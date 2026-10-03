@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * NBA My Career engine (2026-08-05). Basketball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -138,7 +139,9 @@ export interface NbaCareerState {
   allNbas: number;
   finalsMvps: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 57 life layer. All optional so pre-R57 saves keep loading. */
   netWorth?: number;
@@ -273,21 +276,21 @@ export function nbaTeamLabelOf(id: string, eraId?: string): string {
 
 export function startNbaCareer(
   name: string, pos: NbaCareerPos, archetype: NbaArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): NbaCareerState {
   /* Round 172: the era decides the year, the draft pool and the money. */
   const era = nbaEraById(eraId);
   const teamIds = nbaEraTeamIds(eraId);
-  const base = 68 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 10 + Math.floor(rng() * 13) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
-  const team = teamIds[Math.floor(rng() * teamIds.length)];
-  const lottery = stock <= 14;
+  const base = entry?.ratingAfter ?? (68 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 10 + Math.floor(rng() * 13) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
+  const team = entry?.team ?? teamIds[Math.floor(rng() * teamIds.length)];
+  const lottery = stock > 0 && stock <= 14;
   const c: NbaCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 19 + Math.floor(rng() * 3),
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (19 + Math.floor(rng() * 3)),
     ovr: base, pot,
-    morale: 70, fanbase: lottery ? 60 : 35, health: 100,
+    morale: 70, fanbase: lottery ? 60 : 35, health: entry?.health ?? 100,
     salary: Math.max(0.5, Math.round((lottery ? (16 - stock) * 0.7 + 6 : 2.5) * era.moneyScale * 10) / 10),
     contractYears: 4,
     seasons: [],
@@ -308,6 +311,7 @@ export function startNbaCareer(
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
   if (era.id !== 'now') c.eraId = era.id;
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -444,7 +448,7 @@ function nbaIncumbentOvr(teamQuality: number, rng: () => number): number {
 /** Draft-night rotation spot. Mutates c.role, returns the feed line. */
 export function nbaAssignRole(c: NbaCareerState, teamQuality: number, rng: () => number = Math.random): string {
   const incumbent = nbaIncumbentOvr(teamQuality, rng);
-  if (c.draftPick <= 5) {
+  if (c.draftPick > 0 && c.draftPick <= 5) {
     c.role = 'starter';
     return '📋 Top five picks do not sit. You open in the starting five.';
   }
@@ -892,7 +896,7 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.finalsMvps} Finals MVP${c.finalsMvps === 1 ? '' : 's'}, ${c.allNbas} All-NBA`,
     `${t.pts.toLocaleString()} points, ${t.reb.toLocaleString()} rebounds, ${t.ast.toLocaleString()} assists in ${t.games} games`,
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }

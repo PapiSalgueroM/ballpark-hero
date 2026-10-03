@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * NHL My Career engine (2026-08-05). Hockey sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 32-team
@@ -140,7 +141,9 @@ export interface NhlCareerState {
   allStars: number;
   connSmythes: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 59 life layer. All optional so pre-R59 saves keep loading. */
   netWorth?: number;
@@ -281,22 +284,22 @@ export function majorAwardName(pos: NhlCareerPos): string {
 
 export function startNhlCareer(
   name: string, pos: NhlCareerPos, archetype: NhlArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): NhlCareerState {
   /* Round 173: the era decides the year, the league you are drafted into
      and the money. Leaving it off is today's league, byte for byte. */
   const era = nhlEraById(eraId);
   const pool = nhlEraTeamIds(eraId);
-  const base = 66 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 11 + Math.floor(rng() * 13) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(50 - (base - 64) * 4.5 + rng() * 24));
-  const team = pool[Math.floor(rng() * pool.length)];
+  const base = entry?.ratingAfter ?? (66 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 11 + Math.floor(rng() * 13) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(50 - (base - 64) * 4.5 + rng() * 24));
+  const team = entry?.team ?? pool[Math.floor(rng() * pool.length)];
   const c: NhlCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 18 + Math.floor(rng() * 2),
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (18 + Math.floor(rng() * 2)),
     ovr: base, pot,
-    morale: 70, fanbase: stock <= 10 ? 55 : 32, health: 100,
-    salary: Math.max(0.3, Math.round((stock <= 10 ? 3.5 : 0.9) * era.moneyScale * 10) / 10),
+    morale: 70, fanbase: stock > 0 && stock <= 10 ? 55 : 32, health: entry?.health ?? 100,
+    salary: Math.max(0.3, Math.round((stock > 0 && stock <= 10 ? 3.5 : 0.9) * era.moneyScale * 10) / 10),
     contractYears: 3,
     seasons: [],
     cups: 0, harts: 0, allStars: 0, connSmythes: 0,
@@ -316,6 +319,7 @@ export function startNhlCareer(
   if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -346,7 +350,7 @@ export function nhlAssignRole(c: NhlCareerState, teamQuality: number, rng: () =>
     c.role = 'backup';
     return '📋 You open as the backup goalie: twenty-odd starts and a clipboard cap.';
   }
-  if (c.draftPick <= 10) {
+  if (c.draftPick > 0 && c.draftPick <= 10) {
     c.role = 'starter';
     return '📋 Top ten picks step straight into the top of the lineup.';
   }
@@ -807,7 +811,7 @@ export function nhlLegacyOf(c: NhlCareerState): NhlLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.cups} Cup${c.cups === 1 ? '' : 's'}, ${countOf(c.harts, award.one, award.many)}, ${c.connSmythes} Conn Smythe${c.connSmythes === 1 ? '' : 's'}, ${c.allStars} All-Star nods`,
     c.pos === 'G' ? `${t.wins} wins in ${t.games} games` : `${t.goals} goals, ${t.assists} assists, ${t.points} points in ${t.games} games`,
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }

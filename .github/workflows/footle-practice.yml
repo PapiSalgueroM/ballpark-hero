@@ -1,0 +1,93 @@
+name: Footle five-puzzle run verification
+
+on:
+  push:
+    branches: [codex/footle-practice-995]
+  pull_request:
+    paths:
+      - .github/workflows/footle-practice.yml
+      - scripts/simFootlePractice995.mjs
+      - scripts/qa/footle995*
+      - src/pages/Footle.tsx
+      - src/hooks/useGame*
+      - src/lib/footlePracticeRun*
+      - src/lib/gameLogic.ts
+      - src/lib/fetchFootlePlayerPool*
+      - src/types/game.ts
+      - src/test/footle*
+      - src/test/fixtures/footlePracticePlayers.ts
+
+permissions:
+  contents: read
+concurrency:
+  group: footle-practice-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p footle-practice-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee footle-practice-artifacts/types.log
+          npm run build 2>&1 | tee footle-practice-artifacts/build.log
+      - name: Actual practice outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: FOOTLE_PRACTICE_CONTROL=all ONLY=simFootlePractice995 node scripts/runAllSims.mjs 2>&1 | tee footle-practice-artifacts/practice.log
+      - name: Existing daily hook, atomic pool and search identity
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$(pwd)/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/hooks/useGame.test.ts src/lib/fetchFootlePlayerPool.test.ts src/test/playerSearchIdentity.test.ts --maxWorkers=1 --no-file-parallelism 2>&1 | tee footle-practice-artifacts/existing-unit.log
+      - name: Relevant offline Footle and player-search families
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simFootleAtomicPool simFootleCurrency simFootleLeagues simPlayerSearchKeyboard simPlayerSearchFailure; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "footle-practice-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers, search and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "footle-practice-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Complete native runs, reloads and daily isolation
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/footle995.mjs 2>&1 | tee footle-practice-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: footle-practice-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: footle-practice-artifacts/

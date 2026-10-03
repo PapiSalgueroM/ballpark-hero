@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * MLB My Career engine (2026-08-05). Baseball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -178,7 +179,9 @@ export interface MlbCareerState {
   mvpCys: number;      // MVPs for hitters, Cy Youngs for pitchers
   allStars: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 58 life layer. All optional so pre-R58 saves keep loading. */
   netWorth?: number;
@@ -323,21 +326,21 @@ export function mlbTeamLabelOf(id: string, eraId?: string): string {
 
 export function startMlbCareer(
   name: string, pos: MlbCareerPos, archetype: MlbArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): MlbCareerState {
   /* Round 173: the era decides the year, the league you are drafted into
      and the money. Leaving it off is today's league, byte for byte. */
   const era = mlbEraById(eraId);
   const pool = mlbEraTeamIds(eraId);
-  const base = 64 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
-  const team = pool[Math.floor(rng() * pool.length)];
+  const base = entry?.ratingAfter ?? (64 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
+  const team = entry?.team ?? pool[Math.floor(rng() * pool.length)];
   const c: MlbCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 21,
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (21),
     ovr: base, pot,
-    morale: 70, fanbase: stock <= 10 ? 50 : 30, health: 100,
+    morale: 70, fanbase: stock > 0 && stock <= 10 ? 50 : 30, health: entry?.health ?? 100,
     salary: Math.max(0.3, Math.round(0.8 * era.moneyScale * 10) / 10),
     contractYears: 6, // team control years, baseball-style
     seasons: [],
@@ -358,6 +361,7 @@ export function startMlbCareer(
   if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -384,7 +388,7 @@ function mlbIncumbentOvr(teamQuality: number, rng: () => number): number {
 export function mlbAssignRole(c: MlbCareerState, teamQuality: number, rng: () => number = Math.random): string {
   if (c.pos === 'RP') { c.role = 'starter'; return '📋 The bullpen has its own ladder. Your arm decides the inning you get.'; }
   const incumbent = mlbIncumbentOvr(teamQuality, rng);
-  if (c.draftPick <= 10) {
+  if (c.draftPick > 0 && c.draftPick <= 10) {
     c.role = 'starter';
     return c.pos === 'SP'
       ? '📋 Top ten picks jump the queue. You break camp in the rotation.'
@@ -884,7 +888,7 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${countOf(c.mvpCys, award.one, award.many)}, ${c.allStars} All-Star nods`,
     mlbCareerStatBullet(t, c.pos),
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }
