@@ -35,6 +35,11 @@
         tier (or the pool when it is full), never on the active roster.
      6) the save: the farm block's JSON bytes after every summer stay inside a
         stated budget per sport, and its ledger holds nobody who has left.
+     7) every Send down and Call up button says what the move does: on a copy
+        of the league, the option year the button names is the one spent, an
+        exempt man goes straight down, Expose to waivers goes to the wire, a
+        greyed button's move is refused, and Add to the 40 man is said only
+        of a man off it.
 
    Controls, through SIM_GMFARM_CONTROL, each rewriting an in memory copy of
    the module behind an esbuild redirect (src is never touched). Each
@@ -46,6 +51,7 @@
      nobonus       the tier's growth bonus set to nothing       -> 4
      draftactive   MLB and NHL draftees put on the roster       -> 5
      noprune       the summer keeps ledger rows of men who left -> 6
+     labelswap     an exposed man's button says Option him      -> 7
 
    MEASURED (filled in from runs, see the bottom of this header). */
 
@@ -58,7 +64,7 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_GMFARM_CONTROL || '';
-const KNOWN = ['noclaim', 'returnguard', 'elevcap', 'invent', 'nobonus', 'draftactive', 'noprune'];
+const KNOWN = ['noclaim', 'returnguard', 'elevcap', 'invent', 'nobonus', 'draftactive', 'noprune', 'labelswap'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${KNOWN.join(', ')})`);
   process.exit(1);
@@ -101,6 +107,7 @@ if (CONTROL === 'invent') {
 if (CONTROL === 'nobonus') farmSrc = rewrite(farmSrc, 'export const TIER_GROWTH_BONUS = 1;', 'export const TIER_GROWTH_BONUS = 0;', 'control nobonus');
 if (CONTROL === 'draftactive') farmSrc = rewrite(farmSrc, "  if (r.drafteeTo === 'active') {", '  if (true) {', 'control draftactive');
 if (CONTROL === 'noprune') farmSrc = rewrite(farmSrc, '      if (!here.has(id)) { delete seat.club.ledger[id]; continue; }', '      if (!here.has(id)) continue;', 'control noprune');
+if (CONTROL === 'labelswap') farmSrc = rewrite(farmSrc, "  if (route === 'option') {\n    const l = seat.club.ledger[p.id];", "  if (route === 'waivers') {\n    const l = seat.club.ledger[p.id];", 'control labelswap');
 if (CONTROL) console.log(`   [control ${CONTROL} applied to an in memory copy of the module]`);
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'gmfarm-'));
@@ -229,7 +236,7 @@ const lostPresent = (lg, state, sport) => {
 const S = {};
 const statsOf = sport => (S[sport] ??= {
   periods: 0, breaches: [], covers: 0, coverBad: [], claims: 0, farmReturns: [], engineReturns: 0,
-  gainsPS: [], gainsActive: [], gapBy: {}, coversBy: {}, claimsBy: {}, tierSize: [], poolSize: [], leagueBytes: [], draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
+  gainsPS: [], gainsActive: [], gapBy: {}, coversBy: {}, claimsBy: {}, tierSize: [], poolSize: [], leagueBytes: [], buttons: 0, buttonBad: [], draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
 });
 
 function runLeague(sport, seed) {
@@ -310,6 +317,7 @@ function runLeague(sport, seed) {
     summer(sport, lg, state, rng, st, season, farmStep, engineStep, caps, tally);
   }
   probe(sport, lg, state, st, seed);
+  buttons(sport, lg, state, st);
   if (sport === 'nfl') st.gapBy[seed] = mean(st.gainsPS.slice(gp0)) - mean(st.gainsActive.slice(ga0));
   st.leagueBytes.push(JSON.stringify(lg).length);
 }
@@ -393,10 +401,53 @@ function probe(sport, lg, state, st) {
   }
 }
 
+/* ---------- section 7: every button says what its move does ---------- */
+function buttons(sport, lg, state, st) {
+  const base = ctxOf(sport, lg, state, 1);
+  for (const seat of base.seats.slice(0, 6)) {
+    for (const p of seat.players.filter(x => x.out <= 0).slice(0, 4)) {
+      const L = structuredClone(lg);
+      const F = structuredClone(state);
+      const c = ctxOf(sport, L, F, 1);
+      const me = c.seats.find(s => s.abbr === seat.abbr);
+      const man = me.players.find(x => x.id === p.id);
+      const b = farm.farmSendDownButton(c, me, man);
+      const before = me.club.ledger[p.id]?.optUsed;
+      const res = farm.sendDown(c, me, p.id);
+      const after = me.club.ledger[p.id]?.optUsed;
+      let good;
+      if (b.refusal) good = res === null;
+      else if (b.label.startsWith('Option him (option year')) good = res === 'option' && after === Number(b.label.match(/year (\d+) of/)[1]);
+      else if (b.label.startsWith('Option him (already')) good = res === 'option' && after === before;
+      else if (b.label.startsWith('Send to the farm club')) good = res === 'exempt';
+      else if (b.label === 'Expose to waivers') good = res === 'claimed' || res === 'cleared';
+      else good = false;
+      st.buttons += 1;
+      if (!good) st.buttonBad.push(`${seat.abbr} ${p.id} "${b.label}" did ${res}`);
+    }
+    for (const p of seat.reserve.slice(0, 4)) {
+      const L = structuredClone(lg);
+      const F = structuredClone(state);
+      const c = ctxOf(sport, L, F, 1);
+      const me = c.seats.find(s => s.abbr === seat.abbr);
+      const man = me.reserve.find(x => x.id === p.id);
+      const b = farm.farmCallUpButton(c, me, man);
+      const wasOff = !!me.club.ledger[p.id]?.off40;
+      const res = farm.callUp(c, me, p.id);
+      const good = b.refusal ? !res : res && me.players.some(x => x.id === p.id) && (b.label.startsWith('Add to the 40') === wasOff) && !me.club.ledger[p.id]?.off40;
+      st.buttons += 1;
+      if (!good) st.buttonBad.push(`${seat.abbr} ${p.id} "${b.label}" did ${res}`);
+    }
+  }
+}
+
 /* ---------- run and report ---------- */
-/* Bands, from the measured runs in the header. */
-const COVER_FLOOR = { nfl: 1, nba: 1, mlb: 1, nhl: 1 };
-const CLAIM_FLOOR = { nfl: 0, nba: 0, mlb: 1, nhl: 1 };
+/* Bands, from the measured runs in the header, for the default ten seasons.
+   A shorter run scales the cover floors and grades claims only at ten (an
+   NHL farm club is exempt for its first seasons, so early claims are rare). */
+const TEN = SEASONS / 10;
+const COVER_FLOOR = { nfl: 2400 * TEN, nba: 1400 * TEN, mlb: 2000 * TEN, nhl: 650 * TEN };
+const CLAIM_FLOOR = SEASONS >= 10 ? { nfl: 2, nba: 0, mlb: 200, nhl: 85 } : { nfl: 0, nba: 0, mlb: 0, nhl: 0 };
 const GROWTH_GAP = 0.5;
 const BYTES_BUDGET = { nfl: Infinity, nba: Infinity, mlb: Infinity, nhl: Infinity };
 
@@ -433,6 +484,7 @@ for (const sport of SPORTS) {
   const big = Math.max(...st.bytes);
   check(6, st.bytes.every(b => b <= BYTES_BUDGET[sport]), `${sport}: farm block ${Math.min(...st.bytes)} to ${big} bytes over ${st.bytes.length} summers (the league itself ${Math.min(...st.leagueBytes)} to ${Math.max(...st.leagueBytes)}), budget ${BYTES_BUDGET[sport]}`);
   check(6, st.stale.length === 0, `${sport}: no ledger row for a man who left (${st.stale.length})`);
+  check(7, st.buttons > 0 && st.buttonBad.length === 0, `${sport}: ${st.buttons} buttons did what they say (${st.buttonBad.length} did not)${st.buttonBad.length ? ' first: ' + st.buttonBad.slice(0, 2).join(' | ') : ''}`);
 }
 const red = [...failedSections].sort().join(', ');
 console.log(`\nsimGmFarm: ${checks} checks, ${failures} failure${failures === 1 ? '' : 's'}${red ? ` (sections ${red})` : ''}, ${((Date.now() - t0) / 1000).toFixed(1)} s${CONTROL ? `, control ${CONTROL}` : ''}`);

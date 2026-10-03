@@ -918,8 +918,58 @@ export function farmOffseason<P extends FarmMan>(state: FarmState<P>, ctx: FarmC
       delete l.twGames;
       delete l.coverFor;
       if (l.signedAge !== undefined) l.proSeasons = (l.proSeasons ?? 1) + 1;
+      if (!Object.keys(l).length) delete seat.club.ledger[id];
     }
     seat.club.up = [];
     stockTier(ctx, seat, o);
+  }
+}
+
+/* ---------- what the screen says ---------- */
+
+/** One button: its words, a warning when the move can lose the man, and why it is greyed (or null). */
+export interface FarmButton { id: string; label: string; warn?: string; refusal: string | null }
+
+/** The send down button says exactly the route sendDown will take. simGmFarm section 7 holds the two together. */
+export function farmSendDownButton<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, p: P): FarmButton {
+  const refusal = sendDownRefusal(ctx, seat, p.id);
+  if (refusal) return { id: p.id, label: 'Send down', refusal };
+  const route = sendDownRoute(ctx, seat, p);
+  if (route === 'option') {
+    const l = seat.club.ledger[p.id];
+    if (l?.optSeason === ctx.season) return { id: p.id, label: 'Option him (already optioned this season, no year used)', refusal: null };
+    const used = l?.optUsed ?? (p.age >= 27 ? ctx.rules.optionYears! : 0);
+    return { id: p.id, label: `Option him (option year ${used + 1} of ${ctx.rules.optionYears})`, refusal: null };
+  }
+  if (route === 'exempt') return { id: p.id, label: 'Send to the farm club (waiver exempt)', refusal: null };
+  return { id: p.id, label: 'Expose to waivers', warn: 'Any club can claim him, worst record first. A claimed man is gone for good.', refusal: null };
+}
+
+/** The call up button. An MLB man off the 40 has to be added to it first, and the button says so. */
+export function farmCallUpButton<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, p: P): FarmButton {
+  const off = ctx.rules.sport === 'mlb' && !!seat.club.ledger[p.id]?.off40;
+  return { id: p.id, label: off ? 'Add to the 40 man and call up' : 'Call up', refusal: callUpRefusal(ctx, seat, p.id) };
+}
+
+/** The tier's rules in plain words, for the panel and the board's how to play. */
+export function farmRuleLines(rules: FarmRules): string[] {
+  switch (rules.sport) {
+    case 'nfl': return [
+      `Up to ${rules.tierCap} on the practice squad, plus one place for an international player.`,
+      `A squad man can be elevated for game day ${rules.elevationsPerSeason} times a season, ${rules.elevationsPerGame} a game. After that he has to be signed.`,
+      'Any rival can sign a squad man to its active roster.',
+    ];
+    case 'nba': return [
+      `Up to ${rules.tierCap} two way men beside the 15 standard contracts.`,
+      `A two way man can be active for ${rules.twoWayGames} games a season.`,
+    ];
+    case 'mlb': return [
+      `${rules.activeMax} active (${rules.septemberActiveMax} from September), all of them on the ${rules.fortyMan} man roster.`,
+      `A man can be optioned in ${rules.optionYears} seasons. Out of options he has to clear waivers to go down.`,
+    ];
+    default: return [
+      `Up to ${rules.contractLimit} contracts, the farm club included.`,
+      'A young man goes down without waivers until his exemption runs out, by his age when he signed and his games played.',
+    ];
   }
 }
