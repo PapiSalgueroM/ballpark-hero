@@ -37,6 +37,7 @@ const controls = {
   reset: { file: board, from: 'setCharging(false);\n    setLabShots([]);\n    labReleaseLock.current = false;', to: 'setCharging(false);\n    labReleaseLock.current = false;', tests: ['leaves the lab for practice without stale shots or record changes'] },
   rim: { file: comparison, from: '{result.blocked ? <p className="mt-2 text-muted-foreground">', to: '{false ? <p className="mt-2 text-muted-foreground">', tests: [stopped] },
   landing: { file: board, from: 'if (shot.result.blocked || shot.result.entryDeg <= 0) return null;', to: 'if (false) return null;', tests: [stopped] },
+  contact: { file: board, from: "result.made ? result.verdict : 'Missed. Compare the path and rim crossing.'", to: 'result.verdict', tests: [compare] },
 };
 const control = process.env.BUZZER_SHOT_LAB_CONTROL || '';
 assert.ok(!control || control === 'all' || control in controls, 'Known Shot lab control');
@@ -101,7 +102,8 @@ try {
     for (const name of wanted) {
       const matching = rows.filter(row => row.title === name); assert.equal(matching.length, 1);
       assert.equal(matching[0].status, 'failed', `Intended outcome fails: ${name}`);
-      assert.match(matching[0].failureMessages.join('\n'), /AssertionError:|Error: expect\(element\)/, 'A named outcome assertion must reject the changed binding');
+      const failure = matching[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, '');
+      assert.match(failure, /AssertionError:|Error: expect\(element\)/, 'A named outcome assertion must reject the changed binding');
     }
     for (const name of independent) assert.equal(rows.find(row => row.title === name)?.status, 'passed', `Independent original-mode baseline: ${name}`);
     console.log(`simBuzzerShotLab ${control}: ${wanted.length} intended assertion failures, two original-mode baselines passed, ${15 - wanted.length - independent.length} intentional skips.`);

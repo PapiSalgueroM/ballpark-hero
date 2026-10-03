@@ -67,7 +67,7 @@ jobs:
           for harness in simBuzzerBeater simBuzzerPractice simThreePointContest simArcadeShotFeedback simArcadePause simArcadeHoldRelease; do
             ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "buzzer-shot-lab-artifacts/$harness.log" || failed=1
           done
-          BUZZER_PRACTICE_CONTROL=capture ONLY=simBuzzerPractice node scripts/runAllSims.mjs 2>&1 | tee buzzer-shot-lab-artifacts/practice-capture-control.log || failed=1
+          BUZZER_PRACTICE_CONTROL=capture NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simBuzzerPractice.mjs 2>&1 | tee buzzer-shot-lab-artifacts/practice-capture-control.log || failed=1
           ONLY=buzzer-beater NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyReload.mjs 2>&1 | tee buzzer-shot-lab-artifacts/simDailyReload.log || failed=1
           exit "$failed"
       - name: All built readers and guide checks

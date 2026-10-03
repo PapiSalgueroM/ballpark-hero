@@ -197,11 +197,18 @@ describe('Buzzer Beater Shot lab', () => {
     const view = startLab();
     const releases = [{ x: 0.08, arc: 0.6, power: 0.25 }, { x: -0.12, arc: 0.72, power: 0.4 }, { x: 0.16, arc: 0.82, power: 0.2 }];
     const results = releases.map(release => expectedShot(release));
+    expect(results[0].made).toBe(false);
+    expect(results[0].depth).toBeGreaterThan(0.5);
     for (let index = 0; index < releases.length; index++) {
       setRelease(releases[index]); expect(shoot()).toEqual(results[index]);
       expect(view.container.querySelectorAll('[data-lab-shot]')).toHaveLength(Math.min(index, 2));
       if (index) expectDrawnShot(view, 'current', releases[index - 1], results[index - 1], index);
       settle(view);
+      if (index === 0) {
+        const status = view.container.querySelector('[data-lab-result] [role="status"]');
+        expect(status).toHaveTextContent('Missed. Compare the path and rim crossing.');
+        expect(status).not.toHaveTextContent(/front rim|back iron/i);
+      }
       expectDrawnShot(view, 'current', releases[index], results[index], index + 1);
       if (index) expectDrawnShot(view, 'previous', releases[index - 1], results[index - 1], index);
       expect(view.container.querySelectorAll('[data-lab-shot]')).toHaveLength(Math.min(index + 1, 2));
@@ -281,11 +288,16 @@ describe('Buzzer Beater Shot lab', () => {
     const view = startLab();
     const release = { x: -0.08, arc: 0.68, power: 0.26 };
     setRelease(release);
+    const heldPower = power(), heldArc = arc(), heldFade = fade();
     fireEvent.click(button('Shot lab rules'));
     expect(screen.getByRole('dialog')).toBeVisible();
     expect(screen.getByRole('dialog')).toHaveTextContent(/same|repeat/i);
     expect(board(view)).toHaveAttribute('data-arcade-paused', 'true');
-    advance(5000); expectRelease(release); expect(power()).toBeDisabled();
+    advance(5000);
+    expect(heldPower).toHaveValue(String(release.power));
+    expect(heldArc).toHaveValue(String(release.arc));
+    expect(heldFade).toHaveValue(String(release.x));
+    expect(heldPower).toBeDisabled();
     fireEvent.click(button("Let's Play!")); advance(1);
     expect(button('Shot lab rules')).toHaveFocus();
     expect(button('Shoot')).toBeDisabled();

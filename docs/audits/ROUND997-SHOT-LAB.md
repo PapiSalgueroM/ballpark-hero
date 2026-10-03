@@ -70,3 +70,18 @@ No acceptance or publication is claimed yet. Next free 998 is unclaimed.
 First remote run 37118264085 stopped at the type gate: two Testing Library
 role lookups used an unsupported `exact` option. No build, test or browser
 success is credited to that run. The role names already match exactly.
+
+Second remote run 37118473998 passed type/build, all existing arcade gates,
+the daily reload checks, all 17 built readers and all three native profiles.
+The new mounted suite passed 14 of 15 cases; its remaining query incorrectly
+looked for an accessible background slider while the rules dialog hid it.
+Six controls correctly rejected their intended mutation with both baselines
+passing, but the wrapper rejected ANSI-coloured assertion text. The final
+repair retains actual control elements for the modal check and strips ANSI
+before matching assertion types. Counts and mutation requirements stay fixed.
+
+Screenshots exposed inherited feedback claiming back-rim contact for a shot
+over two metres long. Lab-only miss copy now describes a miss without claiming
+contact. An added contact control restores the false wording and requires the
+existing comparison case to reject it. Final coverage is 15 cases and 16
+controls. Existing physics stays unchanged.

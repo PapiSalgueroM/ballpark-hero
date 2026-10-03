@@ -656,7 +656,9 @@ export default function BuzzerBeaterBoard() {
       )}
 
       {mode === 'lab' && phase === 'shotEnd' && result && <div ref={labActionRef} data-lab-result className="space-y-2">
-        <p role="status" className="font-semibold">{result.verdict}</p>
+        <p role="status" className="font-semibold">{result.blocked ? 'Blocked at the defender.'
+          : result.entryDeg <= 0 ? 'Never reached rim height.'
+          : result.made ? result.verdict : 'Missed. Compare the path and rim crossing.'}</p>
         <div className="grid grid-cols-2 gap-2">
           <Button ref={practiceActionRef} className="min-h-[44px]" onClick={() => repeatLab(false)} onKeyDown={practiceKeyDown}>Retry this shot</Button>
           <Button variant="outline" className="min-h-[44px]" onClick={() => repeatLab(true)} onKeyDown={practiceKeyDown}>Change setup</Button>
