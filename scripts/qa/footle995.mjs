@@ -117,15 +117,26 @@ try {
       const help = page.getByRole('dialog', { name: 'How to Play Footle' }); await help.waitFor();
       assert.match(await help.textContent(), /five|5/i, 'Instructions explain the run before play');
       assert.match(await help.textContent(), /example|imagine|hypothetical/i, 'Instructions include a worked example');
-      await page.screenshot({ path: path.join(output, `${width}-instructions.png`) });
+      await page.screenshot({ path: path.join(output, `${width}-instructions.png`), animations: 'disabled' });
       await activate(help.getByRole('button', { name: "Let's Play!" }), 'close instructions');
       await guess(dailyWrong);
       await page.waitForFunction(key => JSON.parse(localStorage.getItem(key) || 'null')?.guesses?.length === 1, dailyKey);
       const daily = JSON.parse(await page.evaluate(key => localStorage.getItem(key), dailyKey));
       assert.equal(daily.gameStatus, 'playing'); assert.notEqual(daily.puzzleId, dailyWrong);
       const records = await heldRecords();
+      await activate(page.locator('[data-footle-mode="unlimited"]'), 'open Easy Unlimited');
+      await guess(fixtureRows.obscure[0].player_name);
+      await page.getByText(/^Guesses:\s*1\s*\/\s*8$/).waitFor();
+      const unlimitedClues = await page.locator('.animate-cell-reveal').allTextContents();
+      assert.equal(unlimitedClues.length, 9, 'One wrong Unlimited guess has all eight clues');
       await activate(page.getByRole('button', { name: 'Five-puzzle run', exact: true }), 'open practice');
       await activate(page.getByRole('button', { name: new RegExp(`^${tier}$`, 'i') }), `choose ${tier}`);
+      await page.waitForFunction(tier => [...document.querySelectorAll('button')].some(button => button.textContent?.trim() === tier && button.getAttribute('aria-pressed') === 'true'), tier);
+      await activate(page.locator('[data-footle-mode="unlimited"]'), 'return to preserved Unlimited');
+      await page.getByText(/^Guesses:\s*1\s*\/\s*8$/).waitFor();
+      assert.equal(await page.getByRole('button', { name: 'easy', exact: true }).getAttribute('aria-pressed'), 'true', 'Practice tier selection preserves the in-progress Unlimited tier');
+      assert.deepEqual(await page.locator('.animate-cell-reveal').allTextContents(), unlimitedClues, 'Returning to Unlimited preserves the original guess clues');
+      await activate(page.locator('[data-footle-mode="practice"]'), 'return to chosen practice tier');
       await page.waitForFunction(tier => [...document.querySelectorAll('button')].some(button => button.textContent?.trim() === tier && button.getAttribute('aria-pressed') === 'true'), tier);
       await layout('setup'); await page.screenshot({ path: path.join(output, `${width}-setup.png`), animations: 'disabled' });
       await activate(page.getByRole('button', { name: 'Start run', exact: true }), 'start run');
@@ -160,7 +171,7 @@ try {
       assert.equal(await rawRun(), beforeReload, 'Same-name hidden Enter consumes no guess');
       await guess(initial.targets[0]); await waitRound(0, 2, 'won');
       await visibleResult(page.getByRole('button', { name: 'Next puzzle', exact: true }), 'first result next action');
-      await layout('first result'); await page.screenshot({ path: path.join(output, `${width}-first-result.png`) });
+      await layout('first result'); await page.screenshot({ path: path.join(output, `${width}-first-result.png`), animations: 'disabled' });
       for (let index = 1; index < 5; index++) {
         await activate(page.getByRole('button', { name: 'Next puzzle', exact: true }), `next puzzle ${index + 1}`);
         await waitRound(index, 0, 'playing');
@@ -176,7 +187,7 @@ try {
           for (let count = 0; count < misses.length; count++) { await guess(misses[count].name); await waitRound(index, count + 1, count === 7 ? 'lost' : 'playing'); }
           assert.equal(await page.getByRole('combobox').count(), 0, 'Eight misses end the puzzle');
           await visibleResult(page.getByRole('button', { name: 'Next puzzle', exact: true }), 'eight-miss next action');
-          await layout('eight misses'); await page.screenshot({ path: path.join(output, `${width}-eight-misses.png`) });
+          await layout('eight misses'); await page.screenshot({ path: path.join(output, `${width}-eight-misses.png`), animations: 'disabled' });
         } else if (index === 3) {
           await activate(page.getByRole('button', { name: 'Give up', exact: true }), 'give up');
           await activate(page.getByRole('button', { name: 'Yes, reveal it', exact: true }), 'confirm give up');
@@ -197,7 +208,7 @@ try {
       await visibleResult(receipt.getByRole('button', { name: 'Play another five', exact: true }), 'completed run next action');
       for (const name of initial.targets) assert.ok((await receipt.textContent()).includes(name), 'All five answer cards appear');
       assert.equal(await page.getByRole('button', { name: 'Next puzzle', exact: true }).count(), 0);
-      await receipt.scrollIntoViewIfNeeded(); await layout('complete'); await page.screenshot({ path: path.join(output, `${width}-complete.png`) });
+      await receipt.scrollIntoViewIfNeeded(); await layout('complete'); await page.screenshot({ path: path.join(output, `${width}-complete.png`), animations: 'disabled' });
       const finishedBytes = await rawRun(); await page.reload(); await receipt.waitFor();
       assert.equal(await rawRun(), finishedBytes, 'Completed reload keeps the same result and all five targets');
       assert.deepEqual(await heldRecords(), records); assert.deepEqual(writes, [], 'No daily score write is attempted by practice');

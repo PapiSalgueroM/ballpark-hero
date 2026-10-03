@@ -262,7 +262,7 @@ export function useGame() {
   }, [mode, difficulty, playerPool, resetDailyHook, isLoadingPool]);
 
   const changeDifficulty = useCallback((newDiff: Difficulty) => {
-    // Difficulty selection only applies in unlimited mode, daily tier is locked
+    // Daily difficulty is locked; practice and Unlimited keep separate tiers.
     if (mode === 'daily' || isLoadingPool) return;
     if (mode === 'practice') {
       if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);

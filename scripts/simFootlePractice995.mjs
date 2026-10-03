@@ -26,6 +26,7 @@ const mounted = {
   complete: 'finishes five puzzles with the exact receipt and untouched daily record',
   unlimited: 'starts the first Unlimited puzzle from the resolved pool',
   guards: 'ignores duplicate guesses and double next inputs at the hook boundary',
+  isolation: 'keeps practice difficulty separate from a played Unlimited puzzle',
   entry: 'offers practice from the daily result without resetting that result',
   rules: 'shows worked rules and derives examples from a loaded non-answer player',
   corrupt: 'rejects a corrupt saved run and permits a clean replacement',
@@ -62,7 +63,8 @@ const controls = {
   rules: { group: 'mounted', file: page, anchor: 'These example numbers are hypothetical.', replacement: 'These example numbers.', failed: [mounted.rules] },
   example: { group: 'mounted', file: hook, anchor: 'const examplePlayer = playerPool.find(player => player.name !== dailyTarget?.name', replacement: 'const examplePlayer = playerPool.find(player => player.name === dailyTarget?.name', failed: [mounted.rules] },
   loading: { group: 'mounted', file: hook, anchor: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);', replacement: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(() => selectRandomPlayer(difficulty, playerPool));', failed: [mounted.unlimited] },
-  ready: { group: 'mounted', file: hook, anchor: 'practiceCandidates(playerPool, difficulty, dailyTarget.name).length >= 5', replacement: 'practiceCandidates(playerPool, difficulty, dailyTarget.name).length >= 1', failed: [mounted.short] },
+  ready: { group: 'mounted', file: hook, anchor: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5', replacement: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 1', failed: [mounted.short] },
+  isolation: { group: 'mounted', file: hook, anchor: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);', replacement: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) { setPracticeDifficulty(newDiff); setDifficultyState(newDiff); }', failed: [mounted.isolation] },
 };
 const mode = process.env.FOOTLE_PRACTICE_CONTROL || '';
 assert.ok(!mode || mode === 'all' || Object.hasOwn(controls, mode), 'Known practice control');
