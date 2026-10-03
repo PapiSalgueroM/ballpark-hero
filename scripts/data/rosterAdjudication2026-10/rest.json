@@ -501,9 +501,9 @@
     {
       "name": "Mario Kröpfl",
       "from": "Hartberg",
-      "realClub": "ATUS Velden (Austrian amateur football)",
+      "realClub": "Unconfirmed: left Hartberg, current club on one source only (Soccerway names ATUS Velden, Austrian amateur football, from 2024-07-01)",
       "adjudicatedOn": "2026-10-03",
-      "note": "Austrian midfielder born 1989-12-21. Not in Hartberg's 2026/2027 squad on the league's page or on ESPN's squad page. Soccerway has him leaving Hartberg for ATUS Velden on 2024-07-01; that destination is one source only, but nothing places him at any club the game models. ESPN's player index still names Hartberg, a stale profile its own squad page contradicts.",
+      "note": "Austrian midfielder born 1989-12-21. Not in Hartberg's 2026/2027 squad on the league's page or on ESPN's squad page, so the removal stands on both families. Where he plays now is not settled: Soccerway has him leaving Hartberg for ATUS Velden on 2024-07-01, a destination on one source only, and ESPN's player index still names Hartberg, a stale profile its own squad page contradicts. Nothing places him at any club the game models.",
       "sources": [
         { "family": "A", "url": "https://www.bundesliga.at/team/tsv-egger-glas-hartberg/6522/kader", "publisher": "Austrian Bundesliga (Hartberg 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6907", "publisher": "ESPN (TSV Hartberg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
@@ -513,13 +513,13 @@
     {
       "name": "Emanuel Schreiner",
       "from": "Altach",
-      "realClub": "Union Weisskirchen (Austrian amateur football)",
+      "realClub": "Unconfirmed: left Altach in 2023, current club not settled (Soccerway alone, and its own page disagrees: header Weisskirchen, newest season row 2026 at Lillehammer in Norway)",
       "adjudicatedOn": "2026-10-03",
-      "note": "Austrian born 1989-02-02. Not in Altach's 2026/2027 squad on the league's page or on ESPN's squad page. Soccerway has him leaving Altach for Weisskirchen on 2023-07-01 after ten seasons; that destination is one source only, but nothing places him at any club the game models. ESPN's player index still names Altach, a stale profile its own squad page contradicts.",
+      "note": "Austrian born 1989-02-02. Not in Altach's 2026/2027 squad on the league's page or on ESPN's squad page, so the removal stands on both families. Where he plays now is not settled: Soccerway has him leaving Altach for Weisskirchen on 2023-07-01 after ten seasons and its header still names Weisskirchen, but its career table's newest row is 2026 at Lillehammer (Norway, Division 3 Group 6, one appearance) above 2024/2025 at Weisskirchen. That is one source contradicting itself. ESPN's player index still names Altach, a stale profile its own squad page contradicts. Nothing places him at any club the game models.",
       "sources": [
         { "family": "A", "url": "https://www.bundesliga.at/team/scr-altach/6495/kader", "publisher": "Austrian Bundesliga (Altach 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4405", "publisher": "ESPN (SC Rheindorf Altach squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
-        { "family": "B", "url": "https://www.soccerway.com/player/schreiner-emanuel/QT80kXI0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-02-02; Altach to Weisskirchen 2023-07-01" }
+        { "family": "B", "url": "https://www.soccerway.com/player/schreiner-emanuel/QT80kXI0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-02-02; header Weisskirchen; Altach to Weisskirchen 2023-07-01; career table newest row 2026 Lillehammer, Division 3 Group 6, 1 appearance, then 2024/2025 Weisskirchen" }
       ]
     },
     {
@@ -574,9 +574,9 @@
     {
       "name": "Joël Ris",
       "from": "Vaduz",
-      "realClub": "SC Cham (Swiss Promotion League)",
+      "realClub": "Unconfirmed: left Vaduz in 2023, current club on one source only (Soccerway names SC Cham, Swiss Promotion League, from 2025-07-01)",
       "adjudicatedOn": "2026-10-03",
-      "note": "Swiss midfielder born 2001-01-16. Played for Vaduz in 2021-22 and 2022-23, then Bulle, Kriens (2024-07-16) and Cham (2025-07-01). Not in Vaduz's own squad. The destination is Soccerway alone; ESPN's player index still names Vaduz, a stale profile the club's own page contradicts. Nothing places him at a club the game models.",
+      "note": "Swiss midfielder born 2001-01-16. Played for Vaduz in 2021-22 and 2022-23, then Bulle, Kriens (2024-07-16) and Cham (2025-07-01) by Soccerway. Not in Vaduz's own squad, so the removal stands on the official page. The destination is Soccerway alone and is recorded as unconfirmed; ESPN's player index still names Vaduz, a stale profile the club's own page contradicts. Nothing places him at a club the game models.",
       "sources": [
         { "family": "A", "url": "https://www.fcvaduz.li/teams/1-mannschaft", "publisher": "FC Vaduz (1. Mannschaft Kader)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.soccerway.com/player/ris-joel/lpMtkuTC/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cham (Promotion League), born 2001-01-16, Bulle to Kriens 2024-07-16, Kriens to Cham 2025-07-01, contract to 2027-06-30" }
@@ -585,9 +585,9 @@
     {
       "name": "Serginho",
       "from": "Viborg FF",
-      "realClub": "Al Wasl (United Arab Emirates)",
+      "realClub": "Unconfirmed: left Viborg in 2025, current club on one source only (Soccerway names Al Wasl, United Arab Emirates, from 2025-08-04)",
       "adjudicatedOn": "2026-10-03",
-      "note": "The Cape Verdean forward born 2001-01-29 (baked age 24 matches), at Viborg from Estoril on 2023-07-31 and sold to Al Wasl on 2025-08-04, with UAE League appearances in 2026/2027. Not in Viborg's own squad or ESPN's Viborg 2026-27 squad. The destination is Soccerway alone. Not the Brazilian Serginho born 1995 now at Atromitos, nor the Portuguese one born 1999 now at Levski Sofia; neither ever played for Viborg. The UAE is not modelled.",
+      "note": "The Cape Verdean forward born 2001-01-29 (baked age 24 matches), at Viborg from Estoril on 2023-07-31 and, by Soccerway, sold to Al Wasl on 2025-08-04, with UAE League appearances in 2026/2027. Not in Viborg's own squad or ESPN's Viborg 2026-27 squad, so the removal stands on both families. The destination is Soccerway alone and is recorded as unconfirmed. Not the Brazilian Serginho born 1995 now at Atromitos, nor the Portuguese one born 1999 now at Levski Sofia; neither ever played for Viborg. The UAE is not modelled.",
       "sources": [
         { "family": "A", "url": "https://www.vff.dk/ligaen/truppen", "publisher": "Viborg FF (Truppen page)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3153", "publisher": "ESPN (Viborg FF squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
@@ -597,9 +597,9 @@
     {
       "name": "Mateus Castro",
       "from": "Al-Taawoun",
-      "realClub": "Nagoya Grampus (Japan)",
+      "realClub": "Unconfirmed: left Al Taawoun in 2025, current club on one source only (Soccerway names Nagoya Grampus, Japan, from 2025-01-22)",
       "adjudicatedOn": "2026-10-03",
-      "note": "Brazilian forward born 1994-09-11 (baked age 31 matches). Joined Al Taawoun from Nagoya in August 2023 and went back to Nagoya on 2025-01-22; four J1 League appearances in 2026. Absent from Al Taawoun's squad on the league's page and on ESPN. The destination is Soccerway alone (it lists him as Mateus). Japan is not modelled.",
+      "note": "Brazilian forward born 1994-09-11 (baked age 31 matches). By Soccerway, joined Al Taawoun from Nagoya in August 2023 and went back to Nagoya on 2025-01-22, with four J1 League appearances in 2026. Absent from Al Taawoun's squad on the league's page and on ESPN, so the removal stands on both families. The destination is Soccerway alone (it lists him as Mateus) and is recorded as unconfirmed: ESPN's search has no hit for him and no second source was found. Japan is not modelled.",
       "sources": [
         { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-taawoun/squad", "publisher": "Saudi Pro League (Al Taawoun squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18459", "publisher": "ESPN (Al Taawoun squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
@@ -609,9 +609,9 @@
     {
       "name": "Mohammed Majrashi",
       "from": "Al-Faisaly",
-      "realClub": "Al Anwar (Saudi First Division)",
+      "realClub": "Unconfirmed: left Al-Faisaly in 2025, current club on one source only (Soccerway names Al Anwar, Saudi First Division, from 2025-09-20)",
       "adjudicatedOn": "2026-10-03",
-      "note": "Saudi forward born 1991-05-20 (baked age 34 matches). Joined Al-Faisaly from Al Fayha on 2024-08-18 and left on a free for Al Anwar on 2025-09-20. Absent from Al-Faisaly's squad on the league's page and on ESPN. The destination is Soccerway alone; several other Saudi players share the surname, and this is the forward born 1991. The Saudi second tier is not modelled.",
+      "note": "Saudi forward born 1991-05-20 (baked age 34 matches). By Soccerway, joined Al-Faisaly from Al Fayha on 2024-08-18 and left on a free for Al Anwar on 2025-09-20. Absent from Al-Faisaly's squad on the league's page and on ESPN, so the removal stands on both families. The destination is Soccerway alone and is recorded as unconfirmed; several other Saudi players share the surname, and this is the forward born 1991. The Saudi second tier is not modelled.",
       "sources": [
         { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-faisaly/squad", "publisher": "Saudi Pro League (Al Faisaly squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21446", "publisher": "ESPN (Al Faisaly squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
@@ -621,9 +621,9 @@
     {
       "name": "Michael Gardawski",
       "from": "Asteras Tripolis",
-      "realClub": "Eintracht Hohkeppel (German Regionalliga West)",
+      "realClub": "Unconfirmed: left Asteras in 2023, current club not settled (Soccerway alone names Eintracht Hohkeppel, German Regionalliga West, and its newest season row there is 2024/2025)",
       "adjudicatedOn": "2026-10-03",
-      "note": "German midfielder born 1990-09-25. Left Asteras for Ionikos on 2023-09-29 and joined Eintracht Hohkeppel on 2024-07-18. Not in Asteras' 2026-2027 roster on the league's page or on ESPN. The destination is Soccerway alone; ESPN's player index still names Asteras, a stale profile its own squad page contradicts. German regional football is not modelled.",
+      "note": "German midfielder born 1990-09-25. By Soccerway, left Asteras for Ionikos on 2023-09-29 and joined Eintracht Hohkeppel on 2024-07-18. Not in Asteras' 2026-2027 roster on the league's page or on ESPN, so the removal stands on both families. The destination is Soccerway alone and stale (its newest season row is 2024/2025 at Hohkeppel), so it is recorded as unconfirmed; ESPN's player index still names Asteras, a stale profile its own squad page contradicts. German regional football is not modelled.",
       "sources": [
         { "family": "A", "url": "https://www.slgr.gr/en/team/1188/teamComp/25/", "publisher": "Super League Greece (Asteras Aktor 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/8354", "publisher": "ESPN (Asteras Tripoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
@@ -646,8 +646,6 @@
       "name": "Ramiro Macagno",
       "from": "Levadiakos",
       "realClub": "Independiente Rivadavia (Argentina), on loan from Levadiakos",
-      "loan": true,
-      "loanFrom": "Levadiakos",
       "adjudicatedOn": "2026-10-03",
       "note": "Argentine goalkeeper born 1997-03-18. Joined Levadiakos on a free on 2025-02-03 and was loaned to Independiente Rivadavia in January 2026, playing in Argentina's Liga Profesional in 2026. Not in Levadiakos' 2026-2027 roster on the league's page or on ESPN. Per loanPolicy he is placed at the club he plays for, which the game does not model; Soccerway dates the loan's end to 2026-12-31, so re-check in January.",
       "sources": [
@@ -692,7 +690,7 @@
       "sources": [
         { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-shabab/squad", "publisher": "Saudi Pro League (Al Shabab squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/793", "publisher": "ESPN (Al Shabab squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
-        { "family": "B", "url": "https://www.soccerway.com/player/bonaventura-giacomo/lxFZfQF4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-08-22, Fiorentina to Al Shabab 2024-08-05 free, last season 2024/2025 at Al Shabab (6 appearances), no current club" }
+        { "family": "B", "url": "https://www.soccerway.com/player/bonaventura-giacomo/lxFZfQF4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-08-22, Fiorentina to Al Shabab 2024-08-05 free, header names no club and no contract; newest season row 2024/2025 at Al Shabab, Saudi Professional League, 29 appearances" }
       ]
     }
   ],
