@@ -1,3 +1,78 @@
+## Codex998/999 published, 2026-10-03
+
+The recovered publisher confirmed "Your website was updated". Public build
+`index-CsgC_U2K.js` now serves both accepted modes. On the actual domain, Codex
+played the NBA/NHL/MLB Legends circuit to a5/15 result, verified a two-pick
+reload, editing, all three reveals, completed review and replay. Rugby League
+completed all ten claims at4/10, with2/5 in each category, then replayed and
+reopened its rules. The public tab reported no errors and no horizontal overflow
+at1265px. These are live gameplay checks, not a new audit of underlying records.
+
+Accepted998/999 publication is complete. Its hold on isolated PR118/121/122 is
+released. Codex retains the narrow publication slot to integrate the independently
+verified1000 court presentation next.1001/1002 remain draft PR121/122 while their
+remote native and focused checks finish. Claude988/manager lanes stay separate.
+No local runtime gates or production DB probes. Held root drafts/seven stashes
+remain intact. Next free1003; AdSense and indexing submissions stay deferred.
+Codex CLAIMS publication recovery, 2026-10-03 11:40 EDT.
+The existing publisher recovered and now displays Publish changes. The latest
+synchronized main entry is664dabc1, with accepted998/999 and docs only after
+those product commits. The host labels its preview out of date, so inspect the
+release state and publish accepted main, then verify both public game modes.
+No final publish sent at claim time. Keep product PR118/121/122 isolated until
+this accepted batch has a live receipt. Claude988/manager lanes stay separate.
+No paid changes, production DB probes or local runtime. Next free1003 unchanged.
+## Codex claims1001 and1002, 2026-10-03: clue review and hockey planning
+
+Anthony asked to keep going. Publication is still blocked: the latest editor
+check opened an empty Publish dialog. No final publish action was sent. Accepted
+998/999 remain independently publishable and1000 stays verified in PR118.
+Publication ownership remains released. Continue these two isolated improvements
+without changing that accepted batch or Claude's career/manager work.
+
+-1001, Footle clue desk: readable clue cards and guess history on phones, plus
+  completed five-puzzle run review from the frozen saved pool. Own Footle.tsx
+  and adjacent components/styles/tests. Keep the shared GameBoard, useGame,
+  scoring, target picker, run schema and Daily completion behavior unchanged.
+-1002, NHL Connections planning bench: four tentative groups, free movement,
+  explicit submission and separately saved notes. Own the NHL Connections page,
+  hook, help and a small draft helper with focused verification. Preserve puzzle
+  membership, four lives, Daily scoring and existing completion records.
+
+Both need remote types/build, actual mounted outcomes, effective controls,
+existing regressions, all built readers and phone/desktop play. No local runtime
+gates, production DB probes, new unverified sports records or paid actions.
+Design contracts are in docs/audits/ROUND1001-FOOTLE-CLUE-DESK.md and
+ROUND1002-NHL-PLANNING-BENCH.md. Hold their product PRs until the accepted
+publication queue resolves. Held root drafts/seven stashes stay intact.
+Next free1003 is unclaimed. AdSense and indexing remain deferred.
+
+## Codex1000 verified, 2026-10-03: court preview ready, publication still blocked
+
+Round1000 is ready in isolated PR118 at5d0c9edb. Buzzer Beater gains fictional
+articulated athletes, arena and floor detail, a supported glass hoop and a spinning
+ball. Its aiming readout now sits below the court, fixing an existing overlay
+that hid the physical rim on the longest shot. Scored geometry, controls, modes,
+pause, reduced motion and saved results retain their original behavior.
+
+Court37130692048 and Shot Lab37130692025 both passed. Actual artifacts and
+phone/desktop screenshots were independently reviewed. Candidate and CI merge
+share tree6bda59a3a1aa28253a6e5e19f23905cc9d02c367. The final evidence includes
+five new mounted outcomes, six effective source controls, the full prior Shot
+Lab suite and arcade regressions,17 built readers, six before/current native
+profiles and three effective geometry controls. A gameplay video is saved for
+Anthony. Full receipt: `docs/audits/ROUND1000-VERIFICATION.md`.
+
+PR118 is ready, not merged or live. Keep it isolated until accepted998/999 have
+a verified public receipt. The latest public Rank Em check at14:34UTC still has
+only Daily and Unlimited, and Lovable's editor remains stuck loading project
+content. No final publish action was sent. Publication ownership stays released;
+accepted998/999 remain independently publishable from main.
+
+No local runtime gates or production DB probes. Held root drafts and all seven
+stashes remain preserved. Claude988/manager lanes stay separate. Next free1001
+is unclaimed. AdSense and indexing submissions stay deferred.
+
 ## Codex claims1000, 2026-10-03: playable Buzzer Beater court presentation
 
 Anthony asked to keep going. Publishing998/999 is still the delivery priority:
