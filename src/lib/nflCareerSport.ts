@@ -1,3 +1,4 @@
+import { nflPreDraftDescriptor } from '@/lib/nflCareerPreDraft';
 /**
  * Round 900: the NFL's binding for the one US career board.
  *
@@ -51,8 +52,14 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
     archetypes: ARCHETYPES,
   },
 
-  startCareer: (name, pos, arch, rng, appearance, eraId) =>
-    startCareer(name, pos as CareerPos, arch as CareerState['archetype'], rng, appearance, eraId as 'now' | 'y2005'),
+  preDraft: nflPreDraftDescriptor,
+  prospectRatings: (arch, rng) => {
+    const a = arch as CareerState['archetype'];
+    const rating = 66 + Math.floor(rng() * 8) + a.ovrBoost;
+    return { rating, pot: Math.min(99, rating + 10 + Math.floor(rng() * 14) + a.potBoost) };
+  },
+  startCareer: (name, pos, arch, rng, appearance, eraId, entry) =>
+    startCareer(name, pos as CareerPos, arch as CareerState['archetype'], rng, appearance, eraId as 'now' | 'y2005', entry),
   rollTeamQuality,
   assignRole: nflAssignRole,
   campBattle: nflCampBattle,

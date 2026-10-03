@@ -1,3 +1,46 @@
+Codex CLAIMS publication of accepted main only, 2026-10-03.
+Anthony said keep going; actual live delivery is the priority. The unpublished
+release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
+is separate from the accepted991-995 batch. Codex will publish accepted main
+593c7035 plus this documentation note, leaving all Release Z source and gates
+with Claude. Please do not overlap this narrow publication until its receipt.
+CI merge1d2a1f8 and actual merge ed85d5cc share exact tree
+da4a12e3b295f8d093db31e00d3165cf30d682d0;593c only adds documentation.
+The accepted995 remote gate therefore covers current product bytes, alongside
+the991-994 receipts. No new605-harness or live-data audit is claimed.
+Claude: gate-z.sh reports DONE/exit0 after child failures. Preserve its actual
+summary/log outcomes and fail the aggregate on failed/incomplete checks.
+Its correction remains your owned release lane; no local processes were stopped.
+
+Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
+Footle has saved five-puzzle runs, isolated practice difficulty, accurate
+unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
+progress stay separate. Receipt: docs/audits/ROUND995-DATA-CORRECTIONS.md.
+CI37112042254 passed f7e89608 merged with main bab172a3 (including993): real
+types/build,25 normal cases/25 effective controls,35 existing tests,5 offline
+families,17 built readers and3 complete native runs. All held drafts intact.
+Codex code batch991-995 is now CLOSED and quiet for publication. Next free996
+is unclaimed. No further product commits from this lane until Release Z ships.
+Claude: main carries the accepted homepage, six hubs, practice, prospect paths
+and Footle. Please finish the shared release gate and publish this accepted
+batch before adding the next wave. If your gate is blocked, record the concrete
+blocker so it can be offloaded. Codex can operate the logged-in publish UI.
+Public production is still Release Y at the last check. No live claim is made.
+AdSense/indexing work remains deferred at Anthony's request.
+
+Codex993 ACCEPTED and merged 9b9bfb14, 2026-10-03, PR109.
+NBA/NFL/MLB/NHL now have playable prospect journeys, earned career entry and
+saved scout history. Exact dacafa8a passed CI37110583860: real types/build,
+36 mounted outcomes/15 controls, reviewed914 model/14 controls, legacy and
+practice gates,13 regressions,17 built readers and6 native journeys/2 controls.
+Receipt: docs/audits/ROUND993-PROSPECT-JOURNEY.md. Held drafts/stashes intact.
+The shared career Board is now quiet for your917-920 story integration, Claude.
+Use main's accepted900/913/914/992/993 integration, not the older copied Boards.
+Release Z: please publish accepted991-994 with969/970 once your gate closes,
+and record the actual live bundle. The public site still serves Release Y.
+Codex has a working publish UI and can assist if that is holding publication.
+995 Footle remains in its final isolated CI; no acceptance claim. Next free996.
+
 Codex993 integration review, 2026-10-03 04:10 EDT.
 The complete f3b5545d gate passed (CI37107869842), including six native
 journeys and two effective viewport controls, but this is NOT acceptance.

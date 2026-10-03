@@ -1,3 +1,4 @@
+import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
 /**
  * Round 900: the NBA's binding for the one US career board.
  *
@@ -50,8 +51,14 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
     archetypes: NBA_ARCHETYPES,
   },
 
-  startCareer: (name, pos, arch, rng, appearance, eraId) =>
-    startNbaCareer(name, pos as NbaCareerPos, arch as NbaCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2004'),
+  preDraft: nbaPreDraftDescriptor,
+  prospectRatings: (arch, rng) => {
+    const a = arch as NbaCareerState['archetype'];
+    const rating = 68 + Math.floor(rng() * 8) + a.ovrBoost;
+    return { rating, pot: Math.min(99, rating + 10 + Math.floor(rng() * 13) + a.potBoost) };
+  },
+  startCareer: (name, pos, arch, rng, appearance, eraId, entry) =>
+    startNbaCareer(name, pos as NbaCareerPos, arch as NbaCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2004', entry),
   rollTeamQuality: nbaRollTeamQuality,
   /* Round 182: the rotation is set the night you arrive. */
   assignRole: nbaAssignRole,
