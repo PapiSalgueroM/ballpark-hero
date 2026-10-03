@@ -26,7 +26,7 @@ function button(match: RegExp) {
 const click = async (element: HTMLButtonElement) => { await act(async () => { fireEvent.click(element); }); };
 const read = () => JSON.parse(localStorage.getItem(KEY)!);
 const node = () => document.querySelector('[data-nhl-waiver-receipt]');
-const quiet = () => assert.equal(node(), null, 'No waiver event without a local committed release');
+const quiet = () => assert.ok(node() === null, 'No waiver event without a local committed release');
 const normalized = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
 function handler(element: HTMLButtonElement): () => void {
   const key = Object.keys(element).find(name => name.startsWith('__reactProps$'));
@@ -141,7 +141,7 @@ export async function run() {
       const first = await waive(ids[0], expected, state); values(first, state.myTeam);
       const firstNode = node(); assert.equal(mounted.writes.length, 1);
       const second = await waive(ids[1], expected, state); values(second, state.myTeam);
-      assert.notEqual(node(), firstNode, 'A second real event owns a new finite cue');
+      assert.ok(node() !== firstNode, 'A second real event owns a new finite cue');
       assert.equal(expected.teams[state.myTeam].players.length, 15); assert.equal(mounted.writes.length, 2);
       assert.equal(rng.calls(), 0, 'Waivers and presentation add no randomness');
       assert.equal(Object.prototype.hasOwnProperty.call(read(), 'waiverReceipt'), false, 'Transient receipt never enters saved state');
@@ -180,10 +180,11 @@ export async function run() {
       await roster(); await waive(last(expected.teams[state.myTeam].players).id, expected, state);
       const receipt = node(); assert.ok(receipt); const status = receipt.closest('[data-nhl-waiver-status]'), raw = localStorage.getItem(KEY);
       await act(async () => { mounted.view.rerender(<Board />); });
-      assert.equal(node(), receipt); assert.equal(node()?.closest('[data-nhl-waiver-status]'), status);
+      assert.ok(node() === receipt, 'Rerender preserves the receipt');
+      assert.ok(node()?.closest('[data-nhl-waiver-status]') === status, 'Rerender preserves the status region');
       await click(button(/^Hub$/)); await click(button(/Free agency/));
-      assert.equal(node(), receipt, 'Other panel keeps the same event DOM');
-      await click(button(/^Hub$/)); await roster(); assert.equal(node(), receipt, 'Return never remounts the cue');
+      assert.ok(node() === receipt, 'Other panel keeps the same event DOM');
+      await click(button(/^Hub$/)); await roster(); assert.ok(node() === receipt, 'Return never remounts the cue');
       assert.equal(localStorage.getItem(KEY), raw); assert.equal(mounted.writes.length, 1);
     }],
     ['reload and a deliberate reset keep recovered or fresh openings quiet with exact saved bytes', async () => {
@@ -227,7 +228,7 @@ export async function run() {
       const receipt = node(), raw = localStorage.getItem(KEY), rng = random(975); Math.random = rng;
       const control = arm(expected.teams[state.myTeam].players[0].id); assert.equal(control.disabled, true);
       await act(async () => { handler(control)(); }); await act(async () => { handler(button(/^Waive him$/))(); });
-      assert.equal(node(), receipt); values(commit, state.myTeam); assert.ok(node()?.textContent?.startsWith('Last waiver'));
+      assert.ok(node() === receipt, 'Refusal preserves the prior receipt'); values(commit, state.myTeam); assert.ok(node()?.textContent?.startsWith('Last waiver'));
       assert.equal(localStorage.getItem(KEY), raw); assert.equal(mounted.writes.length, 1); assert.equal(rng.calls(), 0);
     }],
   ];
