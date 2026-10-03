@@ -402,19 +402,28 @@ describe('the NHL exemption clock, on its edges (review fixes)', () => {
 });
 
 describe('room, the cap and the contract limit (review fixes)', () => {
-  it('the NFL refuses a send down with the squad full, counting men up for the game, and a cleared man joins it', () => {
-    const squad = Array.from({ length: 15 }, () => man('LB', 50));
+  it('a man who clears joins a full NFL squad, counting men up for the game, and its lowest rated man makes room', () => {
+    const squad = Array.from({ length: 15 }, (_, i) => man('LB', 50 + i));
     const kid = man('LB', 55, { age: 22 });
+    const low = squad[0];
     const s = seat('nfl', 'AAA', [kid, man('LB', 70)], squad, 5, 5);
     const ctx = ctxOf('nfl', [s, seat('nfl', 'BBB', [man('LB', 90)])], 53);
     s.club.up.push('elevated1');
-    expect(sendDownRefusal(ctx, s, kid.id)).toMatch(/practice squad is full/);
-    expect(farmSendDownButton(ctx, s, kid).refusal).toMatch(/full/);
-    s.club.up = [];
-    expect(sendDownRefusal(ctx, s, kid.id)).toBeNull();
-    expect(farmSendDownButton(ctx, s, kid).warn).toMatch(/goes to your practice squad/);
+    const b = farmSendDownButton(ctx, s, kid);
+    expect(b.refusal).toBeNull();
+    expect(b.warn).toContain(`goes to your practice squad, and ${low.name}, your lowest rated squad man, is released to make room`);
     expect(sendDown(ctx, s, kid.id)).toBe('cleared');
     expect(s.reserve.map(p => p.id)).toContain(kid.id);
+    expect(s.reserve.map(p => p.id)).not.toContain(low.id);
+    expect(ctx.pool.map(p => p.id)).toEqual([low.id]);
+    expect(s.reserve.length + s.club.up.length).toBe(16);
+    /* With room nobody is cut. */
+    const kid2 = man('LB', 56, { age: 22 });
+    s.players.push(kid2);
+    s.club.up = [];
+    expect(farmSendDownButton(ctx, s, kid2).warn).toMatch(/goes to your practice squad\.$/);
+    expect(sendDown(ctx, s, kid2.id)).toBe('cleared');
+    expect(ctx.pool.length).toBe(1);
   });
 
   it('a call up and a claim need cap room when the engine gives one', () => {

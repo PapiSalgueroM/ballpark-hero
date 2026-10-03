@@ -587,6 +587,14 @@ export function clearedRoom(r: FarmRules, seat: FarmSeat): boolean {
     && (r.contractLimit === undefined || contractCount(seat) < r.contractLimit);
 }
 
+/** A full capped tier (the NFL squad): the lowest rated men not up for the game, released so a man who clears has a place. */
+export function tierRoomCuts<P extends FarmMan>(r: FarmRules, seat: FarmSeat<P>): P[] {
+  if (r.tierCap === undefined || r.clearedTo !== 'tier') return [];
+  const n = tierLoad(seat) - r.tierCap + 1;
+  if (n <= 0) return [];
+  return seat.reserve.filter(p => !seat.club.up.includes(p.id)).sort((a, b) => a.ovr - b.ovr || a.id.localeCompare(b.id)).slice(0, n);
+}
+
 /**
  * Expose a man already taken off his club's roster to the wire. Claimed, he
  * joins the claimer with his ledger and his old club records the loss for
@@ -610,6 +618,13 @@ export function waive<P extends FarmMan>(ctx: FarmCtx<P>, from: FarmSeat<P>, man
     return 'claimed';
   }
   ctx.events.push(ev('cleared', from.abbr, man));
+  /* A capped tier (the NFL squad) makes room for him, the way a club cuts a squad man to keep the one who cleared. */
+  for (const p of tierRoomCuts(r, from)) {
+    from.reserve.splice(from.reserve.indexOf(p), 1);
+    delete from.club.ledger[p.id];
+    ctx.pool.push({ ...p, years: 1 });
+    ctx.events.push(ev('released', from.abbr, p));
+  }
   if (clearedRoom(r, from)) {
     from.reserve.push(man);
     /* MLB: an outright assignment takes him off the 40 man. */
@@ -627,10 +642,6 @@ export function sendDownRefusal<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSe
   if (!p) return 'He is not on your active roster.';
   if (ctx.rules.sport === 'nba') return 'A standard contract stays with the big club here. Only two way men move between.';
   if (seat.club.up.includes(id)) return 'He is only up for this game. He goes back on his own.';
-  /* A capped tier (the NFL squad) is reached through waivers: full, a man who cleared would be lost to free agency. */
-  if (ctx.rules.tierCap !== undefined && sendDownRoute(ctx, seat, p) === 'waivers' && !clearedRoom(ctx.rules, seat)) {
-    return `Your ${ctx.rules.tierName.toLowerCase()} is full. A man who cleared waivers would have nowhere to go.`;
-  }
   return null;
 }
 
@@ -1047,6 +1058,11 @@ export function farmSendDownButton<P extends FarmMan>(ctx: FarmCtx<P>, seat: Far
 /** Where a man who clears waivers goes, in words, from the same test waive applies once he is off the roster. */
 export function clearedWords<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, p: P): string {
   const off = { ...seat, players: seat.players.filter(x => x.id !== p.id) };
+  const cuts = tierRoomCuts(ctx.rules, off);
+  if (cuts.length) {
+    const who = cuts.length === 1 ? `${cuts[0].name}, your lowest rated squad man, is` : `your ${cuts.length} lowest rated squad men are`;
+    return `If nobody claims him he goes to your ${ctx.rules.tierName.toLowerCase()}, and ${who} released to make room.`;
+  }
   if (!clearedRoom(ctx.rules, off)) return 'If nobody claims him he becomes a free agent.';
   if (ctx.rules.fortyMan !== undefined) return 'If nobody claims him he is outrighted to the minors, off the 40 man.';
   return `If nobody claims him he goes to your ${ctx.rules.tierName.toLowerCase()}.`;
