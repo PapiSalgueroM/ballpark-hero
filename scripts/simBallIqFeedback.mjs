@@ -72,7 +72,11 @@ try {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 10);
     const target = rows.find(row => row.title === controls[control].test);
     assert.equal(target?.status, 'failed'); assert.equal(rows.find(row => row.title === baseline)?.status, 'passed');
-    assert.match(target.failureMessages.join('\n'), /AssertionError:|expect\(element\)|Expected element with focus|TestingLibraryElementError: Unable to find an element with the text:/);
+    /* Colour codes come out: on Windows vitest colours a matcher hint even with
+       FORCE_COLOR=0, which split "expect(element)" and failed the answer, bar
+       and names controls on a message they had produced correctly. */
+    const plain = target.failureMessages.join('\n').replace(/\x1B\[[0-9;]*m/g, '');
+    assert.match(plain, /AssertionError:|expect\(element\)|Expected element with focus|TestingLibraryElementError: Unable to find an element with the text:/);
     console.log(`simBallIqFeedback ${control}: actual executable binding changes one owned source copy.`);
     console.log(`simBallIqFeedback ${control}: one intended assertion fails, original twelve-question score/save/share/completion baseline passes, ten explicit skips.`);
     console.log(`BALL_IQ_CONTROL: ${JSON.stringify({ control, intended: target.title, messages: target.failureMessages })}`);
