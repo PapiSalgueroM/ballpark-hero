@@ -477,7 +477,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
   /* ------------------------- 7. THE ROOKIE YEAR ------------------------- */
   {
     id: 'mlbC_rookie_book', category: 'rookie', cooldown: 99,
-    when: c => yrsOf(c) === 1,
+    when: c => yrsOf(c) >= 1 && yrsOf(c) <= 2,
     title: 'The league has a book on you now',
     body: c => (isHitter(c)
       ? 'One season and every advance scout in the league knows you chase the high fastball. Pitchers have started living up there.'
@@ -503,21 +503,21 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     ],
   },
   {
-    id: 'mlbC_rookie_award_race', category: 'rookie', cooldown: 99,
-    when: c => yrsOf(c) === 1 && c.ovr >= 74,
-    title: 'Rookie of the year talk',
-    body: 'Your name is in the rookie award conversation and every reporter wants to know how it feels. The veterans in the room want to know if it is going to your head.',
+    id: 'mlbC_rookie_home', category: 'rookie', cooldown: 99,
+    when: c => yrsOf(c) === 1,
+    title: 'Home for the winter, a big leaguer',
+    body: 'Your hometown wants you at everything: the high school banquet, the little league opener, the local news, a parade nobody asked you about. Your old coach has already told everyone you will be there.',
     options: [
-      { label: 'Give the reporters everything', say: 'You said yes to every request and became a national story for a month.', fx: { fanbase: 8, morale: -2 } },
-      { label: 'Say it is about the team', say: 'Same quote every night. The veterans nodded and the reporters gave up.', fx: { morale: 3, fanbase: 1 } },
-      { label: 'Stop reading anything about yourself', say: 'You deleted the apps until October and the season stayed simple.', fx: { morale: 4, rating: 1 } },
+      { label: 'Say yes to all of it', say: 'You shook every hand in town and signed every glove. The whole county follows you now.', fx: { fanbase: 7, morale: 3, health: -2 } },
+      { label: 'Do the little league and nothing else', say: 'One morning with the kids, one photo in the paper, and the rest of the winter was yours.', fx: { fanbase: 3, morale: 4 } },
+      { label: 'Stay in your team\'s city and train', say: 'You skipped the hometown tour and spent the winter in the weight room. Some people back home took it personally.', fx: { rating: 1, fanbase: -2 } },
     ],
   },
   {
     id: 'mlbC_rookie_sophomore', category: 'rookie', cooldown: 99,
-    when: c => yrsOf(c) === 2,
+    when: c => yrsOf(c) === 1,
     title: 'The second year',
-    body: 'Everyone has a name for the year after your first. The league adjusts, the expectations go up, and your bad weeks get headlines now.',
+    body: 'Everyone has a name for the year after your first. The expectations go up, the city knows your face, and your bad weeks get headlines now.',
     options: [
       { label: 'Change nothing that worked', p: 0.5,
         win: { say: 'You trusted the routine and the numbers came back on their own by June.', fx: { morale: 5, rating: 1 } },
@@ -690,7 +690,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
   },
   {
     id: 'mlbC_rule_innings_limit', category: 'rules', cooldown: 99, story: 'inningsLimit',
-    when: c => isSp(c) && yrsOf(c) <= 3 && c.age <= 25,
+    when: c => isSp(c) && yrsOf(c) <= 5 && c.age <= 27,
     title: 'Shut down in September',
     body: 'The club set an innings limit for your arm before the season started. You hit it with three weeks left and the team is in the race. The pitching coach says the plan is the plan.',
     options: [
