@@ -36,7 +36,12 @@
       pure 32/0 for the second review's, which also move two 2005 digests in
       "whole"; the 2015-16 data file and its nationality block were the only
       difference between the two trees, so the data moved them, by a path
-      this harness does not isolate).
+      this harness does not isolate). Round 901 rewrote them once more after
+      the same attribution: the round's base tree (06dc0741, the change taken
+      back out) reproduced the baseline exactly (eras 9/0, pure 32/0); on the
+      round's tree the two 2010-11 leagues moved, its three new ones were
+      added, the views gained them, and the 2015-16 and 2005-06 saves moved
+      in "whole" only (laliga2005 in "start" too), the path Round 899 met.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -345,8 +350,9 @@ async function partEras() {
     for (const l of leagues) saves.push({ key: `${eraId}|${l.id}`, club: l.clubs[0], eraId, second: false });
   }
   /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
-     regenerates the baseline on purpose, like a modern one). */
-  if (saves.length !== 9) fail(`the eras hold ${saves.length} leagues where Round 899 left 9`);
+     regenerates the baseline on purpose, like a modern one). Round 901: twelve, the 2010-11 era
+     gained its Serie A, Bundesliga and Ligue 1. */
+  if (saves.length !== 12) fail(`the eras hold ${saves.length} leagues where Round 901 left 12`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }
