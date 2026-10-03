@@ -43,7 +43,7 @@
 .search:focus-within { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
 .search button { display: grid; width: 44px; min-height: 44px; flex-shrink: 0; place-items: center; }
 .search button svg { width: 16px; height: 16px; }
-.resultCount { margin: 14px 0 22px; min-height: 16px; color: hsl(var(--muted-foreground)); font-size: 11px; }
+.resultCount { margin: 14px 0 22px; min-height: 16px; color: hsl(var(--muted-foreground)); font-size: 11px; overflow-wrap: anywhere; }
 .deep > h2, .quick > h2 { font-size: 19px; line-height: 1.2; font-weight: 700; letter-spacing: -.02em; }
 .sectionNote { margin: 7px 0 15px; font-size: 12px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
 .featuredGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
