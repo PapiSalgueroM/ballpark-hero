@@ -17,11 +17,21 @@
  *     is lodged: won must leave him at zero, lost must leave him at the number
  *     the button printed, which must be the ban plus one, and nothing else in
  *     the save may move but his suspendedMatches and the desk. Accepting is
- *     walked too and must move nothing at all.
+ *     walked too and must move nothing at all. The odds on every card must be
+ *     the ladder's (the harness's own copy) for HIS red count this season,
+ *     read off the save, not off the card.
+ * 3b. An appeal nobody answers closes at the next match. In the ignore
+ *     seasons every card written at an earlier match must be closed after
+ *     the next one, and an appeal is also planted on every kept state and
+ *     left alone over the next match: it must close as expired.
  *  4. Each answer moves only the number it names. Every answer of every deck
  *     card is applied to real mid season states; the button's words must end
  *     in the effect's own words, the named number must move by exactly the
- *     stated amount, and the rest of the save must be untouched.
+ *     stated amount, and the rest of the save must be untouched. The hidden
+ *     gate figure (books.fanMood) is read too and no answer may move it or
+ *     claim to: it is not the Fans meter and the code says it is never
+ *     labelled (the review of this round caught three fans answers that
+ *     moved it while the Fans meter stood still).
  *  5. Declining everything is main. Seasons are replayed on one seed with the
  *     shipped engine and with a copy that has the desk's two hook lines taken
  *     out (the season settle and the answer route), which is main for this
@@ -29,7 +39,11 @@
  *     its no change answer, must both leave a save byte identical to that
  *     copy's once the desk block itself is set aside.
  *  6. Words. Every desk card speaks through a role, carries no quotation
- *     marks, and no em or en dash.
+ *     marks, and no em or en dash. Invented speech or conduct next to a real
+ *     name is simNoInventedQuotes's job, which reads the desk since the
+ *     review (QUOTES_CONTROL=desk is its control).
+ *  7. The desk does not cross the summer. A ban is wiped over the summer,
+ *     so after every rollover the desk must be empty.
  *
  * Negative controls (each rewrites a copy in memory, asserts the text it
  * rewrites exists first, and must turn its section red):
@@ -39,13 +53,29 @@
  *   CM_DECISIONS_CONTROL=dice         the settle draws one Math.random (5)
  *   CM_DECISIONS_CONTROL=yellowappeal a second yellow is offered an appeal (1)
  *   CM_DECISIONS_CONTROL=quote        the appeal card quotes the secretary (6)
+ *   CM_DECISIONS_CONTROL=firstred     a first red is quoted as a second (3)
+ *   CM_DECISIONS_CONTROL=noexpiry     an unanswered appeal never closes (3b)
+ *   CM_DECISIONS_CONTROL=carry        the desk crosses the summer (7)
+ *   CM_DECISIONS_CONTROL=gate         board answers also nudge the gate (4)
  *
  * Each was run on 2026-10-03 and went red in its own section and nowhere
  * else: freeloss 12 findings in section 3 (a lost appeal left the ban where
  * the button said it would grow), liar 3 in section 2 (every tier about half
  * its stated rate), leaky 94 in section 4, dice 4 in section 5 (all four
  * declined seasons parted from main), yellowappeal 5 in section 1, quote 35
- * in section 6.
+ * in section 6. The four added after the review were run the same day:
+ * firstred 26 findings in section 3, noexpiry 142 in section 3b, carry 2 in
+ * section 7 (6 of 6 cards crossed the summer at two clubs), gate 148 in
+ * section 4 (gate moved 2 on every board patience answer).
+ * MEASURED AFTER THE REVIEW, 2026-10-03, seeds 979, 1, 2, 3 and 4:
+ *   3b: 38, 40, 23, 38 and 30 unanswered cards closed at the next match in
+ *     the ignore seasons (3, 6, 1, 3 and 5 of them appeals, too few to
+ *     floor, so appeals are planted too). Floor 10 on the cards. Planted
+ *     appeals: 21, 23, 24, 21 and 26, every one closed as expired. Floor 10.
+ *   7: 2, 2, 3, 2 and 3 summers crossed with a desk on the save, 0 cards
+ *     carried. Floor 1 (the carry control proves the check bites).
+ *   3: the odds matched his own red count on every appeal lodged (13, 15,
+ *     11, 16 and 16), a second red among them on three of the five seeds.
  * MEASURED BANDS, 2026-10-03, default seed 979 and SIM_SEED 1, 2, 3 and 4
  * (three clubs, two seasons each, plus four declined seasons against main):
  *   section 5: 4 of 4 seasons byte identical on every seed, with 114, 120,
@@ -57,7 +87,8 @@
  *     on every seed; the pooled end to end win rate was 31 of 71 (43.7%),
  *     against a stated 40% on almost every card. Reported, never asserted.
  *   section 4: 418 to 521 answers applied, all 18 answers of the 7 cards
- *     walked on every seed, 3 to 14 of them meeting a bound. Floor 200.
+ *     walked on every seed, 3 to 14 of them meeting a bound (6 to 20 after
+ *     the review moved the fans answers onto press and board). Floor 200.
  *   section 2: the verdict reads a hash, not Math.random, so it does not move
  *     with the seed: over 20000 ids a tier, 40.39%, 25.37% and 15.04%
  *     observed against 40, 25 and 15 stated (one standard error is 0.35,
@@ -192,8 +223,9 @@ const MIN_STRAIGHT_REDS = 6;   // straight reds the play seasons must contain (m
 const MIN_SITUATIONS = 200;    // answers applied, seasons plus kept states (measured 418 to 521)
 const ODDS_SAMPLE = 20000;     // synthetic verdicts per tier in section 2
 const ODDS_BAND = 1.5;         // points either side of the stated odds
-const MIN_EXPIRED_APPEALS = 1; // unanswered appeals closed at the next match in the ignore seasons (PROVISIONAL)
-const MIN_ROLLOVERS = 2;       // summers crossed with a desk on the save (PROVISIONAL)
+const MIN_CLOSED_CARDS = 10;   // unanswered cards closed at the next match in the ignore seasons (measured 23 to 40)
+const MIN_EXPIRED_APPEALS = 10; // planted appeals closed as expired (measured 21 to 26)
+const MIN_ROLLOVERS = 1;       // summers crossed with a desk on the save (measured 2 to 3)
 
 const fails = [];
 const fail = (section, msg) => { fails.push(`[${section}] ${msg}`); };
@@ -255,7 +287,7 @@ const s5 = { pairs: 0, identical: 0, cards: 0, appeals: 0 };
 /* 3b. Nobody answers in the ignore seasons, so after every match each card
    written at an earlier match must be closed, an appeal as expired with its
    ban as written (the byte identity with main holds the ban itself). */
-const s3b = { closed: 0, appealsExpired: 0 };
+const s3b = { closed: 0, appealsExpired: 0, planted: 0, plantedExpired: 0 };
 const ignoreAll = (s, before, r) => {
   noteDesk(s);
   if (r?.kind !== 'match') return s;
@@ -294,7 +326,7 @@ for (const mode of ['ignore', 'decline']) {
 }
 if (deskSeen.length < S5_MIN_CARDS) fail(5, `only ${deskSeen.length} desk cards met in the declined seasons, under the floor of ${S5_MIN_CARDS}, so identity proves little`);
 console.log(`5. declining is main: ${s5.identical} of ${s5.pairs} seasons byte identical, ${deskSeen.length} desk cards met and declined`);
-if (s3b.appealsExpired < MIN_EXPIRED_APPEALS) fail('3b', `only ${s3b.appealsExpired} unanswered appeals closed at the next match, under the floor of ${MIN_EXPIRED_APPEALS}`);
+if (s3b.closed < MIN_CLOSED_CARDS) fail('3b', `only ${s3b.closed} unanswered cards closed at the next match, under the floor of ${MIN_CLOSED_CARDS}`);
 console.log(`3b. left open: ${s3b.closed} unanswered cards closed at the next match, ${s3b.appealsExpired} of them appeals`);
 
 /* ---------- the play seasons: sections 1, 3 and 4 ---------- */
@@ -465,6 +497,36 @@ for (const [k, base] of kept.entries()) {
     item.options.forEach((_, idx) => checkAnswer(`kept ${k} ${card.id}`, s, A.answerMessage(s, item.id, idx), item, idx));
   }
 }
+/* ---------- 3b, planted: an unanswered appeal on every kept state ---------- */
+/* The ignore seasons above meet only a handful of reds, so an appeal is also
+   planted on every kept state (a fit man given a two match straight red) and
+   left alone over the next match: it must close as expired. Runs after every
+   section that reads the seasons' random stream, so it moves none of them. */
+for (const [k, base] of kept.entries()) {
+  let s = clone(base);
+  const p = s.squad.find(x => !x.isYouth && !x.injuryWeeks && !x.suspendedMatches);
+  if (!p) continue;
+  p.suspendedMatches = 2;
+  p.seasonReds = (p.seasonReds ?? 0) + 1;
+  const card = D.appealCard(s, p.id, 'Planted Town');
+  if (!card) { fail('3b', `kept ${k}: no appeal card for a man with a 2 match ban`); continue; }
+  s.decisions = [card, ...D.deskOf(s)];
+  let played = false;
+  for (let g = 0; g < 12 && !played; g++) {
+    const r = A.playNextEntry(s, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'match') played = true;
+    if (r.kind === 'seasonOver' || s.sacked) break;
+  }
+  if (!played) continue;
+  s3b.planted += 1;
+  const after = D.deskOf(s).find(d => d.id === card.id);
+  if (after?.resolved && after.outcome === 'expired') s3b.plantedExpired += 1;
+  else fail('3b', `kept ${k}: a planted appeal left unanswered reads ${after ? (after.outcome ?? 'open') : 'gone'} after the next match`);
+}
+if (s3b.plantedExpired < MIN_EXPIRED_APPEALS) fail('3b', `only ${s3b.plantedExpired} planted appeals closed as expired, under the floor of ${MIN_EXPIRED_APPEALS}`);
+console.log(`3b. planted: ${s3b.plantedExpired} of ${s3b.planted} planted appeals closed as expired at the next match`);
+
 const allPairs = D.DECK.reduce((n, c) => n + c.options.length, 0);
 if (s4.pairs.size !== allPairs) fail(4, `only ${s4.pairs.size} of ${allPairs} card answers were walked`);
 if (s4.answered < MIN_SITUATIONS) fail(4, `only ${s4.answered} situation answers applied`);
