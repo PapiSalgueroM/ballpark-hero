@@ -16,24 +16,38 @@
  *     awards. 7796 lines, hashed per section, every tenth line kept as text to
  *     point at a mismatch. Recorded twice: identical bytes. Replayed after the
  *     lift: identical.
- *  2. A GM climbs Club Manager's ladder exactly: same XP at every level, same
- *     level, points and progress either side of every threshold, and 200 paired
- *     seeded walks of 40 spends refused and accepted identically.
+ *  2. A GM climbs Club Manager's ladder exactly. The GM's curve and level reads
+ *     are written in the fixture's own words and held against the RECORDING
+ *     (Club Manager now delegates to gmXp, so comparing the two live seats runs
+ *     one function against itself and could never fail on the curve), plus 200
+ *     paired seeded walks of 40 spends refused and accepted identically.
  *  3. Nothing spent is the game that shipped: every consumer at zero points
- *     hands back exactly what it was given.
+ *     hands back exactly what it was given, at every roll.
  *  4. Every point moves its consumer at EVERY step from 1 to 5, for EVERY real
  *     input, not the mean and not the two ends (Round 513's Media tree passed an
- *     ends check while points 3 to 5 bought nothing). The inputs are read from
- *     the shared front office modules: the draft's -4..+4 scouting error, the
- *     firm and sour trade premiums, frontOfficeCuts' dead money for seven
- *     salaries, gradeSeason's trust losses, every press gamble's odds. It is all
+ *     ends check while points 3 to 5 bought nothing), and it is read AFTER the
+ *     number is stored the way the engines store it: a rating as a whole number,
+ *     money in tenths. (The first draft read unrounded ratios over typed inputs,
+ *     and development, which added a fraction to a whole number rating, bought
+ *     nothing at points 1 to 4 once a board rounded it.) The inputs are read from
+ *     the engines: the draft's -4..+4 scouting error, every opening ask the NFL,
+ *     NFL QB, NBA, MLB and NHL price lists set from rating 40 to 99 with each
+ *     list's own floor (136 asks, 131 clear of the floor), frontOfficeCuts' dead
+ *     money for each of them (197 figures), each engine's growth draw parsed
+ *     from its code (NFL 1 or 2, the others 1 to 3), the firm and sour trade
+ *     premiums, gradeSeason's trust losses, every press gamble's odds. It is all
  *     deterministic (rolls are a 1000 point grid, not draws), so the measured
  *     smallest step is exact and each floor is half of it:
  *       scouting 0.15 (floor 0.07)    negotiation 0.02 (0.01)   cap craft 0.04 (0.02)
- *       development 0.05 (0.025)      trading 0.08 (0.04)       ownership 1 (0.5)
+ *       development 0.1 rating points (0.05)   trading 0.08 (0.04)   ownership 1 (0.5)
  *       media 0.03 (0.015)
+ *  4b. Every output is a number a board can store (whole ratings and read
+ *     errors, money in tenths, whole trust), no ask goes under its league's floor
+ *     or above the agent figure, no player grows past his potential (and one
+ *     already at it gains nothing), and the ownership cushion never touches a
+ *     trust gain. 1930080 readings.
  *  5. Each tile's "at the cap" words match what five points do, within a tenth:
- *     measured 0.55, 0.90, 0.80, 1.25, 0.60, 0.636 and +0.15.
+ *     measured 0.55, 0.90, 0.80, +0.5 of a rating point, 0.60, 0.636 and +0.15.
  *  6. A point cannot be conjured, a tree takes five, a full board is 35, a spend
  *     never mutates, and 15 mangled blocks each read as a fresh one without
  *     touching the save around them.
@@ -43,7 +57,7 @@
  *
  * Negative controls (GMXP_CONTROL=...), each refusing to run if its text is gone:
  *   curvestep   XP_LEVEL_STEP 1.04 to 1.041 in whichever file holds the curve:
- *               section 1 red (4 sections of the fixture).
+ *               section 1 red (4 sections of the fixture) and section 2 red.
  *   gmcap       a sixth point per GM tree: section 2 red.
  *   nocap       the shared spend forgets the cap: sections 1, 2 and 6 red.
  *   saturate    ownership stops paying after two points: section 4 red on
@@ -51,10 +65,16 @@
  *   notneutral  negotiation shaves every ask at zero points: section 3 red.
  *   claim       media buys 0.02 a point, the tile still says fifteen: section 5
  *               red while section 4 stays green.
+ *   fractional  development adds a fraction again (the review's defect): section
+ *               4 red at points 1 to 4 and section 4b red.
+ *   pastceiling development forgets the ceiling: section 4b red.
+ *   cushiongain the ownership cushion shrinks a trust gain too: section 4b red.
  * A control that leaves every check green exits 1.
  *
- * Nothing here reads the network: it bundles src/lib modules that import no
- * client, and reads only the fixture.
+ * Nothing here reads the network: it bundles src/lib modules, the four front
+ * office engines among them, that import no client (25 bundled inputs, none
+ * under integrations, no fetch, checked 2026-10-03), and reads only the fixture
+ * and the engines' source.
  *
  * Run: node scripts/simGmXp.mjs
  * Record the Club Manager fixture (only ever from a tree whose clubManagerXp.ts
@@ -74,7 +94,7 @@ const CM_PATH = `${ROOT}/src/lib/clubManagerXp.ts`;
 const GM_PATH = `${ROOT}/src/lib/gmXp.ts`;
 const RECORD = process.env.GMXP_RECORD === '1';
 const CONTROL = process.env.GMXP_CONTROL || '';
-const KNOWN = ['curvestep', 'gmcap', 'nocap', 'saturate', 'notneutral', 'claim'];
+const KNOWN = ['curvestep', 'gmcap', 'nocap', 'saturate', 'notneutral', 'claim', 'fractional', 'pastceiling', 'cushiongain'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`GMXP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -128,8 +148,26 @@ if (CONTROL === 'curvestep') {
   /* Negotiation shaves a point off every ask even with nothing spent. Section 3. */
   swapInto(GM_PATH, '@/lib/gmXp', [
     ['  if (points <= 0) return ask;', ''],
-    ['  return ask * (1 - points * GM_ASK_EDGE_PER_POINT);', '  return ask * (0.99 - points * GM_ASK_EDGE_PER_POINT);'],
+    ['  const exact = Math.max(minimum, ask * (1 - points * GM_ASK_EDGE_PER_POINT));',
+      '  const exact = Math.max(minimum, ask * (0.99 - points * GM_ASK_EDGE_PER_POINT));'],
   ]);
+} else if (CONTROL === 'fractional') {
+  /* The review's defect put back: development adds a fraction of a whole number
+     rating, which a board rounds away. Section 4 (read after the engines'
+     rounding) and section 4b (whole numbers out) must both go red. */
+  swapInto(GM_PATH, '@/lib/gmXp', [[
+    '  return roll < points * GM_GROWTH_CHANCE_PER_POINT && headroom - growth >= 1 ? growth + 1 : growth;',
+    '  return growth + Math.max(0, Math.min(growth * points * 0.05, headroom - growth));',
+  ]]);
+} else if (CONTROL === 'pastceiling') {
+  /* Development forgets the ceiling (Rounds 96 and 116). Section 4b. */
+  swapInto(GM_PATH, '@/lib/gmXp', [[
+    '  return roll < points * GM_GROWTH_CHANCE_PER_POINT && headroom - growth >= 1 ? growth + 1 : growth;',
+    '  return roll < points * GM_GROWTH_CHANCE_PER_POINT ? growth + 1 : growth;',
+  ]]);
+} else if (CONTROL === 'cushiongain') {
+  /* The ownership cushion shrinks a trust GAIN too. Section 4b. */
+  swapInto(GM_PATH, '@/lib/gmXp', [['  if (points <= 0 || delta >= 0) return delta;', '  if (points <= 0) return delta;']]);
 } else if (CONTROL === 'claim') {
   /* The code drifts from the tile: media buys two points of odds, the tile still
      says fifteen at the cap. Section 4 stays green (it still moves); section 5 must not. */
@@ -148,6 +186,11 @@ fs.writeFileSync(ENTRY, [
   "export * as mandate from '@/lib/foOwnerMandate';",
   "export * as press from '@/lib/foGmPress';",
   "export * as cuts from '@/lib/frontOfficeCuts';",
+  /* The four engines' own price lists: what an agent opens at, in tenths. */
+  "export { salaryFor as nflSalaryFor } from '@/lib/frontOffice';",
+  "export { nbaSalaryFor } from '@/lib/nbaFrontOffice';",
+  "export { mlbSalaryFor } from '@/lib/mlbFrontOffice';",
+  "export { nhlSalaryFor } from '@/lib/nhlFrontOffice';",
 ].join('\n'));
 const aliasPlugin = {
   name: 'dukb-alias',
@@ -166,7 +209,7 @@ await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: BUNDLE, logLevel: 'error', plugins: [aliasPlugin],
 });
-const { cm, gm, talks, mandate, press, cuts } = await import(pathToFileURL(BUNDLE).href);
+const { cm, gm, talks, mandate, press, cuts, nflSalaryFor, nbaSalaryFor, mlbSalaryFor, nhlSalaryFor } = await import(pathToFileURL(BUNDLE).href);
 for (const f of [ENTRY, BUNDLE, ...Object.values(overrides)]) { try { fs.unlinkSync(f); } catch { /* gone */ } }
 
 let failures = 0;
@@ -187,6 +230,26 @@ function mulberry32(seed) {
 const sha = lines => crypto.createHash('sha256').update(lines.join('\n')).digest('hex');
 const show = v => (v === null ? 'null' : v === undefined ? 'undefined' : typeof v === 'number' ? String(v) : JSON.stringify(v));
 
+/* The curve and the level reads, in the fixture's own words. Kept apart so
+   section 2 can write the GM's ladder the same way and hold it against the
+   recording from origin/main, not against today's Club Manager (which now runs
+   the very same functions, so comparing the two live seats proves nothing). */
+function curveSections(x) {
+  const curve = [];
+  for (let l = -1; l <= x.MAX_LEVEL + 3; l++) curve.push(`L=${l} xpForLevel=${x.xpForLevel(l)}`);
+
+  const levels = [];
+  const probe = xp => levels.push(
+    `xp=${xp} level=${x.levelFor(xp)} earned=${x.pointsEarned(xp)} progress=${x.levelProgress(xp)}`);
+  for (const xp of [-50, -1, 0, NaN, Infinity, 1e9]) probe(xp);
+  for (let l = 1; l <= x.MAX_LEVEL + 2; l++) {
+    const t = x.xpForLevel(l);
+    const gap = x.xpForLevel(l + 1) - t;
+    for (const xp of [t - 1, t, t + 1, t + Math.floor(gap / 2), t + Math.floor(gap / 3)]) probe(xp);
+  }
+  return { curve, levels };
+}
+
 /* ================================================================== */
 /* The Club Manager fixture: every number the XP screen and the engine */
 /* read, from the real module, at every level and every point.         */
@@ -203,18 +266,7 @@ function cmSections(x) {
     `TREE_INFO=${show(trees.map(t => x.TREE_INFO[t]))}`,
   ];
 
-  S.curve = [];
-  for (let l = -1; l <= x.MAX_LEVEL + 3; l++) S.curve.push(`L=${l} xpForLevel=${x.xpForLevel(l)}`);
-
-  S.levels = [];
-  const probe = xp => S.levels.push(
-    `xp=${xp} level=${x.levelFor(xp)} earned=${x.pointsEarned(xp)} progress=${x.levelProgress(xp)}`);
-  for (const xp of [-50, -1, 0, NaN, Infinity, 1e9]) probe(xp);
-  for (let l = 1; l <= x.MAX_LEVEL + 2; l++) {
-    const t = x.xpForLevel(l);
-    const gap = x.xpForLevel(l + 1) - t;
-    for (const xp of [t - 1, t, t + 1, t + Math.floor(gap / 2), t + Math.floor(gap / 3)]) probe(xp);
-  }
+  Object.assign(S, curveSections(x));
 
   S.spend = [];
   const rnd = mulberry32(942);
@@ -351,7 +403,24 @@ if (!gm) {
 /* ---------- 2. A GM climbs exactly the ladder a manager climbs ---------- */
 console.log('2) The GM curve is Club Manager\'s, at every level, and so is every spend');
 {
+  const f0 = failures;
   let checked = 0;
+  /* Against the RECORDING, not the live seat: Club Manager now delegates to
+     gmXp, so a live comparison runs one function against itself. */
+  const fx = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+  const gmLadder = curveSections({
+    MAX_LEVEL: gm.GM_MAX_LEVEL, xpForLevel: gm.xpForLevel,
+    levelFor: xp => gm.levelFor(xp, gm.GM_MAX_LEVEL), pointsEarned: xp => gm.pointsEarned(xp, gm.GM_MAX_LEVEL),
+    levelProgress: xp => gm.levelProgress(xp, gm.GM_MAX_LEVEL),
+  });
+  for (const name of ['curve', 'levels']) {
+    const want = fx.sections[name];
+    checked += gmLadder[name].length;
+    if (!want || gmLadder[name].length !== want.count || sha(gmLadder[name]) !== want.sha256) {
+      const diff = want?.lines.find(([i, l]) => gmLadder[name][i] !== l);
+      fail(`the GM ${name} is not Club Manager's as recorded from ${fx.recordedFrom}` + (diff ? `: want ${diff[1]}, got ${gmLadder[name][diff[0]]}` : ''));
+    }
+  }
   if (gm.GM_MAX_LEVEL !== cm.MAX_LEVEL) fail(`GM max level ${gm.GM_MAX_LEVEL}, Club Manager ${cm.MAX_LEVEL}`);
   if (gm.GM_TREES.length !== cm.SKILL_TREES.length) fail(`GM has ${gm.GM_TREES.length} trees, Club Manager ${cm.SKILL_TREES.length}`);
   if (gm.GM_MAX_TREE_POINTS !== cm.MAX_TREE_POINTS) fail(`GM tree cap ${gm.GM_MAX_TREE_POINTS}, Club Manager ${cm.MAX_TREE_POINTS}`);
@@ -385,7 +454,7 @@ console.log('2) The GM curve is Club Manager\'s, at every level, and so is every
       }
     }
   }
-  if (!failures) ok(`${checked} XP probes over ${cm.MAX_LEVEL + 5} levels and ${spends} paired spends land the same on both seats`);
+  if (failures === f0) ok(`${checked} XP probes, the curve and level reads matching the recording from ${fx.recordedFrom}, and ${spends} paired spends landing the same on both seats`);
 }
 
 /* ---------- the real numbers each GM consumer is handed ---------- */
@@ -401,21 +470,67 @@ const REAL = (() => {
     { gradeResult: 'missed' }, { tradeLine: 'a deal' }, { gradeResult: 'met' }].map(f => ({ ...base, ...f }));
   const odds = new Set();
   for (const f of facts) for (const o of press.buildGmPresser(words, f)?.options ?? []) if (o.effect.gamble) odds.add(o.effect.gamble.odds);
-  const deadNow = [1, 2.5, 4, 9, 14, 22, 35].map(salary => cuts.deadMoneyFor({ salary, years: 3, guaranteed: false }).now);
+  /* Every opening ask each engine prices, rating 40 to 99, and its floor: the
+     price it puts on the worst man it would ever sign. */
+  const pricers = {
+    NFL: ovr => nflSalaryFor('WR', ovr), 'NFL QB': ovr => nflSalaryFor('QB', ovr),
+    NBA: ovr => nbaSalaryFor(ovr), MLB: ovr => mlbSalaryFor(ovr), NHL: ovr => nhlSalaryFor(ovr),
+  };
+  const asks = [];
+  for (const [league, price] of Object.entries(pricers)) {
+    const minimum = price(0);
+    const seen = new Set();
+    for (let ovr = 40; ovr <= 99; ovr++) seen.add(price(ovr));
+    for (const ask of [...seen].sort((a, b) => a - b)) asks.push({ league, ask, minimum });
+  }
+  /* The dead money the shared cut engine charges for each of those deals, cut
+     with years left, guaranteed or not: this season's charge and next. */
+  const dead = new Set();
+  for (const { ask } of asks) for (const guaranteed of [false, true]) {
+    const d = cuts.deadMoneyFor({ salary: ask, years: 3, guaranteed });
+    for (const x of [d.now, d.next]) if (x > 0) dead.add(x);
+  }
+  /* A year of growth, as each engine draws it: p.ovr + a + floor(rng() * n),
+     capped at potential. Read from the code (comments stripped), so a retune of
+     an engine is a retune of what this harness walks. */
+  const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  const growth = [];
+  for (const [league, file] of [['NFL', 'frontOffice'], ['NBA', 'nbaFrontOffice'], ['MLB', 'mlbFrontOffice'], ['NHL', 'nhlFrontOffice']]) {
+    const code = strip(readSrc(`${ROOT}/src/lib/${file}.ts`));
+    const draws = new Set();
+    for (const m of code.matchAll(/p\.ovr = Math\.min\(p\.pot, p\.ovr \+ (\d+) \+ Math\.floor\(rng\(\) \* (\d+)\)\)/g)) {
+      for (let k = 0; k < Number(m[2]); k++) draws.add(Number(m[1]) + k);
+    }
+    if (!draws.size) fail(`${file}.ts no longer grows a young player the way this harness reads (p.ovr + a + floor(rng() * n), capped at p.pot)`);
+    for (const g of [...draws].sort()) growth.push({ league, g });
+  }
   return {
     noise: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
-    asks: [1.2, 4.5, 12, 30],
-    deadNow,
-    growth: [[1, 12], [3, 10], [6, 15]],
+    asks,
+    dead: [...dead].sort((a, b) => a - b),
+    growth,
     premiums: [talks.FIRM_PREMIUM, talks.SOUR_PREMIUM],
     losses: graded.map(g => g.trustDelta).filter(d => d < 0),
     gains: graded.map(g => g.trustDelta).filter(d => d >= 0),
     odds: [...odds].sort(),
   };
 })();
-if (REAL.losses.length < 2 || REAL.odds.length < 3 || REAL.deadNow.some(d => !(d > 0))) {
-  fail(`the front office numbers this harness reads came back thin: losses ${show(REAL.losses)}, odds ${show(REAL.odds)}, dead ${show(REAL.deadNow)}`);
+if (REAL.losses.length < 2 || REAL.gains.filter(g => g > 0).length < 2 || REAL.odds.length < 3 || REAL.dead.length < 10 ||
+  REAL.asks.length < 40 || new Set(REAL.growth.map(x => x.league)).size !== 4) {
+  fail(`the front office numbers this harness reads came back thin: losses ${show(REAL.losses)}, gains ${show(REAL.gains)}, odds ${show(REAL.odds)}, ` +
+    `${REAL.dead.length} dead money figures, ${REAL.asks.length} asks, growth ${show(REAL.growth)}`);
 }
+console.log(`   real inputs: ${REAL.asks.length} opening asks over five price lists, ${REAL.dead.length} dead money figures, ` +
+  `growth draws ${['NFL', 'NBA', 'MLB', 'NHL'].map(l => `${l} ${REAL.growth.filter(x => x.league === l).map(x => x.g).join('/')}`).join(', ')}`);
+/* What a board does with a number before it is ever read again: a rating is a
+   whole number, money is kept in tenths. Section 4 reads every consumer AFTER
+   this, so a point that a board would round away buys nothing here either. */
+const asRating = x => Math.round(x);
+const asMoney = x => Math.round(x * 10) / 10;
+/* Asks far enough above their league's floor that five points of talk never
+   reach it: on these every point must bite in full. The rest are checked in 4b
+   for never going under the floor. */
+const OPEN_ASKS = REAL.asks.filter(a => a.ask * (1 - gm.GM_MAX_TREE_POINTS * gm.GM_ASK_EDGE_PER_POINT) >= a.minimum);
 
 /* Each GM tree, the consumer it feeds, and a reading of that consumer at p points
    over the real inputs. `dir` is the way a point must push the reading. */
@@ -423,18 +538,18 @@ const ROLLS = Array.from({ length: 1000 }, (_, i) => (i + 0.5) / 1000);
 const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
 const CONSUMERS = {
   scouting: { feeds: 'expected read error of a prospect, per scouting error the draft drew (a perfect read has nothing to fix)', dir: -1,
-    read: p => REAL.noise.filter(n => n !== 0).map(n => mean(ROLLS.map(r => Math.abs(gm.scoutedNoise(n, p, r))))) },
-  negotiation: { feeds: 'opening contract ask, as a share of the agent figure', dir: -1,
-    read: p => REAL.asks.map(a => gm.contractAsk(a, p) / a) },
-  capCraft: { feeds: 'dead money a release leaves, as a share of the shared engine figure', dir: -1,
-    read: p => REAL.deadNow.map(d => gm.craftedDeadMoney(d, p) / d) },
-  development: { feeds: 'a young player year of growth, as a share of the base growth', dir: 1,
-    read: p => REAL.growth.map(([g, h]) => gm.developedGrowth(g, h, p) / g) },
+    read: p => REAL.noise.filter(n => n !== 0).map(n => mean(ROLLS.map(r => Math.abs(asRating(gm.scoutedNoise(n, p, r)))))) },
+  negotiation: { feeds: 'opening ask once kept in tenths, as a share of the agent figure, on every ask clear of its floor', dir: -1,
+    read: p => OPEN_ASKS.map(a => mean(ROLLS.map(r => asMoney(gm.contractAsk(a.ask, p, r, a.minimum)))) / a.ask) },
+  capCraft: { feeds: 'dead money once kept in tenths, as a share of the cut engine figure', dir: -1,
+    read: p => REAL.dead.map(d => mean(ROLLS.map(r => asMoney(gm.craftedDeadMoney(d, p, r)))) / d) },
+  development: { feeds: 'rating points a young player gains in a year once stored as a whole number, per engine growth draw, one point of room left', dir: 1,
+    read: p => REAL.growth.map(({ g }) => mean(ROLLS.map(r => asRating(gm.developedGrowth(g, g + 1, p, r))))) },
   trading: { feeds: 'a rival premium over value, as a share of the firm and sour premiums', dir: -1,
     read: p => REAL.premiums.map(x => (gm.tradePremium(x, p) - 1) / (x - 1)) },
   ownership: { feeds: 'trust lost to a missed and a badly missed mandate', dir: -1,
     read: p => REAL.losses.map(d => -gm.cushionTrustLoss(d, p)) },
-  media: { feeds: 'odds each candid or bold answer lands', dir: 1,
+  media: { feeds: 'odds each answer that gambles lands', dir: 1,
     read: p => REAL.odds.map(o => gm.pressOdds(o, p)) },
 };
 
@@ -445,17 +560,20 @@ console.log('3) A GM who has spent nothing gets exactly the numbers the front of
   let checked = 0;
   const xs = [-28, -16, -4, -2.5, -1, 0, 0.45, 0.97, 1, 1.02, 1.15, 2.5, 7, 30];
   for (const x of xs) {
-    for (const r of [0, 0.01, 0.5, 0.99]) if (gm.scoutedNoise(x, 0, r) !== x) fail(`scoutedNoise moved ${x} at zero points`);
-    const at0 = { contractAsk: gm.contractAsk(x, 0), craftedDeadMoney: gm.craftedDeadMoney(x, 0),
-      developedGrowth: gm.developedGrowth(x, 3, 0), tradePremium: gm.tradePremium(x, 0),
-      cushionTrustLoss: gm.cushionTrustLoss(x, 0), pressOdds: gm.pressOdds(x, 0) };
+    for (const r of [0, 0.01, 0.5, 0.99]) {
+      /* The roll takers, at every roll, and an ask under a floor above it: zero points touch nothing. */
+      const rolled = { scoutedNoise: gm.scoutedNoise(x, 0, r), contractAsk: gm.contractAsk(x, 0, r, 1),
+        craftedDeadMoney: gm.craftedDeadMoney(x, 0, r), developedGrowth: gm.developedGrowth(x, 30, 0, r) };
+      for (const [name, v] of Object.entries(rolled)) if (!Object.is(v, x)) fail(`${name}(${x}) at zero points and roll ${r} is ${v}`);
+    }
+    const at0 = { tradePremium: gm.tradePremium(x, 0), cushionTrustLoss: gm.cushionTrustLoss(x, 0), pressOdds: gm.pressOdds(x, 0) };
     for (const [name, v] of Object.entries(at0)) { checked += 1; if (!Object.is(v, x)) fail(`${name}(${x}) at zero points is ${v}`); }
   }
   const fresh = gm.defaultGmXp();
   for (const t of gm.GM_TREES) {
     if (gm.gmTreePoints(fresh, t) !== 0 || gm.gmTreePoints(undefined, t) !== 0) fail(`a fresh or absent block has points in ${t}`);
   }
-  if (failures === f0) ok(`${checked + 4 * xs.length} readings at zero points hand back exactly what they were given; fresh and absent blocks are empty`);
+  if (failures === f0) ok(`${checked + 16 * xs.length} readings at zero points hand back exactly what they were given; fresh and absent blocks are empty`);
 }
 
 /* ---------- 4. Every point moves its consumer, at every step ---------- */
@@ -465,7 +583,7 @@ console.log('4) Every GM tree point moves the number it feeds, at every step fro
      about half the smallest step measured (header), so a tree that loses half its
      bite at any one level fails, and a tree that stops moving fails by miles. */
   const MIN_STEP = {
-    scouting: 0.07, negotiation: 0.01, capCraft: 0.02, development: 0.025,
+    scouting: 0.07, negotiation: 0.01, capCraft: 0.02, development: 0.05,
     trading: 0.04, ownership: 0.5, media: 0.015,
   };
   let endsOnly = 0;
@@ -496,17 +614,68 @@ console.log('4) Every GM tree point moves the number it feeds, at every step fro
   console.log(`   (an ends only check passes ${endsOnly} of ${gm.GM_TREES.length} trees)`);
 }
 
+/* ---------- 4b. What a board stores, and the lines a point never crosses ---------- */
+console.log('4b) Every effect hands back a number a board can store, and never crosses its line');
+{
+  const f0 = failures;
+  let checked = 0;
+  const once = new Set();
+  const bad = (key, msg) => { if (!once.has(key)) { once.add(key); fail(msg); } };
+  const isWhole = x => Number.isInteger(x);
+  const isTenth = x => Math.abs(x * 10 - Math.round(x * 10)) < 1e-9;
+  for (let p = 1; p <= gm.GM_MAX_TREE_POINTS; p++) {
+    for (const r of ROLLS) {
+      for (const n of REAL.noise) { checked += 1; if (!isWhole(gm.scoutedNoise(n, p, r))) bad('scout', `scouting hands back ${gm.scoutedNoise(n, p, r)} for a read error of ${n}: not a whole number`); }
+      /* Development: whole numbers out, and never past the ceiling, for every
+         growth an engine draws and every room from none to plenty. */
+      for (const { league, g } of REAL.growth) {
+        for (const room of [0, 1, 2, 5]) {
+          const h = g + room;
+          const v = gm.developedGrowth(g, h, p, r);
+          checked += 1;
+          if (!isWhole(v)) bad('devwhole', `development turns ${league} growth ${g} into ${v} at ${p} points: a whole number rating cannot hold it`);
+          if (v > h) bad('ceiling', `development carries ${league} growth ${g} to ${v}, past the ${h} his potential leaves (${p} points)`);
+          if (v < g) bad('devdown', `development cut ${league} growth ${g} to ${v}`);
+        }
+      }
+      /* Money: tenths out, never above the engine figure, never under the floor. */
+      for (const { league, ask, minimum } of REAL.asks) {
+        const v = gm.contractAsk(ask, p, r, minimum);
+        checked += 1;
+        if (!isTenth(v)) bad('asktenth', `negotiation turns a ${league} ask of ${ask} into ${v}: not a tenth`);
+        if (v < minimum - 1e-9) bad('floor', `negotiation takes a ${league} ask of ${ask} to ${v}, under the league floor ${minimum} (${p} points)`);
+        if (v > ask + 1e-9) bad('askup', `negotiation raised a ${league} ask of ${ask} to ${v}`);
+      }
+      for (const d of REAL.dead) {
+        const v = gm.craftedDeadMoney(d, p, r);
+        checked += 1;
+        if (!isTenth(v)) bad('deadtenth', `cap craft turns ${d} of dead money into ${v}: not a tenth`);
+        if (v > d + 1e-9 || v < 0) bad('deadrange', `cap craft turns ${d} of dead money into ${v}`);
+      }
+    }
+    /* Ownership cushions a loss and never touches a gain. */
+    for (const g of REAL.gains) { checked += 1; if (gm.cushionTrustLoss(g, p) !== g) bad('gain', `ownership turned a trust gain of ${g} into ${gm.cushionTrustLoss(g, p)} at ${p} points`); }
+    for (const l of REAL.losses) { checked += 1; if (!isWhole(gm.cushionTrustLoss(l, p))) bad('trustwhole', `ownership turned a trust loss of ${l} into a fraction`); }
+  }
+  /* A player already capped by his potential gains nothing from any point. */
+  for (const { g } of REAL.growth) for (let p = 1; p <= gm.GM_MAX_TREE_POINTS; p++) {
+    checked += 1;
+    if (ROLLS.some(r => gm.developedGrowth(g, g, p, r) !== g)) bad('capped', `a player whose growth of ${g} already reached his potential grew past it at ${p} points`);
+  }
+  if (failures === f0) ok(`${checked} readings: whole ratings, money in tenths, no ask under its floor, nobody past his ceiling, no trust gain touched`);
+}
+
 /* ---------- 5. What each tile promises is what the code applies ---------- */
 console.log('5) Each tile\'s "at the cap" line matches what five points actually do');
 {
   /* The claim in GM_TREE_INFO[t].atMax, as a number, and the reading it is about:
-     the capped reading over the untouched one (media: the odds added). Within a
+     the capped reading over the untouched one (media and development: the amount added). Within a
      tenth either way, so the words cannot drift from the code. */
   const CLAIM = {
     scouting: { says: 'a little over half', want: 0.55, of: 'ratio' },
     negotiation: { says: 'about a tenth off', want: 0.9, of: 'ratio' },
     capCraft: { says: 'about a fifth less', want: 0.8, of: 'ratio' },
-    development: { says: 'about a quarter more', want: 1.25, of: 'ratio' },
+    development: { says: 'an even chance of one extra rating point', want: 0.5, of: 'gain' },
     trading: { says: 'about 40 percent less', want: 0.6, of: 'ratio' },
     ownership: { says: 'about a third less', want: 2 / 3, of: 'ratio' },
     media: { says: '15 points more often', want: 0.15, of: 'gain' },

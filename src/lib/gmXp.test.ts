@@ -5,7 +5,7 @@ import { createElement } from 'react';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import * as cm from '@/lib/clubManagerXp';
 import {
-  GM_MAX_LEVEL, GM_MAX_TREE_POINTS, GM_TREES, contractAsk, cushionTrustLoss, defaultGmXp,
+  GM_MAX_LEVEL, GM_MAX_TREE_POINTS, GM_TREES, contractAsk, craftedDeadMoney, cushionTrustLoss, defaultGmXp,
   developedGrowth, gmPointsFree, gmXpOf, isValidGmXp, levelFor, pointsEarned, pressOdds,
   scoutedNoise, spendGmPoint, tradePremium, xpForLevel,
 } from '@/lib/gmXp';
@@ -54,26 +54,47 @@ describe('the GM block', () => {
 describe('the GM effects', () => {
   it('hand back exactly what they were given at zero points', () => {
     expect(scoutedNoise(3, 0, 0)).toBe(3);
-    expect(contractAsk(12.5, 0)).toBe(12.5);
-    expect(developedGrowth(3, 10, 0)).toBe(3);
+    expect(contractAsk(12.5, 0, 0, 1)).toBe(12.5);
+    expect(craftedDeadMoney(4.5, 0, 0)).toBe(4.5);
+    expect(developedGrowth(3, 10, 0, 0)).toBe(3);
     expect(tradePremium(1.15, 0)).toBe(1.15);
     expect(cushionTrustLoss(-16, 0)).toBe(-16);
     expect(pressOdds(0.5, 0)).toBe(0.5);
   });
 
-  it('move at every point, not only at the cap', () => {
+  /* The rolled effects, averaged over a grid of rolls, stored the way a board stores them. */
+  const rolls = Array.from({ length: 100 }, (_, i) => (i + 0.5) / 100);
+  const avg = (f: (r: number) => number) => rolls.reduce((s, r) => s + f(r), 0) / rolls.length;
+
+  it('move at every point, not only at the cap, after the board rounds them', () => {
     for (let p = 1; p <= GM_MAX_TREE_POINTS; p++) {
-      expect(contractAsk(10, p)).toBeLessThan(contractAsk(10, p - 1));
+      expect(avg(r => contractAsk(1.2, p, r, 0.7))).toBeLessThan(avg(r => contractAsk(1.2, p - 1, r, 0.7)));
+      expect(avg(r => craftedDeadMoney(0.5, p, r))).toBeLessThan(avg(r => craftedDeadMoney(0.5, p - 1, r)));
+      expect(avg(r => Math.round(developedGrowth(1, 9, p, r)))).toBeGreaterThan(avg(r => Math.round(developedGrowth(1, 9, p - 1, r))));
       expect(tradePremium(1.15, p)).toBeLessThan(tradePremium(1.15, p - 1));
       expect(-cushionTrustLoss(-16, p)).toBeLessThan(-cushionTrustLoss(-16, p - 1));
       expect(pressOdds(0.45, p)).toBeGreaterThan(pressOdds(0.45, p - 1));
-      expect(developedGrowth(3, 10, p)).toBeGreaterThan(developedGrowth(3, 10, p - 1));
     }
   });
 
-  it('never grows a player past his ceiling and never touches a gain or a decline', () => {
-    expect(developedGrowth(4, 4.1, 5)).toBeCloseTo(4.1, 10);
-    expect(developedGrowth(-2, 5, 5)).toBe(-2);
+  it('hand back whole ratings and money in tenths', () => {
+    for (const r of rolls) {
+      expect(Number.isInteger(developedGrowth(2, 9, 3, r))).toBe(true);
+      const ask = contractAsk(1.2, 3, r, 0.7);
+      expect(Math.round(ask * 10) / 10).toBe(ask);
+      const dead = craftedDeadMoney(0.8, 3, r);
+      expect(Math.round(dead * 10) / 10).toBe(dead);
+    }
+  });
+
+  it('never grows a player past his ceiling, never asks under the floor, and never touches a gain or a decline', () => {
+    for (const r of rolls) {
+      expect(developedGrowth(2, 2, 5, r)).toBe(2);
+      expect(developedGrowth(2, 3, 5, r)).toBeLessThanOrEqual(3);
+      expect(contractAsk(0.7, 5, r, 0.7)).toBe(0.7);
+      expect(contractAsk(0.8, 5, r, 0.7)).toBeGreaterThanOrEqual(0.7);
+    }
+    expect(developedGrowth(-2, 5, 5, 0)).toBe(-2);
     expect(cushionTrustLoss(14, 5)).toBe(14);
     expect(tradePremium(1.15, 5)).toBeGreaterThan(1);
   });
@@ -91,6 +112,20 @@ describe('GmXpPanel', () => {
     for (const b of off) expect((b as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: 'Spend a point (0/5)' }));
     expect(spend).toHaveBeenCalledWith('ownership');
+  });
+
+  it('says nothing is full at the top level while points sit unspent', () => {
+    const maxed = { ...defaultGmXp(), xp: xpForLevel(GM_MAX_LEVEL) };
+    render(createElement(GmXpPanel, { block: maxed, onSpendPoint: () => {}, live: GM_TREES }));
+    expect(screen.getByText('Top level. Every point the trees hold has been earned.')).toBeTruthy();
+    expect(screen.getByText('35 points to spend')).toBeTruthy();
+    expect(screen.queryByText(/Every tree is full/)).toBeNull();
+  });
+
+  it('does not offer points to spend when no tile on the desk can take one', () => {
+    render(createElement(GmXpPanel, { block: rich, onSpendPoint: () => {}, live: [] }));
+    expect(screen.queryByText('3 points to spend')).toBeNull();
+    expect(screen.getByText('3 points saved. No tree on this desk can take one yet.')).toBeTruthy();
   });
 
   it('draws a mangled block as a fresh one rather than crashing', () => {

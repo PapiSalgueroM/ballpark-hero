@@ -157,8 +157,11 @@ export function spendPoint<T extends string, B extends XpBlock<T>>(set: XpTreeSe
  *    premium, a graded season's trust change, a press gamble's odds) and hands
  *    back the adjusted one.
  * 3. EVERY POINT, NOT JUST THE LAST. Every effect is a scale rather than a race
- *    to a clamp, so points 1 to 5 each move it. scripts/simGmXp.mjs walks every
- *    step against the real numbers the front office produces.
+ *    to a clamp, so points 1 to 5 each move it, and it moves it AFTER the board
+ *    stores the number: ratings are whole numbers and money is kept in tenths, so
+ *    an effect hands back a whole number or a tenth, never a fraction a board
+ *    would round away. scripts/simGmXp.mjs walks every step against the real
+ *    numbers the front office produces, in the units the engines store.
  */
 export type GmTree =
   | 'scouting' | 'negotiation' | 'capCraft' | 'development'
@@ -198,7 +201,7 @@ export const GM_TREE_INFO: Record<GmTree, GmTreeDef> = {
     id: 'negotiation', label: 'Negotiation', emoji: '\u{1F91D}',
     blurb: 'Agents open nearer what their man is actually worth.',
     atMax: 'About a tenth off the opening ask on a new deal.',
-    needs: 'Only pays when you sign or extend somebody.',
+    needs: 'Only pays when you sign or extend somebody above the league minimum.',
   },
   capCraft: {
     id: 'capCraft', label: 'Cap craft', emoji: '\u{1F9EE}',
@@ -209,7 +212,7 @@ export const GM_TREE_INFO: Record<GmTree, GmTreeDef> = {
   development: {
     id: 'development', label: 'Development', emoji: '\u{1F331}',
     blurb: 'Young players grow a little faster, never past their ceiling.',
-    atMax: 'About a quarter more growth a year, still capped by potential.',
+    atMax: 'An even chance of one extra rating point a year, still capped by potential.',
     needs: 'Pays on young players with room left to grow.',
   },
   trading: {
@@ -227,8 +230,8 @@ export const GM_TREE_INFO: Record<GmTree, GmTreeDef> = {
   media: {
     id: 'media', label: 'Media', emoji: '\u{1F3A4}',
     blurb: 'Your gambles at the podium land more often.',
-    atMax: 'A candid or bold answer lands 15 points more often.',
-    needs: 'Only pays when you gamble with a candid or bold answer.',
+    atMax: 'An answer that gambles lands 15 points more often.',
+    needs: 'Only pays on an answer that gambles. A safe answer has nothing to land.',
   },
 };
 
@@ -292,43 +295,77 @@ export function spendGmPoint(u: unknown, tree: string): GmXp | null {
 /** Scouting: the chance a second look halves a prospect's read error, per point. */
 export const GM_SCOUT_SECOND_LOOK = 0.15;
 /**
- * Scouting. `noise` is the board's scouting error for one prospect (the shared
- * draft class draws it as a whole number, -4 to +4) and `roll` is a draw in
- * [0, 1) that the caller makes ONLY when points are above zero, so an untouched
- * GM's draft draws exactly the same numbers it always did. A good roll halves
- * the error toward zero. A whole number in, a whole number out.
+ * Scouting. `noise` is the scouting error on one prospect's read (the draft
+ * class draws it as a whole number, -4 to +4) and `roll` is a draw in [0, 1).
+ * A good roll halves the error toward zero. A whole number in, a whole number out.
+ *
+ * Two rules for whoever wires it in. The draft class keeps ONE grade per
+ * prospect and every CPU club drafts by it, so the sharpened read must be the
+ * user's own view (a field of its own beside the shared grade), never a rewrite
+ * of the shared grade, or a GM's points would sharpen his rivals' board as much
+ * as his. And the roll comes from a stream of its own, never the class's rng,
+ * so a GM with points is dealt exactly the class an untouched GM is dealt.
  */
 export function scoutedNoise(noise: number, points: number, roll: number): number {
   if (points <= 0) return noise;
   return roll < points * GM_SCOUT_SECOND_LOOK ? Math.trunc(noise / 2) : noise;
 }
 
+/*
+ * Every front office keeps money in tenths of a million (salaryFor, nbaSalaryFor,
+ * mlbSalaryFor, nhlSalaryFor and deadMoneyFor all round to 0.1), and a few
+ * percent of a small deal is less than a tenth. Rounded to the nearest tenth,
+ * the middle points would buy nothing on most deals. So the money effects hand
+ * back a figure already in tenths, rounded up or down by a roll in proportion to
+ * how far the exact figure sits between the two: on average a point is worth
+ * exactly its percentage, and every point raises the chance of the lower tenth.
+ * As with scouting, the caller draws the roll only when points are above zero,
+ * from a stream of its own.
+ */
+function toTenths(exact: number, roll: number): number {
+  const t = exact * 10;
+  const lo = Math.floor(t + 1e-9);
+  const frac = t - lo;
+  return (frac > 1e-9 && roll < frac ? lo + 1 : lo) / 10;
+}
+
 /** Negotiation: the share of an agent's opening ask talked away, per point. */
 export const GM_ASK_EDGE_PER_POINT = 0.02;
-export function contractAsk(ask: number, points: number): number {
+/**
+ * Negotiation. `ask` is the agent's opening figure in the league's tenths and
+ * `minimum` is the league's minimum deal: talk never takes an ask below it, so
+ * a man already on the minimum has nothing to negotiate.
+ */
+export function contractAsk(ask: number, points: number, roll: number, minimum: number): number {
   if (points <= 0) return ask;
-  return ask * (1 - points * GM_ASK_EDGE_PER_POINT);
+  const exact = Math.max(minimum, ask * (1 - points * GM_ASK_EDGE_PER_POINT));
+  return Math.min(ask, toTenths(exact, roll));
 }
 
 /** Cap craft: the share of a release's dead money structured away, per point. */
 export const GM_DEAD_MONEY_RELIEF_PER_POINT = 0.04;
-export function craftedDeadMoney(amount: number, points: number): number {
+/** Cap craft. `amount` is the dead money the shared cut engine charges, in tenths. */
+export function craftedDeadMoney(amount: number, points: number, roll: number): number {
   if (points <= 0) return amount;
-  return amount * (1 - points * GM_DEAD_MONEY_RELIEF_PER_POINT);
+  return Math.min(amount, toTenths(amount * (1 - points * GM_DEAD_MONEY_RELIEF_PER_POINT), roll));
 }
 
-/** Development: extra growth per point, as a share of the year's growth. */
-export const GM_GROWTH_PER_POINT = 0.05;
+/** Development: the chance, per point, of one extra rating point in a year of growth. */
+export const GM_GROWTH_CHANCE_PER_POINT = 0.1;
 /**
- * Development. `growth` is the year's rating change and `headroom` is what the
- * player has left below his potential. A decline is left alone, and the extra
- * never carries a player past his ceiling (the Round 96 and 116 rule): it is
- * clipped at the headroom the base growth left, and never below the base.
+ * Development. `growth` is the year's rating change (a whole number: every
+ * engine grows a young player 1 or 2 points in the NFL, 1 to 3 elsewhere) and
+ * `headroom` is what the player had left below his potential before it. A
+ * fraction of a whole number rating is lost the moment a board stores it, so a
+ * point buys a chance of one whole extra point instead: 10 percent a point, an
+ * even chance at five. A decline is left alone, and the extra never carries a
+ * player past his ceiling (the Round 96 and 116 rule). The bonus is for the
+ * GM's own players only, and the roll, like scouting's, is drawn only when
+ * points are above zero, from a stream of its own.
  */
-export function developedGrowth(growth: number, headroom: number, points: number): number {
+export function developedGrowth(growth: number, headroom: number, points: number, roll: number): number {
   if (points <= 0 || growth <= 0) return growth;
-  const extra = growth * points * GM_GROWTH_PER_POINT;
-  return growth + Math.max(0, Math.min(extra, headroom - growth));
+  return roll < points * GM_GROWTH_CHANCE_PER_POINT && headroom - growth >= 1 ? growth + 1 : growth;
 }
 
 /** Trading: the share of a rival's premium over value talked away, per point. */
@@ -350,7 +387,7 @@ export function cushionTrustLoss(delta: number, points: number): number {
 /** Media: odds added to a press gamble landing, per point, and the most it can reach. */
 export const GM_PRESS_ODDS_PER_POINT = 0.03;
 export const GM_PRESS_ODDS_CAP = 0.95;
-/** Media. `odds` is the chance a candid or bold answer lands. A gamble always keeps some risk. */
+/** Media. `odds` is the chance an answer that gambles lands. A gamble always keeps some risk. */
 export function pressOdds(odds: number, points: number): number {
   if (points <= 0) return odds;
   return Math.min(GM_PRESS_ODDS_CAP, odds + points * GM_PRESS_ODDS_PER_POINT);

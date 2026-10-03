@@ -31,6 +31,9 @@ export function GmXpPanel({ block: raw, onSpendPoint, live }: GmXpPanelProps) {
   const progress = levelProgress(block.xp, GM_MAX_LEVEL);
   const atCap = level >= GM_MAX_LEVEL;
   const nextAt = atCap ? null : xpForLevel(level + 1);
+  const pointsIn = (tree: GmTree) => Math.max(0, Math.min(GM_MAX_TREE_POINTS, block.points[tree] ?? 0));
+  /* A point is only "to spend" when some tile on this desk can take it. */
+  const canTakeOne = GM_TREES.some(tree => live.includes(tree) && pointsIn(tree) < GM_MAX_TREE_POINTS);
 
   return (
     <div className="space-y-3" data-gm-xp>
@@ -46,25 +49,27 @@ export function GmXpPanel({ block: raw, onSpendPoint, live }: GmXpPanelProps) {
         </div>
         <div className="text-[10px] text-muted-foreground">
           {atCap
-            ? 'Every tree is full. There is nothing left to earn.'
+            ? 'Top level. Every point the trees hold has been earned.'
             : `${Math.max(0, Math.round((nextAt ?? 0) - block.xp)).toLocaleString()} XP to level ${level + 1}, which is one more point.`}
         </div>
-        <div className={cn('text-[11px] font-bold', free > 0 ? 'text-gold' : 'text-muted-foreground')}>
-          {free > 0
+        <div className={cn('text-[11px] font-bold', free > 0 && canTakeOne ? 'text-gold' : 'text-muted-foreground')}>
+          {free > 0 && canTakeOne
             ? `${free} point${free === 1 ? '' : 's'} to spend`
-            : `${spent} of ${GM_TREES.length * GM_MAX_TREE_POINTS} points spent`}
+            : free > 0
+              ? `${free} point${free === 1 ? '' : 's'} saved. No tree on this desk can take one yet.`
+              : `${spent} of ${GM_TREES.length * GM_MAX_TREE_POINTS} points spent`}
         </div>
         <p className="text-[9px] text-muted-foreground">
-          You earn XP for a winning season, titles, playoff rounds, beating the owner's ask,
-          finishing higher than anyone expected and bringing a prospect through. Points are
-          yours for good: nothing here can be taken back.
+          You earn XP every season for your win share, plus titles, playoff rounds, meeting or
+          beating the owner's ask, finishing higher than anyone expected and bringing a prospect
+          through. Points are yours for good: nothing here can be taken back.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {GM_TREES.map(tree => {
           const info = GM_TREE_INFO[tree];
-          const have = Math.max(0, Math.min(GM_MAX_TREE_POINTS, block.points[tree] ?? 0));
+          const have = pointsIn(tree);
           const full = have >= GM_MAX_TREE_POINTS;
           const onDesk = live.includes(tree);
           const canSpend = onDesk && free > 0 && !full;
