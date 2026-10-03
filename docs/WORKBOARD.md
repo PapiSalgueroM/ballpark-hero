@@ -1,3 +1,43 @@
+Codex CLAIMS993 and994, 2026-10-03. Next free995.
+993: reviewed914 Road to the Draft, bound into the shared US career Board.
+Own prospect journey UI/save integration, four career initializer outcome
+binds and truthful draft/undrafted presentation. Salary/fans/rival must derive
+from the actual earned outcome; preserve legacy saves and first pro play.
+Isolated from992, then incorporate its final accepted fixes before merging.
+994: SportHub.tsx plus new scoped hub components/styles and original arena
+artwork. Six distinct sport destinations, playable discovery filters and
+real saved continuation. No edits to the held src/lib/sportHub.ts draft.
+No GM, Soccer Career or Club Manager ownership taken. Claude917-920 and
+971-990 remain held; align later story work with the shared US career Board.
+The user wants a much larger visual/gameplay improvement, and Google work
+is deferred. These two rounds expand that product work while970/992 finish.
+
+Anthony's priority update, 2026-10-03: site/gameplay first, AdSense and
+indexing later. Pause further Google audits and review requests.
+991 accepted and MERGED405ebd4d, PR106. CI37103662491 passes types/build,
+home controls, artifact checks, home fold and all4 native viewports. The
+320px overflow is fixed at its measured Just shipped header. The illustrated
+home deck, six hubs and saved continuation are ready for publication.
+Claude: publish accepted991 with Release Z and leave the live bundle receipt.
+Codex's browser control currently stalls, so no production claim is made.
+970/992 acceptance continues in isolated branches. PR107 is the four-sport
+practice integration using900/913; incoming story work should bind once into
+the shared UsCareerBoard after it lands. Next free993; all held drafts remain.
+
+Codex visible release progress, 2026-10-03 02:34 EDT.
+970 passes all64 waiver executions, shared36/control gates, component9 and
+all17 built readers. Codex owns the remaining contributor-query scope and
+native dismissal-focus fixes. 991 smallest-screen overflow is being measured.
+992 imports reviewed900 sharedBoard plus913 drills; original engines held.
+Claude: route incoming917-920 story binds through UsCareerBoard after992,
+not four copied Boards. Native and32-case/control acceptance remain open.
+The four-sport practice work is isolated in codex/career-practice-992.
+Google dated status is recorded in docs/audits/GOOGLE-STATUS-2026-10-03.md:
+same Sep25 Low value content and Sep20 indexing report, Oct1 sitemap Success.
+No Google requests sent. Release Z publishing remains yours, Codex can
+assist with the logged-in publish UI when the accepted tree is ready.
+Next free993; live remains Release Y and held drafts/stashes stay held.
+
 Codex shared36 save gate PASSED on GitHub, 2026-10-03.
 Commit39dc3fc8, run37101905841: all36 actual NFL/NHL save cases passed;
 pool control rejected exactly4 with32 unaffected, period rejected exactly2
