@@ -21,8 +21,8 @@
  *   contact   a little interest, and he tells you his next priority
  *   pitch     sell one of six things; the one he cares about most moves him
  *             most, and only if your program can back it up
- *   visit     an official visit, limited per cycle, worth more in a week you
- *             win at home
+ *   visit     an official visit, one a man and limited per cycle, worth more
+ *             in a week you win at home
  *   nil       a NIL offer, reserved from the pot and paid only if he signs
  *
  * Every recruit also has a short list of rival schools that add interest
@@ -60,9 +60,14 @@ export const PRIORITY_LABEL: Record<RecruitPriority, string> = {
 /** One sport's binding. Everything that differs between football and
  *  basketball recruiting lives here; the loop does not. */
 export interface RecruitingSport {
-  sport: 'cfb' | 'cbb';
+  /** The dynasty this binds, written into the trail so a save is never
+   *  played under the wrong sport. Any id: a new sport is a new descriptor. */
+  sport: string;
   /** Positions a recruit can play, repeats weight the draw. */
   positions: readonly string[];
+  /** A star roll (0 to 100) over the first line is a five star, over the
+   *  second a four, over the third a three, else a two. */
+  starRolls: readonly [number, number, number];
   /** Recruits on the board each cycle. */
   boardSize: number;
   /** The most a school may sign in one class. */
@@ -78,23 +83,41 @@ export interface RecruitingSport {
   eliteLine: number;
   /** A recruit's true rating is ratingBase + 5 per star + 0 to 8. */
   ratingBase: number;
-  /** A recruit's NIL ask is this per star plus 0 to 7, in the dynasty's NIL units. */
+  /** A recruit's NIL ask is this per star plus 0 to nilNoise - 1, in the dynasty's NIL units. */
   nilPerStar: number;
+  nilNoise: number;
   /** The prestige a man of 0 to 5 stars expects to hear from, and how many
    *  points short of it cost his whole attention. Basketball's table is the
    *  top of its sport, so its needs sit higher and its span is tighter. */
   starNeed: readonly number[];
   reachSpan: number;
-  /** The portal: how many outside men are in it, how long it runs, the hours, and the sit downs. */
+  /** The portal: how many outside men are in it, how long it runs, the hours, the visits and the sit downs. */
   portalSize: number;
   portalWeeks: number;
   portalHours: number;
+  portalVisits: number;
   retainSlots: number;
+  /** The outside men's positions, dealt in turn, so a window of portalSize
+   *  holds every position group. */
+  portalPositions: readonly string[];
+  /** An outside man's rating is portalOvrLo plus 0 to portalOvrSpan - 1; at
+   *  portalFourStar or over he is a four star; his NIL ask is
+   *  (rating - portalNilFloor) times portalNilRate, at least 1. */
+  portalOvrLo: number;
+  portalOvrSpan: number;
+  portalFourStar: number;
+  portalNilFloor: number;
+  portalNilRate: number;
 }
 
+/* The star rolls, ratings, NIL asks and portal men below are the dynasties'
+   own generators number for number (cfbRecruitClass and cfbPortalPool in
+   src/lib/cfbDynasty.ts, cbbRecruitClass and cbbPortalPool in
+   src/lib/cbbDynasty.ts), so binding this module changes no distribution. */
 export const CFB_RECRUITING: RecruitingSport = {
   sport: 'cfb',
   positions: ['QB', 'RB', 'WR', 'WR', 'TE', 'OL', 'OL', 'DL', 'DL', 'LB', 'DB', 'DB'],
+  starRolls: [93, 72, 34],
   boardSize: 24,
   classCap: 5,
   weeks: 10,
@@ -104,17 +127,26 @@ export const CFB_RECRUITING: RecruitingSport = {
   eliteLine: 90,
   ratingBase: 54,
   nilPerStar: 9,
+  nilNoise: 8,
   starNeed: [0, 50, 60, 70, 80, 88],
   reachSpan: 25,
   portalSize: 8,
   portalWeeks: 2,
   portalHours: 10,
+  portalVisits: 1,
   retainSlots: 3,
+  portalPositions: ['QB', 'RB', 'WR', 'TE', 'OL', 'DL', 'LB', 'DB'],
+  portalOvrLo: 70,
+  portalOvrSpan: 16,
+  portalFourStar: 82,
+  portalNilFloor: 62,
+  portalNilRate: 1.4,
 };
 
 export const CBB_RECRUITING: RecruitingSport = {
   sport: 'cbb',
   positions: ['PG', 'SG', 'SF', 'PF', 'C'],
+  starRolls: [92, 70, 32],
   boardSize: 20,
   classCap: 3,
   weeks: 8,
@@ -124,12 +156,20 @@ export const CBB_RECRUITING: RecruitingSport = {
   eliteLine: 88,
   ratingBase: 56,
   nilPerStar: 8,
+  nilNoise: 7,
   starNeed: [0, 60, 72, 80, 86, 91],
   reachSpan: 9,
   portalSize: 7,
   portalWeeks: 2,
   portalHours: 8,
+  portalVisits: 1,
   retainSlots: 2,
+  portalPositions: ['PG', 'SG', 'SF', 'PF', 'C', 'SG', 'PF'],
+  portalOvrLo: 72,
+  portalOvrSpan: 15,
+  portalFourStar: 83,
+  portalNilFloor: 64,
+  portalNilRate: 1.3,
 };
 
 /* ------------------------------------------------------------- the rules */
@@ -196,7 +236,9 @@ export interface ProgramPitchContext {
   coachYears: number;
   /** Starting spots opening next season, by position. */
   openSpots: Partial<Record<string, number>>;
-  /** NIL pot for this cycle. */
+  /** NIL money this window opens with. A dynasty that spends one pot on
+   *  the class and the portal hands the portal what the class left. A NIL
+   *  pitch is backed by what is still unspent, not by this. */
   nilPot: number;
 }
 
@@ -228,7 +270,7 @@ export interface TrailRecruit {
 
 export interface RecruitingTrail {
   phase: 'hs' | 'portal';
-  sport: 'cfb' | 'cbb';
+  sport: string;
   season: number;
   mySchool: string;
   week: number;
@@ -239,7 +281,11 @@ export interface RecruitingTrail {
   nilLeft: number;
   /** NIL actually paid to men who signed with me. */
   nilPaid: number;
+  /** The most I may sign. */
   classCap: number;
+  /** The most any other school may sign. The same as mine on the high
+   *  school trail; in the portal mine follows my losses and theirs does not. */
+  rivalCap: number;
   recruits: TrailRecruit[];
   /** Commitments each school holds right now (rivals included). */
   commits: Record<string, number>;
@@ -368,11 +414,13 @@ export function pickRivals(sport: RecruitingSport, stars: number, home: string, 
         : stars === 3 ? s.prestige >= need[3] && s.prestige <= need[5] + 2
           : s.prestige <= need[4] + 2;
   const pool = others.filter(fits);
-  const from = pool.length >= RIVALS_PER_RECRUIT ? pool : others;
+  /* Distinct ids, so a table that lists a school twice cannot leave the
+     loop below hunting for a third name that is not there. */
+  const from = [...new Set((pool.length >= RIVALS_PER_RECRUIT ? pool : others).map(s => s.id))];
   const out: string[] = [];
   while (out.length < Math.min(RIVALS_PER_RECRUIT, from.length)) {
-    const s = pick(from, rng);
-    if (!out.includes(s.id)) out.push(s.id);
+    const id = pick(from, rng);
+    if (!out.includes(id)) out.push(id);
   }
   const local = others.filter(s => s.state && s.state === home && !out.includes(s.id));
   if (local.length && rng() < 0.6) out[out.length - 1] = pick(local, rng).id;
@@ -398,7 +446,8 @@ export function openTrail(
   const recruits: TrailRecruit[] = [];
   for (let i = 0; i < sport.boardSize; i++) {
     const roll = rng() * 100;
-    const stars = roll > 93 ? 5 : roll > 72 ? 4 : roll > 34 ? 3 : 2;
+    const [five, four, three] = sport.starRolls;
+    const stars = roll > five ? 5 : roll > four ? 4 : roll > three ? 3 : 2;
     const trueOvr = sport.ratingBase + stars * 5 + Math.floor(rng() * 9);
     const home = ctx.state && (rng() < HOME_SHARE || !states.length) ? ctx.state : (states.length ? pick(states, rng) : '');
     const rivals = pickRivals(sport, stars, home, schools, ctx.schoolId, rng);
@@ -410,7 +459,7 @@ export function openTrail(
       priorities: drawPriorities(sport, stars, trueOvr, rng), known: 0,
       trueOvr, lo, hi, rivals, interest,
       committedTo: null, signedWith: null,
-      nilAsk: stars * sport.nilPerStar + Math.floor(rng() * 8), nilOffer: 0,
+      nilAsk: stars * sport.nilPerStar + Math.floor(rng() * sport.nilNoise), nilOffer: 0,
       visited: false, contacted: false,
     });
   }
@@ -419,7 +468,7 @@ export function openTrail(
     phase: 'hs', sport: sport.sport, season, mySchool: ctx.schoolId,
     week: 0, weeks: sport.weeks, hoursPerWeek: sport.hoursPerWeek,
     visitsLeft: sport.visitLimit, nilLeft: Math.max(0, Math.floor(ctx.nilPot)), nilPaid: 0,
-    classCap: sport.classCap, recruits, commits: {}, done: false,
+    classCap: sport.classCap, rivalCap: sport.classCap, recruits, commits: {}, done: false,
   };
 }
 
@@ -432,7 +481,8 @@ export function hoursOf(actions: TrailAction[]): number {
  *  somewhere, and when every school on his list is full it is one of these. */
 export const OFF_BOARD = 'elsewhere';
 
-const hasRoom = (t: RecruitingTrail, id: string) => id === OFF_BOARD || (t.commits[id] ?? 0) < t.classCap;
+const capOf = (t: RecruitingTrail, id: string) => (id === t.mySchool ? t.classCap : t.rivalCap);
+const hasRoom = (t: RecruitingTrail, id: string) => id === OFF_BOARD || (t.commits[id] ?? 0) < capOf(t, id);
 const commitLine = (t: RecruitingTrail) => (t.phase === 'portal' ? PORTAL_COMMIT_AT : COMMIT_AT);
 
 /** His schools by interest, best first, ties by id so a replay is exact. */
@@ -466,9 +516,12 @@ function applyAction(sport: RecruitingSport, t: RecruitingTrail, r: TrailRecruit
       return true;
     case 'pitch':
       if (!a.priority || !RECRUIT_PRIORITIES.includes(a.priority)) return false;
-      r.interest[me] = (r.interest[me] ?? 0) + pitchGain(r, a.priority, ctx) * k;
+      /* A NIL pitch is backed by the money still mine to offer him: what is
+         left in the pot plus anything already on the table for him. */
+      r.interest[me] = (r.interest[me] ?? 0) + pitchGain(r, a.priority, { ...ctx, nilPot: t.nilLeft + r.nilOffer }) * k;
       return true;
     case 'visit': {
+      /* One official visit a man, and only while the cycle's visits last. */
       if (t.visitsLeft <= 0 || r.visited) return false;
       const mult = wk.home ? (wk.won ? VISIT_HOME_WIN : VISIT_HOME_LOSS) : 1;
       r.interest[me] = (r.interest[me] ?? 0) + VISIT_GAIN * mult * k;
@@ -478,7 +531,8 @@ function applyAction(sport: RecruitingSport, t: RecruitingTrail, r: TrailRecruit
     }
     case 'nil': {
       const amount = Math.floor(Math.min(a.amount ?? r.nilAsk, t.nilLeft));
-      if (amount <= 0 || r.nilOffer > 0) return false;
+      /* NaN (an empty form field) is refused, never spent. */
+      if (!Number.isFinite(amount) || amount <= 0 || r.nilOffer > 0) return false;
       t.nilLeft -= amount;
       r.nilOffer = amount;
       r.interest[me] = (r.interest[me] ?? 0) + nilGain(r, amount) * k;
@@ -611,9 +665,10 @@ export function classScore(t: RecruitingTrail, schoolId: string): number {
 export interface RosterMan { id: string; name: string; pos: string; ovr: number; cls: string; starter: boolean }
 
 /** The chance a man of mine enters the portal when nobody sits down with
- *  him. Seniors are out of eligibility, and in a one and done sport an elite
- *  freshman is off to the pros, not the portal. A good player stuck behind a
- *  starter is the one who goes. */
+ *  him. In this game a senior graduates rather than transfers (real
+ *  graduate transfers exist; this model leaves them out), and in a one and
+ *  done sport an elite freshman is off to the pros, not the portal. A good
+ *  player stuck behind a starter is the one who goes. */
 export const PORTAL_STARTER_RISK = 0.02;
 export const PORTAL_BENCH_RISK = 0.06;
 export const PORTAL_STUCK_RISK = 0.3;
@@ -635,14 +690,21 @@ export interface PortalWindow { lost: RosterMan[]; retained: string[]; trail: Re
  * roster order whoever is retained, so a sit down never changes who else
  * goes. Then the window: outside men with real tape (the band is exact),
  * a short window, a lower commit line, and room for as many as I lost plus
- * two, never more than a class.
+ * two, never more than a class. My losses cap me, not my rivals: each of
+ * them keeps a full class of room. The window opens with ctx.nilPot, so a
+ * caller with one pot for the year hands in what the class left of it.
  */
 export function openPortal(
   sport: RecruitingSport, roster: RosterMan[], retainIds: string[], schools: RecruitingSchool[],
   ctx: ProgramPitchContext, season: number, deps: TrailDeps,
 ): PortalWindow {
   const { rng } = deps;
-  const retained = retainIds.filter(id => roster.some(m => m.id === id)).slice(0, sport.retainSlots);
+  /* A sit down is spent only on a man who could leave: a repeated name, or
+     a man with no risk (a senior, an early pro), costs no slot. */
+  const retained = [...new Set(retainIds)].filter(id => {
+    const m = roster.find(x => x.id === id);
+    return !!m && portalRisk(m, sport) > 0;
+  }).slice(0, sport.retainSlots);
   const lost: RosterMan[] = [];
   for (const m of roster) {
     const goes = rng() < portalRisk(m, sport);
@@ -653,8 +715,8 @@ export function openPortal(
   const me: RecruitingSchool = byId.get(ctx.schoolId) ?? { id: ctx.schoolId, prestige: ctx.prestige, state: ctx.state };
   const recruits: TrailRecruit[] = [];
   for (let i = 0; i < sport.portalSize; i++) {
-    const trueOvr = sport.ratingBase + 16 + Math.floor(rng() * 16);
-    const stars = trueOvr >= sport.ratingBase + 28 ? 4 : 3;
+    const trueOvr = sport.portalOvrLo + Math.floor(rng() * sport.portalOvrSpan);
+    const stars = trueOvr >= sport.portalFourStar ? 4 : 3;
     const home = states.length ? pick(states, rng) : (ctx.state ?? '');
     let priorities = drawPriorities(sport, stars, trueOvr, rng);
     if (rng() < 0.5) priorities = ['playing-time' as RecruitPriority, ...priorities.filter(p => p !== 'playing-time')].slice(0, 3);
@@ -662,10 +724,10 @@ export function openPortal(
     const interest: Record<string, number> = { [me.id]: startInterest(me, home, rng) };
     for (const id of rivals) interest[id] = startInterest(byId.get(id)!, home, rng);
     recruits.push({
-      id: deps.newId(), name: deps.genName(rng), pos: sport.positions[i % sport.positions.length], stars, home,
+      id: deps.newId(), name: deps.genName(rng), pos: sport.portalPositions[i % sport.portalPositions.length], stars, home,
       priorities, known: 0, trueOvr, lo: trueOvr, hi: trueOvr, rivals, interest,
       committedTo: null, signedWith: null,
-      nilAsk: Math.max(1, Math.round((trueOvr - sport.ratingBase - 8) * 1.4)), nilOffer: 0,
+      nilAsk: Math.max(1, Math.round((trueOvr - sport.portalNilFloor) * sport.portalNilRate)), nilOffer: 0,
       visited: false, contacted: false,
     });
   }
@@ -675,8 +737,8 @@ export function openPortal(
     trail: {
       phase: 'portal', sport: sport.sport, season, mySchool: ctx.schoolId,
       week: 0, weeks: sport.portalWeeks, hoursPerWeek: sport.portalHours,
-      visitsLeft: 1, nilLeft: Math.max(0, Math.floor(ctx.nilPot)), nilPaid: 0,
-      classCap: Math.min(sport.classCap, lost.length + 2), recruits, commits: {}, done: false,
+      visitsLeft: sport.portalVisits, nilLeft: Math.max(0, Math.floor(ctx.nilPot)), nilPaid: 0,
+      classCap: Math.min(sport.classCap, lost.length + 2), rivalCap: sport.classCap, recruits, commits: {}, done: false,
     },
   };
 }
@@ -684,6 +746,7 @@ export function openPortal(
 /* ------------------------------------------------------------- the save */
 
 const isNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
+const isInt = (v: unknown): v is number => Number.isInteger(v);
 const isStr = (v: unknown): v is string => typeof v === 'string';
 const isNumRecord = (v: unknown): v is Record<string, number> =>
   !!v && typeof v === 'object' && !Array.isArray(v) && Object.values(v as object).every(isNum);
@@ -692,39 +755,77 @@ function validRecruit(r: unknown): r is TrailRecruit {
   if (!r || typeof r !== 'object') return false;
   const x = r as Record<string, unknown>;
   const pr = x.priorities;
-  return isStr(x.id) && isStr(x.name) && isStr(x.pos) && isStr(x.home)
-    && isNum(x.stars) && isNum(x.known) && isNum(x.trueOvr) && isNum(x.lo) && isNum(x.hi)
-    && x.lo <= x.trueOvr && x.trueOvr <= x.hi
+  const fieldsOk = isStr(x.id) && isStr(x.name) && isStr(x.pos) && isStr(x.home)
+    && isInt(x.stars) && x.stars >= 0 && x.stars <= 5
+    && isInt(x.known) && x.known >= 0 && x.known <= 3
+    && isNum(x.trueOvr) && isNum(x.lo) && isNum(x.hi)
+    && x.lo <= x.trueOvr && x.trueOvr <= x.hi && x.hi - x.lo <= 2 * BAND_START
     && Array.isArray(pr) && pr.length === 3 && new Set(pr).size === 3
     && pr.every(p => RECRUIT_PRIORITIES.includes(p as RecruitPriority))
     && Array.isArray(x.rivals) && x.rivals.every(isStr)
     && isNumRecord(x.interest)
     && (x.committedTo === null || isStr(x.committedTo))
     && (x.signedWith === null || isStr(x.signedWith))
-    && isNum(x.nilAsk) && isNum(x.nilOffer) && x.nilOffer >= 0
+    && isNum(x.nilAsk) && x.nilAsk >= 0 && isNum(x.nilOffer) && x.nilOffer >= 0
     && typeof x.visited === 'boolean' && typeof x.contacted === 'boolean';
+  if (!fieldsOk) return false;
+  /* He commits and signs only with a school on his list (or off the board
+     on signing day), and a committed man signs where he is committed. */
+  const list = x.interest as Record<string, number>;
+  const onList = (id: string) => Object.prototype.hasOwnProperty.call(list, id);
+  const c = x.committedTo as string | null;
+  const s = x.signedWith as string | null;
+  if (c !== null && !onList(c)) return false;
+  if (s !== null && s !== OFF_BOARD && !onList(s)) return false;
+  return c === null || s === null || s === c;
 }
 
 /**
  * A saved trail, checked. This block is new and optional: a save without it
  * has no trail and plays as before, and a block that fails any check comes
  * back null so the caller resets this block alone and nothing else in the
- * save. A valid block comes back as a fresh copy.
+ * save. A valid block comes back as a fresh copy. The block is checked
+ * against the sport it is loaded for, and its fields must agree with each
+ * other, not only each be the right type.
  */
-export function sanitizeTrail(raw: unknown): RecruitingTrail | null {
+export function sanitizeTrail(raw: unknown, sport: RecruitingSport): RecruitingTrail | null {
   if (!raw || typeof raw !== 'object') return null;
   const x = raw as Record<string, unknown>;
-  const ok = (x.phase === 'hs' || x.phase === 'portal') && (x.sport === 'cfb' || x.sport === 'cbb')
+  const portal = x.phase === 'portal';
+  const ok = (x.phase === 'hs' || portal) && x.sport === sport.sport
     && isNum(x.season) && isStr(x.mySchool)
-    && isNum(x.week) && isNum(x.weeks) && x.week >= 0 && x.week <= x.weeks
-    && isNum(x.hoursPerWeek) && isNum(x.visitsLeft) && x.visitsLeft >= 0
+    && isInt(x.weeks) && x.weeks >= 1 && x.weeks <= (portal ? sport.portalWeeks : sport.weeks)
+    && isInt(x.week) && x.week >= 0 && x.week <= x.weeks
+    && isNum(x.hoursPerWeek) && x.hoursPerWeek > 0 && x.hoursPerWeek <= (portal ? sport.portalHours : sport.hoursPerWeek)
+    && isInt(x.visitsLeft) && x.visitsLeft >= 0
     && isNum(x.nilLeft) && x.nilLeft >= 0 && isNum(x.nilPaid) && x.nilPaid >= 0
-    && isNum(x.classCap) && x.classCap >= 0
+    && isInt(x.classCap) && x.classCap >= 0 && x.classCap <= sport.classCap
+    && isInt(x.rivalCap) && x.rivalCap >= 0 && x.rivalCap <= sport.classCap
     && Array.isArray(x.recruits) && x.recruits.every(validRecruit)
-    && isNumRecord(x.commits) && Object.values(x.commits).every(n => n >= 0 && n <= (x.classCap as number))
+    && isNumRecord(x.commits)
     && typeof x.done === 'boolean';
   if (!ok) return null;
-  const ids = (x.recruits as TrailRecruit[]).map(r => r.id);
+  const t = x as unknown as RecruitingTrail;
+  const ids = t.recruits.map(r => r.id);
   if (new Set(ids).size !== ids.length) return null;
+  /* Visits used and men visited are the same count (one visit a man). */
+  const visited = t.recruits.filter(r => r.visited).length;
+  if (t.visitsLeft + visited > (portal ? sport.portalVisits : sport.visitLimit)) return null;
+  /* Nobody signs before signing day and everybody signs on it. */
+  const signed = t.recruits.filter(r => r.signedWith !== null).length;
+  if (t.done ? signed !== t.recruits.length : signed !== 0 || t.week >= t.weeks) return null;
+  /* Each school's count is the men committed or signed there, inside its cap. */
+  const held: Record<string, number> = {};
+  for (const r of t.recruits) {
+    const at = r.signedWith ?? r.committedTo;
+    if (at !== null && at !== OFF_BOARD) held[at] = (held[at] ?? 0) + 1;
+  }
+  for (const id of new Set([...Object.keys(held), ...Object.keys(t.commits)])) {
+    if ((t.commits[id] ?? 0) !== (held[id] ?? 0) || (held[id] ?? 0) > capOf(t, id)) return null;
+  }
+  /* NIL is paid only on signing day, only to my signees, and every other offer went back. */
+  const mine = t.recruits.filter(r => r.signedWith === t.mySchool).reduce((a, r) => a + r.nilOffer, 0);
+  if (t.nilPaid !== (t.done ? mine : 0)) return null;
+  if (t.done && t.recruits.some(r => r.signedWith !== t.mySchool && r.nilOffer !== 0)) return null;
   return JSON.parse(JSON.stringify(raw)) as RecruitingTrail;
 }
