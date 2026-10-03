@@ -31,6 +31,15 @@ try {
     await stage.waitFor();
     await page.evaluate(() => document.fonts.ready);
     await stage.locator('svg').first().waitFor();
+    await page.screenshot({ path: `${output}/home-${width}.png` });
+    const layout = await page.evaluate(() => ({
+      viewport: innerWidth, width: document.documentElement.scrollWidth,
+      overflow: [...document.querySelectorAll('body *')].map(el => {
+        const r = el.getBoundingClientRect();
+        return { tag: el.tagName, className: typeof el.className === 'string' ? el.className : '', text: el.textContent?.slice(0, 80), left: r.left, right: r.right };
+      }).filter(r => r.left < -1 || r.right > innerWidth + 1).slice(0, 35),
+    }));
+    await writeFile(`${output}/layout-${width}.json`, JSON.stringify(layout, null, 2));
     const first = stage.locator('[data-stage-card]').first();
     const box = await first.boundingBox();
     assert.ok(box && box.y <= 430 && box.height >= 44, 'A playable game is in the first screen');
@@ -43,7 +52,6 @@ try {
       assert.ok(target && target.height >= 44, 'Sport has a usable touch target: ' + href);
     }
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'No page-level horizontal overflow');
-    await page.screenshot({ path: `${output}/home-${width}.png` });
     await first.focus();
     await page.keyboard.press('Enter');
     await page.waitForURL('**/soccer-career');
