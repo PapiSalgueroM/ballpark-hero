@@ -536,6 +536,22 @@ export function loadPreDraft(raw: unknown, desc?: PreDraftDescriptor): PreDraftS
   };
   if (desc) {
     if (s.sport !== desc.sport || s.eraId !== desc.eraId || !desc.routes.some(route => route.id === s.routeId)) return null;
+    if (s.phase === 'done' && s.draft) {
+      // A committed outcome is history, not a request to run today's formulas.
+      const d = s.draft, teams = desc.teamIds(), count = d.devSeasons.length;
+      const route = preDraftRoute(desc, s.routeId);
+      if (!teams.includes(d.team) || d.draftYear !== desc.draftYear
+        || s.seasonsDone !== route.seasons || s.age !== route.startAge + route.seasons
+        || s.lines.some((line, i) => line.age !== route.startAge + i)
+        || d.ageAtDraft !== s.age || d.ageAfter !== d.ageAtDraft + count
+        || !Number.isInteger(d.ratingAfter) || d.ratingAfter < 1 || d.ratingAfter > s.pot
+        || d.devSeasons.some((line, i) => line.age !== d.ageAtDraft + i)
+        || (desc.postDraft ? count < desc.postDraft.min || count > desc.postDraft.max : count !== 0)
+        || (d.slotValue !== null && d.slotValue < 0)
+        || (d.pick === null ? d.slotValue !== null
+          : d.pick > teams.length * desc.rounds || d.round !== Math.ceil(d.pick / teams.length)
+            || d.pickInRound !== (d.pick - 1) % teams.length + 1)) return null;
+    }
     if (s.phase === 'choice' && !preDraftChoicePool(desc).some(card => card.id === s.pendingChoice)) {
       s.pendingChoice = null;
       s.phase = s.seasonsDone >= preDraftRoute(desc, s.routeId).seasons ? 'showcase' : 'season';

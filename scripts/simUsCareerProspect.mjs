@@ -1,7 +1,7 @@
 /* Round 993: actual career boards carry a played, saved prospect journey
    into the constructor and first professional season. Every source control
    must fail four named outcomes while four legacy saves remain unchanged.
-   US_CAREER_PROSPECT_CONTROL=before|save|restore|handoff|duplicate|choice|invalid|showcase|undrafted|archive|corrupt|back|rules */
+   US_CAREER_PROSPECT_CONTROL=before|save|restore|handoff|duplicate|choice|invalid|showcase|undrafted|archive|corrupt|back|rules|historical|outcome */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -18,6 +18,7 @@ const QUIET = 'quiet legacy restore preserves the existing career unchanged';
 const JOURNEY = 'plays every saved prospect stage into the earned career and first season';
 const CHOICE = 'choices apply the displayed consequences and reject invalid options';
 const SHOWCASE = 'rules reopen and showcase approaches pay their displayed stock moves';
+const HISTORICAL = 'historical completed outcomes survive reload and remain the career archive';
 const entry = '{ ...outcome, pot: state.pot, health: outcome.devSeasons.length ? 100 : state.health, prospect: state }';
 const controls = {
   save: { file: BOARD, from: "localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape));", to: 'void sport.saveKey;', test: JOURNEY },
@@ -30,10 +31,11 @@ const controls = {
   undrafted: { file: BOARD, from: entry, to: entry.replace('...outcome,', '...outcome, pick: outcome.pick ?? 1,'), test: 'an actual undrafted outcome becomes a camp signing without top-pick rewards' },
   archive: { file: BOARD, from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);', to: 'delete c.prospect;\n    const campNote = sport.campBattle(c, teamQuality, Math.random);', test: JOURNEY },
   corrupt: { file: 'src/lib/usCareerProspect.ts', from: 'const state = loadPreDraft(p.state, desc);', to: 'const state = p.state;', test: 'rejects corrupt nested journey saves without changing storage' },
+  outcome: { file: ENGINE, from: "if (s.phase === 'done' && s.draft) {", to: 'if (false) {', test: 'rejects corrupt nested journey saves without changing storage' },
   back: { file: BOARD, from: "prospectRef.current = null; setProspect(null); setPhase('create');\n      localStorage.removeItem(sport.saveKey);", to: "prospectRef.current = null; setProspect(null); setPhase('create');", test: 'back before route selection preserves the player and clears only the unfinished save' },
   rules: { file: 'src/components/us-career/ProspectJourney.tsx', from: 'The button shows the exact change before you choose.', to: 'Pick whatever you want.', test: SHOWCASE },
 };
-assert(!CONTROL || CONTROL === 'before' || controls[CONTROL], `Unknown prospect control: ${CONTROL}`);
+assert(!CONTROL || CONTROL === 'before' || CONTROL === 'historical' || controls[CONTROL], `Unknown prospect control: ${CONTROL}`);
 const evidence = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-prospect993-'));
 const swaps = {}, owned = [];
 let folder;
@@ -61,6 +63,12 @@ if (CONTROL === 'before') {
   const source = execFileSync('git', ['show', `57a2de2f:${BOARD}`], { cwd: ROOT, encoding: 'utf8' });
   assert(source.includes('data-career-practice') && !source.includes('Play your road to the draft'), 'Physical before must retain 992 but predate the prospect entry');
   writeControl(BOARD, source);
+} else if (CONTROL === 'historical') {
+  const file = 'src/lib/usCareerProspect.ts';
+  const source = execFileSync('git', ['show', `8f72dbc4:${file}`], { cwd: ROOT, encoding: 'utf8' });
+  assert(source.includes('JSON.stringify(state.draft) !== JSON.stringify(expected)'), 'Historical control must restore the actual replay-dependent reader');
+  assert.notEqual(source.replaceAll('\r\n', '\n'), fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n'));
+  writeControl(file, source);
 } else if (CONTROL) {
   const control = controls[CONTROL];
   const source = fs.readFileSync(path.join(ROOT, control.file), 'utf8').replaceAll('\r\n', '\n');
@@ -73,7 +81,7 @@ const require = createRequire(path.join(ROOT, 'package.json'));
 const vitest = path.join(path.dirname(require.resolve('vitest/package.json')), 'vitest.mjs');
 const report = path.join(evidence, 'report.json');
 const args = [vitest, 'run', 'src/test/usCareerProspect.test.tsx', '--maxWorkers=1', '--no-file-parallelism', '--reporter=json', `--outputFile=${report}`];
-const named = CONTROL === 'before' ? JOURNEY : controls[CONTROL]?.test;
+const named = CONTROL === 'before' ? JOURNEY : CONTROL === 'historical' ? HISTORICAL : controls[CONTROL]?.test;
 if (named) args.push('-t', `${named}|${QUIET}`);
 const env = { ...process.env, NO_COLOR: '1' };
 for (const key of ['FORCE_COLOR', 'NO_DOUBLE_SWAP', 'US_BOARD_CONTROL_ALIAS', 'US_BOARD_CONTROL_FILE']) delete env[key];
@@ -97,12 +105,12 @@ if (!CONTROL) {
   for (const test of failed) console.error(`${test.fullName}\n${test.failureMessages.join('\n')}`.slice(0, 6000));
   assert.equal(run.status, 0, `Prospect failures: ${failed.map(t => t.fullName).join('; ')}`);
   assert.equal(failed.length, 0);
-  assert.equal(passed.length, 32, 'All 32 actual-board prospect outcomes must run');
+  assert.equal(passed.length, 36, 'All 36 actual-board prospect outcomes must run');
   for (const label of labels) {
-    assert.equal(passed.filter(t => title(t).startsWith(`${label} `)).length, 8, `${label} outcomes missing`);
-    console.log(`   ${label}: 8 actual-board outcomes passed, including saved phases, earned draft handoff and the first pro season`);
+    assert.equal(passed.filter(t => title(t).startsWith(`${label} `)).length, 9, `${label} outcomes missing`);
+    console.log(`   ${label}: 9 actual-board outcomes passed, including saved phases, historical outcomes, earned draft handoff and the first pro season`);
   }
-  console.log('simUsCareerProspect: 32 actual-board outcomes passed across all four sports');
+  console.log('simUsCareerProspect: 36 actual-board outcomes passed across all four sports');
 } else {
   assert.equal(run.status, 1, `${CONTROL} must fail assertions, never stall or fail loading`);
   assert.equal(failed.length, 4, `${CONTROL} must fail exactly four named outcomes`);

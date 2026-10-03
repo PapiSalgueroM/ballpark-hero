@@ -224,6 +224,43 @@ describe('US career prospect on the actual boards', () => {
     expect(row.sport.legacyOf(c).bullets.join(' ')).not.toContain('drafted pick 0');
   });
 
+  it.each(SPORTS)('$label historical completed outcomes survive reload and remain the career archive', row => {
+    const ready = toShowcase(row), desc = row.sport.preDraft(ready.eraId);
+    const current = { ...ready, state: preDraftRunDraft(desc, preDraftShowcase(desc, ready.state!, 'steady')) };
+    const historical = clone(current), state = historical.state!, out = state.draft!;
+    // Plausible committed values from an earlier balance, independent of today's replay.
+    state.lines[0].stats = [{ label: 'Scouting grade', value: 'B+' }];
+    out.ratingAfter = out.ratingAfter === state.pot ? out.ratingAfter - 1 : out.ratingAfter + 1;
+    if (out.slotValue !== null) out.slotValue += 100;
+    if (out.devSeasons.length) out.devSeasons[0].stats = [{ label: 'Scouting grade', value: 'A-' }];
+    expect(historical).not.toEqual(current);
+    expect(loadUsCareerProspect(row.sport, historical)).toEqual(historical);
+    state.choicesSeen[0] = 'retired_scout_decision';
+    expect(loadUsCareerProspect(row.sport, historical)).toEqual(historical);
+    seed(row, prospectSave(historical));
+    let view = mount(row);
+    view = reload(row, view, 'done');
+    expect(journey(view)).toHaveTextContent('B+ Scouting grade');
+    const expected = expectedCareer(row, historical);
+    fireEvent.click(buttons(view).getByRole('button', { name: 'Start your career' }));
+    expect(saved(row)).toEqual(expected);
+    expect(saved(row).c!.prospect).toEqual(state);
+    let bytes = localStorage.getItem(row.sport.saveKey);
+    view.unmount(); view = mount(row);
+    expect(localStorage.getItem(row.sport.saveKey)).toBe(bytes);
+    fireEvent.click(view.getByRole('button', { name: /My Player/ }));
+    expect(view.container.querySelector('[data-prospect-record]')).toHaveTextContent('B+ Scouting grade');
+    expect(localStorage.getItem(row.sport.saveKey)).toBe(bytes);
+    view.unmount(); view = mount(row);
+    fireEvent.click(view.getByRole('button', { name: /^Play the \d+ season$/ }));
+    expect(saved(row).c!.prospect).toEqual(state);
+    expect(saved(row).c!.seasons[0].ovr).toBe(out.ratingAfter);
+    bytes = localStorage.getItem(row.sport.saveKey);
+    view.unmount(); mount(row);
+    expect(localStorage.getItem(row.sport.saveKey)).toBe(bytes);
+    expect(localStorage.getItem('unrelated-prospect-fixture')).toBe('keep this save');
+  });
+
   it.each(SPORTS)('$label rejects corrupt nested journey saves without changing storage', row => {
     const ready = toShowcase(row), desc = row.sport.preDraft(ready.eraId);
     const done = { ...ready, state: preDraftRunDraft(desc, preDraftShowcase(desc, ready.state!, 'steady')) };
@@ -232,6 +269,20 @@ describe('US career prospect on the actual boards', () => {
       (p: UsCareerProspect) => { p.state!.showcase!.grade = 'Z' as never; },
       (p: UsCareerProspect) => { p.state!.draft!.team = 'not-a-team'; },
       (p: UsCareerProspect) => { p.state!.routeId = 'missing-route'; },
+      (p: UsCareerProspect) => { p.state!.draft!.draftYear += 1; },
+      (p: UsCareerProspect) => { p.state!.draft!.ageAtDraft += 1; },
+      (p: UsCareerProspect) => { p.state!.draft!.ageAfter += 1; },
+      (p: UsCareerProspect) => { p.state!.draft!.ratingAfter = p.pot + 1; },
+      (p: UsCareerProspect) => { p.state!.draft!.ratingAfter = 70.5; },
+      (p: UsCareerProspect) => { p.state!.draft!.slotValue = -1; },
+      (p: UsCareerProspect) => { Object.assign(p.state!.draft!, { pick: 1, round: 2, pickInRound: 1 }); },
+      (p: UsCareerProspect) => { Object.assign(p.state!.draft!, { pick: 1, round: 1, pickInRound: 2 }); },
+      (p: UsCareerProspect) => { Object.assign(p.state!.draft!, { pick: desc.teamIds().length * desc.rounds + 1, round: desc.rounds + 1, pickInRound: 1 }); },
+      (p: UsCareerProspect) => {
+        const out = p.state!.draft!;
+        if (out.devSeasons.length) out.devSeasons[0].age += 1;
+        else { out.devSeasons.push(clone(p.state!.lines[0])); out.ageAfter += 1; }
+      },
     ];
     for (const corrupt of broken) {
       const bad = clone(done); corrupt(bad); seed(row, prospectSave(bad));

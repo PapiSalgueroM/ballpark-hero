@@ -66,7 +66,7 @@ jobs:
         run: |
           status=0
           if ! node scripts/simUsCareerProspect.mjs 2>&1 | tee prospect-journey-artifacts/prospect.log; then status=1; fi
-          for control in before save restore handoff duplicate choice invalid showcase undrafted archive corrupt back rules; do
+          for control in before save restore handoff duplicate choice invalid showcase undrafted archive corrupt back rules historical outcome; do
             if ! US_CAREER_PROSPECT_CONTROL="$control" node scripts/simUsCareerProspect.mjs 2>&1 | tee "prospect-journey-artifacts/prospect-$control.log"; then status=1; fi
           done
           exit "$status"

@@ -1,4 +1,4 @@
-import { loadPreDraft, preDraftChoicePool, preDraftRunDraft, type PreDraftState } from './careerPreDraft';
+import { loadPreDraft, preDraftChoicePool, type PreDraftState } from './careerPreDraft';
 import { keyedRng } from './keyedRng';
 import { defaultAppearance, type PlayerAppearance } from './soccerCareerAppearance';
 import type { UsCareerSport } from './usCareerSport';
@@ -46,11 +46,7 @@ export function loadUsCareerProspect(sport: UsCareerSport, raw: unknown): UsCare
     || (state.phase === 'season' && state.seasonsDone >= route.seasons)
     || (['showcase', 'draft', 'done'].includes(state.phase) && state.seasonsDone !== route.seasons)) return null;
   const choices = preDraftChoicePool(desc).filter(c => !c.routes || c.routes.includes(route.id));
-  if (state.choicesSeen.some(id => !choices.some(c => c.id === id))
-    || (state.pendingChoice && (!choices.some(c => c.id === state.pendingChoice) || state.choicesSeen.includes(state.pendingChoice)))) return null;
-  if (state.phase === 'done') {
-    const expected = preDraftRunDraft(desc, { ...state, phase: 'draft', draft: null }).draft;
-    if (JSON.stringify(state.draft) !== JSON.stringify(expected)) return null;
-  }
+  // Recorded choices remain history when the current card pool changes.
+  if (state.pendingChoice && (!choices.some(c => c.id === state.pendingChoice) || state.choicesSeen.includes(state.pendingChoice))) return null;
   return { ...p, state };
 }

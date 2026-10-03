@@ -86,3 +86,12 @@ integer/length/age validation and truthful NHL draft-entry wording remain.
 The renamed-card fixture now reaches its final choice through actual seasons;
 corrupt line cases retain valid array lengths to isolate their content guard.
 Fresh type, build, compatibility, model and native gates are required.
+
+Completed awaiting-Join saves now validate their stored team, pick/round math,
+year, rating, age and development length without rerunning the current model.
+Recorded choices can outlive their card definitions. Professional archives keep
+their existing structural reader. Four added mounted cases carry deliberately
+different valid historical stats and ratings through reload, career entry,
+archive viewing and a professional season. The actual previous replay reader is
+a rejection control, and a second control removes semantic outcome validation.
+The final mounted gate is 36 outcomes with 15 controls.
