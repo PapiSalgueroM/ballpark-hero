@@ -36,7 +36,7 @@
  *     higher by a floor per pack, and the two-bad-years group draws a top
  *     half offer at most 3 percent of the time. Control `tierceiling`
  *     (managerOffers' own tier filter removed, in the bundle only, never on
- *     disk) lifts that share to 17 to 23 percent.
+ *     disk) lifts that share to 15 to 21 percent.
  *  8. takeSeat moves the seat (team, trust, mandate) and keeps the league
  *     object, its season, its champions and its teams. Control `takeseat`.
  *  9. Only the two college packs ever draw a buyout bid, always one tier up,
