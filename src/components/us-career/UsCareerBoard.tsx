@@ -650,7 +650,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               </button>
             ))}
           </div>
-          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor={sport.create.clubColor} />
+          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor={sport.create.clubColor} sport={sport.slug} />
 
           <div className="grid gap-1.5">
             {sport.create.archetypes[pos].map(a => (

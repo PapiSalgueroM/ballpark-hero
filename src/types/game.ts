@@ -27,8 +27,8 @@ export interface Player {
   club: string;
   nationality: string;
   league: League;
-  goals: number;
-  assists: number;
+  goals: number | null;
+  assists: number | null;
   position: Position;
   /** Squad number, or null when none is on file. Round 443: it used to be 0 for
    *  "unknown", and Footle printed that 0 as though it were the man's number. */
