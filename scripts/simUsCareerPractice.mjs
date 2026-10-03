@@ -33,6 +33,25 @@ const controls = {
 };
 assert(!CONTROL || CONTROL === 'before' || controls[CONTROL], `Unknown practice control: ${CONTROL}`);
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-practice992-'));
+const sourceCopies = [];
+let sourceFolder;
+if (CONTROL) {
+  const parent = path.join(ROOT, '.sim-control');
+  fs.mkdirSync(parent, { recursive: true });
+  sourceFolder = fs.mkdtempSync(path.join(parent, 'practice992-'));
+  process.once('exit', () => {
+    for (const copy of sourceCopies) fs.rmSync(copy, { force: true });
+    fs.rmdirSync(sourceFolder);
+  });
+}
+const writeControl = (name, source) => {
+  fs.writeFileSync(path.join(work, name), source);
+  // React imports resolve from the project; TEMP retains the evidence copy.
+  const copy = path.join(sourceFolder, name);
+  fs.writeFileSync(copy, source);
+  sourceCopies.push(copy);
+  return copy.replaceAll('\\', '/');
+};
 const swaps = {};
 const alias = file => `@/${file.slice(4).replace(/\.tsx?$/, '')}`;
 if (CONTROL === 'before') {
@@ -40,9 +59,7 @@ if (CONTROL === 'before') {
     const file = `src/components/${slug}-my-career/${name}MyCareerBoard.tsx`;
     const original = execFileSync('git', ['show', `a0ba8344:${file}`], { cwd: ROOT, encoding: 'utf8' });
     assert(original.includes('Play the {career.year} season') && !original.includes('data-career-practice'), `Not a pre-practice board: ${file}`);
-    const copy = path.join(work, `${name}Before.tsx`);
-    fs.writeFileSync(copy, original);
-    swaps[alias(file)] = copy.replaceAll('\\', '/');
+    swaps[alias(file)] = writeControl(`${name}Before.tsx`, original);
   }
 } else if (CONTROL) {
   const control = controls[CONTROL];
@@ -50,9 +67,7 @@ if (CONTROL === 'before') {
   assert.equal(source.split(control.from).length - 1, 1, `${CONTROL} must change exactly one source anchor`);
   const broken = source.replace(control.from, control.to);
   assert.notEqual(broken, source, `${CONTROL} did not change source`);
-  const copy = path.join(work, path.basename(control.file));
-  fs.writeFileSync(copy, broken);
-  swaps[alias(control.file)] = copy.replaceAll('\\', '/');
+  swaps[alias(control.file)] = writeControl(path.basename(control.file), broken);
 }
 const report = path.join(work, 'report.json');
 const require = createRequire(path.join(ROOT, 'package.json'));
@@ -76,6 +91,9 @@ const results = JSON.parse(fs.readFileSync(report, 'utf8'));
 const tests = results.testResults.flatMap(file => file.assertionResults);
 const failed = tests.filter(test => test.status === 'failed');
 const passed = tests.filter(test => test.status === 'passed');
+for (const file of results.testResults) {
+  if (file.status === 'failed' && !file.assertionResults.length) console.error(file.message);
+}
 const labels = ['NFL', 'NBA', 'MLB', 'NHL'];
 // Vitest formats an object-table string as 'NFL'; retain the exact outcome
 // title while normalising only those four known sport prefixes.
