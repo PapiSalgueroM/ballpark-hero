@@ -23,11 +23,17 @@
  *   4. CONSERVATION. Ten seasons of random trades, a draft and a roll every
  *      summer: after every single trade and every roll each club's pick in
  *      each round of each year carried exists exactly once, every draft slot
- *      is used once by its holder, and no player is lost or doubled.
+ *      is used once by its holder, every ordinary pick is used in the slot
+ *      of the club it first belonged to (acquired ones included), and no
+ *      player is lost or doubled.
  *   5. THE DEADLINE. In those same ten seasons the desk keeps proposing after
  *      the deadline, and not one deal is made between the deadline period and
  *      the season's close. The period it shuts after is this harness's own
  *      number (scripts/lib/gmPicksHarness.mjs SPORTS), not the module's.
+ *   6. COMPENSATORY PICKS. Random NFL free agent moves: every draft hands
+ *      out exactly min(32, the sum of min(4, each club's net loss)), worked
+ *      out here and not by the module, and with six clubs (the league cap
+ *      cannot bind) every club gets exactly min(4, its net loss).
  *
  * BANDS, FROM MEASURED HEADROOM (seeds 11, 23, 37, 59, 71; 2026-10-02):
  *   Lottery: 275 club shares over 40,000 draws each. Their distance from the
@@ -42,6 +48,11 @@
  *     deals made       NFL 411 to 466, NBA 357 to 421, NHL 934 to 1002, MLB 69 to 90
  *     picks moved      NFL 945 to 1045, NBA 645 to 771, NHL 1989 to 2144, MLB 0
  *     offseason deals  NFL 109 to 129, NBA 68 to 88, NHL 165 to 193, MLB 9 to 23
+ *     acquired picks used on draft day  NFL 693 to 789, NBA 281 to 322,
+ *                      NHL 1170 to 1259, MLB 0 (none can move)
+ *   Compensatory picks, per seed over 40 six club and 40 full drafts: clubs
+ *   owed more than four 257 to 299 (floor 125), full drafts at the league
+ *   cap 40 of 40 (floor 20).
  *   (NHL remeasured 2026-10-02 after its prospects became tradable; it was
  *   577 to 650 deals before, and its floors were set from those.)
  *   The floors are about half the smallest of each. Tries after the deadline
@@ -59,6 +70,8 @@
  *   leak        the summer roll drops every traded first round pick
  *   latetrade   the window stays open one period past the deadline
  *   repeatwin   a club that has won a draw can win the next one too
+ *   holderslot  a round seats each pick at its HOLDER's place, not its first owner's
+ *   nocompcap   the four a club cap on compensatory picks removed
  *
  * Run: node scripts/simGmPicks.mjs
  */
@@ -77,9 +90,12 @@ const SWAPS = {
     ['    for (let i = 0; i < pool.length; i++) if (!won.has(pool[i])) total += weight[i];', '    for (let i = 0; i < pool.length; i++) total += weight[i];'],
     ['      if (won.has(pool[i]) || weight[i] <= 0) continue;', '      if (weight[i] <= 0) continue;'],
   ] },
+  holderslot: { picks: [["      if (p.orig === orig && pickKind(p) === 'std') out.push({ round, slot: out.length + 1, pick: p });", "      if (p.holder === orig && pickKind(p) === 'std') out.push({ round, slot: out.length + 1, pick: p });"]] },
+  nocompcap: { picks: [['    for (const value of lost.slice(0, comp.perClubMax)) {', '    for (const value of lost) {']] },
 };
 const EXPECT = {
   odds: [1, 2], flatlottery: [2], noclimbcap: [2], dropmarker: [3], leak: [4], latetrade: [5], repeatwin: [2],
+  holderslot: [4], nocompcap: [6],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`GM_PICKS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -91,6 +107,7 @@ const SECTION_NAMES = {
   3: 'an old number[] save migrates with every pick kept',
   4: 'picks and players conserved through ten seasons of trades',
   5: 'no deal between the deadline and the season close',
+  6: 'compensatory picks follow the net loss and both caps',
 };
 
 const SEEDS = [11, 23, 37, 59, 71];
@@ -311,10 +328,10 @@ const TRIES_OFFSEASON = 40;
    makes far fewer deals because most of what a random desk reaches for there
    is a pick, and no ordinary MLB pick can move. */
 const FLOORS = {
-  nfl: { deals: 200, picksMoved: 470, offDeals: 55 },
-  nba: { deals: 180, picksMoved: 320, offDeals: 34 },
-  nhl: { deals: 280, picksMoved: 680, offDeals: 50 },
-  mlb: { deals: 35, picksMoved: 0, offDeals: 4 },
+  nfl: { deals: 200, picksMoved: 470, offDeals: 55, acquiredUsed: 340 },
+  nba: { deals: 180, picksMoved: 320, offDeals: 34, acquiredUsed: 140 },
+  nhl: { deals: 280, picksMoved: 680, offDeals: 50, acquiredUsed: 580 },
+  mlb: { deals: 35, picksMoved: 0, offDeals: 4, acquiredUsed: 0 },
 };
 MEASURED.trades = {};
 for (const sport of SPORTS) {
@@ -322,7 +339,7 @@ for (const sport of SPORTS) {
   for (const seed of SEEDS) {
     const lg = makeLeague(sport, gm, seed * 31 + 7);
     const players0 = lg.ids.reduce((s, id) => s + lg.teams[id].players.length + lg.teams[id].prospects.length, 0);
-    const st = { tries: 0, deals: 0, picksMoved: 0, lateTries: 0, lateDeals: 0, offDeals: 0, openDeals: 0, problems: 0, slotsWrong: 0, wrongHolder: 0 };
+    const st = { tries: 0, deals: 0, picksMoved: 0, lateTries: 0, lateDeals: 0, offDeals: 0, openDeals: 0, problems: 0, slotsWrong: 0, wrongHolder: 0, wrongSlot: 0, acquiredUsed: 0 };
     const tryTrade = (played, closed, stances) => {
       const [a, b] = pickSome(lg.rng, lg.ids, 2);
       const give = pickSome(lg.rng, clubAssets(lg, gm, a), 1 + Math.floor(lg.rng() * 3));
@@ -355,10 +372,15 @@ for (const sport of SPORTS) {
       const used = new Set();
       let slots = 0;
       for (let round = 1; round <= rules.rounds; round++) {
-        for (const s2 of gm.picks.roundSlots(lg.ledger, lg.season, round, round === 1 ? order.firstRound : order.laterRounds)) {
+        const roundOrder = round === 1 ? order.firstRound : order.laterRounds;
+        for (const s2 of gm.picks.roundSlots(lg.ledger, lg.season, round, roundOrder)) {
           slots++;
           used.add(gm.picks.pickKey(s2.pick));
           if (!lg.teams[s2.pick.holder]) st.wrongHolder++;
+          /* An ordinary pick is used in the slot of the club it first
+             belonged to, whoever holds it now. */
+          if (gm.picks.pickKind(s2.pick) === 'std' && roundOrder[s2.slot - 1] !== s2.pick.orig) st.wrongSlot++;
+          if (s2.pick.holder !== s2.pick.orig) st.acquiredUsed++;
         }
       }
       if (slots !== sport.clubs * rules.rounds || used.size !== slots) st.slotsWrong++;
@@ -371,6 +393,8 @@ for (const sport of SPORTS) {
     const tag = `${sport.key} seed ${seed}`;
     ok(4, `${tag}: every pick exists exactly once after every deal and every roll`, st.problems === 0, `${st.problems} problems`);
     ok(4, `${tag}: every draft used clubs x rounds slots, each once`, st.slotsWrong === 0 && st.wrongHolder === 0, `${st.slotsWrong} drafts off`);
+    ok(4, `${tag}: every ordinary pick was used in its first owner's slot`, st.wrongSlot === 0, `${st.wrongSlot} in another club's slot`);
+    if (rules.tradableKinds.includes('std')) ok(4, `${tag}: acquired picks were used, so the slot check had something to check`, st.acquiredUsed >= FLOORS[sport.key].acquiredUsed, `${st.acquiredUsed}`);
     ok(4, `${tag}: no player lost or doubled`, everyone.length === players0 && new Set(everyone).size === players0, `${everyone.length} of ${players0}`);
     ok(4, `${tag}: the desk made deals`, st.deals >= FLOORS[sport.key].deals, `${st.deals}`);
     if (rules.tradableKinds.includes('std')) ok(4, `${tag}: picks changed hands`, st.picksMoved >= FLOORS[sport.key].picksMoved, `${st.picksMoved}`);
@@ -379,7 +403,62 @@ for (const sport of SPORTS) {
     ok(5, `${tag}: no deal between the deadline and the season close`, st.lateDeals === 0, `${st.lateDeals} late deals`);
     ok(5, `${tag}: deals were made while the window was open`, st.openDeals > 0, `${st.openDeals}`);
     ok(5, `${tag}: and again once the season closed`, st.offDeals >= FLOORS[sport.key].offDeals, `${st.offDeals}`);
-    (MEASURED.trades[sport.key] ??= []).push(`${st.deals}/${st.picksMoved}/${st.lateTries}/${st.offDeals}`);
+    (MEASURED.trades[sport.key] ??= []).push(`${st.deals}/${st.picksMoved}/${st.lateTries}/${st.offDeals}/${st.acquiredUsed}`);
+  }
+}
+
+/* ---- 6. compensatory picks ------------------------------------------------ */
+/* The shape the NFL publishes (gmPicks.ts NFL block): a club is owed picks for
+   its NET loss, no more than four a club and 32 a draft, in rounds three to
+   seven. The harness works the expected count out itself from the moves it
+   hands in, not from the module: one signing cancels one loss, so a club is
+   owed min(4, lost minus signed), and the draft min(32, the sum). Two shapes
+   per seed: six clubs, where the league cap cannot bind and every club's
+   count is exact, and 32, where it often does. Each club loses 0 to 7 and
+   signs 0 to 3, so about one club in five is owed more than four. */
+const COMP_REPS = 40;
+MEASURED.comp = [];
+{
+  const rules = gm.picks.GM_PICK_RULES.nfl;
+  const roundFor = v => 8 - v / 15;
+  for (const seed of SEEDS) {
+    const rng = makeRng(seed * 97 + 5);
+    const st = { countOff: 0, clubOff: 0, overCap: 0, badRound: 0, capBit: 0, leagueCapBit: 0, awards: 0 };
+    for (const clubs of [6, 32]) {
+      for (let rep = 0; rep < COMP_REPS; rep++) {
+        const moves = [];
+        for (let c = 0; c < clubs; c++) {
+          const nl = Math.floor(rng() * 8);
+          const ng = Math.floor(rng() * 4);
+          moves.push({
+            club: `C${String(c + 1).padStart(2, '0')}`,
+            lost: Array.from({ length: nl }, () => Math.round(rng() * 100)),
+            gained: Array.from({ length: ng }, () => Math.round(rng() * 100)),
+          });
+        }
+        const awards = gm.picks.compensatoryAwards(moves, rules, roundFor);
+        const owed = moves.map(m => Math.min(4, Math.max(0, m.lost.length - m.gained.length)));
+        const sum = owed.reduce((s, x) => s + x, 0);
+        st.awards += awards.length;
+        st.capBit += moves.filter(m => m.lost.length - m.gained.length > 4).length;
+        if (sum > 32) st.leagueCapBit++;
+        if (awards.length !== Math.min(32, sum)) st.countOff++;
+        moves.forEach((m, i) => {
+          const got = awards.filter(a => a.club === m.club).length;
+          if (got > 4) st.overCap++;
+          if (clubs === 6 && got !== owed[i]) st.clubOff++;
+        });
+        for (const a of awards) if (a.round < 3 || a.round > 7) st.badRound++;
+      }
+    }
+    const tag = `nfl seed ${seed}`;
+    ok(6, `${tag}: each draft hands out min(32, the sum of min(4, net loss)) picks`, st.countOff === 0, `${st.countOff} of ${COMP_REPS * 2} drafts off`);
+    ok(6, `${tag}: with six clubs, every club gets exactly min(4, its net loss)`, st.clubOff === 0, `${st.clubOff} clubs off`);
+    ok(6, `${tag}: no club gets more than four`, st.overCap === 0, `${st.overCap}`);
+    ok(6, `${tag}: every award sits in rounds three to seven`, st.badRound === 0, `${st.badRound}`);
+    ok(6, `${tag}: clubs owed more than four were in the run, so the club cap was tested`, st.capBit >= 125, `${st.capBit}`);
+    ok(6, `${tag}: drafts where the league cap binds were in the run`, st.leagueCapBit >= 20, `${st.leagueCapBit}`);
+    MEASURED.comp.push(`${st.awards}/${st.capBit}/${st.leagueCapBit}`);
   }
 }
 
@@ -390,7 +469,8 @@ for (const [n, s] of [...bySection.entries()].sort((a, b) => a[0] - b[0])) {
 }
 console.log(`   measured: lottery |z| over ${MEASURED.lotteryZ.n} club shares, median ${MEASURED.lotteryZ.median.toFixed(2)}, 95th percentile ${MEASURED.lotteryZ.p95.toFixed(2)} (band ${Z_BAND})`);
 console.log(`   measured: later slot |z| over ${MEASURED.slotZ.n} club and slot shares, median ${MEASURED.slotZ.median.toFixed(2)}, 95th percentile ${MEASURED.slotZ.p95.toFixed(2)} (band ${Z_BAND})`);
-for (const [k, v] of Object.entries(MEASURED.trades)) console.log(`   measured: ${k} deals/picks moved/late tries/offseason deals per seed: ${v.join('  ')}`);
+console.log(`   measured: compensatory awards/clubs owed more than four/drafts at the league cap per seed: ${MEASURED.comp.join('  ')}`);
+for (const [k, v] of Object.entries(MEASURED.trades)) console.log(`   measured: ${k} deals/picks moved/late tries/offseason deals/acquired picks used per seed: ${v.join('  ')}`);
 if (CONTROL) {
   const red = [...bySection.entries()].filter(([, s]) => s.bad > 0).map(([n]) => n).sort((a, b) => a - b);
   const want = EXPECT[CONTROL];
