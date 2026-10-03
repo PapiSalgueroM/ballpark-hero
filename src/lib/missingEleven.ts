@@ -242,7 +242,6 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Laurence Maroney', slotIndex: 1, nationality: 'USA', fact: 'Started at running back for the 18-0 Patriots on the night the perfect season died.' },
-      { name: 'Kyle Brady', slotIndex: 5, nationality: 'USA', fact: 'The OTHER Brady, the blocking tight end in the two-TE set.' },
       { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.' },
     ],
     source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
@@ -975,7 +974,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     venue: 'SoFi Stadium, Inglewood',
     slots: [
       S('QB', 'Joe Burrow'),
-      S('RB', 'Joe Mixon'),
+      S('HB', 'Joe Mixon'),
       S('WR', 'Ja\'Marr Chase'),
       S('WR', 'Tee Higgins'),
       S('WR', 'Tyler Boyd'),
@@ -1038,7 +1037,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     venue: 'Mercedes-Benz Stadium, Atlanta',
     slots: [
       S('QB', 'Jared Goff'),
-      S('RB', 'Todd Gurley'),
+      S('HB', 'Todd Gurley'),
       S('WR', 'Robert Woods'),
       S('WR', 'Brandin Cooks'),
       S('WR', 'Josh Reynolds'),
