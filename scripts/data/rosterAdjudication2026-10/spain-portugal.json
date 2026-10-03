@@ -1,0 +1,239 @@
+{
+ "round": 931,
+ "shard": "Spain and Portugal: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in La Liga or the Primeira Liga as Club Manager models them for 2026-27 (48 rows at origin/main 5f2622fd: Spain 31, Portugal 17)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Each row was read on the web on 2026-10-03 with WebFetch and WebSearch only, never a wiki. A row leaves pending only when an official page (family A: the LaLiga player or match page, the Liga Portugal page, a club's own squad page or announcement, or a governing body such as the AFC) and an independent publisher on another host (family B: Soccerway, FotMob, ESPN) agree where the man is. Birth dates are in the note so a namesake cannot be mistaken for him. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows; realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "counts": {},
+ "forTheFold": "",
+ "confirmedStill": [
+  {
+   "name": "Hugo Novoa",
+   "club": "Alavés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-01-24. Alavés number 12 for 2026-27, on the bench against Osasuna on 2026-09-06. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/hugo-novoa",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Deportivo Alavés, shirt 12, born 24-01-2003"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/96",
+     "publisher": "ESPN (Alavés squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "forward, shirt 12, age 23"
+    }
+   ]
+  },
+  {
+   "name": "Youssef Enríquez",
+   "club": "Alavés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-10-07, the Madrid born left back signed from Real Madrid Castilla in July 2025. LaLiga's page for him sits under the slug youssef-lekhedim and ESPN lists him as Youssef Lekhedim (his second surname), number 3, age 20: same shirt, same birth date, same man.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-ES/player/youssef-lekhedim",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "full name Youssef Enriquez, Deportivo Alavés, shirt 3, born 2005-10-07, 6 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1403692/youssef-enriquez",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Deportivo Alavés since July 2025, not on loan, born 2005-10-07, played 25 minutes at Athletic Club on 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/96",
+     "publisher": "ESPN (Alavés squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Youssef Lekhedim, defender, shirt 3, age 20"
+    }
+   ]
+  },
+  {
+   "name": "Yeray Álvarez",
+   "club": "Athletic Club",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-01-24. Athletic's number 5, started the 2026-27 league game against Sevilla on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Yeray, shirt 5, in the Athletic Club starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Yeray, defender, shirt 5, age 31"
+    }
+   ]
+  },
+  {
+   "name": "Yuri Berchiche",
+   "club": "Athletic Club",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1990-02-10. Athletic's number 17, started the 2026-27 league game against Sevilla on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Yuri, shirt 17, in the Athletic Club starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Yuri Berchiche, defender, shirt 17, age 36"
+    }
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Abdel Abqar",
+   "from": "Alavés",
+   "to": "Getafe",
+   "realClub": "Getafe",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-03-10, Moroccan centre back. Left Alavés at the end of his contract and joined Getafe on a free on 2025-07-29, contract to 2028-06-30. Getafe number 5 in 2026-27.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/abqar",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Getafe, shirt 5, born 10-03-1999, 2 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/abqar-abdelkebir/Gp35on1c/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Alavés to Getafe 2025-07-29 as a free agent, born 1999-03-10, contract to 2028-06-30"
+    }
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Stoichkov",
+   "from": "Alavés",
+   "realClub": "Johor Darul Ta'zim",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Juan Diego Molina Martínez, born 1993-11-05. Sold by Alavés to Granada in January 2025, loaned to Deportivo La Coruña for 2025-26, back at Granada on 2026-06-30 and joined Johor Darul Ta'zim in Malaysia on 2026-08-01. Malaysia is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.the-afc.com/en/more/transfers.html/news/jdt-nab-stoichkov-ha-noi-add-jung",
+     "publisher": "Asian Football Confederation (transfer news, 2026-08-02)",
+     "readOn": "2026-10-03",
+     "says": "the 32 year old former Granada CF player joined Malaysian champions Johor Darul Ta'zim"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/stoichkov/Kneifk5H/transfers/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Granada CF to Johor DT 2026-08-01, born 1993-11-05, contract to 2027-06-30"
+    }
+   ]
+  },
+  {
+   "name": "Ángel Correa",
+   "from": "Atlético Madrid",
+   "realClub": "River Plate",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-03-09, the Argentine forward. Sold by Atlético to Tigres UANL on 2025-07-09, then by Tigres to River Plate on 2026-07-24, contract to December 2029. Tigres is modelled (Liga MX) but he is no longer there; Argentina is not modelled. The departure is on the league's own page, the destination on two independent publishers.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://ligamx.net/cancha/club/16/tigres",
+     "publisher": "Liga MX (Tigres UANL Apertura 2026 squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed among the five forwards or anywhere in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/correa-angel/McWkid34/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Tigres UANL to River Plate 2026-07-24, born 1995-03-09, contract to 2029-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.swissinfo.ch/spa/river-plate-oficializ%c3%b3-la-llegada-de-delantero-%c3%81ngel-correa%2c-quien-firmar%c3%a1-hasta-2029/91796383",
+     "publisher": "EFE via Swissinfo (2026-07-24)",
+     "readOn": "2026-10-03",
+     "says": "River Plate agreed the permanent transfer from Tigres UANL, contract to December 2029"
+    }
+   ]
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Iñigo Lekue",
+   "from": "Athletic Club",
+   "why": "Retired. Born 1993-05-04, a one club man: Athletic told him his contract would not be renewed and he played the last minutes of his professional career against Real Madrid on 2026-05-23, then left when the deal ran out in June 2026. Not in Athletic's 2026-27 squad, and no club since.",
+   "adjudicatedOn": "2026-10-03",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.athletic-club.eus/en/news/2026/05/11/lekue-retires-as-a-one-club-man/",
+     "publisher": "Athletic Club (club news, 2026-05-11; the page answers WebFetch with HTTP 403, the title was read in the search index)",
+     "readOn": "2026-10-03",
+     "says": "Lekue retires as a One Club Man"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "not in the Athletic Club eleven or among the twelve substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/616544/inigo-lekue",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Retired, born 1993-05-04, Athletic Club July 2015 to June 2026, last match 2026-05-23 v Real Madrid"
+    },
+    {
+     "family": "B",
+     "url": "https://www.elgoldigital.com/futbol/athletic-club/valverde-ultimo-partido-athletic-bernabeu-lekue-retirada/",
+     "publisher": "El Gol Digital (2026-05-23)",
+     "readOn": "2026-10-03",
+     "says": "plays the last minutes of his professional career"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  }
+ ],
+ "pending": [
+  {
+   "name": "Nico Mantl",
+   "club": "Arouca",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2000-02-06, German goalkeeper. Arouca loaned him to Blau-Weiss Linz from 2026-01-28 to 2026-06-30 (Soccerway, FotMob). A preseason Flashscore piece lists him in Arouca's provisional 2026-27 squad (https://www.flashscore.pt/noticias/arouca-com-menos-mexidas-procura-melhorar-a-oitava-posicao-da-epoca-passada/0dMDWOCM/), but ESPN's Arouca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/15784) lists only Vinarcik, De Arruabarrena and Martim Duarte in goal, FotMob shows no match since 2026-05-16 for Linz, and no official Arouca or Liga Portugal page could be read (both render their squads in script). Re-check against Liga Portugal's player page."
+  }
+ ]
+}
