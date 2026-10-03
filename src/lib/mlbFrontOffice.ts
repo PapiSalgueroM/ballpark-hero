@@ -477,6 +477,37 @@ export function mlbProspectToPlayer(pr: MlbProspect, rng: () => number): MlbGmPl
   };
 }
 
+/** Current draft rights are round tokens, without future seasons or origin teams. */
+export function mlbDraftCapital(t: Pick<MlbGmTeam, 'picks'>): number | null {
+  return Array.isArray(t.picks) && t.picks.length <= (AL.length + NL.length) * 2
+    && Array.from(t.picks).every(pick => pick === 1 || pick === 2) ? t.picks.length : null;
+}
+
+export function mlbConsumeDraftPick(t: Pick<MlbGmTeam, 'picks'>): boolean {
+  const capital = mlbDraftCapital(t);
+  if (capital == null || capital === 0) return false;
+  t.picks.shift();
+  return true;
+}
+
+/** The existing abbreviated league draft uses at most five eligible rivals per batch. */
+export function mlbAiDraftPicks(league: MlbLeague, remaining: MlbProspect[], order: string[], rng: () => number) {
+  const rest = remaining.slice();
+  const picks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+  const seen = new Set<string>();
+  for (const abbr of order) {
+    if (picks.length >= 5 || rest.length === 0) break;
+    const team = league.teams[abbr];
+    if (seen.has(abbr) || !team) continue;
+    seen.add(abbr);
+    if (!mlbConsumeDraftPick(team)) continue;
+    const prospect = rest.shift()!;
+    team.players.push(mlbProspectToPlayer(prospect, rng));
+    picks.push({ team: abbr, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+  }
+  return { remaining: rest, picks };
+}
+
 /* Round 829 review: THE CUT DOWN TO 28, the shape Round 828 gave the NFL's
    53. A full roster club the draft took over MLB_ROSTER_MAX releases, before
    the season starts, its lowest rated men the sim does not play until it is
