@@ -303,7 +303,7 @@ const DB_TO_ERA_L1 = {
  * kept Christian Maggio and Gianni Guigou at Fiorentina and Roberto Nanni
  * at Siena: all three went on in January 2006. A sweep of the men FBref
  * splits between two clubs found two more who started the season at the
- * OTHER club and came to the snapshot's only in January: Olivier Sorlin
+ * OTHER club and were back at the snapshot club only in January: Olivier Sorlin
  * (Monaco, moved there) and Yacine Abdessadki (Toulouse, removed, no row
  * places him there); the rest of that sweep checked out (Mickael Pagis,
  * Pierre-Alain Frau, David Di Michele, Matteo Guardalben and Stefano Mauri
