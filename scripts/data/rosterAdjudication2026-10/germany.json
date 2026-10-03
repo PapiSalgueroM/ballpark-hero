@@ -143,6 +143,29 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the defenders"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/138/ger.wolfsburg", "publisher": "ESPN (VfL Wolfsburg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28"}
    ]
+  },
+  {
+   "name": "Louey Ben Farhat",
+   "club": "Karlsruhe",
+   "loan": true,
+   "loanFrom": "Freiburg",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The 20 year old forward. Freiburg bought him from Karlsruhe on 2026-09-01 and loaned him straight back for 2026-27, so he still plays for Karlsruhe, where the game has him. Loan fields are information only, the ledger's loan policy.",
+   "sources": [
+    {"family": "A", "url": "https://www.scfreiburg.com/en/latest/first-team/news/2026-27/ben-farhat-joins-sc-and-returns-to-ksc-on-loan/", "publisher": "SC Freiburg (club announcement, 2026-09-01)", "readOn": "2026-10-03", "says": "signs for Freiburg and returns to KSC on loan"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/karlsruher-sc/squad", "publisher": "Bundesliga (Karlsruher SC squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4471/karlsruher-sc", "publisher": "ESPN (Karlsruher SC squad page, season 2026-27)", "readOn": "2026-10-03", "says": "listed as Louey Farhat, midfielder, shirt 19, age 20, 5 appearances"}
+   ]
+  },
+  {
+   "name": "Tim Janisch",
+   "club": "Nürnberg",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Nuernberg's number 32, aged 21 on ESPN, six appearances this season. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-nuernberg/squad", "publisher": "Bundesliga (1. FC Nuernberg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/269/1-fc-nurnberg", "publisher": "ESPN (1. FC Nuernberg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 32, age 21, 6 appearances"}
+   ]
   }
  ],
  "movedTo": [
@@ -392,7 +415,7 @@
    "loan": true,
    "loanFrom": "Wolfsburg",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1999-12-29, the Danish winger. On loan at Rangers for the second half of 2025-26, back at Wolfsburg on 2026-06-30, then loaned to Basaksehir on 2026-07-28 to the end of 2026-27 with a conditional obligation to buy. Placed at the club he plays for, the ledger's loan policy.",
+   "note": "Born 1999-12-29, the Danish winger. On loan at Rangers for the second half of 2025-26, back at Wolfsburg on 2026-06-30, then loaned to Basaksehir on 2026-07-28 to the end of 2026-27 with a conditional obligation to buy. Placed at the club he plays for, the ledger's loan policy. Family A here confirms only that he is off Wolfsburg's squad; the destination rests on the club announcement as quoted by beIN Sports and on Soccerway.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://beinsports.com.tr/haber/rams-basaksehir-yeni-transferini-acikladi-2", "publisher": "beIN Sports Turkey (2026-07-28), quoting the club's announcement", "readOn": "2026-10-03", "says": "Basaksehir announce Skov Olsen on loan from Wolfsburg to the end of 2026-27 with a conditional obligation to buy"},
@@ -410,6 +433,73 @@
     {"family": "A", "url": "https://www.afc.co.uk/en/news/marius-mueller-joins-the-dons", "publisher": "Aberdeen FC (club announcement, 2026-07-16)", "readOn": "2026-10-03", "says": "joins from VfL Wolfsburg on a two year deal, aged 33"},
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-wolfsburg/squad", "publisher": "Bundesliga (VfL Wolfsburg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/muller-marius/OYbFR8ut/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Wolfsburg to Aberdeen 2026-07-16, born 1993-07-12"}
+   ]
+  },
+  {
+   "name": "Oladapo Afolayan",
+   "from": "St. Pauli",
+   "to": "Blackburn Rovers",
+   "realClub": "Blackburn Rovers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-09-11. Sold by St. Pauli to Blackburn on 2026-02-01, contract to June 2027; their number 21 with three goals this season. Family A here confirms only that he is off St. Pauli's squad; where he is rests on two independent publishers that agree.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/fc-st-pauli/squad", "publisher": "Bundesliga (FC St. Pauli squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/365/eng.blackburn", "publisher": "ESPN (Blackburn Rovers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 29, 8 appearances, 3 goals"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/afolayan-oladapo/E7kAr9I9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "St. Pauli to Blackburn 2026-02-01, born 1997-09-11, contract to June 2027"}
+   ]
+  },
+  {
+   "name": "Robert Wagner",
+   "from": "St. Pauli",
+   "to": "Dynamo Dresden",
+   "realClub": "Dynamo Dresden",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-07-14, the German midfielder owned by Freiburg. St. Pauli only had him on loan in 2024-25; he then went on loan to Holstein Kiel and in January 2026 to Dresden, who signed him permanently from Freiburg from 2026-07-01.",
+   "sources": [
+    {"family": "A", "url": "https://www.scfreiburg.com/en/latest/news/first-team/2025-26/robert-wagner-joins-dynamo-dresden/", "publisher": "SC Freiburg (club announcement, 2026-06-23)", "readOn": "2026-10-03", "says": "joins Dynamo Dresden permanently after half a season there on loan"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/sg-dynamo-dresden/squad", "publisher": "Bundesliga (Dynamo Dresden squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://ie.soccerway.com/player/wagner-robert/z7Kd7nZd/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Freiburg to Dresden 2026-07-01, born 2003-07-14"}
+   ]
+  },
+  {
+   "name": "Martijn Kaars",
+   "from": "Magdeburg",
+   "to": "St. Pauli",
+   "realClub": "FC St. Pauli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-03-05, the Dutch striker. Sold by Magdeburg to St. Pauli on 2025-08-28; their number 19 in 2026-27.",
+   "sources": [
+    {"family": "A", "url": "https://www.fcstpauli.com/en/news/fc-st-pauli-sign-striker-martijn-kaars", "publisher": "FC St. Pauli (club announcement, 2025-08-28)", "readOn": "2026-10-03", "says": "signs from FC Magdeburg"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/fc-st-pauli/squad", "publisher": "Bundesliga (FC St. Pauli squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/270/ger.st_pauli", "publisher": "ESPN (St. Pauli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 19, age 27, 6 appearances"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/kaars-martijn/xnYgdAQ0/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Magdeburg to St. Pauli 2025-08-28, born 1999-03-05"}
+   ]
+  },
+  {
+   "name": "Berkay Yilmaz",
+   "from": "Nürnberg",
+   "to": "Freiburg",
+   "realClub": "SC Freiburg",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-02-25, the Turkish left back. He was on loan at Nuernberg from Freiburg from 2024-08-27; Freiburg extended his contract and he returned on 2026-06-30. Freiburg's number 27 in 2026-27.",
+   "sources": [
+    {"family": "A", "url": "https://www.scfreiburg.com/en/latest/news/first-team/2025-26/berkay-yilmaz-extends-contract-and-returns-to-sc/", "publisher": "SC Freiburg (club announcement, 2026-05-11)", "readOn": "2026-10-03", "says": "extends his contract and returns to Freiburg in summer 2026"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 27, age 21, 1 appearance"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/yilmaz-berkay/dhZeCRHq/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "return from loan Nurnberg to Freiburg 2026-06-30, born 2005-02-25"}
+   ]
+  },
+  {
+   "name": "Oliver Villadsen",
+   "from": "Nürnberg",
+   "to": "Brøndby IF",
+   "realClub": "Brøndby IF",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-11-16, the Danish right back. Sold by Nuernberg to Brondby on 2025-07-17, contract to June 2029; their number 2, in the matchday squad for the derby of 2026-09-20.",
+   "sources": [
+    {"family": "A", "url": "https://brondby.com/nyheder/herrer/2026/september/truppen-til-derby-pa-brondby-stadion", "publisher": "Brondby IF (club matchday squad, 2026-09-20)", "readOn": "2026-10-03", "says": "number 2 in the squad"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-nuernberg/squad", "publisher": "Bundesliga (1. FC Nuernberg squad, 2. Bundesliga season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://za.soccerway.com/player/rose-villadsen-oliver/dMPYlirB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nurnberg to Brondby 2025-07-17, born 2001-11-16, contract to June 2029"}
    ]
   }
  ],
@@ -475,6 +565,18 @@
     {"family": "A", "url": "https://www.fchk.cz/", "publisher": "FC Hradec Kralove (club site)", "readOn": "2026-10-02", "says": "in the A team roster, shirt 70, scored twice in a friendly against Kladno on 2026-10-02"},
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-moenchengladbach/squad", "publisher": "Bundesliga (Borussia Moenchengladbach squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/cvancara-tomas/zgMpZZSc/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "loaned Gladbach to Hradec Kralove 2026-09-03 until 2027-06-30, born 2000-08-13"}
+   ]
+  },
+  {
+   "name": "Joel Vega Zambrano",
+   "from": "Paderborn",
+   "realClub": "Rot-Weiss Oberhausen",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2004-09-10. Left Paderborn for Viktoria Koln on 2026-01-05, then joined Rot-Weiss Oberhausen on 2026-08-06, contract to June 2028. Neither the 3. Liga nor the Regionalliga is modelled. Family A here confirms only that he is off Paderborn's squad; the destination rests on two independent publishers that agree, and the Oberhausen club site would not load.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/sc-paderborn-07/squad", "publisher": "Bundesliga (SC Paderborn squad, season 2026-2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://mx.soccerway.com/jugador/vega-zambrano-joel/2DYOK3Cn/traspasos", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Paderborn to Viktoria Koln 2026-01-05, Viktoria Koln to Oberhausen 2026-08-06, born 2004-09-10"},
+    {"family": "B", "url": "https://global.espn.com/football/player/_/id/408236/joel-vega-zambrano", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "club RW Oberhausen, born 10/9/2004"}
    ]
   }
  ],
