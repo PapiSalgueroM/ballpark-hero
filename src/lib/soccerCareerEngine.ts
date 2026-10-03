@@ -4178,7 +4178,10 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   s.frozenOut = 0;
   s.badSeasonStreak = 0;
   s.morale = clamp(s.morale + 6, 0, 100);
-  s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
+  /* Round 974: added to the season's log, never written over it. A move
+     used to wipe the log, so a season that ended in a transfer kept one
+     line of its story. */
+  s.events = [...s.events, `🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
   // Round 244: a captain who leaves on loan hands the armband over; it can
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
@@ -4604,12 +4607,14 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   const agentFee = offer.transferFee > 0 ? Math.round(offer.transferFee * feeRate * 100) / 100 : 0;
   if (agentFee > 0) {
     s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
   } else {
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
   }
-  // Round 244: the armband never travels. Stripped after the events reset
-  // above so the handover line survives onto the fresh list.
+  /* Round 974: the signing is added to the season's log, never written over
+     it, so the season it ends keeps its whole story. */
+  // Round 244: the armband never travels. Stripped after the signing line
+  // above so the handover line follows it.
   endClubCaptaincy(s, "transfer");
   // Round 54: staying loyal to the badge that raised you pays off in the
   // fans' hearts, and coming home later is an instant love story.

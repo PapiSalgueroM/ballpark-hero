@@ -182,6 +182,24 @@ describe('Soccer Career: the story keeps every season', () => {
     expect(b.overall).toBe(a.overall);
     expect(b.netWorth).toBe(a.netWorth);
   });
+
+  it('a signing and a loan add to the season log instead of writing over it', () => {
+    Math.random = seeded(9753);
+    let s = newCareer(9753);
+    const seen: Archived[] = [];
+    for (let guard = 0; guard < 400 && s.phase !== 'contract_offer'; guard++) s = step(s, seen);
+    expect(s.phase).toBe('contract_offer');
+    const before = [...s.events];
+    expect(before.length).toBeGreaterThan(0);
+    const offer = s.pendingOffers[0];
+    const signed = E.acceptOffer(s, offer);
+    expect(signed.events.slice(0, before.length), 'the season before the signing is still there').toEqual(before);
+    expect(signed.events[before.length]).toContain(`Signed with ${offer.club.name}`);
+    const loaned = E.acceptLoan(signed, { ...offer, isLoan: true });
+    expect(loaned.events.slice(0, signed.events.length)).toEqual(signed.events);
+    expect(loaned.events.some(l => l.includes('Off on loan'))).toBe(true);
+    expect(s.events, 'the save it came from is untouched').toEqual(before);
+  });
 });
 
 describe('Soccer Career: old and damaged stories', () => {
@@ -232,9 +250,9 @@ describe('Soccer Career: old and damaged stories', () => {
 
 /* MEASURED 2026-10-03 by this test, the longest career the engine plays
    (27 to 29 season rows) plus ten manager seasons:
-     seed 9748: 27 rows, 26 story seasons, story 13,180 B, save 49,129 B (35,949 without)
-     seed 9749: 28 rows, 27 story seasons, story 13,960 B, save 53,169 B (39,209 without)
-     seed 9750: 29 rows, 28 story seasons, story 13,674 B, save 52,547 B (38,873 without)
+     seed 9748: 27 rows, 26 story seasons, story 13,278 B, save 49,227 B (35,949 without)
+     seed 9749: 28 rows, 27 story seasons, story 14,058 B, save 53,267 B (39,209 without)
+     seed 9750: 29 rows, 28 story seasons, story 13,772 B, save 52,645 B (38,873 without)
    So the story adds about 13 to 14 KB, roughly 500 bytes a season. The bound
    is 80,000 bytes for the whole save (half again over the largest measured)
    and 1,000 bytes a story season (twice the measured mean), so a story line

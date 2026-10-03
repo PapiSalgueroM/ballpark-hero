@@ -5,11 +5,17 @@
    was thrown away, and the page drew the last three lines of the current one.
    Round 974 writes the season that is ending into CareerState.story at both
    resets (archiveSeasonStory) and the Career Story screen reads it back.
+   AND A SECOND ONE, found by looking at the first story on a phone: a
+   signing (acceptOffer) and a loan (acceptLoan) did not add their line to
+   the log, they replaced the log with it. A season that ended in a move kept
+   one line. On the measured run below that was 13,522 of 28,599 lines, about
+   half of every story, gone before any reset ran. Both now append.
 
    WHAT IT DOES. Bundles the real engine and plays CAREERS full careers (four
-   seeds by default, eight positions and three choice styles, transfers taken
-   and refused), noting before every season step what the log holds and which
-   season row it belongs to. That note is what the story must end up holding.
+   seeds by default, eight positions and three choice styles, transfers and
+   loans taken and refused), noting before every season step what the log
+   holds and which season row it belongs to. That note is what the story must
+   end up holding.
 
    CHECKS, all on outcomes:
      1. Completeness, walked step by step: after every season step the story
@@ -22,32 +28,37 @@
         out of both resets, which is the engine before Round 974.
      3. Size: mean bytes per story season and mean save size at the end of a
         career, against bands set from measurement (below). Never a max.
+     4. The log only grows between resets: after every other step the old log
+        is still the start of the new one. Fails if fewer than one signing in
+        four careers was seen, so it cannot pass by never meeting a move.
 
-   MEASURED 2026-10-03, eight seeds x 24 careers, before setting the bands:
+   MEASURED 2026-10-03, eight seeds x 24 careers, both fixes in:
      seed     story bytes a season   seasons a career   save mean bytes
-     9741            254                  21.9              33,752
-     19741           260                  22.4              34,107
-     29741           261                  22.6              35,053
-     39741           256                  22.0              34,288
-     49741           253                  21.8              34,080
-     59741           257                  22.5              34,714
-     69741           245                  22.7              34,559
-     79741           250                  22.4              34,627
-     all 192 careers: 15,058 lines written, every one kept; a finished career
-     could read 244 of them (1.6%) before this round. Run time about 60 s.
-   The default run is the first four seeds (story 258 B a season, save mean
-   34,300 B). Bands: story bytes a season 180 to 400 (the seed spread is 245
-   to 261, so 400 is half again over and catches a line that starts carrying
-   data), save mean 25,000 to 45,000 (seed spread 33,752 to 35,053; the save
-   without the story is about 28,600, so the floor is below the old engine).
-   Means only; a max is noise.
+     9741            428                  21.9              37,552
+     19741           423                  22.4              37,791
+     29741           428                  22.7              38,985
+     39741           424                  22.0              37,939
+     49741           432                  21.8              37,968
+     59741           433                  22.5              38,705
+     69741           433                  22.7              38,841
+     79741           431                  22.4              38,721
+     all 192 careers: 2,287 signings and 54 loans, 28,599 lines written, every
+     one kept; a finished career could read 244 of them (0.9%) before this
+     round. With the signing still writing over the log (the wipe control) the
+     same 192 careers kept 15,077. Run time about 60 s.
+   The default run is the first four seeds. Bands: story bytes a season 300
+   to 650 (seed spread 423 to 433, so 650 is half again over and catches a
+   line that starts carrying data), save mean 28,000 to 50,000 (seed spread
+   37,552 to 38,985; the old save without a story ran about 34,000 on the
+   same driver). Means only; a max is noise.
 
    CONTROLS. CAREER_STORY_CONTROL=reset drops the archive at the pro season
-   reset, =cap keeps 5 lines a season, =draw makes the archive draw once. Each
-   mutates the engine source as it is bundled (the anchor is asserted to be
-   there first) and must fail its own check: reset and cap fail check 1, draw
-   fails check 2. A control run exits 0 only when its check failed and prints
-   which one; it exits 1 when the control did not fire.
+   reset, =cap keeps 5 lines a season, =draw makes the archive draw once,
+   =wipe puts the signing back to writing over the log. Each mutates the
+   engine source as it is bundled (the anchor is asserted to be there first)
+   and must fail its own check: reset and cap fail check 1, draw fails check
+   2, wipe fails check 4. A control run exits 0 only when its check failed and
+   prints which one; it exits 1 when the control did not fire.
 
    Run: node scripts/simCareerStory.mjs [careersPerSeed]
    Reads no network: fetch is replaced with a thrower before the engine loads. */
@@ -68,8 +79,10 @@ const MUTATIONS = {
   reset: { anchor: RESET, count: 2, apply: src => { const i = src.lastIndexOf(RESET); return src.slice(0, i) + "s.age += 1; s.events = [];" + src.slice(i + RESET.length); } },
   cap: { anchor: "export const STORY_LINES_PER_SEASON = 40;", count: 1, apply: src => src.replace("export const STORY_LINES_PER_SEASON = 40;", "export const STORY_LINES_PER_SEASON = 5;") },
   draw: { anchor: "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", count: 1, apply: src => src.replace("export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {", "export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {\n  Math.random();") },
+  /* the signing written over the season's log again, as it was before 974 */
+  wipe: { anchor: "s.events = [...s.events, `✍️ Signed with", count: 2, apply: src => src.split("s.events = [...s.events, `✍️ Signed with").join("s.events = [`✍️ Signed with") },
 };
-const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws" };
+const EXPECT_FAIL = { reset: "completeness", cap: "completeness", draw: "draws", wipe: "log" };
 if (CONTROL && !MUTATIONS[CONTROL]) { console.error(`unknown CAREER_STORY_CONTROL ${CONTROL}`); process.exit(2); }
 
 const original = fs.readFileSync(ENGINE, "utf8");
@@ -137,6 +150,7 @@ function career(E, seed, c, walk) {
   let s = E.initCareer(`Story ${seed}-${c}`, NATIONS[c % 8], POSITIONS[c % 8], "2020s", st, ovr, 2020, clubs, null);
   const seen = [];
   const stepFaults = [];
+  const logFaults = [];
   let lines = 0;
   for (let guard = 0; guard < 1500 && !s.retired; guard++) {
     const phase = s.phase;
@@ -152,7 +166,10 @@ function career(E, seed, c, walk) {
       }
       continue;
     }
-    switch (phase) {
+    const logBefore = s.events;
+    const loanable = phase === "transfer_window" && c % 3 === 1 && (s.pendingLoanOffers?.length ?? 0) > 0;
+    switch (loanable ? "loan" : phase) {
+      case "loan": s = E.acceptLoan(s, s.pendingLoanOffers[0]); loans++; break;
       case "contract_offer": { const o = s.pendingOffers || []; s = o.length ? E.acceptOffer(s, o.find(x => x.isHomegrown) || o[0]) : { ...s, phase: "playing" }; break; }
       case "rehab_choice": s = E.applyRehabChoice(s, c % 3); break;
       case "newspaper": s = E.dismissNewspaper(s); break;
@@ -176,17 +193,23 @@ function career(E, seed, c, walk) {
       case "retirement_suggestion": s = c % 4 === 0 ? E.acceptRetirementSuggestion(s) : E.declineRetirementSuggestion(s, clubs); break;
       default: throw new Error(`no move for ${phase} (${seed}/${c})`);
     }
+    /* check 4: off the two season resets nothing may take a line back out of
+       the log; a transfer or a loan used to write over the whole season */
+    if (walk && (s.events.length < logBefore.length || logBefore.some((l, i) => s.events[i] !== l))) {
+      logFaults.push(`${seed}/${c} ${phase}${loanable ? " (loan)" : ""} at ${s.age}: the log went from ${logBefore.length} lines to ${s.events.length}, dropping earlier ones`);
+    }
   }
-  return { s, seen, lines, stepFaults };
+  return { s, seen, lines, stepFaults, logFaults };
 }
 
 /* Bands, set from the measured numbers in the header. */
 const BANDS = {
-  storyBytesPerSeason: [180, 400],
-  saveBytesMean: [25000, 45000],
+  storyBytesPerSeason: [300, 650],
+  saveBytesMean: [28000, 50000],
 };
 
-const fails = { completeness: [], draws: [], size: [] };
+const fails = { completeness: [], draws: [], size: [], log: [] };
+let loans = 0, transfers = 0;
 let careers = 0, seasonsKept = 0, linesKept = 0, linesWritten = 0, liveLines = 0, cut = 0;
 let storyBytes = 0, saveBytes = 0;
 const saves = [];
@@ -198,6 +221,8 @@ for (const seed of SEEDS) {
     careers++;
     const story = a.s.story ?? [];
     fails.completeness.push(...a.stepFaults);
+    fails.log.push(...a.logFaults);
+    transfers += story.reduce((n, e) => n + e.lines.filter(l => l.includes("Signed with")).length, 0);
     if (story.length !== a.seen.length) fails.completeness.push(`${seed}/${c}: story ${story.length} seasons, played ${a.seen.length}`);
     story.forEach((e, i) => {
       const want = a.seen[i];
@@ -221,6 +246,7 @@ for (const seed of SEEDS) {
   console.log(`seed ${seed}: ${n} careers, story ${(sb / Math.max(1, ss)).toFixed(0)} bytes a season, ${(ss / Math.max(1, n)).toFixed(1)} seasons a career, save mean ${(vb / Math.max(1, n)).toFixed(0)} bytes`);
   Object.assign(bySeed, { careers, storyBytes, seasons: seasonsKept, saveBytes });
 }
+if (transfers < careers / 4) fails.log.push(`only ${transfers} signings over ${careers} careers: the log check saw too few moves to mean anything`);
 if (cut > 0) fails.completeness.push(`${cut} lines past the season cap were not kept`);
 const perSeason = storyBytes / Math.max(1, seasonsKept);
 const meanSave = saveBytes / Math.max(1, careers);
@@ -229,6 +255,7 @@ if (meanSave < BANDS.saveBytesMean[0] || meanSave > BANDS.saveBytesMean[1]) fail
 if (seasonsKept < careers * 10) fails.completeness.push(`only ${seasonsKept} story seasons over ${careers} careers: the driver is not playing careers`);
 
 saves.sort((x, y) => x - y);
+console.log(`moves kept in the story: ${transfers} signings, ${loans} loans taken`);
 console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
 console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
