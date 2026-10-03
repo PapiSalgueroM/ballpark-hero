@@ -104,6 +104,7 @@ export function MysteryBoxBoard() {
           funFact="Same boxes for everyone today, the skill is what you keep."
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `XI ${rating}`, gameName: 'Mystery Box', gamePath: '/mystery-box', customText: shareText }}
+          playNext={<p className="text-sm text-muted-foreground">Fresh boxes tomorrow.</p>}
         />
         </RestoredResult>
       )}

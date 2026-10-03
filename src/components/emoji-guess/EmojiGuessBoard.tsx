@@ -89,6 +89,7 @@ export function EmojiGuessBoard() {
             funFact="🟩 first try · 🟨 second · 🟧 third · 🟥 missed"
             emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
             share={{ score: `${totalScore} pts`, gameName: 'Emoji Guess', gamePath: '/emoji-guess', customText: shareText }}
+            playNext={<p className="text-sm text-muted-foreground">Five new puzzles tomorrow.</p>}
           />
           </RestoredResult>
         </div>

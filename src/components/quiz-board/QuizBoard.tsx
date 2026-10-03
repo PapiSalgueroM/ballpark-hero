@@ -203,6 +203,7 @@ export function QuizBoard() {
           funFact={score < 0 ? `You finished on -$${Math.abs(score)}. A cleared board never banks below $0.` : undefined}
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `$${banked}`, gameName: 'Sports Quiz Board', gamePath: '/quiz-board', customText: shareText }}
+          playNext={<p className="text-sm text-muted-foreground">A new board tomorrow.</p>}
         />
         </RestoredResult>
       )}

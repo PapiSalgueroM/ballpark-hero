@@ -89,6 +89,7 @@ export function BallIqBoard() {
           statLine={`${correctCount}/${questions.length} correct`}
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `IQ ${iq}`, gameName: 'Ball Knowledge IQ', gamePath: '/ball-iq', customText: shareText }}
+          playNext={<p className="text-sm text-muted-foreground">Twelve new questions tomorrow.</p>}
         />
         </RestoredResult>
 
