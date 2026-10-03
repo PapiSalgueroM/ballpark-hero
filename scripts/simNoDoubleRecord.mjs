@@ -53,8 +53,10 @@
      slugdrift     useNflHL's slug pair back to its old mismatch; only the
                    nfl-higher-lower row
      togglerearm   Rank 'Em's recorder gets its mode check back; only rank-em
-     coachflip     the NFL My Career's done back to the retired screen alone;
-                   only nfl-my-career, on its first coaching round trip
+     coachflip     the shared US career board's done back to the retired
+                   screen alone; all four My Career rows and only those,
+                   each on its first coaching round trip (Round 900: one
+                   board, so one edit, four reds)
      playunlimited NFL Career Path's Play Unlimited stays in the daily again;
                    only nfl-career, on its replay step
      olddaily      useDailyPuzzle trusts a stored 'playing' again; only
@@ -93,6 +95,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/noDoubleRecord.test.tsx';
@@ -129,9 +132,12 @@ const VITEST_CONTROLS = {
     point: /records nothing/,
   },
   coachflip: {
-    edits: [{ file: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', from: "  const done = phase === 'retired' || phase === 'coach';", to: "  const done = phase === 'retired';" }],
-    why: 'the NFL My Career counts only the retired screen as done again, so every coaching round trip re-arms the recorder',
-    red: row => row.title === 'nfl-my-career',
+    /* Round 900: the four US careers are one board, so this one edit has to
+       turn all four rows red. A sport that stayed green here would be a
+       sport that is not on the shared board. */
+    edits: [{ file: US_CAREER_BOARD, from: "  const done = phase === 'retired' || phase === 'coach';", to: "  const done = phase === 'retired';" }],
+    why: 'the shared US career board counts only the retired screen as done again, so every coaching round trip re-arms the recorder in all four My Careers',
+    red: row => /^(nfl|nba|mlb|nhl)-my-career$/.test(row.title),
     point: /coaching round trip 1 records nothing/,
   },
   playunlimited: {
