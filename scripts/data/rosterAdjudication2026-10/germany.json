@@ -602,13 +602,14 @@
   {
    "name": "Maximilian Philipp",
    "from": "Freiburg",
-   "why": "Unattached as far as two sources show. Born 1994-03-01. Freiburg announced on 2026-05-22 that he would no longer be part of the first team from 2026-27, and he is on neither 2026-27 Freiburg squad page. No new club was found up to 2026-10-02. Disagreement recorded: the Soccerway, ESPN and FotMob player pages still name Freiburg as his club, and none shows a new contract or a 2026-27 game (ESPN's last listed game is 2026-05-16), so they read as not yet updated after the club let him go. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
-   "adjudicatedOn": "2026-10-02",
+   "why": "Off Freiburg, certain on both families; unattached is INFERRED, not reported. Born 1994-03-01. Freiburg announced on 2026-05-22 that he would no longer be part of the first team from next season (the club text read on 2026-10-03 gives no contract detail), FotMob gives his Freiburg contract as ending June 2026, and he is on neither 2026-27 Freiburg squad page. No source names him a free agent: the verdict rests on the contract running out plus no new club being found on any page or in two web searches up to 2026-10-03. Disagreement recorded: the Soccerway, ESPN and FotMob player pages still name Freiburg as his club, and none shows a new contract or a 2026-27 game (ESPN's last listed game is 2026-05-16, FotMob's last match 2026-05-20, an unused sub against Aston Villa), so they read as not yet updated after the contract ran out. The in-game effect (off Freiburg) is two-sourced either way. Medium confidence on unattached: a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
    "sources": [
     {"family": "A", "url": "https://www.scfreiburg.com/en/latest/news/first-team/2025-26/thank-you-chicco-milli-and-kofi", "publisher": "SC Freiburg (club announcement, 2026-05-22)", "readOn": "2026-10-02", "says": "no longer part of the first team from next season"},
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "not listed"},
-    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/202802/maximilian-philipp", "publisher": "ESPN (player page)", "readOn": "2026-10-02", "says": "still shows SC Freiburg; last game listed is 2026-05-16 against RB Leipzig; born 1994-03-01"}
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/202802/maximilian-philipp", "publisher": "ESPN (player page)", "readOn": "2026-10-02", "says": "still shows SC Freiburg; last game listed is 2026-05-16 against RB Leipzig; born 3/1/1994 (month first)"},
+    {"family": "B", "url": "https://www.fotmob.com/players/532738/maximilian-philipp", "publisher": "FotMob", "readOn": "2026-10-03", "says": "club Freiburg, contract Jun 2026; last match 2026-05-20 against Aston Villa, unused sub; born Mar 1, 1994"}
    ]
   },
   {
