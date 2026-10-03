@@ -3,7 +3,8 @@
 
    Run: node scripts/simCareerHall.mjs <nfl|nba|mlb|nhl> [careers, default 2000]
         SIM_CONTROL=<name> runs one negative control (the list is CONTROLS below).
-   One sport per run on purpose: a run stays short on a busy machine.
+   With no sport (how runAllSims calls it) it runs all four, one child each,
+   and exits with the worst code; give a sport to keep a run short.
 
    WHAT IT HOLDS, per sport, each with a control that must turn it red:
      1. iff        inducted if and only if the sport's own legacyOf says hof.
@@ -55,9 +56,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { readFileSync, unlinkSync } from 'node:fs';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
-const ROOT = process.cwd();
+const SELF = fileURLToPath(import.meta.url);
+const ROOT = path.resolve(path.dirname(SELF), '..');
 const SPORT = process.argv[2];
 const CAREERS = Number(process.argv[3] || 2000);
 const CONTROL = process.env.SIM_CONTROL || '';
@@ -68,6 +71,16 @@ const ENGINES = {
   mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
   nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
+if (!SPORT) {
+  // runAllSims calls every harness with no arguments: run the four sports, one child each.
+  let worst = 0;
+  for (const s of Object.keys(ENGINES)) {
+    const r = spawnSync(process.execPath, [SELF, s, String(CAREERS)], { stdio: 'inherit', env: process.env, cwd: ROOT });
+    worst = Math.max(worst, r.status ?? 1);
+  }
+  console.log(`simCareerHall: ${worst ? 'RED' : 'all four sports green'}`);
+  process.exit(worst);
+}
 const E = ENGINES[SPORT];
 if (!E) { console.error(`usage: node scripts/simCareerHall.mjs <${Object.keys(ENGINES).join('|')}> [careers]`); process.exit(2); }
 
@@ -111,7 +124,7 @@ const entry = [
 ].join('\n');
 await build({
   stdin: { contents: entry, resolveDir: ROOT, loader: 'ts' },
-  bundle: true, format: 'esm', platform: 'node', outfile: OUT,
+  bundle: true, format: 'esm', platform: 'node', outfile: OUT, absWorkingDir: ROOT,
   logLevel: 'error', alias: { '@': './src' }, plugins: [controlPlugin],
 });
 const eng = await import(pathToFileURL(OUT).href);
