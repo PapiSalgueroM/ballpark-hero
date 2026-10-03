@@ -335,6 +335,21 @@
     {"family": "B", "url": "https://us.soccerway.com/player/michal-lucas/fD49VLmq/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Cercle Brugge from Monaco 2026-07-30 to 2027-06-30, born 2005-06-22"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/174/as-monaco", "publisher": "ESPN (AS Monaco squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
+  },
+  {
+   "name": "Abakar Sylla",
+   "from": "Strasbourg",
+   "to": "Gaziantep FK",
+   "realClub": "Gaziantep FK",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-12-25. After a spring 2026 loan at Nantes he went back to Strasbourg and was sold to Gaziantep on 2026-09-04, contract to June 2028; their number 21, with Super Lig matches on 2026-09-07 and 2026-09-14. The destination rests on two independent publishers: Gaziantep's own site could not be reached, so the official voice is Strasbourg's 2026-27 squad, which no longer lists him.",
+   "sources": [
+    {"family": "A", "url": "https://www.rcstrasbourgalsace.fr/leffectif-pro-26-27/", "publisher": "RC Strasbourg Alsace (professional squad 26-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/20070/gaziantep-fk", "publisher": "ESPN (Gaziantep FK squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 21, age 23, Ivory Coast"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/340239/abakar-sylla", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Gaziantep FK number 21, born 2002-12-25, played 2026-09-14"},
+    {"family": "B", "url": "https://us.soccerway.com/player/sylla-abakar/lOBSekrn/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Strasbourg to Gaziantep 2026-09-04, born 2002-12-25, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg", "publisher": "ESPN (Strasbourg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -576,6 +591,45 @@
     {"family": "B", "url": "https://us.soccerway.com/player/said-wesley/400jX4xg/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lens to Shamal free 2026-07-18, born 1995-04-19, contract to 2028-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/186189/wesley-said", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Al Shamal number 22, born 1995-04-19, played 2026-09-14"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/175/lens", "publisher": "ESPN (Lens squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Presnel Kimpembe",
+   "from": "PSG",
+   "realClub": "Al-Kharitiyath",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-08-13. Left PSG for Qatar SC on 2025-09-07 and joined Al-Kharitiyath on a free on 2026-07-01. Qatar is not modelled. The destination rests on Soccerway alone (ESPN's player page is a stale PSG shell with no matches); off PSG is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://www.psg.fr/equipes/equipe-premiere/effectif", "publisher": "Paris Saint-Germain (men's first team squad 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/160/paris-saint-germain", "publisher": "ESPN (Paris Saint-Germain squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/kimpembe-presnel/dMyiR1D8/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "PSG to Qatar SC 2025-09-07, Qatar SC to Al-Kharitiyath free 2026-07-01, born 1995-08-13"}
+   ]
+  },
+  {
+   "name": "Shavy Babicka",
+   "from": "Toulouse",
+   "realClub": "United FC, on loan from Crvena zvezda",
+   "loan": true,
+   "loanFrom": "Crvena zvezda",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000 (Soccerway 2000-06-01, ESPN 2000-05-31). Sold by Toulouse to Crvena zvezda in August 2025, loaned to Karagumruk in January 2026, then to United FC from 2026-07-26 to June 2027. None of those clubs is modelled. The destination rests on Soccerway alone (ESPN's page shows no club); off Toulouse is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://www.toulousefc.com/equipes/equipe-professionnelle/effectif", "publisher": "Toulouse FC (professional squad 2026/2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/179/toulouse", "publisher": "ESPN (Toulouse squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/babicka-shavy/zwDOyrZu/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at United FC from Crvena zvezda from 2026-07-26 to 2027-06-30, Toulouse to Crvena zvezda August 2025"}
+   ]
+  },
+  {
+   "name": "Thierno Baldé",
+   "from": "Troyes",
+   "realClub": "Nancy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.estac.fr/equipe-premiere/effectif/", "publisher": "ESTAC Troyes (first team squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes", "publisher": "ESPN (Troyes squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
