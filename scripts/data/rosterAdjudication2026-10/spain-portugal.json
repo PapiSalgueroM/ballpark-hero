@@ -122,6 +122,28 @@
      "says": "Gianluca Prestianni, forward, shirt 25, age 20"
     }
    ]
+  },
+  {
+   "name": "Juanmi",
+   "club": "Getafe",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Juan Miguel Jiménez López, born 1993-05-20, the forward. Getafe's number 7 for 2026-27, no league minutes yet. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/juanmi",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Getafe, shirt 7, full name Juan Miguel Jiménez López, born 1993-05-20, 0 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Juanmi, forward, shirt 7, age 33"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -236,6 +258,96 @@
      "family": "B",
      "url": "https://www.espn.com/soccer/team/squad/_/id/1929",
      "publisher": "ESPN (Benfica squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Álex Sola",
+   "from": "Getafe",
+   "realClub": "Almería",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
+     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Carles Pérez",
+   "from": "Getafe",
+   "realClub": "Girona",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
+     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
+     "readOn": "2026-10-03",
+     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Juan Bernat",
+   "from": "Getafe",
+   "realClub": "Eibar",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
+     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not listed"
     }
