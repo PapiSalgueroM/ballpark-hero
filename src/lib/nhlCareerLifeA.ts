@@ -515,11 +515,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_quiet_room',
       category: 'body', cooldown: 2,
       title: 'The quiet room',
-      body: 'You took a shoulder up high and the trainer is asking what city you are in. You know the answer. You think you know the answer.',
+      body: 'You took a shoulder up high in the second period, and now the trainer is holding a light in front of your eyes and asking what city you are in. You know the answer. You think you know the answer. The bench is yelling for you to get back out there and the trainer is not.',
       options: [
-        { label: 'Full protocol, no shortcuts', effect: 'Do it right', apply: (cc) => { const h = hp(cc, 18); const m = mor(cc, 3); const f = fan(cc, -3); flag(cc, 'headSafe'); return `Cleared properly two weeks later with zero symptoms. Health +${h}, morale +${m}, fanbase ${f}. Best decision of your career.`; } },
-        { label: 'Tell the truth and sit tonight', effect: 'Honest answer', apply: (cc) => { const h = hp(cc, 11); const m = mor(cc, 5); flag(cc, 'headSafe'); return `You told them the truth and watched from the bench. Health +${h}, morale +${m}.`; } },
-        { label: 'Say you are fine, go back out', effect: 'Hide it', apply: (cc) => { const h = hp(cc, -16); const m = mor(cc, -7); const f = fan(cc, 5); flag(cc, 'hidConcussion'); return `You played nine more minutes and lost the rest of the month anyway. Health ${h}, morale ${m}, fanbase +${f}. Not worth it.`; } },
+        {
+          label: 'Full protocol, no shortcuts', effect: 'Do it right',
+          apply: (cc) => { const h = hp(cc, 18); const m = mor(cc, 3); const f = fan(cc, -3); flag(cc, 'headSafe'); return `A dark room, no screens, the tests every day until they came back clean. Cleared properly two weeks later with zero symptoms. Health +${h}, morale +${m}, fanbase ${f}. Best decision of your career.`; },
+        },
+        {
+          label: 'Tell the truth and sit tonight', effect: 'Honest answer',
+          apply: (cc) => { const h = hp(cc, 11); const m = mor(cc, 5); flag(cc, 'headSafe'); return `You told them the room was spinning and watched the third period from the bench with a towel on your head. Health +${h}, morale +${m}.`; },
+        },
+        {
+          label: 'Say you are fine, go back out', effect: 'Hide it',
+          apply: (cc) => { const h = hp(cc, -16); const m = mor(cc, -7); const f = fan(cc, 5); flag(cc, 'hidConcussion'); return `You played nine more minutes, the crowd loved it, and you lost the rest of the month to headaches anyway. Health ${h}, morale ${m}, fanbase +${f}. Not worth it.`; },
+        },
       ],
     });
   }
@@ -529,11 +538,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_broken_hand',
       category: 'body', cooldown: 2,
       title: 'Round two, broken hand',
-      body: 'The scan is not close and the doc is not smiling. He says a needle, a cast liner, and you can hold the stick with two fingers.',
+      body: 'A slash on the hands in the second round, and the scan is not close. The doctor is not smiling. He says a needle before every game, a cast liner under the glove, and you can probably hold the stick with two fingers. Probably.',
       options: [
-        { label: 'Play with the freeze', effect: 'Playoff legend', apply: (cc) => { const f = fan(cc, 13); const h = hp(cc, -13); const m = mor(cc, 6); const g = rate(cc, -1); flag(cc, 'playoffWarrior'); return `They still talk about it in that city. Fanbase +${f}, morale +${m}, health ${h}, rating ${g}.`; } },
-        { label: 'Sit two games, return for the next round', effect: 'Split the difference', apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); const f = fan(cc, -3); return `Two games in a suit, back for the conference final. Health +${h}, morale +${m}, fanbase ${f}.`; } },
-        { label: 'Shut it down and get it fixed', effect: 'Fix it now', apply: (cc) => { const h = hp(cc, 15); const m = mor(cc, -4); const f = fan(cc, -7); return `Surgery on Monday, full grip by August. Health +${h}, morale ${m}, fanbase ${f}.`; } },
+        {
+          label: 'Play with the freeze', effect: 'Playoff legend',
+          apply: (cc) => { const f = fan(cc, 13); const h = hp(cc, -13); const m = mor(cc, 6); const g = rate(cc, -1); flag(cc, 'playoffWarrior'); return `A needle before every game and a stick you could barely feel. They still talk about it in that city. Fanbase +${f}, morale +${m}, health ${h}, rating ${g}.`; },
+        },
+        {
+          label: 'Sit two games, return for the next round', effect: 'Split the difference',
+          apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); const f = fan(cc, -3); return `Two games in a suit, a lot of ice on the hand, and you were back for the next round with a little more grip. Health +${h}, morale +${m}, fanbase ${f}.`; },
+        },
+        {
+          label: 'Shut it down and get it fixed', effect: 'Fix it now',
+          apply: (cc) => { const h = hp(cc, 15); const m = mor(cc, -4); const f = fan(cc, -7); return `Surgery on Monday, two plates and six screws, full grip by August. Some fans called it soft. Health +${h}, morale ${m}, fanbase ${f}.`; },
+        },
       ],
     });
   }
@@ -543,11 +561,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_shoulder_surgery',
       category: 'body', cooldown: 3,
       title: 'The shoulder',
-      body: 'It comes out on faceoffs now, and once in your sleep. Surgery is five months, which means no camp and no October.',
+      body: 'It comes out on faceoffs now, and once in your sleep, which was a new kind of morning. The surgeon says five months of recovery, which means no camp and no October. The trainer says you could probably play through it with the right harness. Probably again.',
       options: [
-        { label: 'Get it done in May', effect: 'Full repair', apply: (cc) => { const h = hp(cc, 21); const g = rate(cc, -1); const m = mor(cc, 2); flag(cc, 'shoulderFixed'); return `Labrum repaired, first surgery of your life. Health +${h}, rating ${g}, morale +${m}. It stays in the socket now.`; } },
-        { label: 'Play through with a harness', effect: 'Tape it up', apply: (cc) => { const h = hp(cc, -9); const f = fan(cc, 6); const m = mor(cc, 3); return `A harness under the shoulder pads all year. Health ${h}, fanbase +${f}, morale +${m}.`; } },
-        { label: 'Rehab hard, decide in August', effect: 'Buy time', apply: (cc, r) => { const h = hp(cc, 9); const m = mor(cc, 2); if (r() < 0.4) { const h2 = hp(cc, -5); return `It popped out again in camp and you had it done anyway. Health +${h + h2}, morale +${m}.`; } return `Twelve weeks of band work held it together. Health +${h}, morale +${m}.`; } },
+        {
+          label: 'Get it done in May', effect: 'Full repair',
+          apply: (cc) => { const h = hp(cc, 21); const g = rate(cc, -1); const m = mor(cc, 2); flag(cc, 'shoulderFixed'); return `Labrum repaired, first surgery of your life, and a summer of very boring rehab. Health +${h}, rating ${g}, morale +${m}. It stays in the socket now.`; },
+        },
+        {
+          label: 'Play through with a harness', effect: 'Tape it up',
+          apply: (cc) => { const h = hp(cc, -9); const f = fan(cc, 6); const m = mor(cc, 3); return `A harness under the shoulder pads all year and a lot of one handed shots. The fans loved the grit. Health ${h}, fanbase +${f}, morale +${m}.`; },
+        },
+        {
+          label: 'Rehab hard, decide in August', effect: 'Buy time',
+          apply: (cc, r) => { const h = hp(cc, 9); const m = mor(cc, 2); if (r() < 0.4) { const h2 = hp(cc, -5); return `It popped out again in camp on the first faceoff and you had it done anyway. Health +${h + h2}, morale +${m}.`; } return `Twelve weeks of band work and a physio who never let you skip a day. It held. Health +${h}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -557,11 +584,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_goalie_hips',
       category: 'body', cooldown: 2,
       title: 'Goalie hips',
-      body: 'Twenty years of butterfly and the labrum is fraying on both sides. The surgeon says do it now or do it at 34 when it is worse.',
+      body: 'Twenty years of dropping into the butterfly, and the labrum is fraying on both sides. You can feel it getting up off the ice now, every time. The surgeon says do it now and miss the fall, or do it at 34 when it is worse and the recovery is longer.',
       options: [
-        { label: 'Do it now, miss the fall', effect: 'Fix the hips', apply: (cc) => { const h = hp(cc, 20); const g = rate(cc, -1); const m = mor(cc, -3); flag(cc, 'hipsFixed'); return `Both hips scoped in June. Health +${h}, rating ${g}, morale ${m}, and you can drop into the butterfly without wincing.`; } },
-        { label: 'Mobility program instead', effect: 'Manage it', apply: (cc) => { const h = hp(cc, 9); const g = rate(cc, 1); const m = mor(cc, 2); return `Ninety minutes of hip work daily, all summer. Health +${h}, rating +${g}, morale +${m}.`; } },
-        { label: 'Play through and freeze it', effect: 'Push it back', apply: (cc) => { const h = hp(cc, -10); const f = fan(cc, 7); const m = mor(cc, 4); return `Sixty two starts on frozen hips. Health ${h}, fanbase +${f}, morale +${m}.`; } },
+        {
+          label: 'Do it now, miss the fall', effect: 'Fix the hips',
+          apply: (cc) => { const h = hp(cc, 20); const g = rate(cc, -1); const m = mor(cc, -3); flag(cc, 'hipsFixed'); return `Both hips scoped in June and a backup who got your net for two months. Health +${h}, rating ${g}, morale ${m}, and you can drop into the butterfly without wincing.`; },
+        },
+        {
+          label: 'Mobility program instead', effect: 'Manage it',
+          apply: (cc) => { const h = hp(cc, 9); const g = rate(cc, 1); const m = mor(cc, 2); return `Ninety minutes of hip work every day, all summer, with bands and a foam roller and a yoga teacher who did not care that you were famous. Health +${h}, rating +${g}, morale +${m}.`; },
+        },
+        {
+          label: 'Play through and freeze it', effect: 'Push it back',
+          apply: (cc) => { const h = hp(cc, -10); const f = fan(cc, 7); const m = mor(cc, 4); return `Sixty two starts on frozen hips and an ice bath after every one. The fans called you a warrior. Your hips called you something else. Health ${h}, fanbase +${f}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -571,11 +607,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_sleep_program',
       category: 'body', cooldown: 2,
       title: 'The sleep guy',
-      body: 'The team hired a sleep scientist who wants your phone out of the bedroom and blackout curtains taped up in every hotel.',
+      body: 'The team hired a sleep scientist. He wants your phone out of the bedroom, blackout curtains taped up in every hotel room on the road, and a nap schedule printed on the back of your door. Half the room thinks he is a genius and the other half thinks he is a cult.',
       options: [
-        { label: 'Full buy in', effect: 'Sleep like a pro', apply: (cc) => { const h = hp(cc, 10); const g = rate(cc, 1); const m = mor(cc, -2); flag(cc, 'sleepPro'); return `Nine hours a night and no phone after ten. Health +${h}, rating +${g}, morale ${m}.`; } },
-        { label: 'Just the naps and the curtains', effect: 'Half measure', apply: (cc) => { const h = hp(cc, 5); const m = mor(cc, 2); return `Twenty minute naps before every game. Health +${h}, morale +${m}.`; } },
-        { label: 'Keep the 2am gaming', effect: 'Unplug from him', apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, -6); return `You and three teammates online until the sun. Morale +${m}, health ${h}.`; } },
+        {
+          label: 'Full buy in', effect: 'Sleep like a pro',
+          apply: (cc) => { const h = hp(cc, 10); const g = rate(cc, 1); const m = mor(cc, -2); flag(cc, 'sleepPro'); return `Nine hours a night, no phone after ten, and a sleep tracker that judged you. It worked, annoyingly. Health +${h}, rating +${g}, morale ${m}.`; },
+        },
+        {
+          label: 'Just the naps and the curtains', effect: 'Half measure',
+          apply: (cc) => { const h = hp(cc, 5); const m = mor(cc, 2); return `Twenty minute naps before every game and a roll of tape for every hotel window. Good enough. Health +${h}, morale +${m}.`; },
+        },
+        {
+          label: 'Keep the 2am gaming', effect: 'Unplug from him',
+          apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, -6); return `You and three teammates online until the sun came up, headsets on, the sleep guy shaking his head. Morale +${m}, health ${h}.`; },
+        },
       ],
     });
   }
@@ -585,11 +630,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_skating_coach',
       category: 'body', cooldown: 2,
       title: 'Rebuilding the stride',
-      body: 'A power skating coach wants to take your stride apart down to the studs. It will feel wrong until roughly Christmas.',
+      body: 'A power skating coach watched your tape and wants to take your stride apart down to the studs: knee bend, push, recovery, all of it. She says it will feel wrong until roughly Christmas and then it will feel like cheating.',
       options: [
-        { label: 'Commit to the whole summer', effect: 'Rebuild it', apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -4); const h = hp(cc, 3); flag(cc, 'strideRebuilt'); return `Two steps quicker out of the turn. Rating +${g}, health +${h}, morale ${m}.`; } },
-        { label: 'Do the light version', effect: 'Tweak it', apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 2); return `Edges and crossovers twice a week. Rating +${g}, morale +${m}.`; } },
-        { label: 'Trust what got you here', effect: 'Do not touch it', apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 2); return `Nobody has ever fixed you before and nobody starts now. Morale +${m}, fanbase +${f}.`; } },
+        {
+          label: 'Commit to the whole summer', effect: 'Rebuild it',
+          apply: (cc) => { const g = rate(cc, 2); const m = mor(cc, -4); const h = hp(cc, 3); flag(cc, 'strideRebuilt'); return `Six days a week of drills you thought you left behind at nine years old. Two steps quicker out of the turn by October. Rating +${g}, health +${h}, morale ${m}.`; },
+        },
+        {
+          label: 'Do the light version', effect: 'Tweak it',
+          apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 2); return `Edges and crossovers twice a week and nothing too drastic. A little quicker, a lot less sore. Rating +${g}, morale +${m}.`; },
+        },
+        {
+          label: 'Trust what got you here', effect: 'Do not touch it',
+          apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, 2); return `Nobody has ever fixed your stride before and nobody starts now. You skated how you skate. Morale +${m}, fanbase +${f}.`; },
+        },
       ],
     });
   }
@@ -599,11 +653,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_nutritionist',
       category: 'body', cooldown: 2,
       title: 'The nutritionist versus the postgame pizza',
-      body: 'She wants to kill the four slice tradition after home wins. The room has extremely strong feelings about this.',
+      body: 'The new team nutritionist wants to kill the four slice tradition after home wins and replace it with something called a recovery bowl. The room has extremely strong feelings about this, and they are all looking at you to see which side you are on.',
       options: [
-        { label: 'Follow the plan exactly', effect: 'Eat like a pro', apply: (cc) => { const h = hp(cc, 9); const g = rate(cc, 1); const m = mor(cc, -3); flag(cc, 'cleanEater'); return `You showed up to camp at 6 percent body fat. Health +${h}, rating +${g}, morale ${m}.`; } },
-        { label: 'Clean on the road, pizza at home', effect: 'Meet in the middle', apply: (cc) => { const h = hp(cc, 5); const m = mor(cc, 3); return `Best of both, mostly. Health +${h}, morale +${m}.`; } },
-        { label: 'Order the pizza, lead the room', effect: 'Tradition first', apply: (cc) => { const m = mor(cc, 9); const h = hp(cc, -5); const f = fan(cc, 2); flag(cc, 'roomGuy'); return `Eleven boxes on the plane. Morale +${m}, fanbase +${f}, health ${h}.`; } },
+        {
+          label: 'Follow the plan exactly', effect: 'Eat like a pro',
+          apply: (cc) => { const h = hp(cc, 9); const g = rate(cc, 1); const m = mor(cc, -3); flag(cc, 'cleanEater'); return `Recovery bowls, meal prep, no sugar after noon. You showed up to camp at 6 percent body fat and missing pizza. Health +${h}, rating +${g}, morale ${m}.`; },
+        },
+        {
+          label: 'Clean on the road, pizza at home', effect: 'Meet in the middle',
+          apply: (cc) => { const h = hp(cc, 5); const m = mor(cc, 3); return `The plan on the road, the four slices after home wins. Best of both, mostly. Health +${h}, morale +${m}.`; },
+        },
+        {
+          label: 'Order the pizza, lead the room', effect: 'Tradition first',
+          apply: (cc) => { const m = mor(cc, 9); const h = hp(cc, -5); const f = fan(cc, 2); flag(cc, 'roomGuy'); return `Eleven boxes on the plane after a road win and a nutritionist who sat in the front row in silence. Morale +${m}, fanbase +${f}, health ${h}.`; },
+        },
       ],
     });
   }
