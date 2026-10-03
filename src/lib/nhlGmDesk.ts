@@ -453,7 +453,7 @@ export function nhlDeskOffseason(league: NhlLeague, desk: GmDesk, team: string, 
   const ledger = deskCopy(nhlContractsOf(desk, league, team));
   const autoSettled = autoDecide(nhlContractHost, league, ledger);
   const run = runDeskOffseason(nhlContractHost, league, ledger, rng);
-  if (!run.ok) return { ok: false, desk, notes: [], lines: [`Still waiting on: ${run.undecided.map(u => u.name).join(', ')}.`], autoSettled: [], applied: [] };
+  if (run.ok === false) return { ok: false, desk, notes: [], lines: [`Still waiting on: ${run.undecided.map(u => u.name).join(', ')}.`], autoSettled: [], applied: [] };
 
   let picks = rollLedger(picksBefore, ids, closed, nhlGamePickRules());
   for (const d of run.applied) {
