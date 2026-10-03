@@ -20,20 +20,26 @@
  *
  * Round 901: the era is a full big five (the Serie A, the Bundesliga and
  * Ligue 1 joined through scripts/lib/eraBakeExtend.mjs, 98 clubs, 1,769
- * players). The harness grew with it: Milan, Dortmund and Lille name for
+ * players at the first cut, 1,751 after the review fix finished the summer
+ * 2010 window pass). The harness grew with it: Milan, Dortmund and Lille name for
  * name (1), five leagues and 98 board demands with the new giants told to
  * win and the new minnows not, and each nation's own cup (3), six seed bands
  * for a giant of each new league and the thinnest squad (4, measured
  * 2026-10-03: AC Milan 1,2,2,1,6,2 mean 2.33; Bayern 1,1,2,4,1,1 mean 1.67;
- * Marseille 6,2,2,9,2,1 mean 3.67; Cesena 19,20,20,20,20,17 mean 19.33),
+ * Marseille 6,2,2,9,2,1 mean 3.67; Cesena 19,20,20,20,20,17 mean 19.33; on
+ * the review fix's corrected tree AC Milan 1,2,2,3,3,1 mean 2.00, Bayern
+ * 3,1,1,2,6,2 mean 2.50, Marseille 3,8,2,5,2,1 mean 3.50, Cesena
+ * 20,20,20,20,19,18 mean 19.50; the bands' seed families are at BAND),
  * the bake's accounting pinned with the re-audit (Ibrahimovic and Robinho at
  * Milan), a sample of the summer 2010 window, the men who left the five
  * leagues and the men who moved only in January 2011 (5), and an old two
  * league save that plays on and gets all five leagues in its second summer
- * (7).
+ * (7). The review fix (Round 901) added the tiebreak each league really used
+ * (3), every league club against its bake key and the Marco Rossi split (5),
+ * and widened the section 4 bands to measured headroom (see BAND).
  *
- * Three negative controls, SIM_ERA2010_CONTROL=dupe|stale|twoleagues, each
- * described where it is defined; each must end the run red.
+ * Five negative controls, SIM_ERA2010_CONTROL=dupe|stale|twoleagues|noh2h|
+ * misskey, each described where it is defined; each must end the run red.
  *
  * Run: node scripts/simEra2010.mjs
  */
@@ -86,15 +92,34 @@ const REAL_RANDOM = Math.random;
                  club check and the re-audit check must both fail.
      stale       Gourcuff sent back to Bordeaux: the window check must fail.
      twoleagues  the era cut back to its first two leagues for section 3: the
-                 league count, the sizes and the 98 demands must fail. */
-/* Section 4's bands for the new leagues, on six seed MEANS, set from the
-   headroom measured 2026-10-03 (the header has the finishes): AC Milan 2.33
-   and Bayern 1.67 under a 3.5 giant band; Marseille, a contender in a
-   tighter league (the real 2010-11 runners up), 3.67 under a 6.0 band; Cesena,
-   three real players and youth padding, 19.33 over an 11 floor. */
-const BAND = { giant: 3.5, contender: 6, thin: 11 };
+                 league count, the sizes and the 98 demands must fail.
+     noh2h       (review fix) the Serie A table sorted without its head to head
+                 rule: section 3's tiebreak check must fail.
+     misskey     (review fix) Saint-Etienne's bake key misspelled the way a
+                 careless edit would: section 5's membership check must fail. */
+/* Section 4's bands for the new leagues, on six seed MEANS. The first cut
+   set the giant band at 3.5 from one sample of six (AC Milan 2.33), and the
+   review showed that was a coin toss: the six seed mean of a healthy Milan
+   moves with the random stream, so an unrelated engine or data change could
+   turn it red. Measured 2026-10-03 under ten seed families each (family f
+   uses seeds i * 7919 + f * 1000003, family 0 is this harness's own), on the
+   review's tree AC Milan 2.33, 2.67, 2.83, 1.50, 2.00, 2.33, 2.67, 2.17,
+   4.33, 1.83 and on the corrected tree 2.00, 3.83, 3.17, 2.33, 3.33, 1.83,
+   2.33, 1.50, 2.33, 3.50: centre about 2.6, spread about 0.8. The giant band
+   is 5.0, about three spreads out, and still far below the mid table a
+   broken strength model gives. Bayern sits under the same band (corrected
+   tree, families 0 to 4: 2.50, 1.00, 1.33, 2.00, 1.83). Marseille, a
+   contender in a tighter league (the real 2010-11 runners up), swings
+   harder: one season in the families finished 18th, another 15th, and on
+   the corrected tree its ten family means read 3.50, 3.83, 4.33, 4.17, 3.33,
+   3.50, 1.50, 6.50, 2.83, 5.00 (centre about 3.9, spread about 1.3), so the
+   first cut's 6.0 band was a coin toss too, red in family 7. Its band is
+   8.0, about three spreads out, still under the 10.5 a coin flip of a
+   strength model averages. Cesena, three real players and youth padding,
+   keeps its 11 floor (19.33 at the first cut). */
+const BAND = { giant: 5, contender: 8, thin: 11 };
 const CONTROL = process.env.SIM_ERA2010_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'twoleagues'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'twoleagues', 'noh2h', 'misskey'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['AC Milan'] ?? []).find(p => p.n === 'Zlatan Ibrahimović');
@@ -108,6 +133,13 @@ function controlStale(rosters) {
   if (!row) controlRefuse('there is no Gourcuff at Lyon to send back');
   console.log('   CONTROL stale applied: Gourcuff is back at Bordeaux');
   return { ...rosters, 'Lyon': rosters['Lyon'].filter(p => p !== row), 'Bordeaux': [...rosters['Bordeaux'], row] };
+}
+function controlMissKey(rosters) {
+  if (!rosters['Saint-Étienne']) controlRefuse('there is no Saint-Étienne key to misspell');
+  console.log('   CONTROL misskey applied: the bake key reads Saint-Etienne');
+  const out = { ...rosters, 'Saint-Etienne': rosters['Saint-Étienne'] };
+  delete out['Saint-Étienne'];
+  return out;
 }
 
 const playSeason = (state) => {
@@ -312,6 +344,28 @@ console.log('3) Boards talk 2010: title for Barcelona, survival for Blackpool, n
     if (!o) fail(`2010 ${club} has no cup objective at all`);
     else if (!cup.test(o.label)) fail(`2010 ${club}'s cup objective says "${o.label}"`);
   }
+  /* Round 901 review fix: each league's tiebreak, read through the real sort
+     path rather than by asking the rules table what it holds. Two clubs level
+     on points: Alpha has the better goal difference, Beta won both meetings.
+     Serie A 2010-11 and La Liga split them on head to head (Beta first), the
+     Premier League, the Bundesliga and Ligue 1 on goal difference (Alpha
+     first). Sources for the Serie A rule are in the scripts/bakeEra2010.mjs
+     notes and the clubManager.ts rules row. */
+  const WANT_FIRST = { premier2010: 'Alpha', laliga2010: 'Beta', seriea2010: 'Beta', bundesliga2010: 'Alpha', ligue12010: 'Alpha' };
+  const level = [
+    { club: 'Alpha', w: 18, d: 6, l: 14, gf: 60, ga: 40, pts: 60 },
+    { club: 'Beta', w: 18, d: 6, l: 14, gf: 45, ga: 40, pts: 60 },
+  ];
+  for (const [id, first] of Object.entries(WANT_FIRST)) {
+    const ctx = cm.tableSortContext({ pairResults: { [id]: { 'Alpha|Beta': [0, 1], 'Beta|Alpha': [2, 0] } } }, id);
+    if (CONTROL === 'noh2h' && id === 'seriea2010') {
+      if (ctx.rule !== 'h2h') controlRefuse(`the Serie A rule reads ${ctx.rule}, there is no head to head to take away`);
+      ctx.rule = 'gdGfOnly';
+      console.log('   CONTROL noh2h applied: the Serie A table sorts without head to head');
+    }
+    const top = cm.sortedTable(level, ctx)[0].club;
+    if (top !== first) fail(`${id}: two clubs level on points sort ${top} first (rule ${ctx.rule}), the 2010-11 rule puts ${first} first`);
+  }
 }
 
 /* ---------- 4. Seasons complete and land where 2010 says ---------- */
@@ -390,12 +444,24 @@ console.log('5) The bake file tells the truth about itself');
     if (n >= 8 && ERA2010_PARTIAL.includes(club)) fail(`${club} has ${n} players but is declared partial`);
   }
   /* Round 901: the five league world, pinned (the numbers move only with a
-     re-bake, and then on purpose): 1,769 players, 98 clubs, the 11 Round 146
-     corrections plus 126 moved, 122 removed, 95 arrived and 2 folded. */
-  if (players !== 1769 || clubs !== 98) fail(`the 2010-11 world holds ${players} players in ${clubs} clubs, the bake made 1769 in 98`);
-  if (ERA2010_META.moves !== 356) fail(`META.moves reads ${ERA2010_META.moves}, the bake counted 356`);
+     re-bake, and then on purpose): 1,751 players, 98 clubs, the 11 Round 146
+     corrections plus 130 moved, 140 removed, 95 arrived and 2 folded (the
+     review fix added 4 moves and 18 removals to the first pass). */
+  if (players !== 1751 || clubs !== 98) fail(`the 2010-11 world holds ${players} players in ${clubs} clubs, the bake made 1751 in 98`);
+  if (ERA2010_META.moves !== 378) fail(`META.moves reads ${ERA2010_META.moves}, the bake counted 378`);
   if (ERA2010_PARTIAL.join(',') !== 'Blackpool,Cesena') fail(`the thin list reads ${ERA2010_PARTIAL.join(',')}`);
-  const R = CONTROL === 'dupe' ? controlDupe(ERA2010_ROSTERS) : CONTROL === 'stale' ? controlStale(ERA2010_ROSTERS) : ERA2010_ROSTERS;
+  const R = CONTROL === 'dupe' ? controlDupe(ERA2010_ROSTERS) : CONTROL === 'stale' ? controlStale(ERA2010_ROSTERS)
+    : CONTROL === 'misskey' ? controlMissKey(ERA2010_ROSTERS) : ERA2010_ROSTERS;
+  /* Round 901 review fix: every club of every 2010-11 league has its bake
+     key, and every key is a league club. A misspelled key would leave a real
+     club on an all made up squad while the counts above still add up. */
+  const members = new Set((ERA_LEAGUES['era2010'] ?? []).flatMap(l => l.clubs));
+  const keys = new Set(Object.keys(R));
+  const unbaked = [...members].filter(c => !keys.has(c));
+  const stray = [...keys].filter(c => !members.has(c));
+  if (unbaked.length) fail(`${unbaked.length} league clubs have no bake key: ${unbaked.join(', ')}`);
+  if (stray.length) fail(`${stray.length} bake keys are no league club: ${stray.join(', ')}`);
+  if (members.size !== 98) fail(`the 2010-11 leagues hold ${members.size} distinct clubs, expected 98`);
   // One man, one club, in the whole world.
   const seen = new Map();
   let dupes = 0;
@@ -424,18 +490,25 @@ console.log('5) The bake file tells the truth about itself');
     ['Laurent Koscielny', 'Arsenal'], ['Marouane Chamakh', 'Arsenal'], ['Asamoah Gyan', 'Sunderland'], ['Alberto Aquilani', 'Juventus'],
     ['Hernanes', 'Lazio'], ['Milos Krasic', 'Juventus'], ['Robert Lewandowski', 'Borussia Dortmund'], ['Shinji Kagawa', 'Borussia Dortmund'],
     ['Mario Mandžukić', 'Wolfsburg'], ['Kevin-Prince Boateng', 'AC Milan'], ['Moussa Sow', 'Lille'], ['Kamel Ghilas', 'Arles-Avignon'],
+    /* the review fix pass, and four Round 146 lines the bigger world proves */
+    ['Angelo', 'Parma'], ['Sébastien Squillaci', 'Arsenal'], ['Victor Obinna', 'West Ham'], ['Royston Drenthe', 'Hércules'],
   ];
   let landed = 0;
   for (const [name, club] of WINDOW) { if (where(name) === club) landed += 1; else fail(`${name} sits at ${where(name)}, the summer 2010 window put him at ${club}`); }
   /* Men who left the five leagues that summer are gone. */
-  for (const name of ['Mamadou Niang', 'Kevin Kuranyi', 'Ricardo Quaresma', 'Sidney Govou', 'Jean-Alain Boumsong', 'Issiar Dia', 'David Beckham', 'Fabio Cannavaro']) {
-    if (where(name)) fail(`${name} is still at ${where(name)}; he left the five leagues in summer 2010`);
+  for (const name of ['Mamadou Niang', 'Kevin Kuranyi', 'Ricardo Quaresma', 'Sidney Govou', 'Jean-Alain Boumsong', 'Issiar Dia', 'David Beckham', 'Fabio Cannavaro',
+    'Carlos Eduardo', 'Juan Pablo Pino', 'Mickaël Pagis', 'Ivan Juric', 'Cédric Varrault', 'Stefano Okaka']) {
+    if (where(name)) fail(`${name} is still at ${where(name)}; he was not at a club of the five leagues when 2010-11 began`);
   }
+  /* One string, two men: Genoa's captain (31, a right midfielder) stays,
+     Sampdoria's young centre-back spent the season on loan at Bari. */
+  const rossi = (R['Genoa'] ?? []).find(p => p.n === 'Marco Rossi');
+  if (!rossi || rossi.a !== 31 || rossi.p !== 'RM') fail(`Marco Rossi reads ${where('Marco Rossi')} ${rossi ? `${rossi.p} ${rossi.a}` : ''}; the 2010-11 Marco Rossi of the world is Genoa's captain, 31, RM`);
   /* And men who moved only in January 2011 stay where the season began. */
   for (const [name, club] of [['Edin Dzeko', 'Wolfsburg'], ['Giampaolo Pazzini', 'Sampdoria'], ['Antonio Cassano', 'Sampdoria'], ['Ronaldinho', 'AC Milan'], ['Andrea Barzagli', 'Wolfsburg'], ['Martín Demichelis', 'Bayern Munich']]) {
     if (where(name) !== club) fail(`${name} sits at ${where(name)}; he moved only in January 2011, so 2010-11 began with him at ${club}`);
   }
-  console.log(`   one man one club: ${dupes} names twice · window sample: ${landed} of ${WINDOW.length} landed`);
+  console.log(`   one man one club: ${dupes} names twice · window sample: ${landed} of ${WINDOW.length} landed · ${members.size} league clubs, ${unbaked.length} without a bake key`);
 }
 
 /* ---------- 6. Round 166: legends rate like legends ---------- */
