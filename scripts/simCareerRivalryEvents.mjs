@@ -28,7 +28,7 @@
  *      advanceProSeason for enough years to draft a rival and roll beats,
  *      through the real dismissRivalryEvent, proving the pending slot, the
  *      no-repeat rule and the forced retirement beat are all still wired.
- *   4. The NFL binding: every one of the seventeen beats reachable and
+ *   4. The NFL binding: every one of the twenty three beats reachable and
  *      correct against constructed fixtures (a badge-style coverage proof,
  *      since natural play cannot be trusted to roll every gate on its own),
  *      plus real simulated careers proving the tick actually fires and the
@@ -446,10 +446,19 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     218: [nflFixture({ team: 'DAL', fanbase: 60 }), rivalFixture()],
     219: [nflFixture({ team: 'DAL' }), rivalFixture()],
     220: [nflFixture(), rivalFixture({ ovr: 88 })],
-    221: [nflFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    221: [nflFixture({ team: 'DAL', ovr: 85 }), rivalFixture({ ovr: 85 })],
     222: [nflFixture(), rivalFixture()],
-    223: [nflFixture(), rivalFixture({ age: 27 })],
+    223: [nflFixture({ team: 'DAL' }), rivalFixture({ age: 27 })],
   };
+  /* Round 917 review: the rival is drafted onto the player's own team, so a
+     beat that puts the two on opposite sides must stay shut while they are
+     teammates. Same fixture, the player moved onto the rival's team. */
+  for (const id of [218, 219, 221, 223]) {
+    const def = nflRivalry.NFL_RIVALRY_EVENTS.find(d => d.id === id);
+    const [p, r] = gates[id];
+    if (!def) fail(`beat ${id} is missing from the NFL table`);
+    else if (def.when({ ...p, team: r.team }, r)) fail(`beat ${id} (${def.title}) fires while the rival is your teammate`);
+  }
   let reachable = 0, correct = 0;
   const total = nflRivalry.NFL_RIVALRY_EVENTS.length;
   for (const def of nflRivalry.NFL_RIVALRY_EVENTS) {
