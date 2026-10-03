@@ -144,6 +144,57 @@
      "says": "Juanmi, forward, shirt 7, age 33"
     }
    ]
+  },
+  {
+   "name": "Isi Palazón",
+   "club": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-27. Rayo's number 7, started the 2026-27 opener at Sevilla on 2026-08-15. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-sevilla-fc-rayo-vallecano-1",
+     "publisher": "LaLiga (match page, Sevilla v Rayo Vallecano, matchday 1, 2026-08-15)",
+     "readOn": "2026-10-03",
+     "says": "Isi in the Rayo Vallecano starting eleven, substituted at 64 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/264197/isi-palazon",
+     "publisher": "ESPN (player page; the Rayo 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Rayo Vallecano, shirt 7, born 1994-12-27, played 2026-08-15 at Sevilla and 2026-08-20 v Alavés"
+    }
+   ]
+  },
+  {
+   "name": "Peque Fernández",
+   "club": "Sevilla",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-10-04, the forward ESPN lists as Peque. Sevilla's number 10, scored a late penalty in the 2026-27 opener against Rayo on 2026-08-15 and started at Athletic on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-sevilla-fc-rayo-vallecano-1",
+     "publisher": "LaLiga (match page, Sevilla v Rayo Vallecano, matchday 1, 2026-08-15)",
+     "readOn": "2026-10-03",
+     "says": "10 Peque on the Sevilla bench, on at half time, scored a penalty at 90 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Peque Fernández in the Sevilla starting eleven, booked at 22 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/347359/peque",
+     "publisher": "ESPN (player page; the Sevilla 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Sevilla, shirt 10, born 2002-10-04, played 2026-08-15, 2026-08-22 and 2026-08-29"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -168,6 +219,61 @@
      "publisher": "Soccerway",
      "readOn": "2026-10-03",
      "says": "Alavés to Getafe 2025-07-29 as a free agent, born 1999-03-10, contract to 2028-06-30"
+    }
+   ]
+  },
+  {
+   "name": "Alex Král",
+   "from": "Espanyol",
+   "to": "FC Copenhagen",
+   "realClub": "FC København",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-05-19, the Czech midfielder. Espanyol's number 20 in 2024-25, gone from their 2025-26 and 2026-27 squads; FC København's number 33, starting Danish Superliga games in September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.fck.dk/holdet",
+     "publisher": "FC København (first team squad)",
+     "readOn": "2026-10-03",
+     "says": "33 Král among the midfielders"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/257085/alex-kral",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "F.C. København, shirt 33, born 1998-05-19, started at Brøndby on 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/88",
+     "publisher": "ESPN (Espanyol squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Marash Kumbulla",
+   "from": "Espanyol",
+   "to": "Rayo Vallecano",
+   "realClub": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-02-08, the Albanian centre back. Espanyol's number 4 in 2024-25, at Mallorca in 2025-26 (ESPN shows his league games for them to April 2026), and Rayo Vallecano's number 3 for 2026-27, with no league minutes yet.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/marash-kumbulla",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Rayo Vallecano, shirt 3, born 08-02-2000, 0 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/101",
+     "publisher": "ESPN (Rayo Vallecano squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Marash Kumbulla, defender, shirt 3, age 26"
     }
    ]
   }
@@ -417,6 +523,12 @@
    "club": "Benfica",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending for want of an official page on the destination. Born 2001-06-18. Not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's 2025-26 and 2026-27 Benfica pages leave him out. ESPN listed him at Nice in 2025-26 (shirt 47) and its player page (https://www.espn.com/soccer/player/_/id/290081/tiago-gouveia) now has him at Gençlerbirliği, shirt 7, with five Süper Lig matches from 2026-08-23 to 2026-09-19. Gençlerbirliği is modelled, so this would be a move, but the club's site answered HTTP 522 and no Süper Lig or TFF page was read. Re-check with a TFF or club page."
+  },
+  {
+   "name": "Brian Oliván",
+   "club": "Espanyol",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending, though he is not at Espanyol: ESPN's Espanyol pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/88) leave him out, and he was their number 14 in 2024-25. Born 1994-04-01. ESPN's player page (https://www.espn.com/soccer/player/_/id/213067/brian-olivan) shows his last games for Sporting Gijón in LaLiga 2 up to 2026-05-30 and a header naming AEK Larnaca, yet ESPN's AEK Larnaca page (2025-26, https://www.espn.com/soccer/team/squad/_/id/4039) does not list him. No official page was found and both candidate clubs are unmodelled, so the in-game effect of either answer is removal; the row waits for a second source on where he is."
   }
  ]
 }
