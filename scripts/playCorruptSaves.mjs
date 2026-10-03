@@ -42,8 +42,25 @@
  * narrows the routes (prefix MSYS_NO_PATHCONV=1 in Git Bash), and
  * CORRUPT_VARIANTS=shell narrows the shapes.
  *
- * MEASURED (Round 958, local build of the round's branch, chromium):
- * filled in below the summary line of the first full run, see the report.
+ * MEASURED (Round 958, local vite build of the round's branch, chromium,
+ * 390 by 844, both shapes, 42 broken saves over 21 games):
+ *   17 reached the error page and needed the button: the four US My
+ *      Careers, CFB and CBB Dynasty, Fight Promoter and Fight Gym in both
+ *      shapes, and Fight Career in the wrongtype shape; every one reached its
+ *      start screen in one click with the raw save kept aside
+ *   23 were coped with by the game itself (Soccer Career and the NFL, NHL
+ *      and MLB front offices offer their own delete; Club Manager, Stadium
+ *      Tycoon, Wonderkid Factory, Rebuild, NBA Front Office, Aussie Rules
+ *      Manager, Idle Arena and Fight Career's shell shape start over or draw)
+ *    2 not judged offline (Hall of Champions, see OFFLINE_ONLY)
+ *    0 trapped.
+ * On the branch before it merged main at 665898cf the split was 20 needed,
+ * 20 coped: MLB Front Office and Fight Career's shell shape then threw too,
+ * and other rounds have since given them their own recovery.
+ * Control nobutton: every route that needed the button trapped (17 of 17,
+ * and 20 of 20 before the merge).
+ * Not a statistical harness: every count above is deterministic for a given
+ * build, so there is no band; any trapped route fails.
  */
 import fs from 'node:fs';
 import net from 'node:net';
