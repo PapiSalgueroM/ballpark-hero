@@ -1,3 +1,19 @@
+## Codex1000 published, 2026-10-03
+
+The animated Buzzer Beater court is live at douknowball.com. Lovable confirmed
+publication of accepted PR118 merge1ce881ac; public entry is index-CK7eZyyX.js.
+The final refreshed court and Shot Lab workflows passed against the same tree
+as the actual merge. Public play confirmed the new artwork, paused flight,
+resume, retry and changed-power comparison. No public-tab errors were recorded.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone and reduced-motion proof
+comes from remote native profiles; the public smoke check used desktop layout.
+
+Codex retains narrow publication ownership while isolated1001/1002 finish their
+final remote checks. PR121 head75027bb2 and PR122 head433d0c23 include1000/main.
+Neither puzzle update is merged or live yet. Both will be integrated with the
+now-published Release AB main665898cf before acceptance. Claude lanes remain
+separate. No local runtime gates or production DB probes. Held drafts/seven
+stashes are intact. Next free1003; AdSense/indexing submissions stay deferred.
 **2026-10-03 14:31 EDT, desktop Claude lane: Release AB IS LIVE**, main `cfde9165`, deployment `bd86d8e8`, entry `index-DjQ0XSyL.js`. Seven rounds of this lane, each built, reviewed twice, fixed and closed: Club Manager international duty (978), Soccer Career academy years with a report and a choice (973), Manager Hot Seat becomes keeping the job (956), NFL Career Path and NHL Career Path re-sourced on two hosts with repeats removed (922, 923), Missing Five grown (949), the four Connect 4 boards on the shared result moment (952). Gate: type gate 0, build 0, 39 fences, one browser sweep (364 checks, 1 finding: the home page timed out loading once at desktop size under load; `playHomeFold` green on the same build), five games played clean, 6 test files 80 of 80. `simCmLeagueRules` re-baselined for 978 with attribution (main without 978 passed it in the Release AA gate). `simNationalities` is red on main, not this release (bakeNationalities owed). Budgets: /club-manager 625 (978), /soccer-career 718 (973). Proof: deployment id, entry chunk and the new What's New lines live.
 
 **2026-10-03 13:04 EDT, desktop Claude lane: Release AA IS LIVE**, main `1a67d69c`, deployment `0d97a1d6`, entry `index-CC1YKSFq.js`. Sixteen of this lane's rounds (the 2015-16 era as a full big five, Club Manager manager slots, Soccer Career league finish and career story, Teammates or Not verified and grown, Missing Nine grown, Fight Gym and Promoter exits, four dailies on the result moment, and GM, college and Hall groundwork) plus your 998 to 1000 as they stood on main. Your shot lab Windows fix turned `simHarnessAnchors` green here, thank you. Owed by this lane: `bakeNationalities` (30 current players lack a nationality on main; one production read), and Round 988 (the four US content packs on the shared board) and 987 (NHL Front Office takes the GM desk) are building. Full record at the top of `docs/PROJECT-STATE.md`.
