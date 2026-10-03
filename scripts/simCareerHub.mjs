@@ -35,6 +35,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, US_CAREER_SPORTS, readUsSource, stripComments, wrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'careerHubEntry.mjs');
@@ -205,14 +206,15 @@ console.log('4) The trophy case reads the seasons, not the counters');
 /* --------------------------------------------- 5. the four boards use it */
 console.log('5) All four career boards are on the shared boxes');
 {
-  const BOARDS = [
-    'src/components/nfl-my-career/NflMyCareerBoard.tsx',
-    'src/components/mlb-my-career/MlbMyCareerBoard.tsx',
-    'src/components/nba-my-career/NbaMyCareerBoard.tsx',
-    'src/components/nhl-my-career/NhlMyCareerBoard.tsx',
-  ];
-  for (const rel of BOARDS) {
-    const t = fs.readFileSync(path.join(ROOT, rel), 'utf-8');
+  /* Round 900: the four boards are one board plus a binding per sport, so
+     the hub is checked once in the shared board and each sport is checked
+     for being on that board. Comments are stripped first: this prose names
+     the very strings the checks look for. */
+  for (const s of US_CAREER_SPORTS) {
+    for (const why of wrapperProblems(ROOT, s)) ok(false, why);
+  }
+  for (const rel of [US_CAREER_BOARD]) {
+    const t = stripComments(readUsSource(ROOT, rel));
     ok(t.includes("from '@/lib/careerHub'"), `${rel}: does not use the hub engine`);
     ok(t.includes('<HubTiles'), `${rel}: does not render the shared boxes`);
     ok(t.includes('<HubPanelHeader'), `${rel}: still draws its own back bar`);
@@ -230,7 +232,7 @@ console.log('5) All four career boards are on the shared boxes');
   ok(/export function HubTiles/.test(shared), 'the shared box component is gone');
   const door = fs.readFileSync(path.join(ROOT, 'src/components/front-office-shared/FoHubTiles.tsx'), 'utf-8');
   ok(/from '@\/components\/hub\/HubTiles'/.test(door), 'the front office door no longer points at the shared box');
-  console.log('   4 boards on the shared boxes, 0 hand built grids left');
+  console.log(`   ${US_CAREER_SPORTS.length} careers on the one board, the board on the shared boxes, 0 hand built grids left`);
 }
 
 console.log('');
