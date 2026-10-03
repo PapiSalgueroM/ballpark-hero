@@ -6,10 +6,11 @@
  * Layer one, the game plan. Three or four identities on each side of the
  * ball, each scored -1, 0 or +1 against the opponent's tendency on the other
  * side. His tendency is read off his roster units: the stronger of two sub
- * units, or balanced when they sit within the pack's band. A +1 is worth
- * PLAN_EDGE rating points on that unit, the scale the coordinator edges
- * already use (STAFF_UNIT_EDGE_MAX is 3), and the pack's pointsPerEdge turns
- * rating points into points on the scoreboard, as the engines do.
+ * units, or balanced when they sit within the pack's band. A +1 is worth the
+ * pack's planEdge in rating points on that unit, the scale the coordinator
+ * edges already use (STAFF_UNIT_EDGE_MAX is 3), never more than PLAN_EDGE_CAP,
+ * and the pack's pointsPerEdge turns rating points into points on the
+ * scoreboard, as the engines do.
  *
  * Layer two, the calls. How many moments a game has is drawn from that
  * game's own margin, and a blowout draws none. Every die a game will use is
@@ -68,6 +69,8 @@ export interface CoachCallsPack {
   blowout: number;
   /** Points a game per rating point of edge, the engines' own scale. */
   pointsPerEdge: number;
+  /** Rating points a +1 identity is worth on its unit, capped at PLAN_EDGE_CAP. */
+  planEdge: number;
   /** What a level game becomes: overtime (this many points) or a draw. */
   ties: { kind: 'overtime'; points: number } | { kind: 'draw' };
   /** off reads HIS defense, def reads HIS offense. */
@@ -75,8 +78,8 @@ export interface CoachCallsPack {
   moments: MomentDef[];
 }
 
-/** Rating points a +1 identity is worth on its unit. Half a coordinator's cap. */
-export const PLAN_EDGE = 1.5;
+/** The most a +1 identity can be worth on its unit: half a coordinator's cap. */
+export const PLAN_EDGE_CAP = 1.5;
 /** Odds never leave this range, however lopsided the units. */
 export const ODDS_FLOOR = 0.05;
 export const ODDS_CEIL = 0.95;
@@ -110,7 +113,7 @@ export function readTendency(pack: CoachCallsPack, side: 'off' | 'def', his: Uni
 
 export interface Plan { off: string; def: string }
 export interface PlanEdge {
-  /** Rating points on each of your units, never past PLAN_EDGE either way. */
+  /** Rating points on each of your units, never past PLAN_EDGE_CAP either way. */
   off: number; def: number;
   /** What the plan is worth on the scoreboard, whole points. */
   points: number;
@@ -127,8 +130,9 @@ function identityScore(pack: CoachCallsPack, side: 'off' | 'def', id: string, hi
 
 /** What a plan is worth against this opponent. An unknown identity is worth nothing. */
 export function planEdge(pack: CoachCallsPack, plan: Plan | null | undefined, his: Units): PlanEdge {
-  const off = plan ? identityScore(pack, 'off', plan.off, his) * PLAN_EDGE : 0;
-  const def = plan ? identityScore(pack, 'def', plan.def, his) * PLAN_EDGE : 0;
+  const edge = clampTo(pack.planEdge, 0, PLAN_EDGE_CAP);
+  const off = plan ? identityScore(pack, 'off', plan.off, his) * edge : 0;
+  const def = plan ? identityScore(pack, 'def', plan.def, his) * edge : 0;
   return {
     off, def,
     points: roundSym((off + def) * pack.pointsPerEdge),

@@ -1,8 +1,8 @@
 /**
  * Round 947: college football's coach's calls, as data for src/lib/coachCalls.ts.
- * Scoring values (touchdown 6, field goal 3, the try worth 1 kicked or 2 run
- * or passed) are the college rule book's; sources in the round's audit note.
- * Everything else here (odds, swings, the counter matrix) is a game rule.
+ * Every number here (odds, swings in points, the counter matrix, the one
+ * score cap) is a game rule. No rule book value is stated in the copy: the
+ * plays are named (go for two) but never priced.
  */
 import type { CoachCallsPack } from '@/lib/coachCalls';
 
@@ -16,6 +16,8 @@ export const CFB_CALLS: CoachCallsPack = {
   blowout: 17,
   /** Matches CFB_POINTS_PER_EDGE in src/lib/cfbDynasty.ts; simCoachCalls checks it. */
   pointsPerEdge: 1.5,
+  /** Half a coordinator's cap (STAFF_UNIT_EDGE_MAX is 3). */
+  planEdge: 1.5,
   ties: { kind: 'overtime', points: 3 },
   plan: {
     off: {
@@ -52,28 +54,28 @@ export const CFB_CALLS: CoachCallsPack = {
       id: 'fourth-short', title: 'Fourth and short', setup: 'Fourth and one near midfield. Punt it away or go for it?', lead: [-99, 99], weight: 3,
       options: [
         { id: 'punt', label: 'Punt it', blurb: 'Flip the field and trust your defense.', mine: 'run', theirs: 'front', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'go', label: 'Go for it', blurb: 'Your line against their front. Convert and the drive lives, miss and they start in your half.', mine: 'run', theirs: 'front', base: 0.6, slope: 0.03, win: 4, lose: 3 },
+        { id: 'go', label: 'Go for it', blurb: 'Your line against their front. Convert and you finish the drive with a touchdown, miss and they kick a field goal off the short field.', mine: 'run', theirs: 'front', base: 0.6, slope: 0.03, win: 7, lose: 3 },
       ],
     },
     {
       id: 'two-point', title: 'Kick it or go for two?', setup: 'You just scored. Kick the extra point or go for two?', lead: [-99, 99], weight: 3,
       options: [
         { id: 'kick', label: 'Kick the extra point', blurb: 'Nearly automatic.', mine: 'kick', theirs: 'front', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'two', label: 'Go for two', blurb: 'Your passing game against their secondary. One more point if it works, one fewer if it does not.', mine: 'pass', theirs: 'coverage', base: 0.45, slope: 0.03, win: 1, lose: 1 },
+        { id: 'two', label: 'Go for two', blurb: 'Your passing game against their secondary. More than the kick if it works, nothing if it does not.', mine: 'pass', theirs: 'coverage', base: 0.45, slope: 0.03, win: 1, lose: 1 },
       ],
     },
     {
       id: 'onside', title: 'The onside kick', setup: 'You just scored and you still trail. Kick it deep or try to steal a possession?', lead: [-99, -1], weight: 4,
       options: [
         { id: 'deep', label: 'Kick it deep', blurb: 'Make them drive the length of the field.', mine: 'kick', theirs: 'pass', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'onside', label: 'Onside kick', blurb: 'Usually fails. When it works, you are going to score again.', mine: 'kick', theirs: 'pass', base: 0.25, slope: 0.01, win: 7, lose: 3 },
+        { id: 'onside', label: 'Onside kick', blurb: 'Usually fails and hands them a short field for a field goal. When it works, you go score a touchdown.', mine: 'kick', theirs: 'pass', base: 0.25, slope: 0.01, win: 7, lose: 3 },
       ],
     },
     {
       id: 'kneel', title: 'Kneel or score?', setup: 'Up late with the ball inside their ten. Take a knee or punch it in?', lead: [1, 99], weight: 3,
       options: [
         { id: 'kneel', label: 'Take a knee', blurb: 'Run out the clock. The lead stays exactly where it is.', mine: 'run', theirs: 'front', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'score', label: 'Punch it in', blurb: 'Seven more if you get in. A fumble hands them the ball and a shot at a field goal.', mine: 'run', theirs: 'front', base: 0.75, slope: 0.02, win: 7, lose: 3 },
+        { id: 'score', label: 'Punch it in', blurb: 'Another touchdown if you get in. A fumble hands them the ball and a shot at a field goal.', mine: 'run', theirs: 'front', base: 0.75, slope: 0.02, win: 7, lose: 3 },
       ],
     },
   ],

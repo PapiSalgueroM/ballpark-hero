@@ -1,8 +1,7 @@
 /**
  * Round 947: college basketball's coach's calls, as data for src/lib/coachCalls.ts.
- * Scoring values (a basket 2, from beyond the arc 3, a free throw 1) are the
- * college rule book's; sources in the round's audit note. Everything else
- * here (odds, swings, the counter matrix) is a game rule.
+ * Every number here (odds, swings in points, the counter matrix, the one
+ * score cap) is a game rule. No rule book value is stated in the copy.
  */
 import type { CoachCallsPack } from '@/lib/coachCalls';
 
@@ -16,6 +15,8 @@ export const CBB_CALLS: CoachCallsPack = {
   blowout: 15,
   /** Matches CBB_POINTS_PER_EDGE in src/lib/cbbDynasty.ts; simCoachCalls checks it. */
   pointsPerEdge: 1.5,
+  /** Half a coordinator's cap (STAFF_UNIT_EDGE_MAX is 3). */
+  planEdge: 1.5,
   ties: { kind: 'overtime', points: 3 },
   plan: {
     off: {
@@ -59,7 +60,7 @@ export const CBB_CALLS: CoachCallsPack = {
       id: 'press', title: 'Press when trailing?', setup: 'Down late and the clock is against you. Press the inbound or play it safe?', lead: [-99, -1], weight: 4,
       options: [
         { id: 'half', label: 'Play the half court', blurb: 'Get a stop the normal way.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'press', label: 'Full court press', blurb: 'Your guards against theirs. A steal is a quick basket, a broken press is a layup the other way.', mine: 'perimeter', theirs: 'perimeter', base: 0.4, slope: 0.025, win: 3, lose: 3 },
+        { id: 'press', label: 'Full court press', blurb: 'Your guards against theirs. A steal is a quick basket, a broken press is a layup the other way.', mine: 'perimeter', theirs: 'perimeter', base: 0.4, slope: 0.025, win: 2, lose: 2 },
       ],
     },
     {
@@ -73,7 +74,7 @@ export const CBB_CALLS: CoachCallsPack = {
       id: 'ice', title: 'Ice the shooter?', setup: 'Their best free throw shooter steps up late. Burn a timeout to ice him?', lead: [-99, 99], weight: 2,
       options: [
         { id: 'shoot', label: 'Let him shoot', blurb: 'Keep the timeout.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'ice', label: 'Call timeout', blurb: 'Might rattle him. Might not. It is close to a coin flip.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0.005, win: 1, lose: 1 },
+        { id: 'ice', label: 'Call timeout', blurb: 'Might rattle him, might not. It is close to a coin flip.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0.005, win: 1, lose: 1 },
       ],
     },
   ],

@@ -18,6 +18,9 @@ export const AFL_CALLS: CoachCallsPack = {
    *  1.6 a point of strength (0.006 of possession a minute for 80 minutes at
    *  about 1.7 points a possession), so 1.5 keeps it slightly under. */
   pointsPerEdge: 1.5,
+  /** Lower than the college packs: the six clubs are drawn from one pool and sit
+   *  close together, so a full plan here would outweigh the roster. */
+  planEdge: 0.75,
   ties: { kind: 'draw' },
   plan: {
     off: {
@@ -60,7 +63,7 @@ export const AFL_CALLS: CoachCallsPack = {
     {
       id: 'flood', title: 'Flood the back half?', setup: 'You lead late and they are coming. Flood the back half or keep your shape?', lead: [1, 99], weight: 4,
       options: [
-        { id: 'shape', label: 'Keep your shape', blurb: 'A coin flip: win it and you goal on the rebound, lose it and they goal.', mine: 'back', theirs: 'fwd', base: 0.5, slope: 0.02, win: 6, lose: 6 },
+        { id: 'shape', label: 'Keep your shape', blurb: 'An even fight: win it and you goal on the rebound, lose it and they goal.', mine: 'back', theirs: 'fwd', base: 0.5, slope: 0.02, win: 6, lose: 6 },
         { id: 'flood', label: 'Flood the back half', blurb: 'Everybody back. They rarely get through, but you will not score either.', mine: 'back', theirs: 'fwd', base: 0.8, slope: 0.02, win: 0, lose: 6 },
       ],
     },

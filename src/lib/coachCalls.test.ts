@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  COACH_CALL_PACKS, PLAN_EDGE, MAX_CALLS, ODDS_FLOOR, ODDS_CEIL,
+  COACH_CALL_PACKS, PLAN_EDGE_CAP, MAX_CALLS, ODDS_FLOOR, ODDS_CEIL,
   readUnits, readTendency, planEdge, pickPlan, sanitizePlan, momentCount,
   startCalls, nextMoment, answerMoment, finishCalls, chooseOption, playCalls, optionOdds,
   type CallsInput, type CoachCallsPack, type Units,
@@ -19,6 +19,8 @@ const input = (pack: CoachCallsPack, over: Partial<CallsInput> = {}): CallsInput
 
 describe('coach call packs', () => {
   it.each(PACKS.map(p => [p.sport, p] as const))('%s pack is well formed', (_s, pack) => {
+    expect(pack.planEdge).toBeGreaterThan(0);
+    expect(pack.planEdge).toBeLessThanOrEqual(PLAN_EDGE_CAP);
     for (const side of ['off', 'def'] as const) {
       const s = pack.plan[side];
       expect(s.identities.length).toBeGreaterThanOrEqual(3);
@@ -55,12 +57,12 @@ describe('the game plan', () => {
     expect(u.pass).toBe(90);
     expect(u.coverage).toBe(60);
   });
-  it('is worth at most PLAN_EDGE a side, and a counter is worth the mirror of a miss', () => {
+  it('is worth the pack planEdge a side, and a counter is worth the mirror of a miss', () => {
     const his = { ...level(pack), run: 80, pass: 70, front: 80, coverage: 70 };
     const best = planEdge(pack, pickPlan(pack, his, 'best'), his);
     const worst = planEdge(pack, pickPlan(pack, his, 'worst'), his);
-    expect(best.off).toBe(PLAN_EDGE);
-    expect(best.def).toBe(PLAN_EDGE);
+    expect(best.off).toBe(pack.planEdge);
+    expect(best.def).toBe(pack.planEdge);
     expect(worst.points).toBe(-best.points);
     expect(planEdge(pack, null, his).points).toBe(0);
     expect(planEdge(pack, { off: 'nope', def: 'nope' }, his).points).toBe(0);
