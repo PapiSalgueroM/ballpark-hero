@@ -44,7 +44,12 @@ async function page() {
 function submit(view: ReturnType<typeof render>, name: string) {
   const search = view.getByRole('combobox', { name: 'Search for a player' });
   fireEvent.change(search, { target: { value: name } });
-  expect(view.getAllByRole('option')[0]).toHaveTextContent(name);
+  const options = view.getAllByRole('option');
+  const index = options.findIndex(option => option.firstElementChild?.textContent === name);
+  expect(index, `Exact player ${name} must remain guessable`).toBeGreaterThanOrEqual(0);
+  for (let step = 0; step < index; step++) fireEvent.keyDown(search, { key: 'ArrowDown' });
+  expect(search).toHaveAttribute('aria-activedescendant', options[index].id);
+  expect(options[index]).toHaveAttribute('aria-selected', 'true');
   fireEvent.keyDown(search, { key: 'Enter' });
 }
 async function start(view: ReturnType<typeof render>) {
