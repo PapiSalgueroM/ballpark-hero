@@ -49,7 +49,12 @@
         Every sacked run, the silent arm's and the talk past the room arm's, is
         refused and writes nothing. In a full run the reprieves section 2
         played are handed over too, since the section's own runs rarely have
-        one.
+        one. Review fixes (2026-10-03): the career goes across with Club
+        Manager's own takeover stamp (Round 633's handover, read back through
+        its ensureHandover, equal to the takeover's points and games) and its
+        takeover badge, without the previous manager's post, and every number
+        on the offer card (games, clubs, board, a window before the next
+        fixture) is the one Club Manager opens on.
 
    Negative controls (house rule: prove the checks can fail), each a rewrite
    of a copy of src/lib/managerHotSeat.ts that refuses to run if its anchor
@@ -70,6 +75,11 @@
        saved career is written over without the confirm. Must go red.
      HOT_SEAT_CONTROL=sackoffer  a sacked manager is offered the career.
        Must go red.
+     HOT_SEAT_CONTROL=nostamp    the takeover goes across without the
+       takeover stamp, so Club Manager would score the engine's weeks as
+       yours. Must go red.
+     HOT_SEAT_CONTROL=card       the offer card counts only the games played
+       in the job (the reviewers' mutation). Must go red.
 
    Thresholds, from this harness on its own seed and on SIM_SEED=1, 2, 3
    (2026-09-30, 240 setups a run, three arms each, about two minutes a run
@@ -102,8 +112,13 @@
      sacked in Club Manager on the way fixed 2 to 4                       (reported)
      sacked runs refused               fixed 11 to 26                     floor 5
      reprieves handed over             fixed 0 to 2 (section 5 alone)     (reported)
+     window before the next fixture    fixed 3 (own seed, after the fixes) (reported)
    Under nocal no career is handed over; under clobber the first confirm
-   check fails on every survivor; under sackoffer every sacked run fails.
+   check fails on every survivor; under sackoffer every sacked run fails;
+   under nostamp and card every handover fails (39 of 39 on the own seed).
+   A review probe on a sixth seed saw 6 careers sacked in Club Manager, so
+   the reported 2 to 4 is not a ceiling; the offer card warns when the board
+   is not yet safe.
 
    What the measurement says about the game as shipped, for whoever tunes
    it: a manager who plays balanced and says nothing keeps the job about

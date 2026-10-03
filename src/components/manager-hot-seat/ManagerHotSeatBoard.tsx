@@ -60,6 +60,12 @@ function readActions(v: unknown): HotSeatAction[] | null {
   return Array.isArray(v) && v.length <= 60 && v.every(isAction) ? (v as HotSeatAction[]) : null;
 }
 
+/** A verdict that keeps the job, for the menu's way back to the offer. The
+ *  card's own canCarryOn is still the gate on the offer itself. */
+function keepsJob(kind: VerdictKind): boolean {
+  return kind === 'survived' || kind === 'reprieve';
+}
+
 function dotsOf(run: HotSeatRun): string {
   return run.log.filter(m => m.counts).map(m => (m.res === 'W' ? '🟩' : m.res === 'D' ? '🟨' : '🟥')).join('');
 }
@@ -109,12 +115,21 @@ function Progress({ run }: { run: HotSeatRun }) {
 /* Round 956: a manager who keeps the job keeps it in Club Manager. The run's
    own state goes across through Club Manager's save, so the season, the table
    and the board are the ones on this screen. A full page load opens it, which
-   boots Club Manager from that save the same way a return visit does. */
-function CarryOnCard({ run }: { run: HotSeatRun }) {
-  const s = carryOnSummary(run);
+   boots Club Manager from that save the same way a return visit does.
+   Review fix: the card gates itself on canCarryOn and takes the page change
+   as a prop, so src/test/managerHotSeatCarryOnCard.test.tsx can hold which
+   button replaces a career and which one never does. */
+function openPage(path: string) {
+  window.location.assign(path);
+}
+
+export function CarryOnCard({ run, openPath = openPage }: { run: HotSeatRun; openPath?: (path: string) => void }) {
   const [ask, setAsk] = useState<ExistingClubManagerSave | null>(null);
   const [note, setNote] = useState<string | null>(null);
   const [going, setGoing] = useState(false);
+  /* Below every hook: a sacked manager gets no card at all. */
+  if (!canCarryOn(run)) return null;
+  const s = carryOnSummary(run);
 
   const go = (replace: boolean) => {
     if (going) return;
@@ -131,7 +146,7 @@ function CarryOnCard({ run }: { run: HotSeatRun }) {
     }
     if (res === 'saved') {
       setGoing(true);
-      window.location.assign('/club-manager');
+      openPath('/club-manager');
     }
   };
 
@@ -146,8 +161,14 @@ function CarryOnCard({ run }: { run: HotSeatRun }) {
     <div className="rounded-lg border border-primary/50 bg-primary/5 p-4" data-testid="hot-seat-carry-on">
       <div className="text-xs font-semibold uppercase tracking-wide text-primary">Carry on in Club Manager</div>
       <p className="mt-1 text-sm">
-        The job is yours, so keep it. This exact season goes across: {run.state.clubName}, {ordinal(s.position)} of {s.clubs} on {s.points} points after {s.leaguePlayed} league games, the same squad and the board on {s.board}. You pick it up at the next fixture.
+        The job is yours, so keep it. This exact season goes across: {run.state.clubName}, {ordinal(s.position)} of {s.clubs} on {s.points} points after {s.leaguePlayed} league games, the same squad and the board on {s.board}. {s.windowFirst ? 'The transfer window is open first, then you pick it up at the next fixture.' : 'You pick it up at the next fixture.'}
       </p>
+      {s.boardTone !== 'good' && (
+        <p className="mt-1 text-xs text-muted-foreground" data-testid="hot-seat-carry-on-board">
+          Careful: on {s.board} the board still have you down as {s.boardBand.toLowerCase()}. Club Manager's board can sack you too, so the next few results still count.
+        </p>
+      )}
+      <p className="mt-1 text-xs text-muted-foreground">Not now? The offer waits on the menu until you start another run, or until tomorrow for the daily.</p>
       {ask ? (
         <div className="mt-3 rounded-md bg-muted p-3 text-sm" role="alertdialog" aria-label="Replace your Club Manager career?" data-testid="hot-seat-carry-on-confirm">
           <p>You already have a Club Manager career on this device{theirs}. Carrying on replaces it, and it cannot be brought back.</p>
@@ -174,6 +195,11 @@ export default function ManagerHotSeatBoard() {
   const [dailyDone, setDailyDone] = useState<DailySummary | null>(null);
   const [dailySaved, setDailySaved] = useState<HotSeatAction[] | null>(null);
   const [freeSaved, setFreeSaved] = useState<{ setup: HotSeatSetup; actions: HotSeatAction[] } | null>(null);
+  /* Round 956 review fix: a finished run whose manager kept the job, so the
+     Club Manager offer outlives the verdict screen (Menu, New club, a refresh
+     or a look at the career it would replace no longer lose it). */
+  const [dailyFinished, setDailyFinished] = useState<HotSeatAction[] | null>(null);
+  const [freeFinished, setFreeFinished] = useState<{ setup: HotSeatSetup; actions: HotSeatAction[] } | null>(null);
   const [league, setLeague] = useState<string>('premier');
   const [mentality, setMentality] = useState<Mentality>('balanced');
   const [talk, setTalk] = useState<TalkTone | null>(null);
@@ -195,8 +221,10 @@ export default function ManagerHotSeatBoard() {
         : null;
       return { actions, done };
     });
-    if (rec?.done) setDailyDone(rec.done);
-    else if (rec && rec.actions.length) setDailySaved(rec.actions);
+    if (rec?.done) {
+      setDailyDone(rec.done);
+      setDailyFinished(rec.actions.length ? rec.actions : null);
+    } else if (rec && rec.actions.length) setDailySaved(rec.actions);
     try {
       const raw = localStorage.getItem(FREE_KEY);
       if (raw) {
@@ -204,8 +232,10 @@ export default function ManagerHotSeatBoard() {
         const actions = readActions(p.actions);
         const club = typeof p.club === 'string' ? p.club : '';
         const seed = Number(p.seed);
-        if (p.v === 1 && actions && p.done !== true && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
-          setFreeSaved({ setup: { club, seed: seed >>> 0 }, actions });
+        if (p.v === 1 && actions && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
+          if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0 }, actions });
+          /* kind is new in Round 956 and optional: an older finished record has none and gets no offer. */
+          else if (typeof p.kind === 'string' && keepsJob(p.kind as VerdictKind)) setFreeFinished({ setup: { club, seed: seed >>> 0 }, actions });
         }
       }
     } catch {
@@ -221,18 +251,22 @@ export default function ManagerHotSeatBoard() {
         done: !!r.verdict,
         ...(r.verdict ? { kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) } : {}),
       });
-      if (r.verdict) setDailyDone({ club: r.setup.club, kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) });
+      if (r.verdict) {
+        setDailyDone({ club: r.setup.club, kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) });
+        setDailyFinished(r.actions);
+      }
       /* Round 721 review fix: the in memory copy moves with the store, or Menu
          then reopening the daily went back to the brief and the next save
          overwrote the matches already played. */
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
-        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.verdict }));
+        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
       setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
+      setFreeFinished(r.verdict && keepsJob(r.verdict.kind) ? { setup: r.setup, actions: r.actions } : null);
     }
   }, []);
 
@@ -308,6 +342,11 @@ export default function ManagerHotSeatBoard() {
               <div className="mt-3 rounded-md bg-muted px-3 py-2 text-sm" data-testid="hot-seat-daily-done">
                 <div className="font-semibold">{VERDICT_WORDS[dailyDone.kind].title}</div>
                 <div className="text-muted-foreground">{dailyDone.points} of {dailyDone.target} points {dailyDone.dots}. Back tomorrow for a new club.</div>
+                {keepsJob(dailyDone.kind) && dailyFinished && (
+                  <button type="button" onClick={() => open({ club: daily.club, seed: daily.seed, daily: daily.daily }, dailyFinished)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
+                    See the Club Manager offer
+                  </button>
+                )}
               </div>
             ) : (
               <button type="button" onClick={startDaily} className="mt-3 min-h-[44px] w-full rounded-md bg-primary px-4 py-2 font-semibold text-primary-foreground">
@@ -326,6 +365,11 @@ export default function ManagerHotSeatBoard() {
             {freeSaved && (
               <button type="button" onClick={() => open(freeSaved.setup, freeSaved.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
                 Carry on at {freeSaved.setup.club}
+              </button>
+            )}
+            {!freeSaved && freeFinished && (
+              <button type="button" onClick={() => open(freeFinished.setup, freeFinished.actions)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
+                See the Club Manager offer for {freeFinished.setup.club}
               </button>
             )}
           </div>
@@ -476,7 +520,7 @@ export default function ManagerHotSeatBoard() {
             >
               <p className="text-sm text-muted-foreground">{VERDICT_WORDS[run.verdict.kind].line}</p>
             </ResultMoment>
-            {canCarryOn(run) && <CarryOnCard run={run} />}
+            <CarryOnCard run={run} />
             <div className="rounded-md bg-muted px-3 py-2 text-sm">
               <div><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points from {run.leaguePlayed} league game{run.leaguePlayed === 1 ? '' : 's'} {dotsOf(run)}</div>
               <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
