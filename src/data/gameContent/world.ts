@@ -2347,7 +2347,7 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Lifting the trophy for a permanent boost",
+        heading: "Lifting the trophy for a boost that carries over",
         items: [
           "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
         ],

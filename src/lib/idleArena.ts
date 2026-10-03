@@ -52,7 +52,7 @@ export const OFFLINE_RATE = 0.5;
 export const AWAY_AFTER_MS = 750;
 /** the trophy formula starts paying at this many points earned in one run */
 export const TROPHY_FLOOR = 1_000_000;
-/** each trophy is a permanent bonus on everything */
+/** each trophy held is a bonus on everything, until it is spent in the trophy room */
 export const TROPHY_BONUS = 0.05;
 export const GROWTH = 1.15;
 
@@ -228,7 +228,8 @@ export interface ArenaState {
   awayMs: number;
   started: number;
   /** Round 957: trophy room levels, perk id to level 1..3. A save from before
-   *  the round has no such field and loadSave reads it as none bought. */
+   *  the round has no such field and loadSave reads it as none bought, and so
+   *  is a block with any level off the ladder. */
   perks: Partial<Record<Perk['id'], number>>;
 }
 
@@ -241,14 +242,18 @@ export function newState(now: number = Date.now()): ArenaState {
   return { v: 1, points: 0, earned: 0, allTime: 0, taps: 0, owned, upgrades: [], trophies: 0, runs: 0, ach: [], lastTick: now, awayMs: 0, started: now, perks: {} };
 }
 
-/** A perks block is coerced level by level: an unknown id is dropped, a level
- *  that is not a whole number from 1 to PERK_MAX is clamped or dropped, and
- *  anything that is not an object at all reads as nothing bought. */
+/** A perks block is read whole. An unknown id is dropped, since it means
+ *  nothing to this engine. A known perk whose level is not a whole number from
+ *  0 to PERK_MAX makes the block corrupt, and a corrupt block resets to nothing
+ *  bought rather than being rounded up the ladder; the rest of the save is not
+ *  touched. Anything that is not an object at all reads as nothing bought. */
 function loadPerks(raw: unknown): ArenaState['perks'] {
   const out: ArenaState['perks'] = {};
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
   for (const p of PERKS) {
-    const level = Math.min(PERK_MAX, Math.floor(finite((raw as Record<string, unknown>)[p.id])));
+    const level = (raw as Record<string, unknown>)[p.id];
+    if (level === undefined) continue;
+    if (typeof level !== 'number' || !Number.isInteger(level) || level < 0 || level > PERK_MAX) return {};
     if (level >= 1) out[p.id] = level;
   }
   return out;

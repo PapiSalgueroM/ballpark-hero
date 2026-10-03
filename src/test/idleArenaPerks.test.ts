@@ -40,6 +40,23 @@ describe('idle arena trophy room', () => {
     for (const p of PERKS) expect(buyPerk(s, p.id)).toBe(s);
   });
 
+  it('a cabinet holding exactly the price buys the level and is left empty', () => {
+    /* a first lift at 9M earned pays exactly 3, the first price on every ladder */
+    for (const p of PERKS) {
+      let s: ArenaState = { ...withTrophies(p.cost[0]) };
+      for (let level = 1; level <= PERK_MAX; level++) {
+        s = { ...s, trophies: p.cost[level - 1] };
+        const next = buyPerk(s, p.id);
+        expect(next).not.toBe(s);
+        expect(next.trophies).toBe(0);
+        expect(perkLevel(next, p.id)).toBe(level);
+        /* and one short of the price is refused */
+        expect(buyPerk({ ...s, trophies: p.cost[level - 1] - 1 }, p.id).trophies).toBe(p.cost[level - 1] - 1);
+        s = next;
+      }
+    }
+  });
+
   it('every level reaches the rule it names, one step at a time', () => {
     for (let level = 0; level <= PERK_MAX; level++) {
       const s = { ...newState(0), perks: { longNight: level, nightShift: level, headStart: level, scouting: level } };
@@ -97,11 +114,17 @@ describe('idle arena trophy room', () => {
   });
 
   it('a corrupt perks block resets that block alone', () => {
-    const raw = JSON.stringify({ ...newState(0), trophies: 9, points: 500, perks: { longNight: 99, nightShift: -2, headStart: 'lots', scouting: 1.7, hax: 3 } });
-    const s = loadSave(raw, 0)!;
-    expect(s.perks).toEqual({ longNight: PERK_MAX, scouting: 1 });
-    expect(s.trophies).toBe(9);
-    expect(s.points).toBe(500);
+    /* one level off the ladder is enough: it is never rounded up to the top */
+    for (const level of [99, PERK_MAX + 1, -2, 1.7, 'lots', null]) {
+      const raw = JSON.stringify({ ...newState(0), trophies: 9, points: 500, perks: { longNight: level, scouting: 1 } });
+      const s = loadSave(raw, 0)!;
+      expect(s.perks).toEqual({});
+      expect(s.trophies).toBe(9);
+      expect(s.points).toBe(500);
+    }
+    /* a good block keeps every level, and an id this engine does not know is dropped */
+    const good = loadSave(JSON.stringify({ ...newState(0), perks: { longNight: PERK_MAX, nightShift: 0, scouting: 1, hax: 3 } }), 0)!;
+    expect(good.perks).toEqual({ longNight: PERK_MAX, scouting: 1 });
     for (const bad of ['"x"', '[1,2]', 'null', '7']) {
       const t = loadSave(`{"v":1,"trophies":4,"perks":${bad}}`, 0)!;
       expect(t.perks).toEqual({});

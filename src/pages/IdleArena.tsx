@@ -108,12 +108,12 @@ const IdleArena = () => {
     {
       key: 'trophy', icon: '🏆', title: 'Trophy',
       value: lifts > 0 ? `${lifts} to lift` : `${s.trophies} held`,
-      sub: lifts > 0 ? `+${Math.round(lifts * TROPHY_BONUS * 100)}% forever` : `${fmt(s.earned)} of ${fmt(TROPHY_FLOOR)} earned`,
+      sub: lifts > 0 ? `+${Math.round(lifts * TROPHY_BONUS * 100)}% on everything` : `${fmt(s.earned)} of ${fmt(TROPHY_FLOOR)} earned`,
       accent: lifts > 0,
     },
     {
       key: 'room', icon: '🗝️', title: 'Trophy room',
-      value: `${perkLevels} of ${PERKS.length * PERK_MAX} perks`,
+      value: `${perkLevels} of ${PERKS.length * PERK_MAX} levels`,
       sub: cheapestPerk === null ? 'every perk at the top' : `next for ${cheapestPerk} troph${cheapestPerk === 1 ? 'y' : 'ies'}`,
       accent: cheapestPerk !== null && cheapestPerk <= s.trophies,
     },
@@ -306,7 +306,7 @@ const IdleArena = () => {
                 <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
                   <p className="text-xs text-muted-foreground leading-snug">
                     Lift the trophy and the run starts again: the points, the squad and the upgrades all go.
-                    What stays is permanent. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, two trophies
+                    The trophies stay. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, two trophies
                     at {fmt(4 * TROPHY_FLOOR)}, three at {fmt(9 * TROPHY_FLOOR)}, and every trophy is
                     +{Math.round(TROPHY_BONUS * 100)}% on everything, taps and squad alike, in every run after it,
                     unless you spend it on a perk in the trophy room.
@@ -373,7 +373,7 @@ const IdleArena = () => {
                               onClick={() => { doPerk(p.id); setConfirmPerk(null); }}
                               className="flex-1 rounded-xl py-2 text-xs font-bold bg-gold text-black hover:opacity-90"
                             >
-                              Spend {price}, lose {Math.round(price * TROPHY_BONUS * 100)}%
+                              Spend {price}, give up +{Math.round(price * TROPHY_BONUS * 100)}%
                             </button>
                           </div>
                         ) : (
@@ -444,18 +444,18 @@ const IdleArena = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Idle Arena | DoUKnowBall"
-          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a permanent bonus, and earn at half speed for up to eight hours while you are away."
+          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a bonus you keep or spend in the trophy room, and earn at half speed for up to eight hours while you are away."
           howToPlay={[
             'Tap the ball to score a point',
             'Sign Ball Boys, Sunday Strikers and the rest, and they score every second for you',
             'Buy upgrades to double a line or boost everything',
-            'Lift the trophy once a run has earned a million: it resets the run and pays a permanent bonus',
+            'Lift the trophy once a run has earned a million: it resets the run and pays a bonus that lasts for as long as you hold the trophies',
             'The squad keeps scoring while you are away, at half speed, for up to eight hours, tab open or shut',
             "Spend trophies in the trophy room on perks that last forever, each one giving up that trophy's 5%",
           ]}
           examples={[
             'A Ball Boy costs 15 and scores 0.4 a second; the tenth one costs 53',
-            'A run that earns four million lifts two trophies, worth 10% on everything forever',
+            'A run that earns four million lifts two trophies, worth 10% on everything for as long as you hold them',
             'Own five Sunday Strikers and New Boots appears, doubling every one of them',
             'With 30 trophies, 3 spent on Night Shift drops the bonus from 150% to 135% but makes a night away pay 70% speed instead of 50%',
           ]}

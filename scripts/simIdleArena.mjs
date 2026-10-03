@@ -93,7 +93,7 @@ if (CONTROL === 'free') {
   console.log('CONTROL dominant: Night Shift leaks into the live rate, so one perk wins everywhere. Section 6 must go red.');
 } else if (CONTROL === 'oldsave') {
   engineSrc = swap(engineSrc, 'export const TROPHY_BONUS = 0.05;', 'export const TROPHY_BONUS = 0.04;');
-  console.log('CONTROL oldsave: a trophy pays 4% to make room for the perks, so a save from before the round scores less. Section 6 must go red.');
+  console.log('CONTROL oldsave: a trophy pays 4% to make room for the perks, so a save from before the round scores less. Section 7 must go red.');
 } else if (CONTROL) {
   console.error(`unknown IDLE_ARENA_CONTROL ${CONTROL}`);
   process.exit(2);
@@ -224,6 +224,7 @@ console.log('4) the save round trips and survives hostility');
     /* Round 957: a broken perks block resets that block and nothing else */
     ['bad perks', JSON.stringify({ v: 1, points: 10, trophies: 7, perks: { longNight: 99, nightShift: -1, headStart: 'lots', scouting: 1.5, hax: 2 } })],
     ['perks not an object', JSON.stringify({ v: 1, points: 10, trophies: 7, perks: [3, 3] })],
+    ['one rung past the top in perks', JSON.stringify({ v: 1, points: 10, trophies: 7, perks: { longNight: 4, scouting: 1 } })],
   ];
   for (const [name, raw] of hostile) {
     let out;
@@ -238,8 +239,8 @@ console.log('4) the save round trips and survives hostility');
     else if (Object.entries(out.perks).some(([id, l]) => !A.PERKS.some(p => p.id === id) || !Number.isInteger(l) || l < 1 || l > A.PERK_MAX)) fail(`${name} save kept a perk that does not exist or a level off the ladder: ${JSON.stringify(out.perks)}`);
     if (name.endsWith('perks') || name.startsWith('perks')) {
       if (out.trophies !== 7 || out.points !== 10) fail(`${name}: a broken perks block took the trophies or the points with it`);
-      const want = name === 'bad perks' ? { longNight: A.PERK_MAX, scouting: 1 } : {};
-      if (JSON.stringify(out.perks) !== JSON.stringify(want)) fail(`${name}: perks loaded as ${JSON.stringify(out.perks)}, expected ${JSON.stringify(want)}`);
+      /* a level off the ladder is never rounded up to the top: the block resets */
+      if (JSON.stringify(out.perks) !== '{}') fail(`${name}: perks loaded as ${JSON.stringify(out.perks)}, expected the block reset to {}`);
     }
     try { A.totalRate(out); A.tapValue(out); A.tick(out, 1000); } catch (e) { fail(`${name} save crashed the engine: ${String(e).slice(0, 60)}`); }
   }
@@ -343,7 +344,19 @@ console.log('7) a save from before the trophy room plays on unchanged');
 {
   let oldSrc = '';
   try { oldSrc = execSync(`git show ${PRE_ROUND}:src/lib/idleArena.ts`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch { /* reported below */ }
-  if (!oldSrc.includes('export function loadSave')) fail(`cannot read the engine from before the round (git show ${PRE_ROUND}:src/lib/idleArena.ts), so there is nothing to compare an old save against`);
+  /* a shallow clone (CLAUDE.md's fallback when a full clone fails) has no
+     history to read, which says nothing about the code: say so plainly rather
+     than going red, and refuse the control that needs this section */
+  let shallow = false;
+  if (!oldSrc.includes('export function loadSave')) {
+    try { shallow = execSync('git rev-parse --is-shallow-repository', { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() === 'true'; } catch { /* not a shallow clone we can see */ }
+  }
+  if (shallow && CONTROL === 'oldsave') {
+    console.error(`  CONTROL DEAD: this is a shallow clone without ${PRE_ROUND}, so section 7 cannot run and the oldsave control proves nothing. Refusing to run.`);
+    process.exit(2);
+  }
+  if (shallow) console.log(`   NOT RUN: this is a shallow clone and ${PRE_ROUND} (the engine from before the round) is not in it. This section is not a pass here; run it in a full clone.`);
+  else if (!oldSrc.includes('export function loadSave')) fail(`cannot read the engine from before the round (git show ${PRE_ROUND}:src/lib/idleArena.ts), so there is nothing to compare an old save against`);
   else {
     const OLD = await bundle('preround', oldSrc);
     if ('perks' in OLD.newState(0)) fail(`the engine at ${PRE_ROUND} already has perks, so it is not a save from before the round`);
