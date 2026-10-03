@@ -29,8 +29,14 @@
      rest         a short rest start costs nothing             -> 3
      inflate      the lineup term is worth forty times more    -> 4
 
-   MEASURED (filled in from the runs, several seeds): see the numbers at
-   each section's bands. */
+   MEASURED 2026-10-03, five seeds (11 29 47 83 131), 13 s a run:
+     1. 600 MLB, 800 NHL and 640 NFL clubs x 3 ways, 0 off; fixture 25 of 25.
+     2. MLB 619 bench and 381 order swaps, NHL 171 and 829, NFL 300 scheme
+        benchings, none flat; median cost MLB 0.248, NHL 0.052, NFL 0.153.
+        700 NFL chart moves followed today's number exactly, 4 of them RAISED
+        it (today's engine, see section 2).
+     3. 925 starters, 150 five and 150 four man turns, 150 of 150 hurt walks.
+     4. bands and their 17 seed measurement are at BAND. */
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -280,8 +286,8 @@ for (const sport of ['mlb', 'nhl']) {
 {
   const sp = SPORT.nfl;
   let a = 0, b = 0, flat = 0, idle = 0, rises = 0;
-  for (const seed of SEEDS) for (const deep of [true]) {
-    const rng = lcg(seed * 17 + (deep ? 1 : 2));
+  for (const seed of SEEDS) {
+    const rng = lcg(seed * 17 + 1);
     const lg = NFL.initLeague(lcg(seed), { depth: FO_DEPTH });
     hurt(lg, lcg(seed + 3));
     const teams = Object.values(lg.teams);
