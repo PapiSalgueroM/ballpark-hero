@@ -84,6 +84,42 @@ describe('gmInbox engine', () => {
     }
   });
 
+  it('the cap drops the oldest answered message, never one still open', () => {
+    const s = desk();
+    const seat = seatFor({ ...TOY, cooldown: 0 });
+    const [first] = gmInboxWeek(s, seat, 'b', {}, 0, () => 0.5);
+    for (let clock = 1; clock < 20; clock++) {
+      for (const m of gmInboxWeek(s, seat, 'b', {}, clock, () => 0.5)) answerGmInbox(s, m.id, 0, seat);
+      expect(s.phoneInbox!.some(m => m.id === first.id)).toBe(true);
+    }
+    expect(GM_INBOX_MAX).toBe(8);
+    expect(s.phoneInbox!).toHaveLength(8);
+    expect(gmInboxOpen(s)).toBe(1);
+  });
+
+  it('a clock that falls rebases the cooldown book instead of locking the event out', () => {
+    const s = desk();
+    const seat = seatFor(TOY);
+    /* 0.99 draws the second of the two eligible events, the repeatable. */
+    const [rep] = gmInboxWeek(s, seat, 'a', { n: 9 }, 10, () => 0.99);
+    expect(rep.defId).toBe('rep');
+    answerGmInbox(s, rep.id, 0, seat);
+    const back: number[] = [];
+    const run = (to: number) => {
+      for (let clock = 0; clock < to; clock++) {
+        for (const m of gmInboxWeek(s, seat, 'a', { n: 9 }, clock, () => 0)) { if (m.defId === 'rep') back.push(clock); answerGmInbox(s, m.id, 0, seat); }
+      }
+    };
+    run(8);
+    expect(back).toEqual([3, 6]);
+    /* The clock falls a second time and week 3 comes round again. */
+    run(4);
+    expect(back).toEqual([3, 6, 3]);
+    const ids = s.phoneInbox!.map(m => m.id);
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.filter(id => id.startsWith('rep-2026-w3'))).toHaveLength(2);
+  });
+
   it('every option moves exactly what its card says, once', () => {
     const s = desk();
     const seat = seatFor(TOY);

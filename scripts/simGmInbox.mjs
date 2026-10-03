@@ -67,7 +67,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_INBOX_CONTROL || '';
 const SEED = Number(process.env.SEED || 1);
-if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random'].includes(CONTROL)) {
+if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate'].includes(CONTROL)) {
   console.error(`GM_INBOX_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
@@ -82,17 +82,21 @@ process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: tru
 const R = ROOT.replaceAll('\\', '/');
 const ENGINE = path.join(ROOT, 'src/lib/gmInbox.ts');
 let engineSrc = null;
-if (CONTROL === 'drift') {
+/* The controls that swap one line of the engine: the line, and what it becomes. */
+const ENGINE_CONTROLS = {
+  drift: ['if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);', '/* drift control: out effect dropped */'],
+  random: ['filter(e => rng() < (e.chance ?? pack.chance))', 'filter(e => Math.random() < (e.chance ?? pack.chance))'],
+  shift: ['const idx = inbox.findIndex(m => m.answered !== undefined);', 'const idx = 0; /* shift control */'],
+  opencap: ['const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));', 'const want = pack.perWeek; /* opencap control */'],
+  maxcap: ['export const GM_INBOX_MAX = 8;', 'export const GM_INBOX_MAX = 12; /* maxcap control */'],
+  oneshot: ['if (e.oneShot) return !used.has(e.id);', '/* oneshot control */'],
+};
+if (ENGINE_CONTROLS[CONTROL]) {
   const src = fs.readFileSync(ENGINE, 'utf8');
-  const line = 'if (c.out && c.out.weeks > 0) seat.setOut(s, c.out.who, c.out.weeks);';
-  if (!src.includes(line)) { console.error('drift control: the out effect line is not in gmInbox.ts, refusing to run'); process.exit(2); }
-  engineSrc = src.replace(line, '/* drift control: out effect dropped */');
-}
-if (CONTROL === 'random') {
-  const src = fs.readFileSync(ENGINE, 'utf8');
-  const roll = 'filter(e => rng() < (e.chance ?? pack.chance))';
-  if (!src.includes(roll)) { console.error('random control: the chance roll is not in gmInbox.ts, refusing to run'); process.exit(2); }
-  engineSrc = src.replace(roll, 'filter(e => Math.random() < (e.chance ?? pack.chance))');
+  const [line, swap] = ENGINE_CONTROLS[CONTROL];
+  if (!src.includes(line)) { console.error(`${CONTROL} control: "${line}" is not in gmInbox.ts, refusing to run`); process.exit(2); }
+  engineSrc = src.replace(line, swap);
+  if (engineSrc === src) { console.error(`${CONTROL} control changed nothing, refusing to run`); process.exit(2); }
 }
 const ENTRY = path.join(tmpDir, 'entry.mjs');
 const BUNDLE = path.join(tmpDir, 'bundle.mjs');
@@ -284,9 +288,41 @@ if (CONTROL === 'cool') {
   if (!SEATS.some(k => PACKS[k].cooldown > 0)) { console.error('cool control: no pack has a cooldown, refusing to run'); process.exit(2); }
   for (const k of SEATS) { PACKS[k].cooldown = 0; for (const e of PACKS[k].events) if (e.cooldown !== undefined) e.cooldown = 0; }
 }
+/* A data edit, not an engine one: the holdout loses its gate in BOTH copies,
+   so section 3 (which judges by the pristine copy) has nothing to object to
+   and only section 4's band can see the deck come out heavier. */
+if (CONTROL === 'ungate') {
+  for (const p of [PACKS.nfl, PRISTINE.nfl]) {
+    const e = p.events.find(x => x.id === 'nfl_holdout');
+    if (!e?.when?.length) { console.error('ungate control: nfl_holdout has no conditions to drop, refusing to run'); process.exit(2); }
+    delete e.when;
+  }
+}
 
 const DESKS = 100;
 const SEASONS = 10;
+const EDGE_DESKS = 20;
+const EDGE_FLOOR = 0.5;
+/* The brief's numbers, as literals: Club Manager keeps a list of eight and
+   never leaves more than three open. Checking against the engine's own
+   constants would follow a change to them instead of catching it. */
+const KEEP = 8;
+const OPEN = 3;
+if (E.GM_INBOX_MAX !== KEEP) fail(`the engine keeps ${E.GM_INBOX_MAX} messages, the brief says ${KEEP}`);
+if (E.GM_INBOX_OPEN !== OPEN) fail(`the engine allows ${E.GM_INBOX_OPEN} open, Club Manager's rule is ${OPEN}`);
+const seasonFactsOf = (pristine, rng) => {
+  const out = {};
+  for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'season') out[k] = draw(spec, rng);
+  return out;
+};
+const weekFactsOf = (pristine, seasonFacts, rng) => {
+  const out = { ...seasonFacts };
+  for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'week') out[k] = draw(spec, rng);
+  return out;
+};
+/* Rule 4: a message still open before a week must still be there after it. */
+const openIds = s => (s.phoneInbox ?? []).filter(m => m.answered === undefined).map(m => m.id);
+const lostOpen = (s, before) => before.filter(id => !(s.phoneInbox ?? []).some(m => m.id === id));
 const holds = (c, facts) => {
   if (!(c.fact in facts)) return false;
   const v = facts[c.fact];
@@ -316,13 +352,14 @@ function runDesk(seat, desk, seed) {
   let clock = 0;
   for (let season = 0; season < SEASONS; season++) {
     s.year = 2030 + season;
-    const seasonFacts = {};
-    for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'season') seasonFacts[k] = draw(spec, factRng);
+    const seasonFacts = seasonFactsOf(pristine, factRng);
     let count = 0;
     for (const beat of weeks) {
-      const facts = { ...seasonFacts };
-      for (const [k, spec] of Object.entries(pristine.facts)) if (spec.per === 'week') facts[k] = draw(spec, factRng);
-      for (const m of E.gmInboxWeek(s, bound, beat, facts, clock, deckRng)) {
+      const facts = weekFactsOf(pristine, seasonFacts, factRng);
+      const before = openIds(s);
+      const got = E.gmInboxWeek(s, bound, beat, facts, clock, deckRng);
+      for (const id of lostOpen(s, before)) bad.push(`${id}: dropped from the desk while still unanswered`);
+      for (const m of got) {
         const pe = byId.get(m.defId);
         count++;
         log.push(`${m.defId}@${clock}`);
@@ -337,9 +374,10 @@ function runDesk(seat, desk, seed) {
         lastAt[pe.id] = clock;
       }
       const open = (s.phoneInbox ?? []).filter(m => m.answered === undefined);
-      if (open.length > E.GM_INBOX_OPEN) bad.push(`${open.length} open at once`);
-      if ((s.phoneInbox ?? []).length > E.GM_INBOX_MAX) bad.push(`${s.phoneInbox.length} kept at once`);
-      /* A desk answers most weeks, not all, so the open cap gets exercised. */
+      if (open.length > OPEN) bad.push(`${open.length} open at once`);
+      if ((s.phoneInbox ?? []).length > KEEP) bad.push(`${s.phoneInbox.length} kept at once`);
+      /* A desk answers most weeks, not all. The caps barely bind on desks like
+         this, so section 3b drives the two desks that push them to the edge. */
       for (const m of open) if (answerRng() < 0.75) E.answerGmInbox(s, m.id, Math.floor(answerRng() * m.choices.length), bound);
       clock++;
     }
@@ -360,6 +398,60 @@ console.log(`3) The rules hold over ${DESKS * SEASONS} seasons a pack`);
   if (dealt < 1000) fail(`only ${dealt} events dealt: nothing was tested`);
   if (bad.length) fail(`${bad.length} deliveries broke a rule (beat, condition, one shot, cooldown or caps)`);
   else ok('every delivery was on its beat with every condition true, no one shot twice, no repeat inside a cooldown, caps held');
+}
+
+console.log(`3b) The caps at their edges: ${EDGE_DESKS} silent and ${EDGE_DESKS} stubborn desks a pack, ten seasons each`);
+/* A silent desk never answers, so the open cap is the only thing between it
+   and a pile of decisions. A stubborn desk leaves its first message open and
+   answers everything after it the week it lands, so the list fills to the
+   kept cap with one open message at the very front: rule 4 says that one
+   stays. Each check must have bitten (the cap reached) to count. */
+{
+  const bad = [];
+  const reached = { silent: {}, stubborn: {} };
+  for (const seat of SEATS) {
+    const pristine = PRISTINE[seat];
+    const weeks = E.gmSeasonWeeks(pristine);
+    for (const kind of ['silent', 'stubborn']) {
+      reached[kind][seat] = 0;
+      for (let desk = 0; desk < EDGE_DESKS; desk++) {
+        const factRng = keyedRng(`simGmInbox|${kind}|${seat}|${SEED}|${desk}|facts`);
+        const deckRng = keyedRng(`simGmInbox|${kind}|${seat}|${SEED}|${desk}|deck`);
+        const s = newDesk();
+        const bound = bindDesk(PACKS[seat]);
+        let first = null;
+        let peak = 0;
+        let clock = 0;
+        for (let season = 0; season < SEASONS; season++) {
+          s.year = 2030 + season;
+          const seasonFacts = seasonFactsOf(pristine, factRng);
+          for (const beat of weeks) {
+            const before = openIds(s);
+            const got = E.gmInboxWeek(s, bound, beat, weekFactsOf(pristine, seasonFacts, factRng), clock, deckRng);
+            for (const id of lostOpen(s, before)) bad.push(`${seat} ${kind} desk ${desk}: ${id} dropped while still unanswered`);
+            if (kind === 'stubborn') for (const m of got) { if (first === null) first = m.id; else E.answerGmInbox(s, m.id, 0, bound); }
+            const open = openIds(s).length;
+            const kept = (s.phoneInbox ?? []).length;
+            if (open > OPEN) bad.push(`${seat} ${kind} desk ${desk}: ${open} open at once`);
+            if (kept > KEEP) bad.push(`${seat} ${kind} desk ${desk}: ${kept} kept at once`);
+            peak = Math.max(peak, kind === 'silent' ? open : kept);
+            clock++;
+          }
+        }
+        if (kind === 'stubborn' && first !== null && !(s.phoneInbox ?? []).some(m => m.id === first)) bad.push(`${seat} stubborn desk ${desk}: the first message is gone`);
+        if (peak >= (kind === 'silent' ? OPEN : KEEP)) reached[kind][seat]++;
+      }
+    }
+  }
+  for (const kind of ['silent', 'stubborn']) {
+    const line = SEATS.map(k => `${k} ${reached[kind][k]}`).join(', ');
+    const thin = SEATS.filter(k => reached[kind][k] < EDGE_DESKS * EDGE_FLOOR);
+    if (thin.length) fail(`${kind} desks reached the ${kind === 'silent' ? 'open' : 'kept'} cap too rarely to test it (${line} of ${EDGE_DESKS})`);
+    else console.log(`   ${kind} desks at the ${kind === 'silent' ? `open cap of ${OPEN}` : `kept cap of ${KEEP}`}: ${line} of ${EDGE_DESKS}`);
+  }
+  for (const b of [...new Set(bad)].slice(0, 10)) console.error(`     ${b}`);
+  if (bad.length) fail(`${bad.length} cap breaks at the edges (open past ${OPEN}, kept past ${KEEP}, or an open message dropped)`);
+  else ok(`never past ${OPEN} open or ${KEEP} kept, and no open message ever dropped`);
 }
 
 console.log('4) Each pack deals a measured number of events a season');

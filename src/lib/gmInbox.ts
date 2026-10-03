@@ -32,9 +32,11 @@
       GM_INBOX_OPEN unanswered at once: Club Manager's rule.
    4. The list is capped at GM_INBOX_MAX, like Club Manager's. The oldest
       ANSWERED message drops first, so an open decision is never lost.
-   5. Every option moves exactly what its card says. The card's effect line
-      is written by choiceEffects from the same fields the answer applies,
-      so the words and the effect cannot drift apart.
+   5. Every option moves exactly what its card says, up to the end of the
+      meter: trust, the room and fan mood live on 0 to 100, so at trust 97
+      a card that says +6 lands on 100. The card's effect line is written by
+      choiceEffects from the same fields the answer applies, so the words
+      and the effect cannot drift apart.
    6. Nothing here calls Math.random. Same seed, same deck.
 
    A seat delivers through gmInboxWeek, never through careerInbox's own
@@ -243,6 +245,11 @@ export function gmInboxWeek<S extends GmInboxHost>(
   const inbox = [...(s.phoneInbox ?? [])];
   const used = [...(s.phoneUsedIds ?? [])];
   const last = { ...(s.gmInboxLast ?? {}) };
+  /* The clock only ever rises. A seat that hands in one that fell (a week of
+     the season instead of a running count) leaves book entries in the
+     future, which would keep their events away for good: read them as
+     arriving now, so each waits one cooldown and comes back. */
+  for (const [id, at] of Object.entries(last)) if (at > clock) last[id] = clock;
   const open = inbox.filter(m => m.answered === undefined).length;
   const want = Math.max(0, Math.min(pack.perWeek, GM_INBOX_OPEN - open));
   const came = gmEligible(pack, beat, facts, used, last, clock).filter(e => rng() < (e.chance ?? pack.chance));
@@ -250,8 +257,12 @@ export function gmInboxWeek<S extends GmInboxHost>(
   const fresh: InboxMessage[] = [];
   while (fresh.length < want && came.length > 0) {
     const e = came.splice(Math.floor(rng() * came.length), 1)[0];
+    /* A fallen clock could repeat a week, and two messages with one id would
+       leave the second unanswerable, so a repeat gets a suffix. */
+    let id = `${e.id}-${year}-w${clock}`;
+    for (let n = 2; inbox.some(m => m.id === id); n++) id = `${e.id}-${year}-w${clock}-${n}`;
     const msg: InboxMessage = {
-      id: `${e.id}-${year}-w${clock}`, defId: e.id, from: e.from, emoji: e.emoji, text: e.text,
+      id, defId: e.id, from: e.from, emoji: e.emoji, text: e.text,
       year, choices: e.choices, beat: e.beat,
     };
     inbox.push(msg);
