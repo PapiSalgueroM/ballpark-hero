@@ -22,7 +22,10 @@ function hooks(onEdit?: (e: ManagerEdit) => void) {
   };
 }
 
-describe('the manager on the career panel', () => {
+/* Each case builds a real career and the first rename check folds every real
+   name the game knows, which is seconds on a busy machine, not milliseconds:
+   measured 4.8 s for the Skip case alone on a loaded box, against the 5 s default. */
+describe('the manager on the career panel', { timeout: 60000 }, () => {
   it('shows his face, his name and his background point', () => {
     const c = startCareer('Arsenal', undefined, undefined, { ...SPEC, appearance: { ...defaultManagerLook(), outfit: 'suit', ageBand: 'sixties' } });
     const { container } = render(<ClubManagerCareerPanel c={c} g={hooks()} nationOffer={null} />);
