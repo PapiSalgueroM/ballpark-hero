@@ -220,6 +220,30 @@ const CONTROLS = {
     to: '    const used = club ? payroll(club, man.id) : 0;',
     section: 4,
   },
+  /* Second review of 2026-10-02, one control each. */
+  nofinalcap: { from: '  if (overCeiling(c, res.final.salary)) {', to: '  if (false) {', section: 4 },
+  ladcap: {
+    file: 'gmContractRules.ts',
+    from: 'export const NHL_OFFER_SHEET_LADDER_CAP = 95.5;',
+    to: 'export const NHL_OFFER_SHEET_LADDER_CAP = 88;',
+    section: 4,
+  },
+  ladder: {
+    file: 'gmContractRules.ts',
+    from: '  { upTo: 7.020113, picks: [1, 3] },',
+    to: '  { upTo: 7.020113, picks: [2, 3] },',
+    section: 4,
+  },
+  underlist: {
+    from: '  return club.players.filter(p => p.years <= 1 && !(host.held?.(league, p)));',
+    to: '  return club.players.filter(p => p.years <= 1 && p.ovr % 7 !== 0 && !(host.held?.(league, p)));',
+    section: 1,
+  },
+  arbstep: {
+    from: '    const step = Math.min(ARBITRATION_SHARES.length - 1, Math.max(0, service - MLB_ARBITRATION_AFTER));',
+    to: '    const step = Math.min(ARBITRATION_SHARES.length - 1, Math.max(0, service - MLB_ARBITRATION_AFTER + 1));',
+    section: 4,
+  },
   nobird: {
     from: '        limit = Math.min(max, man.salary * NBA_NON_BIRD_RAISE);',
     to: '        limit = max;',
@@ -515,8 +539,28 @@ function playedHere(track, id) {
   if (!t || t.how === 'founder') return null;
   return t.n;
 }
-/** The NBA maximum share by seasons in the league, as the two sources state it (0-6, 7-9, 10+). */
+/** The NBA maximum share by seasons in the league (0-6, 7-9, 10+), written here by hand from the recorded sources. */
 const NBA_MAX_BY_SERVICE = s => (s <= 6 ? 0.25 : s <= 9 ? 0.3 : 0.35);
+
+/* The NHL offer sheet ladder as published for 2025-26 at a 95.5M cap
+   (pittsburghhockeynow.com, reread 2026-10-02, and dailyfaceoff.com): the top
+   of each rung in dollars and the picks it costs. Written here by hand and
+   never read off gmContractRules.ts, so a stale cap or a mistyped rung in the
+   module goes red (review 2, finding 2). The game charges a sheet by its share
+   of the cap, and its drafts have two rounds, so a third round pick is not
+   payable. */
+const NHL_LADDER_CAP = 95.5;
+const NHL_LADDER = [
+  [1544424, []], [2340037, [3]], [4680076, [2]], [7020113, [1, 3]],
+  [9360153, [1, 2, 3]], [11700192, [1, 1, 2, 3]], [Number.POSITIVE_INFINITY, [1, 1, 1, 1]],
+];
+/** The rung a sheet of `salary` ($M) sits on against `cap`, in published dollars; null within a dollar of a rung's top. */
+function ladderRung(salary, cap) {
+  const dollars = (salary / cap) * NHL_LADDER_CAP * 1e6;
+  if (NHL_LADDER.some(([top]) => Math.abs(dollars - top) < 1)) return null;
+  return NHL_LADDER.findIndex(([top]) => dollars <= top);
+}
+const payable = picks => picks.filter(r => r <= 2);
 
 /** Sections 2, 3 and 4 for one case. */
 function checkCase(sport, lg, ledger, team, c, st, s) {
@@ -572,6 +616,24 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     const dead = (club.deadCap ?? []).filter(e => e.seasonsLeft > 1).reduce((a, e) => a + r1(e.amount / 2), 0);
     if (dead > 0) bump('cases with dead money on the books');
     const room = cap - club.players.reduce((a, p) => a + (p.id === c.man.id ? 0 : p.salary), 0) - r1(dead);
+    st.nbaTop[c.man.id] = { top: max, capped: false };
+    /* The same man under a ceiling of 85 and of 65 percent of his ask, so his
+       last word lands as a counter and as an insult, both over the ceiling:
+       signing that last word must be refused. On the real cases the ceiling
+       mostly sits so far under the ask that the push walks him out, so this
+       is where acceptFinal's guard is really exercised (review 2, finding 1). */
+    if (c.canNegotiate) {
+      for (const k of [0.85, 0.65]) {
+        const ceiling = r1(c.ask.salary * k);
+        if (ceiling < host.minSalary(lg)) continue;
+        const c2 = { ...c, ceiling };
+        const l3 = structuredClone(ledger);
+        const res = desk.pushFor(l3, lg, c2, { years: c.ask.years, salary: ceiling });
+        if (desk.decisionFor(l3, lg.season, c.man.id) || !res?.final || !(res.final.salary > ceiling)) continue;
+        bump('last word over an imposed ceiling');
+        if (desk.acceptFinal(l3, lg, c2).ok) fail(4, `${tag}: signed on a last word of ${res.final.salary} over an imposed ${ceiling} ceiling`);
+      }
+    }
     /* A push over what the rules allow is cut to it, so it can never sign him above it. */
     if (c.canNegotiate) {
       const l2 = structuredClone(ledger);
@@ -594,9 +656,20 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
       const want = r1(Math.max(limit, room, floor));
       st.rule.capped = (st.rule.capped ?? 0) + 1;
       if (c.ceiling == null || Math.abs(c.ceiling - want) > 0.051) fail(4, `${tag}: ${tier} Bird ceiling ${c.ceiling} where the rule gives ${want} (ask ${c.ask.salary}, room ${r1(room)})`);
+      st.nbaTop[c.man.id] = { top: Math.min(want, max), capped: true };
       if (c.ask.salary > (c.ceiling ?? Infinity)) {
         st.rule.overCeiling = (st.rule.overCeiling ?? 0) + 1;
         if (desk.keepAtAsk(structuredClone(ledger), lg, c).ok) fail(4, `${tag}: kept at an ask over his ceiling`);
+        /* Offer him the ceiling. When his last word comes back over it, signing
+           that last word must be refused (review 2, finding 1). */
+        if (c.canNegotiate) {
+          const l3 = structuredClone(ledger);
+          const res = desk.pushFor(l3, lg, c, { years: c.ask.years, salary: want });
+          if (!desk.decisionFor(l3, lg.season, c.man.id) && res?.final && res.final.salary > Math.min(want, max) + 0.051) {
+            bump('last word over the ceiling');
+            if (desk.acceptFinal(l3, lg, c).ok) fail(4, `${tag}: signed on his last word of ${res.final.salary}, over the ${Math.min(want, max)} the rules allow`);
+          }
+        }
       }
       /* Paid through the Early Bird exception: two seasons at the least, even on a one season push. */
       if (tier === 'early' && limit > room) {
@@ -617,6 +690,18 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     st.rule[expect] = (st.rule[expect] ?? 0) + 1;
     if (!!c.tender !== (expect !== 'free-agent')) fail(4, `${tag}: tender ${c.tender ? 'offered' : 'missing'} for ${expect}`);
     if (c.tender && c.canNegotiate) fail(4, `${tag}: a controlled man is open to negotiation`);
+    /* What the tender pays, by his own service year (review 2, finding 5). The
+       game's own figures, written here by hand: pre arbitration his current
+       salary or the engine's floor; arbitration years one, two and three pay
+       40, 60 and 80 percent of his market, never a cut. */
+    if (c.tender) {
+      const market = r1(host.marketSalary(lg, c.man));
+      const want = expect === 'pre-arbitration' ? r1(Math.max(host.minSalary(lg), c.man.salary))
+        : r1(Math.max(c.man.salary, market * [0.4, 0.6, 0.8][Math.min(2, played - 3)]));
+      bump(`${expect} tenders priced`);
+      if (expect === 'arbitration' && want > r1(c.man.salary)) bump('arbitration tenders set by the step');
+      if (Math.abs(c.tender.salary - want) > 0.051) fail(4, `${tag}: an ${expect} tender at ${c.tender.salary} in service year ${played}, the game's step pays ${want}`);
+    }
     if (c.qualifying) {
       st.rule.qualifyingOffers = (st.rule.qualifyingOffers ?? 0) + 1;
       const top = Object.values(lg.teams).flatMap(t => t.players.map(p => p.salary)).sort((a, b) => b - a).slice(0, 125);
@@ -638,8 +723,13 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
       const sheet = c.restricted.sheet;
       if (sheet) {
         st.rule.sheets = (st.rule.sheets ?? 0) + 1;
-        const want = rules.offerSheetPicks(sheet.salary, cap).filter(r => r <= 2);
-        if (JSON.stringify(want) !== JSON.stringify(sheet.picks)) fail(4, `${tag}: sheet picks ${sheet.picks} where the ladder pays ${want}`);
+        const rung = ladderRung(sheet.salary, cap);
+        if (rung == null) bump('sheets on a rung edge, not judged');
+        else {
+          bump('sheets priced off the published ladder');
+          const want = payable(NHL_LADDER[rung][1]);
+          if (JSON.stringify(want) !== JSON.stringify(sheet.picks)) fail(4, `${tag}: a ${sheet.salary}M sheet against a ${cap}M cap costs ${sheet.picks}, the published ladder says ${want}`);
+        }
         if (c.canNegotiate) fail(4, `${tag}: open to negotiation with a sheet on the table`);
       }
     }
@@ -745,13 +835,26 @@ function deskRun(sport, seed, st) {
       }
     }
     trackDesk(st.track, lg, team);
+    /* Who is up, read off the roster by this harness and never off the desk:
+       every man on his last season except the one the GM just tagged (review
+       2, finding 3). Each must have a decision applied in this offseason. */
+    const rosterUp = lg.teams[team].players.filter(p => p.years <= 1 && !st.taggedNow.has(p.id)).map(p => ({ id: p.id, name: p.name }));
+    st.rosterUp += rosterUp.length;
     desk.noteRoster(ledger, lg, true);
     const cases = desk.deskCases(host, lg, ledger);
+    st.nbaTop = {};
     for (const c of cases) checkCase(sport, lg, ledger, team, c, st, s);
     cases.forEach((c, i) => {
       const made = decide(lg, ledger, c, i, st.paths);
       if (made && made.ok === false) fail(1, `${sport.key} ${lg.season} ${c.man.name}: the policy's decision was refused: ${made.reason}`);
       if (c.qualifying && desk.decisionFor(ledger, lg.season, c.man.id)?.kind.startsWith('qualify')) st.qualified.add(c.man.id);
+      /* NBA: nobody stays on a figure over what the rules let the club pay him (review 2, finding 1). */
+      const d = desk.decisionFor(ledger, lg.season, c.man.id);
+      const top = st.nbaTop[c.man.id];
+      if (sport.key === 'nba' && d && STAYS.has(d.kind) && top) {
+        if (top.capped) st.rule['capped men kept'] = (st.rule['capped men kept'] ?? 0) + 1;
+        if (d.salary > top.top + 0.051) fail(4, `nba ${lg.season} ${c.man.name}: kept (${d.kind}) at ${d.salary}, over the ${top.top} the rules allow`);
+      }
     });
     st.cases += cases.length;
 
@@ -830,6 +933,9 @@ function deskRun(sport, seed, st) {
       }
     }
     for (const c of cases) if (!run.applied.some(d => d.id === c.man.id)) fail(1, `${sport.key} ${c.man.name}: expiring but no decision was applied`);
+    for (const m of rosterUp) {
+      if (!run.applied.some(d => d.id === m.id)) { st.leftUnlisted += 1; fail(1, `${sport.key} ${lg.season} ${m.name}: his deal ran out, yet he never reached the desk`); }
+    }
     st.picksAdded += run.picksAdded.length;
     if (lg.teams[team].picks.length !== basePicks + run.picksAdded.length) {
       fail(4, `${sport.key} ${lg.season}: ${run.picksAdded.length} picks owed, the club holds ${lg.teams[team].picks.length} against a base of ${basePicks}`);
@@ -840,7 +946,7 @@ function deskRun(sport, seed, st) {
 }
 
 const newStats = () => ({
-  baseUp: 0, baseLeft: 0, cases: 0, kept: 0, letGo: 0, retiredKept: 0, leftUndecided: 0, picksAdded: 0,
+  baseUp: 0, baseLeft: 0, cases: 0, kept: 0, letGo: 0, retiredKept: 0, leftUndecided: 0, picksAdded: 0, rosterUp: 0, leftUnlisted: 0, nbaTop: {},
   shares: [], bySeason: [], meterSteps: 0, rule: {}, paths: {}, qualified: new Set(), closedChecked: false,
 });
 const ALL = {};
@@ -861,7 +967,7 @@ for (const sport of SPORTS) {
   const st = ALL[sport.key];
   console.log(`\n${sport.key.toUpperCase()}`);
   console.log(`  0) baseline, no desk: ${st.baseLeft} of ${st.baseUp} expiring men left on the engine's flip (${pc(st.baseLeft, st.baseUp)})`);
-  console.log(`  1) desk: ${st.cases} cases, ${st.kept} kept on their agreed terms, ${st.letGo} let go, ${st.retiredKept} kept then retired by the engine, ${st.leftUndecided} left without a decision`);
+  console.log(`  1) desk: ${st.cases} cases, ${st.kept} kept on their agreed terms, ${st.letGo} let go, ${st.retiredKept} kept then retired by the engine, ${st.leftUndecided} left without a decision; ${st.rosterUp} expiring by the roster, ${st.leftUnlisted} of them never at the desk`);
   const seasons = st.bySeason.map((xs, i) => [i, xs]).filter(([, xs]) => xs && xs.length);
   const seasonMins = seasons.map(([, xs]) => quant(xs, 0));
   const seasonMaxs = seasons.map(([, xs]) => quant(xs, 1));
@@ -878,6 +984,30 @@ for (const sport of SPORTS) {
 for (let s = 0; s <= 15; s++) {
   if (rules.nbaMaxShare(s) !== NBA_MAX_BY_SERVICE(s)) fail(4, `nba: the maximum for ${s} seasons reads ${rules.nbaMaxShare(s)}, the sources say ${NBA_MAX_BY_SERVICE(s)}`);
 }
+
+/* ---------- 4. the NHL offer sheet ladder, every rung (review 2, finding 2) ---------- */
+let ladderEdges = 0;
+const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+/* At the ladder's own cap, every published edge exactly: the top of each rung and one dollar over it. */
+NHL_LADDER.forEach(([top, picks], i) => {
+  if (!Number.isFinite(top)) return;
+  const at = rules.offerSheetPicks(top / 1e6, NHL_LADDER_CAP);
+  const over = rules.offerSheetPicks((top + 1) / 1e6, NHL_LADDER_CAP);
+  ladderEdges += 2;
+  if (!sameList(at, picks)) fail(4, `nhl: a $${top} sheet costs ${at}, the published ladder says ${picks}`);
+  if (!sameList(over, NHL_LADDER[i + 1][1])) fail(4, `nhl: a $${top + 1} sheet costs ${over}, the published ladder says ${NHL_LADDER[i + 1][1]}`);
+});
+/* At other caps, the middle of every rung: the ladder moves with the cap as a share of it. */
+for (const cap of [80, 88, 104.3]) {
+  NHL_LADDER.forEach(([top, picks], i) => {
+    const lo = i ? NHL_LADDER[i - 1][0] : 0;
+    const mid = Number.isFinite(top) ? (lo + top) / 2 : lo * 1.2;
+    const got = rules.offerSheetPicks((mid / 1e6) * (cap / NHL_LADDER_CAP), cap);
+    ladderEdges += 1;
+    if (!sameList(got, picks)) fail(4, `nhl: the middle of rung ${i + 1} at a ${cap}M cap costs ${got}, the published ladder says ${picks}`);
+  });
+}
+console.log(`\n4) NHL offer sheet ladder: ${ladderEdges} rung edges and middles walked against the published 2025-26 table`);
 
 /* ---------- 5. the books ---------- */
 for (const r of rules.CONTRACT_RULES) {
