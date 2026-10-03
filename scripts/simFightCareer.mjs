@@ -207,6 +207,69 @@ if (CONTROL === 'freecard') {
   rewriteLife('wipesave', 'fightCareerLife',
     '  return { ...st, life: ensureLifeBlock(st) };',
     '  return { ...st, fightNo: 0, history: [], life: ensureLifeBlock(st) };');
+} else if (CONTROL === 'sharpstays') {
+  /* A card's sharpness is never cleared by the fight it was for. 7g (i). */
+  rewriteLife('sharpstays', 'fightCareerLifeFlow', '  life.sharp = 0;\n', '');
+} else if (CONTROL === 'endlesspromoter') {
+  /* The promoter deal never runs out. 7g (ii). */
+  rewriteLife('endlesspromoter', 'fightCareerLifeFlow',
+    '  if (life.promoterFights > 0) life.promoterFights -= 1;',
+    '  if (life.promoterFights > 1) life.promoterFights -= 1;');
+} else if (CONTROL === 'grosspurse') {
+  /* The bank keeps the corner's share. 7g (iii). */
+  rewriteLife('grosspurse', 'fightCareerLifeFlow',
+    '  life.bank = round2(life.bank + takeHome);',
+    '  life.bank = round2(life.bank + offer.purse);');
+} else if (CONTROL === 'rivalfollows') {
+  /* The rival follows you into a new division. 7g (iv). */
+  rewriteLife('rivalfollows', 'fightCareerLife',
+    '  return !!r && (r.weight === undefined || r.weight === st.weight);',
+    '  return !!r;');
+} else if (CONTROL === 'keepbeaten') {
+  /* The man who beat you follows you into a new division. 7g (iv). */
+  rewriteLife('keepbeaten', 'fightCareerLife',
+    'the rematch clause goes with it. */\n      life.lastBeatenBy = null;',
+    'the rematch clause goes with it. */');
+} else if (CONTROL === 'crossbeat') {
+  /* A ranking beat compares two divisions. 7g (iv). */
+  rewriteLife('crossbeat', 'fightCareerRivalry',
+    '(p, r) => sameClass(p) && hisRank(r) < youRank(p)',
+    '(p, r) => hisRank(r) < youRank(p)');
+} else if (CONTROL === 'nodrift') {
+  /* Morale never settles. 7g (v). */
+  rewriteLife('nodrift', 'fightCareerLifeFlow',
+    'export const MORALE_DRIFT = 2;',
+    'export const MORALE_DRIFT = 0;');
+} else if (CONTROL === 'totalsbeat') {
+  /* "He won again" reads his career total. 7g (vi). */
+  rewriteLife('totalsbeat', 'fightCareerRivalry',
+    "(_p, r) => r.last === 'W' && r.wins >= 2,",
+    '(_p, r) => r.wins >= 2,');
+} else if (CONTROL === 'staleanswer') {
+  /* A waiting card is never read again after an answer. 7g (vii). */
+  rewriteLife('staleanswer', 'fightCareerLife',
+    '    if (!waiting.when || waiting.when(next)) return true;',
+    '    return true;');
+} else if (CONTROL === 'unrankedrank') {
+  /* A rank effect hands an unranked man a number. 7g (vii). */
+  rewriteLife('unrankedrank', 'fightCareerLife',
+    '  if (e.rank && !st.champion && f.rank < 99) {',
+    '  if (e.rank && !st.champion) {');
+} else if (CONTROL === 'specialtable') {
+  /* Nothing holds a grudge fight or a rematch on the table. 7g (viii). */
+  rewriteLife('specialtable', 'fightCareerLife',
+    '  st.offers.some(o => o.label === GRUDGE_LABEL || o.label === REMATCH_LABEL);',
+    '  st.offers.length < 0;');
+} else if (CONTROL === 'stuckchoice') {
+  /* An unknown rival choice survives the load. 7g (ix). */
+  rewriteLife('stuckchoice', 'fightCareerLifeFlow',
+    '  if (life.pendingRivalryChoice && !FIGHT_RIVALRY_CHOICES.some(',
+    '  if (life.pendingRivalryChoice && false && !FIGHT_RIVALRY_CHOICES.some(');
+} else if (CONTROL === 'silentreply') {
+  /* A text reply prints nothing of what it does. 7g (x). */
+  rewriteLife('silentreply', 'fightCareerInbox',
+    '  describeLifeEffect(inboxChoiceEffect(c));',
+    '  describeLifeEffect({});');
 } else if (CONTROL === 'nodecay') {
   rewrite('nodecay',
     'f.damage = Math.round((f.damage + res.damageTaken) * 10) / 10;',
@@ -1343,6 +1406,228 @@ function effectMismatches(e, words) {
     fail('one bad field in a life block did not repair to its default while the rest was kept');
   }
   if (failures === failedBefore) ok('an old save keeps its fighter and record, gets a default corner, and fights the same fights on; corrupt blocks reset alone');
+}
+
+/* Round 916 review: the promises that are about TIME, or about what a fight
+   does to the life, were checked only at the moment an answer was given. A
+   card's sharpness that never wore off, a promoter deal that never ended, a
+   bank that kept the corner's share, a rival who followed you up a division
+   and a mood that never settled all left every section green. Each of those
+   is walked here through lifeTakeFight itself, with its own control. */
+const pctOf = (words) => Number((words.match(/Takes (\d+)% of every purse/) || [])[1]);
+{
+  console.log('7g) what a fight does to the life, and what it leaves behind');
+  const failedBefore = failures;
+  const freshLife = (tag, trainer = 'allround', manager = 'family') =>
+    fl.cloneForLife(ff.lifeNewCareer(`G ${tag}`, 'welter', 'outboxer', trainer, manager, `g-${tag}`));
+  const fightOn = (st, idx = 1) => {
+    const o = st.offers[Math.min(idx, st.offers.length - 1)];
+    return ff.lifeTakeFight(st, o.id, smartLine(o.opponent.style, o.rounds));
+  };
+
+  /* (i) Sharpness from a card is that night's only: the guide says it is gone
+     the morning after. Walked with banked points and with a real card. */
+  for (const banked of [-4, 4]) {
+    const st = freshLife(`sharp${banked}`);
+    st.life.sharp = banked;
+    if ((fl.lifeFightMods(st).sharp ?? 0) !== banked) fail(`a banked ${banked} did not reach the fight night`);
+    const after = fightOn(st).state;
+    if (after.life.sharp !== 0 || (fl.lifeFightMods(after).sharp ?? 0) !== 0) {
+      fail(`sharpness ${banked} was still there after the fight it was for (banked ${after.life.sharp}, next night ${fl.lifeFightMods(after).sharp ?? 0})`);
+    }
+  }
+  {
+    const st = freshLife('shortnotice');
+    st.life.pending = ['short-notice'];
+    const card = fl.lifeCardById('short-notice');
+    const take = card.options.findIndex(o => o.effect.sharp);
+    const answered = fl.answerLifeCard(st, take).state;
+    const promised = card.options[take].effect.sharp;
+    if ((fl.lifeFightMods(answered).sharp ?? 0) !== promised) fail(`the short notice card promised ${promised} sharpness and the night got ${fl.lifeFightMods(answered).sharp ?? 0}`);
+    const after = fightOn(answered).state;
+    if ((fl.lifeFightMods(after).sharp ?? 0) !== 0) fail(`the short notice card's ${promised} sharpness lasted into the next fight`);
+  }
+
+  /* (ii) The promoter deal lasts the fights it says and then ends: the
+     safest offer comes back and purses go back to what they were. Each
+     table is checked against a twin that never signed. */
+  {
+    let st = freshLife('promoter');
+    st.life.pending = ['promoter-deal'];
+    const sign = fl.lifeCardById('promoter-deal').options.findIndex(o => o.effect.promoter);
+    const length = fl.lifeCardById('promoter-deal').options[sign].effect.promoter;
+    st = fl.answerLifeCard(st, sign).state;
+    let fought = 0;
+    for (let k = 1; k <= length + 2 && !st.retired; k += 1) {
+      const twin = fl.cloneForLife(st);
+      twin.life.promoterFights = 0;
+      const pick = st.offers[0];
+      const a = ff.lifeTakeFight(st, pick.id, smartLine(pick.opponent.style, pick.rounds));
+      const b = ff.lifeTakeFight(twin, pick.id, smartLine(pick.opponent.style, pick.rounds));
+      if (!a || !b) { fail('a promoter table offered a fight that could not be taken'); break; }
+      fought = k;
+      const left = Math.max(0, length - k);
+      if (a.state.life.promoterFights !== left) fail(`after fight ${k} of a ${length} fight deal the save says ${a.state.life.promoterFights} left, not ${left}`);
+      const want = left > 0
+        ? b.state.offers.slice(1).map(o => ({ ...o, purse: r2(o.purse * fl.PROMOTER_PURSE_MUL) }))
+        : b.state.offers;
+      if (!a.state.retired && tableKey(a.state.offers) !== tableKey(want)) {
+        fail(`after fight ${k} of a ${length} fight deal the table is ${left > 0 ? 'not the promoter table' : 'still the promoter table'}`);
+      }
+      st = a.state;
+    }
+    if (fought < length + 1) fail(`only ${fought} fights were walked on the promoter deal, too few to see it end`);
+  }
+
+  /* (iii) The corner is paid out of every purse: the tiles say what each man
+     takes, and the bank gets the rest. All twelve pairings, words to bank. */
+  {
+    let pairs = 0;
+    for (const t of fl.TRAINERS) for (const m of fl.MANAGERS) {
+      const tPct = pctOf(fl.describeTrainer(t));
+      const mPct = pctOf(fl.describeManager(m));
+      if (!Number.isFinite(tPct) || !Number.isFinite(mPct)) { fail(`the ${t.id} or ${m.id} tile does not say what he takes`); continue; }
+      const st = freshLife(`corner-${t.id}-${m.id}`, t.id, m.id);
+      const offer = st.offers[1];
+      const res = fightOn(st);
+      const banked = r2(res.state.life.bank - st.life.bank);
+      const want = r2(offer.purse * (1 - (tPct + mPct) / 100));
+      if (banked !== want || res.takeHome !== banked) fail(`${t.id} and ${m.id}: a ${offer.purse}m purse banked ${banked}m, the tiles promise ${want}m`);
+      pairs += 1;
+    }
+    if (pairs !== fl.TRAINERS.length * fl.MANAGERS.length) fail(`only ${pairs} corner pairings were checked`);
+  }
+
+  /* (iv) A class move leaves the rival, and the man who beat you, in the
+     division you left: no grudge fight with him, no rematch clause, no beat
+     that ranks him against you. Come back and he is there again. */
+  {
+    const st = probeState();
+    st.life.rival.rank = 3;
+    if (!fl.rivalInYourClass(st) || !fl.rivalFighter(st)) fail('the probe rival is not in your division to begin with, so this check proves nothing');
+    const moved = fl.cloneForLife(st);
+    fl.applyLifeEffect(moved, { moveClass: 1 });
+    if (fl.rivalInYourClass(moved) || fl.rivalFighter(moved)) fail('after a move up the rival is still in your division');
+    const table = tableKey(moved.offers);
+    fl.applyLifeEffect(moved, { grudge: true });
+    if (tableKey(moved.offers) !== table) fail('after a move up a grudge fight with the rival still reached the table');
+    if (moved.life.lastBeatenBy) fail('after a move up the man who beat you in the old division is still on file for the rematch clause');
+    const clause = fl.lifeCardById('rematch-clause');
+    if (clause.when(moved)) fail('after a move up the rematch clause can still be dealt');
+    for (const id of [9, 10]) {
+      const b = fr.FIGHT_RIVALRY_EVENTS.find(x => x.id === id);
+      if (b.when(moved, moved.life.rival)) fail(`after a move up rival beat ${id} still compares your ranking with his`);
+    }
+    const faceOff = fr.FIGHT_RIVALRY_CHOICES.find(d => d.id === 'fr-face-off');
+    if (faceOff.when(moved, moved.life.rival)) fail('after a move up the face-off with the rival can still be dealt');
+    const back = fl.cloneForLife(moved);
+    fl.applyLifeEffect(back, { moveClass: -1 });
+    if (!fl.rivalInYourClass(back) || !fl.rivalFighter(back)) fail('after moving back down the rival is not in your division again');
+  }
+
+  /* (v) Morale settles toward 50 after every fight, by the amount the corner
+     tile says, and a karma of 70 or more hands 2 back, as the tile also says. */
+  {
+    const settle = (morale, karma = 50) => {
+      const st = freshLife(`mood${morale}-${karma}`);
+      st.life.morale = morale;
+      st.life.karma = karma;
+      return fightOn(st).state.life;
+    };
+    for (const [m, want] of [[70, 68], [30, 32], [51, 50], [49, 50], [50, 50]]) {
+      const got = settle(m).morale;
+      if (got !== want) fail(`morale ${m} at karma 50 came out of a fight at ${got}, not ${want}`);
+    }
+    const kind = settle(70, 80);
+    if (kind.morale !== 70 || kind.karma !== 78) fail(`morale 70 at karma 80 came out at ${kind.morale} and karma ${kind.karma}, the tile says 70 and 78`);
+  }
+
+  /* (vi) "He won again" and "he lost" say what happened in this window, not
+     what his career totals are. */
+  {
+    const st = probeState();
+    const r = st.life.rival;
+    const won = fr.FIGHT_RIVALRY_EVENTS.find(x => x.id === 1);
+    const lost = fr.FIGHT_RIVALRY_EVENTS.find(x => x.id === 3);
+    Object.assign(r, { wins: 9, losses: 4 });
+    for (const [last, w, l] of [['W', true, false], ['L', false, true], [null, false, false]]) {
+      r.last = last;
+      if (won.when(st, r) !== w || lost.when(st, r) !== l) fail(`with his last window ${last ?? 'idle'} the beats read won ${won.when(st, r)}, lost ${lost.when(st, r)}`);
+    }
+  }
+
+  /* (vii) A card waiting behind a class move is read again when it comes up:
+     step aside money has no places left to cost an unranked man, so it lapses,
+     and a rank effect never hands an unranked man a number. */
+  {
+    const st = probeState();
+    st.life.pending = ['move-up', 'step-aside'];
+    if (!fl.lifeCardById('step-aside').when(st)) fail('step aside money is not open on the probe, so this check proves nothing');
+    const up = fl.lifeCardById('move-up').options.findIndex(o => o.effect.moveClass);
+    const after = fl.answerLifeCard(st, up).state;
+    if (after.life.pending.includes('step-aside')) fail('step aside money is still waiting after a class move left you unranked');
+    const unranked = fl.cloneForLife(after);
+    fl.applyLifeEffect(unranked, { rank: 2 });
+    if (unranked.fighter.rank !== 99) fail(`a rank effect moved an unranked fighter to #${unranked.fighter.rank}`);
+  }
+
+  /* (viii) A grudge fight or a rematch on the table holds back the cards
+     that would throw the table away or take the same slot. */
+  {
+    const st = probeState();
+    st.fightNo = 9;
+    fl.applyLifeEffect(st, { grudge: true });
+    if (!st.offers.some(o => o.label === fl.GRUDGE_LABEL)) fail('the probe grudge fight did not reach the table, so this check proves nothing');
+    for (const id of ['move-up', 'move-down', 'rematch-clause']) {
+      if (fl.lifeCardById(id).when(st)) fail(`card ${id} can be dealt with a grudge fight on the table, and would undo it`);
+    }
+  }
+
+  /* (ix) A waiting rival step nothing can answer (an id this build does not
+     know, or a beat with no rival) is cleared when the save is opened, so the
+     hub is never stuck on it. */
+  {
+    const st = probeState();
+    const stored = JSON.parse(JSON.stringify(st));
+    stored.life.pendingRivalryChoice = { id: 'fr-renamed-long-ago', emoji: '?', title: 'Gone', description: 'Gone', choices: [{ label: 'x', emoji: 'x', consequence: 'x' }] };
+    const opened = ff.lifeLoadState(stored);
+    if (ff.nextLifeStep(opened)?.kind === 'choice') fail('a rival choice with an unknown id survived the load and blocks the hub');
+    const orphan = JSON.parse(JSON.stringify(st));
+    orphan.life.rival = null;
+    orphan.life.pendingRivalryEvent = { id: 5, emoji: '?', title: 'x', description: 'x', consequence: 'x' };
+    if (ff.nextLifeStep(ff.lifeLoadState(orphan))?.kind === 'beat') fail('a rival beat with no rival survived the load and blocks the hub');
+    const known = JSON.parse(JSON.stringify(st));
+    known.life.pendingRivalryChoice = { ...stored.life.pendingRivalryChoice, id: fr.FIGHT_RIVALRY_CHOICES[0].id };
+    if (ff.nextLifeStep(ff.lifeLoadState(known))?.kind !== 'choice') fail('the load cleared a rival choice it does know');
+  }
+
+  /* (x) Every text reply prints what it does, and does what it prints. */
+  {
+    let replies = 0;
+    for (const t of fi.FIGHT_INBOX_TEXTS) {
+      t.choices.forEach((c, i) => {
+        replies += 1;
+        const words = fi.describeInboxChoice(c);
+        const said = parseWords(words);
+        const want = { cash: c.cash ?? 0, fans: c.popularity ?? 0, morale: c.morale ?? 0, karma: c.karma ?? 0 };
+        for (const k of Object.keys(want)) {
+          if ((said[k] ?? 0) !== want[k]) fail(`text ${t.id} reply ${i} reads ${k} ${said[k] ?? 'nothing'}, the reply does ${want[k]}`);
+        }
+        if (!want.cash && !want.fans && !want.morale && !want.karma && words !== 'Nothing changes.') fail(`text ${t.id} reply ${i} does nothing and reads "${words}"`);
+        const st = probeState();
+        st.life.phoneInbox = [{ id: 'probe-text', defId: t.id, from: t.from, emoji: t.emoji, text: t.text, year: 9, choices: t.choices }];
+        const L0 = { ...st.life };
+        fi.answerFightInbox(st, st.life, 'probe-text', i);
+        const L1 = st.life;
+        if (L1.bank !== r2(L0.bank + want.cash) || L1.fanbase !== m100(L0.fanbase + want.fans) ||
+          L1.morale !== m100(L0.morale + want.morale) || L1.karma !== m100(L0.karma + want.karma)) {
+          fail(`text ${t.id} reply ${i} left bank ${L1.bank}, fans ${L1.fanbase}, morale ${L1.morale}, karma ${L1.karma}; its words say ${words}`);
+        }
+      });
+    }
+    console.log(`   ${replies} text replies read back from their words`);
+  }
+  if (failures === failedBefore) ok('sharpness lasts one night, the promoter deal ends on time, the corner is paid from every purse, the rival and the rematch stay in the old division, morale settles, the beats read this window, lapsed cards lapse, a special fight holds the table, dead rival steps clear on load, and every reply says what it does');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

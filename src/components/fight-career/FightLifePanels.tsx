@@ -16,7 +16,7 @@ import {
 } from '@/lib/fightCareerLifeFlow';
 import { UPGRADES, upgradeLevel, upgradePrice, canBuyUpgrade, fmtBank, MAX_UPGRADE_LEVEL } from '@/lib/fightCareerMoney';
 import { answerFightRivalryChoice, dismissFightRivalryEvent, rivalRankLabel } from '@/lib/fightCareerRivalry';
-import { FIGHT_INBOX_CALENDAR, unreadFightInbox } from '@/lib/fightCareerInbox';
+import { FIGHT_INBOX_CALENDAR, unreadFightInbox, describeInboxChoice } from '@/lib/fightCareerInbox';
 import { inboxBeatLine } from '@/lib/careerInbox';
 
 type Live = FightCareerState & { life: FightLife };
@@ -159,7 +159,8 @@ function InboxPanel({ st, onChange }: { st: Live; onChange: (next: Live) => void
               {m.choices.map((c, i) => (
                 <button key={i} onClick={() => { const next = lifeAnswerInbox(st, m.id, i); if (next) onChange(next); }}
                   className="min-h-[44px] w-full rounded-md border bg-background px-3 py-2 text-left text-sm transition hover:border-primary">
-                  {c.label}
+                  <span className="block">{c.label}</span>
+                  <span className="block text-[11px] leading-snug text-muted-foreground">{describeInboxChoice(c)}</span>
                 </button>
               ))}
             </div>
@@ -270,7 +271,7 @@ function CornerPanel({ st }: { st: Live }) {
         ))}
         <p className="pt-1 text-[11px] text-muted-foreground">
           Next fight night: {sharp > 0 ? `+${sharp}` : sharp} sharpness (power, speed, stamina and defence, that night only).
-          Every 10 morale above or below 50 is a point, and morale settles 2 back toward 50 after every fight. Every fan adds half a percent to your purses.
+          Every 10 morale above or below 50 is a point, and morale settles 2 back toward 50 after every fight. Karma drifts 2 toward 50 as well. Kept at 70 or more it hands back 2 morale and 2 fans every fight, so a good name keeps a good mood going; down at 30 or less it costs 1 morale and 2 fans. Every fan adds half a percent to your purses.
         </p>
       </div>
       {st.life.feed.length > 0 && (

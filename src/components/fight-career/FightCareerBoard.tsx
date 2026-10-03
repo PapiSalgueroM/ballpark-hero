@@ -16,8 +16,8 @@ import {
 /* Round 916: the life between fights. The board starts a career, runs a camp
    and takes a fight through the life layer's wrappers, which call the same
    engine functions this file used to call directly. */
-import { ensureLife, lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
-import { lifeNewCareer, lifeRunCamp, lifeTakeFight, nextLifeStep } from '@/lib/fightCareerLifeFlow';
+import { lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
+import { lifeNewCareer, lifeRunCamp, lifeTakeFight, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
 import { fmtBank } from '@/lib/fightCareerMoney';
 import { CornerPicker, LifeStepCard, LifeTiles, LifePanel, type LifeView } from '@/components/fight-career/FightLifePanels';
 
@@ -68,6 +68,11 @@ export default function FightCareerBoard() {
   const [result, setResult] = useState<BoutResult | null>(null);
   const [shown, setShown] = useState(0);
   const [animate, setAnimate] = useState(true);
+  /* Round 916 review: a restored game plan save whose fight is not on it.
+     The camp is already on the fighter, so the next pick skips the camp. */
+  const [campDone, setCampDoneState] = useState(false);
+  const campDoneRef = useRef(false);
+  const setCampDone = (v: boolean) => { campDoneRef.current = v; setCampDoneState(v); };
 
   /* Round 916: the gap between fights shows one thing at a time, read off the
      save, so its key is part of what the reveal follows. */
@@ -94,11 +99,16 @@ export default function FightCareerBoard() {
          damaged one may have a bad one. ensureLife leaves the fighter and the
          record exactly as stored and repairs or adds only that block. Cards
          that were waiting are ids on the block, so they are still waiting. */
-      setSt(ensureLife(s.st));
+      setSt(lifeLoadState(s.st));
       /* Never restore straight into a half played bout: the result is not on
          the save, so the fight would have no rounds to show. */
       const kept = s.phase === 'plan' ? s.st.offers.find(o => o.id === s.offerId) ?? null : null;
       if (kept) setOffer(kept);
+      /* A game plan save from before this round has no offerId, and its camp
+         is already on the fighter. It opens on the offers with the camp marked
+         done, so picking a fight goes straight to the game plan and a second
+         camp cannot be run on top of the first (Round 916 review). */
+      if (s.phase === 'plan' && !kept && !s.st.retired) setCampDone(true);
       setPhase(s.st.retired ? 'retired' : s.phase === 'plan' && kept ? 'plan' : s.phase === 'setup' ? 'setup' : 'hub');
     } catch { /* a fresh career is the right fallback */ }
   }, []);
@@ -106,7 +116,10 @@ export default function FightCareerBoard() {
   const persist = useCallback((next: LiveState, ph: Phase, offerId?: string) => {
     setSt(next);
     setPhase(ph);
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: next, phase: ph, offerId })); } catch { /* ignore */ }
+    /* While a restored camp is waiting for its fight, the save keeps saying
+       "plan" so a second reload still knows the camp was run. */
+    const stored = ph === 'hub' && campDoneRef.current ? 'plan' : ph;
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: next, phase: stored, offerId })); } catch { /* ignore */ }
   }, []);
 
   /* ── the bout reveal, beat by beat, and always skippable ── */
@@ -124,7 +137,16 @@ export default function FightCareerBoard() {
     persist(next, 'hub');
   };
 
-  const chooseOffer = (o: Offer) => { setOffer(o); setPhase('camp'); };
+  const chooseOffer = (o: Offer) => {
+    setOffer(o);
+    if (campDone && st) {
+      setCampDone(false);
+      campDoneRef.current = false;
+      persist(st, 'plan', o.id);
+      return;
+    }
+    setPhase('camp');
+  };
 
   const intoCamp = () => {
     if (!st) return;
@@ -156,7 +178,7 @@ export default function FightCareerBoard() {
 
   const reset = () => {
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
-    setSt(null); setResult(null); setOffer(null); setShown(0); setView('main'); setPhase('setup');
+    setSt(null); setResult(null); setOffer(null); setShown(0); setView('main'); setPhase('setup'); setCampDone(false);
   };
 
   const campTotal = camp.conditioning + camp.power + camp.defence + camp.speed;
@@ -302,6 +324,11 @@ export default function FightCareerBoard() {
           <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">
             {st.champion ? 'Defend the title' : 'What do you take?'}
           </p>
+          {campDone && (
+            <p className="mb-2 rounded-md border border-primary/40 bg-primary/5 p-2 text-xs">
+              Your camp is already done. Pick the fight it was for and go straight to the game plan.
+            </p>
+          )}
           <div className="space-y-2">
             {st.offers.map(o => {
               const gap = ratingOf(o.opponent) - ratingOf(f);

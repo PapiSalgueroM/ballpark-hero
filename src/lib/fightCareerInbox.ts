@@ -24,7 +24,7 @@ import {
 import { keyedRng } from '@/lib/keyedRng';
 import { round2 } from '@/lib/fightCareerMoney';
 import type { FightCareerState } from '@/lib/fightCareer';
-import type { FightLife } from '@/lib/fightCareerLife';
+import { describeLifeEffect, type FightLife, type LifeEffect } from '@/lib/fightCareerLife';
 
 export const FIGHT_INBOX_CALENDAR: InboxBeat[] = [
   { id: 'debut', label: 'Your debut', emoji: '🔔', oneOff: true },
@@ -184,6 +184,24 @@ export const FIGHT_INBOX_TEXTS: InboxMessageDef[] = [...FIGHT_INBOX_POOL, ...MOR
 export function neutralInboxChoice(m: { choices: InboxMessage['choices'] }): number {
   return m.choices.findIndex(c => c.karma === 0 && !c.morale);
 }
+
+/**
+ * Round 916 review: a reply is a LifeEffect too, so its button can print what
+ * it does in the same words as a card. The shared inbox applies karma to the
+ * mood meter (karma here), morale, popularity (the fans meter here) and cash,
+ * and nothing else, which is exactly this mapping.
+ */
+export function inboxChoiceEffect(c: InboxMessage['choices'][number]): LifeEffect {
+  const e: LifeEffect = {};
+  if (c.karma) e.karma = c.karma;
+  if (c.morale) e.morale = c.morale;
+  if (c.popularity) e.fans = c.popularity;
+  if (c.cash) e.cash = c.cash;
+  return e;
+}
+
+export const describeInboxChoice = (c: InboxMessage['choices'][number]): string =>
+  describeLifeEffect(inboxChoiceEffect(c));
 
 /** The binding. Age and the fight number come from the save around the block. */
 export function fightInboxSport(st: FightCareerState): InboxSport<FightLife> {

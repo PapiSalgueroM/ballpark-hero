@@ -16,12 +16,12 @@ import {
 } from '@/lib/fightCareer';
 import {
   newLife, cloneForLife, dressOffers, dealLifeCards, settleCampCarry, lifeFightMods, lifeTakeHome,
-  managerDef, pendingLifeCard, pushLifeFeed, GRUDGE_LABEL,
+  managerDef, pendingLifeCard, pushLifeFeed, ensureLife, GRUDGE_LABEL,
   type FightLife, type TrainerId, type ManagerId, type LifeCardDef,
 } from '@/lib/fightCareerLife';
 import { round2, buyUpgrade, MAX_UPGRADE_LEVEL, upgradeLevel, UPGRADES, type UpgradeId } from '@/lib/fightCareerMoney';
 import { fightInboxTick, answerFightInbox } from '@/lib/fightCareerInbox';
-import { fightRivalryTick, rivalFightNight, settleGrudge } from '@/lib/fightCareerRivalry';
+import { fightRivalryTick, rivalFightNight, settleGrudge, FIGHT_RIVALRY_CHOICES } from '@/lib/fightCareerRivalry';
 import { earnedBadges, type BadgeDef } from '@/lib/careerBadges';
 import type { RivalryEvent } from '@/lib/careerRivalryEvents';
 import type { RivalryChoiceCard } from '@/lib/careerRivalryChoices';
@@ -130,6 +130,24 @@ export function nextLifeStep(st: FightCareerState): LifeStep | null {
   return card ? { kind: 'card', card } : null;
 }
 
+/**
+ * A save as the board opens it: ensureLife, then the two waiting slots the
+ * deck module cannot check because they belong to the rival module. A rival
+ * choice whose id this build does not know (a damaged save, or a later round
+ * renaming one) and a beat with no rival behind it can never be answered, and
+ * the hub shows the waiting step and nothing else, so either would stop the
+ * career. Both are cleared here; everything else is ensureLife's.
+ */
+export function lifeLoadState(st: FightCareerState): Live {
+  const live = ensureLife(st);
+  const life = live.life;
+  if (life.pendingRivalryChoice && !FIGHT_RIVALRY_CHOICES.some(d => d.id === life.pendingRivalryChoice?.id)) {
+    life.pendingRivalryChoice = null;
+  }
+  if (life.pendingRivalryEvent && !life.rival) life.pendingRivalryEvent = null;
+  return live;
+}
+
 /* ─────────────────────────── the shop and the phone ─────────────────────────── */
 
 export function lifeBuyUpgrade(st: FightCareerState, id: UpgradeId): Live | null {
@@ -165,6 +183,8 @@ export interface FightBadgeFacts {
   bank: number;
   fans: number;
   classMoves: number;
+  /** World titles won after your first change of class. */
+  titlesAfterMove: number;
   rivalWins: number;
   maxedUpgrades: number;
   decisions: number;
@@ -184,6 +204,10 @@ export function fightBadgeFacts(st: FightCareerState): FightBadgeFacts {
     bank: live.life.bank,
     fans: live.life.fanbase,
     classMoves: live.life.classMoves,
+    /* A history line's `no` is the fight's own number, 1 first; firstMoveAt is
+       how many fights were done when the move was made. */
+    titlesAfterMove: live.life.firstMoveAt === undefined ? 0
+      : live.history.filter(h => h.title && h.result === 'W' && h.no > (live.life.firstMoveAt ?? 0)).length,
     rivalWins: live.life.rival?.h2hWins ?? 0,
     maxedUpgrades: UPGRADES.filter(u => upgradeLevel(live.life, u.id) >= MAX_UPGRADE_LEVEL).length,
     decisions: live.life.decisions,
@@ -197,13 +221,13 @@ export const FIGHT_BADGES: BadgeDef<FightBadgeFacts>[] = [
   { id: 'fb-unbeaten', emoji: '🧼', label: 'Still perfect', blurb: 'Ten fights in and nobody has beaten you.', test: f => f.fights >= 10 && f.losses === 0 },
   { id: 'fb-champion', emoji: '🏆', label: 'World champion', blurb: 'Won a world title.', test: f => f.titleWins >= 1 },
   { id: 'fb-defender', emoji: '🛡️', label: 'A proper reign', blurb: 'Three successful title defences.', test: f => f.defences >= 3 },
-  { id: 'fb-two-weights', emoji: '⚖️', label: 'Moved and won', blurb: 'Changed weight class at least once and won a world title.', test: f => f.classMoves >= 1 && f.titleWins >= 1 },
+  { id: 'fb-two-weights', emoji: '⚖️', label: 'Moved and won', blurb: 'Changed weight class, then won a world title.', test: f => f.titlesAfterMove >= 1 },
   { id: 'fb-rival', emoji: '😤', label: 'Settled it', blurb: 'Beat your rival in the ring.', test: f => f.rivalWins >= 1 },
   { id: 'fb-crowd', emoji: '📣', label: 'A following', blurb: 'Sixty fans on the meter.', test: f => f.fans >= 60 },
   { id: 'fb-banker', emoji: '🏦', label: 'Kept some of it', blurb: 'A million in the bank at once.', test: f => f.bank >= 1 },
   { id: 'fb-full-corner', emoji: '🧰', label: 'A full corner', blurb: 'Took one camp upgrade to its top level.', test: f => f.maxedUpgrades >= 1 },
   { id: 'fb-long-road', emoji: '🛣️', label: 'The long road', blurb: 'Thirty professional fights.', test: f => f.fights >= 30 },
-  { id: 'fb-got-out', emoji: '🚶', label: 'Got out clean', blurb: 'Retired with damage under 40.', test: f => f.retired && f.fights >= 10 && f.damage < 40 },
+  { id: 'fb-got-out', emoji: '🚶', label: 'Got out clean', blurb: 'Retired after ten or more fights with damage under 40.', test: f => f.retired && f.fights >= 10 && f.damage < 40 },
   { id: 'fb-busy-life', emoji: '🗂️', label: 'A busy life', blurb: 'Answered fifty cards and texts.', test: f => f.decisions >= 50 },
 ];
 

@@ -109,7 +109,7 @@ export function describeTrainer(t: TrainerDef): string {
 export function describeManager(m: ManagerDef): string {
   const parts: string[] = [];
   if (m.purseMul !== 1) parts.push(`purses ${Math.round((m.purseMul - 1) * 100)}% bigger`);
-  if (m.rankBonus) parts.push(`a win that is not for a title is worth ${m.rankBonus} more place${m.rankBonus === 1 ? '' : 's'}`);
+  if (m.rankBonus) parts.push(`a win that moves you up the rankings moves you ${m.rankBonus} more place${m.rankBonus === 1 ? '' : 's'}`);
   if (m.fansPerFight) parts.push(`${m.fansPerFight} more fan${m.fansPerFight === 1 ? '' : 's'} after every fight`);
   if (parts.length === 0) parts.push('purses as they come');
   const line = parts.join(', ');
@@ -136,6 +136,10 @@ export interface FightRival {
    *  leave him behind; come back and he is there. Absent on a block from
    *  before this field, which reads as your own division. */
   weight?: WeightId;
+  /** How his own last fight window went: W, L, or null when he did not fight
+   *  in it. Absent on a block from before this field. The beats that say "he
+   *  won again" or "he lost" read this, not his career totals. */
+  last?: 'W' | 'L' | null;
   /** Your record against him. */
   h2hWins: number;
   h2hLosses: number;
@@ -180,6 +184,9 @@ export interface FightLife {
   lastBeatenBy: Fighter | null;
   /** How many times you have changed weight class. */
   classMoves: number;
+  /** Fights done when you first changed class, so a badge can tell a title
+   *  won after the move from one won before it. Absent until the first move. */
+  firstMoveAt?: number;
   /** Cards, texts and rival choices answered. */
   decisions: number;
   /** The newest lines first, capped. */
@@ -278,7 +285,10 @@ export function describeLifeEffect(e: LifeEffect): string {
   if (e.rank) parts.push(e.rank > 0 ? `Down ${e.rank} in the rankings` : `Up ${-e.rank} in the rankings`);
   if (e.moveClass) parts.push(`Move ${e.moveClass > 0 ? 'up' : 'down'} a weight class, unranked again, any belt stays behind`);
   if (e.promoter) parts.push(`Purses ${signed(Math.round((PROMOTER_PURSE_MUL - 1) * 100))}% for ${e.promoter} fights, the safest offer leaves the table`);
-  if (e.rematch) parts.push(`The middle offer becomes the rematch, a win worth ${REMATCH_RANK_GAIN} places`);
+  /* "Up to": a ranked man who beats somebody rated well below him earns no
+     places at all (fightCareer.ts applyResult), and the man who beat you is
+     kept at the level he was that night. */
+  if (e.rematch) parts.push(`The middle offer becomes the rematch, a win worth up to ${REMATCH_RANK_GAIN} places`);
   if (e.grudge) parts.push(`The middle offer becomes the grudge fight, purse ${signed(Math.round((GRUDGE_PURSE_MUL - 1) * 100))}%`);
   return parts.length ? parts.join('. ') + '.' : 'Nothing changes.';
 }
@@ -375,9 +385,10 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
   if (e.age && e.age > 0) f.age = round2(f.age + e.age);
   if (e.sharp) life.sharp = clamp(Math.round(life.sharp + e.sharp), -SHARP_CAP, SHARP_CAP);
   if (e.pursePct) st.offers = st.offers.map(o => ({ ...o, purse: round2(o.purse * (1 + e.pursePct! / 100)) }));
-  if (e.rank && !st.champion) {
-    const cur = f.rank === 99 ? 20 : f.rank;
-    f.rank = clamp(Math.round(cur + e.rank), 1, 99);
+  /* Only a ranked man has places to lose or gain: an unranked one is left
+     where he is rather than handed a number (Round 916 review). */
+  if (e.rank && !st.champion && f.rank < 99) {
+    f.rank = clamp(Math.round(f.rank + e.rank), 1, 98);
   }
   if (e.moveClass) {
     const to = classAfterMove(st.weight, e.moveClass);
@@ -385,7 +396,11 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
       st.weight = to;
       st.champion = false;
       f.rank = 99;
+      if (life.classMoves === 0) life.firstMoveAt = st.fightNo;
       life.classMoves += 1;
+      /* The man who beat you fights in the division you left, like the
+         rival, so the rematch clause goes with it. */
+      life.lastBeatenBy = null;
       st.offers = offersFor(st);
       dressOffers(st);
     }
@@ -398,7 +413,7 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
     const i = middleOf(st.offers);
     const base = st.offers[i];
     st.offers[i] = {
-      ...base, id: `${base.id}r`, opponent: { ...life.lastBeatenBy }, label: 'Rematch',
+      ...base, id: `${base.id}r`, opponent: { ...life.lastBeatenBy }, label: REMATCH_LABEL,
       rankGain: base.title ? 0 : REMATCH_RANK_GAIN,
     };
     life.lastBeatenBy = null;
@@ -414,6 +429,13 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
 }
 
 export const GRUDGE_LABEL = 'Grudge match';
+export const REMATCH_LABEL = 'Rematch';
+
+/** A grudge fight or a rematch is already on the table. A class move would
+ *  throw the table away and a second one would take the same slot, so the
+ *  cards that do either wait until it has been fought or turned down. */
+export const specialFightOnTable = (st: FightCareerState): boolean =>
+  st.offers.some(o => o.label === GRUDGE_LABEL || o.label === REMATCH_LABEL);
 
 /* ─────────────────────────── a fresh block, and a repaired one ─────────────────────────── */
 
@@ -485,6 +507,7 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
   const rival = isObj(raw.rival) && typeof raw.rival.name === 'string' && STYLE_IDS.includes(raw.rival.style as FightStyle)
     ? { ...fresh.rival!, ...(raw.rival as unknown as FightRival) } : raw.rival === null ? null : fresh.rival;
   if (rival && rival.weight !== undefined && !WEIGHT_CLASSES.some(w => w.id === rival.weight)) rival.weight = st.weight;
+  if (rival && rival.last !== undefined && rival.last !== 'W' && rival.last !== 'L' && rival.last !== null) delete rival.last;
   const beaten = isObj(raw.lastBeatenBy) && typeof raw.lastBeatenBy.name === 'string' && isObj(raw.lastBeatenBy.attrs)
     ? raw.lastBeatenBy as unknown as Fighter : null;
   return {
@@ -505,6 +528,7 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
     promoterFights: Math.floor(numOr(raw.promoterFights, 0, 0, 20)),
     lastBeatenBy: beaten,
     classMoves: Math.floor(numOr(raw.classMoves, 0, 0, 99)),
+    ...(typeof raw.firstMoveAt === 'number' && Number.isFinite(raw.firstMoveAt) ? { firstMoveAt: Math.max(0, Math.floor(raw.firstMoveAt)) } : {}),
     decisions: Math.floor(numOr(raw.decisions, 0, 0, 1e6)),
     feed: strings(raw.feed).slice(0, FEED_MAX),
     rival,
@@ -567,8 +591,15 @@ const BODY_CARDS: LifeCardDef[] = [
   },
   {
     id: 'move-up', emoji: '⬆️', title: 'The class above', cooldown: 14,
+    /* "Punches end fights more often" up a class, and "go the distance more"
+       down one, matches the engine's koBias ladder and two sources, read
+       2026-10-02: Physician and Sportsmedicine 2024, PMID 37990916 (abstract
+       on Europe PMC: a significant association between KO/TKO rate and
+       weight class, heavyweights highest), and
+       scirp.org/journal/paperinformation?paperid=107460 (knockout wins rise
+       with the division's weight). */
     text: 'Your trainer thinks you have outgrown the division. Up there punches end fights more often, and nobody knows your name.',
-    when: st => st.fightNo >= 6 && classAfterMove(st.weight, 1) !== null,
+    when: st => st.fightNo >= 6 && classAfterMove(st.weight, 1) !== null && !specialFightOnTable(st),
     options: [
       { label: 'Move up', effect: { moveClass: 1 }, line: 'Moved up a weight class and started again from the bottom of it.' },
       { label: 'Stay where you are', effect: {}, line: 'Stayed at the weight.', neutral: true },
@@ -577,7 +608,7 @@ const BODY_CARDS: LifeCardDef[] = [
   {
     id: 'move-down', emoji: '⬇️', title: 'The class below', cooldown: 14,
     text: 'Your manager thinks the money and the openings are a division down. The cut is hard and fights there go the distance more.',
-    when: st => st.fightNo >= 6 && classAfterMove(st.weight, -1) !== null,
+    when: st => st.fightNo >= 6 && classAfterMove(st.weight, -1) !== null && !specialFightOnTable(st),
     options: [
       { label: 'Move down', effect: { moveClass: -1, sharp: -2 }, line: 'Dropped a weight class and felt the cut.' },
       { label: 'Stay where you are', effect: {}, line: 'Stayed at the weight.', neutral: true },
@@ -653,7 +684,7 @@ const BUSINESS_CARDS: LifeCardDef[] = [
   {
     id: 'rematch-clause', emoji: '🔁', title: 'The rematch clause', cooldown: 3,
     text: 'There was a rematch clause in the contract for the one you lost. Your manager can invoke it today.',
-    when: st => !!st.life.lastBeatenBy && climbing(st) && st.offers.length > 0 && !st.offers[0].title,
+    when: st => !!st.life.lastBeatenBy && climbing(st) && st.offers.length > 0 && !st.offers[0].title && !specialFightOnTable(st),
     options: [
       { label: 'Invoke it', effect: { rematch: true }, line: 'Invoked the rematch clause.' },
       { label: 'Let it go', effect: {}, line: 'Let the rematch clause lapse.', neutral: true },
@@ -693,7 +724,11 @@ const BUSINESS_CARDS: LifeCardDef[] = [
   },
   {
     id: 'advance', emoji: '💵', title: 'An advance', cooldown: 8,
-    text: 'Your manager can get you some of the next purse today. It comes off the fight, and then some.',
+    /* The cost is a fifth of whichever purse you take, so it is cheap on a
+       small purse and dear on a big one. The text says that and no more: an
+       earlier draft promised it always cost more than it paid, which is false
+       on an unranked fighter's purses (Round 916 review). */
+    text: 'Your manager can get you a bit of money today against the next fight. The promoter takes a fifth of that purse back for it, big or small.',
     options: [
       { label: 'Take the advance', effect: { cash: 0.05, pursePct: -20 }, line: 'Took an advance against the next purse.' },
       { label: 'Wait for the purse', effect: {}, line: 'Waited for the purse.', neutral: true },
@@ -736,6 +771,11 @@ const BUSINESS_CARDS: LifeCardDef[] = [
   },
   {
     id: 'ticket-seller', emoji: '🎟️', title: 'Selling tickets', cooldown: 7,
+    /* Being paid partly in tickets early on, two sources read 2026-10-02:
+       sportsboom.com/boxing/how-much-do-boxers-make (a new pro will likely
+       start on a ticket deal with a small hall promoter) and irish-boxing.com
+       /off-the-wall-former-irish-pro-outlines-the-financial-reality-of-small-hall-boxing
+       (a purse paid as tickets to sell). */
     text: 'Early in a career you are paid partly in tickets you sell yourself. Your phone is full of people who said they would come.',
     when: st => st.fighter.rank > 10,
     options: [
@@ -972,9 +1012,20 @@ export function answerLifeCard(st: FightCareerState, optionIdx: number): { state
   const option = card?.options[optionIdx];
   if (!card || !option) return null;
   applyLifeEffect(next, option.effect);
-  next.life.pending = next.life.pending.slice(1);
   next.life.decisions += 1;
   pushFeed(next.life, `${card.emoji} ${option.line}`);
+  /* A card's gate is read when it is dealt, and an answer can close the gate
+     of a card still waiting behind it: a class move leaves a fighter
+     unranked, so "step aside money" has no places left to cost. A card whose
+     gate has closed lapses with a line in the feed rather than being shown
+     with words that are no longer true (Round 916 review). */
+  next.life.pending = next.life.pending.slice(1).filter(id => {
+    const waiting = lifeCardById(id);
+    if (!waiting) return false;
+    if (!waiting.when || waiting.when(next)) return true;
+    pushFeed(next.life, `${waiting.emoji} ${waiting.title}: no longer on the table.`);
+    return false;
+  });
   return { state: next, line: option.line };
 }
 

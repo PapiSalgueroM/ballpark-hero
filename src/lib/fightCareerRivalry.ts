@@ -53,6 +53,7 @@ export function rivalFightNight(st: FightCareerState, life: FightLife): string |
   r.age = round2(r.age + 0.34);
   const drift = r.age < 29 ? Math.min(1.2, (r.potential - r.rating) * 0.12) : r.age < 32 ? 0 : -0.8;
   r.rating = clamp(Math.round((r.rating + drift) * 10) / 10, 30, 97);
+  r.last = null;
   if (r.age >= 36.5 || (r.age >= 32 && r.rating < 55)) {
     r.retired = true;
     r.champion = false;
@@ -61,6 +62,7 @@ export function rivalFightNight(st: FightCareerState, life: FightLife): string |
   if (rng() < 0.2) return null;
   const won = rng() < clamp(0.55 + (r.rating - levelAt(r.champion ? 0 : r.rank)) / 40, 0.2, 0.9);
   const cur = r.rank >= 99 ? 20 : r.rank;
+  r.last = won ? 'W' : 'L';
   if (won) {
     r.wins += 1;
     if (rng() < 0.4) r.kos += 1;
@@ -110,12 +112,19 @@ const beat = (
 const youRank = (p: Live): number => (p.champion ? 0 : p.fighter.rank);
 const hisRank = (r: FightRival): number => (r.champion ? 0 : r.rank);
 
+/* Round 916 review: the beats that say what he did this window read his last
+   result (rivalFightNight sets it), not his career totals, and the two that
+   compare rankings need him in your division, because a number in another
+   division is not above or below yours. Being on the same bill, or a record
+   set beside his, is true across divisions and stays open. */
+const sameClass = (p: Live): boolean => rivalInYourClass(p);
+
 export const FIGHT_RIVALRY_EVENTS: Beat[] = [
-  beat(1, '📈', 'He keeps winning', { heat: 4 }, (_p, r) => r.wins >= 2,
+  beat(1, '📈', 'He keeps winning', { heat: 4 }, (_p, r) => r.last === 'W' && r.wins >= 2,
     (_p, r) => `${r.name} won again while you were in camp, and the papers ran the two records side by side.`),
   beat(2, '🏆', 'He got there first', { heat: 8, fans: -1 }, (p, r) => r.champion && !p.champion,
     (_p, r) => `${r.name} has a world title round his waist before you do.`),
-  beat(3, '📉', 'He was beaten', { heat: -3, fans: 1 }, (_p, r) => r.losses >= 1,
+  beat(3, '📉', 'He was beaten', { heat: -3, fans: 1 }, (_p, r) => r.last === 'L',
     (_p, r) => `${r.name} lost, and people asked what that says about the pair of you.`),
   beat(4, '🎪', 'The same bill', { heat: 6, fans: 2 }, p => p.fightNo >= 3,
     (_p, r) => `You and ${r.name} boxed on the same bill, and the crowd took sides.`),
@@ -127,9 +136,9 @@ export const FIGHT_RIVALRY_EVENTS: Beat[] = [
     (_p, r) => `Promoters are openly pricing a fight between you and ${r.name}.`),
   beat(8, '🔄', 'He changed corners', { heat: 4 }, p => p.fightNo >= 5,
     (_p, r) => `${r.name} has a new trainer, one who has been studying your fights.`),
-  beat(9, '⬆️', 'You are ranked above him', { fans: 1, heat: 2 }, (p, r) => youRank(p) < hisRank(r),
+  beat(9, '⬆️', 'You are ranked above him', { fans: 1, heat: 2 }, (p, r) => sameClass(p) && youRank(p) < hisRank(r),
     (_p, r) => `The new rankings have you above ${r.name}, and his people say they are wrong.`),
-  beat(10, '⬇️', 'He is ranked above you', { heat: 5 }, (p, r) => hisRank(r) < youRank(p),
+  beat(10, '⬇️', 'He is ranked above you', { heat: 5 }, (p, r) => sameClass(p) && hisRank(r) < youRank(p),
     (_p, r) => `The new rankings have ${r.name} above you.`),
   beat(RIVAL_RETIRED_EVENT_ID, '👋', 'He hangs them up', { fans: 2 }, (_p, r) => r.retired,
     (_p, r) => `${r.name} has retired at ${r.wins} and ${r.losses}. Between the two of you it finished ${r.h2hWins} and ${r.h2hLosses} your way.`),
@@ -176,7 +185,8 @@ export const FIGHT_RIVALRY_CHOICES: FightChoiceDef[] = [
   {
     id: 'fr-face-off', emoji: '😤', title: 'Face to face',
     description: (_p, r) => `You and ${r.name} are on the same card, and the promoter has put you nose to nose for the cameras.`,
-    when: () => true,
+    /* A face-off is for two men who could be matched: same division only. */
+    when: p => sameClass(p),
     choices: [
       option('Shove him', '💢', { fans: 3, karma: -3, heat: 8 }, r => `Shoved ${r} in front of the cameras.`),
       option('Stare and say nothing', '👁️', { heat: 3 }, r => `Stared ${r} down.`, true),
@@ -255,7 +265,13 @@ export function fightRivalryTick(st: Live): void {
 export function dismissFightRivalryEvent(st: FightCareerState): Live | null {
   const next = cloneForLife(st);
   const event: RivalryEvent | null = next.life.pendingRivalryEvent;
-  if (!event || !next.life.rival) return null;
+  if (!event) return null;
+  /* A beat with no rival behind it (a damaged save) is cleared, never left
+     blocking the hub with nothing able to answer it. */
+  if (!next.life.rival) {
+    next.life.pendingRivalryEvent = null;
+    return next;
+  }
   applyRivalryEvent(next, next.life.rival, event, FIGHT_RIVALRY_EVENTS, () => 0.5, line => pushLifeFeed(next.life, line));
   next.life.pendingRivalryEvent = null;
   next.life.lastRivalryEventId = event.id;
@@ -268,6 +284,13 @@ export function answerFightRivalryChoice(st: FightCareerState, choiceIdx: number
   const next = cloneForLife(st);
   const card = next.life.pendingRivalryChoice;
   if (!card) return null;
+  /* A choice this build does not know (a damaged save, or an id a later round
+     renamed) cannot be resolved, so any tap clears it rather than leaving the
+     hub stuck on it. lifeLoadState clears it on load as well. */
+  if (!FIGHT_RIVALRY_CHOICES.some(d => d.id === card.id)) {
+    next.life.pendingRivalryChoice = null;
+    return { state: next, line: '' };
+  }
   const line = resolveRivalryChoice(next, next.life.rival, card.id, choiceIdx, FIGHT_RIVALRY_CHOICES, () => 0.5);
   if (line === null) return null;
   next.life.pendingRivalryChoice = null;
