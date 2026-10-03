@@ -1,3 +1,17 @@
+Codex CLAIMS993 and994, 2026-10-03. Next free995.
+993: reviewed914 Road to the Draft, bound into the shared US career Board.
+Own prospect journey UI/save integration, four career initializer outcome
+binds and truthful draft/undrafted presentation. Salary/fans/rival must derive
+from the actual earned outcome; preserve legacy saves and first pro play.
+Isolated from992, then incorporate its final accepted fixes before merging.
+994: SportHub.tsx plus new scoped hub components/styles and original arena
+artwork. Six distinct sport destinations, playable discovery filters and
+real saved continuation. No edits to the held src/lib/sportHub.ts draft.
+No GM, Soccer Career or Club Manager ownership taken. Claude917-920 and
+971-990 remain held; align later story work with the shared US career Board.
+The user wants a much larger visual/gameplay improvement, and Google work
+is deferred. These two rounds expand that product work while970/992 finish.
+
 Anthony's priority update, 2026-10-03: site/gameplay first, AdSense and
 indexing later. Pause further Google audits and review requests.
 991 accepted and MERGED405ebd4d, PR106. CI37103662491 passes types/build,
