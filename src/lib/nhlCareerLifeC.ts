@@ -69,151 +69,55 @@
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
 import { nhlTeamLabelOf, nhlEraById, nhlEraTeamIds } from './nhlMyCareer';
 import { nhlWaiverExempt, nhlWaiverRequired } from './nhlCareerWaivers';
+import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC } from './usCareerDeckC';
+import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
 
-type Option = NhlCareerEvent['options'][number];
+/* Round 988: the machinery (the clamps, the era money, the gamble, the
+   trade and the claim, the words) is the shared engine in usCareerDeckC.ts.
+   This file holds the cards and the NHL's settings for that engine. */
 
-/** What an option moves. Money is in millions of modern dollars and is paid
- *  in the career's own era money. earned hits career earnings and net worth;
+/** What an option moves. earned hits career earnings and net worth;
  *  netWorth is spending or a windfall and leaves earnings alone. */
-export interface NhlLifeCFx {
-  morale?: number;
-  fanbase?: number;
-  health?: number;
-  rating?: number;
-  netWorth?: number;
-  earned?: number;
-}
+export type NhlLifeCFx = DeckCFx;
+export type NhlLifeCOptionDef = DeckCOptionDef<NhlCareerState>;
+export type NhlLifeCDef = DeckCDef<NhlCareerState, 'position' | 'rookie' | 'veteran' | 'bench' | 'rules'>;
 
-/** move: 'trade' is a trade, 'claim' is a waiver claim. Either way the
- *  contract goes with the player and only the team changes. */
-interface Outcome { say: string | ((c: NhlCareerState) => string); fx: NhlLifeCFx; move?: 'trade' | 'claim' }
-type Extra = { flag?: string };
-type SureDef = { label: string } & Outcome & Extra;
-type GambleDef = { label: string; p: number; win: Outcome; lose: Outcome } & Extra;
-export type NhlLifeCOptionDef = SureDef | GambleDef;
+/** The NHL as the engine plays it: cents, the report line, direction chips
+ *  that do not read the save (the reviewed pack's button), and a rating
+ *  drop that stops at deck A's floor of 55. Functions only, so nothing
+ *  imported is read at module scope (nhlMyCareer.ts imports this file). */
+const NHL_DECK_C: DeckCSport<NhlCareerState> = {
+  moneyScale: c => nhlEraById(c.eraId).moneyScale,
+  money: 'cents',
+  log: 'report',
+  chip: 'directions',
+  chipReadsSave: false,
+  ratingFloor: before => Math.min(55, before),
+  teamIds: c => nhlEraTeamIds(c.eraId),
+  teamLabel: (id, c) => nhlTeamLabelOf(id, c.eraId),
+};
 
-export interface NhlLifeCDef {
-  id: string;
-  category: 'position' | 'rookie' | 'veteran' | 'bench' | 'rules';
-  cooldown: number;
-  story?: string;
-  when: (c: NhlCareerState) => boolean;
-  title: string | ((c: NhlCareerState) => string);
-  body: string | ((c: NhlCareerState) => string);
-  options: NhlLifeCOptionDef[];
-}
-
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-const round2 = (x: number) => Math.round(x * 100) / 100;
 const flagOf = (c: NhlCareerState, k: string): number => (c.lifeFlags || {})[k] || 0;
-const bump = (c: NhlCareerState, k: string) => { c.lifeFlags = { ...(c.lifeFlags || {}), [k]: flagOf(c, k) + 1 }; };
 const isModern = (c: NhlCareerState): boolean => nhlEraById(c.eraId).id === 'now';
 /** The rule exists in the season ahead: always in today's league, and from
  *  the given season on in a 2006-07 career. */
 const ruleFrom = (year: number) => (c: NhlCareerState): boolean => isModern(c) || c.year >= year;
 const yrsOf = (c: NhlCareerState): number => c.seasons.length;
-const text = (t: string | ((c: NhlCareerState) => string), c: NhlCareerState): string => (typeof t === 'function' ? t(c) : t);
-const signed = (n: number): string => (n > 0 ? `+${n}` : `${n}`);
-const capital = (s: string): string => (s ? s[0].toUpperCase() + s.slice(1) : s);
-const team = (c: NhlCareerState): string => nhlTeamLabelOf(c.team, c.eraId);
 
 /** Applies an effect to the career and returns the words for what really
  *  moved, after the clamps. A stat that could not move is not mentioned. */
 export function applyNhlLifeCFx(c: NhlCareerState, fx: NhlLifeCFx): string {
-  const parts: string[] = [];
-  if (fx.rating) {
-    const before = c.ovr;
-    /* Growth stays inside the potential headroom, the same ceiling decks A
-       and B use (pot + 1), and a raise can never lower a rating. The floor
-       is deck A's 55. */
-    const next = fx.rating > 0 ? Math.max(before, Math.min(c.pot + 1, before + fx.rating)) : before + fx.rating;
-    c.ovr = clamp(next, Math.min(55, before), 99);
-    if (c.ovr !== before) parts.push(`rating ${signed(c.ovr - before)} to ${c.ovr}`);
-  }
-  const meter = (key: 'morale' | 'fanbase' | 'health', d: number | undefined) => {
-    if (!d) return;
-    const before = c[key];
-    c[key] = clamp(before + d, 0, 100);
-    if (c[key] !== before) parts.push(`${key} ${signed(c[key] - before)}`);
-  };
-  meter('morale', fx.morale);
-  meter('fanbase', fx.fanbase);
-  meter('health', fx.health);
-  const scale = nhlEraById(c.eraId).moneyScale;
-  if (fx.earned) {
-    const amt = round2(scale * fx.earned);
-    c.earnings = round2(c.earnings + amt);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`earned ${amt}M`);
-  }
-  if (fx.netWorth) {
-    const amt = round2(scale * fx.netWorth);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`net worth ${signed(amt)}M`);
-  }
-  return parts.length ? `${capital(parts.join(', '))}.` : '';
+  return applyDeckCFx(NHL_DECK_C, c, fx);
 }
 
 /** The short promise on the button, written from the same data. */
 export function nhlLifeCChip(o: { fx: NhlLifeCFx; move?: 'trade' | 'claim' }): string {
-  const bits: string[] = [];
-  const dir = (name: string, d: number | undefined) => { if (d) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`); };
-  dir('rating', o.fx.rating);
-  dir('morale', o.fx.morale);
-  dir('fans', o.fx.fanbase);
-  dir('health', o.fx.health);
-  const cash = (o.fx.earned ?? 0) + (o.fx.netWorth ?? 0);
-  if (cash) bits.push(cash > 0 ? 'money in' : 'money out');
-  if (o.move) bits.push('new team');
-  return bits.length ? bits.join(', ') : 'no change';
-}
-
-function settle(cc: NhlCareerState, r: () => number, o: Outcome): string {
-  const story = text(o.say, cc);
-  let moved = '';
-  if (o.move) {
-    /* A trade or a claim stays inside the career's own era, and the
-       contract goes with the player: salary and years are not touched. */
-    const pool = nhlEraTeamIds(cc.eraId).filter(id => id !== cc.team);
-    const next = pool[Math.floor(r() * pool.length)];
-    cc.team = next;
-    moved = `${o.move === 'claim' ? 'Claimed by' : 'Traded to'} ${nhlTeamLabelOf(next, cc.eraId)}.`;
-  }
-  return [story, moved, applyNhlLifeCFx(cc, o.fx)].filter(Boolean).join(' ');
-}
-
-function toOption(o: NhlLifeCOptionDef): Option {
-  if ('p' in o) {
-    return {
-      label: o.label,
-      effect: `Could go either way: ${nhlLifeCChip(o.win)}, or ${nhlLifeCChip(o.lose)}`,
-      apply: (cc, r) => {
-        if (o.flag) bump(cc, o.flag);
-        return settle(cc, r, r() < o.p ? o.win : o.lose);
-      },
-    };
-  }
-  return {
-    label: o.label,
-    effect: capital(nhlLifeCChip(o)),
-    apply: (cc, r) => {
-      if (o.flag) bump(cc, o.flag);
-      return settle(cc, r, o);
-    },
-  };
+  return deckCChip(NHL_DECK_C, o);
 }
 
 /** One card, built for this career. Works on any save, eligible or not. */
 export function buildNhlLifeCCard(def: NhlLifeCDef, c: NhlCareerState): NhlCareerEvent {
-  return {
-    id: def.id,
-    category: def.category,
-    cooldown: def.cooldown,
-    ...(def.story ? { story: def.story } : {}),
-    title: text(def.title, c),
-    body: text(def.body, c),
-    options: def.options.map(toOption),
-  };
+  return buildDeckCCard(NHL_DECK_C, def, c);
 }
 
 /* ============================== THE CATALOG ============================== */
@@ -783,5 +687,5 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
  *  the gates are facts about the save, so adding this deck to the draw costs
  *  the stream exactly the one pick it always cost. */
 export function getNhlLifeEventsC(c: NhlCareerState, _rng: () => number): NhlCareerEvent[] {
-  return NHL_LIFE_C.filter(d => d.when(c)).map(d => buildNhlLifeCCard(d, c));
+  return dealDeckC(NHL_DECK_C, NHL_LIFE_C, c);
 }

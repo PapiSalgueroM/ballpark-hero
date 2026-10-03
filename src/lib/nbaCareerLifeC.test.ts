@@ -155,7 +155,7 @@ describe('the words are the effect', () => {
     const c = career('PG');
     expect(nbaLifeCChip({ fx: { rating: 2, health: -4 } }, c)).toBe('rating up, health down');
     expect(nbaLifeCChip({ fx: { netWorth: -0.2, fanbase: 3 } }, c)).toBe('fans up, money out');
-    expect(nbaLifeCChip({ fx: { morale: -4 }, trade: true }, c)).toBe('morale down, fans down, new team');
+    expect(nbaLifeCChip({ fx: { morale: -4 }, move: 'trade' }, c)).toBe('morale down, fans down, new team');
     expect(nbaLifeCChip({ fx: {} }, c)).toBe('no change');
     /* Written on a copy: the save itself does not move. */
     expect([c.ovr, c.morale, c.fanbase, c.health, c.netWorth]).toEqual([75, 50, 50, 60, 5]);

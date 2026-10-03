@@ -65,161 +65,51 @@
 */
 import type { MlbCareerState, MlbCareerEvent, MlbCareerPos } from './mlbMyCareer';
 import { mlbTeamLabelOf, mlbEraById, mlbEraTeamIds } from './mlbMyCareer';
+import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC } from './usCareerDeckC';
+import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
 
-type Option = MlbCareerEvent['options'][number];
+/* Round 988: the machinery (the clamps, the era money, the gamble, the
+   trade, the flags, the words) is the shared engine in usCareerDeckC.ts.
+   This file holds the cards and MLB's settings for that engine. */
 
-/** What an option moves. Money is in millions of modern dollars and is paid
- *  in the career's own era money. earned hits career earnings and net worth;
+/** What an option moves. earned hits career earnings and net worth;
  *  netWorth is spending or a windfall and leaves earnings alone. */
-export interface MlbLifeCFx {
-  morale?: number;
-  fanbase?: number;
-  health?: number;
-  rating?: number;
-  netWorth?: number;
-  earned?: number;
-}
-
-interface Outcome { say: string | ((c: MlbCareerState) => string); fx: MlbLifeCFx; trade?: boolean }
-type Extra = { flag?: string };
-type Label = string | ((c: MlbCareerState) => string);
-type SureDef = { label: Label } & Outcome & Extra;
-type GambleDef = { label: Label; p: number; win: Outcome; lose: Outcome } & Extra;
-export type MlbLifeCOptionDef = SureDef | GambleDef;
-
+export type MlbLifeCFx = DeckCFx;
+export type MlbLifeCOptionDef = DeckCOptionDef<MlbCareerState>;
 export type MlbLifeCCategory = 'position' | 'rookie' | 'veteran' | 'bench' | 'rules';
+export type MlbLifeCDef = DeckCDef<MlbCareerState, MlbLifeCCategory>;
 
-export interface MlbLifeCDef {
-  id: string;
-  category: MlbLifeCCategory;
-  cooldown: number;
-  story?: string;
-  when: (c: MlbCareerState) => boolean;
-  title: string | ((c: MlbCareerState) => string);
-  body: string | ((c: MlbCareerState) => string);
-  options: MlbLifeCOptionDef[];
-}
+/** MLB as the engine plays it: cents, the report line, and direction chips
+ *  that read the save. Functions only, so nothing imported is read at
+ *  module scope (mlbMyCareer.ts imports this file). */
+const MLB_DECK_C: DeckCSport<MlbCareerState> = {
+  moneyScale: c => mlbEraById(c.eraId).moneyScale,
+  money: 'cents',
+  log: 'report',
+  chip: 'directions',
+  chipReadsSave: true,
+  teamIds: c => mlbEraTeamIds(c.eraId),
+  teamLabel: (id, c) => mlbTeamLabelOf(id, c.eraId),
+};
 
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-const round2 = (x: number) => Math.round(x * 100) / 100;
-const flagOf = (c: MlbCareerState, k: string): number => (c.lifeFlags || {})[k] || 0;
-const bump = (c: MlbCareerState, k: string) => { c.lifeFlags = { ...(c.lifeFlags || {}), [k]: flagOf(c, k) + 1 }; };
 const yrsOf = (c: MlbCareerState): number => c.seasons.length;
-const text = (t: string | ((c: MlbCareerState) => string), c: MlbCareerState): string => (typeof t === 'function' ? t(c) : t);
-const signed = (n: number): string => (n > 0 ? `+${n}` : `${n}`);
-const capital = (s: string): string => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
 /** Applies an effect to the career and returns the words for what really
  *  moved, after the clamps. A stat that could not move is not mentioned. */
 export function applyMlbLifeCFx(c: MlbCareerState, fx: MlbLifeCFx): string {
-  const parts: string[] = [];
-  if (fx.rating) {
-    const before = c.ovr;
-    /* Growth stays inside the potential headroom, the same ceiling decks A
-       and B use (pot + 1), and a raise can never lower a rating. */
-    const next = fx.rating > 0 ? Math.max(before, Math.min(c.pot + 1, before + fx.rating)) : before + fx.rating;
-    c.ovr = clamp(next, 50, 99);
-    if (c.ovr !== before) parts.push(`rating ${signed(c.ovr - before)} to ${c.ovr}`);
-  }
-  const meter = (key: 'morale' | 'fanbase' | 'health', d: number | undefined) => {
-    if (!d) return;
-    const before = c[key];
-    c[key] = clamp(before + d, 0, 100);
-    if (c[key] !== before) parts.push(`${key} ${signed(c[key] - before)}`);
-  };
-  meter('morale', fx.morale);
-  meter('fanbase', fx.fanbase);
-  meter('health', fx.health);
-  const scale = mlbEraById(c.eraId).moneyScale;
-  if (fx.earned) {
-    const amt = round2(scale * fx.earned);
-    c.earnings = round2(c.earnings + amt);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`earned ${amt}M`);
-  }
-  if (fx.netWorth) {
-    const amt = round2(scale * fx.netWorth);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`net worth ${signed(amt)}M`);
-  }
-  return parts.length ? `${capital(parts.join(', '))}.` : '';
-}
-
-/** Whether a stat can still move that way on this save, under the same
- *  clamps applyMlbLifeCFx uses: a raise stops at pot + 1 and at 99, a drop
- *  at 50, and the meters run 0 to 100. */
-function canMove(c: MlbCareerState, key: 'rating' | 'morale' | 'fanbase' | 'health', d: number): boolean {
-  if (key === 'rating') return d > 0 ? c.ovr < Math.min(c.pot + 1, 99) : c.ovr > 50;
-  return d > 0 ? c[key] < 100 : c[key] > 0;
+  return applyDeckCFx(MLB_DECK_C, c, fx);
 }
 
 /** The short promise on the button, written from the same data. Given the
  *  save the card is shown on, it leaves out a stat that is already at its
  *  ceiling or floor, so "health up" is never shown to a player at 100. */
-export function mlbLifeCChip(o: { fx: MlbLifeCFx; trade?: boolean }, c?: MlbCareerState): string {
-  const bits: string[] = [];
-  const dir = (name: string, key: 'rating' | 'morale' | 'fanbase' | 'health', d: number | undefined) => {
-    if (d && (!c || canMove(c, key, d))) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`);
-  };
-  dir('rating', 'rating', o.fx.rating);
-  dir('morale', 'morale', o.fx.morale);
-  dir('fans', 'fanbase', o.fx.fanbase);
-  dir('health', 'health', o.fx.health);
-  const scale = c ? mlbEraById(c.eraId).moneyScale : 1;
-  const cash = round2(scale * (o.fx.earned ?? 0)) + round2(scale * (o.fx.netWorth ?? 0));
-  if (cash) bits.push(cash > 0 ? 'money in' : 'money out');
-  if (o.trade) bits.push('new team');
-  return bits.length ? bits.join(', ') : 'no change';
-}
-
-function settle(cc: MlbCareerState, r: () => number, o: Outcome): string {
-  const story = text(o.say, cc);
-  let moved = '';
-  if (o.trade) {
-    /* A trade stays inside the career's own era, and the contract goes with
-       the player: salary and years are not touched. */
-    const pool = mlbEraTeamIds(cc.eraId).filter(id => id !== cc.team);
-    const next = pool[Math.floor(r() * pool.length)];
-    cc.team = next;
-    moved = `Traded to ${mlbTeamLabelOf(next, cc.eraId)}.`;
-  }
-  return [story, moved, applyMlbLifeCFx(cc, o.fx)].filter(Boolean).join(' ');
-}
-
-/** One button, for the save it is shown on: the label can read the
- *  position, and the chip reads the stats' room to move. */
-function toOption(o: MlbLifeCOptionDef, c: MlbCareerState): Option {
-  if ('p' in o) {
-    return {
-      label: text(o.label, c),
-      effect: `Could go either way: ${mlbLifeCChip(o.win, c)}, or ${mlbLifeCChip(o.lose, c)}`,
-      apply: (cc, r) => {
-        if (o.flag) bump(cc, o.flag);
-        return settle(cc, r, r() < o.p ? o.win : o.lose);
-      },
-    };
-  }
-  return {
-    label: text(o.label, c),
-    effect: capital(mlbLifeCChip(o, c)),
-    apply: (cc, r) => {
-      if (o.flag) bump(cc, o.flag);
-      return settle(cc, r, o);
-    },
-  };
+export function mlbLifeCChip(o: { fx: MlbLifeCFx; move?: 'trade' | 'claim' }, c?: MlbCareerState): string {
+  return deckCChip(MLB_DECK_C, o, c);
 }
 
 /** One card, built for this career. Works on any save, eligible or not. */
 export function buildMlbLifeCCard(def: MlbLifeCDef, c: MlbCareerState): MlbCareerEvent {
-  return {
-    id: def.id,
-    category: def.category,
-    cooldown: def.cooldown,
-    ...(def.story ? { story: def.story } : {}),
-    title: text(def.title, c),
-    body: text(def.body, c),
-    options: def.options.map(o => toOption(o, c)),
-  };
+  return buildDeckCCard(MLB_DECK_C, def, c);
 }
 
 /* ============================== THE CATALOG ============================== */
@@ -649,7 +539,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     title: 'Out of options',
     body: 'Your option years are all used up. The club cannot send you to Triple A anymore without putting you on waivers first, where any team can claim you. The manager says your roster spot gets talked about every week.',
     options: [
-      { label: 'Ask them to trade you before waivers', say: 'The front office found a deal in a week and you started over somewhere new.', fx: { morale: 3 }, trade: true },
+      { label: 'Ask them to trade you before waivers', say: 'The front office found a deal in a week and you started over somewhere new.', fx: { morale: 3 }, move: 'trade' },
       { label: 'Make the roster spot impossible to cut', p: 0.5,
         win: { say: 'You made yourself the most useful man on the bench, and nobody brought up your spot again.', fx: { rating: 1, morale: 5 } },
         lose: { say: 'You pressed every time they used you and it showed. The weekly meeting kept talking about you.', fx: { morale: -6 } },
@@ -770,5 +660,5 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
  *  the gates are facts about the save, so adding this deck to the draw costs
  *  the stream exactly the one pick it always cost. */
 export function getMlbLifeEventsC(c: MlbCareerState, _rng: () => number): MlbCareerEvent[] {
-  return MLB_LIFE_C.filter(d => d.when(c)).map(d => buildMlbLifeCCard(d, c));
+  return dealDeckC(MLB_DECK_C, MLB_LIFE_C, c);
 }

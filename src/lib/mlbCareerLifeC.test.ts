@@ -186,7 +186,7 @@ describe('the words are the effect', () => {
   it('writes the chip from the same data', () => {
     expect(mlbLifeCChip({ fx: { rating: 2, morale: -3 } })).toBe('rating up, morale down');
     expect(mlbLifeCChip({ fx: { fanbase: 2, netWorth: -0.1 } })).toBe('fans up, money out');
-    expect(mlbLifeCChip({ fx: { morale: 3 }, trade: true })).toBe('morale up, new team');
+    expect(mlbLifeCChip({ fx: { morale: 3 }, move: 'trade' })).toBe('morale up, new team');
     expect(mlbLifeCChip({ fx: {} })).toBe('no change');
   });
 

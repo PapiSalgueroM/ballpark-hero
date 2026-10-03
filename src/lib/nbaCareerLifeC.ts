@@ -69,140 +69,54 @@
 */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
 import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds } from './nbaMyCareer';
+import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC } from './usCareerDeckC';
+import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
 
-type Option = NbaCareerEvent['options'][number];
+/* Round 988: the machinery (the clamps, the era money, the gamble, the
+   trade, the words) is the shared engine in usCareerDeckC.ts. This file
+   holds the cards and the NBA's settings for that engine. */
 
-/** What an option moves. Money is in millions of modern dollars and is paid
- *  in the career's own era money; it is spending or a windfall, so it moves
- *  net worth and leaves career earnings alone. */
-export interface NbaLifeCFx {
-  morale?: number;
-  fanbase?: number;
-  health?: number;
-  rating?: number;
-  netWorth?: number;
-}
+/** What an option moves. Money is spending or a windfall: it moves net
+ *  worth and leaves career earnings alone. */
+export type NbaLifeCFx = DeckCFx;
+export type NbaLifeCOptionDef = DeckCOptionDef<NbaCareerState>;
+export type NbaLifeCDef = DeckCDef<NbaCareerState, 'position' | 'rookie' | 'veteran' | 'bench' | 'rules'>;
 
-interface Outcome { say: string | ((c: NbaCareerState) => string); fx: NbaLifeCFx; trade?: boolean }
-type SureDef = { label: string } & Outcome;
-type GambleDef = { label: string; p: number; win: Outcome; lose: Outcome };
-export type NbaLifeCOptionDef = SureDef | GambleDef;
+/** The NBA as the engine plays it: cents, the report line, and direction
+ *  chips that read the save. A traded player's fans start over in the new
+ *  city at the 44 decks A and B use for the same move, so a trade plays the
+ *  same whichever deck dealt it. Functions only, so nothing imported is read
+ *  at module scope (nbaMyCareer.ts imports this file). */
+const NBA_DECK_C: DeckCSport<NbaCareerState> = {
+  moneyScale: c => nbaEraById(c.eraId).moneyScale,
+  money: 'cents',
+  log: 'report',
+  chip: 'directions',
+  chipReadsSave: true,
+  tradeFans: 44,
+  teamIds: c => nbaEraTeamIds(c.eraId),
+  teamLabel: (id, c) => nbaTeamLabelOf(id, c.eraId),
+};
 
-export interface NbaLifeCDef {
-  id: string;
-  category: 'position' | 'rookie' | 'veteran' | 'bench' | 'rules';
-  cooldown: number;
-  story?: string;
-  when: (c: NbaCareerState) => boolean;
-  title: string | ((c: NbaCareerState) => string);
-  body: string | ((c: NbaCareerState) => string);
-  options: NbaLifeCOptionDef[];
-}
-
-const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
-const round2 = (x: number) => Math.round(x * 100) / 100;
 const isModern = (c: NbaCareerState): boolean => nbaEraById(c.eraId).id === 'now';
 const yrsOf = (c: NbaCareerState): number => c.seasons.length;
-const text = (t: string | ((c: NbaCareerState) => string), c: NbaCareerState): string => (typeof t === 'function' ? t(c) : t);
-const signed = (n: number): string => (n > 0 ? `+${n}` : `${n}`);
-const capital = (s: string): string => (s ? s[0].toUpperCase() + s.slice(1) : s);
 
 /** Applies an effect to the career and returns the words for what really
  *  moved, after the clamps. A stat that could not move is not mentioned. */
 export function applyNbaLifeCFx(c: NbaCareerState, fx: NbaLifeCFx): string {
-  const parts: string[] = [];
-  if (fx.rating) {
-    const before = c.ovr;
-    /* Growth stays inside the potential headroom, the same ceiling decks A
-       and B use (pot + 1), and a raise can never lower a rating. */
-    const next = fx.rating > 0 ? Math.max(before, Math.min(c.pot + 1, before + fx.rating)) : before + fx.rating;
-    c.ovr = clamp(next, 50, 99);
-    if (c.ovr !== before) parts.push(`rating ${signed(c.ovr - before)} to ${c.ovr}`);
-  }
-  const meter = (key: 'morale' | 'fanbase' | 'health', d: number | undefined) => {
-    if (!d) return;
-    const before = c[key];
-    c[key] = clamp(before + d, 0, 100);
-    if (c[key] !== before) parts.push(`${key} ${signed(c[key] - before)}`);
-  };
-  meter('morale', fx.morale);
-  meter('fanbase', fx.fanbase);
-  meter('health', fx.health);
-  if (fx.netWorth) {
-    const amt = round2(nbaEraById(c.eraId).moneyScale * fx.netWorth);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`net worth ${signed(amt)}M`);
-  }
-  return parts.length ? `${capital(parts.join(', '))}.` : '';
+  return applyDeckCFx(NBA_DECK_C, c, fx);
 }
-
-/* A traded player's fans start over in the new city, at the 44 decks A and
-   B use for the same move, so a trade plays the same whichever deck dealt
-   it. The reset is written as the move it makes on this save. */
-const NEW_CITY_FANS = 44;
-const fxOn = (o: { fx: NbaLifeCFx; trade?: boolean }, c: NbaCareerState): NbaLifeCFx =>
-  (o.trade ? { ...o.fx, fanbase: NEW_CITY_FANS - c.fanbase } : o.fx);
 
 /** The short promise on the button, written from the same data and from the
- *  save it will land on: the effect is run on a copy, so a stat already at
- *  its limit (health 100, a rating at its ceiling) is not promised. */
-export function nbaLifeCChip(o: { fx: NbaLifeCFx; trade?: boolean }, c: NbaCareerState): string {
-  const after = { ...c };
-  applyNbaLifeCFx(after, fxOn(o, c));
-  const bits: string[] = [];
-  const dir = (name: string, d: number) => { if (d) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`); };
-  dir('rating', after.ovr - c.ovr);
-  dir('morale', after.morale - c.morale);
-  dir('fans', after.fanbase - c.fanbase);
-  dir('health', after.health - c.health);
-  const cash = round2((after.netWorth ?? 0) - (c.netWorth ?? 0));
-  if (cash) bits.push(cash > 0 ? 'money in' : 'money out');
-  if (o.trade) bits.push('new team');
-  return bits.length ? bits.join(', ') : 'no change';
-}
-
-function settle(cc: NbaCareerState, r: () => number, o: Outcome): string {
-  const story = text(o.say, cc);
-  const fx = fxOn(o, cc);
-  let moved = '';
-  if (o.trade) {
-    /* A trade stays inside the career's own era, and the contract goes with
-       the player: salary and years are not touched. */
-    const pool = nbaEraTeamIds(cc.eraId).filter(id => id !== cc.team);
-    const next = pool[Math.floor(r() * pool.length)];
-    cc.team = next;
-    moved = `Traded to ${nbaTeamLabelOf(next, cc.eraId)}, where the fans start over.`;
-  }
-  return [story, moved, applyNbaLifeCFx(cc, fx)].filter(Boolean).join(' ');
-}
-
-function toOption(o: NbaLifeCOptionDef, c: NbaCareerState): Option {
-  if ('p' in o) {
-    return {
-      label: o.label,
-      effect: `Could go either way: ${nbaLifeCChip(o.win, c)}, or ${nbaLifeCChip(o.lose, c)}`,
-      apply: (cc, r) => settle(cc, r, r() < o.p ? o.win : o.lose),
-    };
-  }
-  return {
-    label: o.label,
-    effect: capital(nbaLifeCChip(o, c)),
-    apply: (cc, r) => settle(cc, r, o),
-  };
+ *  save it will land on, so a stat already at its limit is not promised. */
+export function nbaLifeCChip(o: { fx: NbaLifeCFx; move?: 'trade' | 'claim' }, c: NbaCareerState): string {
+  return deckCChip(NBA_DECK_C, o, c);
 }
 
 /** One card, built for this career: its chips are written from this save.
  *  Works on any save, eligible or not. */
 export function buildNbaLifeCCard(def: NbaLifeCDef, c: NbaCareerState): NbaCareerEvent {
-  return {
-    id: def.id,
-    category: def.category,
-    cooldown: def.cooldown,
-    ...(def.story ? { story: def.story } : {}),
-    title: text(def.title, c),
-    body: text(def.body, c),
-    options: def.options.map(o => toOption(o, c)),
-  };
+  return buildDeckCCard(NBA_DECK_C, def, c);
 }
 
 /* ============================== THE CATALOG ============================== */
@@ -631,18 +545,18 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     title: 'Your contract makes the math work',
     body: c => `${nbaTeamLabelOf(c.team, c.eraId)} wants a star at the deadline and is over the cap. A team over the cap cannot just add him: the salary going out has to come close to the salary coming in. Your contract is the one that makes the numbers line up. Nothing about your deal changes if you go. Same money, same years, different city.`,
     options: [
-      { label: 'Tell your agent you will go without a fuss', say: 'The call came at two in the afternoon. You were on a plane by six with the same contract in a new time zone.', fx: { morale: -4 }, trade: true },
+      { label: 'Tell your agent you will go without a fuss', say: 'The call came at two in the afternoon. You were on a plane by six with the same contract in a new time zone.', fx: { morale: -4 }, move: 'trade' },
       {
         label: 'Ask the front office to find another contract to send', p: 0.5,
         win: { say: 'They found a different way to make it add up. You stayed, and everybody knows how close it was.', fx: { morale: 4 } },
-        lose: { say: 'There was no other way to make it add up.', fx: { morale: -8 }, trade: true },
+        lose: { say: 'There was no other way to make it add up.', fx: { morale: -8 }, move: 'trade' },
       },
       {
         /* The win is a team that asked for you, not a promise of minutes:
            the rotation is still settled in camp (nbaCampBattle). */
         label: 'If you are going, ask your agent to steer it', p: 0.5,
-        win: { say: 'Your agent got a third team involved, one whose coach had been asking about you for a year.', fx: { morale: 6 }, trade: true },
-        lose: { say: 'The deal was the deal. You went where the math sent you.', fx: { morale: -3 }, trade: true },
+        win: { say: 'Your agent got a third team involved, one whose coach had been asking about you for a year.', fx: { morale: 6 }, move: 'trade' },
+        lose: { say: 'The deal was the deal. You went where the math sent you.', fx: { morale: -3 }, move: 'trade' },
       },
     ],
   },
@@ -726,5 +640,5 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
  *  the gates are facts about the save, so adding this deck to the draw costs
  *  the stream exactly the one pick it always cost. */
 export function getNbaLifeEventsC(c: NbaCareerState, _rng: () => number): NbaCareerEvent[] {
-  return NBA_LIFE_C.filter(d => d.when(c)).map(d => buildNbaLifeCCard(d, c));
+  return dealDeckC(NBA_DECK_C, NBA_LIFE_C, c);
 }
