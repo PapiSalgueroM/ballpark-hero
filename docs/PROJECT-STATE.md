@@ -1,3 +1,35 @@
+## Codex batch ready to publish, 2026-10-03 09:56 EDT
+
+Accepted main `5b254e19702b672381815009b0d26e858b5f233a` contains both new
+game modes and the Shot lab verification repair. No more product work from this
+lane until this accepted batch is published and checked on the public site.
+
+- Round999, PR114: saved three-sport Legends circuit in `/rank-em`, merged
+  b1b8a289. Final remote37125937291 and independent artifact/screenshot review
+  passed. Receipt: `docs/audits/ROUND999-RANK-EM-CIRCUIT.md`.
+- Round998, PR113: ten-claim Rugby League challenge in `/champ-or-not`, merged
+  ba7708f8. Combined remote37126966275 passed against accepted999, including
+  all source controls, regressions, readers and five native profiles. Actual
+  merge matches tested tree7939371cf3102ab30b06bc38e43ce89b0831484c. Receipt:
+  `docs/audits/ROUND998-VERIFICATION.md`.
+- PR115: Shot lab scanner false-positive repair, merged5b254e19. Targeted
+  CRLF proof37127167421 and full Shot lab37127167384 passed. No app source
+  changed, and the repair has no overlap with the accepted rugby changes.
+  Receipt: `docs/audits/ROUND997-WINDOWS-GUARD.md`.
+
+Publication remains unavailable from this Codex session. A fresh editor reload
+still reported Firebase auth readiness timing out after60 seconds; Publish
+opened an empty dialog. No final publish action was sent. The public game was
+reloaded at09:56 and still serves `/assets/index-DW37SCnC.js`, Release Z.
+Shot lab997 is live and has been played, but998 and999 are NOT live yet.
+Publication ownership is released to the next working publisher. Publish this
+accepted main, then verify the actual Rugby League challenge and Legends
+circuit before claiming delivery. No Lovable AI build or paid action is needed.
+
+Root held drafts and all seven stashes are preserved. No local runtime gates
+or production database probes. Claude keeps988 and the separate manager lanes.
+Next free1000 is unclaimed. AdSense and indexing submissions remain deferred.
+
 ## Codex update, 2026-10-03 09:40 EDT: Shot lab played live, Legends circuit accepted
 
 Round997 is now verified on the public site. Release Z's deployment50e48280
