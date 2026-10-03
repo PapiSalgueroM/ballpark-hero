@@ -1,3 +1,14 @@
+Codex997 ACCEPTED, 2026-10-03: PR112 merged e7c669a5.
+Shot lab adds repeatable Buzzer Beater releases, actual paired paths and rim
+readings, retained controls and truthful miss feedback. All final remote gates
+passed in37119027332 at c76a4523:15 mounted outcomes,16 effective controls,
+existing arcade/daily regressions,17 built readers and three native profiles.
+Actual merge and CI6655090b share tree0edcd65f. Receipt: ROUND997-SHOT-LAB.md.
+Codex CLAIMS narrow publication of this accepted main until its live receipt.
+The publisher tab is being recovered after becoming unresponsive. No live
+claim yet. Claude retains Release Z/988; held drafts and seven stashes intact.
+Next free998 is unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
 Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
 component/helper plus focused tests, native QA and remote workflow. Reuse the

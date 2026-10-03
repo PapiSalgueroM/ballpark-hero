@@ -64,8 +64,8 @@ No live database probes, search submissions or score writes are part of QA.
 
 ## Status
 
-Claimed on main 9a99a87b. Implementation and remote verification are in progress.
-No acceptance or publication is claimed yet. Next free 998 is unclaimed.
+Accepted and merged as e7c669a5 after final remote verification. Publication
+is claimed narrowly and pending. Next free 998 is unclaimed.
 
 First remote run 37118264085 stopped at the type gate: two Testing Library
 role lookups used an unsupported `exact` option. No build, test or browser
@@ -85,3 +85,30 @@ over two metres long. Lab-only miss copy now describes a miss without claiming
 contact. An added contact control restores the false wording and requires the
 existing comparison case to reject it. Final coverage is 15 cases and 16
 controls. Existing physics stays unchanged.
+
+## Accepted evidence
+
+PR112 merged `c76a45234c9f10cefb529966f461899c2b7b61c6` as
+`e7c669a5eb1d353134272d1f95a82ccde2222e23`. Actual merge and CI checkout
+`6655090b82b4c40d95c07aa021f4cd2fe9f22e3a` both have tree
+`0edcd65fe12992abbdc3dddb0ef29d0d2dea4c89`.
+
+Final workflow [37119027332](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/37119027332)
+passed type/build, 15 real Board outcomes and all 16 effective controls. Each
+control retained two passing independent original-mode baselines. Existing
+Buzzer physics, practice, contest, feedback, pause and hold/release gates passed.
+The practice capture control and daily reload checks passed, including key-clear
+and silent-handshake controls. All 17 built readers passed.
+
+Native browser checks passed at 320x780 touch/reduced motion, 390x844 touch,
+and 1440x1000 keyboard. All 12 exits passed. Protected saves stayed byte-identical
+with zero transient score/storage write attempts, page errors or asset failures.
+Desktop scroll stayed at 13px through the tested retry. Phone court, actions,
+paired readings, rules and desktop dark/light views were reviewed among 25
+retained screenshots. This is scoped verification, not a full repository suite
+or live player-data audit. No local runtime gates were run.
+
+Artifact11273100846 (2,110,411 bytes) SHA256 matched the published digest:
+`cf3e6daf5f80c62bdb5890cbaa7c76ff72ed071400286cdf7db1a6335a96d4b6`.
+Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-buzzer997-ci-2026-10-03/c76a4523/evidence/`.
+The twelve held raw drafts and seven stashes passed preservation after merge.
