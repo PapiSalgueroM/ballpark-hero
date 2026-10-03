@@ -191,7 +191,7 @@ export const GM_TREE_INFO: Record<GmTree, GmTreeDef> = {
   scouting: {
     id: 'scouting', label: 'Scouting', emoji: '\u{1F52D}',
     blurb: 'Your draft board reads prospects closer to what they really are.',
-    atMax: 'The fog on a prospect grade is half what it is on day one.',
+    atMax: 'A prospect read is off by a little over half what it is on day one.',
     needs: 'Pays on draft night, while you read the board.',
   },
   negotiation: {
@@ -277,4 +277,139 @@ export function gmPointsFree(u: unknown): number {
 /** Spend one point. Null when it cannot be done, so `?? prev` keeps the save. */
 export function spendGmPoint(u: unknown, tree: string): GmXp | null {
   return spendPoint(GM_TREE_SET, gmXpOf(u), tree);
+}
+
+/* ================================================================== */
+/* What a GM point does                                               */
+/* ================================================================== */
+
+/*
+ * Each effect takes the tree's points (read with gmTreePoints) and the number the
+ * front office engine already produced, and returns the adjusted number. At zero
+ * points every one of them hands back exactly what it was given.
+ */
+
+/** Scouting: the chance a second look halves a prospect's read error, per point. */
+export const GM_SCOUT_SECOND_LOOK = 0.15;
+/**
+ * Scouting. `noise` is the board's scouting error for one prospect (the shared
+ * draft class draws it as a whole number, -4 to +4) and `roll` is a draw in
+ * [0, 1) that the caller makes ONLY when points are above zero, so an untouched
+ * GM's draft draws exactly the same numbers it always did. A good roll halves
+ * the error toward zero. A whole number in, a whole number out.
+ */
+export function scoutedNoise(noise: number, points: number, roll: number): number {
+  if (points <= 0) return noise;
+  return roll < points * GM_SCOUT_SECOND_LOOK ? Math.trunc(noise / 2) : noise;
+}
+
+/** Negotiation: the share of an agent's opening ask talked away, per point. */
+export const GM_ASK_EDGE_PER_POINT = 0.02;
+export function contractAsk(ask: number, points: number): number {
+  if (points <= 0) return ask;
+  return ask * (1 - points * GM_ASK_EDGE_PER_POINT);
+}
+
+/** Cap craft: the share of a release's dead money structured away, per point. */
+export const GM_DEAD_MONEY_RELIEF_PER_POINT = 0.04;
+export function craftedDeadMoney(amount: number, points: number): number {
+  if (points <= 0) return amount;
+  return amount * (1 - points * GM_DEAD_MONEY_RELIEF_PER_POINT);
+}
+
+/** Development: extra growth per point, as a share of the year's growth. */
+export const GM_GROWTH_PER_POINT = 0.05;
+/**
+ * Development. `growth` is the year's rating change and `headroom` is what the
+ * player has left below his potential. A decline is left alone, and the extra
+ * never carries a player past his ceiling (the Round 96 and 116 rule): it is
+ * clipped at the headroom the base growth left, and never below the base.
+ */
+export function developedGrowth(growth: number, headroom: number, points: number): number {
+  if (points <= 0 || growth <= 0) return growth;
+  const extra = growth * points * GM_GROWTH_PER_POINT;
+  return growth + Math.max(0, Math.min(extra, headroom - growth));
+}
+
+/** Trading: the share of a rival's premium over value talked away, per point. */
+export const GM_PREMIUM_CUT_PER_POINT = 0.08;
+/** Trading. `premium` is the multiple of value a rival asks (1.02 firm, 1.15 sour). Never below value. */
+export function tradePremium(premium: number, points: number): number {
+  if (points <= 0 || premium <= 1) return premium;
+  return 1 + (premium - 1) * (1 - points * GM_PREMIUM_CUT_PER_POINT);
+}
+
+/** Ownership: the share of a graded season's trust LOSS absorbed, per point. */
+export const GM_TRUST_CUSHION_PER_POINT = 0.07;
+/** Ownership. A gain is left alone; a loss shrinks and stays a whole number, like every trust change. */
+export function cushionTrustLoss(delta: number, points: number): number {
+  if (points <= 0 || delta >= 0) return delta;
+  return Math.round(delta * (1 - points * GM_TRUST_CUSHION_PER_POINT));
+}
+
+/** Media: odds added to a press gamble landing, per point, and the most it can reach. */
+export const GM_PRESS_ODDS_PER_POINT = 0.03;
+export const GM_PRESS_ODDS_CAP = 0.95;
+/** Media. `odds` is the chance a candid or bold answer lands. A gamble always keeps some risk. */
+export function pressOdds(odds: number, points: number): number {
+  if (points <= 0) return odds;
+  return Math.min(GM_PRESS_ODDS_CAP, odds + points * GM_PRESS_ODDS_PER_POINT);
+}
+
+/* ================================================================== */
+/* Earning it as a GM                                                 */
+/* ================================================================== */
+
+/*
+ * Club Manager's rates, carried over so the same curve fills at the same pace,
+ * with one change a sport neutral seat needs: wins are paid on WIN SHARE rather
+ * than per win, because an NFL season is 17 games and an MLB one is 162. A .600
+ * season pays 60, which is what twenty league wins pay in Club Manager. Weighted
+ * toward achievements, not volume: a title is worth twice a winning season.
+ */
+export const GM_XP_WIN_SHARE = 100;
+export const GM_XP_PER_TITLE = 120;
+export const GM_XP_PER_PLAYOFF_ROUND = 50;
+export const GM_XP_PER_MANDATE_STEP = 60;
+export const GM_XP_PER_PLACE_OVERPERFORMED = 25;
+export const GM_XP_PER_PROSPECT = 40;
+
+export interface GmXpAward {
+  wins: number;
+  titles: number;
+  playoffs: number;
+  mandate: number;
+  overperformance: number;
+  prospects: number;
+  total: number;
+}
+
+/** How far past the owner's ask a graded season went: met is one step, beating it or a title two. */
+export function mandateSteps(result: string): number {
+  if (result === 'title' || result === 'overachieved') return 2;
+  return result === 'met' ? 1 : 0;
+}
+
+const count = (n: number): number => (Number.isFinite(n) ? Math.max(0, Math.round(n)) : 0);
+
+/** What a GM's season was worth. Pure over plain numbers, so a harness can drive it directly. */
+export function gmSeasonXp(input: {
+  winPct: number;
+  titles: number;
+  playoffRoundsWon: number;
+  mandateSteps: number;
+  placesAboveExpectation: number;
+  prospectsGraduated: number;
+}): GmXpAward {
+  const pct = Number.isFinite(input.winPct) ? Math.max(0, Math.min(1, input.winPct)) : 0;
+  const wins = Math.round(pct * GM_XP_WIN_SHARE);
+  const titles = count(input.titles) * GM_XP_PER_TITLE;
+  const playoffs = count(input.playoffRoundsWon) * GM_XP_PER_PLAYOFF_ROUND;
+  const mandate = Math.min(2, count(input.mandateSteps)) * GM_XP_PER_MANDATE_STEP;
+  const overperformance = count(input.placesAboveExpectation) * GM_XP_PER_PLACE_OVERPERFORMED;
+  const prospects = count(input.prospectsGraduated) * GM_XP_PER_PROSPECT;
+  return {
+    wins, titles, playoffs, mandate, overperformance, prospects,
+    total: wins + titles + playoffs + mandate + overperformance + prospects,
+  };
 }

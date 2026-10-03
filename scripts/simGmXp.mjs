@@ -63,6 +63,12 @@ const BUNDLE = `${TMP}/simGmXp.${process.pid}.bundle.mjs`;
 fs.writeFileSync(ENTRY, [
   "export * as cm from '@/lib/clubManagerXp';",
   HAS_GM ? "export * as gm from '@/lib/gmXp';" : 'export const gm = null;',
+  /* The shared front office modules, read for the real numbers each GM tree's
+     consumer is handed. None of them imports anything that reaches a network. */
+  "export * as talks from '@/lib/foTradeTalks';",
+  "export * as mandate from '@/lib/foOwnerMandate';",
+  "export * as press from '@/lib/foGmPress';",
+  "export * as cuts from '@/lib/frontOfficeCuts';",
 ].join('\n'));
 const aliasPlugin = {
   name: 'dukb-alias',
@@ -81,7 +87,7 @@ await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: BUNDLE, logLevel: 'error', plugins: [aliasPlugin],
 });
-const { cm, gm } = await import(pathToFileURL(BUNDLE).href);
+const { cm, gm, talks, mandate, press, cuts } = await import(pathToFileURL(BUNDLE).href);
 for (const f of [ENTRY, BUNDLE, ...Object.values(overrides)]) { try { fs.unlinkSync(f); } catch { /* gone */ } }
 
 let failures = 0;
@@ -256,6 +262,158 @@ console.log('1) Club Manager XP replays the fixture recorded before the lift');
   if (lines < 3000) fail(`the fixture holds ${lines} lines, too few to be the recording this harness writes`);
   const bad = replay(cmS, fx);
   if (!bad) ok(`${lines} lines over ${Object.keys(fx.sections).length} sections match the recording from ${fx.recordedFrom}`);
+}
+
+if (!gm) {
+  console.error('\nsimGmXp: src/lib/gmXp.ts does not exist, so only the Club Manager replay ran');
+  process.exit(1);
+}
+
+/* ---------- 2. A GM climbs exactly the ladder a manager climbs ---------- */
+console.log('2) The GM curve is Club Manager\'s, at every level, and so is every spend');
+{
+  let checked = 0;
+  if (gm.GM_MAX_LEVEL !== cm.MAX_LEVEL) fail(`GM max level ${gm.GM_MAX_LEVEL}, Club Manager ${cm.MAX_LEVEL}`);
+  if (gm.GM_TREES.length !== cm.SKILL_TREES.length) fail(`GM has ${gm.GM_TREES.length} trees, Club Manager ${cm.SKILL_TREES.length}`);
+  if (gm.GM_MAX_TREE_POINTS !== cm.MAX_TREE_POINTS) fail(`GM tree cap ${gm.GM_MAX_TREE_POINTS}, Club Manager ${cm.MAX_TREE_POINTS}`);
+  for (let l = -1; l <= cm.MAX_LEVEL + 3; l++) {
+    const t = cm.xpForLevel(l);
+    if (gm.xpForLevel(l) !== t) fail(`level ${l}: GM needs ${gm.xpForLevel(l)} XP, Club Manager ${t}`);
+    for (const xp of [t - 1, t, t + 1]) {
+      checked += 1;
+      const a = `${gm.levelFor(xp, gm.GM_MAX_LEVEL)} ${gm.pointsEarned(xp, gm.GM_MAX_LEVEL)} ${gm.levelProgress(xp, gm.GM_MAX_LEVEL)}`;
+      const b = `${cm.levelFor(xp)} ${cm.pointsEarned(xp)} ${cm.levelProgress(xp)}`;
+      if (a !== b) fail(`at ${xp} XP the GM reads level, points, progress ${a}; Club Manager ${b}`);
+    }
+  }
+  /* The same seeded spend walk on both seats, tree i of one standing for tree i
+     of the other: every refusal and every point must land the same way. */
+  const rnd = mulberry32(4242);
+  const toGm = pts => Object.fromEntries(cm.SKILL_TREES.map((t, i) => [gm.GM_TREES[i], pts[t]]));
+  let spends = 0;
+  for (let w = 0; w < 200; w++) {
+    let c = { ...cm.defaultXp(), xp: Math.floor(rnd() * (cm.xpForLevel(cm.MAX_LEVEL) + 3000)) };
+    let g = { ...gm.defaultGmXp(), xp: c.xp };
+    for (let s = 0; s < 40; s++) {
+      const i = Math.floor(rnd() * cm.SKILL_TREES.length);
+      const cr = cm.spendPoint(c, cm.SKILL_TREES[i]);
+      const gr = gm.spendGmPoint(g, gm.GM_TREES[i]);
+      spends += 1;
+      if ((cr === null) !== (gr === null)) { fail(`walk ${w} spend ${s}: Club Manager ${cr ? 'took' : 'refused'} it, the GM ${gr ? 'took' : 'refused'} it`); break; }
+      if (cr) { c = cr; g = gr; }
+      if (show(toGm(c.points)) !== show(g.points) || cm.pointsFree(c) !== gm.gmPointsFree(g)) {
+        fail(`walk ${w} spend ${s}: the boards diverged`); break;
+      }
+    }
+  }
+  ok(`${checked} XP probes over ${cm.MAX_LEVEL + 5} levels and ${spends} paired spends land the same on both seats`);
+}
+
+/* ---------- the real numbers each GM consumer is handed ---------- */
+/* Read from the shared front office modules, not typed here, so a retune of the
+   engine is a retune of what this harness measures. */
+const REAL = (() => {
+  const m = { tier: 'contend', text: '', winFloor: 0, reqLevel: 2, season: 1 };
+  const out = (lvl, title = false) => ({ wins: 40, madePlayoffs: lvl >= 1, roundsWon: lvl >= 2 ? 1 : 0, reachedFinal: lvl >= 3, wonTitle: title });
+  const graded = [out(0), out(1), out(2), out(3), out(3, true)].map(o => mandate.gradeSeason(m, o));
+  const words = { title: 'the title', playoffs: 'the playoffs', round: 'a series', games: 82 };
+  const base = { justHired: false, teamLabel: 'Test City', fired: false, wonTitle: false, gradeResult: null, tradeLine: null, seasonsPlayed: 3 };
+  const facts = [{ justHired: true, seasonsPlayed: 0 }, { wonTitle: true, gradeResult: 'title' }, { gradeResult: 'badly' },
+    { gradeResult: 'missed' }, { tradeLine: 'a deal' }, { gradeResult: 'met' }].map(f => ({ ...base, ...f }));
+  const odds = new Set();
+  for (const f of facts) for (const o of press.buildGmPresser(words, f)?.options ?? []) if (o.effect.gamble) odds.add(o.effect.gamble.odds);
+  const deadNow = [1, 2.5, 4, 9, 14, 22, 35].map(salary => cuts.deadMoneyFor({ salary, years: 3, guaranteed: false }).now);
+  return {
+    noise: [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+    asks: [1.2, 4.5, 12, 30],
+    deadNow,
+    growth: [[1, 12], [3, 10], [6, 15]],
+    premiums: [talks.FIRM_PREMIUM, talks.SOUR_PREMIUM],
+    losses: graded.map(g => g.trustDelta).filter(d => d < 0),
+    gains: graded.map(g => g.trustDelta).filter(d => d >= 0),
+    odds: [...odds].sort(),
+  };
+})();
+if (REAL.losses.length < 2 || REAL.odds.length < 3 || REAL.deadNow.some(d => !(d > 0))) {
+  fail(`the front office numbers this harness reads came back thin: losses ${show(REAL.losses)}, odds ${show(REAL.odds)}, dead ${show(REAL.deadNow)}`);
+}
+
+/* Each GM tree, the consumer it feeds, and a reading of that consumer at p points
+   over the real inputs. `dir` is the way a point must push the reading. */
+const ROLLS = Array.from({ length: 1000 }, (_, i) => (i + 0.5) / 1000);
+const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+const CONSUMERS = {
+  scouting: { feeds: 'expected read error of a prospect, per scouting error the draft drew (a perfect read has nothing to fix)', dir: -1,
+    read: p => REAL.noise.filter(n => n !== 0).map(n => mean(ROLLS.map(r => Math.abs(gm.scoutedNoise(n, p, r))))) },
+  negotiation: { feeds: 'opening contract ask, as a share of the agent figure', dir: -1,
+    read: p => REAL.asks.map(a => gm.contractAsk(a, p) / a) },
+  capCraft: { feeds: 'dead money a release leaves, as a share of the shared engine figure', dir: -1,
+    read: p => REAL.deadNow.map(d => gm.craftedDeadMoney(d, p) / d) },
+  development: { feeds: 'a young player year of growth, as a share of the base growth', dir: 1,
+    read: p => REAL.growth.map(([g, h]) => gm.developedGrowth(g, h, p) / g) },
+  trading: { feeds: 'a rival premium over value, as a share of the firm and sour premiums', dir: -1,
+    read: p => REAL.premiums.map(x => (gm.tradePremium(x, p) - 1) / (x - 1)) },
+  ownership: { feeds: 'trust lost to a missed and a badly missed mandate', dir: -1,
+    read: p => REAL.losses.map(d => -gm.cushionTrustLoss(d, p)) },
+  media: { feeds: 'odds each candid or bold answer lands', dir: 1,
+    read: p => REAL.odds.map(o => gm.pressOdds(o, p)) },
+};
+
+/* ---------- 3. Nothing spent is the game that shipped ---------- */
+console.log('3) A GM who has spent nothing gets exactly the numbers the front office produced');
+{
+  let checked = 0;
+  const xs = [-28, -16, -4, -2.5, -1, 0, 0.45, 0.97, 1, 1.02, 1.15, 2.5, 7, 30];
+  for (const x of xs) {
+    for (const r of [0, 0.01, 0.5, 0.99]) if (gm.scoutedNoise(x, 0, r) !== x) fail(`scoutedNoise moved ${x} at zero points`);
+    const at0 = { contractAsk: gm.contractAsk(x, 0), craftedDeadMoney: gm.craftedDeadMoney(x, 0),
+      developedGrowth: gm.developedGrowth(x, 3, 0), tradePremium: gm.tradePremium(x, 0),
+      cushionTrustLoss: gm.cushionTrustLoss(x, 0), pressOdds: gm.pressOdds(x, 0) };
+    for (const [name, v] of Object.entries(at0)) { checked += 1; if (!Object.is(v, x)) fail(`${name}(${x}) at zero points is ${v}`); }
+  }
+  const fresh = gm.defaultGmXp();
+  for (const t of gm.GM_TREES) {
+    if (gm.gmTreePoints(fresh, t) !== 0 || gm.gmTreePoints(undefined, t) !== 0) fail(`a fresh or absent block has points in ${t}`);
+  }
+  if (!failures) ok(`${checked + 4 * xs.length} readings at zero points hand back exactly what they were given; fresh and absent blocks are empty`);
+}
+
+/* ---------- 4. Every point moves its consumer, at every step ---------- */
+console.log('4) Every GM tree point moves the number it feeds, at every step from 1 to the cap');
+{
+  /* The smallest step each tree must take, in the reading's own units. Set at
+     about half the smallest step measured (header), so a tree that loses half its
+     bite at any one level fails, and a tree that stops moving fails by miles. */
+  const MIN_STEP = {
+    scouting: 0.07, negotiation: 0.01, capCraft: 0.02, development: 0.025,
+    trading: 0.04, ownership: 0.5, media: 0.015,
+  };
+  let endsOnly = 0;
+  for (const t of gm.GM_TREES) {
+    const c = CONSUMERS[t];
+    if (!c) { fail(`tree ${t} has no consumer in this harness`); continue; }
+    if (!gm.GM_TREE_INFO[t]) fail(`tree ${t} has no screen entry`);
+    /* r[p][k]: the reading for real input k with p points. Every input, every step. */
+    const r = [];
+    for (let p = 0; p <= gm.GM_MAX_TREE_POINTS; p++) r.push(c.read(p));
+    let worst = Infinity;
+    let endsOk = true;
+    r[0].forEach((_, k) => {
+      for (let p = 1; p <= gm.GM_MAX_TREE_POINTS; p++) {
+        const step = c.dir * (r[p][k] - r[p - 1][k]);
+        worst = Math.min(worst, step);
+        if (!(step >= MIN_STEP[t])) fail(`${t}: point ${p} moved input ${k} by ${step.toFixed(4)}, below the ${MIN_STEP[t]} a point must buy`);
+      }
+      if (!(c.dir * (r[gm.GM_MAX_TREE_POINTS][k] - r[0][k]) >= MIN_STEP[t])) endsOk = false;
+    });
+    if (endsOk) endsOnly += 1;
+    const avg = r.map(row => mean(row).toFixed(4)).join(c.dir > 0 ? ' < ' : ' > ');
+    console.log(`   ${t} (${c.feeds}), mean over ${r[0].length} real inputs: ${avg}`);
+    if (worst >= MIN_STEP[t]) ok(`${t}: smallest step over every input and level ${worst.toFixed(4)} (floor ${MIN_STEP[t]})`);
+  }
+  /* What a 0 against the cap check would have said. It is printed, never relied
+     on: GMXP_CONTROL=saturate keeps it green while the per step check goes red. */
+  console.log(`   (an ends only check passes ${endsOnly} of ${gm.GM_TREES.length} trees)`);
 }
 
 /* ---------- summary ---------- */
