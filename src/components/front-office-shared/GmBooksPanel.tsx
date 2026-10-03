@@ -3,8 +3,9 @@
  *
  * Everything this prints comes out of src/lib/gmBooks.ts (projectGmBooks,
  * ticketReactionGm), so what the screen promises is what the module books:
- * the ticket buttons say what the crowd and ownership will do, and those are
- * the two things setGmTicketTier changes. The operations budget is printed
+ * the ticket buttons say what the crowd and ownership will do: the crowd is
+ * what setGmTicketTier moves, and ownership's point of trust is closeGmSeason's,
+ * once, on the price the season finishes on. The operations budget is printed
  * apart from the payroll on purpose, because it never buys a player.
  *
  * Not mounted by this round: the boards belong to the rounds running beside

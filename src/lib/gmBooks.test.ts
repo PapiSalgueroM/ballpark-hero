@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  GM_BOOKS_SPORTS, buyFacility, closeGmSeason, gmBooksOf, isValidGmBooks, ledgerBalances,
+  GM_BOOKS_SPORTS, buyFacility, closeGmSeason, facilityFundsK, gmBooksOf, isValidGmBooks, ledgerBalances,
   marketTierFromPayrolls, newGmBooks, notePlayoffHomeGame, noteTax, opsBudgetFor, opsFreeK,
   projectGmBooks, setGmTicketTier, tickGmBooks, toK, type GmBooks, type GmBooksContext,
 } from '@/lib/gmBooks';
@@ -67,7 +67,22 @@ describe('gmFacilities', () => {
   it('a mangled block resets alone to the day one levels', () => {
     expect(isValidFacilities(NBA_FACILITY_PACK, { v: 1, pack: 'nba', levels: { training: 11 } })).toBe(false);
     expect(facilitiesOf(NBA_FACILITY_PACK, 'junk', 1)).toEqual(newFacilities(NBA_FACILITY_PACK, 1));
-    expect(upkeepPerPeriod(NBA_FACILITY_PACK, newFacilities(NBA_FACILITY_PACK, 1))).toBeGreaterThan(0);
+  });
+
+  it('every seat in every pack opens neutral: level 1 everywhere and no upkeep, whatever the market', () => {
+    for (const pack of Object.values(GM_FACILITY_PACKS)) {
+      for (const tier of [1, 2, 3] as MarketTier[]) {
+        const f = newFacilities(pack, tier);
+        expect(Object.values(f.levels).every(l => l === 1)).toBe(true);
+        expect(upkeepPerPeriod(pack, f)).toBe(0);
+      }
+    }
+  });
+
+  it('a block saved before a building was added keeps its levels and opens the new one at level 1', () => {
+    const saved = { v: 1, pack: 'nba', levels: { training: 4, medical: 3, analytics: 2 }, build: null, seasonSpend: 0 };
+    const f = facilitiesOf(NBA_FACILITY_PACK, saved, 1);
+    expect(f.levels).toEqual({ training: 4, medical: 3, analytics: 2, scouting: 1 });
   });
 });
 
@@ -109,16 +124,31 @@ describe('gmBooks', () => {
     expect(marketTierFromPayrolls(100, all)).toBe(3);
   });
 
-  it('trust moves the operations budget, and a price change narrates ownership without sacking anybody', () => {
+  it('trust moves the operations budget, and the price moves trust once a season, never by flicking it', () => {
     expect(opsBudgetFor(2, 100, CAP)).toBeGreaterThan(opsBudgetFor(2, 60, CAP));
     expect(opsBudgetFor(2, 60, CAP)).toBeGreaterThan(opsBudgetFor(2, 0, CAP));
     const b = newGmBooks(nba, 2, 60, CAP);
-    const fair = setGmTicketTier(b, 0, 1);
-    expect(fair.trust).toBe(1);
-    expect(fair.line).toMatch(/Ownership/);
-    const premium = setGmTicketTier(b, 2, 60);
-    expect(premium.trust).toBe(61);
-    expect(setGmTicketTier(b, 1, 60).line).toBeNull();
+    expect(setGmTicketTier(b, 0).line).toMatch(/Ownership/);
+    expect(setGmTicketTier(b, 1).line).toBeNull();
+    let flicked = b;
+    for (let i = 0; i < 40; i++) flicked = setGmTicketTier(flicked, i % 2 === 0 ? 2 : 1).books;
+    expect(flicked.ticketTier).toBe(1);
+    expect(closeGmSeason(flicked, 60, CAP).trust).toBe(60);
+    expect(closeGmSeason(setGmTicketTier(flicked, 2).books, 60, CAP).trust).toBe(61);
+    expect(closeGmSeason(setGmTicketTier(flicked, 0).books, 1, CAP).trust).toBe(1);
+    expect(closeGmSeason(setGmTicketTier(flicked, 0).books, 30, CAP).trust).toBe(29);
+  });
+
+  it('the operations budget carries to the $k, an overrun as a debt, and next season is set from the trust', () => {
+    const b = { ...newGmBooks(nba, 2, 60, CAP), opsCarry: 500 };
+    const played = playSeason(b, { ...ctxFor(2), facilities: undefined }, []);
+    const spent = played.season.staff + played.season.scouting;
+    const { books } = closeGmSeason(played, 80, 170);
+    expect(books.opsCarry).toBe(b.opsBudget + 500 - spent);
+    expect(books.opsBudget).toBe(opsBudgetFor(2, 80, 170));
+    const over = closeGmSeason({ ...played, opsCarry: -b.opsBudget }, 60, CAP).books;
+    expect(over.opsCarry).toBeLessThan(0);
+    expect(isValidGmBooks(over)).toBe(true);
   });
 
   it('a building is paid from the operations budget and booked as facilities spend', () => {
@@ -131,6 +161,14 @@ describe('gmBooks', () => {
     expect(spent).toBeGreaterThan(0);
     expect(opsFreeK(bought!.books, { ...ctx, facilities: { pack: NBA_FACILITY_PACK, state: bought!.facilities } })).toBeLessThanOrEqual(free - spent);
     expect(bought!.books.kitty).toBe(-spent);
+  });
+
+  it('a building may cost only what is left once its own upkeep for the rest of the season is kept back', () => {
+    const b = newGmBooks(nba, 1, 60, CAP);
+    const ctx = ctxFor(1);
+    const forTraining = facilityFundsK(b, ctx, 'training');
+    expect(forTraining).toBeLessThan(opsFreeK(b, ctx));
+    expect(forTraining).toBeGreaterThan(0);
   });
 
   it('a corrupt books block resets alone', () => {

@@ -11,7 +11,7 @@
  * it, and the round that binds a pack to its game mounts this panel there.
  */
 import {
-  facilityEffectLines, facilityLevel, facilityUpgradeCost, upgradeRefusal,
+  facilityEffectLines, facilityLevel, facilityMoney, facilityUpgradeCost, upgradeRefusal,
   type FacilityPack, type GmFacilitiesState,
 } from '@/lib/gmFacilities';
 import { cn } from '@/lib/utils';
@@ -21,25 +21,29 @@ interface GmFacilitiesPanelProps {
   state: GmFacilitiesState;
   /** What the seat may spend on buildings right now, in the pack's money (opsFreeK / 1000 for a GM seat). */
   funds: number;
+  /**
+   * What each building may cost, when that differs by building (a GM seat:
+   * facilityFundsK(books, ctx, id) / 1000, which also keeps back the upkeep
+   * the new level adds once it opens). Falls back to `funds`.
+   */
+  fundsById?: Record<string, number>;
   /** The league's money against its opening season, so prices follow it. */
   scale?: number;
   /** Start the next level; the board applies startUpgrade (or buyFacility) and saves. */
   onUpgrade?: (id: string) => void;
 }
 
-const money = (n: number, unit: string): string => (unit === '$M' ? `$${n.toFixed(n < 1 ? 3 : 1)}M` : `${n} ${unit}`);
-
-export function GmFacilitiesPanel({ pack, state, funds, scale = 1, onUpgrade }: GmFacilitiesPanelProps) {
+export function GmFacilitiesPanel({ pack, state, funds, fundsById, scale = 1, onUpgrade }: GmFacilitiesPanelProps) {
   return (
     <section data-gm-facilities className="space-y-2">
       <p className="text-center text-[10px] text-muted-foreground">
-        {money(Math.max(0, funds), pack.unit)} to spend on buildings. One project at a time, paid when the work starts.
+        {facilityMoney(pack, Math.max(0, funds))} to spend on buildings. One project at a time, paid when the work starts.
       </p>
       <div className="grid grid-cols-2 gap-2">
         {pack.facilities.map(d => {
           const level = facilityLevel(pack, state, d.id);
           const cost = facilityUpgradeCost(pack, state, d.id, scale);
-          const refusal = upgradeRefusal(pack, state, d.id, funds, scale);
+          const refusal = upgradeRefusal(pack, state, d.id, fundsById?.[d.id] ?? funds, scale);
           const building = state.build?.id === d.id ? state.build : null;
           return (
             <div key={d.id} data-facility={d.id} className="rounded-lg border border-border/60 p-2 text-[10px]">
@@ -57,7 +61,7 @@ export function GmFacilitiesPanel({ pack, state, funds, scale = 1, onUpgrade }: 
                   onClick={() => onUpgrade(d.id)}
                   className={cn('mt-1 w-full rounded-md border px-1 py-0.5', refusal ? 'border-border/40 text-muted-foreground' : 'border-primary text-primary')}
                 >
-                  Build level {level + 1}, {money(cost, pack.unit)}
+                  Build level {level + 1}, {facilityMoney(pack, cost)}
                 </button>
               )}
               {cost === null && <p className="text-muted-foreground">Top level.</p>}

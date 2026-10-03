@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { GmBooksPanel } from '@/components/front-office-shared/GmBooksPanel';
 import { GmFacilitiesPanel } from '@/components/front-office-shared/GmFacilitiesPanel';
-import { GM_BOOKS_SPORTS, newGmBooks, setGmTicketTier, type GmBooksContext } from '@/lib/gmBooks';
+import { GM_BOOKS_SPORTS, closeGmSeason, newGmBooks, setGmTicketTier, type GmBooksContext } from '@/lib/gmBooks';
 import { newFacilities, startUpgrade } from '@/lib/gmFacilities';
 import { GYM_FACILITY_PACK, NBA_FACILITY_PACK } from '@/data/gmFacilities/packs';
 
@@ -26,8 +26,8 @@ describe('GmBooksPanel', () => {
     render(<GmBooksPanel books={books} ctx={ctx} onTicketTier={onTicketTier} />);
     fireEvent.click(screen.getByText(/Premium/));
     expect(onTicketTier).toHaveBeenCalledWith(2);
-    expect(screen.getByText(/Ownership adds a point of trust/)).toBeTruthy();
-    expect(setGmTicketTier(books, 2, 60).trust).toBe(61);
+    expect(screen.getByText(/Finish a season on these and ownership adds a point of trust/)).toBeTruthy();
+    expect(closeGmSeason(setGmTicketTier(books, 2).books, 60, 165).trust).toBe(61);
   });
 });
 

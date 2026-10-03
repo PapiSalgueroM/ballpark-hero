@@ -22,7 +22,12 @@
  *   THE OPERATIONS BUDGET. What ownership lets you spend on the building and
  *   the people in it this season: staff, scouting, facility upkeep and new
  *   facilities. It is set at each summer from the market tier and ownership's
- *   trust (foOwnerMandate), and what you do not spend carries. It is NOT the
+ *   trust (foOwnerMandate), and what you do not spend carries in full. A new
+ *   building is only started when the budget still covers everything else
+ *   the season will cost, its own upkeep included, so a purchase never takes
+ *   a season over; if running costs alone overrun (a budget cut after a
+ *   building spree), the overrun carries as a debt against the next budget
+ *   instead of vanishing into the kitty. It is NOT the
  *   salary cap and it never buys a player: payroll, tax and dead money are
  *   the cap's business and are charged to the kitty without touching it.
  *
@@ -36,14 +41,14 @@
  * ownership's reaction narrated, never quoted.
  */
 import type { FacilityPack, GmFacilitiesState } from '@/lib/gmFacilities';
-import { facilityDef, facilityUpgradeCost, startUpgrade, upkeepPerPeriod } from '@/lib/gmFacilities';
+import { facilityDef, facilityUpgradeCost, startUpgrade, tickFacilities, upkeepPerPeriod } from '@/lib/gmFacilities';
 import type { MarketTier } from '@/lib/gmFacilities';
 
 export type { MarketTier };
 
 export interface GmBooksSport {
   id: string;
-  /** Ticks in a regular season: 18 weeks in the NFL, 20 rounds in the NBA and NHL, 27 in MLB. */
+  /** Ticks in a regular season: 17 weeks in the NFL, 20 rounds in the NBA and NHL, 27 in MLB. */
   periods: number;
   /** Regular season home games. */
   homeGames: number;
@@ -51,12 +56,16 @@ export interface GmBooksSport {
   period: string;
 }
 
-/* The engines' own season shapes: frontOffice REGULAR_WEEKS 17 plus a bye,
+/* The engines' own season shapes, one tick per week or round the engine
+   plays: frontOffice REGULAR_WEEKS 17 (no bye in the engine, so 17 ticks),
    NBA_ROUNDS x GAMES_PER_ROUND = 80, NHL_FO_ROUNDS x NHL_GAMES_PER_ROUND = 80,
-   MLB_ROUNDS x MLB_GAMES_PER_ROUND = 162, half of each at home (the NFL's odd
-   game makes 8 or 9; the books use 8.5 as the season's even split). */
+   MLB_ROUNDS x MLB_GAMES_PER_ROUND = 162, half of each at home. The NFL's
+   odd game gives a club 8 or 9 home games; the gate's price per game uses
+   8.5, the season's even split, and the projection reads the club's own
+   count from ctx.homeGamesThisSeason when the board passes it.
+   scripts/simGmBooks.mjs reads the engine constants and fails on a drift. */
 export const GM_BOOKS_SPORTS: Record<string, GmBooksSport> = {
-  nfl: { id: 'nfl', periods: 18, homeGames: 8.5, period: 'week' },
+  nfl: { id: 'nfl', periods: 17, homeGames: 8.5, period: 'week' },
   nba: { id: 'nba', periods: 20, homeGames: 40, period: 'round' },
   nhl: { id: 'nhl', periods: 20, homeGames: 40, period: 'round' },
   mlb: { id: 'mlb', periods: 27, homeGames: 81, period: 'round' },
@@ -111,7 +120,10 @@ export interface GmBooks {
   kitty: number;
   /** $k ownership set for this season's operations. */
   opsBudget: number;
-  /** $k of last season's operations budget left unspent and carried. */
+  /**
+   * $k carried from last season: what was left unspent, in full, or, below
+   * zero, what the running costs overran, owed out of this season's budget.
+   */
   opsCarry: number;
   season: GmLedger;
   lastSeason: GmClosedLedger | null;
@@ -217,7 +229,7 @@ export function isValidGmBooks(b: unknown): b is GmBooks {
     && (o.marketTier === 1 || o.marketTier === 2 || o.marketTier === 3)
     && (o.ticketTier === 0 || o.ticketTier === 1 || o.ticketTier === 2)
     && typeof o.gateMood === 'number' && Number.isFinite(o.gateMood) && o.gateMood >= 0 && o.gateMood <= 100
-    && isInt(o.kitty) && isInt(o.opsBudget) && o.opsBudget >= 0 && isInt(o.opsCarry) && o.opsCarry >= 0
+    && isInt(o.kitty) && isInt(o.opsBudget) && o.opsBudget >= 0 && isInt(o.opsCarry)
     && isLedger(o.season) && (o.lastSeason === null || isClosed(o.lastSeason));
 }
 
@@ -240,6 +252,8 @@ export interface GmBooksContext {
   facilities?: { pack: FacilityPack; state: GmFacilitiesState };
   /** The league's money against its opening season (cap / opening cap), so a building costs the same share later. */
   scale?: number;
+  /** This club's regular season home games from its own schedule (an NFL club has 8 or 9), for the projection. */
+  homeGamesThisSeason?: number;
 }
 
 /** A season total split so the periods add up to it exactly: the share of period i. */
@@ -298,6 +312,9 @@ export function opsRatesK(b: GmBooks, ctx: GmBooksContext, i: number): [number, 
  * gates played in it, and the gate's mood drifting toward where the price
  * and the form put it. Pure; a period past the season's last books nothing
  * but the gates, so a stray extra tick cannot charge a thirteenth month.
+ * Order each period: buy anything first, then tick the books with the
+ * period's buildings in ctx, then tickFacilities, which is the order opsFreeK
+ * reserves the rest of the season's upkeep in.
  */
 export function tickGmBooks(books: GmBooks, ctx: GmBooksContext, form: readonly string[], homeGames: number): GmBooks {
   const b = cloneBooks(books);
@@ -346,30 +363,63 @@ export function opsSpentK(b: GmBooks): number {
 }
 
 /**
+ * The running costs the rest of the regular season will still book, [staff,
+ * scouting, upkeep] in $k, with the buildings as they will stand in each of
+ * those periods: a build under way opens on its own period and its upkeep is
+ * counted from there. The order is the one tickGmBooks documents (the books
+ * tick on the period's buildings, then the facilities tick).
+ */
+function runningCostsLeftK(b: GmBooks, ctx: GmBooksContext, state?: GmFacilitiesState): [number, number, number] {
+  const out: [number, number, number] = [0, 0, 0];
+  const pack = ctx.facilities?.pack;
+  let f = state ?? ctx.facilities?.state;
+  for (let i = b.season.periods; i < ctx.sport.periods; i++) {
+    const c = pack && f ? { ...ctx, facilities: { pack, state: f } } : ctx;
+    const [staff, scouting, upkeep] = opsRatesK(b, c, i);
+    out[0] += staff; out[1] += scouting; out[2] += upkeep;
+    if (pack && f) f = tickFacilities(pack, f).state;
+  }
+  return out;
+}
+
+const sum3 = (r: [number, number, number]): number => r[0] + r[1] + r[2];
+
+/**
  * $k free to start a building today: the budget and the carry, less what is
  * spent, less the staff, scouts and upkeep the rest of the season will still
- * cost at today's levels. Never below zero.
+ * cost, a build under way counted from the period it opens. Never below zero.
  */
 export function opsFreeK(b: GmBooks, ctx: GmBooksContext): number {
-  let committed = 0;
-  for (let i = b.season.periods; i < ctx.sport.periods; i++) {
-    const [staff, scouting, upkeep] = opsRatesK(b, ctx, i);
-    committed += staff + scouting + upkeep;
-  }
-  return Math.max(0, b.opsBudget + b.opsCarry - opsSpentK(b) - committed);
+  return Math.max(0, b.opsBudget + b.opsCarry - opsSpentK(b) - sum3(runningCostsLeftK(b, ctx)));
+}
+
+/**
+ * $k this building's next level may cost: what is free, less the upkeep the
+ * new level adds from the period it opens to the season's end, so a building
+ * bought today can never push this season's running costs past the budget.
+ * Zero when the engine would refuse it for another reason (busy site, top).
+ */
+export function facilityFundsK(b: GmBooks, ctx: GmBooksContext, id: string): number {
+  if (!ctx.facilities) return 0;
+  const { pack, state } = ctx.facilities;
+  const trial = startUpgrade(pack, state, id, Number.MAX_SAFE_INTEGER, ctx.scale ?? 1);
+  if (!trial) return 0;
+  const extra = sum3(runningCostsLeftK(b, ctx, trial.state)) - sum3(runningCostsLeftK(b, ctx));
+  return Math.max(0, opsFreeK(b, ctx) - Math.max(0, extra));
 }
 
 /**
  * Start the next level of a building out of the operations budget. The cost
  * is booked as facilities spend the moment work starts. Null when the
- * facility engine refuses (busy site, top level, not enough free budget).
+ * facility engine refuses (busy site, top level, not enough free budget once
+ * the new level's upkeep for the rest of the season is kept back).
  */
 export function buyFacility(
   books: GmBooks, ctx: GmBooksContext, id: string,
 ): { books: GmBooks; facilities: GmFacilitiesState; line: string } | null {
   if (!ctx.facilities) return null;
   const { pack, state } = ctx.facilities;
-  const started = startUpgrade(pack, state, id, toM(opsFreeK(books, ctx)), ctx.scale ?? 1);
+  const started = startUpgrade(pack, state, id, toM(facilityFundsK(books, ctx, id)), ctx.scale ?? 1);
   if (!started) return null;
   const b = cloneBooks(books);
   book(b, 'facilities', toK(started.cost));
@@ -384,29 +434,31 @@ export function nextFacilityCost(ctx: GmBooksContext, id: string): number | null
 
 /* ---------- the ticket price, with ownership's reaction narrated ---------- */
 
+/** Ownership's verdict on the price you finish a season on: a point of trust either way, or none. */
+export const TICKET_TRUST: Record<GmTicketTier, number> = { 0: -1, 1: 0, 2: 1 };
+
 export function ticketReactionGm(tier: GmTicketTier): { crowd: string; owner: string } {
-  if (tier === 0) return { crowd: 'The building fills up over the weeks.', owner: 'Ownership takes a point of trust off the day you set it: cheaper seats are money left on the table.' };
-  if (tier === 2) return { crowd: 'A few seats go empty over the weeks.', owner: 'Ownership adds a point of trust the day you set it: they like the bigger take a seat.' };
+  if (tier === 0) return { crowd: 'The building fills up over the weeks.', owner: 'Finish a season on these and ownership takes a point of trust off: cheaper seats are money left on the table.' };
+  if (tier === 2) return { crowd: 'A few seats go empty over the weeks.', owner: 'Finish a season on these and ownership adds a point of trust: they like the bigger take a seat.' };
   return { crowd: 'Nobody notices.', owner: 'Ownership has no view.' };
 }
 
 /**
- * Change the price. The gate's mood jumps a little at once and then drifts;
- * ownership's trust moves a point, never below 1, because zero is the sack
- * and a price change is not a sacking (Club Manager's floor, same reason).
+ * Change the price. The gate's mood jumps a little at once and then drifts.
+ * Trust is not touched here: ownership judges the price once a season, on
+ * the tier you hold when the books close (closeGmSeason), so flicking the
+ * price back and forth earns nothing.
  */
-export function setGmTicketTier(books: GmBooks, tier: GmTicketTier, trust: number): { books: GmBooks; trust: number; line: string | null } {
-  if (tier === books.ticketTier) return { books, trust, line: null };
+export function setGmTicketTier(books: GmBooks, tier: GmTicketTier): { books: GmBooks; line: string | null } {
+  if (tier === books.ticketTier) return { books, line: null };
   const b = cloneBooks(books);
   b.ticketTier = tier;
   b.gateMood = clamp(round1(b.gateMood + (tier === 0 ? 3 : tier === 2 ? -4 : 0)), 0, 100);
-  const delta = tier === 0 ? -1 : tier === 2 ? 1 : 0;
-  const next = delta < 0 ? clamp(trust + delta, 1, 100) : clamp(trust + delta, 0, 100);
   const t = GM_TICKET_TIERS[tier];
-  const line = delta === 0
+  const line = TICKET_TRUST[tier] === 0
     ? `${t.emoji} Tickets back to ${t.label.toLowerCase()}. Ownership has no view.`
-    : `${t.emoji} Tickets set to ${t.label.toLowerCase()}. Ownership ${delta > 0 ? 'liked the bigger take a seat' : 'noticed the money left on the table'}: trust ${delta > 0 ? '+1' : '-1'}.`;
-  return { books: b, trust: next, line };
+    : `${t.emoji} Tickets set to ${t.label.toLowerCase()}. Ownership will judge the price you finish the season on.`;
+  return { books: b, line };
 }
 
 /* ---------- the projection, Club Manager's projectFinances shape ---------- */
@@ -459,10 +511,13 @@ export function projectGmBooks(b: GmBooks, ctx: GmBooksContext): GmFinanceProjec
     left.localMedia += periodShare(toK(LOCAL_MEDIA_SHARE * ctx.cap * MARKET_MULT[b.marketTier]), i, P);
     left.payroll += periodShare(toK(ctx.payroll), i, P);
     left.deadMoney += periodShare(toK(ctx.deadMoney), i, P);
-    const [staff, scouting, upkeep] = opsRatesK(b, ctx, i);
-    left.staff += staff; left.scouting += scouting; left.upkeep += upkeep;
   }
-  const homeGamesLeft = Math.max(0, Math.round(ctx.sport.homeGames - s.homeGames));
+  [left.staff, left.scouting, left.upkeep] = runningCostsLeftK(b, ctx);
+  /* The club's own count when the board passes it; otherwise the whole home
+     games the sport's split still guarantees (8 of the NFL's 8.5), so the
+     projection never counts a gate the schedule may not hold. */
+  const homeTotal = ctx.homeGamesThisSeason ?? Math.floor(ctx.sport.homeGames);
+  const homeGamesLeft = Math.max(0, Math.round(homeTotal - s.homeGames));
   left.gate = homeGateK(b, ctx) * homeGamesLeft;
   const line = (id: GmIncomeKey | GmCostKey, label: string, ops: boolean, note?: string): GmProjectionLine => ({
     id, label, actual: toM(s[id]), projected: toM(s[id] + left[id]), ops, note,
@@ -513,20 +568,32 @@ export function ledgerBalances(l: GmClosedLedger): boolean {
   return l.income - l.spend === l.kittyAtClose - l.kittyAtOpen;
 }
 
+/** Trust after ownership's verdict on the price the season closed on; a price never takes it below 1 (zero is the sack). */
+export function trustAfterTickets(b: GmBooks, trust: number): number {
+  const delta = TICKET_TRUST[b.ticketTier] ?? 0;
+  if (delta === 0) return trust;
+  return delta < 0 ? clamp(trust + delta, Math.min(trust, 1), 100) : clamp(trust + delta, 0, 100);
+}
+
 /**
- * The summer. The season closes into lastSeason, the unspent operations
- * budget carries, and ownership sets next season's from the market and the
- * trust it has after the season's grade. Run AFTER the mandate is graded.
+ * The summer. The season closes into lastSeason; ownership judges the price
+ * the season finished on (a point of trust, once); the operations budget
+ * carries to the $k, unspent money in full and an overrun as a debt against
+ * next season's budget, so nothing spent past the budget disappears; and
+ * ownership sets next season's budget from the market and that trust. Run
+ * AFTER the mandate is graded, pass the graded trust, and store the trust
+ * this returns.
  */
-export function closeGmSeason(b: GmBooks, trustAfter: number, nextCap: number): { books: GmBooks; closed: GmClosedLedger } {
+export function closeGmSeason(b: GmBooks, trustAfter: number, nextCap: number): { books: GmBooks; closed: GmClosedLedger; trust: number } {
   const closed = closeGmLedger(b);
-  const carry = Math.max(0, b.opsBudget + b.opsCarry - opsSpentK(b));
+  const trust = trustAfterTickets(b, trustAfter);
+  const carry = b.opsBudget + b.opsCarry - opsSpentK(b);
   const books: GmBooks = {
     ...b,
-    opsBudget: opsBudgetFor(b.marketTier, trustAfter, nextCap),
+    opsBudget: opsBudgetFor(b.marketTier, trust, nextCap),
     opsCarry: carry,
     season: emptyGmLedger(b.kitty),
     lastSeason: closed,
   };
-  return { books, closed };
+  return { books, closed, trust };
 }

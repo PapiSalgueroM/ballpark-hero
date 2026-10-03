@@ -28,7 +28,9 @@
  *
  * Saves: the block is optional on whatever save carries it, and a block that
  * fails isValidFacilities resets to the day one levels on its own, leaving the
- * rest of the save alone.
+ * rest of the save alone. A pack that later gains a building does not reset
+ * anybody: facilitiesOf opens the new building at its day one level and keeps
+ * every level the save already had; a building a pack drops is forgotten.
  */
 
 export interface FacilityEffect {
@@ -153,9 +155,28 @@ export function isValidFacilities(pack: FacilityPack, f: unknown): f is GmFacili
   return isValidBuild(pack, o.build, lv) && isMoney(o.seasonSpend);
 }
 
+/**
+ * A block saved under an older version of this pack: every building the
+ * pack still has keeps its saved level, a building added since opens at
+ * level 1 (neutral, which is every pack's day one level), and one the pack
+ * dropped is forgotten. Anything else wrong (a bad level, a bad build, the
+ * wrong pack) still fails, so the caller resets.
+ */
+function fitToPack(pack: FacilityPack, f: unknown): unknown {
+  if (!f || typeof f !== 'object' || Array.isArray(f)) return f;
+  const o = f as Record<string, unknown>;
+  const lv = o.levels;
+  if (!lv || typeof lv !== 'object' || Array.isArray(lv)) return f;
+  const levels: Record<string, unknown> = {};
+  for (const d of pack.facilities) levels[d.id] = d.id in lv ? (lv as Record<string, unknown>)[d.id] : 1;
+  return { ...o, levels };
+}
+
 /** The block for reading: a missing or mangled one reads as the day one levels, and only this block resets. */
 export function facilitiesOf(pack: FacilityPack, f: unknown, tier: MarketTier): GmFacilitiesState {
-  return isValidFacilities(pack, f) ? f : newFacilities(pack, tier);
+  if (isValidFacilities(pack, f)) return f;
+  const fitted = fitToPack(pack, f);
+  return isValidFacilities(pack, fitted) ? fitted : newFacilities(pack, tier);
 }
 
 export function facilityLevel(pack: FacilityPack, f: GmFacilitiesState, id: string): number {
@@ -181,6 +202,12 @@ export function fullBuildOutCost(pack: FacilityPack, scale = 1): number {
   return money3(pack.facilities.reduce((n, d) => n + facilityCostLadder(pack, d.id, scale).reduce((a, b) => a + b, 0), 0));
 }
 
+/** A sum in the pack's money the way the facility tile prints it: '$0.488M' on a $M pack. */
+export function facilityMoney(pack: FacilityPack, n: number): string {
+  const v = money3(n);
+  return pack.unit === '$M' ? `$${v.toFixed(v < 1 ? 3 : 1)}M` : `${v} ${pack.unit}`;
+}
+
 /** Why a build cannot start, or null when it can. `funds` is what the seat may spend on buildings. */
 export function upgradeRefusal(pack: FacilityPack, f: GmFacilitiesState, id: string, funds: number, scale = 1): string | null {
   const def = facilityDef(pack, id);
@@ -191,7 +218,7 @@ export function upgradeRefusal(pack: FacilityPack, f: GmFacilitiesState, id: str
   }
   const cost = facilityUpgradeCost(pack, f, id, scale);
   if (cost === null) return `The ${def.label.toLowerCase()} is already at level ${pack.maxLevel}.`;
-  if (funds < cost) return `It needs ${cost} ${pack.unit} and the budget has ${money3(Math.max(0, funds))} left.`;
+  if (funds < cost) return `It needs ${facilityMoney(pack, cost)} and the budget has ${facilityMoney(pack, Math.max(0, funds))} left for it.`;
   return null;
 }
 
@@ -238,8 +265,10 @@ export function tickFacilities(pack: FacilityPack, f: GmFacilitiesState): { stat
  * the new club's own buildings are read on its first look (undefined here).
  */
 export function rolloverFacilities(pack: FacilityPack, f: unknown, moving: boolean): GmFacilitiesState | undefined {
-  if (moving || !isValidFacilities(pack, f)) return undefined;
-  return { ...finishBuild(pack, f).state, seasonSpend: 0 };
+  if (moving) return undefined;
+  const fitted = isValidFacilities(pack, f) ? f : fitToPack(pack, f);
+  if (!isValidFacilities(pack, fitted)) return undefined;
+  return { ...finishBuild(pack, fitted).state, seasonSpend: 0 };
 }
 
 /* ---------- the effects, each exactly neutral at level 1 ---------- */
