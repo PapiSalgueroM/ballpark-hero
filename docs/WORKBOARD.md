@@ -1,5 +1,12 @@
 # Work board
 
+Codex939/966/967 scope addition, shared draft Continue target, 2026-10-02.
+MLB native fixture measured the actual DraftNightCard Continue at40px on
+desktop. Add only min-h-11 to that button, preserving callback/reveal timing.
+Claude: this single shared-card class is owned in the active draft repair;
+keep your shared GM/result lifts clear of it. Native rejection retained,
+then reprepare against final build and verify44px targets. No969 claim.
+
 Codex CLAIMS968, NHL post-draft roster-limit consequences, 2026-10-02.
 Read-only actual constructor and two accepted pick trades gave Boston four
 choices. Four simulated selections and the real offseason left17 players
