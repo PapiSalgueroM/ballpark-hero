@@ -1,5 +1,5 @@
 import { Component, type ReactNode } from 'react';
-import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import NflBoard from '@/components/front-office/FrontOfficeBoard';
 import NhlBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
@@ -49,11 +49,12 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     else tm.contributors = nhlContributors(tm);
     const raw = JSON.stringify(saved);
     const { view, writes, removes } = mount(raw);
-    expect(view.getByRole('button', { name: /^👔\s*Roster/ })).toBeVisible();
+    const rosterButton = view.getByRole('button', { name: /^👔\s*Roster/ });
+    expect(rosterButton).toBeVisible();
     expect(view.getByText(new RegExp(`${c.sport === 'NFL' ? 'Week' : 'Round'} 4/`))).toBeVisible();
     expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
-    fireEvent.click(view.getByRole('button', { name: /^👔\s*Roster/ }));
+    fireEvent.click(rosterButton);
     expect(view.getByText(saved.league.teams[c.team].players[0].name)).toBeVisible();
     expect(localStorage.getItem(c.key)).toBe(raw);
   });
@@ -128,9 +129,10 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     const { view, writes, removes } = mount(raw);
     expect(view.queryByText('TEST: route crashed')).toBeNull();
     expect(view.getByText(c.picker)).toBeVisible();
-    expect(view.getByRole('alert')).toHaveTextContent("We couldn't open this save.");
+    const alert = view.getByRole('alert');
+    expect(alert).toHaveTextContent("We couldn't open this save.");
     expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
-    fireEvent.click(view.getByRole('button', { name: 'Delete unusable save' }));
+    fireEvent.click(within(alert).getByRole('button', { name: 'Delete unusable save' }));
     expect(localStorage.getItem(c.key)).toBeNull(); expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem('other-game-save')).toBe('unrelated progress'); expect(removes).toHaveBeenCalledExactlyOnceWith(c.key);
   });
