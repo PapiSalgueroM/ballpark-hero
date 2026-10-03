@@ -25,14 +25,14 @@ assert.equal(titles.length, 8, 'Eight complete actual-action outcomes are bound'
 const candidatePath = process.env.NHL_WAIVER_BOARD;
 const candidate = candidatePath ? holdSource(await readFile(path.resolve(candidatePath))) : null;
 const product = candidate?.source ?? held.get(board).source;
-const eventAnchor = '<NhlWaiverReceipt event={waiverReceipt} />';
+const eventAnchor = "<NhlWaiverReceipt event={waiverReceipt} fallbackFocus={() => waiverBoard.current?.querySelector<HTMLButtonElement>('button:not(:disabled):not([data-nhl-waiver-dismiss])') ?? null} />";
 const controls = {
   metadata: ['        mandate, trust, fired, pressTilt, seasonTradeLine,',
     '        mandate, trust, fired, pressTilt: 0, seasonTradeLine: null,', [1, 3, 4, 5, 6, 7]],
-  event: [eventAnchor, '<NhlWaiverReceipt event={null} />', [1, 3, 4, 5, 6, 7]],
+  event: [eventAnchor, eventAnchor.replace('event={waiverReceipt}', 'event={null}'), [1, 3, 4, 5, 6, 7]],
   guard: [' || waiverCommit.current === league', '', [3]],
   cap: ['capAfter: nhlCapRoom(team, lg.cap)', 'capAfter: capBefore', [1, 7]],
-  remount: [eventAnchor, '<NhlWaiverReceipt key={tab ?? "hub"} event={waiverReceipt} />', [4]],
+  remount: [eventAnchor, eventAnchor.replace('event={waiverReceipt}', 'key={tab ?? "hub"} event={waiverReceipt}'), [4]],
   refusal: ['if (nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion)) {',
     'if ((nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion), true)) {', [2, 7]],
 };

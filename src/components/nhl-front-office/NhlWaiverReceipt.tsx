@@ -13,7 +13,7 @@ export type NhlWaiverReceiptEvent = {
 
 const money = (value: number) => `${value < 0 ? '-' : ''}$${Math.abs(value)}M`;
 
-export function NhlWaiverReceipt({ event }: { event: NhlWaiverReceiptEvent | null }) {
+export function NhlWaiverReceipt({ event, fallbackFocus }: { event: NhlWaiverReceiptEvent | null; fallbackFocus?: () => HTMLElement | null }) {
   const [dismissedId, setDismissedId] = useState<number | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   return (
@@ -24,12 +24,14 @@ export function NhlWaiverReceipt({ event }: { event: NhlWaiverReceiptEvent | nul
             <p className={styles.label}>Last waiver</p>
             <p className={styles.player}>Waived {event.playerName}.</p>
           </div>
-          <button type="button" aria-label="Dismiss waiver receipt" className={styles.dismiss}
+          <button type="button" aria-label="Dismiss waiver receipt" data-nhl-waiver-dismiss className={styles.dismiss}
             onFocus={e => { if (e.relatedTarget instanceof HTMLElement) returnFocus.current = e.relatedTarget; }}
             onPointerDown={e => { if (document.activeElement instanceof HTMLElement && document.activeElement !== e.currentTarget) returnFocus.current = document.activeElement; }}
             onClick={() => {
               setDismissedId(event.id);
-              const target = returnFocus.current;
+              const previous = returnFocus.current;
+              const target = previous?.isConnected && previous !== document.body && !(previous instanceof HTMLButtonElement && previous.disabled)
+                ? previous : fallbackFocus?.();
               if (target?.isConnected && !(target instanceof HTMLButtonElement && target.disabled)) target.focus({ preventScroll: true });
             }}>
             <span aria-hidden="true">×</span>

@@ -225,6 +225,7 @@ export default function NhlFrontOfficeBoard() {
   const [cutArmed, setCutArmed] = useState<string | null>(null);
   const [waiverReceipt, setWaiverReceipt] = useState<NhlWaiverReceiptEvent | null>(null);
   const waiverSequence = useRef(0), waiverCommit = useRef<NhlLeague | null>(null);
+  const waiverBoard = useRef<HTMLDivElement>(null);
   const rosterRows = useRef<HTMLDivElement>(null);
   const waiverFocus = useRef<{ opener: Element | null; index: number } | null>(null);
   useLayoutEffect(() => {
@@ -938,7 +939,7 @@ export default function NhlFrontOfficeBoard() {
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
-    <div className="space-y-4">
+    <div ref={waiverBoard} className="space-y-4">
       <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
@@ -953,7 +954,7 @@ export default function NhlFrontOfficeBoard() {
         {tab !== 'team' && <button onClick={() => openPanel('team')} className="min-h-11 rounded-full border border-border bg-card px-4 py-2 font-bold">Open roster</button>}
       </div>}
 
-      <NhlWaiverReceipt event={waiverReceipt} />
+      <NhlWaiverReceipt event={waiverReceipt} fallbackFocus={() => waiverBoard.current?.querySelector<HTMLButtonElement>('button:not(:disabled):not([data-nhl-waiver-dismiss])') ?? null} />
 
       {/* Round 180: the owner card, always visible on the hub. The cut is the
           top 8 of my conference by points, the same read the bracket uses. */}

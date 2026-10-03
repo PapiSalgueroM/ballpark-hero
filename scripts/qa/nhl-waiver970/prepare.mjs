@@ -22,7 +22,7 @@ const rootHolds = critical.map(file => ({ file: path.join(root, file), sha256: f
 const gateHolds = [...walk(path.join(gate, 'src')), path.join(gate, 'tailwind.config.ts'), path.join(gate, 'postcss.config.js')].map(file => ({ file, sha256: sha(file) }));
 const board = fs.readFileSync(path.join(gate, critical[0]), 'utf8');
 assert.match(board, /import\s*\{\s*NhlWaiverReceipt\b[^\n]*from\s*['"]\.\/NhlWaiverReceipt['"]/);
-assert.match(board, /<NhlWaiverReceipt\s+event=\{waiverReceipt\}\s*\/>/);
+assert.match(board, /<NhlWaiverReceipt\s+event=\{waiverReceipt\}\s+fallbackFocus=\{/);
 assert.match(board, /nhlOffseason\(lg, Math\.random, myTeam\)/, 'Keep the969 human-owner offseason argument');
 for (const relative of critical) assert.ok(fs.existsSync(path.join(gate, relative)), 'Final source gate file: ' + relative);
 const out = path.join(dir, 'built');

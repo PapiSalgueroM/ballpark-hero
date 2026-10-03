@@ -71,6 +71,32 @@ describe('NHL committed waiver receipt', () => {
     expect(screen.queryByText(/fee/i)).toBeNull();
   });
 
+  it.each(['missing', 'removed'])('uses the current Board fallback when the previous opener is %s', mode => {
+    let fallback: HTMLButtonElement | null = null;
+    const draw = (opener: boolean) => <>
+      <button ref={node => { fallback = node; }} type="button">Continue managing</button>
+      {opener && <button type="button">Open roster</button>}
+      <NhlWaiverReceipt event={event} fallbackFocus={() => fallback} />
+    </>;
+    const view = render(draw(mode === 'removed'));
+    const target = screen.getByRole('button', { name: 'Continue managing' });
+    const focus = vi.spyOn(target, 'focus');
+    const dismiss = screen.getByRole('button', { name: 'Dismiss waiver receipt' });
+    if (mode === 'removed') {
+      const opener = screen.getByRole('button', { name: 'Open roster' });
+      opener.focus(); dismiss.focus(); view.rerender(draw(false));
+      expect(opener.isConnected).toBe(false);
+    } else {
+      expect(document.activeElement).toBe(document.body);
+      dismiss.focus();
+    }
+    fireEvent.click(dismiss);
+    expect(target).toHaveFocus();
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+    expect(receipt()).toBeNull();
+    focus.mockRestore();
+  });
+
   it('retains the same event node on passive cloned props', () => {
     const view = render(<NhlWaiverReceipt event={event} />);
     const status = screen.getByRole('status'), node = receipt();
