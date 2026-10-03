@@ -72,13 +72,13 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const BOARDS = [
   ['src/components/front-office/FrontOfficeBoard.tsx', '/front-office', 'playWeek', 'if (!league || !my) return;'],
   ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', '/nba-front-office', 'playRound', 'if (!league || !my) return;'],
-  ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', '/nhl-front-office', 'playRound', 'if (!league || !my) return;'],
+  ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', '/nhl-front-office', 'playRound', 'if (!league || !my || my.players.length > NHL_ROSTER_MAX) return;'],
   ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', '/mlb-front-office', 'playRound', 'if (!league || !my) return;'],
   /* Round 900: the four My Career boards are one board. It marks the route
      its sport binding names, so the mark is written once, as a template,
      and the four routes are proven below it: each binding must name its own
      route and each sport's page must be on this board. */
-  [US_CAREER_BOARD, null, 'playSeason', 'if (!career || teamQuality == null) return;', 'recordActivity(`/${sport.gameSlug}`'],
+  [US_CAREER_BOARD, null, 'playSeason', 'if (!career || teamQuality == null || practiceOpen) return;', 'recordActivity(`/${sport.gameSlug}`'],
 ];
 const TYCOON = 'src/hooks/useStadiumTycoon.ts';
 
