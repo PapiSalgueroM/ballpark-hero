@@ -275,6 +275,20 @@
     {"family": "B", "url": "https://us.soccerway.com/player/haidara-massadio/YqmUoTve/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Brest to Kocaelispor free 2025-07-03, born 1992-12-02, contract to 2027-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6997/brest", "publisher": "ESPN (Brest squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
+  },
+  {
+   "name": "Étienne Youté Kinkoué",
+   "from": "Le Havre",
+   "to": "Lausanne-Sport",
+   "realClub": "Lausanne-Sport",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-01-14. Left Le Havre on a free and joined Lausanne-Sport on 2026-09-03, contract to June 2029; their number 4.",
+   "sources": [
+    {"family": "A", "url": "https://www.lausanne-sport.ch/contingent/", "publisher": "FC Lausanne-Sport (first team squad)", "readOn": "2026-10-03", "says": "4, Etienne Youte Kinkoue, defender"},
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/youte-kinkoue-etienne/WvnBSOGB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Lausanne free 2026-09-03, born 2002-01-14, contract to 2029-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/297168/etienne-youte-kinkoue", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lausanne Sports, defender, born 2002-01-14"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -464,6 +478,45 @@
     {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/el-melali-farid/Yu4ZEgGr/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Angers to CR Belouizdad free 2025-08-31, born 1997-07-13, contract to 2030-06-30"}
+   ]
+  },
+  {
+   "name": "Antoine Joujou",
+   "from": "Le Havre",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Arthur Desmas",
+   "from": "Le Havre",
+   "realClub": "Al-Duhail",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-04-07. Left Le Havre on a free and joined Al-Duhail on 2025-09-28; their number 16, with AFC Champions League Elite matches. Qatar is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/desmas-arthur/xMzvOmz3/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Al-Duhail free 2025-09-28, born 1994-04-07, goalkeeper"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/226999/arthur-desmas", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Al Duhail number 16, born 1994-04-07"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Reda Khadra",
+   "from": "Le Havre",
+   "realClub": "Qarabağ",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-07-04. His Le Havre spell was a loan from Reims that ended on 2026-06-30; Reims sold him to Qarabag on 2026-08-28, contract to June 2028. Azerbaijan is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/khadra-reda/tSf0YZjE/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Reims to Qarabag 2026-08-28, back from loan at Le Havre 2026-06-30, born 2001-07-04, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/294632/reda-khadra", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FK Qarabag, born 2001-07-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
