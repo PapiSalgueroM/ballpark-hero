@@ -5,8 +5,9 @@ import {
   hashSeed, budgetFor, managerOptionsFor, KEEP_MANAGER, managerFits, boardEnvelopeFor, fortuneDeckFor,
   drawFinEvent, planRivals, isContested, warRivalIndex, rivalCapFor, nextRaise, spinOrder, dealReplacements,
   drawPunishments, applyPreset, forceSales, bestFor, buildXi, xiRatingWithHoles, OVERDRAFT_LIMIT,
+  CURRENT_DECK, SWAP_DISCOUNT, LOAN_FEE,
   type ManagerOption, type BoardEnvelope, type BoardObjective, type FinEvent, type FortuneCard,
-  type ReplacementDeal, type RebuildPreset, type RivalPlan, type PunishCard, type ForcedSwap,
+  type ReplacementDeal, type RebuildPreset, type RivalPlan, type PunishCard, type ForcedSwap, type DeckVersion,
 } from '@/lib/rebuildDeck';
 
 /**
@@ -42,6 +43,18 @@ export interface Perks {
   rescout: number;
   discount: number;
   noWar: number;
+  /** Round 980: the five a deck 2 run can be dealt. A deck 1 run never holds one. */
+  respin: number;
+  veto: number;
+  swap: number;
+  loan: number;
+  peek: number;
+}
+
+/** A man on a season loan (Round 980): he plays this season, the fee is gone, and he goes back afterwards. */
+export interface Loan {
+  player: Player;
+  fee: number;
 }
 
 export interface Reckoning {
@@ -56,6 +69,8 @@ export interface Reckoning {
   remainingDeficit: number;
   cards: PunishCard[];
   missed: BoardObjective[];
+  /** Round 980: the card the veto tore up, by index into `cards`. */
+  vetoed?: number;
 }
 
 export interface RunState {
@@ -100,6 +115,19 @@ export interface RunState {
   rivalPlans: RivalPlan[];
   war: WarState | null;
   reckoning: Reckoning | null;
+  /* ---- Round 980 ---- */
+  /** The deck this run deals from. 1 for every run a pre Round 980 save holds. */
+  deck: DeckVersion;
+  /** Men on a season loan. Not signings: the board does not count them and nobody can sell them. */
+  loans: Loan[];
+  /** A part exchange is open: the scouts' three are on the table and the man the wheel landed on is still yours. */
+  swapOpen: boolean;
+  /** The envelope a sneak peek revealed, by its index, until it lands. */
+  peeked: number | null;
+  /** The whistle has gone, the board's cards are face up, and the veto is waiting on a choice. */
+  verdict: boolean;
+  /** Shirts the second spin brought the wheel back to, in order. */
+  reopened: number[];
 }
 
 export interface RunSetup {
@@ -112,6 +140,8 @@ export interface RunSetup {
   seed?: number;
   /** Personas seated at the table (Round 461), which never double as this run's war rivals. */
   avoidPersonas?: string[];
+  /** Which deck to deal from. A new run takes the current one; a restore passes the deck its save was played on. */
+  deck?: DeckVersion;
 }
 
 /**
@@ -147,6 +177,7 @@ export function createRun(setup: RunSetup): RunState {
   const formation = FORMATIONS[0];
   const startRating = openingRating(formation, setup.squad);
   const board = boardEnvelopeFor(seed, setup.club, setup.preset);
+  const deck = setup.deck ?? CURRENT_DECK;
   return {
     seed,
     club: setup.club,
@@ -170,7 +201,7 @@ export function createRun(setup: RunSetup): RunState {
     managerOptions: managerOptionsFor(setup.club, seed),
     manager: null,
     board,
-    financeDeck: fortuneDeckFor(seed),
+    financeDeck: fortuneDeckFor(seed, deck),
     financeCard: null,
     financeIndex: null,
     post: [],
@@ -178,10 +209,16 @@ export function createRun(setup: RunSetup): RunState {
     overpaid: 0,
     discounts: 0,
     actions: 0,
-    perks: { rescout: 0, discount: 0, noWar: 0 },
+    perks: { rescout: 0, discount: 0, noWar: 0, respin: 0, veto: 0, swap: 0, loan: 0, peek: 0 },
     rivalPlans: planRivals(setup.club, setup.clubs, seed, setup.avoidPersonas ?? []),
     war: null,
     reckoning: null,
+    deck,
+    loans: [],
+    swapOpen: false,
+    peeked: null,
+    verdict: false,
+    reopened: [],
   };
 }
 
@@ -199,7 +236,8 @@ export function budgetOf(s: RunState): number {
     - s.overpaid
     + s.discounts
     + s.sold.reduce((t, p) => t + p.marketValue, 0)
-    - s.signed.reduce((t, p) => t + p.marketValue, 0);
+    - s.signed.reduce((t, p) => t + p.marketValue, 0)
+    - s.loans.reduce((t, l) => t + l.fee, 0);
 }
 
 export function spendCeilingOf(s: RunState): number {
@@ -249,15 +287,44 @@ export function gradeOf(s: RunState): string {
 
 /** Can the scouts be asked for a fresh list right now: the list is a dead end, or a perk pays for it. */
 export function canRedeal(s: RunState): boolean {
-  if (!s.deal || s.war) return false;
+  if (!s.deal || s.war || s.swapOpen) return false;
   const ceiling = spendCeilingOf(s);
   const deadEnd = !s.deal.offers.some(p => offerPrice(s, p) <= ceiling) && s.deal.bench.length === 0;
   return deadEnd || s.perks.rescout > 0;
 }
 
-/** What an offer costs this player right now: the value, or 20 percent under it while the discount perk is held. */
+/** What an offer costs this player right now: the value, 20 percent under it
+ *  while the discount perk is held, or the part exchange price while one is
+ *  open (the two do not stack: the trade is its own deal). */
 export function offerPrice(s: RunState, p: Player): number {
+  if (s.swapOpen) return Math.max(1, Math.round(p.marketValue * (1 - SWAP_DISCOUNT)));
   return s.perks.discount > 0 ? Math.round(p.marketValue * 0.8) : p.marketValue;
+}
+
+/** What a season loan of this man costs: half his value, never under a million. */
+export function loanFeeOf(p: Player): number {
+  return Math.max(1, Math.round(p.marketValue * LOAN_FEE));
+}
+
+/** The money a part exchange can reach: the ceiling with the man going the other way already counted. */
+export function swapCeilingOf(s: RunState): number {
+  const inc = s.spun !== null ? s.baseXi[s.spun] : null;
+  return spendCeilingOf(s) + (inc ? inc.marketValue : 0);
+}
+
+/** The index the next envelope as you go will carry: one lands every second transfer action. */
+export function nextEnvelopeIndex(s: RunState): number {
+  return Math.floor(s.actions / 2) + 1;
+}
+
+/** What a sneak peek showed, while it has not landed yet. */
+export function peekedEnvelope(s: RunState): FinEvent | null {
+  return s.peeked === null ? null : drawFinEvent(s.seed, s.peeked, s.deck);
+}
+
+/** Does this man belong to a season loan? Nobody can sell him, and he is not a signing. */
+export function isOnLoan(s: RunState, name: string): boolean {
+  return s.loans.some(l => l.player.name === name);
 }
 
 /* ---------------- the envelopes and the manager ---------------- */
@@ -320,6 +387,7 @@ function takenNames(s: RunState): Set<string> {
   for (const p of s.baseXi) if (p) taken.add(p.name);
   for (const p of Object.values(s.decided)) if (p) taken.add(p.name);
   for (const p of s.signed) taken.add(p.name);
+  for (const l of s.loans) taken.add(l.player.name);
   for (const p of s.sold) taken.add(p.name);
   for (const n of Object.keys(s.lost)) taken.add(n);
   return taken;
@@ -345,21 +413,25 @@ export function spinNext(s: RunState): RunState {
 function resolveSlot(s: RunState, p: Player | null): RunState {
   if (s.spun === null) return s;
   const decided = { ...s.decided, [s.spun]: p };
-  return { ...s, decided, settledCount: Object.keys(decided).length, deal: null, dealAttempt: 0, spun: null };
+  return { ...s, decided, settledCount: Object.keys(decided).length, deal: null, dealAttempt: 0, spun: null, swapOpen: false };
 }
 
-/** Every second transfer action, an envelope arrives. */
+/** Every second transfer action, an envelope arrives. A sneak peek clears when the envelope it showed lands. */
 function bump(s: RunState): RunState {
   const actions = s.actions + 1;
   if (actions % 2 !== 0) return { ...s, actions };
-  const ev = drawFinEvent(s.seed, actions / 2);
+  const index = actions / 2;
+  const ev = drawFinEvent(s.seed, index, s.deck);
   const perks = { ...s.perks };
   if (ev.perk) perks[ev.perk] += 1;
-  return { ...s, actions, extraFunds: s.extraFunds + ev.delta, perks, post: [...s.post, ev] };
+  const landed = { ...s, actions, extraFunds: s.extraFunds + ev.delta, perks, post: [...s.post, ev] };
+  return s.peeked === index ? { ...landed, peeked: null } : landed;
 }
 
+/** Keep the man the wheel landed on. While a part exchange is open this is
+ *  backing out of it: he stays, the list goes, and the perk is spent. */
 export function keep(s: RunState): RunState {
-  if (s.phase !== 'spin' || s.spun === null || s.deal || s.war) return s;
+  if (s.phase !== 'spin' || s.spun === null || (s.deal && !s.swapOpen) || s.war) return s;
   const incumbent = s.baseXi[s.spun];
   if (!incumbent) return s;
   return resolveSlot(s, incumbent);
@@ -394,6 +466,7 @@ export function takeOffer(s: RunState, name: string): RunState {
   if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war) return s;
   const p = s.deal.offers.find(o => o.name === name);
   if (!p) return s;
+  if (s.swapOpen) return completeExchange(s, p);
   const price = offerPrice(s, p);
   if (price > spendCeilingOf(s)) return s;
 
@@ -428,7 +501,7 @@ export function takeOffer(s: RunState, name: string): RunState {
 
 /** The fourth option: a squad player already at the club takes the shirt, free. */
 export function promote(s: RunState, name: string): RunState {
-  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war) return s;
+  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war || s.swapOpen) return s;
   const p = s.deal.bench.find(b => b.name === name);
   if (!p) return s;
   return bump(resolveSlot(s, p));
@@ -437,7 +510,7 @@ export function promote(s: RunState, name: string): RunState {
 /** The last resort that keeps the loop alive: give the shirt to a 40 overall.
  *  The rating says so immediately, so it is a real cost, never a cheat. */
 export function takeForty(s: RunState): RunState {
-  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war) return s;
+  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war || s.swapOpen) return s;
   return resolveSlot(s, null);
 }
 
@@ -450,6 +523,84 @@ export function redeal(s: RunState): RunState {
   if (!deadEnd) perks.rescout -= 1;
   const attempt = s.dealAttempt + 1;
   return { ...s, perks, dealAttempt: attempt, deal: makeDeal(s, s.spun, attempt) };
+}
+
+/* ---------------- Round 980: the five new perks ---------------- */
+
+/** A reopened shirt deals from its own stream, so the second spin shows a new list rather than the one turned down. */
+export const REOPEN_ATTEMPT = 10;
+
+/** Part exchange: the scouts' three for the shirt the wheel just landed on,
+ *  while its man is still yours. Take one and he goes the other way, or back
+ *  out with keep. The perk is spent either way, the moment the list opens. */
+export function partExchange(s: RunState): RunState {
+  if (s.phase !== 'spin' || s.spun === null || s.deal || s.war || s.verdict || s.perks.swap <= 0) return s;
+  const inc = s.baseXi[s.spun];
+  if (!inc || s.sold.some(x => x.name === inc.name)) return s;
+  const opened = { ...s, perks: { ...s.perks, swap: s.perks.swap - 1 }, swapOpen: true };
+  return { ...opened, deal: makeDeal(opened, s.spun, 0) };
+}
+
+/** The trade itself: he is sold, the new man signs at the part exchange
+ *  price, and no rival can hijack a deal two clubs already agreed. */
+function completeExchange(s: RunState, p: Player): RunState {
+  const inc = s.spun !== null ? s.baseXi[s.spun] : null;
+  if (!inc || s.sold.some(x => x.name === inc.name)) return s;
+  const price = offerPrice(s, p);
+  if (price > swapCeilingOf(s)) return s;
+  return completeSigning(bump({ ...s, sold: [...s.sold, inc] }), p, price);
+}
+
+/** Loan: one of the scouts' three for the season at the loan fee. He takes
+ *  the shirt, he is not a signing (the board does not count him), nobody can
+ *  sell him, and he goes back to his club when the season is over. */
+export function loanOffer(s: RunState, name: string): RunState {
+  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war || s.swapOpen || s.perks.loan <= 0) return s;
+  const p = s.deal.offers.find(o => o.name === name);
+  if (!p) return s;
+  const fee = loanFeeOf(p);
+  if (fee > spendCeilingOf(s)) return s;
+  const withLoan = { ...s, perks: { ...s.perks, loan: s.perks.loan - 1 }, loans: [...s.loans, { player: p, fee }] };
+  return bump(resolveSlot(withLoan, p));
+}
+
+/** Can the second spin bring the wheel back to this shirt now: between spins,
+ *  a settled shirt, and not a man you bought or borrowed this window. */
+export function canSecondSpin(s: RunState, slot: number): boolean {
+  if (s.phase !== 'spin' || s.spun !== null || s.deal || s.war || s.verdict || s.perks.respin <= 0) return false;
+  if (!(slot in s.decided)) return false;
+  const man = s.decided[slot];
+  return !man || (!s.signed.some(p => p.name === man.name) && !isOnLoan(s, man.name));
+}
+
+/** Second spin: the wheel comes back to a settled shirt. A man you kept is
+ *  sold (it counts as a sale), a squad man you promoted goes back to the
+ *  bench, a 40 overall just goes, and the scouts' list opens for the shirt. */
+export function secondSpin(s: RunState, slot: number): RunState {
+  if (!canSecondSpin(s, slot)) return s;
+  const man = s.decided[slot];
+  const decided = { ...s.decided };
+  delete decided[slot];
+  const base: RunState = {
+    ...s,
+    decided,
+    settledCount: Object.keys(decided).length,
+    spun: slot,
+    dealAttempt: REOPEN_ATTEMPT,
+    perks: { ...s.perks, respin: s.perks.respin - 1 },
+    reopened: [...s.reopened, slot],
+  };
+  if (man && s.baseXi[slot]?.name === man.name) {
+    const withSale = { ...base, sold: [...s.sold, man] };
+    return bump({ ...withSale, deal: makeDeal(withSale, slot, REOPEN_ATTEMPT) });
+  }
+  return { ...base, deal: makeDeal(base, slot, REOPEN_ATTEMPT) };
+}
+
+/** Sneak peek: the next envelope as you go, face up until it lands. */
+export function usePeek(s: RunState): RunState {
+  if ((s.phase !== 'spin' && s.phase !== 'manager') || s.verdict || s.perks.peek <= 0 || s.peeked !== null) return s;
+  return { ...s, perks: { ...s.perks, peek: s.perks.peek - 1 }, peeked: nextEnvelopeIndex(s) };
 }
 
 /* ---------------- bidding wars ---------------- */
@@ -504,14 +655,47 @@ export function clearWar(s: RunState): RunState {
 /* ---------------- the whistle ---------------- */
 
 export function canBlowWhistle(s: RunState): boolean {
-  return s.phase === 'spin' && s.settledCount >= s.formation.slots.length && s.spun === null && !s.war;
+  return s.phase === 'spin' && s.settledCount >= s.formation.slots.length && s.spun === null && !s.war && !s.verdict;
 }
 
+/** The board's verdict as the window stands: the money it closed on, the
+ *  demands it missed, and the punishment card each miss draws. */
+export function whistleDraw(s: RunState): { windowFunds: number; missed: BoardObjective[]; cards: PunishCard[] } {
+  const windowFunds = budgetOf(s);
+  // The demands are judged on the window as the player closed it, not on the
+  // books after the board's own clawback, or "finish with money in the bank"
+  // would read as met the moment the forced sales cleared the debt.
+  const missed = s.board.demands.filter(o => !o.check({ signed: s.signed, sold: s.sold, budget: windowFunds }));
+  return { windowFunds, missed, cards: drawPunishments(s.seed, missed.length) };
+}
+
+/** The whistle. Holding a veto with a card that hurts on the table, the cards
+ *  go face up first and the window waits on vetoCard or acceptVerdict. */
 export function blowWhistle(s: RunState): RunState {
   if (!canBlowWhistle(s)) return s;
+  if (s.perks.veto > 0 && whistleDraw(s).cards.some(c => c.kind !== 'safe')) return { ...s, verdict: true };
+  return settleWindow(s, null);
+}
+
+/** Tear up card k of the verdict. The safe card is not worth a veto and is refused. */
+export function vetoCard(s: RunState, k: number): RunState {
+  if (!s.verdict || s.phase !== 'spin') return s;
+  const card = whistleDraw(s).cards[k];
+  if (!card || card.kind === 'safe') return s;
+  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k);
+}
+
+/** Take every card as drawn and keep the veto in the drawer. */
+export function acceptVerdict(s: RunState): RunState {
+  if (!s.verdict || s.phase !== 'spin') return s;
+  return settleWindow({ ...s, verdict: false }, null);
+}
+
+function settleWindow(s: RunState, vetoed: number | null): RunState {
   const notes: string[] = [];
   const xi: (Player | null)[] = s.formation.slots.map((_, i) => s.decided[i] ?? null);
-  const windowFunds = budgetOf(s);
+  const { windowFunds, missed, cards } = whistleDraw(s);
+  const onLoan = new Set(s.loans.map(l => l.player.name));
   let funds = windowFunds;
   let ratingPen = 0;
 
@@ -521,7 +705,7 @@ export function blowWhistle(s: RunState): RunState {
   let swaps: ForcedSwap[] = [];
   let remainingDeficit = 0;
   if (funds < 0) {
-    const forced = forceSales(xi, s.formation, s.market, -funds, s.seed);
+    const forced = forceSales(xi, s.formation, s.market, -funds, s.seed, onLoan);
     swaps = forced.swaps;
     remainingDeficit = forced.remainingDeficit;
     for (const sw of swaps) {
@@ -536,21 +720,17 @@ export function blowWhistle(s: RunState): RunState {
     }
   }
 
-  // The demands are judged on the window as the player closed it, not on the
-  // books after the board's own clawback, or "finish with money in the bank"
-  // would read as met the moment the forced sales cleared the debt.
-  const missed = s.board.demands.filter(o => !o.check({ signed: s.signed, sold: s.sold, budget: windowFunds }));
-  const cards = drawPunishments(s.seed, missed.length);
   const soldNames = new Set(s.sold.map(p => p.name));
   cards.forEach((card, k) => {
     const miss = missed[k];
     const head = `${card.emoji} ${card.title} (you missed: ${miss.text})`;
+    if (k === vetoed) { notes.push(`✋ Vetoed: ${head}. The chairman tore it up, nothing happens.`); return; }
     if (card.kind === 'safe') { notes.push(`${head}: ${card.text}`); return; }
     if (card.kind === 'fine') { funds -= card.amount; notes.push(`${head}: ${card.text}`); return; }
     if (card.kind === 'ratingHit') { ratingPen += card.amount; notes.push(`${head}: ${card.text}`); return; }
     // sellBest and sellRandom take a shirt; the club's own depth steps in
     // if anyone fits, otherwise the shirt goes to a 40 overall.
-    const holders = xi.map((p, i) => ({ p, i })).filter((x): x is { p: Player; i: number } => x.p !== null);
+    const holders = xi.map((p, i) => ({ p, i })).filter((x): x is { p: Player; i: number } => x.p !== null && !onLoan.has(x.p.name));
     if (holders.length === 0) { notes.push(`${head}: ${card.text}`); return; }
     let victim: { p: Player; i: number };
     if (card.kind === 'sellBest') {
@@ -574,6 +754,6 @@ export function blowWhistle(s: RunState): RunState {
   return {
     ...s,
     phase: 'done',
-    reckoning: { notes, xi, windowFunds, funds, ratingPen, swaps, remainingDeficit, cards, missed },
+    reckoning: { notes, xi, windowFunds, funds, ratingPen, swaps, remainingDeficit, cards, missed, ...(vetoed !== null ? { vetoed } : {}) },
   };
 }

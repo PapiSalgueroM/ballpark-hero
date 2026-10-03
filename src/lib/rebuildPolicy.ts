@@ -39,6 +39,21 @@ export interface RebuildPolicy {
   deal: (s: RunState) => DealMove;
   /** Raise or walk when a rival leads a bidding war. */
   war: (s: RunState) => 'raise' | 'walk';
+  /* Round 980: the five new perks. A policy without one of these never plays
+     that perk, except the veto: a verdict has to be answered, so a policy with
+     no veto rule tears up the first card that hurts. */
+  /** Open a part exchange on the man the wheel just landed on. */
+  swap?: (s: RunState) => boolean;
+  /** With a part exchange open: the offer to take, or null to keep the man. */
+  swapDeal?: (s: RunState) => string | null;
+  /** The offer to take on a season loan, or null to deal the list as usual. */
+  loan?: (s: RunState) => string | null;
+  /** Look at the next envelope now. */
+  peek?: (s: RunState) => boolean;
+  /** The settled shirt to bring the wheel back to, or null. */
+  respin?: (s: RunState) => number | null;
+  /** The punishment card to tear up, or null to take them all. */
+  veto?: (s: RunState) => number | null;
 }
 
 const mean = (a: number[]): number => a.reduce((x, y) => x + y, 0) / a.length;
@@ -148,6 +163,79 @@ function expectedGain(s: RunState, slotIdx: number, cash: number): number {
   return best - r;
 }
 
+/** How the thinking policy values a man for the open shirt: his rating, the
+ *  manager's lift, and a nudge toward whatever the board still wants. */
+function scorerOf(s: RunState): { read: BoardRead; lift: (p: Player) => number; score: (p: Player) => number } {
+  const read = boardRead(s);
+  const signedNations = new Set(s.signed.map(p => p.nationality));
+  const manager = s.manager;
+  const lift = manager && manager.lift > 0 ? (p: Player) => (managerFits(manager.profile, p) ? manager.lift : 0) : () => 0;
+  const score = (p: Player) => {
+    let v = playerRating(p) + lift(p);
+    if (read.unmet.has('youth') && p.age > 0 && p.age <= 23) v += 4;
+    if (read.unmet.has('youth3') && p.age > 0 && p.age <= 24) v += 4;
+    if (read.unmet.has('idCore') && p.age > 0 && p.age <= 26) v += 4;
+    if (read.unmet.has('marquee') && p.marketValue >= 70) v += 5;
+    if (read.unmet.has('marquee2') && p.marketValue >= 60) v += 5;
+    if (read.unmet.has('idGalactico') && p.marketValue >= 80) v += 6;
+    if (read.unmet.has('idStatement') && p.marketValue >= 50) v += 5;
+    if (read.unmet.has('sameNation') && signedNations.has(p.nationality)) v += 4;
+    if (read.unmet.has('prime') && p.age > 29) v -= 8;
+    return v;
+  };
+  return { read, lift, score };
+}
+
+/** Round 980: what a sneak peek showed is money the policy can count on (or
+ *  has to keep back for), because it lands before the window is much older. */
+function peekShift(s: RunState): number {
+  return loop.peekedEnvelope(s)?.delta ?? 0;
+}
+
+/** The pot above the board's reserve, a peeked envelope included. */
+function roomOf(s: RunState, read: BoardRead): number {
+  return loop.budgetOf(s) - read.reserve + peekShift(s);
+}
+
+/** Share the pot across the shirts still likely to need a buy: the weak
+ *  links not yet spun plus the inherited holes. One shirt may take up to
+ *  twice its share, never the whole pot with weak shirts still to come.
+ *  A cheap seat's worth of money is kept back for every shirt still worth selling. */
+function spendableOf(s: RunState, room: number): number {
+  const pending = s.order.slice(s.settledCount + 1).filter(i => {
+    if (i in s.decided) return false;
+    const base = s.baseXi[i];
+    return !base || expectedGain(s, i, room + base.marketValue) >= 2;
+  }).length;
+  return Math.max(Math.min(room, 6), room - pending * 6);
+}
+
+/** The best median rating `cash` reaches in the scouts' bands for a shirt,
+ *  under the same third of a band rule expectedGain reads. */
+function reachRating(s: RunState, slotIdx: number, cash: number): number {
+  const view = bandView(s, slotIdx);
+  let best = 0;
+  for (const members of [view.marquee, view.solid, view.cheap]) {
+    const reach = members.filter(p => p.marketValue <= cash);
+    if (members.length && reach.length * 3 >= members.length) best = Math.max(best, median(reach.map(playerRating)));
+  }
+  return best;
+}
+
+/** The rating a deal move puts in the shirt, for comparing the policy's plan with a perk's. */
+function ratingOfMove(s: RunState, move: DealMove, lift: (p: Player) => number): number {
+  if (!s.deal) return 40;
+  if (move.kind === 'offer') {
+    const p = s.deal.offers.find(o => o.name === move.name);
+    return p ? playerRating(p) + lift(p) : 40;
+  }
+  if (move.kind === 'promote') {
+    const p = s.deal.bench.find(o => o.name === move.name);
+    return p ? playerRating(p) + lift(p) : 40;
+  }
+  return 40;
+}
+
 export const THINKING: RebuildPolicy = {
   name: 'thinking',
   finance: () => 0,
@@ -194,34 +282,9 @@ export const THINKING: RebuildPolicy = {
     const deal = s.deal;
     const inc = s.baseXi[s.spun];
     const floor = inc ? playerRating(inc) : 40;
-    const budget = loop.budgetOf(s);
-    const read = boardRead(s);
-    const signedNations = new Set(s.signed.map(p => p.nationality));
-    const manager = s.manager;
-    const lift = manager && manager.lift > 0 ? (p: Player) => (managerFits(manager.profile, p) ? manager.lift : 0) : () => 0;
-    const score = (p: Player) => {
-      let v = playerRating(p) + lift(p);
-      if (read.unmet.has('youth') && p.age > 0 && p.age <= 23) v += 4;
-      if (read.unmet.has('youth3') && p.age > 0 && p.age <= 24) v += 4;
-      if (read.unmet.has('idCore') && p.age > 0 && p.age <= 26) v += 4;
-      if (read.unmet.has('marquee') && p.marketValue >= 70) v += 5;
-      if (read.unmet.has('marquee2') && p.marketValue >= 60) v += 5;
-      if (read.unmet.has('idGalactico') && p.marketValue >= 80) v += 6;
-      if (read.unmet.has('idStatement') && p.marketValue >= 50) v += 5;
-      if (read.unmet.has('sameNation') && signedNations.has(p.nationality)) v += 4;
-      if (read.unmet.has('prime') && p.age > 29) v -= 8;
-      return v;
-    };
-    /* Share the pot across the shirts still likely to need a buy: the weak
-       links not yet spun plus the inherited holes. One shirt may take up to
-       twice its share, never the whole pot with weak shirts still to come. */
-    const room = budget - read.reserve;
-    /* Keep a cheap seat's worth of money back for every shirt still worth selling. */
-    const pending = s.order.slice(s.settledCount + 1).filter(i => {
-      const base = s.baseXi[i];
-      return !base || expectedGain(s, i, room + base.marketValue) >= 2;
-    }).length;
-    const spendable = Math.max(Math.min(room, 6), room - pending * 6);
+    const { read, lift, score } = scorerOf(s);
+    const room = roomOf(s, read);
+    const spendable = spendableOf(s, room);
     const offers = deal.offers
       .filter(p => loop.offerPrice(s, p) <= spendable && p.marketValue <= read.cap)
       .sort((a, b) => score(b) - score(a) || loop.offerPrice(s, a) - loop.offerPrice(s, b));
@@ -238,7 +301,8 @@ export const THINKING: RebuildPolicy = {
       .filter(p => loop.offerPrice(s, p) <= loop.spendCeilingOf(s) && p.marketValue <= read.cap)
       .sort((a, b) => loop.offerPrice(s, a) - loop.offerPrice(s, b))[0];
     if (cheap && loop.offerPrice(s, cheap) <= 12) return { kind: 'offer', name: cheap.name };
-    if (loop.canRedeal(s) && s.dealAttempt < 2) return { kind: 'redeal' };
+    /* A second spin's list deals from attempt REOPEN_ATTEMPT, and gets the same two fresh lists a first one does. */
+    if (loop.canRedeal(s) && s.dealAttempt % loop.REOPEN_ATTEMPT < 2) return { kind: 'redeal' };
     return { kind: 'forty' };
   },
   war: s => {
@@ -246,7 +310,88 @@ export const THINKING: RebuildPolicy = {
     const next = nextRaise(s.war.price);
     return next <= loop.budgetOf(s) && next <= s.war.player.marketValue * 1.3 ? 'raise' : 'walk';
   },
+  /* ---- Round 980: every new perk, played as a player who reads the board would ---- */
+  /* A part exchange goes on the first man it would sell anyway: it sees the
+     three before he goes, and the new man comes cheaper. */
+  swap: s => THINKING.spun(s) === 'sell',
+  swapDeal: s => {
+    if (s.spun === null || !s.deal) return null;
+    const inc = s.baseXi[s.spun];
+    if (!inc) return null;
+    const { read, lift, score } = scorerOf(s);
+    const room = roomOf(s, read) + inc.marketValue;
+    const spendable = spendableOf(s, room);
+    const best = s.deal.offers
+      .filter(p => loop.offerPrice(s, p) <= spendable && loop.offerPrice(s, p) <= loop.swapCeilingOf(s) && p.marketValue <= read.cap)
+      .sort((a, b) => score(b) - score(a) || loop.offerPrice(s, a) - loop.offerPrice(s, b))[0];
+    if (!best) return null;
+    /* The board is owed a sale or a signing: the trade pays both. Otherwise only an upgrade goes through. */
+    if (read.sales > 0 || read.signings > 0) return best.name;
+    return playerRating(best) + lift(best) >= playerRating(inc) + lift(inc) + 1 ? best.name : null;
+  },
+  /* A loan goes on a man two points better than whatever the list would
+     otherwise put in the shirt, unless the board is owed signings and the
+     shirts are running out: a loan is not a signing. */
+  loan: s => {
+    if (!s.deal || s.spun === null) return null;
+    const { read, lift } = scorerOf(s);
+    const remaining = s.formation.slots.length - s.settledCount;
+    if (read.signings > 0 && remaining <= read.signings + 1) return null;
+    const room = roomOf(s, read);
+    const spendable = spendableOf(s, room);
+    const best = s.deal.offers
+      .filter(p => loop.loanFeeOf(p) <= spendable && loop.loanFeeOf(p) <= loop.spendCeilingOf(s))
+      .sort((a, b) => playerRating(b) + lift(b) - (playerRating(a) + lift(a)))[0];
+    if (!best) return null;
+    const planned = ratingOfMove(s, THINKING.deal(s), lift);
+    return playerRating(best) + lift(best) >= planned + 2 ? best.name : null;
+  },
+  /* Information is free: look the moment the window is running. */
+  peek: s => s.phase === 'spin',
+  /* The second spin waits for the whole XI to be settled, when the money
+     picture is final, and goes on the shirt the pot can lift most: a 40
+     overall, a promoted squad man, or a kept man worth selling now. */
+  respin: s => {
+    if (s.settledCount < s.formation.slots.length) return null;
+    const read = boardRead(s);
+    const pot = loop.budgetOf(s) - Math.max(0, read.reserve) + peekShift(s);
+    let best: number | null = null;
+    let bestGain = 2;
+    for (const i of Object.keys(s.decided).map(Number)) {
+      if (!loop.canSecondSpin(s, i)) continue;
+      const man = s.decided[i];
+      const kept = !!man && s.baseXi[i]?.name === man.name;
+      const cash = pot + (kept && man ? man.marketValue : 0);
+      let gain = reachRating(s, i, cash) - (man ? playerRating(man) : 40);
+      if (kept && read.sales > 0) gain += 3;
+      if (gain > bestGain) { best = i; bestGain = gain; }
+    }
+    return best;
+  },
+  /* The veto goes on the card that would leave the best XI, read off the
+     engine itself: every card that hurts is torn up in turn and the
+     outcomes compared, rating first and money second. */
+  veto: s => {
+    if (!s.verdict) return null;
+    const { cards } = loop.whistleDraw(s);
+    let best: number | null = null;
+    let bestScore = -Infinity;
+    cards.forEach((c, k) => {
+      if (c.kind === 'safe') return;
+      const out = loop.vetoCard(s, k);
+      if (out === s) return;
+      const v = loop.ratingOf(out) * 1000 + loop.finalFundsOf(out);
+      if (v > bestScore) { best = k; bestScore = v; }
+    });
+    return best;
+  },
 };
+
+/** What a policy with no veto rule does with a verdict: tear up the first card that hurts. */
+function firstHarmful(s: RunState): number | null {
+  const k = loop.whistleDraw(s).cards.findIndex(c => c.kind !== 'safe');
+  return k >= 0 ? k : null;
+}
 
 export interface PolicyMove {
   /** The move the policy asked for, for the harness's refusal message. */
@@ -267,6 +412,11 @@ export function policyMove(s: RunState, policy: RebuildPolicy): PolicyMove {
     return { what: 'pickFinance', next: loop.pickFinance(s, policy.finance(s)) };
   }
   if (s.phase === 'manager') return { what: 'hireManager', next: loop.hireManager(s, policy.manager(s)) };
+  if (s.verdict) {
+    const k = policy.veto ? policy.veto(s) : firstHarmful(s);
+    if (k !== null) return { what: `veto ${k}`, next: loop.vetoCard(s, k) };
+    return { what: 'acceptVerdict', next: loop.acceptVerdict(s) };
+  }
   if (s.war) {
     if (s.war.outcome !== 'live') return { what: 'clearWar', next: loop.clearWar(s) };
     if (s.war.leader === 'you') return { what: 'rivalReply', next: loop.rivalReply(s) };
@@ -277,6 +427,15 @@ export function policyMove(s: RunState, policy: RebuildPolicy): PolicyMove {
     return { what: 'walk', next: loop.walk(s) };
   }
   if (s.deal) {
+    if (s.swapOpen) {
+      const name = policy.swapDeal ? policy.swapDeal(s) : null;
+      if (name) return { what: `takeOffer ${name}`, next: loop.takeOffer(s, name) };
+      return { what: 'keep', next: loop.keep(s) };
+    }
+    if (s.perks.loan > 0 && policy.loan) {
+      const name = policy.loan(s);
+      if (name) return { what: `loan ${name}`, next: loop.loanOffer(s, name) };
+    }
     const a = policy.deal(s);
     if (a.kind === 'offer') return { what: `takeOffer ${a.name}`, next: loop.takeOffer(s, a.name) };
     if (a.kind === 'promote') return { what: `promote ${a.name}`, next: loop.promote(s, a.name) };
@@ -284,8 +443,14 @@ export function policyMove(s: RunState, policy: RebuildPolicy): PolicyMove {
     return { what: 'takeForty', next: loop.takeForty(s) };
   }
   if (s.spun !== null) {
+    if (s.perks.swap > 0 && policy.swap?.(s)) return { what: 'partExchange', next: loop.partExchange(s) };
     if (policy.spun(s) === 'sell') return { what: 'sell', next: loop.sell(s) };
     return { what: 'keep', next: loop.keep(s) };
+  }
+  if (s.perks.peek > 0 && s.peeked === null && policy.peek?.(s)) return { what: 'peek', next: loop.usePeek(s) };
+  if (s.perks.respin > 0 && policy.respin) {
+    const slot = policy.respin(s);
+    if (slot !== null) return { what: `secondSpin ${slot}`, next: loop.secondSpin(s, slot) };
   }
   if (s.settledCount < s.formation.slots.length) return { what: 'spinNext', next: loop.spinNext(s) };
   return { what: 'blowWhistle', next: loop.blowWhistle(s) };
