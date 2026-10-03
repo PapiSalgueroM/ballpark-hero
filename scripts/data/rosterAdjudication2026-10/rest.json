@@ -4,7 +4,7 @@
   "measuredRowCount": 59,
   "measuredRowCountByLeague": { "austria": 10, "switzerland": 16, "saudi": 10, "scottish": 4, "greece": 7, "croatia": 6, "denmark": 5, "brasileirao": 1 },
   "adjudicatedOn": "2026-10-03",
-  "method": "Read with WebFetch only on 2026-10-03 (the session's web search budget was spent, so pages were reached by their own navigation and by ESPN's public search endpoint). Family A is the club's own squad page or the league's own page. Family B is an independent publisher on another host, mostly ESPN's squad and player pages for season 2026-27. A row leaves pending only when an A and a B source agree on the day read. Namesakes are told apart by the birth date or age the sources print against the baked age in src/data/clubManagerRosters.ts (a 2025 row, so one year younger). Same row shapes as the ledger: confirmedStill rows carry club, movedTo rows carry from, to and realClub, removedClubNotModelled rows carry from and realClub, notCurrent rows carry from and why, pending rows carry club, checkedOn and the reason.",
+  "method": "Read with WebFetch only on 2026-10-03 (the session's web search budget was spent, so pages were reached by their own navigation, by ESPN's public search endpoint and by the Livesport search endpoint behind Soccerway). Family A is the club's own squad page or the league's own page (bundesliga.at, hnl.hr, the clubs' sites). Family B is an independent publisher on another host: ESPN's 2026-27 squad and player pages and Soccerway's player pages, which count as two publishers. A row leaves pending when an A and a B source agree on the day read. Where the official page for the club a verdict names could not be read (many club sites render their squad by script, some answered 403, 404 or 522), the row was settled only when ESPN and Soccerway both agree with dated 2026-27 evidence (league appearances or a dated transfer), the precedent of the 2026-10-02 Brazil pass, and the row carries officialPageRead false so the fold can hold it back if the stricter rule is wanted. A row resting on one publisher stays pending. Namesakes are told apart by the birth date or age the sources print against the baked age in src/data/clubManagerRosters.ts (a 2025 row, so one year younger). Same row shapes as the ledger: confirmedStill rows carry club, movedTo rows carry from, to and realClub, removedClubNotModelled rows carry from and realClub, notCurrent rows carry from and why, pending rows carry club, checkedOn and the reason.",
   "confirmedStill": [
     {
       "name": "Jonas Auer",
@@ -115,6 +115,17 @@
         { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 25" },
         { "family": "B", "url": "https://www.soccerway.com/player/bislimi-uran/pfn3aHPA/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1999-09-25, contract to 2027-06-30, 9 Super League and 6 Conference League appearances in 2026/2027" }
       ]
+    },
+    {
+      "name": "Jota",
+      "club": "Celtic",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Portuguese forward born 1999-03-30, bought from Rennes on 2025-01-27, contract to 2030-06-30, shirt 7 in ESPN's 2026-27 squad with no appearance yet; Soccerway lists a knee injury from 2025-08-09. Celtic's own site rendered only a loading screen, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/256", "publisher": "ESPN (Celtic squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 7, age 27, no appearances shown" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jota/OOmhPCaf/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Celtic, born 1999-03-30, contract to 2030-06-30, knee injury" }
+      ]
     }
   ],
   "movedTo": [
@@ -135,6 +146,7 @@
       "from": "Sturm Graz",
       "to": "Estrela Amadora",
       "realClub": "Estrela Amadora",
+      "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "note": "Croatian midfielder born 2005-05-08. Sturm Graz was a 2024-25 loan from Bayern; he spent 2025-26 on loan at Grasshoppers and Estrela bought him from Bayern on 2026-07-16. Absent from Sturm's 2026-27 squad on the league's own page. The destination rests on two independent publishers that agree, with league starts for Estrela on 2026-09-14 and 2026-09-20: Estrela's own site did not resolve and Liga Portugal's club pages returned 404, so no official page for the new club was read.",
       "sources": [
@@ -148,6 +160,7 @@
       "from": "Basel",
       "to": "Braga",
       "realClub": "Braga",
+      "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "note": "Bosnian centre back born 2001-07-19. On loan at Braga from January 2026, bought outright on 2026-07-01, shirt 37, league starts for Braga on 2026-09-14 and 2026-09-20. Absent from Basel's own squad page. The destination rests on two independent publishers that agree: Braga's own site gave no squad page to a plain fetch.",
       "sources": [
@@ -161,6 +174,7 @@
       "from": "Basel",
       "to": "Famalicão",
       "realClub": "Famalicão",
+      "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "note": "Dutch centre back born 2003-02-25. Sold by Basel to Famalicao on 2026-07-01, shirt 4, seven league appearances for Famalicao by 2026-09-19. Absent from Basel's own squad page. The destination rests on two independent publishers that agree: Famalicao's own site answered 403.",
       "sources": [
@@ -189,6 +203,7 @@
       "from": "Osijek",
       "to": "Estoril",
       "realClub": "Estoril",
+      "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "note": "Croatian defender born 2001-09-28. Played five HNL games for Osijek in 2026-27 (the league's table keeps them), then was sold to Estoril on 2026-09-04, shirt 21, starting at Braga 2026-09-14 and against Casa Pia 2026-09-20. The destination rests on two independent publishers that agree; no official Estoril page was read.",
       "sources": [
@@ -202,6 +217,7 @@
       "from": "Lugano",
       "to": "Famalicão",
       "realClub": "Famalicão",
+      "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "note": "Greek forward born 2004-02-08. Sold by Lugano to Famalicao on 2026-07-24, shirt 70, seven league starts and five goals by 2026-09-19. Absent from Lugano's own squad page. The destination rests on two independent publishers that agree: Famalicao's own site answered 403.",
       "sources": [
@@ -220,6 +236,47 @@
       "sources": [
         { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 7" },
         { "family": "B", "url": "https://www.soccerway.com/player/alioski-egzijan/ObGOBo9F/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1992-02-12, Al Ahli to Lugano 2025-07-01 free, contract to 2027-06-30, 3 Super League appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Thibault Klidjé",
+      "from": "Luzern",
+      "to": "Hibernian",
+      "realClub": "Hibernian",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Togolese forward born 2001-07-10. Sold by Luzern to Hibernian on 2025-07-13, on loan at Randers from February to June 2026, back at Hibernian for 2026-27 with shirt 18 and Premiership appearances. Neither Luzern's site (522) nor Hibernian's or the SPFL's pages gave a squad to a plain fetch, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/258", "publisher": "ESPN (Hibernian squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 18, age 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/klidje-thibault/GbbVBRzj/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hibernian, born 2001-07-10, Luzern to Hibernian 2025-07-13 1.2m, loan to Randers 2026-02-02 back 2026-06-30, Premiership appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Topi Keskinen",
+      "from": "Aberdeen",
+      "to": "OB",
+      "realClub": "OB (Odense Boldklub)",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Finnish forward born 2003-03-07. Sold by Aberdeen to Odense on 2026-07-10, shirt 9, nine Superliga appearances by 2026-09-19. Absent from ESPN's Aberdeen 2026-27 squad. Aberdeen's site gave 404 and OB's site was not reached, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/341438/topi-keskinen", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Odense Boldklub, shirt 9, born 2003-03-07, Superliga starts 2026-09-13 (1 goal) and 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/keskinen-topi/tYPHS2vA/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Aberdeen to Odense 2026-07-10, 1.0m, contract to 2031-06-30, 9 Superliga appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/263", "publisher": "ESPN (Aberdeen squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Duk",
+      "from": "Aberdeen",
+      "to": "Atlas",
+      "realClub": "Atlas",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Cape Verdean forward born 2000-02-16. Sold by Aberdeen to Leganes on 2025-02-03 and by Leganes to Atlas on 2026-07-01; shirt 11 in ESPN's Atlas 2026-27 squad, eight Liga MX appearances. Liga MX's Atlas page (ligamx.net/cancha/club/3) rendered its roster sections empty, so this rests on two independent publishers that agree.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/216", "publisher": "ESPN (Atlas squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 26, Cape Verde Islands" },
+        { "family": "B", "url": "https://www.soccerway.com/player/duk/YeG6Lfce/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Atlas, born 2000-02-16, Aberdeen to Leganes 2025-02-03, Leganes to Atlas 2026-07-01 2.0m, 8 Liga MX appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/263", "publisher": "ESPN (Aberdeen squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
       ]
     }
   ],
@@ -283,8 +340,34 @@
         { "family": "B", "url": "https://www.soccerway.com/player/lucic-ivan/nZCskbG4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Legnica, goalkeeper, born 1995-03-23, Hajduk Split to Legnica 2026-01-26 free, contract to 2028-06-30" },
         { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Ivan%20Lucic&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/207181/ivan-lucic)", "readOn": "2026-10-03", "says": "Miedz Legnica" }
       ]
+    },
+    {
+      "name": "Graham Carey",
+      "from": "St Johnstone",
+      "realClub": "Livingston (Scottish Championship)",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Irish forward born 1989-05-20. Left St Johnstone on a free for Livingston on 2025-07-01, on loan at Dunfermline from January to May 2026, back at Livingston for 2026-27 with Championship appearances. Livingston is not in the game's Scottish Premiership list.",
+      "sources": [
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/140769/graham-carey", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Livingston, shirt 27, born 1989-05-20, SPFL Championship appearances 2026-08-01, 2026-08-07, 2026-09-11" },
+        { "family": "B", "url": "https://www.soccerway.com/player/carey-graham/CpB5IzL3/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "St Johnstone to Livingston 2025-07-01 free, contract to 2027-06-30, 4 Championship appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/267", "publisher": "ESPN (St Johnstone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
     }
   ],
   "notCurrent": [],
-  "pending": []
+  "pending": [
+    {
+      "name": "Lars Villiger",
+      "club": "Luzern",
+      "checkedOn": "2026-10-03",
+      "note": "Checked 2026-10-03 and left pending on one source. Soccerway has him at Luzern (born 2003-04-29, contract to 2028-06-30, four Super League and two cup appearances in 2026/2027, no transfer since 2023), so the row is probably right. But Luzern's own site (fcl.ch) answered 522 on three tries, ESPN's Luzern squad page is still the 2025-26 list and does not show him, and ESPN's player search does not know him, so no second publisher on another host was read."
+    },
+    {
+      "name": "Pascal Schürpf",
+      "club": "Luzern",
+      "checkedOn": "2026-10-03",
+      "note": "Checked 2026-10-03 and left pending, but the row is very probably wrong. Soccerway (born 1989-07-15) has him leaving Luzern for Grasshoppers on a free on 2023-07-01, last playing in 2024/2025, and its player index now gives him no club. ESPN's player index still names Grasshoppers, but ESPN's Grasshoppers squad page (2025-26 list) does not show him. Two independent publishers therefore agree he left Luzern in 2023, but neither says where he is now, and no official page could be read: fcl.ch answered 522 and gcz.ch's player page did not render. Re-check for a retirement notice."
+    }
+  ]
 }
