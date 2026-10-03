@@ -138,10 +138,17 @@ describe('selling up', () => {
     expect(gymVerdict(sellGym(signed)!).score).toBe(gymVerdict(sellGym(g)!).score);
   });
 
-  it('pays less for a man carrying damage', () => {
+  it('pays less for a man carrying damage, beyond what his rating loses', () => {
+    /* His rating already falls with damage, so a bare "cheaper" would hold with
+       no discount at all. At 10 and 40 damage neither price marks the name, so
+       his worth is the price with him less the price without him. The rating
+       alone takes about 19% of it, the discount takes it to about 46%. */
     const g = saleGym('discount', 10);
     const hurt = { ...g, roster: g.roster.map((f, i) => (i === 1 ? { ...f, damage: 40 } : f)) };
+    const without = salePrice({ ...g, roster: [g.roster[0]] });
+    const drop = 1 - (salePrice(hurt) - without) / (salePrice(g) - without);
     expect(salePrice(hurt)).toBeLessThan(salePrice(g));
+    expect(drop).toBeGreaterThan(0.33);
   });
 });
 

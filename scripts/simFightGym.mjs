@@ -42,10 +42,29 @@
  *   7  selling at week 60 over spending out from week 60, paired on the seed,
  *      120 gyms: +19.1, +18.2, +18.5 on sell seeds 0 to 2, never fewer than 116
  *      gyms reaching both endings, so margin 8. With noexit the gap falls to
- *      +2.4, which is the bleed out alone (59 of 116 seeds no better).
+ *      +2.4, which is the bleed out alone (59 of 116 seeds no better). After
+ *      the review fix settled the roster at both endings: +19.1, +18.2, +18.6.
  *   8c late punches landed, four blocks with conditioning over none, 300 pairs:
  *      +0.73, +0.79, +0.90, +0.88 on camp seeds 0 to 3 (untrained land about
  *      33 late), so margin 0.4. With nocamp the difference is exactly zero.
+ *   8b focus area growth per block, 80 blocks: 1.65 (the other three move 0),
+ *      so floor 0.5. With weakfocus (the career's weekly 0.4) it is 0.00,
+ *      because a gain that small rounds away on the whole number attribute.
+ *
+ * REVIEW FIX BANDS (measured on the fixed tree, then on each control):
+ *   7c 200 gyms at week 26, name 60, two belts, two men with a 3-1 record.
+ *      Wrecked man (75) kept through the sale over letting him go first: 0.00;
+ *      through going broke: 0.00; healthy pair let go first over selling with
+ *      them: -0.99. With nosettle: +7.00, +7.00, +3.00 (the review measured
+ *      +7.0 and +3.0 on the same construction). Slack 0.5.
+ *   7d the same gyms. A man's worth to the buyer falls 46.3% going from 10 to
+ *      40 damage; with nodiscount 19.4%, which is what his falling rating takes
+ *      alone. That is structural (the discount is a 0.6/0.9 factor on top), so
+ *      the floor sits at the midpoint, 33%. A man who never fought moves the
+ *      price in 0 and the verdict in 0 of 200; paperprice 200 and 1,
+ *      paperclean 0 and 200.
+ *   8a and 8d are exact counts over 60 gyms: every one or none. widecap opens
+ *      the other man in 0 of 60; nospend and forgetweek are below.
  */
 
 import './lib/seedRandom.mjs';
@@ -780,19 +799,22 @@ console.log('7) selling up ends the game with a verdict, and beats going under')
     return { ...x, reputation: 60, titles: 2, roster: x.roster.map((f, i) => ({ ...f, wins: 3, losses: 1, damage: i === 0 ? hurt : 10 })) };
   };
   const broken = (x) => gym.closeBroke({ ...x, money: -0.01 });
+  /* NaN when the sale is refused, so a refused sale fails the band below
+     rather than crashing the harness before the sections after it run. */
+  const soldScore = (x) => { const s = gym.sellGym(x); return s ? gym.gymVerdict(s).score : Number.NaN; };
   let wreckKeep = 0, wreckLet = 0, cleanKeep = 0, cleanShed = 0, brokeKeep = 0, brokeLet = 0;
   for (let s = 0; s < SETTLE_N; s += 1) {
     const w = settleGym(s, 75);
     const letW = gym.releaseFighter(w, w.roster[0].id);
-    wreckKeep += gym.gymVerdict(gym.sellGym(w)).score;
-    wreckLet += gym.gymVerdict(gym.sellGym(letW)).score;
+    wreckKeep += soldScore(w);
+    wreckLet += soldScore(letW);
     brokeKeep += gym.gymVerdict(broken(w)).score;
     brokeLet += gym.gymVerdict(broken(letW)).score;
     const c = settleGym(s, 10);
     let shed = c;
     for (const f of c.roster) shed = gym.releaseFighter(shed, f.id);
-    cleanKeep += gym.gymVerdict(gym.sellGym(c)).score;
-    cleanShed += gym.gymVerdict(gym.sellGym(shed)).score;
+    cleanKeep += soldScore(c);
+    cleanShed += soldScore(shed);
   }
   const dWreck = (wreckKeep - wreckLet) / SETTLE_N;
   const dBroke = (brokeKeep - brokeLet) / SETTLE_N;
@@ -809,19 +831,35 @@ console.log('7) selling up ends the game with a verdict, and beats going under')
      damage (under the line where letting him go costs the name) is worth less
      than the same man at 10, and a man signed that week who never fought adds
      nothing to the price or to the clean count. */
-  let cheaper = 0, paperPrice = 0, paperScore = 0;
+  /* The man's own worth to the buyer is read as the price with him less the
+     price without him (at 10 and 40 neither marks the name, so the name term
+     is the same in all three). His rating already falls with damage, which
+     makes "priced lower" true even with no discount at all, so the check is on
+     the SIZE of the drop: the discount for what he carries must take a real
+     share of his worth on top of what his rating loses. */
+  const DISCOUNT_FLOOR = 0.33;
+  let cheaper = 0, paperPrice = 0, paperScore = 0, dropSum = 0, dropN = 0;
   for (let s = 0; s < SETTLE_N; s += 1) {
     const c = settleGym(s, 10);
     const hurt = { ...c, roster: c.roster.map((f, i) => (i === 1 ? { ...f, damage: 40 } : f)) };
     if (gym.salePrice(hurt) < gym.salePrice(c)) cheaper += 1;
+    const without = gym.salePrice({ ...c, roster: c.roster.filter((_, i) => i !== 1) });
+    const worth10 = gym.salePrice(c) - without;
+    const worth40 = gym.salePrice(hurt) - without;
+    if (worth10 > 0.02) { dropSum += 1 - worth40 / worth10; dropN += 1; }
     const paper = gym.signProspect(c, c.prospects[0].id);
     if (!paper) continue;
     if (gym.salePrice(paper) !== gym.salePrice(c)) paperPrice += 1;
-    if (gym.gymVerdict(gym.sellGym(paper)).score !== gym.gymVerdict(gym.sellGym(c)).score) paperScore += 1;
+    if (soldScore(paper) !== soldScore(c)) paperScore += 1;
   }
   console.log(`   ${SETTLE_N} gyms: the damaged man priced lower in ${cheaper}; a man who never fought moved the price in ${paperPrice} and the verdict in ${paperScore}`);
+  const drop = dropSum / Math.max(1, dropN);
+  console.log(`   ${dropN} men worth pricing: going from 10 to 40 damage takes ${(drop * 100).toFixed(1)}% off what a buyer pays for him`);
   if (cheaper < SETTLE_N) fail(`a man carrying 40 damage was priced no lower in ${SETTLE_N - cheaper} of ${SETTLE_N} gyms`);
   else ok('a buyer pays less for a man carrying damage, in every gym');
+  if (dropN < SETTLE_N * 0.9) fail(`only ${dropN} of ${SETTLE_N} men were worth enough to price`);
+  else if (!(drop > DISCOUNT_FLOOR)) fail(`30 more damage takes only ${(drop * 100).toFixed(1)}% off a man's price, so the buyer barely discounts what he carries (floor ${DISCOUNT_FLOOR * 100}%)`);
+  else ok(`30 more damage takes ${(drop * 100).toFixed(1)}% off a man's price (floor ${DISCOUNT_FLOOR * 100}%)`);
   if (paperPrice > 0) fail(`a man who never fought moved the sale price in ${paperPrice} gyms`);
   else ok('a man who never fought adds nothing to the price');
   if (paperScore > 0) fail(`a man who never fought moved the verdict in ${paperScore} gyms, so idle cash buys points`);
