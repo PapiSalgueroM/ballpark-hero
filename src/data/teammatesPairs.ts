@@ -1,9 +1,10 @@
 import { TeammatesPair } from '@/types/teammates';
 
 /* Every row is generated from scripts/data/teammatesVerified2026-10.json, which
-   holds two sources on two hosts for every player and every claim in a funFact.
-   Edit the record, never this file: scripts/simTeammatesRecord.mjs fails when
-   the two disagree. */
+   holds two sources on two hosts for every player and every claim in a funFact
+   (the old soccer rows it marks legacy are still owed that). Edit the record,
+   never this file, then run node scripts/genTeammatesPairs.mjs:
+   scripts/simTeammatesRecord.mjs fails when the two disagree. */
 export const teammatesPairs: TeammatesPair[] = [
   // EASY (difficulty 1), obvious pairings
   { player1: "LeBron James", player2: "Dwyane Wade", sport: "NBA", answer: true, funFact: "Heat teammates for four seasons, 2010-11 through 2013-14, and Wade joined LeBron again in Cleveland for part of 2017-18.", difficulty: 1 },
