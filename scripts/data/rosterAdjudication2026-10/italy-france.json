@@ -55,6 +55,16 @@
     {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "listed, midfielder, shirt 11"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 22"}
    ]
+  },
+  {
+   "name": "Emmanuel Biumla",
+   "club": "Angers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Angers's number 24, aged 24 on ESPN (no appearances yet this season). On both current squad pages; the club lists him among the defenders, ESPN among the midfielders.",
+   "sources": [
+    {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "shirt 24, age 24, France, 0 appearances"}
+   ]
   }
  ],
  "movedTo": [
@@ -223,6 +233,47 @@
     {"family": "A", "url": "https://www.legaseriea.it/team/parma/squad", "publisher": "Lega Serie A (Parma squad, current)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/benedyczak-adrian/KSn7To32/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Parma to Kasimpasa 2026-07-28, born 2000-11-24, contract to 2030-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/288482/adrian-benedyczak", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Kasimpasa number 9, born 2000-11-24, played 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Duje Caleta-Car",
+   "from": "Lyon",
+   "to": "Sassuolo",
+   "realClub": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Sassuolo's number 15, aged 30 on ESPN, with two appearances in 2026-27. Not in Lyon's 2026-27 squad on ESPN; in Sassuolo's on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/sassuolo/squad", "publisher": "Lega Serie A (Sassuolo squad, current)", "readOn": "2026-10-03", "says": "listed, defender, shirt 15"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo", "publisher": "ESPN (Sassuolo squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 15, age 30, 2 appearances (player id 194766)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/167/lyon", "publisher": "ESPN (Lyon squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Romain Del Castillo",
+   "from": "Brest",
+   "to": "Osasuna",
+   "realClub": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-03-29. Played Brest's first two Ligue 1 matches of 2026-27, then was sold to Osasuna on 2026-09-01, contract to June 2028; Osasuna's number 20, with LaLiga matches on 2026-09-12 and 2026-09-16. Brest's own squad page still lists him, but it is an old page (it is headed 2024-2025 and carries men who have left), so it is not used.",
+   "sources": [
+    {"family": "A", "url": "https://www.osasuna.es/en/team", "publisher": "CA Osasuna (first team roster, 2026)", "readOn": "2026-10-03", "says": "20, Romain Del Castillo, midfielder"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/230896/romain-del-castillo", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Osasuna number 20, born 1996-03-29, played 2026-09-16; last Brest match 2026-08-29"},
+    {"family": "B", "url": "https://us.soccerway.com/player/del-castillo-romain/hnER3xyT/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Brest to Osasuna 2026-09-01, born 1996-03-29, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6997/brest", "publisher": "ESPN (Brest squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Massadio Haïdara",
+   "from": "Brest",
+   "to": "Kocaelispor",
+   "realClub": "Kocaelispor",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-12-02. Left Brest on a free and joined Kocaelispor on 2025-07-03, contract to June 2027; their number 21, with six appearances in 2026-27 on ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.kocaelispor.com.tr/", "publisher": "Kocaelispor (club site, A team roster)", "readOn": "2026-10-03", "says": "#21 Massadio Haidara, defender, profile /oyuncu/massadio-haidara"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/995/kocaelispor", "publisher": "ESPN (Kocaelispor squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 21, age 33, Mali, 6 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/haidara-massadio/YqmUoTve/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Brest to Kocaelispor free 2025-07-03, born 1992-12-02, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6997/brest", "publisher": "ESPN (Brest squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
@@ -401,6 +452,18 @@
     {"family": "B", "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino", "publisher": "ESPN (Torino squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Farid El Melali",
+   "from": "Angers",
+   "realClub": "CR Belouizdad",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-07-13. Left Angers on a free for CR Belouizdad on 2025-08-31, contract to June 2030. Algeria is not modelled. The destination rests on Soccerway alone (the ESPN search answered with a connection error twice); off Angers is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/el-melali-farid/Yu4ZEgGr/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Angers to CR Belouizdad free 2025-08-31, born 1997-07-13, contract to 2030-06-30"}
    ]
   }
  ],
