@@ -53,6 +53,7 @@ import {
   applyMoneyAction,
   acceptLoan, projectLeagueApps,
 } from "@/lib/soccerCareerEngine";
+import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -347,10 +348,76 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
   );
 }
 
+/* ─── Round 972: the first stage on the cup card ───
+   The group stage (or the league phase) that now comes before the knockouts:
+   where my club finished, the table of four, and the nights behind a fold so
+   the card stays a small tile. Highlighting reads the stage's own row, not the
+   current club, because the card can outlive a summer move. */
+const stageOrdinal = (n: number): string => {
+  const v = n % 100;
+  const suffix = v >= 11 && v <= 13 ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
+  return `${n}${suffix}`;
+};
+
+function FirstStageBlock({ stage }: { stage: FirstStageStage }) {
+  const mine = stage.myRow.club;
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span>{stage.label}</span>
+        <span className="font-bold text-foreground">{stageOrdinal(stage.position)} of {stage.of}</span>
+      </div>
+      {stage.table ? (
+        <div className="rounded-lg bg-muted/20 px-2 py-1">
+          {stage.table.map((r, i) => (
+            <div key={r.club} className={`flex items-center text-[11px] py-0.5 ${r.club === mine ? "font-bold text-foreground" : "text-muted-foreground"}`}>
+              <span className="w-4 shrink-0">{i + 1}</span>
+              <span className="flex-1 truncate">{r.club}</span>
+              <span className="w-12 text-right shrink-0">{r.w}-{r.d}-{r.l}</span>
+              <span className="w-8 text-right shrink-0">{r.gf - r.ga > 0 ? "+" : ""}{r.gf - r.ga}</span>
+              <span className="w-8 text-right shrink-0">{r.pts}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-lg bg-muted/20 px-3 py-1.5 text-[11px] text-muted-foreground">
+          <span className="font-bold text-foreground">{stage.myRow.w}-{stage.myRow.d}-{stage.myRow.l}, {stage.myRow.pts} pts</span>
+          {stage.cutoffs && <> · 8th had {stage.cutoffs.direct} pts, 24th had {stage.cutoffs.playoff}</>}
+        </div>
+      )}
+      <details className="text-[11px]">
+        <summary className="cursor-pointer text-muted-foreground">All {stage.games.length} games</summary>
+        <div className="space-y-0.5 pt-1">
+          {stage.games.map(g => (
+            <div key={g.matchday} className="flex items-center justify-between bg-muted/10 rounded px-2 py-0.5">
+              <span className="text-[10px] text-muted-foreground w-9 shrink-0">MD{g.matchday}</span>
+              <span className="truncate flex-1">{g.home ? "vs" : "at"} {g.opponent}</span>
+              <span className="font-black shrink-0 mx-2">{g.goalsFor}-{g.goalsAgainst}</span>
+              <span className={`text-[10px] w-3 shrink-0 ${g.goalsFor > g.goalsAgainst ? "text-emerald-400" : g.goalsFor < g.goalsAgainst ? "text-red-400" : "text-muted-foreground"}`}>
+                {g.goalsFor > g.goalsAgainst ? "W" : g.goalsFor < g.goalsAgainst ? "L" : "D"}
+              </span>
+            </div>
+          ))}
+        </div>
+      </details>
+      {stage.runnerUpOut && (
+        <div className="text-[10px] text-center text-muted-foreground">Second, but not one of the two best runners-up, so out.</div>
+      )}
+      <div className="text-[10px] text-muted-foreground">{stage.footnote}</div>
+    </div>
+  );
+}
+
+/** What the card says when the run ended before the knockouts. */
+const cupResultLabel = (result: string): string =>
+  result === "Group Stage" ? "Out in the group stage" :
+  result === "League Phase" ? "Out in the league phase" :
+  result === "Play-off" ? "Out in the knockout play-off" : result;
+
 /* ─── Timeline Entry ─── */
 function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
 
   return (
     <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
@@ -497,7 +564,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 /* ─── Season Summary Card ─── */
 function SeasonSummaryCard({ season, position, onContinue, appearance }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null }) {
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
 
   return (
@@ -4047,11 +4114,21 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* UCL Result (latest) */}
           {career.lastUCLResult && career.lastUCLResult.qualified && (
             <div className="bg-card border border-border rounded-xl p-4 space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">⭐ Champions League</span>
+              {/* Round 972: named by the club's confederation and season, so a
+                  club in Brazil plays the Copa Libertadores and 1990-91 is the
+                  European Cup. A result saved before this round has no name
+                  and was always the Champions League. */}
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">⭐ {career.lastUCLResult.competition ?? "Champions League"}</span>
               <div className="text-xs text-muted-foreground text-center font-semibold">
-                {career.lastUCLResult.result === "Winner" ? "🏆 WINNER!" : career.lastUCLResult.result}
+                {career.lastUCLResult.result === "Winner" ? "🏆 WINNER!" : cupResultLabel(career.lastUCLResult.result)}
                 {career.lastUCLResult.isTopScorer && " · 👟 Top Scorer"}
               </div>
+              {career.lastUCLResult.firstStage?.stages.map((stage, i) => (
+                <FirstStageBlock key={i} stage={stage} />
+              ))}
+              {career.lastUCLResult.firstStage && career.lastUCLResult.matches.length > 0 && (
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground pt-1">Knockouts</div>
+              )}
               <div className="space-y-1">
                 {/* Round 546: a tie is two legs now, so each leg is its own row
                     and the deciding one carries the aggregate and how it was
@@ -4100,6 +4177,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="text-[10px] text-center text-muted-foreground">
                   ⚽ {career.lastUCLResult.playerGoals} goal{career.lastUCLResult.playerGoals > 1 ? "s" : ""} in tournament
                 </div>
+              )}
+              {career.lastUCLResult.simplified && (
+                <div className="text-[10px] text-muted-foreground">{career.lastUCLResult.simplified}</div>
               )}
             </div>
           )}
