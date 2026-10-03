@@ -98,6 +98,10 @@ export interface RebuildState {
   canRedeal: boolean;
   // Round 980: the five new power ups
   canSecondSpin: (slot: number) => boolean;
+  /** What an open part exchange can reach, the man going the other way counted. */
+  swapCeiling: number;
+  /** A season loan of this man: 40 percent of his value. */
+  loanFee: (p: Player) => number;
   /** The next envelope, while a sneak peek has it face up. */
   peeked: FinEvent | null;
   /** The board's cards face up while a veto waits on a choice. */
@@ -463,6 +467,8 @@ export function useRebuild(): RebuildState {
   const offerPrice = useCallback((p: Player) => (run ? loop.offerPrice(run, p) : p.marketValue), [run]);
   const canRedeal = run ? loop.canRedeal(run) : false;
   const canSecondSpin = useCallback((slot: number) => (run ? loop.canSecondSpin(run, slot) : false), [run]);
+  const swapCeiling = run ? loop.swapCeilingOf(run) : 0;
+  const loanFee = useCallback((p: Player) => loop.loanFeeOf(p), []);
   const peeked = run ? loop.peekedEnvelope(run) : null;
   const verdictCards = useMemo(() => (run && run.verdict ? loop.whistleDraw(run) : null), [run]);
 
@@ -516,7 +522,7 @@ export function useRebuild(): RebuildState {
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
     managerReading, offerPrice, canRedeal,
-    canSecondSpin, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
+    canSecondSpin, swapCeiling, loanFee, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,

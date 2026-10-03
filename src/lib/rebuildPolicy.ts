@@ -368,20 +368,21 @@ export const THINKING: RebuildPolicy = {
     }
     return best;
   },
-  /* A veto sends a card back and the board deals another from what is left,
-     face down. The policy weighs each card that hurts against the average of
-     every card still in the deck (never the one the seed will deal), read off
-     the engine itself, rating first and money second, and vetoes only when
+  /* A veto shuffles a card back in with the ones the board has not dealt and
+     one comes out in its place, maybe the same one. The policy weighs each
+     card that hurts against the average over that pool (never the card the
+     seed will deal), read off the engine itself, rating first and money
+     second, and vetoes only when
      the gamble beats taking the cards as they fell. */
   veto: s => {
     if (!s.verdict) return null;
-    const { cards, left } = loop.whistleDraw(s);
+    const { cards } = loop.whistleDraw(s);
     const value = (r: RunState) => loop.ratingOf(r) * 1000 + loop.finalFundsOf(r);
     let best: number | null = null;
     let bestScore = value(loop.acceptVerdict(s));
     cards.forEach((c, k) => {
       if (c.kind === 'safe') return;
-      const outs = (left.length ? left : [null]).map(instead => loop.vetoPreview(s, k, instead));
+      const outs = loop.vetoPool(s, k).map(instead => loop.vetoPreview(s, k, instead));
       if (outs.some(o => o === s)) return;
       const v = mean(outs.map(value));
       if (v > bestScore) { best = k; bestScore = v; }

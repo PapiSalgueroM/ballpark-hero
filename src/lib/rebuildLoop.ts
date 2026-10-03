@@ -303,7 +303,7 @@ export function offerPrice(s: RunState, p: Player): number {
   return s.perks.discount > 0 ? Math.round(p.marketValue * 0.8) : p.marketValue;
 }
 
-/** What a season loan of this man costs: half his value, never under a million. */
+/** What a season loan of this man costs: 40 percent of his value, never under a million. */
 export function loanFeeOf(p: Player): number {
   return Math.max(1, Math.round(p.marketValue * LOAN_FEE));
 }
@@ -674,10 +674,20 @@ export function whistleDraw(s: RunState): { windowFunds: number; missed: BoardOb
   return { windowFunds, missed, cards, left };
 }
 
-/** The card the board deals in place of a vetoed one: the next in its seeded
- *  order, face down until then. Null when the deck has nothing left. */
-function redrawFor(s: RunState, drawn: number): PunishCard | null {
-  return drawPunishments(s.seed, drawn + 1)[drawn] ?? null;
+/** The cards a vetoed card is shuffled back in with: itself plus every card
+ *  the board has not dealt, in deck order. One of them replaces it. */
+export function vetoPool(s: RunState, k: number): PunishCard[] {
+  const { cards } = whistleDraw(s);
+  const card = cards[k];
+  if (!card) return [];
+  return PUNISH_DECK.filter(c => c.id === card.id || !cards.some(d => d.id === c.id));
+}
+
+/** The card the board deals in place of vetoed card k: a seeded pick from
+ *  its pool, face down until it lands, so it can be the same card again. */
+function redrawFor(s: RunState, k: number): PunishCard | null {
+  const pool = vetoPool(s, k);
+  return pool.length ? pool[hashSeed(`${s.seed}:veto:${k}`) % pool.length] : null;
 }
 
 /** The whistle. Holding a veto with a card that hurts on the table, the cards
@@ -688,19 +698,20 @@ export function blowWhistle(s: RunState): RunState {
   return settleWindow(s, null);
 }
 
-/** Veto card k of the verdict: it is sent back and the board deals the next
- *  card of its deck in its place, face down until it lands, and that one
- *  stands. The safe card is not worth a veto and is refused. */
+/** Veto card k of the verdict: it is shuffled back in with the cards the
+ *  board has not dealt and one of them comes out face up in its place (it
+ *  can be the same one), and that one stands. The safe card is not worth a
+ *  veto and is refused. */
 export function vetoCard(s: RunState, k: number): RunState {
   if (!s.verdict || s.phase !== 'spin') return s;
   const { cards } = whistleDraw(s);
   const card = cards[k];
   if (!card || card.kind === 'safe') return s;
-  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, redrawFor(s, cards.length));
+  return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, redrawFor(s, k));
 }
 
 /** What a veto of card k would leave if the board dealt `instead` in its
- *  place. For a policy weighing the veto over every card still face down,
+ *  place. For a policy weighing the veto over every card of its pool,
  *  so it never reads the one the seed will actually deal. */
 export function vetoPreview(s: RunState, k: number, instead: PunishCard | null): RunState {
   if (!s.verdict || s.phase !== 'spin') return s;
@@ -750,10 +761,11 @@ function settleWindow(s: RunState, vetoed: number | null, redrawn: PunishCard | 
     let card = drawn;
     let head = `${card.emoji} ${card.title} (you missed: ${miss.text})`;
     if (k === vetoed) {
-      if (!redrawn) { notes.push(`✋ Vetoed: ${head}. The board's deck is empty, so nothing comes in its place.`); return; }
-      notes.push(`✋ Vetoed: ${head}. The board deals another in its place.`);
+      if (!redrawn) { notes.push(`✋ Vetoed: ${head}. Nothing comes in its place.`); return; }
+      const again = redrawn.id === drawn.id;
+      notes.push(`✋ Vetoed: ${head}. It goes back in the board's deck and one comes out${again ? ': the same card, it stands' : ' in its place'}.`);
       card = redrawn;
-      head = `${card.emoji} ${card.title} (dealt in place of the vetoed card)`;
+      head = `${card.emoji} ${card.title} (${again ? 'back again' : 'dealt in place of the vetoed card'})`;
     }
     if (card.kind === 'safe') { notes.push(`${head}: ${card.text}`); return; }
     if (card.kind === 'fine') { funds -= card.amount; notes.push(`${head}: ${card.text}`); return; }
