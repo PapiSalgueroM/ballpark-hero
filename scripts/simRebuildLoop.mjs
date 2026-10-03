@@ -35,6 +35,36 @@
  *   8) the managers are three generated people with different profiles and
  *      fees, and no hire covers the target on its own
  *   9) one seed, one run: a replay is byte identical
+ *  10) the five Round 980 power ups (second spin, veto, part exchange, loan,
+ *      sneak peek), each slipped into the pocket of a deck 1 run (the three
+ *      perk engine every older save was played on) at 66 clubs x 12 seeds:
+ *      held and never played, the run is the run without it to the byte;
+ *      played, it does what its card says on the move that plays it (the
+ *      wheel comes back to the shirt, the vetoed card is shuffled back and
+ *      one of its pool comes out, the exchange sells and signs at 25 percent
+ *      off, the loan costs 40 percent and nobody can sell him, the peek shows
+ *      exactly the envelope that lands), a second copy is played and checked
+ *      the same way, and the thinking policy (the CPU seat) plays each one on
+ *      the new deck. Bands, measured 2026-10-03 over those 792 seeds:
+ *        rating lift against the same run without it: respin +0.162, veto
+ *        +0.385, swap +0.155, loan +0.270, peek +0.015; floors at about a
+ *        third (0.05, 0.13, 0.05, 0.09). Peek is information: it changed the
+ *        run 29 times (floor 10). Probes over two other seed sets of 396 put
+ *        the same lifts at 0.10 to 0.22, 0.35 to 0.52, 0.09 to 0.21, 0.21 to
+ *        0.33. No single one may be worth half of all five together: veto,
+ *        the biggest, measured 39 percent (35 to 46 on the probes) once it
+ *        stopped being a clean tear up (a pure tear up measured 0.72 to 0.82,
+ *        more than the other four together).
+ *        second copies: played in respin 33, swap 65, loan 31, peek 66 of 66
+ *        (floors 15, 30, 15, 30) and adding +0.212, +0.169, +0.613 (floors
+ *        0.05, 0.05, 0.15). The second spin changed the shirt's man 440 times
+ *        in 539 (floor 60 percent): the rest the new list put him back.
+ *        the new deck against the old over the same seeds: thinking +1.577 on
+ *        deck 1 (main's number) and +1.874 on deck 2, a lift of +0.297
+ *        (probes +0.33 to +0.35). Band +0.1 to +0.6: the perks have to lift
+ *        a good player, and by less than half the 1.2 points thinking was
+ *        measured to hold over sell everything on main.
+ *        the CPU plays each at least 20 times (measured 67 to 187).
  *
  * NEGATIVE CONTROL, and it reproduces the shipped defect this round fixed:
  *   SIM_REBUILD_LOOP_CONTROL=top900   caps the market at the 900 most valuable
@@ -47,7 +77,13 @@
  *                                     modest club could not reach any of the
  *                                     three prices without the overdraft.
  *                                     Section 3 must FAIL on the cheap seat.
- * The control patches a copy of the file, normalises CRLF first, asserts the
+ *   SIM_REBUILD_LOOP_CONTROL=noveto   makes the veto a no op inside a copy of
+ *                                     rebuildLoop.ts (spent, and the card
+ *                                     stays) with the policy bundled against
+ *                                     that copy. Section 10 must FAIL on the
+ *                                     veto doing what its card says and on
+ *                                     its lift.
+ * Each control patches a copy of a file, normalises CRLF first, asserts the
  * text it rewrites is present exactly once, and refuses to run otherwise.
  *
  * Run: node scripts/simRebuildLoop.mjs
@@ -64,7 +100,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SIM_REBUILD_LOOP_CONTROL || '';
-if (CONTROL && CONTROL !== 'top900') {
+if (CONTROL && CONTROL !== 'top900' && CONTROL !== 'noveto') {
   console.error(`SIM_REBUILD_LOOP_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -100,6 +136,25 @@ if (CONTROL === 'top900') {
   );
   console.log('NEGATIVE CONTROL ON: the market is the 900 most valuable rows, the shape fetchRebuild shipped until Round 456');
 }
+let loopPath = LOOP_SRC;
+let policyPath = `${ROOT}/src/lib/rebuildPolicy.ts`;
+if (CONTROL === 'noveto') {
+  /* The veto is spent and the window settles as though it never was: the
+     card stays. The policy is bundled against the same patched engine. */
+  loopPath = patchedCopy(
+    LOOP_SRC,
+    'settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, redrawFor(s, k));',
+    'settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, null);',
+    'simRebuildLoop.control.rebuildLoop.ts',
+  );
+  policyPath = patchedCopy(
+    policyPath,
+    "import * as loop from '@/lib/rebuildLoop';",
+    `import * as loop from '${loopPath}';`,
+    'simRebuildLoop.control.rebuildPolicy.ts',
+  );
+  console.log('NEGATIVE CONTROL ON: the veto is a no op, the card it was played on stays');
+}
 
 /* ---------- bundle the real modules ---------- */
 
@@ -107,8 +162,8 @@ const ENTRY = `${TMP}/rebuildLoop.entry.mjs`;
 const BUNDLE = `${TMP}/rebuildLoop.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 export * as deck from '${deckPath}';
-export * as loop from '${LOOP_SRC}';
-export * as policy from '${ROOT}/src/lib/rebuildPolicy.ts';
+export * as loop from '${loopPath}';
+export * as policy from '${policyPath}';
 export { FORMATIONS, playerRating, normalizePosition } from '${ROOT}/src/lib/squadDeal.ts';
 export { getEnrichment } from '${ROOT}/src/data/footleEnrichment.ts';
 `);
@@ -173,16 +228,16 @@ const { KEEP_ALL, SELL_ALL, THINKING } = policy;
 
 /* ---------- the driver ---------- */
 
-function setupFor(clubName, seed) {
+function setupFor(clubName, seed, deckVersion) {
   const club = CLUBS.find(c => c.club === clubName);
-  return { club, clubs: CLUBS, squad: SQUADS.get(clubName), market: marketFor(clubName), preset: 'none', seed };
+  return { club, clubs: CLUBS, squad: SQUADS.get(clubName), market: marketFor(clubName), preset: 'none', seed, deck: deckVersion };
 }
 
 /** Plays one run to the whistle. Every refused move is a finding: the policy
  *  asked for something legal, so the engine handing the same object back
  *  means the rules and the policy disagree about what is legal. */
 function playRun(setup, pol, watch = {}) {
-  let s = loop.createRun(setup);
+  let s = watch.start ? watch.start(loop.createRun(setup)) : loop.createRun(setup);
   const deals = [];
   let steps = 0;
   while (s.phase !== 'done') {
@@ -196,6 +251,7 @@ function playRun(setup, pol, watch = {}) {
     const { what, next } = policy.policyMove(s, pol);
     if (next === s) throw new Error(`${pol.name} at ${setup.club.club}: "${what}" was refused with the same state back (phase ${s.phase}, spun ${s.spun}, deal ${!!s.deal}, war ${!!s.war})`);
     if (what === 'sell' && watch.onSell) watch.onSell(next);
+    if (watch.onMove) watch.onMove(s, what, next);
     s = next;
   }
   return { state: s, deals, steps };
@@ -584,6 +640,162 @@ console.log('\n9. ONE SEED, ONE RUN');
   if (strip(a) !== strip(b)) fail('the same seed and policy produced two different runs');
   if (strip(a) === strip(c)) fail('two different seeds produced the same run');
   console.log(`  seed 4242 replays byte for byte (${a.sold.length} sold, ${a.signed.length} signed, €${a.reckoning.funds}M left) and seed 4243 differs`);
+}
+
+/** Each new perk, checked on the very move that plays it: does it do what its
+ *  card says? Returns how many plays were checked, how many held, and a line
+ *  for each failure. Function declarations, so section 10 can call them. */
+function namedOutcome(p, events, run) {
+  const out = { checked: 0, ok: 0, lines: [], changed: 0 };
+  const name = x => x?.name ?? '40';
+  const judge = (good, line) => { out.checked += 1; if (good) out.ok += 1; else out.lines.push(`${p}: ${line}`); };
+  events.forEach(({ a, what, b }, i) => {
+    if (p === 'respin' && what.startsWith('secondSpin')) {
+      const slot = Number(what.split(' ')[1]);
+      const man = a.decided[slot];
+      const kept = !!man && a.baseXi[slot]?.name === man.name;
+      const reopened = b.spun === slot && !!b.deal && !(slot in b.decided) && (!kept || b.sold.some(x => x.name === man.name));
+      judge(reopened, `shirt ${slot} held ${name(man)} and the second spin did not bring the wheel back to it`);
+      /* whether the shirt changes hands is the policy's choice on the new list, so it is a rate, not a rule */
+      if (name(run.decided[slot]) !== name(man)) out.changed += 1;
+    }
+    if (p === 'veto' && what.startsWith('veto ')) {
+      const k = Number(what.split(' ')[1]);
+      const pool = loop.vetoPool(a, k).map(c => c.id);
+      const r = b.reckoning;
+      judge(r && r.vetoed === k && !!r.redrawn && pool.includes(r.redrawn.id) && r.notes.some(n => n.startsWith('✋ Vetoed')),
+        `card ${k} was played on but the reckoning says vetoed ${r?.vetoed} redrawn ${r?.redrawn?.id}`);
+    }
+    if (p === 'swap' && a.swapOpen && b.spun === null) {
+      const inc = a.baseXi[a.spun];
+      if (what.startsWith('takeOffer ')) {
+        const man = a.deal.offers.find(o => o.name === what.slice(10));
+        const price = Math.max(1, Math.round(man.marketValue * (1 - deck.SWAP_DISCOUNT)));
+        judge(b.sold.some(x => x.name === inc.name) && b.signed.some(x => x.name === man.name) && b.discounts - a.discounts === man.marketValue - price,
+          `the exchange of ${inc.name} for ${man.name} did not sell, sign and take ${man.marketValue - price} off`);
+      } else {
+        judge(what === 'keep' && name(b.decided[a.spun]) === inc.name && !b.sold.some(x => x.name === inc.name), `backing out of the exchange lost ${inc.name}`);
+      }
+    }
+    if (p === 'loan' && what.startsWith('loan ')) {
+      const man = what.slice(5);
+      const l = b.loans.find(x => x.player.name === man);
+      judge(!!l && l.fee === Math.max(1, Math.round(l.player.marketValue * deck.LOAN_FEE)) && !b.signed.some(x => x.name === man) && run.reckoning.xi.some(x => x?.name === man),
+        `the loan of ${man} was not a ${deck.LOAN_FEE * 100} percent fee, not a signing and in the XI at the end`);
+    }
+    if (p === 'peek' && what === 'peek') {
+      const shown = loop.peekedEnvelope(b);
+      const land = events.slice(i + 1).find(e => e.a.peeked === b.peeked && e.b.peeked === null);
+      if (land) judge(!!shown && land.b.post[land.b.post.length - 1].text === shown.text && land.b.actions / 2 === b.peeked, `the peek showed "${shown?.text}" and "${land.b.post[land.b.post.length - 1].text}" landed`);
+    }
+  });
+  return out;
+}
+
+function report10({ per, d1, d2, cpuUses, NEW }) {
+  const pct = x => `${(x * 100).toFixed(0)}%`;
+  const gains = Object.fromEntries(NEW.map(p => [p, mean(per[p].gain)]));
+  const total = NEW.reduce((t, p) => t + Math.max(0, gains[p]), 0);
+  for (const p of NEW) {
+    const g = per[p];
+    const l2 = g.level2.length ? `, a second copy played in ${g.level2Used} of ${g.level2Runs} and adds ${mean(g.level2) >= 0 ? '+' : ''}${mean(g.level2).toFixed(3)}` : '';
+    console.log(`  ${p.padEnd(7)} played in ${g.used} of ${g.runs} runs, rating ${gains[p] >= 0 ? '+' : ''}${gains[p].toFixed(3)} against the same run without it (${pct(gains[p] / total)} of the five), changes the run ${g.diverged} times, does what it says ${g.namedOk} of ${g.named}${p === 'respin' ? ` (the shirt changed hands ${g.changed} times)` : ''}, unused and not the identity ${g.identityBroken}${l2}`);
+  }
+  const lift = mean(d2) - mean(d1);
+  console.log(`  thinking on the old deck ${mean(d1).toFixed(3)}, on the new deck ${mean(d2).toFixed(3)} over the same ${d1.length} seeds: ${lift >= 0 ? '+' : ''}${lift.toFixed(3)}`);
+  console.log(`  the thinking policy (the CPU seat) plays each one on the new deck: ${NEW.map(p => `${p} ${cpuUses[p]}`).join(', ')}`);
+  for (const p of NEW) {
+    const g = per[p];
+    if (g.identityBroken > 0) fail(`${p}: ${g.identityBroken} runs held it, never played it, and still ended differently`);
+    if (g.named === 0) fail(`${p}: never played, so what it does was never checked`);
+    if (g.namedOk < g.named) fail(`${p}: did what its card says ${g.namedOk} of ${g.named} times`);
+    if (cpuUses[p] < 20) fail(`${p}: the CPU policy played it ${cpuUses[p]} times over the seeded runs`);
+  }
+  for (const [p, floor] of Object.entries(GAIN_FLOOR_10)) {
+    if (!(gains[p] >= floor)) fail(`${p}: lifts the rating ${gains[p].toFixed(3)} on average, under its floor ${floor}`);
+  }
+  if (per.respin.changed < per.respin.named * 0.6) fail(`respin: the shirt changed hands after only ${per.respin.changed} of ${per.respin.named} second spins`);
+  for (const [p, floor] of Object.entries(LEVEL2_GAIN_10)) {
+    if (!(mean(per[p].level2) >= floor)) fail(`${p}: a second copy adds ${mean(per[p].level2).toFixed(3)} on average, under its floor ${floor}`);
+  }
+  for (const p of NEW) if (gains[p] / total >= 0.5) fail(`${p} is worth ${pct(gains[p] / total)} of all five together: it dominates`);
+  for (const p of ['respin', 'swap', 'loan', 'peek']) {
+    if (per[p].level2Used < LEVEL2_FLOOR_10[p]) fail(`${p}: a second copy was played in only ${per[p].level2Used} of ${per[p].level2Runs} runs`);
+  }
+  if (per.peek.diverged < PEEK_DIVERGE_FLOOR_10) fail(`peek: the policy played differently after a peek in only ${per.peek.diverged} runs`);
+  if (!(lift >= 0.1 && lift <= 0.6)) fail(`the new deck moves the thinking policy ${lift.toFixed(3)}, outside the band +0.1 to +0.6`);
+}
+const GAIN_FLOOR_10 = { respin: 0.05, veto: 0.13, swap: 0.05, loan: 0.09 };
+const LEVEL2_FLOOR_10 = { respin: 15, swap: 30, loan: 15, peek: 30 };
+const LEVEL2_GAIN_10 = { respin: 0.05, swap: 0.05, loan: 0.15 };
+const PEEK_DIVERGE_FLOOR_10 = 10;
+
+/* ================= 10. the power ups (Round 980) ================= */
+console.log('\n10. THE FIVE NEW POWER UPS');
+{
+  const NEW = ['respin', 'veto', 'swap', 'loan', 'peek'];
+  const HOOK = { respin: 'respin', veto: 'veto', swap: 'swap', loan: 'loan', peek: 'peek' };
+  /* Deck 1 is the three perk engine every save before this round was played
+     on (simRebuildSave replays 144 of them byte for byte), so a deck 1 run
+     with one new perk slipped into the pocket isolates that perk. */
+  const strip = s => JSON.stringify({
+    decided: Object.keys(s.decided).sort().map(i => `${i}:${s.decided[i]?.name ?? '40'}`),
+    sold: s.sold.map(p => p.name), signed: s.signed.map(p => p.name), loans: s.loans.map(l => l.player.name),
+    xi: s.reckoning.xi.map(p => p?.name ?? '40'), funds: s.reckoning.funds, pen: s.reckoning.ratingPen,
+    notes: s.reckoning.notes, rating: loop.ratingOf(s),
+  });
+  const delta = s => loop.ratingOf(s) - s.startRating;
+  const usedOf = (s, p, start) => start + s.post.filter(e => e.perk === p).length - s.perks[p];
+  const idlePolicy = p => (p === 'veto' ? { ...THINKING, veto: () => null } : { ...THINKING, [HOOK[p]]: undefined });
+  const SEEDS_10 = 12;
+  const seeds10 = c => Array.from({ length: SEEDS_10 }, (_, k) => (deck.hashSeed(c) ^ (k * 0x9e3779b1)) >>> 0);
+  const per = Object.fromEntries(NEW.map(p => [p, {
+    runs: 0, used: 0, gain: [], identityBroken: 0, diverged: 0, changed: 0, named: 0, namedOk: 0, level2: [], level2Used: 0, level2Runs: 0,
+  }]));
+  const d1 = [];
+  const d2 = [];
+  const cpuUses = Object.fromEntries(NEW.map(p => [p, 0]));
+  const sample = [];
+  for (const c of CLUBS) {
+    for (const seed of seeds10(c.club)) {
+      const base = playRun(setupFor(c.club, seed, 1), THINKING).state;
+      d1.push(delta(base));
+      const two = playRun(setupFor(c.club, seed, 2), THINKING).state;
+      d2.push(delta(two));
+      for (const p of NEW) cpuUses[p] += usedOf(two, p, 0) > 0 ? 1 : 0;
+      for (const p of NEW) {
+        const g = per[p];
+        const grant = n => r => ({ ...r, perks: { ...r.perks, [p]: n } });
+        g.runs += 1;
+        /* unused: the perk sits in the pocket and the run is the base run to the byte */
+        const idle = playRun(setupFor(c.club, seed, 1), idlePolicy(p), { start: grant(1) }).state;
+        if (strip(idle) !== strip(base)) g.identityBroken += 1;
+        /* used: the outcome it names, checked on the move that plays it */
+        const events = [];
+        const run = playRun(setupFor(c.club, seed, 1), THINKING, { start: grant(1), onMove: (a, what, b) => events.push({ a, what, b }) }).state;
+        g.gain.push(delta(run) - delta(base));
+        if (strip(run) !== strip(base)) g.diverged += 1;
+        if (usedOf(run, p, 1) > 0) g.used += 1;
+        const verdicts = namedOutcome(p, events, run);
+        g.named += verdicts.checked;
+        g.namedOk += verdicts.ok;
+        g.changed += verdicts.changed;
+        if (sample.length < 400 && verdicts.checked) sample.push(...verdicts.lines.slice(0, 1));
+        /* the second copy: the four that can be played twice, on one seed a club */
+        if (p !== 'veto' && seed === seeds10(c.club)[0]) {
+          const ev2 = [];
+          const twice = playRun(setupFor(c.club, seed, 1), THINKING, { start: grant(2), onMove: (a, what, b) => ev2.push({ a, what, b }) }).state;
+          const v2 = namedOutcome(p, ev2, twice);
+          g.named += v2.checked;
+          g.namedOk += v2.ok;
+          g.changed += v2.changed;
+          g.level2Runs += 1;
+          if (usedOf(twice, p, 2) >= 2) { g.level2Used += 1; g.level2.push(delta(twice) - delta(run)); }
+        }
+      }
+    }
+  }
+  report10({ per, d1, d2, cpuUses, NEW });
 }
 
 /* ================= verdict ================= */

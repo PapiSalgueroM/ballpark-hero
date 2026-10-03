@@ -44,6 +44,15 @@
  *      out of the source, and every action the hook can reach must have a
  *      case in applyMove. A new action added next round with no case fails
  *      here rather than being silently dropped from every save.
+ *   7) A SAVE WRITTEN BEFORE ROUND 980 COMES BACK THE SAME. Round 980 put
+ *      five new perks in the envelope decks and moved the save to version 2,
+ *      which records the deck each seat dealt from. scripts/data/
+ *      rebuildSavesV1.json holds 144 version 1 saves written by the engine
+ *      on main before the round (one to four seats, three policies, four
+ *      points in each table). Every one has to load, step up onto deck 1,
+ *      restore to the byte (sha of everything a player can see, recorded on
+ *      main), write back as version 2 unchanged, and a seat restored mid
+ *      window has to take its next move.
  *
  * NEGATIVE CONTROLS, each patching a copy of a file after normalising CRLF,
  * asserting the text it rewrites is present exactly once, and refusing to run
@@ -77,11 +86,15 @@
  *                                        mid thought removed, leaving the
  *                                        reply only inside raiseWar's own
  *                                        timer: section 1 must FAIL
+ *   SIM_REBUILD_SAVE_CONTROL=v1deck2     the version 1 to 2 step puts old
+ *                                        seats on the new deck: section 7
+ *                                        must FAIL
  *
  * Run: node scripts/simRebuildSave.mjs
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -89,13 +102,13 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').replace(/\\/g, '/');
 const TMP = os.tmpdir().replace(/\\/g, '/');
 
-const SECTIONS = [1, 2, 3, 4, 5, 6];
+const SECTIONS = [1, 2, 3, 4, 5, 6, 7];
 const failures = Object.fromEntries(SECTIONS.map(n => [n, 0]));
 let section = 1;
 const fail = m => { failures[section] += 1; console.error(`  FAIL: ${m}`); };
 const total = () => SECTIONS.reduce((t, n) => t + failures[n], 0);
 
-const CONTROLS = ['trustshape', 'partial', 'endonly', 'missmove', 'nomark', 'twofinishes', 'nowarheal'];
+const CONTROLS = ['trustshape', 'partial', 'endonly', 'missmove', 'nomark', 'twofinishes', 'nowarheal', 'v1deck2'];
 const CONTROL = process.env.SIM_REBUILD_SAVE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_REBUILD_SAVE_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -181,6 +194,13 @@ if (CONTROL === 'twofinishes') {
     "  const complete = solo ? phase === 'done' : phase === 'season';",
   ]]);
   console.log('NEGATIVE CONTROL ON: the hook decides a finish with its own copy of the rule');
+}
+if (CONTROL === 'v1deck2') {
+  patchSave([[
+    '      ? { ...(s as Record<string, unknown>), deck: 1 }',
+    '      ? { ...(s as Record<string, unknown>), deck: 2 }',
+  ]], CONTROL_FILE);
+  console.log('NEGATIVE CONTROL ON: a version 1 save steps up onto the new deck instead of the one it was played on');
 }
 if (CONTROL === 'nowarheal') {
   hookSrc = rewrite('useRebuild.ts', hookSrc, [[
@@ -282,6 +302,13 @@ function moveOf(what, s, pol) {
   if (what === 'blowWhistle') return { k: 'whistle' };
   if (what.startsWith('takeOffer ')) return { k: 'offer', name: what.slice('takeOffer '.length) };
   if (what.startsWith('promote ')) return { k: 'promote', name: what.slice('promote '.length) };
+  /* Round 980: the five new power ups */
+  if (what === 'partExchange') return { k: 'swap' };
+  if (what === 'peek') return { k: 'peek' };
+  if (what === 'acceptVerdict') return { k: 'accept' };
+  if (what.startsWith('loan ')) return { k: 'loan', name: what.slice('loan '.length) };
+  if (what.startsWith('secondSpin ')) return { k: 'respin', slot: Number(what.slice('secondSpin '.length)) };
+  if (what.startsWith('veto ')) return { k: 'veto', i: Number(what.slice('veto '.length)) };
   return null;
 }
 
@@ -820,6 +847,56 @@ section = 6;
   const kinds = [...saveCode.matchAll(/\| \{ k: '(\w+)'/g)].map(m => m[1]);
   if (kinds.length !== cases.length) fail(`the RebuildMove union names ${kinds.length} kinds and applyMove handles ${cases.length}`);
   console.log(`   the move union names ${kinds.length} kinds and every one of them replays`);
+}
+
+/* =================== 7) a save written before Round 980 comes back the same =================== */
+
+console.log('');
+console.log('7) a version 1 save, played on the three perk deck, comes back the same and plays on');
+section = 7;
+{
+  const sha = x => createHash('sha256').update(x).digest('hex').slice(0, 24);
+  const fixture = JSON.parse(fs.readFileSync(`${ROOT}/scripts/data/rebuildSavesV1.json`, 'utf8'));
+  let same = 0;
+  let notV1 = 0;
+  let unread = 0;
+  let wrongDeck = 0;
+  let differs = 0;
+  let resaveDiffers = 0;
+  let playsOn = 0;
+  let stuck = 0;
+  let withPerk = 0;
+  for (const f of fixture.saves) {
+    if (JSON.parse(f.raw).v !== 1) { notV1 += 1; continue; }
+    if (f.perks) withPerk += 1;
+    localStorage.setItem(save.REBUILD_SAVE_KEY, f.raw);
+    const read = save.readRebuildSave();
+    if (!read) { unread += 1; continue; }
+    if (read.seats.some(s => (s.fp !== null ? s.deck !== 1 : s.deck !== undefined))) wrongDeck += 1;
+    const back = save.restoreTable(read, CLUBS, dataFor(read.preset));
+    if (!back) { unread += 1; continue; }
+    if (sha(snapTable(back.table)) !== f.view) { differs += 1; continue; }
+    same += 1;
+    /* written again it is a version 2 save on the same deck, and it reads back the same */
+    const again = roundTrip(back, read.preset);
+    if (!again.back || sha(snapTable(again.back.table)) !== f.view || JSON.parse(again.raw).v !== save.REBUILD_SAVE_VERSION) resaveDiffers += 1;
+    /* and it plays on: the seat in the chair, mid window, takes its next move */
+    const seat = back.table.seats[back.table.turn];
+    if (seat?.run && seat.run.phase !== 'done' && back.table.phase === 'window') {
+      const { next } = policy.policyMove(seat.run, policy.THINKING);
+      if (next !== seat.run) playsOn += 1; else stuck += 1;
+    }
+  }
+  console.log(`   ${fixture.saves.length} saves written on main before this round (${withPerk} with an old perk dealt or held): ${same} come back to the byte, ${differs} differ, ${unread} do not read, ${wrongDeck} step up onto the wrong deck, ${notV1} are not version 1`);
+  console.log(`   written again: ${resaveDiffers} differ; mid window: ${playsOn} take their next move, ${stuck} are stuck`);
+  if (fixture.saves.length < 100) fail(`only ${fixture.saves.length} frozen saves, the fixture is not the one this check was written for`);
+  if (notV1 > 0) fail(`${notV1} frozen saves are not version 1`);
+  if (unread > 0) fail(`${unread} saves written before this round no longer load`);
+  if (wrongDeck > 0) fail(`${wrongDeck} saves stepped up onto a deck they were not played on`);
+  if (differs > 0) fail(`${differs} saves written before this round come back different`);
+  if (resaveDiffers > 0) fail(`${resaveDiffers} restored saves change when written again`);
+  if (stuck > 0) fail(`${stuck} restored mid window seats refuse their next move`);
+  if (playsOn < 20) fail(`only ${playsOn} restored saves were mid window, too few to say old saves play on`);
 }
 
 /* ---------- verdict ---------- */
