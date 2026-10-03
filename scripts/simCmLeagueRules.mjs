@@ -28,7 +28,14 @@
       tree gave the same hashes), and re-taken from main's own tree at
       f3b1ea14 when Release P changed the match engine (CM_RULES_ROOT pointed
       at a git archive of main's src, nothing of this branch in it); the
-      branch then matched it hash for hash.
+      branch then matched it hash for hash. Round 899 rewrote the eras and
+      pure entries twice, each time after attribution: the branch tree with
+      the round's change taken back out reproduced the old entries exactly
+      (eras 7/0 and pure 30/0 for the two new leagues; eras 9/0 and pure
+      32/0 for the review's window corrections, which also move two 2005
+      digests in "whole"; the 2015-16 data file was the only difference
+      between the two trees, so the data moved them, by a path this
+      harness does not isolate).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

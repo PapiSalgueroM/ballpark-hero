@@ -326,7 +326,7 @@ const ALSO_REAL_ELSEWHERE = [
  * Round 832: every real player in the three era bakes whose name this
  * generator could build (a GEN_FIRST name, a space, a GEN_LAST name). The
  * guard used to read the era rosters themselves, which only ever mattered for
- * these few (eleven then, sixteen since Round 899), because the generator
+ * these few (eleven then, fifteen since Round 899), because the generator
  * can produce nothing else. The era
  * rosters now load with their era, so reading them here would make a name
  * depend on which eras this tab happened to open, and a modern save would
@@ -338,9 +338,11 @@ const ALSO_REAL_ELSEWHERE = [
 export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
   'Bruno Fernandes', 'Gabriel Silva', 'Hugo Ibarra', 'Javier Garrido', 'Javier Paredes', 'Jorge Andrade',
   'Lorenzo Reyes', 'Lucas Silva', 'Mateo Kovacic', 'Pedro Mendes', 'Pedro Pereira',
-  /* Round 899: the 2015-16 Bundesliga and Ligue 1 brought five more real men
-     the generator could have named a made up youth after. */
-  'Jesper Hansen', 'Jonas Hofmann', 'Kian Hansen', 'Thiago Silva', 'Yannick Carrasco',
+  /* Round 899: the 2015-16 Bundesliga and Ligue 1 brought four more real men
+     the generator could have named a made up youth after. (Jonas Hofmann
+     left the era world in the review fix, back at Dortmund that summer; the
+     2026 rosters still carry him, so the filler still cannot build him.) */
+  'Jesper Hansen', 'Kian Hansen', 'Thiago Silva', 'Yannick Carrasco',
 ];
 
 function realNames(): Set<string> {
