@@ -69,3 +69,9 @@ checks because this machine is under memory pressure. Type checking, build,
 original900/913/914 checks and controls, actual Board reload/handoff/undrafted
 cases, one professional season, and native mobile/desktop review remain CI gates.
 The mounted993 harness is owned separately by save_diagnosis in this worktree.
+The serial prospect-journey workflow includes original900 controls, all914 model
+controls, the992 practice outcomes/controls and913 timing controls. The native
+career993 walk covers all four sports at390px, NBA at320px with reduced motion,
+and NBA at1440px with keyboard. It captures choices, the draft reveal, the scout
+archive and the first professional season, and checks complete saves after each
+transition against an expectation computed before the input.

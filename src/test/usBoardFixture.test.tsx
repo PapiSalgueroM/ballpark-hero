@@ -90,11 +90,11 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    one counter for the whole process, so the id a dialog trigger carries says
    how many dialogs every earlier test mounted and nothing about this screen:
    left in, one sport's path could turn another sport red. The number is
-   taken out. Only Round 992's additive practice entry is excluded; removing
+   taken out. Only The additive practice and prospect entries is excluded; removing
    its parent or changing the existing season button still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
-  copy.querySelectorAll('section[data-career-practice]').forEach(el => el.remove());
+  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry]').forEach(el => el.remove());
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
@@ -143,7 +143,7 @@ function fieldHashes(save: Save | null): Record<string, string> {
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 

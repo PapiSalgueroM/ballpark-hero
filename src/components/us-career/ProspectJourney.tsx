@@ -101,7 +101,7 @@ export function ProspectRecord({ sport, state }: { sport: UsCareerSport; state: 
         <p className="font-semibold">Age {line.age} · {line.level}</p>
         <p className="mt-1 text-muted-foreground">{line.stats.map(st => `${st.value} ${st.label}`).join(' · ')}</p>
       </div>)}
-      <p className="text-muted-foreground">Entered the league at age {out.ageAfter}, rated {out.ratingAfter}. Your first professional season was {out.draftYear + out.devSeasons.length}.</p>
+      <p className="text-muted-foreground">Entered the league in {out.draftYear + out.devSeasons.length} at age {out.ageAfter}, rated {out.ratingAfter}.</p>
     </div>
   </details>;
 }
