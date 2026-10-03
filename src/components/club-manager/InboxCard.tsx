@@ -25,6 +25,15 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
      the same onAnswer the messages use (answerMessage routes 'desk-' ids). */
   const desk = deskOf(career);
   const deskPending = desk.filter(d => !d.resolved).length;
+  /* Closed cards stay out of the way: the open ones, the one you just
+     answered (so its outcome shows), and when nothing is open the newest
+     closed one. The rest sit behind a toggle. */
+  const [showClosed, setShowClosed] = useState(false);
+  const [lastAnswered, setLastAnswered] = useState<string | null>(null);
+  const deskClosed = desk.filter(d => d.resolved);
+  const deskShown = desk.filter(d => !d.resolved || showClosed || d.id === lastAnswered
+    || (deskPending === 0 && d.id === deskClosed[0]?.id));
+  const deskHidden = desk.length - deskShown.length;
   const [view, setView] = useState<'all' | 'pending' | 'resolved'>('all');
   const [search, setSearch] = useState('');
   const [visibleLimit, setVisibleLimit] = useState(4);
@@ -78,7 +87,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
           </div>
           <p className="text-[10px] text-muted-foreground mb-2">Answer before your next match. Anything left open closes with nothing changed.</p>
           <div className="space-y-2">
-            {desk.map(d => (
+            {deskShown.map(d => (
               <div
                 key={d.id}
                 ref={d.id === answerRequest ? answeredCard : null}
@@ -112,7 +121,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
                     {d.options.map((o, i) => (
                       <button
                         key={i}
-                        onClick={() => { setAnswerRequest(d.id); onAnswer(d.id, i); }}
+                        onClick={() => { setAnswerRequest(d.id); setLastAnswered(d.id); onAnswer(d.id, i); }}
                         className="min-h-[44px] min-w-[44px] max-w-full px-2.5 py-1 rounded-lg text-left text-[10px] font-bold bg-card border border-border text-foreground hover:border-primary transition-all"
                       >
                         {o.label}
@@ -126,6 +135,15 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
               </div>
             ))}
           </div>
+          {(deskHidden > 0 || showClosed) && deskClosed.length > 0 && (
+            <button
+              aria-expanded={showClosed}
+              onClick={() => setShowClosed(v => !v)}
+              className="mt-2 min-h-[44px] min-w-[44px] px-2.5 rounded-lg text-[11px] font-bold border bg-card border-border text-muted-foreground"
+            >
+              {showClosed ? 'Hide closed cards' : `Show closed cards (${deskHidden})`}
+            </button>
+          )}
         </section>
       )}
       {inbox.length > 0 && (<>

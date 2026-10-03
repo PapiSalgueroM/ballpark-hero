@@ -113,16 +113,19 @@ describe('Round 979 decisions deck', () => {
           playerId: 'b', playerName: 'Player b',
         };
         const after = answerDecision({ ...s, decisions: [item] }, item.id, i);
+        /* The gate figure (books.fanMood) is in here to prove nothing moves
+           it: it is not the Fans meter and must never be labelled. */
         const moved = {
           board: after.boardConfidence - s.boardConfidence,
-          fans: Math.round((after.books!.fanMood - s.books!.fanMood) * 10) / 10,
+          gate: Math.round((after.books!.fanMood - s.books!.fanMood) * 10) / 10,
           press: after.press!.mood - s.press!.mood,
           morale: after.squad.find(p => p.id === 'b')!.morale - 30,
           budget: Math.round((after.budget - s.budget) * 10) / 10,
         };
-        const want = { board: 0, fans: 0, press: 0, morale: 0, budget: 0 };
+        const want = { board: 0, gate: 0, press: 0, morale: 0, budget: 0 };
         if (o.effect.kind === 'move') want[o.effect.meter] = o.effect.delta;
         expect(moved, `${card.id} option ${i}`).toEqual(want);
+        expect(label.toLowerCase(), `${card.id} option ${i}`).not.toMatch(/fan mood|crowd|gate/);
         expect(after.squad.filter(p => p.id !== 'b')).toEqual(s.squad.filter(p => p.id !== 'b'));
         expect(deskOf(after)[0].resolved).toBeTruthy();
       });
@@ -178,12 +181,36 @@ describe('Round 979 the desk on the inbox screen', () => {
     const s = career({ inbox: [] });
     settleDecisionDesk(s, ['a'], 'Rival Town');
     const card = deskOf(s).find(d => d.kind === 'appeal')!;
-    const after = answerDecision(s, card.id, 1);
+    const answered = answerDecision(s, card.id, 1);
+    const after = { ...answered, decisions: deskOf(answered).filter(d => d.id === card.id) };
     const view = render(<InboxCard career={after} onAnswer={vi.fn()} />);
     const node = view.container.querySelector<HTMLElement>(`[data-desk-card="${card.id}"]`)!;
     expect(node.dataset.inboxState).toBe('resolved');
     expect(node.textContent).toContain('Accepted');
     expect(within(node).queryAllByRole('button')).toHaveLength(0);
+    cleanup();
+  });
+
+  it('keeps closed cards behind a toggle while a card is open', () => {
+    const item = (id: string, resolved?: string): DeskItem => ({
+      id: `desk-2-${id}-columnist`, kind: 'situation', season: 2, week: Number(id), from: 'The press officer',
+      text: `card ${id}`, options: resolved ? [] : [{ label: 'Say nothing (nothing changes)', effect: { kind: 'none' } }],
+      deckId: 'columnist', ...(resolved ? { resolved } : {}),
+    });
+    const desk = [item('9'), item('8', 'Noted.'), item('7', 'Noted.'), item('6', 'Noted.')];
+    const view = render(<InboxCard career={career({ inbox: [], decisions: desk })} onAnswer={vi.fn()} />);
+    const shown = () => view.container.querySelectorAll('[data-desk-card]').length;
+    expect(shown()).toBe(1);
+    fireEvent.click(view.getByRole('button', { name: 'Show closed cards (3)' }));
+    expect(shown()).toBe(4);
+    fireEvent.click(view.getByRole('button', { name: 'Hide closed cards' }));
+    expect(shown()).toBe(1);
+    cleanup();
+    /* With nothing open, the newest closed card still shows its outcome. */
+    const quiet = render(<InboxCard career={career({ inbox: [], decisions: desk.slice(1) })} onAnswer={vi.fn()} />);
+    const nodes = quiet.container.querySelectorAll<HTMLElement>('[data-desk-card]');
+    expect(nodes).toHaveLength(1);
+    expect(nodes[0].dataset.deskCard).toBe(desk[1].id);
     cleanup();
   });
 

@@ -18008,6 +18008,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     loanedOut: [],
     resultLog: [],
     inbox: [],
+    /* Round 979: the desk goes with the inbox. A ban is wiped over the summer
+       (agePlayer), so an appeal carried across would close on a ban that no
+       longer exists, and a card from the old club could move the new one. */
+    decisions: undefined,
     promisedStarts: [],
     // Round 462: the pair ledger is one season's results, so it starts empty.
     pairResults: {},

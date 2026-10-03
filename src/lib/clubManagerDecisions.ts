@@ -10,10 +10,14 @@
  *     yellow is not appealable (it is two bookings, not one decision), so it
  *     never gets a card.
  *  2. A small deck of situations, each with two or three answers. Every answer
- *     moves at most ONE number the engine already keeps (board patience, fan
- *     mood, press mood, one player's morale, the transfer budget) and its
- *     label is generated from that move, so the words on the button are the
- *     effect and cannot drift from it. One answer on every card moves nothing.
+ *     moves at most ONE number the engine already keeps and shows the player
+ *     (board patience, press mood, one player's morale, the transfer budget)
+ *     and its label is generated from that move, so the words on the button
+ *     are the effect and cannot drift from it. One answer on every card moves
+ *     nothing. There is no fans answer on purpose: the Fans meter is derived
+ *     fresh from results, prices and the shirt (clubManagerMeters.ts) and keeps
+ *     no number a desk could move, and books.fanMood is the hidden gate figure
+ *     that clubManagerFinances.ts says must never be labelled.
  *
  * Nothing in here draws from Math.random. Whether a situation is offered and
  * how an appeal goes are read off a hash of the save, the season, the week
@@ -32,10 +36,9 @@
  */
 import type { CareerState } from '@/lib/clubManager';
 import { money } from '@/lib/clubManager';
-import { isValidBooks } from '@/lib/clubManagerFinances';
 
 /** A number the desk is allowed to move. One per answer, at most. */
-export type DeskMeter = 'board' | 'fans' | 'press' | 'morale' | 'budget';
+export type DeskMeter = 'board' | 'press' | 'morale' | 'budget';
 
 export type DeskEffect =
   | { kind: 'appeal' }
@@ -95,7 +98,7 @@ function isValidEffect(e: unknown): e is DeskEffect {
   const o = e as Record<string, unknown>;
   if (o.kind === 'appeal' || o.kind === 'acceptBan' || o.kind === 'none') return true;
   return o.kind === 'move'
-    && ['board', 'fans', 'press', 'morale', 'budget'].includes(o.meter as string)
+    && ['board', 'press', 'morale', 'budget'].includes(o.meter as string)
     && typeof o.delta === 'number' && Number.isFinite(o.delta);
 }
 
@@ -164,7 +167,6 @@ export function effectWords(effect: DeskEffect, state?: CareerState): string {
   if (effect.kind !== 'move') return 'nothing changes';
   switch (effect.meter) {
     case 'board': return `board patience ${signed(effect.delta)}`;
-    case 'fans': return `fan mood ${signed(effect.delta)}`;
     case 'press': return `press mood ${signed(effect.delta)}`;
     case 'morale': return `his morale ${signed(effect.delta)}`;
     case 'budget':
@@ -187,7 +189,6 @@ export interface DeckCard {
   options: { verb: string; effect: DeskEffect }[];
 }
 
-const hasFans = (s: CareerState): boolean => isValidBooks(s.books);
 const hasPress = (s: CareerState): boolean => !!s.press && typeof s.press.mood === 'number' && Number.isFinite(s.press.mood);
 const move = (meter: DeskMeter, delta: number): DeskEffect => ({ kind: 'move', meter, delta });
 const NONE: DeskEffect = { kind: 'none' };
@@ -206,11 +207,11 @@ function lowestMorale(s: CareerState): { id: string; name: string; morale: numbe
  */
 export const DECK: DeckCard[] = [
   {
-    id: 'promoShoot', from: 'The commercial team', fits: hasFans,
-    text: s => `A sponsor wants the squad at a photo shoot on the day off and will pay ${money(0.2, s)} for the afternoon. The supporters trust has asked for the same afternoon for an open day at the training ground.`,
+    id: 'promoShoot', from: 'The commercial team', fits: hasPress,
+    text: s => `A sponsor wants the squad at a photo shoot on the day off and will pay ${money(0.2, s)} for the afternoon. The supporters trust has asked for the same afternoon for an open day at the training ground, and the local paper wants to cover it.`,
     options: [
       { verb: 'Do the shoot', effect: move('budget', 0.2) },
-      { verb: 'Give the afternoon to the fans', effect: move('fans', 4) },
+      { verb: 'Give the afternoon to the fans', effect: move('press', 3) },
       { verb: 'Give the squad the day off', effect: NONE },
     ],
   },
@@ -232,10 +233,10 @@ export const DECK: DeckCard[] = [
     ],
   },
   {
-    id: 'schoolVisit', from: 'The community department', fits: hasFans,
-    text: () => 'A local school has asked for a first team visit, and the community department would like the manager to front it.',
+    id: 'schoolVisit', from: 'The community department', fits: () => true,
+    text: () => 'A local school has asked for a first team visit, and the community department would like the manager to front it. The board like to see the manager doing this sort of thing.',
     options: [
-      { verb: 'Go yourself', effect: move('fans', 3) },
+      { verb: 'Go yourself', effect: move('board', 2) },
       { verb: 'Send a signed shirt instead', effect: NONE },
     ],
   },
@@ -249,18 +250,18 @@ export const DECK: DeckCard[] = [
   },
   {
     id: 'spareFunds', from: 'The board', fits: () => true,
-    text: s => `There is ${money(0.2, s)} left in this year's facilities budget. The board will move it to the transfer pot if you ask, though they would rather it stayed where it is.`,
+    text: s => `The board have ${money(0.2, s)} spare this quarter and want to know where you want it. They will put it in the transfer pot if you ask, and they would read holding it back as a careful manager.`,
     options: [
-      { verb: 'Move it to the transfer pot', effect: move('budget', 0.2) },
-      { verb: 'Leave it where it is', effect: move('board', 2) },
+      { verb: 'Put it in the transfer pot', effect: move('budget', 0.2) },
+      { verb: 'Let them hold it back', effect: move('board', 2) },
       { verb: 'Tell them it is their call', effect: NONE },
     ],
   },
   {
-    id: 'finesKitty', from: 'The head coach', fits: hasFans,
-    text: s => `The squad's fines kitty has ${money(0.1, s)} in it from late arrivals and phones in meetings. The head coach asks where it should go.`,
+    id: 'finesKitty', from: 'The head coach', fits: hasPress,
+    text: s => `The squad's fines kitty has ${money(0.1, s)} in it from late arrivals and phones in meetings. The head coach asks where it should go. The local paper always runs it when it goes to charity.`,
     options: [
-      { verb: "Give it to the club's community partner", effect: move('fans', 2) },
+      { verb: "Give it to the club's community partner", effect: move('press', 2) },
       { verb: 'Put it in the transfer pot', effect: move('budget', 0.1) },
       { verb: 'Leave it in the kitty', effect: NONE },
     ],
@@ -411,11 +412,6 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
   if (meter === 'board') {
     const boardConfidence = clamp(career.boardConfidence + delta, 1, 100);
     return close(`Done. Board patience ${signed(round1(boardConfidence - career.boardConfidence))}.`, undefined, { boardConfidence });
-  }
-  if (meter === 'fans') {
-    if (!isValidBooks(career.books)) return close('Noted. Nothing changed.');
-    const fanMood = clamp(round1(career.books.fanMood + delta), 0, 100);
-    return close(`Done. Fan mood ${signed(round1(fanMood - career.books.fanMood))}.`, undefined, { books: { ...career.books, fanMood } });
   }
   if (meter === 'press') {
     if (!career.press) return close('Noted. Nothing changed.');
