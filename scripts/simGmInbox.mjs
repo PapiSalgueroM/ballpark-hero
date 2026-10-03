@@ -67,7 +67,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_INBOX_CONTROL || '';
 const SEED = Number(process.env.SEED || 1);
-if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate'].includes(CONTROL)) {
+if (CONTROL && !['quote', 'flip', 'cool', 'drift', 'never', 'random', 'shift', 'opencap', 'maxcap', 'oneshot', 'ungate', 'unclamp'].includes(CONTROL)) {
   console.error(`GM_INBOX_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
 }
@@ -98,6 +98,15 @@ if (ENGINE_CONTROLS[CONTROL]) {
   engineSrc = src.replace(line, swap);
   if (engineSrc === src) { console.error(`${CONTROL} control changed nothing, refusing to run`); process.exit(2); }
 }
+/* unclamp swaps one line of careerInbox.ts, whose answer flow moves trust. */
+const CAREER = path.join(ROOT, 'src/lib/careerInbox.ts');
+let careerSrc = null;
+if (CONTROL === 'unclamp') {
+  const src = fs.readFileSync(CAREER, 'utf8');
+  const line = 'sport.setMood(s, clamp(sport.moodOf(s) + choice.karma, 0, 100));';
+  if (!src.includes(line)) { console.error('unclamp control: the trust clamp is not in careerInbox.ts, refusing to run'); process.exit(2); }
+  careerSrc = src.replace(line, 'sport.setMood(s, sport.moodOf(s) + choice.karma); /* unclamp control */');
+}
 const ENTRY = path.join(tmpDir, 'entry.mjs');
 const BUNDLE = path.join(tmpDir, 'bundle.mjs');
 fs.writeFileSync(ENTRY, `
@@ -111,6 +120,8 @@ const redirect = {
   setup(b) {
     b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]gmInbox\.ts$/ }, () => (engineSrc === null ? undefined
       : { contents: engineSrc, loader: 'ts', resolveDir: path.dirname(ENGINE) }));
+    b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]careerInbox\.ts$/ }, () => (careerSrc === null ? undefined
+      : { contents: careerSrc, loader: 'ts', resolveDir: path.dirname(CAREER) }));
   },
 };
 await build({
@@ -245,6 +256,20 @@ const sgn = v => (v > 0 ? `+${v}` : `${v}`);
         if (pc.rating && pc.rating.delta) want.rating[pc.rating.who] = pc.rating.delta;
         if (pc.recruit) want.recruit = 50 + pc.recruit;
         if (meters(s) !== meters(want)) bad.push(`${pe.id} option ${idx}: moved ${meters(s)}, declared ${meters(want)}`);
+        /* Rule 5 at the end of a meter: each moved 0 to 100 meter starts 1 short
+           of the end it moves toward, and must land exactly on that end. */
+        {
+          const near = d => (d > 0 ? 99 : 1);
+          const s2 = newDesk();
+          if (pc.karma) s2.trust = near(pc.karma);
+          if (pc.popularity) s2.fans = near(pc.popularity);
+          if (pc.morale) s2.morale = near(pc.morale);
+          const start = { trust: s2.trust, fans: s2.fans, morale: s2.morale };
+          const [g2] = E.gmInboxWeek(s2, seat1, pe.beat, facts, 0, () => 0);
+          E.answerGmInbox(s2, g2.id, idx, seat1);
+          const end = { trust: clamp100(start.trust + pc.karma), fans: clamp100(start.fans + (pc.popularity ?? 0)), morale: clamp100(start.morale + (pc.morale ?? 0)) };
+          for (const k of ['trust', 'fans', 'morale']) if (s2[k] !== end[k]) bad.push(`${pe.id} option ${idx}: ${k} went from ${start[k]} to ${s2[k]} at the meter's end, not ${end[k]}`);
+        }
         /* The card, rebuilt here from the declaration, not from choiceEffects. */
         const m = pristine.meters;
         const card = [];
