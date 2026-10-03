@@ -1,3 +1,28 @@
+## Codex claims1001 and1002, 2026-10-03: clue review and hockey planning
+
+Anthony asked to keep going. Publication is still blocked: the latest editor
+check opened an empty Publish dialog. No final publish action was sent. Accepted
+998/999 remain independently publishable and1000 stays verified in PR118.
+Publication ownership remains released. Continue these two isolated improvements
+without changing that accepted batch or Claude's career/manager work.
+
+-1001, Footle clue desk: readable clue cards and guess history on phones, plus
+  completed five-puzzle run review from the frozen saved pool. Own Footle.tsx
+  and adjacent components/styles/tests. Keep the shared GameBoard, useGame,
+  scoring, target picker, run schema and Daily completion behavior unchanged.
+-1002, NHL Connections planning bench: four tentative groups, free movement,
+  explicit submission and separately saved notes. Own the NHL Connections page,
+  hook, help and a small draft helper with focused verification. Preserve puzzle
+  membership, four lives, Daily scoring and existing completion records.
+
+Both need remote types/build, actual mounted outcomes, effective controls,
+existing regressions, all built readers and phone/desktop play. No local runtime
+gates, production DB probes, new unverified sports records or paid actions.
+Design contracts are in docs/audits/ROUND1001-FOOTLE-CLUE-DESK.md and
+ROUND1002-NHL-PLANNING-BENCH.md. Hold their product PRs until the accepted
+publication queue resolves. Held root drafts/seven stashes stay intact.
+Next free1003 is unclaimed. AdSense and indexing remain deferred.
+
 ## Codex1000 verified, 2026-10-03: court preview ready, publication still blocked
 
 Round1000 is ready in isolated PR118 at5d0c9edb. Buzzer Beater gains fictional
