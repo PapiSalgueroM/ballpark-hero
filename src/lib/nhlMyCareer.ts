@@ -16,6 +16,7 @@ import type { CareerRival } from './careerRival';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNhlLifeEventsA } from './nhlCareerLifeA';
 import { getNhlLifeEventsB } from './nhlCareerLifeB';
+import { getNhlLifeEventsC } from './nhlCareerLifeC';
 import { getNhlCorruptionEvents } from './nhlCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
@@ -764,6 +765,7 @@ export function drawNhlEvent(c: NhlCareerState, rng: () => number): NhlCareerEve
   // ── Round 59: 90 life events and the corruption deck join the draw ──
   deck.push(...getNhlLifeEventsA(c, rng));
   deck.push(...getNhlLifeEventsB(c, rng));
+  deck.push(...getNhlLifeEventsC(c, rng)); /* Round 920: deck C, 36 cards, draws nothing from rng */
   const corrupt = getNhlCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['bounty', 'cap', 'doctor', 'tips', 'juniorAgent', 'wash'].includes(k));
