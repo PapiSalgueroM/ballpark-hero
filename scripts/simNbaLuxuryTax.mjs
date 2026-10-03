@@ -939,7 +939,7 @@ console.log('7) The league the lines are set from: taxpayers, the biggest bill a
     const page = read('src/pages/NbaFrontOffice.tsx'), guide = read('src/data/gameContent/basketball.ts'), news = read('src/pages/WhatsNew.tsx');
     const example = `Open a new league on its $${L}M tax line, close the season $10M over it and pay $${b10}M (the first $${W.toFixed(3)}M at 1.00, the rest at 1.25), or $${r10}M as a repeater`;
     ok(7, 'the worked example quotes the opening league exactly', page.includes(example), example);
-    const guideBits = [`opens on a ${L} million line with ${opening} clubs over it`, `(${W.toFixed(1)} million in a new league)`, `first apron (${A1} million in a new league)`];
+    const guideBits = [`The opening line is ${L} million, with ${opening} clubs over it once minimum deals fill the rosters.`, `(${W.toFixed(1)} million in a new league)`, `first apron (${A1} million in a new league)`];
     ok(7, 'the guide quotes the opening line, the bracket width and the first apron', guideBits.every(b => guide.includes(b)), guideBits.filter(b => !guide.includes(b)).join(' | '));
     const newsBit = `a new league opens on a $${L}M line with ${opening} clubs over it`;
     ok(7, "What's New quotes the opening line", news.includes(newsBit), newsBit);
