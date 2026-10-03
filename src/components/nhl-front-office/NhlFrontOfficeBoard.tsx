@@ -513,7 +513,7 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const finishDraft = (lg: NhlLeague) => {
-      const notes = nhlOffseason(lg, Math.random);
+      const notes = nhlOffseason(lg, Math.random, myTeam);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
