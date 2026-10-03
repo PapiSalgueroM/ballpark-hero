@@ -10,7 +10,7 @@ import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, conditionTrack, 
 import {
   newGym, signProspect, trainFighter, offersForFighter, takeGymFight,
   releaseFighter, advanceWeek, gymVerdict, guessWeight, weeklyCost, cutRate, TRAIN_COST,
-  trainedThisWeek, campQualityFor, sellGym, salePrice, canSellGym, sanitizeGym, wentBroke,
+  trainedThisWeek, campQualityFor, sellGym, salePrice, canSellGym, sanitizeGym,
   SELL_MIN_WEEKS, BROKE_PENALTY, TRAIN_FOCI,
   type GymState, type GymOffer, type TrainFocus,
 } from '@/lib/fightGym';
@@ -48,8 +48,10 @@ function GymRules() {
         </p>
         <p>
           <strong>Selling up.</strong> From week {SELL_MIN_WEEKS} you can sell the gym. The buyer pays for your name, your
-          belts and the men still under contract, less what they are carrying. Selling ends the game and shows the verdict
-          with the sale counted in. Run out of money instead and the doors close with {BROKE_PENALTY} points off.
+          belts and every man under contract who has fought for you, less what he is carrying. The men go with the keys
+          and count as fighters who came through your gym, so a man you have wrecked counts against you whether you let
+          him go first or sell him on. Selling ends the game and shows the verdict with the sale counted in. Run out of
+          money instead and the doors close with {BROKE_PENALTY} points off.
         </p>
       </div>
     </HowToPlayPopover>
@@ -175,9 +177,9 @@ export default function FightGymBoard() {
       <div className="space-y-4" ref={revealRef}>
         {Header}
         <div className="rounded-lg border bg-card p-4 text-center">
-          <Trophy className={cn('mx-auto mb-2 h-7 w-7', wentBroke(g) ? 'text-muted-foreground' : 'text-amber-500')} />
+          <Trophy className={cn('mx-auto mb-2 h-7 w-7', g.exit === 'sold' ? 'text-amber-500' : 'text-muted-foreground')} />
           <p className="text-sm font-semibold">
-            {wentBroke(g) ? 'The doors closed' : `Sold for ${(g.soldFor ?? 0).toFixed(3)}m`}
+            {g.exit === 'sold' ? `Sold for ${(g.soldFor ?? 0).toFixed(3)}m` : 'The doors closed'}
           </p>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">What the gym is remembered as</p>
           <p className="text-2xl font-bold text-primary">{verdict.tier}</p>
@@ -188,9 +190,9 @@ export default function FightGymBoard() {
         </div>
         <ShareButtons gameName="Fight Gym" gamePath="/fight-gym"
           score={`${verdict.tier}, ${verdict.score}/100`}
-          customText={wentBroke(g)
-            ? `${g.name} put ${g.alumni.length} fighters through and came out as ${verdict.tier}.`
-            : `${g.name} put ${g.alumni.length} fighters through, sold up in week ${g.week} and went out as ${verdict.tier}.`} />
+          customText={g.exit === 'sold'
+            ? `${g.name} put ${g.alumni.length} fighters through, sold up in week ${g.week} and went out as ${verdict.tier}.`
+            : `${g.name} put ${g.alumni.length} fighters through and came out as ${verdict.tier}.`} />
         <button onClick={reset} className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
           <RotateCcw className="mr-2 inline h-4 w-4" />Open a new gym
         </button>
@@ -426,7 +428,7 @@ export default function FightGymBoard() {
                   <div className="mt-2 space-y-1.5 border-t pt-2">
                     {offers.map(o => (
                       <button key={o.id}
-                        onClick={() => { setOffer(o); setPhase('plan'); }}
+                        onClick={() => { setOffer(o); setPhase('plan'); setConfirm(null); setTrainingId(null); }}
                         className="w-full rounded-md border p-2 text-left text-xs hover:border-primary">
                         <span className="flex justify-between font-semibold">
                           <span>{o.label}</span><span className="text-primary">{o.purse.toFixed(3)}m</span>

@@ -111,7 +111,8 @@ export interface PromoterState {
   /**
    * Round 955: how the promotion ended. Absent while it is running. An old save
    * that is closed without one went broke, because until this round that was
-   * the only way a promotion could close.
+   * the only way a promotion could close, but it keeps the verdict it was
+   * recorded with: see wentBroke.
    */
   exit?: PromoterExit;
   /** Round 955: what the buyer paid, in millions, when the promotion was handed over. */
@@ -472,9 +473,14 @@ export function handOver(st: PromoterState): PromoterState | null {
   };
 }
 
-/** True for a promotion that closed because the money ran out, old saves included. */
+/**
+ * True for a promotion that closed because the money ran out. A save closed
+ * before Round 955 carries no exit at all: it did run out of money, the only
+ * way a promotion could close then, but it was scored and recorded without the
+ * penalty, so it is left out here and its verdict reads as it did when it ended.
+ */
 export function wentBroke(st: PromoterState): boolean {
-  return st.closed && st.exit !== 'handed';
+  return st.closed && st.exit === 'broke';
 }
 
 /** What going under costs the verdict. */

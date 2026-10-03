@@ -60,10 +60,16 @@ describe('handing over', () => {
 });
 
 describe('old saves and bad blocks', () => {
-  it('reads an old closed save with no exit as one that went under', () => {
-    const st = { ...withShows(12), closed: true };
-    expect(wentBroke(st)).toBe(true);
-    expect(promoterVerdict(st).bullets[0]).toContain('money ran out');
+  it('keeps the verdict an old closed save was recorded with', () => {
+    /* A promotion closed before Round 955 carries no exit. It ran out of
+       money, but it was scored and recorded without the penalty, so reopening
+       it must not change the score it shares. */
+    const open = withShows(12);
+    const st = { ...open, closed: true };
+    expect(wentBroke(st)).toBe(false);
+    expect(promoterVerdict(st).score).toBe(promoterVerdict(open).score);
+    expect(promoterVerdict(st).bullets).toEqual(promoterVerdict(open).bullets);
+    expect(wentBroke(closeBroke(open))).toBe(true);
   });
 
   it('drops only the block that does not read right', () => {

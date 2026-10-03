@@ -10,7 +10,7 @@ import { STYLES, weightById, ratingOf, type Fighter } from '@/lib/fightCareer';
 import {
   newPromoter, runShow, promoterVerdict, appealOf, purseFor, legalMatch,
   drawOf, weightOf, expectedAttendance, houseFill, VENUES, venueById,
-  handOver, canHandOver, handOverPrice, sanitizePromoter, wentBroke,
+  handOver, canHandOver, handOverPrice, sanitizePromoter,
   HANDOVER_MIN_SHOWS, BROKE_PENALTY,
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
@@ -149,9 +149,9 @@ export default function FightPromoterBoard() {
       <div className="space-y-4" ref={revealRef}>
         {Header}
         <div className="rounded-lg border bg-card p-4 text-center">
-          <Trophy className={cn('mx-auto mb-2 h-7 w-7', wentBroke(st) ? 'text-muted-foreground' : 'text-amber-500')} />
+          <Trophy className={cn('mx-auto mb-2 h-7 w-7', st.exit === 'handed' ? 'text-amber-500' : 'text-muted-foreground')} />
           <p className="text-sm font-semibold">
-            {wentBroke(st) ? 'Out of the business' : `Handed over for ${(st.handedFor ?? 0).toFixed(3)}m`}
+            {st.exit === 'handed' ? `Handed over for ${(st.handedFor ?? 0).toFixed(3)}m` : 'Out of the business'}
           </p>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">How you are remembered</p>
           <p className="text-2xl font-bold text-primary">{verdict.tier}</p>
@@ -162,9 +162,9 @@ export default function FightPromoterBoard() {
         </div>
         <ShareButtons gameName="Fight Promoter" gamePath="/fight-promoter"
           score={`${verdict.tier}, ${verdict.score}/100`}
-          customText={wentBroke(st)
-            ? `${st.name} put on ${st.history.length} shows and finished as ${verdict.tier}.`
-            : `${st.name} put on ${st.history.length} shows, handed it over and went out as ${verdict.tier}.`} />
+          customText={st.exit === 'handed'
+            ? `${st.name} put on ${st.history.length} shows, handed it over and went out as ${verdict.tier}.`
+            : `${st.name} put on ${st.history.length} shows and finished as ${verdict.tier}.`} />
         <button onClick={reset} className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
           <RotateCcw className="mr-2 inline h-4 w-4" />Start again
         </button>
@@ -336,6 +336,7 @@ export default function FightPromoterBoard() {
             const r = runShow(st, plan);
             if (!r) return;
             setResult(r.result);
+            setConfirm(null);
             persist(r.state, 'result');
           }}
           className="mt-3 min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-40">
