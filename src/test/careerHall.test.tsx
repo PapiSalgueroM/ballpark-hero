@@ -7,10 +7,13 @@
  *      one season.
  *   2. Each of the three answers does what its button says.
  *   3. A corrupt save block resets that block alone.
- *   4. The ballot: inducted is exactly the sport's own hof verdict, the first
- *      class is the last season plus the table's offset, shares sit on the
- *      right side of the threshold, the first ballot is certain where the
- *      verdict promises it, and the same career always gets the same ballot.
+ *   4. The ballot: inducted is exactly the sport's own hof verdict (read from
+ *      the engine's legacyOf, never the Hall binding), the first class is the
+ *      last season plus the table's offset, shares sit on the right side of
+ *      the threshold, the first ballot is certain where the verdict promises
+ *      it, a career outside the Hall is off the ballot exactly under half the
+ *      line and otherwise falls off (a Hall with a limit) or waits (one
+ *      without), and the same career always gets the same ballot.
  *   5. The jersey goes to the club with the most seasons, ties by games.
  *   6. Every speech button's words are the steps the speech applies, and the
  *      speech is given once.

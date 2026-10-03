@@ -116,7 +116,7 @@ the data files mark it `firstClass: "verified"` and only then does the card prin
   this rule, so nothing printed is contradicted. Modelling it means a balance round on the
   engine's verdict, not this one. Size of the gap: `scripts/simCareerHall.mjs mlb` prints it,
   and on 2026-10-03 it was 0 of 2000 careers under ten seasons with games either inducted or
-  on the ballot (base seed, a quarter of them retiring at the first talk).
+  on the ballot, in each of six seeds (a quarter of the careers retiring at the first talk).
 - First class, the last season plus six (`firstClassOffset` 6). verified, read 2026-10-03.
   Calendar years: last season Y, five calendar years away, first election Y+6.
   1. CC Sabathia, career 2001-2019 (https://baseballhall.org/hall-of-famers/sabathia-cc), and

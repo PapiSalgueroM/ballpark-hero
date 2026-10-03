@@ -56,27 +56,30 @@
    when it is not (DID NOT FIRE), whatever else went red.
 
    BANDS, from measured headroom. Measured 2026-10-03 at 2000 careers a sport,
-   the default seed plus SIM_SEED 1 to 5 (six runs a sport):
+   the default seed plus SIM_SEED 1 to 5 (six runs a sport), on the tree with
+   the answers loop (a quarter of careers retire at the first talk):
      rises, real careers: at each of the nine decile cuts, the first ballot
        share above the cut minus below it. Smallest cut of six runs:
-       nfl 0.303, nba 0.136, mlb 0.271, nhl 0.350. Band: every cut at least
+       nfl 0.312, nba 0.142, mlb 0.298, nhl 0.341. Band: every cut at least
        0.06. (A single decile against its neighbour is too small a sample:
-       mlb's second decile came out under its first in the base run.)
+       mlb's second decile came out under its first in one run.)
      outcome, early fall off where the Hall has a stay floor (mlb): early
-       fall offs over careers on the ballot outside the Hall, 25.7 to 30.0
+       fall offs over careers on the ballot outside the Hall, 28.1 to 31.5
        percent in six runs (2 in 1053 before the review's curve change).
        Band: at least 10 percent.
      sides, the floor sweep (mlb): synthetic ballots shown at exactly the
-       floor, 379 base (371 under shownraw, which then misses 178). Band: at
-       least 100, so the 4.96 shown as 5.0 guard is really exercised.
+       floor, 345 to 379 in six runs (under shownraw 178 of them miss).
+       Band: at least 100, so the 4.96 shown as 5.0 guard is really exercised.
      rises, ladder: ten steps up the Hall band, 4000 synthetic candidates a
        step, every step must rise. The expected step is 0.07; the smallest
        step of all 24 seeded runs was 0.036 (nhl). Band: every step over 0.015.
      talk reach: share of careers asked at least once before the hard stop.
-       Lowest of six: nfl 86.9, nba 100, mlb 99.9, nhl 97.4. Band: at least 70.
-     iff: inducted is 22 to 24 percent (nfl), 30 to 34 (nba), 40 to 42 (mlb),
-       30 to 33 (nhl) of these careers. Band: at least 5 percent, so the
-       check can never pass on an empty Hall.
+       Lowest of six: nfl 86.8, nba 100, mlb 100, nhl 97.2. Band: at least 70.
+     iff: inducted is 19.6 to 21.6 percent (nfl), 28.2 to 31.1 (nba), 36.2 to
+       39.4 (mlb), 28.1 to 31.1 (nhl) of these careers. Band: at least 5
+       percent, so the check can never pass on an empty Hall.
+     mlb careers under ten seasons with games that reach the Hall or the
+       ballot (printed, not checked; the real ballot needs ten): 0 in all six.
    Everything else is exact: zero misses, every run, every seed.
    These careers pick event answers at random and never change teams by
    choice, so the shares are this loop's, not the game's; the checks are about
@@ -407,7 +410,7 @@ console.log(`  deciles ${decileShares.map(v => v.toFixed(2)).join(' ')}; cuts ${
 console.log(`  misses: iff ${iffMiss}, outcome ${outcomeMiss}, table [${tableDiffs.join(',')}], offset ${offsetMiss}, promise ${promiseMiss}/${promiseN}, draws ${hallDraws}, notSame ${notSame}, sides ${sideMiss}, talk ${talkMismatch}+${talkBeforeAge}, jersey ${jerseyMiss}`);
 // Printed, not checked: careers under ten seasons with games (MLB's real ballot needs ten, which the model leaves to legacyOf).
 const shortCareer = c => c.seasons.filter(s => s.games > 0).length < 10;
-console.log(`  under ten seasons played: ${careers.filter(c => shortCareer(c) && c.rec.outcome === 'inducted').length} inducted, ${careers.filter(c => shortCareer(c) && c.rec.ballots.length > 0 && c.rec.outcome !== 'inducted').length} on the ballot outside the Hall`);
+if (SPORT === 'mlb') console.log(`  under ten seasons played: ${careers.filter(c => shortCareer(c) && c.rec.outcome === 'inducted').length} inducted, ${careers.filter(c => shortCareer(c) && c.rec.ballots.length > 0 && c.rec.outcome !== 'inducted').length} on the ballot outside the Hall`);
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
 console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talks))}; first talk at ${med(careers.filter(c => c.firstTalkAge !== null).map(c => c.firstTalkAge))}; career ends at ${med(careers.map(c => c.finalAge))}; non finite scores ${careers.filter(c => !Number.isFinite(c.score)).length}`);
 
