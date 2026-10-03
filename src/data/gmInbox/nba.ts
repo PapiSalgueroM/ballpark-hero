@@ -107,3 +107,14 @@ export const NBA_GM_INBOX: GmInboxPack = {
     },
   ],
 };
+
+/* SOURCES, each read 2026-10-03, two per rule. The copy carries no number or date from them.
+   The buyout market, veterans freed after the trade deadline joining contenders:
+     https://www.nba.com/news/everything-to-know-about-2025-nba-trade-deadline
+     https://www.thescore.com/nba/news/439382/how-buyouts-affect-the-trade-deadline-and-the-postseason
+   Extension eligibility opening in the offseason:
+     https://hoopsrumors.com/2024/04/players-eligible-for-rookie-scale-extensions-in-2024.html
+     https://www.nbcchicago.com/nba/nba-contract-extensions-tracker-who-has-signed-who-can-sign-and-when-is-the-deadline/3247280/
+   A payroll over the luxury tax line pays a tax bill:
+     https://hoopsrumors.com/2024/11/hoops-rumors-glossary-luxury-tax-penalties-4.html
+     https://www.thebiglead.com/ranking-nba-franchises-by-luxury-tax-bills-in-2025-26/ */

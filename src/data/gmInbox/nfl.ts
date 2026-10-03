@@ -124,3 +124,11 @@ export const NFL_GM_INBOX: GmInboxPack = {
     },
   ],
 };
+
+/* SOURCES, each read 2026-10-03, two per rule. The copy carries no number or date from them.
+   A tagged player has until a July deadline to sign a multiyear deal, or he plays the year on the one year tag:
+     https://www.nfl.com/news/july-15-franchise-tag-deadline-will-provide-no-drama-in-2026
+     https://www.dallascowboys.com/news/deadline-passes-for-george-pickens-to-receive-long-term-deal-in-2026
+   Cut down day, every club reducing its roster by a late August deadline:
+     https://www.bengals.com/news/2026-nfl-53-man-roster-cutdown-deadline-essential-information
+     https://www.chargers.com/news/2026-nfl-53-man-roster-cutdown-deadline */

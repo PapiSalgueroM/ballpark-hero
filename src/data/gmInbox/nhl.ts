@@ -104,3 +104,11 @@ export const NHL_GM_INBOX: GmInboxPack = {
     },
   ],
 };
+
+/* SOURCES, each read 2026-10-03, two per rule. The copy carries no number or date from them.
+   An offer sheet: the old club can match, or let him go and usually take draft picks (the lowest tier carries none):
+     https://www.dkpittsburghsports.com/2020/10/05/restricted-free-agent-rfa-nhl-offer-sheet-faq-tlh
+     https://puckalytics.com/nhl_rfa_offersheet_compensation
+   A modified no trade clause, a list of teams a player would accept a trade to:
+     https://www.dailyfaceoff.com/news/gear-how-do-nhl-player-no-move-and-no-trade-clauses-work
+     https://tsn.ca/nhl/john-klingberg-submits-10-team-list-to-anaheim-ducks-ahead-of-nhl-trade-deadline-1.1905648 */

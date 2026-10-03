@@ -106,3 +106,16 @@ export const MLB_GM_INBOX: GmInboxPack = {
     },
   ],
 };
+
+/* SOURCES, each read 2026-10-03, two per rule. The copy carries no number or date from them.
+   The qualifying offer: a one year offer, and usually a pick back when a player who turns it down signs elsewhere
+   (compensation depends on the club, hence "may" in the copy); it is still in use for the 2025-26 winter:
+     https://mlbtraderumors.com/2015/10/explaining-the-qualifying-offer-system.html
+     https://ublawsportsforum.com/2022/10/19/mlbs-qualifying-offer-from-its-inception-to-its-impending-removal/
+     https://www.cbssports.com/mlb/news/mlb-qualifying-offer-2026-contract-bichette-tucker-schwarber-diaz/
+   Arbitration figures are exchanged, a deal can still be reached, and otherwise a hearing picks one figure:
+     https://mlbtraderumors.com/2025/01/17-players-exchange-filing-figures.html
+     https://www.cbssports.com/mlb/news/mlb-hot-stove-rumors-and-news-roundup-for-january-16
+   Holding a prospect down a few weeks can still buy an extra year of control:
+     https://www.espn.com/mlb/story/_/id/33761266/the-end-mlb-service-manipulation-how-kris-bryant-paved-way-next-kris-bryant
+     https://pitcherlist.com/cba-variables-service-time */
