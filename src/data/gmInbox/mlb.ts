@@ -37,8 +37,8 @@ export const MLB_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'expiringStar', op: '==', value: true }],
       text: 'Your best free agent to be is about to hit the market. Make him the qualifying offer and he either takes the year or you may get a pick back when he signs elsewhere.',
       choices: [
-        { label: 'Make the offer', reply: 'Put it in front of him.', karma: 1, cash: -1 },
-        { label: 'Let him walk', reply: 'We have other plans.', karma: -1, cash: 1, popularity: -3 },
+        { label: 'Make him the offer', reply: 'Put it in front of him.', karma: 2, morale: 1 },
+        { label: 'Do not make the offer', reply: 'We have other plans.', karma: -1, popularity: -3 },
       ],
     },
     {
@@ -47,16 +47,16 @@ export const MLB_GM_INBOX: GmInboxPack = {
       text: 'Arbitration figures are swapped with your starting second baseman, and the gap between the two numbers is wide. Settle or go to a hearing?',
       choices: [
         { label: 'Settle in the middle', reply: 'Meet him halfway.', karma: 0, cash: -1, morale: 2 },
-        { label: 'Go to a hearing', reply: 'We like our number.', karma: 1, cash: 0.5, morale: -3 },
+        { label: 'Go to a hearing', reply: 'We like our number.', karma: 1, morale: -3 },
       ],
     },
     {
       id: 'mlb_service_clock', beat: 'spring', from: 'Your farm director', emoji: '🌱',
       when: [{ fact: 'topProspect', op: '==', value: true }],
-      text: 'Your top prospect tore up spring. Break camp with him, or start him in the minors for a few weeks and keep an extra year of control.',
+      text: 'Your top prospect tore up spring and the fans want him up on opening day. Holding him down a few weeks can keep an extra year of control. Your farm director wants to know what to tell him.',
       choices: [
-        { label: 'Break camp with him', reply: 'He made the team.', karma: 0, popularity: 3, morale: 2, rating: { who: 'prospect', delta: 1 } },
-        { label: 'Start him in the minors', reply: 'A few more weeks down there.', karma: 2, popularity: -3, morale: -1 },
+        { label: 'Tell him he has earned it', reply: 'He has earned it.', karma: 0, popularity: 3, morale: 2, rating: { who: 'prospect', delta: 1 } },
+        { label: 'Tell him a few more weeks', reply: 'A few more weeks down there.', karma: 2, popularity: -3, morale: -1 },
       ],
     },
     {
@@ -80,10 +80,10 @@ export const MLB_GM_INBOX: GmInboxPack = {
     {
       id: 'mlb_deadline_rental', beat: 'deadline', from: 'Ownership', emoji: '🏢',
       when: [{ fact: 'winPct', op: '>=', value: 0.55 }],
-      text: 'You are in the race. Ownership will take on salary for a rental arm if you want one.',
+      text: 'You are in the race. Ownership wants to know if you are buying an arm at the deadline, and the clubhouse is listening.',
       choices: [
-        { label: 'Get the arm', reply: 'Go get him.', karma: 3, cash: -2, morale: 2 },
-        { label: 'Stand pat', reply: 'Our staff is good enough.', karma: -2, morale: -1 },
+        { label: 'Tell ownership you are working the phones', reply: 'We are going for it.', karma: 3, morale: -1 },
+        { label: 'Tell the clubhouse this staff is enough', reply: 'Our staff is good enough.', karma: -2, morale: 2 },
       ],
     },
     {
@@ -91,8 +91,8 @@ export const MLB_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'winPct', op: '<', value: 0.45 }],
       text: 'The season is gone and a contender keeps calling about your closer.',
       choices: [
-        { label: 'Sell for prospects', reply: 'Take the best offer.', karma: 2, cash: 1, morale: -2, popularity: -2 },
-        { label: 'Keep him', reply: 'He closes for us next year too.', karma: -2, morale: 1 },
+        { label: 'Take their calls', reply: 'Hear the best offer.', karma: 2, morale: -2, popularity: -2 },
+        { label: 'Tell them he is not available', reply: 'He closes for us next year too.', karma: -2, morale: 1 },
       ],
     },
     {

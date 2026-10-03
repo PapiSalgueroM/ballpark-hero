@@ -36,26 +36,26 @@ export const NHL_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'rfaStar', op: '==', value: true }],
       text: 'Another club is circling your restricted free agent with an offer sheet. If one is signed you can match it, or let him go and usually get draft picks back.',
       choices: [
-        { label: 'Sign him before they can', reply: 'Get him done today.', karma: 1, cash: -2, morale: 2 },
-        { label: 'Wait them out', reply: 'Let them try. We will match.', karma: -1, morale: -2 },
+        { label: 'Open talks today', reply: 'Get his agent on the phone.', karma: 1, morale: 2 },
+        { label: 'Wait them out', reply: 'Let them try.', karma: -1, morale: -2 },
       ],
     },
     {
       id: 'nhl_crowded_crease', beat: 'camp', from: 'Your goalie coach', emoji: '🥅',
       when: [{ fact: 'threeGoalies', op: '==', value: true }],
-      text: 'Three goalies, two spots. Somebody has to go, and the young one would play every night in the minors.',
+      text: 'Three goalies in camp and two nets. The goalie coach wants to know where the work goes.',
       choices: [
-        { label: 'Carry all three', reply: 'Keep them all for now.', karma: 0, cash: -0.5, morale: -1 },
-        { label: 'Send the kid down to play', reply: 'Starts are what he needs.', karma: 1, rating: { who: 'kidGoalie', delta: 1 } },
+        { label: 'Split it three ways', reply: 'Everybody gets a look.', karma: 0, morale: -1 },
+        { label: 'Give the kid the heavy work', reply: 'Work is what he needs.', karma: 1, rating: { who: 'kidGoalie', delta: 1 } },
       ],
     },
     {
       id: 'nhl_line_juggle', beat: 'season', from: 'Your head coach', emoji: '🧢',
       when: [{ fact: 'winPct', op: '<', value: 0.4 }],
-      text: 'The top line has gone cold. The coach wants to break it up and move your young center up.',
+      text: 'The top line has gone cold. The coach asks whether the young center should become the priority.',
       choices: [
-        { label: 'Promote the kid', reply: 'Top line, tonight.', karma: 0, popularity: 2, morale: -1, rating: { who: 'young', delta: 2 } },
-        { label: 'Keep the lines', reply: 'They will come out of it.', karma: 0, popularity: -1, morale: 1 },
+        { label: 'Make the kid the priority', reply: 'Let him learn up there.', karma: 0, popularity: 2, morale: -1, rating: { who: 'young', delta: 2 } },
+        { label: 'Keep the lines as they are', reply: 'They will come out of it.', karma: 0, popularity: -1, morale: 1 },
       ],
     },
     {
@@ -72,17 +72,17 @@ export const NHL_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'ntcVet', op: '==', value: true }, { fact: 'winPct', op: '<', value: 0.45 }],
       text: 'Your veteran with a no trade clause has sent over the teams he would accept a move to. The list is short.',
       choices: [
-        { label: 'Work the list', reply: 'Call all of them.', karma: 2, cash: 1, morale: -2, popularity: -2 },
-        { label: 'Keep him', reply: 'He finishes the year here.', karma: -2, morale: 1 },
+        { label: 'Call every team on it', reply: 'Call all of them.', karma: 2, morale: -2, popularity: -2 },
+        { label: 'Tell his agent he is staying', reply: 'He finishes the year here.', karma: -2, morale: 1 },
       ],
     },
     {
       id: 'nhl_deadline_buy', beat: 'deadline', from: 'Ownership', emoji: '🏢',
       when: [{ fact: 'winPct', op: '>=', value: 0.55 }],
-      text: 'You are in a playoff spot. Ownership will add salary for a depth forward at the deadline.',
+      text: 'You are in a playoff spot. Ownership wants to know if you are buying at the deadline, and the room is listening.',
       choices: [
-        { label: 'Add him', reply: 'Go get him.', karma: 3, cash: -2, morale: 2 },
-        { label: 'Stand pat', reply: 'This group got us here.', karma: -2, morale: -1 },
+        { label: 'Tell ownership you are working the phones', reply: 'We are going for it.', karma: 3, morale: -1 },
+        { label: 'Tell the room this group is enough', reply: 'This group got us here.', karma: -2, morale: 2 },
       ],
     },
     {

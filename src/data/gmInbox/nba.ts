@@ -38,17 +38,17 @@ export const NBA_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'starUnhappy', op: '==', value: true }, { fact: 'winPct', op: '<', value: 0.45 }],
       text: 'Word from your best player\'s agent: he would like a trade before the deadline. It has not leaked yet.',
       choices: [
-        { label: 'Move him for a haul', reply: 'Find the best package out there.', karma: 1, cash: 1, popularity: -5, morale: -2 },
-        { label: 'Say no and build around him', reply: 'He is not going anywhere.', karma: 2, morale: -3, popularity: 1 },
+        { label: 'Tell his agent you will listen', reply: 'Bring me the best package out there.', karma: 1, popularity: -5, morale: -2 },
+        { label: 'Tell his agent he is staying', reply: 'He is not going anywhere.', karma: 2, morale: -3, popularity: 1 },
       ],
     },
     {
       id: 'nba_buyout_vet', beat: 'buyout', from: 'Your assistant GM', emoji: '🗂️',
       when: [{ fact: 'winPct', op: '>=', value: 0.55 }],
-      text: 'The buyout market is open. A veteran shooter just got free and wants to join a contender.',
+      text: 'The buyout market is open. Your assistant GM wants money set aside in case a veteran shooter comes free.',
       choices: [
-        { label: 'Sign him', reply: 'Bring him in.', karma: 2, cash: -1, morale: 2 },
-        { label: 'Keep the spot for the kid', reply: 'The minutes stay with our guy.', karma: -1, rating: { who: 'young', delta: 1 } },
+        { label: 'Set the money aside', reply: 'Be ready to move.', karma: 2, cash: -1, morale: 1 },
+        { label: 'Keep the minutes for the kid', reply: 'The minutes stay with our guy.', karma: -1, rating: { who: 'young', delta: 1 } },
       ],
     },
     {
@@ -56,17 +56,17 @@ export const NBA_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'starExtEligible', op: '==', value: true }],
       text: 'Your best player is eligible for an extension this summer. Sign now at today\'s number, or wait and pay what he is worth next year.',
       choices: [
-        { label: 'Extend him now', reply: 'Get it done this summer.', karma: 2, cash: -2, morale: 3 },
+        { label: 'Open extension talks now', reply: 'Let us get it done this summer.', karma: 2, morale: 3 },
         { label: 'Wait a year', reply: 'Let him prove it first.', karma: -1, morale: -2 },
       ],
     },
     {
       id: 'nba_tax_bill', beat: 'summer', from: 'Ownership', emoji: '🏢',
       when: [{ fact: 'overTax', op: '==', value: true }],
-      text: 'You are over the luxury tax line and ownership has been reading the bill.',
+      text: 'You are over the luxury tax line and ownership has been reading the bill. They want the travel and staff extras trimmed.',
       choices: [
-        { label: 'Dump salary', reply: 'We will get under it.', karma: 3, cash: 2, morale: -3, popularity: -2 },
-        { label: 'Pay the tax', reply: 'This roster is worth it.', karma: -3, cash: -3, morale: 1 },
+        { label: 'Trim the extras', reply: 'Cut what we can.', karma: 3, cash: 2, morale: -2 },
+        { label: 'Keep the extras', reply: 'This roster is worth it.', karma: -3, morale: 1 },
       ],
     },
     {
@@ -74,8 +74,8 @@ export const NBA_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'youngCore', op: '==', value: true }, { fact: 'winPct', op: '<', value: 0.4 }],
       text: 'The young guard is ready for more minutes, and the veteran ahead of him is not thrilled about it.',
       choices: [
-        { label: 'Give the kid the minutes', reply: 'Let him play through mistakes.', karma: 0, popularity: 2, morale: -2, rating: { who: 'young', delta: 2 } },
-        { label: 'Keep the rotation', reply: 'Minutes are earned.', karma: 0, popularity: -1, morale: 2 },
+        { label: 'Make the kid the priority', reply: 'Let him play through mistakes.', karma: 0, popularity: 2, morale: -2, rating: { who: 'young', delta: 2 } },
+        { label: 'Keep the rotation as it is', reply: 'Minutes are earned.', karma: 0, popularity: -1, morale: 2 },
       ],
     },
     {

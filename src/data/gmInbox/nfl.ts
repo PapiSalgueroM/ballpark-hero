@@ -38,34 +38,34 @@ export const NFL_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'starExpiring', op: '==', value: true }],
       text: 'Your franchise player has not reported to camp. His camp wants a new deal before he takes a snap.',
       choices: [
-        { label: 'Pay him now', reply: 'Get it done before the pads come on.', karma: -2, cash: -3, morale: 3, popularity: 3 },
-        { label: 'Fine him and wait', reply: 'Camp is not optional. The fines stand.', karma: 2, morale: -3, out: { who: 'star', weeks: 2 } },
+        { label: 'Find money to get him in', reply: 'Get him in before the pads come on.', karma: -2, cash: -3, morale: 3, popularity: 3 },
+        { label: 'Hold firm and wait', reply: 'Camp is not optional.', karma: 2, morale: -3, out: { who: 'star', weeks: 2 } },
       ],
     },
     {
       id: 'nfl_tag_deadline', beat: 'tag', from: 'Your capologist', emoji: '📑',
       when: [{ fact: 'tagged', op: '==', value: true }],
-      text: 'This is the last week to turn your tagged player into a long term deal. After it he plays the year on the tag.',
+      text: 'This is the last week to work out a long term deal with your tagged player. After it he plays the year on the tag.',
       choices: [
-        { label: 'Lock him up long term', reply: 'Make the long deal work.', karma: 3, cash: -2, morale: 2 },
+        { label: 'Make him a long term offer', reply: 'Put a real offer on the table.', karma: 1, morale: 2 },
         { label: 'Let him play on the tag', reply: 'One year, and we talk again.', karma: 0, morale: -2, popularity: -1 },
       ],
     },
     {
       id: 'nfl_cutdown_last_spot', beat: 'cutdown', from: 'Your head coach', emoji: '🧢',
-      text: 'Cut down day. The last spot comes down to a veteran who knows the system and an undrafted kid who flew around all camp.',
+      text: 'Cut down day. The coach wants to know who gets the reps in the last practice: a veteran who knows the system, or the undrafted kid who flew around all camp.',
       choices: [
-        { label: 'Keep the veteran', reply: 'Experience wins the spot.', karma: 1, morale: 2 },
-        { label: 'Keep the kid', reply: 'He earned it. Get him reps.', karma: 0, popularity: 2, rating: { who: 'kid', delta: 2 } },
+        { label: 'Reps to the veteran', reply: 'Experience first.', karma: 1, morale: 2 },
+        { label: 'Reps to the kid', reply: 'He earned a look.', karma: 0, popularity: 2, rating: { who: 'kid', delta: 2 } },
       ],
     },
     {
       id: 'nfl_cutdown_money', beat: 'cutdown', from: 'Your capologist', emoji: '📑',
       when: [{ fact: 'capSpace', op: '<', value: 5 }],
-      text: 'You are tight against the cap. Releasing a veteran this week frees room, and the room will not love it.',
+      text: 'You are tight against the cap. Your capologist wants to ask a veteran to take less this year, and the room will not love it.',
       choices: [
-        { label: 'Release him', reply: 'Make the move.', karma: 2, cash: 1.5, morale: -3 },
-        { label: 'Keep him', reply: 'Find the room somewhere else.', karma: -2, morale: 1 },
+        { label: 'Ask for the pay cut', reply: 'Make the call.', karma: 2, cash: 1.5, morale: -3 },
+        { label: 'Leave his deal alone', reply: 'Find the room somewhere else.', karma: -2, morale: 1 },
       ],
     },
     {
@@ -73,8 +73,8 @@ export const NFL_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'rookieQB', op: '==', value: true }, { fact: 'winPct', op: '<', value: 0.4 }],
       text: 'The rookie quarterback has been sharp in practice and the starter is not winning. The room wants to know who plays Sunday.',
       choices: [
-        { label: 'Start the rookie', reply: 'It is his job now.', karma: 1, popularity: 3, morale: -2, rating: { who: 'rookie', delta: 2 } },
-        { label: 'Stay with the veteran', reply: 'We ride with the starter.', karma: -1, popularity: -2, morale: 2 },
+        { label: 'First team reps to the rookie', reply: 'Let him take the reps.', karma: 1, popularity: 3, morale: -2, rating: { who: 'rookie', delta: 2 } },
+        { label: 'Keep the reps as they are', reply: 'We ride with the starter.', karma: -1, popularity: -2, morale: 2 },
       ],
     },
     {
@@ -89,10 +89,10 @@ export const NFL_GM_INBOX: GmInboxPack = {
     {
       id: 'nfl_deadline_buy', beat: 'deadline', from: 'Ownership', emoji: '🏢',
       when: [{ fact: 'winPct', op: '>=', value: 0.6 }],
-      text: 'You are in the race. Ownership will cover a rental at the deadline if you think it gets you over the top.',
+      text: 'You are in the race. Ownership wants to know if you are buying at the deadline, and the room is listening.',
       choices: [
-        { label: 'Spend it', reply: 'We are going for it.', karma: 3, cash: -2, morale: 3 },
-        { label: 'Stand pat', reply: 'This group has done it so far.', karma: -3, morale: -1 },
+        { label: 'Tell ownership you are working the phones', reply: 'We are going for it.', karma: 3, morale: -1 },
+        { label: 'Tell the room this group is enough', reply: 'This group has done it so far.', karma: -3, morale: 3 },
       ],
     },
     {
@@ -100,8 +100,8 @@ export const NFL_GM_INBOX: GmInboxPack = {
       when: [{ fact: 'winPct', op: '<', value: 0.35 }],
       text: 'The season is slipping. Ownership wants a plan, and selling a veteran for picks is one.',
       choices: [
-        { label: 'Sell the veteran', reply: 'Picks it is.', karma: 2, cash: 1, morale: -3, popularity: -2 },
-        { label: 'Keep the group together', reply: 'Nobody is giving up.', karma: -3, morale: 2 },
+        { label: 'Say you will listen on veterans', reply: 'Picks would help.', karma: 2, morale: -3, popularity: -2 },
+        { label: 'Back the group', reply: 'Nobody is giving up.', karma: -3, morale: 2 },
       ],
     },
     {
