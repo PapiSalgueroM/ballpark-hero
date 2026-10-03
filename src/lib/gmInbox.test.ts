@@ -133,6 +133,15 @@ describe('gmInbox engine', () => {
     expect(badInbox.phoneInbox).toEqual([]);
     expect(badInbox.gmInboxLast).toEqual({ bee: 0 });
   });
+
+  it('a delivered message whose option lost its trust number resets the inbox, not the save', () => {
+    const s = desk();
+    gmInboxWeek(s, seatFor(TOY), 'b', {}, 0, () => 0);
+    const bent = { ...s, phoneInbox: s.phoneInbox!.map(m => ({ ...m, choices: [{ label: 'Up', reply: 'Up.' }] })) as unknown as Desk['phoneInbox'] };
+    repairGmInbox(bent);
+    expect(bent.phoneInbox).toEqual([]);
+    expect(bent.trust).toBe(50);
+  });
 });
 
 describe('gmInbox packs', () => {

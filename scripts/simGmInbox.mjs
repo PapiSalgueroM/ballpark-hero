@@ -25,6 +25,13 @@
         run, and in at least REACH_FLOOR of them.
      6) SAME SEED, SAME DECK, and a different seed deals a different one.
 
+   No board is bound to the deck yet (Round 940 builds the engine, the packs
+   and the panel only), so sections 3 to 5 drive synthetic desks: every fact
+   is drawn from the range its own pack declares, per season or per week as
+   declared, and a desk answers three weeks in four. The rate bands are the
+   deck's own rhythm on those desks, to be remeasured on a real board when
+   one binds it.
+
    MEASURED at seeds 1 to 5 (100 desks of 10 seasons a pack, every pack at
    chance 0.5), mean events a season:
      nfl 2.76 to 2.86, nba 2.27 to 2.37, mlb 2.53 to 2.57, nhl 2.73 to 2.79,

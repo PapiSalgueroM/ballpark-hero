@@ -27,6 +27,14 @@ export function GmInboxPanel({ pack, messages, onAnswer, seen }: {
     choices: m.choices.map(c => ({ ...c, label: gmChoiceLabel(c as GmChoiceDef, pack) })),
   })), [messages, pack]);
   const open = messages.filter(m => m.answered === undefined).length;
+  /* The career panel's empty line talks about a phone; a desk gets its own. */
+  if (messages.length === 0) {
+    return (
+      <p className="rounded-2xl border border-border bg-card p-4 text-center text-xs text-muted-foreground" data-gm-inbox={pack.seat}>
+        Nothing on your desk yet. Play on and the calls will come.
+      </p>
+    );
+  }
   return (
     <div className="space-y-2" data-gm-inbox={pack.seat}>
       <p className="text-[11px] text-muted-foreground">

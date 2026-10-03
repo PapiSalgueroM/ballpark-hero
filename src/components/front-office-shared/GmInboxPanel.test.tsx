@@ -26,6 +26,11 @@ describe('GmInboxPanel', () => {
     expect(onAnswer).toHaveBeenCalledWith('new', 0);
   });
 
+  it('an empty desk says so in desk words', () => {
+    render(<GmInboxPanel pack={pack} messages={[]} onAnswer={() => undefined} seen={new Set()} />);
+    expect(screen.getByText('Nothing on your desk yet.', { exact: false })).toBeTruthy();
+  });
+
   it('says when the desk is full', () => {
     render(<GmInboxPanel pack={pack} messages={[msg('a'), msg('b'), msg('c')]} onAnswer={() => undefined} seen={new Set()} />);
     expect(screen.getByText('Nothing new lands until you answer one.', { exact: false })).toBeTruthy();

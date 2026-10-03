@@ -37,6 +37,11 @@
       so the words and the effect cannot drift apart.
    6. Nothing here calls Math.random. Same seed, same deck.
 
+   A seat delivers through gmInboxWeek, never through careerInbox's own
+   receive or deliver: those know nothing of conditions or cooldowns and
+   would deal the whole pack. The seat satisfies InboxSport so the answer
+   flow and the panel can be shared, not so the player's phone tick can be.
+
    LEGAL SHAPE. Every voice in every pack is a role (ownership, your
    capologist, his camp, the athletic director) and every person an event is
    about is a role too (your franchise quarterback, a fighter on your card).
@@ -330,6 +335,7 @@ const isMsg = (m: unknown): m is InboxMessage => {
   return !!o && typeof o === 'object' && typeof o.id === 'string' && typeof o.defId === 'string'
     && typeof o.from === 'string' && typeof o.text === 'string' && typeof o.year === 'number'
     && Array.isArray(o.choices) && o.choices.length > 0
+    && o.choices.every(c => !!c && typeof c.label === 'string' && typeof c.karma === 'number' && Number.isFinite(c.karma))
     && (o.answered === undefined || (Number.isInteger(o.answered) && o.answered >= 0 && o.answered < o.choices.length));
 };
 
