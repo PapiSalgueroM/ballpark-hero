@@ -182,10 +182,13 @@ const NEW_FIELDS = ['leagueFinish', 'leagueSize'];
    digest seeds the engine makes the same number of Math.random calls at every
    one of the 85 to 104 steps as the Round 929 tree, and once story is out the
    two states are equal leaf for leaf. So it leaves the digest by name, and
-   nothing else does; the stream control below still turns section 4 red. */
+   nothing else does; the stream control below still turns section 4 red.
+   Only the top level key goes: a random event card on main already carries
+   its own story id (pendingEvents[n].story, "podcastLaunch"), and that one
+   stays in the hash. */
 const LATER_FIELDS = ['story'];
 function digest(s) {
-  const json = JSON.stringify(s, (k, v) => (NEW_FIELDS.includes(k) || LATER_FIELDS.includes(k) ? undefined : v));
+  const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
 const DIGEST_SEEDS = 16;
