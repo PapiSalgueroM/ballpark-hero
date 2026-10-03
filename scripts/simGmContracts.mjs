@@ -376,6 +376,11 @@ function draftForUser(sport, lg, team, rng, ledger, track) {
    count it the way the engine does (review finding 17). */
 function trimNbaWithCuts(lg, team, size) {
   const club = lg.teams[team];
+  /* A salary dump first: the dearest man outside the top five with two or
+     more seasons left, so next season's books really carry dead money. */
+  const top5 = new Set([...club.players].sort((a, b) => b.ovr - a.ovr).slice(0, 5).map(p => p.id));
+  const dump = club.players.filter(p => !top5.has(p.id) && p.years >= 2).sort((a, b) => b.salary - a.salary)[0];
+  if (dump) B.nba.nbaRelease(club, lg.freeAgents, dump.id);
   for (let guard = 0; club.players.length > size && guard < 40; guard++) {
     const worst = [...club.players].sort((a, b) => a.ovr - b.ovr)[0];
     if (!B.nba.nbaRelease(club, lg.freeAgents, worst.id)) break;
@@ -411,7 +416,12 @@ function decide(lg, ledger, c, i, paths) {
   if (c.option) {
     /* Some option holders are kept on a new deal instead, so the desk has to
        remember that the option went with the rookie deal (review finding 1). */
-    if (i % 4 === 2) { const kept = desk.keepAtAsk(ledger, lg, c); if (kept.ok) { tally('option holder kept at ask'); return kept; } }
+    if (i % 4 === 1 || i % 4 === 2) {
+      /* One season over his ask, so he is back at the desk next winter, past his rookie deal. */
+      desk.pushFor(ledger, lg, c, { years: 1, salary: c.ask.salary * 1.1 });
+      const kept = desk.decisionFor(ledger, lg.season, c.man.id);
+      if (kept?.kind === 'keep') { tally('option holder re-signed for one season'); return { ok: true, decision: kept }; }
+    }
     tally(i % 4 === 3 ? 'option declined' : 'option');
     return i % 4 === 3 ? desk.letGo(ledger, lg, c) : desk.useOption(ledger, lg, c);
   }
@@ -502,7 +512,10 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     const expect = drafted && tr.round === 1 && !st.firstDealOver.has(c.man.id);
     if (!!c.option !== expect) fail(4, `${tag}: option ${c.option ? 'offered' : 'missing'} for a round ${tr?.round ?? '-'} ${tr?.how} man${st.firstDealOver.has(c.man.id) ? ' whose rookie deal is over' : ''}`);
     if (c.option) { bump('options'); if (c.option.years !== 1) fail(4, `${tag}: the option buys ${c.option.years} years`); }
-    if (drafted && tr.round === 1 && st.firstDealOver.has(c.man.id)) bump('first rounders past their rookie deal');
+    if (drafted && tr.round === 1 && st.firstDealOver.has(c.man.id)) {
+      bump('first rounders past their rookie deal');
+      if (!st.optionUsed.has(c.man.id)) bump('first rounders back with the option unused');
+    }
     if (drafted && tr.round !== 1) bump('laterRoundsAsked');
     if (st.taggedNow.has(c.man.id)) fail(4, `${tag}: tagged this winter and still at the desk`);
     if (st.taggedLast.has(c.man.id)) bump('tag year men at the desk');
@@ -529,14 +542,16 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
     const floor = host.minSalary(lg);
     const tier = played == null || played >= 3 ? 'full' : played === 2 ? 'early' : played === 1 ? 'non' : 'none';
     st.rule[`tier ${tier}`] = (st.rule[`tier ${tier}`] ?? 0) + 1;
-    if (c.ask.salary > room) {
+    /* An ask exactly at the room is a coin toss in floating point: not judged. */
+    if (Math.abs(c.ask.salary - room) < 1e-6) bump('asks exactly at the room, not judged');
+    else if (c.ask.salary > room) {
       const all = Object.values(lg.teams).flatMap(t => t.players);
       const avg = all.reduce((a, p) => a + p.salary, 0) / all.length;
       const limit = tier === 'full' ? max : tier === 'early' ? Math.min(max, Math.max(c.man.salary * 1.75, avg * 1.05))
         : tier === 'non' ? Math.min(max, c.man.salary * 1.2) : 0;
       const want = r1(Math.max(limit, room, floor));
       st.rule.capped = (st.rule.capped ?? 0) + 1;
-      if (c.ceiling == null || Math.abs(c.ceiling - want) > 0.051) fail(4, `${tag}: ${tier} Bird ceiling ${c.ceiling} where the rule gives ${want}`);
+      if (c.ceiling == null || Math.abs(c.ceiling - want) > 0.051) fail(4, `${tag}: ${tier} Bird ceiling ${c.ceiling} where the rule gives ${want} (ask ${c.ask.salary}, room ${r1(room)})`);
       if (c.ask.salary > (c.ceiling ?? Infinity)) {
         st.rule.overCeiling = (st.rule.overCeiling ?? 0) + 1;
         if (desk.keepAtAsk(structuredClone(ledger), lg, c).ok) fail(4, `${tag}: kept at an ask over his ceiling`);
@@ -655,6 +670,7 @@ function deskRun(sport, seed, st) {
   st.track = {};
   for (const p of lg.teams[team].players) st.track[p.id] = { how: 'founder', n: 0 };
   st.firstDealOver = new Set();
+  st.optionUsed = new Set();
   st.taggedLast = new Set();
   st.midIds = new Set();
   st.market = {};
@@ -741,6 +757,7 @@ function deskRun(sport, seed, st) {
           if (d.kind !== 'option' && guaranteedBefore.has(d.id)) st.rule['guaranteed men re-signed'] = (st.rule['guaranteed men re-signed'] ?? 0) + 1;
         }
         if (st.track[d.id]?.how === 'draft') st.firstDealOver.add(d.id);
+        if (d.kind === 'option') st.optionUsed.add(d.id);
       } else if (p) fail(1, `${sport.key} ${d.season} ${d.name}: let go (${d.kind}) but still on the roster`);
       else {
         st.letGo += 1;
