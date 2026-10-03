@@ -86,8 +86,8 @@ function ContractsPanel({ desk, facts, onDesk }: Props) {
   const act = (fn: (l: typeof ledger) => Made) => {
     const copy = deskCopy(ledger);
     const made = fn(copy);
-    if (made.ok) onDesk(withGmBlock(desk, NHL_DESK_KEYS.contracts, copy));
-    else facts.say(`✍️ ${made.reason}`);
+    if (made.ok === false) facts.say(`✍️ ${made.reason}`);
+    else onDesk(withGmBlock(desk, NHL_DESK_KEYS.contracts, copy));
   };
   const push = (c: DeskCase, offer: GmTerms) => {
     const copy = deskCopy(ledger);
