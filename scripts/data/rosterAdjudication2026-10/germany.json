@@ -281,9 +281,10 @@
    "to": "PSV",
    "realClub": "PSV",
    "adjudicatedOn": "2026-10-02",
-   "note": "Born 1993-10-03, the French forward. Registered by PSV for the 2026-27 Champions League as their number 14, and on ESPN's PSV squad with the same shirt. On neither 2026-27 Gladbach squad page.",
+   "note": "Born 1993-03-10, the French forward (corrected on 2026-10-03 from 1993-10-03, a day and month swap of UEFA's 10/3/1993; Soccerway writes March 10, 1993). Registered by PSV for the 2026-27 Champions League as their number 14, and on ESPN's PSV squad with the same shirt. On neither 2026-27 Gladbach squad page.",
    "sources": [
-    {"family": "A", "url": "https://www.uefa.com/uefachampionsleague/clubs/players/250026751--alassane-plea/", "publisher": "UEFA (Champions League player page, 2026/27)", "readOn": "2026-10-02", "says": "PSV, forward, shirt 14, born 1993-10-03"},
+    {"family": "A", "url": "https://www.uefa.com/uefachampionsleague/clubs/players/250026751--alassane-plea/", "publisher": "UEFA (Champions League player page, 2026/27)", "readOn": "2026-10-03", "says": "PSV, forward, shirt 14, date of birth 10/3/1993 (33), day first"},
+    {"family": "B", "url": "https://us.soccerway.com/player/plea-alassane/0rfLpu2t/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Age: 33 (March 10, 1993); PSV; B. Monchengladbach to PSV 2025-07-17; contract expires June 30, 2028"},
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-moenchengladbach/squad", "publisher": "Bundesliga (Borussia Moenchengladbach squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/148/ned.psv", "publisher": "ESPN (PSV squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 14, age 33"}
    ]
