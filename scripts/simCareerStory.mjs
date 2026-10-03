@@ -195,6 +195,7 @@ function career(E, seed, c, walk) {
     }
     /* check 4: off the two season resets nothing may take a line back out of
        the log; a transfer or a loan used to write over the whole season */
+    if (walk && s.events.some((l, i) => l.includes("Signed with") && logBefore[i] !== l)) transfers++;
     if (walk && (s.events.length < logBefore.length || logBefore.some((l, i) => s.events[i] !== l))) {
       logFaults.push(`${seed}/${c} ${phase}${loanable ? " (loan)" : ""} at ${s.age}: the log went from ${logBefore.length} lines to ${s.events.length}, dropping earlier ones`);
     }
@@ -222,7 +223,6 @@ for (const seed of SEEDS) {
     const story = a.s.story ?? [];
     fails.completeness.push(...a.stepFaults);
     fails.log.push(...a.logFaults);
-    transfers += story.reduce((n, e) => n + e.lines.filter(l => l.includes("Signed with")).length, 0);
     if (story.length !== a.seen.length) fails.completeness.push(`${seed}/${c}: story ${story.length} seasons, played ${a.seen.length}`);
     story.forEach((e, i) => {
       const want = a.seen[i];
@@ -255,7 +255,7 @@ if (meanSave < BANDS.saveBytesMean[0] || meanSave > BANDS.saveBytesMean[1]) fail
 if (seasonsKept < careers * 10) fails.completeness.push(`only ${seasonsKept} story seasons over ${careers} careers: the driver is not playing careers`);
 
 saves.sort((x, y) => x - y);
-console.log(`moves kept in the story: ${transfers} signings, ${loans} loans taken`);
+console.log(`moves the log check saw: ${transfers} signings, ${loans} loans`);
 console.log(`careers ${careers} (${SEEDS.length} seeds x ${PER_SEED}), story seasons ${seasonsKept}, lines written ${linesWritten}, kept in the story ${linesKept} plus ${liveLines} live`);
 console.log(`baseline before Round 974: a finished career could read ${liveLines} of ${linesWritten} lines (${(100 * liveLines / Math.max(1, linesWritten)).toFixed(1)}%); now ${linesKept + liveLines} (${(100 * (linesKept + liveLines) / Math.max(1, linesWritten)).toFixed(1)}%)`);
 console.log(`size: story ${perSeason.toFixed(0)} bytes a season, save mean ${meanSave.toFixed(0)} bytes, median ${saves[Math.floor(saves.length / 2)]}`);
