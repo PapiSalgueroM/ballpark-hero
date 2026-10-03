@@ -67,8 +67,14 @@ const FO_FACILITIES = [
 export const FO_COST_PER_CAP = 0.001;
 /** Two percent of the cap a season in running costs with every building at level 5 (16 levels above 1). */
 const FO_UPKEEP_SHARE = 0.02;
-/** A good season's operating result as a share of the cap, measured by scripts/simGmBooks.mjs (see its header). */
-export const FO_GOOD_SEASON_SHARE = 0.5;
+/**
+ * A good season's operating result as a share of the cap: a big market on
+ * the cap winning two in three with a deep playoff run. scripts/simGmBooks.mjs
+ * measured it on 2026-10-02 at 0.639 caps (NFL), 0.583 (NBA), 0.580 (NHL) and
+ * 0.483 (MLB), six seeds each with under 0.002 between them, and fails if any
+ * sport's comes out above this number, so it is never an underestimate.
+ */
+export const FO_GOOD_SEASON_SHARE = 0.7;
 
 function foPack(id: string, label: string, cap: number, periods: number, period: string): FacilityPack {
   return {
