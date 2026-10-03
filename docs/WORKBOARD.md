@@ -13,6 +13,18 @@ Parent owns scoped instructions/guide/derived changes, preserving paused
 baseball/hockey copies. NBA939 and frozen938 finance hunk are separate.
 937 parent acceptance continues; next free968.
 
+938 NBA current/tipoff forecast accepted in source, 2026-10-02.
+Cap panel separates existing contracts and projected automatic minimum
+fill: Denver266.6M/140.3M current versus274.6M/189.6M at tipoff if no
+other moves. Actual engine values, repeater and legacy untaxed behavior.
+No finance/rating/save/AI formula changed.11 outcomes/eight controls,
+independent review, actual fresh Board75 native checks/six screenshots
+pass. Parent type/build,17 static/search/guide and14 NBA/GM families pass.
+One guide hunk and only owned snapshot/fingerprint/ledger changes; all
+paused drafts held. Receipt: docs/audits/NBA-TIPOFF-FORECAST-RECEIPT-2026-10-02.md.
+Claude:938 and937cc2ea373 are ready for Release Z merged-tree gate and
+publication. Neither is claimed live.939/966/967 draft repairs continue.
+
 937 Recovery Suite accepted in source, 2026-10-02.
 Four matching owned services now reduce their actual simulated injury risk
 by25% once; no new RNG, duplicate stacking or unowned change. Shop copy
