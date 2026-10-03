@@ -793,8 +793,10 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
           apply: (cc) => { const g = rate(cc, 1); const m = mor(cc, 5); const f = fan(cc, 4); return `Not a word. Four points against him in the next two meetings, and you skated past his bench after every one. Rating +${g}, morale +${m}, fanbase +${f}.`; },
         },
         {
+          /* No money moves here or on the mouthguard card: a spend this small
+             rounds away in the bank, and the line used to print it as 0M. */
           label: 'Send him a case of beer', effect: 'Disarm him',
-          apply: (cc) => { const spent = cash(cc, -0.002); const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `${spent}M of good beer to his hotel with a note that just said "see you Thursday" ended a three year war. Morale +${m}, fanbase +${f}.`; },
+          apply: (cc) => { const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `A case of good beer to his hotel with a note that just said "see you Thursday" ended a three year war. Morale +${m}, fanbase +${f}.`; },
         },
       ],
     });
@@ -840,7 +842,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
         },
         {
           label: 'Get the flipper, never smile', effect: 'Removable solution',
-          apply: (cc) => { const spent = cash(cc, -0.004); const m = mor(cc, 3); const f = fan(cc, 4); return `A ${spent}M piece of plastic that lives in your glove during games and in your pocket at dinner. Morale +${m}, fanbase +${f}.`; },
+          apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, 4); return `A little piece of plastic that lives in your glove during games and in your pocket at dinner. Morale +${m}, fanbase +${f}.`; },
         },
       ],
     });
