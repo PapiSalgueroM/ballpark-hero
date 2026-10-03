@@ -163,6 +163,21 @@ const ClubManager = () => {
   /* Round 964: the world editor's edit, held here until the career starts on
      it. Null is the real world. It applies to today's era and real clubs only. */
   const [worldEdit, setWorldEdit] = useState<WorldEdit | null>(null);
+  /* Round 964 review: the edited world's club lists and board asks, worked
+     out once per edit inside ONE registration. Each registration rebuilds the
+     club def map, and wrapping every list and every league tile on every
+     render rebuilt it a couple of dozen times a render. Skipped on the editor
+     screen itself, where the edit changes with every tap and none of this is
+     drawn. */
+  const onWorldStep = pickStep === 'world';
+  const editedPicker = useMemo(() => {
+    if (!worldEdit || onWorldStep) return null;
+    return withWorldEdit(worldEdit, () => {
+      const teamsBy = new Map(REAL_LEAGUES.map(l => [l.id, playableClubs(l.id)] as const));
+      const wants = new Map([...teamsBy.values()].flat().map(c => [c.name, boardWantLabel(c.name)] as const));
+      return { teamsBy, wants };
+    });
+  }, [worldEdit, onWorldStep]);
   /* Round 832: a past era's squads are fetched when its tile is picked, while
      the nation step (which needs none of them) is on screen. This records a
      fetch still running or one that failed, so the league and team steps can
@@ -369,11 +384,15 @@ const ClubManager = () => {
     /* Round 964: today's picker lists and board asks read the edited world
        for the length of one synchronous call, and nothing stays registered. */
     const editing = !historicPick && worldEdit !== null;
+    const edited = editing ? editedPicker : null;
     const inWorld = <T,>(fn: () => T): T => (editing ? withWorldEdit(worldEdit, fn) : fn());
+    const todaysTeams = (id: string) => edited?.teamsBy.get(id) ?? inWorld(() => playableClubs(id));
     const teams = league && !waitingForEra
-      ? (historicPick ? eraPlayableClubs(pickEra, league.id) : inWorld(() => playableClubs(league.id)))
+      ? (historicPick ? eraPlayableClubs(pickEra, league.id) : todaysTeams(league.id))
       : [];
-    const teamWants = new Map(inWorld(() => teams.map(c => [c.name, boardWantLabel(c.name, historicPick ? pickEra : undefined)] as const)));
+    const teamWants = edited
+      ? new Map(teams.map(c => [c.name, edited.wants.get(c.name) ?? ''] as const))
+      : new Map(inWorld(() => teams.map(c => [c.name, boardWantLabel(c.name, historicPick ? pickEra : undefined)] as const)));
     const movedCount = editing ? worldEditMoves(worldEdit).length : 0;
     const homeNationOf = (club: string) => {
       const home = editing ? realLeagueIdOf(club) : null;
@@ -564,7 +583,7 @@ const ClubManager = () => {
             ).map(id => {
               const lg = (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === id);
               if (!lg) return null;
-              const lgTeams = historicPick ? eraPlayableClubs(pickEra, lg.id) : inWorld(() => playableClubs(lg.id));
+              const lgTeams = historicPick ? eraPlayableClubs(pickEra, lg.id) : todaysTeams(lg.id);
               return (
                 <button
                   key={lg.id}
