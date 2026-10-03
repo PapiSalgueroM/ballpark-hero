@@ -62,7 +62,7 @@ describe('the catalog', () => {
   it('never uses an em or en dash', () => {
     const words = JSON.stringify(MLB_LIFE_C.map(d => [d.title, d.body, d.options])) +
       MLB_LIFE_C.map(d => buildMlbLifeCCard(d, career('SP')).body).join(' ');
-    expect(/[–—]/.test(words)).toBe(false);
+    expect(/[\u2013\u2014]/.test(words)).toBe(false);
   });
 });
 
