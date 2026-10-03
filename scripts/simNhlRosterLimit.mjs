@@ -27,7 +27,7 @@ const controls = {
   disabled: ['disabled={overLimit > 0}', 'disabled={false}', [1]],
   warning: ['Your roster has {my.players.length} players, {overLimit} over', 'Your roster has {my.players.length + 1} players, {overLimit} over', [0, 2]],
   roster: ['onClick={() => openPanel(\'team\')}', 'onClick={() => undefined}', [0, 2]],
-  waive: ['if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, lg.ratingModelVersion))', 'if (false)', [2]],
+  waive: ['if (nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion))', 'if (false)', [2]],
 };
 const mode = process.env.NHL_ROSTER_CONTROL || '';
 assert.ok(!mode || mode === 'all' || mode === 'original' || Object.prototype.hasOwnProperty.call(controls, mode), 'Known roster-limit control');
@@ -97,6 +97,7 @@ try {
     const row = { mode: current || 'normal', total: 4, passed: report.passed, rejected: report.failed, exactTargets: targets };
     outcomes.push(row);
     await writeFile(path.join(receipts, `${current || 'normal'}-accepted.json`), JSON.stringify({ ...row, reference, sourceHashes: Object.fromEntries([...held].map(([file, { bytes }]) => [file, hash(bytes)])), rawSourcesHeld: true, outsideAttempts: 0 }, null, 2));
+    for (const outcome of report.rows) console.log(`NHL roster ${current || 'normal'}: ${outcome.status}: ${outcome.title}`);
     console.log(`NHL roster ${current || 'normal'}: ${report.passed}/4 passed, ${report.failed} exact outcome rejections, all four cases executed.`);
   }
   await writeFile(path.join(receipts, 'verified-summary.json'), JSON.stringify({ outcomes, reference, sourceHashes: Object.fromEntries([...held].map(([file, { bytes }]) => [file, hash(bytes)])), limits: 'Actual Board/engine and DOM-dispatched controls using accepted trades, generated draft and real offseason as a local fixture. Exact waiver/dead-money/no-re-sign/reload and within-limit engine/RNG proof. The roster fixture uses automatic contributors; manual contributor preferences are preserved in source but not newly exercised. No native input, layout, medical or historical fact, full played season, complete CPU draft or economy approval claim.' }, null, 2));
