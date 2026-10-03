@@ -145,7 +145,7 @@ async function loadModule(rel, override) {
 const src = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
 // A flag emoji is its ISO code in regional indicator letters, so it is built, never typed.
 const flagOf = (iso) => String.fromCodePoint(...iso.toUpperCase().split('').map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65));
-const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
 const record = JSON.parse(fs.readFileSync(RECORD_PATH, 'utf8'));
 let dataText = src(DATA);
