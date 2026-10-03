@@ -78,6 +78,7 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -117,7 +118,8 @@ function walk(dir, out = []) {
 }
 
 const KIT = 'src/components/club-manager/Celebration.tsx';
-const NBA_BOARD = 'src/components/nba-my-career/NbaMyCareerBoard.tsx';
+/* Round 900: the four US career boards are one; the control copies that one. */
+const US_BOARD = US_CAREER_BOARD;
 const DRAFT_NIGHT = 'src/components/front-office-shared/DraftNightCard.tsx';
 const DRAFT_DAY = 'src/components/us-career/DraftDayCard.tsx';
 const TYCOON = 'src/pages/StadiumTycoon.tsx';
@@ -130,15 +132,15 @@ const files = walk(path.join(ROOT, 'src'));
 const substitute = new Map();
 const extra = [];
 if (CONTROL === 'countup') {
-  const src = read(path.join(ROOT, NBA_BOARD));
+  const src = read(path.join(ROOT, US_BOARD));
   const anchor = "import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';\n";
-  if (!src.includes(anchor)) abort(`control cannot run: ${NBA_BOARD} is not in the shape REVEAL_CONTROL=countup rewrites`);
+  if (!src.includes(anchor)) abort(`control cannot run: ${US_BOARD} is not in the shape REVEAL_CONTROL=countup rewrites`);
   const rewritten = src.replace(anchor, anchor + "import { CountUp } from '@/components/soccer-career/CareerFx';\n");
-  if (rewritten === src) abort(`control cannot run: the rewrite of ${NBA_BOARD} changed nothing`);
-  const copy = scratch('NbaMyCareerBoard.control.tsx');
+  if (rewritten === src) abort(`control cannot run: the rewrite of ${US_BOARD} changed nothing`);
+  const copy = scratch('UsCareerBoard.control.tsx');
   fs.writeFileSync(copy, rewritten);
   extra.push(copy);
-  console.log('   NEGATIVE CONTROL ON: a copy of the NBA career board imports the counting number again, section 1 must go red');
+  console.log('   NEGATIVE CONTROL ON: a copy of the shared US career board imports the counting number again, section 1 must go red');
 }
 if (CONTROL === 'rollup') {
   const src = read(path.join(ROOT, TYCOON));
