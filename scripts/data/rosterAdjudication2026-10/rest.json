@@ -126,6 +126,16 @@
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/256", "publisher": "ESPN (Celtic squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 7, age 27, no appearances shown" },
         { "family": "B", "url": "https://www.soccerway.com/player/jota/OOmhPCaf/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Celtic, born 1999-03-30, contract to 2030-06-30, knee injury" }
       ]
+    },
+    {
+      "name": "Ilyas Chouaref",
+      "club": "Sion",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 2000-12-12 (Malta international), shirt 7, seven Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcsion.ch/fr/les-equipes/", "publisher": "FC Sion (Equipe premiere page)", "readOn": "2026-10-03", "says": "attaquant, shirt 7, born 2000-12-12" },
+        { "family": "B", "url": "https://www.soccerway.com/player/chouaref-ylyas/bV1XwLf5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Sion, born 2000-12-12, contract to 2028-06-30, 7 Super League appearances 2 goals in 2026/2027" }
+      ]
     }
   ],
   "movedTo": [
@@ -278,6 +288,49 @@
         { "family": "B", "url": "https://www.soccerway.com/player/duk/YeG6Lfce/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Atlas, born 2000-02-16, Aberdeen to Leganes 2025-02-03, Leganes to Atlas 2026-07-01 2.0m, 8 Liga MX appearances in 2026/2027" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/263", "publisher": "ESPN (Aberdeen squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
       ]
+    },
+    {
+      "name": "Alexis Antunes",
+      "from": "Servette",
+      "to": "Göztepe",
+      "realClub": "Göztepe",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swiss midfielder born 2000-07-31. Sold by Servette to Goztepe on 2026-01-05, shirt 8, Super Lig appearances from 2026-08-17 to 2026-09-20. Absent from Servette's own squad page; Goztepe's own page was not read.",
+      "sources": [
+        { "family": "A", "url": "https://servettefc.ch/equipe-premiere/effectif/", "publisher": "Servette FC (Effectif page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/290184/alexis-antunes", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Goztepe, shirt 8, born 2000-07-31, Super Lig games 2026-08-17, 2026-09-07, 2026-09-12, 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/antunes-alexis/YVSZXHHU/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Servette to Goztepe 2026-01-05, 537k, contract to 2029-06-30, 6 Super Lig appearances 4 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Gora Diouf",
+      "from": "Sion",
+      "to": "Mechelen",
+      "realClub": "Mechelen",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Senegalese centre back born 2003-09-20. Left Sion on a free for KV Mechelen on 2025-07-01, shirt 4.",
+      "sources": [
+        { "family": "A", "url": "https://kvmechelen.be/selectie/", "publisher": "KV Mechelen (A-kern selection page)", "readOn": "2026-10-03", "says": "defender, shirt 4" },
+        { "family": "B", "url": "https://www.soccerway.com/player/diouf-gora/6cwkTzBJ/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "KV Mechelen, born 2003-09-20, Sion to KV Mechelen 2025-07-01 free, contract to 2028-06-30, 1 appearance in 2026/2027" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Gora%20Diouf&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/350454/gora-diouf)", "readOn": "2026-10-03", "says": "KV Mechelen, Belgian Pro League" }
+      ]
+    },
+    {
+      "name": "Ebrima Colley",
+      "from": "Young Boys",
+      "to": "Konyaspor",
+      "realClub": "Konyaspor, on a season-long loan from Young Boys",
+      "loan": true,
+      "loanFrom": "Young Boys",
+      "officialPageRead": false,
+      "adjudicatedOn": "2026-10-03",
+      "note": "Gambian forward born 2000-02-01, loaned to Konyaspor on 2026-07-15 until 2027-06-30, shirt 19, Super Lig appearance against Kasimpasa on 2026-09-18. Absent from Young Boys' own squad page; Konyaspor's own page was not read. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.bscyb.ch/kader", "publisher": "BSC Young Boys (Kader page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/287077/ebrima-colley", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Konyaspor, shirt 19, born 2000-02-01, Super Lig substitute appearance 2026-09-18" },
+        { "family": "B", "url": "https://www.soccerway.com/player/colley-ebrima/t6HYZ4HP/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Konyaspor on loan from Young Boys 2026-07-15 to 2027-06-30, 5 Super Lig appearances 1 goal in 2026/2027" }
+      ]
     }
   ],
   "removedClubNotModelled": [
@@ -352,6 +405,29 @@
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/140769/graham-carey", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Livingston, shirt 27, born 1989-05-20, SPFL Championship appearances 2026-08-01, 2026-08-07, 2026-09-11" },
         { "family": "B", "url": "https://www.soccerway.com/player/carey-graham/CpB5IzL3/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "St Johnstone to Livingston 2025-07-01 free, contract to 2027-06-30, 4 Championship appearances in 2026/2027" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/267", "publisher": "ESPN (St Johnstone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Théo Magnin",
+      "from": "Servette",
+      "realClub": "Red Star FC (France, Ligue 2)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://servettefc.ch/equipe-premiere/effectif/", "publisher": "Servette FC (Effectif page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Joël Ris",
+      "from": "Vaduz",
+      "realClub": "SC Cham (Swiss Promotion League)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swiss midfielder born 2001-01-16. Played for Vaduz in 2021-22 and 2022-23, then Bulle, Kriens (2024-07-16) and Cham (2025-07-01). Not in Vaduz's own squad. The destination is Soccerway alone; ESPN's player index still names Vaduz, a stale profile the club's own page contradicts. Nothing places him at a club the game models.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcvaduz.li/teams/1-mannschaft", "publisher": "FC Vaduz (1. Mannschaft Kader)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/ris-joel/lpMtkuTC/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cham (Promotion League), born 2001-01-16, Bulle to Kriens 2024-07-16, Kriens to Cham 2025-07-01, contract to 2027-06-30" }
       ]
     }
   ],
