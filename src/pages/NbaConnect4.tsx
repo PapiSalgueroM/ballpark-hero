@@ -123,9 +123,13 @@ const NbaConnect4 = () => {
                   )}
                 >
                   {attr}
-                  {selectedCol === c && (
-                    <ArrowDown className="w-3 h-3 mx-auto mt-0.5 animate-bounce" />
-                  )}
+                  {/* Round 952: every header keeps the arrow's room, so the row does not
+                     grow when a column is picked and shrink after the drop, and the
+                     board does not jump when the last disc ends the game */}
+                  <ArrowDown
+                    aria-hidden="true"
+                    className={cn('w-3 h-3 mx-auto mt-0.5', selectedCol === c ? 'animate-bounce' : 'invisible')}
+                  />
                 </button>
               ))}
 
