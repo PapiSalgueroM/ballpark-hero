@@ -6,8 +6,20 @@
    real league fact: the four front offices use 17, 80, 80 and 162 (the
    words their boards pass today), CFB_ROUNDS is 12 one game rounds, CBB is
    10 rounds of two (CBB_ROUNDS times CBB_GAMES_PER_ROUND), and the Aussie
-   rules manager plays 10 rounds. The gym has no season at all yet, so its
-   year of 10 fight nights is this pack's own rule until a gym bind sets one.
+   rules manager plays 10 rounds.
+
+   The Aussie rules manager has NO finals: ten home and away rounds and the
+   ladder leader wins the league (aussieRulesManager.ts, its board and its
+   guide all say so). So its asks are ladder places, never finals, and the
+   pack carries `ladder` for ladderSeasonOutcome: top four is the 'make it'
+   level, top three the deep run, first the title, of its six clubs.
+
+   HELD: Fight Gym. In that game you open and own the gym, the money lands on
+   you and the gym closes when the money runs out (fightGym.ts). Nobody sits
+   upstairs to sack you, there is no season and no circuit of rival gyms to
+   hire you, so the seat this module models does not exist there. A pack
+   would have to change the game's premise to bind, so there is none until a
+   gym round gives the game a seat.
 
    Every line is narrated and every speaker is a role. Nothing here is a
    quote and nothing names a real person. */
@@ -73,47 +85,29 @@ export const GM_SEAT_PACKS: Record<GmSeatPack['id'], GmSeatPack> = {
   nhl: pro('nhl', 'NHL Front Office', 'the Stanley Cup', 'the playoffs', 'a series', 80),
   mlb: pro('mlb', 'MLB Front Office', 'the World Series', 'October', 'a series', 162),
   cfb: college('cfb', 'College Football Dynasty', 'the Playoff', 'a Playoff game', 12),
-  cbb: college('cbb', 'College Basketball Dynasty', 'the tournament', 'a tournament game', 20),
+  /* The national tournament, said in full: the game also plays conference
+     tournaments, and a conference win must not read as meeting the ask. */
+  cbb: college('cbb', 'College Basketball Dynasty', 'the national tournament', 'a national tournament game', 20),
   afl: {
     id: 'afl', game: 'Aussie Rules Manager', role: 'senior coach', seat: 'club', seats: 'clubs',
     upstairs: 'the board',
-    words: { title: 'the flag', playoffs: 'finals', round: 'a final', games: 10 },
+    words: { title: 'the league', playoffs: 'the top four', round: 'a top three finish', games: 10 },
     roster: 'squad', winUnit: 'games', poachable: false,
+    ladder: { cut: 4, deep: 3 },
     asks: {
-      title: 'Win {title}. Anything less and the board calls it a wasted year.',
-      champDefend: 'Defend the flag: a deep run in {playoffs} is the least the board will take.',
-      contend: 'Make {playoffs} and win {round}. This {roster} is built for it.',
-      playoffs: 'Make {playoffs}. The board thinks this {roster} belongs there.',
+      title: 'Win {title}: finish top of the ladder. Anything less and the board calls it a wasted year.',
+      champDefend: 'Defend the title: {round} is the least the board will take.',
+      contend: 'Get {round} and stay in the race for top spot. This {roster} is built for it.',
+      playoffs: 'Finish in {playoffs}. The board thinks this {roster} belongs there.',
       respect: 'Win {winGames} and show the members a direction.',
       rebuild: 'Rebuild properly: {wins} keeps the board patient.',
     },
     verdicts: {
-      title: '🏆 The flag. The board will not hear a word against you for a while.',
+      title: '🏆 Top of the ladder. The board will not hear a word against you for a while.',
       overachieved: '📈 Ahead of the ask. The board noticed.',
       met: '✅ Ask met. The board is comfortable.',
       missed: '⚠️ Short of the ask. The board is less patient now.',
       badly: '🔻 Nowhere near the ask. The board room went quiet.',
-    },
-  },
-  fight: {
-    id: 'fight', game: 'Fight Gym', role: 'head trainer', seat: 'gym', seats: 'gyms',
-    upstairs: 'the backers',
-    words: { title: 'a world title', playoffs: 'a title eliminator', round: 'an eliminator', games: 10 },
-    roster: 'stable', winUnit: 'fights', poachable: false,
-    asks: {
-      title: 'Bring home {title}. The backers did not put money in for anything less.',
-      champDefend: 'Defend the belt: the backers want at least an eliminator won this year.',
-      contend: 'Get a fighter into {playoffs} and win it. This {roster} is good enough.',
-      playoffs: 'Get somebody into {playoffs}. The backers think this {roster} has one in it.',
-      respect: 'Win {winGames} and give the backers a reason to stay in.',
-      rebuild: 'Build it up honestly: {wins} keeps the backers patient.',
-    },
-    verdicts: {
-      title: '🏆 A world title. The backers will not hear a word against you for a while.',
-      overachieved: '📈 Ahead of the ask. The backers noticed.',
-      met: '✅ Ask met. The backers stay in.',
-      missed: '⚠️ Short of the ask. The backers are asking questions.',
-      badly: '🔻 Nowhere near the ask. The backers stopped answering.',
     },
   },
 };

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import GmSeatCard from './GmSeatCard';
 import {
-  newGmCareer, recordSeatSeason, endSeatStint, seatOffers, seatFiredLine, poachBid, takeSeat,
+  newGmCareer, recordSeatSeason, endSeatStint, seatOffers, seatExitLine, poachBid, takeSeat,
   startSeatStint, sitOutYear, seatMandate, type SeatTeam,
 } from '@/lib/gmSeat';
 import { GM_SEAT_PACKS } from '@/data/gmSeat/packs';
@@ -32,7 +32,10 @@ describe('GmSeatCard', () => {
     expect(offers.length).toBeGreaterThan(0);
     const onTake = vi.fn();
     render(<GmSeatCard pack={pack} mandate={null} trust={0}
-      market={{ line: seatFiredLine(pack, c, offers.length), offers, seasonsOut: 0 }} onTake={onTake} onSitOut={() => {}} />);
+      market={{ line: seatExitLine(pack, c, offers.length), offers, seasonsOut: 0 }} onTake={onTake} onSitOut={() => {}} />);
+    /* A champion who walked is told he walked, never that he was pushed. */
+    expect(screen.getByText(/You walked away on your own terms/)).toBeTruthy();
+    expect(screen.queryByText(/made the call/)).toBeNull();
     fireEvent.click(screen.getAllByText('Take the job')[0]);
     expect(onTake).toHaveBeenCalledWith(offers[0]);
     const save = { league: { season: 2027 }, myTeam: 'T0', trust: 0, fired: true, mandate: null };
@@ -47,7 +50,7 @@ describe('GmSeatCard', () => {
     const c = endSeatStint(recordSeatSeason(newGmCareer('T5', 4, 2026), 'badly'), 'fired');
     const onSitOut = vi.fn();
     render(<GmSeatCard pack={pack} mandate={null} trust={0}
-      market={{ line: seatFiredLine(pack, c, 0), offers: [], seasonsOut: 1 }} onSitOut={onSitOut} />);
+      market={{ line: seatExitLine(pack, c, 0), offers: [], seasonsOut: 1 }} onSitOut={onSitOut} />);
     expect(screen.getByText('No club is calling right now.')).toBeTruthy();
     expect(screen.getByText(/Nobody has called yet/)).toBeTruthy();
     fireEvent.click(screen.getByText('Sit the year out'));

@@ -3,7 +3,8 @@
    Three states, all drawn from src/lib/gmSeat.ts and nothing computed here:
    - In the seat: the ask from upstairs in the seat's own words, and trust.
    - A buyout bid on the table (college only): go, or stay put.
-   - Between seats: the sacking line, the feed of offers you earned, and the
+   - Between seats: the exit line (seatExitLine: a sacking, a walk or a
+     contract that ran out), the feed of offers you earned, and the
      choice to take one or sit the year out. An empty feed says so plainly.
 
    The buttons only report the choice. The board that binds this card applies
@@ -22,7 +23,7 @@ interface Props {
   /** The ask for the seat you hold; null while you are between seats. */
   mandate: OwnerMandate | null;
   trust: number;
-  /** Between seats: the sacking line and the feed. Null while you hold a seat. */
+  /** Between seats: the exit line and the feed. Null while you hold a seat. */
   market?: { line: string; offers: SeatOffer[]; seasonsOut: number } | null;
   /** A buyout bid while you hold the seat. Only a college pack ever makes one. */
   bid?: SeatOffer | null;

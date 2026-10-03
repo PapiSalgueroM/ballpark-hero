@@ -21,20 +21,23 @@
       becomes four tiers by rank, a tenure (seasons, titles, mandate grades,
       how it ended) becomes a ManagerProfile, and generateJobOffers draws the
       feed. Three rules sit on top, all here and none in the engine: the club
-      that just let you go is never in the feed, a man fired after a season
-      graded 'badly' is never offered a top tier job, and a title winner who
-      walks always has an offer at his level or above.
+      that just let you go is never in the feed, a man who leaves straight
+      after a season graded 'badly' (fired, or walking before the call came)
+      is never offered a top tier job, and a title winner who walks always has
+      an offer at his level or above in his first feed.
 
-   3. THE SPORT'S OWN DIFFERENCE. A college coach can be bought out and
-      poached upward after a big year. A pro GM under contract is not. It is a
-      flag on the pack, read in one place (poachBid).
+   3. THE SEAT'S OWN DIFFERENCE. In these games a college coach can be
+      bought out and poached upward after a big year, and a pro GM never draws
+      a bid. That is this game's rule, not a claim about real front offices
+      (real executives have left a contract early with compensation paid). It
+      is a flag on the pack, read in one place (poachBid).
 
    Legal line, same as the engines: everything is narrated. Speakers are roles
    (ownership, the athletic director, the board, the backers), never a real
    person, and no line here is a quote. */
 
 import {
-  buildOwnerMandate, gradeSeason, FO_TRUST_START,
+  buildOwnerMandate, gradeSeason, strengthRank, FO_TRUST_START,
   type FoSportWords, type FoTier, type FoGradeResult, type FoGrade,
   type OwnerMandate, type FoSeasonOutcome,
 } from './foOwnerMandate';
@@ -43,7 +46,7 @@ import {
   type ClubTier, type Departure, type ManagerProfile, type OfferClub,
 } from './managerOffers';
 
-export type GmSeatId = 'nfl' | 'nba' | 'nhl' | 'mlb' | 'cfb' | 'cbb' | 'fight' | 'afl';
+export type GmSeatId = 'nfl' | 'nba' | 'nhl' | 'mlb' | 'cfb' | 'cbb' | 'afl';
 
 /** One ask per mandate level, plus the defending champion's version of 'contend'. */
 export type SeatAskKey = FoTier | 'champDefend';
@@ -52,9 +55,9 @@ export interface GmSeatPack {
   id: GmSeatId;
   /** The game this seat lives in, for the card header. */
   game: string;
-  /** What you are: 'general manager', 'head coach', 'head trainer'. */
+  /** What you are: 'general manager', 'head coach', 'senior coach'. */
   role: string;
-  /** What you run, singular and plural: 'franchise', 'program', 'club', 'gym'. */
+  /** What you run, singular and plural: 'franchise', 'program', 'club'. */
   seat: string;
   seats: string;
   /** Who sits upstairs, lower case, narrated: 'ownership', 'the board'. */
@@ -74,6 +77,13 @@ export interface GmSeatPack {
   verdicts: Record<FoGradeResult, string>;
   /** College only: a big year can get you bought out and poached upward. */
   poachable: boolean;
+  /** A league only season with no postseason (the Aussie rules manager: ten
+      rounds, the ladder leader wins). A ladder place stands in for the
+      postseason levels the mandate grades (ladderSeasonOutcome): the top
+      `cut` places make the 'playoffs' level, the top `deep` places the 'win a
+      round' level, first is the title. Absent on every seat that plays a
+      postseason. */
+  ladder?: { cut: number; deep: number };
 }
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -107,6 +117,23 @@ export function seatMandate(
   const base = buildOwnerMandate(rank, teamCount, defendingChamp, pack.words, season, tilt);
   const key: SeatAskKey = base.tier === 'contend' && defendingChamp ? 'champDefend' : base.tier;
   return { ...base, text: fillSeatWords(pack.asks[key], pack, base.winFloor) };
+}
+
+/** A league only seat's season, as gradeSeason reads one: a final ladder
+    place (1 = top) and the wins. Nothing here claims the game has a final:
+    the places just stand on gradeSeason's levels, first as the title, second
+    where a beaten finalist would stand, the top `deep` as a round won and the
+    top `cut` as making it. So a title ask finished second is 'missed', not
+    'badly', and a top three ask finished third is 'met'. */
+export function ladderSeasonOutcome(pack: GmSeatPack, place: number, wins: number): FoSeasonOutcome {
+  if (!pack.ladder) throw new Error(`${pack.id} plays a postseason, grade it from the bracket`);
+  return {
+    wins,
+    madePlayoffs: place <= pack.ladder.cut,
+    roundsWon: place <= pack.ladder.deep ? 1 : 0,
+    reachedFinal: place <= 2,
+    wonTitle: place === 1,
+  };
 }
 
 /** The season grade, with the seat's own verdict line. Trust and result are
@@ -228,10 +255,9 @@ export function leagueTiers(teams: SeatTeam[]): Map<string, ClubTier> {
   return out;
 }
 
-/** 1 = strongest, the same count foOwnerMandate.strengthRank makes. */
+/** 1 = strongest, counted by foOwnerMandate.strengthRank itself. */
 function rankIn(teams: SeatTeam[], id: string): number {
-  const mine = teams.find(t => t.id === id)?.strength ?? -Infinity;
-  return 1 + teams.filter(t => t.id !== id && t.strength > mine).length;
+  return strengthRank(Object.fromEntries(teams.map(t => [t.id, t.strength])), id);
 }
 
 /* Every club in a seat's market shares one country, so managerOffers'
@@ -278,9 +304,11 @@ export function careerProfile(c: GmCareer, tiers: Map<string, ClubTier>): Manage
   };
 }
 
-/** The best tier a man fired straight after a 'badly' season can be offered.
-    A hard rule on top of the engine's own ceiling: whatever he won before, a
-    top tier club does not hire the man who just ran one into the ground. */
+/** The best tier a man can be offered when he leaves straight after a
+    'badly' season, fired or walking before the call came. A hard rule on top
+    of the engine's own ceiling: whatever he won before, a top tier club does
+    not hire the man who just ran one into the ground, and walking out first
+    does not wash that off. */
 export const BADLY_FIRED_CEILING: ClubTier = 2;
 
 export interface SeatOffer {
@@ -332,8 +360,11 @@ function toSeatOffer(
  * The feed for a GM between seats. Empty is a real answer: the engine decides
  * how many call and from how high, and this adds three rules on top.
  *  - The club you just left is never in it.
- *  - Fired straight after a 'badly' season: nothing above BADLY_FIRED_CEILING.
- *  - Won a title and walked: at least one offer at your level or above.
+ *  - Left straight after a 'badly' season, however it ended: nothing above
+ *    BADLY_FIRED_CEILING.
+ *  - Won a title in the seat you walked away from, and your last season
+ *    there was not 'badly': at least one offer at your level or above, in the
+ *    first feed only. A year out after that is the engine's own idle cut.
  */
 export function seatOffers(
   pack: GmSeatPack, teams: SeatTeam[], c: GmCareer, season: number,
@@ -343,7 +374,7 @@ export function seatOffers(
   const tiers = leagueTiers(teams);
   const profile = careerProfile(c, tiers);
   const level = profile.lastTier;
-  const topAllowed: ClubTier = last.ended === 'fired' && lastGradeOf(last) === 'badly' ? BADLY_FIRED_CEILING : 1;
+  const topAllowed: ClubTier = lastGradeOf(last) === 'badly' ? BADLY_FIRED_CEILING : 1;
   const clubs: OfferClub[] = teams
     .filter(t => t.id !== last.team)
     .map(t => ({ name: t.id, country: SEAT_COUNTRY, tier: tiers.get(t.id)!, league: pack.id, budget: 0 }))
@@ -351,7 +382,8 @@ export function seatOffers(
   const offers = generateJobOffers(profile, clubs, rng)
     .map(o => toSeatOffer(pack, teams, o.club, o.tier, o.keenness, c, season, champion, rng));
 
-  if (last.ended === 'walked' && careerTotals(c).titles >= 1 && !offers.some(o => o.tier <= level)) {
+  const walkedAWinner = last.ended === 'walked' && last.grades.includes('title') && lastGradeOf(last) !== 'badly';
+  if (walkedAWinner && c.seasonsOut === 0 && !offers.some(o => o.tier <= level)) {
     /* The champion who walked. The nearest tier at or above his level, so it
        is a real step sideways or up, never a token offer from the bottom. */
     const fits = clubs.filter(club => club.tier <= level);
@@ -370,10 +402,11 @@ export function seatOffers(
 export const POACH_CHANCE: Partial<Record<FoGradeResult, number>> = { title: 0.6, overachieved: 0.35 };
 
 /**
- * Part 3, the sport's own difference. A college coach coming off a title or a
- * season that beat the ask can be bought out by a program one tier up. A pro
- * GM under contract never is: the flag is false on every pro pack, and this
- * is the only place that reads it.
+ * Part 3, the seat's own difference. In this game a college coach coming off
+ * a title or a season that beat the ask can be bought out by a program one
+ * tier up, and a pro GM never draws a bid. That is a game rule, not a claim
+ * that real pro executives are never bought out: the flag is false on every
+ * pro pack, and this is the only place that reads it.
  */
 export function poachBid(
   pack: GmSeatPack, teams: SeatTeam[], c: GmCareer, season: number,
@@ -382,7 +415,8 @@ export function poachBid(
   if (!pack.poachable) return null;
   const cur = currentStint(c);
   if (cur.ended) return null;
-  const chance = POACH_CHANCE[lastGradeOf(cur) ?? 'met'];
+  const bigYear = lastGradeOf(cur) ?? 'met';
+  const chance = POACH_CHANCE[bigYear];
   if (chance === undefined) return null;
   const tiers = leagueTiers(teams);
   const level = levelOf(cur, tiers);
@@ -391,7 +425,13 @@ export function poachBid(
   if (!above.length || rng() >= chance) return null;
   const pick = above[Math.floor(rng() * above.length)];
   const keen = Math.round(Math.max(5, Math.min(100, managerStanding(careerProfile(c, tiers)))));
-  return { ...toSeatOffer(pack, teams, pick.id, (level - 1) as ClubTier, keen, c, season, champion, rng), buyout: true };
+  const offer = toSeatOffer(pack, teams, pick.id, tiers.get(pick.id)!, keen, c, season, champion, rng);
+  /* Why a program pays a buyout: the year that earned it, never the feed's
+     fallback about nobody else biting. */
+  const reason = bigYear === 'title'
+    ? `They will pay the buyout to get the coach who just won ${pack.words.title}.`
+    : 'They will pay the buyout: your last season beat the ask, and they saw it.';
+  return { ...offer, reason, buyout: true };
 }
 
 /* ---------------- taking the job ---------------- */
@@ -400,15 +440,21 @@ export function poachBid(
     league, its season, its champions, its history) is carried over as is. */
 export interface SeatSave {
   myTeam: string;
-  trust: number;
-  fired: boolean;
-  mandate: OwnerMandate | null;
+  /* Optional, as the four front office saves declare them (Round 180). */
+  trust?: number;
+  fired?: boolean;
+  mandate?: OwnerMandate | null;
+  /* The press state those saves keep (Round 192). It was said at the old
+     club, so it does not follow you to the new one. */
+  pressTilt?: -1 | 0 | 1;
+  seasonTradeLine?: string | null;
 }
 
 /** Take an offer inside the same league: a new team, fresh trust, that
-    club's ask, and the rest of the save untouched. */
+    club's ask, no press state carried over from the old club, and the rest
+    of the save untouched. */
 export function takeSeat<S extends SeatSave>(save: S, offer: SeatOffer): S {
-  return { ...save, myTeam: offer.teamId, trust: FO_TRUST_START, fired: false, mandate: offer.ask };
+  return { ...save, myTeam: offer.teamId, trust: FO_TRUST_START, fired: false, mandate: offer.ask, pressTilt: 0 as const, seasonTradeLine: null };
 }
 
 /** The career side of taking an offer: a seat still held closes first (as
@@ -422,14 +468,20 @@ export function startSeatStint(c: GmCareer, offer: SeatOffer, season: number): G
   };
 }
 
-/** The sacking line. Honest about the phone: it says who called, or that
-    nobody did, and never promises a call the market did not make. */
-export function seatFiredLine(pack: GmSeatPack, c: GmCareer, offerCount: number): string {
+/** The market line, for whatever ended the last stint: a sacking says who
+    made the call, a walk says you chose it, a contract that ran out says so.
+    Honest about the phone too: it says who called, or that nobody did, and
+    never promises a call the market did not make. */
+export function seatExitLine(pack: GmSeatPack, c: GmCareer, offerCount: number): string {
   const s = currentStint(c);
   const seasons = s.grades.length;
   const titles = s.grades.filter(g => g === 'title').length;
-  const head = `${cap(pack.upstairs)} made the call: you are out after ${seasons} season${seasons === 1 ? '' : 's'}`
-    + ` and ${titles === 0 ? 'no titles' : `${titles} title${titles === 1 ? '' : 's'}`}.`;
+  const record = `${seasons} season${seasons === 1 ? '' : 's'}`
+    + ` and ${titles === 0 ? 'no titles' : `${titles} title${titles === 1 ? '' : 's'}`}`;
+  const head = s.ended === 'walked' ? `You walked away on your own terms after ${record}.`
+    : s.ended === 'expired' ? `Your contract ran out after ${record}, and nobody pushed either way.`
+    : s.ended === 'poached' ? `You took the buyout after ${record}.`
+    : `${cap(pack.upstairs)} made the call: you are out after ${record}.`;
   const tail = offerCount === 0
     ? ' Nobody has called yet. Sit the year out and see who remembers you.'
     : ` ${offerCount} ${offerCount === 1 ? pack.seat : pack.seats} called.`;

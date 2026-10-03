@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest';
 import {
   seatMandate, seatGrade, leagueTiers, careerProfile, seatOffers, poachBid, takeSeat,
   newGmCareer, recordSeatSeason, endSeatStint, sitOutYear, startSeatStint, sanitizeGmCareer,
-  seatFiredLine, fillSeatWords, BADLY_FIRED_CEILING, type GmCareer, type SeatTeam,
+  seatExitLine, fillSeatWords, ladderSeasonOutcome, BADLY_FIRED_CEILING, type GmCareer, type SeatTeam,
 } from '@/lib/gmSeat';
-import { buildOwnerMandate, gradeSeason, FO_TRUST_START, type FoGradeResult } from '@/lib/foOwnerMandate';
+import { bestTierAvailable } from '@/lib/managerOffers';
+import { buildOwnerMandate, gradeSeason, FO_TRUST_START, type FoGradeResult, type OwnerMandate } from '@/lib/foOwnerMandate';
 import { GM_SEAT_PACKS } from '@/data/gmSeat/packs';
 
 const seeded = (s: number) => {
@@ -13,7 +14,7 @@ const seeded = (s: number) => {
 };
 const league = (n: number): SeatTeam[] =>
   Array.from({ length: n }, (_, i) => ({ id: `T${String(i).padStart(2, '0')}`, name: `Team ${i}`, strength: 100 - i }));
-const career = (team: string, tier: 1 | 2 | 3 | 4, grades: FoGradeResult[], ended?: 'fired' | 'walked'): GmCareer => {
+const career = (team: string, tier: 1 | 2 | 3 | 4, grades: FoGradeResult[], ended?: 'fired' | 'walked' | 'expired'): GmCareer => {
   let c = newGmCareer(team, tier, 2026);
   for (const g of grades) c = recordSeatSeason(c, g);
   return ended ? endSeatStint(c, ended) : c;
@@ -97,6 +98,62 @@ describe('the market', () => {
     }
   });
 
+  it('makes the guaranteed offer a step sideways, never a leap past the engine', () => {
+    /* A one title walker from a lower half seat. Every offer sits at or below
+       the better of the engine's own ceiling and the nearest tier at his
+       level, so a guarantee that reached for the top tier would show here. */
+    const teams = league(32);
+    const tiers = leagueTiers(teams);
+    let teeth = 0;
+    for (const from of ['T17', 'T25']) {
+      const c = career(from, tiers.get(from)!, ['title'], 'walked');
+      const level = tiers.get(from)!;
+      const ceiling = bestTierAvailable(careerProfile(c, tiers)) ?? 4;
+      for (let s = 1; s <= 300; s++) {
+        const feed = seatOffers(GM_SEAT_PACKS.nfl, teams, c, 2027, seeded(s));
+        expect(feed.some(o => o.tier <= level)).toBe(true);
+        for (const o of feed) expect(o.tier).toBeGreaterThanOrEqual(Math.min(ceiling, level));
+        /* A feed where a top tier offer would break the rule. */
+        if (Math.min(ceiling, level) > 1) teeth++;
+      }
+    }
+    expect(teeth).toBeGreaterThan(0);
+  });
+
+  it('caps a man who walks straight after a badly season like one who was fired', () => {
+    const teams = league(6);
+    for (const ended of ['fired', 'walked', 'expired'] as const) {
+      const c = career('T00', 1, ['title', 'title', 'badly', 'badly', 'badly', 'badly'], ended);
+      for (let s = 1; s <= 300; s++) {
+        for (const o of seatOffers(GM_SEAT_PACKS.afl, teams, c, 2035, seeded(s))) expect(o.tier).toBeGreaterThanOrEqual(BADLY_FIRED_CEILING);
+      }
+    }
+  });
+
+  it('gives a buyout bid the reason that earned it', () => {
+    const teams = league(40);
+    let seen = 0;
+    for (let s = 1; s <= 200; s++) {
+      const bid = poachBid(GM_SEAT_PACKS.cbb, teams, career('T20', 3, ['overachieved']), 2027, seeded(s));
+      if (bid) { seen++; expect(bid.reason).toMatch(/buyout/); expect(bid.reason).not.toMatch(/Nobody else/); }
+    }
+    expect(seen).toBeGreaterThan(0);
+  });
+
+  it('grades a league only season from its ladder place, with no final', () => {
+    const afl = GM_SEAT_PACKS.afl;
+    const grade = (rank: number, place: number) =>
+      seatGrade(afl, seatMandate(afl, rank, 6, false, 2026), ladderSeasonOutcome(afl, place, 5)).result;
+    expect(grade(1, 1)).toBe('title');
+    expect(grade(1, 2)).toBe('missed');
+    expect(grade(2, 3)).toBe('met');
+    expect(grade(2, 4)).toBe('missed');
+    expect(grade(3, 4)).toBe('met');
+    expect(grade(3, 5)).toBe('missed');
+    expect(() => ladderSeasonOutcome(GM_SEAT_PACKS.nfl, 1, 10)).toThrow();
+    for (let rank = 1; rank <= 6; rank++) expect(seatMandate(afl, rank, 6, rank === 2, 2026).text).not.toMatch(/final/i);
+  });
+
   it('only makes college bids, only upward, and only after a big year', () => {
     const teams = league(40);
     const big = career('T20', 3, ['title']);
@@ -105,7 +162,14 @@ describe('the market', () => {
       expect(poachBid(GM_SEAT_PACKS.nfl, teams, big, 2027, seeded(s))).toBeNull();
       expect(poachBid(GM_SEAT_PACKS.cfb, teams, career('T20', 3, ['met']), 2027, seeded(s))).toBeNull();
       const bid = poachBid(GM_SEAT_PACKS.cfb, teams, big, 2027, seeded(s));
-      if (bid) { bids++; expect(bid.tier).toBe(2); expect(bid.buyout).toBe(true); }
+      if (bid) {
+        bids++;
+        /* The tier the league gives that program, not the one the bid says. */
+        expect(leagueTiers(teams).get(bid.teamId)).toBe(2);
+        expect(bid.tier).toBe(leagueTiers(teams).get(bid.teamId));
+        expect(bid.buyout).toBe(true);
+        expect(bid.reason).toMatch(/buyout/);
+      }
     }
     expect(bids).toBeGreaterThan(0);
   });
@@ -123,6 +187,19 @@ describe('taking the job and the save block', () => {
     expect(next.trust).toBe(FO_TRUST_START);
     expect(next.fired).toBe(false);
     expect(next.mandate).toEqual(offer.ask);
+  });
+
+  it('takes a front office save as its type declares it, and leaves the old press state behind', () => {
+    /* The shape FrontOfficeBoard declares: mandate, trust and fired optional,
+       an answered press tilt and the season's trade line from the old club. */
+    interface BoardSave { myTeam: string; titles: number; mandate?: OwnerMandate | null; trust?: number; fired?: boolean; pressTilt?: -1 | 0 | 1; seasonTradeLine?: string | null }
+    const save: BoardSave = { myTeam: 'T00', titles: 1, fired: true, pressTilt: 1, seasonTradeLine: 'A big deal at the old club.' };
+    const offer = seatOffers(GM_SEAT_PACKS.nfl, league(32), career('T00', 1, ['title'], 'walked'), 2031, seeded(4))[0];
+    const next: BoardSave = takeSeat(save, offer);
+    expect(next.pressTilt).toBe(0);
+    expect(next.seasonTradeLine).toBeNull();
+    expect(next.titles).toBe(1);
+    expect(next.trust).toBe(FO_TRUST_START);
   });
 
   it('round trips a career, rejects a corrupt one, and grows idle time', () => {
@@ -144,8 +221,17 @@ describe('taking the job and the save block', () => {
 
   it('never promises a call the market did not make', () => {
     const c = career('T00', 1, ['badly'], 'fired');
-    expect(seatFiredLine(GM_SEAT_PACKS.nfl, c, 0)).toMatch(/Nobody has called/);
-    expect(seatFiredLine(GM_SEAT_PACKS.nfl, c, 2)).toMatch(/2 franchises called/);
-    expect(seatFiredLine(GM_SEAT_PACKS.cbb, c, 1)).toMatch(/1 program called/);
+    expect(seatExitLine(GM_SEAT_PACKS.nfl, c, 0)).toMatch(/Nobody has called/);
+    expect(seatExitLine(GM_SEAT_PACKS.nfl, c, 2)).toMatch(/2 franchises called/);
+    expect(seatExitLine(GM_SEAT_PACKS.cbb, c, 1)).toMatch(/1 program called/);
+  });
+
+  it('says how the stint ended: only a sacking says upstairs made the call', () => {
+    const pack = GM_SEAT_PACKS.nfl;
+    expect(seatExitLine(pack, career('T00', 1, ['missed', 'badly'], 'fired'), 1)).toMatch(/^Ownership made the call/);
+    const walked = seatExitLine(pack, career('T00', 1, ['title'], 'walked'), 2);
+    expect(walked).toMatch(/^You walked away/);
+    expect(walked).not.toMatch(/made the call|you are out/);
+    expect(seatExitLine(pack, career('T00', 1, ['met'], 'expired'), 0)).toMatch(/^Your contract ran out/);
   });
 });
