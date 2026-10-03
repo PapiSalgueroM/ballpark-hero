@@ -1,6 +1,46 @@
 # Round999: Rank Em Legends circuit
 
-2026-10-03. Implementation and verification in progress. Not merged or live.
+2026-10-03. Accepted and merged through PR114. Publication pending.
+
+## Acceptance
+
+Head `859328af7c3b02f64f0058ece155e47ccf7eb98e` merged as
+`b1b8a289c1a42a2e6d1eb737118f11529f4032c7`. Actual merge and tested PR checkout
+`9ce354852b2ad80592f49c5b02523264ae4238ad` share tree
+`ab54f798828decd1b28681cd0c474810e04baacf`.
+
+Remote [run 37125937291](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/37125937291)
+passed real app types/build, 14 normal outcomes, 14 effective copied-source
+controls, both original ranking/completion gates and all 17 built readers.
+Each control produced exactly its intended AssertionError, retained one passing
+independent Daily baseline and skipped the other 12 cases. All 14 changed copies
+matched their single intended edit and every runner retained seven source inputs
+byte for byte. No import, timeout or runtime fault earned control credit.
+
+Four native profiles passed: 320x780 touch/reduced motion, 390x844 touch,
+1440x1000 dark keyboard and 1440x1000 light keyboard. Three complete runs
+independently checked 5/5, 3/5 and 0/5 boards and the actual 8/15 finish. The
+390px run restored saved draft, reveal and results through real reloads. Each
+reveal checked all names, totals, units and submitted positions. Replay and
+all three reviews passed. The light profile completed its NBA board.
+
+Retained evidence includes 31 screenshots, 52 positive visibility checks,
+41 width checks and three effective geometry controls. Each control changed
+the actual page, failed the exact existing guard, then restored a passing
+baseline and unchanged save bytes. No page, console or asset errors, score
+write attempts or protected-save writes were recorded. All 14 external GETs
+were fulfilled locally. Two reviewers inspected the actual phone and desktop
+screenshots. Earlier 320px intro and restored 390px reveal clipping are fixed.
+
+Artifact 11275620898 (2,520,979 bytes) was downloaded and SHA256 verified:
+`9e9dc0cf7e9f1e58fadcff80efbdea2cd341dc5987904c780e8190bef4b9b533`.
+Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-rank999-ci-2026-10-03/859328af/evidence/`.
+Preview: `C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/rank-em-circuit-preview999.png`.
+
+This is scoped remote verification, not a full repository or production data
+audit. All 45 circuit entries have separate two-source provenance. No local
+runtime gates or production database probes were run. Publication still needs
+a host success receipt and actual public circuit verification.
 
 ## Design contract
 
@@ -57,6 +97,7 @@ rules and replay. Inspect final screenshots for instructions with Start and
 answers with Next; measure page width and actionable controls. Browser requests
 are fulfilled locally in CI. No local runtime gates or production data calls.
 
-Round997 publication remains blocked by Lovable's empty Publish panel. Round998
-is verified in PR113. Keep this work isolated until that publication queue is
-resolved. AdSense and indexing submissions remain deferred.
+Round997 was published in Release Z and its actual public Shot lab was played
+successfully. Round998 is integrating against the accepted circuit in PR113.
+Neither the circuit nor Rugby League challenge is claimed live yet. AdSense
+and indexing submissions remain deferred.
