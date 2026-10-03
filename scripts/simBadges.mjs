@@ -32,7 +32,7 @@
  *
  * NEGATIVE CONTROLS. Each rewrites a copy of the shipped source, refuses to
  * run if the text it rewrites is gone, and must turn its own section red:
- *   SIM_BADGES_CONTROL=nonumber     a rule loses its number             -> 0
+ *   SIM_BADGES_CONTROL=twonumbers   a rule carries two numbers          -> 0
  *   SIM_BADGES_CONTROL=offbyone     the at-least test becomes above     -> 1
  *   SIM_BADGES_CONTROL=perfectweek  Perfect Week back to a 7 day streak -> 2
  *   SIM_BADGES_CONTROL=strayslug    category lookup keeps the slash     -> 3
@@ -61,11 +61,11 @@ const read = f => fs.readFileSync(path.join(ROOT, f), 'utf8').split('\r\n').join
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, '');
 
 const CONTROLS = {
-  nonumber: {
+  twonumbers: {
     sec: 0, file: BADGES,
     old: "  'variety-5': { metric: 'bestDayVariety', atLeast: 5 },",
-    now: "  'variety-5': { metric: 'bestDayVariety' },",
-    say: 'a rule with no number to compare against',
+    now: "  'variety-5': { metric: 'bestDayVariety', atLeast: 5, atMost: 9 },",
+    say: 'a rule with two numbers, so which one it means is a guess',
   },
   offbyone: {
     sec: 1, file: BADGES,
@@ -320,8 +320,7 @@ console.log('2. every pair of badges is told apart by some scripted player');
       else fail(`${a} and ${b} are earned by exactly the same players: one badge twice`);
     }
   }
-  const never = defIds.filter(id => !PLAYERS.some(p => p.got.has(id)));
-  if (never.length) fail(`never earned by any scripted player: ${never.join(', ')}`);
+  // (that each badge can be earned at all is sections 1 and 3, not this one)
   console.log(`   ${apart} of ${pairs} pairs told apart over ${PLAYERS.length} players`);
 }
 
@@ -374,12 +373,13 @@ console.log('4. a second device earns what the account earned, and prints no zer
     }
     console.log(`   account ${c.points} pts, ${c.games} games, best run ${c.longest}: second device ${ids(secondDevice)}`);
   }
-  // the points threshold walked through the account half, with this browser
-  // one point short of it
-  const at = await earnedBy({ points: 999, server: { totalPoints: 1000 } });
-  const below = await earnedBy({ points: 999, server: { totalPoints: 999 } });
-  if (!at.has('points-1000')) fail('account 1000, browser 999: Point Hunter locked');
-  if (below.has('points-1000')) fail('account 999, browser 999: Point Hunter earned');
+  // a browser one point short beside an account at the number: the badges
+  // are those of the larger half, exactly as if it were all in this browser
+  for (const [mine, account] of [[999, 1000], [999, 999], [1000, 999], [9999, 10000]]) {
+    const mixed = await earnedBy({ points: mine, server: { totalPoints: account } });
+    const twin = await earnedBy({ points: Math.max(mine, account) });
+    if (ids(mixed) !== ids(twin)) fail(`browser ${mine}, account ${account}: earned ${ids(mixed)}, the larger half alone earns ${ids(twin)}`);
+  }
   // the page itself: the badges get the account half, the tiles come from the
   // same merge (code only, comments stripped)
   const page = stripComments(sourceOf(PROFILE));
