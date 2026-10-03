@@ -43,7 +43,7 @@ function run(control = '') {
     fs.writeFileSync(copy, changed);
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/lib/frontOfficeSave': copy });
   }
-  const result = spawnSync(process.execPath, ['node_modules/vitest/vitest.mjs', 'run', test, '--reporter=json', '--outputFile', report], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
+  const result = spawnSync(process.execPath, ['node_modules/vitest/vitest.mjs', 'run', test, '--maxWorkers=1', '--no-file-parallelism', '--reporter=json', '--outputFile', report], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
   if (result.error) throw result.error;
   assert.ok(fs.existsSync(report), 'Vitest must produce an actual test report.');
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));

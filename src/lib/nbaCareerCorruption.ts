@@ -26,7 +26,8 @@
    functions, once both modules have finished initialising.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaTeamLabelOf } from './nbaMyCareer';
+import { nbaTeamLabelOf, NBA_SPEND_ITEMS } from './nbaMyCareer';
+import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
 
 type DirtyState = NbaCareerState & {
   heat?: number;
@@ -173,7 +174,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
   }
 
   /* ══ Standalone temptations ══ */
-  if (c.draftPick <= 20 && pro === 0) {
+  if (c.draftPick > 0 && c.draftPick <= 20 && pro === 0) {
     deck.push({
       id: 'ncorr_agent_advance',
       title: 'Money before the draft',
@@ -289,8 +290,8 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
       title: 'Where did it go',
       body: `You have earned ${Math.round(c.earnings)}M in this league and your accountant says you are nearly broke. Houses, relatives, an advisor, four businesses that never opened. It is the most common story in the sport.`,
       options: [
-        { label: 'Sell everything and start over', effect: 'Recover cash, lose the lifestyle',
-          apply: (cc) => { bank(cc, 5); D(cc).yearlyCosts = 0; cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the second house and the restaurant group. Five million back and a much quieter life.'; } },
+        { label: 'Sell lifestyle assets and cancel services', effect: 'Recover cash, lose the lifestyle',
+          apply: (cc) => { bank(cc, 5); liquidateUsCareerPurchases(cc, NBA_SPEND_ITEMS); cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the second house and the restaurant group. Five million back and a much quieter life. Your yearly lifestyle services are canceled. Past training and gifts stay earned.'; } },
         { label: 'Take the money being offered', effect: '6M dirty, heat +26',
           apply: (cc) => { dirty(cc, 6); heatUp(cc, 26); return 'You called the number you swore you never would. Six million, and the meter went straight up. Heat +26.'; } },
         { label: 'Get real advisors and grind it back', effect: 'Boring, works',

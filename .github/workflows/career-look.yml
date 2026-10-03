@@ -1,0 +1,133 @@
+name: Career appearance verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-look.yml
+      - scripts/qa/careerLook996.mjs
+      - src/components/soccer-career/AppearanceBuilder.tsx
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/lib/careerAppearanceCopy.ts
+      - src/test/appearanceSportCopy.test.tsx
+      - src/test/usBoardFixture.test.tsx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-look-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p career-look-artifacts
+          git rev-parse HEAD | tee career-look-artifacts/commit.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-look-artifacts/types.log
+          npm run build 2>&1 | tee career-look-artifacts/build.log
+      - name: Mounted appearance options and saved values
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$(pwd)/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/appearanceSportCopy.test.tsx --maxWorkers=1 --no-file-parallelism --reporter=default --reporter=json --outputFile=career-look-artifacts/mounted.json 2>&1 | tee career-look-artifacts/mounted.log
+      - name: NHL soccer-copy control rejects the actual rendered context
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$(pwd)/scripts/lib/offlineTransport.cjs" node --input-type=module <<'NODE' 2>&1 | tee career-look-artifacts/control-summary.log
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import { spawnSync } from 'node:child_process';
+          import { createHash } from 'node:crypto';
+          const source = 'src/components/soccer-career/AppearanceBuilder.tsx';
+          const original = fs.readFileSync(source, 'utf8');
+          const anchor = 'const copy = careerAppearanceCopy(sport);';
+          assert.equal(original.split(anchor).length - 1, 1, 'One executable copy binding');
+          const copy = path.resolve('career-look-artifacts/AppearanceBuilder-soccer-control.tsx');
+          const mutated = original.replace(anchor, "const copy = careerAppearanceCopy(sport === 'nhl' ? 'soccer' : sport);")
+            .replace('from "./PlayerAvatar"', 'from "@/components/soccer-career/PlayerAvatar"');
+          assert.notEqual(mutated, original, 'The control changes executable code');
+          assert(!mutated.includes('from "./PlayerAvatar"'), 'Copied avatar import resolves from its original module');
+          fs.writeFileSync(copy, mutated);
+          const args = ['node_modules/vitest/vitest.mjs', 'run', 'src/test/appearanceSportCopy.test.tsx',
+            '--maxWorkers=1', '--no-file-parallelism', '-t', 'NHL.*keeps every saved option while showing its own sport context|omitting sport retains every soccer label',
+            '--reporter=json', '--outputFile=career-look-artifacts/control.json'];
+          console.log('Control command: node ' + args.join(' '));
+          const run = spawnSync(process.execPath, args, { encoding: 'utf8', env: { ...process.env,
+            NO_DOUBLE_SWAP: JSON.stringify({ '@/components/soccer-career/AppearanceBuilder': copy }) } });
+          fs.writeFileSync('career-look-artifacts/control.log', (run.stdout || '') + (run.stderr || ''));
+          assert.ifError(run.error);
+          assert.equal(run.signal, null, 'Control was not interrupted');
+          assert.equal(run.status, 1, 'The bad NHL context must fail');
+          const report = JSON.parse(fs.readFileSync('career-look-artifacts/control.json', 'utf8'));
+          const failed = report.testResults.flatMap(file => file.assertionResults).filter(test => test.status === 'failed');
+          assert.equal(report.numTotalTests, 11);
+          assert.equal(report.numFailedTests, 1);
+          assert.equal(report.numPassedTests, 1, 'Unchanged soccer still passes');
+          assert.equal(report.numPendingTests, 9, 'Only the explicitly selected NHL and soccer cases ran');
+          assert.equal(failed.length, 1);
+          assert(failed[0].fullName.includes('NHL')
+            && failed[0].fullName.endsWith('keeps every saved option while showing its own sport context'));
+          const message = failed[0].failureMessages.join('\n').replace(/\x1b\[[0-9;]*m/g, '');
+          assert(message.includes('Unable to find an accessible element with the role "button" and name')
+            && message.includes('Skates') && message.includes('Boots'), 'The real Skates control was missing while soccer Boots rendered');
+          assert.equal(report.numRuntimeErrorTestSuites || 0, 0, 'No test infrastructure errors');
+          assert.equal(fs.readFileSync(source, 'utf8'), original, 'Production source held byte-identical');
+          console.log(JSON.stringify({ expectedRejections: 1, rejected: failed[0].fullName,
+            originalSha256: createHash('sha256').update(original).digest('hex'),
+            controlSha256: createHash('sha256').update(mutated).digest('hex') }));
+          NODE
+      - name: Existing gear compatibility and shared import boundaries
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simTycoonGear simUsCareerWeight; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "career-look-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-look-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Five actual create screens by touch and keyboard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/careerLook996.mjs 2>&1 | tee career-look-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-look-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: career-look-artifacts/

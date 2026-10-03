@@ -1,0 +1,46 @@
+{
+  "preparedUnbound": true,
+  "rows": [
+    {
+      "restorePath": "src/components/nhl-front-office/NhlWaiverReceipt.tsx",
+      "artifact": "NhlWaiverReceipt.tsx.txt",
+      "normalizedSha256": "4b87f2de3024cf37b351056af73de05e0fccabeebc607cd0ea121ee99d05cfe8",
+      "originalRawSha256": "4b87f2de3024cf37b351056af73de05e0fccabeebc607cd0ea121ee99d05cfe8"
+    },
+    {
+      "restorePath": "src/components/nhl-front-office/NhlWaiverReceipt.module.css",
+      "artifact": "NhlWaiverReceipt.module.css.txt",
+      "normalizedSha256": "d11ac20ec8e3f432dafdee7cfc1907af201f90c21ad56cfcdccab6b40d516e30",
+      "originalRawSha256": "d11ac20ec8e3f432dafdee7cfc1907af201f90c21ad56cfcdccab6b40d516e30"
+    },
+    {
+      "restorePath": "src/components/nhl-front-office/NhlWaiverReceipt.test.tsx",
+      "artifact": "NhlWaiverReceipt.test.tsx.txt",
+      "normalizedSha256": "7e54627528465d9be9cff45eaa368c1fc386178de4216941b8723f37e078ede3",
+      "originalRawSha256": "7e54627528465d9be9cff45eaa368c1fc386178de4216941b8723f37e078ede3"
+    },
+    {
+      "restorePath": "src/test/NhlWaiverReceipt.outcomes.tsx",
+      "artifact": "NhlWaiverReceipt.outcomes.tsx.txt",
+      "normalizedSha256": "c494c3b27034f1ab25b71133a1f287dd3148eaacaae0645b8be0b71021c51284",
+      "originalRawSha256": "c494c3b27034f1ab25b71133a1f287dd3148eaacaae0645b8be0b71021c51284"
+    },
+    {
+      "restorePath": "scripts/simNhlWaiverReceipt.mjs",
+      "artifact": "simNhlWaiverReceipt.mjs.txt",
+      "normalizedSha256": "b95bd3625a07b6bff872c785e35ca5be83af115b905531fd593579dadccbca01",
+      "originalRawSha256": "b95bd3625a07b6bff872c785e35ca5be83af115b905531fd593579dadccbca01"
+    }
+  ],
+  "BoardBaseSha256": "7a46e8cc2088c7461b6b62372136b73d9d521d6113e70c6bf3a8a8ea002e8d01",
+  "candidateNormalizedSha256": "8ff85a06869b83c3382f1b2c77af9ec4b01fbcadfb8a97aeb0047fb1b94e35ef",
+  "standaloneComponentTests": {
+    "total": 7,
+    "passed": 7,
+    "actualBoardOutcomesExecuted": 0,
+    "nativePathsExecuted": 0
+  },
+  "sourceReceipt": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-candidate-2026-10-03/authoring-receipt.json",
+  "archivedRawFiles": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-candidate-2026-10-03/archive-manifest.json",
+  "note": "Text artifacts intentionally stay outside application imports and sim auto-discovery. Restore exact paths after ownership check; normalized hashes support both line ending conventions. Apply reviewed seven Board hunks individually to current source rather than replacing another developer's Board."
+}
