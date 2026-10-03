@@ -30,16 +30,20 @@
    6. every background starts a new career with exactly one point in its own
       tree and nothing free; a career with no manager holds none;
    7. a Round 303 save (a manager with no face and no gift) loads byte equal,
-      gets its background point once and never twice, and plays a week;
+      gets its background point once and never twice, and plays a week; and
+      across two season rollovers, each saved and loaded, the point stays one;
    8. the face is stored, survives a save and a load, and a broken one is
-      dropped alone while the manager stays;
+      dropped by the load itself, alone, while the rest of the manager stays;
    9. every style lands on a real formation with a full eleven, no two styles
       share a shape and mentality pair, an unknown style reads Balanced;
   10. every homeland outside the league nations is called by its own
-      federation and carried into the job market;
+      federation and carried into the job market, and every league nation's
+      manager is stored in the spelling the job market gives his own clubs
+      (United States, not the engine's USA), so his home market knows him;
   11. the Edit manager sheet: rename through the real name gate, homeland,
       face; background fixed; a Skip career names its manager and gets his
-      point; the career handed in is never mutated;
+      point, and his style is read off the shape and mentality the team
+      plays, at every one of the eleven; the career handed in is never mutated;
   12. a Skip career plays a byte identical season to the engine with this
       round's two manager hooks taken out;
   13. every style changes what the match engine plays: a style with its own
@@ -65,6 +69,13 @@
                                         Gegenpress twice; section 13 must go red.
      SIM_MANAGER_CONTROL=deadmentality  the defensive mentality stops moving
                                         the scoring rates; section 13 must go red.
+     SIM_MANAGER_CONTROL=dropgift       the rollover's addXp rebuilds the XP
+                                        block field by field and loses the gift
+                                        record; section 7 must go red.
+     SIM_MANAGER_CONTROL=usaspelling    the first draft's homeland spelling
+                                        (USA, where the job market says United
+                                        States); section 10 must go red.
+   Every one of these must turn its own section red and no other.
    SPEC_STYLE_BASE and SPEC_STYLE_SEEDS move section 13's seeds.
 
    Run: node scripts/simManagerSpec.mjs
@@ -88,7 +99,7 @@ const fail = m => {
   console.error('  FAIL: ' + m);
 };
 const MODE = process.env.SIM_MANAGER_CONTROL || '';
-const CONTROLS = ['unguard', 'noappearance', 'leak', 'twinstyle', 'deadmentality'];
+const CONTROLS = ['unguard', 'noappearance', 'leak', 'twinstyle', 'deadmentality', 'usaspelling', 'dropgift'];
 if (MODE && !CONTROLS.includes(MODE)) {
   console.error(`SIM_MANAGER_CONTROL=${MODE} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -122,12 +133,18 @@ const rewrite = (file, pairs, outName) => {
   fs.writeFileSync(out, src);
   return out;
 };
-const bundle = (name, cmFile, xpFile) => {
+/* Only the main bundle carries the job market (section 10): section 12's two
+   bundles stay the engine alone. The market reads the real clubManager.ts for
+   its clubs' countries, which is the spelling a stored homeland must match. */
+const MARKET = `
+export * as jm from '${ROOT_URL}/src/lib/managerJobMarket.ts';
+export * as mo from '${ROOT_URL}/src/lib/managerOffers.ts';`;
+const bundle = (name, cmFile, xpFile, market = false) => {
   const entry = path.join(os.tmpdir(), `${name}.entry.mjs`);
   const out = path.join(os.tmpdir(), `${name}.bundle.mjs`);
   fs.writeFileSync(entry, `
 export * as cm from '${cmFile.replaceAll('\\', '/')}';
-export * as xp from '${(xpFile ?? XP_SRC).replaceAll('\\', '/')}';
+export * as xp from '${(xpFile ?? XP_SRC).replaceAll('\\', '/')}';${market ? MARKET : ''}
 export { CM_ROSTERS } from '${ROOT_URL}/src/data/clubManagerRosters.ts';
 export { players as POOL } from '${ROOT_URL}/src/data/players.ts';
 `);
@@ -143,11 +160,11 @@ let xpPath = null;
 if (MODE === 'unguard') {
   cmPath = rewrite(CM_SRC, [['if (realPersonNamesFolded().has(foldClubName(trimmed))) {', 'if (false) {']], 'clubManager.control.ts');
 } else if (MODE === 'noappearance') {
-  /* Round 965: the stored spec loses its face. Only section 7 may go red. */
+  /* Round 965: the stored spec loses its face. Only section 8 may go red. */
   cmPath = rewrite(CM_SRC, [['  if (look) out.appearance = look;', '']], 'clubManager.noappearance.ts');
 } else if (MODE === 'leak') {
   /* Round 965: the background grant leaks into careers with no manager.
-     Section 11, the Skip career against the engine without this round, must
+     Section 12, the Skip career against the engine without this round, must
      go red. */
   xpPath = rewrite(XP_SRC, [['  const tree = backgroundTree(state.manager?.background);', "  const tree = backgroundTree(state.manager?.background ?? 'exPlayer');"]], 'clubManagerXp.leak.ts');
 } else if (MODE === 'twinstyle') {
@@ -159,8 +176,22 @@ if (MODE === 'unguard') {
      style that only differs from Balanced by being defensive (Counter attack,
      same 4-4-2) changes nothing. Section 13 must go red. */
   cmPath = rewrite(CM_SRC, [['  defensive: { atk: -0.38, def: -0.32 },', '  defensive: { atk: 0, def: 0 },']], 'clubManager.deadmentality.ts');
+} else if (MODE === 'dropgift') {
+  /* Round 965 review: the rollover's addXp rebuilds the XP block field by
+     field and loses the gift record, so the grant runs again every summer.
+     Section 7 must go red. */
+  xpPath = rewrite(XP_SRC, [['  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };']], 'clubManagerXp.dropgift.ts');
+} else if (MODE === 'usaspelling') {
+  /* Round 965 review: this round's first draft, which stored a homeland in the
+     international engine's spelling (USA) where the job market spells its
+     clubs' country United States. Section 10 must go red. */
+  cmPath = rewrite(CM_SRC, [
+    ['  return Object.keys(NATION_CONFED).map(n => HOMELAND_STORED_NAME[n] ?? n).sort(', '  return Object.keys(NATION_CONFED).sort('],
+    ['  const stored = HOMELAND_STORED_NAME[nation] ?? nation;', '  const stored = HOMELAND_ENGINE_NAME[nation] ?? nation;'],
+    ['nationality: HOMELAND_STORED_NAME[m.nationality] ?? m.nationality,', 'nationality: m.nationality,'],
+  ], 'clubManager.usaspelling.ts');
 }
-const BUNDLE = bundle('managerSpec', cmPath, xpPath);
+const BUNDLE = bundle('managerSpec', cmPath, xpPath, true);
 /* Stub in THIS process, before the import: a stub inside the entry hoists
    below the imports and the module scope reads localStorage first. */
 const store = new Map();
@@ -170,7 +201,7 @@ globalThis.localStorage = {
   removeItem: k => { store.delete(k); },
   clear: () => { store.clear(); },
 };
-const { cm, xp, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
+const { cm, xp, jm, mo, CM_ROSTERS, POOL } = await import(pathToFileURL(BUNDLE).href);
 
 section = '1'; console.log('1) the name gate holds');
 {
@@ -328,6 +359,34 @@ section = '7'; console.log('7) a Round 303 save, no face and no gift, loads unch
     const after = cm.playNextEntry(twice).state;
     if (json(after.manager) !== before) fail('a week of football changed the Round 303 manager');
     console.log('   manager byte equal after two loads and a week, no face invented, Recruitment 1 and never 2');
+    /* Round 965 review: once and never twice ACROSS season rollovers as well.
+       The once only record is the XP block's optional gift field, and it lives
+       only because the rollover's addXp spreads the block: a rebuild field by
+       field drops it and pays a free point every summer while every check
+       above stays green (the dropgift control). Two seasons, each played out,
+       rolled over, saved and loaded. */
+    let rolled = 0;
+    withSeed(7303, () => {
+      let s = after;
+      for (let season = 1; season <= 2 && s; season++) {
+        let over = false;
+        for (let g = 0; g < 200 && !over; g++) {
+          const res = cm.playNextEntry(s, { skipHalftime: true });
+          s = res.state;
+          over = res.kind === 'seasonOver';
+        }
+        if (!over) { fail(`season ${season} never ended, so no rollover was crossed`); break; }
+        const xpBefore = s.managerXp?.xp ?? 0;
+        s = cm.startNextSeason(s);
+        if (!((s.managerXp?.xp ?? 0) > xpBefore)) fail(`rollover ${season} paid no XP, so it never reached the rollover's XP write`);
+        cm.saveCareer(s);
+        s = cm.loadCareer();
+        const rec = s?.managerXp?.points?.recruitment;
+        if (rec !== 1 || s?.managerXp?.gift !== 'recruitment') fail(`after rollover ${season} and a reload the Round 303 analyst holds Recruitment ${rec} (gift ${s?.managerXp?.gift}), wanted 1`);
+        else rolled += 1;
+      }
+    });
+    console.log(`   Recruitment still exactly 1 after ${rolled} of 2 season rollovers, each saved and loaded`);
   }
 }
 
@@ -343,7 +402,11 @@ section = '8'; console.log('8) the face is stored, travels through a save, and a
   cm.saveCareer(broken);
   const b2 = cm.loadCareer();
   if (!b2 || b2.manager?.name !== SPEC.name) fail('a broken face took the manager down with it');
-  if (cm.managerLookOf(b2?.manager?.appearance) !== null) fail('a face with an outfit nobody can draw read as valid');
+  if (cm.managerLookOf(broken.manager.appearance) !== null) fail('a face with an outfit nobody can draw read as valid');
+  /* Round 965 review: the load path itself drops the broken face, so the save
+     stops carrying it, and leaves the rest of the manager as it was. */
+  if (b2?.manager && 'appearance' in b2.manager) fail(`loading kept a face nobody can draw: ${json(b2.manager.appearance)}`);
+  if (b2?.manager && (b2.manager.background !== SPEC.background || b2.manager.nationality !== SPEC.nationality || b2.manager.style !== c.manager.style)) fail('dropping the broken face changed the rest of the manager');
   if (cm.managerLookOf(LOOK) === null) fail('the good face did not validate');
   const handed = cm.startCareer('Arsenal', undefined, undefined, { ...SPEC, appearance: { ...LOOK, accent: '#123456' } });
   if (!handed.manager) fail('a bad face stopped the manager being stored');
@@ -381,13 +444,13 @@ section = '10'; console.log('10) a homeland outside the league nations still get
   const homelands = cm.managerHomelands();
   const outside = homelands.filter(n => !league.has(n));
   if (outside.length < 50) fail(`only ${outside.length} homelands outside the ${league.size} league nations, the picker did not open up`);
-  /* Every league nation opens the picker on itself or on the engine's own
-     spelling of it (United States is USA there), never on the England
-     fallback. */
+  /* Every league nation opens the picker on itself, in the league spelling a
+     Round 303 save holds (United States, which the engine calls USA), never on
+     the England fallback and never on another spelling. */
   for (const n of league) {
     const opened = cm.managerHomelandFor(n);
     if (!homelands.includes(opened)) fail(`league nation ${n} opens the picker on ${opened}, which is not on it`);
-    else if (opened === 'England' && n !== 'England') fail(`league nation ${n} fell off the homeland picker and opens on England`);
+    else if (opened !== n) fail(`league nation ${n} opens the homeland picker on ${opened}`);
   }
   const c = cm.startCareer('Manchester City', undefined, undefined, SPEC);
   c.trophies = [{ kind: 'league', season: 1 }, { kind: 'cup', season: 2 }, { kind: 'ucl', season: 3 }, { kind: 'league', season: 4 }];
@@ -400,7 +463,39 @@ section = '10'; console.log('10) a homeland outside the league nations still get
     else called += 1;
     if (cm.wildernessProfile(k).nationality !== n) fail(`the wilderness lost ${n}`);
   }
-  console.log(`   ${homelands.length} homelands on the picker, ${outside.length} outside the league nations, ${called} of them called by their own federation`);
+  /* Round 965 review: a league nation's manager, made the way the form makes
+     him (the picker opened on the nation the club came through), must be
+     matched at his own league's clubs. The job market spells a club's country
+     off NATIONS, and its home familiarity is an exact string match, so a
+     homeland stored in the engine's spelling (this round's first draft stored
+     USA) silently lost every American his home market. */
+  const market = jm.allOfferClubs();
+  let matched = 0;
+  for (const n of cm.NATIONS) {
+    const home = market.filter(o => o.country === n.name);
+    if (!home.length) { fail(`the job market has no club in ${n.name}`); continue; }
+    const made = cm.startCareer('Arsenal', undefined, undefined, { ...SPEC, nationality: cm.managerHomelandFor(n.name) });
+    const nat = cm.wildernessProfile(made).nationality;
+    if (nat !== n.name) fail(`a manager from ${n.name} reaches the job market as ${nat}, which none of its ${home.length} clubs match`);
+    else matched += 1;
+    const call = cm.nationOfferFor({ ...c, manager: { ...c.manager, nationality: made.manager.nationality } });
+    if (call?.nation !== cm.homelandEngineName(n.name)) fail(`a manager from ${n.name} was called by ${call?.nation ?? 'nobody'}`);
+    const edited = cm.editManager(made, { name: 'Robin Ashgrove' });
+    if (edited?.manager?.nationality !== made.manager.nationality) fail(`renaming a ${n.name} manager rewrote his homeland to ${edited?.manager?.nationality}`);
+  }
+  /* And the outcome, against a baseline: an American at the same profile is
+     offered US jobs far more often than a Ghanaian is (measured 140 against 7
+     over 400 seeds when the spelling matched; 7 against 7 when it did not). */
+  const us = cm.startCareer('Inter Miami', undefined, undefined, { ...SPEC, nationality: cm.managerHomelandFor('United States') });
+  const prof = cm.wildernessProfile(us);
+  const usOffers = nat => {
+    let k = 0;
+    for (let s = 1; s <= 200; s++) k += mo.generateJobOffers({ ...prof, nationality: nat }, market, seeded(s)).filter(o => o.country === 'United States').length;
+    return k;
+  };
+  const usHome = usOffers(prof.nationality), ghana = usOffers('Ghana');
+  if (!(usHome >= 3 * Math.max(1, ghana))) fail(`an American got ${usHome} US offers over 200 seeds against a Ghanaian's ${ghana}: his home market does not know him`);
+  console.log(`   ${homelands.length} homelands on the picker, ${outside.length} outside the league nations, ${called} of them called by their own federation; ${matched} of ${cm.NATIONS.length} league nations matched at their own clubs; US offers to an American ${usHome} against a Ghanaian ${ghana}`);
 }
 
 section = '11'; console.log('11) the Edit manager sheet: what can change, what cannot, and a Skip career naming its man');
@@ -436,6 +531,22 @@ section = '11'; console.log('11) the Edit manager sheet: what can change, what c
     if (again?.managerXp?.points?.finance !== 1) fail('editing the late manager again paid the gift twice');
     if (cm.editManager(made, { background: 'pundit' })) fail('the late manager changed background once chosen');
   }
+  /* Round 965 review: the late manager's style is read off the shape AND the
+     mentality the team plays, at every style, not only on the default 4-3-3
+     Balanced: Balanced, Counter attack and Direct all play 4-4-2 and only the
+     mentality tells them apart. */
+  let readBack = 0;
+  for (const id of Object.keys(cm.CLUB_IDENTITIES)) {
+    const row = cm.CLUB_IDENTITIES[id];
+    const playing = { ...skip, formationIndex: row.formationIndex, mentality: row.mentality };
+    const late = cm.editManager(playing, { name: 'Robin Ashgrove', nationality: 'Japan', background: 'analyst' });
+    if (late?.manager?.style !== id) fail(`a Skip career playing ${id}'s ${row.formationIndex}/${row.mentality} named a manager whose style reads ${late?.manager?.style}`);
+    else readBack += 1;
+  }
+  const offShape = cm.editManager({ ...skip, formationIndex: 3, mentality: 'defensive' }, { name: 'Robin Ashgrove', nationality: 'Japan', background: 'analyst' });
+  if (Object.values(cm.CLUB_IDENTITIES).some(r => r.formationIndex === 3 && r.mentality === 'defensive')) fail('the off shape probe (formation 3, defensive) is now a real style; pick another');
+  else if (offShape?.manager?.style !== 'balanced') fail(`a Skip career on a shape no style plays named a ${offShape?.manager?.style} manager, wanted Balanced`);
+  console.log(`   the late manager's style read back at ${readBack} of ${Object.keys(cm.CLUB_IDENTITIES).length} styles, and Balanced off any style's shape`);
   console.log(`   rename, homeland and face change; real names, unknown countries, broken faces and a new background refused; a Skip career names its man with his point`);
 }
 
@@ -448,10 +559,12 @@ section = '12'; console.log('12) a Skip career plays a byte identical season to 
    * engine: it asks only whether this round's code reaches a career with no
    * manager. Both sides are fresh bundles, run in the same order with the clock
    * pinned, because the engine stamps some ids with Date.now and a module
-   * counter.
+   * counter. Under a control the base is cut from the control's own rewrite,
+   * so a control aimed at another section (deadmentality, say) moves both
+   * sides alike and leaves this one green.
    */
-  const baseXp = rewrite(XP_SRC, [['  if (tree && block.gift === undefined) state.managerXp = grantGift(block, tree);', '']], 'clubManagerXp.base.ts');
-  const baseCm = rewrite(CM_SRC, [
+  const baseXp = rewrite(xpPath ?? XP_SRC, [['  if (tree && block.gift === undefined) state.managerXp = grantGift(block, tree);', '']], 'clubManagerXp.base.ts');
+  const baseCm = rewrite(cmPath, [
     ['    state.manager = cleanManagerSpec(manager);', '    state.manager = { ...manager, name: manager.name.trim() };'],
     ['CLUB_IDENTITIES[styleOf(manager.style)]', 'CLUB_IDENTITIES[manager.style]'],
   ], 'clubManager.base.ts');
@@ -591,13 +704,14 @@ if (CONTROL) {
   console.error('\ncontrol run: severing the real name gate changed NOTHING, the checks are dead');
   process.exit(1);
 }
-/* Round 965's two controls. Each says which sections must go red, and the
-   face control also says which must NOT: the brief asks that dropping the
-   appearance field turns only the new face section red. */
-if (MODE === 'noappearance' || MODE === 'leak' || MODE === 'twinstyle' || MODE === 'deadmentality') {
+/* Round 965's controls. Each names the one section that must go red and no
+   other may: the brief asks that dropping the appearance field turns only the
+   new face section red, and the review made the same demand of the rest. */
+const WANT = { noappearance: '8', leak: '12', twinstyle: '13', deadmentality: '13', usaspelling: '10', dropgift: '7' };
+if (WANT[MODE]) {
   const red = [...failedSections.keys()].sort((a, b) => Number(a) - Number(b));
-  const want = MODE === 'noappearance' ? '8' : MODE === 'leak' ? '12' : '13';
-  const onlyWant = MODE === 'noappearance';
+  const want = WANT[MODE];
+  const onlyWant = true;
   const ok = red.includes(want) && (!onlyWant || red.length === 1);
   if (ok) {
     console.log(`\ncontrol run ${MODE}: section ${want} went red${onlyWant ? ' and no other section did' : ''} (red: ${red.join(', ')}), as expected`);

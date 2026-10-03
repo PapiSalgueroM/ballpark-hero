@@ -20,7 +20,9 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
   const [editing, setEditing] = useState(false);
   const look = managerLookOf(c.manager?.appearance);
   const bg = c.manager ? MANAGER_BACKGROUNDS[c.manager.background] : undefined;
-  const bgTree = c.manager ? BACKGROUND_TREE[c.manager.background] : undefined;
+  /* The +1 line reads the XP block's own record of the point, not the
+     background table, so it only shows once the point has been handed over. */
+  const bgTree = c.manager && c.managerXp?.gift && BACKGROUND_TREE[c.manager.background] === c.managerXp.gift ? c.managerXp.gift : undefined;
   return (
                 <>
                 {/* Round 202: the international job. Club football is

@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   MANAGER_BACKGROUNDS, CLUB_IDENTITIES, validateManagerName, managerLookOf, defaultManagerLook, managerHomelandFor,
+  NATIONS, leagueOf,
 } from '@/lib/clubManager';
 import type { CareerState, ManagerBackground, ManagerEdit, ManagerLook } from '@/lib/clubManager';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
@@ -46,7 +47,13 @@ export default function EditManagerSheet({ career, open, onOpenChange, onSave }:
 function SheetBody({ career, onSave }: { career: CareerState; onSave: (edit: ManagerEdit) => void }) {
   const cur = career.manager;
   const [name, setName] = useState(cur?.name ?? '');
-  const [nationality, setNationality] = useState(() => managerHomelandFor(cur?.nationality ?? 'England'));
+  /* A Skip career opens on the club's own country, the way the new career
+     form does. The homeland is only sent when the player changed it, so
+     saving a rename or a face never rewrites the homeland a save holds. */
+  const [startNation] = useState(() => managerHomelandFor(
+    cur?.nationality ?? NATIONS.find(n => n.leagueIds.includes(leagueOf(career.clubName)?.id))?.name ?? 'England',
+  ));
+  const [nationality, setNationality] = useState(startNation);
   const [look, setLook] = useState<ManagerLook>(() => managerLookOf(cur?.appearance) ?? defaultManagerLook());
   const [background, setBackground] = useState<ManagerBackground | null>(cur?.background ?? null);
   const [tried, setTried] = useState(false);
@@ -56,7 +63,8 @@ function SheetBody({ career, onSave }: { career: CareerState; onSave: (edit: Man
   const save = () => {
     setTried(true);
     if (nameError || needsBackground) return;
-    const edit: ManagerEdit = { name: name.trim(), nationality, appearance: look };
+    const edit: ManagerEdit = { name: name.trim(), appearance: look };
+    if (!cur || nationality !== startNation) edit.nationality = nationality;
     if (!cur && background) edit.background = background;
     onSave(edit);
   };

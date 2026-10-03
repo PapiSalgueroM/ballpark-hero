@@ -696,6 +696,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     /* Your record starts now. The club's season is inherited; the manager's is
        not, so the progression is the day one one rather than a run of matches
        you did not pick a team for. */
+    manager: career.manager,
     managerXp: career.managerXp,
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
@@ -716,7 +717,11 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
  * takeover above and the Round 783 one below, so the two cannot drift apart.
  */
 function playRunIn(career: CareerState, target: number): CareerState {
-  let s = career;
+  /* Round 965: the weeks before the handover are the previous manager's, so
+     they run without ours: no background point working the gate or the
+     academy, no homeland in the market. Both callers put our manager and his
+     own XP block back at the handover. */
+  let s: CareerState = career.manager ? { ...career, manager: undefined, managerXp: undefined } : career;
   let guard = 0;
   while (s.week < target && guard < 400) {
     guard += 1;

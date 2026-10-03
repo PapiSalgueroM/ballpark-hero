@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Shuffle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
+import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR, randomAppearance } from '@/lib/soccerCareerAppearance';
 import type { AppearanceOption } from '@/lib/soccerCareerAppearance';
 import { MANAGER_OUTFITS, MANAGER_AGE_BANDS, MANAGER_ACCENTS } from '@/lib/clubManager';
 import type { ManagerLook, ManagerOutfit, ManagerAgeBand } from '@/lib/clubManager';
@@ -28,14 +28,16 @@ const ROWS: { field: Field; label: string; options: AppearanceOption[] }[] = [
 
 const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
 
-/** A roll for the shuffle button. Only ever called from a click. */
+/** A roll for the shuffle button. Only ever called from a click. The face is
+ *  Soccer Career's own roll, so its rules (dyed colours are a choice, not a
+ *  roll) follow wherever that changes. */
 function rollLook(): ManagerLook {
+  const face = randomAppearance();
   return {
-    skinTone: pick(SKIN_TONES).id,
-    hairstyle: pick(HAIRSTYLES).id,
-    /* dyed colours are a choice, not a roll, the same rule Soccer Career keeps */
-    hairColor: pick(HAIR_COLORS.filter(c => !c.label.startsWith('Dyed') && c.id !== 'bleach')).id,
-    facialHair: pick(FACIAL_HAIR).id,
+    skinTone: face.skinTone,
+    hairstyle: face.hairstyle,
+    hairColor: face.hairColor,
+    facialHair: face.facialHair,
     outfit: pick(OUTFIT_OPTIONS).id as ManagerOutfit,
     accent: pick(MANAGER_ACCENTS).hex,
     ageBand: pick(AGE_OPTIONS).id as ManagerAgeBand,

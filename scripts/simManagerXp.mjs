@@ -50,6 +50,9 @@
  *                          a curve that does not steepen.
  *   XP_CONTROL=nomap       maps the TV pundit background to no tree (Round 965),
  *                          so section 9 finds a background that is a badge again.
+ *   XP_CONTROL=dropgift    makes addXp rebuild the block field by field, losing
+ *                          the gift record, so section 9 finds the point paid
+ *                          again after the rollover's XP write.
  * Each control refuses to run if its rewrite did not find its text.
  *
  * Run: node scripts/simManagerXp.mjs
@@ -77,12 +80,12 @@ const ENTRY = `${TMP}/mgrXp.entry.mjs`;
 const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
-const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate', 'nomap'];
+const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate', 'nomap', 'dropgift'];
 /* The first four rewrite clubManagerXp.ts and are read by sections 1 to 6.
    'deadgate' patches the ENGINE bundle instead, because section 7 runs the
    real engine and the engine imports the real module whatever we do to a copy
    of the source. */
-const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate', 'nomap'];
+const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate', 'nomap', 'dropgift'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`XP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -118,6 +121,10 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
     /* Round 965: one background mapped to no tree, which is the badge the
        round exists to end. Section 9 must go red. */
     swap("  pundit: 'media',", "  pundit: 'nowhere' as SkillTree,");
+  } else if (CONTROL === 'dropgift') {
+    /* Round 965 review: addXp rebuilds the block field by field and loses the
+       gift record. Section 9 must go red. */
+    swap('  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };');
   } else if (CONTROL === 'nocap') {
     swap('  if (now >= MAX_TREE_POINTS) return null;', '');
   } else if (CONTROL === 'flatlevels') {
@@ -826,8 +833,8 @@ console.log('9) Every background hands over exactly one point, in its own tree, 
    * XP_CONTROL=nomap maps the TV pundit to no tree, the badge restored, and
    * section 9 must go red on it.
    */
-  const { backgroundTree, grantGift, ensureXp, pointsBought, MAX_LEVEL: TOP } = xp;
-  for (const [name, fn] of Object.entries({ backgroundTree, grantGift, ensureXp, pointsBought })) {
+  const { backgroundTree, grantGift, ensureXp, pointsBought, addXp, MAX_LEVEL: TOP } = xp;
+  for (const [name, fn] of Object.entries({ backgroundTree, grantGift, ensureXp, pointsBought, addXp })) {
     if (typeof fn !== 'function') {
       console.error(`section 9 could not reach ${name}; the bundle is not the shape it expects`);
       process.exit(1);
@@ -877,6 +884,14 @@ console.log('9) Every background hands over exactly one point, in its own tree, 
     ensureXp(reloaded);
     if (pointsSpent(s.managerXp) !== 1) fail(`${bg}: repeated ensures took the spend to ${pointsSpent(s.managerXp)}`);
     if (pointsSpent(reloaded.managerXp) !== 1) fail(`${bg}: a reload took the spend to ${pointsSpent(reloaded.managerXp)}`);
+    /* Round 965 review: and across the rollover, whose XP write is addXp. A
+       block rebuilt there field by field drops the gift record and the grant
+       runs again every summer (XP_CONTROL=dropgift). simManagerSpec section 7
+       crosses two real rollovers; this is the pure module's half. */
+    const summer = { manager: s.manager, managerXp: addXp(clone(s.managerXp), xpForLevel(3)) };
+    ensureXp(summer);
+    ensureXp(summer);
+    if (pointsSpent(summer.managerXp) !== 1 || summer.managerXp.gift !== tree) fail(`${bg}: after the rollover's XP write the spend is ${pointsSpent(summer.managerXp)} and the gift ${summer.managerXp.gift}`);
     walked += 1;
   }
   if (walked !== 7) fail(`only ${walked} backgrounds were walked, wanted all 7`);

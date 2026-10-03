@@ -1523,7 +1523,9 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
      the manager had a name, the club's own country was the only honest
      answer, and it stays the answer whenever the spec is absent or the
      homeland is somewhere the engine cannot simulate. */
-  const own = career.manager?.nationality;
+  /* Round 965: a homeland is stored in the league spelling, so United States
+     is looked up as the engine's USA. */
+  const own = career.manager?.nationality ? homelandEngineName(career.manager.nationality) : undefined;
   const league = leagueOf(career.clubName);
   const nationDef = league ? NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
   const nation = (own && NATION_CONFED[own]) ? own : (nationDef?.name ?? null);
@@ -4255,29 +4257,46 @@ export function defaultManagerLook(): ManagerLook {
   return { skinTone: 'olive', hairstyle: 'sidepart', hairColor: 'darkbrown', facialHair: 'stubble', outfit: 'tracksuit', accent: MANAGER_ACCENTS[0].hex, ageBand: 'forties' };
 }
 
-/** Round 965: every homeland the picker offers, the international engine's
- *  own table, so whichever one is picked the federation call can run. */
-export function managerHomelands(): string[] {
-  return Object.keys(NATION_CONFED).sort((a, b) => a.localeCompare(b));
+/* Round 965: the one league nation the international engine spells
+   differently. The league table and the job market say United States (NATIONS),
+   NATION_CONFED says USA. A homeland is STORED in the league spelling, the one
+   Round 303 saved and the one the job market compares against its clubs'
+   country, and only turned into the engine's spelling to look the nation up. */
+const HOMELAND_ENGINE_NAME: Record<string, string> = { 'United States': 'USA' };
+const HOMELAND_STORED_NAME: Record<string, string> = Object.fromEntries(
+  Object.entries(HOMELAND_ENGINE_NAME).map(([stored, engine]) => [engine, stored]),
+);
+
+/** Round 965: the international engine's spelling of a stored homeland. */
+export function homelandEngineName(nation: string): string {
+  return HOMELAND_ENGINE_NAME[nation] ?? nation;
 }
 
-/* The one league nation the international engine spells differently. */
-const HOMELAND_ALIAS: Record<string, string> = { 'United States': 'USA' };
+/** Round 965: a homeland the international engine runs, in either spelling. */
+export function isManagerHomeland(nation: string): boolean {
+  return Object.prototype.hasOwnProperty.call(NATION_CONFED, homelandEngineName(nation));
+}
 
-/** Round 965: the homeland a picker opens on for this nation: itself when the
- *  engine runs it, its engine spelling when it has one, England otherwise. */
+/** Round 965: every homeland the picker offers, the international engine's
+ *  own table, so whichever one is picked the federation call can run, in the
+ *  spelling a homeland is stored in. */
+export function managerHomelands(): string[] {
+  return Object.keys(NATION_CONFED).map(n => HOMELAND_STORED_NAME[n] ?? n).sort((a, b) => a.localeCompare(b));
+}
+
+/** Round 965: the homeland a picker opens on for this nation: its stored
+ *  spelling when the engine runs it, England otherwise. */
 export function managerHomelandFor(nation: string): string {
   const all = managerHomelands();
-  if (all.includes(nation)) return nation;
-  const alias = HOMELAND_ALIAS[nation];
-  if (alias && all.includes(alias)) return alias;
+  const stored = HOMELAND_STORED_NAME[nation] ?? nation;
+  if (all.includes(stored)) return stored;
   return all.includes('England') ? 'England' : all[0];
 }
 
 /** Round 965: the spec as it is stored. The style is read safely and a look
  *  that does not validate is left off rather than stored half broken. */
 function cleanManagerSpec(m: ManagerSpec): ManagerSpec {
-  const out: ManagerSpec = { name: m.name.trim(), nationality: m.nationality, background: m.background, style: styleOf(m.style) };
+  const out: ManagerSpec = { name: m.name.trim(), nationality: HOMELAND_STORED_NAME[m.nationality] ?? m.nationality, background: m.background, style: styleOf(m.style) };
   const look = managerLookOf(m.appearance);
   if (look) out.appearance = look;
   return out;
@@ -4313,10 +4332,10 @@ export function editManager(career: CareerState, edit: ManagerEdit): CareerState
   const name = edit.name !== undefined ? edit.name.trim() : cur?.name;
   if (name === undefined || validateManagerName(name) !== null) return null;
   const nationality = edit.nationality ?? cur?.nationality;
-  if (nationality === undefined || !Object.prototype.hasOwnProperty.call(NATION_CONFED, nationality)) {
-    /* An old Round 303 homeland is always in the table (NATIONS is a subset),
-       but a mangled one should not lock the sheet: only a NEW value is held
-       to the table. */
+  if (nationality === undefined || !isManagerHomeland(nationality)) {
+    /* Every Round 303 homeland passes isManagerHomeland (United States through
+       its engine spelling), but a mangled one should not lock the sheet: only
+       a NEW value is held to the table. */
     if (edit.nationality !== undefined || nationality === undefined) return null;
   }
   let appearance = cur?.appearance;
@@ -4338,7 +4357,7 @@ export function editManager(career: CareerState, edit: ManagerEdit): CareerState
       .find(k => CLUB_IDENTITIES[k].formationIndex === career.formationIndex && CLUB_IDENTITIES[k].mentality === career.mentality);
     style = match ?? 'balanced';
   }
-  const manager: ManagerSpec = { name, nationality: nationality as string, background, style };
+  const manager: ManagerSpec = { name, nationality: HOMELAND_STORED_NAME[nationality as string] ?? (nationality as string), background, style };
   if (appearance) manager.appearance = appearance;
   const next: CareerState = { ...career, manager };
   ensureXp(next);
@@ -18719,6 +18738,12 @@ export function loadCareer(): CareerState | null {
     /* Round 513: the manager's own progression. Registered in BOTH loadCareer
        and playNextEntry, because a screen can be opened before a ball is
        kicked and engine only repair is not enough. */
+    /* Round 965: a face this build cannot draw is dropped, that block alone;
+       the manager, his name and his point stay. A save with no face (every
+       Round 303 manager) is not touched. */
+    if (parsed.manager && parsed.manager.appearance !== undefined && !managerLookOf(parsed.manager.appearance)) {
+      delete parsed.manager.appearance;
+    }
     ensureXp(parsed);
     /* Round 514: same reasoning, and the currency in particular is read by
        the very first screen drawn, before a ball is kicked. */

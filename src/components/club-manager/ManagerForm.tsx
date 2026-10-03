@@ -67,7 +67,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         <div>
           <h2 className="text-lg font-bold font-display text-foreground">Who is in the dugout?</h2>
           <p className="text-[11px] text-muted-foreground">
-            Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the career tab.
+            Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel.
           </p>
         </div>
 
@@ -93,7 +93,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
 
         <div>
           <span id="manager-homeland-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Homeland</span>
-          <p className="text-[10px] text-muted-foreground mb-1.5">Any country with a national team. Your federation for the national team call, and the leagues that know your name.</p>
+          <p className="text-[10px] text-muted-foreground mb-1.5">Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name.</p>
           <HomelandSelect value={nationality} onChange={setNationality} labelledBy="manager-homeland-label" />
         </div>
 

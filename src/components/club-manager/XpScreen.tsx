@@ -89,10 +89,13 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
             : `${spent} of ${SKILL_TREES.length * MAX_TREE_POINTS} points spent`}
         </div>
         {/* Round 965: the point his background brought with him. It works
-            exactly like a bought one and never cost a level. */}
+            exactly like a bought one and never cost a level. When the tree was
+            already full it stays at five and the point he had bought there is
+            handed back, which the count above already shows, so this line says
+            only what is true either way: one of the tree's points is the gift. */}
         {block.gift && (
           <div data-cm-xp-gift className="text-[10px] text-foreground">
-            🎁 One {TREE_INFO[block.gift].label} point came with your background{career.manager ? ` (${MANAGER_BACKGROUNDS[career.manager.background]?.label ?? 'your past'})` : ''}. It works like any other and cost you no XP.
+            🎁 One of your {TREE_INFO[block.gift].label} points is your background's{career.manager ? ` (${MANAGER_BACKGROUNDS[career.manager.background]?.label ?? 'your past'})` : ''}. It works like any other and cost you no XP.
           </div>
         )}
         <p className="text-[9px] text-muted-foreground">
