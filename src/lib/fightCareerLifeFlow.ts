@@ -16,7 +16,7 @@ import {
 } from '@/lib/fightCareer';
 import {
   newLife, cloneForLife, dressOffers, dealLifeCards, settleCampCarry, lifeFightMods, lifeTakeHome,
-  managerDef, pendingLifeCard, pushLifeFeed, ensureLife, GRUDGE_LABEL,
+  managerDef, pendingLifeCard, pushLifeFeed, ensureLife, rematchInTime, GRUDGE_LABEL, REMATCH_LABEL,
   type FightLife, type TrainerId, type ManagerId, type LifeCardDef,
 } from '@/lib/fightCareerLife';
 import { round2, buyUpgrade, MAX_UPGRADE_LEVEL, upgradeLevel, UPGRADES, type UpgradeId } from '@/lib/fightCareerMoney';
@@ -85,12 +85,30 @@ export function lifeTakeFight(st: FightCareerState, offerId: string, tactics: Ta
      kept up, not something banked once and owned for a career. */
   life.morale = life.morale > 50 ? Math.max(50, life.morale - MORALE_DRIFT) : Math.min(50, life.morale + MORALE_DRIFT);
   if (life.promoterFights > 0) life.promoterFights -= 1;
-  if (!won && !drew) life.lastBeatenBy = { ...offer.opponent, wins: offer.opponent.wins + 1 };
-  if (offer.label === GRUDGE_LABEL) {
+  /* The new table is dressed below from scratch, so what the last gap's cards
+     did to the old one is done with. */
+  delete life.tablePurseMul;
+  if (!won && !drew) {
+    life.lastBeatenBy = { ...offer.opponent, wins: offer.opponent.wins + 1 };
+    life.lastBeatenAt = next.fightNo;
+  } else if (life.lastBeatenBy && !rematchInTime(next)) {
+    /* The clause runs out: the man on file is not kept at the level he was
+       that night for the rest of a career (Round 916 review). */
+    life.lastBeatenBy = null;
+    delete life.lastBeatenAt;
+  }
+  /* A fight with the rival is a grudge match, or a rematch clause invoked
+     after he beat you: either way it is a night between the two of you and
+     goes in the record between you (Round 916 review, found by 7g (xiv) of
+     scripts/simFightCareer.mjs). dressOffers keeps his name off every other
+     man on a table, so the name and the label together are him. */
+  const grudge = offer.label === GRUDGE_LABEL ||
+    (offer.label === REMATCH_LABEL && !!life.rival && offer.opponent.name === life.rival.name);
+  if (grudge) {
     settleGrudge(life, won, drew);
     life.rivalryIntensity = meter(life.rivalryIntensity + 10);
   }
-  const rivalLine = rivalFightNight(next, life);
+  const rivalLine = rivalFightNight(next, life, grudge);
   if (rivalLine) pushLifeFeed(life, rivalLine);
 
   if (next.retired) {

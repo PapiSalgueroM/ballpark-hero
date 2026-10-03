@@ -27,7 +27,7 @@ import {
 import { keyedRng } from '@/lib/keyedRng';
 import type { FightCareerState } from '@/lib/fightCareer';
 import {
-  applyLifeEffect, describeLifeEffect, cloneForLife, pushLifeFeed, isBoutNeutral, rivalInYourClass,
+  applyLifeEffect, describeLifeEffect, cloneForLife, pushLifeFeed, isBoutNeutral, rivalInYourClass, lapseClosedCards,
   type FightLife, type FightRival, type LifeEffect,
 } from '@/lib/fightCareerLife';
 
@@ -46,7 +46,7 @@ const levelAt = (rank: number): number => (rank >= 99 ? 50 : rank === 0 ? 88 : 8
  * until 29 and fades after 32, and most windows he fights somebody at his own
  * level. Mutates `life.rival`. Returns a feed line for the nights that matter.
  */
-export function rivalFightNight(st: FightCareerState, life: FightLife): string | null {
+export function rivalFightNight(st: FightCareerState, life: FightLife, foughtYou = false): string | null {
   const r = life.rival;
   if (!r || r.retired) return null;
   const rng = keyedRng(`${st.seed}|${st.fightNo}|fight-rival`);
@@ -57,8 +57,19 @@ export function rivalFightNight(st: FightCareerState, life: FightLife): string |
   if (r.age >= 36.5 || (r.age >= 32 && r.rating < 55)) {
     r.retired = true;
     r.champion = false;
+    /* A rematch clause on a man who has retired cannot be invoked. */
+    if (life.lastBeatenBy?.name === r.name) {
+      life.lastBeatenBy = null;
+      delete life.lastBeatenAt;
+    }
     return `${r.name} has retired at ${r.wins} and ${r.losses}.`;
   }
+  /* A window in which he fought you was his fight. settleGrudge has put it
+     on his record, so he does not box again the same night, and his last
+     result stays empty: the "won again while you were in camp" and "he was
+     beaten" beats are about his own fights, not the one with you (Round 916
+     review). */
+  if (foughtYou) return null;
   if (rng() < 0.2) return null;
   const won = rng() < clamp(0.55 + (r.rating - levelAt(r.champion ? 0 : r.rank)) / 40, 0.2, 0.9);
   const cur = r.rank >= 99 ? 20 : r.rank;
@@ -111,6 +122,8 @@ const beat = (
 
 const youRank = (p: Live): number => (p.champion ? 0 : p.fighter.rank);
 const hisRank = (r: FightRival): number => (r.champion ? 0 : r.rank);
+/** You have won a world title at some point, belt kept or not. */
+const everChampion = (p: Live): boolean => p.champion || p.history.some(h => h.title && h.result === 'W');
 
 /* Round 916 review: the beats that say what he did this window read his last
    result (rivalFightNight sets it), not his career totals, and the two that
@@ -122,7 +135,10 @@ const sameClass = (p: Live): boolean => rivalInYourClass(p);
 export const FIGHT_RIVALRY_EVENTS: Beat[] = [
   beat(1, '📈', 'He keeps winning', { heat: 4 }, (_p, r) => r.last === 'W' && r.wins >= 2,
     (_p, r) => `${r.name} won again while you were in camp, and the papers ran the two records side by side.`),
-  beat(2, '🏆', 'He got there first', { heat: 8, fans: -1 }, (p, r) => r.champion && !p.champion,
+  /* "Before you do" is only true of a man who has never held a world title:
+     not of one who won a belt and lost it, or left it behind with a class
+     move (Round 916 review). */
+  beat(2, '🏆', 'He got there first', { heat: 8, fans: -1 }, (p, r) => r.champion && !p.champion && !everChampion(p),
     (_p, r) => `${r.name} has a world title round his waist before you do.`),
   beat(3, '📉', 'He was beaten', { heat: -3, fans: 1 }, (_p, r) => r.last === 'L',
     (_p, r) => `${r.name} lost, and people asked what that says about the pair of you.`),
@@ -296,6 +312,10 @@ export function answerFightRivalryChoice(st: FightCareerState, choiceIdx: number
   next.life.pendingRivalryChoice = null;
   next.life.decisions += 1;
   pushLifeFeed(next.life, `${card.emoji} ${line}`);
+  /* The cards were dealt before this answer. Taking the grudge fight closes
+     the class move and rematch cards waiting behind it, which would throw
+     the grudge away, so they lapse here with a line (Round 916 review). */
+  lapseClosedCards(next);
   return { state: next, line };
 }
 

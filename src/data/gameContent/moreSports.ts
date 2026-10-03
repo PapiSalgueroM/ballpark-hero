@@ -1858,14 +1858,14 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Your rival and the grudge match",
-        items: ["Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more."],
+        items: ["Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more, and a card that would move you a division or bring a rematch is dropped rather than throw that fight away."],
       },
       {
         heading: "Moving weight and the rematch clause",
         /* Knockouts rising with weight, two sources read 2026-10-02: Physician
            and Sportsmedicine 2024, PMID 37990916 (Europe PMC abstract), and
            scirp.org/journal/paperinformation?paperid=107460. */
-        items: ["Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. A rematch clause after a loss turns the middle offer into the man who beat you, and a win is worth up to 4 places."],
+        items: ["Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker."],
       },
     ],
     exampleSections: [

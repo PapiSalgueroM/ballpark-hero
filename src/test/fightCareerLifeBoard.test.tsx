@@ -90,4 +90,25 @@ describe('Fight Career board, the life between fights', () => {
     expect(saved.offerId).toBe(pick.id);
     expect(saved.st.fighter.attrs).toEqual(st.fighter.attrs);
   });
+
+  /* Round 916 review: the board is the one real caller of lifeLoadState. A
+     save holding a rival choice this build does not know (a damaged save, or
+     an id a later round renamed) must open on the offers, not on a card
+     nothing can answer. Loading through plain ensureLife would bring the
+     soft lock back, and this is the test that sees it. */
+  it('opens a save with an unknown rival choice on the offers, not stuck on it', async () => {
+    const st = lifeNewCareer('Lost Card', 'light', 'counter', 'allround', 'family', 'board-stuck');
+    const stored = JSON.parse(JSON.stringify(st));
+    stored.life.pendingRivalryChoice = {
+      id: 'fr-renamed-long-ago', emoji: '?', title: 'A choice from long ago', description: 'Nothing answers this.',
+      choices: [{ label: 'Gone', emoji: '?', consequence: 'Nothing changes.' }],
+    };
+    expect(nextLifeStep(stored)?.kind).toBe('choice');
+    localStorage.setItem(KEY, JSON.stringify({ st: stored, phase: 'hub' }));
+    const view = render(<FightCareerBoard />);
+    await view.findByText('Lost Card');
+    const text = view.container.textContent ?? '';
+    expect(text).not.toContain('A choice from long ago');
+    expect(text).toMatch(/What do you take\?|Defend the title/);
+  });
 });

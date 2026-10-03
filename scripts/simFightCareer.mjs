@@ -58,6 +58,18 @@
  *   FIGHT_CONTROL=specialtable    a class move can throw away a grudge  -> 7g (viii)
  *   FIGHT_CONTROL=stuckchoice     an unknown rival choice blocks a save -> 7g (ix)
  *   FIGHT_CONTROL=silentreply     a text reply hides what it does       -> 7g (x)
+ *   FIGHT_CONTROL=pursecarry      a class move forgets the purse cards  -> 7g (iii b)
+ *   FIGHT_CONTROL=nomanagerpurse  the dealmaker's bigger purses go      -> 7g (iii c)
+ *   FIGHT_CONTROL=nomanagerrank   the matchmaker's extra place goes     -> 7g (iii c)
+ *   FIGHT_CONTROL=nomanagerfans   the dealmaker's extra fan goes        -> 7g (iii c)
+ *   FIGHT_CONTROL=rematchbonus    a rematch drops the extra place       -> 7g (iii c)
+ *   FIGHT_CONTROL=frontstale      the front card is never read again    -> 7g (xi)
+ *   FIGHT_CONTROL=grudgeswap      a grudge win never reaches the record -> 7g (xii), (xiv)
+ *   FIGHT_CONTROL=grudgetwice     the rival boxes twice in one night    -> 7g (xii)
+ *   FIGHT_CONTROL=beattwo         "before you do" to a former champion  -> 7g (xiii)
+ *   FIGHT_CONTROL=oldbeaten       the rematch clause never runs out     -> 7g (xiii)
+ *   FIGHT_CONTROL=namesake        an ordinary man wears the rival's name -> 7g (xiv)
+ *   FIGHT_CONTROL=nobadge         Settled it reads the wrong side       -> 7g (xiv)
  *   7g is exact rather than banded: each check is one walk whose answer is a
  *   number the words state (a fight's 0 sharpness after, 4 promoter tables
  *   and then the free one, the take home to the cent for all 12 corner
@@ -86,6 +98,17 @@
  *      Punches landed over 120 debuts at sharpness -4, -2, 0, 2, 4: 8902,
  *      9267, 9757, 10270, 10586 (the smallest step is 316). The cut man takes
  *      one fight's 2.332 damage to 2.24, 2.15 and 2.05.
+ *   7g, added by the second review of the round (exact, like the rest of
+ *      7g): 6 purse options walked into a class move, each new table equal
+ *      to its twin's times the words' percentage; 3 manager promises read
+ *      off the tiles and paid against a family friend twin; 3 grudge walks
+ *      with the class move and rematch cards dealt before it; 6 grudge fights
+ *      (3 won, 3 lost); 40 careers that take every grudge, whose badges
+ *      earned and missed were first win 40/0, ten wins 24/16, ten KOs 1/39,
+ *      unbeaten 0/40, champion 8/32, rival 8/32, long road 12/28, busy life
+ *      27/13. That fleet found two defects the reviews had not: an ordinary
+ *      opponent wearing the rival's name, and a rematch clause invoked on the
+ *      rival that never reached the record between you.
  */
 
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -268,7 +291,7 @@ if (CONTROL === 'freecard') {
 } else if (CONTROL === 'staleanswer') {
   /* A waiting card is never read again after an answer. 7g (vii). */
   rewriteLife('staleanswer', 'fightCareerLife',
-    '    if (!waiting.when || waiting.when(next)) return true;',
+    '    if (stillOpen(st, waiting)) return true;',
     '    return true;');
 } else if (CONTROL === 'unrankedrank') {
   /* A rank effect hands an unranked man a number. 7g (vii). */
@@ -290,6 +313,68 @@ if (CONTROL === 'freecard') {
   rewriteLife('silentreply', 'fightCareerInbox',
     '  describeLifeEffect(inboxChoiceEffect(c));',
     '  describeLifeEffect({});');
+} else if (CONTROL === 'pursecarry') {
+  /* A class move deals a new table and forgets what the cards did. 7g (iii b). */
+  rewriteLife('pursecarry', 'fightCareerLife',
+    '      if (carried !== 1) st.offers = st.offers.map(o => ({ ...o, purse: round2(o.purse * carried) }));',
+    '');
+} else if (CONTROL === 'nomanagerpurse') {
+  /* The dealmaker's bigger purses are never paid. 7g (iii c). */
+  rewriteLife('nomanagerpurse', 'fightCareerLife',
+    '  const mul = mgr.purseMul * (1 + life.fanbase * FAN_PURSE_STEP);',
+    '  const mul = 1 * (1 + life.fanbase * FAN_PURSE_STEP);');
+} else if (CONTROL === 'nomanagerrank') {
+  /* The matchmaker's extra place is never paid. 7g (iii c). */
+  rewriteLife('nomanagerrank', 'fightCareerLife',
+    'o.rankGain + mgr.rankBonus : o.rankGain',
+    'o.rankGain : o.rankGain');
+} else if (CONTROL === 'nomanagerfans') {
+  /* The dealmaker's extra fan is never paid. 7g (iii c). */
+  rewriteLife('nomanagerfans', 'fightCareerLifeFlow',
+    '  return meter(life.fanbase + swing + managerDef(life.manager.kind).fansPerFight);',
+    '  return meter(life.fanbase + swing);');
+} else if (CONTROL === 'rematchbonus') {
+  /* A rematch drops the matchmaker's extra place. 7g (iii c). */
+  rewriteLife('rematchbonus', 'fightCareerLife',
+    'REMATCH_RANK_GAIN + managerDef(life.manager.kind).rankBonus,',
+    'REMATCH_RANK_GAIN,');
+} else if (CONTROL === 'frontstale') {
+  /* The card at the front is never read again, after a rival choice or on
+     load. 7g (xi). */
+  rewriteLife('frontstale', 'fightCareerLife',
+    '    if (card && stillOpen(st as Live, card)) return card;',
+    '    if (card) return card;');
+  rewriteLife('frontstale', 'fightCareerRivalry',
+    '  lapseClosedCards(next);\n  return { state: next, line };',
+    '  return { state: next, line };');
+} else if (CONTROL === 'grudgeswap') {
+  /* A grudge win is filed as a draw and never reaches the record. 7g (xii). */
+  rewriteLife('grudgeswap', 'fightCareerLifeFlow',
+    '    settleGrudge(life, won, drew);',
+    '    settleGrudge(life, drew, won);');
+} else if (CONTROL === 'grudgetwice') {
+  /* The rival boxes again the night he fought you. 7g (xii). */
+  rewriteLife('grudgetwice', 'fightCareerRivalry',
+    '  if (foughtYou) return null;\n',
+    '');
+} else if (CONTROL === 'beattwo') {
+  /* "Before you do" is said to a former champion. 7g (xiii). */
+  rewriteLife('beattwo', 'fightCareerRivalry',
+    'r.champion && !p.champion && !everChampion(p),',
+    'r.champion && !p.champion,');
+} else if (CONTROL === 'oldbeaten') {
+  /* The rematch clause never runs out. 7g (xiii). */
+  rewriteLife('oldbeaten', 'fightCareerLife',
+    'export const REMATCH_WINDOW = 4;',
+    'export const REMATCH_WINDOW = 1e9;');
+} else if (CONTROL === 'namesake') {
+  /* An ordinary opponent may carry the rival's name. 7g (xiv). */
+  rewriteLife('namesake', 'fightCareerLife', '  if (rivalName) {', '  if (rivalName && false) {');
+} else if (CONTROL === 'nobadge') {
+  /* "Settled it" reads the wrong side of the head to head. 7g (xiv). */
+  rewriteLife('nobadge', 'fightCareerLifeFlow',
+    '    rivalWins: live.life.rival?.h2hWins ?? 0,',
+    '    rivalWins: live.life.rival?.h2hLosses ?? 0,');
 } else if (CONTROL === 'nodecay') {
   rewrite('nodecay',
     'f.damage = Math.round((f.damage + res.damageTaken) * 10) / 10;',
@@ -1473,6 +1558,9 @@ const pctOf = (words) => Number((words.match(/Takes (\d+)% of every purse/) || [
      table is checked against a twin that never signed. */
   {
     let st = freshLife('promoter');
+    /* The deal is only dealt from the fourth fight on, and a waiting card is
+       read against its gate when it is shown. */
+    st.fightNo = 4;
     st.life.pending = ['promoter-deal'];
     const sign = fl.lifeCardById('promoter-deal').options.findIndex(o => o.effect.promoter);
     const length = fl.lifeCardById('promoter-deal').options[sign].effect.promoter;
@@ -1516,6 +1604,89 @@ const pctOf = (words) => Number((words.match(/Takes (\d+)% of every purse/) || [
       pairs += 1;
     }
     if (pairs !== fl.TRAINERS.length * fl.MANAGERS.length) fail(`only ${pairs} corner pairings were checked`);
+  }
+
+  /* (iii b) A class move answered after a purse card in the same gap keeps
+     what that card did to the purses: the advance is still paid back, the
+     fine still taken, the short notice money still there. Every purse option
+     in the deck, walked through answerLifeCard, against a twin that had the
+     same card's other effects and no purse change. Exact: the new table is
+     the twin's table times the percentage the words say. */
+  {
+    let walked = 0;
+    for (const card of fl.LIFE_CARDS) {
+      card.options.forEach((opt, idx) => {
+        if (!opt.effect.pursePct || opt.effect.moveClass) return;
+        const pct = parseWords(fl.describeLifeEffect(opt.effect)).pursePct;
+        const st = probeState();
+        st.life.pending = [card.id, 'move-up'];
+        if (card.when && !card.when(st)) return;
+        const mid = fl.answerLifeCard(st, idx)?.state;
+        if (!mid || ff.nextLifeStep(mid)?.card?.id !== 'move-up') { fail(`after ${card.id} the move up card is not next, so this walk proves nothing`); return; }
+        const up = fl.lifeCardById('move-up').options.findIndex(o => o.effect.moveClass);
+        const a = fl.answerLifeCard(mid, up).state;
+        const twin = probeState();
+        const { pursePct: _gone, ...rest } = opt.effect;
+        fl.applyLifeEffect(twin, rest);
+        fl.applyLifeEffect(twin, { moveClass: 1 });
+        if (a.weight !== twin.weight || a.offers.length !== twin.offers.length) { fail(`${card.id}: the walk and its twin moved to different tables`); return; }
+        walked += 1;
+        a.offers.forEach((o, i) => {
+          const want = r2(twin.offers[i].purse * (1 + pct / 100));
+          if (o.opponent.name !== twin.offers[i].opponent.name || Math.abs(o.purse - want) > 1e-9) {
+            fail(`${card.id} option ${idx} then a move up: offer ${i} pays ${o.purse}m, the words (${pct}%) and the new table say ${want}m`);
+          }
+        });
+      });
+    }
+    if (walked < 5) fail(`only ${walked} purse options were walked into a class move`);
+    else console.log(`   ${walked} purse options walked into a class move`);
+  }
+
+  /* (iii c) The manager's other promises, read from his tile: purses N%
+     bigger, up to N more places on a win that climbs, N more fans after every
+     fight. Each manager against a family friend twin on the same career, the
+     table at the sixth ranked probe, and one fight taken by both. The
+     matchmaker's place is paid on a rematch too. */
+  {
+    const probeWith = (manager) => {
+      const st = fl.cloneForLife(ff.lifeNewCareer('Probe', 'welter', 'outboxer', 'allround', manager, 'probe-916'));
+      st.fightNo = 9; st.champion = false; st.fighter.rank = 6; st.fighter.damage = 45;
+      st.offers = fc.offersFor(st);
+      fl.dressOffers(st);
+      return st;
+    };
+    let promises = 0;
+    for (const m of fl.MANAGERS) {
+      const words = fl.describeManager(m);
+      const bigger = Number((words.match(/urses (\d+)% bigger/) || [])[1] || 0);
+      const places = Number((words.match(/moves you up to (\d+) more place/) || [])[1] || 0);
+      const fans = Number((words.match(/(\d+) more fans? after every fight/) || [])[1] || 0);
+      promises += (bigger ? 1 : 0) + (places ? 1 : 0) + (fans ? 1 : 0);
+      const a = probeWith(m.id);
+      const b = probeWith('family');
+      if (!b.offers.some(o => o.purse >= 0.2)) fail('the probe table pays too little to tell a percentage from rounding');
+      a.offers.forEach((o, i) => {
+        const p = b.offers[i];
+        if (Math.abs(o.purse - p.purse * (1 + bigger / 100)) > 0.0115) fail(`${m.id}: offer ${i} pays ${o.purse}m against ${p.purse}m, the tile says ${bigger ? `${bigger}% bigger` : 'the same'}`);
+        const climbs = !p.title && p.rankGain > 0;
+        if (o.rankGain !== p.rankGain + (climbs ? places : 0)) fail(`${m.id}: offer ${i} moves you ${o.rankGain} places against ${p.rankGain}, the tile says ${places} more`);
+      });
+      const pick = b.offers[1];
+      const ra = ff.lifeTakeFight(a, pick.id, smartLine(pick.opponent.style, pick.rounds));
+      const rb = ff.lifeTakeFight(b, pick.id, smartLine(pick.opponent.style, pick.rounds));
+      if (ra.result.winner !== rb.result.winner) fail(`${m.id}: the twins fought different fights, so the fans check proves nothing`);
+      else if (ra.state.life.fanbase !== m100(rb.state.life.fanbase + fans)) fail(`${m.id}: ${ra.state.life.fanbase} fans after the fight against ${rb.state.life.fanbase}, the tile says ${fans} more`);
+      const ra2 = probeWith(m.id);
+      ra2.life.lastBeatenBy = { ...ra2.offers[0].opponent, name: 'Probe Beaten' };
+      fl.applyLifeEffect(ra2, { rematch: true });
+      const re = ra2.offers.find(o => o.label === fl.REMATCH_LABEL);
+      if (!re) fail(`${m.id}: the rematch did not reach the probe table`);
+      else if (!re.title && re.rankGain !== fl.REMATCH_RANK_GAIN + places) fail(`${m.id}: a rematch win is worth ${re.rankGain} places, the card and the tile say ${fl.REMATCH_RANK_GAIN} and ${places} more`);
+      if (places && !fl.describeLifeEffect({ rematch: true }).includes(`${places} more with ${m.label.toLowerCase()}`)) fail(`the rematch card does not say ${m.id} adds ${places}`);
+    }
+    if (promises < 3) fail(`only ${promises} manager promises were read off the tiles`);
+    else console.log(`   ${promises} manager promises read off the tiles and paid`);
   }
 
   /* (iv) A class move leaves the rival, and the man who beat you, in the
@@ -1647,7 +1818,161 @@ const pctOf = (words) => Number((words.match(/Takes (\d+)% of every purse/) || [
     }
     console.log(`   ${replies} text replies read back from their words`);
   }
-  if (failures === failedBefore) ok('sharpness lasts one night, the promoter deal ends on time, the corner is paid from every purse, the rival and the rematch stay in the old division, morale settles, the beats read this window, lapsed cards lapse, a special fight holds the table, dead rival steps clear on load, and every reply says what it does');
+
+  /* (xi) A grudge agreed with the rival survives the cards dealt before it.
+     The order the hub forces: the fight is taken, the rival's choice and the
+     cards are dealt together (the class move and rematch gates see no grudge
+     yet), the choice is shown first, the grudge goes on the table, and only
+     then the cards. Every card the hub then shows is answered with the option
+     that would throw the table away or take the slot, and the grudge must
+     still be there. A save left in that state by an older build is read the
+     same way when it is opened. */
+  {
+    const def = fr.FIGHT_RIVALRY_CHOICES.find(d => d.id === 'fr-call-out');
+    const take = def.choices.findIndex(c => c.effect.grudge);
+    let walks = 0;
+    for (const queue of [['move-up', 'rematch-clause'], ['rematch-clause', 'move-down'], ['move-down']]) {
+      const st = probeState();
+      st.life.rival.rank = 5;
+      st.life.pending = [...queue];
+      st.life.pendingRivalryChoice = { id: def.id, emoji: def.emoji, title: def.title, description: 'probe', choices: def.choices.map(c => ({ label: c.label, emoji: c.emoji, consequence: c.consequence })) };
+      if (queue.some(id => !fl.lifeCardById(id).when(st)) || !def.when(st, st.life.rival)) { fail(`the probe for ${queue.join(' then ')} has a gate shut before the grudge, so it proves nothing`); continue; }
+      let s = fr.answerFightRivalryChoice(st, take).state;
+      if (!s.offers.some(o => o.label === fl.GRUDGE_LABEL)) { fail('the probe grudge fight did not reach the table'); continue; }
+      walks += 1;
+      for (let guard = 0; guard < 6; guard += 1) {
+        const step = ff.nextLifeStep(s);
+        if (!step || step.kind !== 'card') break;
+        const hit = step.card.options.findIndex(o => o.effect.moveClass || o.effect.rematch);
+        s = fl.answerLifeCard(s, hit >= 0 ? hit : 0).state;
+      }
+      if (!s.offers.some(o => o.label === fl.GRUDGE_LABEL)) fail(`with ${queue.join(' then ')} dealt before it, the grudge fight agreed with the rival was thrown away by a card`);
+      const stored = JSON.parse(JSON.stringify(st));
+      fl.applyLifeEffect(stored, { grudge: true });
+      stored.life.pendingRivalryChoice = null;
+      const shown = ff.nextLifeStep(ff.lifeLoadState(JSON.parse(JSON.stringify(stored))));
+      if (shown?.kind === 'card' && queue.includes(shown.card.id)) fail(`a save opened with a grudge on the table still shows ${shown.card.id}`);
+    }
+    if (walks < 3) fail(`only ${walks} grudge walks ran`);
+  }
+
+  /* (xii) The grudge fight's result reaches the record between you, the
+     "Settled it" badge, and his own record exactly once: that night was his
+     fight, so he does not box again and his last result stays empty. Walked
+     against a weak and a strong rival until a win and a loss have both been
+     seen. */
+  {
+    const seen = { player: 0, opp: 0, draw: 0 };
+    for (const [k, rating] of [[0, 30], [1, 34], [2, 96], [3, 97], [4, 40], [5, 92]]) {
+      const st = probeState();
+      st.fightNo = 9 + k;
+      Object.assign(st.life.rival, { rating, rank: 5, age: 26 });
+      fl.applyLifeEffect(st, { grudge: true });
+      const offer = st.offers.find(o => o.label === fl.GRUDGE_LABEL);
+      if (!offer) { fail('the probe grudge fight did not reach the table'); continue; }
+      const r0 = { ...st.life.rival };
+      const res = ff.lifeTakeFight(st, offer.id, smartLine(offer.opponent.style, offer.rounds));
+      const r1 = res.state.life.rival;
+      const who = res.result.winner;
+      seen[who] += 1;
+      const want = who === 'player' ? [1, 0, 0, 1] : who === 'opp' ? [0, 1, 1, 0] : [0, 0, 0, 0];
+      const got = [r1.h2hWins - r0.h2hWins, r1.h2hLosses - r0.h2hLosses, r1.wins - r0.wins, r1.losses - r0.losses];
+      if (got.join() !== want.join()) fail(`a grudge fight ending ${who} moved head to head ${got[0]}-${got[1]} and his record ${got[2]}-${got[3]}, it should be ${want[0]}-${want[1]} and ${want[2]}-${want[3]}`);
+      if (r1.last !== null && r1.last !== undefined) fail(`the night he fought you, his own last result reads ${r1.last}`);
+      const settled = ff.fightBadgesEarned(res.state).some(b => b.id === 'fb-rival');
+      if (settled !== (r1.h2hWins >= 1)) fail(`after a grudge fight ending ${who} the Settled it badge reads ${settled} with ${r1.h2hWins} wins over him`);
+    }
+    if (!seen.player || !seen.opp) fail(`the grudge walks saw ${seen.player} wins and ${seen.opp} losses, both are needed`);
+    else console.log(`   grudge fights walked: ${seen.player} won, ${seen.opp} lost, ${seen.draw} drawn`);
+  }
+
+  /* (xiii) Two lines that must be true when they are shown: "he got there
+     first" is never said to a man who has held a world title, and the
+     rematch clause is for a loss in the last 4 fights, the window the guide
+     states. The number is written here, not read from the engine, so a
+     change to it there is a change this check sees. */
+  {
+    const RULE_WINDOW = 4;
+    const st = probeState();
+    Object.assign(st.life.rival, { champion: true, rank: 1 });
+    const first = fr.FIGHT_RIVALRY_EVENTS.find(x => x.id === 2);
+    if (!first.when(st, st.life.rival)) fail('beat 2 is shut on a never champion, so this check proves nothing');
+    st.history = [...st.history, { no: 8, opponent: 'Probe Champ', result: 'W', method: 'UD', round: 12, rounds: 12, purse: 1, title: true, oppRating: 80, myRating: 80 }];
+    if (first.when(st, st.life.rival)) fail('"he has a world title before you do" can be shown to a man who has won one');
+    const clause = fl.lifeCardById('rematch-clause');
+    const fresh = probeState();
+    fresh.life.lastBeatenAt = fresh.fightNo;
+    if (!clause.when(fresh)) fail('the rematch clause is shut straight after a loss, so this check proves nothing');
+    const old = probeState();
+    old.life.lastBeatenAt = old.fightNo - RULE_WINDOW;
+    if (clause.when(old)) fail(`the rematch clause can still be dealt ${RULE_WINDOW} fights after the loss`);
+    old.life.lastBeatenAt = old.fightNo - RULE_WINDOW + 1;
+    const after = ff.lifeTakeFight(old, old.offers[0].id, smartLine(old.offers[0].opponent.style, old.offers[0].rounds));
+    if (after.result.winner === 'opp') fail('the probe lost its tune up, so the expiry check proves nothing');
+    else if (after.state.life.lastBeatenBy) fail('a man who beat you is still on file for the clause after its window ran out');
+  }
+
+  /* (xiv) The badges agree with the record. Forty careers that answer every
+     card at random and take every grudge fight they are offered; each badge
+     the record can decide is worked out from the fight history and the
+     walk's own count of decisions, never from the badge table, and the
+     record between you and the rival must equal the grudge fights in the
+     history. */
+  {
+    const tally = {};
+    let rivalFights = 0;
+    for (let seed = 7000; seed < 7040; seed += 1) {
+      const rng = rngFrom(seed);
+      let st = ff.lifeNewCareer(`B${seed}`, WEIGHTS_SAMPLED[seed % 5], STYLES[seed % 4], fl.TRAINERS[seed % 4].id, fl.MANAGERS[seed % 3].id, `badge-${seed}`);
+      let decisions = 0;
+      for (let fights = 0; !st.retired && fights < 60; fights += 1) {
+        for (let guard = 0; guard < 24; guard += 1) {
+          const step = ff.nextLifeStep(st);
+          if (!step) break;
+          if (step.kind === 'beat') { st = fr.dismissFightRivalryEvent(st); continue; }
+          const opts = step.kind === 'choice' ? fr.FIGHT_RIVALRY_CHOICES.find(d => d.id === step.card.id).choices : step.card.options;
+          const g = opts.findIndex(o => o.effect.grudge);
+          const pick = g >= 0 ? g : Math.floor(rng() * opts.length);
+          st = step.kind === 'choice' ? fr.answerFightRivalryChoice(st, pick).state : fl.answerLifeCard(st, pick).state;
+          decisions += 1;
+        }
+        const offer = st.offers.find(o => o.label === fl.GRUDGE_LABEL) || st.offers[Math.min(1, st.offers.length - 1)];
+        if (offer.label === fl.GRUDGE_LABEL) rivalFights += 1;
+        st = ff.lifeRunCamp(st, PLAN);
+        const res = ff.lifeTakeFight(st, offer.id, smartLine(offer.opponent.style, offer.rounds));
+        if (!res) break;
+        st = res.state;
+      }
+      const h = st.history;
+      const W = h.filter(x => x.result === 'W');
+      const rivalName = st.life.rival?.name;
+      const vsRival = h.filter(x => x.opponent === rivalName);
+      if (st.life.rival && (st.life.rival.h2hWins !== vsRival.filter(x => x.result === 'W').length || st.life.rival.h2hLosses !== vsRival.filter(x => x.result === 'L').length)) {
+        fail(`career ${seed}: the head to head reads ${st.life.rival.h2hWins}-${st.life.rival.h2hLosses}, the history has ${vsRival.filter(x => x.result === 'W').length}-${vsRival.filter(x => x.result === 'L').length} against him`);
+      }
+      const truth = {
+        'fb-first-win': W.length >= 1,
+        'fb-ten-wins': W.length >= 10,
+        'fb-ten-kos': W.filter(x => x.method === 'KO' || x.method === 'TKO').length >= 10,
+        'fb-unbeaten': h.length >= 10 && !h.some(x => x.result === 'L'),
+        'fb-champion': W.some(x => x.title),
+        'fb-rival': vsRival.some(x => x.result === 'W'),
+        'fb-long-road': h.length >= 30,
+        'fb-busy-life': decisions >= 50,
+      };
+      const earned = new Set(ff.fightBadgesEarned(st).map(b => b.id));
+      for (const [id, want] of Object.entries(truth)) {
+        tally[id] = tally[id] || [0, 0];
+        tally[id][want ? 0 : 1] += 1;
+        if (earned.has(id) !== want) fail(`career ${seed}: badge ${id} reads ${earned.has(id)}, the record says ${want}`);
+      }
+    }
+    for (const id of ['fb-ten-wins', 'fb-champion', 'fb-rival', 'fb-long-road', 'fb-busy-life']) {
+      if (!tally[id] || !tally[id][0] || !tally[id][1]) fail(`badge ${id} was earned by ${tally[id]?.[0] ?? 0} and missed by ${tally[id]?.[1] ?? 0} of 40 careers, so the check cannot tell`);
+    }
+    console.log(`   40 careers, ${rivalFights} grudge fights, badges earned/missed: ${Object.entries(tally).map(([k, v]) => `${k.slice(3)} ${v[0]}/${v[1]}`).join(', ')}`);
+  }
+  if (failures === failedBefore) ok('sharpness lasts one night, the promoter deal ends on time, the corner is paid from every purse, the rival and the rematch stay in the old division, morale settles, the beats read this window, lapsed cards lapse, a special fight holds the table, dead rival steps clear on load, every reply says what it does, a class move keeps the purse cards, every manager pays what his tile says, a grudge survives the cards dealt before it and reaches the record once, the two dated lines hold, and the badges agree with the record');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

@@ -109,7 +109,9 @@ export function describeTrainer(t: TrainerDef): string {
 export function describeManager(m: ManagerDef): string {
   const parts: string[] = [];
   if (m.purseMul !== 1) parts.push(`purses ${Math.round((m.purseMul - 1) * 100)}% bigger`);
-  if (m.rankBonus) parts.push(`a win that moves you up the rankings moves you ${m.rankBonus} more place${m.rankBonus === 1 ? '' : 's'}`);
+  /* "Up to": the rankings stop at number one, so a man a place or two from
+     the top can be handed fewer than this (Round 916 review). */
+  if (m.rankBonus) parts.push(`a win that moves you up the rankings moves you up to ${m.rankBonus} more place${m.rankBonus === 1 ? '' : 's'}`);
   if (m.fansPerFight) parts.push(`${m.fansPerFight} more fan${m.fansPerFight === 1 ? '' : 's'} after every fight`);
   if (parts.length === 0) parts.push('purses as they come');
   const line = parts.join(', ');
@@ -182,6 +184,15 @@ export interface FightLife {
   promoterFights: number;
   /** The last man to beat you, kept for the rematch clause. */
   lastBeatenBy: Fighter | null;
+  /** Fights done when he beat you. The clause runs out REMATCH_WINDOW fights
+   *  later, so it is never a frozen copy of a man from long ago. Absent on a
+   *  block from before this field, which is given a fresh window on load. */
+  lastBeatenAt?: number;
+  /** What the cards answered in this gap have done to the purses on the
+   *  table, as one multiplier, so a class move that deals a new table keeps
+   *  a cost already agreed (an advance, a fine) and a bonus already won.
+   *  Absent or 1 when no card has touched the table; cleared by every fight. */
+  tablePurseMul?: number;
   /** How many times you have changed weight class. */
   classMoves: number;
   /** Fights done when you first changed class, so a badge can tell a title
@@ -205,6 +216,8 @@ export const START_FANS = 5;
 export const PROMOTER_PURSE_MUL = 1.2;
 export const GRUDGE_PURSE_MUL = 1.3;
 export const REMATCH_RANK_GAIN = 4;
+/** Fights after a loss that the rematch clause can still be invoked. */
+export const REMATCH_WINDOW = 4;
 /** Fans to purse: half a percent a fan, so a full house is half as much again. */
 export const FAN_PURSE_STEP = 0.005;
 /** Morale to the night: every ten above or below 50 is a point of sharpness. */
@@ -288,7 +301,12 @@ export function describeLifeEffect(e: LifeEffect): string {
   /* "Up to": a ranked man who beats somebody rated well below him earns no
      places at all (fightCareer.ts applyResult), and the man who beat you is
      kept at the level he was that night. */
-  if (e.rematch) parts.push(`The middle offer becomes the rematch, a win worth up to ${REMATCH_RANK_GAIN} places`);
+  if (e.rematch) {
+    /* The manager's extra place is paid on a rematch too (Round 916 review),
+       so the words say so, read off his own numbers. */
+    const extra = MANAGERS.find(m => m.rankBonus > 0);
+    parts.push(`The middle offer becomes the rematch, a win worth up to ${REMATCH_RANK_GAIN} places${extra ? `, ${extra.rankBonus} more with ${extra.label.toLowerCase()}` : ''}`);
+  }
   if (e.grudge) parts.push(`The middle offer becomes the grudge fight, purse ${signed(Math.round((GRUDGE_PURSE_MUL - 1) * 100))}%`);
   return parts.length ? parts.join('. ') + '.' : 'Nothing changes.';
 }
@@ -359,7 +377,30 @@ export function dressOffers(st: FightCareerState & { life: FightLife }): void {
     purse: round2(o.purse * mul),
     rankGain: !o.title && o.rankGain > 0 ? o.rankGain + mgr.rankBonus : o.rankGain,
   }));
+  /* The name banks are small enough that an ordinary opponent can come out
+     with your rival's name. He is a different man and his result is not in
+     the record between you, so he is shown under another name rather than as
+     your rival on an ordinary night (Round 916 review, found by 7g (xiv) of
+     scripts/simFightCareer.mjs). A name is words only: the bout never reads it. */
+  const rivalName = life.rival?.name;
+  if (rivalName) {
+    st.offers = st.offers.map(o => (o.opponent.name === rivalName && o.label !== GRUDGE_LABEL
+      ? { ...o, opponent: { ...o.opponent, name: otherName(st, o.id, [rivalName, st.fighter.name]) } }
+      : o));
+  }
   if (life.promoterFights > 0) promoterTable(st);
+}
+
+/** A generated name that is none of `avoid`, drawn from a stream keyed on the
+ *  save's seed and the offer, so the same table always gets the same name and
+ *  neither the bout's stream nor the life's is moved. */
+function otherName(st: FightCareerState, key: string, avoid: string[]): string {
+  let h = (st.seed ^ 0x27d4eb2f) >>> 0;
+  for (let i = 0; i < key.length; i += 1) h = Math.imul(h ^ key.charCodeAt(i), 16777619);
+  const rng = rngFrom(h >>> 0);
+  let name = genFighterName(rng);
+  for (let i = 0; i < 12 && avoid.includes(name); i += 1) name = genFighterName(rng);
+  return name;
 }
 
 /** The promoter's table: the safest offer goes and the rest pay more. */
@@ -384,7 +425,10 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
   if (e.damage && e.damage > 0) f.damage = Math.round((f.damage + e.damage) * 10) / 10;
   if (e.age && e.age > 0) f.age = round2(f.age + e.age);
   if (e.sharp) life.sharp = clamp(Math.round(life.sharp + e.sharp), -SHARP_CAP, SHARP_CAP);
-  if (e.pursePct) st.offers = st.offers.map(o => ({ ...o, purse: round2(o.purse * (1 + e.pursePct! / 100)) }));
+  if (e.pursePct) {
+    st.offers = st.offers.map(o => ({ ...o, purse: round2(o.purse * (1 + e.pursePct! / 100)) }));
+    life.tablePurseMul = Math.round((life.tablePurseMul ?? 1) * (1 + e.pursePct / 100) * 1e6) / 1e6;
+  }
   /* Only a ranked man has places to lose or gain: an unranked one is left
      where he is rather than handed a number (Round 916 review). */
   if (e.rank && !st.champion && f.rank < 99) {
@@ -401,8 +445,15 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
       /* The man who beat you fights in the division you left, like the
          rival, so the rematch clause goes with it. */
       life.lastBeatenBy = null;
+      delete life.lastBeatenAt;
       st.offers = offersFor(st);
       dressOffers(st);
+      /* A card answered earlier in this gap already changed the purses (an
+         advance taken against them, a fine agreed, a short notice bonus). The
+         new division's table carries that change, or a move would refund a
+         cost while the card's other half stays (Round 916 review). */
+      const carried = life.tablePurseMul ?? 1;
+      if (carried !== 1) st.offers = st.offers.map(o => ({ ...o, purse: round2(o.purse * carried) }));
     }
   }
   if (e.promoter) {
@@ -414,9 +465,10 @@ export function applyLifeEffect(st: FightCareerState & { life: FightLife }, e: L
     const base = st.offers[i];
     st.offers[i] = {
       ...base, id: `${base.id}r`, opponent: { ...life.lastBeatenBy }, label: REMATCH_LABEL,
-      rankGain: base.title ? 0 : REMATCH_RANK_GAIN,
+      rankGain: base.title ? 0 : REMATCH_RANK_GAIN + managerDef(life.manager.kind).rankBonus,
     };
     life.lastBeatenBy = null;
+    delete life.lastBeatenAt;
   }
   if (e.grudge) {
     const him = rivalFighter(st);
@@ -510,6 +562,13 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
   if (rival && rival.last !== undefined && rival.last !== 'W' && rival.last !== 'L' && rival.last !== null) delete rival.last;
   const beaten = isObj(raw.lastBeatenBy) && typeof raw.lastBeatenBy.name === 'string' && isObj(raw.lastBeatenBy.attrs)
     ? raw.lastBeatenBy as unknown as Fighter : null;
+  /* A block from before lastBeatenAt has no date on the loss: it is given a
+     fresh window from today, which is the most it could have had. */
+  const beatenAt = beaten
+    ? Math.floor(numOr(raw.lastBeatenAt, st.fightNo, 0, st.fightNo))
+    : undefined;
+  const tableMul = typeof raw.tablePurseMul === 'number' && Number.isFinite(raw.tablePurseMul) && raw.tablePurseMul > 0
+    ? clamp(raw.tablePurseMul, 0.1, 10) : 1;
   return {
     v: 1,
     tick: numOr(raw.tick, 0, 0, 1e9),
@@ -527,6 +586,8 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
     carry,
     promoterFights: Math.floor(numOr(raw.promoterFights, 0, 0, 20)),
     lastBeatenBy: beaten,
+    ...(beatenAt !== undefined ? { lastBeatenAt: beatenAt } : {}),
+    ...(tableMul !== 1 ? { tablePurseMul: tableMul } : {}),
     classMoves: Math.floor(numOr(raw.classMoves, 0, 0, 99)),
     ...(typeof raw.firstMoveAt === 'number' && Number.isFinite(raw.firstMoveAt) ? { firstMoveAt: Math.max(0, Math.floor(raw.firstMoveAt)) } : {}),
     decisions: Math.floor(numOr(raw.decisions, 0, 0, 1e6)),
@@ -575,6 +636,9 @@ export interface LifeCardDef {
 }
 
 const ranked = (st: Live): boolean => !st.champion && st.fighter.rank < 99;
+/** The loss the clause is for is recent: within REMATCH_WINDOW fights. */
+export const rematchInTime = (st: Live): boolean =>
+  st.fightNo - (st.life.lastBeatenAt ?? st.fightNo) < REMATCH_WINDOW;
 const climbing = (st: Live): boolean => !st.champion && st.fighter.rank > 1;
 
 /* The body: weight, hands, cuts, the things a camp does to a fighter. */
@@ -660,7 +724,10 @@ const BODY_CARDS: LifeCardDef[] = [
   },
   {
     id: 'overcooked', emoji: '🥵', title: 'Left it in the gym', cooldown: 7,
-    text: 'You have been flat for a week. Your trainer says fighters overtrain more often than they undertrain.',
+    /* Round 916 review: an earlier line stated a general claim about
+       overtraining that no source backed and the options below contradicted.
+       The card now says only what happened in this camp. */
+    text: 'You have been flat in the gym all week, and your trainer cannot tell yet whether you need a rest or a push.',
     when: st => st.fightNo >= 3,
     options: [
       { label: 'Keep the schedule', effect: {}, line: 'Kept to the schedule.', neutral: true },
@@ -684,7 +751,7 @@ const BUSINESS_CARDS: LifeCardDef[] = [
   {
     id: 'rematch-clause', emoji: '🔁', title: 'The rematch clause', cooldown: 3,
     text: 'There was a rematch clause in the contract for the one you lost. Your manager can invoke it today.',
-    when: st => !!st.life.lastBeatenBy && climbing(st) && st.offers.length > 0 && !st.offers[0].title && !specialFightOnTable(st),
+    when: st => !!st.life.lastBeatenBy && rematchInTime(st) && climbing(st) && st.offers.length > 0 && !st.offers[0].title && !specialFightOnTable(st),
     options: [
       { label: 'Invoke it', effect: { rematch: true }, line: 'Invoked the rematch clause.' },
       { label: 'Let it go', effect: {}, line: 'Let the rematch clause lapse.', neutral: true },
@@ -995,10 +1062,40 @@ export function dealLifeCards(st: Live): string[] {
   return dealt;
 }
 
-/** The card waiting to be answered, or null. */
+/** Is this waiting card still true of the save? Its gate is read when it is
+ *  dealt, and anything answered since (a rival choice, a card, a text, the
+ *  shop) can close it. */
+const stillOpen = (st: Live, card: LifeCardDef): boolean => !card.when || card.when(st);
+
+/**
+ * The card waiting to be answered, or null: the first waiting card whose gate
+ * is still open. Read only. A card whose gate closed after the deal is never
+ * shown, wherever it sits in the queue, because its words may no longer be
+ * true and its effect may undo something agreed since: a grudge fight agreed
+ * with the rival before the cards, then a class move that would deal a new
+ * table, or a rematch clause that would take the grudge's slot (Round 916
+ * review). answerLifeCard and lapseClosedCards drop it with a feed line.
+ */
 export function pendingLifeCard(st: FightCareerState): LifeCardDef | null {
-  const id = st.life?.pending?.[0];
-  return (id && lifeCardById(id)) || null;
+  const pending = st.life?.pending;
+  if (!pending) return null;
+  for (const id of pending) {
+    const card = lifeCardById(id);
+    if (card && stillOpen(st as Live, card)) return card;
+  }
+  return null;
+}
+
+/** Drop every waiting card whose gate has closed, each with a line in the
+ *  feed. Mutates; `st` is a cloneForLife copy. */
+export function lapseClosedCards(st: Live): void {
+  st.life.pending = st.life.pending.filter(id => {
+    const waiting = lifeCardById(id);
+    if (!waiting) return false;
+    if (stillOpen(st, waiting)) return true;
+    pushFeed(st.life, `${waiting.emoji} ${waiting.title}: no longer on the table.`);
+    return false;
+  });
 }
 
 /**
@@ -1011,6 +1108,9 @@ export function answerLifeCard(st: FightCareerState, optionIdx: number): { state
   const card = pendingLifeCard(next);
   const option = card?.options[optionIdx];
   if (!card || !option) return null;
+  /* Anything ahead of the shown card has lapsed: drop it first, so the card
+     answered is the one at the front. */
+  lapseClosedCards(next);
   applyLifeEffect(next, option.effect);
   next.life.decisions += 1;
   pushFeed(next.life, `${card.emoji} ${option.line}`);
@@ -1019,13 +1119,8 @@ export function answerLifeCard(st: FightCareerState, optionIdx: number): { state
      unranked, so "step aside money" has no places left to cost. A card whose
      gate has closed lapses with a line in the feed rather than being shown
      with words that are no longer true (Round 916 review). */
-  next.life.pending = next.life.pending.slice(1).filter(id => {
-    const waiting = lifeCardById(id);
-    if (!waiting) return false;
-    if (!waiting.when || waiting.when(next)) return true;
-    pushFeed(next.life, `${waiting.emoji} ${waiting.title}: no longer on the table.`);
-    return false;
-  });
+  next.life.pending = next.life.pending.filter(id => id !== card.id);
+  lapseClosedCards(next);
   return { state: next, line: option.line };
 }
 
