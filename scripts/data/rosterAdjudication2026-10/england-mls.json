@@ -367,6 +367,32 @@
     {"family": "A", "url": "https://www.qpr.co.uk/teams/first-team", "publisher": "Queens Park Rangers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/279948/zan-celar", "publisher": "ESPN", "readOn": "2026-10-03", "says": "FC Basel, born 1999-03-14; Düsseldorf appearances March and April 2026, Basel v Juventus 2026-07-18"}
    ]
+  },
+  {
+   "name": "Luís Guilherme",
+   "from": "West Ham",
+   "to": "Sporting CP",
+   "realClub": "Sporting CP",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Brazilian winger born 2006-02-09 (ESPN), the baked row's age 19 fits. West Ham's page lists him neither in the squad nor among its players on loan; Sporting list him among their forwards and he has played their league and Champions League games since 2026-08-22. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.sporting.pt/pt/futebol/equipa-principal/plantel", "publisher": "Sporting Clube de Portugal (first team squad page)", "readOn": "2026-10-03", "says": "Avançado: Luís Guilherme"},
+    {"family": "A", "url": "https://www.whufc.com/en/teams/mens-team", "publisher": "West Ham United FC (men's first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among players on loan"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/361429/luis-guilherme", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Sporting CP, born 2006-02-09; Primeira Liga appearances 2026-08-22 to 2026-09-13, Champions League v Galatasaray 2026-09-09; not on ESPN's West Ham squad"}
+   ]
+  },
+  {
+   "name": "Sasa Kalajdzic",
+   "from": "Wolves",
+   "to": "LASK",
+   "realClub": "LASK",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Austria striker, born 1997-07-07 (ESPN). LASK list him at shirt 11 with two appearances; Wolves list him neither in the squad nor on loan. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (pros squad page)", "readOn": "2026-10-03", "says": "Sturm: Saša Kalajdžić, 11, 2 Spiele"},
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/259131/sasa-kalajdzic", "publisher": "ESPN", "readOn": "2026-10-03", "says": "LASK Linz, born 1997-07-07; LASK v Hartberg 2026-09-20, Austria Nations League games in September 2026"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -470,6 +496,31 @@
     {"family": "A", "url": "https://www.clermontfoot.com/equipes", "publisher": "Clermont Foot 63 (squad page)", "readOn": "2026-10-03", "says": "Attaquant: 7 Florian Bianchini"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"}
    ]
+  },
+  {
+   "name": "Kelechi Iheanacho",
+   "from": "Middlesbrough",
+   "realClub": "Bursaspor",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Nigeria striker, born 1996-10-03 (ESPN). He finished 2025-26 at Celtic and has scored nine in seven league games for Bursaspor this season (ESPN, 2026-09-18). Middlesbrough's page does not list him. The game models no Bursaspor. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.bursaspor.org.tr/bursaspor-futbolcular", "publisher": "Bursaspor Kulübü (official players page)", "readOn": "2026-10-03", "says": "Kelechi Iheanacho, Hücum"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/story/_/id/49970583/nigeria-name-injured-osimhen-recall-nwabali-iheanacho-afcon-qualifiers", "publisher": "ESPN (2026-09-18)", "readOn": "2026-10-03", "says": "Nigeria squad: Kelechi Iheanacho (Bursaspor FC, Turkey), nine goals in seven league games"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/39902/kelechi-iheanacho", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Bursaspor, born 1996-10-03; Celtic appearances to 2026-05-23"}
+   ]
+  },
+  {
+   "name": "Isaiah Jones",
+   "from": "Middlesbrough",
+   "realClub": "Luton Town",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-26 (ESPN). Luton list him at shirt 25 and do not tag him as a loanee (they tag theirs 'Loaned in'); ESPN agrees on the shirt. Middlesbrough's page does not list him. Luton are in League One, which the game does not model.",
+   "sources": [
+    {"family": "A", "url": "https://www.lutontown.co.uk/teams/first-team", "publisher": "Luton Town FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "25 Isaiah Jones, right back"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/301", "publisher": "ESPN (Luton Town squad, season 2026-27)", "readOn": "2026-10-03", "says": "Isaiah Jones, shirt 25, forward, born 1999-06-26"}
+   ]
   }
  ],
  "notCurrent": [
@@ -509,6 +560,42 @@
     {"family": "A", "url": "https://www.mlssoccer.com/news/fc-dallas-exercise-buyout-of-paxton-pomykal", "publisher": "MLS (mlssoccer.com, 2026-02-19)", "readOn": "2026-10-03", "says": "FC Dallas exercise a guaranteed contract buyout on Pomykal; he no longer occupies a senior roster spot"},
     {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/185", "publisher": "ESPN (FC Dallas squad, season 2026)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Yasser Larouci",
+   "from": "Watford",
+   "why": "Not at Watford, certain on both families: Watford list him neither in the squad nor among their loaned out players, and ESPN's Watford squad does not carry him. His club today is NOT confirmed by an official page: ESPN places him at Le Mans, a club the game models, with Ligue 1 appearances from 2026-08-22 to 2026-09-19 after a spell at Kifisia in spring 2026, but Le Mans' own players page still shows last season's Ligue 2 squad and the league's pages did not render. So he leaves Watford and no destination is claimed. One official Le Mans read would let the fold move him to Le Mans instead.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-01-01 (ESPN).",
+   "sources": [
+    {"family": "A", "url": "https://www.watfordfc.com/teams/first-team", "publisher": "Watford FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "A", "url": "https://www.lemansfc.fr/index.php?section=equipes-masculines", "publisher": "Le Mans FC (players page, titled Ligue 2, stale)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/289837/yasser-larouci", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Le Mans, born 2001-01-01; Kifisia appearances May 2026, Le Mans Ligue 1 appearances 2026-08-22 to 2026-09-19; not on ESPN's Watford squad"}
+   ]
+  },
+  {
+   "name": "Nathan Redmond",
+   "from": "Burnley",
+   "why": "Not at Burnley, certain on both families: neither Burnley's squad page nor ESPN's Burnley squad lists him. ESPN has him at Sheffield Wednesday in January 2026 and Blackburn in April 2026, but Blackburn's current first team page does not list him, and no 2026-27 squad in ESPN's top four English divisions, the Scottish Premiership or MLS carries him. Unattached is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-03-06 (ESPN). ESPN's player header still says Blackburn Rovers, but its Blackburn squad does not carry him.",
+   "sources": [
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/146091/nathan-redmond", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Sheffield Wednesday appearances January 2026, Blackburn appearances 2026-04-11 and 2026-04-14, nothing since; on no 2026-27 squad ESPN lists for the Premier League, Championship, League One, League Two, Scottish Premiership or MLS"}
+   ]
+  },
+  {
+   "name": "Matt Ritchie",
+   "from": "Portsmouth",
+   "why": "Not at Portsmouth, certain on both families: neither Portsmouth's first team page nor ESPN's Portsmouth squad lists him. ESPN has him at Reading in League One up to 2026-05-02, but Reading's current first team page does not list him, and no 2026-27 squad in ESPN's top four English divisions, the Scottish Premiership or MLS carries him. He turned 37 in September 2026. Unattached or retired is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-09-10 (ESPN). ESPN's player header still says Reading, with no next match.",
+   "sources": [
+    {"family": "A", "url": "https://www.portsmouthfc.co.uk/teams/first-team/", "publisher": "Portsmouth FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.readingfc.co.uk/teams/first-team", "publisher": "Reading FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/126500/matt-ritchie", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Reading appearances 2026-04-03 to 2026-05-02, nothing since; on no 2026-27 squad ESPN lists for the four English divisions, the Scottish Premiership or MLS"}
    ]
   }
  ],
