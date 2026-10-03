@@ -354,7 +354,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
   }
 
   /* ══ More standalone temptations, situational and repeatable ══ */
-  if (c.draftPick <= 15 && c.seasons.length === 0) {
+  if (c.draftPick > 0 && c.draftPick <= 15 && c.seasons.length === 0) {
     deck.push({
       id: 'corr_combine_sample',
       title: 'The sample was not yours',
