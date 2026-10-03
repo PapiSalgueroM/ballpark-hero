@@ -581,7 +581,9 @@ section = '13'; console.log('13) every style changes what the match engine plays
       if (a.every((x, k) => x === b[k])) { twins += 1; fail(`${styleIds[i]} and ${styleIds[j]} field the same eleven in the same mentality at every club: one style twice`); }
     }
   }
-  console.log(`   ${shifts.filter(s => !s.sameMentality).length} styles with their own mentality all past the ${STYLE_SHIFT_FLOOR} floor, the shape only style fields its own eleven, ${twins} twin styles`);
+  const own = shifts.filter(s => !s.sameMentality);
+  const past = own.filter(s => s.shift >= STYLE_SHIFT_FLOOR).length;
+  console.log(`   ${past} of ${own.length} styles with their own mentality past the ${STYLE_SHIFT_FLOOR} floor (smallest ${Math.min(...own.map(s => s.shift)).toFixed(3)}), ${twins} twin styles`);
 }
 
 if (CONTROL) {
