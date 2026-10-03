@@ -80,7 +80,8 @@ try {
     const libImports = source => source.replace(/(from\s+['"])\.\/([^'"]+)(['"])/g, '$1@/lib/$2$3');
     await writeFile(path.join(folder, 'Engine.ts'), libImports(engineSource));
     await writeFile(path.join(folder, 'Original.ts'), libImports(originals.get(engine)));
-    await writeFile(path.join(folder, 'Board.tsx'), boardSource.replace("from './NhlContributors.module.css'", "from '@/components/nhl-front-office/NhlContributors.module.css'"));
+    await writeFile(path.join(folder, 'Board.tsx'), boardSource.replace("from './NhlContributors.module.css'", "from '@/components/nhl-front-office/NhlContributors.module.css'")
+      .replace("from './NhlWaiverReceipt'", "from '@/components/nhl-front-office/NhlWaiverReceipt'"));
     await writeFile(path.join(folder, 'EngineTrace.ts'), `export * from './Engine';\nimport * as actual from './Engine';\nexport const trace = { ai: [], summers: [], drafts: [], clear() { this.ai.length = 0; this.summers.length = 0; this.drafts.length = 0; } };\nexport function nhlDraftClass(...args) { const result = actual.nhlDraftClass(...args); trace.drafts.push(result.length); return result; }\nexport function nhlAiDraftPicks(...args) { const result = actual.nhlAiDraftPicks(...args); trace.ai.push({ order: [...args[2]], picks: result.picks.map(p => p.prospect.name) }); return result; }\nexport function nhlOffseason(...args) { trace.summers.push(JSON.parse(JSON.stringify(args[0]))); return actual.nhlOffseason(...args); }\n`);
     await writeFile(path.join(folder, 'entry.ts'), `export { run } from '${path.join(root, fixture).replaceAll('\\', '/')}';\nexport * as reference from './Original';\nexport { trace } from './EngineTrace';\n`);
     const built = await build({ entryPoints: [path.join(folder, 'entry.ts')], outfile: path.join(folder, 'product.mjs'), bundle: true, platform: 'node', format: 'esm', packages: 'external', jsx: 'automatic', logLevel: 'silent', metafile: true,

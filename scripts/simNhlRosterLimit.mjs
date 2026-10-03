@@ -59,7 +59,8 @@ try {
   for (const current of mode === 'all' ? ['', 'original', ...Object.keys(controls)] : [mode]) {
     let source = current === 'original' ? original : product;
     if (controls[current]) source = source.replace(controls[current][0], controls[current][1]);
-    await writeFile(path.join(folder, 'Board.tsx'), source.replace("from './NhlContributors.module.css'", "from '@/components/nhl-front-office/NhlContributors.module.css'"));
+    await writeFile(path.join(folder, 'Board.tsx'), source.replace("from './NhlContributors.module.css'", "from '@/components/nhl-front-office/NhlContributors.module.css'")
+      .replace("from './NhlWaiverReceipt'", "from '@/components/nhl-front-office/NhlWaiverReceipt'"));
     await writeFile(path.join(folder, 'entry.ts'), `export { run } from '${path.join(root, fixture).replaceAll('\\', '/')}';\n`);
     const built = await build({ entryPoints: [path.join(folder, 'entry.ts')], outfile: path.join(folder, 'product.mjs'), bundle: true, platform: 'node', format: 'esm', packages: 'external', jsx: 'automatic', logLevel: 'silent', metafile: true,
       alias: { '@/components/nhl-front-office/NhlFrontOfficeBoard': path.join(folder, 'Board.tsx'), '@': path.join(root, 'src') },

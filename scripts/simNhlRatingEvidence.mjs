@@ -77,7 +77,8 @@ try {
     const relative = "from './NhlContributors.module.css'";
     assert.equal(copySource.split(relative).length - 1, 1, 'Copy retains the actual contributor CSS');
     const copy = path.join(folder, 'NhlFrontOfficeBoard.tsx'); owned.push(copy);
-    await writeFile(copy, copySource.replace(relative, "from '@/components/nhl-front-office/NhlContributors.module.css'"));
+    await writeFile(copy, copySource.replace(relative, "from '@/components/nhl-front-office/NhlContributors.module.css'")
+      .replace("from './NhlWaiverReceipt'", "from '@/components/nhl-front-office/NhlWaiverReceipt'"));
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/nhl-front-office/NhlFrontOfficeBoard': copy });
   }
   const reportFile = path.join(receiptFolder, 'vitest.json');
