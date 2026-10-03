@@ -195,6 +195,94 @@
      "says": "Sevilla, shirt 10, born 2002-10-04, played 2026-08-15, 2026-08-22 and 2026-08-29"
     }
    ]
+  },
+  {
+   "name": "Gerard Moreno",
+   "club": "Villarreal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-04-07, Villarreal's number 7, started at Alavés on 2026-08-28. Namesake: LaLiga's page under the slug gerard-moreno is a different man, a goalkeeper born 2005-02-12 at Sporting Gijón (second tier, not modelled, not in the game), so that page is not used here.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-deportivo-alaves-villarreal-cf-3",
+     "publisher": "LaLiga (match page, Alavés v Villarreal, matchday 3, 2026-08-28)",
+     "readOn": "2026-10-03",
+     "says": "Gerard Moreno in the Villarreal starting eleven, in attack beside Mikautadze"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/156172/gerard-moreno",
+     "publisher": "ESPN (player page; the Villarreal 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Villarreal, shirt 7, born 1992-04-07, played v Levante on 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Diego Llorente",
+   "club": "Real Betis",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-08-16, Betis's number 3, started against Real Madrid on 2026-09-04 and went off injured at 39 minutes. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-real-betis-real-madrid-4",
+     "publisher": "LaLiga (match page, Real Betis v Real Madrid, matchday 4, 2026-09-04)",
+     "readOn": "2026-10-03",
+     "says": "3 Llorente in the Betis starting eleven, replaced by Bartra at 39 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/181530/diego-llorente",
+     "publisher": "ESPN (player page; the Real Betis 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Real Betis, shirt 3, born 1993-08-16, started at Valencia and v Real Madrid"
+    }
+   ]
+  },
+  {
+   "name": "Kike Barja",
+   "club": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-04-01, Osasuna's number 11, six league games so far in 2026-27. ESPN writes him Enrique Barja. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/kike-barja",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Osasuna, shirt 11, born 1997-04-01, 6 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/97",
+     "publisher": "ESPN (Osasuna squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Enrique Barja, forward, shirt 11, age 29"
+    }
+   ]
+  },
+  {
+   "name": "Moi Gómez",
+   "club": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-06-23, Osasuna's number 16, set up Budimir's goal at Alavés on 2026-09-06. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/moi-gomez",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Osasuna, shirt 16, born 1994-06-23, 4 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/97",
+     "publisher": "ESPN (Osasuna squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Moi Gómez, forward, shirt 16, age 32"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -274,6 +362,68 @@
      "publisher": "ESPN (Rayo Vallecano squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "Marash Kumbulla, defender, shirt 3, age 26"
+    }
+   ]
+  },
+  {
+   "name": "Jon Ander Olasagasti",
+   "from": "Real Sociedad",
+   "to": "Levante",
+   "realClub": "Levante",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-08-16, the midfielder. In Real Sociedad's 2024-25 squad, gone from their 2026-27 one; started for Levante at Málaga on 2026-09-06 and ESPN shows him in five Levante league games from 2026-08-24 to 2026-09-20.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "Jon Ander Olasagasti in the Levante starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/317784/jon-ander-olasagasti",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Levante, shirt 8, born 2000-08-16, five LaLiga matches for Levante from 2026-08-24 to 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/89",
+     "publisher": "ESPN (Real Sociedad squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Sheraldo Becker",
+   "from": "Real Sociedad",
+   "to": "Mainz",
+   "realClub": "1. FSV Mainz 05",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-02-09, the Surinamese forward. In Real Sociedad's 2024-25 squad, gone from their 2026-27 one; listed among Mainz's 2026-27 strikers and playing their Bundesliga games in August and September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fsv-mainz-05/squad",
+     "publisher": "Bundesliga (Mainz squad, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "listed among the strikers"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/195027/sheraldo-becker",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Mainz, shirt 23, born 1995-02-09, four Bundesliga matches for Mainz from 2026-08-29 to 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/89",
+     "publisher": "ESPN (Real Sociedad squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
     }
    ]
   }
@@ -454,6 +604,43 @@
      "family": "B",
      "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
      "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Antoñito Cordero",
+   "from": "Málaga",
+   "realClub": "Cádiz",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
+     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "not in the Málaga eleven or among the substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
+     "publisher": "ESPN (Málaga squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not listed"
     }
