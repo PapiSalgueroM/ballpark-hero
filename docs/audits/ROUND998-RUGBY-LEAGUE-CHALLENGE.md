@@ -67,6 +67,26 @@ work is included.
 
 ## Status
 
-Implementation in progress on codex/rugby-league-challenge-998. No runtime
-acceptance or live publication is claimed. Round997 is accepted but remains
-unpublished while the Lovable editor cannot initialize its publishing controls.
+Implementation is in PR113 on codex/rugby-league-challenge-998. No live
+publication is claimed. Round997 is accepted but remains unpublished while the
+Lovable editor cannot initialize its publishing controls.
+
+The first remote run, 37122050532 at 944f7c3d, passed the real type/build gates,
+15 normal cases, all 16 executable controls, both original compatibility gates,
+all 17 built readers and five native profiles. Each control produced exactly
+one intended assertion failure and two independent legacy passes. Representative
+offline data is the coverage boundary, not production database completeness.
+
+Visual review rejected the first layout despite those green gates. At 320px,
+intro scrolling hid the instructions and worked example above Start. Answer
+scrolling also hid the original claim above the receipt. The native checks had
+measured actions and width without requiring that context to remain visible.
+The repair compacts the active header and targets complete content blocks.
+New native assertions require the example with Start, and the claim with its
+receipt and Next, to remain readable together. Native scroll controls reproduce
+the old loss of context, require the new assertions to reject it, then restore
+the viewport and require the positive checks again. These are geometry controls,
+separate from the 16 copied-source gameplay controls.
+
+First-run artifact11274095985 has SHA256
+3a734a715b83bc314f1fca3b7163b1c017023097a9230f9b852b7d0f94695a8c.

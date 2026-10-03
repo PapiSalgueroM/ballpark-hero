@@ -101,8 +101,8 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
 
   return (
     <section ref={panel} tabIndex={-1} data-rugby-challenge="" data-rugby-phase={phase} aria-label="Rugby League challenge" className="mx-auto max-w-md">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="font-display text-xl text-foreground">Rugby League challenge</h2>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <h2 className="font-display text-lg text-foreground">Ten claims. Your call.</h2>
         <HowToPlayPopover title="Rugby League rules" triggerLabel="Rugby League rules" floatingTrigger={false} className="min-h-[44px] min-w-[44px] shrink-0" open={active && helpOpen} onOpenChange={setHelpOpen}>{rules}</HowToPlayPopover>
       </div>
 
@@ -118,27 +118,25 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
         }}>Retry rugby records</button></div>
       </div>}
 
-      {phase === 'intro' && <div className="overflow-hidden rounded-2xl border border-primary/30 bg-card">
-        <div className="border-b border-primary/20 bg-primary/10 p-5">
-          <p className="text-3xl" aria-hidden="true">🏉</p>
-          <h3 className="mt-2 text-xl font-bold text-foreground">Know the winners. Spot the wrong year.</h3>
-          <p className="mt-2 text-sm text-muted-foreground">Five premiers. Five medallists. Ten calls that count.</p>
+      {phase === 'intro' && <div ref={actionArea} className="overflow-hidden rounded-2xl border border-primary/30 bg-card">
+        <div className="border-b border-primary/20 bg-primary/10 px-4 py-3">
+          <p className="text-sm font-semibold text-foreground">Five premiers. Five medallists. Ten calls that count.</p>
         </div>
-        <div className="space-y-4 p-4">
-          <p className="text-sm text-muted-foreground">Tap CHAMP for a true claim or NOT for a false one. You get one point for each correct call, then see who really won. Records through 2025.</p>
+        <div className="space-y-3 p-4">
+          <p className="text-sm text-muted-foreground">CHAMP means true. NOT means false. Earn one point for each correct call, then reveal the winners.</p>
           {example && <div className="rounded-xl border border-border bg-secondary/50 p-3 text-sm">
             <p className="font-semibold text-foreground">Try this example</p>
             <p className="mt-1 text-muted-foreground">{example.realTeams[0]} won the top grade rugby league premiership in {example.year}.</p>
-            <p className="mt-2 font-semibold text-primary">CHAMP. They are listed as a premier that year.</p>
+            <p className="mt-2 font-semibold text-primary">CHAMP. That winner matches the year.</p>
           </div>}
-          <div ref={actionArea}><button ref={actionButton} className={primary} onClick={() => {
+          <div><button ref={actionButton} className={primary} onClick={() => {
             if (!active || helpOpen || phaseRef.current !== 'intro') return;
             moveTo('question');
           }}>Start ten questions</button><p className="mt-2 text-center text-xs text-muted-foreground">Unranked. Progress stays until you reload.</p></div>
         </div>
       </div>}
 
-      {(phase === 'question' || phase === 'reveal') && current && <div data-rugby-question={index + 1} data-rugby-category={current.compKey}>
+      {(phase === 'question' || phase === 'reveal') && current && <div ref={actionArea} data-rugby-question={index + 1} data-rugby-category={current.compKey}>
         <div className="mb-3 flex items-center justify-between text-sm"><p>Claim <strong>{index + 1} / {RUGBY_ROUNDS}</strong></p><p className="text-muted-foreground">Right: <strong className="text-foreground">{score}</strong></p></div>
         <div className={cn('overflow-hidden rounded-2xl border bg-card', phase === 'reveal' ? lastCorrect ? 'border-correct' : 'border-destructive' : 'border-primary/40')}>
           <div className="flex items-center justify-between gap-2 border-b border-primary/20 bg-primary/10 px-4 py-3">
@@ -147,11 +145,11 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
           </div>
           <div className="p-4">
             <p data-rugby-statement="" className="text-lg font-semibold leading-snug text-foreground">{current.statement}</p>
-            {phase === 'question' && <div ref={actionArea} className="mt-5 grid grid-cols-2 gap-3">
+            {phase === 'question' && <div className="mt-4 grid grid-cols-2 gap-3">
               <button ref={actionButton} onClick={() => choose(true)} className={primary}>CHAMP</button>
               <button onClick={() => choose(false)} className="min-h-[44px] rounded-xl border border-border bg-secondary px-3 py-3 font-semibold text-foreground hover:bg-secondary/70">NOT</button>
             </div>}
-            {phase === 'reveal' && <div ref={actionArea} className="mt-4">
+            {phase === 'reveal' && <div className="mt-3">
               <div role="status" className="rounded-xl bg-secondary/50 p-3">
                 <p className={cn('flex items-center gap-2 font-bold', lastCorrect ? 'text-correct' : 'text-destructive')}>{lastCorrect ? <Check aria-hidden="true" className="h-5 w-5" /> : <X aria-hidden="true" className="h-5 w-5" />}{lastCorrect ? 'Right call!' : 'Not this time.'}</p>
                 <p className="mt-1 text-sm text-muted-foreground">The claim is {current.isTrue ? 'true' : 'false'}. You chose {lastPick ? 'CHAMP' : 'NOT'}.</p>

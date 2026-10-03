@@ -70,10 +70,10 @@ async function layout(page, panel, stage) {
     stage + ': content fits its card ' + JSON.stringify(row));
   return { stage, ...sizes };
 }
-async function visibleUnaided(control, page, stage) {
+async function visibleUnaided(control, page, stage, kind = 'action') {
   await settledLayout(page);
   const box = await control.boundingBox(), height = await page.evaluate(() => innerHeight);
-  assert(box && box.y >= -1 && box.y + box.height <= height + 1, stage + ': action appears without driver scrolling');
+  assert(box && box.y >= -1 && box.y + box.height <= height + 1, stage + ': ' + kind + ' appears without driver scrolling');
   return { stage, box };
 }
 function truthFor(statement, category) {
@@ -103,7 +103,7 @@ try {
     const { width, height, touch, reduced, kind, completedDaily } = profile;
     const id = `${width}-${kind}-${touch ? 'touch' : 'keyboard'}${reduced ? '-reduced' : ''}`;
     const dailyBytes = JSON.stringify({ answers: completedDaily ? [true, false, true, true, false, true, true, false, true, true] : [true, false, true] });
-    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], claims: [],
+    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [],
       pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
     report.cases.push(result);
     let missingBank = kind === 'missing-bank';
@@ -165,8 +165,32 @@ try {
     const phase = value => page.waitForFunction(expected => document.querySelector('[data-rugby-challenge]')?.getAttribute('data-rugby-phase') === expected, value);
     const shot = async stage => {
       const file = `${id}-${stage}.png`;
+      await settledLayout(page);
       await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' });
       result.screenshots.push(file);
+    };
+    const scrollGuardControl = async (scrollTarget, contextTarget, stage) => {
+      const before = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+      const originalBox = await contextTarget.boundingBox();
+      let changed;
+      try {
+        // Reproduce the old action-only reveal without changing product code or outcome state.
+        await scrollTarget.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start', inline: 'nearest' }));
+        changed = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+        const movedBox = await contextTarget.boundingBox();
+        assert(Math.abs(changed.y - before.y) > 1, stage + ': scroll control changed the real viewport');
+        assert(originalBox && movedBox && movedBox.y < -1 && movedBox.y < originalBox.y - 1,
+          stage + ': scroll control actually hid the reading context');
+        const expected = stage + ': content appears without driver scrolling';
+        await assert.rejects(() => visibleUnaided(contextTarget, page, stage, 'content'), error =>
+          error.name === 'AssertionError' && error.code === 'ERR_ASSERTION' && error.message === expected);
+      } finally {
+        await page.evaluate(position => window.scrollTo({ left: position.x, top: position.y, behavior: 'instant' }), before);
+      }
+      const restored = await visibleUnaided(contextTarget, page, stage + '-restored', 'content');
+      const after = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+      assert(Math.abs(after.x - before.x) <= 1 && Math.abs(after.y - before.y) <= 1, stage + ': original viewport restored');
+      result.guardControls.push({ stage, kind: 'native visibility guard only', rejected: true, before, changed, restored, after });
     };
     const isolate = async before => {
       assert.deepEqual(await protectedState(page), before, 'Challenge preserves daily, completion, streak and diary bytes');
@@ -198,9 +222,13 @@ try {
       } else {
         await phase('intro');
         assert((await panel.innerText()).includes('Five premiers. Five medallists.'), 'Intro explains the two question types');
-        const example = (await panel.locator('p').filter({ hasText: /^.+ won the top grade rugby league premiership in \d{4}\.$/ }).innerText()).trim();
+        const exampleParagraph = panel.locator('p').filter({ hasText: /^.+ won the top grade rugby league premiership in \d{4}\.$/ });
+        const example = (await exampleParagraph.innerText()).trim();
         assert(truthFor(example, 'nrl').isTrue, 'Worked example matches the independently verified winner and year');
         result.example = example;
+        result.visibility.push(await visibleUnaided(exampleParagraph, page, 'intro example', 'content'));
+        result.visibility.push(await visibleUnaided(button('Start ten questions'), page, 'intro start'));
+        if (width === 320) await scrollGuardControl(button('Start ten questions'), exampleParagraph, 'intro example');
         result.layouts.push(await layout(page, panel, 'intro')); await shot('intro');
         await activate(button('Start ten questions'), touch);
         await phase('question');
@@ -219,6 +247,8 @@ try {
           await activate(button(pick ? 'CHAMP' : 'NOT'), touch);
           await phase('reveal');
           const next = button(index === 9 ? 'View results' : 'Next claim');
+          result.visibility.push(await visibleUnaided(panel.locator('[data-rugby-statement]'), page, 'claim-' + (index + 1), 'content'));
+          result.visibility.push(await visibleUnaided(panel.getByRole('status'), page, 'winner-' + (index + 1), 'content'));
           result.visibility.push(await visibleUnaided(next, page, 'reveal-' + (index + 1)));
           assert(await next.evaluate(el => document.activeElement === el), 'Reveal focuses the real next action');
           const reveal = panel.getByRole('status');
@@ -229,6 +259,7 @@ try {
           result.claims.push({ statement, category, ...truth, pick, correct });
           result.layouts.push(await layout(page, panel, 'reveal-' + (index + 1)));
           if (index === 0) {
+            if (width === 320) await scrollGuardControl(reveal, panel.locator('[data-rugby-statement]'), 'claim-1');
             await shot('first-reveal');
             await activate(button('Rugby League rules'), touch);
             const dialog = page.getByRole('dialog', { name: 'Rugby League rules', exact: true });
@@ -272,6 +303,9 @@ try {
           assert.equal(await panel.locator('[data-rugby-score="total"]').count(), 0, 'Replay clears old result totals');
           await activate(button('CHAMP'), touch); await phase('reveal');
           assert.equal(await panel.locator('[data-rugby-question]').getAttribute('data-rugby-question'), '1', 'Replay accepts a new first decision');
+          result.visibility.push(await visibleUnaided(panel.locator('[data-rugby-statement]'), page, 'replay claim', 'content'));
+          result.visibility.push(await visibleUnaided(panel.getByRole('status'), page, 'replay winner', 'content'));
+          result.visibility.push(await visibleUnaided(button('Next claim'), page, 'replay next'));
           result.layouts.push(await layout(page, panel, 'replay')); await shot('replay');
         }
       }

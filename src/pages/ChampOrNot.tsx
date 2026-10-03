@@ -61,20 +61,21 @@ const ChampOrNot = () => {
       />
       <GameShell help="none"
         width="narrow"
-        title="🏆 CHAMP OR NOT"
-        subtitle="Ten title claims. Which ones really happened?"
+        title={showRugby ? 'RUGBY LEAGUE' : '🏆 CHAMP OR NOT'}
+        subtitle={showRugby ? 'Premiers and Dally M. Records through 2025.' : 'Ten title claims. Which ones really happened?'}
+        className={showRugby ? '[&>header]:mb-3 [&>header>h1]:text-2xl [&>header>h1]:tracking-wide' : undefined}
         headerExtra={
           <>
-            <div className="flex items-center justify-center gap-2 mt-3">
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
               <button
                 onClick={() => { setShowRugby(false); switchMode('daily'); }}
-                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                className={cn('rounded-lg font-semibold border transition-all', showRugby ? 'min-h-[44px] px-2 py-1.5 text-xs' : 'px-4 py-1.5 text-sm',
                   !showRugby && mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Daily</button>
               <button
                 onClick={() => { setShowRugby(false); switchMode('unlimited'); }}
-                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
+                className={cn('rounded-lg font-semibold border transition-all', showRugby ? 'min-h-[44px] px-2 py-1.5 text-xs' : 'px-4 py-1.5 text-sm',
                   !showRugby && mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Unlimited</button>
@@ -86,18 +87,19 @@ const ChampOrNot = () => {
                   hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >😈 Hard</button>
-            </div>
             <button
               ref={rugbyButton}
               onClick={() => { setOpenedRugby(true); setShowRugby(true); }}
               aria-label="Rugby League"
               aria-pressed={showRugby}
-              className={cn('mt-3 mx-auto flex w-full max-w-md items-center gap-3 rounded-xl border p-3 text-left min-h-[64px]',
-                showRugby ? 'border-primary bg-primary/10' : 'border-border bg-card hover:border-primary/60')}
+              className={showRugby
+                ? 'min-h-[44px] rounded-lg border border-primary bg-primary/10 px-2 py-1.5 text-xs font-semibold text-foreground'
+                : 'mt-1 mx-auto flex w-full max-w-md items-center gap-3 rounded-xl border border-border bg-card p-3 text-left min-h-[64px] hover:border-primary/60'}
             >
-              <span aria-hidden="true" className="text-2xl">🏉</span>
-              <span className="min-w-0"><span className="block font-semibold text-foreground">Rugby League</span><span className="block text-xs text-muted-foreground">Ten claims. Premiers + Dally M. Records through 2025.</span></span>
+              {showRugby ? 'Rugby League' : <><span aria-hidden="true" className="text-2xl">🏉</span>
+              <span className="min-w-0"><span className="block font-semibold text-foreground">Rugby League</span><span className="block text-xs text-muted-foreground">Ten claims. Premiers + Dally M. Records through 2025.</span></span></>}
             </button>
+            </div>
             {!showRugby && hard && mode === 'daily' && (
               <p className="text-xs text-muted-foreground mt-2">Hard kicks in on Unlimited. The daily stays the same ten for everyone.</p>
             )}
