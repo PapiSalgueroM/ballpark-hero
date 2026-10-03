@@ -44,7 +44,7 @@ try {
     }
     await mkdir(path.join(root, '.sim-control'), { recursive: true });
     folder = await mkdtemp(path.join(root, '.sim-control/nhl-contributors-board-'));
-    copy = path.join(folder, 'NhlFrontOfficeBoard.tsx'); await writeFile(copy, changed);
+    copy = path.join(folder, 'NhlFrontOfficeBoard.tsx'); await writeFile(copy, changed.replace("from './NhlWaiverReceipt'", "from '@/components/nhl-front-office/NhlWaiverReceipt'"));
     env.NO_DOUBLE_SWAP = JSON.stringify({ '@/components/nhl-front-office/NhlFrontOfficeBoard': copy });
     args.push('--testNamePattern', controls[control].test + '|' + independent);
   }
