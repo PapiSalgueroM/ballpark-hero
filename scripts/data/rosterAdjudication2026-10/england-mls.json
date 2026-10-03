@@ -217,7 +217,122 @@
    ]
   }
  ],
- "removedClubNotModelled": [],
- "notCurrent": [],
+ "removedClubNotModelled": [
+  {
+   "name": "Osman Bukari",
+   "from": "Austin FC",
+   "realClub": "Red Star Belgrade (Crvena zvezda)",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-12-13 (MLS and ESPN agree). Back at Red Star, the club Austin bought him from in 2024: he has played their Champions League and Europa League qualifiers from 2026-07-29. Whether it is a loan or a sale was not read. The game models no Serbian league.",
+   "sources": [
+    {"family": "A", "url": "https://www.crvenazvezdafk.com/en/timovi/prvi-tim", "publisher": "FK Crvena zvezda (first team page)", "readOn": "2026-10-03", "says": "midfield: Osman Bukari, 14"},
+    {"family": "A", "url": "https://www.austinfc.com/roster/", "publisher": "Austin FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000003)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/276407/osman-bukari", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Red Star Belgrade, born 1998-12-13; Red Star appearances v Larne, Hapoel Be'er Sheva and Viktoria Plzen, 2026-07-29 to 2026-08-27; not on ESPN's Austin FC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Tomás Avilés",
+   "from": "Inter Miami",
+   "realClub": "O'Higgins (Chile), on loan from Inter Miami",
+   "loan": true,
+   "loanFrom": "Inter Miami",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2004-02-03 (MLS and ESPN agree). Inter Miami loaned him to O'Higgins through 2026 on 2026-07-16, after half a season on loan at CF Montréal. Placed at the club he plays for, the ledger's loanPolicy, and the game models no Chilean league, so he leaves Inter Miami's squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/inter-miami-loan-tomas-aviles-to-chilean-club", "publisher": "MLS (mlssoccer.com, 2026-07-16)", "readOn": "2026-10-03", "says": "Inter Miami loan Avilés to O'Higgins through 2026"},
+    {"family": "A", "url": "https://www.intermiamicf.com/roster/", "publisher": "Inter Miami roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000008)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/358595/tomas-aviles", "publisher": "ESPN", "readOn": "2026-10-03", "says": "O'Higgins, born 2004-02-03; O'Higgins appearances in the Chilean Primera and Copa Chile, 2026-09-06 to 2026-09-30"}
+   ]
+  },
+  {
+   "name": "Miki Yamane",
+   "from": "LA Galaxy",
+   "realClub": "Urawa Red Diamonds",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-12-22 (MLS and ESPN agree). Transferred from the Galaxy to Urawa on 2026-08-16. The game models no Japanese league.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/la-galaxy-transfer-miki-yamane-to-japanese-club", "publisher": "MLS (mlssoccer.com, 2026-08-17)", "readOn": "2026-10-03", "says": "LA Galaxy transfer Miki Yamane to Urawa Red Diamonds"},
+    {"family": "A", "url": "https://www.lagalaxy.com/roster/", "publisher": "LA Galaxy roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/238050/miki-yamane", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Urawa Red Diamonds; last Galaxy appearance 2026-07-26, J1 League appearances for Urawa from 2026-08-23"}
+   ]
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "from": "Toronto FC",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne", "publisher": "MLS (mlssoccer.com, 2025-07-01)", "readOn": "2026-10-03", "says": "Toronto FC and Insigne mutually agree to terminate his contract"},
+    {"family": "A", "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/", "publisher": "U.C. Sampdoria (match report, 2026-09-19)", "readOn": "2026-10-03", "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2734", "publisher": "ESPN (Sampdoria squad, season 2026-27)", "readOn": "2026-10-03", "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Bryce Duke",
+   "from": "CF Montréal",
+   "realClub": "Wellington Phoenix",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-28 (MLS and ESPN; Wellington's profile gives age 25, which fits). He left Montréal, signed for San Diego FC as a free agent on 2026-02-09, played for San Diego up to 2026-09-05 and is now in Wellington Phoenix's A-League squad. Terms of the Wellington move were not read. The game models no Australian league.",
+   "sources": [
+    {"family": "A", "url": "https://wellingtonphoenix.com/squads/men/", "publisher": "Wellington Phoenix (men's squad page)", "readOn": "2026-10-03", "says": "midfielders: 7 Bryce Duke"},
+    {"family": "A", "url": "https://www.mlssoccer.com/news/san-diego-fc-sign-midfielder-bryce-duke", "publisher": "MLS (mlssoccer.com, 2026-02-09)", "readOn": "2026-10-03", "says": "San Diego FC sign Bryce Duke via free agency"},
+    {"family": "A", "url": "https://www.cfmontreal.com/roster/", "publisher": "CF Montréal and San Diego FC rosters (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "on neither"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/302238/bryce-duke", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Wellington Phoenix FC, born 2001-02-28, next match A-League Men; San Diego appearances 2026-04-12 to 2026-09-05"}
+   ]
+  },
+  {
+   "name": "Léo Chú",
+   "from": "FC Dallas",
+   "realClub": "Avaí",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Leonardo Alves Chú Franco, born 2000-04-06 (Avaí and ESPN agree). Playing for Avaí in Brazil's Série B in August and September 2026. The game models Brazil's Série A only.",
+   "sources": [
+    {"family": "A", "url": "https://avai.com.br/elenco-profissional/leo-chu/", "publisher": "Avaí F.C. (professional squad profile)", "readOn": "2026-10-03", "says": "Atacante, Leonardo Alves Chú Franco, born 06/04/2000"},
+    {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000005)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/300110/leo-chu", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Avaí, born 2000-04-06; Série B appearances 2026-08-19 to 2026-09-09; not on ESPN's FC Dallas 2026 squad"}
+   ]
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Jordi Alba",
+   "from": "Inter Miami",
+   "why": "Retired. Inter Miami and Alba announced on 2025-10-07 that he would retire after the 2025 season, which ended with the MLS Cup final on 2025-12-06, his last match.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-03-21 (MLS and ESPN agree). ESPN's record marks him inactive.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/inter-miami-defender-jordi-alba-to-retire-after-2025-season", "publisher": "MLS (mlssoccer.com, 2025-10-07)", "readOn": "2026-10-03", "says": "Jordi Alba will retire after Inter Miami's 2025 season"},
+    {"family": "A", "url": "https://www.intermiamicf.com/roster/", "publisher": "Inter Miami roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/story/_/id/47227677/lionel-messi-jordi-alba-sergio-busquets-mls-cup-inter-miami", "publisher": "ESPN (2025-12-07)", "readOn": "2026-10-03", "says": "Messi bids farewell to Alba and Busquets after the MLS Cup"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/121021/jordi-alba", "publisher": "ESPN", "readOn": "2026-10-03", "says": "inactive; last match 2025-12-06, MLS Cup v Vancouver; not on ESPN's Inter Miami 2026 squad"}
+   ]
+  },
+  {
+   "name": "Javairô Dilrosun",
+   "from": "LAFC",
+   "why": "Not at LAFC, certain on both families: LAFC only had him on loan from Club América until 2025-07-24, and neither the league's current LAFC roster nor ESPN's lists him. His club today is NOT confirmed: ESPN places him at Al Sadd (AFC Champions League Elite appearances on 2026-02-17 and 2026-04-16), but Al Sadd's own first team page, read the same day, does not list him. So he leaves LAFC and no destination is claimed. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-06-22 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/lafc-acquire-javairo-dilrosun-on-loan-from-club-america", "publisher": "MLS (mlssoccer.com, 2025-06-11)", "readOn": "2026-10-03", "says": "LAFC acquire Dilrosun on loan from Club América through July 24"},
+    {"family": "A", "url": "https://www.lafc.com/roster/", "publisher": "LAFC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://al-saddclub.com/teams/", "publisher": "Al Sadd Sports Club (football team page)", "readOn": "2026-10-03", "says": "30 players listed, Dilrosun not among them"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/258971/javairo-dilrosun", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Al Sadd; last LAFC appearance 2025-07-26; not on ESPN's LAFC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Paxton Pomykal",
+   "from": "FC Dallas",
+   "why": "Not at FC Dallas, certain on both families: Dallas bought out his guaranteed contract on 2026-02-19 and he is on neither the league's current Dallas roster nor ESPN's Dallas squad. No later club was found on mlssoccer.com or ESPN (ESPN's player header still says FC Dallas, but its Dallas squad does not carry him and his last match there is 2025-10-19). Unattached is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-12-17 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/fc-dallas-exercise-buyout-of-paxton-pomykal", "publisher": "MLS (mlssoccer.com, 2026-02-19)", "readOn": "2026-10-03", "says": "FC Dallas exercise a guaranteed contract buyout on Pomykal; he no longer occupies a senior roster spot"},
+    {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/185", "publisher": "ESPN (FC Dallas squad, season 2026)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  }
+ ],
  "pending": []
 }
