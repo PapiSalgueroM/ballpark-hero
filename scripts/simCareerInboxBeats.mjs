@@ -227,6 +227,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 import { probeSoccer, RIVAL_DILEMMA_IDS } from './lib/soccerInboxProbe796.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -466,32 +467,39 @@ console.log('2) Source: one home for each rule, every binding imported');
     ['src/lib/nbaMyCareer.ts', /receiveNbaInboxTexts\(c, !nbaShouldRetire\(c\)\);/, 'NBA progress runs the inbox off the season stream and tells it whether the career goes on'],
     ['src/lib/mlbMyCareer.ts', /receiveMlbInboxTexts\(c, !mlbShouldRetire\(c\)\);/, 'MLB progress runs the inbox off the season stream and tells it whether the career goes on'],
     ['src/lib/nhlMyCareer.ts', /receiveNhlInboxTexts\(c, !nhlShouldRetire\(c\)\);/, 'NHL progress runs the inbox off the season stream and tells it whether the career goes on'],
-    ['src/components/nba-my-career/NbaMyCareerBoard.tsx', /nbaDraftNightInbox\(c\);/, 'the NBA board delivers draft night on the inbox\'s own stream'],
-    ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', /mlbDraftNightInbox\(c\);/, 'the MLB board delivers draft day on the inbox\'s own stream'],
-    ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', /nhlDraftNightInbox\(c\);/, 'the NHL board delivers draft day on the inbox\'s own stream'],
-    ['src/components/nba-my-career/NbaMyCareerBoard.tsx', /calendar=\{NBA_CALENDAR\}/, 'the NBA inbox panel is handed the calendar'],
-    ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', /calendar=\{MLB_CALENDAR\}/, 'the MLB inbox panel is handed the calendar'],
-    ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', /calendar=\{NHL_CALENDAR\}/, 'the NHL inbox panel is handed the calendar'],
+    ['src/lib/nbaCareerSport.ts', /draftNightInbox: c => nbaDraftNightInbox\(c\),/, 'the NBA binding delivers draft night on the inbox\'s own stream'],
+    ['src/lib/mlbCareerSport.ts', /draftNightInbox: c => mlbDraftNightInbox\(c\),/, 'the MLB binding delivers draft day on the inbox\'s own stream'],
+    ['src/lib/nhlCareerSport.ts', /draftNightInbox: c => nhlDraftNightInbox\(c\),/, 'the NHL binding delivers draft day on the inbox\'s own stream'],
+    ['src/lib/nbaCareerSport.ts', /calendar: NBA_CALENDAR,/, 'the NBA binding hands the inbox panel its calendar'],
+    ['src/lib/mlbCareerSport.ts', /calendar: MLB_CALENDAR,/, 'the MLB binding hands the inbox panel its calendar'],
+    ['src/lib/nhlCareerSport.ts', /calendar: NHL_CALENDAR,/, 'the NHL binding hands the inbox panel its calendar'],
     ['src/lib/nflMyCareer.ts', /receiveNflInboxTexts\(c, !shouldRetire\(c\)\);/, 'progress runs the inbox off the season stream and tells it whether the career goes on'],
     ['src/lib/nflCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NFL rivalry file binds the shared choices'],
     ['src/lib/soccerCareerEngine.ts', /from "\.\/careerRivalryChoices"/, 'the soccer engine binds the shared choices'],
     ['src/lib/soccerCareerEngine.ts', /if \(rivalChoice && !rivalryChoiceOpen\(s, s\.rival, rivalChoice\)\) return false;/, 'the soccer trigger gates the four through the shared gate'],
     ['src/lib/soccerCareerEngine.ts', /resolveRivalryChoice\(s, s\.rival, dilemma\.id, idx, SOCCER_RIVALRY_CHOICES, Math\.random\)/, 'the soccer dilemma resolves the four through the shared engine'],
     ['src/lib/nflMyCareer.ts', /else nflRivalryChoiceTick\(c\);/, 'the NFL season rolls a choice when no beat came up, off the season stream'],
-    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /nflDraftNightInbox\(c\);/, 'the NFL board delivers draft night on the inbox\'s own stream'],
-    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NFL board draws the choice card'],
-    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /calendar=\{NFL_CALENDAR\}/, 'the NFL inbox panel is handed the calendar'],
+    ['src/lib/nflCareerSport.ts', /draftNightInbox: c => nflDraftNightInbox\(c\),/, 'the NFL binding delivers draft night on the inbox\'s own stream'],
+    ['src/lib/nflCareerSport.ts', /resolveRivalryChoice: resolveNflRivalryChoice,/, 'the NFL binding resolves the choice card through its own rivalry file'],
+    ['src/lib/nflCareerSport.ts', /calendar: NFL_CALENDAR,/, 'the NFL binding hands the inbox panel its calendar'],
     ['src/lib/nbaCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NBA rivalry file binds the shared choices'],
     ['src/lib/nbaMyCareer.ts', /else nbaRivalryChoiceTick\(c\);/, 'the NBA season rolls a choice when no beat came up, off the season stream'],
-    ['src/components/nba-my-career/NbaMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NBA board draws the choice card'],
+    ['src/lib/nbaCareerSport.ts', /resolveRivalryChoice: resolveNbaRivalryChoice,/, 'the NBA binding resolves the choice card through its own rivalry file'],
     ['src/lib/mlbCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the MLB rivalry file binds the shared choices'],
     ['src/lib/mlbMyCareer.ts', /else mlbRivalryChoiceTick\(c\);/, 'the MLB season rolls a choice when no beat came up, off the season stream'],
-    ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the MLB board draws the choice card'],
+    ['src/lib/mlbCareerSport.ts', /resolveRivalryChoice: resolveMlbRivalryChoice,/, 'the MLB binding resolves the choice card through its own rivalry file'],
     ['src/lib/nhlCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NHL rivalry file binds the shared choices'],
     ['src/lib/nhlMyCareer.ts', /else nhlRivalryChoiceTick\(c\);/, 'the NHL season rolls a choice when no beat came up, off the season stream'],
-    ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NHL board draws the choice card'],
+    ['src/lib/nhlCareerSport.ts', /resolveRivalryChoice: resolveNhlRivalryChoice,/, 'the NHL binding resolves the choice card through its own rivalry file'],
+    /* Round 900: the four boards are one. What each used to do itself, the
+       shared board does once, through the binding rows above. */
+    [US_CAREER_BOARD, /sport\.draftNightInbox\(c\);/, 'the shared board delivers draft night through the sport binding'],
+    [US_CAREER_BOARD, /calendar=\{sport\.calendar\}/, 'the shared board hands the inbox panel the binding\'s calendar'],
+    [US_CAREER_BOARD, /<RivalryChoiceCard/, 'the shared board draws the choice card'],
+    [US_CAREER_BOARD, /sport\.resolveRivalryChoice\(career, choiceIdx, Math\.random\)/, 'the shared board resolves a choice through the sport binding'],
   ];
   for (const [rel, re, what] of BINDINGS) if (!re.test(code.get(rel) ?? '')) fail(`${what}: not found in ${rel}`);
+  for (const why of allWrapperProblems(ROOT)) fail(why);
   /* Each rival dilemma outcome is written once, inside SOCCER_RIVALRY_CHOICES,
      not a second time in a leftover switch case. */
   const soccerCode = code.get('src/lib/soccerCareerEngine.ts') ?? '';

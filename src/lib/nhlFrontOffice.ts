@@ -554,13 +554,28 @@ export function nhlProspectToPlayer(pr: NhlProspect, rng: () => number, version?
   };
 }
 
+/** Current simulation rights have round tokens, without a future-year ledger. */
+export function nhlDraftCapital(team: Pick<NhlGmTeam, 'picks'>): number | null {
+  return Array.isArray(team.picks) && team.picks.length <= (EASTERN.length + WESTERN.length) * 2
+    && Array.from(team.picks).every(pick => pick === 1 || pick === 2) ? team.picks.length : null;
+}
+
+export function nhlConsumeDraftPick(team: Pick<NhlGmTeam, 'picks'>): boolean {
+  const count = nhlDraftCapital(team);
+  if (count == null || count === 0) return false;
+  team.picks.shift();
+  return true;
+}
+
 /** Existing scouting order with a known-version next-cap commitment check. */
 export function nhlAiDraftPicks(league: NhlLeague, remaining: NhlProspect[], order: string[], rng: () => number) {
   const guarded = league.ratingModelVersion === NHL_RATING_MODEL_VERSION && league.draftAffordabilityVersion === NHL_DRAFT_AFFORDABILITY_VERSION;
+  const eligible = [...new Set(order)].filter(abbr => league.teams[abbr] && (nhlDraftCapital(league.teams[abbr]) ?? 0) > 0).slice(0, 5);
   if (!guarded) {
-    const aiTakes = remaining.slice(0, 5);
+    const aiTakes = remaining.slice(0, eligible.length);
     const picks = aiTakes.map((prospect, i) => {
-      const team = league.teams[order[i % order.length]], player = nhlProspectToPlayer(prospect, rng, league.ratingModelVersion);
+      const team = league.teams[eligible[i]], player = nhlProspectToPlayer(prospect, rng, league.ratingModelVersion);
+      nhlConsumeDraftPick(team);
       team.players.push(player);
       return { team: team.abbr, prospect, player };
     });
@@ -569,18 +584,20 @@ export function nhlAiDraftPicks(league: NhlLeague, remaining: NhlProspect[], ord
   const available = [...remaining], picks: { team: string; prospect: NhlProspect; player: NhlGmPlayer }[] = [];
   const nextCap = Math.round(league.cap * 1.09);
   let skipped = 0, substituted = 0;
-  for (let slot = 0; slot < Math.min(5, remaining.length); slot++) {
-    const team = league.teams[order[slot % order.length]];
+  for (const abbr of eligible) {
+    if (available.length === 0) break;
+    const team = league.teams[abbr];
     const index = available.findIndex(p => nhlSalaryFor(p.trueOvr, league.ratingModelVersion) <= nhlCapRoom(team, nextCap));
     if (index < 0) { skipped++; continue; }
     const prospect = available[index], player = nhlProspectToPlayer(prospect, rng, league.ratingModelVersion);
     if (index > 0) substituted++;
+    nhlConsumeDraftPick(team);
     team.players.push(player); available.splice(index, 1); picks.push({ team: team.abbr, prospect, player });
   }
   return { remaining: available, picks, skipped, substituted, guarded };
 }
 
-export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
+export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
@@ -609,6 +626,21 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
+  if (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam)) {
+    let released = false;
+    for (const t of Object.values(league.teams)) {
+      if (t.abbr === userTeam) continue;
+      while (t.players.length > NHL_ROSTER_MAX) {
+        const selected = nhlContributors(t);
+        const protectedIds = new Set([...selected.forwards, ...selected.defense, ...(selected.goalie === null ? [] : [selected.goalie])]);
+        const down = t.players.filter(p => !protectedIds.has(p.id))
+          .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
+        if (!down || !nhlRelease(t, league.freeAgents, down.id, league.ratingModelVersion)) break;
+        released = true;
+      }
+    }
+    if (released) league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
+  }
   league.cap = Math.round(league.cap * 1.09);
   league.season += 1;
   league.round = 1;
