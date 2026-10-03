@@ -57,15 +57,16 @@
  *      of the window, the men kept on their snapshot club because their move
  *      was dated January 2006, and men gone from the world. The review fix
  *      added the men the first pass had left at clubs they did not start
- *      2005-06 at: three moved, nineteen gone, two checked and kept.
+ *      2005-06 at: three moved, nineteen gone, two checked and kept; and
+ *      the era2005 nationality block held to the world, one line per man.
  *   7. A save from before the round (a two league world, no strength for the
  *      new leagues' Champions League clubs) reads them at the era's finish
  *      based rating until its first summer, exactly as it read them while
  *      they were foreign, plays its season out, and gets all five leagues in
  *      the summer, where they are rated from their real squads.
- * Six negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues|euro|
- * thinswap|nocut, each of which must end the run red (see the block where
- * they are defined).
+ * Seven negative controls, SIM_ERA2005_CONTROL=dupe|stale|twoleagues|euro|
+ * thinswap|nocut|nonat, each of which must end the run red (see the block
+ * where they are defined).
  *
  * Run: node scripts/simEra2005.mjs
  */
@@ -87,14 +88,15 @@ const era2005 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManager
 const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
 const era2015 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2015.ts');
 const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
-export { engine, eras, era2005, era2010, era2015, modern };
+const nat = await import('${ROOT.replaceAll('\\', '/')}/src/data/playerNationalities.ts');
+export { engine, eras, era2005, era2010, era2015, modern, nat };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: ER, era2005: E05, era2010: E10, era2015: E15, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: ER, era2005: E05, era2010: E10, era2015: E15, modern: MOD, nat: NAT } = await import(pathToFileURL(BUNDLE).href);
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
@@ -130,9 +132,12 @@ const REAL_RANDOM = Math.random;
                  thin band must both fail, so both read real finishes.
      nocut       (review fix) section 7 skips the cut, so the "old" save is a
                  fresh five league save: the strength match with Ajax and the
-                 two league world at the season's end must both fail. */
+                 two league world at the season's end must both fail.
+     nonat       (review fix) Vieira's era2005 nationality line dropped and a
+                 line for a man not in the world added, in memory: the
+                 nationality fence of section 5 must fail both ways. */
 const CONTROL = process.env.SIM_ERA2005_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'twoleagues', 'euro', 'thinswap', 'nocut'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'twoleagues', 'euro', 'thinswap', 'nocut', 'nonat'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['Juventus'] ?? []).find(p => p.n === 'Patrick Vieira');
@@ -567,6 +572,25 @@ console.log('5) The bake file tells the truth about itself');
     'Mozart', 'Aílton', 'Christian Vieri', 'Per Kröldrup', 'Reto Ziegler', 'Albert Riera', 'Steve Marlet', 'Julien Rodriguez',
     'Carlos Gamarra', 'Nilmar', 'Kamil Kosowski', 'França', 'Javier Portillo']) {
     if (clubsOf(name).length) fail(`${name} is still in this world at ${clubsOf(name).join(',')}`);
+  }
+  /* Review fix: the era2005 nationality block, both ways. simNationalities
+     covers it too, but that harness is red on main for the modern world, so
+     a break here would land on a fence that is already red. Every man in the
+     world has exactly one line, and no line names a man who is not here. */
+  {
+    let natBlock = NAT.NATIONALITY_BY_WORLD?.era2005 ?? {};
+    if (CONTROL === 'nonat') {
+      if (!natBlock['Patrick Vieira'] || natBlock['Tore André Flo']) controlRefuse('Vieira has no era2005 line, or Flo already has one');
+      natBlock = { ...natBlock, 'Tore André Flo': 'Norway' };
+      delete natBlock['Patrick Vieira'];
+      console.log('   CONTROL nonat applied: Vieira has no nationality line and Flo has one');
+    }
+    const names = new Set(Object.values(ERA2005_ROSTERS).flat().map(p => p.n));
+    const missing = [...names].filter(n => !natBlock[n]);
+    const stray = Object.keys(natBlock).filter(n => !names.has(n));
+    if (missing.length) fail(`${missing.length} men of the 2005 world have no era2005 nationality line: ${missing.slice(0, 5).join(', ')}`);
+    if (stray.length) fail(`${stray.length} era2005 nationality lines name men not in the world: ${stray.slice(0, 5).join(', ')}`);
+    console.log(`   nationalities: ${Object.keys(natBlock).length} era2005 lines for ${names.size} men`);
   }
   // One name, two men: the Real Betis Fernando keeps the name, Siena's is not in the world.
   if (clubsOf('Fernando').join(',') !== 'Real Betis') fail(`Fernando is at ${clubsOf('Fernando').join(',') || 'nowhere'}, the namesake rule keeps the Real Betis line`);
