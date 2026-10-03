@@ -592,7 +592,12 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 1) {
+  /* Round 919: the big leagues had no pitch clock until the 2023 season
+     (espn.com/mlb/story/_/id/35631564 ; cbssports.com, "MLB new rules: pitch
+     clock, shift ban and new bases all in play on Opening Day 2023", both
+     read 2026-10-02). c.year is the season ahead, so a 2004 career meets the
+     clock from 2023 on and a 2026 career is unchanged. */
+  if (yrs >= 1 && c.year >= 2023) {
     deck.push({
       id: 'mlbA_pitch_clock',
       category: 'body', cooldown: 2,
