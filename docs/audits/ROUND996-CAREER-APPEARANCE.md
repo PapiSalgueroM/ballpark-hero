@@ -62,5 +62,39 @@ Local evidence directories are `C:/Users/antho/AppData/Local/Temp/` followed by
 `dukb-career996-ci-2026-10-03`. Thirty appearance screenshots were retained;
 NHL phone, NBA phone and soccer desktop views were visually reviewed.
 
-Publication is pending. All12 held drafts and seven stashes passed preservation
-checks after the accepted merge. AdSense and indexing submissions stay deferred.
+## Publication
+
+Published through Lovable on2026-10-03, with live verification completed by
+06:32 EDT. The publisher displayed synchronized main
+`5667485d1e64b0b8aa22ffcdf4248abcde2b0878` (the acceptance documents after the
+tested merge), then confirmed "Your website was updated".
+
+Production changed from `/assets/index-4CdXhclr.js` to
+`/assets/index-DS-YzsM8.js`. The new entry returned760738 bytes, SHA256
+`d85dd6fe5a5e5085f835e747ffc33dde0f44830753fb2d3346eb10ef638983f8`.
+The actual public create screens showed:
+
+| Career | Gear | Default pose |
+| --- | --- | --- |
+| NHL | Skates | Stick Raise |
+| NBA | Sneakers | Crowd Point |
+| NFL | Cleats | Sideline Salute |
+| MLB | Cleats | Dugout Point |
+
+All four live create screens had clientWidth375 and scrollWidth375 under the
+390px browser viewport (desktop scrollbar uses15px). The NHL Skates tab opened
+its actual options. No career was started or overwritten. The checked public
+tab recorded no error logs. The viewport override was reset afterwards.
+The home launch deck remains present in the final public screenshot.
+
+HTTP evidence: `C:/Users/antho/AppData/Local/Temp/dukb-publication996-2026-10-03-http/`.
+Live screenshots in
+`C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/`:
+`live-nhl-appearance-0630.jpg` and `live-home-0632.jpg`.
+
+All12 held drafts and seven stashes passed preservation checks after publication.
+The narrow publication claim is closed. Claude retains the separate Release Z
+expansion. AdSense and indexing submissions stay deferred. Next free997 remains
+unclaimed; the read-only next-work candidate is a separate Buzzer Beater Shot lab
+with repeated setups and comparison of actual releases, preserving all existing
+practice and scored modes.

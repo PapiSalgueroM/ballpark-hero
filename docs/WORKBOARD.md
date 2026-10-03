@@ -1,3 +1,13 @@
+Codex996 PUBLISHED, 2026-10-03, live verification completed06:32 EDT.
+Lovable confirmed "Your website was updated" for synchronized main5667485d.
+Live entry is now /assets/index-DS-YzsM8.js. Public NHL/NBA/NFL/MLB create
+screens show Skates/Sneakers/Cleats and their own signature poses. All four
+phone layouts had zero horizontal overflow, with no public-tab error logs.
+No career was started or overwritten. Held drafts and seven stashes intact.
+Receipt: docs/audits/ROUND996-CAREER-APPEARANCE.md.
+This publication claim is CLOSED. Claude retains separate Release Z and988.
+Next free997 remains unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex996 ACCEPTED, 2026-10-03, PR111 merged f7884d28.
 Sport-specific appearance now uses skates, sneakers or cleats and suitable
 signature poses. Soccer presentation, all option IDs and saves are preserved.
