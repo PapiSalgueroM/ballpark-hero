@@ -7,7 +7,10 @@
  * that block alone. The distribution checks (median pick by stock decile,
  * lottery frequencies) live in scripts/simCareerPreDraft.mjs.
  */
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
+import { cleanup, render } from '@testing-library/react';
+import { PreDraftSeasonCard } from '@/components/career/PreDraftSeasonCard';
+import { DraftShowcaseCard } from '@/components/career/DraftShowcaseCard';
 import {
   loadPreDraft, preDraftChoicePool, preDraftChoose, preDraftEffectText, preDraftEffectiveEffect,
   preDraftOrder, preDraftPlaySeason, preDraftRunDraft, preDraftShowcase, preDraftStart,
@@ -189,5 +192,31 @@ describe('the save block', () => {
   it('meters out of range come back clamped', () => {
     expect(loadPreDraft({ ...done, stock: 140, health: -9 })!.stock).toBe(100);
     expect(loadPreDraft({ ...done, stock: 140, health: -9 })!.health).toBe(0);
+  });
+});
+
+describe('the cards on screen', () => {
+  afterEach(() => cleanup());
+  it('the season card prints each option with the numbers the choice applies', () => {
+    for (const d of ALL) {
+      let s = preDraftStart(d, { seed: 'ui', routeId: d.routes[0].id, rating: 70, pot: 71 });
+      s = preDraftPlaySeason(d, s);
+      if (s.phase !== 'choice') continue;
+      const { getAllByTestId, unmount } = render(<PreDraftSeasonCard desc={d} state={s} onPlaySeason={() => {}} onChoose={() => {}} />);
+      const card = preDraftChoicePool(d).find(c => c.id === s.pendingChoice)!;
+      const shown = getAllByTestId('pre-draft-effect').map(e => e.textContent);
+      expect(shown).toEqual(card.options.map(o => preDraftEffectText(preDraftEffectiveEffect(s, o.effect))));
+      unmount();
+    }
+  });
+  it('the showcase prints the table it applies, and the result names the pick holder', () => {
+    const d = nbaPreDraftDescriptor('y2004');
+    const s0 = { ...preDraftStart(d, { seed: 'show', routeId: 'prep', rating: 74, pot: 90 }), phase: 'showcase' as const };
+    const { getAllByTestId, unmount } = render(<DraftShowcaseCard desc={d} state={s0} onShowcase={() => {}} onRunDraft={() => {}} />);
+    expect(getAllByTestId('approach-promise').map(e => e.textContent)).toEqual(['Grade A +10, B +4, C -3, D -8', 'Grade A +5, B +2, C -1, D -3', `Draft stock ${SKIP_DELTA}`]);
+    unmount();
+    const done = preDraftRunDraft(d, preDraftShowcase(d, s0, 'allout'));
+    const { getByTestId } = render(<DraftShowcaseCard desc={d} state={done} onShowcase={() => {}} onRunDraft={() => {}} />);
+    if (done.draft!.pick !== null) expect(getByTestId('draft-result').textContent).toContain(d.teamLabel(preDraftOrder(d, 'show').order[done.draft!.pick - 1]));
   });
 });
