@@ -76,6 +76,16 @@ describe('Round 979 red card appeals', () => {
     expect(deskOf(after)[0].resolved).toMatch(/Too late/);
   });
 
+  it('closes the appeal window once the next match has kicked off', () => {
+    const s = career();
+    settleDecisionDesk(s, ['a'], 'Rival Town');
+    const card = deskOf(s).find(d => d.kind === 'appeal')!;
+    const paused = { ...s, live: {} } as unknown as CareerState;
+    const after = answerDecision(paused, card.id, 0);
+    expect(after.squad).toBe(paused.squad);
+    expect(deskOf(after)[0].outcome).toBe('expired');
+  });
+
   it('closes an unanswered appeal at the next match with the ban untouched', () => {
     const s = career();
     settleDecisionDesk(s, ['a'], 'Rival Town');

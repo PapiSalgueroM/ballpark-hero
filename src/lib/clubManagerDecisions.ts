@@ -387,6 +387,9 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
     return close(`Accepted. ${item.playerName ?? 'He'} serves the ${plural(item.ban ?? 0, 'match')} ban.`, 'accepted');
   }
   if (effect.kind === 'appeal') {
+    /* Paused at half time means the next match has kicked off, and the card
+       says the appeal goes in before it. */
+    if (career.live) return close('The next match has already kicked off, so the appeal window closed. The ban stands.', 'expired');
     const p = career.squad.find(x => x.id === item.playerId);
     /* The ban he is appealing is the ban as written. If it has started being
        served, or he has gone, there is nothing left to appeal. */
