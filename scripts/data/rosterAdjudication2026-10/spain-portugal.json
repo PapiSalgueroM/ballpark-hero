@@ -283,6 +283,57 @@
      "says": "Moi Gómez, forward, shirt 16, age 32"
     }
    ]
+  },
+  {
+   "name": "David Mella",
+   "club": "Deportivo La Coruña",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-05-23, the winger. Deportivo's number 11, three La Liga games so far in 2026-27 after the promotion. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/david-mella",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Real Club Deportivo de A Coruña, shirt 11, born 2005-05-23, 3 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375390/david-mella",
+     "publisher": "ESPN (player page; the Deportivo 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Deportivo, shirt 11, born 2005-05-23, started v Real Betis on 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Andrés Martín",
+   "club": "Racing Santander",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-11, Racing's number 11, started each of their first three La Liga games of 2026-27. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-getafe-cf-r-racing-club-2",
+     "publisher": "LaLiga (match page, Getafe v Racing, matchday 2, 2026-08-23)",
+     "readOn": "2026-10-03",
+     "says": "11 Andrés Martín in the Racing starting eleven"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-r-racing-club-elche-cf-3",
+     "publisher": "LaLiga (match page, Racing v Elche, matchday 3, 2026-08-28)",
+     "readOn": "2026-10-03",
+     "says": "Andrés Martín, shirt 11, started, off injured at 59 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/3141/andres-martin",
+     "publisher": "ESPN (player page; the Racing Santander 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Racing Santander, shirt 11, born 1999-07-11, started 2026-08-16, 2026-08-23 and 2026-08-28"
+    }
+   ]
   }
  ],
  "movedTo": [
@@ -422,6 +473,44 @@
      "family": "B",
      "url": "https://www.espn.com/soccer/team/squad/_/id/89",
      "publisher": "ESPN (Real Sociedad squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Iker Losada",
+   "from": "Celta Vigo",
+   "to": "Real Betis",
+   "realClub": "Real Betis",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-08-01, the forward. Celta's number 14 in 2024-25, not in Celta's 2026-27 squad. ESPN shows him playing for Levante in La Liga to 2026-05-23, then for Betis from August 2026; he is Betis's number 14 and the only Iker in their squad, and LaLiga names 14 Iker on the Betis bench against Real Madrid.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-real-betis-real-madrid-4",
+     "publisher": "LaLiga (match page, Real Betis v Real Madrid, matchday 4, 2026-09-04)",
+     "readOn": "2026-10-03",
+     "says": "14 Iker among the Betis substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/244",
+     "publisher": "ESPN (Real Betis squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Iker Losada, forward, shirt 14, age 25; no other Iker in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/292222/iker-losada",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Real Betis, shirt 14, born 2001-08-01"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/85",
+     "publisher": "ESPN (Celta Vigo squad page, season 2026-27)",
      "readOn": "2026-10-03",
      "says": "not listed"
     }
@@ -716,6 +805,30 @@
    "club": "Espanyol",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending, though he is not at Espanyol: ESPN's Espanyol pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/88) leave him out, and he was their number 14 in 2024-25. Born 1994-04-01. ESPN's player page (https://www.espn.com/soccer/player/_/id/213067/brian-olivan) shows his last games for Sporting Gijón in LaLiga 2 up to 2026-05-30 and a header naming AEK Larnaca, yet ESPN's AEK Larnaca page (2025-26, https://www.espn.com/soccer/team/squad/_/id/4039) does not list him. No official page was found and both candidate clubs are unmodelled, so the in-game effect of either answer is removal; the row waits for a second source on where he is."
+  },
+  {
+   "name": "Adam Boayar",
+   "club": "Elche",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending for want of an official page. Born 2005-10-13. ESPN's Elche 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3751) lists him, forward, shirt 32, and his ESPN player page (https://www.espn.com/soccer/player/_/id/367682/adam-boayar) names Elche, but its last match for them is 2026-02-20. He is not in either Elche match LaLiga published that was read (Racing v Elche 2026-08-28, Athletic v Elche 2026-09-12, only partly listed), LaLiga's player page could not be found by slug and Elche's site shows no squad. Most likely still an Elche player; one official page settles it."
+  },
+  {
+   "name": "Agustín Álvarez",
+   "club": "Elche",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2001-05-19, the Uruguayan forward. ESPN's Elche 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3751) leaves him out and his ESPN player page (https://www.espn.com/soccer/player/_/id/307473/agustin-alvarez-martinez) has him at Talleres (Córdoba), shirt 9, in five Argentine league games from 2026-08-24 to 2026-09-19. But Talleres' own men's squad page (https://www.clubtalleres.com.ar/plantel-profesional/) does not list him. Argentina is not modelled, so if ESPN is right the in-game effect is removal."
+  },
+  {
+   "name": "Clément Michelin",
+   "club": "Racing Santander",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 1997-05-11, the French right back. Not at Racing: ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out. LaLiga's player page (https://www.laliga.com/en-GB/player/clement-michelin) puts him at Real Valladolid for 2026-27 with no shirt number and no minutes, but ESPN's Valladolid 2026-27 page (https://www.espn.com/soccer/team/squad/_/id/95) does not list him. Valladolid is in the second tier and not modelled, so if LaLiga is right the in-game effect is removal."
+  },
+  {
+   "name": "Ekain Zenitagoia",
+   "club": "Racing Santander",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: no source places him. ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out, LaLiga's page under his name (https://www.laliga.com/en-GB/player/ekain-zenitagoia) says it has no data on him, and neither ESPN's Real Valladolid nor Sporting Gijón 2026-27 page lists him. No birth date was read, so a namesake cannot be ruled out either. Needs a source that names his current club."
   }
  ]
 }
