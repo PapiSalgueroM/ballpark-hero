@@ -25,6 +25,7 @@
    and no screen may quote it as one. */
 
 import type { GmSportId, StandingRow } from './gmPicks';
+import { share as winShare } from './gmPicks';
 
 export interface GmDeadlineRules {
   sport: GmSportId;
@@ -140,12 +141,6 @@ export interface StanceRow extends StandingRow {
    Both numbers are the game's design values, not league rules. */
 export const BUYER_Z = 0.5;
 export const SELLER_Z = 1.5;
-
-function winShare(r: StandingRow): number {
-  if (typeof r.pct === 'number') return r.pct;
-  const g = r.wins + r.losses;
-  return g > 0 ? r.wins / g : 0.5;
-}
 
 export interface StanceReport {
   stance: Record<string, DeadlineStance>;

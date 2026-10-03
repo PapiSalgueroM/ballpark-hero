@@ -237,8 +237,16 @@ const KINDS: GmPickKind[] = ['std', 'comp', 'cb'];
 /** A saved ledger read back. Anything wrong with the block and it returns
     null, so the caller rebuilds this block alone and the rest of the save is
     untouched. A ledger from before a season roll is not wrong, only old:
-    picks for drafts already held are dropped by rollLedger, not here. */
-export function validateLedger(raw: unknown, teamIds: string[]): GmPickLedger | null {
+    picks for drafts already held are dropped by rollLedger, not here.
+
+    Pass the league's `rules` and a well typed block that cannot be right is
+    refused too: a round the league does not draft, drafts spread over more
+    years than the ledger carries, or a later draft missing a club's own pick
+    in some round. The EARLIEST draft in the block may be short, on purpose:
+    a save written mid draft has spent picks, and a migrated save holds only
+    the picks the old list could account for. That is also why this does not
+    call ledgerProblems, which needs every pick of every year. */
+export function validateLedger(raw: unknown, teamIds: string[], rules?: GmPickRules): GmPickLedger | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as { v?: unknown; picks?: unknown };
   if (r.v !== 1 || !Array.isArray(r.picks)) return null;
@@ -250,6 +258,7 @@ export function validateLedger(raw: unknown, teamIds: string[]): GmPickLedger | 
     const p = x as Record<string, unknown>;
     if (typeof p.year !== 'number' || !Number.isInteger(p.year)) return null;
     if (typeof p.round !== 'number' || !Number.isInteger(p.round) || p.round < 1) return null;
+    if (rules && p.round > rules.rounds) return null;
     if (typeof p.orig !== 'string' || !known.has(p.orig)) return null;
     if (typeof p.holder !== 'string' || !known.has(p.holder)) return null;
     if (p.kind !== undefined && !KINDS.includes(p.kind as GmPickKind)) return null;
@@ -262,6 +271,17 @@ export function validateLedger(raw: unknown, teamIds: string[]): GmPickLedger | 
     if (seen.has(key)) return null;
     seen.add(key);
     picks.push(pick);
+  }
+  if (rules && picks.length > 0) {
+    const years = [...new Set(picks.map(p => p.year))].sort((a, b) => a - b);
+    const first = years[0];
+    const last = years[years.length - 1];
+    if (last - first >= rules.ledgerYears) return null;
+    for (let year = first + 1; year <= last; year++) {
+      for (let round = 1; round <= rules.rounds; round++) {
+        for (const id of teamIds) if (!seen.has(pickKey({ year, round, orig: id }))) return null;
+      }
+    }
   }
   return { v: 1, picks };
 }
@@ -401,7 +421,9 @@ export interface StandingRow {
   diff?: number;
 }
 
-function share(r: StandingRow): number {
+/** A club's winning share: the engine's own when it hands one in, else wins
+    over games, else level. gmDeadline reads standings through this too. */
+export function share(r: StandingRow): number {
   if (typeof r.pct === 'number') return r.pct;
   const g = r.wins + r.losses;
   return g > 0 ? r.wins / g : 0.5;
@@ -563,7 +585,8 @@ export function compensatoryAwards(
    end of rounds three to seven, for the net loss of compensatory free agents
    (both pages above).
    Compensatory picks can be traded like any other since the 2017 draft
-   (the owners' resolution of 2016). Read by the round's review on 2026-10-02:
+   (the owners passed the resolution on 2 December 2015). Read by the
+   round's review on 2026-10-02:
      https://www.nfl.com/news/compensatory-picks-to-be-tradable-beginning-in-2017-0ap3000000592818
      https://overthecap.com/front-office-scheme-bolstered-ability-trade-compensatory-picks
    NOT CONFIRMED TWICE, so not claimed: how many drafts ahead a pick can be
@@ -580,6 +603,7 @@ export const NFL_PICK_RULES: GmPickRules = {
   comp: { leagueMax: 32, perClubMax: 4, firstRound: 3, lastRound: 7 },
   partial: [
     'How a lost free agent is valued is this game\'s own sum; the league does not publish its formula in full.',
+    'Compensatory picks at the end of a round go in draft order here; the league orders them by how much the lost free agent was worth.',
   ],
 };
 

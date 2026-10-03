@@ -308,7 +308,8 @@ for (const sport of SPORTS) {
     ok(3, `${sport.key} seed ${seed}: the old save is left as it was`, JSON.stringify(teams) === before);
     const keys = m.ledger.picks.map(gm.picks.pickKey);
     ok(3, `${sport.key} seed ${seed}: no pick twice`, new Set(keys).size === keys.length);
-    ok(3, `${sport.key} seed ${seed}: reads back as a valid block`, gm.picks.validateLedger(JSON.parse(JSON.stringify(m.ledger)), ids) !== null);
+    ok(3, `${sport.key} seed ${seed}: reads back as a valid block`, gm.picks.validateLedger(JSON.parse(JSON.stringify(m.ledger)), ids) !== null
+      && gm.picks.validateLedger(JSON.parse(JSON.stringify(m.ledger)), ids, rules) !== null);
     const census = gm.picks.ledgerCensus(m.ledger);
     const later = Object.entries(census).filter(([y]) => Number(y) > 2026);
     ok(3, `${sport.key} seed ${seed}: later years start whole`, later.length === rules.ledgerYears - 1 && later.every(([, n]) => n === sport.clubs * rules.rounds));
@@ -387,6 +388,8 @@ for (const sport of SPORTS) {
       lg.ledger = gm.picks.rollLedger(lg.ledger, lg.ids, lg.season, rules);
       lg.season++;
       st.problems += gm.picks.ledgerProblems(lg.ledger, lg.ids, lg.season, rules).length;
+      /* and the rolled ledger reads back through the full check */
+      if (!gm.picks.validateLedger(JSON.parse(JSON.stringify(lg.ledger)), lg.ids, rules)) st.problems++;
       for (const id of lg.ids) { lg.teams[id].wins = 0; lg.teams[id].losses = 0; }
     }
     const everyone = lg.ids.flatMap(id => [...lg.teams[id].players, ...lg.teams[id].prospects].map(p => p.id));

@@ -134,6 +134,29 @@ describe('a corrupt block', () => {
     expect(validateLedger({ v: 1, picks: [{ year: 2026, round: 1, orig: 'T01', holder: 'ZZ' }] }, t)).toBeNull();
     expect(validateLedger({ v: 1, picks: [...good.picks, good.picks[0]] }, t)).toBeNull();
   });
+  it('with the rules, a well typed block that cannot be right reads as null too', () => {
+    const t = ids(4);
+    const r = NHL_PICK_RULES;
+    const good = newLedger(t, 2026, r);
+    expect(validateLedger(good, t, r)).not.toBeNull();
+    expect(validateLedger(rollLedger(good, t, 2026, r), t, r)).not.toBeNull();
+    const round99 = { v: 1, picks: [...good.picks, { year: 2027, round: 99, orig: 'T01', holder: 'T02', kind: 'comp', seq: 1 }] };
+    expect(validateLedger(round99, t)).not.toBeNull();
+    expect(validateLedger(round99, t, r)).toBeNull();
+    const noLater = { v: 1, picks: good.picks.filter(p => pickKey(p) !== '2028:4:T03') };
+    expect(validateLedger(noLater, t, r)).toBeNull();
+    const tooWide = { v: 1, picks: [...good.picks, { year: 2029, round: 1, orig: 'T01', holder: 'T01', kind: 'comp', seq: 1 }] };
+    expect(validateLedger(tooWide, t, r)).toBeNull();
+  });
+  it('with the rules, a short earliest draft still loads: picks spent mid draft, or a migrated save', () => {
+    const t = ids(4);
+    const r = NHL_PICK_RULES;
+    const spent = { v: 1, picks: newLedger(t, 2026, r).picks.filter(p => !(p.year === 2026 && p.round <= 2)) };
+    expect(validateLedger(spent, t, r)).not.toBeNull();
+    const teams = { T01: { picks: [1, 1, 2] }, T02: { picks: [2] }, T03: { picks: [1, 2] }, T04: { picks: [1] } };
+    const m = migrateLegacyPicks(teams, 2026, r, 2);
+    expect(validateLedger(JSON.parse(JSON.stringify(m.ledger)), t, r)).not.toBeNull();
+  });
 });
 
 describe('the consecutive firsts rule', () => {

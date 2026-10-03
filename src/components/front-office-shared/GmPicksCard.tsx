@@ -42,7 +42,10 @@ export function GmPicksCard({ ledger, club, season, rules, clubName, window: win
   const name = clubName ?? ((id: string) => id);
   const years = ledgerYears(season, rules);
   const held = picksHeldBy(ledger, club).filter(p => years.includes(p.year));
-  const gone = ledger.picks.filter(p => p.orig === club && p.holder !== club && years.includes(p.year));
+  /* A migrated pick whose first owner the old save never wrote down
+     (origUnknown) names a GUESSED donor, so the guessed club is not shown
+     losing it; the holder's side already says only 'from a trade'. */
+  const gone = ledger.picks.filter(p => p.orig === club && p.holder !== club && !p.origUnknown && years.includes(p.year));
   const total = held.length;
   const firsts = held.filter(p => p.round === 1).length;
 
