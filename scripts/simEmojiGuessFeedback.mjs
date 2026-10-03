@@ -68,18 +68,18 @@ try {
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 9, 'All nine actual outcomes must collect');
+  assert.equal(rows.length, 10, 'All ten actual outcomes must collect');
   if (control) {
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 7);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 8);
     const intended = rows.filter(row => row.title === controls[control].test); assert.equal(intended.length, 1); assert.equal(intended[0].status, 'failed');
     const messages = intended[0].failureMessages.join('\n');
     assert.match(messages, /AssertionError:|expect\(element\)\.(?:toHaveFocus|toHaveClass)|Expected element with focus/, 'Intended row must fail its actual assertion');
     assert.equal(rows.find(row => row.title === baseline)?.status, 'passed', 'Independent original hook/save/share/completion outcome stays green');
-    console.log(`simEmojiGuessFeedback ${control}: one intended assertion fails, independent original five-puzzle outcome passes, seven cases explicitly skipped.`);
-    console.log('EMOJI_RECEIPT: ' + JSON.stringify({ control, failed: 1, independentPassed: 1, skipped: 7, intended: intended[0].title, messages }));
+    console.log(`simEmojiGuessFeedback ${control}: one intended assertion fails, independent original five-puzzle outcome passes, eight cases explicitly skipped.`);
+    console.log('EMOJI_RECEIPT: ' + JSON.stringify({ control, failed: 1, independentPassed: 1, skipped: 8, intended: intended[0].title, messages }));
   } else {
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 9); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
-    console.log('simEmojiGuessFeedback: nine actual Page/hook outcomes pass.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 10); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
+    console.log('simEmojiGuessFeedback: ten actual Page/hook outcomes pass.');
     console.log('simEmojiGuessFeedback: five puzzles, 290 points, four solved, exact saved guesses/index and original share text.');
     console.log('simEmojiGuessFeedback: once-only completion, quiet restore/no-op/clone, native focus guards and finite/static presentation verified.');
   }

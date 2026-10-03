@@ -133,11 +133,11 @@ export const WORLD_CONTENT: GameContentMap = {
 
   '/teammates': {
     intro: [
-      "Two names, one question: did these guys ever wear the same shirt? Teammates or Not flashes a pair of athletes from the NFL, NBA or soccer and you call it, yes or no.",
+      "Two names, one question: did these guys ever play for the same team? Teammates or Not flashes a pair of athletes from the NFL, NBA, MLB, NHL or soccer and you call it, yes or no. Club and league teams are what count here, so a national team or an All-Star game doesn't make two guys teammates.",
       "It sounds easy until you hit the pairs whose careers brushed past each other by a season. That one year in a strange uniform is exactly what this game lives on.",
     ],
     headings: {
-      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA and soccer game",
+      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA, MLB, NHL and soccer game",
       rules: "Teammates or Not? rules for rounds, scoring and difficulty",
       example: "Teammates or Not? walkthrough: Kobe and Shaq, Brady and Manning",
       tips: "Teammates or Not? tips for spotting real career overlaps",
@@ -153,7 +153,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Deciding if they shared a team ever",
         items: [
-          "Decide whether they were ever on the same team at any point in their careers.",
+          "Decide whether they were ever on the same club or league team at any point in their careers. For the NFL, NBA, MLB and NHL pairs that means the same team in that league, and for soccer the same club. National teams, the Olympics, All-Star games, the Pro Bowl and college teams don't count.",
         ],
       },
       {
@@ -207,13 +207,13 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Kobe and Shaq, then Brady and Manning",
         paragraphs: [
-          "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
+          "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never played for the same NFL team, so that's a no.",
         ],
       },
       {
         heading: "The sneaky pairs about exact timing",
         paragraphs: [
-          "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most.",
+          "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Get 9 or 10 and you really know your rosters.",
         ],
       },
     ],
@@ -244,7 +244,11 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Which sports are covered?",
-        a: "Pairs come from the NFL, the NBA and soccer, and each question shows a sport badge so you know which world you're in.",
+        a: "Pairs come from the NFL, the NBA, MLB, the NHL and soccer, and each question shows a sport badge so you know which world you're in.",
+      },
+      {
+        q: "Do national teams or All-Star games count as teammates?",
+        a: "No. Only club and league teams count. For an NFL, NBA, MLB or NHL pair that means the same team in that league, and for soccer the same club. Playing together for your country, at the Olympics, in an All-Star game or the Pro Bowl, or in college doesn't count here.",
       },
       {
         q: "Is this a daily puzzle?",

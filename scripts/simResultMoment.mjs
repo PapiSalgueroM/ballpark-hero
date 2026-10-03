@@ -181,10 +181,6 @@ const OWN_SURFACE = {
   '/nascar-chain': 'its own game over block in NascarChainBoard, the chain and the reason it ended',
   '/ufc-chain': 'its own game over block in CombatChainBoard, the chain and the reason it ended',
   '/minefield': 'its own done panel in the page, the banked score and rounds won',
-  '/quiz-board': 'its own finished panel in QuizBoard, the bank after the last tile',
-  '/ball-iq': 'its own finished screen in BallIqBoard, an IQ number, a rank and correct out of the questions',
-  '/emoji-guess': "its own Today's result screen in EmojiGuessBoard, solved out of the rounds",
-  '/mystery-box': 'its own finished panel in MysteryBoxBoard, the squad rating and best pull',
   '/aussie-rules-manager': 'its own season complete panel in AussieRulesManagerBoard, the league winner and the final ladder',
 };
 
