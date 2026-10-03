@@ -66,6 +66,7 @@ import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
+import CareerStory from "@/components/soccer-career/CareerStory";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
@@ -3464,6 +3465,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const statBars = getPositionStatBars(career.position, career);
 
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
+  // Round 974: the career story, every season kept, opened from Latest Events
+  const [storyOpen, setStoryOpen] = useState(false);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -4168,9 +4171,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       </div>
 
       {/* Events log */}
-      {career.events.length > 0 && (
+      {(career.events.length > 0 || (career.story?.length ?? 0) > 0) && (
         <div className="bg-card border border-border rounded-xl p-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
+          {/* Round 974: the whole career, season by season, one tap away */}
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
+            <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
+              className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+          </div>
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4180,6 +4188,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
         </div>
       )}
+      {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
 
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
@@ -4246,6 +4255,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {career.phase === "retired" && career.legacy && (
         <LegacyCard career={career} totals={totals} onShare={onShare} />
       )}
+      {/* Round 974: the same story on the retirement screen, every season a tile */}
+      {career.phase === "retired" && <CareerStory career={career} />}
 
       {/* Retire Confirmation Dialog */}
       {showRetireConfirm && (
