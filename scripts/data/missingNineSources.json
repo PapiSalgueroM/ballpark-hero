@@ -43,6 +43,122 @@
         { "name": "Roberto Perez", "nationality": "Puerto Rico", "born": "Mayaguez, Puerto Rico", "fact": "Batted ninth and caught the start, Yan Gomes only entered late.", "checked": "both boxes: Perez c 9th, Gomes c indented sub; bref subs: Gomes in at catcher top 8th after Naquin ran for Perez." },
         { "name": "Coco Crisp", "nationality": "USA", "born": "Los Angeles, California", "fact": "Doubled and scored Cleveland's first run; Michael Martinez later replaced him in the field.", "checked": "both boxes: 2B off Hendricks, Martinez indented sub; bref pbp bottom 3rd: Crisp double, Santana single, Crisp scores; SABR: Santana singled in Crisp, who had reached on a double. DISAGREEMENT: SABR puts Martinez's entry in the eighth, bref pbp in the top of the 9th, so the old 'in the 8th' is dropped and no inning is claimed." }
       ]
+    },
+    {
+      "id": "ws-2001-g7-nyy",
+      "game": "2001 World Series Game 7, 2001-11-04, Bank One Ballpark: Diamondbacks 3, Yankees 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=200111040ARI", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/ARI/ARI200111040.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-4-2001-luis-gonzalezs-walk-off-single-lifts-diamondbacks-to-game-7-win-over-yankees/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["SS Derek Jeter", "RF Paul O'Neill", "CF Bernie Williams", "1B Tino Martinez", "C Jorge Posada", "LF Shane Spencer", "2B Alfonso Soriano", "3B Scott Brosius", "P Roger Clemens"],
+      "blanks": [
+        { "name": "Shane Spencer", "nationality": "USA", "born": "Key West, Florida", "fact": "Started in left field; Chuck Knoblauch and David Justice only came off the bench.", "checked": "both boxes: Spencer lf starter, Knoblauch ph,lf and Justice ph indented. Old wording said both only pinch-hit, but Knoblauch stayed on in left, so it now says off the bench." },
+        { "name": "Alfonso Soriano", "nationality": "Dominican Republic", "born": "San Pedro de Macoris, Dominican Republic", "fact": "His 8th-inning homer off Curt Schilling briefly put New York ahead 2-1.", "checked": "both boxes: HR 8th off Schilling, 0 on; bref pbp: Martinez RBI single top 7th made it 1-1 first; SABR: Martinez tied it 1-1 in the 7th, Soriano led off the 8th with the homer for 2-1." },
+        { "name": "Roger Clemens", "nationality": "USA", "born": "Dayton, Ohio", "fact": "NL park, no DH: Clemens batted ninth and struck out 10 in 6.1 innings.", "checked": "both boxes: Clemens p in the 9 hole, 6.1 IP, 10 SO." }
+      ]
+    },
+    {
+      "id": "ws-2001-g7-ari",
+      "game": "2001 World Series Game 7, 2001-11-04, Bank One Ballpark: Diamondbacks 3, Yankees 2",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=200111040ARI", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/ARI/ARI200111040.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-4-2001-luis-gonzalezs-walk-off-single-lifts-diamondbacks-to-game-7-win-over-yankees/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["SS Tony Womack", "2B Craig Counsell", "LF Luis Gonzalez", "3B Matt Williams", "CF Steve Finley", "RF Danny Bautista", "1B Mark Grace", "C Damian Miller", "P Curt Schilling"],
+      "blanks": [
+        { "name": "Tony Womack", "nationality": "USA", "born": "Danville, Virginia", "fact": "His ninth-inning double off Mariano Rivera tied the game before the walk-off.", "checked": "both boxes: 2B off Rivera, 1 RBI; bref pbp bottom 9th at 1-2, double, Cummings scores; SABR: Cummings scored and the game was tied 2-2." },
+        { "name": "Craig Counsell", "nationality": "USA", "born": "South Bend, Indiana", "fact": "Hit by a Rivera pitch in the 9th, setting the stage for Gonzalez's walk-off single.", "checked": "both boxes: HBP Counsell by Rivera; bref pbp bottom 9th: Gonzalez single, Bell scores, Counsell to 2B; SABR: Rivera hit Counsell to load the bases, then Gonzalez singled in the winner." },
+        { "name": "Danny Bautista", "nationality": "Dominican Republic", "born": "Santo Domingo, Dominican Republic", "fact": "His double off Clemens drove in Arizona's first run.", "checked": "both boxes: 2B off Clemens, his only hit, 1 RBI; bref pbp bottom 6th at 0-0: double, Finley scores; SABR: Finley scored on the double to put Arizona up 1-0 in the sixth." }
+      ]
+    },
+    {
+      "id": "ws-1988-g1-oak",
+      "game": "1988 World Series Game 1, 1988-10-15, Dodger Stadium: Dodgers 5, Athletics 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198810150LAN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN198810150.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["3B Carney Lansford", "CF Dave Henderson", "RF Jose Canseco", "LF Dave Parker", "1B Mark McGwire", "C Terry Steinbach", "2B Glenn Hubbard", "SS Walt Weiss", "P Dave Stewart"],
+      "blanks": [
+        { "name": "Jose Canseco", "nationality": "Cuba", "born": "Havana, Cuba", "fact": "His second-inning grand slam off Tim Belcher gave Oakland a 4-2 lead.", "checked": "both boxes: HR 2nd off Belcher, 3 on; bref pbp top 2nd at 0-2." },
+        { "name": "Dave Parker", "nationality": "USA", "born": "Mississippi (town differs, see playerPages)", "fact": "Started in left field and batted cleanup for Oakland.", "checked": "both boxes: Parker lf 4th, Stan Javier ran for him. Old 'The Cobra' nickname dropped: not in either box." },
+        { "name": "Dave Stewart", "nationality": "USA", "born": "Oakland, California", "fact": "Threw 8 innings, then Dennis Eckersley took the loss on Kirk Gibson's walk-off.", "checked": "both boxes: Stewart 8.0 IP, Eckersley L (0-1), Gibson HR 9th off Eckersley, 1 on, 2 out." }
+      ]
+    },
+    {
+      "id": "ws-1988-g1-lad",
+      "game": "1988 World Series Game 1, 1988-10-15, Dodger Stadium: Dodgers 5, Athletics 4",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198810150LAN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/LAN/LAN198810150.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["2B Steve Sax", "1B Franklin Stubbs", "LF Mickey Hatcher", "RF Mike Marshall", "CF John Shelby", "C Mike Scioscia", "3B Jeff Hamilton", "SS Alfredo Griffin", "P Tim Belcher"],
+      "blanks": [
+        { "name": "Mickey Hatcher", "nationality": "USA", "born": "Cleveland, Ohio", "fact": "Homered in the 1st inning. Kirk Gibson never started, his walk-off homer was a pinch-hit at-bat.", "checked": "both boxes: Hatcher lf starter, HR 1st off Stewart, 1 on; Gibson ph only, HR 9th." },
+        { "name": "Franklin Stubbs", "nationality": "USA", "born": "Laurinburg, North Carolina", "fact": "Started at first base on the night of Gibson's pinch-hit walk-off.", "checked": "both boxes: Stubbs 1b, batting 2nd." },
+        { "name": "Mike Scioscia", "nationality": "USA", "born": "Upper Darby, Pennsylvania", "fact": "Caught the whole game and drove in a run with a single.", "checked": "both boxes: Scioscia c, no Dodger catching sub, 1 RBI, no extra base hit (so the RBI hit was a single); bref pbp bottom 6th: single, Marshall scores. The inning is bref only, so the fact does not name it. Old 'later a World Series-winning manager' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-1986-g6-bos",
+      "game": "1986 World Series Game 6, 1986-10-25, Shea Stadium: Mets 6, Red Sox 5 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198610250NYN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYN/NYN198610250.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/october-25-1986-a-little-roller-up-along-first-mets-win-wild-game-six-on-buckner-error/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["3B Wade Boggs", "2B Marty Barrett", "1B Bill Buckner", "LF Jim Rice", "RF Dwight Evans", "C Rich Gedman", "CF Dave Henderson", "SS Spike Owen", "P Roger Clemens"],
+      "blanks": [
+        { "name": "Roger Clemens", "nationality": "USA", "born": "Dayton, Ohio", "fact": "Started and threw seven innings with eight strikeouts.", "checked": "both boxes: 7.0 IP, 8 SO; SABR: 134 pitches through seven innings. Old 'the collapse came after he left' dropped as opinion." },
+        { "name": "Bill Buckner", "nationality": "USA", "born": "Vallejo, California", "fact": "Batted third and played first base; his error on Mookie Wilson's grounder in the 10th let the winning run score.", "checked": "both boxes: Buckner 1b 3rd, E Buckner; bref pbp bottom 10th: Wilson reached on E3, Knight scores, last play; SABR: the ball skipped through Buckner's legs and Ray Knight scored." },
+        { "name": "Dave Henderson", "nationality": "USA", "born": "Merced, California", "fact": "His homer leading off the 10th, off Rick Aguilera, put Boston ahead 4-3.", "checked": "both boxes: HR 10th off Aguilera, 0 on, 0 out; bref pbp: Barrett's single next at 4-3; SABR: Henderson homered in the 10th off Aguilera, 5-3 after Barrett's single. Old 'one strike from the title' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-1986-g6-nym",
+      "game": "1986 World Series Game 6, 1986-10-25, Shea Stadium: Mets 6, Red Sox 5 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=198610250NYN", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/NYN/NYN198610250.shtml", "read": "2026-10-03" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/october-25-1986-a-little-roller-up-along-first-mets-win-wild-game-six-on-buckner-error/", "read": "2026-10-03", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["CF Lenny Dykstra", "2B Wally Backman", "1B Keith Hernandez", "C Gary Carter", "RF Darryl Strawberry", "3B Ray Knight", "LF Mookie Wilson", "SS Rafael Santana", "P Bob Ojeda"],
+      "blanks": [
+        { "name": "Bob Ojeda", "nationality": "USA", "born": "Los Angeles, California", "fact": "Started Game 6, not Dwight Gooden, and went six innings.", "checked": "both boxes: Ojeda p 9th, 6.0 IP, no Gooden anywhere; SABR: Bob Ojeda started. Name fixed from Bobby to Bob: both player pages and the SABR recap bill him Bob Ojeda. Old 'lefty ex-Red Sox' dropped: not in either box." },
+        { "name": "Mookie Wilson", "nationality": "USA", "born": "Bamberg, South Carolina", "fact": "Hit the grounder that went through Bill Buckner's legs, and Ray Knight scored the winning run.", "checked": "bref pbp bottom 10th: Wilson reached on E3 (ground ball), Knight scores, final play; almanac: E Buckner, Knight's run, 6-5 final; SABR: little roller up along first, skipped through Buckner's legs, Ray Knight scored." },
+        { "name": "Rafael Santana", "nationality": "Dominican Republic", "born": "La Romana, Dominican Republic", "fact": "Started at short and batted eighth; Kevin Elster and Howard Johnson both took turns there later.", "checked": "both boxes: Santana ss 8th, Elster ss and Johnson ph,ss indented under him. Old 'most famous Game 6 ever' dropped as opinion." }
+      ]
+    },
+    {
+      "id": "ws-2013-g6-bos",
+      "game": "2013 World Series Game 6, 2013-10-30, Fenway Park: Red Sox 6, Cardinals 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201310300BOS", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS201310300.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["CF Jacoby Ellsbury", "2B Dustin Pedroia", "DH David Ortiz", "1B Mike Napoli", "LF Jonny Gomes", "RF Shane Victorino", "3B Xander Bogaerts", "SS Stephen Drew", "C David Ross"],
+      "blanks": [
+        { "name": "David Ross", "nationality": "USA", "born": "Bainbridge, Georgia", "fact": "Started at catcher; Jarrod Saltalamacchia did not play in the clincher.", "checked": "both boxes: Ross c 9th, no Saltalamacchia in the Boston box. The old second source was Wikipedia, which does not count; 'regular' and 'his glove anchored' dropped." },
+        { "name": "Xander Bogaerts", "nationality": "Aruba", "born": "Oranjestad, Aruba, born 1992-10-01", "fact": "Started at third base, aged 21.", "checked": "both boxes: Bogaerts 3b 7th; both player pages: born 1992-10-01, so 21 on 2013-10-30. Old 'rookie' dropped: not in either box." },
+        { "name": "Stephen Drew", "nationality": "USA", "born": "Hahira, Georgia", "fact": "Led off the 4th with a homer off Michael Wacha.", "checked": "both boxes: HR 4th off Wacha, 0 on, 0 out. Old 'limited at the plate all series' dropped: a series claim neither box makes." }
+      ]
+    },
+    {
+      "id": "ws-2013-g6-stl",
+      "game": "2013 World Series Game 6, 2013-10-30, Fenway Park: Red Sox 6, Cardinals 1",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201310300BOS", "read": "2026-10-03" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/BOS/BOS201310300.shtml", "read": "2026-10-03" }
+      ],
+      "starters": ["2B Matt Carpenter", "RF Carlos Beltran", "LF Matt Holliday", "DH Allen Craig", "C Yadier Molina", "1B Matt Adams", "3B David Freese", "CF Jon Jay", "SS Daniel Descalso"],
+      "blanks": [
+        { "name": "Daniel Descalso", "nationality": "USA", "born": "Redwood City, California", "fact": "Started at shortstop; Pete Kozma did not play in Game 6.", "checked": "both boxes: Descalso ss 9th, no Kozma in the St. Louis box. Old 'reduced to a pinch-running role' came from Wikipedia and is dropped." },
+        { "name": "Matt Adams", "nationality": "USA", "born": "Philipsburg, Pennsylvania", "fact": "Started at first base while Allen Craig was the designated hitter.", "checked": "both boxes: Adams 1b 6th, Craig dh 4th." },
+        { "name": "Allen Craig", "nationality": "USA", "born": "Mission Viejo, California", "fact": "Batted cleanup as the designated hitter in the AL park.", "checked": "both boxes: Craig dh, 4th in the order, at Fenway Park." }
+      ]
     }
   ]
 }
