@@ -859,8 +859,8 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(2005),
     startYear: 2005,
     emoji: '\u{1F4FC}',
-    blurb: 'Ronaldinho\'s Ballon d\'Or. Mourinho\'s Chelsea. A 17 year old Messi. Premier League and La Liga, 2005-06.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2005')} with their real 2005 ages and values, all 40 clubs of the 2005-06 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`; },
+    blurb: 'Ronaldinho\'s Ballon d\'Or. Mourinho\'s Chelsea. A 17 year old Messi. Shevchenko\'s Milan, Ballack\'s Bayern, Juninho\'s Lyon. All of the big five, 2005-06.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2005')} with their real 2005 ages and values, all 98 clubs of the 2005-06 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Thin squads are padded with made up youth players and say so.`; },
   },
 ];
 
