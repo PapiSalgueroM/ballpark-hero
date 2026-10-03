@@ -533,6 +533,30 @@ export function playFirstStage(
   return { kind: 'groups', stages, through };
 }
 
+/** A table row as the card reads it. */
+function isStageRow(x: unknown): x is StageRow {
+  if (!x || typeof x !== 'object') return false;
+  const r = x as Record<string, unknown>;
+  return typeof r.club === 'string' && ['w', 'd', 'l', 'gf', 'ga', 'pts'].every(k => Number.isFinite(r[k]));
+}
+
+/** Round 972: a saved first stage is read by the cup card, so one without the
+ *  shape the card reads is dropped on load, on its own (repairCareer), and the
+ *  rest of the result is kept. */
+export function isFirstStageResult(x: unknown): x is FirstStageResult {
+  if (!x || typeof x !== 'object') return false;
+  const r = x as FirstStageResult;
+  if ((r.kind !== 'groups' && r.kind !== 'leaguePhase') || typeof r.through !== 'boolean' || !Array.isArray(r.stages)) return false;
+  return r.stages.every(st => !!st && typeof st === 'object'
+    && typeof st.label === 'string' && typeof st.footnote === 'string'
+    && Number.isFinite(st.position) && Number.isFinite(st.of)
+    && isStageRow(st.myRow)
+    && (st.table === undefined || (Array.isArray(st.table) && st.table.every(isStageRow)))
+    && Array.isArray(st.games)
+    && st.games.every(g => !!g && typeof g === 'object' && typeof g.opponent === 'string'
+      && Number.isFinite(g.matchday) && Number.isFinite(g.goalsFor) && Number.isFinite(g.goalsAgainst)));
+}
+
 /** Opponents a first stage needs named. */
 export function firstStageOpponentCount(shape: FirstStageShape): number {
   if (shape.kind === 'leaguePhase') return LEAGUE_PHASE.games;

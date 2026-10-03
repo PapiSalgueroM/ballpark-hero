@@ -12,7 +12,7 @@ import { uclTieOutcome } from '@/lib/uclTieRule';
 import {
   uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,
   CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,
-  firstStageTarget, solveStageStrength, playFirstStage,
+  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,
   type ClubCupId, type FirstStageResult,
 } from './soccerCareerContinental';
 import {
@@ -2604,6 +2604,29 @@ export function repairCareer<T extends CareerState>(state: T): T {
   /* Round 257: no verdict has ever been passed on a save from before it. */
   if (s.frozenOut === undefined) s.frozenOut = 0;
   if (s.badSeasonStreak === undefined) s.badSeasonStreak = 0;
+  /* Round 972: the cup card reads three new optional fields of the last
+     result and every season may carry clubCupTitle. A corrupt one is dropped
+     on its own, on a copy, and everything else in the save is kept. */
+  if (s.lastUCLResult && typeof s.lastUCLResult === "object") {
+    const u = s.lastUCLResult;
+    const badStage = u.firstStage !== undefined && !isFirstStageResult(u.firstStage);
+    const badName = u.competition !== undefined && typeof u.competition !== "string";
+    const badNote = u.simplified !== undefined && typeof u.simplified !== "string";
+    if (badStage || badName || badNote) {
+      const fixed = { ...u };
+      if (badStage) delete fixed.firstStage;
+      if (badName) delete fixed.competition;
+      if (badNote) delete fixed.simplified;
+      s.lastUCLResult = fixed;
+    }
+  }
+  if (Array.isArray(s.seasons) && s.seasons.some(x => x && x.clubCupTitle !== undefined && typeof x.clubCupTitle !== "string")) {
+    s.seasons = s.seasons.map(x => {
+      if (!x || x.clubCupTitle === undefined || typeof x.clubCupTitle === "string") return x;
+      const { clubCupTitle: _dropped, ...rest } = x;
+      return rest;
+    });
+  }
   /* Round 244: captaincy fields are optional and default to "never worn it".
      If a save somehow claims the armband at a club he no longer plays for,
      drop the flag quietly rather than let it follow him. */

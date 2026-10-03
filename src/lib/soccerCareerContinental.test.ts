@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   clubConfederation, clubCupFor, continentalOpponents, firstStageShape, playFirstStage,
   firstStageTarget, solveStageStrength, stagePassChance, PASS_CURVES, LEAGUE_TOP8,
-  LEAGUE_PHASE, SC_CONTINENTAL_PARTIAL, CONTINENTAL_PERIODS, type CurveId,
+  LEAGUE_PHASE, SC_CONTINENTAL_PARTIAL, CONTINENTAL_PERIODS, isFirstStageResult, type CurveId,
 } from './soccerCareerContinental';
 import { UCL_FORMAT_PERIODS } from './uclFormatHistory';
 
@@ -155,5 +155,19 @@ describe('solving the pass rate', () => {
         prev = p;
       }
     }
+  });
+});
+
+describe('an old or broken save', () => {
+  it('accepts a first stage the engine wrote and refuses one the card could not read', () => {
+    const good = playFirstStage(firstStageShape(2010), 'Mine', 0.5, ['A', 'B', 'C'], seeded(3));
+    expect(isFirstStageResult(JSON.parse(JSON.stringify(good)))).toBe(true);
+    const lp = playFirstStage(firstStageShape(2026), 'Mine', 0.5, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], seeded(4));
+    expect(isFirstStageResult(JSON.parse(JSON.stringify(lp)))).toBe(true);
+    expect(isFirstStageResult(undefined)).toBe(false);
+    expect(isFirstStageResult({ kind: 'groups', through: true, stages: [{ label: 'Group stage' }] })).toBe(false);
+    const broken = JSON.parse(JSON.stringify(good));
+    broken.stages[0].games[0].goalsFor = 'two';
+    expect(isFirstStageResult(broken)).toBe(false);
   });
 });
