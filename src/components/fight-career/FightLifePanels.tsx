@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import type { FightCareerState } from '@/lib/fightCareer';
 import {
   TRAINERS, MANAGERS, describeTrainer, describeManager, describeLifeEffect, answerLifeCard,
-  trainerDef, managerDef, lifeSharpness, lifeTakeHome, PROMOTER_PURSE_MUL, rivalInYourClass,
+  trainerDef, managerDef, lifeSharpness, lifeTakeHome, PROMOTER_PURSE_MUL, rivalInYourClass, lifeCardById,
   type FightLife, type TrainerId, type ManagerId,
 } from '@/lib/fightCareerLife';
 import {
@@ -68,7 +68,13 @@ export function CornerPicker({ trainer, manager, onTrainer, onManager }: {
 
 /* ── the gap: one thing at a time, read off the save ── */
 export function LifeStepCard({ st, step, onChange }: { st: Live; step: LifeStep; onChange: (next: Live) => void }) {
-  const waiting = st.life.pending.length + (st.life.pendingRivalryChoice ? 1 : 0) + (st.life.pendingRivalryEvent ? 1 : 0);
+  /* Only cards still open count: one whose gate has closed since the deal
+     is never shown and lapses on the next answer (pendingLifeCard). */
+  const openCards = st.life.pending.filter(id => {
+    const c = lifeCardById(id);
+    return !!c && (!c.when || c.when(st));
+  }).length;
+  const waiting = openCards + (st.life.pendingRivalryChoice ? 1 : 0) + (st.life.pendingRivalryEvent ? 1 : 0);
   const head = (emoji: string, title: string, body: string) => (
     <>
       <p className="text-xs uppercase tracking-wide text-muted-foreground">Between fights · {waiting} to deal with</p>
