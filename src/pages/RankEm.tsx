@@ -2,17 +2,20 @@ import { useMemo, useState, useCallback, useEffect, useLayoutEffect, useRef, typ
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isRankEmLog } from '@/lib/dailySaveShapes';
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
 import { Trophy, ArrowDown, RotateCcw } from 'lucide-react';
 import styles from './RankEmOrder.module.css';
+import { advanceCircuit, CIRCUIT_SPORTS, circuitRound, circuitScore, createCircuit, editCircuit, loadCircuit, lockCircuit, saveCircuit, startCircuit, type CircuitState } from '@/lib/rankEmCircuit';
 import {
   RankRound,
   RANK_POINTS_PER_SLOT,
@@ -30,7 +33,7 @@ import {
  * Missing Five/Nine/Eleven).
  */
 
-type Mode = 'daily' | 'unlimited';
+type Mode = 'daily' | 'unlimited' | 'circuit';
 type RankAction = { order: string[] };
 const SENTINEL = [{ id: 'rank-em-daily' }];
 
@@ -40,6 +43,25 @@ const RankEm = () => {
   const dailyRound = useMemo<RankRound>(() => getDailyRankRound(), []);
   const [unlimitedRound, setUnlimitedRound] = useState<RankRound>(() => getRandomRankRound());
   const [unlimitedSeed, setUnlimitedSeed] = useState<number>(() => Math.floor(Math.random() * 1e9));
+  const [circuit, setCircuit] = useState<CircuitState | null>(loadCircuit);
+  const circuitRef = useRef(circuit);
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+  const [circuitHelp, setCircuitHelp] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
+  const circuitSerial = useRef(0);
+  const circuitAction = useRef<HTMLButtonElement>(null);
+  const circuitHeading = useRef<HTMLParagraphElement>(null);
+  const circuitFocus = useRef<Element | null | false>(false);
+  const heldDraft = useRef<{ mode: Mode; roundId: string; picks: string[] } | null>(null);
+  const isCircuit = mode === 'circuit' && circuit !== null;
+  const circuitIndex = reviewIndex ?? circuit?.index ?? 0;
+  const circuitArea = useRevealScroll<HTMLDivElement>(`${mode}:${circuit?.phase}:${circuit?.index}:${reviewIndex}`, { enabled: isCircuit && !circuitHelp, skipFirst: false });
+  const storeCircuit = useCallback((next: CircuitState) => {
+    if (next === circuitRef.current) return;
+    circuitRef.current = next;
+    setCircuit(next);
+    setSaveFailed(!saveCircuit(next));
+  }, []);
 
   const {
     guesses: dailyActions,
@@ -58,9 +80,9 @@ const RankEm = () => {
 
   const [unlimitedActions, setUnlimitedActions] = useState<RankAction[]>([]);
 
-  const round = mode === 'daily' ? dailyRound : unlimitedRound;
-  const seed = mode === 'daily' ? dateSeed(getTodayET()) : unlimitedSeed;
-  const actions = mode === 'daily' ? dailyActions : unlimitedActions;
+  const round = isCircuit ? circuitRound(circuit, circuitIndex) : mode === 'daily' ? dailyRound : unlimitedRound;
+  const seed = isCircuit ? circuit.seeds[circuitIndex] : mode === 'daily' ? dateSeed(getTodayET()) : unlimitedSeed;
+  const actions = isCircuit ? circuit.orders[circuitIndex] ? [{ order: circuit.orders[circuitIndex]! }] : [] : mode === 'daily' ? dailyActions : unlimitedActions;
   const submitted = actions.length > 0;
   const submittedOrder = submitted ? actions[0].order : null;
 
@@ -79,10 +101,12 @@ const RankEm = () => {
 
   // Reset the working picks whenever the round or mode changes.
   useLayoutEffect(() => {
-    draftRef.current = [];
+    const restored = isCircuit ? circuit.drafts[circuitIndex] : heldDraft.current?.mode === mode && heldDraft.current.roundId === round.id ? heldDraft.current.picks : [];
+    if (!isCircuit && heldDraft.current?.mode === mode) heldDraft.current = null;
+    draftRef.current = [...restored];
     pendingFocus.current = null;
     pendingLock.current = null;
-    setPicks([]);
+    setPicks([...restored]);
     setCommitted(false);
   }, [round.id, mode]);
 
@@ -93,9 +117,11 @@ const RankEm = () => {
   const won = submitted && correctCount === 5;
 
   const act = useCallback((a: RankAction) => {
-    if (mode === 'daily') addDailyAction(a);
+    if (mode === 'circuit') {
+      if (circuitRef.current) storeCircuit(lockCircuit(circuitRef.current));
+    } else if (mode === 'daily') addDailyAction(a);
     else setUnlimitedActions((prev) => [...prev, a]);
-  }, [mode, addDailyAction]);
+  }, [mode, addDailyAction, storeCircuit]);
 
   useLayoutEffect(() => {
     draftRef.current = picks;
@@ -142,9 +168,11 @@ const RankEm = () => {
   }, [committed]);
 
   const edit = (order: string[], target: string) => {
+    if (isCircuit && (circuitHelp || circuitRef.current?.phase !== 'playing')) return;
     if (submitted || pendingLock.current || order.every((name, i) => name === draftRef.current[i]) && order.length === draftRef.current.length) return;
     draftRef.current = order;
     pendingFocus.current = { target, opener: document.activeElement };
+    if (isCircuit && circuitRef.current) storeCircuit(editCircuit(circuitRef.current, order));
     setPicks(order);
   };
   const pick = (name: string) => {
@@ -162,6 +190,7 @@ const RankEm = () => {
   };
   const undo = () => { const draft = draftRef.current, last = draft[draft.length - 1]; if (last) remove(last); };
   const lockOrder = () => {
+    if (isCircuit && (circuitHelp || circuitRef.current?.phase !== 'playing')) return;
     const order = draftRef.current;
     if (submitted || pendingLock.current || order.length !== 5 || new Set(order).size !== 5 || !order.every(name => scramble.includes(name))) return;
     pendingLock.current = { mode, roundId: round.id, order: [...order], opener: document.activeElement };
@@ -182,11 +211,49 @@ const RankEm = () => {
     setCommitted(false);
   }, []);
 
+  const enterCircuit = () => {
+    if (mode === 'circuit') return;
+    heldDraft.current = { mode, roundId: round.id, picks: [...draftRef.current] };
+    if (!circuitRef.current) {
+      const next = createCircuit(getDailyRankRound().id, (Date.now() + Math.floor(Math.random() * 1e9) + ++circuitSerial.current) >>> 0);
+      if (!next) return;
+      storeCircuit(next);
+    }
+    circuitFocus.current = document.activeElement;
+    setMode('circuit');
+  };
+  const circuitStep = () => {
+    const state = circuitRef.current;
+    if (!isCircuit || circuitHelp || !state) return;
+    const next = state.phase === 'intro' ? startCircuit(state) : advanceCircuit(state);
+    if (next === state) return;
+    circuitFocus.current = document.activeElement;
+    storeCircuit(next);
+  };
+  const replayCircuit = () => {
+    const state = circuitRef.current;
+    if (!isCircuit || circuitHelp || state?.phase !== 'done') return;
+    const next = createCircuit(getDailyRankRound().id, (Date.now() + Math.floor(Math.random() * 1e9) + ++circuitSerial.current) >>> 0);
+    if (!next) return;
+    setReviewIndex(null);
+    circuitFocus.current = document.activeElement;
+    storeCircuit(startCircuit(next));
+  };
+  useLayoutEffect(() => {
+    if (!isCircuit || circuitHelp || circuitFocus.current === false) return;
+    const nextFocus = circuit?.phase === 'playing' ? circuitHeading.current : circuitAction.current;
+    if (!nextFocus) return;
+    const opener = circuitFocus.current, active = document.activeElement;
+    circuitFocus.current = false;
+    if (active === opener || active === document.body || !active?.isConnected) nextFocus.focus({ preventScroll: true });
+  }, [isCircuit, circuit?.phase, circuit?.index, reviewIndex, circuitHelp, isLoading]);
+  useEffect(() => { if (!isCircuit) setCircuitHelp(false); }, [isCircuit]);
+
   /* Round 643: the daily status alone, in either mode (the MissingXi shape).
      Gated on the mode, a trip to Unlimited and back went false then true
      over a daily already recorded and paid it again; a restored finish still
      arrives through useDailyPuzzle's markRestoredFinish handshake. */
-  useGameCompletion('rank-em', rawDailyStatus !== 'playing', score);
+  useGameCompletion('rank-em', rawDailyStatus !== 'playing', isCircuit ? scoreRankGuess(dailyActions[0]?.order ?? [], dailyRound) * RANK_POINTS_PER_SLOT : score);
 
   const valueOf = (name: string): number | undefined => round.items.find((it) => it.name === name)?.value;
 
@@ -199,38 +266,74 @@ const RankEm = () => {
       />
       <GameShell
         width="narrow"
-        className={styles.board}
-        title="📊 RANK 'EM"
-        subtitle="Put five players in order by the stat, most to fewest."
+        className={cn(styles.board, isCircuit && styles.circuitPage)}
+        help={isCircuit ? 'none' : 'auto'}
+        title={isCircuit ? 'LEGENDS CIRCUIT' : "📊 RANK 'EM"}
+        subtitle={isCircuit ? circuit.phase === 'intro' ? 'Three sports. Fifteen places. One run.' : undefined : 'Put five players in order by the stat, most to fewest.'}
         headerExtra={
-          <div className="flex items-center justify-center gap-1 mt-4 bg-secondary rounded-full p-1 w-fit mx-auto">
+          <div className={cn('flex flex-wrap items-center justify-center gap-1 mt-4 bg-secondary rounded-xl p-1 w-fit mx-auto', isCircuit && styles.circuitModes)}>
             {(['daily', 'unlimited'] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
                 onKeyDown={guardRepeat}
                 className={cn(
-                  `px-5 py-1.5 rounded-full text-sm font-semibold transition-all ${styles.action}`,
+                  `px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${styles.action}`,
                   mode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
               </button>
             ))}
+            <button onClick={enterCircuit} onKeyDown={guardRepeat} aria-label="Legends circuit" aria-pressed={isCircuit} className={cn(`rounded-lg px-3 py-1.5 text-xs font-semibold ${styles.action}`, isCircuit ? 'bg-primary text-primary-foreground' : 'text-primary hover:bg-primary/10')}>{isCircuit ? 'Circuit' : 'Legends circuit'}</button>
           </div>
         }
       >
         {!isLoading && (
-          <>
-            <div className="text-center mb-4">
-              <p className="text-sm font-bold text-primary">{round.sport} · {round.statLabel}</p>
+          <div ref={isCircuit ? circuitArea : undefined} data-rank-circuit={isCircuit ? '' : undefined} data-circuit-phase={isCircuit ? circuit.phase : undefined} data-circuit-sport={isCircuit ? round.sport : undefined} data-circuit-round={isCircuit ? round.id : undefined} className={isCircuit ? styles.circuit : undefined}>
+            {isCircuit && <>
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <p className="text-xs text-muted-foreground">Completed league careers. Unranked.</p>
+                <HowToPlayPopover title="Legends circuit rules" triggerLabel="Legends circuit rules" floatingTrigger={false} className={styles.action} open={circuitHelp} onOpenChange={setCircuitHelp}>
+                  <p>Rank five players from most to fewest in each sport: NBA, NHL, then MLB. Pick all five, edit with the arrows or Remove, then press Lock order.</p>
+                  <p>Each exact position earns one point. Five places per sport, fifteen in the circuit. Your Daily score stays separate.</p>
+                  <p>For example, totals of 30, 20 and 10 belong in that order. Swapping the first two leaves only the last player in the right place. These example numbers are not player statistics.</p>
+                  <p>Each reveal shows the full names, totals and your positions. Press Next sport when ready. This run saves on this device, including unfinished picks. A new run excludes the Daily board at the time it starts.</p>
+                </HowToPlayPopover>
+              </div>
+              <div className="mb-3 grid grid-cols-3 gap-2" aria-label="Circuit progress">
+                {CIRCUIT_SPORTS.map((sport, i) => <div key={sport} className={cn('rounded-xl border px-2 py-1 text-center', i === circuitIndex ? 'border-primary bg-primary/10' : 'border-border bg-card')}>
+                  <span className="flex items-center justify-center gap-1"><span aria-hidden="true" className="text-lg">{['🏀', '🏒', '⚾'][i]}</span><span className="text-xs font-bold">{sport}</span></span>
+                  <span className="block text-xs text-muted-foreground">{circuit.orders[i] ? `${scoreRankGuess(circuit.orders[i]!, circuitRound(circuit, i))} / 5` : i === circuit.index && circuit.phase !== 'intro' ? 'Up now' : 'To play'}</span>
+                </div>)}
+              </div>
+              {saveFailed && <p role="alert" className="mb-3 rounded-lg border border-destructive/50 p-3 text-sm">Your run is open, but this browser could not save it. Keep this tab open to finish.</p>}
+              {circuit.phase === 'intro' && <div className="rounded-2xl border border-primary/30 bg-card p-4 text-sm">
+                <h2 className="text-lg font-bold">Put the legends in order.</h2>
+                <p className="mt-2 text-muted-foreground">Pick five names, most to fewest. Edit with arrows or Remove, then Lock order. One point per exact place.</p>
+                <div className="my-3 rounded-xl bg-secondary p-3"><strong>Worked example</strong><p className="mt-1">30, 20, 10 is correct. Swap 30 and 20: only 10 stays right. Example numbers, not player stats.</p></div>
+                <p className="mb-3 text-muted-foreground">Three sports, 15 places. Picks save on this device. Daily stays separate.</p>
+                <button ref={circuitAction} onClick={circuitStep} onKeyDown={guardRepeat} className={`w-full rounded-xl bg-primary px-3 py-3 font-bold text-primary-foreground ${styles.action}`}>Start circuit</button>
+              </div>}
+              {circuit.phase === 'done' && reviewIndex === null && <div data-circuit-result="" className="rounded-2xl border border-primary/30 bg-card p-4 text-center">
+                <h2 className="text-xl font-bold">Circuit complete</h2>
+                <p data-circuit-total="" className="my-3 font-display text-4xl text-primary">{circuitScore(circuit)} / 15</p>
+                <p className="mb-3 text-sm text-muted-foreground">Exact places across three sports. Open a sport to review your order.</p>
+                <div className="grid grid-cols-3 gap-2">{CIRCUIT_SPORTS.map((sport, i) => <button key={sport} aria-label={`Review ${sport}`} onClick={() => { circuitFocus.current = document.activeElement; setReviewIndex(i); }} className={`rounded-xl border border-border bg-secondary px-1 py-3 text-sm ${styles.action}`}><strong className="block">{sport}</strong><span data-circuit-score={sport}>{scoreRankGuess(circuit.orders[i]!, circuitRound(circuit, i))} / 5</span><span className="block text-xs text-primary">Review</span></button>)}</div>
+                <button ref={circuitAction} onClick={replayCircuit} onKeyDown={guardRepeat} className={`mt-4 w-full rounded-xl bg-primary px-3 py-3 font-bold text-primary-foreground ${styles.action}`}>Play another circuit</button>
+                <p className="mt-2 text-xs text-muted-foreground">Saved on this device. No leaderboard points.</p>
+              </div>}
+            </>}
+            {(!isCircuit || circuit.phase === 'playing' || circuit.phase === 'reveal' || reviewIndex !== null) && <>
+            <div className={cn('text-center', isCircuit ? 'mb-2' : 'mb-4')}>
+              <p ref={circuitHeading} tabIndex={-1} className="text-sm font-bold text-primary">{round.sport} · {round.statLabel}</p>
               <p className="text-xs text-muted-foreground mt-0.5 inline-flex items-center gap-1">
                 Rank most <ArrowDown className="w-3 h-3" /> fewest
               </p>
             </div>
 
             {/* Ranking slots */}
-            <div data-rank-ladder className={`max-w-md mx-auto space-y-2 mb-4 ${styles.ladder}`}>
+            {!(isCircuit && over) && <div data-rank-ladder className={`max-w-md mx-auto space-y-2 mb-4 ${styles.ladder}`}>
               {Array.from({ length: 5 }).map((_, i) => {
                 const name = finalOrder[i];
                 const isCorrect = over && name === round.items[i].name;
@@ -267,7 +370,7 @@ const RankEm = () => {
                   </div>
                 );
               })}
-            </div>
+            </div>}
 
             {/* Pool */}
             {!over && (
@@ -301,7 +404,7 @@ const RankEm = () => {
             )}
 
             {/* Result */}
-            {over && (
+            {over && !isCircuit && (
               <div ref={resultRef} role="region" aria-label="Rank result" tabIndex={-1} data-rank-action-count={actions.length} data-rank-cue={committed ? 'committed' : undefined} className={`mt-4 flex justify-center ${styles.result} ${styles.fullText} ${committed ? styles.committed : ''}`}>
                 <ResultScreen
                   won={won}
@@ -322,7 +425,15 @@ const RankEm = () => {
                 />
               </div>
             )}
-          </>
+            {isCircuit && over && <div ref={resultRef} role="region" aria-label="Circuit round result" tabIndex={-1} data-circuit-reveal="" className={cn('rounded-2xl border border-primary/30 bg-card p-3', committed && styles.committed)}>
+              <h2 className="mb-2 text-center text-lg font-bold">{correctCount} / 5 exact places</h2>
+              <ol className="space-y-1">{round.items.map((item, i) => <li key={item.name} className={cn('grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-2 py-1.5 text-sm', submittedOrder?.[i] === item.name ? 'bg-correct/10' : 'bg-secondary/60')}>
+                <strong>{i + 1}</strong><span className="min-w-0"><span className="block font-semibold">{item.name}</span><span className="block text-xs text-muted-foreground">Your #{submittedOrder!.indexOf(item.name) + 1}{submittedOrder?.[i] === item.name ? ', correct' : ''}</span></span><span className="text-right text-xs tabular-nums">{item.value.toLocaleString()}<span className="block text-muted-foreground">{round.unit}</span></span>
+              </li>)}</ol>
+              {reviewIndex !== null ? <button ref={circuitAction} onClick={() => { circuitFocus.current = document.activeElement; setReviewIndex(null); }} className={`mt-3 w-full rounded-xl bg-primary px-3 py-3 font-semibold text-primary-foreground ${styles.action}`}>Back to circuit results</button> : <button ref={circuitAction} onClick={circuitStep} onKeyDown={guardRepeat} className={`mt-3 w-full rounded-xl bg-primary px-3 py-3 font-semibold text-primary-foreground ${styles.action}`}>{circuit.index === 2 ? 'View circuit results' : 'Next sport'}</button>}
+            </div>}
+            </>}
+          </div>
         )}
 
         <GameSeoContent
