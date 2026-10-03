@@ -3,12 +3,13 @@ import { Check, Copy, RotateCcw } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
-import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, type PerkKind, type ManagerProfile } from '@/lib/rebuildDeck';
+import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, SWAP_DISCOUNT, type ManagerProfile } from '@/lib/rebuildDeck';
 import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
 import { useRebuild } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { CelebrationStyles, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
+import { PowerUpPocket, VetoVerdict } from '@/components/rebuild/RebuildPowerUps';
 
 const TIER_LABEL: Record<ClubTier, string> = {
   elite: 'Elite, barely any headroom',
@@ -24,7 +25,6 @@ const TIER_STYLE: Record<ClubTier, string> = {
   modest: 'text-muted-foreground',
 };
 
-const PERK_KINDS: PerkKind[] = ['rescout', 'discount', 'noWar'];
 
 /* The manager's lift in words, never a "+N rating" label: who it lands on
    and roughly how hard. The XI reading beside it is the honest number. */
@@ -52,6 +52,7 @@ export function RebuildBoard() {
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
     managerReading, offerPrice, canRedeal,
+    canSecondSpin, swapCeiling, loanFee, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
     pickFinance, toManager, hireManager, keepManager, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,
@@ -760,7 +761,7 @@ export function RebuildBoard() {
   const onTrack = currentRating >= target;
   const incumbent = spun !== null ? startingXi[spun] : null;
   const spentAllSpins = settledCount >= formation.slots.length;
-  const heldPerks = PERK_KINDS.filter(k => perks[k] > 0);
+  const swapOpen = run.swapOpen;
 
   return (
     <div ref={revealRef} className="mx-auto max-w-2xl px-4 py-6">
@@ -812,13 +813,15 @@ export function RebuildBoard() {
         {spentAllSpins && (
           <button
             onClick={finish}
-            disabled={!!war}
+            disabled={!!war || run.verdict}
             className="ml-auto rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
           >
             Final whistle
           </button>
         )}
       </div>
+
+      {verdictCards && <VetoVerdict verdict={verdictCards} vetoCard={vetoCard} acceptVerdict={acceptVerdict} />}
 
       {/* Board demands, live checklist */}
       {objectives.length > 0 && (
@@ -833,17 +836,14 @@ export function RebuildBoard() {
       )}
 
       {/* Perks in hand */}
-      {heldPerks.length > 0 && (
-        <div className="mt-3 rounded-xl border border-primary/40 bg-primary/5 p-3">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">In your pocket</p>
-          {heldPerks.map(k => (
-            <p key={k} className="mt-1 text-xs text-foreground">
-              {PERK_LABEL[k].emoji} <span className="font-semibold">{PERK_LABEL[k].short}{perks[k] > 1 ? ` x${perks[k]}` : ''}</span>
-              <span className="text-muted-foreground">: {PERK_LABEL[k].long}</span>
-            </p>
-          ))}
-        </div>
-      )}
+      <PowerUpPocket
+        run={run}
+        peeked={peeked}
+        canSecondSpin={canSecondSpin}
+        secondSpin={secondSpin}
+        sneakPeek={sneakPeek}
+        busy={spinning || !!war}
+      />
 
       {/* Envelopes that arrived as you went */}
       {post.length > 0 && (
@@ -924,6 +924,16 @@ export function RebuildBoard() {
               SELL, €{incumbent.marketValue}M
             </button>
           </div>
+          {perks.swap > 0 && (
+            <div className="mt-2 text-center">
+              <button
+                onClick={partExchange}
+                className="rounded-full border border-primary/60 bg-primary/10 px-5 py-2 text-xs font-bold text-primary hover:bg-primary/20"
+              >
+                {PERK_LABEL.swap.emoji} PART EXCHANGE: see the three first
+              </button>
+            </div>
+          )}
           <p className="mt-2 text-center text-[10px] text-muted-foreground">
             Selling is final. The scouts bring three prices, the bench is free, and a 40 overall is always there.
           </p>
@@ -934,16 +944,18 @@ export function RebuildBoard() {
       {spun !== null && deal && (
         <div className="mt-4 rounded-2xl border border-border bg-card p-4">
           <p className="text-center text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-            {incumbent ? `Fill the ${formation.slots[spun].label} shirt` : `The ${formation.slots[spun].label} shirt was already empty, fill it`}
+            {swapOpen && incumbent
+              ? `Part exchange: take one and ${incumbent.name} goes the other way`
+              : incumbent ? `Fill the ${formation.slots[spun].label} shirt` : `The ${formation.slots[spun].label} shirt was already empty, fill it`}
           </p>
           {deal.offers.length > 0 && (
             <div className="mt-3 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-                The scouts' three{perks.discount > 0 ? ', 20% off the one you take' : ''}
+                The scouts' three{swapOpen ? `, ${Math.round(SWAP_DISCOUNT * 100)}% off in the exchange` : perks.discount > 0 ? ', 20% off the one you take' : ''}
               </p>
               {deal.offers.map(p => {
                 const price = offerPrice(p);
-                const affordable = price <= spendCeiling;
+                const affordable = price <= (swapOpen ? swapCeiling : spendCeiling);
                 return (
                   <button
                     key={p.name}
@@ -968,9 +980,26 @@ export function RebuildBoard() {
                   </button>
                 );
               })}
+              {perks.loan > 0 && !swapOpen && (
+                <div className="pt-1">
+                  <p className="text-[10px] text-muted-foreground">{PERK_LABEL.loan.emoji} Or borrow one for the season (not a signing, he goes back after):</p>
+                  <div className="mt-1 flex flex-wrap gap-1.5">
+                    {deal.offers.map(p => (
+                      <button
+                        key={p.name}
+                        onClick={() => loanReplacement(p)}
+                        disabled={loanFee(p) > spendCeiling || !!war}
+                        className="rounded-full border border-primary/50 px-3 py-1 text-[11px] font-semibold text-primary hover:bg-primary/10 disabled:opacity-40"
+                      >
+                        Loan {p.name}, €{loanFee(p)}M
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
-          {deal.bench.length > 0 && (
+          {deal.bench.length > 0 && !swapOpen && (
             <div className="mt-3 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-500">Promote from your own squad, free</p>
               {deal.bench.map(p => (
@@ -1005,13 +1034,22 @@ export function RebuildBoard() {
               </button>
             </div>
           )}
-          <button
-            onClick={takeForty}
-            disabled={!!war}
-            className="mt-3 w-full rounded-lg border border-border/60 px-3 py-2 text-center text-[11px] text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-40"
-          >
-            Take a 40 overall for this shirt
-          </button>
+          {swapOpen && incumbent ? (
+            <button
+              onClick={keepSpun}
+              className="mt-3 w-full rounded-lg border border-emerald-500/50 px-3 py-2 text-center text-xs font-semibold text-emerald-500 hover:bg-emerald-500/10"
+            >
+              Call it off, keep {incumbent.name} (the exchange is used up)
+            </button>
+          ) : (
+            <button
+              onClick={takeForty}
+              disabled={!!war}
+              className="mt-3 w-full rounded-lg border border-border/60 px-3 py-2 text-center text-[11px] text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-40"
+            >
+              Take a 40 overall for this shirt
+            </button>
+          )}
         </div>
       )}
 
@@ -1027,6 +1065,12 @@ export function RebuildBoard() {
             <p className="mt-1 text-muted-foreground">
               <span className="font-semibold text-emerald-500">In:</span>{' '}
               {signed.map(p => `${p.name} (€${p.marketValue}M)`).join(', ')}
+            </p>
+          )}
+          {run.loans.length > 0 && (
+            <p className="mt-1 text-muted-foreground">
+              <span className="font-semibold text-primary">On loan for the season:</span>{' '}
+              {run.loans.map(l => `${l.player.name} (€${l.fee}M fee)`).join(', ')}
             </p>
           )}
           {overpaid > 0 && (

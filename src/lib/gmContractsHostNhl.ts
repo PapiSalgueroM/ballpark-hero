@@ -13,8 +13,9 @@ export const nhlContractHost: GmContractHost<NhlLeague, string[]> = {
   /* The engine prices by rating, on the scale the save's rating model uses. */
   marketSalary: (league, man) => nhlSalaryFor(man.ovr, league.ratingModelVersion),
   nextCap: league => Math.round(league.cap * NHL_DESK_CAP_RISE),
-  /* The NHL offseason takes no user club: every club is run the same way. */
-  runOffseason: (league, rng) => nhlOffseason(league, rng),
+  /* Round 987: the user club goes in, so the engine trims every CPU club over
+     its roster limit exactly as the board's own path does (Round 969). */
+  runOffseason: (league, rng, team) => nhlOffseason(league, rng, team),
   /* The lowest figure the engine signs a draft pick for. */
   minSalary: () => 0.8,
   /* The engine's own roster ceiling: a rival with no spot cannot table a sheet. */
