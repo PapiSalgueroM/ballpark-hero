@@ -75,6 +75,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
@@ -217,20 +218,33 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
     { rel: 'src/lib/soccerCareerEngine.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the soccer engine binds careerRivalryEvents' },
     { rel: 'src/lib/nflCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NFL binding binds careerRivalryEvents' },
     { rel: 'src/lib/nflMyCareer.ts', re: /from\s+["']\.\/nflCareerRivalryEvents["']/, what: 'the NFL engine runs the rivalry tick' },
-    { rel: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nflCareerRivalryEvents["']/, what: 'the NFL board dismisses the pending beat' },
+    { rel: 'src/lib/nflCareerSport.ts', re: /from\s+["']@\/lib\/nflCareerRivalryEvents["']/, what: 'the NFL board binding hands the board its rivalry beats' },
     { rel: 'src/lib/mlbCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the MLB binding binds careerRivalryEvents' },
     { rel: 'src/lib/mlbMyCareer.ts', re: /from\s+["']\.\/mlbCareerRivalryEvents["']/, what: 'the MLB engine runs the rivalry tick' },
-    { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/lib\/mlbCareerRivalryEvents["']/, what: 'the MLB board dismisses the pending beat' },
+    { rel: 'src/lib/mlbCareerSport.ts', re: /from\s+["']@\/lib\/mlbCareerRivalryEvents["']/, what: 'the MLB board binding hands the board its rivalry beats' },
     { rel: 'src/lib/nbaCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NBA binding binds careerRivalryEvents' },
     { rel: 'src/lib/nbaMyCareer.ts', re: /from\s+["']\.\/nbaCareerRivalryEvents["']/, what: 'the NBA engine runs the rivalry tick' },
-    { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nbaCareerRivalryEvents["']/, what: 'the NBA board dismisses the pending beat' },
+    { rel: 'src/lib/nbaCareerSport.ts', re: /from\s+["']@\/lib\/nbaCareerRivalryEvents["']/, what: 'the NBA board binding hands the board its rivalry beats' },
     { rel: 'src/lib/nhlCareerRivalryEvents.ts', re: /from\s+["']\.\/careerRivalryEvents["']/, what: 'the NHL binding binds careerRivalryEvents' },
     { rel: 'src/lib/nhlMyCareer.ts', re: /from\s+["']\.\/nhlCareerRivalryEvents["']/, what: 'the NHL engine runs the rivalry tick' },
-    { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nhlCareerRivalryEvents["']/, what: 'the NHL board dismisses the pending beat' },
+    { rel: 'src/lib/nhlCareerSport.ts', re: /from\s+["']@\/lib\/nhlCareerRivalryEvents["']/, what: 'the NHL board binding hands the board its rivalry beats' },
   ];
   for (const imp of IMPORTS) {
     if (!imp.re.test(code.get(imp.rel) ?? '')) fail(`${imp.what}: no import found in ${imp.rel}`);
   }
+  /* Round 900: the four boards are one. The binding importing its rivalry
+     module proves nothing unless the shared board calls it and each sport's
+     page is on that board, so both halves are checked here. */
+  const BOARD_DOES = [
+    { re: /sport\.dismissRivalryEvent\(/, what: 'dismisses the pending beat through the sport binding' },
+    { re: /sport\.resolveRivalryChoice\(/, what: 'resolves a rival choice through the sport binding' },
+    { re: /<RivalryEventCard\b/, what: 'draws the rivalry beat card' },
+    { re: /<RivalryChoiceCard\b/, what: 'draws the rival choice card' },
+  ];
+  for (const b of BOARD_DOES) {
+    if (!b.re.test(code.get(US_CAREER_BOARD) ?? '')) fail(`the shared US career board no longer ${b.what} (${US_CAREER_BOARD})`);
+  }
+  for (const why of allWrapperProblems(ROOT)) fail(why);
   console.log(`   ${RULES.length} rule fingerprints checked, ${IMPORTS.length} bindings confirmed`);
 }
 
