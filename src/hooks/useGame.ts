@@ -156,7 +156,8 @@ export function useGame() {
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
 
   // First selection waits for the same resolved pool as the daily.
-  const [difficulty, setDifficultyState] = useState<Difficulty>(() => practiceRun?.tier ?? 'easy');
+  const [difficulty, setDifficultyState] = useState<Difficulty>('easy');
+  const [practiceDifficulty, setPracticeDifficulty] = useState<Difficulty>(() => practiceRun?.tier ?? 'easy');
   const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<GuessResult[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
@@ -186,9 +187,9 @@ export function useGame() {
     if (isLoadingPool || !dailyTarget) return;
     const current = practiceRef.current;
     if (current && !practiceFinished(current)) return;
-    const run = createPracticeRun(playerPool, difficulty, dailyTarget.name);
+    const run = createPracticeRun(playerPool, practiceDifficulty, dailyTarget.name);
     if (run) { savePractice(run); setMode('practice'); }
-  }, [isLoadingPool, dailyTarget, playerPool, difficulty, savePractice]);
+  }, [isLoadingPool, dailyTarget, playerPool, practiceDifficulty, savePractice]);
 
   const advancePractice = useCallback(() => {
     const run = practiceRef.current;
@@ -263,11 +264,11 @@ export function useGame() {
   const changeDifficulty = useCallback((newDiff: Difficulty) => {
     // Difficulty selection only applies in unlimited mode, daily tier is locked
     if (mode === 'daily' || isLoadingPool) return;
-    if (newDiff === difficulty) return;
     if (mode === 'practice') {
-      if (!practiceRef.current || practiceFinished(practiceRef.current)) setDifficultyState(newDiff);
+      if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);
       return;
     }
+    if (newDiff === difficulty) return;
     setDifficultyState(newDiff);
     setUnlimitedTarget(selectRandomPlayer(newDiff, playerPool));
     setUnlimitedGuesses([]);
@@ -310,7 +311,7 @@ export function useGame() {
     mode,
     switchMode,
     dailyTier,            // today's deterministic tier ('easy' | 'hard' | 'insane')
-    difficulty,           // user-selected tier for unlimited mode
+    difficulty: mode === 'practice' ? practiceDifficulty : difficulty,
     changeDifficulty,
     targetPlayer,
     guesses,
@@ -328,7 +329,7 @@ export function useGame() {
     startPractice,
     advancePractice,
     practiceComplete: practiceRun ? practiceFinished(practiceRun) : false,
-    practiceReady: !isLoadingPool && !!dailyTarget && practiceCandidates(playerPool, difficulty, dailyTarget.name).length >= 5,
+    practiceReady: !isLoadingPool && !!dailyTarget && practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5,
     examplePlayer,
   };
 }

@@ -167,6 +167,50 @@ describe('Footle practice mounted outcomes', () => {
     expect(savedRun().index).toBe(1);
   });
 
+  it('keeps practice difficulty separate from a played Unlimited puzzle', async () => {
+    let hook = renderHook(() => useGame());
+    await waitFor(() => expect(hook.result.current.isLoadingPool).toBe(false));
+    act(() => hook.result.current.switchMode('unlimited'));
+    await waitFor(() => expect(hook.result.current.targetPlayer).not.toBeNull());
+    const target = hook.result.current.targetPlayer!;
+    act(() => hook.result.current.makeGuess(fixture.pool.find(player => player.name !== target.name)!));
+    const unlimited = () => JSON.stringify({ target: hook.result.current.targetPlayer, guesses: hook.result.current.guesses, difficulty: hook.result.current.difficulty, status: hook.result.current.gameStatus });
+    const before = unlimited();
+    expect(hook.result.current.difficulty).toBe('easy');
+    expect(hook.result.current.guesses).toHaveLength(1);
+
+    for (const tier of ['hard', 'insane'] as const) {
+      act(() => hook.result.current.switchMode('practice'));
+      act(() => hook.result.current.changeDifficulty(tier));
+      expect(hook.result.current.difficulty).toBe(tier);
+      act(() => hook.result.current.switchMode('unlimited'));
+      expect(unlimited()).toBe(before);
+      act(() => hook.result.current.switchMode('practice'));
+      expect(hook.result.current.difficulty).toBe(tier);
+    }
+    act(() => hook.result.current.startPractice());
+    expect(hook.result.current.practiceRun!.tier).toBe('insane');
+    expect(hook.result.current.practiceRun!.targets.every(name => fixture.pool.find(player => player.name === name)?.difficulty === 'insane')).toBe(true);
+    const practiceTarget = hook.result.current.targetPlayer!;
+    act(() => hook.result.current.makeGuess(fixture.pool.find(player => player.name !== practiceTarget.name)!));
+    act(() => hook.result.current.switchMode('unlimited'));
+    expect(unlimited()).toBe(before);
+    act(() => hook.result.current.switchMode('practice'));
+    const saved = localStorage.getItem(FOOTLE_PRACTICE_KEY);
+    hook.unmount();
+    hook = renderHook(() => useGame());
+    await waitFor(() => expect(hook.result.current.isLoadingPool).toBe(false));
+    expect(hook.result.current.mode).toBe('practice');
+    expect(hook.result.current.difficulty).toBe('insane');
+    expect(hook.result.current.targetPlayer).toEqual(practiceTarget);
+    expect(hook.result.current.guesses).toHaveLength(1);
+    expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBe(saved);
+    act(() => hook.result.current.switchMode('unlimited'));
+    expect(hook.result.current.difficulty).toBe('easy');
+    expect(hook.result.current.targetPlayer!.difficulty).toBe('easy');
+    expect(hook.result.current.guesses).toHaveLength(0);
+  });
+
   it('offers practice from the daily result without resetting that result', async () => {
     const view = await page();
     await view.findByRole('combobox');
