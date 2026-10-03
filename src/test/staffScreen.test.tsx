@@ -56,7 +56,7 @@ describe('Club Manager staff decision desk', () => {
     /* Round 963: a lift inside developmentRate's clamp adds nothing to a kid already on it. */
     const state = fixture();
     const flyer = { id: 'flyer', name: 'Fixture Flyer', position: 'ST', rating: 60, potential: 80, age: 19, apps: 34 } as unknown as CareerState['squad'][number];
-    const slow = { ...flyer, id: 'slow', name: 'Fixture Slow', position: 'CB', apps: 0, potential: 62 };
+    const slow = { ...flyer, id: 'slow', name: 'Fixture Slow', position: 'CB' as const, apps: 0, potential: 62 };
     const s = staffOf(state);
     state.squad = [flyer, slow];
     state.staff = { ...s, attack: { ...s.attack!, level: 10, potential: 10 }, defence: { ...s.defence!, level: 10, potential: 10 } };
