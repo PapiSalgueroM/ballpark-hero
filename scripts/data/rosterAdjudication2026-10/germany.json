@@ -13,6 +13,56 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/fc-bayern-muenchen/squad", "publisher": "Bundesliga (Bayern Munich squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/132/ger.bayern_munich", "publisher": "ESPN (Bayern Munich squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 7, age 31"}
    ]
+  },
+  {
+   "name": "Emre Can",
+   "club": "Borussia Dortmund",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Dortmund's number 23, aged 32 on ESPN. On both 2026-27 squad pages, though ESPN shows no minutes for him yet this season.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-dortmund/squad", "publisher": "Bundesliga (Borussia Dortmund squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/124/ger.dortmund", "publisher": "ESPN (Borussia Dortmund squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 23, age 32"}
+   ]
+  },
+  {
+   "name": "Ansgar Knauff",
+   "club": "Eintracht Frankfurt",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Frankfurt's number 7, aged 24 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/eintracht-frankfurt/squad", "publisher": "Bundesliga (Eintracht Frankfurt squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/125/ger.eintracht_frankfurt", "publisher": "ESPN (Eintracht Frankfurt squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 7, age 24"}
+   ]
+  },
+  {
+   "name": "Lukas Petkov",
+   "club": "Elversberg",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 2000-11-01. Still at Elversberg, who were promoted and now play in the Bundesliga; he has Bundesliga minutes for them this season.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sv-elversberg/squad", "publisher": "Bundesliga (SV Elversberg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://www.fotmob.com/players/1093782/lukas-petkov", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Elversberg, born 2000-11-01, 353 Bundesliga minutes in 2026-27"}
+   ]
+  },
+  {
+   "name": "Niklas Beste",
+   "club": "Freiburg",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Freiburg's number 19, aged 27 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 19, age 27"}
+   ]
+  },
+  {
+   "name": "Vincenzo Grifo",
+   "club": "Freiburg",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Freiburg's number 32, aged 33 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 32, age 33"}
+   ]
   }
  ],
  "movedTo": [
@@ -105,6 +155,19 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-bochum-1848/squad", "publisher": "Bundesliga (VfL Bochum squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://ca.soccerway.com/player/passlack-felix/rHIRgwGG/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Bochum to Hibernian 2026-02-02, born 1998-05-29, contract to June 2029"}
    ]
+  },
+  {
+   "name": "Michy Batshuayi",
+   "from": "Eintracht Frankfurt",
+   "to": "Abha",
+   "realClub": "Abha",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1993-10-02. Frankfurt confirmed his move to Abha on 2026-08-17, and he has six Saudi Pro League appearances for them since. Abha is a Club Manager club.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/eintracht-frankfurt/squad", "publisher": "Bundesliga (Eintracht Frankfurt squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.hessenschau.de/sport/fussball/eintracht-frankfurt/eintracht-frankfurt-bestaetigt-transfer-batshuayi-wechselt-nach-saudi-arabien-v1,batshuayi-fix-100.html", "publisher": "hessenschau, Hessischer Rundfunk (2026-08-17)", "readOn": "2026-10-02", "says": "Eintracht Frankfurt confirms the move to Abha"},
+    {"family": "B", "url": "https://www.fotmob.com/players/248689", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Abha, born 1993-10-02, 6 Saudi Pro League appearances, played 90 minutes at Al-Diriyah on 2026-09-13"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -143,8 +206,46 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/vfl-bochum-1848/squad", "publisher": "Bundesliga (VfL Bochum squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://ca.soccerway.com/player/bero-matus/lWQqSFyt/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Bochum to Ferencvaros 2026-09-01 as a free agent, born 1995-09-06"}
    ]
+  },
+  {
+   "name": "Mahmoud Dahoud",
+   "from": "Eintracht Frankfurt",
+   "realClub": "United FC (Dubai)",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1996-01-01. Frankfurt announced on 2026-04-07 that his contract ending 2026-06-30 would not be renewed, and he is off their 2026-27 squad. He joined United FC of Dubai as a free agent on 2026-09-24. The United Arab Emirates are not modelled. Medium confidence on the destination only: the club had teased the signing ahead of a full announcement that neither publisher quotes; his absence from Frankfurt is certain.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/die-adler-und-dahoud-trennen-sich-im-sommer-36783", "publisher": "Bundesliga (news, 2026-04-07)", "readOn": "2026-10-02", "says": "contract to 2026-06-30 not extended by mutual agreement"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/eintracht-frankfurt/squad", "publisher": "Bundesliga (Eintracht Frankfurt squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.soccerway.com/player/dahoud-mahmoud/YkH1Bfia/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Eintracht Frankfurt to United FC 2026-09-24 as a free agent, born 1996-01-01"},
+    {"family": "B", "url": "https://bulinews.com/former-dortmund-brighton-and-frankfurt-midfielder-mahmoud-dahoud-set-play-under-andrea-pirlo", "publisher": "Bulinews", "readOn": "2026-10-02", "says": "set to be unveiled by the Dubai club, which teased the signing on Instagram"}
+   ]
   }
  ],
- "notCurrent": [],
+ "notCurrent": [
+  {
+   "name": "Niklas Süle",
+   "from": "Borussia Dortmund",
+   "why": "Retired from professional football when his Dortmund contract ran out on 2026-06-30, after a knee injury against Hoffenheim. He has since joined SV Tiefenbach, an amateur Kreisliga side, to play with friends, which no Club Manager league models.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/de/bundesliga/news/niklas-suele-bvb-bayern-muenchen-karrierenende-37254", "publisher": "Bundesliga (news, 2026-05-07)", "readOn": "2026-10-02", "says": "ends his professional career in summer 2026"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/borussia-dortmund/squad", "publisher": "Bundesliga (Borussia Dortmund squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.sport1.de/news/fussball/2026/07/nach-bvb-abschied-das-ist-sueles-neuer-klub", "publisher": "Sport1 (2026-07-05)", "readOn": "2026-10-02", "says": "retired from the professional game, confirmed to Sky he will play for SV Tiefenbach in the Kreisliga"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/124/ger.dortmund", "publisher": "ESPN (Borussia Dortmund squad page, season 2026-27)", "readOn": "2026-10-02", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Maximilian Philipp",
+   "from": "Freiburg",
+   "why": "Unattached as far as two sources show. Born 1994-03-01. Freiburg announced on 2026-05-22 that he would no longer be part of the first team from 2026-27, and he is on neither 2026-27 Freiburg squad page. No new club was found up to 2026-10-02. Disagreement recorded: the Soccerway, ESPN and FotMob player pages still name Freiburg as his club, and none shows a new contract or a 2026-27 game (ESPN's last listed game is 2026-05-16), so they read as not yet updated after the club let him go. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {"family": "A", "url": "https://www.scfreiburg.com/en/latest/news/first-team/2025-26/thank-you-chicco-milli-and-kofi", "publisher": "SC Freiburg (club announcement, 2026-05-22)", "readOn": "2026-10-02", "says": "no longer part of the first team from next season"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sc-freiburg/squad", "publisher": "Bundesliga (SC Freiburg squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/126/ger.freiburg", "publisher": "ESPN (SC Freiburg squad page, season 2026-27)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/202802/maximilian-philipp", "publisher": "ESPN (player page)", "readOn": "2026-10-02", "says": "still shows SC Freiburg; last game listed is 2026-05-16 against RB Leipzig; born 1994-03-01"}
+   ]
+  }
+ ],
  "pending": []
 }
