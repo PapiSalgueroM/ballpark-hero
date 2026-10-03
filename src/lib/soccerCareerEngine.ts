@@ -21,6 +21,8 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+/* Round 929: every season's league finish, and the era aware elite rule. */
+import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -179,6 +181,13 @@ export interface SeasonRecord {
       parent club's name, so the record always says where you really belonged. */
   onLoanFrom?: string | null;
   leagueTitle: boolean;
+  /** Round 929: where the club finished in the league, 1 exactly when
+      leagueTitle is true. Absent on saves from before that round, on a
+      season cut short, and on a non title season in a league whose size is
+      not verified (soccerCareerLeague.ts), so nothing false is ever printed. */
+  leagueFinish?: number;
+  /** Round 929: clubs in that league that season, only where verified. */
+  leagueSize?: number;
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
@@ -740,6 +749,23 @@ export interface SeriousInjury {
   setback: boolean;
 }
 
+/**
+ * Round 974: one finished season of the career log, kept for the Career
+ * Story screen. Both season steps used to start with events = [], so every
+ * line from an earlier season was thrown away and a fifteen season career
+ * could only read its last three lines. The lines are kept exactly as the
+ * engine wrote them, rendered on read like the live log.
+ */
+export interface CareerStorySeason {
+  /** the season row's year, age and club the lines belong to */
+  year: number;
+  age: number;
+  club: string;
+  lines: string[];
+  /** lines past STORY_LINES_PER_SEASON that were not kept (measured never to happen) */
+  more?: number;
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -764,6 +790,9 @@ export interface CareerState {
   overall: number;
   seasons: SeasonRecord[];
   events: string[];
+  /** Round 974: every finished season's log, oldest first. Optional: a save
+      from before it starts its story from the season it loads. */
+  story?: CareerStorySeason[];
   retired: boolean;
   /**
    * Round 253: the injury arc. A serious injury used to be a stat penalty
@@ -2504,6 +2533,59 @@ export function careerBuildEffects(s: CareerState): BuildEffects {
   }
 }
 
+/* Round 974: the career story. Measured before this round over 174 season
+   steps (8 seeded careers, scripts/simCareerStory.mjs carries the numbers): a
+   season writes 7 lines at the median, 16 at p99 and 18 at most. 40 keeps
+   every line of every season measured and still bounds a runaway loop. A
+   career is two youth years plus at most about 28 pro seasons, so 60 seasons
+   is never reached by play; it only bounds a damaged save. */
+export const STORY_LINES_PER_SEASON = 40;
+export const STORY_SEASONS_MAX = 60;
+
+function isStorySeason(v: unknown): v is CareerStorySeason {
+  if (!v || typeof v !== "object" || Array.isArray(v)) return false;
+  const e = v as Record<string, unknown>;
+  return typeof e.year === "number" && Number.isFinite(e.year)
+    && typeof e.age === "number" && Number.isFinite(e.age)
+    && typeof e.club === "string"
+    && Array.isArray(e.lines) && e.lines.every(l => typeof l === "string")
+    && (e.more === undefined || (typeof e.more === "number" && Number.isFinite(e.more) && e.more >= 0));
+}
+
+/** A damaged story resets alone: not a list becomes empty, a bad season is
+    dropped, and a good story comes back as the same array. */
+export function cleanCareerStory(raw: unknown): CareerStorySeason[] {
+  if (!Array.isArray(raw)) return [];
+  const kept = raw.every(isStorySeason) ? raw as CareerStorySeason[] : raw.filter(isStorySeason);
+  return kept.length > STORY_SEASONS_MAX ? kept.slice(-STORY_SEASONS_MAX) : kept;
+}
+
+/**
+ * The story with the season that is ending written into it, called by both
+ * season steps just before they clear the log. The lines belong to the last
+ * season row (the year that was just played). Pure: draws nothing and never
+ * mutates the state it reads, so a step run twice on the same save writes the
+ * season once. A second clear on the same row adds to that season rather than
+ * writing it twice.
+ */
+export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {
+  const story = cleanCareerStory(s.story);
+  const lines = Array.isArray(s.events) ? s.events.filter((l): l is string => typeof l === "string") : [];
+  if (lines.length === 0) return story;
+  const row = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1] : null;
+  const year = row ? row.year : 0;
+  const age = row ? row.age : s.age;
+  const club = row ? row.club : s.currentClub;
+  const last = story.length > 0 ? story[story.length - 1] : null;
+  const same = last !== null && last.year === year && last.age === age && last.club === club;
+  const all = same ? [...last.lines, ...lines] : lines;
+  const dropped = (same ? last.more ?? 0 : 0) + Math.max(0, all.length - STORY_LINES_PER_SEASON);
+  const entry: CareerStorySeason = { year, age, club, lines: all.slice(0, STORY_LINES_PER_SEASON) };
+  if (dropped > 0) entry.more = dropped;
+  const next = same ? [...story.slice(0, -1), entry] : [...story, entry];
+  return next.length > STORY_SEASONS_MAX ? next.slice(-STORY_SEASONS_MAX) : next;
+}
+
 /**
  * Round 127's lesson, applied again: repairing a save only inside the step
  * function is not enough, because a screen can be opened before any step is
@@ -2551,6 +2633,9 @@ export function repairCareer<T extends CareerState>(state: T): T {
       return rest;
     });
   }
+  /* Round 974: a save from before the story starts it from the season it
+     loads; a damaged story resets alone and never costs the career. */
+  s.story = cleanCareerStory(s.story);
   /* Round 244: captaincy fields are optional and default to "never worn it".
      If a save somehow claims the armband at a club he no longer plays for,
      drop the flag quietly rather than let it follow him. */
@@ -3808,7 +3893,11 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
-  const isElite = ELITE_CLUBS.includes(state.currentClub);
+  /* Round 929: elite only in a season where the era tier rules leave the club
+     at tier 1, so Man City and PSG stop winning two leagues in three in the
+     1990s. Same Math.random calls below, only the threshold moves. */
+  const seasonYear = lastYear + 1;
+  const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);
   const performanceBoost = (overall >= 85 && rating >= 7.5) ? 0.15 :
                            (overall >= 80 && rating >= 7.0) ? 0.10 :
                            (overall >= 75 && rating >= 6.8) ? 0.05 : 0;
@@ -3824,13 +3913,19 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
   const winLeague = Math.random() < leagueChance;
   const winCup = Math.random() < cupChance;
+  /* Round 929: the league finish, from its own generator seeded off this
+     season, so the main Math.random stream does not move. */
+  const finish = drawLeagueFinish({
+    league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
+    seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
+  });
 
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
-    leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
+    leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -4054,7 +4149,10 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   s.frozenOut = 0;
   s.badSeasonStreak = 0;
   s.morale = clamp(s.morale + 6, 0, 100);
-  s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
+  /* Round 974: added to the season's log, never written over it. A move
+     used to wipe the log, so a season that ended in a transfer kept one
+     line of its story. */
+  s.events = [...s.events, `🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
   // Round 244: a captain who leaves on loan hands the armband over; it can
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
@@ -4422,7 +4520,7 @@ export function initCareer(
 
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   receivePhoneTexts(s, "youth");
   // Round 78: legacy saves get a generous default so mid-career players are
   // not suddenly nerfed; new careers carry their rolled ceiling.
@@ -4480,12 +4578,14 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   const agentFee = offer.transferFee > 0 ? Math.round(offer.transferFee * feeRate * 100) / 100 : 0;
   if (agentFee > 0) {
     s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
   } else {
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
   }
-  // Round 244: the armband never travels. Stripped after the events reset
-  // above so the handover line survives onto the fresh list.
+  /* Round 974: the signing is added to the season's log, never written over
+     it, so the season it ends keeps its whole story. */
+  // Round 244: the armband never travels. Stripped after the signing line
+  // above so the handover line follows it.
   endClubCaptaincy(s, "transfer");
   // Round 54: staying loyal to the badge that raised you pays off in the
   // fans' hearts, and coming home later is an instant love story.
@@ -4699,7 +4799,7 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 }
 
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   receivePhoneTexts(s, "pro");
   // Reset social media action for new season
   s.socialMediaActionUsedThisSeason = false;
@@ -4942,7 +5042,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
          If it is a tournament summer it is played without him, so the
          calendar moving on never skips a World Cup. Before this the year had
          no row and no money at all. */
-      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      /* Round 929: the league finish goes with the title roll, the table was never finished for him. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
