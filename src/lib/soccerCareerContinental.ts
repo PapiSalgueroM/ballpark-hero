@@ -223,7 +223,7 @@ export const LEAGUE_PHASE = { clubs: 36, games: 8, direct: 8, playoffTo: 24 } as
 /** The year three points for a win arrived in the group stage. */
 export const UCL_THREE_POINTS_FROM = 1995;
 
-export const SC_FIRST_STAGE_PARTIAL: string[] = ['ucl-points-before-1995', 'ucl-tiebreak-other-seasons'];
+export const SC_STAGE_RULES_PARTIAL: string[] = ['ucl-points-before-1995', 'ucl-tiebreak-other-seasons'];
 
 function ladderFor(entrants: number): string[] {
   if (entrants >= 16) return ['R16', 'QF', 'SF', 'Final'];
