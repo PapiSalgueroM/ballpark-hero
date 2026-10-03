@@ -63,7 +63,21 @@ Final artifact11273433102,1847684 bytes, was downloaded and SHA256-verified:
 Local evidence: C:/Users/antho/AppData/Local/Temp/dukb-rugby998-ci-2026-10-03/31ce1b24/evidence.
 User preview: C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/rugby-league-preview998.png.
 
-## Remaining publication blocker
+## Integration after Release Z
+
+The previous publication dependency is resolved: Claude published997 in
+Release Z, and Codex subsequently played the actual public Shot lab. The
+Rugby League branch merged Release Z main87bac711 without changing any owned
+rugby source. Head8382fa88 passed remote run37126463822, including real app
+types/build, all outcome/control gates, 17 readers and five native profiles.
+Artifact SHA256: `922304959b81f027e1cb2832d379193cd8743aa963a6f05e4435020e3b030b2e`.
+
+PR114 then merged the independently accepted Rank Em circuit as mainb1b8a289.
+PR113 is now incorporating that accepted head and these documentation receipts
+for a final combined remote check. Do not infer publication from either merge.
+The next publisher must publish accepted main and verify both new modes.
+
+## Previous publication blocker
 
 The existing Lovable project still opened an empty Publish panel after a fresh
 reload. Preview and revision history did not initialize. No final publish action

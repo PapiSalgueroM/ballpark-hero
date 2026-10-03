@@ -1,10 +1,11 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useChampOrNot } from '@/hooks/useChampOrNot';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { RulesGate } from '@/components/game/RulesGate';
+import { RugbyLeagueChallenge } from '@/components/champ-or-not/RugbyLeagueChallenge';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -24,6 +25,13 @@ const ChampOrNot = () => {
     lastPick, answers, done, score, answer, advanceReveal, playAgain,
     hard, hardActive, toggleHard,
   } = useChampOrNot();
+  const [showRugby, setShowRugby] = useState(false);
+  const [openedRugby, setOpenedRugby] = useState(false);
+  const rugbyButton = useRef<HTMLButtonElement>(null);
+  const leaveRugby = () => {
+    setShowRugby(false);
+    rugbyButton.current?.focus({ preventScroll: true });
+  };
 
   const total = rounds.length;
   const lastCorrect = showingResult && current ? lastPick === current.isTrue : null;
@@ -53,35 +61,49 @@ const ChampOrNot = () => {
       />
       <GameShell help="none"
         width="narrow"
-        title="🏆 CHAMP OR NOT"
-        subtitle="Ten title claims. Which ones really happened?"
+        title={showRugby ? 'RUGBY LEAGUE' : '🏆 CHAMP OR NOT'}
+        subtitle={showRugby ? 'Premiers and Dally M. Records through 2025.' : 'Ten title claims. Which ones really happened?'}
+        className={showRugby ? '[&>header]:mb-3 [&>header>h1]:text-2xl [&>header>h1]:tracking-wide' : undefined}
         headerExtra={
           <>
-            <div className="flex items-center justify-center gap-2 mt-3">
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
               <button
-                onClick={() => switchMode('daily')}
-                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
-                  mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
+                onClick={() => { setShowRugby(false); switchMode('daily'); }}
+                className={cn('rounded-lg font-semibold border transition-all', showRugby ? 'min-h-[44px] px-2 py-1.5 text-xs' : 'px-4 py-1.5 text-sm',
+                  !showRugby && mode === 'daily' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Daily</button>
               <button
-                onClick={() => switchMode('unlimited')}
-                className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
-                  mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
+                onClick={() => { setShowRugby(false); switchMode('unlimited'); }}
+                className={cn('rounded-lg font-semibold border transition-all', showRugby ? 'min-h-[44px] px-2 py-1.5 text-xs' : 'px-4 py-1.5 text-sm',
+                  !showRugby && mode === 'unlimited' ? 'bg-primary text-primary-foreground border-primary/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Unlimited</button>
               <button
+                hidden={showRugby}
                 onClick={toggleHard}
                 title="Hard mode: the fake winner really won a nearby year (unlimited only)"
                 className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all',
                   hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >😈 Hard</button>
+            <button
+              ref={rugbyButton}
+              onClick={() => { setOpenedRugby(true); setShowRugby(true); }}
+              aria-label="Rugby League"
+              aria-pressed={showRugby}
+              className={showRugby
+                ? 'min-h-[44px] rounded-lg border border-primary bg-primary/10 px-2 py-1.5 text-xs font-semibold text-foreground'
+                : 'mt-1 mx-auto flex w-full max-w-md items-center gap-3 rounded-xl border border-border bg-card p-3 text-left min-h-[64px] hover:border-primary/60'}
+            >
+              {showRugby ? 'Rugby League' : <><span aria-hidden="true" className="text-2xl">🏉</span>
+              <span className="min-w-0"><span className="block font-semibold text-foreground">Rugby League</span><span className="block text-xs text-muted-foreground">Ten claims. Premiers + Dally M. Records through 2025.</span></span></>}
+            </button>
             </div>
-            {hard && mode === 'daily' && (
+            {!showRugby && hard && mode === 'daily' && (
               <p className="text-xs text-muted-foreground mt-2">Hard kicks in on Unlimited. The daily stays the same ten for everyone.</p>
             )}
-            {loadState === 'ready' && !done && (
+            {!showRugby && loadState === 'ready' && !done && (
               <div className="flex items-center justify-center gap-4 mt-3 text-sm">
                 <span className="text-muted-foreground">Claim: <span className="font-semibold text-foreground">{Math.min(roundIdx + 1, total)}</span>/{total}</span>
                 <span className="text-muted-foreground">Right: <span className="font-semibold text-gold">{shownScore}</span></span>
@@ -91,6 +113,8 @@ const ChampOrNot = () => {
           </>
         }
       >
+        {openedRugby && <div hidden={!showRugby}><RugbyLeagueChallenge active={showRugby} onExit={leaveRugby} /></div>}
+        <div hidden={showRugby}>
         <RulesGate title="How to Play Champ or Not">
           <div className="space-y-3">
             <p>Ten claims about champions, one at a time. Some really happened, some are made from a real winner dropped into the wrong year. You call it: Champ or Not.</p>
@@ -201,6 +225,7 @@ const ChampOrNot = () => {
             />
           </div>
         )}
+        </div>
 
         <p className="text-center text-xs text-muted-foreground mt-6">
           Want the source material? <Link to="/records" className="text-primary hover:underline">Browse the Record Books</Link>, champions by year for every competition we keep.

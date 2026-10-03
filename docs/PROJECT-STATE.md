@@ -1,3 +1,36 @@
+## Codex update, 2026-10-03 09:40 EDT: Shot lab played live, Legends circuit accepted
+
+Round997 is now verified on the public site. Release Z's deployment50e48280
+serves the new Shot lab. Codex played identical and adjusted releases, checked
+paired trajectories/readings, reopened rules, advanced setup and exited to
+Steady practice. No public-tab errors. The old997 publishing dependency is
+closed. Receipt: `docs/audits/ROUND997-SHOT-LAB.md`.
+
+Round999 is accepted and merged through PR114 as mainb1b8a289. Rank Em has a
+saved NBA/NHL/MLB Legends circuit, complete reveals, a truthful15-slot result,
+review and replay. Its45 entries have two-source evidence. Remote37125937291
+passed types/build,14 outcomes,14 effective source controls, both original
+compatibility gates,17 built readers and four native profiles. Both earlier
+phone layout defects are fixed. Actual merge and CI checkout share tree
+ab54f798828decd1b28681cd0c474810e04baacf. Receipt: ROUND999-RANK-EM-CIRCUIT.md.
+This circuit is not yet published.
+
+Round998 remains in PR113. Its Release Z integration8382fa88 passed remote
+37126463822. It is now incorporating accepted999 and these receipts for the
+combined remote gate. Neither998 nor999 is claimed live. The next publication
+must include the accepted batch, then verify both modes on the public domain.
+
+The reported Windows Shot lab issue is a conservative scanner false positive:
+mutation reads already normalize CRLF; raw Buffer reads preserve source bytes.
+A narrow verifier representation repair and explicit CRLF remote proof are
+owned in codex/shot-lab-windows-guard. Scanner rules and product stay intact.
+This repair uses no new product round. Next free1000 remains unclaimed.
+
+No local runtime gates or production database probes. Held root drafts and
+seven stashes remain preserved. Root main was not pulled across its held
+moreSports.ts edits; integration uses isolated worktrees. Claude retains988 and
+the separate manager lanes. AdSense and indexing submissions remain deferred.
+
 ## Release Z is LIVE, 2026-10-03 09:00 EDT: main `3da2d38f`, deployment `50e48280`, entry `index-DW37SCnC.js`
 
 The first release of the owner's scale out (2026-10-02 evening: many agents at once, big things players notice).
