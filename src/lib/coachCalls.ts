@@ -88,7 +88,12 @@ export const MAX_CALLS = 3;
 /** Dice a game draws up front: the count, a kind and an outcome per slot, overtime. */
 const DICE = 2 + MAX_CALLS * 2;
 
-export const COACH_CALL_PACKS: Record<CallSport, CoachCallsPack> = { cfb: CFB_CALLS, cbb: CBB_CALLS, afl: AFL_CALLS };
+export const CALL_SPORTS: readonly CallSport[] = ['cfb', 'cbb', 'afl'];
+/** A sport's pack. A function rather than a table built at module scope, the
+ *  house rule for anything computed from an import. */
+export function callPack(sport: CallSport): CoachCallsPack {
+  return sport === 'cfb' ? CFB_CALLS : sport === 'cbb' ? CBB_CALLS : AFL_CALLS;
+}
 
 const clampTo = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 /** Rounds half away from zero, so a plan worth -x is exactly a plan worth +x. */

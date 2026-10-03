@@ -5,20 +5,20 @@
  */
 import { describe, expect, it } from 'vitest';
 import {
-  COACH_CALL_PACKS, PLAN_EDGE_CAP, MAX_CALLS, ODDS_FLOOR, ODDS_CEIL,
+  CALL_SPORTS, callPack, PLAN_EDGE_CAP, MAX_CALLS, ODDS_FLOOR, ODDS_CEIL,
   readUnits, readTendency, planEdge, pickPlan, sanitizePlan, momentCount,
   startCalls, nextMoment, answerMoment, finishCalls, chooseOption, playCalls, optionOdds,
   type CallsInput, type CoachCallsPack, type Units,
 } from '@/lib/coachCalls';
 
-const PACKS = Object.values(COACH_CALL_PACKS);
+const packs = () => CALL_SPORTS.map(callPack);
 const level = (pack: CoachCallsPack, v = 70): Units => Object.fromEntries(Object.keys(pack.units).map(u => [u, v]));
 const input = (pack: CoachCallsPack, over: Partial<CallsInput> = {}): CallsInput => ({
   seed: 7, gameKey: 'g1', myScore: 20, oppScore: 18, mine: level(pack), his: level(pack), plan: null, ...over,
 });
 
 describe('coach call packs', () => {
-  it.each(PACKS.map(p => [p.sport, p] as const))('%s pack is well formed', (_s, pack) => {
+  it.each(packs().map(p => [p.sport, p] as const))('%s pack is well formed', (_s, pack) => {
     expect(pack.planEdge).toBeGreaterThan(0);
     expect(pack.planEdge).toBeLessThanOrEqual(PLAN_EDGE_CAP);
     for (const side of ['off', 'def'] as const) {
@@ -45,7 +45,7 @@ describe('coach call packs', () => {
 });
 
 describe('the game plan', () => {
-  const pack = COACH_CALL_PACKS.cfb;
+  const pack = callPack('cfb');
   it('reads his tendency off his units, with a band for level', () => {
     expect(readTendency(pack, 'def', { ...level(pack), run: 75, pass: 70 }).id).toBe('run-first');
     expect(readTendency(pack, 'def', { ...level(pack), run: 70, pass: 75 }).id).toBe('pass-first');
@@ -76,7 +76,7 @@ describe('the game plan', () => {
 });
 
 describe('the calls', () => {
-  it.each(PACKS.map(p => [p.sport, p] as const))('%s: a blowout draws none, a one score game one to three', (_s, pack) => {
+  it.each(packs().map(p => [p.sport, p] as const))('%s: a blowout draws none, a one score game one to three', (_s, pack) => {
     for (let d = 0; d < 1; d += 0.05) {
       expect(momentCount(pack, pack.blowout + 1, d)).toBe(0);
       expect(momentCount(pack, -(pack.blowout + 1), d)).toBe(0);
@@ -85,13 +85,13 @@ describe('the calls', () => {
       expect(c).toBeLessThanOrEqual(MAX_CALLS);
     }
   });
-  it.each(PACKS.map(p => [p.sport, p] as const))('%s: same seed, same moments; another key, other dice', (_s, pack) => {
+  it.each(packs().map(p => [p.sport, p] as const))('%s: same seed, same moments; another key, other dice', (_s, pack) => {
     const a = playCalls(pack, input(pack), 'best');
     const b = playCalls(pack, input(pack), 'best');
     expect(b).toEqual(a);
     expect(startCalls(pack, input(pack, { gameKey: 'g2' })).dice).not.toEqual(startCalls(pack, input(pack)).dice);
   });
-  it.each(PACKS.map(p => [p.sport, p] as const))('%s: a call never reshuffles the dice and never moves past one score', (_s, pack) => {
+  it.each(packs().map(p => [p.sport, p] as const))('%s: a call never reshuffles the dice and never moves past one score', (_s, pack) => {
     for (let seed = 1; seed <= 300; seed += 1) {
       const inp = input(pack, { seed, gameKey: `k${seed}`, myScore: 20 + (seed % 7), oppScore: 20 });
       const first = startCalls(pack, inp);
@@ -110,20 +110,20 @@ describe('the calls', () => {
     }
   });
   it('odds stay inside the floor and ceiling however lopsided the units', () => {
-    for (const pack of PACKS) for (const m of pack.moments) for (const o of m.options) {
+    for (const pack of packs()) for (const m of pack.moments) for (const o of m.options) {
       expect(optionOdds(o, level(pack, 99), level(pack, 1))).toBeLessThanOrEqual(ODDS_CEIL);
       expect(optionOdds(o, level(pack, 1), level(pack, 99))).toBeGreaterThanOrEqual(ODDS_FLOOR);
     }
   });
   it('an unknown option is the book call', () => {
-    const pack = COACH_CALL_PACKS.cbb;
+    const pack = callPack('cbb');
     const st = startCalls(pack, input(pack, { myScore: 70, oppScore: 69 }));
     const m = nextMoment(pack, st)!;
     expect(m).not.toBeNull();
     expect(answerMoment(pack, st, m, 'not-an-option').calls[0].option).toBe(m.def.options[0].id);
   });
   it('overtime settles a level college game, a level Aussie Rules game is a draw', () => {
-    const cfb = COACH_CALL_PACKS.cfb, afl = COACH_CALL_PACKS.afl;
+    const cfb = callPack('cfb'), afl = callPack('afl');
     const c = finishCalls(cfb, { ...startCalls(cfb, input(cfb)), count: 0, margin: 0 });
     expect(c.overtime).toBe(true);
     expect(Math.abs(c.margin)).toBe(3);
@@ -132,7 +132,7 @@ describe('the calls', () => {
     expect(a.overtime).toBe(false);
   });
   it('the final score moves only by what the plan and the calls moved', () => {
-    const pack = COACH_CALL_PACKS.cfb;
+    const pack = callPack('cfb');
     for (let seed = 1; seed <= 200; seed += 1) {
       const r = playCalls(pack, input(pack, { seed, gameKey: `s${seed}`, myScore: 24, oppScore: 21 }), 'best');
       if (!r.overtime) expect(r.margin - 3).toBe(r.planPoints + r.calls.reduce((s, c) => s + c.swing, 0));

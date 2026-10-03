@@ -101,7 +101,7 @@ if (CONTROL) {
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}`);
 }
 const { calls, cfb, cbb, afl, rngFrom } = await import(pathToFileURL(BUNDLE).href);
-const { COACH_CALL_PACKS } = calls;
+const COACH_CALL_PACKS = Object.fromEntries(calls.CALL_SPORTS.map(s => [s, calls.callPack(s)]));
 
 /* ---- the base games, from the engines as they are ---- */
 const asRoster = players => players.map(p => ({ pos: p.pos, ovr: p.ovr }));
