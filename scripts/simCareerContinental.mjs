@@ -246,13 +246,21 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
 {
   const before = failures;
   const stats = o => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+  /* 150 seasons a career: a held 90 at Real Madrid wins about one season in
+     twenty (3 to 5 in 60, measured), so 150 keeps "never won" off a coin. */
+  const SEASONS = 150;
   const career = (club, country) => {
     let s = E.initCareer('Cup Test', country === 'Spain' ? 'Spain' : 'Argentina', 'ST', '2020s', stats(88), 88, 2018, CLUBS, null);
     let at = 0, ucl = 0, other = 0, otherNames = new Set();
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < SEASONS; i++) {
       const prev = {
         ...s, phase: 'playing', retired: false, age: 26, currentClub: club, currentClubCountry: country,
         currentClubTier: 1, matchFixBanned: 0, prisonSeasons: 0,
+        /* Held at 90 every season: some careers decline from 26 on whatever
+           the age says, and a declining career winning nothing in sixty
+           seasons would read as the honour going missing (measured: one
+           Real Madrid career in three fell from 87 to 40 and won nothing). */
+        ...stats(90), overall: 90,
       };
       s = E.advanceProSeason(prev, CLUBS);
       const last = s.seasons[s.seasons.length - 1];
@@ -264,9 +272,9 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
     return { s, at, ucl, other, otherNames };
   };
   const boca = career('Boca Juniors', 'Argentina');
-  if (boca.at < 40) fail(`only ${boca.at} of 60 seasons were played at Boca Juniors, too few to judge`);
+  if (boca.at < SEASONS * 0.8) fail(`only ${boca.at} of ${SEASONS} seasons were played at Boca Juniors, too few to judge`);
   if (boca.ucl > 0) fail(`a career at Boca Juniors recorded ${boca.ucl} Champions League(s)`);
-  if (boca.other === 0) fail('a career at Boca Juniors never won its own cup in sixty seasons, so the honour went unmeasured');
+  if (boca.other === 0) fail(`a career at Boca Juniors never won its own cup in ${SEASONS} seasons, so the honour went unmeasured`);
   if ([...boca.otherNames].some(n => n !== 'Copa Libertadores')) fail(`Boca's cup was recorded as ${[...boca.otherNames].join(', ')}`);
   const totals = E.getCareerTotals(boca.s.seasons);
   if (totals.championsLeagues !== 0) fail(`the totals count ${totals.championsLeagues} Champions League(s) for a career spent at Boca`);
@@ -278,7 +286,7 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
   if (boca.s.awards.some(a => a.name === 'UCL Top Scorer')) fail('a Boca Juniors career won a UCL Top Scorer award');
   const madrid = career('Real Madrid', 'Spain');
   if (madrid.other > 0) fail(`a career at Real Madrid recorded ${madrid.other} continental club cup(s) outside UEFA`);
-  if (madrid.ucl === 0) fail('a career at Real Madrid never won the Champions League in sixty seasons');
+  if (madrid.ucl === 0) fail(`a career at Real Madrid never won the Champions League in ${SEASONS} seasons`);
   red[4] = failures > before;
   if (!red[4]) console.log(`   Boca Juniors: ${boca.other} Copa Libertadores in ${boca.at} seasons and 0 Champions Leagues; legacy line ${line('Continental Club Cups').points} points; Real Madrid: ${madrid.ucl} Champions Leagues and 0 other cups in ${madrid.at}`);
 }
