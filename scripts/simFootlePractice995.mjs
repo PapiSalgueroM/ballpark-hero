@@ -63,7 +63,7 @@ const controls = {
   rules: { group: 'mounted', file: page, anchor: 'These example numbers are hypothetical.', replacement: 'These example numbers.', failed: [mounted.rules] },
   example: { group: 'mounted', file: hook, anchor: 'const examplePlayer = playerPool.find(player => player.name !== dailyTarget?.name', replacement: 'const examplePlayer = playerPool.find(player => player.name === dailyTarget?.name', failed: [mounted.rules] },
   loading: { group: 'mounted', file: hook, anchor: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);', replacement: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(() => selectRandomPlayer(difficulty, playerPool));', failed: [mounted.unlimited] },
-  ready: { group: 'mounted', file: hook, anchor: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5', replacement: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 1', failed: [mounted.short] },
+  ready: { group: 'mounted', file: hook, anchor: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5', replacement: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 1', failed: [mounted.short], failurePattern: /expect\(element\)\.toBeDisabled\(\)[\s\S]*Received element is not disabled:[\s\S]*data-testid="practice-start"/ },
   isolation: { group: 'mounted', file: hook, anchor: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);', replacement: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) { setPracticeDifficulty(newDiff); setDifficultyState(newDiff); }', failed: [mounted.isolation] },
 };
 const mode = process.env.FOOTLE_PRACTICE_CONTROL || '';
@@ -105,8 +105,8 @@ try {
     assert.deepEqual(rejected.map(row => row.title).sort(), [...expected].sort(), `${name}: exact intended outcomes reject`);
     assert.equal(child.status, expected.length ? 1 : 0);
     for (const row of rejected) {
-      const message = row.failureMessages.join('\n');
-      assert.match(message, /AssertionError|expected |Expected /, 'Only intended assertion failures count');
+      const message = row.failureMessages.join('\n').replace(/\u001b\[[0-9;]*m/g, '');
+      assert.match(message, control?.failurePattern ?? /AssertionError|expected |Expected /, 'Only intended assertion failures count');
       assert.doesNotMatch(message, /TypeError|ReferenceError|SyntaxError|Timed out|Unable to find|Found multiple/, 'Controls must reach assertions');
     }
     for (const row of rows) console.log(`${name} ${row.status.toUpperCase()}: ${row.title}`);
