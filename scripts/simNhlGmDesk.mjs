@@ -18,6 +18,8 @@
  *      win probability, the scouting miss, the rounds an injury costs
  *   6  migration keeps every marker, a corrupt block resets alone, retained
  *      salary stays at its full figure while the deal runs and the limits hold
+ *   7  every desk panel draws (server rendered), and the re-sign desk draws a
+ *      tile for every expiring man
  * Negative controls (SIM_NHL_GM_DESK_CONTROL), each must go red in its check:
  *   coinflip   the summer runs the engine's own offseason, coin flip and all  (2)
  *   latetrade  the package clock never moves, so deals pass the deadline     (3)
@@ -140,10 +142,15 @@ export { NHL_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
 export { nhlContractHost } from '${ROOT_URL}/src/lib/gmContractsHostNhl.ts';
 export { leagueNames } from '${ROOT_URL}/src/lib/foNames.ts';
 export { NHL_OPENING_RATINGS } from '${ROOT_URL}/src/data/nhlOpeningRatings.ts';
+export { NHL_DESK_PANELS, NHL_RECAP_PANELS } from '${ROOT_URL}/src/components/nhl-front-office/NhlGmDesk.tsx';
+export { GmDeskMount } from '${ROOT_URL}/src/components/front-office-shared/GmDeskMount.tsx';
+import React from '${NM}/react/index.js';
+import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
+export const render = (C, p) => renderToStaticMarkup(React.createElement(C, p));
 `);
 const esbuild = createRequire(`${NM}/`)('esbuild');
 await esbuild.build({
-  entryPoints: [ENTRY], bundle: true, format: 'cjs', platform: 'node', alias: { '@': `${ROOT_URL}/src` },
+  entryPoints: [ENTRY], bundle: true, format: 'cjs', platform: 'node', jsx: 'automatic', alias: { '@': `${ROOT_URL}/src` },
   outfile: BUNDLE, logLevel: 'error',
   plugins: [{
     name: 'control',
@@ -500,6 +507,34 @@ begin('6', 'migration keeps every marker, a corrupt block resets alone, retained
 }
 
 /* ================================================================== */
+begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every expiring man');
+{
+  const { NHL_DESK_PANELS, NHL_RECAP_PANELS, GmDeskMount, render } = M;
+  const rng = mulberry32(77);
+  const lg = E.initNhlLeague(rng, NHL_OPENING_RATINGS);
+  let desk = D.openNhlDesk(lg, TEAM);
+  /* One season on, so somebody's deal is running out. */
+  desk = seasonDesk(lg, TEAM, desk, rng, 0, 'render walk');
+  const facts = { teamId: TEAM, teamLabel: TEAM, seasonsPlayed: 1, phase: 'hub', hub: {}, league: lg, seasonOver: false, clubName: x => x, say: () => {}, commit: () => {} };
+  const props = { sport: { key: 'nhl' }, desk, facts, onDesk: () => {}, onBack: () => {} };
+  const marks = { staff: 'data-nhl-desk-staff', contracts: 'data-resign-desk', picks: 'data-gm-picks', deals: 'data-nhl-desk-deals' };
+  for (const p of NHL_DESK_PANELS) {
+    let html = '';
+    try { html = render(p.Panel, props); } catch (e) { fail(`the ${p.key} panel threw: ${String(e).slice(0, 160)}`); continue; }
+    if (!html.includes(marks[p.key])) fail(`the ${p.key} panel drew without its ${marks[p.key]} mark`);
+  }
+  const cases = C.deskCases(HOST, lg, D.nhlContractsOf(desk, lg, TEAM)).length;
+  const html = render(NHL_DESK_PANELS.find(p => p.key === 'contracts').Panel, props);
+  const tiles = (html.match(/data-resign-tile=/g) ?? []).length;
+  if (cases === 0) fail('nobody is expiring a season in, so the re-sign tiles were not drawn at all');
+  if (tiles !== cases) fail(`${cases} expiring men and ${tiles} tiles on the re-sign desk`);
+  const hub = render(GmDeskMount, { sport: 'nhl', desk, facts, panels: NHL_DESK_PANELS, open: null, onOpen: () => {}, onDesk: () => {} });
+  if ((hub.match(/<button/g) ?? []).length < NHL_DESK_PANELS.length) fail(`the hub drew ${(hub.match(/<button/g) ?? []).length} desk boxes for ${NHL_DESK_PANELS.length} panels`);
+  if (NHL_RECAP_PANELS.length !== 1 || NHL_RECAP_PANELS[0].key !== 'contracts') fail('the recap mounts more than the re-sign desk');
+  console.log(`   4 panels drawn, ${tiles} re-sign tiles for ${cases} expiring men`);
+}
+
+/* ================================================================== */
 const failed = [...failedIn.values()].reduce((s, n) => s + n, 0);
 if (CONTROL) {
   const want = CONTROLS[CONTROL];
@@ -510,6 +545,6 @@ if (CONTROL) {
   process.exit(0);
 }
 if (failed) { console.error(`simNhlGmDesk: ${failed} failure(s) in ${J([...failedIn.keys()])}`); process.exit(1); }
-console.log(`simNhlGmDesk: all six checks passed (${SEEDS.length} seeds x ${SEASONS} seasons)`);
+console.log(`simNhlGmDesk: all seven checks passed (${SEEDS.length} seeds x ${SEASONS} seasons)`);
 
 
