@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from
 import { Lightbulb } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
 import { useEmojiGuess } from '@/hooks/useEmojiGuess';
 import styles from './EmojiGuessFeedback.module.css';
 
@@ -16,6 +17,8 @@ export function EmojiGuessBoard() {
   const { rounds, index, current, finished, totalScore, solvedCount, hintVisible, guess, next, shareText } =
     useEmojiGuess();
   const [input, setInput] = useState('');
+  /* Round 951: the moment plays when the fifth puzzle closes here, never on a reopen or reload. */
+  const freshFinish = useFreshFinish(true, finished);
   const inputRef = useRef<HTMLInputElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -76,6 +79,7 @@ export function EmojiGuessBoard() {
             finish cue (never set on a restore) and the held key guard for the
             share row. Most puzzles solved is a win, any solved a good try. */}
         <div ref={resultRef} data-emoji-cue={cue?.kind === 'result' ? 'result' : undefined} onKeyDown={guardRepeat}>
+          <RestoredResult restored={!freshFinish}>
           <ResultScreen
             outcome={solvedCount * 2 > rounds.length ? 'win' : solvedCount > 0 ? 'close' : 'loss'}
             score={totalScore}
@@ -86,6 +90,7 @@ export function EmojiGuessBoard() {
             emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
             share={{ score: `${totalScore} pts`, gameName: 'Emoji Guess', gamePath: '/emoji-guess', customText: shareText }}
           />
+          </RestoredResult>
         </div>
 
         <div className="mt-6 space-y-2">

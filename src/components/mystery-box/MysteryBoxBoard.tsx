@@ -4,6 +4,7 @@ import { Package, Trash2 } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
 import { playerRating } from '@/lib/squadDeal';
 import { TOTAL_PACKS, useMysteryBox } from '@/hooks/useMysteryBox';
 import type { PackTier } from '@/lib/fetchPackPool';
@@ -24,6 +25,8 @@ export function MysteryBoxBoard() {
   } = useMysteryBox();
   const [placedSlot, setPlacedSlot] = useState<number | null>(null);
   const previous = useRef({ packIndex, squad });
+  /* Round 951: the moment plays when the last pack is settled here, never on a reopen or reload. */
+  const freshFinish = useFreshFinish(!loading, finished);
 
   useEffect(() => {
     if (packIndex !== previous.current.packIndex) {
@@ -85,12 +88,14 @@ export function MysteryBoxBoard() {
 
       {/* Finished */}
       {/* Round 951: the last pack ends on the shared result moment, the XI
-          below stays as the review. A full XI is a win, a short one a good
-          try. */}
+          below stays as the review. A full XI is a win, most of one (six or
+          more of the eleven) a good try, five or fewer not this time; the
+          rating, empty slots counted at 45, is the score either way. */}
       {finished && (
+        <RestoredResult restored={!freshFinish}>
         <ResultScreen
           className="mt-4"
-          outcome={filled === 11 ? 'win' : 'close'}
+          outcome={filled === 11 ? 'win' : filled * 2 > 11 ? 'close' : 'loss'}
           score={rating}
           scoreLabel="XI rating"
           outcomeEmoji="📦"
@@ -100,6 +105,7 @@ export function MysteryBoxBoard() {
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `XI ${rating}`, gameName: 'Mystery Box', gamePath: '/mystery-box', customText: shareText }}
         />
+        </RestoredResult>
       )}
 
       {/* Pack area */}

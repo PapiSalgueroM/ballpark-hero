@@ -3,8 +3,16 @@ import { Link } from 'react-router-dom';
 import { Check, X } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
 import { useBallIq } from '@/hooks/useBallIq';
 import styles from './BallIqFeedback.module.css';
+
+/* Round 951: the card's state follows the rank the hook gave this IQ, which
+   is also the card's headline, so retuning the bands in useBallIq moves both
+   together. Solid ball knowledge or better is a win, Casual a good try, the
+   two ranks under it not this time. */
+const WIN_RANKS = new Set(['Certified ball knower', 'Knows ball', 'Solid ball knowledge']);
+const CLOSE_RANKS = new Set(['Casual']);
 
 export function BallIqBoard() {
   const { loading, questions, index, current, status, correctCount, iq, rank, answer, next, shareText } =
@@ -13,6 +21,8 @@ export function BallIqBoard() {
   const pendingAnswer = useRef<{ index: number; id: string; chosen: string; opener: Element | null } | null>(null);
   const [cue, setCue] = useState<{ id: string; chosen: string } | null>(null);
   const answeredCount = questions.filter(q => q.chosen !== null).length;
+  /* The moment plays when the twelfth answer lands here, never on a reopen or reload. */
+  const freshFinish = useFreshFinish(!loading, status === 'finished');
 
   useLayoutEffect(() => {
     const request = pendingAnswer.current;
@@ -68,11 +78,10 @@ export function BallIqBoard() {
     return (
       <div className="mx-auto max-w-xl px-4 py-8">
         {/* Round 951: the test ends on the shared result moment, the answer
-            review stays under it. The state follows the game's own rank
-            bands: Solid ball knowledge (105) or better is a win, Casual (85)
-            a good try, below that not this time. */}
+            review stays under it. The state follows the rank (see WIN_RANKS). */}
+        <RestoredResult restored={!freshFinish}>
         <ResultScreen
-          outcome={iq >= 105 ? 'win' : iq >= 85 ? 'close' : 'loss'}
+          outcome={WIN_RANKS.has(rank) ? 'win' : CLOSE_RANKS.has(rank) ? 'close' : 'loss'}
           score={iq}
           scoreLabel="Ball Knowledge IQ"
           outcomeEmoji="🧠"
@@ -81,6 +90,7 @@ export function BallIqBoard() {
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `IQ ${iq}`, gameName: 'Ball Knowledge IQ', gamePath: '/ball-iq', customText: shareText }}
         />
+        </RestoredResult>
 
         <div className="mt-6 space-y-2">
           {questions.map((q, i) => {

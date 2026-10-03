@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { GameNav } from '@/components/game/GameNav';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { VALUES, type ClueValue } from '@/lib/fetchQuizBoard';
 import { useQuizBoard } from '@/hooks/useQuizBoard';
@@ -37,6 +38,9 @@ export function QuizBoard() {
   const tiles = categories.flatMap(cat => VALUES.flatMap(v => { const t = board[cat]?.[v]; return t ? [t] : []; }));
   const boardTotal = tiles.reduce((sum, t) => sum + t.clue.value, 0);
   const correctTiles = tiles.filter(t => t.correct).length;
+  /* Round 951: the moment plays when the board is cleared here, never when a
+     cleared board is reopened or reloaded. */
+  const freshFinish = useFreshFinish(!loading, finished);
 
   if (loading) {
     return (
@@ -188,6 +192,7 @@ export function QuizBoard() {
           board above stays as the review. Half the board's dollars is a win,
           any bank is a good try, a $0 bank is not this time. */}
       {finished && (
+        <RestoredResult restored={!freshFinish}>
         <ResultScreen
           className="mt-5"
           outcome={banked * 2 >= boardTotal ? 'win' : banked > 0 ? 'close' : 'loss'}
@@ -199,6 +204,7 @@ export function QuizBoard() {
           emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
           share={{ score: `$${banked}`, gameName: 'Sports Quiz Board', gamePath: '/quiz-board', customText: shareText }}
         />
+        </RestoredResult>
       )}
 
       <GameNav currentPath="/quiz-board" />
