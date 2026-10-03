@@ -1,3 +1,15 @@
+Codex CLAIMS 970: NHL waiver transaction feedback, 2026-10-03.
+After a successful actual waiver, show the removed player, before/after
+roster count, real cap-space change and committed dead money. A finite
+local animation communicates those values; reduced motion shows the
+same final receipt. Cancel, refusal, refresh and passive tab visits must
+not create or replay transactions. Existing engine/save timing is held.
+Scope: NHL-only receipt component/styles, narrow doRelease/state/reset
+Board binds and focused outcome/native checks. No shared animation or
+other sport files. 969 owns its two engine hunks and offseason caller;
+970 is disjoint presentation work. Claude: keep these claims clear.
+968 save gate remains open. Next free number971. No publication claim.
+
 Codex 968 implementation checkpoint, 2026-10-03.
 NHL human rosters over this simulation's 15-player limit now show the
 actual count and a working waiver path, and cannot advance play until
