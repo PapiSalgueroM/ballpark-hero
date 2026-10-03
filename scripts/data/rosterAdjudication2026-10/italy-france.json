@@ -130,8 +130,9 @@
    "loan": true,
    "loanFrom": "Udinese",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1999-11-14. Joined Watford on a season-long loan from Udinese in August 2026, to June 2027; he played the Championship match against Stoke on 2026-09-12. The two publishers disagree on his shirt (FotMob 26, ESPN 33), not on his club. Watford's own squad and player pages were too large to read, so the official voice is the league page that no longer lists him at Udinese.",
+   "note": "Born 1999-11-14. Joined Watford on a season-long loan from Udinese in August 2026, to June 2027; he played the Championship match against Stoke on 2026-09-12. The two publishers disagree on his shirt (FotMob 26, ESPN 33), not on his club. Watford's own squad page renders no names without a login token, so the official voice for the destination is Udinese's own announcement of 2026-08-02 naming Watford and the loan's end date, and ESPN's Watford matches up to 2026-09-12 show the loan is running; the league page no longer lists him at Udinese.",
    "sources": [
+    {"family": "A", "url": "https://www.udinese.it/news/squadra/jordan-zemura-al-watford-fc", "publisher": "Udinese Calcio (club announcement, 2026-08-02)", "readOn": "2026-10-03", "says": "Udinese has loaned Jordan Zemura to Watford FC until 2027-06-30"},
     {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://www.fotmob.com/en-GB/players/982633/jordan-zemura", "publisher": "FotMob", "readOn": "2026-10-03", "says": "Watford, on loan from Udinese August 2026 to June 2027, born 1999-11-14, played 2026-09-12"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/283171/jordan-zemura", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Watford, born 1999-11-14, Championship matches from 2026-08-29 to 2026-09-12"}
@@ -342,8 +343,9 @@
    "to": "Gaziantep FK",
    "realClub": "Gaziantep FK",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 2002-12-25. After a spring 2026 loan at Nantes he went back to Strasbourg and was sold to Gaziantep on 2026-09-04, contract to June 2028; their number 21, with Super Lig matches on 2026-09-07 and 2026-09-14. The destination rests on two independent publishers: Gaziantep's own site could not be reached, so the official voice is Strasbourg's 2026-27 squad, which no longer lists him.",
+   "note": "Born 2002-12-25. After a spring 2026 loan at Nantes he went back to Strasbourg and was sold to Gaziantep on 2026-09-04, contract to June 2028; their number 21, with Super Lig matches on 2026-09-07 and 2026-09-14. Gaziantep's own first team page lists him at 21 (the page carries no season label, but he only signed on 2026-09-04, so a page that lists him is current); the club's site is gaziantepfk.org, not the .org.tr host first tried. Strasbourg's 2026-27 squad no longer lists him.",
    "sources": [
+    {"family": "A", "url": "https://gaziantepfk.org/branslar/futbol/profesyonel-a-futbol-takimi", "publisher": "Gaziantep FK (professional first team squad; no season label, current because it lists a 2026-09-04 signing)", "readOn": "2026-10-03", "says": "21, Abakar Sylla"},
     {"family": "A", "url": "https://www.rcstrasbourgalsace.fr/leffectif-pro-26-27/", "publisher": "RC Strasbourg Alsace (professional squad 26-27)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/20070/gaziantep-fk", "publisher": "ESPN (Gaziantep FK squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 21, age 23, Ivory Coast"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/340239/abakar-sylla", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Gaziantep FK number 21, born 2002-12-25, played 2026-09-14"},
