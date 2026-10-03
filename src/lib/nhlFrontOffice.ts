@@ -597,7 +597,7 @@ export function nhlAiDraftPicks(league: NhlLeague, remaining: NhlProspect[], ord
   return { remaining: available, picks, skipped, substituted, guarded };
 }
 
-export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
+export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
@@ -626,6 +626,21 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
   for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
+  if (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam)) {
+    let released = false;
+    for (const t of Object.values(league.teams)) {
+      if (t.abbr === userTeam) continue;
+      while (t.players.length > NHL_ROSTER_MAX) {
+        const selected = nhlContributors(t);
+        const protectedIds = new Set([...selected.forwards, ...selected.defense, ...(selected.goalie === null ? [] : [selected.goalie])]);
+        const down = t.players.filter(p => !protectedIds.has(p.id))
+          .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
+        if (!down || !nhlRelease(t, league.freeAgents, down.id, league.ratingModelVersion)) break;
+        released = true;
+      }
+    }
+    if (released) league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
+  }
   league.cap = Math.round(league.cap * 1.09);
   league.season += 1;
   league.round = 1;

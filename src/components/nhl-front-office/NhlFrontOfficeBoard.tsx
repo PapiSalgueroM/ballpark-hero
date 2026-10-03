@@ -48,6 +48,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import contributorsStyles from './NhlContributors.module.css';
+import { NhlWaiverReceipt, type NhlWaiverReceiptEvent } from './NhlWaiverReceipt';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
@@ -222,6 +223,21 @@ export default function NhlFrontOfficeBoard() {
   /* Round 631: the man whose Waive button has been tapped once. The second
      tap is only offered once the dead money is on screen. Transient. */
   const [cutArmed, setCutArmed] = useState<string | null>(null);
+  const [waiverReceipt, setWaiverReceipt] = useState<NhlWaiverReceiptEvent | null>(null);
+  const waiverSequence = useRef(0), waiverCommit = useRef<NhlLeague | null>(null);
+  const waiverBoard = useRef<HTMLDivElement>(null);
+  const rosterRows = useRef<HTMLDivElement>(null);
+  const waiverFocus = useRef<{ opener: Element | null; index: number } | null>(null);
+  useLayoutEffect(() => {
+    const request = waiverFocus.current;
+    if (!request) return;
+    waiverFocus.current = null;
+    const active = document.activeElement;
+    if (active !== request.opener && active !== document.body && active?.isConnected) return;
+    const rows = rosterRows.current?.children;
+    const row = rows?.[Math.min(request.index, rows.length - 1)];
+    (row?.querySelector<HTMLButtonElement>('button:not(:disabled)') ?? rosterRows.current)?.focus({ preventScroll: true });
+  }, [waiverReceipt]);
   /* Round 190: the live phone call. Transient like the market window:
      never persisted, a reload simply ends the call. */
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
@@ -323,6 +339,7 @@ export default function NhlFrontOfficeBoard() {
     setSaveError(false);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
+    setWaiverReceipt(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season}-${(lg.season + 1) % 100} season drops the puck now.`,
       `🏛️ The ownership mandate: ${m.text}`,
@@ -513,7 +530,8 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const finishDraft = (lg: NhlLeague) => {
-      const notes = nhlOffseason(lg, Math.random);
+      const notes = nhlOffseason(lg, Math.random, myTeam);
+      setWaiverReceipt(null);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
@@ -580,10 +598,21 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const doRelease = (pid: string) => {
-    if (!league) return;
+    if (!league || waiverCommit.current === league) return;
     setCutArmed(null);
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid, lg.ratingModelVersion)) { setLeague(lg); persist({}, lg, myTeam); }
+    const team = lg.teams[myTeam], player = team.players.find(p => p.id === pid);
+    if (!player) return;
+    const rosterBefore = team.players.length, capBefore = nhlCapRoom(team, lg.cap);
+    if (nhlRelease(team, lg.freeAgents, pid, lg.ratingModelVersion)) {
+      waiverCommit.current = league;
+      const rows = Array.from(rosterRows.current?.children ?? []);
+      waiverFocus.current = { opener: document.activeElement, index: Math.max(0, rows.findIndex(row => (row as HTMLElement).dataset.rosterRow === pid)) };
+      setLeague(lg); persist({}, lg, myTeam);
+      setWaiverReceipt({ id: ++waiverSequence.current, playerName: player.name,
+        rosterBefore, rosterAfter: team.players.length, capBefore, capAfter: nhlCapRoom(team, lg.cap),
+        deadMoneyAfter: deadCapUsed(team) });
+    }
   };
   const changeContributors = (value: NhlContributors | null): boolean => {
     if (!league || contributorCommit.current === league) return false;
@@ -678,6 +707,7 @@ export default function NhlFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    setWaiverReceipt(null);
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -909,7 +939,7 @@ export default function NhlFrontOfficeBoard() {
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
-    <div className="space-y-4">
+    <div ref={waiverBoard} className="space-y-4">
       <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
@@ -923,6 +953,8 @@ export default function NhlFrontOfficeBoard() {
         <p>Your roster has {my.players.length} players, {overLimit} over this simulation's limit of {NHL_ROSTER_MAX}. Waive {overLimit === 1 ? 'one player' : `${overLimit} players`} before you play. Waivers keep the usual dead money costs.</p>
         {tab !== 'team' && <button onClick={() => openPanel('team')} className="min-h-11 rounded-full border border-border bg-card px-4 py-2 font-bold">Open roster</button>}
       </div>}
+
+      <NhlWaiverReceipt event={waiverReceipt} fallbackFocus={() => waiverBoard.current?.querySelector<HTMLButtonElement>('button:not(:disabled):not([data-nhl-waiver-dismiss])') ?? null} />
 
       {/* Round 180: the owner card, always visible on the hub. The cut is the
           top 8 of my conference by points, the same read the bracket uses. */}
@@ -968,7 +1000,7 @@ export default function NhlFrontOfficeBoard() {
               : ' This franchise keeps its saved grades, contracts and development.'}
           </p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
-          <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+          <div ref={rosterRows} tabIndex={-1} role="group" aria-label="Roster players" className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
               const cost = deadMoneyFor(p);

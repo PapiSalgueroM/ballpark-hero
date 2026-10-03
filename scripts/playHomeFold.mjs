@@ -83,7 +83,7 @@ async function look(width, height) {
   /* Supabase hangs rather than fails without egress, so it is aborted here the
      same way every other harness in this repo does it. The tiles this measures
      render from the registry, not from the database. */
-  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
   /* HOMEFOLD_CONTROL=h1text: the moment the app draws its h1, a word is
      added to it, so section 1's exact h1 check must go red. */
   if (FOLD_CONTROL === 'h1text') {
@@ -289,7 +289,7 @@ console.log('4) a returning player gets NO checklist, and the record never moves
   const fresh = await look(390, 844);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
-  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
   await page.addInitScript(() => {
     const et = d => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(d);
     const today = et(new Date()), yesterday = et(new Date(Date.now() - 86400000));
@@ -335,7 +335,7 @@ console.log('5) the maker note lives on the About page, not on the home page');
      own check red. */
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
-  await page.route('**://*.supabase.co/**', r => r.abort());
+  await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
   await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
   if (FOLD_CONTROL === 'notehome') {
     await page.addInitScript(() => {
@@ -353,6 +353,7 @@ console.log('5) the maker note lives on the About page, not on the home page');
   let noteRewrites = 0;
   if (FOLD_CONTROL === 'notegone') {
     await page.route('**/*', async r => {
+      if (new URL(r.request().url()).origin !== new URL(BASE).origin) return r.abort();
       const type = r.request().resourceType();
       if (type !== 'document' && type !== 'script') return r.continue();
       const res = await r.fetch();
@@ -403,7 +404,7 @@ console.log('6) a returning player: saves bring a Continue row under the stage, 
   const visit = async ({ saves = false, fav = null, click = null }) => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
-    await page.route('**://*.supabase.co/**', r => r.abort());
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
     await page.addInitScript(({ saves, list, shaped, fav, control }) => {
       try {
         if (saves) for (const s of list) localStorage.setItem(s.key, JSON.stringify(shaped[s.key] ?? {}));
