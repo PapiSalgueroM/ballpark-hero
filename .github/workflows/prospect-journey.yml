@@ -1,0 +1,134 @@
+name: Four career prospect verification
+
+on:
+  push:
+    branches: [codex/prospect-journey-993]
+  pull_request:
+    paths:
+      - .github/workflows/prospect-journey.yml
+      - scripts/qa/career993.mjs
+      - scripts/simUsCareerProspect.mjs
+      - scripts/simCareerPreDraft.mjs
+      - src/components/us-career/**
+      - src/components/career/*Draft*.tsx
+      - src/lib/*CareerSport.ts
+      - src/lib/*CareerPreDraft.ts
+      - src/lib/*MyCareer.ts
+      - src/lib/careerPreDraft.ts
+      - src/lib/usCareerProspect.ts
+      - src/test/usCareerProspect.test.tsx
+      - src/test/careerPreDraft.test.tsx
+      - src/test/usBoardFixture.test.tsx
+
+permissions:
+  contents: read
+concurrency:
+  group: prospect-journey-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p prospect-journey-artifacts "$RUNNER_TEMP/prospect-journey"
+          echo "TMPDIR=$RUNNER_TEMP/prospect-journey" >> "$GITHUB_ENV"
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee prospect-journey-artifacts/types.log
+          npm run build 2>&1 | tee prospect-journey-artifacts/build.log
+      - name: Actual prospect saves and rejection controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          status=0
+          if ! node scripts/simUsCareerProspect.mjs 2>&1 | tee prospect-journey-artifacts/prospect.log; then status=1; fi
+          for control in before save restore handoff duplicate choice invalid showcase undrafted archive corrupt back rules historical outcome; do
+            if ! US_CAREER_PROSPECT_CONTROL="$control" node scripts/simUsCareerProspect.mjs 2>&1 | tee "prospect-journey-artifacts/prospect-$control.log"; then status=1; fi
+          done
+          exit "$status"
+      - name: Original pre-draft model and controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx --maxWorkers=1 --no-file-parallelism 2>&1 | tee prospect-journey-artifacts/predraft-components.log
+          node scripts/simCareerPreDraft.mjs 2>&1 | tee prospect-journey-artifacts/predraft.log
+          for control in randomteam flatstock flatlottery mathrandom cardwords showcasewords erarule ceiling ladderskip undraftedtop squeeze laterlottery flatlater loadershallow; do
+            set +e
+            SIM_PRE_DRAFT_CONTROL="$control" node scripts/simCareerPreDraft.mjs 2>&1 | tee "prospect-journey-artifacts/predraft-$control.log"
+            code=${PIPESTATUS[0]}
+            set -e
+            test "$code" -eq 1
+            grep -F "control $control: mutated" "prospect-journey-artifacts/predraft-$control.log"
+            grep -E "simCareerPreDraft .*FAILURE\(S\)" "prospect-journey-artifacts/predraft-$control.log"
+          done
+      - name: Original career behavior and save replay
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/simUsBoardParity.mjs 2>&1 | tee prospect-journey-artifacts/parity.log
+          for control in label draw binding restore era fixture; do
+            US_BOARD_PARITY_CONTROL="$control" node scripts/simUsBoardParity.mjs 2>&1 | tee "prospect-journey-artifacts/parity-$control.log"
+          done
+      - name: Four career practice and controls retained
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/simUsCareerPractice.mjs 2>&1 | tee prospect-journey-artifacts/practice.log
+          for control in before gain cap once save receipt renew rules abort pending reset carry; do
+            US_CAREER_PRACTICE_CONTROL="$control" node scripts/simUsCareerPractice.mjs 2>&1 | tee "prospect-journey-artifacts/practice-$control.log"
+          done
+          node scripts/simCareerTraining.mjs 2>&1 | tee prospect-journey-artifacts/training.log
+          for control in tier overcap tell miss window slip; do
+            CAREER_TRAINING_CONTROL="$control" node scripts/simCareerTraining.mjs 2>&1 | tee "prospect-journey-artifacts/training-$control.log"
+          done
+      - name: Existing career regression families
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for harness in simCareerHub simCareerInbox simCareerInboxBeats simCareerParity simCareerRivalryEvents simExtension simHomeFront simNoDoubleRecord simRevealMoments simSessionMarks simUsCareerActionConfirm simUsCoachCareer simUsCareerWeight; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "prospect-journey-artifacts/$harness.log"
+          done
+          US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs 2>&1 | tee prospect-journey-artifacts/action-ownKey.log
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "prospect-journey-artifacts/$harness.log"
+          done
+      - name: Actual prospect journeys by touch and keyboard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          node scripts/qa/career993.mjs 2>&1 | tee prospect-journey-artifacts/native.log
+          for control in reveal choice; do
+            CAREER993_CONTROL="$control" CAREER993_ARTIFACTS="prospect-journey-artifacts/native-$control-control" node scripts/qa/career993.mjs 2>&1 | tee "prospect-journey-artifacts/native-$control-control.log"
+          done
+      - name: Save review evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prospect-journey-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            prospect-journey-artifacts/
+            ${{ runner.temp }}/prospect-journey/dukb-prospect993-*/
+            ${{ runner.temp }}/prospect-journey/dukb-practice992-*/
