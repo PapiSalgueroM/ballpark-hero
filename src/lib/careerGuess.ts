@@ -5,10 +5,11 @@
  * Acuña), and the surname skips a trailing Jr., Sr., II, III or IV, so "griffey" finds Ken Griffey Jr.
  * (the old rule took the last word, so it wanted "jr.", which then matched every Jr. in the pool).
  *
- * MLB Career Path uses it. The NHL and NBA career hooks still take the last word; they are other rounds'
- * files, and moving them onto this helper is their change to make.
- * scripts/simMlbCareerPathFacts.mjs restates foldName and surnameOf to check that no two MLB pool players
- * share a surname, and src/test/baseballCareerGuess.test.tsx holds the two copies to the same answers.
+ * MLB Career Path uses it. The NHL hook has a rule of its own in src/lib/hockeyCareerGuess.ts (Round 923:
+ * full name, last word, or everything after the first name, full stops ignored, no Jr. skip, no accent
+ * fold) and the NBA hook still takes the last word. Folding the three into one helper is still owed.
+ * scripts/simMlbCareerPathFacts.mjs bundles this file to check that no two MLB pool players share a surname,
+ * and src/test/baseballCareerGuess.test.tsx checks the hook really guesses with it.
  */
 const NAME_SUFFIX = /^(jr|sr|ii|iii|iv)\.?$/;
 
