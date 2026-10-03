@@ -382,7 +382,7 @@ export default function NhlFrontOfficeBoard() {
   const my = league?.teams[myTeam];
 
   const playRound = () => {
-    if (!league || !my) return;
+    if (!league || !my || my.players.length > NHL_ROSTER_MAX) return;
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
@@ -905,6 +905,7 @@ export default function NhlFrontOfficeBoard() {
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
   const cutBlock = cutRefusal(my, NHL_ROSTER_MIN);
   const fullBlock = rosterFullRefusal(my, NHL_ROSTER_MAX);
+  const overLimit = Math.max(0, my.players.length - NHL_ROSTER_MAX);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -917,6 +918,11 @@ export default function NhlFrontOfficeBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 3 ? 'text-destructive' : 'text-muted-foreground')}>Cap space <b>${room}M</b></span>
       </div>
+
+      {overLimit > 0 && <div data-roster-limit role="status" className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-xs space-y-2">
+        <p>Your roster has {my.players.length} players, {overLimit} over this simulation's limit of {NHL_ROSTER_MAX}. Waive {overLimit === 1 ? 'one player' : `${overLimit} players`} before you play. Waivers keep the usual dead money costs.</p>
+        {tab !== 'team' && <button onClick={() => openPanel('team')} className="min-h-11 rounded-full border border-border bg-card px-4 py-2 font-bold">Open roster</button>}
+      </div>}
 
       {/* Round 180: the owner card, always visible on the hub. The cut is the
           top 8 of my conference by points, the same read the bracket uses. */}
@@ -981,7 +987,7 @@ export default function NhlFrontOfficeBoard() {
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
                     title={cutBlock ?? `Waive him and $${cost.now}M stays on this season's cap`}
-                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
+                    className={cn('min-h-11 rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
                       arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
                   >
                     {arming ? 'Keep' : `Waive, $${cost.now}M dead`}
@@ -997,13 +1003,13 @@ export default function NhlFrontOfficeBoard() {
                     <div className="flex gap-1.5">
                       <button
                         onClick={() => doRelease(p.id)}
-                        className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
+                        className="min-h-11 flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
                       >
                         Waive him
                       </button>
                       <button
                         onClick={() => setCutArmed(null)}
-                        className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
+                        className="min-h-11 flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
                       >
                         Keep him
                       </button>
@@ -1142,7 +1148,7 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
-          <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          <button onClick={playRound} disabled={overLimit > 0} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>
