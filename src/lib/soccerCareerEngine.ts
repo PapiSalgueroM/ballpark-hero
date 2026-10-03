@@ -6436,11 +6436,11 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
                  last.round === "QF" ? "Quarter-final" :
                  last.round === "PO" ? "Play-off" : "R16";
 
-  /* Top scorer at 6+ goals, as it always was for the knockout alone. Round
-     972 puts the first stage's nights in front of it, so the bar rises by what
-     those nights add for an attacker on average (UCL_STAGE_GOALS_PER_GAME,
-     measured), which keeps the award as rare as it was. */
-  const topScorerBar = 6 + Math.round(stageGames * UCL_STAGE_GOALS_PER_GAME);
+  /* Top scorer at 6+ goals, as it always was when the knockout was the whole
+     campaign. Round 972 puts the first stage's nights in front of it, so the
+     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME), which keeps the
+     award about as rare as it was and never more common. */
+  const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
   const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
 
   return {
@@ -6450,10 +6450,18 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   };
 }
 
-/** Round 972: what one first stage night adds to an attacker's tournament
- *  goals on average (a leg's chance, capped at what the team scored).
- *  Measured with scripts/simSoccerCareerUcl.mjs section 9's grid. */
-const UCL_STAGE_GOALS_PER_GAME = 0.25;
+/** Round 972: how far each first stage night lifts the top scorer bar. An
+ *  attacker averages about 0.22 goals a first stage night (a leg's chance,
+ *  capped at what the team scored), but a mean lift leaves the tail fatter,
+ *  so the bar was read off the measured distribution instead. Per campaign
+ *  that reached the knockouts, measured 2026-10-03 over 154,596 of them: six
+ *  knockout goals had been reached 0.63% of the time with no first stage;
+ *  after six group nights 8 total goals is reached 1.05% and 9 is 0.39%;
+ *  after eight league nights 9 is 1.09% and 10 is 0.48%; after twelve
+ *  nights (1999 to 2002) 11 is 0.60% and 12 is 0.23%. 0.4 a night, rounded
+ *  up, gives 9, 10 and 11: the nearest bar in each case that does not make
+ *  the award more common than it was. */
+const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
 
 /* ─── Round 834: the awards night, bound for Soccer ───
    The night itself (shortlist, seating, ranking, wider ranking, what the save

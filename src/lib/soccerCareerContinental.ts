@@ -28,7 +28,7 @@
  * same club still reaches the knockouts, and wins the cup, as often as he did
  * on main, the knockout rounds are untouched, and what is new is the group
  * nights before them, including going out in them. scripts/simSoccerCareerUcl.mjs
- * section 9 holds the title rate per tier against main's measured band.
+ * section 8 holds the title rate per tier against main's measured band.
  */
 import { confederationOf, type Confederation } from './soccerInternational';
 import { adjustClubsForYear } from './careerEras';

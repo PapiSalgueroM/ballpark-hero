@@ -63,6 +63,18 @@
  *      already settled at ninety on away goals is seen even when the tie
  *      still reads as away goals after it. Floored on ties settled on away
  *      goals at ninety in both away goals seasons.
+ *   8. Round 972: the first stage the season really had is played. For every
+ *      format period from 1990-91 on, a run to the final plays exactly the
+ *      games the format table says (six a group, two group stages from
+ *      1999-2000 to 2002-03, eight in the league phase plus a two legged
+ *      play-off for 9th to 24th, two a tie, one a final), typed in this file
+ *      from the table's words rather than from the engine; every first stage
+ *      and knockout opponent is in that era's pool; going out in the first
+ *      stage really happens; and the cup is won per tier within main's
+ *      measured band, the knockouts reached as often, and the top scorer
+ *      award never more common. The band and how it was measured are written
+ *      at the section. Section 4 now holds the KNOCKOUT goals of a campaign
+ *      that reached the knockouts, which is what every campaign was before.
  *
  * ON THE TOLERANCES, and on a mistake worth keeping written down. Section 3
  * first gated on the WORST single cell across the grid, and it went red at 11
@@ -87,7 +99,9 @@
  * nothing before it. SC_UCL_CONTROL=etsettled plays extra time on a tie
  * already settled on away goals at ninety (the engine reading only the
  * aggregate there); same anchor rule, and it too must turn section 7 red and
- * nothing before it.
+ * nothing before it. SC_UCL_CONTROL=nostage (Round 972) skips the first stage,
+ * the way every season was played before; same anchor rule, and section 8
+ * must go red.
  *
  * Run: node scripts/simSoccerCareerUcl.mjs      (no database)
  */
@@ -103,7 +117,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_UCL_CONTROL || '';
-const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway', 'etsettled'];
+const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway', 'etsettled', 'nostage'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -115,6 +129,8 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 export const engine = mod;
+export * as fmt from '${ROOT.replaceAll('\\', '/')}/src/lib/uclFormatHistory.ts';
+export * as eras from '${ROOT.replaceAll('\\', '/')}/src/lib/careerEras.ts';
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
 
@@ -180,7 +196,22 @@ if (CONTROL === 'etsettled') {
   console.log('   NEGATIVE CONTROL ON: extra time played on a tie settled on away goals at 90, section 7 must go red and nothing before it');
 }
 
-const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
+if (CONTROL === 'nostage') {
+  /* Round 972: skip the first stage, the way every season was played before
+     this round. Section 8's match count must go red. */
+  const text = fs.readFileSync(BUNDLE, 'utf8').replaceAll('\r\n', '\n');
+  const anchor = 'if (hasFirstStage && shape) {';
+  const n = text.split(anchor).length - 1;
+  if (n !== 1) {
+    console.error(`CONTROL nostage cannot run: its anchor is in the bundle ${n} times, not once (${anchor})`);
+    process.exit(1);
+  }
+  fs.writeFileSync(BUNDLE, text.replace(anchor, 'if (false) {'));
+  console.log('   NEGATIVE CONTROL ON: the first stage is skipped, section 8 must go red');
+}
+
+const bundle = await import(pathToFileURL(BUNDLE).href);
+const cm = bundle.engine;
 const { simulateUCL } = cm;
 if (typeof simulateUCL !== 'function') { console.error('simulateUCL is not exported'); process.exit(1); }
 
@@ -349,19 +380,25 @@ console.log('3) Balance held: the advance rate matches the model this replaced')
 }
 
 /* ------------------------------------------------------------------ */
-console.log('4) Balance held: tournament goals and the top scorer rate have not moved');
+console.log('4) Balance held: knockout goals and the top scorer rate have not moved');
 {
   const before = failures;
-  const goals = rows.map(({ r }) => r.playerGoals);
+  /* Round 972: a campaign now plays a first stage in front of its knockout,
+     and can go out in it. The replaced model's quantity is the KNOCKOUT goals
+     of a campaign that reached the knockouts, which every campaign did before,
+     so that is what is held to its range here. The first stage's own goals
+     and the top scorer bar that allows for them are section 8's. */
+  const ko = rows.filter(({ r }) => r.matches.length > 0);
+  const goals = ko.map(({ r }) => r.matches.reduce((a, m) => a + m.playerGoals, 0));
   const mean = goals.reduce((a, b) => a + b, 0) / goals.length;
-  const topScorerRate = rows.filter(({ r }) => r.isTopScorer).length / rows.length;
+  const topScorerRate = ko.filter(({ r }) => r.isTopScorer).length / ko.length;
   /* The replaced model gave an attacker a 40% chance of 1 to 2 goals per match
      over at most four matches, so the mean sat near 1.2 and six goals was rare.
      A two legged tie is twice the matches, which is why the per leg chance is
      halved. These gates are the measured range of the replaced model. */
-  if (mean < 0.6 || mean > 2.2) fail(`mean tournament goals ${mean.toFixed(2)}, outside the replaced model's range of roughly 0.6 to 2.2`);
+  if (mean < 0.6 || mean > 2.2) fail(`mean knockout goals ${mean.toFixed(2)}, outside the replaced model's range of roughly 0.6 to 2.2`);
   if (topScorerRate > 0.12) fail(`top scorer in ${(topScorerRate * 100).toFixed(1)}% of campaigns, which the six goal threshold was never meant to hand out`);
-  if (failures === before) console.log(`   mean ${mean.toFixed(2)} goals a campaign, top scorer ${(topScorerRate * 100).toFixed(1)}% of the time`);
+  if (failures === before) console.log(`   mean ${mean.toFixed(2)} knockout goals a campaign that reached the knockouts, top scorer ${(topScorerRate * 100).toFixed(1)}% of the time`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -533,6 +570,130 @@ const failuresBeforeS7 = failures;
   }
   if (failures === before) for (const l of lines) console.log(`   ${l}`);
   else console.error(`   ${lines.join('; ')}`);
+}
+
+/* ------------------------------------------------------------------ */
+/* Round 972: the first stage is played. Before this round a qualified club
+   went straight into the round of 16 (a quarter final before 2003), though
+   uclFormatHistory recorded the first stage of every period. */
+console.log('8) The first stage the season really had is played, and the cup is won as often as before');
+let redCount8 = false;
+{
+  const before = failures;
+  const { fmt, eras } = bundle;
+  /* What a run to the final plays, period by period, typed here from the
+     format table's own words and NOT from the engine's derivation, so the two
+     are checked against each other: [first stage games, knockout games], a
+     group being six games, the league phase eight, a two legged tie two and
+     the final one. The league phase adds a two legged play-off for 9th to 24th. */
+  const FULL_RUN = {
+    'european-cup': [0, 5], 'first-groups': [6, 1], renamed: [6, 1], 'one-leg-semis': [6, 2],
+    'four-groups': [6, 5], 'six-groups': [6, 5], 'two-group-stages': [12, 5],
+    'eight-groups-r16': [6, 7], 'league-phase': [8, 7],
+  };
+  const lines = [];
+  for (const p of fmt.UCL_FORMAT_PERIODS) {
+    if (p.to !== null && p.to < 1990) continue;
+    const year = Math.max(p.from, 1990);
+    const want = FULL_RUN[p.id];
+    if (!want) { fail(`no expected match count for period ${p.id}`); continue; }
+    const pool = new Set(eras.getEraUclOpponents(year));
+    let finals = 0, wrongCount = 0, wrongStage = 0, offPool = 0, exits = 0, n = 0;
+    for (let i = 0; i < 700; i++) {
+      const r = simulateUCL(stateFor(90, 1, 'Real Madrid', year), {});
+      if (!r.qualified) continue;
+      n += 1;
+      const stages = r.firstStage?.stages ?? [];
+      const stageGames = stages.reduce((a, s) => a + s.games.length, 0);
+      const perStage = p.stage === 'leaguePhase' ? 8 : 6;
+      if (stageGames !== stages.length * perStage) wrongStage += 1;
+      if (r.result === 'Group Stage' || r.result === 'League Phase') exits += 1;
+      for (const s of stages) for (const g of s.games) if (!pool.has(g.opponent)) offPool += 1;
+      for (const m of r.matches) if (!pool.has(m.opponent) && m.opponent !== 'Unknown FC') offPool += 1;
+      if (r.result === 'Winner' || r.result === 'Final') {
+        finals += 1;
+        const po = r.matches.some(m => m.round === 'PO') ? 2 : 0;
+        if (stageGames !== want[0] || r.matches.length !== want[1] + po) {
+          wrongCount += 1;
+          if (wrongCount <= 2) fail(`${fmt.seasonOf(year)} (${p.id}): a run to the final played ${stageGames} first stage and ${r.matches.length} knockout games, the format table says ${want[0]} and ${want[1] + po}`);
+        }
+      }
+    }
+    if (finals < 20) fail(`${fmt.seasonOf(year)}: only ${finals} runs to the final in ${n} campaigns, too few to count the format`);
+    if (wrongCount > 2) fail(`${fmt.seasonOf(year)}: ${wrongCount} runs to the final in all played the wrong number of games`);
+    if (wrongStage > 0) fail(`${fmt.seasonOf(year)}: ${wrongStage} campaigns played part of a group, not ${p.stage === 'leaguePhase' ? 'eight' : 'six'} games a stage`);
+    if (offPool > 0) fail(`${fmt.seasonOf(year)}: ${offPool} games against a club outside that era's Champions League pool`);
+    if (want[0] > 0 && exits === 0) fail(`${fmt.seasonOf(year)}: not one campaign went out in the first stage in ${n}, so going out there is not a real outcome`);
+    lines.push(`${fmt.seasonOf(year)} ${p.id}: ${want[0]}+${want[1]} games to the final in ${finals} runs, ${exits} of ${n} out in the first stage`);
+  }
+  redCount8 = failures > before;
+  if (failures === before) for (const l of lines) console.log(`   ${l}`);
+}
+{
+  const before = failures;
+  /* The balance rule: the old qualification rate is now the rate of reaching
+     the knockouts, the first stage is solved to a pass rate, and the chance of
+     being in the cup at all is the one over the other. So the cup must be won
+     as often as on main, per tier. MAIN'S BAND, measured 2026-10-03 on
+     origin/main c4ba7492 over this exact grid (seasons from 1995, 2010 and
+     2026, overall 70 to 90 in fours, a striker) at 4,000 campaigns a cell and
+     eight seeds, 576,000 seasons a tier:
+       Real Madrid (tier 1, elite)  title 5.920%  knockouts 85.01%  top scorer 0.43% of knockout runs
+       Ajax (tier 1)                title 3.385%  knockouts 85.03%  top scorer 0.31%
+       Sevilla (tier 2)             title 0.656%  knockouts 34.92%  top scorer 0.22%
+     with single seeds (72,000 seasons) ranging 5.86 to 6.01, 3.32 to 3.44 and
+     0.61 to 0.71. This section runs one seed of 72,000 a tier, so the title
+     gate is main's figure plus or minus three binomial standard errors at
+     that size (about 0.26, 0.20 and 0.09 points). Measured on this round's
+     engine over the same eight seeds: 5.856, 3.435 and 0.662. The knockout
+     rate carries a measured bias of +0.3 to +0.4 points at tier 1 (the pass
+     curves are interpolated linearly, which reads slightly under a bending
+     curve), so its gate is three standard errors plus 0.6 points. The top
+     scorer gate is one sided: never more common than main beyond three
+     standard errors, and not under a third of it. */
+  const MAIN = {
+    'Real Madrid': { tier: 1, title: 5.920, ko: 85.01, ts: 0.43 },
+    Ajax: { tier: 1, title: 3.385, ko: 85.03, ts: 0.31 },
+    Sevilla: { tier: 2, title: 0.656, ko: 34.92, ts: 0.22 },
+  };
+  const se = (p, n) => 100 * Math.sqrt((p / 100) * (1 - p / 100) / n);
+  const lines = [];
+  for (const [club, m] of Object.entries(MAIN)) {
+    let n = 0, ko = 0, won = 0, ts = 0;
+    for (const year of [1995, 2010, 2026]) {
+      for (let overall = 70; overall <= 90; overall += 4) {
+        for (let i = 0; i < 4000; i++) {
+          const r = simulateUCL(stateFor(overall, m.tier, club, year), {});
+          n += 1;
+          /* Reached the knockouts: past the first stage AND past a league
+             phase play-off, which is a knockout tie but not yet the round of 16. */
+          if (!r.qualified || ['Group Stage', 'League Phase', 'Play-off'].includes(r.result)) continue;
+          ko += 1;
+          if (r.result === 'Winner') won += 1;
+          if (r.isTopScorer) ts += 1;
+        }
+      }
+    }
+    const title = (100 * won) / n;
+    const koRate = (100 * ko) / n;
+    const tsRate = (100 * ts) / ko;
+    const tGate = 3 * se(m.title, n);
+    const kGate = 3 * se(m.ko, n) + 0.6;
+    const sGate = 3 * se(m.ts, ko);
+    if (Math.abs(title - m.title) > tGate) fail(`${club}: the cup is won in ${title.toFixed(3)}% of seasons, main's band is ${m.title} plus or minus ${tGate.toFixed(3)}`);
+    if (Math.abs(koRate - m.ko) > kGate) fail(`${club}: the knockouts are reached in ${koRate.toFixed(2)}% of seasons, main's band is ${m.ko} plus or minus ${kGate.toFixed(2)}`);
+    if (tsRate > m.ts + sGate) fail(`${club}: top scorer in ${tsRate.toFixed(2)}% of knockout runs, more common than main's ${m.ts}% beyond ${sGate.toFixed(2)}`);
+    if (tsRate < m.ts / 3) fail(`${club}: top scorer in ${tsRate.toFixed(2)}% of knockout runs, under a third of main's ${m.ts}%`);
+    lines.push(`${club}: title ${title.toFixed(3)}% (main ${m.title} +/- ${tGate.toFixed(3)}), knockouts ${koRate.toFixed(2)}% (main ${m.ko}), top scorer ${tsRate.toFixed(2)}% of knockout runs (main ${m.ts})`);
+  }
+  if (failures === before) for (const l of lines) console.log(`   ${l}`);
+  else console.error(`   ${lines.join('; ')}`);
+}
+
+if (CONTROL === 'nostage') {
+  if (redCount8) { console.log('\n   CONTROL FIRED: with the first stage skipped, the match count went red'); process.exit(0); }
+  console.error('\n   CONTROL DID NOT FIRE: the harness cannot see a season that skips its first stage');
+  process.exit(1);
 }
 
 /* ------------------------------------------------------------------ */
