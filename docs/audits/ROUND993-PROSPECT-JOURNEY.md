@@ -75,3 +75,14 @@ career993 walk covers all four sports at390px, NBA at320px with reduced motion,
 and NBA at1440px with keyboard. It captures choices, the draft reveal, the scout
 archive and the first professional season, and checks complete saves after each
 transition against an expectation computed before the input.
+
+The first complete remote gate passed at f3b5545d (run 37107869842), including
+both native reveal controls. It is retained as a baseline, not final acceptance.
+The reviewed 914 model through fc4bd863 is now integrated: corrected NHL combine
+tests, truthful NFL decisions, route-specific NBA cards, MLB/NHL rate lines and
+the full undrafted development ladder. The updated model harness retains its
+measured bands and all 14 controls. Our constructor entry, invalid-input guards,
+integer/length/age validation and truthful NHL draft-entry wording remain.
+The renamed-card fixture now reaches its final choice through actual seasons;
+corrupt line cases retain valid array lengths to isolate their content guard.
+Fresh type, build, compatibility, model and native gates are required.

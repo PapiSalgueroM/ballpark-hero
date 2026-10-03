@@ -29,7 +29,7 @@ const controls = {
   showcase: { file: ENGINE, from: 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[approach][grade]);\n    s.stock += move;', to: 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[approach][grade]);\n    s.stock += 0;', test: SHOWCASE },
   undrafted: { file: BOARD, from: entry, to: entry.replace('...outcome,', '...outcome, pick: outcome.pick ?? 1,'), test: 'an actual undrafted outcome becomes a camp signing without top-pick rewards' },
   archive: { file: BOARD, from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);', to: 'delete c.prospect;\n    const campNote = sport.campBattle(c, teamQuality, Math.random);', test: JOURNEY },
-  corrupt: { file: 'src/lib/usCareerProspect.ts', from: 'const state = loadPreDraft(p.state);', to: 'const state = p.state;', test: 'rejects corrupt nested journey saves without changing storage' },
+  corrupt: { file: 'src/lib/usCareerProspect.ts', from: 'const state = loadPreDraft(p.state, desc);', to: 'const state = p.state;', test: 'rejects corrupt nested journey saves without changing storage' },
   back: { file: BOARD, from: "prospectRef.current = null; setProspect(null); setPhase('create');\n      localStorage.removeItem(sport.saveKey);", to: "prospectRef.current = null; setProspect(null); setPhase('create');", test: 'back before route selection preserves the player and clears only the unfinished save' },
   rules: { file: 'src/components/us-career/ProspectJourney.tsx', from: 'The button shows the exact change before you choose.', to: 'Pick whatever you want.', test: SHOWCASE },
 };

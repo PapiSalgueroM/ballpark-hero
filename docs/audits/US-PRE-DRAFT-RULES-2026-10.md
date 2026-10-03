@@ -21,7 +21,9 @@ NBA `now` (2026) and `y2004` (start year 2003, so the 2003 draft); MLB `now` and
 | Order | reverse order of finish; no lottery | both | NFL Football Operations, Draft Rules (above) | (order rule is the same page; the CBA has no lottery anywhere in Article 6, read above) |
 | Eligibility | three NFL seasons after high school graduation | now | NFL Football Operations, Draft Rules (above) | CBA Article 6 (above) |
 | Eligibility in force in 2004 to 2005 | upheld by the Second Circuit on 2004-05-24 | y2005 | Congressional Research Service RS21869: https://www.everycrsreport.com/reports/RS21869.html | Clarett v. NFL, 2d Cir. 2004: https://caselaw.findlaw.com/court/us-2nd-circuit/1111241.html |
-| Undrafted | an undrafted rookie is free to sign with any club | now | CBA Article 6 (above) | only one source; the game says no more than "you can still sign with any club" and names no deal size (see LEFT OUT) |
+
+The undrafted row was removed in the review fixes (2026-10-03): it had one source, so the
+NFL and NBA undrafted lines now state no league rule at all (see LEFT OUT).
 
 ## NBA
 
@@ -49,7 +51,7 @@ NBA `now` (2026) and `y2004` (start year 2003, so the 2003 draft); MLB `now` and
 | Four year college route | eligible after his junior year, or at 21 within 45 days of the draft | both | Fox Rothschild (above) | Baseball Connect (above: completed third or fourth year and over 21) |
 | Slot values, picks 1 to 25 | 11,350,600; 10,507,000; 9,740,100; 8,988,400; 8,336,500; 7,746,100; 7,327,200; 6,982,600; 6,675,300; 6,393,100; 6,133,500; 5,889,300; 5,661,300; 5,444,900; 5,241,000; 5,051,900; 4,868,600; 4,695,500; 4,530,500; 4,373,900; 4,224,700; 4,082,700; 3,947,600; 3,818,700; 3,696,000 dollars | now (the 2026 draft) | Baseball America, 2026 bonus pools and slot values: https://www.baseballamerica.com/stories/2026-mlb-draft-bonus-pools-slot-values-for-each-team/ | Just Baseball: https://www.justbaseball.com/mlb-draft/2026-slot-values-bonus-pools/ (also SportsGrid, same table) |
 | After round 10 | a pick can sign for up to 150,000 dollars without touching the pool | now | Baseball America (above) | Just Baseball (above) |
-| Bonus pools began | the 2012 draft, so the 2004 era has no slot pool | y2004 | Baseball Connect (above: "implemented during the 2012 MLB Draft") | Baseball America 2026 table piece and the search summary of MLB.com ("largest since the bonus-pool era began in 2012"); the game shows no bonus figure at all in the 2004 era |
+| Bonus pools began | the 2012 draft (the 2012-16 CBA), so the 2004 era has no slot pool | y2004 | Baseball Prospectus, 2012-05-29, read 2026-10-03: https://baseballprospectus.com/news/article/17169/bizball-inside-the-2012-16-cba-the-luxury-tax-meets-the-draft (under the new CBA "Clubs are given a 'pool' of signing money", in the system's first draft) | ABCA Inside Pitch, Summer 2012, read 2026-10-03: https://www.abca.org/magazine/2012-3-Summer/Last_Inning_The_New_CBA_and_College_Baseball.aspx ("each MLB team now has a pre-determined pool of money to sign players"); Baseball Connect (above) agrees. The game shows no bonus figure at all in the 2004 era |
 | Full season minor league levels | Triple-A, Double-A and A ball (High-A and Low-A since 2021; Class A leagues before) | both | Sports Illustrated, 2021-02-12: https://www.si.com/mlb/2021/02/12/minor-league-baseball-realignment-regional-divisions (California, Florida State and South Atlantic leagues "had been at Class A") | Ballpark Digest, 2021-02-12: https://ballparkdigest.com/2021/02/12/minor-league-baseball-overhaul-unveiled/ ; SportsLogos.net, 2021-02-15 |
 
 ## NHL
@@ -59,7 +61,12 @@ NBA `now` (2026) and `y2004` (start year 2003, so the 2003 draft); MLB `now` and
 | Rounds | 7 | now | FloHockey: https://www.flohockey.tv/articles/11212645-how-many-rounds-are-in-the-nhl-draft | Hockey Answered: https://hockeyanswered.com/how-the-nhl-entry-draft-works-a-complete-guide/ ; Hockey Prospect: https://hockeyprospect.com/nhl-draft-rules-eligibility-and-how-it-works/ |
 | Seven rounds since 2005 | covers the 2006 draft | y2006 | FloHockey (above: "in place since the 2005 NHL Entry Draft") | Sports Illustrated oral history of the 2005 draft, 2015-06-23: https://www.si.com/nhl/2015/06/23/oral-history-2005-nhl-draft-sidney-crosby-carey-price (rounds cut "from nine to seven") |
 | Age | 18 on or before September 15 of the draft year | both (since 1980 by FloHockey's history) | FloHockey (above) | Hockey Answered (above) |
-| Routes | major junior, NCAA college hockey, European leagues | both | Hockey Answered (above) | Hockey Prospect (above) |
+| Routes | major junior, US junior (the USHL), NCAA college hockey, European leagues | both | Hockey Answered (above; names the USHL beside the CHL leagues, reread 2026-10-03) | Hockey Prospect (above; "North American prospects from the CHL, NCAA, and USHL", reread 2026-10-03) |
+| Combine tests | off ice only, no skating test; today's tests include the Wingate bike test, standing long jump, vertical jump and pro agility, plus interviews with teams | now (pro agility since 2014) | NHL.com, 2022-06-14, read 2026-10-03: https://www.nhl.com/kraken/news/scoping-the-nhl-combine-334607654 (Wingate cycle ergometer, standing long jump, vertical jump, pro agility; teams interview the prospects) | Topend Sports, read 2026-10-03: https://www.topendsports.com/sport/icehockey/nhl-draft.htm (full test list; pro agility added in 2014; an on ice component was only ever "looked into"; the 20 minute team interview) |
+
+The 2006 combine's own test list did not confirm twice, so the 2006 era's showcase names only
+"Fitness testing" and "Interview day". Today's era names "Bike test", "Standing long jump",
+"Pro agility" and "Interview day".
 
 ## How the code uses these
 
@@ -68,7 +75,14 @@ NBA `now` (2026) and `y2004` (start year 2003, so the 2003 draft); MLB `now` and
   picks use the combinations above without replacement; everyone else in inverse record;
   round two repeats the full inverse record. No trades, so the team that holds a pick is the
   team that drafts you.
+- The harness checks every drawn pick, not only the first, against the exact chances of the
+  combinations drawn without replacement. For the 1996 to 2004 table that enumeration gives
+  pick 2 odds of 21.55, 18.91 and 15.84 percent and pick 3 odds of 17.85, 17.22 and 15.70
+  percent for the three worst teams, the figures CBS Sports (above) prints, which is a cross
+  check of the drawing model rather than a new fact the game shows.
 - NFL, MLB and NHL: inverse generated record, the same order every round.
+- MLB after the draft: one to three seasons on the last rungs of the ladder (A ball, Double-A,
+  Triple-A); an undrafted player always climbs all three, from A ball, as his line says.
 - MLB now: the slot value of the pick is shown for picks 1 to 25 only; picks 26 to 300 say
   "a slot deal" with no figure; after round 10 the copy says "up to 150,000 dollars". 2004:
   no figure anywhere.
@@ -82,7 +96,15 @@ NBA `now` (2026) and `y2004` (start year 2003, so the 2003 draft); MLB `now` and
   modelled; MLB order is inverse record and the copy never claims otherwise.
 - MLB rookie and short season levels: rookie complex leagues confirmed only by Wikipedia
   and a fan wiki, so the minor league ladder starts at A ball.
-- NFL undrafted contract terms: one source only, so the copy says only that an undrafted
-  player can still sign with any club.
+- NFL undrafted contract terms, and the rule that an undrafted rookie may sign with any club:
+  one source only (CBA Article 6), so the NFL line says only that a club gives you a camp
+  invite. The NBA undrafted rule was never sourced twice either, so its line says only that a
+  team gives you a summer league invite.
+- Minor league, junior, US junior, European and college season lengths: not confirmed twice,
+  so the MLB and NHL stat lines are rates only (AVG, OBP, SLG; ERA, WHIP, K/9; goals,
+  assists and points per game; SV%, GAA) and never print a games or innings count.
+- The 2027 NBA lottery (sixteen teams, recorded in src/lib/nbaPlayoffFormatHistory.ts): not
+  used. The `now` era drafts in 2026, so the fourteen team table above is the right one; a
+  career that drafts in 2027 or later needs the new table verified twice first.
 - Real prospects, real draft classes and real 2026 draft order: never used. Every other
   prospect is unnamed; teams come from the careers' existing era lists.

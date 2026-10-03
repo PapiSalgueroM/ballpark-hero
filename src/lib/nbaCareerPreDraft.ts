@@ -7,7 +7,12 @@
    - 2003: thirteen lottery teams (29 teams, 16 in the playoffs), three picks
      drawn, combinations 250, 200, 157, 120, 89, 64, 44, 29, 18, 11, 7, 6, 5;
    - the 2005 CBA set the floor at 19 in the draft year and a year out of
-     high school, so straight from high school is a 2003-04 road only. */
+     high school, so straight from high school is a 2003-04 road only.
+   NOTE FOR THE BOARD BINDING: the 'now' table is right because the era's
+   draft year is 2026. src/lib/nbaPlayoffFormatHistory.ts records a sixteen
+   team lottery from the 2027 draft; a career that drafts in 2027 or later
+   needs that table first, verified twice. An undrafted outcome has pick
+   null, and today's career states store the pick as a number. */
 
 import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
 import type { PreDraftDescriptor, PreDraftLottery, PreDraftRoute, PreDraftStat } from './careerPreDraft';
@@ -71,6 +76,8 @@ export function nbaPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
         id: 'nba_circuit',
         title: 'The summer circuit',
         body: 'The travel team wants you for every tournament, and the scouts will be at all of them.',
+        /* A travel team is a high school thing, so only the prep road deals it. */
+        routes: ['prep'],
         options: [
           { label: 'Play every tournament', effect: { stock: 3, health: -10 } },
           { label: 'Stay home and train', effect: { rating: 1 } },
@@ -88,6 +95,8 @@ export function nbaPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
       },
     ],
     postDraft: null,
-    undraftedLine: 'Nobody calls your name. You can still sign with any team, and one gives you a summer league invite.',
+    /* No rule about who an undrafted player may sign with: it did not
+       confirm twice (audit, LEFT OUT). */
+    undraftedLine: 'Nobody calls your name. A team gives you a summer league invite.',
   };
 }

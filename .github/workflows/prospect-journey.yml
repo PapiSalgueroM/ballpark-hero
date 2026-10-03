@@ -75,7 +75,7 @@ jobs:
         run: |
           node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx --maxWorkers=1 --no-file-parallelism 2>&1 | tee prospect-journey-artifacts/predraft-components.log
           node scripts/simCareerPreDraft.mjs 2>&1 | tee prospect-journey-artifacts/predraft.log
-          for control in randomteam flatstock flatlottery mathrandom cardwords showcasewords erarule ceiling; do
+          for control in randomteam flatstock flatlottery mathrandom cardwords showcasewords erarule ceiling ladderskip undraftedtop squeeze laterlottery flatlater loadershallow; do
             set +e
             SIM_PRE_DRAFT_CONTROL="$control" node scripts/simCareerPreDraft.mjs 2>&1 | tee "prospect-journey-artifacts/predraft-$control.log"
             code=${PIPESTATUS[0]}

@@ -185,8 +185,8 @@ export function preDraftEffectText(e: PreDraftEffect): string {
 export const SHARED_PRE_DRAFT_CHOICES: PreDraftChoice[] = [
   {
     id: 'summer',
-    title: 'The summer',
-    body: 'Three months off. Your position coach has a plan, your friends have a beach house.',
+    title: 'The offseason',
+    body: 'Time off between seasons. Your coach has a plan, your friends have a beach house.',
     options: [
       { label: 'Train all summer', effect: { rating: 2, stock: 1 } },
       { label: 'Rest up', effect: { health: 15 } },
@@ -222,8 +222,8 @@ export const SHARED_PRE_DRAFT_CHOICES: PreDraftChoice[] = [
 ];
 
 export const PRE_DRAFT_APPROACHES: PreDraftApproach[] = [
-  { id: 'allout', label: 'Go all out', blurb: 'Bigger swings both ways.' },
-  { id: 'steady', label: 'Play it safe', blurb: 'Smaller swings both ways.' },
+  { id: 'allout', label: 'Go all out', blurb: 'Push every drill to the limit.' },
+  { id: 'steady', label: 'Play it safe', blurb: 'Stay within yourself.' },
   { id: 'skip', label: 'Skip it', blurb: 'No drill and no grade. The scouts notice.' },
 ];
 
@@ -461,7 +461,8 @@ export function preDraftRunDraft(desc: PreDraftDescriptor, prev: PreDraftState):
   let age = s.age;
   if (desc.postDraft) {
     const dev = keyedRng(preDraftKey(s.seed, 'development'));
-    const n = preDraftDevSeasonCount(desc.postDraft, rating, dev);
+    // An undrafted player climbs from the first rung, as the result promises.
+    const n = drafted ? preDraftDevSeasonCount(desc.postDraft, rating, dev) : desc.postDraft.max;
     for (let i = 0; i < n; i += 1) {
       const perf = seasonPerf(rating, 100, dev);
       devSeasons.push({
@@ -497,15 +498,16 @@ const isSeasonRecord = (x: unknown): boolean => isRecord(x)
 /** Reads a saved block. Anything that is not a whole, sane block comes back
  *  as null, so a corrupt block resets that block alone and never the career
  *  around it. A save from before Round 914 has no block and reads as null. */
-export function loadPreDraft(raw: unknown): PreDraftState | null {
-  if (!raw || typeof raw !== 'object') return null;
+export function loadPreDraft(raw: unknown, desc?: PreDraftDescriptor): PreDraftState | null {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const r = raw as Record<string, unknown>;
   if (r.v !== 1 || !SPORTS.includes(r.sport as PreDraftSport) || !isStr(r.eraId) || !isStr(r.seed) || !isStr(r.routeId)) return null;
   if (![r.rating, r.pot, r.stock, r.health, r.age, r.seasonsDone].every(isNum)) return null;
   if (!PHASES.includes(r.phase as PreDraftPhase)) return null;
-  if (!Array.isArray(r.lines) || !Array.isArray(r.choicesSeen) || !r.choicesSeen.every(isStr)) return null;
+  if (!Array.isArray(r.lines) || !r.lines.every(isSeasonRecord)) return null;
+  if (!Array.isArray(r.choicesSeen) || !r.choicesSeen.every(isStr)) return null;
   if (!Number.isInteger(r.seasonsDone) || (r.seasonsDone as number) < 0 || (r.seasonsDone as number) > 3
-    || r.lines.length !== r.seasonsDone || !r.lines.every(isSeasonRecord)
+    || r.lines.length !== r.seasonsDone
     || r.choicesSeen.length > (r.seasonsDone as number) || new Set(r.choicesSeen).size !== r.choicesSeen.length
     || (r.rating as number) < 1 || (r.rating as number) > 99 || (r.pot as number) < (r.rating as number)
     || (r.pot as number) > 99 || (r.age as number) < 16 || (r.age as number) > 30) return null;
@@ -527,9 +529,17 @@ export function loadPreDraft(raw: unknown): PreDraftState | null {
       || (d.pick === null ? d.round !== null || d.pickInRound !== null
         : !Number.isInteger(d.pick) || (d.pick as number) < 1 || !isNum(d.round) || !isNum(d.pickInRound))) return null;
   } else if (r.draft !== null) return null;
-  return {
+  const s: PreDraftState = {
     ...(r as unknown as PreDraftState),
     stock: clampMeter(r.stock as number),
     health: clampMeter(r.health as number),
   };
+  if (desc) {
+    if (s.sport !== desc.sport || s.eraId !== desc.eraId || !desc.routes.some(route => route.id === s.routeId)) return null;
+    if (s.phase === 'choice' && !preDraftChoicePool(desc).some(card => card.id === s.pendingChoice)) {
+      s.pendingChoice = null;
+      s.phase = s.seasonsDone >= preDraftRoute(desc, s.routeId).seasons ? 'showcase' : 'season';
+    }
+  }
+  return s;
 }

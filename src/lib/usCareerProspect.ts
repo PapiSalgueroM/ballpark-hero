@@ -36,9 +36,9 @@ export function loadUsCareerProspect(sport: UsCareerSport, raw: unknown): UsCare
     || !Number.isInteger(p.pot) || p.pot < p.rating || p.pot > 99) return null;
   if (!p.appearance || Object.keys(defaultAppearance()).some(k => typeof p.appearance[k as keyof PlayerAppearance] !== 'string')) return null;
   if (p.state === null) return p;
-  const state = loadPreDraft(p.state);
-  if (!state) return null;
   const desc = sport.preDraft(p.eraId);
+  const state = loadPreDraft(p.state, desc);
+  if (!state) return null;
   const route = desc.routes.find(r => r.id === state.routeId);
   if (!route || state.sport !== sport.slug || state.eraId !== p.eraId || state.seed !== p.seed
     || state.pos !== p.pos || state.pot !== p.pot || state.seasonsDone > route.seasons

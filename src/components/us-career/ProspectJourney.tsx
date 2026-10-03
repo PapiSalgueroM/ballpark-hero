@@ -66,7 +66,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
       {help && <div id="prospect-help" className={styles.help}>
         <h3>Make the league on your terms</h3>
         <p>Pick a route, play its seasons, then decide how to handle scouts, training and health. Your rating and health shape your performances. Draft stock shapes how early a team takes you.</p>
-        <p><strong>For example:</strong> playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase offers a bigger swing or a safer approach. Its grade is simulated from your rating, health and saved career seed.</p>
+        <p><strong>For example:</strong> playing through a knock can raise your stock but cost health. The button shows the exact change before you choose. The showcase lets you push hard, play safe or skip; each option lists its possible stock changes. Its grade is simulated from your rating, health and saved career seed.</p>
         <p>All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.</p>
         <button className={styles.helpClose} onClick={() => setHelp(false)}>Got it</button>
       </div>}

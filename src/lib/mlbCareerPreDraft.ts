@@ -26,23 +26,29 @@ export const MLB_SLOT_2026: number[] = [
 
 export const MLB_MINOR_LEVELS = ['A ball', 'Double-A', 'Triple-A'];
 
+/** Rates only, never a games or innings count: a high school, junior
+ *  college, college, A ball, Double-A and Triple-A season are all different
+ *  lengths, and none of those lengths was confirmed twice, so no line
+ *  implies one. */
 function mlbStatLine(perf: number, rng: () => number, pos: string | undefined): PreDraftStat[] {
-  const f = 0.45 + perf / 100;
+  const rate = (x: number) => x.toFixed(3).replace(/^0/, '');
   if (pos === 'SP' || pos === 'RP') {
-    const ip = Math.round((pos === 'SP' ? 70 : 35) * (0.8 + rng() * 0.4));
     const era = Math.max(1.2, 6.2 - perf / 25 + (rng() - 0.5));
+    const whip = Math.max(0.85, 1.7 - perf / 140 + (rng() - 0.5) * 0.12);
+    const k9 = 6 + perf / 18 + (rng() - 0.5);
     return [
-      { label: 'IP', value: String(ip) },
       { label: 'ERA', value: era.toFixed(2) },
-      { label: 'K', value: String(Math.round(ip * (0.7 + perf / 120))) },
+      { label: 'WHIP', value: whip.toFixed(2) },
+      { label: 'K/9', value: k9.toFixed(1) },
     ];
   }
   const avg = Math.min(0.42, Math.max(0.18, 0.21 + perf / 600 + (rng() - 0.5) * 0.04));
+  const obp = avg + 0.055 + perf / 2000 + (rng() - 0.5) * 0.02;
+  const slg = Math.min(0.95, avg + 0.08 + perf / 500 + (rng() - 0.5) * 0.04);
   return [
-    { label: 'G', value: String(40 + Math.floor(rng() * 20)) },
-    { label: 'AVG', value: avg.toFixed(3).replace(/^0/, '') },
-    { label: 'HR', value: String(Math.max(0, Math.round(9 * f * (0.7 + rng() * 0.6)))) },
-    { label: 'RBI', value: String(Math.max(0, Math.round(35 * f * (0.8 + rng() * 0.4)))) },
+    { label: 'AVG', value: rate(avg) },
+    { label: 'OBP', value: rate(obp) },
+    { label: 'SLG', value: rate(slg) },
   ];
 }
 
@@ -61,7 +67,7 @@ export function mlbPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     routes: [
       {
         id: 'hs', label: 'High school senior', level: 'High school, senior year',
-        blurb: 'Eligible the day you graduate. The rawest road and the longest climb after it.',
+        blurb: 'Eligible the day you graduate. The rawest road, and one season to show it.',
         seasons: 1, startAge: 17, stockStart: -2,
       },
       {
@@ -112,6 +118,8 @@ export function mlbPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
       min: 1, max: 3,
       levelFor: (i, n) => MLB_MINOR_LEVELS[MLB_MINOR_LEVELS.length - n + i] ?? 'Triple-A',
     },
-    undraftedLine: 'Nobody calls your name. A club signs you anyway, and you start at the bottom.',
+    /* preDraftRunDraft gives an undrafted player the longest climb, so his
+       first minor league season is always A ball. */
+    undraftedLine: 'Nobody calls your name. A club signs you anyway, and you start in A ball.',
   };
 }

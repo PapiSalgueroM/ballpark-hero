@@ -7,16 +7,29 @@
  * other. The control `randomteam` puts exactly that back.
  *
  * Sections, each with the control that must turn it red:
- *   1. Era rules: rounds, lottery shape, routes, ages, slot values, minor
- *      league ladder, as verified in docs/audits/US-PRE-DRAFT-RULES-2026-10.md.
- *      Control `erarule` (straight from high school in the modern NBA).
- *   2. The team always equals the holder of the pick.           Control `randomteam`.
- *   3. Median pick falls as the stock decile rises, and the stock to pick
- *      rank correlation is strongly negative.                    Control `flatstock`.
- *   4. NBA lottery: the frequency each seed wins pick 1 sits inside a band
- *      around the verified combinations, the chi-square over all seeds sits
- *      under its threshold, and the worst team never falls below the first
- *      pick after the drawn ones.                                Control `flatlottery`.
+ *   1. Era rules: rounds, lottery shape, routes, ages, slot values, and the
+ *      minor league ladder walked rung by rung (n seasons are the last n
+ *      rungs in order, a year older each; every rung is played by someone;
+ *      an undrafted player climbs from A ball, as his line says), as verified
+ *      in docs/audits/US-PRE-DRAFT-RULES-2026-10.md. Controls `erarule`
+ *      (straight from high school in the modern NBA), `ladderskip` (the climb
+ *      skips A ball and repeats Triple-A) and `undraftedtop` (an undrafted
+ *      player gets the rating based climb).
+ *   2. The team always equals the holder of the pick, and the undrafted
+ *      share sits in its band.                  Controls `randomteam`, `squeeze`.
+ *   3. Median pick falls as the stock decile rises, the stock to pick rank
+ *      correlation is strongly negative, and the two middle stock deciles
+ *      land in the middle of the draft as a share of all its picks (rho and
+ *      the ratio are scale free; this one is not).
+ *                                              Controls `flatstock`, `squeeze`.
+ *   4. NBA lottery: every drawn pick, not only the first. The frequency each
+ *      seed wins pick k sits inside a |z| band around its exact chance (the
+ *      verified combinations drawn without replacement; pick 1 is the table
+ *      itself), the chi-square of each pick sits under its threshold, and
+ *      the worst team never falls below the first pick after the drawn ones.
+ *                                          Controls `flatlottery`, `flatlater`.
+ *      4b. Every round after the first is plain inverse record (round 1 too
+ *      without a lottery).                                Control `laterlottery`.
  *   5. Every draw comes from keyedRng: no Math.random in the five files (code
  *      only, comments stripped), a run with Math.random made to throw
  *      completes, and two runs give identical results.           Control `mathrandom`.
@@ -25,19 +38,41 @@
  *      the stock by exactly the clamped table move the card quotes.
  *                                         Controls `cardwords` and `showcasewords`.
  *   7. Growth never passes the ceiling.                          Control `ceiling`.
+ *   8. Old saves and corrupt blocks: a missing block, a wrong version or
+ *      phase, and every block a card would crash on or leave without a button
+ *      (an empty season line, a stat with no value, an empty development
+ *      season, a pick with no round, a late phase with no showcase or outcome,
+ *      a pending card of null) read as none; good blocks round trip; with the
+ *      descriptor a renamed pending card is dropped.       Control `loadershallow`.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
- * and era each, 20,000 lottery draws per era each), 2026-10-03:
- *   - section 3 Spearman(stock, pick rank): -0.966 to -0.978 across the eight
- *     sport and era pairs and five sets (40 values). Floor set at -0.90.
+ * and era each, 20,000 lottery draws per era each), 2026-10-03, on the tree
+ * with the review fixes (undrafted full climb, rate only MLB and NHL lines):
+ *   - section 2 undrafted share: 20.1% to 24.3% over the eight sport and era
+ *     pairs and five sets (40 values; one value's sampling sd is about 0.9
+ *     points). Band set at 15% to 30%. Control `squeeze` drafts everybody: 0%.
+ *   - section 3 Spearman(stock, pick rank): -0.967 to -0.978 (40 values).
+ *     Floor set at -0.90.
  *   - section 3 top decile median pick over bottom decile median pick: 0.036
- *     (NFL) to 0.136 (NBA 2003-04) over the same 40 values. Ceiling set at
+ *     (NFL) to 0.153 (NBA 2003-04) over the same 40 values. Ceiling set at
  *     0.35. The bottom two deciles go undrafted in every pair, so their
  *     median is the past the last pick rank and the ratio is a real fall.
- *   - section 4 largest |z| of a seed's pick 1 frequency: 1.10 to 3.29 over
- *     the ten runs (two eras by five sets). Band set at |z| <= 4.5 per seed.
- *   - section 4 chi-square (13 df modern, 12 df 2003): 3.2 to 20.1. Ceiling
- *     set at 36 (about the 0.999 quantile of 13 df).
+ *   - section 3 middle deciles' median pick over all picks: 0.540 to 0.655
+ *     (40 values). Band set at 0.40 to 0.80.
+ *   - section 3 decile step: every decile median sat at or below the one
+ *     before it in all 40 runs (next over previous never above 1.000, the
+ *     1.000 being the tied undrafted bottom deciles). Tolerance 1.05x + 1.
+ *   - section 4 largest |z| of a seed's frequency at any drawn pick: 1.10 to
+ *     3.43 over 35 values (picks 1 to 4 modern, 1 to 3 for 2003, five sets).
+ *     Band set at |z| <= 4.5 per seed.
+ *   - section 4 chi-square per drawn pick (13 df modern, 12 df 2003): 3.2 to
+ *     25.7 over the same 35 values. Ceiling set at 36 (about the 0.999
+ *     quantile of 13 df). This and the |z| band are closeness checks at a
+ *     fixed N of 20,000 draws, not significance tests that a smaller sample
+ *     would pass: `flatlottery` and `flatlater` show they have the power.
+ *     The exact enumeration reproduces the pick 2 and 3 odds CBS Sports
+ *     prints for 1996 to 2004 (21.55, 18.91, 15.84; 17.85, 17.22, 15.70).
+ *   - section 6 choices checked per pair: 3,326 to 6,060. Floor set at 1,000.
  *   What each control did when measured is listed beside CONTROLS below.
  *
  * Run:      node scripts/simCareerPreDraft.mjs
@@ -61,7 +96,24 @@ const ok = m => console.log('  ok: ' + m);
 
 /* Each control is one source mutation, applied to the bundle only. The
    needle must be in the file or the harness refuses to run, so a control
-   that changes nothing can never pass for a working check. */
+   that changes nothing can never pass for a working check.
+   Measured on seed set a, 2026-10-03, each exit 1:
+     randomteam    s2: about 1,500 of each pair's drafted players at the wrong team.
+     flatstock     s2 undrafted share 0% and s3 rho near 0, in all eight pairs.
+     flatlottery   s4: pick 1 |z| 135.6 (modern) and 146.1 (2003).
+     mathrandom    s5: Math.random called, 1,520 of 1,600 replays differ.
+     cardwords     s6: 104 to 120 choices per pair did not do what they said.
+     showcasewords s6: over 600 showcases per pair.
+     erarule       s1: the modern NBA gets a prep road drafting at 18.
+     ceiling       s7: 900 to 1,950 steps past the ceiling per pair.
+     ladderskip    s1: "Double-A, Triple-A, Triple-A" and "Triple-A, Triple-A".
+     undraftedtop  s1: an undrafted player started in Double-A, both MLB eras.
+     squeeze       s2 undrafted share 0% and s3 middle deciles at 0.01 to 0.08
+                   of the draft, all eight pairs; rho (-0.97) and the ratio
+                   stay inside their bands, which is why the middle band exists.
+     laterlottery  4b: 200 and 192 of 200 NBA orders.
+     flatlater     s4: pick 2 |z| 136.4 and 146.2 while pick 1 stays green.
+     loadershallow s8: the two broken season line cases load. */
 const CONTROLS = {
   randomteam: ['src/lib/careerPreDraft.ts', 'const team = pick ? order[pick - 1] : teams[Math.floor(rng() * teams.length)];', 'const team = teams[Math.floor(rng() * teams.length)];'],
   flatstock: ['src/lib/careerPreDraft.ts', 'const z = (100 - clampMeter(stock)) / 100;', 'const z = 0.5 + 0 * stock;'],
@@ -71,6 +123,12 @@ const CONTROLS = {
   showcasewords: ['src/lib/careerPreDraft.ts', 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[approach][grade]);', 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS.steady[grade]);'],
   erarule: ['src/lib/nbaCareerPreDraft.ts', 'routes: then ? [PREP, COLLEGE_ONE, COLLEGE_THREE] : [COLLEGE_ONE, COLLEGE_THREE],', 'routes: [PREP, COLLEGE_ONE, COLLEGE_THREE],'],
   ceiling: ['src/lib/careerPreDraft.ts', 'return Math.min(Math.max(pot, rating), rating + 1 + Math.floor(rng() * 3));', 'return rating + 1 + Math.floor(rng() * 3);'],
+  ladderskip: ['src/lib/mlbCareerPreDraft.ts', 'MLB_MINOR_LEVELS[MLB_MINOR_LEVELS.length - n + i]', 'MLB_MINOR_LEVELS[MLB_MINOR_LEVELS.length - n + i + 1]'],
+  undraftedtop: ['src/lib/careerPreDraft.ts', 'const n = drafted ? preDraftDevSeasonCount(desc.postDraft, rating, dev) : desc.postDraft.max;', 'const n = preDraftDevSeasonCount(desc.postDraft, rating, dev);'],
+  squeeze: ['src/lib/careerPreDraft.ts', 'const rank = preDraftBoardRank(s.stock, order.length, rng);', 'const rank = preDraftBoardRank(s.stock, teams.length, rng);'],
+  laterlottery: ['src/lib/careerPreDraft.ts', 'for (let r = 2; r <= desc.rounds; r += 1) order.push(...standings);', 'for (let r = 2; r <= desc.rounds; r += 1) order.push(...first);'],
+  flatlater: ['src/lib/careerPreDraft.ts', 'const total = pool.reduce((a, p) => a + p.w, 0);', 'if (d > 0) for (const p of pool) p.w = 1; const total = pool.reduce((a, p) => a + p.w, 0);'],
+  loadershallow: ['src/lib/careerPreDraft.ts', 'if (!Array.isArray(r.lines) || !r.lines.every(isSeasonRecord)) return null;', 'if (!Array.isArray(r.lines)) return null;'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 
@@ -179,6 +237,7 @@ const SLOTS = [11350600, 10507000, 9740100, 8988400, 8336500, 7746100, 7327200, 
 for (const d of DESCS) {
   const e = EXPECT[tag(d)];
   const bad = [];
+  const rungs = new Map();
   if (d.rounds !== e.rounds) bad.push(`rounds ${d.rounds} not ${e.rounds}`);
   if (d.teamIds().length !== e.teams) bad.push(`teams ${d.teamIds().length} not ${e.teams}`);
   if (e.lottery) {
@@ -210,13 +269,28 @@ for (const d of DESCS) {
     if (o.pick !== null && (o.pick > d.rounds * e.teams || o.round > d.rounds)) { bad.push(`pick ${o.pick} past the end of the draft`); break; }
     const dev = o.devSeasons.length;
     if (d.postDraft ? dev < d.postDraft.min || dev > d.postDraft.max : dev !== 0) { bad.push(`${dev} development seasons`); break; }
-    if (d.sport === 'mlb' && o.devSeasons[dev - 1].level !== 'Triple-A') { bad.push('the minor league climb does not end at Triple-A'); break; }
+    /* Every rung, not only the top: n seasons are the last n rungs of the
+       ladder in order, a year older each, and an undrafted player climbs
+       the whole ladder from A ball, as his line says. */
+    if (o.devSeasons.some((x, k) => x.age !== o.ageAtDraft + k)) { bad.push('a development season has the wrong age'); break; }
+    if (d.sport === 'mlb') {
+      const got = o.devSeasons.map(x => x.level);
+      const want = M.MLB_MINOR_LEVELS.slice(M.MLB_MINOR_LEVELS.length - dev);
+      if (JSON.stringify(got) !== JSON.stringify(want)) { bad.push(`a ${dev} season climb read ${got.join(', ')}, not ${want.join(', ')}`); break; }
+      if (o.pick === null && got[0] !== M.MLB_MINOR_LEVELS[0]) { bad.push(`an undrafted player started in ${got[0]}, not ${M.MLB_MINOR_LEVELS[0]}`); break; }
+      for (const lv of got) rungs.set(lv, (rungs.get(lv) ?? 0) + 1);
+    }
+    if (d.sport === 'nhl' && new Set(o.devSeasons.map(x => x.level)).size !== 1) { bad.push('NHL development seasons changed level'); break; }
   }
+  if (d.sport === 'mlb' && !bad.length && M.MLB_MINOR_LEVELS.some(lv => !(rungs.get(lv) > 0))) bad.push(`a rung nobody played: ${M.MLB_MINOR_LEVELS.map(lv => `${lv} ${rungs.get(lv) ?? 0}`).join(', ')}`);
+  if (d.sport === 'mlb' && !/A ball/.test(d.undraftedLine)) bad.push('the undrafted line no longer says where the climb starts');
   if (bad.length) fail(`${tag(d)}: ${bad.join('; ')}`); else ok(`${tag(d)}: ${e.rounds} rounds, ${e.teams} teams, routes ${d.routes.map(r => r.id).join(', ')}`);
 }
 
 /* ─── Section 2: the team is the holder of the pick ─── */
 console.log('\n2. The team always equals the holder of the pick');
+const UNDRAFTED_MIN = 0.15;
+const UNDRAFTED_MAX = 0.30;
 for (const d of DESCS) {
   let drafted = 0, wrong = 0, notATeam = 0;
   const ids = new Set(d.teamIds());
@@ -227,14 +301,20 @@ for (const d of DESCS) {
     drafted += 1;
     if (M.preDraftOrder(d, s.seed).order[o.pick - 1] !== o.team) wrong += 1;
   }
-  if (wrong || notATeam || drafted < N * 0.3) fail(`${tag(d)}: ${wrong} of ${drafted} drafted players joined a team that did not hold their pick, ${notATeam} joined no real team`);
-  else ok(`${tag(d)}: all ${drafted} drafted players joined the holder of their pick (${N - drafted} undrafted)`);
+  /* The undrafted road must stay a real road: a share band, so a slip that
+     drafts everybody (or nobody) goes red even with every holder right. */
+  const share = (N - drafted) / N;
+  const shareBad = share < UNDRAFTED_MIN || share > UNDRAFTED_MAX;
+  if (wrong || notATeam || shareBad) fail(`${tag(d)}: ${wrong} of ${drafted} drafted players joined a team that did not hold their pick, ${notATeam} joined no real team, undrafted share ${(share * 100).toFixed(1)}% (band ${UNDRAFTED_MIN * 100} to ${UNDRAFTED_MAX * 100}%)`);
+  else ok(`${tag(d)}: all ${drafted} drafted players joined the holder of their pick, undrafted share ${(share * 100).toFixed(1)}%`);
 }
 
 /* ─── Section 3: stock moves the pick ─── */
 console.log('\n3. Median pick falls as the stock decile rises');
 const SPEARMAN_MAX = -0.90;
 const TOP_OVER_BOTTOM_MAX = 0.35;
+const MID_MIN = 0.40;
+const MID_MAX = 0.80;
 function ranks(xs) {
   const idx = xs.map((x, i) => [x, i]).sort((a, b) => a[0] - b[0]);
   const r = new Array(xs.length);
@@ -260,8 +340,13 @@ for (const d of DESCS) {
   const meds = Array.from({ length: 10 }, (_, k) => median(sorted.slice(Math.floor(k * N / 10), Math.floor((k + 1) * N / 10)).map(r => r.rank)));
   const inversions = meds.slice(1).filter((m, k) => m > meds[k] * 1.05 + 1).length;
   const ratio = meds[9] / meds[0];
-  const line = `rho ${rho.toFixed(3)}, decile medians ${meds.map(m => Math.round(m)).join(' ')}, top over bottom ${ratio.toFixed(3)}`;
-  if (rho > SPEARMAN_MAX || ratio > TOP_OVER_BOTTOM_MAX || inversions) fail(`${tag(d)}: ${line}, ${inversions} decile(s) went back up`);
+  /* Rho and the ratio are scale free, so a slip that squeezes every career
+     into the first rounds keeps both. The middle of the stock range must
+     still land in the middle of the draft, as a share of all its picks. */
+  const mid = (meds[4] + meds[5]) / 2 / total;
+  const rise = Math.max(...meds.slice(1).map((m, k) => m / meds[k]));
+  const line = `rho ${rho.toFixed(3)}, decile medians ${meds.map(m => Math.round(m)).join(' ')}, top over bottom ${ratio.toFixed(3)}, middle deciles at ${mid.toFixed(3)} of the draft, largest next over previous decile ${rise.toFixed(3)}`;
+  if (rho > SPEARMAN_MAX || ratio > TOP_OVER_BOTTOM_MAX || inversions || mid < MID_MIN || mid > MID_MAX) fail(`${tag(d)}: ${line}, ${inversions} decile(s) went back up (middle band ${MID_MIN} to ${MID_MAX})`);
   else ok(`${tag(d)}: ${line}`);
 }
 
@@ -269,22 +354,59 @@ for (const d of DESCS) {
 console.log('\n4. NBA lottery frequencies against the verified combinations');
 const Z_MAX = 4.5;
 const CHI2_MAX = 36;
+/** Exact chance that seed i wins drawn pick k: the verified combinations,
+ *  drawn without replacement (a combination of a team already drawn is
+ *  drawn again). Pick 1 is the table itself; for 1996 to 2004 this
+ *  reproduces the published pick 2 and pick 3 odds (see the header). */
+function exactLottery(w, drawn) {
+  const P = Array.from({ length: drawn }, () => new Array(w.length).fill(0));
+  const dfs = (rem, prob, depth) => {
+    if (depth === drawn) return;
+    const tot = rem.reduce((a, j) => a + w[j], 0);
+    for (const j of rem) { const p = prob * w[j] / tot; P[depth][j] += p; dfs(rem.filter(x => x !== j), p, depth + 1); }
+  };
+  dfs(w.map((_, i) => i), 1, 0);
+  return P;
+}
 for (const d of DESCS.filter(x => x.lottery)) {
   const L = d.lottery;
-  const wins = new Array(L.teams).fill(0);
+  const P = exactLottery(L.combos, L.drawn);
+  const wins = Array.from({ length: L.drawn }, () => new Array(L.teams).fill(0));
   let worstTooLow = 0;
   for (let t = 0; t < LOTTERY_DRAWS; t += 1) {
     const o = M.preDraftOrder(d, `lottery|${SEEDSET}|${t}`);
-    wins[o.standings.indexOf(o.order[0])] += 1;
+    for (let k = 0; k < L.drawn; k += 1) wins[k][o.standings.indexOf(o.order[k])] += 1;
     if (o.order.indexOf(o.standings[0]) > L.drawn) worstTooLow += 1;
   }
-  const zs = wins.map((w, i) => { const p = L.combos[i] / 1000; return (w / LOTTERY_DRAWS - p) / Math.sqrt(p * (1 - p) / LOTTERY_DRAWS); });
-  const chi2 = wins.reduce((a, w, i) => { const e = LOTTERY_DRAWS * L.combos[i] / 1000; return a + (w - e) ** 2 / e; }, 0);
-  const outside = zs.filter(z => Math.abs(z) > Z_MAX).length;
-  const zmax = Math.max(...zs.map(Math.abs));
-  const line = `seed 1 won ${(wins[0] / LOTTERY_DRAWS * 100).toFixed(2)}% (verified ${L.combos[0] / 10}%), largest |z| ${zmax.toFixed(2)}, chi-square ${chi2.toFixed(1)}`;
-  if (outside || chi2 > CHI2_MAX || worstTooLow) fail(`${tag(d)}: ${line}, ${outside} seed(s) outside the band, worst team fell past pick ${L.drawn + 1} ${worstTooLow} times`);
-  else ok(`${tag(d)}: ${line}`);
+  const bad = [];
+  const parts = [];
+  for (let k = 0; k < L.drawn; k += 1) {
+    const zs = wins[k].map((w, i) => { const p = P[k][i]; return (w / LOTTERY_DRAWS - p) / Math.sqrt(p * (1 - p) / LOTTERY_DRAWS); });
+    const chi2 = wins[k].reduce((a, w, i) => { const e = LOTTERY_DRAWS * P[k][i]; return a + (w - e) ** 2 / e; }, 0);
+    const outside = zs.filter(z => Math.abs(z) > Z_MAX).length;
+    parts.push(`pick ${k + 1}: largest |z| ${Math.max(...zs.map(Math.abs)).toFixed(2)}, chi-square ${chi2.toFixed(1)}`);
+    if (outside || chi2 > CHI2_MAX) bad.push(`pick ${k + 1} has ${outside} seed(s) outside the band, chi-square ${chi2.toFixed(1)}`);
+  }
+  if (Math.abs(P[0][0] * 1000 - L.combos[0]) > 1e-9) bad.push('the exact pick 1 odds are not the table');
+  if (worstTooLow) bad.push(`worst team fell past pick ${L.drawn + 1} ${worstTooLow} times`);
+  const line = `seed 1 won pick 1 ${(wins[0][0] / LOTTERY_DRAWS * 100).toFixed(2)}% (verified ${L.combos[0] / 10}%); ${parts.join('; ')}`;
+  if (bad.length) fail(`${tag(d)}: ${line}; ${bad.join('; ')}`); else ok(`${tag(d)}: ${line}`);
+}
+
+console.log('\n4b. Every round after the first is plain inverse record');
+for (const d of DESCS) {
+  const n = d.teamIds().length;
+  let badOrders = 0;
+  for (let t = 0; t < 200; t += 1) {
+    const o = M.preDraftOrder(d, `rounds|${SEEDSET}|${t}`);
+    const same = r => JSON.stringify(o.order.slice((r - 1) * n, r * n)) === JSON.stringify(o.standings);
+    let okOrder = o.order.length === n * d.rounds;
+    for (let r = 2; r <= d.rounds; r += 1) okOrder = okOrder && same(r);
+    if (!d.lottery) okOrder = okOrder && same(1);
+    if (!okOrder) badOrders += 1;
+  }
+  if (badOrders) fail(`${tag(d)}: ${badOrders} of 200 orders had a later round that was not inverse record`);
+  else ok(`${tag(d)}: 200 orders, rounds 2 to ${d.rounds} all inverse record${d.lottery ? '' : ', round 1 too'}`);
 }
 
 /* ─── Section 6: words match effects ─── */
@@ -346,10 +468,24 @@ for (const d of DESCS) {
 console.log('\n8. Old saves and corrupt blocks');
 {
   const done = RUNS.get('nba:now')[0].s;
-  const cases = [[undefined, null], [null, null], [{ ...done, v: 2 }, null], [{ ...done, phase: 'lunch' }, null], [{ ...done, draft: null }, null]];
-  const wrong = cases.filter(([inp, want]) => M.loadPreDraft(inp) !== want).length;
-  const trip = JSON.stringify(M.loadPreDraft(JSON.parse(JSON.stringify(done)))) === JSON.stringify(done);
-  if (wrong || !trip) fail(`${wrong} corrupt or missing blocks were not reset, round trip ${trip}`); else ok('a missing or corrupt block reads as none, a good one round trips');
+  const mlbDone = RUNS.get('mlb:now').find(r => r.s.draft.devSeasons.length).s;
+  const mid = RUNS.get('nba:now').find(r => r.trail.length).trail[0].before;
+  /* Each case is a block a card would crash on or leave with no button:
+     the cards read every one of these fields. */
+  const cases = [undefined, null, { ...done, v: 2 }, { ...done, phase: 'lunch' }, { ...done, draft: null },
+    { ...done, lines: done.lines.map((line, i) => i ? line : {}) },
+    { ...done, lines: done.lines.map((line, i) => i ? line : { ...line, stats: [{ label: 'PPG' }] }) },
+    { ...mlbDone, draft: { ...mlbDone.draft, devSeasons: [{}] } }, { ...done, draft: { ...done.draft, pick: 3, round: null } },
+    { ...done, showcase: null }, { ...done, phase: 'draft' }, { ...mid, pendingChoice: null }, { ...mid, draft: {} }];
+  const wrong = cases.map((c, i) => [i, M.loadPreDraft(c)]).filter(([, got]) => got !== null).map(([i]) => i);
+  const trips = [done, mlbDone, mid].filter(b => JSON.stringify(M.loadPreDraft(JSON.parse(JSON.stringify(b)))) !== JSON.stringify(b)).length;
+  /* With the descriptor, a pending card a later round renamed is dropped and
+     the road goes on, so the player always has a button to press. */
+  const d = DESCS.find(x => tag(x) === 'nba:now');
+  const healed = M.loadPreDraft({ ...mid, pendingChoice: 'retired_card' }, d);
+  const healOk = healed && healed.pendingChoice === null && (healed.phase === 'season' || healed.phase === 'showcase');
+  if (wrong.length || trips || !healOk) fail(`corrupt cases loaded: ${wrong.join(', ') || 'none'}; ${trips} good blocks failed to round trip; renamed card healed: ${!!healOk}`);
+  else ok(`${cases.length} missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

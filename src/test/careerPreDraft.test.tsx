@@ -18,7 +18,7 @@ import {
 } from '@/lib/careerPreDraft';
 import { nflPreDraftDescriptor } from '@/lib/nflCareerPreDraft';
 import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
-import { mlbPreDraftDescriptor } from '@/lib/mlbCareerPreDraft';
+import { mlbPreDraftDescriptor, MLB_MINOR_LEVELS } from '@/lib/mlbCareerPreDraft';
 import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
 
 const ALL: PreDraftDescriptor[] = [
@@ -157,12 +157,51 @@ describe('growth, money and the seasons after the draft', () => {
     expect(now.bonusLine!(301)).toMatch(/150,000/);
   });
   it('MLB plays one to three minor league seasons climbing to Triple-A; NHL one to three back on its route', () => {
+    const lengths = new Set<number>();
     for (const d of [mlbPreDraftDescriptor('now'), mlbPreDraftDescriptor('y2004')]) for (let i = 0; i < 20; i += 1) {
-      const dev = road(d, `m${i}`, 'college', 60 + i).draft!.devSeasons;
+      const out = road(d, `m${i}`, 'college', 60 + i).draft!;
+      const dev = out.devSeasons;
       expect(dev.length).toBeGreaterThanOrEqual(1);
       expect(dev.length).toBeLessThanOrEqual(3);
-      expect(dev[dev.length - 1].level).toBe('Triple-A');
+      lengths.add(dev.length);
+      /* Every step of the climb, not only the top: n seasons are the last n
+         rungs of the ladder in order, one rung a season, a year older each. */
+      expect(dev.map(x => x.level)).toEqual(MLB_MINOR_LEVELS.slice(MLB_MINOR_LEVELS.length - dev.length));
+      dev.forEach((x, k) => expect(x.age).toBe(out.ageAtDraft + k));
+      if (out.pick === null) expect(dev[0].level).toBe('A ball');
     }
+    expect([...lengths].sort()).toEqual([1, 2, 3]);
+  });
+  it('an undrafted MLB player starts in A ball, as his line says', () => {
+    const d = mlbPreDraftDescriptor('now');
+    let undrafted = 0;
+    for (let i = 0; i < 12; i += 1) {
+      /* Rating 80 alone would climb one or two rungs if drafted. */
+      const s = { ...preDraftStart(d, { seed: `u${i}`, routeId: 'college', rating: 80, pot: 90 }), phase: 'draft' as const, stock: 0, showcase: { approach: 'skip' as const, drill: '', grade: null, stockDelta: -2 } };
+      const out = preDraftRunDraft(d, s).draft!;
+      if (out.pick !== null) continue;
+      undrafted += 1;
+      expect(out.devSeasons.map(x => x.level)).toEqual(['A ball', 'Double-A', 'Triple-A']);
+    }
+    expect(undrafted).toBeGreaterThan(5);
+    expect(d.undraftedLine).toMatch(/A ball/);
+  });
+  it('MLB and NHL lines are rates, never a games or innings count', () => {
+    for (const d of [mlbPreDraftDescriptor('now'), mlbPreDraftDescriptor('y2004'), nhlPreDraftDescriptor('now'), nhlPreDraftDescriptor('y2006')]) {
+      for (let i = 0; i < 12; i += 1) {
+        const s = road(d, `r${i}`, d.routes[i % d.routes.length].id, 64 + i);
+        const labels = [...s.lines, ...s.draft!.devSeasons].flatMap(x => x.stats.map(st => st.label));
+        expect(labels.length).toBeGreaterThan(0);
+        for (const l of labels) expect(['G', 'GP', 'Games', 'IP', 'K', 'HR', 'RBI', 'PTS']).not.toContain(l);
+      }
+    }
+  });
+  it('the NHL combine names no on ice drill', () => {
+    for (const d of [nhlPreDraftDescriptor('now'), nhlPreDraftDescriptor('y2006')]) {
+      for (const x of d.drills) expect(x).not.toMatch(/skat/i);
+    }
+  });
+  it('NHL development seasons stay on the route', () => {
     const nhl = nhlPreDraftDescriptor('y2006');
     const dev = road(nhl, 'h', 'college').draft!.devSeasons;
     expect(dev.every(x => x.level === 'NCAA college hockey')).toBe(true);
@@ -188,6 +227,52 @@ describe('the save block', () => {
     expect(loadPreDraft({ ...done, draft: null })).toBeNull();
     expect(loadPreDraft({ ...done, choicesSeen: [1] })).toBeNull();
     expect(loadPreDraft('[]')).toBeNull();
+  });
+  it('a block the cards cannot draw resets, down to the elements', () => {
+    const mlb = mlbPreDraftDescriptor('now');
+    const mlbDone = road(mlb, 'deep', 'college');
+    expect(mlbDone.draft!.devSeasons.length).toBeGreaterThan(0);
+    const mid: PreDraftState = { ...preDraftPlaySeason(d, preDraftStart(d, { seed: 'mid', routeId: 'three', rating: 70, pot: 80 })) };
+    expect(mid.phase).toBe('choice');
+    const bad: unknown[] = [
+      { ...done, lines: [{}] },
+      { ...done, lines: [{ ...done.lines[0], stats: [{ label: 'PPG' }] }] },
+      { ...done, lines: [{ ...done.lines[0], stats: null }] },
+      { ...mlbDone, draft: { ...mlbDone.draft!, devSeasons: [{}] } },
+      { ...done, draft: { ...done.draft!, team: 7 } },
+      { ...done, draft: { ...done.draft!, pick: 3, round: null } },
+      { ...done, showcase: null },
+      { ...done, showcase: { approach: 'allout', drill: 'Max vertical', grade: 'Z', stockDelta: 4 } },
+      { ...done, phase: 'draft' },
+      { ...done, phase: 'draft', draft: {} },
+      { ...mid, pendingChoice: null },
+      { ...mid, pendingChoice: 4 },
+      { ...mid, phase: 'season' },
+      { ...mid, draft: {} },
+    ];
+    for (const b of bad) expect(loadPreDraft(b)).toBeNull();
+    /* A good mid road block still loads, with and without the descriptor. */
+    expect(loadPreDraft(JSON.parse(JSON.stringify(mid)))).toEqual(mid);
+    expect(loadPreDraft(JSON.parse(JSON.stringify(mid)), d)).toEqual(mid);
+    expect(loadPreDraft(JSON.parse(JSON.stringify(mlbDone)), mlb)).toEqual(mlbDone);
+  });
+  it('with the descriptor: another sport, era or route resets, a card no longer dealt is dropped', () => {
+    const mid = preDraftPlaySeason(d, preDraftStart(d, { seed: 'mid', routeId: 'three', rating: 70, pot: 80 }));
+    expect(loadPreDraft(mid, nflPreDraftDescriptor('now'))).toBeNull();
+    expect(loadPreDraft(mid, nbaPreDraftDescriptor('y2004'))).toBeNull();
+    expect(loadPreDraft({ ...mid, routeId: 'prep' }, d)).toBeNull();
+    const healed = loadPreDraft({ ...mid, pendingChoice: 'retired_card' }, d)!;
+    expect(healed.phase).toBe('season');
+    expect(healed.pendingChoice).toBeNull();
+    let finalChoice = mid;
+    while (finalChoice.seasonsDone < 3) finalChoice = preDraftPlaySeason(d, preDraftChoose(d, finalChoice, 0));
+    expect(finalChoice.phase).toBe('choice');
+    const last = loadPreDraft({ ...finalChoice, pendingChoice: 'retired_card' }, d)!;
+    expect(last.phase).toBe('showcase');
+    /* The healed block draws a button to press. */
+    const { getAllByRole, unmount } = render(<PreDraftSeasonCard desc={d} state={healed} onPlaySeason={() => {}} onChoose={() => {}} />);
+    expect(getAllByRole('button').length).toBeGreaterThan(0);
+    unmount();
   });
   it('meters out of range come back clamped', () => {
     expect(loadPreDraft({ ...done, stock: 140, health: -9 })!.stock).toBe(100);
@@ -231,8 +316,20 @@ describe('the cards on screen', () => {
       }
       expect(preDraftShowcase(d, edge, 'skip').stock - stock).toBe(stock === 97 ? -2 : -1);
     }
-    const done = preDraftRunDraft(d, preDraftShowcase(d, s0, 'allout'));
-    const { getByTestId } = render(<DraftShowcaseCard desc={d} state={done} onShowcase={() => {}} onRunDraft={() => {}} />);
-    if (done.draft!.pick !== null) expect(getByTestId('draft-result').textContent).toContain(d.teamLabel(preDraftOrder(d, 'show').order[done.draft!.pick - 1]));
+    /* Stock 100 is always the first pick (preDraftBoardRank), and stock 0
+       goes undrafted on most seeds, so both branches are drawn every run. */
+    const shown = preDraftShowcase(d, s0, 'allout');
+    const top = preDraftRunDraft(d, { ...shown, stock: 100 });
+    expect(top.draft!.pick).toBe(1);
+    const a = render(<DraftShowcaseCard desc={d} state={top} onShowcase={() => {}} onRunDraft={() => {}} />);
+    expect(a.getByTestId('draft-result').textContent).toContain(`${d.teamLabel(preDraftOrder(d, 'show').order[0])} hold the pick`);
+    a.unmount();
+    const none = Array.from({ length: 10 }, (_, i) => preDraftRunDraft(d, { ...shown, seed: `show${i}`, stock: 0 })).find(x => x.draft!.pick === null)!;
+    expect(none).toBeDefined();
+    const b = render(<DraftShowcaseCard desc={d} state={none} onShowcase={() => {}} onRunDraft={() => {}} />);
+    const text = b.getByTestId('draft-result').textContent ?? '';
+    expect(text).toContain('Undrafted');
+    expect(text).toContain(d.undraftedLine);
+    expect(text).toContain(d.teamLabel(none.draft!.team));
   });
 });
