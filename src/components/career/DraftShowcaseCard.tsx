@@ -1,17 +1,18 @@
 import { Button } from "@/components/ui/button";
 import {
-  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA,
+  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftShowcaseMove,
   type PreDraftApproach, type PreDraftDescriptor, type PreDraftState,
 } from "@/lib/careerPreDraft";
 
-const sign = (n: number) => (n > 0 ? `+${n}` : `${n}`);
+const sign = (n: number) => (n >= 0 ? `+${n}` : `${n}`);
 
-/** What an approach promises, printed straight from the table the showcase
- *  applies. */
-export function approachPromise(id: PreDraftApproach["id"]): string {
-  if (id === "skip") return `Draft stock ${sign(SKIP_DELTA)}`;
+/** What an approach promises from this stock, printed from the same move
+ *  the showcase applies, so a stock near 0 or 100 shows the clamped number. */
+export function approachPromise(id: PreDraftApproach["id"], stock: number): string {
+  const m = (delta: number) => sign(preDraftShowcaseMove(stock, delta));
+  if (id === "skip") return `Draft stock ${m(SKIP_DELTA)}`;
   const t = SHOWCASE_DELTAS[id];
-  return `Grade A ${sign(t.A)}, B ${sign(t.B)}, C ${sign(t.C)}, D ${sign(t.D)}`;
+  return `Grade A ${m(t.A)}, B ${m(t.B)}, C ${m(t.C)}, D ${m(t.D)}`;
 }
 
 /* ─── Round 914: the showcase and draft day, shared by the four US careers ───
@@ -42,7 +43,7 @@ export function DraftShowcaseCard({
               <Button key={a.id} variant="outline" className="h-auto flex-col items-start whitespace-normal text-left" onClick={() => onShowcase(a.id)}>
                 <span className="font-semibold">{a.label}</span>
                 <span className="text-xs text-muted-foreground">{a.blurb}</span>
-                <span className="text-xs" data-testid="approach-promise">{approachPromise(a.id)}</span>
+                <span className="text-xs" data-testid="approach-promise">{approachPromise(a.id, state.stock)}</span>
               </Button>
             ))}
           </div>

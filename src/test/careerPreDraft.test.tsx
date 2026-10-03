@@ -215,6 +215,22 @@ describe('the cards on screen', () => {
     const { getAllByTestId, unmount } = render(<DraftShowcaseCard desc={d} state={s0} onShowcase={() => {}} onRunDraft={() => {}} />);
     expect(getAllByTestId('approach-promise').map(e => e.textContent)).toEqual(['Grade A +10, B +4, C -3, D -8', 'Grade A +5, B +2, C -1, D -3', `Draft stock ${SKIP_DELTA}`]);
     unmount();
+    /* Near the top and bottom of the meter the card prints the clamped move,
+       and the showcase applies exactly that move. */
+    for (const stock of [97, 1]) {
+      const edge = { ...s0, stock };
+      const r = render(<DraftShowcaseCard desc={d} state={edge} onShowcase={() => {}} onRunDraft={() => {}} />);
+      const printed = r.getAllByTestId('approach-promise').map(e => e.textContent);
+      expect(printed).toEqual(stock === 97
+        ? ['Grade A +3, B +3, C -3, D -8', 'Grade A +3, B +2, C -1, D -3', 'Draft stock -2']
+        : ['Grade A +10, B +4, C -1, D -1', 'Grade A +5, B +2, C -1, D -1', 'Draft stock -1']);
+      r.unmount();
+      for (const a of ['allout', 'steady'] as const) {
+        const sc = preDraftShowcase(d, edge, a).showcase!;
+        expect(printed[a === 'allout' ? 0 : 1]).toContain(`${sc.grade} ${sc.stockDelta >= 0 ? '+' : ''}${sc.stockDelta}`);
+      }
+      expect(preDraftShowcase(d, edge, 'skip').stock - stock).toBe(stock === 97 ? -2 : -1);
+    }
     const done = preDraftRunDraft(d, preDraftShowcase(d, s0, 'allout'));
     const { getByTestId } = render(<DraftShowcaseCard desc={d} state={done} onShowcase={() => {}} onRunDraft={() => {}} />);
     if (done.draft!.pick !== null) expect(getByTestId('draft-result').textContent).toContain(d.teamLabel(preDraftOrder(d, 'show').order[done.draft!.pick - 1]));

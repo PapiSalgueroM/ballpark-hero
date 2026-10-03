@@ -22,7 +22,8 @@
  *      completes, and two runs give identical results.           Control `mathrandom`.
  *   6. Every card's words match its meter effect: what a choice applies is what
  *      preDraftEffectiveEffect prints, on mid and edge states; a showcase moves
- *      the stock by exactly the table the card quotes.           Control `cardwords`.
+ *      the stock by exactly the clamped table move the card quotes.
+ *                                         Controls `cardwords` and `showcasewords`.
  *   7. Growth never passes the ceiling.                          Control `ceiling`.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
@@ -67,6 +68,7 @@ const CONTROLS = {
   flatlottery: ['src/lib/careerPreDraft.ts', 'const pool = lotteryTeams.map((id, i) => ({ id, w: L.combos[i] ?? 0 }));', 'const pool = lotteryTeams.map((id) => ({ id, w: 1 }));'],
   mathrandom: ['src/lib/careerPreDraft.ts', "const rng = keyedRng(preDraftKey(s.seed, 'board'));", 'const rng = Math.random;'],
   cardwords: ['src/lib/careerPreDraft.ts', 's.stock += e.stock ?? 0;', 's.stock = s.stock + (option.effect.stock ?? 0);'],
+  showcasewords: ['src/lib/careerPreDraft.ts', 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[approach][grade]);', 'const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS.steady[grade]);'],
   erarule: ['src/lib/nbaCareerPreDraft.ts', 'routes: then ? [PREP, COLLEGE_ONE, COLLEGE_THREE] : [COLLEGE_ONE, COLLEGE_THREE],', 'routes: [PREP, COLLEGE_ONE, COLLEGE_THREE],'],
   ceiling: ['src/lib/careerPreDraft.ts', 'return Math.min(Math.max(pot, rating), rating + 1 + Math.floor(rng() * 3));', 'return rating + 1 + Math.floor(rng() * 3);'],
 };
@@ -312,15 +314,20 @@ for (const d of DESCS) {
   for (const r of RUNS.get(tag(d))) {
     const sc = r.s.showcase;
     const table = sc.approach === 'skip' ? M.SKIP_DELTA : M.SHOWCASE_DELTAS[sc.approach][sc.grade];
+    /* The card prints preDraftShowcaseMove(stock, table): the table number,
+       clamped at the ends of the meter. Unclamped, it must be the table
+       number itself, so the card can never quote a number the table lacks. */
+    const promised = M.preDraftShowcaseMove(r.pre.stock, table);
     const unclamped = r.pre.stock + table >= 0 && r.pre.stock + table <= 100;
-    if (unclamped) { showN += 1; if (sc.stockDelta !== table || r.stockAtDraft - r.pre.stock !== table) showBad += 1; }
+    showN += 1;
+    if (sc.stockDelta !== promised || r.stockAtDraft - r.pre.stock !== promised || (unclamped && promised !== table)) showBad += 1;
     if (sc.approach !== 'skip') {
       const other = M.preDraftShowcase(d, r.pre, sc.approach === 'allout' ? 'steady' : 'allout').showcase;
       if (other.grade === sc.grade && other.drill === sc.drill) sameGrade += 1; else showBad += 1;
     }
   }
   if (bad || showBad || checked < 1000) fail(`${tag(d)}: ${bad} of ${checked} choices and ${showBad} showcases did not do what their words say`);
-  else ok(`${tag(d)}: ${checked} choices and ${showN} unclamped showcases did exactly what they said; ${sameGrade} drills graded the same whichever approach`);
+  else ok(`${tag(d)}: ${checked} choices and ${showN} showcases did exactly what they said; ${sameGrade} drills graded the same whichever approach`);
 }
 
 /* ─── Section 7: growth stays under the ceiling, every step ─── */

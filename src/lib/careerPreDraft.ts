@@ -218,7 +218,7 @@ export const SHARED_PRE_DRAFT_CHOICES: PreDraftChoice[] = [
 export const PRE_DRAFT_APPROACHES: PreDraftApproach[] = [
   { id: 'allout', label: 'Go all out', blurb: 'Bigger swings both ways.' },
   { id: 'steady', label: 'Play it safe', blurb: 'Smaller swings both ways.' },
-  { id: 'skip', label: 'Skip it', blurb: 'Draft stock -2, every time.' },
+  { id: 'skip', label: 'Skip it', blurb: 'No drill and no grade. The scouts notice.' },
 ];
 
 /** Draft stock moves for a drill grade, per approach. These are the only
@@ -228,6 +228,12 @@ export const SHOWCASE_DELTAS: Record<'allout' | 'steady', Record<'A' | 'B' | 'C'
   steady: { A: 5, B: 2, C: -1, D: -3 },
 };
 export const SKIP_DELTA = -2;
+
+/** What a table move really does from this stock, once the meter clamps at
+ *  0 and 100. The showcase card prints this and the showcase applies it. */
+export function preDraftShowcaseMove(stock: number, delta: number): number {
+  return clampMeter(stock + delta) - stock;
+}
 
 /* ─── The draft order ─────────────────────────────────────────────────── */
 
@@ -407,16 +413,17 @@ export function preDraftShowcaseGrade(s: PreDraftState, rng: () => number): 'A' 
 export function preDraftShowcase(desc: PreDraftDescriptor, prev: PreDraftState, approach: PreDraftApproach['id']): PreDraftState {
   if (prev.phase !== 'showcase') return prev;
   const s: PreDraftState = { ...prev };
-  const before = s.stock;
   if (approach === 'skip') {
-    s.stock = clampMeter(s.stock + SKIP_DELTA);
-    s.showcase = { approach, drill: '', grade: null, stockDelta: s.stock - before };
+    const move = preDraftShowcaseMove(s.stock, SKIP_DELTA);
+    s.stock += move;
+    s.showcase = { approach, drill: '', grade: null, stockDelta: move };
   } else {
     const rng = keyedRng(preDraftKey(s.seed, 'showcase'));
     const drill = desc.drills[Math.floor(rng() * desc.drills.length)];
     const grade = preDraftShowcaseGrade(s, rng);
-    s.stock = clampMeter(s.stock + SHOWCASE_DELTAS[approach][grade]);
-    s.showcase = { approach, drill, grade, stockDelta: s.stock - before };
+    const move = preDraftShowcaseMove(s.stock, SHOWCASE_DELTAS[approach][grade]);
+    s.stock += move;
+    s.showcase = { approach, drill, grade, stockDelta: move };
   }
   s.phase = 'draft';
   return s;
