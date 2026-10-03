@@ -325,6 +325,9 @@ export function gmLineupSwap<T>(sport: GmLineupSport<T>, team: T, choice: GmLine
   const where = (x: GmPick): number => ('slot' in x ? (Number.isInteger(x.slot) && x.slot >= 0 && x.slot < slots.length ? x.slot : -2) : ids.indexOf(x.id));
   const ia = where(a), ib = where(b);
   if (ia === -2 || ib === -2 || (ia < 0 && ib < 0) || (ia >= 0 && ia === ib)) return null;
+  /* A slot skipped on purpose is filled again with its own button, not by a swap. */
+  const skipped = (i: number) => !!g.rotation && i >= slots.length - g.rotation.optional && placed[i] === null;
+  if ((ia >= 0 && skipped(ia)) || (ib >= 0 && skipped(ib))) return null;
   if (ia >= 0 && ib >= 0) {
     const pa = placed[ia], pb = placed[ib];
     if ((pa && !accepts(g, slots[ib], pa)) || (pb && !accepts(g, slots[ia], pb))) return null;
