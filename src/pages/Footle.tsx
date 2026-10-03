@@ -2,11 +2,12 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useGame, footleScore, FOOTLE_SCORE_BUCKETS } from '@/hooks/useGame';
 import type { GuessResult, Player } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
-import { GameBoard } from '@/components/game/GameBoard';
+import FootleClueDesk from '@/components/footle/FootleClueDesk';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { StatTile } from '@/components/game/StatTile';
+import { compareGuess } from '@/lib/gameLogic';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
@@ -45,9 +46,23 @@ const Index = () => {
   } = useGame();
 
   const [showRules, setShowRules] = useState(false);
-  const practicePanel = useRef<HTMLElement>(null);
+  const [reviewRound, setReviewRound] = useState<number | null>(null);
+  const [returnSerial, setReturnSerial] = useState(0);
+  const reviewOpener = useRef<HTMLButtonElement | null>(null);
   const inPractice = mode === 'practice';
   const practicePlaying = inPractice && !!practiceRun && !practiceComplete;
+  const searchArea = useRevealScroll<HTMLDivElement>(returnSerial);
+  const practicePanel = useRevealScroll<HTMLElement>(`${inPractice}:${practiceRun?.index}:${gameStatus}`, { enabled: inPractice && !showRules, skipFirst: false });
+  const reviewGuesses = useMemo(() => {
+    if (!practiceComplete || !practiceRun || reviewRound === null) return [];
+    const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[reviewRound])!;
+    return practiceRun.rounds[reviewRound].guesses.map(name => compareGuess(practiceRun.pool.find(player => player.name === name)!, answer));
+  }, [practiceComplete, practiceRun, reviewRound]);
+  useEffect(() => { setReviewRound(null); }, [mode, practiceRun?.targets]);
+  const returnToSearch = () => {
+    searchArea.current?.querySelector<HTMLInputElement>('input[role="combobox"]')?.focus({ preventScroll: true });
+    setReturnSerial(value => value + 1);
+  };
   useEffect(() => {
     if (inPractice) practicePanel.current?.focus({ preventScroll: true });
   }, [inPractice, practiceRun?.index, gameStatus]);
@@ -60,33 +75,6 @@ const Index = () => {
       localStorage.setItem('footle-rules-seen', '1');
     }
   }, []);
-
-  // ---- Attribute-tile supplementary layer (R6 Wave 14 / Part 1 item 4) -----
-  // Footle's GameBoard already renders a full per-guess attribute-tile row
-  // (nationality/club/goals/assists/position/kitNumber/age/marketValue), so
-  // that row already is the "attribute-tile hybrid guesser" pattern the R6
-  // spec describes. This block adds a genuinely separate, non-duplicative
-  // supplementary signal on top of it: a compact "Best Guess So Far" strip
-  // that surfaces the single closest prior guess (by count of correct/close
-  // cells) so players get an at-a-glance read without rescanning the whole
-  // board. Purely derived from existing guesses state; does not touch
-  // useGame.ts, compareGuess, GameBoard, scoring, or the share grid.
-  const bestGuess = useMemo(() => {
-    if (guesses.length === 0) return null;
-    let best = guesses[0];
-    let bestScore = -1;
-    for (const g of guesses) {
-      const cellScore = FOOTLE_CELL_ORDER.reduce((sum, key) => {
-        const status = g.cells[key].status;
-        return sum + (status === 'correct' ? 2 : status === 'close' ? 1 : 0);
-      }, 0);
-      if (cellScore > bestScore) {
-        bestScore = cellScore;
-        best = g;
-      }
-    }
-    return best;
-  }, [guesses]);
 
   // ---- Unlimited tier purity (owner: "I put unlimited mode on insane and I
   // just got Messi") -----------------------------------------------------------
@@ -171,6 +159,12 @@ const Index = () => {
                 <p className="text-muted-foreground">
                   ▲ means the answer is <span className="text-foreground font-semibold">higher</span>, ▼ means it's <span className="text-foreground font-semibold">lower</span>.
                 </p>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Your clue desk</h3>
+                <p className="text-muted-foreground">Each guess opens eight cards. Read the value, comparison and higher or lower direction. The numbered history buttons revisit your earlier guesses. Back to search returns you to your next pick.</p>
+                <p className="text-muted-foreground mt-2">When a five-puzzle run ends, choose a puzzle to review the guesses you actually made. Reviews use that run's saved clues and never change your score.</p>
               </section>
 
               <section>
@@ -288,6 +282,18 @@ const Index = () => {
                 <p className="mt-2 text-lg font-semibold text-primary">{practiceRun.rounds.filter(round => round.status === 'won').length} of 5 solved</p>
                 <p className="text-sm text-muted-foreground">{practiceRun.rounds.reduce((total, round) => total + round.guesses.length, 0)} total guesses · {practiceRun.tier} · no daily points used</p>
                 <button data-testid="practice-start" onClick={startPractice} disabled={!practiceReady} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">Play another five</button>
+                <div className="mt-4 grid grid-cols-5 gap-1" role="group" aria-label="Review completed puzzles">
+                  {practiceRun.rounds.map((round, index) => <button key={index} aria-label={`Review puzzle ${index + 1}`} aria-pressed={reviewRound === index}
+                    onClick={event => { reviewOpener.current = event.currentTarget; setReviewRound(index); }} className={cn('min-h-[44px] rounded-lg border px-1 py-2 text-xs font-semibold', reviewRound === index ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-foreground')}>
+                    <span className="block">{index + 1}</span><span className="block text-[10px]">{round.status === 'won' ? 'Solved' : 'Missed'}</span>
+                  </button>)}
+                </div>
+                {reviewRound !== null && <div className="mt-4" data-footle-review={reviewRound + 1}>
+                  <p className="mb-3 min-w-0 break-words text-sm font-semibold">Puzzle {reviewRound + 1} · {practiceRun.targets[reviewRound]}</p>
+                  <FootleClueDesk key={reviewRound} guesses={reviewGuesses} playing={false} reviewing helpOpen={showRules}
+                    onReturn={() => { setReviewRound(null); reviewOpener.current?.focus({ preventScroll: true }); reviewOpener.current?.scrollIntoView({ block: 'nearest' }); }} />
+                </div>}
+                <details className="mt-3"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">All five player details</summary>
                 <ol className="mt-4 grid gap-2 sm:grid-cols-2">
                   {practiceRun.rounds.map((round, index) => {
                     const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[index])!;
@@ -299,6 +305,7 @@ const Index = () => {
                     </li>;
                   })}
                 </ol>
+                </details>
                 <p className="mt-3 text-xs text-muted-foreground">Player details are from this run's saved puzzle snapshot.</p>
               </div>
             ) : (
@@ -329,7 +336,7 @@ const Index = () => {
             <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         ) : gameStatus === 'playing' && (!inPractice || practicePlaying) ? (
-          <div className="mb-8 space-y-3">
+          <div ref={searchArea} className="mb-5 space-y-3">
             <PlayerSearch
               players={availablePlayers}
               guessedNames={guessedPlayerNames}
@@ -341,35 +348,8 @@ const Index = () => {
           </div>
         ) : null}
 
-        {/* Best Guess So Far: supplementary attribute-tile summary, additive
-            only, shown once there are at least 2 guesses to compare. */}
-        {gameStatus === 'playing' && bestGuess && guesses.length > 1 && (
-          <div className="mb-8">
-            <p className="text-xs text-center text-muted-foreground uppercase tracking-wider mb-2">
-              🔥 Best Guess So Far: <span className="text-foreground font-semibold">{bestGuess.playerName}</span>
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {FOOTLE_CELL_ORDER.map((key) => (
-                <StatTile
-                  key={key}
-                  label={FOOTLE_CELL_LABELS[key]}
-                  value={bestGuess.cells[key].value}
-                  /* Round 443: StatTile has no spoken verdict, only a colour,
-                     and its 'incorrect' is the same neutral grey the board
-                     paints an unknown. So the new status maps onto it here
-                     rather than widening a tile six other games share. The
-                     value already reads "?", which is the honest part. */
-                  state={bestGuess.cells[key].status === 'unknown' ? 'incorrect' : bestGuess.cells[key].status}
-                  direction={bestGuess.cells[key].arrow ?? null}
-                  className="min-w-[80px]"
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Game Board */}
-        {(!inPractice || practicePlaying) && <GameBoard guesses={guesses} maxGuesses={maxGuesses} />}
+        {(!inPractice || practicePlaying) && <FootleClueDesk key={`${mode}:${targetPlayer?.name ?? ''}`}
+          guesses={guesses} playing={gameStatus === 'playing'} helpOpen={showRules} onReturn={returnToSearch} />}
 
         {/* Game Over */}
         {!inPractice && gameStatus !== 'playing' && (
@@ -500,16 +480,5 @@ function footleEmojiGrid(guesses: GuessResult[], maxGuesses: number): string {
 const FOOTLE_CELL_ORDER = [
   'nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue',
 ] as const;
-
-const FOOTLE_CELL_LABELS: Record<typeof FOOTLE_CELL_ORDER[number], string> = {
-  nationality: 'Nation',
-  club: 'Club',
-  goals: 'Goals',
-  assists: 'Assists',
-  position: 'Position',
-  kitNumber: 'Kit #',
-  age: 'Age',
-  marketValue: 'Value',
-};
 
 export default Index;
