@@ -214,8 +214,10 @@
    "to": "Gençlerbirliği",
    "realClub": "Gençlerbirliği",
    "adjudicatedOn": "2026-10-03",
-   "note": "The Portuguese right back born 1998-01-22 (the baked row is an RB aged 27, so it is him and not one of the many namesakes). Left Monza on a free and joined Gencerbirligi on 2025-07-24, contract to June 2027; their number 13 in the 2026-27 squad. The destination rests on two independent publishers: Gencerbirligi's own site did not answer (HTTP 522), so the official voice is the league page that no longer lists him at Monza.",
+   "note": "The Portuguese right back born 1998-01-22 (the baked row is an RB aged 27, so it is him and not one of the many namesakes). Left Monza on a free and joined Gencerbirligi on 2025-07-24, contract to June 2027; their number 13 in the 2026-27 squad. Gencerbirligi's own site did not answer (HTTP 522), so the official voice for the destination is the Turkish Football Federation: his licence page (full name Pedro Miguel de Almeida Lopes Pereira, born in Lisbon on 1998-01-22) carries the Gencerbirligi contract with its 2026-27 registration dated 2026-08-05, and the federation's sheet of the Gencerbirligi v Erzurumspor match of 2026-08-28 names him. The league page no longer lists him at Monza.",
    "sources": [
+    {"family": "A", "url": "https://www.tff.org/Default.aspx?pageId=30&kisiId=2420216", "publisher": "Turkish Football Federation (player licence page)", "readOn": "2026-10-03", "says": "Pedro Miguel de Almeida Lopes Pereira, born 1998-01-22 in Lisbon, Portugal; club Genclerbirligi, contract 2025-07-25 to 2027-06-30, registration renewed (vize) 2026-08-05"},
+    {"family": "A", "url": "https://www.tff.org/Default.aspx?pageId=29&macId=317806", "publisher": "Turkish Football Federation (match sheet, Genclerbirligi v Erzurumspor FK, 2026-08-28)", "readOn": "2026-10-03", "says": "Pedro Miguel de Almeida Lopes Pereira in the Genclerbirligi line up"},
     {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/pereira-pedro/8t5OxIB9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Genclerbirligi free 2025-07-24, born 1998-01-22, Portugal, defender, contract to 2027-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/996/genclerbirligi", "publisher": "ESPN (Genclerbirligi squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28, Portugal (player id 224188)"},
@@ -362,11 +364,12 @@
    "loan": true,
    "loanFrom": "Udinese",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 2005-03-28. Udinese loaned him to Le Havre (August 2025), then Racing Club (January to June 2026), then Audax Italiano from 2026-07-29 to June 2027. Chile is not modelled.",
+   "note": "Born 2005-03-28. Udinese loaned him to Le Havre (August 2025, ended early in January 2026), then Racing Club from January 2026 (Udinese announced that loan to run to 2026-12-31; Soccerway records his return on 2026-06-30, and the Audax loan of July 2026 means it did end early), then Audax Italiano from 2026-07-29 to June 2027. Chile is not modelled. The destination's official voice is Udinese's own announcement; En Cancha, quoting Audax Italiano's announcement, is kept as a second independent report.",
    "sources": [
     {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
-    {"family": "A", "url": "https://www.encancha.cl/futbol-chileno/primera/2026/07/29/capacidad-goleadora-damian-pizarro-tiene-nuevo-equipo-en-chile-y-ya-fue-presentado-oficialmente/", "publisher": "Audax Italiano's official announcement, quoted in full by En Cancha (2026-07-29)", "readOn": "2026-10-03", "says": "officially joins on loan from Udinese until June 2027"},
-    {"family": "B", "url": "https://us.soccerway.com/player/pizarro-damian/O8lwaueL/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Audax Italiano 2026-07-29, back to Udinese 2027-06-30, born 2005-03-28"},
+    {"family": "A", "url": "https://www.udinese.it/news/squadra/pizarro-in-prestito-all-audax-italiano", "publisher": "Udinese Calcio (club announcement, 2026-07-29)", "readOn": "2026-10-03", "says": "Damian Pizarro joins Audax Italiano on loan until 2027-06-30"},
+    {"family": "B", "url": "https://www.encancha.cl/futbol-chileno/primera/2026/07/29/capacidad-goleadora-damian-pizarro-tiene-nuevo-equipo-en-chile-y-ya-fue-presentado-oficialmente/", "publisher": "En Cancha (Chilean newspaper, 2026-07-29, quoting Audax Italiano's announcement)", "readOn": "2026-10-03", "says": "officially joins on loan from Udinese until June 2027"},
+    {"family": "B", "url": "https://us.soccerway.com/player/pizarro-damian/O8lwaueL/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Le Havre 2025-08-26, back 2026-01-13; loaned to Racing Club 2026-01-27, back 2026-06-30; loaned to Audax Italiano 2026-07-29, back to Udinese 2027-06-30; current club Audax Italiano; born 2005-03-28"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   },
