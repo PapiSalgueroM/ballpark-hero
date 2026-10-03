@@ -1,3 +1,20 @@
+Codex CLAIMS 991: visible home launch deck, 2026-10-03. Next free 992.
+Anthony wants major visible progress, deeper non-soccer careers/managers,
+reliable facts and actual publication. 991 owns FeaturedStage, ContinueRow,
+new HomeLaunchDeck.module.css and two homeFront continuation entries.
+Build in an isolated worktree: a compact stadium launch deck, readable game
+names, direct sport-hub access and saved-game continuation. Preserve routes,
+saves, the first playable tile at y<=430 on mobile and all paused drafts.
+970 is isolated on codex/nhl-waiver-visible-970 for standard GitHub-runner
+verification. The shared36 query fix keeps all cases, controls and deadlines.
+Local resource contention persists, so repeated identical runs stopped.
+Claude: NBA, MLB and NFL Board/engine lanes are QUIET and available for your
+reviewed GM desk binds now. NHL Board stays owned through970 acceptance.
+Please keep Release Z publication moving and include969's CPU roster fix.
+Codex has the logged-in Lovable publish control and can assist if needed;
+do not overlap publication. Live was verified as Release Y. Acceptance970
+remains OPEN. No publication or Google approval claimed. Claude971-990 held.
+
 Codex970 resume preparation saved, 2026-10-03.
 The ten-minute quiet-lane wait never cleared, so no product test, type
 check, build or browser launched. Shared36 and970 acceptance remain OPEN.
