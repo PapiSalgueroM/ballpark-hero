@@ -176,9 +176,10 @@ const DB_TO_ERA_BL = {
 /* The 2010-11 Ligue 1, the same two publishers, read the same day, agreeing
  * on all twenty: RSSSF (https://www.rsssf.org/tablesf/fran2011.html) and ESPN
  * (https://www.espn.com/soccer/standings/_/league/FRA.1/season/2010). The
- * twentieth, Arles-Avignon, has no year-2010 row in the table at all (nor a
- * year-2011 one): it is declared EMPTY below and plays on the engine's
- * labelled youth padding, never on names found anywhere else. */
+ * twentieth, Arles-Avignon, sits in the table under its founding name,
+ * "Athlétic Club Arlésien": five year-2010 rows (eight year-2011 ones), the
+ * thinnest squad of the five leagues. A search for "Arles" misses it, which
+ * is how the round's plan came to believe the club had no rows at all. */
 const DB_TO_ERA_L1 = {
   'LOSC Lille': 'Lille', 'Olympique Marseille': 'Marseille', 'Olympique Lyon': 'Lyon',
   'Paris Saint-Germain': 'PSG', 'FC Sochaux-Montbéliard': 'Sochaux', 'Stade Rennais FC': 'Rennes',
@@ -186,8 +187,8 @@ const DB_TO_ERA_L1 = {
   'AS Saint-Étienne': 'Saint-Étienne', 'FC Lorient': 'Lorient', 'Valenciennes FC': 'Valenciennes',
   'AS Nancy-Lorraine': 'Nancy', 'Montpellier HSC': 'Montpellier', 'SM Caen': 'Caen',
   'Stade Brestois 29': 'Brest', 'OGC Nice': 'Nice', 'AS Monaco': 'Monaco', 'RC Lens': 'Lens',
+  'Athlétic Club Arlésien': 'Arles-Avignon',
 };
-const L1_EMPTY = [{ club: 'Arles-Avignon', spellings: ['AC Arles-Avignon', 'AC Arles', 'Arles-Avignon', 'AC Arles Avignon'] }];
 
 /* BIG_FIVE_CORRECTIONS_START */
 /* THE FOLDS: two men Round 146 brought INTO the first two leagues as
@@ -237,7 +238,7 @@ if (bigFiveArg) {
     newLeagues: [
       { label: 'Serie A', dbToEra: DB_TO_ERA_SA },
       { label: 'Bundesliga', dbToEra: DB_TO_ERA_BL },
-      { label: 'Ligue 1', dbToEra: DB_TO_ERA_L1, empty: L1_EMPTY },
+      { label: 'Ligue 1', dbToEra: DB_TO_ERA_L1 },
     ],
     worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
     folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
