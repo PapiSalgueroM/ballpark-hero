@@ -104,7 +104,7 @@ const POOL = Array.from({ length: 120 }, (_, i) => ({
 const GAMES = [
   ['Missing XI', () => mods.missingXi.pickDailyPuzzle().lineup.id, () => mods.missingXi.LINEUPS?.length ?? 0],
   ['Missing XI blank', () => mods.missingXi.pickDailyPuzzle().candidate.name, () => 40],
-  ['Missing Five', () => mods.missingFive.getDailyFivePuzzle().lineup.id, () => 14],
+  ['Missing Five', () => mods.missingFive.getDailyFivePuzzle().lineup.id, () => mods.missingFive.FIVE_LINEUPS?.length ?? 0],
   ['Missing Nine', () => mods.missingNine.getDailyNinePuzzle?.().lineup?.id ?? 'n/a', () => 14],
   ['Missing Eleven', () => mods.missingEleven.getDailyElevenPuzzle?.().lineup?.id ?? 'n/a', () => 14],
   ['Order the List', () => mods.orderTheList.getDailyRankRound().id, () => 14],

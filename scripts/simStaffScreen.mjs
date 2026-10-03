@@ -45,10 +45,10 @@ try {
   assert.match(output, /staffScreen\.test\.tsx/, 'Actual staff screen tests must run');
   if (control) {
     const expected = {
-      unconfirm: { failures: 3, passes: 8, test: 'requires a separate payoff confirmation and shows the exact pure cost, payroll and lost effect', signal: /expected .*not.*called|expected.*spy.*called|onSack/ },
-      close: { failures: 2, passes: 9, test: 'keeps a refused hire open with the same rows and focused original candidate button', signal: /toBeVisible|received value must be an HTMLElement/ },
-      uncued: { failures: 2, passes: 9, test: 'commits the exact paid hire and focuses its stable post with finite clone-safe feedback', signal: /Expected the element to have class:[\s\S]*committed/ },
-      unfocus: { failures: 5, passes: 6, test: 'commits the exact paid hire and focuses its stable post with finite clone-safe feedback', signal: /Expected element with focus/ },
+      unconfirm: { failures: 3, passes: 9, test: 'requires a separate payoff confirmation and shows the exact pure cost, payroll and lost effect', signal: /expected .*not.*called|expected.*spy.*called|onSack/ },
+      close: { failures: 2, passes: 10, test: 'keeps a refused hire open with the same rows and focused original candidate button', signal: /toBeVisible|received value must be an HTMLElement/ },
+      uncued: { failures: 2, passes: 10, test: 'commits the exact paid hire and focuses its stable post with finite clone-safe feedback', signal: /Expected the element to have class:[\s\S]*committed/ },
+      unfocus: { failures: 5, passes: 7, test: 'commits the exact paid hire and focuses its stable post with finite clone-safe feedback', signal: /Expected element with focus/ },
     }[control];
     assert.notEqual(run.status, 0, diagnostic);
     assert.ok(new RegExp(`Tests\\s+${expected.failures} failed.*${expected.passes} passed`).test(output), diagnostic);
@@ -57,8 +57,8 @@ try {
     console.log(`simStaffScreen ${control}: ${expected.failures} intended rendered failures, ${expected.passes} unaffected checks pass.`);
   } else {
     assert.equal(run.status, 0, diagnostic);
-    assert.match(output, /Tests\s+11 passed/, diagnostic);
-    console.log('simStaffScreen: eleven actual-screen checks pass for original generated staff, exact helper previews and paid/free hires.');
+    assert.match(output, /Tests\s+12 passed/, diagnostic);
+    console.log('simStaffScreen: twelve actual-screen checks pass for original generated staff, exact helper previews, the growth ceiling count and paid/free hires.');
   }
   assert.equal(await readFile(sourcePath, 'utf8'), original, 'Production source bytes must remain unchanged');
   console.log('simStaffScreen: actual hire/sack/match/release effects, original IDs, budget/payroll/quota and second-tap cancellation verified.');

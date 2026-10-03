@@ -13,6 +13,8 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+/* Round 929: every season's league finish, and the era aware elite rule. */
+import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -90,9 +92,17 @@ export function loadManagerMarket(): Promise<void> {
 import { managerStanding } from './managerOffers';
 import {
   getLifeEvents, getPriorityLifeEventIds,
-  personalityFollowerMult, personalitySponsorMult,
+  personalitySponsorMult,
   agentWageMult, agentIncomeCutRate, agentTransferCutRate,
 } from "./soccerCareerLife";
+/* Round 835: the posts, the brand ladder and the cover offer run on the
+   shared rules in careerSocial.ts and careerBrand.ts; soccerCareerBrand.ts
+   binds them and imports TYPES from here only, so this edge has no cycle. */
+import { applySocialPost, payFocusBoost, seasonFollowerGrowth } from "./careerSocial";
+import type { SocialPostDef } from "./careerSocial";
+import { updateBrandRung, stageCoverOffer, decideCoverOffer, brandSeasonIncome } from "./careerBrand";
+import { SOCCER_SOCIAL, SOCCER_BRAND, SOCCER_FOLLOWER_GROWTH, SPONSORSHIP_TIERS } from "./soccerCareerBrand";
+import type { SponsorshipTier } from "./soccerCareerBrand";
 import type { PlayerAppearance } from "./soccerCareerAppearance";
 /* Round 131: height, weight and the specific attributes under each of the six
    families. buildEffects turns a build into the handful of multipliers the
@@ -111,6 +121,9 @@ import { getRealismEvents } from "./soccerCareerRealism";
 import { getCriticEvents, soccerCriticArticle, soccerCriticDisgraceArticle } from "./soccerCareerCritic";
 /* Round 473: the signature boot, same one way runtime edge. */
 import { getBootEvents } from "./soccerCareerBoot";
+/* Round 973: the academy focus. soccerCareerAcademy imports nothing from
+   here, so this is a one way edge. */
+import { applyAcademyFocus } from "./soccerCareerAcademy";
 import {
   runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
   nationStrength as intlNationStrength, confederationOf, pickSquad,
@@ -163,6 +176,13 @@ export interface SeasonRecord {
       parent club's name, so the record always says where you really belonged. */
   onLoanFrom?: string | null;
   leagueTitle: boolean;
+  /** Round 929: where the club finished in the league, 1 exactly when
+      leagueTitle is true. Absent on saves from before that round, on a
+      season cut short, and on a non title season in a league whose size is
+      not verified (soccerCareerLeague.ts), so nothing false is ever printed. */
+  leagueFinish?: number;
+  /** Round 929: clubs in that league that season, only where verified. */
+  leagueSize?: number;
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
@@ -705,6 +725,23 @@ export interface SeriousInjury {
   setback: boolean;
 }
 
+/**
+ * Round 974: one finished season of the career log, kept for the Career
+ * Story screen. Both season steps used to start with events = [], so every
+ * line from an earlier season was thrown away and a fifteen season career
+ * could only read its last three lines. The lines are kept exactly as the
+ * engine wrote them, rendered on read like the live log.
+ */
+export interface CareerStorySeason {
+  /** the season row's year, age and club the lines belong to */
+  year: number;
+  age: number;
+  club: string;
+  lines: string[];
+  /** lines past STORY_LINES_PER_SEASON that were not kept (measured never to happen) */
+  more?: number;
+}
+
 export interface CareerState {
   playerName: string;
   nationality: string;
@@ -729,6 +766,9 @@ export interface CareerState {
   overall: number;
   seasons: SeasonRecord[];
   events: string[];
+  /** Round 974: every finished season's log, oldest first. Optional: a save
+      from before it starts its story from the season it loads. */
+  story?: CareerStorySeason[];
   retired: boolean;
   /**
    * Round 253: the injury arc. A serious injury used to be a stat penalty
@@ -2259,114 +2299,30 @@ function tryTriggerMoralDilemma(s: CareerState): boolean {
 }
 
 /* ─── Social Media Action System ─── */
-export interface SocialMediaAction {
-  id: string;
-  label: string;
-  emoji: string;
-  description: string;
-  followerGain: [number, number]; // [min, max] in raw followers
-  reputationChange: number;
-  extraEffect?: string;
-}
-
-export type SponsorshipTier = "local_brand" | "nike_adidas" | "global_ambassador" | "merchandise_line" | "cover_athlete";
-
-export const SOCIAL_MEDIA_ACTIONS: SocialMediaAction[] = [
-  { id: "training_video", label: "Post training video", emoji: "🏋️", description: "Show off your skills in the gym", followerGain: [50_000, 200_000], reputationChange: 0 },
-  { id: "viral_celebration", label: "Go viral with celebration clip", emoji: "🎬", description: "Post an iconic goal celebration", followerGain: [500_000, 2_000_000], reputationChange: 0 },
-  { id: "controversial_opinion", label: "Post controversial opinion", emoji: "🔥", description: "Share a hot take about football", followerGain: [1_000_000, 1_000_000], reputationChange: -10, extraEffect: "Reputation -10" },
-  { id: "charity_work", label: "Announce charity work", emoji: "❤️", description: "Highlight your philanthropic efforts", followerGain: [200_000, 200_000], reputationChange: 15, extraEffect: "Reputation +15" },
-  { id: "personal_life", label: "Post about personal life", emoji: "📸", description: "Share a glimpse into your life off the pitch", followerGain: [300_000, 300_000], reputationChange: 0 },
-  { id: "troll_rival", label: "Troll your rival on social media", emoji: "😈", description: "Take a shot at your rival online", followerGain: [800_000, 800_000], reputationChange: 0, extraEffect: "Rivalry intensity increases" },
-  { id: "stay_off", label: "Stay off social media", emoji: "🧘", description: "Focus on football, no distractions", followerGain: [0, 0], reputationChange: 0, extraEffect: "+2 to all stats next season" },
-];
-
-export const SPONSORSHIP_TIERS: { tier: SponsorshipTier; name: string; emoji: string; minFollowers: number; income: number }[] = [
-  { tier: "local_brand", name: "Local Brand Deal", emoji: "🏪", minFollowers: 1_000_000, income: 0.5 },
-  { tier: "nike_adidas", name: "Global Boot Deal", emoji: "👟", minFollowers: 5_000_000, income: 3 },
-  { tier: "global_ambassador", name: "Global Brand Ambassador", emoji: "🌍", minFollowers: 15_000_000, income: 8 },
-  { tier: "merchandise_line", name: "Own Merchandise Line", emoji: "👕", minFollowers: 30_000_000, income: 15 },
-  { tier: "cover_athlete", name: "Game Cover Athlete", emoji: "🎮", minFollowers: 50_000_000, income: 25 },
-];
-
-function getActiveSponsorshipTier(followers: number): SponsorshipTier | null {
-  let best: SponsorshipTier | null = null;
-  for (const t of SPONSORSHIP_TIERS) {
-    if (followers >= t.minFollowers) best = t.tier;
-  }
-  return best;
-}
-
-function getSponsorshipIncome(tier: SponsorshipTier | null): number {
-  if (!tier) return 0;
-  const t = SPONSORSHIP_TIERS.find(s => s.tier === tier);
-  return t?.income || 0;
-}
+/* Round 835: what a post does, which deal your following has earned and the
+   cover offer are the shared rules in careerSocial.ts and careerBrand.ts. The
+   seven posts, the five deals (kept under the tier ids live saves hold) and
+   the cover offer's terms are soccer's data in soccerCareerBrand.ts. Every
+   name below is kept, with the same shape, so no caller can tell. */
+export type SocialMediaAction = SocialPostDef;
+export type { SponsorshipTier };
+export { SPONSORSHIP_TIERS };
+export { SOCIAL_MEDIA_ACTIONS, SOCCER_COVER } from "./soccerCareerBrand";
 
 export function applySocialMediaAction(prev: CareerState, actionId: string): CareerState {
   const s = { ...prev };
-  const action = SOCIAL_MEDIA_ACTIONS.find(a => a.id === actionId);
-  if (!action || s.socialMediaActionUsedThisSeason) return s;
-
-  s.socialMediaActionUsedThisSeason = true;
-
-  if (actionId === "stay_off") {
-    s.socialMediaFocusBoost = true;
-    s.events = [...s.events, "🧘 Stayed off social media: focus boost for next season (+2 all stats)"];
-  } else {
-    const gain = action.followerGain[0] === action.followerGain[1]
-      ? action.followerGain[0]
-      : rand(action.followerGain[0], action.followerGain[1]);
-    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + gain / 1_000_000) * 100) / 100;
-    s.events = [...s.events, `📱 ${action.emoji} ${action.label}: gained ${(gain / 1_000_000).toFixed(1)}M followers!`];
-
-    if (action.reputationChange !== 0) {
-      s.popularity = clamp(s.popularity + action.reputationChange, 0, 100);
-      if (action.reputationChange > 0) s.events = [...s.events, `✨ Reputation +${action.reputationChange}`];
-      else s.events = [...s.events, `⚠️ Reputation ${action.reputationChange}`];
-    }
-
-    if (actionId === "troll_rival" && s.rival && !s.rival.retired) {
-      s.events = [...s.events, `😤 Rivalry with ${s.rival.name} intensifies!`];
-    }
-  }
-
-  // Update sponsorship tier
-  const newTier = getActiveSponsorshipTier(s.socialMediaFollowers * 1_000_000);
-  if (newTier && newTier !== s.activeSponsorship) {
-    const tierInfo = SPONSORSHIP_TIERS.find(t => t.tier === newTier)!;
-    s.activeSponsorship = newTier;
-    s.events = [...s.events, `${tierInfo.emoji} NEW SPONSORSHIP: ${tierInfo.name}, €${tierInfo.income}M/year!`];
-  }
-
-  // Cover athlete event check
-  if (s.socialMediaFollowers * 1_000_000 >= 50_000_000 && s.overall >= 90 && !s.coverAthleteAccepted && !s.pendingCoverAthleteEvent) {
-    s.pendingCoverAthleteEvent = true;
-  }
-
-  // If the cover athlete event triggered, stay on social media action phase to show it
-  if (s.pendingCoverAthleteEvent) {
-    s.phase = "social_media_action";
-  } else {
-    // Mark as needing to continue via dismissSocialMediaPhase
-    s.phase = "social_media_action";
-  }
+  if (!applySocialPost(s, actionId, SOCCER_SOCIAL)) return s;
+  updateBrandRung(s, SOCCER_BRAND);
+  stageCoverOffer(s, SOCCER_BRAND);
+  // Stay on the social media screen: the cover offer, if staged, shows there,
+  // and the screen's Continue (dismissSocialMediaPhase) moves the summer on.
+  s.phase = "social_media_action";
   return s;
 }
 
 export function handleCoverAthleteDecision(prev: CareerState, accept: boolean): CareerState {
   const s = { ...prev };
-  s.pendingCoverAthleteEvent = false;
-  if (accept) {
-    s.coverAthleteAccepted = true;
-    s.netWorth = Math.round((s.netWorth + 25) * 100) / 100;
-    s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 5) * 100) / 100;
-    s.events = [...s.events, "🎮 You are the cover athlete of the world's biggest football video game! €25M + 5M followers + Legacy +10"];
-    s.awards = [...s.awards, { year: s.seasons[s.seasons.length - 1]?.year || 2024, name: "Game Cover Athlete", emoji: "🎮" }];
-  } else {
-    s.popularity = clamp(s.popularity + 5, 0, 100);
-    s.events = [...s.events, "🎮 Declined the game cover: gained respect for being selective. Reputation +5"];
-  }
+  decideCoverOffer(s, accept, SOCCER_BRAND);
   // Will continue via dismissSocialMediaPhase
   s.phase = "social_media_action";
   return s;
@@ -2553,6 +2509,59 @@ export function careerBuildEffects(s: CareerState): BuildEffects {
   }
 }
 
+/* Round 974: the career story. Measured before this round over 174 season
+   steps (8 seeded careers, scripts/simCareerStory.mjs carries the numbers): a
+   season writes 7 lines at the median, 16 at p99 and 18 at most. 40 keeps
+   every line of every season measured and still bounds a runaway loop. A
+   career is two youth years plus at most about 28 pro seasons, so 60 seasons
+   is never reached by play; it only bounds a damaged save. */
+export const STORY_LINES_PER_SEASON = 40;
+export const STORY_SEASONS_MAX = 60;
+
+function isStorySeason(v: unknown): v is CareerStorySeason {
+  if (!v || typeof v !== "object" || Array.isArray(v)) return false;
+  const e = v as Record<string, unknown>;
+  return typeof e.year === "number" && Number.isFinite(e.year)
+    && typeof e.age === "number" && Number.isFinite(e.age)
+    && typeof e.club === "string"
+    && Array.isArray(e.lines) && e.lines.every(l => typeof l === "string")
+    && (e.more === undefined || (typeof e.more === "number" && Number.isFinite(e.more) && e.more >= 0));
+}
+
+/** A damaged story resets alone: not a list becomes empty, a bad season is
+    dropped, and a good story comes back as the same array. */
+export function cleanCareerStory(raw: unknown): CareerStorySeason[] {
+  if (!Array.isArray(raw)) return [];
+  const kept = raw.every(isStorySeason) ? raw as CareerStorySeason[] : raw.filter(isStorySeason);
+  return kept.length > STORY_SEASONS_MAX ? kept.slice(-STORY_SEASONS_MAX) : kept;
+}
+
+/**
+ * The story with the season that is ending written into it, called by both
+ * season steps just before they clear the log. The lines belong to the last
+ * season row (the year that was just played). Pure: draws nothing and never
+ * mutates the state it reads, so a step run twice on the same save writes the
+ * season once. A second clear on the same row adds to that season rather than
+ * writing it twice.
+ */
+export function archiveSeasonStory(s: CareerState): CareerStorySeason[] {
+  const story = cleanCareerStory(s.story);
+  const lines = Array.isArray(s.events) ? s.events.filter((l): l is string => typeof l === "string") : [];
+  if (lines.length === 0) return story;
+  const row = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1] : null;
+  const year = row ? row.year : 0;
+  const age = row ? row.age : s.age;
+  const club = row ? row.club : s.currentClub;
+  const last = story.length > 0 ? story[story.length - 1] : null;
+  const same = last !== null && last.year === year && last.age === age && last.club === club;
+  const all = same ? [...last.lines, ...lines] : lines;
+  const dropped = (same ? last.more ?? 0 : 0) + Math.max(0, all.length - STORY_LINES_PER_SEASON);
+  const entry: CareerStorySeason = { year, age, club, lines: all.slice(0, STORY_LINES_PER_SEASON) };
+  if (dropped > 0) entry.more = dropped;
+  const next = same ? [...story.slice(0, -1), entry] : [...story, entry];
+  return next.length > STORY_SEASONS_MAX ? next.slice(-STORY_SEASONS_MAX) : next;
+}
+
 /**
  * Round 127's lesson, applied again: repairing a save only inside the step
  * function is not enough, because a screen can be opened before any step is
@@ -2577,6 +2586,9 @@ export function repairCareer<T extends CareerState>(state: T): T {
   /* Round 257: no verdict has ever been passed on a save from before it. */
   if (s.frozenOut === undefined) s.frozenOut = 0;
   if (s.badSeasonStreak === undefined) s.badSeasonStreak = 0;
+  /* Round 974: a save from before the story starts it from the season it
+     loads; a damaged story resets alone and never costs the career. */
+  s.story = cleanCareerStory(s.story);
   /* Round 244: captaincy fields are optional and default to "never worn it".
      If a save somehow claims the armband at a club he no longer plays for,
      drop the flag quietly rather than let it follow him. */
@@ -2793,8 +2805,6 @@ function calcMarketValue(overall: number, age: number, _position: string, _socia
 }
 
 /* ─── Financial helpers ─── */
-const BIG_NATIONS = ["England", "Spain", "France", "Germany", "Brazil", "Argentina", "USA", "Mexico", "Japan", "Italy"];
-
 function calcLifestyleLevel(netWorth: number): LifestyleLevel {
   if (netWorth >= 500) return "Untouchable";
   if (netWorth >= 50) return "Superstar";
@@ -2825,41 +2835,21 @@ function calcLifestyleCost(level: LifestyleLevel): number {
 function calcSponsorshipIncome(popularity: number, socialMediaFollowers: number, sponsorDeal: string | null, activeSponsorship?: SponsorshipTier | null, bonus = 0): number {
   /* The bonus can be negative, because walking away from a deal on principle
      is one of the things it records. The total is floored at zero at the
-     bottom instead, so a lost deal is a real loss and never a negative wage. */
-  let income = bonus;
-  // Base sponsorship from popularity
-  if (popularity >= 80) income += 2;
-  else if (popularity >= 60) income += 1;
-  else if (popularity >= 40) income += 0.3;
-  // Social media income
-  income += socialMediaFollowers * 0.1; // €100k per 1M followers
-  // Named sponsor deal (legacy)
-  // "Nike"/"Adidas" kept for pre-R49 saves; new deals sign fictional brands
-  if (sponsorDeal === "Nike" || sponsorDeal === "Vortex") income += 2;
-  else if (sponsorDeal === "Adidas" || sponsorDeal === "Kinetiq") income += 1.5;
-  // Tiered sponsorship from social media actions
-  income += getSponsorshipIncome(activeSponsorship || null);
-  return Math.round(Math.max(0, income) * 100) / 100;
+     bottom instead, so a lost deal is a real loss and never a negative wage.
+     Round 835: fame, followers, the deal tier and the floor are the shared
+     rule in careerBrand.ts. The named deal below is soccer's own legacy term:
+     "Nike"/"Adidas" kept for pre-R49 saves; new deals sign fictional brands. */
+  let legacy = 0;
+  if (sponsorDeal === "Nike" || sponsorDeal === "Vortex") legacy = 2;
+  else if (sponsorDeal === "Adidas" || sponsorDeal === "Kinetiq") legacy = 1.5;
+  return brandSeasonIncome({ standing: popularity, followers: socialMediaFollowers, tier: activeSponsorship, bonus, legacy }, SOCCER_BRAND);
 }
 
+/* Round 835: the season's own follower growth is the shared rule in
+   careerSocial.ts (buzz, home market, fame, the viral roll, personality);
+   soccer's goals, trophies and big nations are SOCCER_FOLLOWER_GROWTH. */
 function growSocialMedia(state: CareerState, season: SeasonRecord): number {
-  let growth = 0;
-  // Goals contribute
-  growth += season.goals * 0.02; // 20k per goal
-  // Trophies
-  if (season.leagueTitle) growth += 0.5;
-  if (season.championsLeague) growth += 1;
-  if (season.worldCup) growth += 3;
-  if (season.ballonDor) growth += 5;
-  // Big nation bonus
-  if (BIG_NATIONS.includes(state.nationality)) growth *= 1.5;
-  // Base organic growth from fame
-  growth += state.popularity * 0.005;
-  // Random viral moment
-  if (Math.random() < 0.05) growth += rand(1, 5);
-  // Round 49: personality shapes the algorithm
-  growth *= personalityFollowerMult(state.personality);
-  return Math.round(growth * 100) / 100;
+  return seasonFollowerGrowth(state, season, SOCCER_FOLLOWER_GROWTH);
 }
 
 function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
@@ -3856,7 +3846,11 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
-  const isElite = ELITE_CLUBS.includes(state.currentClub);
+  /* Round 929: elite only in a season where the era tier rules leave the club
+     at tier 1, so Man City and PSG stop winning two leagues in three in the
+     1990s. Same Math.random calls below, only the threshold moves. */
+  const seasonYear = lastYear + 1;
+  const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);
   const performanceBoost = (overall >= 85 && rating >= 7.5) ? 0.15 :
                            (overall >= 80 && rating >= 7.0) ? 0.10 :
                            (overall >= 75 && rating >= 6.8) ? 0.05 : 0;
@@ -3872,13 +3866,19 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
   const winLeague = Math.random() < leagueChance;
   const winCup = Math.random() < cupChance;
+  /* Round 929: the league finish, from its own generator seeded off this
+     season, so the main Math.random stream does not move. */
+  const finish = drawLeagueFinish({
+    league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
+    seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
+  });
 
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
-    leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
+    leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -4102,7 +4102,10 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   s.frozenOut = 0;
   s.badSeasonStreak = 0;
   s.morale = clamp(s.morale + 6, 0, 100);
-  s.events = [`🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
+  /* Round 974: added to the season's log, never written over it. A move
+     used to wipe the log, so a season that ended in a transfer kept one
+     line of its story. */
+  s.events = [...s.events, `🛫 Off on loan to ${offer.club.name} ${getFlag(offer.club.country)} for the season. The message from upstairs was simple: go and play.`];
   // Round 244: a captain who leaves on loan hands the armband over; it can
   // be earned back, it is never kept warm.
   endClubCaptaincy(s, "loan");
@@ -4470,7 +4473,7 @@ export function initCareer(
 
 /* ─── Advance youth year ─── */
 export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   receivePhoneTexts(s, "youth");
   // Round 78: legacy saves get a generous default so mid-career players are
   // not suddenly nerfed; new careers carry their rolled ceiling.
@@ -4484,6 +4487,10 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.physical = growStat(s.physical, s.age, true, false, s.primeType, pot, s.overall, devY);
   s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType, pot, s.overall, devY);
   s.overall = calcOverall(s, s.position);
+  /* Round 973: the academy focus, if one was picked. It lands after all seven
+     natural growth draws and draws nothing itself, so every other stat is
+     exactly what it would have been, and with no focus it writes nothing. */
+  if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
@@ -4528,12 +4535,14 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerStat
   const agentFee = offer.transferFee > 0 ? Math.round(offer.transferFee * feeRate * 100) / 100 : 0;
   if (agentFee > 0) {
     s.agentFeesPaid = Math.round((s.agentFeesPaid + agentFee) * 100) / 100;
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)}) · Agent fee: €${agentFee.toFixed(1)}M`];
   } else {
-    s.events = [`✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
+    s.events = [...s.events, `✍️ Signed with ${offer.club.name} ${getFlag(offer.club.country)} (${offer.contractYears}yr, ${formatWage(s.weeklyWage)})`];
   }
-  // Round 244: the armband never travels. Stripped after the events reset
-  // above so the handover line survives onto the fresh list.
+  /* Round 974: the signing is added to the season's log, never written over
+     it, so the season it ends keeps its whole story. */
+  // Round 244: the armband never travels. Stripped after the signing line
+  // above so the handover line follows it.
   endClubCaptaincy(s, "transfer");
   // Round 54: staying loyal to the badge that raised you pays off in the
   // fans' hearts, and coming home later is an instant love story.
@@ -4747,18 +4756,12 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
 }
 
 export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
-  const s = repairCareer({ ...prev }); s.age += 1; s.events = [];
+  const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   receivePhoneTexts(s, "pro");
   // Reset social media action for new season
   s.socialMediaActionUsedThisSeason = false;
   // Apply focus boost from "stay off social media" last season
-  if (s.socialMediaFocusBoost) {
-    for (const k of ["pace", "shooting", "passing", "dribbling", "defending", "physical", "reflexes"] as const) {
-      (s as any)[k] = clamp((s as any)[k] + 2, 20, 99);
-    }
-    s.socialMediaFocusBoost = false;
-    s.events.push("🧘 Social media detox paid off: +2 to all stats!");
-  }
+  payFocusBoost(s, SOCCER_SOCIAL);
 
   // Match fix ban, skip season
   if (s.matchFixBanned > 0) {
@@ -4996,7 +4999,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
          If it is a tournament summer it is played without him, so the
          calendar moving on never skips a World Cup. Before this the year had
          no row and no money at all. */
-      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      /* Round 929: the league finish goes with the title roll, the table was never finished for him. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);

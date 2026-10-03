@@ -907,7 +907,10 @@
     "/fight-career": {
       "howToPlay": [
         "Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles.",
+        "Pick a trainer and a manager. The trainer decides which camp weeks count for more and which for less, the manager decides how big your purses are and what he takes out of them. Each tile says its numbers.",
+        "After every fight, deal with what comes in before the next offers open: two cards, and sometimes a move by your rival. Every option says exactly what it does, and one on every card changes nothing that can reach a fight.",
         "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
+        "Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.",
         "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
         "Watch it round by round, or turn that off and take the decision straight away.",
@@ -922,11 +925,17 @@
         "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
         "Reach number one and every offer on the table is for a world title, whichever road got you there.",
         "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
-        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers."
+        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+        "Your trainer takes 10% of every purse and your manager takes his own share, 5% to 25% depending on who you hired. The rest goes in the bank. A card can put you on the tab, and the next purse pays it off first.",
+        "The camp shop sells five upgrades with three levels each, at 0.05m, 0.25m and 1.00m: sparring partners, a strength coach, a conditioning coach, a pad man and a cut man. Coach bonuses are banked a fraction at a time and paid as whole points, and a camp still never takes you past your ceiling.",
+        "Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up, and karma kept at 70 or more hands 2 back each fight.",
+        "Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more, and a card that would move you a division or bring a rematch is dropped rather than throw that fight away.",
+        "Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker."
       ],
       "example": [
         "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
         "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
+        "After your ninth fight your rival goes first: he calls you out, you take it, and the middle offer becomes him at 30% more. Then two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight.",
         "At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off.",
         "Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great."
       ],
@@ -1781,7 +1790,7 @@
         "The tax line starts at 244 million, matching the real 2026 threshold, and it is a hard cap, rising 3 percent a season.",
         "Playoffs use the real format: best-of-3 Wild Card, best-of-5 Division Series, best-of-7 LCS and World Series.",
         "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
-        "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scout grades carry error; true ratings show only after you pick.",
         "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
         "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
         "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
@@ -2085,12 +2094,12 @@
         "Every game writes a box score off the result already decided. Open Roster, then Set rotation to choose five starters and three bench players; selecting someone already chosen swaps their slots. Starters supply 72 percent of strength and the bench 28 percent. The eight slots get 36, 34, 33, 32, 30, 28, 26 and 21 simulated minutes. Injured choices get healthy cover and return when recovered; departed players are replaced. Automatic uses the highest-rated healthy eight. Those same players earn the season lines, their points add up to the team's score, and the winner outscored the loser. If nobody is healthy, the current engine uses its best eight for an emergency box score, even if injured, a simplified injury exception rather than a real NBA rule. These are this save's sim seasons, not real NBA stats.",
         "At season close the league names five awards by fixed rules, and a man needs four in five of an average team's games to qualify (about 64 of 80). MVP: points plus rebounds plus assists a game, plus 20 times his club's winning share. All-League First Team: the five best by the MVP score, any position. Rookie of the Year: points plus rebounds plus assists a game, among first year men drafted in this league, so a new league's first season has none. Defensive Player of the Year: steals plus blocks plus half his rebounds a game, among men whose club allowed fewer points than the league average. Sixth Man of the Year: points a game, among men who started fewer than half the games they played.",
         "The close screen shows the awards, the points, rebounds and assists leaders and your own club's lines. Winners wear the award on their roster card, and the Standings box keeps every season's champion and awards. A save from before season lines plays out its current season without them and starts keeping them next season.",
-        "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. A new league opens on a 226.7 million line with five clubs over it, and the line rises 7 percent a season with the cap.",
+        "The real league put its 2026-27 tax line at 200.4 million, but the salaries here are the game's own and run richer at the top, so every new league sets its line from its own payrolls instead: enough clubs over it to look like a real season (eight paid tax in 2023-24), but nobody facing a bill above 190 million, about the most any club has ever been billed. The opening line is 226.7 million, with five clubs over it once minimum deals fill the rosters. Your cap panel shows current contracts and a separate tipoff forecast that includes those missing deals. The line rises 7 percent a season with the cap.",
         "Every dollar of payroll over the line, dead money included, is taxed at season close in brackets about 3 percent of the line wide (6.9 million in a new league), at the league's real rates: 1.00 and 1.25 on the first two brackets, 3.50 and 4.75 on the next two, then half a dollar more per bracket. Pay tax in three of the previous four seasons and you are a repeater, taxed at 3.00, 3.25, 5.50 and 6.75 on the same brackets.",
         "The cap panel shows the projected bill all season. At close the bill is listed beside the results, ownership takes one point of trust per 6 million of it (never more than 20), and the money is held back from next season's cap room. Above the first apron (236.4 million in a new league) a trade has to send out at least the salary it brings back. Computer teams that pay tax let their expiring depth walk the next summer, so the line moves the whole league, not just you. A save from before the tax plays out its current season untaxed and gets its line that summer.",
         "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
         "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
-        "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
         "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason."
@@ -2506,7 +2515,7 @@
         "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
         "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
         "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
-        "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
+        "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
       ],
@@ -3333,7 +3342,7 @@
     "/teammates": {
       "howToPlay": [
         "Look at the two players and the sport badge above them.",
-        "Decide whether they were ever on the same team at any point in their careers.",
+        "Decide whether they were ever on the same club or league team at any point in their careers. For the NFL, NBA, MLB and NHL pairs that means the same team in that league, and for soccer the same club. National teams, the Olympics, All-Star games, the Pro Bowl and college teams don't count.",
         "Tap YES or NO to lock in your answer.",
         "Read the fun fact that explains the real story behind the pair.",
         "Hit Next Question and keep going until all 10 are done, then see your score."
@@ -3345,8 +3354,8 @@
         "Play again reshuffles a brand new set of pairs, as many rounds as you like."
       ],
       "example": [
-        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
-        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most."
+        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never played for the same NFL team, so that's a no.",
+        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Get 9 or 10 and you really know your rosters."
       ],
       "tips": [
         "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",

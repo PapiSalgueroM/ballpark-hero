@@ -21,6 +21,50 @@
  *   GYM_CONTROL=noretire     fighters never finish             -> section 4
  *   GYM_CONTROL=freecost     the bills stop arriving           -> section 5
  *   GYM_CONTROL=strongpin    Round 628's clamped bar is back   -> section 6
+ *   GYM_CONTROL=nosale       the gym can never be sold         -> section 7
+ *   GYM_CONTROL=noexit       the verdict ignores how it ended  -> section 7
+ *   GYM_CONTROL=earlysale    a gym sells from its first week   -> section 7
+ *   GYM_CONTROL=nocap        no weekly training limit          -> section 8
+ *   GYM_CONTROL=nofocus      a block bumps all four areas      -> section 8
+ *   GYM_CONTROL=nocamp       the fight ignores the training    -> section 8
+ *   Added by the review fix of Round 955:
+ *   GYM_CONTROL=nosettle     an ending leaves the roster on the books -> 7c
+ *   GYM_CONTROL=nodiscount   a buyer ignores the damage a man carries -> 7d
+ *   GYM_CONTROL=paperprice   a man who never fought adds to the price -> 7d
+ *   GYM_CONTROL=paperclean   a man who never fought counts as clean   -> 7d
+ *   GYM_CONTROL=widecap      one block a week for the whole gym       -> 8a
+ *   GYM_CONTROL=weakfocus    a block pays the career's weekly rate    -> 8b
+ *   GYM_CONTROL=nospend      the fight leaves the camp in place       -> 8d
+ *   GYM_CONTROL=forgetweek   the fight hands back the week's block    -> 8d
+ *
+ * ROUND 955 BANDS, measured before they were set (seed bases via GYM_SELL_SEED
+ * for section 7 and GYM_CAMP_SEED for section 8c, 0 is the default):
+ *   7  selling at week 60 over spending out from week 60, paired on the seed,
+ *      120 gyms: +19.1, +18.2, +18.5 on sell seeds 0 to 2, never fewer than 116
+ *      gyms reaching both endings, so margin 8. With noexit the gap falls to
+ *      +2.4, which is the bleed out alone (59 of 116 seeds no better). After
+ *      the review fix settled the roster at both endings: +19.1, +18.2, +18.6.
+ *   8c late punches landed, four blocks with conditioning over none, 300 pairs:
+ *      +0.73, +0.79, +0.90, +0.88 on camp seeds 0 to 3 (untrained land about
+ *      33 late), so margin 0.4. With nocamp the difference is exactly zero.
+ *   8b focus area growth per block, 80 blocks: 1.65 (the other three move 0),
+ *      so floor 0.5. With weakfocus (the career's weekly 0.4) it is 0.00,
+ *      because a gain that small rounds away on the whole number attribute.
+ *
+ * REVIEW FIX BANDS (measured on the fixed tree, then on each control):
+ *   7c 200 gyms at week 26, name 60, two belts, two men with a 3-1 record.
+ *      Wrecked man (75) kept through the sale over letting him go first: 0.00;
+ *      through going broke: 0.00; healthy pair let go first over selling with
+ *      them: -0.99. With nosettle: +7.00, +7.00, +3.00 (the review measured
+ *      +7.0 and +3.0 on the same construction). Slack 0.5.
+ *   7d the same gyms. A man's worth to the buyer falls 46.3% going from 10 to
+ *      40 damage; with nodiscount 19.4%, which is what his falling rating takes
+ *      alone. That is structural (the discount is a 0.6/0.9 factor on top), so
+ *      the floor sits at the midpoint, 33%. A man who never fought moves the
+ *      price in 0 and the verdict in 0 of 200; paperprice 200 and 1,
+ *      paperclean 0 and 200.
+ *   8a and 8d are exact counts over 60 gyms: every one or none. widecap opens
+ *      the other man in 0 of 60; nospend and forgetweek are below.
  */
 
 import './lib/seedRandom.mjs';
@@ -90,8 +134,8 @@ if (CONTROL === 'nocut') {
     'return 0;');
 } else if (CONTROL === 'nopenalty') {
   rewrite('nopenalty',
-    'const penalty = f.damage >= 70 ? 4.5 : f.damage >= 50 ? 1.8 : 0;',
-    'const penalty = 0;');
+    '  return f.damage >= 70 ? 4.5 : f.damage >= 50 ? 1.8 : 0;',
+    '  return 0;');
   rewrite('nopenalty',
     '  if (fighter.damage >= 55) rep -= 1.7;\n  if (fighter.damage >= 70) rep -= 2.6;',
     '  if (false) rep -= 1.7;');
@@ -116,6 +160,83 @@ if (CONTROL === 'nocut') {
   rewrite('strongpin',
     '  if (straight >= SOFT_FLOOR_FROM) return straight;',
     '  return Math.max(STANDING_FLOOR, straight);', true);
+} else if (CONTROL === 'nosale') {
+  /* Round 955: the gym can never be sold, so the only ending left is going broke. */
+  rewrite('nosale',
+    '  return !g.closed && g.week >= SELL_MIN_WEEKS;',
+    '  return false;');
+} else if (CONTROL === 'noexit') {
+  /* Round 955: the verdict stops caring how the gym ended. */
+  rewrite('noexit',
+    "  const exitPoints = sold\n    ? Math.min(SALE_BONUS_CAP, (g.soldFor ?? 0) * 3)\n    : broke ? -BROKE_PENALTY : 0;",
+    '  const exitPoints = 0;');
+} else if (CONTROL === 'earlysale') {
+  /* Round 955: a gym can be sold from its first week. */
+  rewrite('earlysale',
+    'export const SELL_MIN_WEEKS = 26;',
+    'export const SELL_MIN_WEEKS = 26;\nconst EARLY_SALE = 1;');
+  rewrite('earlysale',
+    '  return !g.closed && g.week >= SELL_MIN_WEEKS;',
+    '  return !g.closed && g.week >= EARLY_SALE;');
+} else if (CONTROL === 'nocap') {
+  /* Round 955: the weekly limit is gone, as it was before this round. */
+  rewrite('nocap',
+    '  if (trainedThisWeek(g, fighterId)) return null;\n',
+    '');
+} else if (CONTROL === 'nofocus') {
+  /* Round 955: a block bumps all four areas again, as it did before this round. */
+  rewrite('nofocus',
+    '  f.attrs[key] = clampi(f.attrs[key] + clamp((f.potential - f.attrs[key]) / 22, 0, 1) * FOCUS_GAIN, 15, 99);',
+    "  for (const k of ['stamina', 'power', 'defence', 'speed'] as const) f.attrs[k] = clampi(f.attrs[k] + clamp((f.potential - f.attrs[k]) / 22, 0, 1) * FOCUS_GAIN, 15, 99);");
+} else if (CONTROL === 'nocamp') {
+  /* Round 955: the fight goes back to the even camp every gym fight had. */
+  rewrite('nocamp',
+    'campQuality: campQualityFor(g, fighterId),',
+    'campQuality: 0.5,');
+} else if (CONTROL === 'nosettle') {
+  /* Round 955 fix: an ending leaves the men under contract on the books, as the
+     first build of this round did, so the verdict only sees men already gone. */
+  rewrite('nosettle',
+    "  const settled = settleRoster(g, 'kept on by the new owner');",
+    '  const settled = g;');
+  rewrite('nosettle',
+    "  const settled = settleRoster(g, 'left without a gym');",
+    '  const settled = g;');
+} else if (CONTROL === 'nodiscount') {
+  /* Round 955 fix: a buyer pays the same for a man whatever he is carrying. */
+  rewrite('nodiscount',
+    ' * (1 - clamp(f.damage, 0, 100) / 100), 0);',
+    ', 0);');
+} else if (CONTROL === 'paperprice') {
+  /* Round 955 fix: a man signed and never fought adds to the sale price. */
+  rewrite('paperprice',
+    '    .filter(f => foughtForGym(f) > 0)\n',
+    '');
+} else if (CONTROL === 'paperclean') {
+  /* Round 955 fix: a man who never fought counts as getting out clean. */
+  rewrite('paperclean',
+    'a.damage < 45 && (a.fights === undefined || a.fights > 0)',
+    'a.damage < 45');
+} else if (CONTROL === 'widecap') {
+  /* Round 955 fix: the limit is one block a week for the whole gym, not per man. */
+  rewrite('widecap',
+    '  return g.training?.[fighterId]?.week === g.week;',
+    '  return Object.values(g.training ?? {}).some(c => c.week === g.week);');
+} else if (CONTROL === 'weakfocus') {
+  /* Round 955 fix: a block pays the career camp's weekly rate, a sixth of what it pays. */
+  rewrite('weakfocus',
+    'const FOCUS_GAIN = 2.4;',
+    'const FOCUS_GAIN = 0.4;');
+} else if (CONTROL === 'nospend') {
+  /* Round 955 fix: the fight leaves the camp in place, so blocks bought once count for every fight after. */
+  rewrite('nospend',
+    '  const training = camp ? { ...g.training, [fighterId]: { week: camp.week, blocks: noBlocks() } } : g.training;',
+    '  const training = g.training;');
+} else if (CONTROL === 'forgetweek') {
+  /* Round 955 fix: the fight forgets the week's block, so a man can train again the week he fought. */
+  rewrite('forgetweek',
+    '[fighterId]: { week: camp.week, blocks: noBlocks() } }',
+    '[fighterId]: { week: -1, blocks: noBlocks() } }');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -182,11 +303,35 @@ const POLICIES = {
   },
 };
 
-function runGym(seed, policyName, weeks = 160) {
+/* Round 955: two endings on top of any policy. sellAt sells the gym the first
+   week it can at or after that week. blowFrom is the bankrupt road: from that
+   week the gym stops fighting and spends everything it has, signing whoever
+   walks in and training every man every week, until the rent goes unpaid. */
+function blowWeek(g) {
+  for (const p of g.prospects.slice()) {
+    const s = gym.signProspect(g, p.id);
+    if (s) g = s;
+  }
+  for (const f of g.roster.slice()) {
+    const t = gym.trainFighter(g, f.id, 'power');
+    if (t) g = t;
+  }
+  return g;
+}
+
+function runGym(seed, policyName, weeks = 160, opts = {}) {
   const pol = POLICIES[policyName];
   let g = gym.newGym(`G${seed}`, `gymseed-${seed}`);
   let fights = 0;
   for (let w = 0; w < weeks && !g.closed; w += 1) {
+    if (opts.sellAt && g.week >= opts.sellAt) {
+      const s = gym.sellGym(g);
+      if (s) { g = s; break; }
+    }
+    if (opts.blowFrom && g.week >= opts.blowFrom) {
+      g = gym.advanceWeek(blowWeek(g));
+      continue;
+    }
     /* Let go of anybody past this policy's line. */
     for (const f of g.roster.slice()) {
       if (f.damage >= pol.releaseAt) {
@@ -213,7 +358,7 @@ function runGym(seed, policyName, weeks = 160) {
         if (res) { g = res.state; fights += 1; }
       }
     } else if (pol.train && g.money > gym.TRAIN_COST * 3 && g.roster.length) {
-      const t = gym.trainFighter(g, g.roster[0].id);
+      const t = gym.trainFighter(g, g.roster[0].id, 'conditioning');
       if (t) g = t;
     }
     g = gym.advanceWeek(g);
@@ -221,6 +366,7 @@ function runGym(seed, policyName, weeks = 160) {
   const v = gym.gymVerdict(g);
   return {
     closed: g.closed,
+    exit: g.exit,
     weeksRun: g.week,
     money: g.money,
     reputation: g.reputation,
@@ -441,7 +587,7 @@ console.log('5) money is a constraint, not decoration');
         if (s) g = s;
       }
       if (g.roster.length) {
-        const t = gym.trainFighter(g, g.roster[0].id);
+        const t = gym.trainFighter(g, g.roster[0].id, 'conditioning');
         if (t) g = t;
       }
       g = gym.advanceWeek(g);
@@ -582,6 +728,260 @@ console.log('6) the condition bars on a gym fight tell the truth, for every kind
     if (!(bothPct < 1)) fail(`${tag} ${bothPinned} decisions (${bothPct.toFixed(2)}%) leave both men on the floor (ceiling 1%)`);
     else ok(`${tag} both men end on the floor in ${bothPct.toFixed(2)}% of decisions (ceiling 1%)`);
   }
+}
+
+/* ═══════════════ 7) Round 955: going out on top ═══════════════ */
+console.log('7) selling up ends the game with a verdict, and beats going under');
+{
+  /* THE SAME GYMS, ONE DECISION APART. Both roads play the careful policy to
+     week SELL_AT on the same seeds, so up to that week they are the same gym.
+     Then one sells and the other spends everything until the rent goes unpaid,
+     without fighting again, so neither road adds a single win after the fork.
+     What separates their verdicts is therefore how each one ended, plus a
+     little reputation the bankrupt road loses to time while it bleeds out. */
+  const SELL_AT = 60;
+  const SELL_GAP_MARGIN = 8;
+  const SELL_SEED = Number(process.env.GYM_SELL_SEED || 0);
+  const sold = [];
+  const broke = [];
+  for (let i = 0; i < N; i += 1) {
+    const seed = 2000 + i * 53 + SELL_SEED * 7919;
+    sold.push(runGym(seed, 'careful', 160, { sellAt: SELL_AT }));
+    broke.push(runGym(seed, 'careful', 400, { blowFrom: SELL_AT }));
+  }
+  const soldN = sold.filter(r => r.closed && r.exit === 'sold').length;
+  const brokeN = broke.filter(r => r.closed && r.exit === 'broke').length;
+  console.log(`   sold at week ${SELL_AT} or later: ${soldN} of ${N}; spent out and went under: ${brokeN} of ${N}`);
+  if (soldN < N * 0.9) fail(`only ${soldN} of ${N} selling gyms reached the verdict by selling (floor 90%)`);
+  else ok(`${soldN} of ${N} selling gyms closed with exit sold, so a well run gym reaches its verdict`);
+  /* Paired on the seed, and only over seeds where BOTH roads got to their end. */
+  const gaps = [];
+  for (let i = 0; i < N; i += 1) {
+    if (sold[i].exit === 'sold' && broke[i].exit === 'broke') gaps.push(sold[i].score - broke[i].score);
+  }
+  const gap = mean(gaps);
+  const behind = gaps.filter(d => d <= 0).length;
+  console.log(`   paired over ${gaps.length} seeds: selling scores ${gap.toFixed(1)} more, and ${behind} seeds score no better than going under`);
+  if (gaps.length < N * 0.5) fail(`only ${gaps.length} seeds reached both endings, too few to compare`);
+  else if (!(gap > SELL_GAP_MARGIN)) fail(`selling up beats going under by only ${gap.toFixed(1)} on the same gyms (margin ${SELL_GAP_MARGIN})`);
+  else ok(`selling up beats going under by ${gap.toFixed(1)} verdict points on the same gyms (margin ${SELL_GAP_MARGIN})`);
+
+  /* EVERY WEEK OF THE LADDER, not its two ends: a sale is refused in each week
+     before SELL_MIN_WEEKS and accepted from that week on. */
+  let early = 0;
+  let onTime = 0;
+  let g = { ...gym.newGym('Ladder', 'ladder-955'), money: 50 };
+  for (let w = 1; w <= gym.SELL_MIN_WEEKS + 4 && !g.closed; w += 1) {
+    const s = gym.sellGym(g);
+    if (g.week < gym.SELL_MIN_WEEKS && s) early += 1;
+    if (g.week >= gym.SELL_MIN_WEEKS && s && s.closed && s.exit === 'sold') onTime += 1;
+    g = gym.advanceWeek(g);
+  }
+  console.log(`   week by week: ${early} sales accepted before week ${gym.SELL_MIN_WEEKS}, ${onTime} of 5 accepted from it`);
+  if (early > 0) fail(`${early} sales went through before week ${gym.SELL_MIN_WEEKS}`);
+  else ok(`no sale before week ${gym.SELL_MIN_WEEKS}`);
+  if (onTime < 5) fail(`only ${onTime} of 5 sales from week ${gym.SELL_MIN_WEEKS} on went through`);
+  else ok('every sale from that week on goes through and closes the gym');
+
+  /* 7c THE ENDING SETTLES THE ROSTER (review fix). The same gym at the sale
+     week, 200 of them, with a name of 60, two belts and two men who have
+     fought for it. Shuffling the roster in the final week must not move the
+     verdict: keeping a wrecked man signed through the sale, or through going
+     broke, must not beat letting him go first, and letting the healthy men go
+     first must not beat selling with them. The first build of this round left
+     the signed men off the books and paid +7 for the wrecked man, +3 for the
+     healthy pair (review measurement on the same construction). */
+  const SETTLE_N = 200;
+  const SETTLE_SLACK = 0.5;
+  const settleGym = (s, hurt) => {
+    let x = { ...gym.newGym(`S${s}`, `settle-${s}`), money: 20 };
+    while (x.week < gym.SELL_MIN_WEEKS && !x.closed) x = gym.advanceWeek(x);
+    return { ...x, reputation: 60, titles: 2, roster: x.roster.map((f, i) => ({ ...f, wins: 3, losses: 1, damage: i === 0 ? hurt : 10 })) };
+  };
+  const broken = (x) => gym.closeBroke({ ...x, money: -0.01 });
+  /* NaN when the sale is refused, so a refused sale fails the band below
+     rather than crashing the harness before the sections after it run. */
+  const soldScore = (x) => { const s = gym.sellGym(x); return s ? gym.gymVerdict(s).score : Number.NaN; };
+  let wreckKeep = 0, wreckLet = 0, cleanKeep = 0, cleanShed = 0, brokeKeep = 0, brokeLet = 0;
+  for (let s = 0; s < SETTLE_N; s += 1) {
+    const w = settleGym(s, 75);
+    const letW = gym.releaseFighter(w, w.roster[0].id);
+    wreckKeep += soldScore(w);
+    wreckLet += soldScore(letW);
+    brokeKeep += gym.gymVerdict(broken(w)).score;
+    brokeLet += gym.gymVerdict(broken(letW)).score;
+    const c = settleGym(s, 10);
+    let shed = c;
+    for (const f of c.roster) shed = gym.releaseFighter(shed, f.id);
+    cleanKeep += soldScore(c);
+    cleanShed += soldScore(shed);
+  }
+  const dWreck = (wreckKeep - wreckLet) / SETTLE_N;
+  const dBroke = (brokeKeep - brokeLet) / SETTLE_N;
+  const dClean = (cleanShed - cleanKeep) / SETTLE_N;
+  console.log(`   ${SETTLE_N} gyms at week ${gym.SELL_MIN_WEEKS}: wrecked man kept through the sale ${dWreck.toFixed(2)} over letting him go first, through going broke ${dBroke.toFixed(2)}; healthy pair let go first ${dClean.toFixed(2)} over selling with them`);
+  if (!(dWreck <= SETTLE_SLACK)) fail(`keeping a wrecked man signed through the sale scores ${dWreck.toFixed(2)} more than letting him go (slack ${SETTLE_SLACK})`);
+  else ok(`keeping a wrecked man through the sale buys ${dWreck.toFixed(2)}, within ${SETTLE_SLACK}`);
+  if (!(dBroke <= SETTLE_SLACK)) fail(`keeping a wrecked man signed through going broke scores ${dBroke.toFixed(2)} more than letting him go (slack ${SETTLE_SLACK})`);
+  else ok(`keeping a wrecked man through going broke buys ${dBroke.toFixed(2)}, within ${SETTLE_SLACK}`);
+  if (!(dClean <= SETTLE_SLACK)) fail(`letting the healthy men go before the sale scores ${dClean.toFixed(2)} more than selling with them (slack ${SETTLE_SLACK})`);
+  else ok(`letting the healthy men go before the sale buys ${dClean.toFixed(2)}, within ${SETTLE_SLACK}`);
+
+  /* 7d WHAT THE BUYER PAYS FOR (review fix). In every gym of 7c: a man at 40
+     damage (under the line where letting him go costs the name) is worth less
+     than the same man at 10, and a man signed that week who never fought adds
+     nothing to the price or to the clean count. */
+  /* The man's own worth to the buyer is read as the price with him less the
+     price without him (at 10 and 40 neither marks the name, so the name term
+     is the same in all three). His rating already falls with damage, which
+     makes "priced lower" true even with no discount at all, so the check is on
+     the SIZE of the drop: the discount for what he carries must take a real
+     share of his worth on top of what his rating loses. */
+  const DISCOUNT_FLOOR = 0.33;
+  let cheaper = 0, paperPrice = 0, paperScore = 0, dropSum = 0, dropN = 0;
+  for (let s = 0; s < SETTLE_N; s += 1) {
+    const c = settleGym(s, 10);
+    const hurt = { ...c, roster: c.roster.map((f, i) => (i === 1 ? { ...f, damage: 40 } : f)) };
+    if (gym.salePrice(hurt) < gym.salePrice(c)) cheaper += 1;
+    const without = gym.salePrice({ ...c, roster: c.roster.filter((_, i) => i !== 1) });
+    const worth10 = gym.salePrice(c) - without;
+    const worth40 = gym.salePrice(hurt) - without;
+    if (worth10 > 0.02) { dropSum += 1 - worth40 / worth10; dropN += 1; }
+    const paper = gym.signProspect(c, c.prospects[0].id);
+    if (!paper) continue;
+    if (gym.salePrice(paper) !== gym.salePrice(c)) paperPrice += 1;
+    if (soldScore(paper) !== soldScore(c)) paperScore += 1;
+  }
+  console.log(`   ${SETTLE_N} gyms: the damaged man priced lower in ${cheaper}; a man who never fought moved the price in ${paperPrice} and the verdict in ${paperScore}`);
+  const drop = dropSum / Math.max(1, dropN);
+  console.log(`   ${dropN} men worth pricing: going from 10 to 40 damage takes ${(drop * 100).toFixed(1)}% off what a buyer pays for him`);
+  if (cheaper < SETTLE_N) fail(`a man carrying 40 damage was priced no lower in ${SETTLE_N - cheaper} of ${SETTLE_N} gyms`);
+  else ok('a buyer pays less for a man carrying damage, in every gym');
+  if (dropN < SETTLE_N * 0.9) fail(`only ${dropN} of ${SETTLE_N} men were worth enough to price`);
+  else if (!(drop > DISCOUNT_FLOOR)) fail(`30 more damage takes only ${(drop * 100).toFixed(1)}% off a man's price, so the buyer barely discounts what he carries (floor ${DISCOUNT_FLOOR * 100}%)`);
+  else ok(`30 more damage takes ${(drop * 100).toFixed(1)}% off a man's price (floor ${DISCOUNT_FLOOR * 100}%)`);
+  if (paperPrice > 0) fail(`a man who never fought moved the sale price in ${paperPrice} gyms`);
+  else ok('a man who never fought adds nothing to the price');
+  if (paperScore > 0) fail(`a man who never fought moved the verdict in ${paperScore} gyms, so idle cash buys points`);
+  else ok('a man who never fought adds nothing to the verdict');
+}
+
+/* ═══════════════ 8) Round 955: training is a weekly decision ═══════════════ */
+console.log('8) one block per fighter per week, it works on one thing, and the fight reads it');
+{
+  const FOCI = ['conditioning', 'power', 'defence', 'speed'];
+  const CAMP_LATE_MARGIN = 0.4;
+  const CAMP_SEED = process.env.GYM_CAMP_SEED || '0';
+  const ATTR = { conditioning: 'stamina', power: 'power', defence: 'defence', speed: 'speed' };
+  /* 8a THE CAP, on every fighter of every gym, and for every focus. */
+  let firsts = 0;
+  let seconds = 0;
+  let otherMan = 0;
+  let nextWeek = 0;
+  let tries = 0;
+  for (let s = 0; s < 60; s += 1) {
+    let g = { ...gym.newGym(`C${s}`, `cap-${s}`), money: 5 };
+    const [a, b] = g.roster;
+    const focus = FOCI[s % 4];
+    tries += 1;
+    const t1 = gym.trainFighter(g, a.id, focus);
+    if (t1) firsts += 1; else continue;
+    if (gym.trainFighter(t1, a.id, FOCI[(s + 1) % 4])) seconds += 1;
+    if (gym.trainFighter(t1, b.id, focus)) otherMan += 1;
+    if (gym.trainFighter(gym.advanceWeek(t1), a.id, focus)) nextWeek += 1;
+  }
+  console.log(`   ${tries} gyms: first block ${firsts}, second block same week ${seconds}, other man same week ${otherMan}, same man next week ${nextWeek}`);
+  if (firsts < tries) fail(`${tries - firsts} first blocks were refused`);
+  if (seconds > 0) fail(`${seconds} second blocks in the same week went through, so there is no weekly limit`);
+  else ok('a second block on the same man in the same week is refused every time');
+  if (otherMan < firsts || nextWeek < firsts) fail(`the limit is too wide: other man ${otherMan}, next week ${nextWeek}, of ${firsts}`);
+  else ok('the limit is per man and per week: the other man and the next week are both open');
+
+  /* 8b THE FOCUS: the chosen area grows and the other three do not move. */
+  const grew = { focus: 0, others: 0, n: 0 };
+  for (let s = 0; s < 80; s += 1) {
+    const g = { ...gym.newGym(`F${s}`, `focus-${s}`), money: 5 };
+    const focus = FOCI[s % 4];
+    const before = g.roster[0];
+    const t = gym.trainFighter(g, before.id, focus);
+    if (!t) continue;
+    const after = t.roster.find(x => x.id === before.id);
+    grew.n += 1;
+    for (const k of FOCI) {
+      const d = after.attrs[ATTR[k]] - before.attrs[ATTR[k]];
+      if (k === focus) grew.focus += d; else grew.others += Math.abs(d);
+    }
+  }
+  console.log(`   ${grew.n} blocks: focus area grew ${(grew.focus / grew.n).toFixed(2)} a block, the other three moved ${grew.others} in total`);
+  if (!(grew.focus / grew.n > 0.5)) fail(`a block barely moves its own area (${(grew.focus / grew.n).toFixed(2)}, floor 0.5)`);
+  else ok(`a block grows its focus area by ${(grew.focus / grew.n).toFixed(2)} on average (floor 0.5)`);
+  if (grew.others > 0) fail(`the other three areas moved ${grew.others} points, so the focus is not a choice`);
+  else ok('the three areas he did not work on do not move');
+
+  /* 8c THE FIGHT READS THE CAMP. The same man, the same opponent, the same
+     luck, with and without four blocks behind him that include conditioning.
+     His attributes are left exactly as they were, so the only thing different
+     between the two fights is what simBout is told about the camp. Measured on
+     punches landed in the second half of the fight, where the gas tank lives. */
+  let pairs = 0;
+  let lateGain = 0;
+  let lateBase = 0;
+  let wonT = 0;
+  let wonU = 0;
+  for (let s = 0; s < 300; s += 1) {
+    const g = { ...gym.newGym(`K${s}`, `camp-${CAMP_SEED}-${s}`), money: 5 };
+    const f = g.roster[0];
+    const offers = gym.offersForFighter(g, f.id);
+    const o = offers[1];
+    const lines = smartLine(o.opponent.style, o.rounds);
+    const trained = { ...g, training: { [f.id]: { week: 0, blocks: { conditioning: 1, power: 1, defence: 1, speed: 1 } } } };
+    const a = gym.takeGymFight(trained, f.id, o, lines);
+    const b = gym.takeGymFight(g, f.id, o, lines);
+    if (!a || !b) continue;
+    pairs += 1;
+    const late = (r) => r.result.rounds.filter(x => x.round > o.rounds / 2).reduce((n, x) => n + x.playerLanded, 0);
+    lateGain += late(a) - late(b);
+    lateBase += late(b);
+    if (a.result.winner === 'player') wonT += 1;
+    if (b.result.winner === 'player') wonU += 1;
+  }
+  const lg = lateGain / Math.max(1, pairs);
+  console.log(`   ${pairs} paired fights: four blocks with conditioning land ${lg.toFixed(2)} more punches late (untrained land ${(lateBase / Math.max(1, pairs)).toFixed(1)}); wins ${wonT} trained against ${wonU} untrained`);
+  if (pairs < 250) fail(`only ${pairs} paired fights ran`);
+  else if (!(lg > CAMP_LATE_MARGIN)) fail(`the camp barely reaches the fight: ${lg.toFixed(2)} more late punches (margin ${CAMP_LATE_MARGIN})`);
+  else ok(`the camp reaches the fight: ${lg.toFixed(2)} more punches landed late (margin ${CAMP_LATE_MARGIN})`);
+
+  /* 8d THE FIGHT SPENDS THE CAMP AND KEEPS THE WEEK (review fix). The rules
+     say the fight spends the work, so the next camp starts from zero; without
+     that, four blocks bought once are sharpness for every fight after and
+     training stops being a weekly decision. And a fight does not hand back the
+     week's block: the save is kept on the fight screen, so a reload reopens
+     the hub in the same week. Every gym: two blocks over two weeks, a fight in
+     the second, then the camp and the limit are read straight after. */
+  let spentRuns = 0, spent = 0, kept = 0, refused = 0, reopened = 0;
+  for (let s = 0; s < 60; s += 1) {
+    let g = { ...gym.newGym(`D${s}`, `spend-${s}`), money: 5 };
+    const id = g.roster[0].id;
+    g = gym.trainFighter(g, id, 'conditioning');
+    g = gym.trainFighter(gym.advanceWeek(g), id, FOCI[s % 4]);
+    if (!g || !(gym.campQualityFor(g, id) > 0.5)) continue;
+    const o = gym.offersForFighter(g, id)[1];
+    const r = gym.takeGymFight(g, id, o, smartLine(o.opponent.style, o.rounds));
+    if (!r) continue;
+    spentRuns += 1;
+    if (gym.campQualityFor(r.state, id) === 0.5) spent += 1;
+    if (gym.trainedThisWeek(r.state, id)) kept += 1;
+    if (!gym.trainFighter(r.state, id, 'speed')) refused += 1;
+    if (gym.trainFighter(gym.advanceWeek(r.state), id, 'speed')) reopened += 1;
+  }
+  console.log(`   ${spentRuns} trained men fought: camp back to 50 after ${spent}, week's block still counted after ${kept}, second block refused ${refused}, open again next week ${reopened}`);
+  if (spentRuns < 50) fail(`only ${spentRuns} trained men got a fight`);
+  if (spent < spentRuns) fail(`${spentRuns - spent} fights left the camp in place, so blocks bought once count for every fight after`);
+  else ok('every fight spends the camp, so the next one starts from zero');
+  if (kept < spentRuns || refused < spentRuns) fail(`a fight handed back the week's block (still counted ${kept}, refused ${refused}, of ${spentRuns})`);
+  else ok('a fight does not hand back the week\'s block');
+  if (reopened < spentRuns) fail(`only ${reopened} of ${spentRuns} could train the week after the fight`);
+  else ok('the block opens again the week after');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

@@ -143,6 +143,10 @@ describe('Club Manager: one of him', () => {
       console.log(`  ${club}: ${api.career.squad.length} players, duplicate ids: ${JSON.stringify(dupes)}`);
       expect(dupes).toEqual([]);
       act(() => api.startNew());
+      /* Round 928: starting over parks the career in its slot now, so the
+         next club's boot would open the managers screen; each club here is a
+         first career on an empty device. */
+      localStorage.clear();
     }
   }, 120000);
 });
