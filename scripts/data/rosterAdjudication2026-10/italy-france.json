@@ -289,6 +289,52 @@
     {"family": "B", "url": "https://us.soccerway.com/player/youte-kinkoue-etienne/WvnBSOGB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Lausanne free 2026-09-03, born 2002-01-14, contract to 2029-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/297168/etienne-youte-kinkoue", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lausanne Sports, defender, born 2002-01-14"}
    ]
+  },
+  {
+   "name": "Rémy Cabella",
+   "from": "Lille",
+   "to": "Volos",
+   "realClub": "Volos",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1990-03-08. Left Lille for Olympiacos in 2024, spent the spring of 2026 on loan at Nantes, and joined Volos on a free on 2026-09-14, contract to June 2027; no appearance for them yet. ESPN's player page still heads him as Olympiacos, but Olympiacos's own squad does not list him and ESPN's last match for him is for Nantes on 2026-05-17, so that header is stale.",
+   "sources": [
+    {"family": "A", "url": "https://www.slgr.gr/en/team/1190/teamComp/25/", "publisher": "Super League Greece (Volos NFC squad, season 2026-2027)", "readOn": "2026-10-03", "says": "5, Remy Cabella, forward, born 1990-03-08, France, 0 appearances"},
+    {"family": "A", "url": "https://www.losc.fr/effectif/lille/76", "publisher": "LOSC Lille (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.olympiacos.org/en/team/", "publisher": "Olympiacos FC (first team squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/cabella-remy/hl6k3P1f/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Olympiacos to Volos free 2026-09-14, born 1990-03-08, contract to 2027-06-30"},
+    {"family": "B", "url": "https://us.soccerway.com/team/volos/nDZbFBqG/squad/", "publisher": "Soccerway (Volos squad 2026-2027)", "readOn": "2026-10-03", "says": "20, Cabella Remy, midfielder, age 36, 0 minutes"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/166/lille", "publisher": "ESPN (Lille squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Luiz Felipe",
+   "from": "Marseille",
+   "to": "Rayo Vallecano",
+   "realClub": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-03-22, the Italy international centre back. Left Marseille on a free and joined Rayo Vallecano on 2025-07-07, contract to June 2027; their number 5, currently injured (hamstring) with no 2026-27 minutes.",
+   "sources": [
+    {"family": "A", "url": "https://www.rayovallecano.es/jugadores", "publisher": "Rayo Vallecano (first team squad)", "readOn": "2026-10-03", "says": "5, defender, Luiz Felipe"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano", "publisher": "ESPN (Rayo Vallecano squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 5, age 29, Italy (player id 225637)"},
+    {"family": "B", "url": "https://us.soccerway.com/player/luiz-felipe/G2OoCE97/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Marseille to Rayo Vallecano free 2025-07-07, born 1997-03-22, Italy, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/176/marseille", "publisher": "ESPN (Marseille squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Lucas Michal",
+   "from": "Monaco",
+   "to": "Cercle Brugge",
+   "realClub": "Cercle Brugge, on loan from Monaco",
+   "loan": true,
+   "loanFrom": "Monaco",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-06-22. After a spring 2026 loan at Metz, Monaco loaned him to Cercle Brugge on 2026-07-30, to June 2027; their number 22, with six appearances in 2026-27. ESPN spells him Lucas Michel.",
+   "sources": [
+    {"family": "A", "url": "https://www.cerclebrugge.be/teams/a-team/", "publisher": "Cercle Brugge (A team squad)", "readOn": "2026-10-03", "says": "22, Lucas Michal, attacker, age 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3610/cercle-brugge-ksv", "publisher": "ESPN (Cercle Brugge squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Lucas Michel, forward, shirt 22, age 21, France, 6 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/michal-lucas/fD49VLmq/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Cercle Brugge from Monaco 2026-07-30 to 2027-06-30, born 2005-06-22"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/174/as-monaco", "publisher": "ESPN (AS Monaco squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -517,6 +563,19 @@
     {"family": "B", "url": "https://us.soccerway.com/player/khadra-reda/tSf0YZjE/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Reims to Qarabag 2026-08-28, back from loan at Le Havre 2026-06-30, born 2001-07-04, contract to 2028-06-30"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/294632/reda-khadra", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FK Qarabag, born 2001-07-04"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Wesley Saïd",
+   "from": "Lens",
+   "realClub": "Al-Shamal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-04-19. Left Lens when his contract ran out and joined Al-Shamal on a free on 2026-07-18, contract to June 2028; their number 22, played in the AFC Champions League Elite on 2026-09-14. Qatar is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.rclens.fr/fr/equipe-premiere/effectif/joueurs", "publisher": "RC Lens (first team squad, with its loaned-out list)", "readOn": "2026-10-03", "says": "not listed, nor among the loaned players"},
+    {"family": "B", "url": "https://us.soccerway.com/player/said-wesley/400jX4xg/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lens to Shamal free 2026-07-18, born 1995-04-19, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/186189/wesley-said", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Al Shamal number 22, born 1995-04-19, played 2026-09-14"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/175/lens", "publisher": "ESPN (Lens squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
