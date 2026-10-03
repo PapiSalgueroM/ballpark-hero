@@ -990,11 +990,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_gear_deal',
       category: 'money', cooldown: 2,
       title: 'The gear deal',
-      body: `A brand wants your name on their ${gear}. The big one pays more but their stuff feels wrong in your hands.`,
+      body: `Two gear companies want your name on their ${gear}. The big one pays a lot more and has a commercial in mind, but their stuff feels wrong in your hands. The small one is a family shop that has made your gear since bantam and knows exactly how you like it.`,
       options: [
-        { label: 'Sign with the big brand', effect: 'Take the money', apply: (cc) => { const got = cash(cc, 0.35); const f = fan(cc, 6); const g = rate(cc, -1); return `${got}M a year to use gear you do not love. Fanbase +${f}, rating ${g}.`; } },
-        { label: 'Stay with the small shop that fits you', effect: 'Trust the feel', apply: (cc) => { const got = cash(cc, 0.09); const g = rate(cc, 1); const m = mor(cc, 5); return `${got}M and gear that is actually right. Rating +${g}, morale +${m}.`; } },
-        { label: 'Sign the big deal, use your old gear anyway', effect: 'The old trick', apply: (cc, r) => { const got = cash(cc, 0.35); if (r() < 0.35) { const f2 = fan(cc, -5); heatUp(cc, 4); return `${got}M banked, then a camera caught the repaint job. Fanbase ${f2}.`; } const m = mor(cc, 4); flag(cc, 'repaintedGear'); return `${got}M banked and a very careful paint job. Morale +${m}. Half the league does it.`; } },
+        {
+          label: 'Sign with the big brand', effect: 'Take the money',
+          apply: (cc) => { const got = cash(cc, 0.35); const f = fan(cc, 6); const g = rate(cc, -1); return `${got}M a year, a billboard, and gear you do not love. It took you until Christmas to stop thinking about it. Fanbase +${f}, rating ${g}.`; },
+        },
+        {
+          label: 'Stay with the small shop that fits you', effect: 'Trust the feel',
+          apply: (cc) => { const got = cash(cc, 0.09); const g = rate(cc, 1); const m = mor(cc, 5); return `${got}M, a handshake, and gear that is actually right. The family put your photo on the wall of the shop. Rating +${g}, morale +${m}.`; },
+        },
+        {
+          label: 'Sign the big deal, use your old gear anyway', effect: 'The old trick',
+          apply: (cc, r) => { const got = cash(cc, 0.35); if (r() < 0.35) { const f2 = fan(cc, -5); heatUp(cc, 4); return `${got}M banked, then a camera zoomed in on the repaint job during a TV timeout. Awkward phone calls followed. Fanbase ${f2}.`; } const m = mor(cc, 4); flag(cc, 'repaintedGear'); return `${got}M banked and a very careful paint job by the equipment manager. Morale +${m}. Half the league does it.`; },
+        },
       ],
     });
   }
@@ -1004,11 +1013,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_card_show',
       category: 'money', cooldown: 1,
       title: 'The card show',
-      body: 'A convention center, a folding table, and 900 people who want your signature on a rookie card. Four hours, flat fee, all above board.',
+      body: 'A convention center, a folding table with a paper tablecloth, and 900 people who want your signature on a rookie card. Four hours, a flat fee, all above board. Some of them are kids. Some of them are grown men with rolling suitcases full of your face.',
       options: [
-        { label: 'Do the full four hours', effect: 'Sign everything', apply: (cc) => { const got = cash(cc, 0.08); const f = fan(cc, 8); const h = hp(cc, -2); return `${got}M and a wrist that hated you. Fanbase +${f}, health ${h}.`; } },
-        { label: 'Two hours, then take photos with kids for free', effect: 'Half paid half free', apply: (cc) => { const got = cash(cc, 0.04); const f = fan(cc, 12); const m = mor(cc, 6); return `${got}M and every kid in line got a photo. Fanbase +${f}, morale +${m}.`; } },
-        { label: 'Skip it, stay home with family', effect: 'Keep the weekend', apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 4); return `A Saturday that belonged to you. Morale +${m}, health +${h}.`; } },
+        {
+          label: 'Do the full four hours', effect: 'Sign everything',
+          apply: (cc) => { const got = cash(cc, 0.08); const f = fan(cc, 8); const h = hp(cc, -2); return `Four hours, nine hundred signatures and one Sharpie per hour. ${got}M and a wrist that hated you. Fanbase +${f}, health ${h}.`; },
+        },
+        {
+          label: 'Two hours, then take photos with kids for free', effect: 'Half paid half free',
+          apply: (cc) => { const got = cash(cc, 0.04); const f = fan(cc, 12); const m = mor(cc, 6); return `${got}M for the paid part, and then every kid in line got a photo and a fist bump for nothing. Fanbase +${f}, morale +${m}.`; },
+        },
+        {
+          label: 'Skip it, stay home with family', effect: 'Keep the weekend',
+          apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 4); return `Pancakes, a walk, a nap on the couch. A Saturday that belonged to you. Morale +${m}, health +${h}.`; },
+        },
       ],
     });
   }
@@ -1018,11 +1036,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_truck_ad',
       category: 'money', cooldown: 2,
       title: 'The truck dealership ad',
-      body: 'Local dealer, green screen, one line of dialogue about zero percent financing. They will pay you and give you a truck.',
+      body: 'The biggest dealer in town wants you for a local ad: a green screen, a cowboy hat they will not let you refuse, and one line of dialogue about zero percent financing. They will pay you and give you a truck. Every player who has done one of these still hears about it.',
       options: [
-        { label: 'Say the line, take the truck', effect: 'Local legend', apply: (cc) => { const got = cash(cc, 0.06); buy(cc, 'a dealership truck'); const f = fan(cc, 9); const m = mor(cc, -2); flag(cc, 'truckGuy'); return `${got}M, a free truck, and that line follows you to the grave. Fanbase +${f}, morale ${m}.`; } },
-        { label: 'Bring your linemate in and split it', effect: 'Two man bit', apply: (cc) => { const got = cash(cc, 0.03); const f = fan(cc, 11); const m = mor(cc, 6); return `The two of you were genuinely funny. ${got}M each, fanbase +${f}, morale +${m}.`; } },
-        { label: 'Pass, keep the dignity', effect: 'No green screen', apply: (cc) => { const m = mor(cc, 5); return `You will never have to hear yourself say zero percent. Morale +${m}.`; } },
+        {
+          label: 'Say the line, take the truck', effect: 'Local legend',
+          apply: (cc) => { const got = cash(cc, 0.06); buy(cc, 'a dealership truck'); const f = fan(cc, 9); const m = mor(cc, -2); flag(cc, 'truckGuy'); return `${got}M, a free truck, and a line the student section now chants at you in warmups. It follows you to the grave. Fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Bring your linemate in and split it', effect: 'Two man bit',
+          apply: (cc) => { const got = cash(cc, 0.03); const f = fan(cc, 11); const m = mor(cc, 6); return `The two of you ad libbed half of it and were genuinely funny. ${got}M each, fanbase +${f}, morale +${m}.`; },
+        },
+        {
+          label: 'Pass, keep the dignity', effect: 'No green screen',
+          apply: (cc) => { const m = mor(cc, 5); return `You said no thanks. You will never have to hear yourself say zero percent on a loop. Morale +${m}.`; },
+        },
       ],
     });
   }
@@ -1032,11 +1059,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_parents_house',
       category: 'money', cooldown: 99, story: 'parentsHouse',
       title: 'The house for your parents',
-      body: 'They drove you to 5am practice for twelve years in a car with a dying heater. You can end their mortgage this week.',
+      body: 'They drove you to 5am practice for twelve years in a car with a dying heater, sold the boat to pay for a summer camp, and never once told you what any of it cost. You can end their mortgage this week. They will say no. You know that already.',
       options: [
-        { label: 'Buy them the house outright', effect: 'Pay them back', apply: (cc) => { const spent = cash(cc, -1.2); buy(cc, 'a house for your parents'); const m = mor(cc, 14); const f = fan(cc, 7); flag(cc, 'boughtParentsHouse'); return `${spent}M, keys on the kitchen table, your mother on the floor crying. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Pay off the mortgage they have', effect: 'Kill the debt', apply: (cc) => { const spent = cash(cc, -0.4); const m = mor(cc, 10); flag(cc, 'boughtParentsHouse'); return `${spent}M and they stay on the street they love. Morale +${m}.`; } },
-        { label: 'Set them up with an income instead', effect: 'Long game', apply: (cc) => { const spent = cash(cc, -0.7); const m = mor(cc, 8); flag(cc, 'parentsFund'); return `${spent}M into something boring that pays them monthly forever. Morale +${m}.`; } },
+        {
+          label: 'Buy them the house outright', effect: 'Pay them back',
+          apply: (cc) => { const spent = cash(cc, -1.2); buy(cc, 'a house for your parents'); const m = mor(cc, 14); const f = fan(cc, 7); flag(cc, 'boughtParentsHouse'); return `${spent}M, the keys on the kitchen table under a bow, and your mother on the floor crying. Your dad pretended he had something in his eye. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Pay off the mortgage they have', effect: 'Kill the debt',
+          apply: (cc) => { const spent = cash(cc, -0.4); const m = mor(cc, 10); flag(cc, 'boughtParentsHouse'); return `${spent}M, one phone call to the bank, and they stay on the street they love next to the neighbors who watched every game. Morale +${m}.`; },
+        },
+        {
+          label: 'Set them up with an income instead', effect: 'Long game',
+          apply: (cc) => { const spent = cash(cc, -0.7); const m = mor(cc, 8); flag(cc, 'parentsFund'); return `${spent}M into something boring that pays them every month forever. Your dad finally fixed the heater. Morale +${m}.`; },
+        },
       ],
     });
   }
@@ -1046,11 +1082,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_teammate_loan',
       category: 'money', cooldown: 2,
       title: 'A teammate needs 300 grand',
-      body: 'His brother in law has a restaurant concept and a pitch deck with three fonts on it. He is asking you, quietly, at the back of the plane.',
+      body: 'His brother in law has a restaurant concept and a pitch deck with three fonts on it. Your teammate is a good guy, a great teammate, and very bad at saying no to family. He is asking you, quietly, at the back of the plane, and he looks embarrassed to be asking.',
       options: [
-        { label: 'Lend it, no paperwork', effect: 'Trust him', apply: (cc, r) => { const spent = cash(cc, -0.3); if (r() < 0.4) { const back = cash(cc, 0.42); const m = mor(cc, 8); return `He paid back ${back}M in two years after lending ${spent}M. Morale +${m}. The place is packed.`; } const m2 = mor(cc, -5); flag(cc, 'badLoan'); return `${spent}M gone and the restaurant lasted nine months. Morale ${m2}.`; } },
-        { label: 'Gift him a smaller number and call it even', effect: 'Cap the damage', apply: (cc) => { const spent = cash(cc, -0.06); const m = mor(cc, 6); return `${spent}M as a gift, never mentioned again, friendship intact. Morale +${m}.`; } },
-        { label: 'Say no and introduce him to your advisor', effect: 'Say no kindly', apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, 1); flag(cc, 'financiallySane'); return `He was annoyed for a month and grateful for a decade. Morale +${m}, fanbase +${f}.`; } },
+        {
+          label: 'Lend it, no paperwork', effect: 'Trust him',
+          apply: (cc, r) => { const spent = cash(cc, -0.3); if (r() < 0.4) { const back = cash(cc, 0.42); const m = mor(cc, 8); return `You lent ${spent}M on a handshake and he paid back ${back}M in two years. Morale +${m}. The place is packed every Friday.`; } const m2 = mor(cc, -5); flag(cc, 'badLoan'); return `${spent}M gone, and the restaurant lasted nine months. He still cannot look you in the eye on the bus. Morale ${m2}.`; },
+        },
+        {
+          label: 'Gift him a smaller number and call it even', effect: 'Cap the damage',
+          apply: (cc) => { const spent = cash(cc, -0.06); const m = mor(cc, 6); return `${spent}M as a gift, no strings, never mentioned again. Friendship intact, restaurant not your problem. Morale +${m}.`; },
+        },
+        {
+          label: 'Say no and introduce him to your advisor', effect: 'Say no kindly',
+          apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, 1); flag(cc, 'financiallySane'); return `Your advisor took one look at the pitch deck and asked gentle questions. He was annoyed for a month and grateful for a decade. Morale +${m}, fanbase +${f}.`; },
+        },
       ],
     });
   }
@@ -1060,11 +1105,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_rent_or_buy',
       category: 'money', cooldown: 99,
       title: 'Rent or buy in this city',
-      body: `You have ${c.contractYears} years left with ${teamName} and a realtor with a house that has a rink sized garage.`,
+      body: `You have ${c.contractYears} years left with ${teamName}, a realtor who will not stop texting, and a house she swears is perfect: four bedrooms, a big yard and a garage big enough to build a small rink in. Players get traded. Players also stay.`,
       options: [
-        { label: 'Buy the house', effect: 'Put down roots', apply: (cc) => { const spent = cash(cc, -1.6); buy(cc, 'a house with a heated garage'); const m = mor(cc, 8); const f = fan(cc, 6); flag(cc, 'homeowner'); return `${spent}M and a mailbox with your name on it. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Rent the condo downtown', effect: 'Stay liquid', apply: (cc) => { const spent = cash(cc, -0.09); const m = mor(cc, 3); flag(cc, 'financiallySane'); return `${spent}M for the year and a lease you can walk away from in March. Morale +${m}.`; } },
-        { label: 'Rent, and buy a cabin back home instead', effect: 'Roots elsewhere', apply: (cc) => { const spent = cash(cc, -0.55); buy(cc, 'a lake cabin back home'); const m = mor(cc, 10); const h = hp(cc, 4); return `${spent}M on water you grew up swimming in. Morale +${m}, health +${h}.`; } },
+        {
+          label: 'Buy the house', effect: 'Put down roots',
+          apply: (cc) => { const spent = cash(cc, -1.6); buy(cc, 'a house with a heated garage'); const m = mor(cc, 8); const f = fan(cc, 6); flag(cc, 'homeowner'); return `${spent}M, a mailbox with your name on it and a neighborhood that brings you casseroles after losses. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Rent the condo downtown', effect: 'Stay liquid',
+          apply: (cc) => { const spent = cash(cc, -0.09); const m = mor(cc, 3); flag(cc, 'financiallySane'); return `${spent}M for the year, a view of the arena, and a lease you can walk away from in March if the phone rings. Morale +${m}.`; },
+        },
+        {
+          label: 'Rent, and buy a cabin back home instead', effect: 'Roots elsewhere',
+          apply: (cc) => { const spent = cash(cc, -0.55); buy(cc, 'a lake cabin back home'); const m = mor(cc, 10); const h = hp(cc, 4); return `${spent}M on the lake you grew up swimming in, with a dock and no cell service. Morale +${m}, health +${h}.`; },
+        },
       ],
     });
   }
