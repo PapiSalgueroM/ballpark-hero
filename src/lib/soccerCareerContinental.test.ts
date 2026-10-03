@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   clubConfederation, clubCupFor, continentalOpponents, firstStageShape, playFirstStage,
   firstStageTarget, solveStageStrength, stagePassChance, PASS_CURVES, LEAGUE_TOP8,
-  LEAGUE_PHASE, SC_CONTINENTAL_PARTIAL, CONTINENTAL_PERIODS, isFirstStageResult, type CurveId,
+  LEAGUE_PHASE, SC_CONTINENTAL_PARTIAL, CONTINENTAL_PERIODS, CONTINENTAL_GAPS, isFirstStageResult, type CurveId,
 } from './soccerCareerContinental';
 import { UCL_FORMAT_PERIODS } from './uclFormatHistory';
 
@@ -43,12 +43,14 @@ describe('which cup a club plays', () => {
     expect(clubCupFor('Egypt', 1996)?.period?.name).toBe('African Cup of Champions Clubs');
     expect(clubCupFor('Egypt', 1997)?.period?.name).toBe('CAF Champions League');
     expect(clubCupFor('New Zealand', 2010)).toBeNull();
+    expect(clubCupFor('Mexico', 2001)).toBeNull();
   });
 
   it('leaves no season of any confederation without a row, and marks every row it could not two source', () => {
     for (const conf of ['CONMEBOL', 'CONCACAF', 'AFC', 'CAF'] as const) {
       for (let y = 1990; y <= 2035; y++) {
-        expect(CONTINENTAL_PERIODS.filter(p => p.confederation === conf && y >= p.from && (p.to === null || y <= p.to))).toHaveLength(1);
+        const gap = CONTINENTAL_GAPS.some(g => g.confederation === conf && g.year === y);
+        expect(CONTINENTAL_PERIODS.filter(p => p.confederation === conf && y >= p.from && (p.to === null || y <= p.to))).toHaveLength(gap ? 0 : 1);
       }
     }
     for (const p of CONTINENTAL_PERIODS) expect(SC_CONTINENTAL_PARTIAL).toContain(p.id);
@@ -65,6 +67,14 @@ describe('which cup a club plays', () => {
     expect(continentalOpponents(clubs, 'CONMEBOL', 2010, 'Flamengo')).toEqual(['Boca Juniors']);
     expect(continentalOpponents(clubs, 'CONCACAF', 2005, 'Monterrey')).toEqual([]);
     expect(continentalOpponents(clubs, 'CONCACAF', 2021, 'Monterrey')).toEqual(['Inter Miami']);
+    /* Australian clubs first played the AFC's cup in its 2007 edition (RSSSF
+       ascup06 and ascup07, read 2026-10-03), and season 2006 is the 2006 one. */
+    const asia = [
+      { id: '6', name: 'Al Hilal', country: 'Saudi Arabia', tier: 2, color: '', league: '' },
+      { id: '7', name: 'Sydney FC', country: 'Australia', tier: 4, color: '', league: '' },
+    ];
+    expect(continentalOpponents(asia, 'AFC', 2006, 'Al Hilal')).toEqual([]);
+    expect(continentalOpponents(asia, 'AFC', 2007, 'Al Hilal')).toEqual(['Sydney FC']);
   });
 });
 
@@ -169,5 +179,18 @@ describe('an old or broken save', () => {
     const broken = JSON.parse(JSON.stringify(good));
     broken.stages[0].games[0].goalsFor = 'two';
     expect(isFirstStageResult(broken)).toBe(false);
+  });
+});
+
+describe('the group footnote says only what is on the record', () => {
+  it('marks the game\'s own tiebreak and makes no claim about the year three points came in', () => {
+    const own = playFirstStage(firstStageShape(2012), 'Mine', 0.5, ['A', 'B', 'C'], seeded(5));
+    expect(own.stages[0].footnote).toContain("this game's order");
+    const verified = playFirstStage(firstStageShape(2007), 'Mine', 0.5, ['A', 'B', 'C'], seeded(6));
+    expect(verified.stages[0].footnote).not.toContain("this game's order");
+    expect(verified.stages[0].footnote).toContain('games between the level clubs');
+    const twoPoints = playFirstStage(firstStageShape(1994), 'Mine', 0.5, ['A', 'B', 'C'], seeded(7));
+    expect(twoPoints.stages[0].footnote).toContain('Two points for a win in this table.');
+    expect(twoPoints.stages[0].footnote).not.toContain('1995');
   });
 });

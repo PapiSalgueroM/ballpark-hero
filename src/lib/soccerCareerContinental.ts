@@ -74,10 +74,12 @@ export function clubConfederation(country: string): Confederation {
  * stages, preliminary rounds, and away goals rules that came and went, and
  * the formats changed often enough (RSSSF lists one match finals, two legged
  * finals and final tournaments inside a single decade of the CONCACAF cup)
- * that a season by season table could not be two source verified tonight.
- * So the shape is one simplification, the same for all of them, and the card
- * says so in the words of `simplified`. The NAME is per season, because the
- * name is the honour a player keeps.
+ * that a season by season table of every round could not be two source
+ * verified tonight. So the rounds before the final are one simplification,
+ * the same for all of them, and the card says so in the words of
+ * `simplified`. The FINAL is per season, one match or two legs as RSSSF
+ * records it (the note above CONTINENTAL_PERIODS), and so is the NAME,
+ * because the name is the honour a player keeps.
  *
  * THE MARKER. A row whose name or final rests on fewer than two publishers
  * outside Wikipedia is listed in SC_CONTINENTAL_PARTIAL, the same shape
@@ -102,38 +104,67 @@ export interface ClubCupPeriod {
 }
 
 export const CONTINENTAL_SIMPLIFIED =
-  'Played here as a straight knockout from the quarter-finals: two legs a tie, extra time and penalties when level, no group stage and no away goals.';
+  'Played here as a straight knockout from the quarter-finals: two legs a tie and a final of one match or two legs by season, extra time and penalties when level, no group stage and no away goals.';
 
 const RSSSF_LIB = 'RSSSF, "Copa Libertadores de America", https://www.rsssf.org/sacups/copalib.html, read 2026-10-03: every final two legs to 2018, then one match (Flamengo 2-1 River Plate in Lima, 2019)';
-const RSSSF_CONCACAF = 'RSSSF, "CONCACAF Cup/Champions League", https://www.rsssf.org/tablesc/ca1.html, read 2026-10-03: two legged finals 2009-10 to 2019, one match in 2020, 2021 and 2024';
+const RSSSF_CONCACAF = 'RSSSF, "CONCACAF Cup/Champions League", https://www.rsssf.org/tablesc/ca1.html, read 2026-10-03: finals of two legs in 1990 and 1991, one match or a final round from 1992 to 2000, 2001 "tournament abandoned", one match in 2002 (Pachuca 1-0 Morelia, final 18 September, https://www.rsssf.org/tablesc/cacups02.html), two legs from 2002/03 to 2019, one match in 2020 (Tigres 2-1 Los Angeles FC) and 2021 (Monterrey 1-0 America), two legs in 2022 and 2023, one match from 2024';
 const CONCACAF_SITE = 'CONCACAF, "Champions Cup", https://www.concacaf.com/champions-cup/, read 2026-10-03: the 2026 edition under the Champions Cup name';
-const RSSSF_ASIA = 'RSSSF, "Asian Champions\' Cup", https://www.rsssf.org/tablesa/as1.html, read 2026-10-03: merged into a Champions League from 2002-03';
+const RSSSF_ASIA = 'RSSSF, "Asian Champions\' Cup", https://www.rsssf.org/tablesa/as1.html, read 2026-10-03: merged into a Champions League from 2002-03; one match finals from 1991 to 2002, two legs 2003 to 2008 (Al-Ain v BEC Tero Sasana, 11 October 2003, the second leg), one match 2009 to 2012, two legs 2013 to 2019 (Urawa v Al-Hilal, 24 November 2019, the second leg), one match 2020 and 2021, two legs in the 2022 edition (6 May 2023, the second leg) and 2023-24 (25 May 2024), one match from 2024-25 (Al-Ahli v Kawasaki Frontale, 3 May 2025)';
 const AFC_SITE = 'AFC, "AFC Champions League Elite", https://www.the-afc.com/en/club/afc_champions_league_elite.html, read 2026-10-03: the 2026/27 edition and its league stage under that name';
-const RSSSF_AFRICA = 'RSSSF, "African Champions\' Cup", https://www.rsssf.org/tablesa/af1.html, read 2026-10-03: a Champions League format from 1997, two legged finals except 2020 to 2022';
+const RSSSF_AFRICA = 'RSSSF, "African Champions\' Cup", https://www.rsssf.org/tablesa/af1.html, read 2026-10-03: a Champions League format from 1997, two legged finals every year except the three listed as one match, 2020 (Al-Ahly 2-1 Zamalek), 2021 (Al-Ahly 3-0 Kaizer Chiefs) and 2022 (Wydad 2-0 Al-Ahly)';
 
+/* THE FINAL, SEASON BY SEASON. Each row's finalLegs is RSSSF's record of the
+ * finals in its seasons (the source strings above say which), one publisher,
+ * so every row stays in SC_CONTINENTAL_PARTIAL. Three things about the years:
+ *   The pandemic pushed three finals out of their seasons (CONCACAF's 2020
+ *   final to December 2020, CAF's 2019-20 final to November 2020 and its
+ *   2020-21 final to July 2021). Those editions stay on the season they
+ *   started in, so CONCACAF's one match finals are seasons 2019 and 2020
+ *   and CAF's are 2019 to 2021.
+ *   The CONCACAF cup of 2001 was abandoned and the next one ran February to
+ *   September 2002, so season 2001 has no CONCACAF cup at all.
+ *   CONCACAF's final rounds of 1993, 1995 and 1996 were a group of four, not
+ *   a final; they are played here as one match. */
 export const CONTINENTAL_PERIODS: ClubCupPeriod[] = [
   { id: 'lib-two-leg-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 1900, to: 2018, name: 'Copa Libertadores', finalLegs: 2, sources: [RSSSF_LIB] },
   { id: 'lib-one-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 2019, to: null, name: 'Copa Libertadores', finalLegs: 1, sources: [RSSSF_LIB] },
-  { id: 'concacaf-champions-cup-old', cup: 'concacaf', confederation: 'CONCACAF', from: 1900, to: 2007, name: "CONCACAF Champions' Cup", finalLegs: 1, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-league', cup: 'concacaf', confederation: 'CONCACAF', from: 2008, to: 2022, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-cup-to-1991', cup: 'concacaf', confederation: 'CONCACAF', from: 1900, to: 1991, name: "CONCACAF Champions' Cup", finalLegs: 2, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-cup-1992-2000', cup: 'concacaf', confederation: 'CONCACAF', from: 1992, to: 2000, name: "CONCACAF Champions' Cup", finalLegs: 1, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-cup-2002', cup: 'concacaf', confederation: 'CONCACAF', from: 2002, to: 2002, name: "CONCACAF Champions' Cup", finalLegs: 1, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-cup-2003-2007', cup: 'concacaf', confederation: 'CONCACAF', from: 2003, to: 2007, name: "CONCACAF Champions' Cup", finalLegs: 2, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-league', cup: 'concacaf', confederation: 'CONCACAF', from: 2008, to: 2018, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-league-2019-2020', cup: 'concacaf', confederation: 'CONCACAF', from: 2019, to: 2020, name: 'CONCACAF Champions League', finalLegs: 1, sources: [RSSSF_CONCACAF] },
+  { id: 'concacaf-champions-league-2021-2022', cup: 'concacaf', confederation: 'CONCACAF', from: 2021, to: 2022, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF] },
   { id: 'concacaf-champions-cup', cup: 'concacaf', confederation: 'CONCACAF', from: 2023, to: null, name: 'CONCACAF Champions Cup', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_SITE] },
   { id: 'asian-club-championship', cup: 'afc', confederation: 'AFC', from: 1900, to: 2001, name: 'Asian Club Championship', finalLegs: 1, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league', cup: 'afc', confederation: 'AFC', from: 2002, to: 2023, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-elite', cup: 'afc', confederation: 'AFC', from: 2024, to: null, name: 'AFC Champions League Elite', finalLegs: 1, sources: [AFC_SITE] },
+  { id: 'afc-champions-league-2002-2008', cup: 'afc', confederation: 'AFC', from: 2002, to: 2008, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
+  { id: 'afc-champions-league-2009-2012', cup: 'afc', confederation: 'AFC', from: 2009, to: 2012, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA] },
+  { id: 'afc-champions-league-2013-2019', cup: 'afc', confederation: 'AFC', from: 2013, to: 2019, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
+  { id: 'afc-champions-league-2020-2021', cup: 'afc', confederation: 'AFC', from: 2020, to: 2021, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA] },
+  { id: 'afc-champions-league-2022-2023', cup: 'afc', confederation: 'AFC', from: 2022, to: 2023, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
+  { id: 'afc-champions-league-elite', cup: 'afc', confederation: 'AFC', from: 2024, to: null, name: 'AFC Champions League Elite', finalLegs: 1, sources: [RSSSF_ASIA, AFC_SITE] },
   { id: 'african-cup-of-champions', cup: 'caf', confederation: 'CAF', from: 1900, to: 1996, name: 'African Cup of Champions Clubs', finalLegs: 2, sources: [RSSSF_AFRICA] },
-  { id: 'caf-champions-league', cup: 'caf', confederation: 'CAF', from: 1997, to: null, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA] },
+  { id: 'caf-champions-league', cup: 'caf', confederation: 'CAF', from: 1997, to: 2018, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA] },
+  { id: 'caf-champions-league-2019-2021', cup: 'caf', confederation: 'CAF', from: 2019, to: 2021, name: 'CAF Champions League', finalLegs: 1, sources: [RSSSF_AFRICA] },
+  { id: 'caf-champions-league-from-2022', cup: 'caf', confederation: 'CAF', from: 2022, to: null, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA] },
+];
+
+/** Seasons a confederation had no cup at all. clubCupFor returns null for
+ *  them, so the club plays no continental cup that season. */
+export const CONTINENTAL_GAPS: { confederation: Confederation; year: number; why: string }[] = [
+  { confederation: 'CONCACAF', year: 2001, why: 'the 2001 tournament was abandoned (RSSSF ca1, read 2026-10-03)' },
 ];
 
 /** Rows where a fact (the name, its first season, or the final's legs) rests
  *  on ONE publisher outside Wikipedia. That is every row tonight: the history
  *  pages of CONMEBOL, CONCACAF, the AFC and CAF render only in a browser, so
  *  the official sites confirmed the current names of two cups and nothing
- *  older, and RSSSF names the CONCACAF cup generically. Wikipedia agreed with
- *  every row as a spot check (its pages on the CONCACAF Champions Cup and the
- *  AFC Champions League Elite, read 2026-10-03), except that RSSSF and
- *  Wikipedia disagree about which Asian finals were one match, which is why
- *  every Asian final is played here as one match. A row leaves this list
- *  only with a second publisher written into its sources. */
+ *  older (not the season either name began), and RSSSF names the CONCACAF cup
+ *  generically and does not name the AFC Champions League Elite. Wikipedia
+ *  agreed with every name and first season as a spot check (its pages on the
+ *  CONCACAF Champions Cup and the AFC Champions League Elite, read
+ *  2026-10-03), and is never counted as one of the two. A row leaves this
+ *  list only with a second publisher written into its sources. */
 export const SC_CONTINENTAL_PARTIAL: string[] = CONTINENTAL_PERIODS.map(p => p.id);
 
 /** The continental cup a club plays in a season, or null when there is none
@@ -151,13 +182,18 @@ export const CONTINENTAL_LADDER = ['QF', 'SF', 'Final'] as const;
 
 /** The clubs of one confederation that existed that season, as opponents:
  *  FALLBACK_CLUBS run through the same era filter the transfer market uses,
- *  so Inter Miami never turns up in 2005. Australian clubs joined the AFC's
- *  cup only after the federation moved from the OFC in 2006 (the member
- *  table cited above), so they are left out before then. */
+ *  so Inter Miami never turns up in 2005. Australia moved from the OFC to
+ *  the AFC in 2006 (the member table cited above), and its clubs first
+ *  played the AFC's cup in its 2007 edition: RSSSF's 2007 page has Adelaide
+ *  United and Sydney FC in Group G with the note that Australia, as new AFC
+ *  members, were granted two entries compared to 2006, and its 2006 page
+ *  names no Australian club (https://www.rsssf.org/tablesa/ascup07.html and
+ *  ascup06.html, read 2026-10-03). Season 2006 here is the 2006 edition
+ *  (final November 2006), so they are left out before season 2007. */
 export function continentalOpponents(clubs: ClubData[], confederation: Confederation, year: number, exclude: string): string[] {
   return adjustClubsForYear(clubs, year)
     .filter(c => c.name !== exclude && clubConfederation(c.country) === confederation)
-    .filter(c => !(c.country === 'Australia' && year < 2006))
+    .filter(c => !(c.country === 'Australia' && year < 2007))
     .map(c => c.name);
 }
 
@@ -385,7 +421,14 @@ function record(rows: StageRow[], h: number, a: number, hg: number, ag: number, 
   else { H.d += 1; A.d += 1; H.pts += 1; A.pts += 1; }
 }
 
-const POINTS_LINE = 'Two points for a win this season, three from 1995-96.';
+/* Round 972 review: the line says what this table does and makes no claim
+   about the year three points arrived, which rests on one publisher. */
+const POINTS_LINE = 'Two points for a win in this table.';
+
+/* The seasons whose level-on-points order clubManagerUclGroups.ts has not
+   verified are ordered by goal difference then goals scored, and the card says
+   that is this game's order, not the season's ('ucl-tiebreak-other-seasons'). */
+const OWN_TIEBREAK_LINE = "Level on points splits on goal difference, then goals scored. That is this game's order: the real tiebreak for this season isn't in our records yet.";
 
 /** One group of four. Club 0 is mine; strengths are in the same units. */
 function playGroup(
@@ -412,7 +455,10 @@ function playGroup(
   });
   const table = sortedUclGroupTable(rows, shape.tiebreak, pairs);
   const position = table.findIndex(r => r.club === names[0]) + 1;
-  const footnote = uclGroupFootnote(rows, shape.tiebreak, pairs) + (shape.pointsForWin === 2 ? ` ${POINTS_LINE}` : '');
+  /* A group season on the 'leaguePhase' order is one whose real order is not
+     verified (tiebreakFor): the league phase itself never reaches playGroup. */
+  const ruleLine = shape.tiebreak === 'leaguePhase' ? OWN_TIEBREAK_LINE : uclGroupFootnote(rows, shape.tiebreak, pairs);
+  const footnote = ruleLine + (shape.pointsForWin === 2 ? ` ${POINTS_LINE}` : '');
   return { label, games, position, of: 4, table, myRow: table[position - 1], footnote };
 }
 
