@@ -106,9 +106,10 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.GM_CONTRACTS_CONTROL || '';
 
+/* Each control rewrites one string in one file (gmContracts.ts unless `file` says otherwise). */
 const CONTROLS = {
   coinflip: {
-    from: '    if (STAYS.has(d.kind)) holdMan(man, d, ledger);',
+    from: '    if (STAYS.has(d.kind)) holdMan(host, man, d, ledger);',
     to: '    if (STAYS.has(d.kind)) { /* control: he is left to the engine */ }',
     section: 1,
   },
@@ -119,8 +120,62 @@ const CONTROLS = {
     section: 3,
   },
   optionall: {
-    from: "    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed ? 'fifth-year-option' : 'veteran';",
-    to: "    return drafted && !rec.optionUsed ? 'fifth-year-option' : 'veteran';",
+    from: "    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed && !rec.firstDealDone ? 'fifth-year-option' : 'veteran';",
+    to: "    return drafted && !rec.optionUsed && !rec.firstDealDone ? 'fifth-year-option' : 'veteran';",
+    section: 4,
+  },
+  /* Review findings of 2026-10-02, one control each. */
+  optiontwice: {
+    from: "    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed && !rec.firstDealDone ? 'fifth-year-option' : 'veteran';",
+    to: "    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed ? 'fifth-year-option' : 'veteran';",
+    section: 4,
+  },
+  keepflags: {
+    from: '  host.endDeal?.(man);\n  man.years = (d.years ?? 1) + 1;',
+    to: '  man.years = (d.years ?? 1) + 1;',
+    section: 4,
+  },
+  qotwice: {
+    from: '  return !!ledger.men[id]?.qualified || !!ledger.qualifiedIds?.includes(id);',
+    to: '  return !!ledger.men[id]?.qualified;',
+    section: 4,
+  },
+  mutmid: {
+    from: '    if (rec && !everQualified(ledger, man.id) && !rec.mid) {',
+    to: '    if (rec && !everQualified(ledger, man.id)) {',
+    section: 4,
+  },
+  mutmax: {
+    file: 'gmContractRules.ts',
+    from: '  for (const tier of NBA_MAX_SHARE) if (service <= tier.maxService) return tier.share;',
+    to: '  for (const tier of NBA_MAX_SHARE) if (service < tier.maxService) return tier.share;',
+    section: 4,
+  },
+  muttag: {
+    file: 'gmContractsHostNfl.ts',
+    from: '  held: (league, man) => (man as GmPlayer).tagSeason === league.season + 1,',
+    to: '  held: (league, man) => (man as GmPlayer).tagSeason === league.season,',
+    section: 4,
+  },
+  noreprice: {
+    from: '        league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });',
+    to: '        league.freeAgents.push({ ...man, years: 1 });',
+    section: 4,
+  },
+  sheetpool: { from: '      if (sheetClub) {', to: '      if (false) {', section: 4 },
+  mutceil: {
+    from: '  const salary = Math.min(offer.salary, topSalary(c));',
+    to: '  const salary = offer.salary;',
+    section: 4,
+  },
+  earlyone: {
+    from: "      if (cls === 'bird-early' && limit > room) out.minYears = NBA_EARLY_BIRD_MIN_YEARS;",
+    to: '',
+    section: 4,
+  },
+  nodeadcap: {
+    from: '    const used = host.nextPayroll ? host.nextPayroll(league, ledger.team, man.id) : (club ? payroll(club, man.id) : 0);',
+    to: '    const used = club ? payroll(club, man.id) : 0;',
     section: 4,
   },
   nobird: {
@@ -141,7 +196,7 @@ const CONTROLS = {
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`GM_CONTRACTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
-  process.exit(1);
+  process.exit(3);
 }
 
 /* A worktree has no node_modules of its own: walk up to the first one that holds esbuild. */
@@ -154,7 +209,7 @@ function findNodeModules() {
     dir = up;
   }
   console.error('could not find node_modules/esbuild above ' + ROOT);
-  process.exit(1);
+  process.exit(3);
 }
 const esbuild = createRequire(path.join(findNodeModules(), 'x.js'))('esbuild');
 
@@ -162,10 +217,10 @@ let controlHits = 0;
 const controlPlugin = {
   name: 'gm-contracts-control',
   setup(build) {
-    build.onLoad({ filter: /[\\/]src[\\/]lib[\\/]gmContracts\.ts$/ }, args => {
+    build.onLoad({ filter: /[\\/]src[\\/]lib[\\/]gmContract[A-Za-z]*\.ts$/ }, args => {
       let text = fs.readFileSync(args.path, 'utf8').replaceAll('\r\n', '\n');
       const c = CONTROLS[CONTROL];
-      if (c) {
+      if (c && path.basename(args.path) === (c.file ?? 'gmContracts.ts')) {
         controlHits = text.split(c.from).length - 1;
         if (controlHits === 1) text = text.replace(c.from, c.to);
       }
@@ -195,9 +250,15 @@ await esbuild.build({
   logLevel: 'error', alias: { '@': `${ROOT_URL}/src` }, plugins: [controlPlugin],
 });
 if (CONTROL && controlHits !== 1) {
-  console.error(`control cannot run: "${CONTROLS[CONTROL].from.trim()}" was found ${controlHits} times in gmContracts.ts, it must be there exactly once`);
-  process.exit(1);
+  console.error(`control cannot run: "${CONTROLS[CONTROL].from.trim()}" was found ${controlHits} times in ${CONTROLS[CONTROL].file ?? 'gmContracts.ts'}, it must be there exactly once`);
+  process.exit(3);
 }
+/* A crash must never read as a control that fired (both would otherwise exit
+   1): anything that ends the run before its summary line exits 3. */
+let finished = false;
+process.on('exit', () => {
+  if (!finished) { console.error('simGmContracts: CRASHED before its summary line (exit 3)'); process.exit(3); }
+});
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 /* Seeded BEFORE the bundle loads: src/lib/entityIds.ts draws its id token from
    Math.random at module scope, the NHL sheet is hashed off the player's id,
@@ -294,7 +355,7 @@ const r1 = n => Math.round(n * 10) / 10;
    offseason, exactly where the boards draft. The MLB second pick is put on a
    two year line so the pre arbitration branch is reached on the real engine:
    the engine's own four year rookie deals always expire in an arbitration year. */
-function draftForUser(sport, lg, team, rng, ledger) {
+function draftForUser(sport, lg, team, rng, ledger, track) {
   const club = lg.teams[team];
   const cls = [...sport.draftClass(lg, rng)].sort((a, b) => b.grade - a.grade);
   const rounds = [...club.picks].sort((a, b) => a - b);
@@ -306,7 +367,20 @@ function draftForUser(sport, lg, team, rng, ledger) {
     if (sport.key === 'mlb' && i === 1) p.years = 2;
     club.players.push(p);
     if (ledger) desk.noteArrival(ledger, p.id, lg.season, 'draft', round);
+    if (track) track[p.id] = { how: 'draft', n: 0, round };
   });
+}
+
+/* NBA only: the GM trims through the engine's own cut (nbaRelease), so dead
+   money really sits on next season's books and the desk's cap room has to
+   count it the way the engine does (review finding 17). */
+function trimNbaWithCuts(lg, team, size) {
+  const club = lg.teams[team];
+  for (let guard = 0; club.players.length > size && guard < 40; guard++) {
+    const worst = [...club.players].sort((a, b) => a.ovr - b.ovr)[0];
+    if (!B.nba.nbaRelease(club, lg.freeAgents, worst.id)) break;
+  }
+  trimRoster(lg, team, size);
 }
 
 /* The GM keeps his roster near its opening size by cutting his lowest rated
@@ -334,7 +408,13 @@ function signFromPool(lg, team, s) {
 /** A fixed policy that walks every door the desk has, so every one is exercised. */
 function decide(lg, ledger, c, i, paths) {
   const tally = k => { paths[k] = (paths[k] ?? 0) + 1; };
-  if (c.option) { tally(i % 4 === 3 ? 'option declined' : 'option'); return i % 4 === 3 ? desk.letGo(ledger, lg, c) : desk.useOption(ledger, lg, c); }
+  if (c.option) {
+    /* Some option holders are kept on a new deal instead, so the desk has to
+       remember that the option went with the rookie deal (review finding 1). */
+    if (i % 4 === 2) { const kept = desk.keepAtAsk(ledger, lg, c); if (kept.ok) { tally('option holder kept at ask'); return kept; } }
+    tally(i % 4 === 3 ? 'option declined' : 'option');
+    return i % 4 === 3 ? desk.letGo(ledger, lg, c) : desk.useOption(ledger, lg, c);
+  }
   if (c.tender) { tally(i % 5 === 4 ? 'non tender' : 'tender'); return i % 5 === 4 ? desk.letGo(ledger, lg, c) : desk.tenderHim(ledger, lg, c); }
   if (c.restricted) {
     if (c.restricted.sheet) { tally(i % 2 ? 'sheet matched' : 'sheet picks'); return i % 2 ? desk.matchSheet(ledger, lg, c) : desk.takePicks(ledger, lg, c); }
@@ -363,13 +443,28 @@ function decide(lg, ledger, c, i, paths) {
   return desk.letGo(ledger, lg, c);
 }
 
-/* The seasons he has played here, re-derived from the ledger by this harness
-   rather than read off the desk, so a desk that miscounted would disagree. */
-function playedHere(ledger, lg, id) {
-  const rec = ledger.men[id];
-  if (!rec || rec.how === 'founder' || rec.how === 'trade') return null;
-  return lg.season - rec.since + (rec.how === 'draft' ? 0 : 1);
+/* The seasons he has played here, counted by this harness itself and never
+   read off the desk's ledger: every winter each man on the roster when the
+   desk opens has just played a season here, so his count goes up by one. A
+   draft pick joins after the desk, so his first count comes a season later.
+   A man on the roster when the desk opened is a founder (unknown, null). A
+   man who leaves is forgotten, so a man signed back starts again at zero,
+   which is the Bird clock's own rule. Nothing here is the desk's formula. */
+function trackDesk(track, lg, team) {
+  const here = new Set(lg.teams[team].players.map(p => p.id));
+  for (const id of Object.keys(track)) if (!here.has(id)) delete track[id];
+  for (const p of lg.teams[team].players) {
+    const t = (track[p.id] ??= { how: 'other', n: 0 });
+    t.n += 1;
+  }
 }
+function playedHere(track, id) {
+  const t = track[id];
+  if (!t || t.how === 'founder') return null;
+  return t.n;
+}
+/** The NBA maximum share by seasons in the league, as the two sources state it (0-6, 7-9, 10+). */
+const NBA_MAX_BY_SERVICE = s => (s <= 6 ? 0.25 : s <= 9 ? 0.3 : 0.35);
 
 /** Sections 2, 3 and 4 for one case. */
 function checkCase(sport, lg, ledger, team, c, st, s) {
@@ -394,22 +489,43 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
   }
   if (desk.readOffer(c.ask, c.ask).closeness !== 100) fail(3, `${tag}: his own ask does not fill the meter`);
 
-  /* 4. Each league's rule, recomputed here. */
+  /* 4. Each league's rule, recomputed here from what this harness tracked itself. */
   const rec = ledger.men[c.man.id];
-  const drafted = rec?.how === 'draft';
-  const played = playedHere(ledger, lg, c.man.id);
+  const tr = st.track[c.man.id];
+  const drafted = tr?.how === 'draft';
+  const played = playedHere(st.track, c.man.id);
+  const bump = k => { st.rule[k] = (st.rule[k] ?? 0) + 1; };
+  st.market[c.man.id] = c.ask.market;
   if (sport.key === 'nfl') {
-    const expect = drafted && rec.round === 1 && !rec.optionUsed;
-    if (!!c.option !== expect) fail(4, `${tag}: option ${c.option ? 'offered' : 'missing'} for a round ${rec?.round ?? '-'} ${rec?.how} man`);
-    if (c.option) { st.rule.options = (st.rule.options ?? 0) + 1; if (c.option.years !== 1) fail(4, `${tag}: the option buys ${c.option.years} years`); }
-    if (drafted && rec.round !== 1) st.rule.laterRoundsAsked = (st.rule.laterRoundsAsked ?? 0) + 1;
+    /* The option belongs to a first rounder's rookie deal: once that deal has
+       been settled at the desk, whatever was decided, it is gone. */
+    const expect = drafted && tr.round === 1 && !st.firstDealOver.has(c.man.id);
+    if (!!c.option !== expect) fail(4, `${tag}: option ${c.option ? 'offered' : 'missing'} for a round ${tr?.round ?? '-'} ${tr?.how} man${st.firstDealOver.has(c.man.id) ? ' whose rookie deal is over' : ''}`);
+    if (c.option) { bump('options'); if (c.option.years !== 1) fail(4, `${tag}: the option buys ${c.option.years} years`); }
+    if (drafted && tr.round === 1 && st.firstDealOver.has(c.man.id)) bump('first rounders past their rookie deal');
+    if (drafted && tr.round !== 1) bump('laterRoundsAsked');
+    if (st.taggedNow.has(c.man.id)) fail(4, `${tag}: tagged this winter and still at the desk`);
+    if (st.taggedLast.has(c.man.id)) bump('tag year men at the desk');
   }
   if (sport.key === 'nba') {
-    const service = drafted ? lg.season - rec.since : Number.POSITIVE_INFINITY;
-    const max = r1(rules.nbaMaxShare(service) * cap);
+    const service = drafted ? played : Number.POSITIVE_INFINITY;
+    const max = r1(NBA_MAX_BY_SERVICE(service) * cap);
     if (c.ask.salary > max + 0.05) fail(4, `${tag}: asks ${c.ask.salary} over the maximum ${max}`);
+    if (c.maxSalary == null || Math.abs(c.maxSalary - max) > 0.051) fail(4, `${tag}: maximum ${c.maxSalary} where ${service} seasons give ${max}`);
     const club = lg.teams[team];
-    const room = cap - club.players.reduce((a, p) => a + (p.id === c.man.id ? 0 : p.salary), 0);
+    /* Next season's dead money, rolled by hand: a cut's entry halves and loses a season. */
+    const dead = (club.deadCap ?? []).filter(e => e.seasonsLeft > 1).reduce((a, e) => a + r1(e.amount / 2), 0);
+    if (dead > 0) bump('cases with dead money on the books');
+    const room = cap - club.players.reduce((a, p) => a + (p.id === c.man.id ? 0 : p.salary), 0) - r1(dead);
+    /* A push over what the rules allow is cut to it, so it can never sign him above it. */
+    if (c.canNegotiate) {
+      const l2 = structuredClone(ledger);
+      const top = desk.topSalary(c);
+      desk.pushFor(l2, lg, c, { years: c.ask.years, salary: c.ask.salary + top * 1.5 });
+      const got = desk.decisionFor(l2, lg.season, c.man.id);
+      bump('pushes over the rules');
+      if (got?.salary != null && got.salary > top + 1e-9) fail(4, `${tag}: a push signed him at ${got.salary}, over the ${top} the rules allow`);
+    }
     const floor = host.minSalary(lg);
     const tier = played == null || played >= 3 ? 'full' : played === 2 ? 'early' : played === 1 ? 'non' : 'none';
     st.rule[`tier ${tier}`] = (st.rule[`tier ${tier}`] ?? 0) + 1;
@@ -425,6 +541,17 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
         st.rule.overCeiling = (st.rule.overCeiling ?? 0) + 1;
         if (desk.keepAtAsk(structuredClone(ledger), lg, c).ok) fail(4, `${tag}: kept at an ask over his ceiling`);
       }
+      /* Paid through the Early Bird exception: two seasons at the least, even on a one season push. */
+      if (tier === 'early' && limit > room) {
+        bump('early bird exception');
+        if (c.minYears !== 2) fail(4, `${tag}: an Early Bird exception deal with a minimum of ${c.minYears ?? 1} seasons`);
+        if (c.canNegotiate) {
+          const l2 = structuredClone(ledger);
+          desk.pushFor(l2, lg, c, { years: 1, salary: c.ceiling });
+          const sent = l2.men[c.man.id]?.push?.offer;
+          if (sent && sent.years < 2) fail(4, `${tag}: an Early Bird exception push went out at ${sent.years} season`);
+        }
+      }
     } else if (c.ceiling != null) fail(4, `${tag}: a ceiling with room for his ask`);
   }
   if (sport.key === 'mlb') {
@@ -439,8 +566,10 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
       const mean = r1(top.reduce((a, n) => a + n, 0) / top.length);
       if (Math.abs(c.qualifying.salary - mean) > 0.051) fail(4, `${tag}: qualifying offer ${c.qualifying.salary}, the top 125 mean is ${mean}`);
       if (st.qualified.has(c.man.id)) fail(4, `${tag}: offered a second qualifying offer`);
-      if (rec?.mid) fail(4, `${tag}: qualifying offer to a mid season arrival`);
+      if (rec?.mid || st.midIds.has(c.man.id)) fail(4, `${tag}: qualifying offer to a mid season arrival`);
     }
+    if (st.midIds.has(c.man.id)) bump('mid season arrivals at the desk');
+    if (st.qualified.has(c.man.id)) bump('men back after a qualifying offer');
   }
   if (sport.key === 'nhl') {
     const expect = drafted && played != null && c.man.age < 27 && played < 7 ? 'restricted' : 'veteran';
@@ -460,6 +589,37 @@ function checkCase(sport, lg, ledger, team, c, st, s) {
   }
 }
 
+/**
+ * Where a man the desk let go ended up (review finding 11). In the NFL and
+ * MLB the pool never reprices anybody, so a man let go must sit there at the
+ * market figure his ask was built from, not at his old deal's figure (or the
+ * club could sign a star straight back at his rookie price). In the NHL a man
+ * whose sheet was not matched belongs to the club that tabled it, on its terms.
+ */
+function checkGone(sport, lg, team, d, retired, st) {
+  const bump = k => { st.rule[k] = (st.rule[k] ?? 0) + 1; };
+  const inPool = lg.freeAgents.find(p => p.id === d.id);
+  if (d.kind === 'take-picks') {
+    if (inPool) { fail(4, `${sport.key} ${d.season} ${d.name}: his sheet was not matched, yet he is in the pool, not at the club that tabled it`); return; }
+    for (const [k, t] of Object.entries(lg.teams)) {
+      if (k === team) continue;
+      const p = t.players.find(x => x.id === d.id);
+      if (!p) continue;
+      bump('sheet men at the rival');
+      if (p.years !== d.years || Math.abs(p.salary - d.salary) > 1e-9) fail(4, `${sport.key} ${d.name}: at the rival on ${p.years}y at ${p.salary}, the sheet said ${d.years}y at ${d.salary}`);
+      return;
+    }
+    if (!retired.has(d.name)) bump('sheet men untraced');
+    return;
+  }
+  if (!inPool || (sport.key !== 'nfl' && sport.key !== 'mlb')) return;
+  const want = st.market[d.id];
+  if (want == null) return;
+  bump('let go men repriced');
+  if (Math.abs(inPool.salary - want) > 0.051) fail(4, `${sport.key} ${d.season} ${d.name}: let go (${d.kind}) into the pool at ${inPool.salary}, his market was ${want}`);
+  if (inPool.guaranteed || inPool.tagSeason != null) fail(4, `${sport.key} ${d.name}: in the pool still carrying his old deal's guarantee or tag`);
+}
+
 /** 0. The engine on its own: how many of the GM's expiring men leave on its flip. */
 function baselineRun(sport, seed, st) {
   const rng = stream(seed);
@@ -468,7 +628,7 @@ function baselineRun(sport, seed, st) {
   const team = pickTeam(lg, seed);
   const size = lg.teams[team].players.length;
   for (let s = 0; s < SEASONS; s++) {
-    draftForUser(sport, lg, team, rng, null);
+    draftForUser(sport, lg, team, rng, null, null);
     const up = lg.teams[team].players.filter(p => p.years <= 1 && !sport.host.held?.(lg, p));
     const out = sport.host.runOffseason(lg, rng, team);
     const retired = sport.retiredNames(out, team);
@@ -491,7 +651,42 @@ function deskRun(sport, seed, st) {
   const size = lg.teams[team].players.length;
   const ledger = desk.openLedger(lg, team);
   const basePicks = lg.teams[team].picks.length;
+  /* This run's own records, kept apart from the desk's ledger. */
+  st.track = {};
+  for (const p of lg.teams[team].players) st.track[p.id] = { how: 'founder', n: 0 };
+  st.firstDealOver = new Set();
+  st.taggedLast = new Set();
+  st.midIds = new Set();
+  st.market = {};
   for (let s = 0; s < SEASONS; s++) {
+    /* NFL: the GM tags his best expiring man who was not tagged last winter,
+       BEFORE the desk opens, the way the board's tag window runs. A man tagged
+       now is under contract for next season and must never reach the desk; a
+       man who played this season on last winter's tag must. */
+    st.taggedNow = new Set();
+    /* Mid season means THIS season: kept, he is here from day one of the next. */
+    st.midIds = new Set();
+    if (sport.key === 'nfl') {
+      const club = lg.teams[team];
+      const up = club.players.filter(p => p.years <= 1 && p.tagSeason !== lg.season + 1 && p.tagSeason !== lg.season)
+        .sort((a, b) => b.ovr - a.ovr).slice(0, 3);
+      for (const p of up) {
+        const res = B.nfl.applyFranchiseTag(lg, club, p.id);
+        if (res.ok) { st.taggedNow.add(p.id); st.rule.tagged = (st.rule.tagged ?? 0) + 1; break; }
+      }
+    }
+    /* MLB: a man picked up from the pool late in the season, so he arrives at
+       the desk mid season and his deal runs out now. No qualifying offer for
+       him this winter (review finding 4). */
+    if (sport.key === 'mlb') {
+      const best = [...lg.freeAgents].sort((a, b) => b.ovr - a.ovr)[0];
+      if (best) {
+        lg.freeAgents = lg.freeAgents.filter(p => p.id !== best.id);
+        lg.teams[team].players.push({ ...best, years: 1 });
+        st.midIds.add(best.id);
+      }
+    }
+    trackDesk(st.track, lg, team);
     desk.noteRoster(ledger, lg, true);
     const cases = desk.deskCases(host, lg, ledger);
     for (const c of cases) checkCase(sport, lg, ledger, team, c, st, s);
@@ -512,8 +707,10 @@ function deskRun(sport, seed, st) {
       st.closedChecked = true;
     }
 
-    draftForUser(sport, lg, team, rng, ledger);
+    draftForUser(sport, lg, team, rng, ledger, st.track);
     const capWant = host.nextCap(lg);
+    /* Who goes into this offseason on a guarantee (a tag or an option year). */
+    const guaranteedBefore = new Set(lg.teams[team].players.filter(p => p.guaranteed).map(p => p.id));
     const run = desk.runDeskOffseason(host, lg, ledger, rng);
     if (!run.ok) { fail(1, `${sport.key} ${lg.season}: the desk refused to run with every decision made (${run.undecided.map(u => u.name)})`); break; }
     if (lg.cap !== capWant) fail(5, `${sport.key}: the host said next season's cap is ${capWant}, the engine set ${lg.cap}`);
@@ -521,6 +718,10 @@ function deskRun(sport, seed, st) {
     /* 1. Every applied decision, against what the roster says now. */
     const retired = sport.retiredNames(run.engine, team);
     const here = new Map(lg.teams[team].players.map(p => [p.id, p]));
+    /* The engine's offseason can cut a man too (the NBA trims to its roster
+       maximum): anyone gone now is forgotten, so a man signed back from the
+       pool later starts his count again. */
+    for (const id of Object.keys(st.track)) if (!here.has(id)) delete st.track[id];
     for (const d of run.applied) {
       const p = here.get(d.id);
       if (STAYS.has(d.kind)) {
@@ -533,16 +734,48 @@ function deskRun(sport, seed, st) {
         } else {
           st.kept += 1;
           if (d.kind === 'option' && p.guaranteed !== true) fail(4, `${sport.key} ${d.name}: the option year is not guaranteed`);
+          /* A new deal starts clean: the old deal's tag and guarantee end with it (review findings 2 and 10). */
+          if (d.kind !== 'option' && (p.guaranteed || p.tagSeason != null || p.tagCount != null)) {
+            fail(4, `${sport.key} ${d.season} ${d.name}: re-signed (${d.kind}) but still carries guaranteed ${p.guaranteed} tagSeason ${p.tagSeason} tagCount ${p.tagCount}`);
+          }
+          if (d.kind !== 'option' && guaranteedBefore.has(d.id)) st.rule['guaranteed men re-signed'] = (st.rule['guaranteed men re-signed'] ?? 0) + 1;
         }
+        if (st.track[d.id]?.how === 'draft') st.firstDealOver.add(d.id);
       } else if (p) fail(1, `${sport.key} ${d.season} ${d.name}: let go (${d.kind}) but still on the roster`);
-      else st.letGo += 1;
+      else {
+        st.letGo += 1;
+        checkGone(sport, lg, team, d, retired, st);
+      }
+    }
+    /* NFL: the man tagged this winter came through on his tag. */
+    for (const id of st.taggedNow) {
+      const p = here.get(id);
+      if (p && (p.years !== 1 || p.tagSeason !== lg.season || p.guaranteed !== true)) {
+        fail(4, `nfl ${lg.season} ${p.name}: tagged, but came out of the offseason on ${p.years}y, tagSeason ${p.tagSeason}, guaranteed ${p.guaranteed}`);
+      }
+    }
+    st.taggedLast = st.taggedNow;
+    /* MLB: a man who turned the qualifying offer down is signed straight back
+       from the pool, so his next winter tests "one offer per man, ever"
+       (review finding 3). */
+    if (sport.key === 'mlb') {
+      for (const d of run.applied) {
+        if (d.kind !== 'qualify-rejected') continue;
+        const back = lg.freeAgents.find(p => p.id === d.id);
+        if (!back) continue;
+        lg.freeAgents = lg.freeAgents.filter(p => p.id !== d.id);
+        lg.teams[team].players.push({ ...back, years: 1 });
+        desk.noteArrival(ledger, d.id, lg.season, 'signing');
+        delete st.track[d.id];
+        st.rule['qualifying offer refusers signed back'] = (st.rule['qualifying offer refusers signed back'] ?? 0) + 1;
+      }
     }
     for (const c of cases) if (!run.applied.some(d => d.id === c.man.id)) fail(1, `${sport.key} ${c.man.name}: expiring but no decision was applied`);
     st.picksAdded += run.picksAdded.length;
     if (lg.teams[team].picks.length !== basePicks + run.picksAdded.length) {
       fail(4, `${sport.key} ${lg.season}: ${run.picksAdded.length} picks owed, the club holds ${lg.teams[team].picks.length} against a base of ${basePicks}`);
     }
-    if (sport.key === 'nba') signFromPool(lg, team, s);
+    if (sport.key === 'nba') { signFromPool(lg, team, s); trimNbaWithCuts(lg, team, size); }
     trimRoster(lg, team, size);
   }
 }
@@ -573,10 +806,18 @@ for (const sport of SPORTS) {
   const seasons = st.bySeason.map((xs, i) => [i, xs]).filter(([, xs]) => xs && xs.length);
   const seasonMins = seasons.map(([, xs]) => quant(xs, 0));
   const seasonMaxs = seasons.map(([, xs]) => quant(xs, 1));
+  const seasonMeds = seasons.filter(([, xs]) => xs.length >= 5).map(([, xs]) => quant(xs, 0.5));
+  st.seasonMedRange = [Math.min(...seasonMeds), Math.max(...seasonMeds)];
   console.log(`  2) ask / cap: p05 ${f3(quant(st.shares, 0.05))}, median ${f3(quant(st.shares, 0.5))}, p95 ${f3(quant(st.shares, 0.95))}; lowest in any season ${f3(Math.min(...seasonMins))}, highest ${f3(Math.max(...seasonMaxs))}; seasons with cases ${seasons.length} of ${SEASONS} (empty: ${[...Array(SEASONS).keys()].filter(i => !(st.bySeason[i] && st.bySeason[i].length)).join(' ') || 'none'})`);
+  console.log(`     season medians from ${f3(st.seasonMedRange[0])} to ${f3(st.seasonMedRange[1])} (seasons with five or more asks)`);
   console.log(`  3) meter steps walked: ${st.meterSteps}`);
   console.log(`  4) rule counts: ${Object.entries(st.rule).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}; picks owed and paid ${st.picksAdded}`);
   console.log(`     doors: ${Object.entries(st.paths).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
+}
+
+/* ---------- 4. the NBA maximum, every rung of the ladder (review finding 5) ---------- */
+for (let s = 0; s <= 15; s++) {
+  if (rules.nbaMaxShare(s) !== NBA_MAX_BY_SERVICE(s)) fail(4, `nba: the maximum for ${s} seasons reads ${rules.nbaMaxShare(s)}, the sources say ${NBA_MAX_BY_SERVICE(s)}`);
 }
 
 /* ---------- 5. the books ---------- */
@@ -590,10 +831,10 @@ console.log(`\n5) ${rules.CONTRACT_RULES.length} rules on the books, ${rules.CON
 /* ---------- the bands, from MEASURED in the header ---------- */
 const BANDS = {
   /* ask / cap: every ask in every season inside [floor, ceiling]; the median inside [medLo, medHi]. */
-  nfl: { floor: 0.001, ceiling: 0.16, medLo: 0.02, medHi: 0.06, p95Hi: 0.085, cases: 150, seasons: 10 },
-  nba: { floor: 0.001, ceiling: 0.351, medLo: 0.15, medHi: 0.32, p95Hi: 0.33, cases: 90, seasons: 9 },
-  mlb: { floor: 0.001, ceiling: 0.16, medLo: 0.02, medHi: 0.07, p95Hi: 0.09, cases: 400, seasons: 9 },
-  nhl: { floor: 0.001, ceiling: 0.16, medLo: 0.025, medHi: 0.07, p95Hi: 0.085, cases: 150, seasons: 9 },
+  nfl: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.02, medHi: 0.06, p95Hi: 0.085, cases: 150, seasons: 10 },
+  nba: { seasonMedLo: 0.005, seasonMedHi: 0.4, medLo: 0.15, medHi: 0.32, p95Hi: 0.33, cases: 90, seasons: 9 },
+  mlb: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.02, medHi: 0.07, p95Hi: 0.09, cases: 400, seasons: 9 },
+  nhl: { seasonMedLo: 0.005, seasonMedHi: 0.2, medLo: 0.025, medHi: 0.07, p95Hi: 0.085, cases: 150, seasons: 9 },
 };
 /* Section 4 coverage floors, each well under its measured range, so a rule cannot pass empty. */
 const RULE_FLOORS = {
@@ -612,10 +853,12 @@ for (const sport of SPORTS) {
   if (st.kept + st.letGo + st.retiredKept + st.leftUndecided !== st.cases) fail(1, `${sport.key}: ${st.cases} cases but ${st.kept + st.letGo + st.retiredKept + st.leftUndecided} outcomes`);
   if (st.cases < b.cases) fail(1, `${sport.key}: only ${st.cases} cases reached the desk (floor ${b.cases})`);
   if (!st.closedChecked) fail(1, `${sport.key}: the fail closed check never ran`);
+  /* Every season walked, on its median, not on its single highest or lowest
+     ask (a max is noise; review finding 22). Each season pools its five runs. */
   st.bySeason.forEach((xs, s) => {
-    for (const x of xs ?? []) {
-      if (x < b.floor || x > b.ceiling) { fail(2, `${sport.key} season ${s + 1}: an ask at ${x.toFixed(3)} of the cap, outside ${b.floor} to ${b.ceiling}`); break; }
-    }
+    if (!xs || xs.length < 5) return;
+    const m = quant(xs, 0.5);
+    if (!(m >= b.seasonMedLo && m <= b.seasonMedHi)) fail(2, `${sport.key} season ${s + 1}: the median ask is ${f3(m)} of the cap, outside ${b.seasonMedLo} to ${b.seasonMedHi}`);
   });
   const seasonsWith = st.bySeason.filter(xs => xs && xs.length).length;
   if (seasonsWith < b.seasons) fail(2, `${sport.key}: asks reached the desk in ${seasonsWith} of ${SEASONS} seasons (floor ${b.seasons})`);
@@ -642,9 +885,11 @@ if (CONTROL) {
   console.log(fired
     ? `simGmContracts: CONTROL ${CONTROL} FIRED, section ${want} went red as it must (${fails[want]} findings, exit 1)`
     : `simGmContracts: CONTROL ${CONTROL} DID NOT FIRE, section ${want} stayed green (exit 2)`);
+  finished = true;
   process.exit(fired ? 1 : 2);
 }
 console.log(failures === 0
   ? `simGmContracts: PASS, ${SPORTS.length} engines, ${SEEDS.length * SPORTS.length} runs of ${SEASONS} seasons, nobody left on a flip`
   : `simGmContracts: FAIL, ${failures} finding(s)`);
+finished = true;
 process.exit(failures === 0 ? 0 : 1);
