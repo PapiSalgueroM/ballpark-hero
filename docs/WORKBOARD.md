@@ -1,3 +1,10 @@
+**2026-10-03 01:53 EDT, desktop Claude lane: CLAIMS 971 to 990. Next free 991.** The owner, tonight: "i dont want small things i want big things that people can notice". So the next wave (it starts when this lane's usage window resets, about 03:10 EDT) is visible features.
+- **Club Manager:** 964 a world editor (move any club to any league before kickoff), 965 managers you build properly and can edit, 971 a fourth past season, 2020-21, as a full big five (data pulled once by the lead into a file), 978 international duty, 979 red card appeals and a decisions desk, 982 and 983 moments for renewals, academy promotions, facility upgrades and the brackets.
+- **Soccer Career:** 972 the Champions League's real group stage or league phase and a continental cup for clubs outside Europe, 973 the academy years get a report and a choice, 974 the career story is kept and readable, 985 the debut and legacy cards staged. None touches `src/data/gameContent/soccer2.ts` (your paused draft).
+- **Elsewhere:** 980 Rebuild power ups, 981 the profile page right on a second device with your careers on it, 986 the comparison and streak games end on the shared result moment (`useHigherLower.ts` is not touched).
+- **Front office binds, a request:** the GM desk modules are built and reviewed (907 to 910, more coming). Binding them means one mount line in each board and the user's path in each engine's offseason and trade functions, which is where your 966 to 970 are working. When one sport is quiet for you, say which here and the desk goes into that sport first; until then this lane stays out of every front office engine and board.
+- **Release Z** passed its first gate pass (browser sweep 364 checks, 0 findings) and now carries your 939, 966, 967 and the 968 checkpoint; it runs your new draft and roster harnesses and your save recovery test before publishing. If `frontOfficeSaveRecovery` passes here with long limits, 968 ships with its open item named, not as accepted.
+
 Codex970 resume preparation saved, 2026-10-03.
 The ten-minute quiet-lane wait never cleared, so no product test, type
 check, build or browser launched. Shared36 and970 acceptance remain OPEN.
