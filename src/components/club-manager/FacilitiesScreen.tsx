@@ -1,13 +1,27 @@
 import { cn } from '@/lib/utils';
-import { money, moneyIn } from '@/lib/clubManager';
+import { growingAtCeiling, money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityUpgradeCost, upgradeFacility,
+  CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityLevel, facilityUpgradeCost, upgradeFacility,
 } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { useDeskCue } from '@/components/club-manager/deskCue';
 import type { DeskCueRead } from '@/components/club-manager/deskCue';
+
+/**
+ * Round 963: the training ground's line, plus the men its lift would be cut
+ * short for. Growth is capped at the fastest anyone grows, so the card says
+ * how many would be there as regulars rather than promising all of them the
+ * full percentage. Only this card: the other three do not touch growth.
+ */
+function effectLine(state: CareerState, id: FacilityId): string {
+  const line = facilityEffectLine(state, id);
+  if (id !== 'trainingGround' || facilityLevel(state, id) <= 1) return line;
+  const n = growingAtCeiling(state, () => true).length;
+  if (n === 0) return line;
+  return `${line} ${n === 1 ? 'As a regular, one player would' : `As regulars, ${n} players would`} be growing as fast as anyone can, so ${n === 1 ? 'he' : 'they'} would get less of the lift.`;
+}
 
 /* ─── Round 467: the facilities desk. ───
    Four levels, one card, the whole thing on a phone's first screen: the
@@ -32,7 +46,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
     if (!next) return null;
     const want = facilitiesOf(next)[id];
     return after => (facilitiesOf(after)[id] === want && after.budget === next.budget
-      ? `${CLUB_FACILITY_INFO[id].label} is level ${want} of ${FACILITY_MAX} now. ${facilityEffectLine(after, id)}`
+      ? `${CLUB_FACILITY_INFO[id].label} is level ${want} of ${FACILITY_MAX} now. ${effectLine(after, id)}`
       : null);
   };
   return (
@@ -85,11 +99,11 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                   data-facility-fresh={lit ? 'yes' : undefined}
                   className={cn('text-[11px] text-muted-foreground mt-1', lit && 'cm-tick-in')}
                 >
-                  Now: {facilityEffectLine(career, id)}
+                  Now: {effectLine(career, id)}
                 </p>
                 {next ? (
                   <div data-facility-preview className="mt-1 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1.5 text-[11px]">
-                    <p className="text-foreground">Next, level {facilitiesOf(next)[id]}: {facilityEffectLine(next, id)}</p>
+                    <p className="text-foreground">Next, level {facilitiesOf(next)[id]}: {effectLine(next, id)}</p>
                     <p className="mt-0.5 font-semibold text-foreground">Leaves {money(next.budget)} in the transfer kitty.</p>
                   </div>
                 ) : (

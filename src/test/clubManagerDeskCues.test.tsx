@@ -263,8 +263,12 @@ describe('Club Manager desk cues: facilities', () => {
     expect(fresh[0]).toHaveClass('cm-win-pulse');
     const now = row.querySelector('[data-facility-current]')!;
     expect(now).toHaveClass('cm-tick-in');
-    expect(now.textContent).toBe(`Now: ${facilityEffectLine(saved, id)}`);
-    expect(said('cm-facilities-cue')).toBe(`${CLUB_FACILITY_INFO[id].label} is level ${level} of ${FACILITY_MAX} now. ${facilityEffectLine(saved, id)}`);
+    /* The Now line opens on the engine's effect line for the saved level
+       (the training ground's card may add Round 963's ceiling sentence), and
+       the spoken line repeats that Now line word for word. */
+    const nowText = (now.textContent ?? '').replace(/^Now: /, '');
+    expect(nowText.startsWith(facilityEffectLine(saved, id))).toBe(true);
+    expect(said('cm-facilities-cue')).toBe(`${CLUB_FACILITY_INFO[id].label} is level ${level} of ${FACILITY_MAX} now. ${nowText}`);
     /* Only the pressed facility moves. */
     expect(view.container.querySelectorAll('[data-facility-fresh]')).toHaveLength(1);
   });
@@ -284,7 +288,9 @@ describe('Club Manager desk cues: facilities', () => {
       const fresh = row().querySelectorAll('[data-facility-pip-fresh]');
       expect(fresh).toHaveLength(1);
       expect(fresh[0]).toBe(row().querySelectorAll('[aria-hidden] > span')[level - 1]);
-      expect(said('cm-facilities-cue')).toBe(`${CLUB_FACILITY_INFO[id].label} is level ${level} of ${FACILITY_MAX} now. ${facilityEffectLine(after(), id)}`);
+      const nowText = (row().querySelector('[data-facility-current]')?.textContent ?? '').replace(/^Now: /, '');
+      expect(nowText.startsWith(facilityEffectLine(after(), id))).toBe(true);
+      expect(said('cm-facilities-cue')).toBe(`${CLUB_FACILITY_INFO[id].label} is level ${level} of ${FACILITY_MAX} now. ${nowText}`);
       steps++;
     }
     expect(facilitiesOf(after())[id]).toBe(FACILITY_MAX);

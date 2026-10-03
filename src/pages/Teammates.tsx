@@ -10,7 +10,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
-const sportEmoji: Record<string, string> = { NFL: '🏈', NBA: '🏀', Soccer: '⚽' };
+const sportEmoji: Record<string, string> = { NFL: '🏈', NBA: '🏀', Soccer: '⚽', MLB: '⚾', NHL: '🏒' };
 
 const Teammates = () => {
   const {
@@ -34,7 +34,7 @@ const Teammates = () => {
     <>
       <PageSeo
         title="Teammates or Not? - Sports Trivia Quiz | DoUKnowBall"
-        description="Were these two athletes ever on the same team? Test your sports knowledge across NFL, NBA, and soccer."
+        description="Were these two athletes ever on the same team? Test your sports knowledge across the NFL, NBA, MLB, NHL and soccer."
         path="/teammates"
       />
       <GameShell
@@ -130,7 +130,7 @@ const Teammates = () => {
                     {lastCorrect ? '✅ Correct!' : '❌ Wrong!'}
                   </p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {currentPair.answer ? 'They WERE teammates!' : 'They were NEVER teammates.'}
+                    {currentPair.answer ? 'They WERE teammates!' : `They were NEVER ${currentPair.sport === 'Soccer' ? 'club' : currentPair.sport} teammates.`}
                   </p>
                 </div>
                 <div className="bg-secondary/50 rounded-xl p-4 mb-4">
@@ -177,17 +177,17 @@ const Teammates = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Teammates or Not? | DoUKnowBall"
-          description="Test your sports knowledge: were these two athletes ever on the same team? Covers NFL, NBA, and soccer with fun facts and shareable scores."
+          description="Test your sports knowledge: were these two athletes ever on the same team? Covers the NFL, NBA, MLB, NHL and soccer with fun facts and shareable scores."
           howToPlay={[
-            "Two athlete names are shown from NFL, NBA, or soccer",
-            "Decide if they ever played on the same team",
+            "Two athlete names are shown from the NFL, NBA, MLB, NHL or soccer",
+            "Decide if they ever played on the same club or league team (national teams and All-Star games don't count)",
             "Tap YES or NO to answer",
             "Learn fun facts after each answer: 10 questions per round",
           ]}
           examples={[
             "Messi & Neymar: YES (Barcelona, PSG)",
             "LeBron James & Kyrie Irving: YES (Cleveland Cavaliers)",
-            "Tom Brady & Peyton Manning: NO (rivals, never teammates)",
+            "Tom Brady & Peyton Manning: NO (rivals, never NFL teammates)",
             "Ronaldo & Rooney: YES (Manchester United)",
             "Kobe Bryant & Shaquille O'Neal: YES (LA Lakers)",
             "Zidane & Ronaldinho: NO (never played on the same club)"
