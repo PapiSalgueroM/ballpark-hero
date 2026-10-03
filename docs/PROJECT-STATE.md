@@ -1,3 +1,11 @@
+Codex CLAIMS publication recovery, 2026-10-03 11:40 EDT.
+The existing publisher recovered and now displays Publish changes. The latest
+synchronized main entry is664dabc1, with accepted998/999 and docs only after
+those product commits. The host labels its preview out of date, so inspect the
+release state and publish accepted main, then verify both public game modes.
+No final publish sent at claim time. Keep product PR118/121/122 isolated until
+this accepted batch has a live receipt. Claude988/manager lanes stay separate.
+No paid changes, production DB probes or local runtime. Next free1003 unchanged.
 ## Codex claims1001 and1002, 2026-10-03: clue review and hockey planning
 
 Anthony asked to keep going. Publication is still blocked: the latest editor
