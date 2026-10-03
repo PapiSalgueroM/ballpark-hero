@@ -360,6 +360,126 @@
     { "name": "Austin Blythe", "fact": "Game book lineup RG 66 A.Blythe; pfr starters Austin Blythe/RG." },
     { "name": "John Sullivan", "fact": "Both scoring tables: this offense scored only a 53-yard field goal in a 13-3 loss." }
    ]
+  },
+  {
+   "id": "sb-xlvii-bal",
+   "game": "Super Bowl XLVII",
+   "matchDate": "2013-02-03",
+   "unit": "offense",
+   "team": "Baltimore Ravens",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Baltimore Ravens Offense", "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf", "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Ravens Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Joe Flacco", "QB 5 J.Flacco", "Joe Flacco/QB"],
+    ["RB", "Ray Rice", "RB 27 R.Rice", "Ray Rice/RB"],
+    ["FB", "Vonta Leach", "FB 44 V.Leach", "Vonta Leach/FB"],
+    ["WR", "Anquan Boldin", "WR 81 A.Boldin", "Anquan Boldin/WR"],
+    ["WR", "Torrey Smith", "WR 82 T.Smith", "Torrey Smith/WR"],
+    ["WR", "Jacoby Jones", "WR 12 J.Jones", "Jacoby Jones/WR"],
+    ["LT", "Bryant McKinnie", "LT 78 B.McKinnie", "Bryant McKinnie/LT"],
+    ["LG", "Kelechi Osemele", "LG 72 K.Osemele", "Kelechi Osemele/LG"],
+    ["C", "Matt Birk", "C 77 M.Birk", "Matt Birk/C"],
+    ["RG", "Marshal Yanda", "RG 73 M.Yanda", "Marshal Yanda/RG"],
+    ["RT", "Michael Oher", "RT 74 M.Oher", "Michael Oher/RT"]
+   ],
+   "facts": [
+    { "name": "Jacoby Jones", "fact": "Scoring: game book 'J.Jones 56 yd. pass from J.Flacco' (Q2 1:45) and 'J.Jones 108 yd. kickoff return' (Q3 14:49); pfr the same two plays." },
+    { "name": "Vonta Leach", "fact": "Both list a fullback and three receivers and no tight end among the eleven starters." },
+    { "name": "Bryant McKinnie", "fact": "Game book lineup LT 78 B.McKinnie; pfr starters Bryant McKinnie/LT." }
+   ]
+  },
+  {
+   "id": "sb-xlvii-sf",
+   "game": "Super Bowl XLVII",
+   "matchDate": "2013-02-03",
+   "unit": "offense",
+   "team": "San Francisco 49ers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense", "url": "https://static.www.nfl.com/image/upload/v1677630684/gamecenter/10012013-0203-00bb-9d76-3f7dbeaf2a5e.pdf", "via": "https://www.nfl.com/games/ravens-at-49ers-2012-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (49ers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201302030sfo.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Colin Kaepernick", "QB 7 C.Kaepernick", "Colin Kaepernick/QB"],
+    ["RB", "Frank Gore", "RB 21 F.Gore", "Frank Gore/RB"],
+    ["WR", "Michael Crabtree", "WR 15 M.Crabtree", "Michael Crabtree/WR"],
+    ["WR", "Randy Moss", "WR 84 R.Moss", "Randy Moss/WR"],
+    ["TE", "Vernon Davis", "TE 85 V.Davis", "Vernon Davis/TE"],
+    ["TE", "Delanie Walker", "TE 46 D.Walker", "Delanie Walker/TE"],
+    ["LT", "Joe Staley", "LT 74 J.Staley", "Joe Staley/LT"],
+    ["LG", "Mike Iupati", "LG 77 M.Iupati", "Mike Iupati/LG"],
+    ["C", "Jonathan Goodwin", "C 59 J.Goodwin", "Jonathan Goodwin/C"],
+    ["RG", "Alex Boone", "RG 75 A.Boone", "Alex Boone/RG"],
+    ["RT", "Anthony Davis", "RT 76 A.Davis", "Anthony Davis/RT"]
+   ],
+   "facts": [
+    { "name": "Delanie Walker", "fact": "Both list two starting tight ends, Walker beside Vernon Davis." },
+    { "name": "Randy Moss", "fact": "Game book lineup WR 84 R.Moss; pfr starters Randy Moss/WR." },
+    { "name": "Jonathan Goodwin", "fact": "Game book lineup C 59 J.Goodwin; pfr starters Jonathan Goodwin/C." }
+   ]
+  },
+  {
+   "id": "sb-xlvi-nyg",
+   "game": "Super Bowl XLVI",
+   "matchDate": "2012-02-05",
+   "unit": "offense",
+   "team": "New York Giants",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New York Giants Offense", "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Giants Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Eli Manning", "QB 10 E.Manning", "Eli Manning/QB"],
+    ["RB", "Ahmad Bradshaw", "RB 44 A.Bradshaw", "Ahmad Bradshaw/RB"],
+    ["FB", "Henry Hynoski", "FB 45 H.Hynoski", "Henry Hynoski/FB"],
+    ["WR", "Hakeem Nicks", "WR 88 H.Nicks", "Hakeem Nicks/WR"],
+    ["WR", "Victor Cruz", "WR 80 V.Cruz", "Victor Cruz/WR"],
+    ["TE", "Jake Ballard", "TE 85 J.Ballard", "Jake Ballard/TE"],
+    ["LT", "David Diehl", "LT 66 D.Diehl", "David Diehl/LT"],
+    ["LG", "Kevin Boothe", "LG 77 K.Boothe", "Kevin Boothe/LG"],
+    ["C", "David Baas", "C 64 D.Baas", "David Baas/C"],
+    ["RG", "Chris Snee", "RG 76 C.Snee", "Chris Snee/RG"],
+    ["RT", "Kareem McKenzie", "RT 67 K.McKenzie", "Kareem McKenzie/RT"]
+   ],
+   "facts": [
+    { "name": "Henry Hynoski", "fact": "Game book lineup FB 45 H.Hynoski; pfr starters Henry Hynoski/FB." },
+    { "name": "Jake Ballard", "fact": "Game book lineup TE 85 J.Ballard; pfr starters Jake Ballard/TE." },
+    { "name": "Ahmad Bradshaw", "fact": "Scoring: game book 'A.Bradshaw 6 yd. run (run failed)' (Q4 0:57, 21-17); pfr 'Ahmad Bradshaw 6 yard rush'." }
+   ]
+  },
+  {
+   "id": "sb-xlvi-ne",
+   "game": "Super Bowl XLVI",
+   "matchDate": "2012-02-05",
+   "unit": "offense",
+   "team": "New England Patriots",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense", "url": "https://static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2011-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Patriots Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201202050nwe.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Tom Brady", "QB 12 T.Brady", "Tom Brady/QB"],
+    ["RB", "BenJarvus Green-Ellis", "RB 42 B.Green-Ellis", "BenJarvus Green-Ellis/RB"],
+    ["WR", "Wes Welker", "WR 83 W.Welker", "Wes Welker/WR"],
+    ["WR", "Deion Branch", "WR 84 D.Branch", "Deion Branch/WR"],
+    ["TE", "Rob Gronkowski", "TE 87 R.Gronkowski", "Rob Gronkowski/TE"],
+    ["TE", "Nate Solder", "TE 77 N.Solder", "Nate Solder/TE"],
+    ["LT", "Matt Light", "LT 72 M.Light", "Matt Light/LT"],
+    ["LG", "Logan Mankins", "LG 70 L.Mankins", "Logan Mankins/LG"],
+    ["C", "Dan Connolly", "C 63 D.Connolly", "Dan Connolly/C"],
+    ["RG", "Brian Waters", "RG 54 B.Waters", "Brian Waters/RG"],
+    ["RT", "Sebastian Vollmer", "RT 76 S.Vollmer", "Sebastian Vollmer/RT"]
+   ],
+   "facts": [
+    { "name": "Nate Solder", "fact": "Game book lineup TE 77 N.Solder (jersey 77); pfr starters Nate Solder/TE. Both list him as a starting tight end beside Gronkowski." },
+    { "name": "Dan Connolly", "fact": "Game book lineup C 63 D.Connolly; pfr starters Dan Connolly/C." },
+    { "name": "Deion Branch", "fact": "Game book lineup WR 84 D.Branch; pfr starters Deion Branch/WR." }
+   ]
   }
  ]
 }
