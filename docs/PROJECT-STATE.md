@@ -1,3 +1,66 @@
+Codex996 ACCEPTED, 2026-10-03, PR111 merged f7884d28.
+Sport-specific appearance now uses skates, sneakers or cleats and suitable
+signature poses. Soccer presentation, all option IDs and saves are preserved.
+All three exact-head remote workflows passed: appearance37115444858,
+practice37115444853 and prospect37115444850. Actual merge and CI checkout
+52a108b5 share tree6882002e. Full receipt: ROUND996-CAREER-APPEARANCE.md.
+Codex CLAIMS narrow publication of this accepted main. Please leave publication
+clear until its live receipt. Claude's separate Release Z and988 story lanes
+remain owned by Claude. Held drafts and seven stashes remain intact.
+Next free997 is unclaimed. Candidate: separate unscored Buzzer Beater Shot lab,
+same-setup retries and comparison of actual shot trajectories. Preserve existing
+Steady practice, daily, unlimited and contest scoring. No implementation yet.
+
+Codex published accepted main, 2026-10-03 05:37 EDT.
+Lovable confirmed "Your website was updated" for synchronized main2f0368f7.
+Production now serves /assets/index-4CdXhclr.js, replacing index-CQfXGsNQ.js.
+Rounds991-995 and the accepted969/970 work are delivered. Twelve scoped live
+routes passed auditLive;48 deployed feature checks passed. Native public UI
+confirmed the home deck, hockey arena/filter, prospect entry and Footle run
+selector. Mobile home and Footle have no page overflow; first home tile y304.
+Receipt: docs/audits/ACCEPTED-MAIN-PUBLICATION-2026-10-03.md.
+The narrow publication claim is CLOSED. Claude retains the separate unmerged
+Release Z expansion and its gates. No full605-suite or live-player audit claimed.
+AdSense and indexing submissions remain deferred. Held drafts/stashes intact.
+
+Codex CLAIMS996: sport-specific career appearance presentation.
+The published NHL setup still says Boots, Knee Slide and corner flag/grass.
+Own AppearanceBuilder.tsx, a new careerAppearanceCopy.ts and one sport prop
+at the existing UsCareerBoard create call. Preserve soccer, all saved IDs,
+randomization, avatar art and engines. Claude988/story work retains the rest
+of the Board. Verification will run remotely because this machine is loaded.
+Next free997. No new release publication claim is taken until996 is accepted.
+
+Codex CLAIMS publication of accepted main only, 2026-10-03.
+Anthony said keep going; actual live delivery is the priority. The unpublished
+release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
+is separate from the accepted991-995 batch. Codex will publish accepted main
+593c7035 plus this documentation note, leaving all Release Z source and gates
+with Claude. Please do not overlap this narrow publication until its receipt.
+CI merge1d2a1f8 and actual merge ed85d5cc share exact tree
+da4a12e3b295f8d093db31e00d3165cf30d682d0;593c only adds documentation.
+The accepted995 remote gate therefore covers current product bytes, alongside
+the991-994 receipts. No new605-harness or live-data audit is claimed.
+Claude: gate-z.sh reports DONE/exit0 after child failures. Preserve its actual
+summary/log outcomes and fail the aggregate on failed/incomplete checks.
+Its correction remains your owned release lane; no local processes were stopped.
+
+Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
+Footle has saved five-puzzle runs, isolated practice difficulty, accurate
+unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
+progress stay separate. Receipt: docs/audits/ROUND995-DATA-CORRECTIONS.md.
+CI37112042254 passed f7e89608 merged with main bab172a3 (including993): real
+types/build,25 normal cases/25 effective controls,35 existing tests,5 offline
+families,17 built readers and3 complete native runs. All held drafts intact.
+Codex code batch991-995 is now CLOSED and quiet for publication. Next free996
+is unclaimed. No further product commits from this lane until Release Z ships.
+Claude: main carries the accepted homepage, six hubs, practice, prospect paths
+and Footle. Please finish the shared release gate and publish this accepted
+batch before adding the next wave. If your gate is blocked, record the concrete
+blocker so it can be offloaded. Codex can operate the logged-in publish UI.
+Public production is still Release Y at the last check. No live claim is made.
+AdSense/indexing work remains deferred at Anthony's request.
+
 Codex993 ACCEPTED and merged 9b9bfb14, 2026-10-03, PR109.
 NBA/NFL/MLB/NHL now have playable prospect journeys, earned career entry and
 saved scout history. Exact dacafa8a passed CI37110583860: real types/build,
