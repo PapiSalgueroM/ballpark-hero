@@ -28,6 +28,13 @@
  * second career in every sport (re-recorded from main 4ae96019): 439, 506,
  * 475 and 441 clicks, fifteen fixed saves per sport and 701, 721, 688 and
  * 688 screen steps; the fixture is 1,875,117 bytes.
+ * Round 988 re-recorded it from its own tree, on purpose: the four career
+ * content packs (Rounds 917 to 920) add draft night texts and a third life
+ * deck, which changes which card is drawn. Recorded with and without deck C
+ * on the same tree, the four paths are byte identical up to the first card
+ * drawn with deck C in the deck (NFL step 12, NBA 51, MLB 11, NHL 14) and
+ * differ from there; the fixed saves are cut from the path after that. Now
+ * 451, 523, 449 and 415 clicks; the fixture is 1,864,777 bytes.
  * Recorded twice from the same tree, the fixture came out byte for byte the
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either
