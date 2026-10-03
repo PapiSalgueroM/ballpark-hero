@@ -23,7 +23,7 @@ import {
 import {
   runHallBallot, firstBallotChance, laterCallChance, mostSeasonsTeam, jerseyFor, hallRecordFor,
   HALL_SPEECHES, HALL_SPEECH_METERS, speechPromise, giveHallSpeech, sanitizeHallSpeech,
-  type HallRecord,
+  type HallRecord, type UsHallSport,
 } from '@/lib/careerHallOfFame';
 import { describeSteps, measureMoves, applyMeterSteps } from '@/lib/careerAwardsNight';
 import { NFL_CAREER_HALL } from '@/lib/nflCareerHall';
@@ -112,7 +112,8 @@ describe('old and corrupt saves', () => {
   });
 });
 
-const SPORTS = [NFL_CAREER_HALL, NBA_CAREER_HALL, MLB_CAREER_HALL, NHL_CAREER_HALL];
+// Typed on never so one loop can hand any of the four to hallRecordFor.
+const SPORTS: UsHallSport<never>[] = [NFL_CAREER_HALL, NBA_CAREER_HALL, MLB_CAREER_HALL, NHL_CAREER_HALL];
 
 describe('the ballot', () => {
   for (const sport of SPORTS) {
