@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest';
 import {
   NBA_LIFE_C, applyNbaLifeCFx, nbaLifeCChip, buildNbaLifeCCard, getNbaLifeEventsC,
 } from './nbaCareerLifeC';
-import { NBA_ARCHETYPES, startNbaCareer } from './nbaMyCareer';
+import { NBA_ARCHETYPES, startNbaCareer, nbaEraTeamIds } from './nbaMyCareer';
 import type { NbaCareerPos, NbaCareerState } from './nbaMyCareer';
 
 const seeded = (seed: number) => () => {
@@ -25,6 +25,7 @@ function career(pos: NbaCareerPos, patch: Partial<NbaCareerState> = {}, seasons 
 }
 
 const idsFor = (c: NbaCareerState) => getNbaLifeEventsC(c, () => 0.5).map(e => e.id);
+const allNba = (c: NbaCareerState) => { c.seasons[c.seasons.length - 1].awards.push('All-NBA'); return c; };
 
 describe('the catalog', () => {
   it('is 36 cards with unique nbaC_ ids, three options each, and every tag filled', () => {
@@ -69,14 +70,24 @@ describe('gates', () => {
     const modernOnly = ['nbaC_rule_g_league', 'nbaC_rule_two_way_kid', 'nbaC_rule_national_tv', 'nbaC_rule_award_games', 'nbaC_sg_shot_diet'];
     const young = { ovr: 74, role: 'backup' as const };
     const star = { ovr: 88, health: 70 };
-    const now = [...idsFor(career('SG', young, 2)), ...idsFor(career('SG', star, 5))];
-    const then = [...idsFor(career('SG', young, 2, 'y2004')), ...idsFor(career('SG', star, 5, 'y2004'))];
+    const now = [...idsFor(career('SG', young, 2)), ...idsFor(allNba(career('SG', star, 5)))];
+    const then = [...idsFor(career('SG', young, 2, 'y2004')), ...idsFor(allNba(career('SG', star, 5, 'y2004')))];
     for (const id of modernOnly) {
       expect(now).toContain(id);
       expect(then).not.toContain(id);
     }
     /* The rule that did exist in 2003-04 stays in both. */
     expect(idsFor(career('SG', { ovr: 80, contractYears: 2 }, 4, 'y2004'))).toContain('nbaC_rule_salary_match');
+  });
+
+  it('calls you a star for the national TV rule only after an All-NBA year in the last three', () => {
+    const has = (c: NbaCareerState) => idsFor(c).includes('nbaC_rule_national_tv');
+    expect(has(career('SG', { ovr: 92 }, 5))).toBe(false);
+    expect(has(allNba(career('SG', { ovr: 78 }, 5)))).toBe(true);
+    const old = career('SG', { ovr: 92 }, 5);
+    old.seasons[0].awards.push('All-NBA');
+    expect(has(old)).toBe(false);
+    expect(has(allNba(career('SG', { ovr: 92, role: 'backup' }, 5)))).toBe(false);
   });
 
   it('holds the G League assignment to the first three seasons', () => {
@@ -134,10 +145,47 @@ describe('the words are the effect', () => {
   });
 
   it('writes the chip from the same data', () => {
-    expect(nbaLifeCChip({ fx: { rating: 2, health: -4 } })).toBe('rating up, health down');
-    expect(nbaLifeCChip({ fx: { netWorth: -0.2, fanbase: 3 } })).toBe('fans up, money out');
-    expect(nbaLifeCChip({ fx: { morale: -4 }, trade: true })).toBe('morale down, new team');
-    expect(nbaLifeCChip({ fx: {} })).toBe('no change');
+    const c = career('PG');
+    expect(nbaLifeCChip({ fx: { rating: 2, health: -4 } }, c)).toBe('rating up, health down');
+    expect(nbaLifeCChip({ fx: { netWorth: -0.2, fanbase: 3 } }, c)).toBe('fans up, money out');
+    expect(nbaLifeCChip({ fx: { morale: -4 }, trade: true }, c)).toBe('morale down, fans down, new team');
+    expect(nbaLifeCChip({ fx: {} }, c)).toBe('no change');
+    /* Written on a copy: the save itself does not move. */
+    expect([c.ovr, c.morale, c.fanbase, c.health, c.netWorth]).toEqual([75, 50, 50, 60, 5]);
+  });
+
+  it('does not promise a stat that is already at its limit', () => {
+    const def = NBA_LIFE_C.find(d => d.id === 'nbaC_rookie_wall')!;
+    const fresh = career('PG', { health: 100 }, 1);
+    const ev = buildNbaLifeCCard(def, fresh);
+    expect(ev.options[0].effect).toBe('Money out');
+    expect(ev.options[1].effect).toBe('Morale up');
+    expect(ev.options[0].apply(fresh, () => 0.5)).toContain('Net worth -0.2M.');
+    expect(fresh.health).toBe(100);
+    const sore = career('PG', { health: 80 }, 1);
+    expect(buildNbaLifeCCard(def, sore).options[0].effect).toBe('Health up, money out');
+    const ceiling = career('PG', { ovr: 81, pot: 80 });
+    expect(nbaLifeCChip({ fx: { rating: 2, morale: 3 } }, ceiling)).toBe('morale up');
+  });
+
+  it('starts the fans over in the new city, the way decks A and B do', () => {
+    const def = NBA_LIFE_C.find(d => d.id === 'nbaC_rule_salary_match')!;
+    const star = career('SF', { fanbase: 90, contractYears: 3 }, 5);
+    const quiet = career('SF', { fanbase: 30, contractYears: 3 }, 5);
+    expect(buildNbaLifeCCard(def, star).options[0].effect).toBe('Morale down, fans down, new team');
+    expect(buildNbaLifeCCard(def, quiet).options[0].effect).toBe('Morale down, fans up, new team');
+    expect(buildNbaLifeCCard(def, star).options[0].apply(star, seeded(5))).toContain('fanbase -46');
+    expect(star.fanbase).toBe(44);
+  });
+
+  it('keeps a 2003-04 trade inside the 2003-04 league', () => {
+    const def = NBA_LIFE_C.find(d => d.id === 'nbaC_rule_salary_match')!;
+    const era = nbaEraTeamIds('y2004');
+    for (let s = 1; s <= 60; s++) {
+      const c = career('SF', { contractYears: 3 }, 5, 'y2004');
+      buildNbaLifeCCard(def, c).options[0].apply(c, seeded(s));
+      expect(era).toContain(c.team);
+    }
   });
 
   it('moves the player and leaves the contract alone on the salary matching trade', () => {

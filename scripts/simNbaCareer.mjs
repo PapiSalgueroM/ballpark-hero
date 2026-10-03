@@ -28,17 +28,35 @@
        compared with what the save did, nothing outside the stats a card may
        move is touched (the contract above all), and the chip on the button
        names one of the outcomes that happened, both ways of a gamble seen.
-       Exact, no band: one mismatch is a failure.
+       Half the draws give the save headroom first, so a clamp cannot hide a
+       number in the line; the other half run on the save exactly as the
+       fleet left it (health 100, a rating at its ceiling), which is where a
+       chip written from the card alone would promise a stat that cannot
+       move. A trade must land on a team of the career's own era, named with
+       that era's label. Exact, no band: one mismatch is a failure.
    T   Every life card drawn, in decks A, B and C, carries its category and
        cooldown tags (the table the summer step list reads).
+   R1  The rivalry beat that has the two of you guarding each other (318) is
+       never rolled while the rival is on your own team. The rival is
+       drafted onto the player's team and keeps it, so this is the common
+       case, not an edge: before the gate was fixed it was 211 of 248 rolls.
+       Exact, no band. The beat must also still be rolled at least once, so
+       the check cannot pass by the beat going quiet.
+   R2  The six Round 918 rivalry beats (318 to 323): every number in the
+       consequence line is what apply moves, and "the rivalry heats up" is
+       said exactly when the rivalry meter rises. Exact, no band.
 
    Negative controls, SIM_NBA_CONTROL=<name>, each asserts the thing it
    mutates exists and each must turn the run red:
-     nodeck     empties the catalog              -> C1 red
-     eraleak    drops the era gate on one card   -> C1e red
-     wordsbreak hides a morale change in a card  -> C2 red
-     tradepay   cuts the salary on the trade     -> C2 red
-     notags     strips one deck A card's tags    -> T red
+     nodeck       empties the catalog                     -> C1 red
+     eraleak      drops the era gate on one card          -> C1e red
+     wordsbreak   hides a morale change in a card         -> C2 red
+     tradepay     cuts the salary on the trade            -> C2 red
+     eraleaktrade drops the era from the trade's team list -> C2 red
+     chipcap      writes the chips from a save with room  -> C2 red
+     notags       strips one deck A card's tags           -> T red
+     sameteam     drops the team check from beat 318      -> R1 red
+     beatwords    moves beat 319's morale by -6, words -4 -> R2 red
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -49,7 +67,7 @@ import { unlinkSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const CONTROL = process.env.SIM_NBA_CONTROL || '';
-const CONTROLS = ['', 'nodeck', 'eraleak', 'wordsbreak', 'tradepay', 'notags'];
+const CONTROLS = ['', 'nodeck', 'eraleak', 'wordsbreak', 'tradepay', 'eraleaktrade', 'chipcap', 'notags', 'sameteam', 'beatwords'];
 if (!CONTROLS.includes(CONTROL)) {
   console.error(`unknown SIM_NBA_CONTROL "${CONTROL}", expected one of: ${CONTROLS.slice(1).join(', ')}`);
   process.exit(2);
@@ -59,7 +77,8 @@ if (!CONTROLS.includes(CONTROL)) {
 const OUT = path.join(os.tmpdir(), `nba-engine-${process.pid}.mjs`);
 await build({
   stdin: {
-    contents: "export * from './src/lib/nbaMyCareer.ts';\nexport * from './src/lib/nbaCareerLifeC.ts';\n",
+    contents: "export * from './src/lib/nbaMyCareer.ts';\nexport * from './src/lib/nbaCareerLifeC.ts';\n"
+      + "export { NBA_RIVALRY_EVENTS } from './src/lib/nbaCareerRivalryEvents.ts';\n",
     resolveDir: process.cwd(), loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,
@@ -77,14 +96,24 @@ if (CONTROL === 'notags') {
   if (tagAt < 0 || tagAt - at > 200) throw new Error('control notags: the tag is not beside the card id');
   writeFileSync(OUT, src.slice(0, tagAt) + src.slice(tagAt + tag.length));
 }
+if (CONTROL === 'eraleaktrade') {
+  /* The slip deck A already made once: the team list asked for without the
+     era, so a 2003-04 trade can land on a franchise that did not exist. */
+  const src = readFileSync(OUT, 'utf8');
+  const call = 'nbaEraTeamIds(cc.eraId).filter(';
+  const n = src.split(call).length - 1;
+  if (n !== 1) throw new Error(`control eraleaktrade: expected the trade's team list call once in the bundle, found ${n}`);
+  writeFileSync(OUT, src.replace(call, 'nbaEraTeamIds().filter('));
+}
 
 const eng = await import(pathToFileURL(OUT).href);
 const {
   NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent, nbaShouldRetire,
   nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaMarketSalary,
   NBA_SPEND_ITEMS, buyNbaItem, nbaAssignRole, nbaCampBattle,
-  NBA_LIFE_C, buildNbaLifeCCard,
+  NBA_LIFE_C, buildNbaLifeCCard, nbaEraTeamIds, nbaTeamLabelOf, NBA_RIVALRY_EVENTS,
 } = eng;
+if (!Array.isArray(NBA_RIVALRY_EVENTS) || !nbaEraTeamIds || !nbaTeamLabelOf) throw new Error('the bundle is missing the rivalry table or the era team helpers');
 unlinkSync(OUT);
 
 const CAREERS = Number(process.argv[2] || 400);
@@ -125,6 +154,22 @@ if (CONTROL === 'tradepay') {
   const line = o.say;
   o.say = c => { c.salary = Math.round(c.salary * 0.8 * 10) / 10; return line; };
 }
+const beatOf = id => {
+  const b = NBA_RIVALRY_EVENTS.find(x => x.id === id);
+  if (!b) throw new Error(`rivalry beat ${id} is not in the NBA table`);
+  return b;
+};
+if (CONTROL === 'sameteam') {
+  const b = beatOf(318);
+  if (!/r\.team\s*!==\s*s\.team/.test(String(b.when))) throw new Error('control sameteam: beat 318 has no team check to drop');
+  b.when = (s, r) => !r.retired && r.pos === s.pos;
+}
+if (CONTROL === 'beatwords') {
+  const b = beatOf(319);
+  if (b.consequence !== 'Morale -4, Fanbase +2') throw new Error(`control beatwords: beat 319 says "${b.consequence}"`);
+  const was = b.apply;
+  b.apply = (s, r) => { was(s, r); s.morale = Math.max(0, s.morale - 2); };
+}
 
 /* ------------------------------ the fleet ------------------------------ */
 
@@ -140,6 +185,7 @@ const eraLeaks = [];             // modern only cards drawn in a 2003-04 career
 const untagged = new Set();      // life card ids drawn without their tags
 const pools = new Map();         // deck C id -> saves the fleet found eligible
 let benchSeasons = 0, eraCareers = 0, lifeDraws = 0;
+let beat318Rolls = 0, beat318SameTeam = 0;   // R1
 const POOL_CAP = 40;
 const clone = x => JSON.parse(JSON.stringify(x));
 
@@ -170,7 +216,14 @@ for (let i = 0; i < CAREERS; i++) {
       } else {
         nbaCampBattle(c, tq, Math.random);
         if (c.role === 'backup') benchSeasons++;
+        const heldBeat = c.pendingRivalryEvent;
         const { line } = simNbaSeason(c, tq, Math.random);
+        /* R1: a beat rolled this season, read the moment it is rolled. */
+        const beat = c.pendingRivalryEvent;
+        if (beat && beat !== heldBeat && beat.id === 318) {
+          beat318Rolls++;
+          if (c.rival && c.rival.team === c.team) beat318SameTeam++;
+        }
         // every position must produce at least one real stat
         const hasStat = [line.ppg, line.rpg, line.apg].some(v => typeof v === 'number' && v > 0);
         if (!hasStat) emptyStatLines++;
@@ -259,22 +312,38 @@ const observedChip = d => {
   return bits.length ? bits.sort().join('|') : 'no change';
 };
 
-let c2Draws = 0, c2Bad = 0;
+let c2Draws = 0, c2Bad = 0, c2RealDraws = 0, c2Trades = 0, c2EraTrades = 0, chipcapMoved = 0;
 const c2Examples = [];
 const c2NoSave = [];
 const c2Unseen = [];
+const roomy = s => {
+  /* Headroom, so a clamp cannot hide a number in the line. */
+  const c = clone(s);
+  c.morale = 50; c.fanbase = 50; c.health = 60;
+  c.ovr = Math.min(c.ovr, 90); c.pot = Math.max(c.pot, c.ovr + 5);
+  return c;
+};
 for (const def of NBA_LIFE_C) {
   const pool = pools.get(def.id) ?? [];
   if (!pool.length) { c2NoSave.push(def.id); continue; }
+  /* Per option, which branch chips were matched on draws where the two
+     branches read differently. On a save at a limit a gamble's two chips
+     can read alike, and then the draw says nothing about which happened. */
   const branchSeen = def.options.map(() => new Set());
-  const branchWant = buildNbaLifeCCard(def, clone(pool[0])).options.map(o => chipBranches(o.effect).length);
+  const branchWant = def.options.map(o => ('p' in o ? 2 : 1));
   for (let d = 0; d < DRAWS_PER_CARD; d++) {
-    const c = clone(pool[d % pool.length]);
-    /* Headroom, so a clamp cannot hide a number: the check is about the
-       words, and the clamps have their own vitest cases. */
-    c.morale = 50; c.fanbase = 50; c.health = 60;
-    c.ovr = Math.min(c.ovr, 90); c.pot = Math.max(c.pot, c.ovr + 5);
-    const ev = buildNbaLifeCCard(def, c);
+    /* Even draws: headroom. Odd draws: the save as the fleet left it. */
+    const real = d % 2 === 1;
+    const c = real ? clone(pool[d % pool.length]) : roomy(pool[d % pool.length]);
+    if (real) c2RealDraws++;
+    let ev = buildNbaLifeCCard(def, c);
+    if (CONTROL === 'chipcap' && real) {
+      /* The chips of a card written from a save with room everywhere, then
+         applied to the real one: what the button said before the fix. */
+      const loose = buildNbaLifeCCard(def, roomy(c));
+      if (loose.options.some((o, j) => o.effect !== ev.options[j].effect)) chipcapMoved++;
+      ev = { ...ev, options: ev.options.map((o, j) => ({ ...o, effect: loose.options[j].effect })) };
+    }
     const k = Math.floor(Math.random() * ev.options.length);
     const before = clone(c);
     const log = ev.options[k].apply(c, Math.random);
@@ -298,16 +367,47 @@ for (const def of NBA_LIFE_C) {
     if (!near(earned, delta.earnings)) bad.push(`earnings moved ${delta.earnings.toFixed(2)}`);
     if (!near(earned + worth, delta.netWorth)) bad.push(`net worth moved ${delta.netWorth.toFixed(2)}`);
     if (/Traded to /.test(line) !== delta.team) bad.push(delta.team ? 'moved team without saying so' : 'said traded, team unchanged');
+    if (delta.team) {
+      c2Trades++;
+      if (c.eraId === 'y2004') c2EraTrades++;
+      if (!nbaEraTeamIds(c.eraId).includes(c.team)) bad.push(`traded to ${c.team}, not a team of the ${c.eraId ?? 'modern'} league`);
+      if (!line.includes(`Traded to ${nbaTeamLabelOf(c.team, c.eraId)}`)) bad.push(`the line does not name ${c.team} the way its era does`);
+    }
     if (rest(c) !== rest(before)) bad.push('touched a field no card may move');
-    const hit = chipBranches(ev.options[k].effect).indexOf(observedChip(delta));
-    if (hit < 0) bad.push(`button said "${ev.options[k].effect}", the save did "${observedChip(delta)}"`);
-    else branchSeen[k].add(hit);
+    const branches = chipBranches(ev.options[k].effect);
+    const hit = branches.indexOf(observedChip(delta));
+    if (hit < 0) bad.push(`button said "${ev.options[k].effect}", the save did "${observedChip(delta)}"${real ? ' (real save)' : ''}`);
+    else if (new Set(branches).size === branches.length) branchSeen[k].add(hit);
     if (bad.length) {
       c2Bad++;
       if (c2Examples.length < 5) c2Examples.push(`${def.id} option ${k}: ${bad.join('; ')} | line: ${line}`);
     }
   }
   branchSeen.forEach((seen, k) => { if (seen.size < branchWant[k]) c2Unseen.push(`${def.id} option ${k}`); });
+}
+
+/* ------------- R2: the six new rivalry beats say what they do ------------- */
+
+const R2_IDS = [318, 319, 320, 321, 322, 323];
+const R2_STATS = [['Morale', 'morale'], ['Fanbase', 'fanbase'], ['Health', 'health'], ['Rating', 'ovr']];
+const r2Bad = [];
+const r2Base = [...pools.values()].find(p => p.length)?.[0];
+if (!r2Base) r2Bad.push('no save to run the beats on');
+for (const id of r2Base ? R2_IDS : []) {
+  const b = beatOf(id);
+  const s = roomy(r2Base);
+  s.rivalryIntensity = 30;
+  const before = clone(s);
+  b.apply(s, clone(s.rival ?? {}));
+  const words = String(b.consequence);
+  for (const [word, key] of R2_STATS) {
+    const said = num(new RegExp(`${word} ([+-]\\d+)`), words);
+    if (said !== s[key] - before[key]) r2Bad.push(`${id}: says ${word} ${said}, moved ${s[key] - before[key]}`);
+  }
+  const heats = /the rivalry heats up/i.test(words);
+  if (heats !== ((s.rivalryIntensity ?? 0) > (before.rivalryIntensity ?? 0))) r2Bad.push(`${id}: the rivalry line and the meter disagree`);
+  const others = o => { const x = { ...o }; for (const k of ['morale', 'fanbase', 'health', 'ovr', 'rivalryIntensity']) delete x[k]; return JSON.stringify(x); };
+  if (others(s) !== others(before)) r2Bad.push(`${id}: moved something its line does not mention`);
 }
 
 /* ------------------------------ the report ------------------------------ */
@@ -337,8 +437,12 @@ console.log(`    rarest three   : ${NBA_LIFE_C.map(d => [d.id, cFired.get(d.id) 
 console.log(`  corruption fired : ${[...seenEventIds].filter(id => id.startsWith('ncorr_')).length}`);
 console.log(`shop items usable  : ${buyable.size}/${NBA_SPEND_ITEMS.length}`);
 console.log(`C1e era leaks      : ${eraLeaks.length}  (modern only cards drawn in a 2003-04 career, must be 0)`);
-console.log(`C2 words vs effect : ${c2Draws} draws, ${c2Bad} mismatches, ${c2Unseen.length} outcomes never seen, ${c2NoSave.length} cards with no eligible save`);
+console.log(`C2 words vs effect : ${c2Draws} draws (${c2RealDraws} on the fleet's own saves), ${c2Bad} mismatches, ${c2Unseen.length} outcomes never seen, ${c2NoSave.length} cards with no eligible save`);
+console.log(`   trades checked  : ${c2Trades} (${c2EraTrades} in a 2003-04 career)`);
+if (CONTROL === 'chipcap') console.log(`   chipcap         : ${chipcapMoved} draws where the loose chips differed`);
 for (const ex of c2Examples) console.log(`    ${ex}`);
+console.log(`R1 beat 318        : rolled ${beat318Rolls} times, ${beat318SameTeam} of them with the rival on your own team (must be 0)`);
+console.log(`R2 beat words      : ${R2_IDS.length} beats, ${r2Bad.length} mismatches${r2Bad.length ? ` (${r2Bad.slice(0, 3).join('; ')})` : ''}`);
 console.log(`T  life cards drawn: ${lifeDraws}, without tags: ${untagged.size}${untagged.size ? ` (${[...untagged].slice(0, 5).join(', ')})` : ''}`);
 console.log('\nsample stat lines by position:');
 for (const p of POSITIONS) {
@@ -359,7 +463,12 @@ if (c2Bad) fails.push(`C2: ${c2Bad} draws where the words and the save disagree`
 if (c2Unseen.length) fails.push(`C2: ${c2Unseen.length} promised outcomes never happened (${c2Unseen.slice(0, 3).join(', ')})`);
 if (c2NoSave.length) fails.push(`C2: ${c2NoSave.length} cards had no eligible save to check (${c2NoSave.slice(0, 3).join(', ')})`);
 if (untagged.size) fails.push(`T: ${untagged.size} life cards drawn without category and cooldown`);
+if (!c2EraTrades) fails.push('C2: no 2003-04 trade was checked, so the era wall went untested');
+if (CONTROL === 'chipcap' && !chipcapMoved) throw new Error('control chipcap changed no chip, so it proves nothing');
+if (beat318SameTeam) fails.push(`R1: beat 318 rolled ${beat318SameTeam} times with the rival on your own team`);
+if (!beat318Rolls) fails.push('R1: beat 318 was never rolled, so its gate went untested');
+if (r2Bad.length) fails.push(`R2: ${r2Bad.length} rivalry beats whose words and effect disagree`);
 console.log(fails.length
   ? `\nFAIL: ${fails.join('; ')}`
-  : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged');
+  : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest');
 process.exit(fails.length ? 1 : 0);

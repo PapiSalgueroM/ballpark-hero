@@ -251,7 +251,7 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     id: "summer_sneaker", from: "Sneaker rep", emoji: "👟", phase: "any", beat: "summer",
     text: "Loved the game last night. We made a pair with your initials on the tongue, if you want to wear them Friday. No contract, just see how they feel.",
     choices: [
-      { label: "Wear them Friday", reply: "Send them over. I'll break them in Friday", karma: 0, popularity: 2, cash: 0.05 },
+      { label: "Wear them Friday", reply: "Send them over. I'll break them in Friday", karma: 0, popularity: 2 },
       { label: "Not until there's a deal", reply: "Appreciate it. Talk to my agent first", karma: 1 },
       { label: "Sticking with what I've got", reply: "I'm good in what I've got. Thank you though", karma: 2, morale: 1 },
     ],
@@ -705,11 +705,13 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
   {
-    id: "contract_insure", from: "Agent", emoji: "💼", phase: "any", beat: "contract",
-    text: "One more thing before the season: an insurance policy in case you get hurt before you sign the next one. It costs real money and I hope it's wasted.",
+    /* Round 918 review: this was an injury policy that never paid out, so it
+       is now something whose whole payoff is the morale it gives. */
+    id: "contract_headspace", from: "Agent", emoji: "💼", phase: "any", beat: "contract",
+    text: "One more thing before the season. Contract years get loud, so I found you someone to talk to who isn't on the team's payroll. It costs real money.",
     choices: [
-      { label: "Buy the policy", reply: "Buy it. I'll sleep better", karma: 2, morale: 2, cash: -0.15 },
-      { label: "I'm not getting hurt", reply: "Save the money. I'm not getting hurt", karma: -1, morale: 1 },
+      { label: "Book the sessions", reply: "Set it up. I'll sleep better", karma: 2, morale: 2, cash: -0.15 },
+      { label: "I'm fine", reply: "Save the money. I've got this", karma: -1, morale: 1 },
     ],
   },
 ];

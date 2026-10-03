@@ -740,7 +740,7 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
     316: [nbaFixture({ age: 30 }), rivalFixture()],
     317: [nbaFixture({ age: 34 }), rivalFixture()],
     /* Round 918: the six new NBA beats. */
-    318: [nbaFixture({ pos: 'PG' }), rivalFixture({ pos: 'PG' })],
+    318: [nbaFixture({ pos: 'PG', team: 'BOS' }), rivalFixture({ pos: 'PG', team: 'LAL' })],
     319: [nbaFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
     320: [nbaFixture({ team: 'BOS' }), rivalFixture({ team: 'LAL', ovr: 85 })],
     321: [nbaFixture({ age: 24 }), rivalFixture()],

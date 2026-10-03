@@ -17,10 +17,11 @@
 
    2. The words are computed from the effect. An option is data (what moves
       and by how much); the chip the button shows and the line the player
-      reads afterwards are both written from that data, and the line reports
-      what really moved after the 0 to 100 clamps. scripts/simNbaCareer.mjs
-      section C2 checks it from the outside anyway: 2,000 draws a card, the
-      words parsed back and compared with the save.
+      reads afterwards are both written from that data on this save, so the
+      chip leaves out a stat already at its limit and the line reports what
+      really moved after the 0 to 100 clamps. scripts/simNbaCareer.mjs
+      section C2 checks it from the outside anyway: 2,000 draws a card, half
+      on the fleet's own saves, the words parsed back and compared with them.
 
    Speakers are roles (the coach, your agent, a veteran) and nobody real is
    named or quoted. League rules, each read from two sources on 2026-10-02
@@ -28,20 +29,29 @@
    - The two way contract began with the 2017 offseason, and a two way
      player does not take a standard roster spot.
      gleague.nba.com/faq ; hoopsrumors.com/2017/04/hoops-rumors-glossary-two-way-contracts.html
-   - A team sending its own young player to its affiliate began before the
-     2005-06 season, and the affiliate league took its current name in
-     2017-18. Neither exists in the 2003-04 era, so both cards are gated to
-     the modern era, and to a player's first three seasons (the assignment
-     rule: three years of service or less).
+   - The development league itself played from 2001-02 (gleague.nba.com/faq,
+     re-read 2026-10-02), so it existed in 2003-04. What did not was a team
+     sending its own young player down: assignment began with the 2005-06
+     season, and the league took its current name in 2017-18. So the
+     assignment card is gated to the modern era, and to a player's first
+     three seasons (the assignment rule: three years of service or less).
      nba.com/suns/news/d_league_050919.html ; gleague.nba.com/faq ; gleague.nba.com/2005-06-nba-assignments
    - A team over the cap has to send out salary close to what it takes back,
      in 2003-04 as now, and a traded player keeps his contract.
-     blazersedge.com/2025/1/15/24344488 ; nationalbasketballnews.com/how-nba-trades-work-salary-matching-trade-exceptions-and-draft-picks ; cbafaq.com/salarycap99.htm
+     blazersedge.com/2025/1/15/24344488 ; nationalbasketballnews.com/how-nba-trades-work-salary-matching-trade-exceptions-and-draft-picks
+     For 2003-04: cbafaq.com/salarycap99.htm (the 1999 agreement). On a
+     re-read on 2026-10-02 it failed on an expired certificate, so that era's
+     second source is the one recorded on the first read, not a fresh one.
    - Since 2023-24 a healthy star is expected to play the national TV games,
-     and the big awards ask for a minimum number of games. Modern era only.
+     a star being an All-Star or All-NBA pick in the past three seasons, and
+     the big awards ask for a minimum number of games. Modern era only.
      nba.com/news/adam-silver-load-management-bog-news-conference-2023 ; espn.com/nba/story/_/id/38386013
-   - The All-Star reserves are picked by the league's head coaches.
-     nba.com/news/2025-nba-all-star-game-reserves ; pr.nba.com/2021-nba-all-star-game-reserves
+   - The All-Star reserves are picked by the league's head coaches, in both
+     eras. Now: nba.com/news/2025-nba-all-star-game-reserves ;
+     pr.nba.com/2021-nba-all-star-game-reserves. Then (read 2026-10-02):
+     cbsnews.com/news/all-star-reserves-announced (2001, reserves picked in
+     a vote by coaches) ; insidehoops.com/all-star-reserves-2004.shtml (seen
+     through a search summary only: the page would not load).
 
    Nothing imported is touched at module scope (nbaMyCareer.ts imports this
    file): the catalog below is functions, and they run at draw time.
@@ -52,21 +62,19 @@ import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds } from './nbaMyCareer';
 type Option = NbaCareerEvent['options'][number];
 
 /** What an option moves. Money is in millions of modern dollars and is paid
- *  in the career's own era money. earned hits career earnings and net worth;
- *  netWorth is spending or a windfall and leaves earnings alone. */
+ *  in the career's own era money; it is spending or a windfall, so it moves
+ *  net worth and leaves career earnings alone. */
 export interface NbaLifeCFx {
   morale?: number;
   fanbase?: number;
   health?: number;
   rating?: number;
   netWorth?: number;
-  earned?: number;
 }
 
 interface Outcome { say: string | ((c: NbaCareerState) => string); fx: NbaLifeCFx; trade?: boolean }
-type Extra = { flag?: string };
-type SureDef = { label: string } & Outcome & Extra;
-type GambleDef = { label: string; p: number; win: Outcome; lose: Outcome } & Extra;
+type SureDef = { label: string } & Outcome;
+type GambleDef = { label: string; p: number; win: Outcome; lose: Outcome };
 export type NbaLifeCOptionDef = SureDef | GambleDef;
 
 export interface NbaLifeCDef {
@@ -82,8 +90,6 @@ export interface NbaLifeCDef {
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 const round2 = (x: number) => Math.round(x * 100) / 100;
-const flagOf = (c: NbaCareerState, k: string): number => (c.lifeFlags || {})[k] || 0;
-const bump = (c: NbaCareerState, k: string) => { c.lifeFlags = { ...(c.lifeFlags || {}), [k]: flagOf(c, k) + 1 }; };
 const isModern = (c: NbaCareerState): boolean => nbaEraById(c.eraId).id === 'now';
 const yrsOf = (c: NbaCareerState): number => c.seasons.length;
 const text = (t: string | ((c: NbaCareerState) => string), c: NbaCareerState): string => (typeof t === 'function' ? t(c) : t);
@@ -111,30 +117,34 @@ export function applyNbaLifeCFx(c: NbaCareerState, fx: NbaLifeCFx): string {
   meter('morale', fx.morale);
   meter('fanbase', fx.fanbase);
   meter('health', fx.health);
-  const scale = nbaEraById(c.eraId).moneyScale;
-  if (fx.earned) {
-    const amt = round2(scale * fx.earned);
-    c.earnings = round2(c.earnings + amt);
-    c.netWorth = round2((c.netWorth ?? 0) + amt);
-    if (amt) parts.push(`earned ${amt}M`);
-  }
   if (fx.netWorth) {
-    const amt = round2(scale * fx.netWorth);
+    const amt = round2(nbaEraById(c.eraId).moneyScale * fx.netWorth);
     c.netWorth = round2((c.netWorth ?? 0) + amt);
     if (amt) parts.push(`net worth ${signed(amt)}M`);
   }
   return parts.length ? `${capital(parts.join(', '))}.` : '';
 }
 
-/** The short promise on the button, written from the same data. */
-export function nbaLifeCChip(o: { fx: NbaLifeCFx; trade?: boolean }): string {
+/* A traded player's fans start over in the new city, at the 44 decks A and
+   B use for the same move, so a trade plays the same whichever deck dealt
+   it. The reset is written as the move it makes on this save. */
+const NEW_CITY_FANS = 44;
+const fxOn = (o: { fx: NbaLifeCFx; trade?: boolean }, c: NbaCareerState): NbaLifeCFx =>
+  (o.trade ? { ...o.fx, fanbase: NEW_CITY_FANS - c.fanbase } : o.fx);
+
+/** The short promise on the button, written from the same data and from the
+ *  save it will land on: the effect is run on a copy, so a stat already at
+ *  its limit (health 100, a rating at its ceiling) is not promised. */
+export function nbaLifeCChip(o: { fx: NbaLifeCFx; trade?: boolean }, c: NbaCareerState): string {
+  const after = { ...c };
+  applyNbaLifeCFx(after, fxOn(o, c));
   const bits: string[] = [];
-  const dir = (name: string, d: number | undefined) => { if (d) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`); };
-  dir('rating', o.fx.rating);
-  dir('morale', o.fx.morale);
-  dir('fans', o.fx.fanbase);
-  dir('health', o.fx.health);
-  const cash = (o.fx.earned ?? 0) + (o.fx.netWorth ?? 0);
+  const dir = (name: string, d: number) => { if (d) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`); };
+  dir('rating', after.ovr - c.ovr);
+  dir('morale', after.morale - c.morale);
+  dir('fans', after.fanbase - c.fanbase);
+  dir('health', after.health - c.health);
+  const cash = round2((after.netWorth ?? 0) - (c.netWorth ?? 0));
   if (cash) bits.push(cash > 0 ? 'money in' : 'money out');
   if (o.trade) bits.push('new team');
   return bits.length ? bits.join(', ') : 'no change';
@@ -142,6 +152,7 @@ export function nbaLifeCChip(o: { fx: NbaLifeCFx; trade?: boolean }): string {
 
 function settle(cc: NbaCareerState, r: () => number, o: Outcome): string {
   const story = text(o.say, cc);
+  const fx = fxOn(o, cc);
   let moved = '';
   if (o.trade) {
     /* A trade stays inside the career's own era, and the contract goes with
@@ -149,33 +160,28 @@ function settle(cc: NbaCareerState, r: () => number, o: Outcome): string {
     const pool = nbaEraTeamIds(cc.eraId).filter(id => id !== cc.team);
     const next = pool[Math.floor(r() * pool.length)];
     cc.team = next;
-    moved = `Traded to ${nbaTeamLabelOf(next, cc.eraId)}.`;
+    moved = `Traded to ${nbaTeamLabelOf(next, cc.eraId)}, where the fans start over.`;
   }
-  return [story, moved, applyNbaLifeCFx(cc, o.fx)].filter(Boolean).join(' ');
+  return [story, moved, applyNbaLifeCFx(cc, fx)].filter(Boolean).join(' ');
 }
 
-function toOption(o: NbaLifeCOptionDef): Option {
+function toOption(o: NbaLifeCOptionDef, c: NbaCareerState): Option {
   if ('p' in o) {
     return {
       label: o.label,
-      effect: `Could go either way: ${nbaLifeCChip(o.win)}, or ${nbaLifeCChip(o.lose)}`,
-      apply: (cc, r) => {
-        if (o.flag) bump(cc, o.flag);
-        return settle(cc, r, r() < o.p ? o.win : o.lose);
-      },
+      effect: `Could go either way: ${nbaLifeCChip(o.win, c)}, or ${nbaLifeCChip(o.lose, c)}`,
+      apply: (cc, r) => settle(cc, r, r() < o.p ? o.win : o.lose),
     };
   }
   return {
     label: o.label,
-    effect: capital(nbaLifeCChip(o)),
-    apply: (cc, r) => {
-      if (o.flag) bump(cc, o.flag);
-      return settle(cc, r, o);
-    },
+    effect: capital(nbaLifeCChip(o, c)),
+    apply: (cc, r) => settle(cc, r, o),
   };
 }
 
-/** One card, built for this career. Works on any save, eligible or not. */
+/** One card, built for this career: its chips are written from this save.
+ *  Works on any save, eligible or not. */
 export function buildNbaLifeCCard(def: NbaLifeCDef, c: NbaCareerState): NbaCareerEvent {
   return {
     id: def.id,
@@ -184,7 +190,7 @@ export function buildNbaLifeCCard(def: NbaLifeCDef, c: NbaCareerState): NbaCaree
     ...(def.story ? { story: def.story } : {}),
     title: text(def.title, c),
     body: text(def.body, c),
-    options: def.options.map(toOption),
+    options: def.options.map(o => toOption(o, c)),
   };
 }
 
@@ -341,7 +347,9 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
       {
         label: 'Answer it with a hard, clean foul next trip down', p: 0.6,
         win: { say: 'One hard screen, one box out that moved him three feet, and it stopped. The guards bought dinner.', fx: { morale: 8, fanbase: 4 } },
-        lose: { say: 'The referees called it a flagrant, the league took a game check, and you watched the next one in a suit.', fx: { morale: 3, netWorth: -0.15, fanbase: -2 } },
+        /* A fine, not a game check: a game check is a share of salary and
+           comes with a missed game, and this card moves neither. */
+        lose: { say: 'The referees called it a flagrant and the league sent you a fine. The guards still bought dinner.', fx: { morale: 3, netWorth: -0.05, fanbase: -2 } },
       },
       { label: 'Answer it on the scoreboard', say: 'You went at him every possession and fouled him out. Nobody had to say anything.', fx: { rating: 1, morale: 4 } },
       { label: 'Stay out of it', say: 'You played your game. The guards noticed who did not show up.', fx: { morale: -5, health: 2 } },
@@ -612,23 +620,30 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     title: 'Your contract makes the math work',
     body: c => `${nbaTeamLabelOf(c.team, c.eraId)} wants a star at the deadline and is over the cap. A team over the cap cannot just add him: the salary going out has to come close to the salary coming in. Your contract is the one that makes the numbers line up. Nothing about your deal changes if you go. Same money, same years, different city.`,
     options: [
-      { label: 'Tell your agent you will go without a fuss', say: 'The call came at two in the afternoon. You were on a plane by six with the same contract in a new time zone.', fx: { morale: -4, fanbase: -5 }, trade: true },
+      { label: 'Tell your agent you will go without a fuss', say: 'The call came at two in the afternoon. You were on a plane by six with the same contract in a new time zone.', fx: { morale: -4 }, trade: true },
       {
         label: 'Ask the front office to find another contract to send', p: 0.5,
         win: { say: 'They found a different way to make it add up. You stayed, and everybody knows how close it was.', fx: { morale: 4 } },
-        lose: { say: 'There was no other way to make it add up.', fx: { morale: -8, fanbase: -4 }, trade: true },
+        lose: { say: 'There was no other way to make it add up.', fx: { morale: -8 }, trade: true },
       },
       {
-        label: 'If you are going, ask to go somewhere you will play', p: 0.5,
-        win: { say: 'Your agent got a third team involved, one with minutes at your position.', fx: { morale: 6, fanbase: -3 }, trade: true },
-        lose: { say: 'The deal was the deal. You went where the math sent you.', fx: { morale: -3, fanbase: -3 }, trade: true },
+        /* The win is a team that asked for you, not a promise of minutes:
+           the rotation is still settled in camp (nbaCampBattle). */
+        label: 'If you are going, ask your agent to steer it', p: 0.5,
+        win: { say: 'Your agent got a third team involved, one whose coach had been asking about you for a year.', fx: { morale: 6 }, trade: true },
+        lose: { say: 'The deal was the deal. You went where the math sent you.', fx: { morale: -3 }, trade: true },
       },
     ],
   },
   {
-    /* Modern era only: the rule on resting stars dates from 2023-24. */
+    /* Modern era only: the national TV expectation comes from the 2023-24
+       Player Participation Policy, which counts as a star anyone picked
+       All-Star or All-NBA in the past three seasons. The engine keeps
+       All-NBA and MVP (a real MVP is always an All-NBA pick) and has no
+       All-Star selection, so the gate reads those two and nothing else. */
     id: 'nbaC_rule_national_tv', category: 'rules', cooldown: 2, story: 'loadManagement',
-    when: c => isModern(c) && c.ovr >= 84 && c.role !== 'backup' && yrsOf(c) >= 2,
+    when: c => isModern(c) && c.role !== 'backup' && yrsOf(c) >= 2
+      && c.seasons.slice(-3).some(s => (s.awards ?? []).some(a => a === 'All-NBA' || a === 'MVP')),
     title: 'Your rest night is the national TV game',
     body: 'The training staff has you down to sit the second night of a back to back. The trouble is that it is the national TV game, and the league now expects a healthy star to be on the floor for those. The team can move your rest night. It cannot just sit you.',
     options: [
@@ -639,23 +654,25 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
   },
   {
     /* Modern era only: the games minimum for the big awards is from 2023-24.
-       The card promises a place on the ballot, never the award: the award is
-       still decided by the season, in careerAwards.ts. */
+       The card is about the knee, not the ballot. It is dealt in the
+       offseason, after the awards are settled, and next season's awards read
+       only next season's games, so no outcome here claims a place on a
+       ballot or the loss of one. */
     id: 'nbaC_rule_award_games', category: 'rules', cooldown: 3, story: 'awardGames',
     when: c => {
       const last = c.seasons[c.seasons.length - 1];
       const missedTime = c.health < 88 || (!!last && last.games > 0 && last.games < 72);
       return isModern(c) && yrsOf(c) >= 2 && c.ovr >= 80 && missedTime;
     },
-    title: 'Close to the games line',
-    body: 'You have missed a lot of time with a sore knee, and the big awards now ask for a minimum number of games played. You are close to the line. The knee would like two more weeks. The calendar does not have two more weeks.',
+    title: 'The knee and the games count',
+    body: 'Your knee has been sore for a while, and these days the big awards ask for a minimum number of games played, so everybody around you is counting. The knee would like a proper rest. Your competitive streak would like the count to start now.',
     options: [
       {
-        label: 'Play through it and stay eligible', p: 0.55,
-        win: { say: 'You got to the line with a game to spare. Your name is allowed on the ballot, and the knee is a problem for the summer.', fx: { fanbase: 5, morale: 5, health: -6 } },
-        lose: { say: 'The knee went in the third game back. You missed the line, and then you missed the rest of the month.', fx: { health: -12, morale: -5 } },
+        label: 'Get back out there as soon as they let you', p: 0.55,
+        win: { say: 'You were back early and you finished the year on the floor. The knee is a problem for the summer.', fx: { fanbase: 5, morale: 5, health: -6 } },
+        lose: { say: 'The knee went again in the third game back, and the rest of the month went with it.', fx: { health: -12, morale: -5 } },
       },
-      { label: 'Rest it properly, the awards can wait a year', say: 'Two weeks off, the line came and went, and you were whole for the games that matter.', fx: { health: 8, morale: -3 } },
+      { label: 'Rest it properly and stop counting', say: 'Two full weeks off. It was hard to watch, and you came back whole.', fx: { health: 8, morale: -3 } },
       { label: 'Do exactly what the doctors say, whatever that costs', say: 'They cleared you a week later than you wanted. You stopped counting games.', fx: { health: 5, morale: -1 } },
     ],
   },

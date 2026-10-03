@@ -216,7 +216,10 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
     id: 318, emoji: "🪞", title: "Same Spot, Same Night",
     description: (_s, r) => `${r.name} plays your position, and the schedule has the two of you guarding each other on opening night.`,
     consequence: "Morale +4, the rivalry heats up",
-    when: (s, r) => !r.retired && r.pos === s.pos,
+    /* Guarding each other needs two teams: the rival is drafted onto your
+       own team and keeps it, so without the team check this beat mostly
+       told a player to guard his own teammate (simNbaCareer R1). */
+    when: (s, r) => !r.retired && r.pos === s.pos && r.team !== s.team,
     apply: s => {
       s.morale = clamp(s.morale + 4, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
