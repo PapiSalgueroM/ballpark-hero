@@ -7,6 +7,8 @@ import {
   NHL_LIFE_C, applyNhlLifeCFx, nhlLifeCChip, buildNhlLifeCCard, getNhlLifeEventsC,
 } from './nhlCareerLifeC';
 import { NHL_ARCHETYPES, startNhlCareer } from './nhlMyCareer';
+import { getNhlLifeEventsA } from './nhlCareerLifeA';
+import { nhlWaiverExempt, nhlWaiverRequired } from './nhlCareerWaivers';
 import type { NhlCareerPos, NhlCareerState } from './nhlMyCareer';
 
 const seeded = (seed: number) => () => {
@@ -98,6 +100,49 @@ describe('gates', () => {
     expect(idsFor(career('D', { ovr: 80, lifeFlags: { alternate: 1, captain: 1 } }, 4))).not.toContain('nhlC_rule_wear_the_a');
     expect(idsFor(career('D', { ovr: 80 }, 4))).not.toContain('nhlC_rule_no_trade_list');
     expect(idsFor(career('D', { ovr: 80, lifeFlags: { tenTeamList: 1 } }, 4))).toContain('nhlC_rule_no_trade_list');
+  });
+
+  it('stops the offer sheet at six seasons, when a seventh would make him unrestricted', () => {
+    const rfa = { contractYears: 0, age: 25, ovr: 80 };
+    expect(idsFor(career('C', rfa, 6))).toContain('nhlC_rule_offer_sheet');
+    expect(idsFor(career('C', rfa, 7))).not.toContain('nhlC_rule_offer_sheet');
+  });
+
+  it('asks one waiver question for decks A and C, by games and by years', () => {
+    const games = (c: NhlCareerState, n: number) => { for (const s of c.seasons) s.games = n; return c; };
+    /* A skater is exempt under 160 games, a goalie under 80. */
+    expect(nhlWaiverExempt(games(career('C', {}, 1), 80))).toBe(true);
+    expect(nhlWaiverExempt(games(career('C', {}, 2), 80))).toBe(false);
+    expect(nhlWaiverRequired(games(career('C', {}, 2), 80))).toBe(true);
+    expect(nhlWaiverExempt(games(career('G', {}, 1), 60))).toBe(true);
+    expect(nhlWaiverRequired(games(career('G', {}, 2), 60))).toBe(true);
+    /* Years run out even without the games. */
+    expect(nhlWaiverRequired(games(career('C', {}, 5), 20))).toBe(true);
+    expect(nhlWaiverRequired(games(career('C', {}, 4), 20))).toBe(false);
+    expect(nhlWaiverRequired(games(career('G', {}, 5), 10))).toBe(false);
+    expect(nhlWaiverRequired(games(career('G', {}, 6), 10))).toBe(true);
+    /* The 2005 agreement was not read twice: nothing before 2013-14. */
+    expect(nhlWaiverRequired(games(career('C', { year: 2012 }, 3, 'y2006'), 80))).toBe(false);
+    expect(nhlWaiverRequired(games(career('C', { year: 2013 }, 3, 'y2006'), 80))).toBe(true);
+  });
+
+  it('never tells one player he needs waivers and does not', () => {
+    for (const pos of ['C', 'D', 'G'] as NhlCareerPos[]) {
+      for (let yrs = 1; yrs <= 6; yrs++) {
+        for (const g of [20, 60, 82]) {
+          const c = career(pos, { ovr: 74, age: 20 }, yrs);
+          for (const s of c.seasons) s.games = g;
+          const a = getNhlLifeEventsA(c, () => 0.5).map(e => e.id);
+          const both = a.includes('nhlA_waiver_wire') && idsFor(c).includes('nhlC_rule_ahl_assignment');
+          expect(both).toBe(false);
+        }
+      }
+    }
+  });
+
+  it('leaves the timeout out of the coach\'s challenge, which no longer needs one', () => {
+    const ev = buildNhlLifeCCard(defOf('nhlC_rule_coach_challenge'), career('RW', {}, 2));
+    expect(ev.body).not.toMatch(/timeout/i);
   });
 
   it('shows the press box and the fourth line to a backup skater only', () => {

@@ -30,6 +30,8 @@
      has to put him on waivers, and any other club can claim him, contract
      and all. Young players are exempt for a while and go up and down freely.
      nhl.com/hurricanes/team/transaction-primer ; thehockeywriters.com/nhl-waiver-rules ; puckbeat.com/explained/waivers
+     Who is exempt is decided in nhlCareerWaivers.ts (games and years, read
+     2026-10-03), which decks A and C both ask, so they cannot disagree.
    - A conditioning loan sends a player to the minors for game minutes
      without waivers. pensionplanpuppets.com/2021/2/16/22284010 ;
      mylittlefalls.com/ahl-off-season-primer-explaining-contracts-waivers-and-the-development-rule
@@ -45,8 +47,10 @@
      paid the same. New in the 2013 agreement.
      nbcsports.com/nhl/news/heres-the-deal-with-retaining-salary-in-trades ; thehockeywriters.com/nhl-retained-salary-trades
    - Three on three overtime (it had been four on four) and the coach's
-     challenge (offside or goalie interference, only with the timeout still
-     in hand) both began in 2015-16.
+     challenge (offside or goalie interference) both began in 2015-16. In
+     2015-16 a challenge needed the timeout still in hand, but that part
+     changed in later seasons (a review on 2026-10-03 cited the league's
+     2019-20 rule changes), so the card says nothing about the timeout.
      nbcsports.com/nhl/news/its-official-3-on-3-ot-coachs-challenges-to-begin-next-season ;
      cbssports.com/nhl/news/report-3-on-3-overtime-coming-to-nhl-pending-board-approval ;
      insideedgehockeynews.com/nhl-rule-changes-for-2015-2016
@@ -64,6 +68,7 @@
 */
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
 import { nhlTeamLabelOf, nhlEraById, nhlEraTeamIds } from './nhlMyCareer';
+import { nhlWaiverExempt, nhlWaiverRequired } from './nhlCareerWaivers';
 
 type Option = NhlCareerEvent['options'][number];
 
@@ -465,8 +470,12 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     options: [
       {
         label: 'Spend the summer adding a new weapon', p: 0.6,
-        win: { say: 'You came to camp with a new release on your shot, and the slump talk died in October.', fx: { rating: 2, fanbase: 3 } },
-        lose: { say: 'You spent the summer on a new shot and lost a little of the old one.', fx: { rating: -1, morale: -3 } },
+        win: { say: c => (c.pos === 'G'
+          ? 'You came to camp with a quicker push across the crease, and the slump talk died in October.'
+          : 'You came to camp with a new release on your shot, and the slump talk died in October.'), fx: { rating: 2, fanbase: 3 } },
+        lose: { say: c => (c.pos === 'G'
+          ? 'You spent the summer rebuilding your stance and lost a little of the old feel.'
+          : 'You spent the summer on a new shot and lost a little of the old one.'), fx: { rating: -1, morale: -3 } },
       },
       { label: 'Keep doing what worked', say: 'Same summer, same routine, same results. Nobody can complain about that.', fx: { morale: 3 } },
       { label: 'Do the media tour', say: 'Three podcasts, a magazine shoot and a truck commercial. The money was real.', fx: { earned: 0.15, fanbase: 4, health: -2 } },
@@ -527,15 +536,18 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
   {
     id: 'nhlC_bench_press_box', category: 'bench', cooldown: 2, story: 'healthyScratch',
     when: c => c.role === 'backup' && c.pos !== 'G' && yrsOf(c) >= 1,
-    title: 'Five straight games in the press box',
-    body: 'Healthy scratch again. You watch from the press box with a sandwich and a notebook, next to the guys who are actually hurt. The coach has not explained it and you have not asked.',
+    /* The engine plays a backup skater every night on short minutes (his
+       season line says so), so the press box is a threat here, never a
+       stint he already served. */
+    title: 'One more bad shift and it is the press box',
+    body: 'You play every night at the bottom of the lineup, and the coach just told you the next lazy shift sends you up to the press box as a healthy scratch, with a sandwich and a notebook, next to the guys who are actually hurt.',
     options: [
-      { label: 'Skate with the extras every morning', say: 'Extra ice with the scratches every day. When your chance came, you were ready for it.', fx: { rating: 1, health: -2 } },
-      { label: 'Ask the coach what it takes', say: 'He said compete level. You said fair. You still sat for another week, but you knew why.', fx: { morale: 2 } },
+      { label: 'Skate with the extras every morning', say: 'Extra ice with the extras every morning. You never gave him the lazy shift he was waiting for.', fx: { rating: 1, health: -2 } },
+      { label: 'Ask the coach what it takes', say: 'He said compete level. You said fair, and from then on you knew exactly what he wanted.', fx: { morale: 2 } },
       {
-        label: 'Tell a reporter you want to play', p: 0.4,
-        win: { say: 'The quote got around, and a week later you were back in the lineup.', fx: { fanbase: 3, morale: 3 } },
-        lose: { say: 'The quote got around, the coach read it, and you stayed in the press box.', fx: { morale: -6, fanbase: -2 } },
+        label: 'Tell a reporter you want more ice', p: 0.4,
+        win: { say: 'The quote got around, and a week later the coach found you a few more shifts.', fx: { fanbase: 3, morale: 3 } },
+        lose: { say: 'The quote got around, the coach read it, and your shifts got even shorter.', fx: { morale: -6, fanbase: -2 } },
       },
     ],
   },
@@ -571,23 +583,27 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
       const last = c.seasons[c.seasons.length - 1];
       return c.role === 'backup' && c.pos !== 'G' && !!last && last.teamResult !== 'Missed the playoffs' && last.teamResult !== 'SUSPENDED';
     },
-    title: 'Practicing with the extras in the playoffs',
-    body: 'The playoffs started and you were not in the lineup. You practiced with the extras, the guys brought up from the minors to stay ready, and you skated hard every morning in case somebody got hurt.',
+    /* The engine dresses a backup skater for every playoff game (his season
+       line prints them), so the card is about the bottom of the lineup in
+       the spring, never about sitting out. */
+    title: 'Playoff hockey at the bottom of the lineup',
+    body: 'The playoffs came and you were in the lineup every night, just barely: a shift or two a period, and fewer when it got close. Every morning the extras called up from the minors practiced beside you, waiting for somebody to get hurt.',
     options: [
-      { label: 'Skate like you are in the lineup', say: 'Every drill at game speed. Halfway through a series a winger got hurt and you were in.', fx: { rating: 1, health: -2, fanbase: 2 } },
+      { label: 'Skate every shift like it is your last', say: 'Every shift at full speed. Halfway through a series somebody higher up the lineup got hurt and you moved up.', fx: { rating: 1, health: -2, fanbase: 2 } },
       { label: 'Be the loudest guy in the room', say: 'You kept the room laughing through the tightest month of the year. The coach noticed.', fx: { morale: 4 } },
-      { label: 'Ask why you are not in', say: 'The coach said he likes the lineup the way it is. You went back to the extras.', fx: { morale: -2 } },
+      { label: 'Ask the coach for more ice', say: 'The coach said he likes the lineup the way it is. You went back to your two shifts a period.', fx: { morale: -2 } },
     ],
   },
 
   /* ---------------------- 8. THE LEAGUE'S OWN RULES ---------------------- */
   {
-    /* The current agreement: a young player is exempt from waivers for a
-       while, so the club can send him down and bring him back freely. */
+    /* The current agreement: a player is exempt from waivers until his
+       games or his years run out (nhlCareerWaivers.ts, which also carries
+       the era gate), so the club can send him down and bring him back. */
     id: 'nhlC_rule_ahl_assignment', category: 'rules', cooldown: 2, story: 'ahlAssignment',
-    when: c => ruleFrom(2013)(c) && yrsOf(c) <= 2 && c.age <= 22 && c.ovr < 78,
+    when: c => nhlWaiverExempt(c) && c.age <= 22 && c.ovr < 78,
     title: 'Sent down, no waivers needed',
-    body: 'You are still young enough that the club can send you to the minors and bring you back without putting you on waivers, so nobody else gets a shot at you. They are using that now. Two weeks down, says the GM, and then we will see.',
+    body: 'You are still early enough in your career that the club can send you to the minors and bring you back without putting you on waivers, so nobody else gets a shot at you. They are using that now. Two weeks down, says the GM, and then we will see.',
     options: [
       {
         label: 'Go down and dominate', p: 0.6,
@@ -599,9 +615,10 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     ],
   },
   {
-    /* Waivers are not a loan: any club can claim him, contract and all. */
+    /* Waivers are not a loan: any club can claim him, contract and all.
+       Only for a player who is past his exemption (nhlCareerWaivers.ts). */
     id: 'nhlC_rule_waiver_claim', category: 'rules', cooldown: 99, story: 'waivers',
-    when: c => ruleFrom(2013)(c) && yrsOf(c) >= 3 && yrsOf(c) <= 9 && c.ovr <= 79,
+    when: c => nhlWaiverRequired(c) && yrsOf(c) <= 9 && c.ovr <= 79,
     title: 'On waivers, and somebody might want you',
     body: 'You are past the point where they can just send you down, so to get you to the minors the club put you on waivers. For a day any team in the league can claim you, contract and all. Waivers are not a loan. If somebody claims you, you are theirs.',
     options: [
@@ -654,9 +671,14 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     /* An offer sheet: another club signs a restricted free agent, his club
        can match it or take draft picks back. Both eras (2007). The card
        never signs anything: the contract is still settled in the free
-       agency window that follows, so the words promise only the meters. */
+       agency window that follows, so the words promise only the meters.
+       A player is unrestricted at 27 or after seven accrued seasons,
+       whichever comes first (dkpittsburghsports.com/2020/10/05/restricted-
+       free-agent-rfa-nhl-offer-sheet-faq-tlh ; iowawild.com/news/detail/1158,
+       cited by the 2026-10-03 review), and every season here is a full
+       one, so the gate stops at six seasons as well as at 26. */
     id: 'nhlC_rule_offer_sheet', category: 'rules', cooldown: 99, story: 'offerSheet',
-    when: c => c.contractYears <= 0 && yrsOf(c) >= 3 && c.age <= 26 && c.ovr >= 78,
+    when: c => c.contractYears <= 0 && yrsOf(c) >= 3 && yrsOf(c) <= 6 && c.age <= 26 && c.ovr >= 78,
     title: 'Another club wants to send you an offer sheet',
     body: 'Your deal is up and you are a restricted free agent. Another club can sign you to an offer sheet, and then your club can match it and keep you, or let you go and take draft picks back. Your agent says one club is ready. He wants to know how you feel before he picks up the phone.',
     options: [
@@ -672,13 +694,13 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
   {
     /* The C and the A. Reads deck A's letter flags: a captain never sees
        it, and a player who already wears an A is told so. */
-    id: 'nhlC_rule_wear_the_a', category: 'rules', cooldown: 99, story: 'captaincy',
+    id: 'nhlC_rule_wear_the_a', category: 'rules', cooldown: 99, story: 'captainGone',
     when: c => yrsOf(c) >= 4 && c.ovr >= 78 && !flagOf(c, 'captain') && (flagOf(c, 'alternate') > 0 || yrsOf(c) >= 6),
     title: 'The captain is gone and the room is looking at you',
     body: c => `The captain was traded at the deadline. ${flagOf(c, 'alternate') > 0 ? 'You have worn an A on your sweater for a while now' : 'You are one of the oldest voices in the room'}, and the coach wants to know if you want the C, or if you would rather wear an A and let somebody else carry it.`,
     options: [
       { label: 'Take the C', flag: 'captain', say: 'Your name is the one they read after a loss now. The room is yours.', fx: { fanbase: 6, morale: 4, health: -2 } },
-      { label: 'Wear the A', flag: 'alternate', say: 'You stayed an alternate and the C went to an older guy. Fewer microphones, same voice in the room.', fx: { morale: 3 } },
+      { label: 'Wear the A', flag: 'alternate', say: 'You wore an A and the C went to somebody else. Fewer microphones, same voice in the room.', fx: { morale: 3 } },
       { label: 'Tell them to wait a year', say: 'No captain for a season, just letters on a few shoulders, and a room that mostly ran itself.', fx: { morale: 2, fanbase: -2 } },
     ],
   },
@@ -686,12 +708,12 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     /* Reads deck B's clause flags: a player who took the no move or the
        ten team list is told his clause decides it. A long serving star
        without one is asked as a courtesy, and the words say only that. */
-    id: 'nhlC_rule_no_trade_list', category: 'rules', cooldown: 99, story: 'noTrade',
+    id: 'nhlC_rule_no_trade_list', category: 'rules', cooldown: 99, story: 'noTradeCall',
     when: c => (flagOf(c, 'noMove') > 0 || flagOf(c, 'tenTeamList') > 0 || (yrsOf(c) >= 8 && c.ovr >= 84)) && c.contractYears >= 1,
     title: 'A contender wants you, and the call is yours',
     body: c => `${flagOf(c, 'noMove') > 0 || flagOf(c, 'tenTeamList') > 0
       ? 'Your deal has trade protection in it, so nothing happens without your signature.'
-      : 'You have been here long enough that the GM will not move you without asking first.'} He sat you down: a contender wants you, it is a real shot at a Cup, and your family would have to move by Thursday.`,
+      : 'You have been in this league a long time, and good for most of it, so the GM will not move you without asking first.'} He sat you down: a contender wants you, it is a real shot at a Cup, and your family would have to move by Thursday.`,
     options: [
       { label: 'Say yes and go', say: 'You signed off on it on a Tuesday and were on a plane by dinner.', fx: { morale: 2, fanbase: -2 }, move: 'trade' },
       { label: 'Say no and stay', say: 'You told the GM this is home. He nodded and called the contender back.', fx: { morale: 4, fanbase: 4 } },
@@ -719,12 +741,13 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     ],
   },
   {
-    /* The coach's challenge, from 2015-16: offside or goalie interference,
-       and only with the timeout still in hand. */
+    /* The coach's challenge, from 2015-16: offside or goalie interference.
+       Whether it costs the timeout changed after 2015-16, so the words
+       leave the timeout out and hold in every season the gate opens. */
     id: 'nhlC_rule_coach_challenge', category: 'rules', cooldown: 3,
     when: c => ruleFrom(2015)(c) && c.pos !== 'G' && yrsOf(c) >= 1,
     title: 'Your goal is under review',
-    body: 'You scored the biggest goal of the month and the other coach challenged it for offside. He could only ask because he still had his timeout. The whole building waits while the officials watch your skate on a replay.',
+    body: 'You scored the biggest goal of the month and the other coach challenged it for offside. The whole building waits while the officials watch your skate on a replay.',
     options: [
       {
         label: 'Celebrate anyway', p: 0.5,

@@ -421,17 +421,17 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Announce it, take the tour',
           effect: 'Long goodbye',
-          apply: (cc) => { fans(cc, 16); mood(cc, 8); const nw = addNet(cc, 0.4); hp(cc, -4); return `Standing ovations in buildings that booed you for fifteen years. Fanbase +16, morale +8, 400k in tour sponsorship, net worth ${nw}M, health -4.`; },
+          apply: (cc) => { const f0 = cc.fanbase, m0 = cc.morale, h0 = cc.health; fans(cc, 16); mood(cc, 8); const nw = addNet(cc, 0.4); hp(cc, -4); return `Standing ovations in buildings that booed you for fifteen years. Fanbase +${cc.fanbase - f0}, morale +${cc.morale - m0}, 400k in tour sponsorship, net worth ${nw}M, health ${cc.health - h0}.`; },
         },
         {
           label: 'Say nothing, decide in June',
           effect: 'Keep the door open',
-          apply: (cc) => { mood(cc, 5); fans(cc, -2); return `No announcement, no paddleboards, no pressure. Morale +5, fanbase -2.`; },
+          apply: (cc) => { const m0 = cc.morale, f0 = cc.fanbase; mood(cc, 5); fans(cc, -2); return `No announcement, no paddleboards, no pressure. Morale +${cc.morale - m0}, fanbase ${cc.fanbase - f0}.`; },
         },
         {
           label: 'Ask every stop to donate instead',
           effect: 'No more canoes',
-          apply: (cc) => { fans(cc, 12); mood(cc, 11); return `Every road club wrote a 25k check to minor hockey instead of buying you a canoe. Fanbase +12, morale +11.`; },
+          apply: (cc) => { const f0 = cc.fanbase, m0 = cc.morale; fans(cc, 12); mood(cc, 11); return `Every road club wrote a 25k check to minor hockey instead of buying you a canoe. Fanbase +${cc.fanbase - f0}, morale +${cc.morale - m0}.`; },
         },
       ],
     });

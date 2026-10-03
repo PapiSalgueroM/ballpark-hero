@@ -14,6 +14,7 @@
 
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
 import { nhlTeamLabelOf } from './nhlMyCareer';
+import { nhlWaiverRequired } from './nhlCareerWaivers';
 
 /** Round 59 optional fields that are not on NhlCareerState yet. */
 type LifeState = NhlCareerState & {
@@ -134,16 +135,19 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  if (yrs >= 1 && yrs <= 6 && c.ovr < 80) {
+  /* Only a player past his waiver exemption, under the agreement that
+     nhlCareerWaivers.ts checks (games and years, two sources). The words
+     carry no clock time: the claim deadline has moved over the years. */
+  if (nhlWaiverRequired(c) && yrs <= 6 && c.ovr < 80) {
     deck.push({
       id: 'nhlA_waiver_wire',
       category: 'callup', cooldown: 2, story: 'waivers',
       title: 'Waiver wire Saturday',
-      body: 'To send you down they have to put you on waivers first, and every other team in the league has until noon tomorrow to claim you and change your entire life. Your phone is face up on the kitchen table. Nobody in your family is talking about it, which means everybody is thinking about it.',
+      body: 'To send you down they have to put you on waivers first, and every other team in the league has until this time tomorrow to claim you and change your entire life. Your phone is face up on the kitchen table. Nobody in your family is talking about it, which means everybody is thinking about it.',
       options: [
         {
           label: 'Phone face down, skate at 8am', effect: 'Control the controllable',
-          apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, 3); return `You skated, ate, napped and never checked once. Cleared at noon and went down with your head up. Morale +${m}, health +${h}.`; },
+          apply: (cc) => { const m = mor(cc, 6); const h = hp(cc, 3); return `You skated, ate, napped and never checked once. Cleared the next day and went down with your head up. Morale +${m}, health +${h}.`; },
         },
         {
           label: 'Work every contact you have', effect: 'Read the room',
@@ -790,7 +794,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
         },
         {
           label: 'Send him a case of beer', effect: 'Disarm him',
-          apply: (cc) => { cash(cc, -0.002); const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `A case of good beer to his hotel with a note that just said "see you Thursday" ended a three year war. Morale +${m}, fanbase +${f}.`; },
+          apply: (cc) => { const spent = cash(cc, -0.002); const m = mor(cc, 6); const f = fan(cc, 6); flag(cc, 'chirpTruce'); return `${spent}M of good beer to his hotel with a note that just said "see you Thursday" ended a three year war. Morale +${m}, fanbase +${f}.`; },
         },
       ],
     });
@@ -836,7 +840,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
         },
         {
           label: 'Get the flipper, never smile', effect: 'Removable solution',
-          apply: (cc) => { cash(cc, -0.004); const m = mor(cc, 3); const f = fan(cc, 4); return `A little piece of plastic that lives in your glove during games and in your pocket at dinner. Morale +${m}, fanbase +${f}.`; },
+          apply: (cc) => { const spent = cash(cc, -0.004); const m = mor(cc, 3); const f = fan(cc, 4); return `A ${spent}M piece of plastic that lives in your glove during games and in your pocket at dinner. Morale +${m}, fanbase +${f}.`; },
         },
       ],
     });
