@@ -275,6 +275,6 @@ describe('Round 912: both college dynasty boards hold their recorded behaviour',
         if (off.length) first = `step ${i} (${a.step}) differs in ${off.join(', ')}\n  was: ${a.head}\n  now: ${b.head}\n  was info ${a.info}\n  now info ${b.info}`;
       }
       expect(first).toBe('');
-    });
+    }, 120_000); /* a full scripted dynasty: 3 s on a quiet machine, 14 s on a busy one */
   }
 });
