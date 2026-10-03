@@ -27,7 +27,11 @@
  *      from its 40 club file (git show 06dc0741). Without the pulls this part prints SKIPPED and why;
  *      A and B do not need them and always run.
  *
- * Negative controls, SIM_ERA_EXTEND_CONTROL=noprove|nostillin|nodupe: the
+ * Round 901 review fix: a name with rows at two clubs of the new leagues is
+ * settled only by the caller's poolNamesakes (A places one by it, B holds its
+ * three guards, control nosplit cuts the undeclared one out).
+ *
+ * Negative controls, SIM_ERA_EXTEND_CONTROL=noprove|nostillin|nodupe|nosplit: the
  * harness imports a COPY of the lib with that guard cut out (it first proves
  * the guarded line is in the lib, and refuses with exit 2 if not), and the
  * run must then end red. Nothing on disk outside the temp folder changes.
@@ -52,6 +56,7 @@ const CONTROLS = {
   noprove: ['if (!next.some(r => worldClubOf(r.club) === to)) {', 'if (false) {'],
   nostillin: ['if (stillIn && !rm.later) die(', 'if (false) die('],
   nodupe: ['if (seen.has(p.n)) die(', 'if (false) die('],
+  nosplit: ['if (undeclaredSplit.length) die(', 'if (false) die('],
 };
 const CONTROL = process.env.SIM_ERA_EXTEND_CONTROL ?? '';
 let libUrl = pathToFileURL(LIB).href;
@@ -110,6 +115,11 @@ const ROWS = [
   row('Sam Namesake', 'Delta SC', 'Centre-Forward', 31, 6e6),
   row('Ari Arrival', 'Outside FC', 'Central Midfield', 24, 3e6),
   row('Bo Shipmove', 'Outside FC', 'Left Midfield', 24, 3e6),
+  /* Round 901 review fix: one string at both new clubs, tied on value, the
+     lower id at Gamma; the declaration keeps Delta's, so the old silent tie
+     break would put her at the wrong club. */
+  row('Pia Split', 'Gamma FC', 'Right Midfield', 30, 2e6),
+  row('Pia Split', 'Delta SC', 'Right Midfield', 22, 2e6),
 ];
 const NEXT = [
   row('Gus Mover', 'Alpha AFC', 'Central Midfield', 25, 5e6, 2016),
@@ -126,6 +136,7 @@ const good = () => ({
   worldDbToEra: { 'Alpha AFC': 'Alpha', 'Beta CF': 'Beta', 'Gamma FC': 'Gamma', 'Delta SC': 'Delta' },
   folds: [{ n: 'Dee Fold', why: 'test' }],
   namesakes: [{ n: 'Sam Namesake', why: 'test' }],
+  poolNamesakes: [{ n: 'Pia Split', keep: 'Delta', why: 'test' }],
   moves: [{ n: 'Gus Mover', to: 'Alpha', why: 'test' }, { n: 'Bo Shipmove', to: 'Gamma', why: 'test' }],
   removals: [
     { n: 'Gary Leaver', why: 'test' },
@@ -148,7 +159,7 @@ console.log('A) a synthetic extension with every kind of correction lands exactl
     for (const [club, list] of res.world) where[club] = list.map(p => p.n).join(',');
     const want = {
       Alpha: 'Ann One,Gus Mover', Beta: 'Bea Two,Dee Fold',
-      Gamma: 'Bo Shipmove,Gil Stay,Gwen Stay', Delta: 'Sam Namesake,Dan Stay,Ari Arrival,Dora Stay',
+      Gamma: 'Bo Shipmove,Gil Stay,Gwen Stay', Delta: 'Sam Namesake,Dan Stay,Ari Arrival,Pia Split,Dora Stay',
     };
     for (const [club, names] of Object.entries(want)) {
       if (where[club] !== names) fail(`${club} holds ${where[club]}, expected ${names}`);
@@ -156,7 +167,9 @@ console.log('A) a synthetic extension with every kind of correction lands exactl
     const s = res.stats;
     const got = `${s.moved} moved, ${s.removed} removed, ${s.arrived} arrived, ${s.folded} folded, ${s.collisions} namesakes`;
     if (got !== '2 moved, 3 removed, 1 arrived, 1 folded, 1 namesakes') fail(`the stats read ${got}`);
-    if (s.players !== 11 || s.clubs !== 4 || s.moves !== 17) fail(`players ${s.players}, clubs ${s.clubs}, moves ${s.moves}; expected 11, 4, 17 (10 shipped plus 2, 3, 1 and 1)`);
+    if (s.players !== 12 || s.clubs !== 4 || s.moves !== 17) fail(`players ${s.players}, clubs ${s.clubs}, moves ${s.moves}; expected 12, 4, 17 (10 shipped plus 2, 3, 1 and 1)`);
+    const pia = res.world.get('Delta').find(p => p.n === 'Pia Split');
+    if (!pia || pia.a !== 22 || res.world.get('Gamma').some(p => p.n === 'Pia Split')) fail(`Pia Split sits ${pia ? `at Delta aged ${pia.a}` : 'nowhere at Delta'}; the declared row is Delta's (aged 22)`);
     /* Dan Stay has two year-2015 rows: the higher value wins (the
        documented DISTINCT ON, offline). */
     const dan = res.world.get('Delta').find(p => p.n === 'Dan Stay');
@@ -168,7 +181,7 @@ console.log('A) a synthetic extension with every kind of correction lands exactl
     fs.writeFileSync(out, res.text);
     try {
       const back = readShippedEra(out, 'ERATEST');
-      if (back.meta.players !== 11 || back.meta.clubs !== 4 || back.meta.moves !== 17) fail(`the written file reads back ${JSON.stringify(back.meta)}`);
+      if (back.meta.players !== 12 || back.meta.clubs !== 4 || back.meta.moves !== 17) fail(`the written file reads back ${JSON.stringify(back.meta)}`);
     } catch (e) { fail(`the written file does not parse back: ${e.message}`); }
     console.log(`   ${got}; ${s.players} players in ${s.clubs} clubs`);
   }
@@ -189,6 +202,9 @@ console.log('B) every guard dies on its own bad correction');
     ['a fold of nobody', c => { c.folds = [...c.folds, { n: 'Nobody Here', why: 'x' }]; }, 'expected on both sides'],
     ['an undeclared name on both sides', c => { c.namesakes = []; }, 'names sit on both sides'],
     ['a declared namesake that never collided', c => { c.namesakes = [...c.namesakes, { n: 'Ann One', why: 'x' }]; }, 'never collided'],
+    ['one string at two new clubs, undeclared', c => { c.poolNamesakes = []; }, 'two clubs of the new leagues'],
+    ['a pool namesake kept at a club with no row', c => { c.poolNamesakes = [{ n: 'Pia Split', keep: 'Alpha', why: 'x' }]; }, 'keeps Alpha'],
+    ['a declared pool namesake that never split', c => { c.poolNamesakes = [...c.poolNamesakes, { n: 'Gil Stay', keep: 'Gamma', why: 'x' }]; }, 'never split'],
     ['a stale mover', c => { c.moves = [...c.moves, { n: 'Nobody Here', to: 'Alpha', why: 'x' }]; }, 'the list is stale'],
     ['a mover to an unknown club', c => { c.moves = [{ n: 'Gus Mover', to: 'Omega', why: 'x' }, ...without(c.moves, 'Gus Mover')]; }, 'unknown club'],
     ['a move the year after does not prove', c => { c.moves = [{ n: 'Gus Mover', to: 'Beta', why: 'x' }, ...without(c.moves, 'Gus Mover')]; }, 'no year-2016 row names that club'],
@@ -220,7 +236,7 @@ console.log('B) every guard dies on its own bad correction');
     }
   }
   console.log(`   ${died} of ${CASES.length} bad corrections died with their own message`);
-  if (CASES.length < 26) fail(`only ${CASES.length} guard cases, the lib has 26 a caller can reach`);
+  if (CASES.length < 29) fail(`only ${CASES.length} guard cases, the lib has 29 a caller can reach`);
 }
 
 /* ---------- C. the real era bakes rebuild byte for byte ---------- */

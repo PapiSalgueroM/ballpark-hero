@@ -6,7 +6,7 @@
 // leagues from an offline pull of the base table, the lines already
 // shipped carried through as bytes). Memberships and sources are in the
 // script header. The verified summer 2010 window corrections are applied
-// across all five leagues (356 rows moved, removed, arrived or folded
+// across all five leagues (378 rows moved, removed, arrived or folded
 // in total). Values in £m at the year-2010 snapshot, ratings 48-94 on the
 // same curve as the 2026 bake. Regenerate per the header of
 // scripts/bakeEra2010.mjs.
@@ -15,9 +15,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const ERA2010_META = {
   year: 2010,
-  players: 1769,
+  players: 1751,
   clubs: 98,
-  moves: 356,
+  moves: 378,
 };
 
 /** 2010 clubs where the year-2010 table runs thin (under 8 real players);
@@ -77,7 +77,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Franck Dja Djédjé', p: 'RW', a: 23, v: 0.8, r: 64 },
     { n: 'Jean-Alain Fanchone', p: 'LB', a: 21, v: 0.8, r: 64 },
     { n: 'Kamel Ghilas', p: 'CF', a: 25, v: 0.8, r: 64 },
-    { n: 'Marvin Esor', p: 'RB', a: 20, v: 0.8, r: 64 },
   ],
   'Arsenal': [
     { n: 'Cesc Fàbregas', p: 'CM', a: 22, v: 44.3, r: 87 },
@@ -89,6 +88,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gaël Clichy', p: 'LB', a: 24, v: 12, r: 79 },
     { n: 'Marouane Chamakh', p: 'ST', a: 25, v: 12, r: 79 },
     { n: 'Alex Song', p: 'CDM', a: 22, v: 11.3, r: 79 },
+    { n: 'Sébastien Squillaci', p: 'CB', a: 29, v: 9.8, r: 78 },
     { n: 'Theo Walcott', p: 'RW', a: 20, v: 9.8, r: 78 },
     { n: 'Tomas Rosicky', p: 'CAM', a: 29, v: 9, r: 78 },
     { n: 'Laurent Koscielny', p: 'CB', a: 24, v: 8.3, r: 77 },
@@ -403,7 +403,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Pierre Ducasse', p: 'CDM', a: 22, v: 1.5, r: 68 },
     { n: 'Florian Marange', p: 'LB', a: 23, v: 0.8, r: 64 },
     { n: 'Floyd Ayité', p: 'LW', a: 21, v: 0.8, r: 64 },
-    { n: 'Franck Jurietti', p: 'LB', a: 34, v: 0.8, r: 64 },
     { n: 'Kévin Olimpa', p: 'GK', a: 21, v: 0.8, r: 64 },
     { n: 'Ulrich Ramé', p: 'GK', a: 37, v: 0.8, r: 64 },
   ],
@@ -438,7 +437,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Gaetano Berardi', p: 'RB', a: 21, v: 0.8, r: 64 },
     { n: 'Michele Arcari', p: 'GK', a: 31, v: 0.8, r: 64 },
     { n: 'Riccardo Taddei', p: 'LW', a: 29, v: 0.8, r: 64 },
-    { n: 'Wálter López', p: 'LB', a: 24, v: 0.8, r: 64 },
   ],
   'Brest': [
     { n: 'Nolan Roux', p: 'ST', a: 21, v: 3, r: 72 },
@@ -464,9 +462,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Yohan Mollo', p: 'RW', a: 20, v: 1.5, r: 68 },
     { n: 'Benjamin Nivet', p: 'CAM', a: 32, v: 0.8, r: 64 },
     { n: 'Grégory Leca', p: 'CDM', a: 29, v: 0.8, r: 64 },
-    { n: 'Grégory Proment', p: 'CDM', a: 31, v: 0.8, r: 64 },
     { n: 'Grégory Tafforeau', p: 'LB', a: 33, v: 0.8, r: 64 },
-    { n: 'Juan Eluchans', p: 'LB', a: 29, v: 0.8, r: 64 },
     { n: 'Rajiv van La Parra', p: 'LW', a: 18, v: 0.8, r: 64 },
   ],
   'Cagliari': [
@@ -695,7 +691,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Nicky Shorey', p: 'LB', a: 28, v: 3, r: 72 },
     { n: 'Paul Konchesky', p: 'LB', a: 28, v: 3, r: 72 },
     { n: 'Simon Davies', p: 'RM', a: 30, v: 3, r: 72 },
-    { n: 'Stefano Okaka', p: 'ST', a: 20, v: 3, r: 72 },
     { n: 'Chris Baird', p: 'CDM', a: 27, v: 2.3, r: 70 },
     { n: 'Chris Smalling', p: 'CB', a: 20, v: 2.3, r: 70 },
     { n: 'Dickson Etuhu', p: 'CDM', a: 27, v: 2.3, r: 70 },
@@ -722,7 +717,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Francesco Modesto', p: 'LB', a: 27, v: 3, r: 72 },
     { n: 'Boško Janković', p: 'RW', a: 25, v: 2.3, r: 70 },
     { n: 'Chico Flores', p: 'CB', a: 22, v: 2.3, r: 70 },
-    { n: 'Ivan Juric', p: 'CM', a: 34, v: 2.3, r: 70 },
+    { n: 'Marco Rossi', p: 'RM', a: 31, v: 2.3, r: 70 },
     { n: 'Omar Milanetto', p: 'CDM', a: 34, v: 1.5, r: 68 },
   ],
   'Getafe': [
@@ -809,6 +804,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
   'Hércules': [
     { n: 'David Trezeguet', p: 'ST', a: 32, v: 12, r: 79 },
     { n: 'Nelson Valdez', p: 'ST', a: 26, v: 3.8, r: 73 },
+    { n: 'Royston Drenthe', p: 'LM', a: 22, v: 3.8, r: 73 },
     { n: 'Juan Calatayud', p: 'GK', a: 30, v: 2.3, r: 70 },
     { n: 'Tiago Gomes', p: 'CM', a: 24, v: 2.3, r: 70 },
     { n: 'Javier Farinós', p: 'CDM', a: 31, v: 1.5, r: 68 },
@@ -822,7 +818,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sendoa Agirre', p: 'LW', a: 34, v: 0.8, r: 64 },
   ],
   'Hoffenheim': [
-    { n: 'Carlos Eduardo', p: 'CAM', a: 22, v: 14.3, r: 80 },
     { n: 'Chinedu Obasi', p: 'ST', a: 23, v: 6.8, r: 76 },
     { n: 'Demba Ba', p: 'ST', a: 24, v: 6.8, r: 76 },
     { n: 'Vedad Ibisevic', p: 'ST', a: 25, v: 6.8, r: 76 },
@@ -944,15 +939,12 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jeda', p: 'CF', a: 30, v: 3, r: 72 },
     { n: 'Daniele Corvia', p: 'ST', a: 25, v: 2.3, r: 70 },
     { n: 'Gianni Munari', p: 'CM', a: 26, v: 2.3, r: 70 },
-    { n: 'Allan Baclet', p: 'ST', a: 23, v: 1.5, r: 68 },
     { n: 'Andrea Rispoli', p: 'RB', a: 21, v: 1.5, r: 68 },
     { n: 'Antonio Rosati', p: 'GK', a: 26, v: 1.5, r: 68 },
     { n: 'Davide Brivio', p: 'LB', a: 21, v: 1.5, r: 68 },
     { n: 'Ignacio Piatti', p: 'LW', a: 24, v: 1.5, r: 68 },
-    { n: 'Angelo', p: 'RB', a: 28, v: 0.8, r: 64 },
     { n: 'Bryan Bergougnoux', p: 'CAM', a: 26, v: 0.8, r: 64 },
     { n: 'Djamel Mesbah', p: 'LB', a: 25, v: 0.8, r: 64 },
-    { n: 'Franco Lepore', p: 'RM', a: 24, v: 0.8, r: 64 },
     { n: 'Giuseppe Vives', p: 'CDM', a: 29, v: 0.8, r: 64 },
     { n: 'Guillermo Giacomazzi', p: 'CM', a: 32, v: 0.8, r: 64 },
   ],
@@ -966,7 +958,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sébastien Roudet', p: 'CAM', a: 28, v: 2.3, r: 70 },
     { n: 'Vedran Runje', p: 'GK', a: 33, v: 2.3, r: 70 },
     { n: 'Yohan Démont', p: 'RB', a: 31, v: 2.3, r: 70 },
-    { n: 'Dejan Milovanovic', p: 'CM', a: 25, v: 1.5, r: 68 },
     { n: 'Éric Chelle', p: 'CB', a: 32, v: 1.5, r: 68 },
     { n: 'Henri Bedimo', p: 'LB', a: 25, v: 1.5, r: 68 },
     { n: 'Kanga Akalé', p: 'LW', a: 28, v: 1.5, r: 68 },
@@ -1044,7 +1035,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Franco Sosa', p: 'RB', a: 28, v: 1.5, r: 68 },
     { n: 'James Fanchone', p: 'RW', a: 29, v: 1.5, r: 68 },
     { n: 'Sebastián Dubarbier', p: 'LB', a: 23, v: 1.5, r: 68 },
-    { n: 'Yazid Mansouri', p: 'CM', a: 31, v: 1.5, r: 68 },
     { n: 'Maxime Baca', p: 'RB', a: 26, v: 0.8, r: 64 },
     { n: 'Olivier Monterrubio', p: 'LW', a: 33, v: 0.8, r: 64 },
     { n: 'Yann Jouffre', p: 'RM', a: 25, v: 0.8, r: 64 },
@@ -1096,7 +1086,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jesús Gámez', p: 'RB', a: 24, v: 4.5, r: 74 },
     { n: 'Apoño', p: 'CM', a: 25, v: 3, r: 72 },
     { n: 'Felipe Caicedo', p: 'ST', a: 21, v: 3, r: 72 },
-    { n: 'Victor Obinna', p: 'CF', a: 22, v: 3, r: 72 },
     { n: 'Weligton', p: 'CB', a: 30, v: 3, r: 72 },
     { n: 'Edinho', p: 'ST', a: 27, v: 2.3, r: 70 },
     { n: 'Gustavo Munúa', p: 'GK', a: 31, v: 2.3, r: 70 },
@@ -1228,7 +1217,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mathieu Coutadeur', p: 'CM', a: 23, v: 3, r: 72 },
     { n: 'Djimi Traoré', p: 'CB', a: 29, v: 2.3, r: 70 },
     { n: 'Jean-Jacques Gosso', p: 'CDM', a: 26, v: 2.3, r: 70 },
-    { n: 'Juan Pablo Pino', p: 'RW', a: 22, v: 2.3, r: 70 },
     { n: 'Lukman Haruna', p: 'CM', a: 19, v: 2.3, r: 70 },
     { n: 'Thomas Mangani', p: 'CM', a: 22, v: 2.3, r: 70 },
     { n: 'Chris Malonga', p: 'LW', a: 22, v: 1.5, r: 68 },
@@ -1265,7 +1253,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Youssouf Hadji', p: 'ST', a: 29, v: 3.8, r: 73 },
     { n: 'André Luiz', p: 'CB', a: 29, v: 3, r: 72 },
     { n: 'Pascal Berenguer', p: 'CDM', a: 28, v: 3, r: 72 },
-    { n: 'Abdeslam Ouaddou', p: 'CB', a: 31, v: 2.3, r: 70 },
     { n: 'Gennaro Bracigliano', p: 'GK', a: 29, v: 2.3, r: 70 },
     { n: 'Paul Alo\'o Efoulou', p: 'ST', a: 26, v: 2.3, r: 70 },
     { n: 'Alfred N\'Diaye', p: 'CDM', a: 19, v: 1.5, r: 68 },
@@ -1387,6 +1374,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Massimo Gobbi', p: 'LB', a: 29, v: 2.3, r: 70 },
     { n: 'Paolo Dellafiore', p: 'CB', a: 24, v: 2.3, r: 70 },
     { n: 'Fernando Marqués', p: 'RW', a: 25, v: 1.5, r: 68 },
+    { n: 'Angelo', p: 'RB', a: 28, v: 0.8, r: 64 },
   ],
   'PSG': [
     { n: 'Mamadou Sakho', p: 'CB', a: 19, v: 11.3, r: 79 },
@@ -1447,7 +1435,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Esteban Granero', p: 'CM', a: 22, v: 8.3, r: 77 },
     { n: 'Ezequiel Garay', p: 'CB', a: 23, v: 8.3, r: 77 },
     { n: 'Guti', p: 'CM', a: 33, v: 4.5, r: 74 },
-    { n: 'Royston Drenthe', p: 'LM', a: 22, v: 3.8, r: 73 },
   ],
   'Real Sociedad': [
     { n: 'Antoine Griezmann', p: 'CF', a: 18, v: 6.8, r: 76 },
@@ -1485,7 +1472,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Georges Mandjeck', p: 'CDM', a: 21, v: 1.5, r: 68 },
     { n: 'Johann Carrasso', p: 'GK', a: 21, v: 1.5, r: 68 },
     { n: 'Kévin Théophile-Catherine', p: 'CB', a: 20, v: 1.5, r: 68 },
-    { n: 'Mickaël Pagis', p: 'CF', a: 36, v: 0.8, r: 64 },
   ],
   'Roma': [
     { n: 'Daniele De Rossi', p: 'CDM', a: 26, v: 30.8, r: 85 },
@@ -1509,7 +1495,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marco Cassetti', p: 'RB', a: 32, v: 2.3, r: 70 },
     { n: 'Bogdan Lobonț', p: 'GK', a: 31, v: 1.5, r: 68 },
     { n: 'Paolo Castellini', p: 'LB', a: 30, v: 1.5, r: 68 },
-    { n: 'Adrian Piț', p: 'LM', a: 26, v: 0.8, r: 64 },
   ],
   'Saint-Étienne': [
     { n: 'Dimitri Payet', p: 'CAM', a: 22, v: 6.8, r: 76 },
@@ -1526,7 +1511,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Christophe Landrin', p: 'CM', a: 32, v: 2.3, r: 70 },
     { n: 'Guirane N\'Daw', p: 'CDM', a: 25, v: 2.3, r: 70 },
     { n: 'Moustapha Sall', p: 'CB', a: 24, v: 2.3, r: 70 },
-    { n: 'Cédric Varrault', p: 'CB', a: 29, v: 1.5, r: 68 },
     { n: 'Yoann Andreu', p: 'LB', a: 20, v: 0.8, r: 64 },
   ],
   'Sampdoria': [
@@ -1545,7 +1529,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Stefano Lucchini', p: 'CB', a: 29, v: 3, r: 72 },
     { n: 'Fernando Tissone', p: 'CDM', a: 23, v: 2.3, r: 70 },
     { n: 'Marco Padalino', p: 'RB', a: 26, v: 2.3, r: 70 },
-    { n: 'Marco Rossi', p: 'CB', a: 22, v: 2.3, r: 70 },
     { n: 'Luciano Zauri', p: 'RB', a: 31, v: 1.5, r: 68 },
     { n: 'Angelo da Costa', p: 'GK', a: 26, v: 0.8, r: 64 },
     { n: 'Fabrizio Cacciatore', p: 'RB', a: 23, v: 0.8, r: 64 },
@@ -1580,7 +1563,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Didier Zokora', p: 'CDM', a: 29, v: 12.8, r: 80 },
     { n: 'Diego Perotti', p: 'LW', a: 21, v: 12.8, r: 80 },
     { n: 'Frédéric Kanouté', p: 'ST', a: 32, v: 12.8, r: 80 },
-    { n: 'Sébastien Squillaci', p: 'CB', a: 29, v: 9.8, r: 78 },
     { n: 'Renato', p: 'CM', a: 30, v: 7.5, r: 77 },
     { n: 'Romaric', p: 'CDM', a: 26, v: 7.5, r: 77 },
     { n: 'Abdoulay Konko', p: 'RB', a: 25, v: 6.8, r: 76 },
@@ -1753,7 +1735,6 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mohamed Fofana', p: 'CB', a: 24, v: 2.3, r: 70 },
     { n: 'Adrián Gunino', p: 'RB', a: 20, v: 1.5, r: 68 },
     { n: 'Fodé Mansaré', p: 'LW', a: 28, v: 1.5, r: 68 },
-    { n: 'Luan', p: 'LW', a: 21, v: 1.5, r: 68 },
     { n: 'Mathieu Valverde', p: 'GK', a: 26, v: 1.5, r: 68 },
     { n: 'Pantxi Sirieix', p: 'CM', a: 29, v: 1.5, r: 68 },
     { n: 'Antoine Devaux', p: 'CM', a: 24, v: 0.8, r: 64 },
@@ -1900,6 +1881,7 @@ export const ERA2010_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'James Tomkins', p: 'CB', a: 20, v: 3, r: 72 },
     { n: 'Kieron Dyer', p: 'RM', a: 31, v: 3, r: 72 },
     { n: 'Radoslav Kovac', p: 'CB', a: 30, v: 3, r: 72 },
+    { n: 'Victor Obinna', p: 'CF', a: 22, v: 3, r: 72 },
     { n: 'Junior Stanislas', p: 'LW', a: 20, v: 2.3, r: 70 },
     { n: 'Luís Boa Morte', p: 'LM', a: 32, v: 2.3, r: 70 },
     { n: 'Manuel da Costa', p: 'CB', a: 23, v: 2.3, r: 70 },

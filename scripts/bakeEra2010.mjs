@@ -235,12 +235,28 @@ const DB_TO_ERA_L1 = {
  *        sixteen summer signings), https://www.maxifoot.fr/football/article-10281.htm
  *   and a club's or a newspaper's own dated report, named on the line.
  *
- * NOT CORRECTED, for want of a dated record: Felipe (Fiorentina), Marco
- * Rossi (Sampdoria), Juan Pablo Pino (Monaco), Luan (Toulouse), Angelo
- * (Lecce), Adrian Pit (Roma), Juan Eluchans (Caen), Marvin Esor and Benjamin
- * Psaume (Arles-Avignon) stay where the snapshot has them; Andre Felipe,
- * Neto, Joao Pedro, Draman Haminu, Mathieu Dossevi, Alexandre Cuvillier,
- * Anton Putilo, Abdoul Camara, Fabien Robert and Andrezinho are not added.
+ * THE REVIEW PASS (Round 901 review fix, read 2026-10-03). The first pass
+ * missed men who had left before the season: every new-league man whose
+ * year-2011 row is not at his baked club (137 of them) was checked again
+ * against kicker's career page, and where kicker has no page, against the
+ * club's 2010-11 season page and the player's own page on Wikipedia, read
+ * as a cross check of the dated report they cite. That brought 18 more
+ * corrections (Carlos Eduardo, Pino, Luan, Angelo, Pit, Eluchans, Esor,
+ * Juric, Pagis, Varrault, Jurietti, Walter Lopez, Lepore, Milovanovic,
+ * Mansouri, Proment, Ouaddou, Baclet), the Marco Rossi tie (POOL NAMESAKES
+ * below), and four Round 146 lines the bigger world now proves (Okaka,
+ * Obinna, Drenthe, Squillaci). Felipe (Fiorentina from summer 2010) and
+ * Benjamin Psaume (Arles-Avignon until the winter) were right as baked.
+ * NOT ADDED for want of a dated record: Andre Felipe, Neto, Joao Pedro,
+ * Draman Haminu, Mathieu Dossevi, Alexandre Cuvillier, Anton Putilo, Abdoul
+ * Camara, Fabien Robert and Andrezinho.
+ * REMOVED, NOT PLACED (a known residual): a man who did play 2010-11 at a
+ * club of the world but has no year-2011 row there (Elson at Stuttgart,
+ * Vincent Plante at Arles-Avignon, Crespo and Valiani at Parma, Budan and
+ * Benalouane at Cesena, Camoranesi and Audel at Stuttgart, Rinaudo at
+ * Juventus, Raggi at Bari, Gavanon at Nancy, Aubameyang at Monaco,
+ * Ranocchia at Genoa) cannot pass the code proof of a move, so he leaves
+ * the world rather than sit at a club he had left; those squads run short.
  * NOT ADDABLE, because the year-2011 row names a later club: Mbokani
  * (Monaco, then Wolfsburg in January 2011), Maccarone (Palermo, then
  * Sampdoria), Nagatomo (Cesena, then Inter), Braafheid (Bayern, then
@@ -266,19 +282,28 @@ const B5_NAMESAKES = [
   { n: 'Eduardo', why: 'the Lens forward from Brazil (29) and the Arsenal forward from Croatia (26)' },
   { n: 'Fernando', why: 'the Bordeaux defensive midfielder from Brazil (28) and the Malaga midfielder from Spain (30)' },
 ];
+/* THE POOL NAMESAKES (Round 901 review fix): strings with year-2010 rows at
+ * two clubs of the new leagues. The step used to settle these by value and
+ * then by the lower id, in silence, and the tie kept the wrong Marco Rossi.
+ * Now each names the club whose row stays. */
+const B5_POOL_NAMESAKES = [
+  { n: 'Marco Rossi', keep: 'Genoa', why: 'two men: the Genoa captain born 1978, at Genoa 2003 to 2013 (KICKER; his year-2010 and year-2011 rows are both Genoa), and the Sampdoria centre-back born 1987, whose Sampdoria loan ended on 30 Jun 2010 and who spent 2010-11 on loan at Bari (KICKER; en.wikipedia, Marco Rossi born 1987); the tied value used to keep the wrong one' },
+  { n: 'Nenê', keep: 'Monaco', why: 'two Brazilian forwards: the Monaco playmaker (28, 14m dollars), who joined PSG on 12 Jul 2010 (KICKER) and moves there below, and the Cagliari striker (26, 6m dollars), dropped by the one name, one player rule' },
+];
 const B5_MOVES = [
   { n: 'Marco Amelia', to: 'AC Milan', why: 'Genoa to AC Milan (ESPN-IT, 25 Jul 2010)' },
   { n: 'Sokratis', to: 'AC Milan', why: 'Genoa to AC Milan (ESPN-IT, 25 Jul 2010)' },
   { n: 'Fabien Laurenti', to: 'Arles-Avignon', why: 'to Arles-Avignon in summer 2010 (MF-ARL)' },
   { n: 'Laurent Koscielny', to: 'Arsenal', why: 'Lorient to Arsenal (ESPN-FR, 7 Jul 2010)' },
   { n: 'Marouane Chamakh', to: 'Arsenal', why: 'Bordeaux to Arsenal (ESPN-EN, 21 May 2010)' },
+  { n: 'Sébastien Squillaci', to: 'Arsenal', why: 'Sevilla to Arsenal (ESPN-EN, 26 Aug 2010; KICKER, at Arsenal from 27 Aug 2010); a Round 146 line, re-audited' },
   { n: 'Adriano', to: 'Barcelona', why: 'Sevilla to Barcelona (ESPN-ES, 17 Jul 2010)' },
   { n: 'Hanno Balitsch', to: 'Bayer Leverkusen', why: 'Hannover to Leverkusen on a free (kicker, 28 May 2010, Balitsch zurueck zu Bayer)' },
   { n: 'Michael Ballack', to: 'Bayer Leverkusen', why: 'Chelsea to Bayer Leverkusen (ESPN-EN, 1 Jul 2010)' },
   { n: 'Sidney Sam', to: 'Bayer Leverkusen', why: 'Hamburg, after his Kaiserslautern loan, to Leverkusen (kicker, 19 May 2010, Bayer schnappt sich Sam)' },
   { n: 'Andreas Ottl', to: 'Bayern Munich', why: 'back at Bayern from his Nurnberg loan, 1 Jul 2010 (KICKER)' },
   { n: 'Breno', to: 'Bayern Munich', why: 'back at Bayern from his Nurnberg loan, 1 Jul 2010 (KICKER)' },
-  { n: 'Toni Kroos', to: 'Bayern Munich', why: 'Bayer Leverkusen to Bayern Munich (Süddeutshe Zeitung, 10 Aug 2010, Kroos kehrt von Leverkusen zu Bayern zurück)' },
+  { n: 'Toni Kroos', to: 'Bayern Munich', why: 'Bayer Leverkusen to Bayern Munich (Süddeutsche Zeitung, 10 Aug 2010, Kroos kehrt von Leverkusen zu Bayern zurück)' },
   { n: 'Aleksandr Hleb', to: 'Birmingham City', why: 'Stuttgart to Birmingham City (ESPN-EN, 31 Aug 2010)' },
   { n: 'Diego Pérez', to: 'Bologna', why: 'Monaco to Bologna (ESPN-FR, 28 Jul 2010)' },
   { n: 'Rene Krhin', to: 'Bologna', why: 'Inter Milan to Bologna (ESPN-IT, 28 Jul 2010)' },
@@ -307,6 +332,7 @@ const B5_MOVES = [
   { n: 'Heiko Westermann', to: 'Hamburg', why: 'Schalke 04 to Hamburg (Hamburger Morgenpost, 21 Jul 2010, So tickt der neue HSV-Star)' },
   { n: 'David Trezeguet', to: 'Hércules', why: 'Juventus to Hercules, 30 Aug 2010 (KICKER; ESPN-ES lists the deal)' },
   { n: 'Nelson Valdez', to: 'Hércules', why: 'Dortmund to Hercules, 17 Aug 2010 (KICKER)' },
+  { n: 'Royston Drenthe', to: 'Hércules', why: 'Real Madrid loaned him to Hercules, 31 Aug 2010 (KICKER; ESPN-ES, 25 Jul 2011, the loan back to Real Madrid); a Round 146 line, re-audited' },
   { n: 'Sebastian Rudy', to: 'Hoffenheim', why: 'Stuttgart to Hoffenheim (VfB Stuttgart, 23 Aug 2010, Rudy geht nach Hoffenheim)' },
   { n: 'Jonathan Biabiany', to: 'Inter Milan', why: 'Parma to Inter Milan (ESPN-IT, 25 Jul 2010)' },
   { n: 'Luca Castellazzi', to: 'Inter Milan', why: 'Sampdoria to Inter Milan (ESPN-IT, 25 Jul 2010)' },
@@ -353,6 +379,7 @@ const B5_MOVES = [
   { n: 'Hatem Ben Arfa', to: 'Newcastle', why: 'Marseille to Newcastle (ESPN-EN, 28 Aug 2010)' },
   { n: 'Julian Schieber', to: 'Nürnberg', why: 'Stuttgart loaned him to Nurnberg (1. FC Nurnberg, 2 Jun 2010, Club leiht Schieber aus)' },
   { n: 'Fernando Marqués', to: 'Parma', why: 'Espanyol to Parma (ESPN-ES, 25 Jul 2010)' },
+  { n: 'Angelo', to: 'Parma', why: 'out of contract at Lecce on 30 Jun 2010, at Parma from 2 Sep 2010 (KICKER)' },
   { n: 'Massimo Gobbi', to: 'Parma', why: 'Fiorentina to Parma (Parma FC, 18 Aug 2010, Gobbi al Parma / Domani, 19 agosto la presentazione ufficiale)' },
   { n: 'Sebastian Giovinco', to: 'Parma', why: 'Juventus to Parma (ESPN-IT, 17 Aug 2010)' },
   { n: 'Mathieu Bodmer', to: 'PSG', why: 'Lyon to PSG (France Football, 29 Jun 2010, Bodmer signe mercredi au PSG)' },
@@ -390,18 +417,21 @@ const B5_MOVES = [
   { n: 'Marko Arnautovic', to: 'Werder Bremen', why: 'Inter Milan to Werder Bremen (ESPN-DE, 25 Jul 2010)' },
   { n: 'Mikaël Silvestre', to: 'Werder Bremen', why: 'Arsenal to Bremen (Deutsche Fussball Liga, 30 Aug 2010, Werder holt Arsenal-Star)' },
   { n: 'Thomas Hitzlsperger', to: 'West Ham', why: 'Stuttgart to West Ham (ESPN-EN, 5 Jun 2010)' },
+  { n: 'Victor Obinna', to: 'West Ham', why: 'his Malaga loan ended, Inter loaned him to West Ham (ESPN-EN, 27 Aug 2010; KICKER, at West Ham from 27 Aug 2010); a Round 146 line, re-audited' },
   { n: 'Diego', to: 'Wolfsburg', why: 'Juventus to Wolfsburg (Deutsche Fußball Liga, 27 Aug 2010, Diego-Wechsel perfekt)' },
   { n: 'Simon Kjaer', to: 'Wolfsburg', why: 'Palermo to Wolfsburg, 8 Jul 2010 (KICKER)' },
   { n: 'Nicolás Bertolo', to: 'Zaragoza', why: 'Palermo to Zaragoza (ESPN-ES, 17 Aug 2010)' },
 ];
 const B5_REMOVALS = [
   { n: 'Adaílton', why: 'Bologna to Sion, 1 Jan 2010 (KICKER)' },
+  { n: 'Adrian Piț', why: 'on loan at Triestina in 2009-10, then Roma to Universitatea Cluj, 31 Aug 2010 (en.wikipedia, Adrian Piț; ro.wikipedia, citing Observator, 3 Sep 2010, Pit a semnat cu Universitatea Cluj)' },
   { n: 'Alberto Zapater', why: 'Genoa to Sporting (ESPN-IT, 28 Jul 2010)' },
   { n: 'Aleksandar Lukovic', why: 'Udinese to Zenit St Petersburg (ESPN-IT, 17 Aug 2010)' },
   { n: 'Alen Stevanovic', why: 'Inter to Torino, then in Serie B, 22 Jul 2010 (KICKER)' },
   { n: 'András Gosztonyi', why: 'Bari to Videoton, 1 Jul 2010 (KICKER)' },
   { n: 'Aurélien Capoue', why: 'Auxerre to Nantes, then in Ligue 2, 1 Jul 2010 (KICKER)' },
   { n: 'Bakari Koné', why: 'Marseille to Lekhwiya, 1 Jul 2010 (KICKER; MF-TOP15)' },
+  { n: 'Carlos Eduardo', why: 'Hoffenheim to Rubin Kazan, 25 Aug 2010 (KICKER)' },
   { n: 'Christian Lell', why: 'Bayern Munich to Hertha BSC (Deutsche Fußball Liga, 23 Jun 2010, Lell wechselt von München nach Berlin)' },
   { n: 'Colin Kazım-Richards', why: 'his Toulouse loan ended, back at Fenerbahce 1 Jul 2010 (KICKER)' },
   { n: 'Daniel Gygax', why: 'Nurnberg to Luzern, 1 Jul 2010 (KICKER)' },
@@ -409,7 +439,7 @@ const B5_REMOVALS = [
   { n: 'David Beckham', why: 'his Milan loan ended, back at LA Galaxy 1 Jul 2010 (KICKER)' },
   { n: 'Dragan Paljic', why: 'Kaiserslautern to Wisla Krakow, 17 Jul 2010 (KICKER)' },
   { n: 'Du-ri Cha', why: 'Freiburg to Celtic (ESPN-DE, 2 Jul 2010)' },
-  { n: 'Filip Trojan', why: 'Mainz to MSV Duisburg (DerWesten, 5 Aug 2010, MSV Duisburg:MSV hat gute Chancen bei Trojan)' },
+  { n: 'Filip Trojan', why: 'Mainz to MSV Duisburg, 13 Aug 2010 (KICKER)' },
   { n: 'Francesco Lodi', why: 'Udinese to Frosinone, 1 Jul 2010 (KICKER)' },
   { n: 'Franco Zuculini', why: 'Hoffenheim loaned him to Genoa (ESPN-DE, 28 Jul 2010), Racing Club from Feb 2011 (ESPN-IT, 5 Feb 2011); the year-2011 row is Racing Club' },
   { n: 'François Modesto', why: 'Monaco to Olympiacos, 1 Jul 2010 (KICKER)' },
@@ -423,10 +453,13 @@ const B5_REMOVALS = [
   { n: 'Jean-Alain Boumsong', why: 'Lyon to Panathinaikos, 1 Jul 2010 (KICKER; MF-REC)' },
   { n: 'Jiri Stajner', why: 'Hannover 96 to Slovan Liberec (Focus, 15 May 2010, Jiri Stajner verlässt Hannover)' },
   { n: 'Johan Audel', why: 'Valenciennes to Stuttgart, 9 Aug 2010 (KICKER); the year-2011 row is outside the world' },
+  { n: 'Juan Eluchans', why: 'out of contract at Caen, to Universidad Catolica, 26 Jun 2010 (en.wikipedia and es.wikipedia, Juan Eluchans)' },
+  { n: 'Juan Pablo Pino', why: 'Monaco to Galatasaray, 1 Jul 2010 (KICKER, as Juan Pablo Pino Puello)' },
   { n: 'Julian Koch', why: 'Borussia Dortmund to MSV Duisburg (MSV Duisburg, 20 Apr 2010, U20-Nationalspieler verstärkt die Zebras zur neuen Saison, MSV leiht Julian Koch von Borussia Dortmund aus)' },
   { n: 'Keirrison', why: 'Fiorentina to Santos (ESPN-ES, 26 Jul 2010)' },
   { n: 'Kevin Kuranyi', why: 'Schalke 04 to Dynamo Moscow (Die Welt, 9 May 2010, Kuranyi kassiert für drei Jahre Moskau 18 Millionen)' },
   { n: 'Kevin Mirallas', why: 'Saint-Etienne to Olympiacos, 1 Jul 2010 (KICKER)' },
+  { n: 'Luan', why: 'Toulouse loaned him to Palmeiras, 4 Aug 2010 (pt.wikipedia, Luan Michel de Louza, citing Extra, 4 Aug 2010, Palmeiras contrata o atacante Luan; fr.wikipedia, Saison 2010-2011 du Toulouse FC, the summer departures)' },
   { n: 'Mamadou Niang', why: 'Marseille to Fenerbahce, 15 Aug 2010 (KICKER; MF-TOP15)' },
   { n: 'Mancini', why: 'his Milan loan ended, back at Inter 1 Jul 2010, Atletico Mineiro from 17 Jan 2011 (KICKER); the year-2011 row is Atletico Mineiro' },
   { n: 'Marco Calderoni', why: 'his Palermo loan ended, back at Piacenza in Serie B, 1 Jul 2010 (KICKER)' },
@@ -435,6 +468,7 @@ const B5_REMOVALS = [
   { n: 'Marino Defendi', why: 'his Lecce loan ended, at Atalanta (Serie B) from 1 Jul 2010 (KICKER)' },
   { n: 'Markus Steinhöfer', why: 'Kaiserslautern loan over, at Frankfurt from 1 Jul 2010 and at Basel from 26 Jan 2011 (KICKER); the year-2011 row is Basel' },
   { n: 'Martin Jørgensen', why: 'Fiorentina to Aarhus, 1 Feb 2010 (KICKER)' },
+  { n: 'Marvin Esor', why: 'signed for Clermont, then in Ligue 2, in June 2010 instead of staying with Arles-Avignon (fr.wikipedia, Marvin Esor, citing mercato365, 24 Jun 2010, Clermont : Esor s engage; fr.wikipedia, Saison 2010-2011 de l AC Arles-Avignon, the summer departures)' },
   { n: 'Mauro Camoranesi', why: 'Juventus to Stuttgart, 31 Aug 2010, Lanus from 2 Feb 2011 (KICKER); the year-2011 row is Lanus' },
   { n: 'Peter Niemeyer', why: 'Werder Bremen to Hertha BSC (Hertha BSC, 9 Aug 2010, Peter Niemeyer ist Herthaner)' },
   { n: 'Réver', why: 'Wolfsburg to Atletico Mineiro, 31 Jul 2010 (KICKER)' },
@@ -444,7 +478,7 @@ const B5_REMOVALS = [
   { n: 'Róbert Vittek', why: 'Lille to Ankaragucu, 1 Feb 2010 (KICKER)' },
   { n: 'Roberto Hilbert', why: 'Stuttgart to Beşiktaş J.K. (Focus, 22 Jun 2010, Besiktas nimmt Hilbert unter Vertrag)' },
   { n: 'Salvatore Bocchetti', why: 'Genoa to Rubin Kazan, 28 Aug 2010 (KICKER)' },
-  { n: 'Savio Nsereko', why: 'left Bologna as his loan ended, listed Bologna to Monaco (ESPN-FR, 22 Jul 2010); the year-2011 row is outside the world' },
+  { n: 'Savio Nsereko', why: 'his Bologna loan ended, at TSV 1860 Munich from 1 Jul 2010 (KICKER); the year-2011 row is outside the world' },
   { n: 'Sidney Govou', why: 'Lyon to Panathinaikos, 1 Jul 2010 (KICKER; MF-REC)' },
   { n: 'Stephan El Shaarawy', why: 'Genoa to Padova (ESPN-IT, 25 Jul 2010)' },
   { n: 'Tim Hoogland', why: 'Mainz to Schalke, 1 Jul 2010 (KICKER); the year-2011 row is outside the world' },
@@ -462,27 +496,36 @@ const B5_REMOVALS = [
   { n: 'Obafemi Martins', why: 'Wolfsburg to Rubin Kazan, 10 Jul 2010 (KICKER)', later: 'the year-2011 row is Birmingham, where he went on loan on 31 Jan 2011 (ESPN-EN)' },
   { n: 'Pierre-Emerick Aubameyang', why: 'his Lille loan ended, Milan loaned him to Monaco, 1 Jul 2010 (KICKER)', later: 'the year-2011 row is Saint-Etienne, where he went on 31 Jan 2011 (KICKER)' },
   { n: 'Steeven Langil', why: 'Caen loaned him to Auxerre, 1 Jul 2010 (KICKER)', later: 'the year-2011 row is Valenciennes, where he went later' },
+  { n: 'Stefano Okaka', why: 'his Fulham loan ended, back at Roma 1 Jul 2010 (KICKER; ESPN-IT, 1 Feb 2010, the Fulham loan)', later: 'the year-2011 row is Bari, where Roma loaned him on 4 Jan 2011 (KICKER); a Round 146 line, re-audited' },
+  { n: 'Abdeslam Ouaddou', why: 'ended his Nancy contract in June 2010 and played 2010-11 for Lekhwiya (fr.wikipedia, Abdeslam Ouaddou, citing France Football, 30 Jun 2010, Ouaddou quitte Nancy; fr.wikipedia, Saison 2010-2011 de l AS Nancy-Lorraine, the summer departures; kicker runs his Nancy spell straight through and is overruled); no year-2011 row at all', single: true },
+  { n: 'Allan Baclet', why: 'Lecce to Vicenza, then in Serie B, in summer 2010 (it.wikipedia, US Lecce 2010-2011, the summer departures; Vicenza Calcio 2010-2011, the squad); no year-2011 row at all', single: true },
   { n: 'Andrea Parola', why: 'Cagliari to Libre (ESPN-IT, 22 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Andrea Raggi', why: 'Bologna to Bari, 1 Jul 2010 (KICKER; ESPN-IT, 22 Jul 2010); no year-2011 row at all', single: true },
-  { n: 'Antonio Mazzotta', why: 'Lecce to Lecce (US Lecce, 22 Jun 2010, Esercitato il diritto di compartecipazione su Mazzotta); no year-2011 row at all', single: true },
+  { n: 'Antonio Mazzotta', why: 'Lecce loaned him to Pescara, then in Serie B, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Aristide Bancé', why: 'Mainz to Al-Ahli Dubai, 15 Aug 2010 (KICKER; kicker, Aristide Bance wechselt zum Al Ahli FC nach Dubai); no year-2011 row at all', single: true },
   { n: 'Arnold Bruggink', why: 'released by Hannover in summer 2010, at Twente from 25 Oct 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Augusto Fernández', why: 'Saint-Étienne to Vélez Sarsfield (ESPN-FR, 28 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Benjamin Gavanon', why: 'Sochaux to Nancy, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Bocundji Ca', why: 'Nancy to Tours, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Cédric Varrault', why: 'out of contract at Saint-Etienne, at Panionios from 1 Jul 2010 (KICKER; fr.wikipedia, Cedric Varrault); no year-2011 row at all', single: true },
   { n: 'Christian Obodo', why: 'Udinese to Torino (ESPN-IT, 17 Aug 2010); no year-2011 row at all', single: true },
   { n: 'Christoph Spycher', why: 'Eintracht Frankfurt to BSC Young Boys (BSC Young Boys, 28 Apr 2010, YB holt Christoph Spycher); no year-2011 row at all', single: true },
   { n: 'Damiano Zenoni', why: 'Parma to Libre (ESPN-IT, 25 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Daniele Franceschini', why: 'Sampdoria to Libre (ESPN-IT, 25 Jul 2010); no year-2011 row at all', single: true },
   { n: 'David Suazo', why: 'his Genoa loan ended, back at Inter 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Dejan Milovanovic', why: 'Lens loaned him to Red Star Belgrade, 1 Jul 2010 (KICKER; fr.wikipedia, Saison 2010-2011 du Racing Club de Lens, the summer departures); no year-2011 row at all', single: true },
   { n: 'Dida', why: 'AC Milan to Libre (ESPN-IT, 25 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Eidur Gudjohnsen', why: 'Monaco to Stoke, 31 Aug 2010 (KICKER; ESPN-EN, 31 Aug 2010); no year-2011 row at all', single: true },
-  { n: 'Élson', why: 'Hannover 96 to VfB Stuttgart (Deutsche Fußball Liga, 22 Jul 2010, Elson-Wechsel vorerst geplatzt); no year-2011 row at all', single: true },
+  { n: 'Élson', why: 'the year-2010 row is his Hannover loan, which ended on 30 Jun 2010, and he was back at Stuttgart from 1 Jul 2010 (KICKER; his permanent move to Hannover fell through, Deutsche Fußball Liga, 22 Jul 2010, Elson-Wechsel vorerst geplatzt); no year-2011 row at all, so he cannot be placed at Stuttgart', single: true },
   { n: 'Erik Jendrisek', why: 'Kaiserslautern to Schalke, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Fabio Cannavaro', why: 'Juventus to Al Ahli (ESPN-IT, 25 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Francesco Valiani', why: 'Bologna to Parma, 1 Feb 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Franck Jurietti', why: 'not kept by Bordeaux when his contract ended on 30 Jun 2010, no later club (KICKER; fr.wikipedia, citing Ouest-France, 23 May 2010, Bordeaux : Placente et Jurietti vont partir); no year-2011 row at all', single: true },
+  { n: 'Franco Lepore', why: 'his Lecce loan ended, at Varese, then in Serie B, from 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Grégory Proment', why: 'out of contract at Caen in June 2010, at Antalyaspor until December 2010 (fr.wikipedia, Gregory Proment, citing France Football, 31 Dec 2010, Proment revient a Caen; fr.wikipedia, Saison 2010-2011 du Stade Malherbe Caen); he was back at Caen only in the January window; no year-2011 row at all', single: true },
   { n: 'Hernán Crespo', why: 'Genoa loaned him to Parma, 30 Jan 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Igor Budan', why: 'Palermo to Cesena, 31 Aug 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Ivan Juric', why: 'retired at Genoa in June 2010, his contract ended on 30 Jun 2010 with no later club (KICKER; en.wikipedia, Ivan Juric); no year-2011 row at all', single: true },
   { n: 'Jens Lehmann', why: 'retired from Stuttgart when his contract ended on 30 Jun 2010 (KICKER; Suddeutsche Zeitung); no year-2011 row at all', single: true },
   { n: 'Jonas Sakuwaha', why: 'Lorient to Le Havre, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Jonathan Santana', why: 'Wolfsburg to Kayserispor (VfL Wolfsburg, 15 Jul 2010, Jonathan Santana wechselt in die Türkei); no year-2011 row at all', single: true },
@@ -501,6 +544,7 @@ const B5_REMOVALS = [
   { n: 'Marco Pisano', why: 'Bari to Parma (Parma FC, 2 Aug 2010, Pisano al Parma, Olivera al Torino); no year-2011 row at all', single: true },
   { n: 'Mariano Bogliacino', why: 'Napoli to Chievo Verona (ESPN-IT, 28 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Max Tonetto', why: 'left Roma when his contract ended on 30 Jun 2010 (KICKER; ESPN-IT, 25 Jul 2010); no year-2011 row at all', single: true },
+  { n: 'Mickaël Pagis', why: 'retired, his Rennes contract ended on 30 Jun 2010 with no later club (KICKER; fr.wikipedia, the retirement announced on 26 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Mickaël Tavares', why: 'Nürnberg to Middlesbrough (ESPN-DE, 28 Aug 2010); no year-2011 row at all', single: true },
   { n: 'Nicola Mingazzini', why: 'Bologna to Libre (ESPN-IT, 22 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Olivier Blondel', why: 'Toulouse to Troyes, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
@@ -514,7 +558,9 @@ const B5_REMOVALS = [
   { n: 'Stephen Appiah', why: 'Bologna to Libre (ESPN-IT, 22 Jul 2010); no year-2011 row at all', single: true },
   { n: 'Vincent Planté', why: 'Saint-Etienne to Arles-Avignon (MF-ARL); no year-2011 row at all', single: true },
   { n: 'Vladimir Koman', why: 'his Bari loan ended, at Sampdoria from 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
+  { n: 'Wálter López', why: 'his Brescia loan ended, at Cerro from 1 Jul 2010 and Universitatea Craiova from 7 Sep 2010 (KICKER; en.wikipedia, Walter Lopez, the Craiova loan of summer 2010); no year-2011 row at all', single: true },
   { n: 'Yohan Benalouane', why: 'Saint-Étienne to Cesena (AS Saint-Étienne, 31 Aug 2010, Benalouane transféré à Cesena (Série A)); no year-2011 row at all', single: true },
+  { n: 'Yazid Mansouri', why: 'Lorient to Al-Sailiya, 1 Jul 2010 (KICKER; fr.wikipedia, signed on 19 Jun 2010); no year-2011 row at all', single: true },
   { n: 'Yohann Thuram', why: 'Monaco loaned him to Tours, 1 Jul 2010 (KICKER); no year-2011 row at all', single: true },
   { n: 'Younousse Sankharé', why: 'PSG loaned him to Dijon, 31 Aug 2010 (KICKER); no year-2011 row at all', single: true },
 ];
@@ -647,6 +693,7 @@ if (bigFiveArg) {
     ],
     worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
     folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
+    poolNamesakes: B5_POOL_NAMESAKES,
     anchors: BIG_FIVE_ANCHORS,
     expectedThin: BIG_FIVE_THIN,
     header: s => [
