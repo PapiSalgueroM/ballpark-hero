@@ -1,0 +1,63 @@
+{
+ "round": 934,
+ "shard": "Belgium, the Netherlands and Turkey: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Belgian Pro League, the Eredivisie or the Süper Lig as Club Manager models them for 2026-27 (60 rows at origin/main 5f2622fd: Belgium 20, Netherlands 18, Turkey 22)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Each row was read on the web on 2026-10-03, never a wiki. The session's web search budget was already spent when this shard started, so every page was reached directly: ESPN's public roster JSON for each club's 2026-27 squad (site.api.espn.com/apis/site/v2/sports/soccer/<league>/teams/<id>/roster, the data behind the squad page cited in each row, read with a small node script so the name, shirt number and birth date come from the data rather than a summary), ESPN's athlete records for where a man went, and the clubs' and leagues' own squad pages, fetched raw and searched for the name. A row leaves pending only when an official page (family A: the club's own squad or player page, or the league's) and an independent publisher on another host (family B: ESPN) agree where the man is. Birth dates are in the note so a namesake cannot be mistaken for him. A season-long loanee is placed at the club he plays for, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows; realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "confirmedStill": [
+  {"name": "Lucas Hey", "club": "Anderlecht", "adjudicatedOn": "2026-10-03", "note": "Born 2003-04-13, Danish centre back. Anderlecht number 3 for 2026-27 on both. No namesake in the game.", "sources": [
+   {"family": "A", "url": "https://www.rsca.be/nl/squad/20", "publisher": "RSC Anderlecht (first team squad page)", "readOn": "2026-10-03", "says": "Verdedigers: 3 Lucas Hey"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/441", "publisher": "ESPN (Anderlecht squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Lucas Hey, shirt 3, born 2003-04-13"}]},
+  {"name": "Thomas Foket", "club": "Anderlecht", "adjudicatedOn": "2026-10-03", "note": "Born 1994-09-25, Belgian right back. Still an Anderlecht player but registered with RSCA Futures, the club's second team in the Challenger Pro League, not with the first team: he is on neither Anderlecht first team list and on both RSCA Futures lists. The game has no second team, so he stays at Anderlecht; the lead may prefer to drop him from the first team roster.", "sources": [
+   {"family": "A", "url": "https://www.rsca.be/nl/squad/11", "publisher": "RSC Anderlecht (RSCA Futures squad page)", "readOn": "2026-10-03", "says": "Defenders: Thomas Foket (25); absent from the first team page rsca.be/nl/squad/20"},
+   {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/179985/thomas-foket", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "team RSCA Futures, born 1994-09-25; absent from ESPN's Anderlecht 2026-27 squad"}]},
+  {"name": "Mohamed Koné", "club": "Charleroi", "adjudicatedOn": "2026-10-03", "note": "Born 2002-03-07 in Adjamé, Ivorian goalkeeper. Charleroi number 30 on both, same birth date on both.", "sources": [
+   {"family": "A", "url": "https://www.sporting-charleroi.be/joueur/mohamed-kone/", "publisher": "Sporting de Charleroi (player page)", "readOn": "2026-10-03", "says": "30 Mohamed Koné, gardiens, date de naissance 07/03/2002"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3616", "publisher": "ESPN (Charleroi squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Mohamed Koné, goalkeeper, shirt 30, born 2002-03-07"}]},
+  {"name": "Leonardo Lopes", "club": "Gent", "adjudicatedOn": "2026-10-03", "note": "Leonardo da Silva Lopes, born 1998-11-30, midfielder. Gent number 22 for 2026-27, contract 2024 to 2028 on the club's page. ESPN lists him as Leo Da Silva Lopes with the same birth date and shirt.", "sources": [
+   {"family": "A", "url": "https://www.kaagent.be/nl/team/first-team/spelers/da-silva-lopes-leonardo", "publisher": "KAA Gent (player page)", "readOn": "2026-10-03", "says": "Leonardo Da Silva Lopes, midfielder, 22, born 30-11-1998, contract 2024 - 2028"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3611", "publisher": "ESPN (Gent squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Leo Da Silva Lopes, shirt 22, born 1998-11-30"}]},
+  {"name": "Max Dean", "club": "Gent", "adjudicatedOn": "2026-10-03", "note": "Born 2004-02-21, English forward. Gent number 21 on both.", "sources": [
+   {"family": "A", "url": "https://www.kaagent.be/nl/team/first-team/spelers", "publisher": "KAA Gent (first team squad page)", "readOn": "2026-10-03", "says": "Forwards: Dean Max (21)"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3611", "publisher": "ESPN (Gent squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Max Dean, forward, shirt 21, born 2004-02-21"}]},
+  {"name": "Ortwin De Wolf", "club": "Mechelen", "adjudicatedOn": "2026-10-03", "note": "Born 1997-04-23, Belgian goalkeeper. Mechelen number 1 on both.", "sources": [
+   {"family": "A", "url": "https://kvmechelen.be/selectie/", "publisher": "KV Mechelen (selectie page)", "readOn": "2026-10-03", "says": "Doelmannen: 1 Ortwin De Wolf"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7879", "publisher": "ESPN (KV Mechelen squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Ortwin De Wolf, goalkeeper, shirt 1, born 1997-04-23"}]},
+  {"name": "Andi Zeqiri", "club": "Standard Liège", "adjudicatedOn": "2026-10-03", "note": "Born 1999-06-22, Swiss forward. Standard number 9 on both.", "sources": [
+   {"family": "A", "url": "https://standard.be/nl/teams/a-kern", "publisher": "Standard de Liège (A-kern page)", "readOn": "2026-10-03", "says": "aanvaller 9 Andi Zeqiri, leeftijd 27, Switzerland"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/559", "publisher": "ESPN (Standard Liège squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Andi Zeqiri, forward, shirt 9, born 1999-06-22"}]}
+ ],
+ "movedTo": [
+  {"name": "Christiaan Ravych", "from": "Cercle Brugge", "to": "Genk", "realClub": "KRC Genk", "adjudicatedOn": "2026-10-03", "note": "Born 2002-07-30, Belgian centre back (ESPN id 335909, the same record that sat on Cercle's 2024-25 squad). Genk number 5 on both; on neither Cercle list.", "sources": [
+   {"family": "A", "url": "https://www.krcgenk.be/nl/sportief/1ste-ploeg/team", "publisher": "KRC Genk (first team page)", "readOn": "2026-10-03", "says": "Defenders: Christiaan Ravych (5)"},
+   {"family": "A", "url": "https://cerclebrugge.be/en/teams/a-team/", "publisher": "Cercle Brugge (A-kern page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/938", "publisher": "ESPN (Racing Genk squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Christiaan Ravych, defender, shirt 5"}]},
+  {"name": "Nazinho", "from": "Cercle Brugge", "to": "Monaco", "realClub": "AS Monaco", "adjudicatedOn": "2026-10-03", "note": "Flávio Nazinho, born 2003-07-20, Portuguese left back. ESPN's record for him (id 316559) is the same one on Cercle's 2024-25 and 2025-26 squads, so this is the Cercle man. Monaco number 20 on the club's page.", "sources": [
+   {"family": "A", "url": "https://www.asmonaco.com/fr/pros/joueurs", "publisher": "AS Monaco (professional squad page)", "readOn": "2026-10-03", "says": "Flavio Nazinho, numéro 20, 23 ans, défenseur"},
+   {"family": "A", "url": "https://cerclebrugge.be/en/teams/a-team/", "publisher": "Cercle Brugge (A-kern page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/316559/nazinho", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "team AS Monaco, born 2003-07-20, defender, Portugal"}]},
+  {"name": "Dante Vanzeir", "from": "Gent", "to": "Cercle Brugge", "realClub": "Cercle Brugge", "adjudicatedOn": "2026-10-03", "note": "Born 1998-04-16, Belgian forward. Cercle number 13 on ESPN; on neither Gent list.", "sources": [
+   {"family": "A", "url": "https://cerclebrugge.be/en/teams/a-team/", "publisher": "Cercle Brugge (A-kern page)", "readOn": "2026-10-03", "says": "aanvaller: Dante Vanzeir"},
+   {"family": "A", "url": "https://www.kaagent.be/nl/team/first-team/spelers", "publisher": "KAA Gent (first team squad page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3610", "publisher": "ESPN (Cercle Brugge squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Dante Vanzeir, forward, shirt 13, born 1998-04-16"}]},
+  {"name": "Lazare Amani", "from": "Standard Liège", "to": "Cercle Brugge", "realClub": "Cercle Brugge", "adjudicatedOn": "2026-10-03", "note": "Born 1998-03-07, Ivorian midfielder. Cercle number 10 on ESPN; on neither Standard list.", "sources": [
+   {"family": "A", "url": "https://cerclebrugge.be/en/teams/a-team/", "publisher": "Cercle Brugge (A-kern page)", "readOn": "2026-10-03", "says": "middenvelder: Lazare Amani"},
+   {"family": "A", "url": "https://standard.be/nl/teams/a-kern", "publisher": "Standard de Liège (A-kern page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3610", "publisher": "ESPN (Cercle Brugge squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Lazare Amani, midfielder, shirt 10, born 1998-03-07"}]},
+  {"name": "Nikola Storm", "from": "Mechelen", "to": "Westerlo", "realClub": "KVC Westerlo", "adjudicatedOn": "2026-10-03", "note": "Born 1994-09-30, Belgian winger. Westerlo number 10 on both; on neither Mechelen list.", "sources": [
+   {"family": "A", "url": "https://kvcwesterlo.be/en/1st-team/", "publisher": "KVC Westerlo (first team page)", "readOn": "2026-10-03", "says": "forwards: 10 Nikola Storm"},
+   {"family": "A", "url": "https://kvmechelen.be/selectie/", "publisher": "KV Mechelen (selectie page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/606", "publisher": "ESPN (KVC Westerlo squad, 2026-27 Belgian Pro League)", "readOn": "2026-10-03", "says": "Nikola Storm, forward, shirt 10, born 1994-09-30"}]},
+  {"name": "Jovan Mijatovic", "from": "OH Leuven", "to": "Braunschweig", "realClub": "Eintracht Braunschweig", "adjudicatedOn": "2026-10-03", "note": "Born 2005-07-11, Serbian forward (ESPN id 352320). In Braunschweig's 2. Bundesliga squad on the league's own page; on neither OH Leuven list. Whether it is a loan was not read; the loanPolicy places him where he plays either way.", "sources": [
+   {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/eintracht-braunschweig/squad", "publisher": "DFL (bundesliga.com, Eintracht Braunschweig squad)", "readOn": "2026-10-03", "says": "strikers: Maximilian Entrup, Jovan Mijatovic, Aaron Opoku"},
+   {"family": "A", "url": "https://ohleuven.com/teams/a-ploeg/spelers-en-staf/", "publisher": "Oud-Heverlee Leuven (spelers en staf)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/352320/jovan-mijatovic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "team TSV Eintracht Braunschweig, Serbia, forward"}]}
+ ],
+ "removedClubNotModelled": [
+  {"name": "Allahyar Sayyadmanesh", "from": "Westerlo", "realClub": "Lech Poznań", "adjudicatedOn": "2026-10-03", "note": "Born 2001-06-29, Iranian forward (ESPN lists him as Allahyar Sayyad). Lech number 17 on the club's page; on neither Westerlo list. Poland is not modelled.", "sources": [
+   {"family": "A", "url": "https://www.lechpoznan.pl/lech-poznan-pierwsza-druzyna,11.html", "publisher": "Lech Poznań (first team page)", "readOn": "2026-10-03", "says": "17 Allahyar Sayyadmanesh"},
+   {"family": "A", "url": "https://kvcwesterlo.be/en/1st-team/", "publisher": "KVC Westerlo (first team page)", "readOn": "2026-10-03", "says": "not listed"},
+   {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/266722/allahyar-sayyad", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "team Lech Poznan, born 2001-06-29, Iran"}]}
+ ],
+ "notCurrent": [],
+ "pending": []
+}
