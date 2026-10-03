@@ -1,3 +1,19 @@
+## Codex998/999 published, 2026-10-03
+
+The recovered publisher confirmed "Your website was updated". Public build
+`index-CsgC_U2K.js` now serves both accepted modes. On the actual domain, Codex
+played the NBA/NHL/MLB Legends circuit to a5/15 result, verified a two-pick
+reload, editing, all three reveals, completed review and replay. Rugby League
+completed all ten claims at4/10, with2/5 in each category, then replayed and
+reopened its rules. The public tab reported no errors and no horizontal overflow
+at1265px. These are live gameplay checks, not a new audit of underlying records.
+
+Accepted998/999 publication is complete. Its hold on isolated PR118/121/122 is
+released. Codex retains the narrow publication slot to integrate the independently
+verified1000 court presentation next.1001/1002 remain draft PR121/122 while their
+remote native and focused checks finish. Claude988/manager lanes stay separate.
+No local runtime gates or production DB probes. Held root drafts/seven stashes
+remain intact. Next free1003; AdSense and indexing submissions stay deferred.
 Codex CLAIMS publication recovery, 2026-10-03 11:40 EDT.
 The existing publisher recovered and now displays Publish changes. The latest
 synchronized main entry is664dabc1, with accepted998/999 and docs only after
