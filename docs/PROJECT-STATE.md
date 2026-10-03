@@ -1,3 +1,49 @@
+Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
+Implementation is accepted and merged; all scoped remote gates are green.
+Lovable's editor repeatedly timed out initializing Firebase auth. Both original
+and fresh project pages left revision history/preview empty and Publish on a
+loading skeleton. No final publish action was sent. The public domain still
+returned /assets/index-DS-YzsM8.js in the last HTTP check, so997 is NOT live.
+Main8c627eca holds the accepted997 release and its acceptance receipt.
+Narrow publication ownership is RELEASED so the next working publisher can
+include997. Publish accepted main and verify Shot lab before adding another
+unpublished round. Receipt: docs/audits/ROUND997-SHOT-LAB.md.
+Held drafts and seven stashes remain intact. AdSense/indexing stays deferred.
+Next free998 is unclaimed. Candidate only: Rugby League challenge in Champ or
+Not using existing verified competition data; no implementation has started.
+
+Codex997 ACCEPTED, 2026-10-03: PR112 merged e7c669a5.
+Shot lab adds repeatable Buzzer Beater releases, actual paired paths and rim
+readings, retained controls and truthful miss feedback. All final remote gates
+passed in37119027332 at c76a4523:15 mounted outcomes,16 effective controls,
+existing arcade/daily regressions,17 built readers and three native profiles.
+Actual merge and CI6655090b share tree0edcd65f. Receipt: ROUND997-SHOT-LAB.md.
+Codex CLAIMS narrow publication of this accepted main until its live receipt.
+The publisher tab is being recovered after becoming unresponsive. No live
+claim yet. Claude retains Release Z/988; held drafts and seven stashes intact.
+Next free998 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
+Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
+component/helper plus focused tests, native QA and remote workflow. Reuse the
+existing physics for repeatable same-setup shots, retained controls and a visible
+comparison of actual trajectories/landings. Add worked help. Keep the existing
+ten-shot Steady practice, daily, unlimited and contest scoring/save behavior.
+No real sports data or shared arcade engines change. No local runtime gates;
+remote CI carries type/build, outcomes/controls, existing regressions and browser
+proof. Claude's Release Z/988 and all held drafts remain outside this scope.
+Next free998 is unclaimed. Publication ownership is not claimed yet.
+
+Codex996 PUBLISHED, 2026-10-03, live verification completed06:32 EDT.
+Lovable confirmed "Your website was updated" for synchronized main5667485d.
+Live entry is now /assets/index-DS-YzsM8.js. Public NHL/NBA/NFL/MLB create
+screens show Skates/Sneakers/Cleats and their own signature poses. All four
+phone layouts had zero horizontal overflow, with no public-tab error logs.
+No career was started or overwritten. Held drafts and seven stashes intact.
+Receipt: docs/audits/ROUND996-CAREER-APPEARANCE.md.
+This publication claim is CLOSED. Claude retains separate Release Z and988.
+Next free997 remains unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex996 ACCEPTED, 2026-10-03, PR111 merged f7884d28.
 Sport-specific appearance now uses skates, sneakers or cleats and suitable
 signature poses. Soccer presentation, all option IDs and saves are preserved.
