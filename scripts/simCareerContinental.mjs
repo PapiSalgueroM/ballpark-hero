@@ -25,12 +25,25 @@
  *      the legacy breakdown and the top scorer award all say so.
  *   5. The pass curves the first stage is solved against are fresh: measured
  *      again here over the module's own playFirstStage and held to the table.
+ *   6. The Ballon d'Or scores a cup won outside UEFA under its own name: the
+ *      nights a Boca career actually had list it as a club cup and never as a
+ *      Champions League, and the engine's own scorer values it above nothing
+ *      and below a Champions League (added after the review of 2026-10-03,
+ *      which swapped the two and found every check green).
+ *   7. The final is played over the legs RSSSF records for the season, in a
+ *      table typed here, and the abandoned 2001 CONCACAF cup is never played.
+ *   8. A club through the league phase play-off meets each knockout round at
+ *      the same target as a club that went straight to the round of 16.
  *
  * NEGATIVE CONTROLS (SC_CONT_CONTROL), each refusing to run unless its anchor
  * is in the bundle exactly once:
  *   tieronly  the tier only gate is back (the country is not read): 1 red.
  *   asucl     a cup won outside UEFA is recorded as a Champions League: 4 red.
  *   stalecal  one row of the pass curves is shifted by ten points: 5 red.
+ *   bdorucl   the Ballon d'Or scores a club cup as a Champions League: 6 red.
+ *   onefinal  every final outside UEFA is one match: 7 red.
+ *   pofrom    the play-off pushes every later round one target harder (the
+ *             old rounds.indexOf): 8 red.
  *
  * SC_CONT_PRINT_CALIBRATION=1 prints a fresh calibration table to paste into
  * the module (20,000 stages a point; several minutes, run it detached).
@@ -49,7 +62,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_CONT_CONTROL || '';
-const KNOWN_CONTROLS = ['tieronly', 'asucl', 'stalecal'];
+const KNOWN_CONTROLS = ['tieronly', 'asucl', 'stalecal', 'bdorucl', 'onefinal', 'pofrom'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_CONT_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -71,6 +84,9 @@ const CONTROL_SWAPS = {
   tieronly: ['clubCupFor(state.currentClubCountry ?? "", uclYear)', 'clubCupFor("", uclYear)'],
   asucl: ['season.championsLeague = isUcl && wonCup;', 'season.championsLeague = wonCup;'],
   stalecal: ['0.6028, 0.6547, 0.7064', '0.5028, 0.5547, 0.6064'],
+  bdorucl: ['if (season.clubCupTitle) playerTrophies.push("ClubCup");', 'if (season.clubCupTitle) playerTrophies.push("UCL");'],
+  onefinal: ['const finalLegs = isUcl ? 1 : cupFor.period.finalLegs;', 'const finalLegs = 1;'],
+  pofrom: ['targetAt(round === "PO" ? 0 : ladder.indexOf(round))', 'targetAt(rounds.indexOf(round))'],
 };
 if (CONTROL) {
   const [anchor, swap] = CONTROL_SWAPS[CONTROL];
@@ -82,6 +98,19 @@ if (CONTROL) {
   }
   fs.writeFileSync(BUNDLE, text.replace(anchor, swap));
   console.log(`   NEGATIVE CONTROL ON: ${CONTROL}`);
+}
+
+/* Section 6 reads the engine's own Ballon d'Or scorer, which the engine does
+   not export: the bundle is given one export line for it, and refuses to run
+   when the function is not there under that name exactly once. */
+{
+  const text = fs.readFileSync(BUNDLE, 'utf8');
+  const n = text.split('function calcBdorPoints(').length - 1;
+  if (n !== 1) {
+    console.error(`calcBdorPoints is in the bundle ${n} times, not once, so section 6 cannot read it`);
+    process.exit(1);
+  }
+  fs.writeFileSync(BUNDLE, `${text}\nexport { calcBdorPoints as __calcBdorPoints };\n`);
 }
 
 const bundle = await import(pathToFileURL(BUNDLE).href);
@@ -214,11 +243,20 @@ section(3, 'Europe is untouched for UEFA clubs: the Champions League is won as o
      70 to 90 in fours, a striker, 576,000 seasons a tier over eight seeds):
      title 5.920% at Real Madrid, 3.385% at Ajax, 0.656% at Sevilla. Here the
      club's country is set, which section 8 leaves blank, so this is the path a
-     real save takes. 2,000 campaigns a cell, 36,000 a tier, gate main plus or
-     minus three binomial standard errors at that size. */
-  const MAIN = [['Real Madrid', 'Spain', 1, 5.920], ['Ajax', 'Netherlands', 1, 3.385], ['Sevilla', 'Spain', 2, 0.656]];
+     real save takes. 2,000 campaigns a cell, 36,000 a tier.
+     THE GATE is a FIXED margin in points (the last number in each row), not
+     one computed from the sample, so a smaller sample can only make the check
+     harder to pass (review of 2026-10-03). The margins are three binomial
+     standard errors at 36,000 a tier. Measured on this round's engine in
+     nine runs on 2026-10-03 (the default seed on several trees, SIM_SEED=11
+     and the builder's earlier runs): Real Madrid 5.728 to 6.019, Ajax 3.517 to 3.567, Sevilla
+     0.600 to 0.683, so the furthest run used 51%, 64% and 44% of its margin.
+     Ajax sits above main in every run (about +0.15), the first stage's
+     solve landing a touch generous at tier 1; inside the margin, and the
+     reason this check is a band and not a point. */
+  const MAIN = [['Real Madrid', 'Spain', 1, 5.920, 0.37], ['Ajax', 'Netherlands', 1, 3.385, 0.29], ['Sevilla', 'Spain', 2, 0.656, 0.13]];
   const lines = [];
-  for (const [club, country, tier, want] of MAIN) {
+  for (const [club, country, tier, want, gate] of MAIN) {
     let n = 0, won = 0;
     for (const year of [1995, 2010, 2026]) {
       for (let overall = 70; overall <= 90; overall += 4) {
@@ -233,7 +271,6 @@ section(3, 'Europe is untouched for UEFA clubs: the Champions League is won as o
       }
     }
     const got = (100 * won) / n;
-    const gate = 3 * 100 * Math.sqrt((want / 100) * (1 - want / 100) / n);
     if (Math.abs(got - want) > gate) fail(`${club}: won the Champions League in ${got.toFixed(3)}% of seasons, main's band is ${want} plus or minus ${gate.toFixed(3)}`);
     lines.push(`${club} ${got.toFixed(3)}% (main ${want} +/- ${gate.toFixed(3)})`);
   }
@@ -242,6 +279,7 @@ section(3, 'Europe is untouched for UEFA clubs: the Champions League is won as o
 }
 
 /* ------------------------------------------------------------------ */
+let CAREERS = null;
 section(4, 'A cup won outside UEFA is kept under its own name, never as a Champions League');
 {
   const before = failures;
@@ -249,9 +287,10 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
   /* 150 seasons a career: a held 90 at Real Madrid wins about one season in
      twenty (3 to 5 in 60, measured), so 150 keeps "never won" off a coin. */
   const SEASONS = 150;
-  const career = (club, country) => {
+  const career = (club, country, ovr = 90) => {
     let s = E.initCareer('Cup Test', country === 'Spain' ? 'Spain' : 'Argentina', 'ST', '2020s', stats(88), 88, 2018, CLUBS, null);
     let at = 0, ucl = 0, other = 0, otherNames = new Set();
+    const nights = [];
     for (let i = 0; i < SEASONS; i++) {
       const prev = {
         ...s, phase: 'playing', retired: false, age: 26, currentClub: club, currentClubCountry: country,
@@ -260,7 +299,7 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
            the age says, and a declining career winning nothing in sixty
            seasons would read as the honour going missing (measured: one
            Real Madrid career in three fell from 87 to 40 and won nothing). */
-        ...stats(90), overall: 90,
+        ...stats(ovr), overall: ovr,
       };
       s = E.advanceProSeason(prev, CLUBS);
       const last = s.seasons[s.seasons.length - 1];
@@ -268,8 +307,9 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
       at += 1;
       if (last.championsLeague) ucl += 1;
       if (last.clubCupTitle) { other += 1; otherNames.add(last.clubCupTitle); }
+      if (last.clubCupTitle || last.championsLeague) nights.push({ clubCup: !!last.clubCupTitle, ucl: !!last.championsLeague, night: s.pendingBallonDor });
     }
-    return { s, at, ucl, other, otherNames };
+    return { s, at, ucl, other, otherNames, nights };
   };
   const boca = career('Boca Juniors', 'Argentina');
   if (boca.at < SEASONS * 0.8) fail(`only ${boca.at} of ${SEASONS} seasons were played at Boca Juniors, too few to judge`);
@@ -285,6 +325,7 @@ section(4, 'A cup won outside UEFA is kept under its own name, never as a Champi
   if (!line('Continental Club Cups') || line('Continental Club Cups').points <= 0) fail('the legacy has no Continental Club Cups line for a Libertadores winner');
   if (boca.s.awards.some(a => a.name === 'UCL Top Scorer')) fail('a Boca Juniors career won a UCL Top Scorer award');
   const madrid = career('Real Madrid', 'Spain');
+  CAREERS = { boca, madrid, run: career };
   if (madrid.other > 0) fail(`a career at Real Madrid recorded ${madrid.other} continental club cup(s) outside UEFA`);
   if (madrid.ucl === 0) fail(`a career at Real Madrid never won the Champions League in ${SEASONS} seasons`);
   red[4] = failures > before;
@@ -329,7 +370,120 @@ section(5, 'The pass curves the first stage is solved against are fresh');
 }
 
 /* ------------------------------------------------------------------ */
-const CONTROL_SECTION = { tieronly: 1, asucl: 4, stalecal: 5 };
+section(6, "The Ballon d'Or scores a cup won outside UEFA under its own name, worth less than a Champions League");
+{
+  const before = failures;
+  /* (a) The nights section 4's careers actually had. Every season Boca won
+     its cup, the player's own line on the night (when he made the ten) must
+     list the club cup and no Champions League; every Real Madrid Champions
+     League season must list it, so the check is reading the right field. */
+  let cupNights = 0, uclNights = 0;
+  const boca95 = CAREERS.run('Boca Juniors', 'Argentina', 95);
+  for (const { clubCup, night } of [...CAREERS.boca.nights, ...boca95.nights]) {
+    if (!clubCup) continue;
+    const me = night?.nominees?.find(n => n.isPlayer);
+    if (!me) continue;
+    cupNights += 1;
+    if (me.trophies.includes('UCL')) fail(`a Boca season with the ${CAREERS.boca.otherNames.values().next().value} was scored on the night as a Champions League (${me.trophies.join(', ')})`);
+    if (!me.trophies.includes('ClubCup')) fail(`a Boca season with its cup was scored on the night without it (${me.trophies.join(', ')})`);
+  }
+  for (const { ucl, night } of CAREERS.madrid.nights) {
+    const me = night?.nominees?.find(n => n.isPlayer);
+    if (!ucl || !me) continue;
+    uclNights += 1;
+    if (!me.trophies.includes('UCL')) fail(`a Real Madrid Champions League season was scored on the night without it (${me.trophies.join(', ')})`);
+  }
+  /* Floors from measured headroom (2026-10-03, default seed and SIM_SEED=11):
+     32 and 33 Boca cup nights, 10 Real Madrid nights each time. */
+  if (cupNights < 10) fail(`only ${cupNights} of Boca's cup seasons reached the night's ten, too few to judge`);
+  if (uclNights < 3) fail(`only ${uclNights} of Real Madrid's Champions League seasons reached the night's ten, too few to judge`);
+  /* (b) The engine's own scorer, on one line of numbers with nothing else
+     changed: the club cup is worth something, and less than a Champions
+     League (8 and 25 points today; the order is what is held, not the
+     numbers). */
+  const P = bundle.__calcBdorPoints;
+  const base = P(20, 5, 85, 1, [], 'Boca Juniors', []);
+  const cup = P(20, 5, 85, 1, ['ClubCup'], 'Boca Juniors', []) - base;
+  const ucl = P(20, 5, 85, 1, ['UCL'], 'Boca Juniors', []) - base;
+  if (!(cup > 0)) fail(`a continental club cup adds ${cup} Ballon d'Or points`);
+  if (!(cup < ucl)) fail(`a continental club cup adds ${cup} Ballon d'Or points and a Champions League ${ucl}`);
+  red[6] = failures > before;
+  if (!red[6]) console.log(`   ${cupNights} Boca cup nights scored as a club cup, ${uclNights} Real Madrid nights as a Champions League; the scorer gives the club cup ${cup} and the Champions League ${ucl}`);
+}
+
+/* ------------------------------------------------------------------ */
+section(7, 'The final is one match or two legs as the season had it, and 2001 has no CONCACAF cup');
+{
+  const before = failures;
+  /* Typed here from RSSSF (copalib, as1, ca1, af1, read 2026-10-03), not
+     read from the module: season, then the legs of that season's final. */
+  const FINALS = [
+    ['Brazil', 2010, 2], ['Brazil', 2019, 1],
+    ['Mexico', 1998, 1], ['Mexico', 2005, 2], ['Mexico', 2012, 2], ['Mexico', 2020, 1], ['Mexico', 2022, 2], ['Mexico', 2024, 1],
+    ['Saudi Arabia', 1998, 1], ['Saudi Arabia', 2005, 2], ['Saudi Arabia', 2010, 1], ['Saudi Arabia', 2015, 2],
+    ['Saudi Arabia', 2021, 1], ['Saudi Arabia', 2022, 2], ['Saudi Arabia', 2024, 1],
+    ['Egypt', 2010, 2], ['Egypt', 2020, 1], ['Egypt', 2023, 2],
+  ];
+  let checked = 0;
+  for (const [country, year, want] of FINALS) {
+    let finals = 0, wrong = 0;
+    for (let i = 0; i < 600 && finals < 20; i++) {
+      const legs = E.simulateUCL(stateFor(90, 1, 'Test FC', country, year), {}).matches.filter(m => m.round === 'Final').length;
+      if (!legs) continue;
+      finals += 1;
+      if (legs !== want) wrong += 1;
+    }
+    checked += finals;
+    if (finals < 10) fail(`${country} ${year}: only ${finals} finals reached, too few to judge`);
+    if (wrong) fail(`${country} ${year}: ${wrong} of ${finals} finals were not ${want === 1 ? 'one match' : 'two legs'}, as RSSSF records it`);
+  }
+  let played2001 = 0;
+  for (let i = 0; i < 200; i++) if (E.simulateUCL(stateFor(90, 1, 'Test FC', 'Mexico', 2001), {}).qualified) played2001 += 1;
+  if (played2001) fail(`a Mexican club played the abandoned 2001 CONCACAF cup ${played2001} times in 200`);
+  red[7] = failures > before;
+  if (!red[7]) console.log(`   ${checked} finals over ${FINALS.length} seasons, each over the legs the record gives; no CONCACAF cup in 2001`);
+}
+
+/* ------------------------------------------------------------------ */
+section(8, 'Through the play-off or straight through, each knockout round is played at the same target');
+{
+  const before = failures;
+  /* 2026, Ajax (tier 1, not elite) at 82: the round of 16 target is 0.464
+     and each round after it 0.04 lower. A club that came through the
+     league phase play-off must meet the round of 16, and every round after
+     it, at the same target as one that finished in the top eight. The old
+     code indexed the target off the ladder WITH the play-off in it, which
+     moves every later round one step (0.04) harder. Ties won per tie
+     played, pooled over the four rounds, compared path against path. The
+     margin is a fixed 0.02, half the step the bug makes, at a sample whose
+     standard error on the difference is about 0.005 (the measured
+     difference is in the green line). Measured 2026-10-03 on the merged
+     tree: a gap of 0.0039 (default seed) and 0.0058 (SIM_SEED=11) with
+     16,551 to 16,727 ties through the play-off; with the old indexing (the
+     pofrom control) the gap is 0.037. */
+  const N = 90000;
+  const tally = { direct: [0, 0], po: [0, 0] };
+  for (let i = 0; i < N; i++) {
+    const r = E.simulateUCL(stateFor(82, 1, 'Ajax', 'Netherlands', 2026), {});
+    if (!r.qualified) continue;
+    const path = r.matches.some(m => m.round === 'PO') ? tally.po : tally.direct;
+    for (const round of ['R16', 'QF', 'SF', 'Final']) {
+      const legs = r.matches.filter(m => m.round === round);
+      if (!legs.length) break;
+      path[0] += 1;
+      if (legs[legs.length - 1].won) path[1] += 1;
+    }
+  }
+  const rate = ([n, w]) => (n ? w / n : NaN);
+  const diff = rate(tally.direct) - rate(tally.po);
+  if (tally.direct[0] < 12000 || tally.po[0] < 12000) fail(`too few ties to judge: ${tally.direct[0]} straight through, ${tally.po[0]} through the play-off`);
+  if (!(Math.abs(diff) <= 0.02)) fail(`ties won: ${rate(tally.direct).toFixed(4)} straight through, ${rate(tally.po).toFixed(4)} through the play-off, a gap of ${diff.toFixed(4)} (margin 0.02)`);
+  red[8] = failures > before;
+  if (!red[8]) console.log(`   ties won ${rate(tally.direct).toFixed(4)} of ${tally.direct[0]} straight through and ${rate(tally.po).toFixed(4)} of ${tally.po[0]} through the play-off (gap ${diff.toFixed(4)}, margin 0.02)`);
+}
+
+/* ------------------------------------------------------------------ */
+const CONTROL_SECTION = { tieronly: 1, asucl: 4, stalecal: 5, bdorucl: 6, onefinal: 7, pofrom: 8 };
 if (CONTROL) {
   const want = CONTROL_SECTION[CONTROL];
   if (red[want]) { console.log(`\n   CONTROL FIRED: section ${want} went red`); process.exit(0); }
