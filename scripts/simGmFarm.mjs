@@ -449,7 +449,10 @@ const TEN = SEASONS / 10;
 const COVER_FLOOR = { nfl: 2400 * TEN, nba: 1400 * TEN, mlb: 2000 * TEN, nhl: 650 * TEN };
 const CLAIM_FLOOR = SEASONS >= 10 ? { nfl: 2, nba: 0, mlb: 200, nhl: 85 } : { nfl: 0, nba: 0, mlb: 0, nhl: 0 };
 const GROWTH_GAP = 0.5;
-const BYTES_BUDGET = { nfl: Infinity, nba: Infinity, mlb: Infinity, nhl: Infinity };
+/* The farm block's own bytes, about a quarter over the most measured. MLB's
+   is the big one: thirty clubs keep a 40 man side and a dozen minor leaguers
+   each, about two thirds of the size of the MLB league save itself. */
+const BYTES_BUDGET = { nfl: 1800, nba: 16000, mlb: 128000, nhl: 88000 };
 
 const t0 = Date.now();
 for (const sport of SPORTS) {
