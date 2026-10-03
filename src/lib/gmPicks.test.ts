@@ -209,6 +209,13 @@ describe('compensatory picks', () => {
     for (const club of ids(12)) expect(awards.filter(a => a.club === club).length).toBeLessThanOrEqual(4);
     for (const a of awards) { expect(a.round).toBeGreaterThanOrEqual(3); expect(a.round).toBeLessThanOrEqual(7); }
   });
+  it('a club that lost six and signed nobody gets exactly four, its four best losses', () => {
+    const awards = compensatoryAwards([{ club: 'A', lost: [20, 60, 30, 50, 40, 10], gained: [] }], NFL_PICK_RULES, roundFor);
+    expect(awards.length).toBe(4);
+    expect(awards.map(a => a.value).sort((x, y) => y - x)).toEqual([60, 50, 40, 30]);
+    const five = compensatoryAwards([{ club: 'B', lost: [60, 50, 40, 30, 20, 10, 10], gained: [15, 5] }], NFL_PICK_RULES, roundFor);
+    expect(five.length).toBe(4);
+  });
   it('a signing cancels a loss, and a club that gained as many as it lost gets nothing', () => {
     expect(compensatoryAwards([{ club: 'A', lost: [50, 30], gained: [55, 10] }], NFL_PICK_RULES, roundFor)).toEqual([]);
     const one = compensatoryAwards([{ club: 'A', lost: [50, 30], gained: [40] }], NFL_PICK_RULES, roundFor);
