@@ -7844,7 +7844,6 @@ era2005: {
   'Xavier Collin': 'France',
   'Xisco Muñoz': 'Spain',
   'Xisco Nadal': 'Spain',
-  'Yacine Abdessadki': 'Morocco',
   'Yakubu': 'Nigeria',
   'Yann Lachuer': 'France',
   'Yannick Fischer': 'France',

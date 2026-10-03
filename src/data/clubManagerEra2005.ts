@@ -6,7 +6,7 @@
 // leagues from an offline pull of the base table, the lines already shipped
 // carried through as bytes). Memberships and sources are in the script
 // header. The verified summer 2005 window corrections are applied across
-// all five leagues (383 rows moved, removed, arrived or folded in
+// all five leagues (385 rows moved, removed, arrived or folded in
 // total). Values in £m at the year-2005 snapshot, ratings 48-94 on the
 // same curve as the 2026 bake. Regenerate per the header of
 // scripts/bakeEra2005.mjs.
@@ -15,9 +15,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const ERA2005_META = {
   year: 2005,
-  players: 1728,
+  players: 1727,
   clubs: 98,
-  moves: 383,
+  moves: 385,
 };
 
 /** 2005 clubs where the year-2005 table runs thin (under 8 real players);
@@ -1183,6 +1183,7 @@ export const ERA2005_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Lucas Bernardi', p: 'CM', a: 27, v: 3.8, r: 73 },
     { n: 'Gerard López', p: 'CM', a: 25, v: 3, r: 72 },
     { n: 'Olivier Kapo', p: 'CAM', a: 24, v: 3, r: 72 },
+    { n: 'Olivier Sorlin', p: 'CDM', a: 25, v: 3, r: 72 },
     { n: 'Akis Zikos', p: 'CDM', a: 30, v: 2.3, r: 70 },
     { n: 'Flavio Roma', p: 'GK', a: 30, v: 2.3, r: 70 },
     { n: 'Jaroslav Plasil', p: 'CM', a: 22, v: 2.3, r: 70 },
@@ -1496,7 +1497,6 @@ export const ERA2005_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Dudu Cearense', p: 'CM', a: 21, v: 3, r: 72 },
     { n: 'Étienne Didot', p: 'CM', a: 21, v: 3, r: 72 },
     { n: 'Jacques Faty', p: 'CB', a: 20, v: 3, r: 72 },
-    { n: 'Olivier Sorlin', p: 'CDM', a: 25, v: 3, r: 72 },
     { n: 'Abdeslam Ouaddou', p: 'CB', a: 26, v: 2.3, r: 70 },
     { n: 'Adailton', p: 'CB', a: 21, v: 2.3, r: 70 },
     { n: 'Erik Edman', p: 'LB', a: 26, v: 2.3, r: 70 },
@@ -1659,7 +1659,6 @@ export const ERA2005_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sidi Keita', p: 'CDM', a: 19, v: 1.5, r: 68 },
     { n: 'Stéphane Cassard', p: 'GK', a: 32, v: 1.5, r: 68 },
     { n: 'Ulrich Le Pen', p: 'LM', a: 30, v: 1.5, r: 68 },
-    { n: 'Yacine Abdessadki', p: 'RW', a: 24, v: 1.5, r: 68 },
     { n: 'Amara Diané', p: 'RW', a: 22, v: 0.8, r: 64 },
     { n: 'Arthur Boka', p: 'LB', a: 21, v: 0.8, r: 64 },
     { n: 'Haykel Gmamdia', p: 'ST', a: 23, v: 0.8, r: 64 },

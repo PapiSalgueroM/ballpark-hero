@@ -29,7 +29,7 @@
  *      Henry above the modern best, the 17 year old Messi honest at 73.
  *
  * ROUND 902: the era is a full big five (Serie A, the Bundesliga and Ligue 1
- * joined, 98 clubs, 1,728 real players after the review fix). What grew:
+ * joined, 98 clubs, 1,727 real players after the review fix). What grew:
  *   1. Juventus, Bayern and Lyon get their real squads name for name, both
  *      directions, summer arrivals included (Vieira, Lahm, Ismael, Tiago).
  *   2. Every new shared name across the four worlds is a verified namesake
@@ -40,24 +40,26 @@
  *      thin squads and Duisburg are told no such thing; each new nation's cup
  *      is named in the cup demand.
  *   4. Measured 2026-10-03 over six seeds each (the streams in the code), on
- *      the world as the review fix left it: Juventus 1,2,2,1,1,1 (mean 1.33),
- *      Bayern 3,1,2,1,1,1 (1.50), Lyon 1,1,1,1,1,6 (1.83), Troyes, a promoted
+ *      the world as the review fix left it: Juventus 1,2,1,1,1,1 (mean 1.17),
+ *      Bayern 3,1,2,1,1,1 (1.50), Lyon 2,1,1,1,1,6 (2.00), Troyes, a promoted
  *      squad of four real players (Nancy, with three, is the thinnest of the
- *      three new leagues), 19,16,19,19,19,12 (17.33); Chelsea 1 six times and
- *      Cadiz 19,20,17,18,19,17. (The first pass measured 1.00, 1.00, 1.17
- *      and 18.00 on the world before the fix.) The bands are on the MEANS: a
- *      giant must average 3.5 or better (1.67 places of headroom over the
- *      worst giant mean measured) and the thin club 11 or worse (6.33 places
- *      of headroom, and its best single seed of 12 is still above the band).
- *      No band reads a single worst seed.
- *   5. The extension's accounting: 98 clubs, 1,728 players, 383
- *      corrections, 294 Serie A, 332 Bundesliga and 342 Ligue 1 players, the
+ *      three new leagues), 20,20,19,16,20,12 (17.83); Chelsea 1 six times and
+ *      Cadiz 19,20,18,17,19,17. Two earlier worlds of the same day measured
+ *      1.00/1.00/1.17/18.00 (the first pass) and 1.33/1.50/1.83/17.33 (the
+ *      fix before its last two men), so the means move by about half a place
+ *      with the data. The bands are on the MEANS: a giant must average 3.5
+ *      or better (1.50 places of headroom over the worst giant mean of all
+ *      three measurements) and the thin club 11 or worse (6.33 places of
+ *      headroom over its best mean, and its best single seed of 12 is still
+ *      above the band). No band reads a single worst seed.
+ *   5. The extension's accounting: 98 clubs, 1,727 players, 385
+ *      corrections, 294 Serie A, 332 Bundesliga and 341 Ligue 1 players, the
  *      five thin clubs by name, one man at one club in the whole world, the
  *      three men Round 176 removed who are home now, the two folds, a sample
  *      of the window, the men kept on their snapshot club because their move
  *      was dated January 2006, and men gone from the world. The review fix
  *      added the men the first pass had left at clubs they did not start
- *      2005-06 at: three moved, nineteen gone, two checked and kept; and
+ *      2005-06 at: four moved, twenty gone, two checked and kept; and
  *      the era2005 nationality block held to the world, one line per man.
  *   7. A save from before the round (a two league world, no strength for the
  *      new leagues' Champions League clubs) reads them at the era's finish
@@ -503,10 +505,10 @@ console.log('5) The bake file tells the truth about itself');
   const at = (club, name) => (R[club] ?? []).some(p => p.n === name);
   const clubsOf = name => Object.entries(R).filter(([, list]) => list.some(p => p.n === name)).map(([c]) => c);
   if (ERA2005_META.clubs !== 98) fail(`meta clubs ${ERA2005_META.clubs}, the big five of 2005-06 are 98`);
-  if (ERA2005_META.players !== 1728) fail(`meta players ${ERA2005_META.players}, the Round 902 bake wrote 1728`);
-  if (ERA2005_META.moves !== 383) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 149 moved, 134 removed, 72 arrived and 2 folded is 383`);
+  if (ERA2005_META.players !== 1727) fail(`meta players ${ERA2005_META.players}, the Round 902 bake wrote 1727`);
+  if (ERA2005_META.moves !== 385) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 150 moved, 135 removed, 72 arrived and 2 folded is 385`);
   /* Serie A, Bundesliga and Ligue 1, as the bake wrote them. */
-  const LEAGUE_TOTALS = '294,332,342';
+  const LEAGUE_TOTALS = '294,332,341';
   const leagueTotal = id => (ERA_LEAGUES['era2005'].find(l => l.id === id)?.clubs ?? []).reduce((s, c) => s + (R[c]?.length ?? 0), 0);
   const totals = `${leagueTotal('seriea2005')},${leagueTotal('bundesliga2005')},${leagueTotal('ligue12005')}`;
   if (totals !== LEAGUE_TOTALS) fail(`Serie A, Bundesliga and Ligue 1 hold ${totals} players, the bake wrote ${LEAGUE_TOTALS}`);
@@ -556,15 +558,15 @@ console.log('5) The bake file tells the truth about itself');
     if (clubsOf(name).join(',') !== club) fail(`${name} should still be at ${club}, he is at: ${clubsOf(name).join(',') || 'nowhere'}`);
   }
   /* Review fix: the men the first pass left at clubs they did not start
-     2005-06 at. Three moved on dated records with a year 2006 row at the
+     2005-06 at. Four moved on dated records with a year 2006 row at the
      club; the rest are gone (see UNRESOLVED in the bake's header). */
-  for (const [name, club, old] of [['Óscar López', 'Real Betis', 'Lazio'], ['Manuel Belleri', 'Lazio', 'Udinese'], ['Roberto Baronio', 'Lazio', 'Chievo Verona']]) {
+  for (const [name, club, old] of [['Óscar López', 'Real Betis', 'Lazio'], ['Manuel Belleri', 'Lazio', 'Udinese'], ['Roberto Baronio', 'Lazio', 'Chievo Verona'], ['Olivier Sorlin', 'Monaco', 'Rennes']]) {
     if (clubsOf(name).join(',') !== club) fail(`${name} should be at ${club} and nowhere else, he is at: ${clubsOf(name).join(',') || 'nowhere'}`);
     if (at(old, name)) fail(`${name} is still at ${old}`);
   }
   for (const name of ['Tore André Flo', 'Alexander Manninger', 'Fabio Pecchia', 'Cristian Bucchi', 'Lamberto Zauli', 'Alessandro Doga',
     'Goran Rubil', 'Jean Carlos', 'Roberto Colacone', 'Roberto Cortellini', 'Toledo', 'Florin Bratu', 'Loris Del Nevo',
-    'Alessandro Monticciolo', 'Manuel Caponi', 'Mattia Marchesetti', 'Mohamed Kallon', 'Valerio Virga', 'Filippo Antonelli Agomeri']) {
+    'Alessandro Monticciolo', 'Manuel Caponi', 'Mattia Marchesetti', 'Mohamed Kallon', 'Valerio Virga', 'Filippo Antonelli Agomeri', 'Yacine Abdessadki']) {
     if (clubsOf(name).length) fail(`${name} should be gone (his snapshot club is not where he started 2005-06), he is at ${clubsOf(name).join(',')}`);
   }
   // Left the world, or left his club with no provable season start club.

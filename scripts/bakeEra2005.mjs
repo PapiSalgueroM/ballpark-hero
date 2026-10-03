@@ -301,7 +301,13 @@ const DB_TO_ERA_L1 = {
  * (Monaco, loaned to Al-Ittihad on 29 Jul 2005) and Valerio Virga (Roma,
  * loaned to Ascoli and injured all season), are removed too. The same check
  * kept Christian Maggio and Gianni Guigou at Fiorentina and Roberto Nanni
- * at Siena: all three went on in January 2006. Arrivals with no proof of
+ * at Siena: all three went on in January 2006. A sweep of the men FBref
+ * splits between two clubs found two more who started the season at the
+ * OTHER club and came to the snapshot's only in January: Olivier Sorlin
+ * (Monaco, moved there) and Yacine Abdessadki (Toulouse, removed, no row
+ * places him there); the rest of that sweep checked out (Mickael Pagis,
+ * Pierre-Alain Frau, David Di Michele, Matteo Guardalben and Stefano Mauri
+ * all left their snapshot club in January 2006). Arrivals with no proof of
  * WHEN (forty candidate rows, most of them January signings) are simply not
  * added. Three shipped lines are left as Round 176 made them because their
  * summer move stayed outside the new leagues: David Bellion (Manchester
@@ -436,6 +442,7 @@ const B5_MOVES = [
   { n: 'Nicola Amoruso', to: 'Reggina', why: 'Messina to Reggina (FB: 29 Serie A games for Reggina, none for Messina)' },
   { n: 'Niels Oude Kamphuis', to: 'Gladbach', why: 'Schalke 04 to Gladbach (KI 30 May 2005, Suche nach einem Verteidiger geht weiter)' },
   { n: 'Olivier Kapo', to: 'Monaco', why: 'Juventus to Monaco (FB: 25 Ligue 1 games for Monaco, none for Juventus)' },
+  { n: 'Olivier Sorlin', to: 'Monaco', why: 'Rennes to Monaco for 2005-06, the first half at Monaco and back at Rennes in the January 2006 window (en.wikipedia, Olivier Sorlin: Monaco 2005-2006; fr.wikipedia, Olivier Sorlin; FB: 20 Ligue 1 games for Monaco, 13 for Rennes)' },
   { n: 'Óscar López', to: 'Real Betis', why: 'his Lazio loan from Barcelona was 2004-05 only, and Barcelona loaned him to Real Betis on 3 Aug 2005 (en.wikipedia, Oscar Lopez (footballer, born 1980); FB: 18 La Liga games for Real Betis, none for Lazio)' },
   { n: 'Otto Addo', to: 'Mainz', why: 'Borussia Dortmund to Mainz (KI 25 May 2005, Stürmer kommt aus Dortmund)' },
   { n: 'Patrick Owomoyela', to: 'Werder Bremen', why: 'Arminia Bielefeld to Werder Bremen (KI 25 May 2005; FB: 32 Bundesliga games for Werder Bremen, none for Arminia Bielefeld)' },
@@ -615,6 +622,7 @@ const B5_REMOVALS = [
   { n: 'Valerio Virga', why: 'Roma loaned him to Ascoli for 2005-06 and a cruciate injury in a summer friendly kept him out all season (it.wikipedia, Valerio Virga); his year 2006 row is Roma, back from that loan, so no row places him at Ascoli', later: true },
   { n: 'Vasilios Tsiartas', why: 'left Koln in the summer of 2005 (KI 29 Jun 2005, Tsiartas, Vassilios)' },
   { n: 'Victor Agali', why: 'Nice to Kayseri Erciyesspor on a free, 1 Jul 2005 (soccerway transfers, Victor Agali)' },
+  { n: 'Yacine Abdessadki', why: 'Strasbourg to Toulouse on a three year deal in 2005, six months and 9 games there, then back at Strasbourg in the January 2006 window (fr.wikipedia, Yacine Abdessadki; FB: 9 Ligue 1 games for Toulouse, 13 for Strasbourg); his year 2006 row is Strasbourg, reached in that later window, and no row places him at Toulouse', later: true },
   { n: 'Yacine Bezzaz', why: 'AC Ajaccio to Valenciennes on a free, 1 Jul 2005 (soccerway transfers, Yacine Bezzaz)' },
 ];
 const B5_ARRIVALS = [
