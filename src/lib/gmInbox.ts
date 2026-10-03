@@ -290,6 +290,12 @@ export function choiceEffects(c: GmChoiceDef, pack: GmInboxPack): string[] {
   return out;
 }
 
+/** The option's words with its effects after them, as the button reads. */
+export function gmChoiceLabel(c: GmChoiceDef, pack: GmInboxPack): string {
+  const fx = choiceEffects(c, pack);
+  return fx.length ? `${c.label} · ${fx.join(', ')}` : c.label;
+}
+
 /* ─── the answer ─────────────────────────────────────────────────────────── */
 
 /**
