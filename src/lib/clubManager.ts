@@ -68,6 +68,9 @@ import {
   rolloverBooks, setTicketPolicy, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
+/* Round 979: the decisions desk, same cycle, same rule: pure exports, nothing
+   read at module scope on either side. */
+import { answerDecision, settleDecisionDesk } from '@/lib/clubManagerDecisions';
 /* Round 471: the four staff posts, same cycle, same rule. */
 import {
   coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,
@@ -2125,6 +2128,11 @@ export interface CareerState {
   resultLog?: ResultLogEntry[];
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
+  /** Round 979: the decisions desk (red card appeals and situations), newest
+   *  first. Absent on every save from before the round; read it through
+   *  deskOf in clubManagerDecisions.ts, which reads a damaged block as empty.
+   *  Inline type import so the line is erased at build time. */
+  decisions?: import('@/lib/clubManagerDecisions').DeskItem[];
   /** Round 73: player ids you promised a start; break it and they notice. */
   promisedStarts?: string[];
   /** Round 116: the youth setup, the scouts on the road and the kids on the books. */
@@ -8334,6 +8342,8 @@ function generateClubMessage(state: CareerState): void {
 
 /** Answer a message. Pure: returns the new state. */
 export function answerMessage(career: CareerState, messageId: string, optionIdx: number): CareerState {
+  /* Round 979: the decisions desk shares the inbox's answer path. */
+  if (messageId.startsWith('desk-')) return answerDecision(career, messageId, optionIdx);
   const inbox = career.inbox ?? [];
   const msg = inbox.find(m => m.id === messageId);
   if (!msg || msg.resolved) return career;
@@ -14843,6 +14853,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const cardLines: CardLine[] = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]
     .map(c => ({ ...c }))
     .sort((a, b) => a.minute - b.minute);
+  /* Round 979: who walked for a straight red, for the decisions desk. */
+  const straightReds: string[] = [];
   for (const c of cardLines) {
     const sq = c.id ? state.squad.find(p => p.id === c.id) : state.squad.find(p => p.name === c.name);
     if (!sq) continue;
@@ -14862,6 +14874,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     } else {
       sq.suspendedMatches = ri(1, 2);
       sq.seasonReds = (sq.seasonReds ?? 0) + 1;
+      straightReds.push(sq.id);
       bumpComp(sq, l => { l.reds += 1; });
       events.push(`🟥 ${sq.name} was sent off, suspended for ${sq.suspendedMatches} match${sq.suspendedMatches > 1 ? 'es' : ''}.`);
     }
@@ -15104,6 +15117,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   generatePlayerMessage(state, xi, won, margin);
   // Round 474: and the five people who are not in your squad.
   generateClubMessage(state);
+  // Round 979: the decisions desk. Draws nothing from Math.random.
+  settleDecisionDesk(state, straightReds, fx.opponent);
 
   /* ----- board confidence ----- */
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
