@@ -373,11 +373,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_bad_presser',
       category: 'media', cooldown: 1,
       title: 'Six words after a 6-1 loss',
-      body: 'You said to ask the guys who were actually trying. It is already a graphic on three different shows.',
+      body: 'Somebody asked about effort after a 6-1 loss and you said to ask the guys who were actually trying. Six words, said in a hallway with your gear still on. By the time you got to your car it was a graphic on three different shows and your phone had forty messages on it, none of them from teammates.',
       options: [
-        { label: 'Apologize to the room first', effect: 'Clean it up', apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, -3); heatUp(cc, -4); return `You said it to their faces before you said it to a camera. Morale +${m}, fanbase ${f}.`; } },
-        { label: 'Double down on camera', effect: 'No takebacks', apply: (cc) => { const f = fan(cc, 10); const m = mor(cc, -7); const h = heatUp(cc, 7); return `The clip has four million views and two teammates have muted you. Fanbase +${f}, morale ${m}, heat now ${h}.`; } },
-        { label: 'Go silent for a week', effect: 'Wait it out', apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, -1); heatUp(cc, -3); return `No comment, seven days, story dead. Morale +${m}, fanbase ${f}.`; } },
+        {
+          label: 'Apologize to the room first', effect: 'Clean it up',
+          apply: (cc) => { const m = mor(cc, 7); const f = fan(cc, -3); heatUp(cc, -4); return `You said it to their faces at the morning skate before you said it to a camera. A couple of the fans wanted the fight. The room did not. Morale +${m}, fanbase ${f}.`; },
+        },
+        {
+          label: 'Double down on camera', effect: 'No takebacks',
+          apply: (cc) => { const f = fan(cc, 10); const m = mor(cc, -7); const h = heatUp(cc, 7); return `You said it again, slower. The clip has four million views and two teammates have muted you in the group chat. Fanbase +${f}, morale ${m}, heat now ${h}.`; },
+        },
+        {
+          label: 'Go silent for a week', effect: 'Wait it out',
+          apply: (cc) => { const m = mor(cc, 3); const f = fan(cc, -1); heatUp(cc, -3); return `No comment, seven days, and a different team blew a lead on national TV. Story dead. Morale +${m}, fanbase ${f}.`; },
+        },
       ],
     });
   }
@@ -387,11 +396,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_bench_cam',
       category: 'media', cooldown: 1,
       title: 'Bench cam got you',
-      body: 'Twelve million views of your face during a line change. Someone added sad piano and your cousins will not stop sending it.',
+      body: 'Twelve million views of your face during a line change, staring at nothing like you had just remembered something terrible. Someone added sad piano. Your cousins will not stop sending it, and a talk show host did a bit about it.',
       options: [
-        { label: 'Post it yourself with a caption', effect: 'Own the joke', apply: (cc) => { const f = fan(cc, 11); const m = mor(cc, 5); return `You beat them to it. Fanbase +${f}, morale +${m}.`; } },
-        { label: 'Put it on a shirt', effect: 'Monetize the clip', apply: (cc) => { const got = cash(cc, 0.15); const f = fan(cc, 8); const m = mor(cc, -2); return `Sold out in a weekend, ${got}M after the split. Fanbase +${f}, morale ${m}.`; } },
-        { label: 'Never acknowledge it', effect: 'Total silence', apply: (cc) => { const m = mor(cc, 3); const g = rate(cc, 1); return `Head down, meme dies in nine days. Morale +${m}, rating +${g}.`; } },
+        {
+          label: 'Post it yourself with a caption', effect: 'Own the joke',
+          apply: (cc) => { const f = fan(cc, 11); const m = mor(cc, 5); return `You posted it with the caption "me thinking about the power play" and beat everybody to the punchline. Fanbase +${f}, morale +${m}.`; },
+        },
+        {
+          label: 'Put it on a shirt', effect: 'Monetize the clip',
+          apply: (cc) => { const got = cash(cc, 0.15); const f = fan(cc, 8); const m = mor(cc, -2); return `Your face, the sad piano, a shirt. Sold out in a weekend, ${got}M after the split, and a part of you will never recover. Fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Never acknowledge it', effect: 'Total silence',
+          apply: (cc) => { const m = mor(cc, 3); const g = rate(cc, 1); return `Head down, mouth shut, extra time on the ice. The meme died in nine days and you got better in the meantime. Morale +${m}, rating +${g}.`; },
+        },
       ],
     });
   }
@@ -401,11 +419,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_canadian_market',
       category: 'media', cooldown: 1,
       title: 'Seven panelists and a countdown clock',
-      body: `In ${teamName} there is a television show about the morning skate. A show. About the skate.`,
+      body: `In ${teamName} there is a television show about the morning skate. A show. About the skate. There are radio hosts who know your line combinations better than your mother does, and a guy at the grocery store asked about your shot selection while you were buying eggs.`,
       options: [
-        { label: 'Do every hit, be the guy', effect: 'Face of the market', apply: (cc) => { const f = fan(cc, 13); const m = mor(cc, -5); return `You became the whole conversation. Fanbase +${f}, morale ${m}.`; } },
-        { label: 'Hockey answers only, forever', effect: 'Say nothing well', apply: (cc) => { const m = mor(cc, 5); const f = fan(cc, 2); return `Ten minutes of words with no news in them. Morale +${m}, fanbase +${f}.`; } },
-        { label: 'Delete the apps until June', effect: 'Go offline', apply: (cc) => { const m = mor(cc, 9); const f = fan(cc, -4); const h = hp(cc, 3); flag(cc, 'offline'); return `You have no idea what they are saying and you sleep great. Morale +${m}, health +${h}, fanbase ${f}.`; } },
+        {
+          label: 'Do every hit, be the guy', effect: 'Face of the market',
+          apply: (cc) => { const f = fan(cc, 13); const m = mor(cc, -5); return `Radio, TV, the morning show, the pregame show, the postgame show. You became the whole conversation and it never stopped. Fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Hockey answers only, forever', effect: 'Say nothing well',
+          apply: (cc) => { const m = mor(cc, 5); const f = fan(cc, 2); return `Ten minutes of words a day with no news in them: one game at a time, good effort, get pucks deep. An art form. Morale +${m}, fanbase +${f}.`; },
+        },
+        {
+          label: 'Delete the apps until June', effect: 'Go offline',
+          apply: (cc) => { const m = mor(cc, 9); const f = fan(cc, -4); const h = hp(cc, 3); flag(cc, 'offline'); return `You have no idea what they are saying about you and you sleep great. A few fans called you aloof. You did not see it. Morale +${m}, health +${h}, fanbase ${f}.`; },
+        },
       ],
     });
   }
@@ -415,11 +442,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_doc_crew',
       category: 'media', cooldown: 2,
       title: 'The documentary crew',
-      body: 'They want cameras in your kitchen, your truck and your rehab table. Ten episodes, streaming in the fall.',
+      body: 'A streaming service wants cameras in your kitchen, your truck and on your rehab table for a whole season. Ten episodes in the fall, a producer who calls you buddy, and a contract with a paragraph about "authentic moments" your agent read twice and did not love.',
       options: [
-        { label: 'Full access, everything', effect: 'All access money', apply: (cc) => { const got = cash(cc, 1.2); const f = fan(cc, 15); const m = mor(cc, -6); return `They filmed your worst week too. ${got}M earned, fanbase +${f}, morale ${m}.`; } },
-        { label: 'Rink only, no house', effect: 'Draw the line', apply: (cc) => { const got = cash(cc, 0.4); const f = fan(cc, 7); const m = mor(cc, 2); return `Practice, bus, room, done. ${got}M earned, fanbase +${f}, morale +${m}.`; } },
-        { label: 'Pass entirely', effect: 'Keep it private', apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 2); return `Your summer belongs to you. Morale +${m}, health +${h}.`; } },
+        {
+          label: 'Full access, everything', effect: 'All access money',
+          apply: (cc) => { const got = cash(cc, 1.2); const f = fan(cc, 15); const m = mor(cc, -6); return `They filmed your best month and your worst week, and the worst week is the episode everybody watched. ${got}M earned, fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Rink only, no house', effect: 'Draw the line',
+          apply: (cc) => { const got = cash(cc, 0.4); const f = fan(cc, 7); const m = mor(cc, 2); return `Practice, bus, room, done, and the front door stayed shut. It was a good show and it was still yours. ${got}M earned, fanbase +${f}, morale +${m}.`; },
+        },
+        {
+          label: 'Pass entirely', effect: 'Keep it private',
+          apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 2); return `You said thanks and no thanks. Your summer belongs to you, and so does your kitchen. Morale +${m}, health +${h}.`; },
+        },
       ],
     });
   }
@@ -429,11 +465,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_allstar_snub',
       category: 'media', cooldown: 2, story: 'allStarSnub',
       title: 'The All Star snub',
-      body: 'Top of your team in ice time, top three in scoring, and the list came out without your name on it anywhere.',
+      body: 'Top of your team in ice time, top three in scoring, and the All-Star list came out without your name on it anywhere. A guy with half your points made it because somebody had to go from his team. Your phone is full of people angry on your behalf.',
       options: [
-        { label: 'Say it stings, on the record', effect: 'Be honest', apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, -3); return `Every fan account in the league defended you for a week. Fanbase +${f}, morale ${m}.`; } },
-        { label: 'Take the four days with the kids', effect: 'Free vacation', apply: (cc) => { const h = hp(cc, 9); const m = mor(cc, 7); return `A beach instead of a skills competition. Health +${h}, morale +${m}.`; } },
-        { label: 'Answer on the ice in February', effect: 'Let it fuel you', apply: (cc, r) => { const g = rate(cc, 1); const m = mor(cc, 4); if (r() < 0.5) { const f = fan(cc, 8); return `Eleven points in the six games after the break. Rating +${g}, morale +${m}, fanbase +${f}.`; } return `Quietly excellent, nobody wrote about it. Rating +${g}, morale +${m}.`; } },
+        {
+          label: 'Say it stings, on the record', effect: 'Be honest',
+          apply: (cc) => { const f = fan(cc, 9); const m = mor(cc, -3); return `You said it stings and you meant it. Every fan account in the league defended you for a week. Fanbase +${f}, morale ${m}.`; },
+        },
+        {
+          label: 'Take the four days with the kids', effect: 'Free vacation',
+          apply: (cc) => { const h = hp(cc, 9); const m = mor(cc, 7); return `A beach instead of a skills competition, sand castles instead of a hardest shot contest. You came back rested and a little tanned. Health +${h}, morale +${m}.`; },
+        },
+        {
+          label: 'Answer on the ice in February', effect: 'Let it fuel you',
+          apply: (cc, r) => { const g = rate(cc, 1); const m = mor(cc, 4); if (r() < 0.5) { const f = fan(cc, 8); return `Eleven points in the six games after the break, and every one of them felt like a reply. Rating +${g}, morale +${m}, fanbase +${f}.`; } return `Quietly excellent for a month, and nobody wrote about it. You knew. Rating +${g}, morale +${m}.`; },
+        },
       ],
     });
   }
@@ -443,11 +488,20 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlA_cover_athlete',
       category: 'media', cooldown: 99, story: 'coverAthlete',
       title: 'The cover',
-      body: 'They want you on the front of the hockey game. Your billet mom will buy nine copies of a game she cannot play.',
+      body: 'They want you on the front of the hockey video game. A photo shoot in July, a motion capture suit, and your billet mom buying nine copies of a game she cannot play. There is also the cover curse, which everybody mentions and nobody believes in, except a little.',
       options: [
-        { label: 'Take the cover and the check', effect: 'Cover money', apply: (cc) => { const got = cash(cc, 0.9); const f = fan(cc, 13); const m = mor(cc, -2); flag(cc, 'coverAthlete'); return `${got}M and your face on every shelf. Fanbase +${f}, morale ${m}, and everyone keeps mentioning a curse.`; } },
-        { label: 'Split it with your linemate', effect: 'Share the shine', apply: (cc) => { const got = cash(cc, 0.5); const f = fan(cc, 8); const m = mor(cc, 6); flag(cc, 'coverAthlete'); return `Two of you on the cover, ${got}M each. Fanbase +${f}, morale +${m}, and the room loved it.`; } },
-        { label: 'Decline, superstition wins', effect: 'Dodge the curse', apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 3); return `No cover, no curse, no photoshoot in July. Morale +${m}, health +${h}.`; } },
+        {
+          label: 'Take the cover and the check', effect: 'Cover money',
+          apply: (cc) => { const got = cash(cc, 0.9); const f = fan(cc, 13); const m = mor(cc, -2); flag(cc, 'coverAthlete'); return `${got}M and your face on every shelf in every store. Fanbase +${f}, morale ${m}, and everyone keeps mentioning a curse.`; },
+        },
+        {
+          label: 'Split it with your linemate', effect: 'Share the shine',
+          apply: (cc) => { const got = cash(cc, 0.5); const f = fan(cc, 8); const m = mor(cc, 6); flag(cc, 'coverAthlete'); return `Two of you on the cover, ${got}M each, and a photo shoot where neither of you could stop laughing. Fanbase +${f}, morale +${m}, and the room loved it.`; },
+        },
+        {
+          label: 'Decline, superstition wins', effect: 'Dodge the curse',
+          apply: (cc) => { const m = mor(cc, 7); const h = hp(cc, 3); return `No cover, no curse, no motion capture suit in July. Your summer stayed quiet. Morale +${m}, health +${h}.`; },
+        },
       ],
     });
   }
