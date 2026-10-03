@@ -1,0 +1,4284 @@
+{
+ "about": "Round 942: Club Manager XP recorded from the real clubManagerXp.ts before the lift into gmXp.ts. Replayed by scripts/simGmXp.mjs section 1; it must match byte for byte.",
+ "recordedFrom": "64d5be42",
+ "sections": {
+  "constants": {
+   "count": 8,
+   "sha256": "622132a6af2e180bc1b2ac1d0359d03535942bfe22e8af599f6adba3f34b728c",
+   "lines": [
+    [
+     0,
+     "SKILL_TREES=[\"tactics\",\"recruitment\",\"negotiation\",\"youth\",\"manManagement\",\"finance\",\"media\"]"
+    ],
+    [
+     1,
+     "MAX_TREE_POINTS=5"
+    ],
+    [
+     2,
+     "MAX_LEVEL=36"
+    ],
+    [
+     3,
+     "XP_FIRST_LEVEL=400"
+    ],
+    [
+     4,
+     "XP_LEVEL_STEP=1.04"
+    ],
+    [
+     5,
+     "XP_VERSION=1"
+    ],
+    [
+     6,
+     "defaultXp={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     7,
+     "TREE_INFO=[{\"id\":\"tactics\",\"label\":\"Tactics\",\"emoji\":\"📋\",\"blurb\":\"Your duties get more out of the men carrying them.\",\"atMax\":\"Duties are worth about half as much again as they are on day one.\",\"needs\":\"Only pays once you set duties on the Tactics screen. With none set it does nothing at all.\"},{\"id\":\"recruitment\",\"label\":\"Recruitment\",\"emoji\":\"🔍\",\"blurb\":\"Your read on what a player is worth gets tighter.\",\"atMax\":\"You get a figure where the desk used to give you a range.\",\"needs\":\"Shows up on the valuation the transfer desk gives you.\"},{\"id\":\"negotiation\",\"label\":\"Negotiation\",\"emoji\":\"🤝\",\"blurb\":\"Sellers open nearer what the player is actually worth.\",\"atMax\":\"You talk about a tenth off the asking price before talks even start.\",\"needs\":\"Only pays while you are actually haggling for somebody.\"},{\"id\":\"youth\",\"label\":\"Youth\",\"emoji\":\"🎓\",\"blurb\":\"The academy finds better boys and reads them more accurately.\",\"atMax\":\"The boys who come up are noticeably better, and read more tightly.\",\"needs\":\"Shows up in the academy intake report.\"},{\"id\":\"manManagement\",\"label\":\"Man Management\",\"emoji\":\"🗣\",\"blurb\":\"A promise you break costs you less of the dressing room.\",\"atMax\":\"A broken promise stings about a third less than it does on day one.\",\"needs\":\"Only pays when a promise goes wrong. Keep them all and it never comes up.\"},{\"id\":\"finance\",\"label\":\"Finance\",\"emoji\":\"💰\",\"blurb\":\"Every matchday brings a little more through the gate.\",\"atMax\":\"About a tenth more money a head on every home crowd.\",\"needs\":\"Pays on every home gate, whatever else you do.\"},{\"id\":\"media\",\"label\":\"Media\",\"emoji\":\"🎤\",\"blurb\":\"Not fronting up to the press costs you less of the room.\",\"atMax\":\"Ducking the press costs about half what it does on day one.\",\"needs\":\"Only pays on a week you skip the press or let the question go stale.\"}]"
+    ]
+   ]
+  },
+  "curve": {
+   "count": 41,
+   "sha256": "36bb806e1c6f678622ec42254f13c7210954f3e8c4daea5d2bf5d445dd3a5430",
+   "lines": [
+    [
+     0,
+     "L=-1 xpForLevel=0"
+    ],
+    [
+     1,
+     "L=0 xpForLevel=0"
+    ],
+    [
+     2,
+     "L=1 xpForLevel=0"
+    ],
+    [
+     3,
+     "L=2 xpForLevel=400"
+    ],
+    [
+     4,
+     "L=3 xpForLevel=816"
+    ],
+    [
+     5,
+     "L=4 xpForLevel=1249"
+    ],
+    [
+     6,
+     "L=5 xpForLevel=1699"
+    ],
+    [
+     7,
+     "L=6 xpForLevel=2167"
+    ],
+    [
+     8,
+     "L=7 xpForLevel=2654"
+    ],
+    [
+     9,
+     "L=8 xpForLevel=3160"
+    ],
+    [
+     10,
+     "L=9 xpForLevel=3686"
+    ],
+    [
+     11,
+     "L=10 xpForLevel=4233"
+    ],
+    [
+     12,
+     "L=11 xpForLevel=4802"
+    ],
+    [
+     13,
+     "L=12 xpForLevel=5394"
+    ],
+    [
+     14,
+     "L=13 xpForLevel=6010"
+    ],
+    [
+     15,
+     "L=14 xpForLevel=6651"
+    ],
+    [
+     16,
+     "L=15 xpForLevel=7318"
+    ],
+    [
+     17,
+     "L=16 xpForLevel=8012"
+    ],
+    [
+     18,
+     "L=17 xpForLevel=8734"
+    ],
+    [
+     19,
+     "L=18 xpForLevel=9485"
+    ],
+    [
+     20,
+     "L=19 xpForLevel=10266"
+    ],
+    [
+     21,
+     "L=20 xpForLevel=11078"
+    ],
+    [
+     22,
+     "L=21 xpForLevel=11922"
+    ],
+    [
+     23,
+     "L=22 xpForLevel=12800"
+    ],
+    [
+     24,
+     "L=23 xpForLevel=13713"
+    ],
+    [
+     25,
+     "L=24 xpForLevel=14663"
+    ],
+    [
+     26,
+     "L=25 xpForLevel=15651"
+    ],
+    [
+     27,
+     "L=26 xpForLevel=16679"
+    ],
+    [
+     28,
+     "L=27 xpForLevel=17748"
+    ],
+    [
+     29,
+     "L=28 xpForLevel=18860"
+    ],
+    [
+     30,
+     "L=29 xpForLevel=20016"
+    ],
+    [
+     31,
+     "L=30 xpForLevel=21218"
+    ],
+    [
+     32,
+     "L=31 xpForLevel=22468"
+    ],
+    [
+     33,
+     "L=32 xpForLevel=23768"
+    ],
+    [
+     34,
+     "L=33 xpForLevel=25120"
+    ],
+    [
+     35,
+     "L=34 xpForLevel=26526"
+    ],
+    [
+     36,
+     "L=35 xpForLevel=27988"
+    ],
+    [
+     37,
+     "L=36 xpForLevel=29508"
+    ],
+    [
+     38,
+     "L=37 xpForLevel=31089"
+    ],
+    [
+     39,
+     "L=38 xpForLevel=32733"
+    ],
+    [
+     40,
+     "L=39 xpForLevel=34443"
+    ]
+   ]
+  },
+  "levels": {
+   "count": 196,
+   "sha256": "16f2608d9964515fa1d9253cf42b46bc93fea05f03eaf86b35976a99529f200c",
+   "lines": [
+    [
+     0,
+     "xp=-50 level=1 earned=0 progress=0"
+    ],
+    [
+     1,
+     "xp=-1 level=1 earned=0 progress=0"
+    ],
+    [
+     2,
+     "xp=0 level=1 earned=0 progress=0"
+    ],
+    [
+     3,
+     "xp=NaN level=1 earned=0 progress=NaN"
+    ],
+    [
+     4,
+     "xp=Infinity level=36 earned=35 progress=1"
+    ],
+    [
+     5,
+     "xp=1000000000 level=36 earned=35 progress=1"
+    ],
+    [
+     6,
+     "xp=-1 level=1 earned=0 progress=0"
+    ],
+    [
+     7,
+     "xp=0 level=1 earned=0 progress=0"
+    ],
+    [
+     8,
+     "xp=1 level=1 earned=0 progress=0.0025"
+    ],
+    [
+     9,
+     "xp=200 level=1 earned=0 progress=0.5"
+    ],
+    [
+     10,
+     "xp=133 level=1 earned=0 progress=0.3325"
+    ],
+    [
+     11,
+     "xp=399 level=1 earned=0 progress=0.9975"
+    ],
+    [
+     12,
+     "xp=400 level=2 earned=1 progress=0"
+    ],
+    [
+     13,
+     "xp=401 level=2 earned=1 progress=0.002403846153846154"
+    ],
+    [
+     14,
+     "xp=608 level=2 earned=1 progress=0.5"
+    ],
+    [
+     15,
+     "xp=538 level=2 earned=1 progress=0.3317307692307692"
+    ],
+    [
+     16,
+     "xp=815 level=2 earned=1 progress=0.9975961538461539"
+    ],
+    [
+     17,
+     "xp=816 level=3 earned=2 progress=0"
+    ],
+    [
+     18,
+     "xp=817 level=3 earned=2 progress=0.0023094688221709007"
+    ],
+    [
+     19,
+     "xp=1032 level=3 earned=2 progress=0.49884526558891457"
+    ],
+    [
+     20,
+     "xp=960 level=3 earned=2 progress=0.3325635103926097"
+    ],
+    [
+     21,
+     "xp=1248 level=3 earned=2 progress=0.9976905311778291"
+    ],
+    [
+     22,
+     "xp=1249 level=4 earned=3 progress=0"
+    ],
+    [
+     23,
+     "xp=1250 level=4 earned=3 progress=0.0022222222222222222"
+    ],
+    [
+     24,
+     "xp=1474 level=4 earned=3 progress=0.5"
+    ],
+    [
+     25,
+     "xp=1399 level=4 earned=3 progress=0.3333333333333333"
+    ],
+    [
+     26,
+     "xp=1698 level=4 earned=3 progress=0.9977777777777778"
+    ],
+    [
+     27,
+     "xp=1699 level=5 earned=4 progress=0"
+    ],
+    [
+     28,
+     "xp=1700 level=5 earned=4 progress=0.002136752136752137"
+    ],
+    [
+     29,
+     "xp=1933 level=5 earned=4 progress=0.5"
+    ],
+    [
+     30,
+     "xp=1855 level=5 earned=4 progress=0.3333333333333333"
+    ],
+    [
+     31,
+     "xp=2166 level=5 earned=4 progress=0.9978632478632479"
+    ],
+    [
+     32,
+     "xp=2167 level=6 earned=5 progress=0"
+    ],
+    [
+     33,
+     "xp=2168 level=6 earned=5 progress=0.002053388090349076"
+    ],
+    [
+     34,
+     "xp=2410 level=6 earned=5 progress=0.4989733059548255"
+    ],
+    [
+     35,
+     "xp=2329 level=6 earned=5 progress=0.3326488706365503"
+    ],
+    [
+     36,
+     "xp=2653 level=6 earned=5 progress=0.997946611909651"
+    ],
+    [
+     37,
+     "xp=2654 level=7 earned=6 progress=0"
+    ],
+    [
+     38,
+     "xp=2655 level=7 earned=6 progress=0.001976284584980237"
+    ],
+    [
+     39,
+     "xp=2907 level=7 earned=6 progress=0.5"
+    ],
+    [
+     40,
+     "xp=2822 level=7 earned=6 progress=0.33201581027667987"
+    ],
+    [
+     41,
+     "xp=3159 level=7 earned=6 progress=0.9980237154150198"
+    ],
+    [
+     42,
+     "xp=3160 level=8 earned=7 progress=0"
+    ],
+    [
+     43,
+     "xp=3161 level=8 earned=7 progress=0.0019011406844106464"
+    ],
+    [
+     44,
+     "xp=3423 level=8 earned=7 progress=0.5"
+    ],
+    [
+     45,
+     "xp=3335 level=8 earned=7 progress=0.33269961977186313"
+    ],
+    [
+     46,
+     "xp=3685 level=8 earned=7 progress=0.9980988593155894"
+    ],
+    [
+     47,
+     "xp=3686 level=9 earned=8 progress=0"
+    ],
+    [
+     48,
+     "xp=3687 level=9 earned=8 progress=0.0018281535648994515"
+    ],
+    [
+     49,
+     "xp=3959 level=9 earned=8 progress=0.4990859232175503"
+    ],
+    [
+     50,
+     "xp=3868 level=9 earned=8 progress=0.3327239488117002"
+    ],
+    [
+     51,
+     "xp=4232 level=9 earned=8 progress=0.9981718464351006"
+    ],
+    [
+     52,
+     "xp=4233 level=10 earned=9 progress=0"
+    ],
+    [
+     53,
+     "xp=4234 level=10 earned=9 progress=0.0017574692442882249"
+    ],
+    [
+     54,
+     "xp=4517 level=10 earned=9 progress=0.4991212653778559"
+    ],
+    [
+     55,
+     "xp=4422 level=10 earned=9 progress=0.3321616871704745"
+    ],
+    [
+     56,
+     "xp=4801 level=10 earned=9 progress=0.9982425307557118"
+    ],
+    [
+     57,
+     "xp=4802 level=11 earned=10 progress=0"
+    ],
+    [
+     58,
+     "xp=4803 level=11 earned=10 progress=0.0016891891891891893"
+    ],
+    [
+     59,
+     "xp=5098 level=11 earned=10 progress=0.5"
+    ],
+    [
+     60,
+     "xp=4999 level=11 earned=10 progress=0.3327702702702703"
+    ],
+    [
+     61,
+     "xp=5393 level=11 earned=10 progress=0.9983108108108109"
+    ],
+    [
+     62,
+     "xp=5394 level=12 earned=11 progress=0"
+    ],
+    [
+     63,
+     "xp=5395 level=12 earned=11 progress=0.0016233766233766235"
+    ],
+    [
+     64,
+     "xp=5702 level=12 earned=11 progress=0.5"
+    ],
+    [
+     65,
+     "xp=5599 level=12 earned=11 progress=0.3327922077922078"
+    ],
+    [
+     66,
+     "xp=6009 level=12 earned=11 progress=0.9983766233766234"
+    ],
+    [
+     67,
+     "xp=6010 level=13 earned=12 progress=0"
+    ],
+    [
+     68,
+     "xp=6011 level=13 earned=12 progress=0.0015600624024961"
+    ],
+    [
+     69,
+     "xp=6330 level=13 earned=12 progress=0.49921996879875197"
+    ],
+    [
+     70,
+     "xp=6223 level=13 earned=12 progress=0.33229329173166927"
+    ],
+    [
+     71,
+     "xp=6650 level=13 earned=12 progress=0.9984399375975039"
+    ],
+    [
+     72,
+     "xp=6651 level=14 earned=13 progress=0"
+    ],
+    [
+     73,
+     "xp=6652 level=14 earned=13 progress=0.0014992503748125937"
+    ],
+    [
+     74,
+     "xp=6984 level=14 earned=13 progress=0.4992503748125937"
+    ],
+    [
+     75,
+     "xp=6873 level=14 earned=13 progress=0.3328335832083958"
+    ],
+    [
+     76,
+     "xp=7317 level=14 earned=13 progress=0.9985007496251874"
+    ],
+    [
+     77,
+     "xp=7318 level=15 earned=14 progress=0"
+    ],
+    [
+     78,
+     "xp=7319 level=15 earned=14 progress=0.001440922190201729"
+    ],
+    [
+     79,
+     "xp=7665 level=15 earned=14 progress=0.5"
+    ],
+    [
+     80,
+     "xp=7549 level=15 earned=14 progress=0.33285302593659943"
+    ],
+    [
+     81,
+     "xp=8011 level=15 earned=14 progress=0.9985590778097982"
+    ],
+    [
+     82,
+     "xp=8012 level=16 earned=15 progress=0"
+    ],
+    [
+     83,
+     "xp=8013 level=16 earned=15 progress=0.0013850415512465374"
+    ],
+    [
+     84,
+     "xp=8373 level=16 earned=15 progress=0.5"
+    ],
+    [
+     85,
+     "xp=8252 level=16 earned=15 progress=0.33240997229916897"
+    ],
+    [
+     86,
+     "xp=8733 level=16 earned=15 progress=0.9986149584487535"
+    ],
+    [
+     87,
+     "xp=8734 level=17 earned=16 progress=0"
+    ],
+    [
+     88,
+     "xp=8735 level=17 earned=16 progress=0.0013315579227696406"
+    ],
+    [
+     89,
+     "xp=9109 level=17 earned=16 progress=0.4993342210386152"
+    ],
+    [
+     90,
+     "xp=8984 level=17 earned=16 progress=0.33288948069241014"
+    ],
+    [
+     91,
+     "xp=9484 level=17 earned=16 progress=0.9986684420772304"
+    ],
+    [
+     92,
+     "xp=9485 level=18 earned=17 progress=0"
+    ],
+    [
+     93,
+     "xp=9486 level=18 earned=17 progress=0.0012804097311139564"
+    ],
+    [
+     94,
+     "xp=9875 level=18 earned=17 progress=0.499359795134443"
+    ],
+    [
+     95,
+     "xp=9745 level=18 earned=17 progress=0.33290653008962867"
+    ],
+    [
+     96,
+     "xp=10265 level=18 earned=17 progress=0.998719590268886"
+    ],
+    [
+     97,
+     "xp=10266 level=19 earned=18 progress=0"
+    ],
+    [
+     98,
+     "xp=10267 level=19 earned=18 progress=0.0012315270935960591"
+    ],
+    [
+     99,
+     "xp=10672 level=19 earned=18 progress=0.5"
+    ],
+    [
+     100,
+     "xp=10536 level=19 earned=18 progress=0.33251231527093594"
+    ],
+    [
+     101,
+     "xp=11077 level=19 earned=18 progress=0.9987684729064039"
+    ],
+    [
+     102,
+     "xp=11078 level=20 earned=19 progress=0"
+    ],
+    [
+     103,
+     "xp=11079 level=20 earned=19 progress=0.001184834123222749"
+    ],
+    [
+     104,
+     "xp=11500 level=20 earned=19 progress=0.5"
+    ],
+    [
+     105,
+     "xp=11359 level=20 earned=19 progress=0.33293838862559244"
+    ],
+    [
+     106,
+     "xp=11921 level=20 earned=19 progress=0.9988151658767772"
+    ],
+    [
+     107,
+     "xp=11922 level=21 earned=20 progress=0"
+    ],
+    [
+     108,
+     "xp=11923 level=21 earned=20 progress=0.0011389521640091116"
+    ],
+    [
+     109,
+     "xp=12361 level=21 earned=20 progress=0.5"
+    ],
+    [
+     110,
+     "xp=12214 level=21 earned=20 progress=0.3325740318906606"
+    ],
+    [
+     111,
+     "xp=12799 level=21 earned=20 progress=0.9988610478359908"
+    ],
+    [
+     112,
+     "xp=12800 level=22 earned=21 progress=0"
+    ],
+    [
+     113,
+     "xp=12801 level=22 earned=21 progress=0.001095290251916758"
+    ],
+    [
+     114,
+     "xp=13256 level=22 earned=21 progress=0.4994523548740416"
+    ],
+    [
+     115,
+     "xp=13104 level=22 earned=21 progress=0.3329682365826944"
+    ],
+    [
+     116,
+     "xp=13712 level=22 earned=21 progress=0.9989047097480832"
+    ],
+    [
+     117,
+     "xp=13713 level=23 earned=22 progress=0"
+    ],
+    [
+     118,
+     "xp=13714 level=23 earned=22 progress=0.0010526315789473684"
+    ],
+    [
+     119,
+     "xp=14188 level=23 earned=22 progress=0.5"
+    ],
+    [
+     120,
+     "xp=14029 level=23 earned=22 progress=0.33263157894736844"
+    ],
+    [
+     121,
+     "xp=14662 level=23 earned=22 progress=0.9989473684210526"
+    ],
+    [
+     122,
+     "xp=14663 level=24 earned=23 progress=0"
+    ],
+    [
+     123,
+     "xp=14664 level=24 earned=23 progress=0.0010121457489878543"
+    ],
+    [
+     124,
+     "xp=15157 level=24 earned=23 progress=0.5"
+    ],
+    [
+     125,
+     "xp=14992 level=24 earned=23 progress=0.33299595141700405"
+    ],
+    [
+     126,
+     "xp=15650 level=24 earned=23 progress=0.9989878542510121"
+    ],
+    [
+     127,
+     "xp=15651 level=25 earned=24 progress=0"
+    ],
+    [
+     128,
+     "xp=15652 level=25 earned=24 progress=0.0009727626459143969"
+    ],
+    [
+     129,
+     "xp=16165 level=25 earned=24 progress=0.5"
+    ],
+    [
+     130,
+     "xp=15993 level=25 earned=24 progress=0.3326848249027237"
+    ],
+    [
+     131,
+     "xp=16678 level=25 earned=24 progress=0.9990272373540856"
+    ],
+    [
+     132,
+     "xp=16679 level=26 earned=25 progress=0"
+    ],
+    [
+     133,
+     "xp=16680 level=26 earned=25 progress=0.0009354536950420954"
+    ],
+    [
+     134,
+     "xp=17213 level=26 earned=25 progress=0.49953227315247895"
+    ],
+    [
+     135,
+     "xp=17035 level=26 earned=25 progress=0.333021515434986"
+    ],
+    [
+     136,
+     "xp=17747 level=26 earned=25 progress=0.9990645463049579"
+    ],
+    [
+     137,
+     "xp=17748 level=27 earned=26 progress=0"
+    ],
+    [
+     138,
+     "xp=17749 level=27 earned=26 progress=0.0008992805755395684"
+    ],
+    [
+     139,
+     "xp=18304 level=27 earned=26 progress=0.5"
+    ],
+    [
+     140,
+     "xp=18118 level=27 earned=26 progress=0.3327338129496403"
+    ],
+    [
+     141,
+     "xp=18859 level=27 earned=26 progress=0.9991007194244604"
+    ],
+    [
+     142,
+     "xp=18860 level=28 earned=27 progress=0"
+    ],
+    [
+     143,
+     "xp=18861 level=28 earned=27 progress=0.0008650519031141869"
+    ],
+    [
+     144,
+     "xp=19438 level=28 earned=27 progress=0.5"
+    ],
+    [
+     145,
+     "xp=19245 level=28 earned=27 progress=0.33304498269896193"
+    ],
+    [
+     146,
+     "xp=20015 level=28 earned=27 progress=0.9991349480968859"
+    ],
+    [
+     147,
+     "xp=20016 level=29 earned=28 progress=0"
+    ],
+    [
+     148,
+     "xp=20017 level=29 earned=28 progress=0.0008319467554076539"
+    ],
+    [
+     149,
+     "xp=20617 level=29 earned=28 progress=0.5"
+    ],
+    [
+     150,
+     "xp=20416 level=29 earned=28 progress=0.33277870216306155"
+    ],
+    [
+     151,
+     "xp=21217 level=29 earned=28 progress=0.9991680532445923"
+    ],
+    [
+     152,
+     "xp=21218 level=30 earned=29 progress=0"
+    ],
+    [
+     153,
+     "xp=21219 level=30 earned=29 progress=0.0008"
+    ],
+    [
+     154,
+     "xp=21843 level=30 earned=29 progress=0.5"
+    ],
+    [
+     155,
+     "xp=21634 level=30 earned=29 progress=0.3328"
+    ],
+    [
+     156,
+     "xp=22467 level=30 earned=29 progress=0.9992"
+    ],
+    [
+     157,
+     "xp=22468 level=31 earned=30 progress=0"
+    ],
+    [
+     158,
+     "xp=22469 level=31 earned=30 progress=0.0007692307692307692"
+    ],
+    [
+     159,
+     "xp=23118 level=31 earned=30 progress=0.5"
+    ],
+    [
+     160,
+     "xp=22901 level=31 earned=30 progress=0.3330769230769231"
+    ],
+    [
+     161,
+     "xp=23767 level=31 earned=30 progress=0.9992307692307693"
+    ],
+    [
+     162,
+     "xp=23768 level=32 earned=31 progress=0"
+    ],
+    [
+     163,
+     "xp=23769 level=32 earned=31 progress=0.0007396449704142012"
+    ],
+    [
+     164,
+     "xp=24444 level=32 earned=31 progress=0.5"
+    ],
+    [
+     165,
+     "xp=24218 level=32 earned=31 progress=0.3328402366863905"
+    ],
+    [
+     166,
+     "xp=25119 level=32 earned=31 progress=0.9992603550295858"
+    ],
+    [
+     167,
+     "xp=25120 level=33 earned=32 progress=0"
+    ],
+    [
+     168,
+     "xp=25121 level=33 earned=32 progress=0.0007112375533428165"
+    ],
+    [
+     169,
+     "xp=25823 level=33 earned=32 progress=0.5"
+    ],
+    [
+     170,
+     "xp=25588 level=33 earned=32 progress=0.3328591749644381"
+    ],
+    [
+     171,
+     "xp=26525 level=33 earned=32 progress=0.9992887624466572"
+    ],
+    [
+     172,
+     "xp=26526 level=34 earned=33 progress=0"
+    ],
+    [
+     173,
+     "xp=26527 level=34 earned=33 progress=0.0006839945280437756"
+    ],
+    [
+     174,
+     "xp=27257 level=34 earned=33 progress=0.5"
+    ],
+    [
+     175,
+     "xp=27013 level=34 earned=33 progress=0.3331053351573187"
+    ],
+    [
+     176,
+     "xp=27987 level=34 earned=33 progress=0.9993160054719562"
+    ],
+    [
+     177,
+     "xp=27988 level=35 earned=34 progress=0"
+    ],
+    [
+     178,
+     "xp=27989 level=35 earned=34 progress=0.0006578947368421052"
+    ],
+    [
+     179,
+     "xp=28748 level=35 earned=34 progress=0.5"
+    ],
+    [
+     180,
+     "xp=28494 level=35 earned=34 progress=0.33289473684210524"
+    ],
+    [
+     181,
+     "xp=29507 level=35 earned=34 progress=0.9993421052631579"
+    ],
+    [
+     182,
+     "xp=29508 level=36 earned=35 progress=1"
+    ],
+    [
+     183,
+     "xp=29509 level=36 earned=35 progress=1"
+    ],
+    [
+     184,
+     "xp=30298 level=36 earned=35 progress=1"
+    ],
+    [
+     185,
+     "xp=30035 level=36 earned=35 progress=1"
+    ],
+    [
+     186,
+     "xp=31088 level=36 earned=35 progress=1"
+    ],
+    [
+     187,
+     "xp=31089 level=36 earned=35 progress=1"
+    ],
+    [
+     188,
+     "xp=31090 level=36 earned=35 progress=1"
+    ],
+    [
+     189,
+     "xp=31911 level=36 earned=35 progress=1"
+    ],
+    [
+     190,
+     "xp=31637 level=36 earned=35 progress=1"
+    ],
+    [
+     191,
+     "xp=32732 level=36 earned=35 progress=1"
+    ],
+    [
+     192,
+     "xp=32733 level=36 earned=35 progress=1"
+    ],
+    [
+     193,
+     "xp=32734 level=36 earned=35 progress=1"
+    ],
+    [
+     194,
+     "xp=33588 level=36 earned=35 progress=1"
+    ],
+    [
+     195,
+     "xp=33303 level=36 earned=35 progress=1"
+    ]
+   ]
+  },
+  "spend": {
+   "count": 7200,
+   "sha256": "89c9a8d38cebfb16e06ebb7bac7268fad5765b1a1e875d2c66e3171f08811ea5",
+   "lines": [
+    [
+     0,
+     "w=0 s=0 manManagement free=23 spent=10 -> {\"v\":1,\"xp\":27960,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":0,\"youth\":2,\"manManagement\":1,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     10,
+     "w=0 s=5 negotiation free=19 spent=14 -> {\"v\":1,\"xp\":27960,\"points\":{\"tactics\":5,\"recruitment\":4,\"negotiation\":1,\"youth\":2,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     20,
+     "w=0 s=10 media free=16 spent=17 -> {\"v\":1,\"xp\":27960,\"points\":{\"tactics\":5,\"recruitment\":4,\"negotiation\":1,\"youth\":3,\"manManagement\":1,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     30,
+     "w=1 s=3 youth free=1 spent=8 -> {\"v\":1,\"xp\":4555,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":5,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     40,
+     "w=1 s=8 tactics free=0 spent=9 -> null"
+    ],
+    [
+     50,
+     "w=2 s=1 youth free=25 spent=10 -> {\"v\":1,\"xp\":31406,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":0,\"youth\":3,\"manManagement\":0,\"finance\":3,\"media\":0}}"
+    ],
+    [
+     60,
+     "w=2 s=6 recruitment free=21 spent=14 -> null"
+    ],
+    [
+     70,
+     "w=2 s=11 recruitment free=17 spent=18 -> null"
+    ],
+    [
+     80,
+     "w=3 s=4 media free=0 spent=10 -> null"
+    ],
+    [
+     90,
+     "w=3 s=9 bogus free=0 spent=10 -> null"
+    ],
+    [
+     100,
+     "w=4 s=2 manManagement free=0 spent=6 -> null"
+    ],
+    [
+     110,
+     "w=4 s=7 media free=0 spent=6 -> null"
+    ],
+    [
+     120,
+     "w=5 s=0 finance free=0 spent=11 -> null"
+    ],
+    [
+     130,
+     "w=5 s=5 manManagement free=0 spent=11 -> null"
+    ],
+    [
+     140,
+     "w=5 s=10 youth free=0 spent=11 -> null"
+    ],
+    [
+     150,
+     "w=6 s=3 negotiation free=3 spent=9 -> {\"v\":1,\"xp\":6144,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":2,\"youth\":3,\"manManagement\":0,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     160,
+     "w=6 s=8 media free=0 spent=12 -> null"
+    ],
+    [
+     170,
+     "w=7 s=1 finance free=27 spent=7 -> {\"v\":1,\"xp\":27988,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     180,
+     "w=7 s=6 tactics free=22 spent=12 -> {\"v\":1,\"xp\":27988,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     190,
+     "w=7 s=11 bogus free=18 spent=16 -> null"
+    ],
+    [
+     200,
+     "w=8 s=4 negotiation free=0 spent=10 -> null"
+    ],
+    [
+     210,
+     "w=8 s=9 recruitment free=0 spent=10 -> null"
+    ],
+    [
+     220,
+     "w=9 s=2 finance free=18 spent=3 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     230,
+     "w=9 s=7 finance free=13 spent=8 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     240,
+     "w=10 s=0 bogus free=27 spent=8 -> null"
+    ],
+    [
+     250,
+     "w=10 s=5 manManagement free=23 spent=12 -> {\"v\":1,\"xp\":31125,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":5,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     260,
+     "w=10 s=10 recruitment free=19 spent=16 -> {\"v\":1,\"xp\":31125,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":0,\"youth\":2,\"manManagement\":5,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     270,
+     "w=11 s=3 finance free=7.5 spent=21.5 -> {\"v\":1,\"xp\":21369,\"points\":{\"tactics\":1,\"recruitment\":2.5,\"negotiation\":5,\"manManagement\":4,\"finance\":5,\"media\":5}}"
+    ],
+    [
+     280,
+     "w=11 s=8 manManagement free=4.5 spent=24.5 -> null"
+    ],
+    [
+     290,
+     "w=12 s=1 bogus free=15 spent=6 -> null"
+    ],
+    [
+     300,
+     "w=12 s=6 media free=11 spent=10 -> {\"v\":1,\"xp\":13389,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":-1,\"youth\":3,\"manManagement\":2,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     310,
+     "w=12 s=11 tactics free=6 spent=15 -> {\"v\":1,\"xp\":13389,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":-1,\"youth\":3,\"manManagement\":2,\"finance\":2,\"media\":4}}"
+    ],
+    [
+     320,
+     "w=13 s=4 bogus free=22 spent=4 -> null"
+    ],
+    [
+     330,
+     "w=13 s=9 recruitment free=18 spent=8 -> {\"v\":1,\"xp\":18680,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":3,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     340,
+     "w=14 s=2 finance free=11 spent=8 -> null"
+    ],
+    [
+     350,
+     "w=14 s=7 negotiation free=9 spent=10 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":2,\"youth\":2,\"manManagement\":0,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     360,
+     "w=15 s=0 finance free=18 spent=5 -> {\"v\":1,\"xp\":15433,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     370,
+     "w=15 s=5 youth free=13 spent=10 -> {\"v\":1,\"xp\":15433,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     380,
+     "w=15 s=10 youth free=9 spent=14 -> {\"v\":1,\"xp\":15433,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":5,\"manManagement\":2,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     390,
+     "w=16 s=3 tactics free=9 spent=9 -> {\"v\":1,\"xp\":10909,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     400,
+     "w=16 s=8 youth free=5 spent=13 -> {\"v\":1,\"xp\":10909,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":0,\"youth\":2,\"manManagement\":5,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     410,
+     "w=17 s=1 recruitment free=13 spent=12 -> {\"v\":1,\"xp\":17599,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":0,\"youth\":0,\"manManagement\":3,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     420,
+     "w=17 s=6 bogus free=8 spent=17 -> null"
+    ],
+    [
+     430,
+     "w=17 s=11 recruitment free=4 spent=21 -> null"
+    ],
+    [
+     440,
+     "w=18 s=4 tactics free=32 spent=3 -> {\"v\":1,\"xp\":33116,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     450,
+     "w=18 s=9 negotiation free=27 spent=8 -> {\"v\":1,\"xp\":33116,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":1,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     460,
+     "w=19 s=2 finance free=16 spent=8 -> {\"v\":1,\"xp\":15661,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":2,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     470,
+     "w=19 s=7 recruitment free=11 spent=13 -> null"
+    ],
+    [
+     480,
+     "w=20 s=0 bogus free=10 spent=6 -> null"
+    ],
+    [
+     490,
+     "w=20 s=5 recruitment free=7 spent=9 -> {\"v\":1,\"xp\":9475,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":4,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     500,
+     "w=20 s=10 manManagement free=2 spent=14 -> {\"v\":1,\"xp\":9475,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":4,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     510,
+     "w=21 s=3 youth free=12 spent=9 -> {\"v\":1,\"xp\":13021,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     520,
+     "w=21 s=8 manManagement free=7 spent=14 -> {\"v\":1,\"xp\":13021,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     530,
+     "w=22 s=1 youth free=23 spent=9 -> {\"v\":1,\"xp\":25771,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":0,\"youth\":4,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     540,
+     "w=22 s=6 bogus free=19 spent=13 -> null"
+    ],
+    [
+     550,
+     "w=22 s=11 manManagement free=16 spent=16 -> {\"v\":1,\"xp\":25771,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":2,\"youth\":5,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     560,
+     "w=23 s=4 manManagement free=20 spent=12 -> {\"v\":1,\"xp\":25757,\"points\":{\"tactics\":2,\"recruitment\":5,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     570,
+     "w=23 s=9 manManagement free=17 spent=15 -> {\"v\":1,\"xp\":25757,\"points\":{\"tactics\":2,\"recruitment\":5,\"negotiation\":2,\"youth\":0,\"manManagement\":2,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     580,
+     "w=24 s=2 media free=4 spent=16 -> null"
+    ],
+    [
+     590,
+     "w=24 s=7 youth free=0 spent=20 -> null"
+    ],
+    [
+     600,
+     "w=25 s=0 media free=22 spent=12 -> {\"v\":1,\"xp\":28171,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":0,\"media\":5}}"
+    ],
+    [
+     610,
+     "w=25 s=5 finance free=18 spent=16 -> {\"v\":1,\"xp\":28171,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":2,\"youth\":3,\"manManagement\":0,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     620,
+     "w=25 s=10 media free=15 spent=19 -> null"
+    ],
+    [
+     630,
+     "w=26 s=3 media free=14 spent=7 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     640,
+     "w=26 s=8 finance free=9 spent=12 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":2,\"manManagement\":2,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     650,
+     "w=27 s=1 negotiation free=21 spent=14 -> {\"v\":1,\"xp\":33323,\"points\":{\"tactics\":5,\"recruitment\":5,\"negotiation\":1,\"youth\":1,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     660,
+     "w=27 s=6 youth free=18 spent=17 -> {\"v\":1,\"xp\":33323,\"points\":{\"tactics\":5,\"recruitment\":5,\"negotiation\":2,\"youth\":2,\"manManagement\":3,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     670,
+     "w=27 s=11 recruitment free=13 spent=22 -> null"
+    ],
+    [
+     680,
+     "w=28 s=4 manManagement free=16 spent=10 -> {\"v\":1,\"xp\":17893,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":2,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     690,
+     "w=28 s=9 media free=11 spent=15 -> {\"v\":1,\"xp\":17893,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":1,\"finance\":5,\"media\":4}}"
+    ],
+    [
+     700,
+     "w=29 s=2 bogus free=0 spent=19.5 -> null"
+    ],
+    [
+     710,
+     "w=29 s=7 negotiation free=0 spent=19.5 -> null"
+    ],
+    [
+     720,
+     "w=30 s=0 finance free=29.5 spent=5.5 -> {\"v\":1,\"xp\":31862,\"points\":{\"tactics\":0,\"recruitment\":2.5,\"negotiation\":2,\"youth\":-1,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     730,
+     "w=30 s=5 negotiation free=24.5 spent=10.5 -> {\"v\":1,\"xp\":31862,\"points\":{\"tactics\":1,\"recruitment\":3.5,\"negotiation\":4,\"youth\":-1,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     740,
+     "w=30 s=10 youth free=20.5 spent=14.5 -> {\"v\":1,\"xp\":31862,\"points\":{\"tactics\":1,\"recruitment\":3.5,\"negotiation\":5,\"youth\":0,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     750,
+     "w=31 s=3 recruitment free=0 spent=4 -> null"
+    ],
+    [
+     760,
+     "w=31 s=8 bogus free=0 spent=4 -> null"
+    ],
+    [
+     770,
+     "w=32 s=1 finance free=29 spent=3 -> {\"v\":1,\"xp\":26116,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     780,
+     "w=32 s=6 youth free=24 spent=8 -> {\"v\":1,\"xp\":26116,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":3,\"youth\":2,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     790,
+     "w=32 s=11 media free=19 spent=13 -> {\"v\":1,\"xp\":26116,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":3,\"youth\":3,\"manManagement\":1,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     800,
+     "w=33 s=4 tactics free=16 spent=8 -> {\"v\":1,\"xp\":15663,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     810,
+     "w=33 s=9 finance free=12 spent=12 -> {\"v\":1,\"xp\":15663,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     820,
+     "w=34 s=2 youth free=0 spent=11.5 -> null"
+    ],
+    [
+     830,
+     "w=34 s=7 finance free=0 spent=11.5 -> null"
+    ],
+    [
+     840,
+     "w=35 s=0 recruitment free=14 spent=9 -> {\"v\":1,\"xp\":15515,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":0,\"youth\":4,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     850,
+     "w=35 s=5 tactics free=11 spent=12 -> {\"v\":1,\"xp\":15515,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":0,\"youth\":5,\"manManagement\":1,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     860,
+     "w=35 s=10 media free=6 spent=17 -> {\"v\":1,\"xp\":15515,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":1,\"youth\":5,\"manManagement\":2,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     870,
+     "w=36 s=3 tactics free=23 spent=12 -> {\"v\":1,\"xp\":30367,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":3,\"youth\":0,\"manManagement\":3,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     880,
+     "w=36 s=8 youth free=18 spent=17 -> {\"v\":1,\"xp\":30367,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":4,\"youth\":1,\"manManagement\":3,\"finance\":4,\"media\":3}}"
+    ],
+    [
+     890,
+     "w=37 s=1 manManagement free=11 spent=12 -> {\"v\":1,\"xp\":15450,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     900,
+     "w=37 s=6 youth free=6 spent=17 -> {\"v\":1,\"xp\":15450,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":5,\"media\":3}}"
+    ],
+    [
+     910,
+     "w=37 s=11 recruitment free=4 spent=19 -> {\"v\":1,\"xp\":15450,\"points\":{\"tactics\":5,\"recruitment\":3,\"negotiation\":1,\"youth\":1,\"manManagement\":2,\"finance\":5,\"media\":3}}"
+    ],
+    [
+     920,
+     "w=38 s=4 finance free=0 spent=10 -> null"
+    ],
+    [
+     930,
+     "w=38 s=9 tactics free=0 spent=10 -> null"
+    ],
+    [
+     940,
+     "w=39 s=2 negotiation free=14 spent=6 -> {\"v\":1,\"xp\":12340,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     950,
+     "w=39 s=7 manManagement free=9 spent=11 -> {\"v\":1,\"xp\":12340,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     960,
+     "w=40 s=0 manManagement free=20 spent=8 -> null"
+    ],
+    [
+     970,
+     "w=40 s=5 youth free=17 spent=11 -> {\"v\":1,\"xp\":20830,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     980,
+     "w=40 s=10 media free=13 spent=15 -> {\"v\":1,\"xp\":20830,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     990,
+     "w=41 s=3 tactics free=8 spent=15 -> {\"v\":1,\"xp\":15216,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":4,\"youth\":4,\"manManagement\":2,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1000,
+     "w=41 s=8 finance free=3 spent=20 -> {\"v\":1,\"xp\":15216,\"points\":{\"tactics\":2,\"recruitment\":4,\"negotiation\":4,\"youth\":5,\"manManagement\":3,\"finance\":3,\"media\":0}}"
+    ],
+    [
+     1010,
+     "w=42 s=1 youth free=11 spent=4 -> {\"v\":1,\"xp\":8422,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1020,
+     "w=42 s=6 media free=6 spent=9 -> {\"v\":1,\"xp\":8422,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":3,\"youth\":2,\"manManagement\":1,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     1030,
+     "w=42 s=11 negotiation free=1 spent=14 -> {\"v\":1,\"xp\":8422,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":5,\"youth\":2,\"manManagement\":1,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     1040,
+     "w=43 s=4 recruitment free=15 spent=5 -> {\"v\":1,\"xp\":12516,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1050,
+     "w=43 s=9 media free=11 spent=9 -> {\"v\":1,\"xp\":12516,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":3,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     1060,
+     "w=44 s=2 youth free=3 spent=10 -> {\"v\":1,\"xp\":7254,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":3,\"finance\":5,\"media\":-1}}"
+    ],
+    [
+     1070,
+     "w=44 s=7 media free=0 spent=13 -> null"
+    ],
+    [
+     1080,
+     "w=45 s=0 bogus free=12 spent=14 -> null"
+    ],
+    [
+     1090,
+     "w=45 s=5 finance free=9 spent=17 -> null"
+    ],
+    [
+     1100,
+     "w=45 s=10 negotiation free=5 spent=21 -> {\"v\":1,\"xp\":18537,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":4,\"youth\":3,\"manManagement\":4,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     1110,
+     "w=46 s=3 finance free=15 spent=2 -> {\"v\":1,\"xp\":9531,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1120,
+     "w=46 s=8 tactics free=10 spent=7 -> {\"v\":1,\"xp\":9531,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1130,
+     "w=47 s=1 recruitment free=27 spent=8 -> {\"v\":1,\"xp\":34492,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":3,\"youth\":0,\"manManagement\":4,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1140,
+     "w=47 s=6 bogus free=24 spent=11 -> null"
+    ],
+    [
+     1150,
+     "w=47 s=11 recruitment free=20 spent=15 -> {\"v\":1,\"xp\":34492,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":4,\"youth\":1,\"manManagement\":5,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1160,
+     "w=48 s=4 manManagement free=0 spent=12 -> null"
+    ],
+    [
+     1170,
+     "w=48 s=9 negotiation free=0 spent=12 -> null"
+    ],
+    [
+     1180,
+     "w=49 s=2 recruitment free=13 spent=6 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":2,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1190,
+     "w=49 s=7 manManagement free=8 spent=11 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":2,\"youth\":1,\"manManagement\":2,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     1200,
+     "w=50 s=0 youth free=25 spent=10 -> {\"v\":1,\"xp\":31864,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1210,
+     "w=50 s=5 youth free=20 spent=15 -> {\"v\":1,\"xp\":31864,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":5,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1220,
+     "w=50 s=10 recruitment free=17 spent=18 -> {\"v\":1,\"xp\":31864,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":5,\"youth\":5,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1230,
+     "w=51 s=3 youth free=25 spent=10 -> {\"v\":1,\"xp\":30846,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":5,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     1240,
+     "w=51 s=8 finance free=21 spent=14 -> {\"v\":1,\"xp\":30846,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":4,\"manManagement\":5,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     1250,
+     "w=52 s=1 tactics free=0 spent=8 -> null"
+    ],
+    [
+     1260,
+     "w=52 s=6 recruitment free=0 spent=8 -> null"
+    ],
+    [
+     1270,
+     "w=52 s=11 finance free=0 spent=8 -> null"
+    ],
+    [
+     1280,
+     "w=53 s=4 youth free=8 spent=10 -> {\"v\":1,\"xp\":10464,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":5,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1290,
+     "w=53 s=9 recruitment free=3 spent=15 -> {\"v\":1,\"xp\":10464,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":1,\"youth\":2,\"manManagement\":5,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     1300,
+     "w=54 s=2 media free=7 spent=10 -> {\"v\":1,\"xp\":10029,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":0,\"youth\":4,\"manManagement\":0,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     1310,
+     "w=54 s=7 recruitment free=2 spent=15 -> null"
+    ],
+    [
+     1320,
+     "w=55 s=0 tactics free=26.5 spent=2.5 -> {\"v\":1,\"xp\":21938,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":2.5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1330,
+     "w=55 s=5 youth free=22.5 spent=6.5 -> {\"v\":1,\"xp\":21938,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":2,\"youth\":2,\"manManagement\":2.5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1340,
+     "w=55 s=10 manManagement free=17.5 spent=11.5 -> {\"v\":1,\"xp\":21938,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":4.5,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1350,
+     "w=56 s=3 youth free=0 spent=3 -> null"
+    ],
+    [
+     1360,
+     "w=56 s=8 negotiation free=0 spent=3 -> null"
+    ],
+    [
+     1370,
+     "w=57 s=1 youth free=5 spent=13 -> null"
+    ],
+    [
+     1380,
+     "w=57 s=6 manManagement free=3 spent=15 -> {\"v\":1,\"xp\":10291,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":3,\"youth\":5,\"manManagement\":1,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     1390,
+     "w=57 s=11 youth free=0 spent=18 -> null"
+    ],
+    [
+     1400,
+     "w=58 s=4 negotiation free=17 spent=6 -> {\"v\":1,\"xp\":14987,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     1410,
+     "w=58 s=9 manManagement free=13 spent=10 -> {\"v\":1,\"xp\":14987,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":2,\"youth\":0,\"manManagement\":2,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     1420,
+     "w=59 s=2 finance free=12 spent=12 -> {\"v\":1,\"xp\":16014,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":0,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     1430,
+     "w=59 s=7 youth free=8 spent=16 -> {\"v\":1,\"xp\":16014,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":1,\"youth\":4,\"manManagement\":0,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     1440,
+     "w=60 s=0 finance free=0 spent=10 -> null"
+    ],
+    [
+     1450,
+     "w=60 s=5 recruitment free=0 spent=10 -> null"
+    ],
+    [
+     1460,
+     "w=60 s=10 finance free=0 spent=10 -> null"
+    ],
+    [
+     1470,
+     "w=61 s=3 tactics free=14 spent=8 -> {\"v\":1,\"xp\":13713,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     1480,
+     "w=61 s=8 finance free=11 spent=11 -> {\"v\":1,\"xp\":13713,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     1490,
+     "w=62 s=1 youth free=34 spent=1 -> {\"v\":1,\"xp\":30020,\"points\":{\"tactics\":1,\"recruitment\":0,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1500,
+     "w=62 s=6 recruitment free=29 spent=6 -> {\"v\":1,\"xp\":30020,\"points\":{\"tactics\":1,\"recruitment\":1,\"youth\":2,\"manManagement\":1,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     1510,
+     "w=62 s=11 bogus free=24 spent=11 -> null"
+    ],
+    [
+     1520,
+     "w=63 s=4 bogus free=30 spent=5 -> null"
+    ],
+    [
+     1530,
+     "w=63 s=9 negotiation free=26 spent=9 -> {\"v\":1,\"xp\":31492,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1540,
+     "w=64 s=2 negotiation free=0 spent=14 -> null"
+    ],
+    [
+     1550,
+     "w=64 s=7 finance free=0 spent=14 -> null"
+    ],
+    [
+     1560,
+     "w=65 s=0 negotiation free=11 spent=5 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     1570,
+     "w=65 s=5 finance free=6 spent=10 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":2,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     1580,
+     "w=65 s=10 recruitment free=3 spent=13 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":2,\"youth\":2,\"manManagement\":1,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     1590,
+     "w=66 s=3 youth free=13 spent=8 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":1,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     1600,
+     "w=66 s=8 manManagement free=9 spent=12 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     1610,
+     "w=67 s=1 negotiation free=24 spent=11 -> {\"v\":1,\"xp\":31951,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":4,\"youth\":3,\"manManagement\":0,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     1620,
+     "w=67 s=6 recruitment free=20 spent=15 -> {\"v\":1,\"xp\":31951,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":4,\"youth\":3,\"manManagement\":1,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     1630,
+     "w=67 s=11 tactics free=15 spent=20 -> {\"v\":1,\"xp\":31951,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":5,\"youth\":3,\"manManagement\":2,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     1640,
+     "w=68 s=4 media free=19 spent=9 -> {\"v\":1,\"xp\":20787,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     1650,
+     "w=68 s=9 manManagement free=15 spent=13 -> {\"v\":1,\"xp\":20787,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":2,\"finance\":3,\"media\":3}}"
+    ],
+    [
+     1660,
+     "w=69 s=2 tactics free=3 spent=3 -> {\"v\":1,\"xp\":2654,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1670,
+     "w=69 s=7 tactics free=0 spent=6 -> null"
+    ],
+    [
+     1680,
+     "w=70 s=0 tactics free=14 spent=5 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     1690,
+     "w=70 s=5 negotiation free=9 spent=10 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":3,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":3,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     1700,
+     "w=70 s=10 recruitment free=5 spent=14 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":3,\"recruitment\":4,\"negotiation\":2,\"youth\":0,\"manManagement\":3,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     1710,
+     "w=71 s=3 finance free=0 spent=4 -> null"
+    ],
+    [
+     1720,
+     "w=71 s=8 youth free=0 spent=4 -> null"
+    ],
+    [
+     1730,
+     "w=72 s=1 tactics free=26 spent=9 -> {\"v\":1,\"xp\":33198,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":6,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1740,
+     "w=72 s=6 manManagement free=22 spent=13 -> {\"v\":1,\"xp\":33198,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":6,\"youth\":2,\"manManagement\":1,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     1750,
+     "w=72 s=11 finance free=17 spent=18 -> {\"v\":1,\"xp\":33198,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":6,\"youth\":2,\"manManagement\":1,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     1760,
+     "w=73 s=4 tactics free=14 spent=5 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     1770,
+     "w=73 s=9 media free=9 spent=10 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     1780,
+     "w=74 s=2 finance free=6 spent=14 -> null"
+    ],
+    [
+     1790,
+     "w=74 s=7 negotiation free=2 spent=18 -> {\"v\":1,\"xp\":11922,\"points\":{\"tactics\":3,\"recruitment\":2,\"negotiation\":2,\"youth\":1,\"manManagement\":1,\"finance\":5,\"media\":5}}"
+    ],
+    [
+     1800,
+     "w=75 s=0 youth free=27 spent=6 -> {\"v\":1,\"xp\":27401,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     1810,
+     "w=75 s=5 negotiation free=22 spent=11 -> {\"v\":1,\"xp\":27401,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":4,\"youth\":2,\"manManagement\":2,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     1820,
+     "w=75 s=10 youth free=17 spent=16 -> {\"v\":1,\"xp\":27401,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":5,\"youth\":4,\"manManagement\":2,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     1830,
+     "w=76 s=3 youth free=18 spent=17 -> {\"v\":1,\"xp\":31667,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":4,\"finance\":4,\"media\":6}}"
+    ],
+    [
+     1840,
+     "w=76 s=8 youth free=13 spent=22 -> {\"v\":1,\"xp\":31667,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":3,\"youth\":4,\"manManagement\":4,\"finance\":4,\"media\":6}}"
+    ],
+    [
+     1850,
+     "w=77 s=1 finance free=21 spent=12 -> null"
+    ],
+    [
+     1860,
+     "w=77 s=6 manManagement free=18 spent=15 -> {\"v\":1,\"xp\":26526,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":0,\"youth\":5,\"manManagement\":2,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     1870,
+     "w=77 s=11 negotiation free=14 spent=19 -> {\"v\":1,\"xp\":26526,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":1,\"youth\":5,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     1880,
+     "w=78 s=4 bogus free=23 spent=10 -> null"
+    ],
+    [
+     1890,
+     "w=78 s=9 media free=19 spent=14 -> {\"v\":1,\"xp\":27215,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":3,\"youth\":4,\"manManagement\":0,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     1900,
+     "w=79 s=2 recruitment free=16 spent=18 -> {\"v\":1,\"xp\":29463,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":4,\"youth\":2,\"manManagement\":0,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     1910,
+     "w=79 s=7 media free=11 spent=23 -> null"
+    ],
+    [
+     1920,
+     "w=80 s=0 media free=26 spent=9 -> {\"v\":1,\"xp\":33403,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     1930,
+     "w=80 s=5 finance free=22 spent=13 -> {\"v\":1,\"xp\":33403,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":5,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     1940,
+     "w=80 s=10 youth free=17 spent=18 -> {\"v\":1,\"xp\":33403,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":1,\"youth\":2,\"manManagement\":5,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     1950,
+     "w=81 s=3 finance free=17 spent=17 -> {\"v\":1,\"xp\":27988,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":5,\"youth\":1,\"manManagement\":5,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     1960,
+     "w=81 s=8 youth free=13 spent=21 -> {\"v\":1,\"xp\":27988,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":5,\"youth\":2,\"manManagement\":5,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     1970,
+     "w=82 s=1 manManagement free=24.5 spent=4.5 -> {\"v\":1,\"xp\":22383,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":2.5}}"
+    ],
+    [
+     1980,
+     "w=82 s=6 manManagement free=20.5 spent=8.5 -> {\"v\":1,\"xp\":22383,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":3,\"finance\":1,\"media\":2.5}}"
+    ],
+    [
+     1990,
+     "w=82 s=11 finance free=16.5 spent=12.5 -> {\"v\":1,\"xp\":22383,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":4,\"finance\":2,\"media\":2.5}}"
+    ],
+    [
+     2000,
+     "w=83 s=4 youth free=21 spent=12 -> {\"v\":1,\"xp\":26526,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":2,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     2010,
+     "w=83 s=9 negotiation free=16 spent=17 -> {\"v\":1,\"xp\":26526,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":3,\"youth\":2,\"manManagement\":3,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     2020,
+     "w=84 s=2 recruitment free=15 spent=16 -> {\"v\":1,\"xp\":25096,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":4,\"youth\":5,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     2030,
+     "w=84 s=7 negotiation free=11 spent=20 -> {\"v\":1,\"xp\":25096,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":5,\"youth\":5,\"manManagement\":2,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     2040,
+     "w=85 s=0 bogus free=12 spent=11 -> null"
+    ],
+    [
+     2050,
+     "w=85 s=5 media free=9 spent=14 -> null"
+    ],
+    [
+     2060,
+     "w=85 s=10 tactics free=6 spent=17 -> {\"v\":1,\"xp\":14991,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":2,\"manManagement\":3,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     2070,
+     "w=86 s=3 recruitment free=33 spent=2 -> {\"v\":1,\"xp\":31092,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2080,
+     "w=86 s=8 recruitment free=30 spent=5 -> {\"v\":1,\"xp\":31092,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2090,
+     "w=87 s=1 youth free=20.5 spent=6.5 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":1,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":2.5}}"
+    ],
+    [
+     2100,
+     "w=87 s=6 recruitment free=15.5 spent=11.5 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":3,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":3.5}}"
+    ],
+    [
+     2110,
+     "w=87 s=11 manManagement free=11.5 spent=15.5 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":3,\"youth\":2,\"manManagement\":1,\"finance\":0,\"media\":3.5}}"
+    ],
+    [
+     2120,
+     "w=88 s=4 finance free=11 spent=15 -> {\"v\":1,\"xp\":17925,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":2,\"manManagement\":2,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     2130,
+     "w=88 s=9 negotiation free=7 spent=19 -> null"
+    ],
+    [
+     2140,
+     "w=89 s=2 tactics free=0 spent=3 -> null"
+    ],
+    [
+     2150,
+     "w=89 s=7 youth free=0 spent=3 -> null"
+    ],
+    [
+     2160,
+     "w=90 s=0 youth free=0 spent=17 -> null"
+    ],
+    [
+     2170,
+     "w=90 s=5 media free=0 spent=17 -> null"
+    ],
+    [
+     2180,
+     "w=90 s=10 tactics free=0 spent=17 -> null"
+    ],
+    [
+     2190,
+     "w=91 s=3 bogus free=0 spent=15 -> null"
+    ],
+    [
+     2200,
+     "w=91 s=8 youth free=0 spent=15 -> null"
+    ],
+    [
+     2210,
+     "w=92 s=1 tactics free=1 spent=7 -> {\"v\":1,\"xp\":3966,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     2220,
+     "w=92 s=6 media free=0 spent=8 -> null"
+    ],
+    [
+     2230,
+     "w=92 s=11 youth free=0 spent=8 -> null"
+    ],
+    [
+     2240,
+     "w=93 s=4 tactics free=7 spent=19 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":6,\"youth\":0,\"manManagement\":4,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     2250,
+     "w=93 s=9 youth free=4 spent=22 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":6,\"youth\":1,\"manManagement\":5,\"finance\":4,\"media\":5}}"
+    ],
+    [
+     2260,
+     "w=94 s=2 tactics free=0 spent=12 -> null"
+    ],
+    [
+     2270,
+     "w=94 s=7 youth free=0 spent=12 -> null"
+    ],
+    [
+     2280,
+     "w=95 s=0 negotiation free=9 spent=5 -> {\"v\":1,\"xp\":7673,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2290,
+     "w=95 s=5 manManagement free=6 spent=8 -> {\"v\":1,\"xp\":7673,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     2300,
+     "w=95 s=10 finance free=1 spent=13 -> {\"v\":1,\"xp\":7673,\"points\":{\"tactics\":2,\"recruitment\":4,\"negotiation\":3,\"youth\":0,\"manManagement\":1,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     2310,
+     "w=96 s=3 manManagement free=6 spent=12 -> {\"v\":1,\"xp\":10647,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     2320,
+     "w=96 s=8 recruitment free=3 spent=15 -> {\"v\":1,\"xp\":10647,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":3,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     2330,
+     "w=97 s=1 recruitment free=0 spent=2 -> null"
+    ],
+    [
+     2340,
+     "w=97 s=6 youth free=0 spent=2 -> null"
+    ],
+    [
+     2350,
+     "w=97 s=11 finance free=0 spent=2 -> null"
+    ],
+    [
+     2360,
+     "w=98 s=4 tactics free=0 spent=9 -> null"
+    ],
+    [
+     2370,
+     "w=98 s=9 youth free=0 spent=9 -> null"
+    ],
+    [
+     2380,
+     "w=99 s=2 manManagement free=10 spent=11 -> {\"v\":1,\"xp\":13227,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":3,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     2390,
+     "w=99 s=7 youth free=6 spent=15 -> {\"v\":1,\"xp\":13227,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":4,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     2400,
+     "w=100 s=0 tactics free=19 spent=8 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":-1,\"youth\":1,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2410,
+     "w=100 s=5 youth free=15 spent=12 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":-1,\"youth\":2,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2420,
+     "w=100 s=10 recruitment free=11 spent=16 -> {\"v\":1,\"xp\":18860,\"points\":{\"tactics\":5,\"recruitment\":3,\"negotiation\":-1,\"youth\":2,\"manManagement\":5,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     2430,
+     "w=101 s=3 tactics free=8.5 spent=13.5 -> {\"v\":1,\"xp\":13850,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":4,\"manManagement\":0,\"finance\":4,\"media\":3.5}}"
+    ],
+    [
+     2440,
+     "w=101 s=8 tactics free=6.5 spent=15.5 -> {\"v\":1,\"xp\":13850,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":4,\"manManagement\":0,\"finance\":5,\"media\":3.5}}"
+    ],
+    [
+     2450,
+     "w=102 s=1 youth free=8 spent=8 -> {\"v\":1,\"xp\":9064,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":2,\"youth\":1,\"manManagement\":0,\"finance\":1}}"
+    ],
+    [
+     2460,
+     "w=102 s=6 recruitment free=4 spent=12 -> null"
+    ],
+    [
+     2470,
+     "w=102 s=11 manManagement free=0 spent=16 -> null"
+    ],
+    [
+     2480,
+     "w=103 s=4 recruitment free=0 spent=19 -> null"
+    ],
+    [
+     2490,
+     "w=103 s=9 finance free=0 spent=19 -> null"
+    ],
+    [
+     2500,
+     "w=104 s=2 youth free=26 spent=9 -> {\"v\":1,\"xp\":32902,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     2510,
+     "w=104 s=7 bogus free=22 spent=13 -> null"
+    ],
+    [
+     2520,
+     "w=105 s=0 recruitment free=8 spent=6 -> {\"v\":1,\"xp\":7448,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":3,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     2530,
+     "w=105 s=5 media free=3 spent=11 -> {\"v\":1,\"xp\":7448,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":4,\"youth\":0,\"manManagement\":3,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     2540,
+     "w=105 s=10 bogus free=0 spent=14 -> null"
+    ],
+    [
+     2550,
+     "w=106 s=3 tactics free=16 spent=3 -> {\"v\":1,\"xp\":11288,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2560,
+     "w=106 s=8 manManagement free=13 spent=6 -> {\"v\":1,\"xp\":11288,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     2570,
+     "w=107 s=1 negotiation free=8.5 spent=20.5 -> {\"v\":1,\"xp\":22238,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":4,\"finance\":4,\"media\":2.5}}"
+    ],
+    [
+     2580,
+     "w=107 s=6 manManagement free=5.5 spent=23.5 -> {\"v\":1,\"xp\":22238,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":5,\"youth\":1,\"manManagement\":5,\"finance\":4,\"media\":3.5}}"
+    ],
+    [
+     2590,
+     "w=107 s=11 media free=2.5 spent=26.5 -> {\"v\":1,\"xp\":22238,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":5,\"youth\":2,\"manManagement\":5,\"finance\":4,\"media\":5.5}}"
+    ],
+    [
+     2600,
+     "w=108 s=4 recruitment free=0 spent=11 -> null"
+    ],
+    [
+     2610,
+     "w=108 s=9 manManagement free=0 spent=11 -> null"
+    ],
+    [
+     2620,
+     "w=109 s=2 bogus free=16 spent=15 -> null"
+    ],
+    [
+     2630,
+     "w=109 s=7 youth free=14 spent=17 -> null"
+    ],
+    [
+     2640,
+     "w=110 s=0 finance free=17 spent=14 -> {\"v\":1,\"xp\":23796,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":4,\"youth\":0,\"manManagement\":3,\"finance\":4,\"media\":4}}"
+    ],
+    [
+     2650,
+     "w=110 s=5 bogus free=12 spent=19 -> null"
+    ],
+    [
+     2660,
+     "w=110 s=10 manManagement free=11 spent=20 -> null"
+    ],
+    [
+     2670,
+     "w=111 s=3 manManagement free=22 spent=13 -> {\"v\":1,\"xp\":33735,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":4,\"manManagement\":2,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     2680,
+     "w=111 s=8 youth free=17 spent=18 -> {\"v\":1,\"xp\":33735,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":1,\"youth\":5,\"manManagement\":2,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     2690,
+     "w=112 s=1 youth free=1.5 spent=21.5 -> {\"v\":1,\"xp\":15396,\"points\":{\"tactics\":5,\"recruitment\":4,\"negotiation\":2,\"youth\":3,\"manManagement\":4,\"finance\":2.5,\"media\":2}}"
+    ],
+    [
+     2700,
+     "w=112 s=6 negotiation free=0 spent=23.5 -> null"
+    ],
+    [
+     2710,
+     "w=112 s=11 recruitment free=0 spent=23.5 -> null"
+    ],
+    [
+     2720,
+     "w=113 s=4 recruitment free=0 spent=15 -> null"
+    ],
+    [
+     2730,
+     "w=113 s=9 youth free=0 spent=15 -> null"
+    ],
+    [
+     2740,
+     "w=114 s=2 tactics free=21 spent=14 -> null"
+    ],
+    [
+     2750,
+     "w=114 s=7 manManagement free=19 spent=16 -> {\"v\":1,\"xp\":29806,\"points\":{\"tactics\":5,\"recruitment\":5,\"negotiation\":1,\"youth\":0,\"manManagement\":3,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     2760,
+     "w=115 s=0 recruitment free=15 spent=6 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":0,\"manManagement\":4,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2770,
+     "w=115 s=5 manManagement free=10 spent=11 -> null"
+    ],
+    [
+     2780,
+     "w=115 s=10 youth free=6 spent=15 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     2790,
+     "w=116 s=3 manManagement free=10 spent=8 -> {\"v\":1,\"xp\":10588,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2800,
+     "w=116 s=8 bogus free=6 spent=12 -> null"
+    ],
+    [
+     2810,
+     "w=117 s=1 finance free=0 spent=12.5 -> null"
+    ],
+    [
+     2820,
+     "w=117 s=6 tactics free=0 spent=12.5 -> null"
+    ],
+    [
+     2830,
+     "w=117 s=11 finance free=0 spent=12.5 -> null"
+    ],
+    [
+     2840,
+     "w=118 s=4 media free=11 spent=12 -> {\"v\":1,\"xp\":14916,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":1,\"youth\":4,\"manManagement\":0,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     2850,
+     "w=118 s=9 finance free=6 spent=17 -> {\"v\":1,\"xp\":14916,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":1,\"youth\":5,\"manManagement\":0,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     2860,
+     "w=119 s=2 negotiation free=0 spent=10 -> null"
+    ],
+    [
+     2870,
+     "w=119 s=7 finance free=0 spent=10 -> null"
+    ],
+    [
+     2880,
+     "w=120 s=0 finance free=25 spent=8 -> {\"v\":1,\"xp\":27383,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     2890,
+     "w=120 s=5 negotiation free=20 spent=13 -> {\"v\":1,\"xp\":27383,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":3,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     2900,
+     "w=120 s=10 recruitment free=17 spent=16 -> {\"v\":1,\"xp\":27383,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":3,\"youth\":2,\"manManagement\":2,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     2910,
+     "w=121 s=3 tactics free=25 spent=10 -> {\"v\":1,\"xp\":32339,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":4,\"youth\":4,\"manManagement\":0,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     2920,
+     "w=121 s=8 finance free=20 spent=15 -> {\"v\":1,\"xp\":32339,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":5,\"youth\":4,\"manManagement\":0,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     2930,
+     "w=122 s=1 negotiation free=0 spent=20.5 -> null"
+    ],
+    [
+     2940,
+     "w=122 s=6 bogus free=0 spent=20.5 -> null"
+    ],
+    [
+     2950,
+     "w=122 s=11 recruitment free=0 spent=20.5 -> null"
+    ],
+    [
+     2960,
+     "w=123 s=4 manManagement free=17 spent=17 -> {\"v\":1,\"xp\":29157,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":1,\"youth\":4,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     2970,
+     "w=123 s=9 manManagement free=13 spent=21 -> {\"v\":1,\"xp\":29157,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":2,\"youth\":5,\"manManagement\":4,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     2980,
+     "w=124 s=2 recruitment free=5 spent=4 -> {\"v\":1,\"xp\":4233,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     2990,
+     "w=124 s=7 recruitment free=1 spent=8 -> {\"v\":1,\"xp\":4233,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":0,\"youth\":0,\"manManagement\":3,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     3000,
+     "w=125 s=0 bogus free=31 spent=2 -> null"
+    ],
+    [
+     3010,
+     "w=125 s=5 youth free=27 spent=6 -> {\"v\":1,\"xp\":27906,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     3020,
+     "w=125 s=10 finance free=23 spent=10 -> {\"v\":1,\"xp\":27906,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":2,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     3030,
+     "w=126 s=3 media free=0 spent=12 -> null"
+    ],
+    [
+     3040,
+     "w=126 s=8 finance free=0 spent=12 -> null"
+    ],
+    [
+     3050,
+     "w=127 s=1 negotiation free=16 spent=10 -> {\"v\":1,\"xp\":18802,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     3060,
+     "w=127 s=6 manManagement free=11 spent=15 -> {\"v\":1,\"xp\":18802,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":1,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     3070,
+     "w=127 s=11 manManagement free=8 spent=18 -> {\"v\":1,\"xp\":18802,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     3080,
+     "w=128 s=4 recruitment free=10 spent=25 -> {\"v\":1,\"xp\":32165,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":5,\"youth\":6,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     3090,
+     "w=128 s=9 tactics free=7 spent=28 -> null"
+    ],
+    [
+     3100,
+     "w=129 s=2 finance free=22 spent=9 -> {\"v\":1,\"xp\":24913,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     3110,
+     "w=129 s=7 negotiation free=17 spent=14 -> {\"v\":1,\"xp\":24913,\"points\":{\"tactics\":3,\"recruitment\":4,\"negotiation\":2,\"youth\":1,\"manManagement\":1,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     3120,
+     "w=130 s=0 manManagement free=26 spent=3 -> {\"v\":1,\"xp\":21796,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     3130,
+     "w=130 s=5 finance free=21 spent=8 -> {\"v\":1,\"xp\":21796,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":2,\"youth\":2,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     3140,
+     "w=130 s=10 tactics free=17 spent=12 -> {\"v\":1,\"xp\":21796,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":2,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     3150,
+     "w=131 s=3 recruitment free=14 spent=13 -> {\"v\":1,\"xp\":19744,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":3,\"youth\":2,\"manManagement\":4,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     3160,
+     "w=131 s=8 tactics free=10 spent=17 -> {\"v\":1,\"xp\":19744,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":3,\"youth\":2,\"manManagement\":5,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     3170,
+     "w=132 s=1 finance free=34 spent=1 -> {\"v\":1,\"xp\":29595,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     3180,
+     "w=132 s=6 bogus free=30 spent=5 -> null"
+    ],
+    [
+     3190,
+     "w=132 s=11 finance free=26 spent=9 -> {\"v\":1,\"xp\":29595,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     3200,
+     "w=133 s=4 tactics free=0 spent=9 -> null"
+    ],
+    [
+     3210,
+     "w=133 s=9 negotiation free=0 spent=9 -> null"
+    ],
+    [
+     3220,
+     "w=134 s=2 recruitment free=13 spent=10 -> {\"v\":1,\"xp\":14663,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":4,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     3230,
+     "w=134 s=7 manManagement free=9 spent=14 -> null"
+    ],
+    [
+     3240,
+     "w=135 s=0 manManagement free=0 spent=5 -> null"
+    ],
+    [
+     3250,
+     "w=135 s=5 negotiation free=0 spent=5 -> null"
+    ],
+    [
+     3260,
+     "w=135 s=10 bogus free=0 spent=5 -> null"
+    ],
+    [
+     3270,
+     "w=136 s=3 tactics free=10 spent=10 -> {\"v\":1,\"xp\":12042,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":2,\"youth\":4,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3280,
+     "w=136 s=8 youth free=5 spent=15 -> null"
+    ],
+    [
+     3290,
+     "w=137 s=1 manManagement free=18 spent=7 -> null"
+    ],
+    [
+     3300,
+     "w=137 s=6 tactics free=14 spent=11 -> {\"v\":1,\"xp\":16679,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     3310,
+     "w=137 s=11 finance free=11 spent=14 -> {\"v\":1,\"xp\":16679,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":5,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     3320,
+     "w=138 s=4 recruitment free=0 spent=11 -> null"
+    ],
+    [
+     3330,
+     "w=138 s=9 tactics free=0 spent=11 -> null"
+    ],
+    [
+     3340,
+     "w=139 s=2 media free=11 spent=12 -> null"
+    ],
+    [
+     3350,
+     "w=139 s=7 finance free=9 spent=14 -> null"
+    ],
+    [
+     3360,
+     "w=140 s=0 youth free=28 spent=5 -> {\"v\":1,\"xp\":27650,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     3370,
+     "w=140 s=5 negotiation free=23 spent=10 -> {\"v\":1,\"xp\":27650,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":3,\"youth\":1,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     3380,
+     "w=140 s=10 manManagement free=18 spent=15 -> {\"v\":1,\"xp\":27650,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":3,\"youth\":1,\"manManagement\":5,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     3390,
+     "w=141 s=3 finance free=23 spent=7 -> {\"v\":1,\"xp\":23332,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3400,
+     "w=141 s=8 negotiation free=20 spent=10 -> null"
+    ],
+    [
+     3410,
+     "w=142 s=1 youth free=16 spent=14 -> {\"v\":1,\"xp\":22792,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":5,\"manManagement\":0,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     3420,
+     "w=142 s=6 recruitment free=13 spent=17 -> {\"v\":1,\"xp\":22792,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":5,\"youth\":5,\"manManagement\":1,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     3430,
+     "w=142 s=11 bogus free=10 spent=20 -> null"
+    ],
+    [
+     3440,
+     "w=143 s=4 manManagement free=0 spent=16 -> null"
+    ],
+    [
+     3450,
+     "w=143 s=9 tactics free=0 spent=16 -> null"
+    ],
+    [
+     3460,
+     "w=144 s=2 finance free=26.5 spent=5.5 -> {\"v\":1,\"xp\":25165,\"points\":{\"tactics\":2.5,\"recruitment\":2,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     3470,
+     "w=144 s=7 negotiation free=22.5 spent=9.5 -> {\"v\":1,\"xp\":25165,\"points\":{\"tactics\":2.5,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     3480,
+     "w=145 s=0 youth free=1 spent=19 -> {\"v\":1,\"xp\":12171,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":5,\"youth\":5,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     3490,
+     "w=145 s=5 youth free=0 spent=20 -> null"
+    ],
+    [
+     3500,
+     "w=145 s=10 manManagement free=0 spent=20 -> null"
+    ],
+    [
+     3510,
+     "w=146 s=3 manManagement free=18 spent=8 -> {\"v\":1,\"xp\":17812,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     3520,
+     "w=146 s=8 tactics free=15 spent=11 -> {\"v\":1,\"xp\":17812,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     3530,
+     "w=147 s=1 finance free=25 spent=7 -> {\"v\":1,\"xp\":25239,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     3540,
+     "w=147 s=6 negotiation free=20 spent=12 -> {\"v\":1,\"xp\":25239,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":3,\"youth\":1,\"manManagement\":1,\"finance\":2,\"media\":4}}"
+    ],
+    [
+     3550,
+     "w=147 s=11 youth free=15 spent=17 -> {\"v\":1,\"xp\":25239,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":2,\"manManagement\":2,\"finance\":2,\"media\":4}}"
+    ],
+    [
+     3560,
+     "w=148 s=4 media free=0 spent=3 -> null"
+    ],
+    [
+     3570,
+     "w=148 s=9 youth free=0 spent=3 -> null"
+    ],
+    [
+     3580,
+     "w=149 s=2 negotiation free=6 spent=7 -> {\"v\":1,\"xp\":6719,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     3590,
+     "w=149 s=7 finance free=1 spent=12 -> {\"v\":1,\"xp\":6719,\"points\":{\"tactics\":2,\"recruitment\":4,\"negotiation\":2,\"youth\":0,\"manManagement\":1,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     3600,
+     "w=150 s=0 recruitment free=18 spent=5 -> {\"v\":1,\"xp\":15631,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     3610,
+     "w=150 s=5 bogus free=14 spent=9 -> null"
+    ],
+    [
+     3620,
+     "w=150 s=10 recruitment free=10 spent=13 -> {\"v\":1,\"xp\":15631,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":2,\"youth\":2,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     3630,
+     "w=151 s=3 tactics free=15 spent=6 -> {\"v\":1,\"xp\":13590,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     3640,
+     "w=151 s=8 manManagement free=10 spent=11 -> {\"v\":1,\"xp\":13590,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":0,\"youth\":4,\"manManagement\":4,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3650,
+     "w=152 s=1 finance free=0 spent=6 -> null"
+    ],
+    [
+     3660,
+     "w=152 s=6 media free=0 spent=6 -> null"
+    ],
+    [
+     3670,
+     "w=152 s=11 manManagement free=0 spent=6 -> null"
+    ],
+    [
+     3680,
+     "w=153 s=4 recruitment free=0 spent=5 -> null"
+    ],
+    [
+     3690,
+     "w=153 s=9 negotiation free=0 spent=5 -> null"
+    ],
+    [
+     3700,
+     "w=154 s=2 youth free=14 spent=11 -> {\"v\":1,\"xp\":17300,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3710,
+     "w=154 s=7 media free=9 spent=16 -> {\"v\":1,\"xp\":17300,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":1,\"youth\":4,\"manManagement\":3,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     3720,
+     "w=155 s=0 media free=20 spent=10 -> {\"v\":1,\"xp\":22646,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":5,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     3730,
+     "w=155 s=5 bogus free=15 spent=15 -> null"
+    ],
+    [
+     3740,
+     "w=155 s=10 youth free=12 spent=18 -> null"
+    ],
+    [
+     3750,
+     "w=156 s=3 media free=26 spent=8 -> {\"v\":1,\"xp\":29092,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     3760,
+     "w=156 s=8 negotiation free=23 spent=11 -> {\"v\":1,\"xp\":29092,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":2,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     3770,
+     "w=157 s=1 youth free=16 spent=11 -> {\"v\":1,\"xp\":19178,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":0,\"youth\":4,\"manManagement\":1,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     3780,
+     "w=157 s=6 youth free=12 spent=15 -> {\"v\":1,\"xp\":19178,\"points\":{\"tactics\":4,\"recruitment\":5,\"negotiation\":0,\"youth\":5,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     3790,
+     "w=157 s=11 finance free=9 spent=18 -> {\"v\":1,\"xp\":19178,\"points\":{\"tactics\":4,\"recruitment\":5,\"negotiation\":0,\"youth\":5,\"manManagement\":3,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3800,
+     "w=158 s=4 youth free=26 spent=9 -> {\"v\":1,\"xp\":31624,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     3810,
+     "w=158 s=9 tactics free=22 spent=13 -> {\"v\":1,\"xp\":31624,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     3820,
+     "w=159 s=2 finance free=12 spent=14 -> {\"v\":1,\"xp\":18384,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":2,\"manManagement\":5,\"finance\":4,\"media\":3}}"
+    ],
+    [
+     3830,
+     "w=159 s=7 tactics free=8 spent=18 -> {\"v\":1,\"xp\":18384,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":5,\"finance\":5,\"media\":3}}"
+    ],
+    [
+     3840,
+     "w=160 s=0 finance free=8 spent=11 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":4,\"youth\":0,\"manManagement\":3,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     3850,
+     "w=160 s=5 recruitment free=3 spent=16 -> {\"v\":1,\"xp\":11078,\"points\":{\"tactics\":3,\"recruitment\":2,\"negotiation\":4,\"youth\":0,\"manManagement\":3,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     3860,
+     "w=160 s=10 bogus free=0 spent=19 -> null"
+    ],
+    [
+     3870,
+     "w=161 s=3 manManagement free=0 spent=15 -> null"
+    ],
+    [
+     3880,
+     "w=161 s=8 finance free=0 spent=15 -> null"
+    ],
+    [
+     3890,
+     "w=162 s=1 finance free=8 spent=7 -> {\"v\":1,\"xp\":8482,\"points\":{\"tactics\":6,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     3900,
+     "w=162 s=6 youth free=3 spent=12 -> {\"v\":1,\"xp\":8482,\"points\":{\"tactics\":6,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     3910,
+     "w=162 s=11 tactics free=0 spent=15 -> null"
+    ],
+    [
+     3920,
+     "w=163 s=4 manManagement free=17 spent=14 -> {\"v\":1,\"xp\":24990,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":4,\"youth\":1,\"manManagement\":1,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     3930,
+     "w=163 s=9 negotiation free=14 spent=17 -> null"
+    ],
+    [
+     3940,
+     "w=164 s=2 finance free=3 spent=3 -> {\"v\":1,\"xp\":2918,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2}}"
+    ],
+    [
+     3950,
+     "w=164 s=7 manManagement free=0 spent=6 -> null"
+    ],
+    [
+     3960,
+     "w=165 s=0 finance free=23 spent=10 -> null"
+    ],
+    [
+     3970,
+     "w=165 s=5 finance free=22 spent=11 -> null"
+    ],
+    [
+     3980,
+     "w=165 s=10 youth free=19 spent=14 -> {\"v\":1,\"xp\":27341,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":0,\"finance\":5,\"media\":5}}"
+    ],
+    [
+     3990,
+     "w=166 s=3 tactics free=14 spent=20 -> {\"v\":1,\"xp\":28779,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":5,\"youth\":0,\"manManagement\":3,\"finance\":5,\"media\":4}}"
+    ],
+    [
+     4000,
+     "w=166 s=8 manManagement free=11 spent=23 -> {\"v\":1,\"xp\":28779,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":5,\"youth\":0,\"manManagement\":5,\"finance\":5,\"media\":4}}"
+    ],
+    [
+     4010,
+     "w=167 s=1 tactics free=12 spent=10 -> null"
+    ],
+    [
+     4020,
+     "w=167 s=6 bogus free=9 spent=13 -> null"
+    ],
+    [
+     4030,
+     "w=167 s=11 finance free=7 spent=15 -> {\"v\":1,\"xp\":14050,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":5,\"manManagement\":0,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     4040,
+     "w=168 s=4 youth free=0 spent=6 -> null"
+    ],
+    [
+     4050,
+     "w=168 s=9 tactics free=0 spent=6 -> null"
+    ],
+    [
+     4060,
+     "w=169 s=2 bogus free=25 spent=10 -> null"
+    ],
+    [
+     4070,
+     "w=169 s=7 media free=22 spent=13 -> {\"v\":1,\"xp\":34080,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4080,
+     "w=170 s=0 recruitment free=9 spent=8 -> {\"v\":1,\"xp\":9917,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":3,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     4090,
+     "w=170 s=5 negotiation free=5 spent=12 -> {\"v\":1,\"xp\":9917,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":1,\"youth\":4,\"manManagement\":3,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     4100,
+     "w=170 s=10 finance free=0 spent=17 -> null"
+    ],
+    [
+     4110,
+     "w=171 s=3 media free=14 spent=12 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":1,\"recruitment\":-1,\"negotiation\":1,\"youth\":5,\"manManagement\":4,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     4120,
+     "w=171 s=8 finance free=10 spent=16 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":5,\"manManagement\":4,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     4130,
+     "w=172 s=1 negotiation free=15 spent=7 -> {\"v\":1,\"xp\":14569,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4140,
+     "w=172 s=6 recruitment free=12 spent=10 -> {\"v\":1,\"xp\":14569,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":5,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     4150,
+     "w=172 s=11 media free=7 spent=15 -> {\"v\":1,\"xp\":14569,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":5,\"youth\":3,\"manManagement\":0,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     4160,
+     "w=173 s=4 youth free=7 spent=16 -> null"
+    ],
+    [
+     4170,
+     "w=173 s=9 bogus free=6 spent=17 -> null"
+    ],
+    [
+     4180,
+     "w=174 s=2 manManagement free=31 spent=4 -> {\"v\":1,\"xp\":34180,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":2,\"manManagement\":2,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     4190,
+     "w=174 s=7 bogus free=26 spent=9 -> null"
+    ],
+    [
+     4200,
+     "w=175 s=0 youth free=21 spent=10 -> {\"v\":1,\"xp\":23990,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":3,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4210,
+     "w=175 s=5 recruitment free=17 spent=14 -> {\"v\":1,\"xp\":23990,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":2,\"youth\":3,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4220,
+     "w=175 s=10 tactics free=13 spent=18 -> {\"v\":1,\"xp\":23990,\"points\":{\"tactics\":2,\"recruitment\":5,\"negotiation\":2,\"youth\":5,\"manManagement\":5,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4230,
+     "w=176 s=3 manManagement free=17 spent=18 -> {\"v\":1,\"xp\":29937,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":6,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     4240,
+     "w=176 s=8 tactics free=15 spent=20 -> {\"v\":1,\"xp\":29937,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":6,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     4250,
+     "w=177 s=1 negotiation free=0 spent=7 -> null"
+    ],
+    [
+     4260,
+     "w=177 s=6 manManagement free=0 spent=7 -> null"
+    ],
+    [
+     4270,
+     "w=177 s=11 manManagement free=0 spent=7 -> null"
+    ],
+    [
+     4280,
+     "w=178 s=4 manManagement free=16 spent=14 -> {\"v\":1,\"xp\":22596,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":4,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     4290,
+     "w=178 s=9 youth free=13 spent=17 -> {\"v\":1,\"xp\":22596,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":1,\"youth\":2,\"manManagement\":4,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     4300,
+     "w=179 s=2 tactics free=0 spent=6 -> null"
+    ],
+    [
+     4310,
+     "w=179 s=7 finance free=0 spent=6 -> null"
+    ],
+    [
+     4320,
+     "w=180 s=0 media free=21 spent=3 -> {\"v\":1,\"xp\":16032,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4330,
+     "w=180 s=5 manManagement free=17 spent=7 -> {\"v\":1,\"xp\":16032,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4340,
+     "w=180 s=10 recruitment free=12 spent=12 -> {\"v\":1,\"xp\":16032,\"points\":{\"tactics\":5,\"recruitment\":4,\"negotiation\":1,\"youth\":1,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4350,
+     "w=181 s=3 manManagement free=23.5 spent=8.5 -> {\"v\":1,\"xp\":25120,\"points\":{\"tactics\":0,\"recruitment\":2.5,\"negotiation\":0,\"youth\":5,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4360,
+     "w=181 s=8 finance free=20.5 spent=11.5 -> {\"v\":1,\"xp\":25120,\"points\":{\"tactics\":1,\"recruitment\":2.5,\"negotiation\":0,\"youth\":5,\"manManagement\":3,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     4370,
+     "w=182 s=1 manManagement free=20 spent=10 -> {\"v\":1,\"xp\":22901,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4380,
+     "w=182 s=6 youth free=17 spent=13 -> {\"v\":1,\"xp\":22901,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":4,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4390,
+     "w=182 s=11 negotiation free=13 spent=17 -> {\"v\":1,\"xp\":22901,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":2,\"youth\":4,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4400,
+     "w=183 s=4 media free=5 spent=17 -> {\"v\":1,\"xp\":13855,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":5,\"manManagement\":4,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     4410,
+     "w=183 s=9 finance free=3 spent=19 -> {\"v\":1,\"xp\":13855,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":0,\"youth\":5,\"manManagement\":5,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     4420,
+     "w=184 s=2 tactics free=29 spent=5 -> {\"v\":1,\"xp\":29315,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4430,
+     "w=184 s=7 recruitment free=24 spent=10 -> {\"v\":1,\"xp\":29315,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     4440,
+     "w=185 s=0 tactics free=0 spent=15 -> null"
+    ],
+    [
+     4450,
+     "w=185 s=5 recruitment free=0 spent=15 -> null"
+    ],
+    [
+     4460,
+     "w=185 s=10 finance free=0 spent=15 -> null"
+    ],
+    [
+     4470,
+     "w=186 s=3 recruitment free=4 spent=4 -> {\"v\":1,\"xp\":3994,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4480,
+     "w=186 s=8 finance free=0 spent=8 -> null"
+    ],
+    [
+     4490,
+     "w=187 s=1 youth free=12 spent=6 -> {\"v\":1,\"xp\":10316,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     4500,
+     "w=187 s=6 youth free=7 spent=11 -> {\"v\":1,\"xp\":10316,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":1,\"youth\":3,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     4510,
+     "w=187 s=11 negotiation free=4 spent=14 -> {\"v\":1,\"xp\":10316,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":2,\"youth\":4,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     4520,
+     "w=188 s=4 finance free=0 spent=2 -> null"
+    ],
+    [
+     4530,
+     "w=188 s=9 manManagement free=0 spent=2 -> null"
+    ],
+    [
+     4540,
+     "w=189 s=2 youth free=7 spent=7 -> {\"v\":1,\"xp\":7698,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     4550,
+     "w=189 s=7 media free=2 spent=12 -> {\"v\":1,\"xp\":7698,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":3,\"manManagement\":2,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     4560,
+     "w=190 s=0 recruitment free=2 spent=5 -> {\"v\":1,\"xp\":3160,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":-1}}"
+    ],
+    [
+     4570,
+     "w=190 s=5 recruitment free=0 spent=7 -> null"
+    ],
+    [
+     4580,
+     "w=190 s=10 media free=0 spent=7 -> null"
+    ],
+    [
+     4590,
+     "w=191 s=3 bogus free=17 spent=3 -> null"
+    ],
+    [
+     4600,
+     "w=191 s=8 finance free=13 spent=7 -> {\"v\":1,\"xp\":11922,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":3,\"media\":0}}"
+    ],
+    [
+     4610,
+     "w=192 s=1 finance free=15 spent=9 -> {\"v\":1,\"xp\":15808,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":0,\"youth\":5,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     4620,
+     "w=192 s=6 youth free=11 spent=13 -> null"
+    ],
+    [
+     4630,
+     "w=192 s=11 media free=8 spent=16 -> {\"v\":1,\"xp\":15808,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":1,\"youth\":5,\"manManagement\":1,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     4640,
+     "w=193 s=4 recruitment free=24 spent=11 -> {\"v\":1,\"xp\":29986,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4650,
+     "w=193 s=9 tactics free=21 spent=14 -> {\"v\":1,\"xp\":29986,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     4660,
+     "w=194 s=2 tactics free=24 spent=8 -> {\"v\":1,\"xp\":25834,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     4670,
+     "w=194 s=7 negotiation free=20 spent=12 -> {\"v\":1,\"xp\":25834,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":5,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     4680,
+     "w=195 s=0 finance free=22 spent=4 -> {\"v\":1,\"xp\":17850,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":-1}}"
+    ],
+    [
+     4690,
+     "w=195 s=5 media free=18 spent=8 -> {\"v\":1,\"xp\":17850,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     4700,
+     "w=195 s=10 finance free=14 spent=12 -> {\"v\":1,\"xp\":17850,\"points\":{\"tactics\":3,\"recruitment\":2,\"negotiation\":1,\"youth\":2,\"manManagement\":0,\"finance\":4,\"media\":1}}"
+    ],
+    [
+     4710,
+     "w=196 s=3 negotiation free=15 spent=11 -> {\"v\":1,\"xp\":18608,\"points\":{\"tactics\":-1,\"recruitment\":2,\"negotiation\":4,\"youth\":0,\"manManagement\":1,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     4720,
+     "w=196 s=8 youth free=11 spent=15 -> {\"v\":1,\"xp\":18608,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":4,\"youth\":1,\"manManagement\":2,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     4730,
+     "w=197 s=1 recruitment free=18 spent=5 -> {\"v\":1,\"xp\":14961,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     4740,
+     "w=197 s=6 media free=13 spent=10 -> {\"v\":1,\"xp\":14961,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":2,\"manManagement\":0,\"finance\":3,\"media\":3}}"
+    ],
+    [
+     4750,
+     "w=197 s=11 negotiation free=8 spent=15 -> {\"v\":1,\"xp\":14961,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":3,\"youth\":3,\"manManagement\":0,\"finance\":3,\"media\":4}}"
+    ],
+    [
+     4760,
+     "w=198 s=4 media free=31 spent=4 -> {\"v\":1,\"xp\":32016,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":2}}"
+    ],
+    [
+     4770,
+     "w=198 s=9 recruitment free=26 spent=9 -> {\"v\":1,\"xp\":32016,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":1,\"youth\":3,\"manManagement\":0,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     4780,
+     "w=199 s=2 finance free=27 spent=8 -> {\"v\":1,\"xp\":30819,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":6}}"
+    ],
+    [
+     4790,
+     "w=199 s=7 media free=23 spent=12 -> null"
+    ],
+    [
+     4800,
+     "w=200 s=0 finance free=0 spent=9.5 -> null"
+    ],
+    [
+     4810,
+     "w=200 s=5 finance free=0 spent=9.5 -> null"
+    ],
+    [
+     4820,
+     "w=200 s=10 negotiation free=0 spent=9.5 -> null"
+    ],
+    [
+     4830,
+     "w=201 s=3 manManagement free=18 spent=17 -> {\"v\":1,\"xp\":32785,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":2,\"manManagement\":5,\"finance\":5,\"media\":3}}"
+    ],
+    [
+     4840,
+     "w=201 s=8 media free=14 spent=21 -> {\"v\":1,\"xp\":32785,\"points\":{\"tactics\":3,\"recruitment\":1,\"negotiation\":1,\"youth\":2,\"manManagement\":5,\"finance\":5,\"media\":5}}"
+    ],
+    [
+     4850,
+     "w=202 s=1 manManagement free=32 spent=2 -> {\"v\":1,\"xp\":28282,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4860,
+     "w=202 s=6 negotiation free=28 spent=6 -> {\"v\":1,\"xp\":28282,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":2,\"youth\":0,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     4870,
+     "w=202 s=11 negotiation free=23 spent=11 -> {\"v\":1,\"xp\":28282,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":4,\"youth\":2,\"manManagement\":3,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     4880,
+     "w=203 s=4 finance free=18 spent=17 -> {\"v\":1,\"xp\":29967,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":2,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     4890,
+     "w=203 s=9 finance free=14 spent=21 -> {\"v\":1,\"xp\":29967,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":3,\"youth\":1,\"manManagement\":5,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     4900,
+     "w=204 s=2 recruitment free=18 spent=17 -> {\"v\":1,\"xp\":31715,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":6,\"youth\":4,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     4910,
+     "w=204 s=7 media free=13 spent=22 -> {\"v\":1,\"xp\":31715,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":6,\"youth\":5,\"manManagement\":1,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     4920,
+     "w=205 s=0 finance free=20 spent=7 -> {\"v\":1,\"xp\":18889,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     4930,
+     "w=205 s=5 finance free=15 spent=12 -> {\"v\":1,\"xp\":18889,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":5,\"finance\":3,\"media\":3}}"
+    ],
+    [
+     4940,
+     "w=205 s=10 bogus free=10 spent=17 -> null"
+    ],
+    [
+     4950,
+     "w=206 s=3 tactics free=16 spent=16 -> {\"v\":1,\"xp\":25274,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     4960,
+     "w=206 s=8 bogus free=13 spent=19 -> null"
+    ],
+    [
+     4970,
+     "w=207 s=1 finance free=0 spent=13 -> null"
+    ],
+    [
+     4980,
+     "w=207 s=6 manManagement free=0 spent=13 -> null"
+    ],
+    [
+     4990,
+     "w=207 s=11 manManagement free=0 spent=13 -> null"
+    ],
+    [
+     5000,
+     "w=208 s=4 finance free=14 spent=3 -> {\"v\":1,\"xp\":9550,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     5010,
+     "w=208 s=9 recruitment free=10 spent=7 -> {\"v\":1,\"xp\":9550,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     5020,
+     "w=209 s=2 tactics free=5 spent=9 -> {\"v\":1,\"xp\":7923,\"points\":{\"tactics\":4,\"recruitment\":4,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     5030,
+     "w=209 s=7 tactics free=0 spent=14 -> null"
+    ],
+    [
+     5040,
+     "w=210 s=0 tactics free=29 spent=5 -> {\"v\":1,\"xp\":28258,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     5050,
+     "w=210 s=5 finance free=24 spent=10 -> {\"v\":1,\"xp\":28258,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     5060,
+     "w=210 s=10 bogus free=20 spent=14 -> null"
+    ],
+    [
+     5070,
+     "w=211 s=3 tactics free=10 spent=11 -> {\"v\":1,\"xp\":13678,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":5,\"manManagement\":0,\"finance\":4,\"media\":2}}"
+    ],
+    [
+     5080,
+     "w=211 s=8 youth free=7 spent=14 -> null"
+    ],
+    [
+     5090,
+     "w=212 s=1 youth free=14 spent=10 -> {\"v\":1,\"xp\":16029,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":5,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     5100,
+     "w=212 s=6 media free=9 spent=15 -> {\"v\":1,\"xp\":16029,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":5,\"youth\":2,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     5110,
+     "w=212 s=11 negotiation free=6 spent=18 -> null"
+    ],
+    [
+     5120,
+     "w=213 s=4 media free=8 spent=10 -> null"
+    ],
+    [
+     5130,
+     "w=213 s=9 media free=4 spent=14 -> null"
+    ],
+    [
+     5140,
+     "w=214 s=2 finance free=8 spent=4 -> {\"v\":1,\"xp\":6300,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     5150,
+     "w=214 s=7 tactics free=3 spent=9 -> {\"v\":1,\"xp\":6300,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     5160,
+     "w=215 s=0 finance free=27.5 spent=3.5 -> {\"v\":1,\"xp\":24287,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":2.5}}"
+    ],
+    [
+     5170,
+     "w=215 s=5 recruitment free=23.5 spent=7.5 -> {\"v\":1,\"xp\":24287,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":4.5}}"
+    ],
+    [
+     5180,
+     "w=215 s=10 finance free=18.5 spent=12.5 -> {\"v\":1,\"xp\":24287,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":4,\"media\":4.5}}"
+    ],
+    [
+     5190,
+     "w=216 s=3 youth free=0 spent=9 -> null"
+    ],
+    [
+     5200,
+     "w=216 s=8 youth free=0 spent=9 -> null"
+    ],
+    [
+     5210,
+     "w=217 s=1 manManagement free=17 spent=9 -> null"
+    ],
+    [
+     5220,
+     "w=217 s=6 negotiation free=14 spent=12 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     5230,
+     "w=217 s=11 youth free=10 spent=16 -> {\"v\":1,\"xp\":17748,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":4,\"manManagement\":5,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     5240,
+     "w=218 s=4 media free=27 spent=8 -> null"
+    ],
+    [
+     5250,
+     "w=218 s=9 finance free=23 spent=12 -> {\"v\":1,\"xp\":32563,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":3,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     5260,
+     "w=219 s=2 finance free=26 spent=9 -> {\"v\":1,\"xp\":31454,\"points\":{\"tactics\":-1,\"recruitment\":5,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":4}}"
+    ],
+    [
+     5270,
+     "w=219 s=7 manManagement free=23 spent=12 -> {\"v\":1,\"xp\":31454,\"points\":{\"tactics\":-1,\"recruitment\":5,\"negotiation\":1,\"youth\":0,\"manManagement\":2,\"finance\":5}}"
+    ],
+    [
+     5280,
+     "w=220 s=0 youth free=25 spent=10 -> {\"v\":1,\"xp\":31150,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     5290,
+     "w=220 s=5 bogus free=22 spent=13 -> null"
+    ],
+    [
+     5300,
+     "w=220 s=10 tactics free=18 spent=17 -> {\"v\":1,\"xp\":31150,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":4,\"youth\":1,\"manManagement\":2,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     5310,
+     "w=221 s=3 negotiation free=21 spent=14 -> {\"v\":1,\"xp\":31362,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":1,\"youth\":3,\"manManagement\":5,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     5320,
+     "w=221 s=8 manManagement free=16 spent=19 -> null"
+    ],
+    [
+     5330,
+     "w=222 s=1 tactics free=0 spent=8.5 -> null"
+    ],
+    [
+     5340,
+     "w=222 s=6 negotiation free=0 spent=8.5 -> null"
+    ],
+    [
+     5350,
+     "w=222 s=11 finance free=0 spent=8.5 -> null"
+    ],
+    [
+     5360,
+     "w=223 s=4 media free=17 spent=12 -> {\"v\":1,\"xp\":21829,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":5,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     5370,
+     "w=223 s=9 tactics free=15 spent=14 -> {\"v\":1,\"xp\":21829,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":5,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     5380,
+     "w=224 s=2 bogus free=13 spent=13 -> null"
+    ],
+    [
+     5390,
+     "w=224 s=7 manManagement free=10 spent=16 -> {\"v\":1,\"xp\":18741,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":1,\"youth\":0,\"manManagement\":3,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     5400,
+     "w=225 s=0 negotiation free=31 spent=1 -> {\"v\":1,\"xp\":26183,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     5410,
+     "w=225 s=5 finance free=28 spent=4 -> {\"v\":1,\"xp\":26183,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":2,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     5420,
+     "w=225 s=10 finance free=23 spent=9 -> {\"v\":1,\"xp\":26183,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":3,\"youth\":1,\"manManagement\":1,\"finance\":3,\"media\":0}}"
+    ],
+    [
+     5430,
+     "w=226 s=3 negotiation free=0 spent=13 -> null"
+    ],
+    [
+     5440,
+     "w=226 s=8 youth free=0 spent=13 -> null"
+    ],
+    [
+     5450,
+     "w=227 s=1 finance free=11 spent=12 -> {\"v\":1,\"xp\":14745,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":6,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     5460,
+     "w=227 s=6 finance free=6 spent=17 -> {\"v\":1,\"xp\":14745,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":2,\"youth\":2,\"manManagement\":6,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     5470,
+     "w=227 s=11 recruitment free=3 spent=20 -> {\"v\":1,\"xp\":14745,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":2,\"youth\":2,\"manManagement\":6,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     5480,
+     "w=228 s=4 youth free=0 spent=11.5 -> null"
+    ],
+    [
+     5490,
+     "w=228 s=9 manManagement free=0 spent=11.5 -> null"
+    ],
+    [
+     5500,
+     "w=229 s=2 finance free=29 spent=5 -> {\"v\":1,\"xp\":29420,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":2,\"manManagement\":1,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5510,
+     "w=229 s=7 media free=24 spent=10 -> {\"v\":1,\"xp\":29420,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     5520,
+     "w=230 s=0 manManagement free=22 spent=13 -> {\"v\":1,\"xp\":29508,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":5,\"manManagement\":5,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     5530,
+     "w=230 s=5 media free=18 spent=17 -> {\"v\":1,\"xp\":29508,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":5,\"manManagement\":5,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     5540,
+     "w=230 s=10 manManagement free=13 spent=22 -> null"
+    ],
+    [
+     5550,
+     "w=231 s=3 media free=15 spent=15 -> {\"v\":1,\"xp\":22468,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     5560,
+     "w=231 s=8 manManagement free=12 spent=18 -> {\"v\":1,\"xp\":22468,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":5,\"youth\":2,\"manManagement\":1,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     5570,
+     "w=232 s=1 bogus free=20 spent=9 -> null"
+    ],
+    [
+     5580,
+     "w=232 s=6 media free=18 spent=11 -> {\"v\":1,\"xp\":22303,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     5590,
+     "w=232 s=11 recruitment free=13 spent=16 -> {\"v\":1,\"xp\":22303,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":1,\"youth\":1,\"manManagement\":3,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     5600,
+     "w=233 s=4 bogus free=0 spent=13.5 -> null"
+    ],
+    [
+     5610,
+     "w=233 s=9 recruitment free=0 spent=13.5 -> null"
+    ],
+    [
+     5620,
+     "w=234 s=2 negotiation free=2 spent=11 -> {\"v\":1,\"xp\":7196,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":2,\"youth\":0,\"manManagement\":3,\"finance\":2,\"media\":4}}"
+    ],
+    [
+     5630,
+     "w=234 s=7 manManagement free=0 spent=13 -> null"
+    ],
+    [
+     5640,
+     "w=235 s=0 finance free=0 spent=4 -> null"
+    ],
+    [
+     5650,
+     "w=235 s=5 youth free=0 spent=4 -> null"
+    ],
+    [
+     5660,
+     "w=235 s=10 manManagement free=0 spent=4 -> null"
+    ],
+    [
+     5670,
+     "w=236 s=3 manManagement free=12 spent=17 -> null"
+    ],
+    [
+     5680,
+     "w=236 s=8 manManagement free=9 spent=20 -> null"
+    ],
+    [
+     5690,
+     "w=237 s=1 finance free=5.5 spent=5.5 -> {\"v\":1,\"xp\":5535,\"points\":{\"tactics\":1,\"recruitment\":2.5,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":3,\"media\":0}}"
+    ],
+    [
+     5700,
+     "w=237 s=6 manManagement free=0.5 spent=10.5 -> {\"v\":1,\"xp\":5535,\"points\":{\"tactics\":1,\"recruitment\":2.5,\"negotiation\":2,\"youth\":0,\"manManagement\":2,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     5710,
+     "w=237 s=11 negotiation free=0 spent=11.5 -> null"
+    ],
+    [
+     5720,
+     "w=238 s=4 negotiation free=11.5 spent=14.5 -> {\"v\":1,\"xp\":17940,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":1,\"youth\":5,\"manManagement\":1,\"finance\":0,\"media\":3.5}}"
+    ],
+    [
+     5730,
+     "w=238 s=9 finance free=6.5 spent=19.5 -> {\"v\":1,\"xp\":17940,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":2,\"youth\":5,\"manManagement\":2,\"finance\":2,\"media\":4.5}}"
+    ],
+    [
+     5740,
+     "w=239 s=2 manManagement free=22 spent=11 -> {\"v\":1,\"xp\":27018,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":2,\"youth\":3,\"manManagement\":1,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     5750,
+     "w=239 s=7 negotiation free=17 spent=16 -> {\"v\":1,\"xp\":27018,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":3,\"youth\":3,\"manManagement\":2,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     5760,
+     "w=240 s=0 media free=27 spent=6 -> {\"v\":1,\"xp\":27927,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":5,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     5770,
+     "w=240 s=5 finance free=23 spent=10 -> {\"v\":1,\"xp\":27927,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":5,\"youth\":3,\"manManagement\":0,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5780,
+     "w=240 s=10 media free=19 spent=14 -> {\"v\":1,\"xp\":27927,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":5,\"youth\":3,\"manManagement\":1,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     5790,
+     "w=241 s=3 tactics free=0 spent=8 -> null"
+    ],
+    [
+     5800,
+     "w=241 s=8 finance free=0 spent=8 -> null"
+    ],
+    [
+     5810,
+     "w=242 s=1 tactics free=18 spent=13 -> {\"v\":1,\"xp\":24797,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":5,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     5820,
+     "w=242 s=6 tactics free=15 spent=16 -> {\"v\":1,\"xp\":24797,\"points\":{\"tactics\":5,\"recruitment\":3,\"negotiation\":5,\"youth\":0,\"manManagement\":1,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     5830,
+     "w=242 s=11 media free=13 spent=18 -> {\"v\":1,\"xp\":24797,\"points\":{\"tactics\":5,\"recruitment\":3,\"negotiation\":5,\"youth\":0,\"manManagement\":1,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     5840,
+     "w=243 s=4 tactics free=27 spent=8 -> {\"v\":1,\"xp\":32393,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":1,\"youth\":1,\"manManagement\":0,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5850,
+     "w=243 s=9 manManagement free=23 spent=12 -> {\"v\":1,\"xp\":32393,\"points\":{\"tactics\":3,\"recruitment\":4,\"negotiation\":1,\"youth\":1,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5860,
+     "w=244 s=2 youth free=24 spent=4 -> {\"v\":1,\"xp\":20104,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     5870,
+     "w=244 s=7 youth free=19 spent=9 -> {\"v\":1,\"xp\":20104,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":0,\"youth\":2,\"manManagement\":0,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     5880,
+     "w=245 s=0 finance free=25 spent=2 -> {\"v\":1,\"xp\":18981,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     5890,
+     "w=245 s=5 youth free=20 spent=7 -> {\"v\":1,\"xp\":18981,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":3,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5900,
+     "w=245 s=10 manManagement free=15 spent=12 -> {\"v\":1,\"xp\":18981,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":0,\"youth\":5,\"manManagement\":2,\"finance\":1,\"media\":1}}"
+    ],
+    [
+     5910,
+     "w=246 s=3 finance free=4 spent=12 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":5,\"youth\":0,\"manManagement\":0,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     5920,
+     "w=246 s=8 media free=0 spent=16 -> null"
+    ],
+    [
+     5930,
+     "w=247 s=1 recruitment free=18 spent=3 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     5940,
+     "w=247 s=6 bogus free=14 spent=7 -> null"
+    ],
+    [
+     5950,
+     "w=247 s=11 negotiation free=11 spent=10 -> {\"v\":1,\"xp\":12800,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":4,\"youth\":1,\"manManagement\":1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     5960,
+     "w=248 s=4 manManagement free=11.5 spent=9.5 -> {\"v\":1,\"xp\":13095,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":2,\"youth\":0,\"manManagement\":1,\"finance\":3.5,\"media\":1}}"
+    ],
+    [
+     5970,
+     "w=248 s=9 negotiation free=6.5 spent=14.5 -> {\"v\":1,\"xp\":13095,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":4,\"youth\":0,\"manManagement\":1,\"finance\":3.5,\"media\":2}}"
+    ],
+    [
+     5980,
+     "w=249 s=2 tactics free=16 spent=15 -> null"
+    ],
+    [
+     5990,
+     "w=249 s=7 negotiation free=13 spent=18 -> {\"v\":1,\"xp\":23869,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":3,\"youth\":1,\"manManagement\":1,\"finance\":4,\"media\":5}}"
+    ],
+    [
+     6000,
+     "w=250 s=0 youth free=17 spent=4 -> {\"v\":1,\"xp\":13293,\"points\":{\"tactics\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     6010,
+     "w=250 s=5 tactics free=13 spent=8 -> {\"v\":1,\"xp\":13293,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     6020,
+     "w=250 s=10 tactics free=9 spent=12 -> {\"v\":1,\"xp\":13293,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":1,\"media\":4}}"
+    ],
+    [
+     6030,
+     "w=251 s=3 recruitment free=17 spent=13 -> {\"v\":1,\"xp\":22493,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":4,\"youth\":2,\"manManagement\":0,\"finance\":0,\"media\":4}}"
+    ],
+    [
+     6040,
+     "w=251 s=8 finance free=12 spent=18 -> {\"v\":1,\"xp\":22493,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":5,\"youth\":4,\"manManagement\":0,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     6050,
+     "w=252 s=1 finance free=13 spent=10 -> {\"v\":1,\"xp\":14759,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":0,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     6060,
+     "w=252 s=6 manManagement free=8 spent=15 -> null"
+    ],
+    [
+     6070,
+     "w=252 s=11 bogus free=4 spent=19 -> null"
+    ],
+    [
+     6080,
+     "w=253 s=4 media free=0 spent=6 -> null"
+    ],
+    [
+     6090,
+     "w=253 s=9 recruitment free=0 spent=6 -> null"
+    ],
+    [
+     6100,
+     "w=254 s=2 negotiation free=10.5 spent=13.5 -> {\"v\":1,\"xp\":16011,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":3.5,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     6110,
+     "w=254 s=7 finance free=6.5 spent=17.5 -> {\"v\":1,\"xp\":16011,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":4.5,\"manManagement\":1,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     6120,
+     "w=255 s=0 bogus free=20 spent=15 -> null"
+    ],
+    [
+     6130,
+     "w=255 s=5 bogus free=17 spent=18 -> null"
+    ],
+    [
+     6140,
+     "w=255 s=10 negotiation free=14 spent=21 -> {\"v\":1,\"xp\":30986,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":3,\"youth\":5,\"manManagement\":1,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     6150,
+     "w=256 s=3 recruitment free=16 spent=15 -> null"
+    ],
+    [
+     6160,
+     "w=256 s=8 negotiation free=14 spent=17 -> {\"v\":1,\"xp\":23768,\"points\":{\"tactics\":0,\"recruitment\":5,\"negotiation\":2,\"youth\":5,\"manManagement\":0,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     6170,
+     "w=257 s=1 tactics free=21 spent=10 -> {\"v\":1,\"xp\":24390,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":4,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     6180,
+     "w=257 s=6 finance free=17 spent=14 -> {\"v\":1,\"xp\":24390,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":2,\"youth\":3,\"manManagement\":4,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     6190,
+     "w=257 s=11 finance free=12 spent=19 -> {\"v\":1,\"xp\":24390,\"points\":{\"tactics\":4,\"recruitment\":2,\"negotiation\":2,\"youth\":3,\"manManagement\":5,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     6200,
+     "w=258 s=4 tactics free=8.5 spent=17.5 -> {\"v\":1,\"xp\":18214,\"points\":{\"tactics\":3.5,\"recruitment\":0,\"youth\":4,\"manManagement\":5,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     6210,
+     "w=258 s=9 youth free=7.5 spent=18.5 -> {\"v\":1,\"xp\":18214,\"points\":{\"tactics\":3.5,\"recruitment\":0,\"youth\":5,\"manManagement\":5,\"finance\":1,\"media\":5}}"
+    ],
+    [
+     6220,
+     "w=259 s=2 media free=0 spent=10 -> null"
+    ],
+    [
+     6230,
+     "w=259 s=7 recruitment free=0 spent=10 -> null"
+    ],
+    [
+     6240,
+     "w=260 s=0 tactics free=1 spent=12 -> {\"v\":1,\"xp\":6855,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":4,\"media\":5}}"
+    ],
+    [
+     6250,
+     "w=260 s=5 finance free=0 spent=13 -> null"
+    ],
+    [
+     6260,
+     "w=260 s=10 bogus free=0 spent=13 -> null"
+    ],
+    [
+     6270,
+     "w=261 s=3 manManagement free=0 spent=13 -> null"
+    ],
+    [
+     6280,
+     "w=261 s=8 youth free=0 spent=13 -> null"
+    ],
+    [
+     6290,
+     "w=262 s=1 recruitment free=14 spent=2 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":1,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6300,
+     "w=262 s=6 finance free=9 spent=7 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     6310,
+     "w=262 s=11 recruitment free=4 spent=12 -> {\"v\":1,\"xp\":8734,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":3,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     6320,
+     "w=263 s=4 negotiation free=16 spent=14 -> {\"v\":1,\"xp\":22715,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":5,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     6330,
+     "w=263 s=9 tactics free=11 spent=19 -> {\"v\":1,\"xp\":22715,\"points\":{\"tactics\":5,\"recruitment\":2,\"negotiation\":1,\"youth\":5,\"manManagement\":0,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     6340,
+     "w=264 s=2 youth free=22 spent=13 -> {\"v\":1,\"xp\":33617,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":5,\"youth\":2,\"manManagement\":6,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6350,
+     "w=264 s=7 finance free=18 spent=17 -> {\"v\":1,\"xp\":33617,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":5,\"youth\":4,\"manManagement\":6,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     6360,
+     "w=265 s=0 youth free=1.5 spent=13.5 -> {\"v\":1,\"xp\":8628,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":3,\"youth\":5,\"manManagement\":0,\"finance\":0,\"media\":2.5}}"
+    ],
+    [
+     6370,
+     "w=265 s=5 recruitment free=0 spent=15.5 -> null"
+    ],
+    [
+     6380,
+     "w=265 s=10 recruitment free=0 spent=15.5 -> null"
+    ],
+    [
+     6390,
+     "w=266 s=3 media free=23 spent=12 -> {\"v\":1,\"xp\":33656,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":1,\"youth\":1,\"manManagement\":1,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     6400,
+     "w=266 s=8 youth free=19 spent=16 -> {\"v\":1,\"xp\":33656,\"points\":{\"tactics\":5,\"recruitment\":0,\"negotiation\":1,\"youth\":2,\"manManagement\":2,\"finance\":5,\"media\":2}}"
+    ],
+    [
+     6410,
+     "w=267 s=1 bogus free=4 spent=3 -> null"
+    ],
+    [
+     6420,
+     "w=267 s=6 manManagement free=1 spent=6 -> {\"v\":1,\"xp\":3160,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":1,\"manManagement\":3,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6430,
+     "w=267 s=11 media free=0 spent=7 -> null"
+    ],
+    [
+     6440,
+     "w=268 s=4 youth free=15 spent=9 -> {\"v\":1,\"xp\":16421,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":2,\"youth\":1,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6450,
+     "w=268 s=9 tactics free=10 spent=14 -> {\"v\":1,\"xp\":16421,\"points\":{\"tactics\":5,\"recruitment\":4,\"negotiation\":3,\"youth\":3,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6460,
+     "w=269 s=2 negotiation free=18 spent=13 -> null"
+    ],
+    [
+     6470,
+     "w=269 s=7 youth free=16 spent=15 -> {\"v\":1,\"xp\":23866,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":6,\"youth\":2,\"manManagement\":0,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     6480,
+     "w=270 s=0 finance free=14 spent=3 -> {\"v\":1,\"xp\":10209,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     6490,
+     "w=270 s=5 finance free=9 spent=8 -> {\"v\":1,\"xp\":10209,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     6500,
+     "w=270 s=10 finance free=4 spent=13 -> {\"v\":1,\"xp\":10209,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":0,\"youth\":1,\"manManagement\":4,\"finance\":5,\"media\":1}}"
+    ],
+    [
+     6510,
+     "w=271 s=3 finance free=0 spent=3 -> null"
+    ],
+    [
+     6520,
+     "w=271 s=8 media free=0 spent=3 -> null"
+    ],
+    [
+     6530,
+     "w=272 s=1 manManagement free=14 spent=9 -> {\"v\":1,\"xp\":14663,\"points\":{\"tactics\":0,\"recruitment\":6,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     6540,
+     "w=272 s=6 bogus free=9 spent=14 -> null"
+    ],
+    [
+     6550,
+     "w=272 s=11 finance free=5 spent=18 -> {\"v\":1,\"xp\":14663,\"points\":{\"tactics\":1,\"recruitment\":6,\"negotiation\":0,\"youth\":2,\"manManagement\":2,\"finance\":3,\"media\":5}}"
+    ],
+    [
+     6560,
+     "w=273 s=4 bogus free=4 spent=8 -> null"
+    ],
+    [
+     6570,
+     "w=273 s=9 youth free=1 spent=11 -> {\"v\":1,\"xp\":6193,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":1,\"youth\":2,\"manManagement\":5,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     6580,
+     "w=274 s=2 finance free=22 spent=5 -> {\"v\":1,\"xp\":19946,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     6590,
+     "w=274 s=7 tactics free=17 spent=10 -> {\"v\":1,\"xp\":19946,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":2,\"youth\":0,\"manManagement\":0,\"finance\":4,\"media\":0}}"
+    ],
+    [
+     6600,
+     "w=275 s=0 media free=8 spent=7 -> {\"v\":1,\"xp\":8012,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":3}}"
+    ],
+    [
+     6610,
+     "w=275 s=5 finance free=3 spent=12 -> {\"v\":1,\"xp\":8012,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":2,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":4}}"
+    ],
+    [
+     6620,
+     "w=275 s=10 recruitment free=0 spent=15 -> null"
+    ],
+    [
+     6630,
+     "w=276 s=3 bogus free=17 spent=12 -> null"
+    ],
+    [
+     6640,
+     "w=276 s=8 negotiation free=14 spent=15 -> {\"v\":1,\"xp\":21218,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":4,\"youth\":3,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     6650,
+     "w=277 s=1 media free=11 spent=12 -> null"
+    ],
+    [
+     6660,
+     "w=277 s=6 youth free=7 spent=16 -> {\"v\":1,\"xp\":14663,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":0,\"youth\":3,\"manManagement\":5,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     6670,
+     "w=277 s=11 manManagement free=2 spent=21 -> null"
+    ],
+    [
+     6680,
+     "w=278 s=4 bogus free=16 spent=16 -> null"
+    ],
+    [
+     6690,
+     "w=278 s=9 manManagement free=14 spent=18 -> null"
+    ],
+    [
+     6700,
+     "w=279 s=2 negotiation free=17 spent=12 -> {\"v\":1,\"xp\":22378,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":2,\"youth\":5,\"manManagement\":1,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     6710,
+     "w=279 s=7 bogus free=12 spent=17 -> null"
+    ],
+    [
+     6720,
+     "w=280 s=0 youth free=0 spent=7.5 -> null"
+    ],
+    [
+     6730,
+     "w=280 s=5 finance free=0 spent=7.5 -> null"
+    ],
+    [
+     6740,
+     "w=280 s=10 tactics free=0 spent=7.5 -> null"
+    ],
+    [
+     6750,
+     "w=281 s=3 tactics free=25 spent=10 -> {\"v\":1,\"xp\":32971,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":2,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     6760,
+     "w=281 s=8 tactics free=20 spent=15 -> {\"v\":1,\"xp\":32971,\"points\":{\"tactics\":2,\"recruitment\":3,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":2,\"media\":5}}"
+    ],
+    [
+     6770,
+     "w=282 s=1 youth free=10.5 spent=13.5 -> {\"v\":1,\"xp\":15978,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":1,\"youth\":5,\"manManagement\":2.5,\"finance\":6,\"media\":0}}"
+    ],
+    [
+     6780,
+     "w=282 s=6 recruitment free=6.5 spent=17.5 -> {\"v\":1,\"xp\":15978,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":5,\"manManagement\":4.5,\"finance\":6,\"media\":1}}"
+    ],
+    [
+     6790,
+     "w=282 s=11 recruitment free=3.5 spent=20.5 -> {\"v\":1,\"xp\":15978,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":1,\"youth\":5,\"manManagement\":4.5,\"finance\":6,\"media\":2}}"
+    ],
+    [
+     6800,
+     "w=283 s=4 manManagement free=21 spent=10 -> {\"v\":1,\"xp\":24233,\"points\":{\"tactics\":4,\"recruitment\":0,\"negotiation\":1,\"youth\":0,\"manManagement\":5,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     6810,
+     "w=283 s=9 finance free=16 spent=15 -> {\"v\":1,\"xp\":24233,\"points\":{\"tactics\":5,\"recruitment\":1,\"negotiation\":3,\"youth\":0,\"manManagement\":5,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     6820,
+     "w=284 s=2 youth free=20 spent=2 -> {\"v\":1,\"xp\":14260,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":2,\"manManagement\":-1,\"finance\":0,\"media\":-1}}"
+    ],
+    [
+     6830,
+     "w=284 s=7 media free=16 spent=6 -> {\"v\":1,\"xp\":14260,\"points\":{\"tactics\":1,\"recruitment\":1,\"negotiation\":2,\"youth\":2,\"manManagement\":-1,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     6840,
+     "w=285 s=0 manManagement free=17 spent=10 -> {\"v\":1,\"xp\":19347,\"points\":{\"tactics\":1,\"recruitment\":5,\"negotiation\":0,\"youth\":4,\"manManagement\":1,\"media\":0}}"
+    ],
+    [
+     6850,
+     "w=285 s=5 youth free=12 spent=15 -> null"
+    ],
+    [
+     6860,
+     "w=285 s=10 tactics free=9 spent=18 -> {\"v\":1,\"xp\":19347,\"points\":{\"tactics\":3,\"recruitment\":5,\"negotiation\":1,\"youth\":5,\"manManagement\":1,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     6870,
+     "w=286 s=3 youth free=2.5 spent=10.5 -> {\"v\":1,\"xp\":7303,\"points\":{\"tactics\":3,\"recruitment\":3,\"negotiation\":2.5,\"youth\":2,\"manManagement\":-1,\"finance\":1,\"media\":0}}"
+    ],
+    [
+     6880,
+     "w=286 s=8 media free=0 spent=13.5 -> null"
+    ],
+    [
+     6890,
+     "w=287 s=1 bogus free=0 spent=7 -> null"
+    ],
+    [
+     6900,
+     "w=287 s=6 media free=0 spent=7 -> null"
+    ],
+    [
+     6910,
+     "w=287 s=11 youth free=0 spent=7 -> null"
+    ],
+    [
+     6920,
+     "w=288 s=4 tactics free=23 spent=6 -> {\"v\":1,\"xp\":21569,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":5,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     6930,
+     "w=288 s=9 tactics free=18 spent=11 -> {\"v\":1,\"xp\":21569,\"points\":{\"tactics\":3,\"recruitment\":0,\"negotiation\":5,\"youth\":0,\"manManagement\":1,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     6940,
+     "w=289 s=2 negotiation free=23 spent=3 -> {\"v\":1,\"xp\":17974,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":1,\"youth\":0,\"manManagement\":1,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     6950,
+     "w=289 s=7 bogus free=18 spent=8 -> null"
+    ],
+    [
+     6960,
+     "w=290 s=0 negotiation free=0 spent=8 -> null"
+    ],
+    [
+     6970,
+     "w=290 s=5 finance free=0 spent=8 -> null"
+    ],
+    [
+     6980,
+     "w=290 s=10 tactics free=0 spent=8 -> null"
+    ],
+    [
+     6990,
+     "w=291 s=3 tactics free=21 spent=2 -> {\"v\":1,\"xp\":15072,\"points\":{\"tactics\":1,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     7000,
+     "w=291 s=8 recruitment free=16 spent=7 -> {\"v\":1,\"xp\":15072,\"points\":{\"tactics\":2,\"recruitment\":1,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     7010,
+     "w=292 s=1 youth free=26 spent=7 -> null"
+    ],
+    [
+     7020,
+     "w=292 s=6 finance free=24 spent=9 -> {\"v\":1,\"xp\":26615,\"points\":{\"tactics\":2,\"recruitment\":0,\"negotiation\":1,\"youth\":5,\"manManagement\":0,\"finance\":2,\"media\":0}}"
+    ],
+    [
+     7030,
+     "w=292 s=11 manManagement free=19 spent=14 -> {\"v\":1,\"xp\":26615,\"points\":{\"tactics\":2,\"recruitment\":2,\"negotiation\":1,\"youth\":5,\"manManagement\":1,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     7040,
+     "w=293 s=4 tactics free=7.5 spent=15.5 -> {\"v\":1,\"xp\":14735,\"points\":{\"tactics\":4,\"recruitment\":1,\"negotiation\":2.5,\"youth\":5,\"manManagement\":0,\"finance\":1,\"media\":3}}"
+    ],
+    [
+     7050,
+     "w=293 s=9 manManagement free=3.5 spent=19.5 -> {\"v\":1,\"xp\":14735,\"points\":{\"tactics\":4,\"recruitment\":3,\"negotiation\":2.5,\"youth\":5,\"manManagement\":1,\"finance\":2,\"media\":3}}"
+    ],
+    [
+     7060,
+     "w=294 s=2 recruitment free=21 spent=7 -> {\"v\":1,\"xp\":20089,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":2,\"manManagement\":0,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     7070,
+     "w=294 s=7 negotiation free=17 spent=11 -> {\"v\":1,\"xp\":20089,\"points\":{\"tactics\":0,\"recruitment\":3,\"negotiation\":3,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":0}}"
+    ],
+    [
+     7080,
+     "w=295 s=0 media free=12 spent=4 -> {\"v\":1,\"xp\":9142,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":2,\"media\":1}}"
+    ],
+    [
+     7090,
+     "w=295 s=5 manManagement free=9 spent=7 -> {\"v\":1,\"xp\":9142,\"points\":{\"tactics\":0,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":1,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     7100,
+     "w=295 s=10 bogus free=5 spent=11 -> null"
+    ],
+    [
+     7110,
+     "w=296 s=3 finance free=19 spent=13 -> {\"v\":1,\"xp\":25836,\"points\":{\"tactics\":1,\"recruitment\":3,\"negotiation\":5,\"youth\":0,\"manManagement\":0,\"finance\":3,\"media\":2}}"
+    ],
+    [
+     7120,
+     "w=296 s=8 media free=14 spent=18 -> {\"v\":1,\"xp\":25836,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":5,\"youth\":1,\"manManagement\":0,\"finance\":5,\"media\":3}}"
+    ],
+    [
+     7130,
+     "w=297 s=1 media free=15 spent=6 -> {\"v\":1,\"xp\":13099,\"points\":{\"tactics\":0,\"recruitment\":4,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":1}}"
+    ],
+    [
+     7140,
+     "w=297 s=6 tactics free=10 spent=11 -> {\"v\":1,\"xp\":13099,\"points\":{\"tactics\":1,\"recruitment\":4,\"negotiation\":0,\"youth\":0,\"manManagement\":4,\"finance\":1,\"media\":2}}"
+    ],
+    [
+     7150,
+     "w=297 s=11 tactics free=5 spent=16 -> {\"v\":1,\"xp\":13099,\"points\":{\"tactics\":4,\"recruitment\":5,\"negotiation\":0,\"youth\":0,\"manManagement\":4,\"finance\":2,\"media\":2}}"
+    ],
+    [
+     7160,
+     "w=298 s=4 manManagement free=31 spent=4 -> {\"v\":1,\"xp\":31035,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":0,\"manManagement\":2,\"finance\":0,\"media\":0}}"
+    ],
+    [
+     7170,
+     "w=298 s=9 finance free=26 spent=9 -> {\"v\":1,\"xp\":31035,\"points\":{\"tactics\":1,\"recruitment\":2,\"negotiation\":0,\"youth\":1,\"manManagement\":2,\"finance\":3,\"media\":1}}"
+    ],
+    [
+     7180,
+     "w=299 s=2 recruitment free=20 spent=13 -> {\"v\":1,\"xp\":27360,\"points\":{\"tactics\":0,\"recruitment\":1,\"negotiation\":1,\"youth\":4,\"manManagement\":3,\"finance\":0,\"media\":5}}"
+    ],
+    [
+     7190,
+     "w=299 s=7 youth free=16 spent=17 -> null"
+    ]
+   ]
+  },
+  "valid": {
+   "count": 80,
+   "sha256": "cce9d36dae6a204ee65672b5c3c7fffc90fbaffcaabc1175268dee7840e9b4d9",
+   "lines": [
+    [
+     0,
+     "#0 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     10,
+     "#10 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     20,
+     "#20 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     30,
+     "#30 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     40,
+     "#40 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     50,
+     "#50 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     60,
+     "#60 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ],
+    [
+     70,
+     "#70 valid=false xpOf={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} ensure={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} after={\"v\":1,\"xp\":0,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}} tp=0,0,0,0,0,0,0"
+    ]
+   ]
+  },
+  "effects": {
+   "count": 65,
+   "sha256": "695c7b8478ff3aff818de6b03dad582c0e8037c90007154e1e42b1e5a6d42d39",
+   "lines": [
+    [
+     0,
+     "absent dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     1,
+     "all=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     2,
+     "tactics=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     3,
+     "recruitment=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     4,
+     "negotiation=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     5,
+     "youth=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     6,
+     "manManagement=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     7,
+     "finance=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     8,
+     "media=-1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     9,
+     "all=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     10,
+     "tactics=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     11,
+     "recruitment=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     12,
+     "negotiation=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     13,
+     "youth=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     14,
+     "manManagement=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     15,
+     "finance=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     16,
+     "media=0 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     17,
+     "all=1 dutyEdge=1.1 valuationTighten=0.02 askEdge=0.02 youthIntakeEdge=0.5 youthReportEdge=0 promiseCushion=0.066 gateEdge=1.02 pressCushion=0.1"
+    ],
+    [
+     18,
+     "tactics=1 dutyEdge=1.1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     19,
+     "recruitment=1 dutyEdge=1 valuationTighten=0.02 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     20,
+     "negotiation=1 dutyEdge=1 valuationTighten=0 askEdge=0.02 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     21,
+     "youth=1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0.5 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     22,
+     "manManagement=1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0.066 gateEdge=1 pressCushion=0"
+    ],
+    [
+     23,
+     "finance=1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1.02 pressCushion=0"
+    ],
+    [
+     24,
+     "media=1 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0.1"
+    ],
+    [
+     25,
+     "all=2 dutyEdge=1.2 valuationTighten=0.04 askEdge=0.04 youthIntakeEdge=1 youthReportEdge=0 promiseCushion=0.132 gateEdge=1.04 pressCushion=0.2"
+    ],
+    [
+     26,
+     "tactics=2 dutyEdge=1.2 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     27,
+     "recruitment=2 dutyEdge=1 valuationTighten=0.04 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     28,
+     "negotiation=2 dutyEdge=1 valuationTighten=0 askEdge=0.04 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     29,
+     "youth=2 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=1 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     30,
+     "manManagement=2 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0.132 gateEdge=1 pressCushion=0"
+    ],
+    [
+     31,
+     "finance=2 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1.04 pressCushion=0"
+    ],
+    [
+     32,
+     "media=2 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0.2"
+    ],
+    [
+     33,
+     "all=3 dutyEdge=1.3 valuationTighten=0.06 askEdge=0.06 youthIntakeEdge=1.5 youthReportEdge=1 promiseCushion=0.198 gateEdge=1.06 pressCushion=0.30000000000000004"
+    ],
+    [
+     34,
+     "tactics=3 dutyEdge=1.3 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     35,
+     "recruitment=3 dutyEdge=1 valuationTighten=0.06 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     36,
+     "negotiation=3 dutyEdge=1 valuationTighten=0 askEdge=0.06 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     37,
+     "youth=3 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=1.5 youthReportEdge=1 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     38,
+     "manManagement=3 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0.198 gateEdge=1 pressCushion=0"
+    ],
+    [
+     39,
+     "finance=3 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1.06 pressCushion=0"
+    ],
+    [
+     40,
+     "media=3 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0.30000000000000004"
+    ],
+    [
+     41,
+     "all=4 dutyEdge=1.4 valuationTighten=0.08 askEdge=0.08 youthIntakeEdge=2 youthReportEdge=1 promiseCushion=0.264 gateEdge=1.08 pressCushion=0.4"
+    ],
+    [
+     42,
+     "tactics=4 dutyEdge=1.4 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     43,
+     "recruitment=4 dutyEdge=1 valuationTighten=0.08 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     44,
+     "negotiation=4 dutyEdge=1 valuationTighten=0 askEdge=0.08 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     45,
+     "youth=4 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=2 youthReportEdge=1 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     46,
+     "manManagement=4 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0.264 gateEdge=1 pressCushion=0"
+    ],
+    [
+     47,
+     "finance=4 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1.08 pressCushion=0"
+    ],
+    [
+     48,
+     "media=4 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0.4"
+    ],
+    [
+     49,
+     "all=5 dutyEdge=1.5 valuationTighten=0.1 askEdge=0.1 youthIntakeEdge=2.5 youthReportEdge=2 promiseCushion=0.33 gateEdge=1.1 pressCushion=0.5"
+    ],
+    [
+     50,
+     "tactics=5 dutyEdge=1.5 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     51,
+     "recruitment=5 dutyEdge=1 valuationTighten=0.1 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     52,
+     "negotiation=5 dutyEdge=1 valuationTighten=0 askEdge=0.1 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     53,
+     "youth=5 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=2.5 youthReportEdge=2 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     54,
+     "manManagement=5 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0.33 gateEdge=1 pressCushion=0"
+    ],
+    [
+     55,
+     "finance=5 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1.1 pressCushion=0"
+    ],
+    [
+     56,
+     "media=5 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0.5"
+    ],
+    [
+     57,
+     "all=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     58,
+     "tactics=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     59,
+     "recruitment=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     60,
+     "negotiation=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     61,
+     "youth=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     62,
+     "manManagement=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     63,
+     "finance=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ],
+    [
+     64,
+     "media=6 dutyEdge=1 valuationTighten=0 askEdge=0 youthIntakeEdge=0 youthReportEdge=0 promiseCushion=0 gateEdge=1 pressCushion=0"
+    ]
+   ]
+  },
+  "season": {
+   "count": 206,
+   "sha256": "0e5ce38b3b1776d45fc06c4c863fb55a081494aca98cb5e52c2b9bb096c4da48",
+   "lines": [
+    [
+     0,
+     "{\"wins\":14,\"trophies\":0,\"objectivesMet\":2,\"placesAboveExpectation\":-6,\"youthPromoted\":2,\"euroRoundsReached\":4,\"soldMoreThanBought\":true} -> {\"wins\":42,\"trophies\":0,\"objectives\":120,\"overperformance\":0,\"youth\":80,\"europe\":200,\"profit\":40,\"total\":482}"
+    ],
+    [
+     10,
+     "{\"wins\":29,\"trophies\":1,\"objectivesMet\":2,\"placesAboveExpectation\":6,\"youthPromoted\":3,\"euroRoundsReached\":-1,\"soldMoreThanBought\":false} -> {\"wins\":87,\"trophies\":120,\"objectives\":120,\"overperformance\":150,\"youth\":120,\"europe\":0,\"profit\":0,\"total\":597}"
+    ],
+    [
+     20,
+     "{\"wins\":28,\"trophies\":2,\"objectivesMet\":2,\"placesAboveExpectation\":-5,\"youthPromoted\":2.5,\"euroRoundsReached\":1,\"soldMoreThanBought\":true} -> {\"wins\":84,\"trophies\":240,\"objectives\":120,\"overperformance\":0,\"youth\":120,\"europe\":50,\"profit\":40,\"total\":654}"
+    ],
+    [
+     30,
+     "{\"wins\":0,\"trophies\":0,\"objectivesMet\":1,\"placesAboveExpectation\":-6,\"youthPromoted\":4,\"euroRoundsReached\":1,\"soldMoreThanBought\":false} -> {\"wins\":0,\"trophies\":0,\"objectives\":60,\"overperformance\":0,\"youth\":160,\"europe\":50,\"profit\":0,\"total\":270}"
+    ],
+    [
+     40,
+     "{\"wins\":11,\"trophies\":1,\"objectivesMet\":0,\"placesAboveExpectation\":20,\"youthPromoted\":1,\"euroRoundsReached\":0,\"soldMoreThanBought\":true} -> {\"wins\":33,\"trophies\":120,\"objectives\":0,\"overperformance\":500,\"youth\":40,\"europe\":0,\"profit\":40,\"total\":733}"
+    ],
+    [
+     50,
+     "{\"wins\":11,\"trophies\":2,\"objectivesMet\":0,\"placesAboveExpectation\":null,\"youthPromoted\":3,\"euroRoundsReached\":0,\"soldMoreThanBought\":true} -> {\"wins\":33,\"trophies\":240,\"objectives\":0,\"overperformance\":null,\"youth\":120,\"europe\":0,\"profit\":40,\"total\":null}"
+    ],
+    [
+     60,
+     "{\"wins\":9,\"trophies\":2,\"objectivesMet\":1,\"placesAboveExpectation\":16,\"youthPromoted\":2.5,\"euroRoundsReached\":5,\"soldMoreThanBought\":true} -> {\"wins\":27,\"trophies\":240,\"objectives\":60,\"overperformance\":400,\"youth\":120,\"europe\":250,\"profit\":40,\"total\":1137}"
+    ],
+    [
+     70,
+     "{\"wins\":24,\"trophies\":2,\"objectivesMet\":1,\"placesAboveExpectation\":7,\"youthPromoted\":2,\"euroRoundsReached\":2,\"soldMoreThanBought\":true} -> {\"wins\":72,\"trophies\":240,\"objectives\":60,\"overperformance\":175,\"youth\":80,\"europe\":100,\"profit\":40,\"total\":767}"
+    ],
+    [
+     80,
+     "{\"wins\":3,\"trophies\":2,\"objectivesMet\":1,\"placesAboveExpectation\":15,\"youthPromoted\":4,\"euroRoundsReached\":0,\"soldMoreThanBought\":true} -> {\"wins\":9,\"trophies\":240,\"objectives\":60,\"overperformance\":375,\"youth\":160,\"europe\":0,\"profit\":40,\"total\":884}"
+    ],
+    [
+     90,
+     "{\"wins\":24,\"trophies\":2.5,\"objectivesMet\":0,\"placesAboveExpectation\":10,\"youthPromoted\":1,\"euroRoundsReached\":1,\"soldMoreThanBought\":true} -> {\"wins\":72,\"trophies\":360,\"objectives\":0,\"overperformance\":250,\"youth\":40,\"europe\":50,\"profit\":40,\"total\":812}"
+    ],
+    [
+     100,
+     "{\"wins\":12,\"trophies\":1,\"objectivesMet\":2,\"placesAboveExpectation\":-3,\"youthPromoted\":0,\"euroRoundsReached\":2,\"soldMoreThanBought\":true} -> {\"wins\":36,\"trophies\":120,\"objectives\":120,\"overperformance\":0,\"youth\":0,\"europe\":100,\"profit\":40,\"total\":416}"
+    ],
+    [
+     110,
+     "{\"wins\":2.5,\"trophies\":3,\"objectivesMet\":0,\"placesAboveExpectation\":23,\"youthPromoted\":0,\"euroRoundsReached\":-1,\"soldMoreThanBought\":false} -> {\"wins\":9,\"trophies\":360,\"objectives\":0,\"overperformance\":575,\"youth\":0,\"europe\":0,\"profit\":0,\"total\":944}"
+    ],
+    [
+     120,
+     "{\"wins\":null,\"trophies\":0,\"objectivesMet\":1,\"placesAboveExpectation\":6,\"youthPromoted\":0,\"euroRoundsReached\":4,\"soldMoreThanBought\":false} -> {\"wins\":null,\"trophies\":0,\"objectives\":60,\"overperformance\":150,\"youth\":0,\"europe\":200,\"profit\":0,\"total\":null}"
+    ],
+    [
+     130,
+     "{\"wins\":1,\"trophies\":3,\"objectivesMet\":0,\"placesAboveExpectation\":24,\"youthPromoted\":4,\"euroRoundsReached\":3,\"soldMoreThanBought\":true} -> {\"wins\":3,\"trophies\":360,\"objectives\":0,\"overperformance\":600,\"youth\":160,\"europe\":150,\"profit\":40,\"total\":1313}"
+    ],
+    [
+     140,
+     "{\"wins\":0,\"trophies\":3,\"objectivesMet\":2,\"placesAboveExpectation\":9,\"youthPromoted\":0,\"euroRoundsReached\":2,\"soldMoreThanBought\":true} -> {\"wins\":0,\"trophies\":360,\"objectives\":120,\"overperformance\":225,\"youth\":0,\"europe\":100,\"profit\":40,\"total\":845}"
+    ],
+    [
+     150,
+     "{\"wins\":17,\"trophies\":null,\"objectivesMet\":1,\"placesAboveExpectation\":2,\"youthPromoted\":0,\"euroRoundsReached\":5,\"soldMoreThanBought\":false} -> {\"wins\":51,\"trophies\":null,\"objectives\":60,\"overperformance\":50,\"youth\":0,\"europe\":250,\"profit\":0,\"total\":null}"
+    ],
+    [
+     160,
+     "{\"wins\":29,\"trophies\":0,\"objectivesMet\":0,\"placesAboveExpectation\":-2,\"youthPromoted\":4,\"euroRoundsReached\":0,\"soldMoreThanBought\":true} -> {\"wins\":87,\"trophies\":0,\"objectives\":0,\"overperformance\":0,\"youth\":160,\"europe\":0,\"profit\":40,\"total\":287}"
+    ],
+    [
+     170,
+     "{\"wins\":2,\"trophies\":0,\"objectivesMet\":0,\"placesAboveExpectation\":19,\"youthPromoted\":1,\"euroRoundsReached\":5,\"soldMoreThanBought\":false} -> {\"wins\":6,\"trophies\":0,\"objectives\":0,\"overperformance\":475,\"youth\":40,\"europe\":250,\"profit\":0,\"total\":771}"
+    ],
+    [
+     180,
+     "{\"wins\":4,\"trophies\":2.5,\"objectivesMet\":0,\"placesAboveExpectation\":-6,\"youthPromoted\":2,\"euroRoundsReached\":3,\"soldMoreThanBought\":true} -> {\"wins\":12,\"trophies\":360,\"objectives\":0,\"overperformance\":0,\"youth\":80,\"europe\":150,\"profit\":40,\"total\":642}"
+    ],
+    [
+     190,
+     "{\"wins\":25,\"trophies\":3,\"objectivesMet\":0,\"placesAboveExpectation\":7,\"youthPromoted\":4,\"euroRoundsReached\":0,\"soldMoreThanBought\":false} -> {\"wins\":75,\"trophies\":360,\"objectives\":0,\"overperformance\":175,\"youth\":160,\"europe\":0,\"profit\":0,\"total\":770}"
+    ],
+    [
+     200,
+     "addXp(0,10) -> {\"v\":1,\"xp\":10,\"points\":{\"tactics\":0,\"recruitment\":0,\"negotiation\":0,\"youth\":0,\"manManagement\":0,\"finance\":0,\"media\":0}}"
+    ]
+   ]
+  }
+ }
+}
