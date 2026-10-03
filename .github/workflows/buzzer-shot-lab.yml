@@ -1,0 +1,90 @@
+name: Buzzer Shot Lab verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/buzzer-shot-lab.yml
+      - scripts/qa/buzzerShotLab997.mjs
+      - scripts/simBuzzerShotLab.mjs
+      - scripts/simBuzzerPractice.mjs
+      - scripts/simThreePointContest.mjs
+      - scripts/simArcadePause.mjs
+      - scripts/simArcadeHoldRelease.mjs
+      - src/components/buzzer-beater/**
+      - src/lib/buzzerBeater.ts
+      - src/test/buzzerShotLab.test.tsx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: buzzer-shot-lab-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p buzzer-shot-lab-artifacts
+          git rev-parse HEAD | tee buzzer-shot-lab-artifacts/commit.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee buzzer-shot-lab-artifacts/types.log
+          npm run build 2>&1 | tee buzzer-shot-lab-artifacts/build.log
+      - name: Shot Lab outcomes and effective copied controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: BUZZER_SHOT_LAB_CONTROL=all ONLY=simBuzzerShotLab node scripts/runAllSims.mjs 2>&1 | tee buzzer-shot-lab-artifacts/mounted.log
+      - name: Existing basketball physics and arcade modes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simBuzzerBeater simBuzzerPractice simThreePointContest simArcadeShotFeedback simArcadePause simArcadeHoldRelease; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "buzzer-shot-lab-artifacts/$harness.log" || failed=1
+          done
+          BUZZER_PRACTICE_CONTROL=capture NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simBuzzerPractice.mjs 2>&1 | tee buzzer-shot-lab-artifacts/practice-capture-control.log || failed=1
+          ONLY=buzzer-beater NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyReload.mjs 2>&1 | tee buzzer-shot-lab-artifacts/simDailyReload.log || failed=1
+          exit "$failed"
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "buzzer-shot-lab-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Actual Shot Lab by touch and keyboard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/buzzerShotLab997.mjs 2>&1 | tee buzzer-shot-lab-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzer-shot-lab-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: buzzer-shot-lab-artifacts/

@@ -1109,7 +1109,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Trades and the draft carry real risk",
         items: [
           "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
-          "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
+          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         ],
       },
       {

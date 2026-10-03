@@ -1,0 +1,85 @@
+name: Rank Em circuit verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/rank-em-circuit.yml
+      - scripts/qa/rankEmCircuit999.mjs
+      - scripts/simRankEmCircuit.mjs
+      - src/pages/RankEm.tsx
+      - src/pages/RankEmOrder.module.css
+      - src/lib/rankEmCircuit.ts
+      - src/lib/orderTheList.ts
+      - src/test/rankEmCircuit.test.tsx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: rank-em-circuit-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p rank-em-circuit-artifacts
+          git rev-parse HEAD | tee rank-em-circuit-artifacts/commit.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee rank-em-circuit-artifacts/types.log
+          npm run build 2>&1 | tee rank-em-circuit-artifacts/build.log
+      - name: Actual circuit outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: RANK_CIRCUIT_CONTROL=all ONLY=simRankEmCircuit node scripts/runAllSims.mjs 2>&1 | tee rank-em-circuit-artifacts/mounted.log
+      - name: Original ranking and completion compatibility
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          ONLY=simRankEmOrder node scripts/runAllSims.mjs 2>&1 | tee rank-em-circuit-artifacts/simRankEmOrder.log || failed=1
+          NO_DOUBLE_ONLY=rank-em ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee rank-em-circuit-artifacts/simNoDoubleRecord.log || failed=1
+          exit "$failed"
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "rank-em-circuit-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native ranking resume and readable results
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/rankEmCircuit999.mjs 2>&1 | tee rank-em-circuit-artifacts/native.log
+      - name: Preserve verification evidence for independent visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rank-em-circuit-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: rank-em-circuit-artifacts/
