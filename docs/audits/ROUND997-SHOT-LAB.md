@@ -65,7 +65,8 @@ No live database probes, search submissions or score writes are part of QA.
 ## Status
 
 Accepted and merged as e7c669a5 after final remote verification. Publication
-is claimed narrowly and pending. Next free 998 is unclaimed.
+is pending on a host editor authentication failure. Ownership was released
+for the next working publisher. Next free 998 is unclaimed.
 
 First remote run 37118264085 stopped at the type gate: two Testing Library
 role lookups used an unsupported `exact` option. No build, test or browser
@@ -112,3 +113,31 @@ Artifact11273100846 (2,110,411 bytes) SHA256 matched the published digest:
 `cf3e6daf5f80c62bdb5890cbaa7c76ff72ed071400286cdf7db1a6335a96d4b6`.
 Evidence: `C:/Users/antho/AppData/Local/Temp/dukb-buzzer997-ci-2026-10-03/c76a4523/evidence/`.
 The twelve held raw drafts and seven stashes passed preservation after merge.
+
+## Publication pending
+
+As of 2026-10-03 07:34 EDT, no final publish action was sent. Lovable's editor
+reported Firebase auth initialization timing out after 60 seconds. Reloading,
+rebinding the existing tab and a fresh tab in the same authenticated browser
+did not restore it. Project history/preview remained empty and the Publish
+panel displayed only loading placeholders. The unused blank recovery tab and
+stalled original were closed. Fresh publisher tab8 remains for handoff, and
+the public game remains in tab6. No credentials or account settings changed.
+
+The public domain returned200 with `/assets/index-DS-YzsM8.js`; this is still
+the previously published996 build. The preview-host HTTP request timed out.
+Main `8c627eca50995c30f7a5416f7469a6380c61dd3f` contains the accepted product
+and acceptance docs. The next publisher should sync accepted main, publish,
+and verify the live unscored Shot lab before claiming delivery. The narrow
+publication claim is released, with Claude's separate lanes preserved.
+
+Screenshots are under
+`C:/Users/antho/.codex/visualizations/2026/10/03/01a10028-7165-70b1-90e1-1946dd227be4/`:
+`shot-lab-preview997.png` is the verified remote build, not a live-site claim;
+`shot-lab997-publisher-blocked.jpg` shows the host's unfinished publish panel.
+
+The read-only next candidate is a Rugby League challenge inside Champ or Not,
+using existing premiers/Dally M generators and revealing the actual answer.
+No code or claim exists. Existing documented coverage ends in2025; no current
+roster or Rugby Union model is accepted. Recheck ownership and data provenance
+before implementing. Site/gameplay work remains ahead of AdSense/indexing.

@@ -1,3 +1,17 @@
+Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
+Implementation is accepted and merged; all scoped remote gates are green.
+Lovable's editor repeatedly timed out initializing Firebase auth. Both original
+and fresh project pages left revision history/preview empty and Publish on a
+loading skeleton. No final publish action was sent. The public domain still
+returned /assets/index-DS-YzsM8.js in the last HTTP check, so997 is NOT live.
+Main8c627eca holds the accepted997 release and its acceptance receipt.
+Narrow publication ownership is RELEASED so the next working publisher can
+include997. Publish accepted main and verify Shot lab before adding another
+unpublished round. Receipt: docs/audits/ROUND997-SHOT-LAB.md.
+Held drafts and seven stashes remain intact. AdSense/indexing stays deferred.
+Next free998 is unclaimed. Candidate only: Rugby League challenge in Champ or
+Not using existing verified competition data; no implementation has started.
+
 Codex997 ACCEPTED, 2026-10-03: PR112 merged e7c669a5.
 Shot lab adds repeatable Buzzer Beater releases, actual paired paths and rim
 readings, retained controls and truthful miss feedback. All final remote gates
