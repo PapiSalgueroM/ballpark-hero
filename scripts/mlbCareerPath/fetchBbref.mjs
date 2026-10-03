@@ -17,8 +17,21 @@ export const BBREF = {
   'bc-059': 'wittbo02', 'bc-060': 'rodriju01', 'bc-061': 'schwaky01', 'bc-062': 'alvaryo01', 'bc-063': 'tatisfe02',
 };
 export const bbrefUrl = (b) => `https://www.baseball-reference.com/players/${b[0]}/${b}.shtml`;
+// The franchise pages for every club in the pool that changed its city (Brooklyn, Milwaukee and New York
+// seasons sit on the Dodgers', Braves' and Giants' pages). build fails if the league's team ids group a
+// card's clubs differently from these pages, so a new move in the pool shows up as a failure, not a guess.
+export const FRANCHISE_PAGES = ['LAD', 'ATL', 'SFG'];
+export const franchiseUrl = (code) => `https://www.baseball-reference.com/teams/${code}/`;
 const MAX = Number(process.env.MAX || 30);
 if (process.argv[1] && process.argv[1].endsWith('fetchBbref.mjs')) {
+  for (const code of FRANCHISE_PAGES) {
+    const f = new URL(`raw/franchise_${code}.html`, WORK);
+    if (fs.existsSync(f)) continue;
+    const r = await fetch(franchiseUrl(code), { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' } });
+    if (r.status === 200) fs.writeFileSync(f, await r.text());
+    console.log('franchise', code, r.status);
+    await new Promise((res) => setTimeout(res, 4000));
+  }
   let n = 0;
   for (const [id, name] of ALL) {
     const b = BBREF[id];

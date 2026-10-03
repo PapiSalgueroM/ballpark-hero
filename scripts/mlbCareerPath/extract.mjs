@@ -2,13 +2,13 @@
 import fs from 'node:fs';
 import { WORK } from './paths.mjs';
 import { ALL } from './players.mjs';
-import { BBREF, bbrefUrl } from './fetchBbref.mjs';
+import { BBREF, bbrefUrl, FRANCHISE_PAGES, franchiseUrl } from './fetchBbref.mjs';
 const ids = JSON.parse(fs.readFileSync(new URL('ids.json', WORK), 'utf8'));
 const apiUrl = (pid) => `https://statsapi.mlb.com/api/v1/people/${pid}?hydrate=awards,draft,xrefId,stats(group=[hitting,pitching,fielding],type=[career,yearByYear])`;
 const strip = (s) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 const AW = {
   mvp: ['ALMVP', 'NLMVP'], cy: ['ALCY', 'NLCY', 'MLBCY'], roy: ['ALROY', 'NLROY', 'MLBROY'], allStar: ['ALAS', 'NLAS'],
-  goldGlove: ['ALGG', 'NLGG'], silverSlugger: ['ALSS', 'NLSS'], ws: ['WSCHAMP'], wsMvp: ['WSMVP'], hof: ['MLBHOF'], asMvp: ['ASMVP'],
+  goldGlove: ['ALGG', 'NLGG', 'MLGG'], silverSlugger: ['ALSS', 'NLSS'], ws: ['WSCHAMP'], wsMvp: ['WSMVP'], hof: ['MLBHOF'], asMvp: ['ASMVP'],
 };
 function api(pid) {
   const p = JSON.parse(fs.readFileSync(new URL(`raw/api_${pid}.json`, WORK), 'utf8')).people[0];
@@ -21,10 +21,12 @@ function api(pid) {
   }
   const stat = (type, group) => p.stats?.find((s) => s.type.displayName === type && s.group.displayName === group);
   const ch = stat('career', 'hitting')?.splits?.[0]?.stat; const cp = stat('career', 'pitching')?.splits?.[0]?.stat;
-  const seasons = [];
+  const seasons = []; const teamIds = {};
   for (const g of ['hitting', 'pitching']) for (const sp of stat('yearByYear', g)?.splits || []) {
     if (sp.sport && sp.sport.id !== 1) continue;
     if (sp.team?.name) seasons.push([Number(sp.season), sp.team.name]);
+    // the league keeps one team id for a club through a move (Brooklyn and Los Angeles Dodgers are both 119)
+    if (sp.team?.name) teamIds[sp.team.name] = [...new Set([...(teamIds[sp.team.name] || []), sp.team.id])];
   }
   const uniq = []; for (const s of seasons.sort((a, b) => a[0] - b[0])) if (!uniq.some((u) => u[0] === s[0] && u[1] === s[1])) uniq.push(s);
   const fld = {}; for (const sp of stat('career', 'fielding')?.splits || []) fld[sp.position?.abbreviation] = (fld[sp.position?.abbreviation] || 0) + (sp.stat.gamesPlayed || 0);
@@ -33,7 +35,7 @@ function api(pid) {
     drafts: (p.drafts || []).map((d) => ({ year: d.year, round: d.pickRound, pick: d.pickNumber, team: d.team?.name, signed: d.isDrafted })),
     hit: ch ? { avg: ch.avg, hr: ch.homeRuns, rbi: ch.rbi, h: ch.hits, sb: ch.stolenBases, g: ch.gamesPlayed } : null,
     pit: cp ? { w: cp.wins, l: cp.losses, era: cp.era, so: cp.strikeOuts, sv: cp.saves, g: cp.gamesPitched, gs: cp.gamesStarted } : null,
-    seasons: uniq, awards,
+    seasons: uniq, teamIds, awards,
   };
 }
 function cells(row) { const o = {}; for (const m of row.matchAll(/data-stat="([^"]+)"[^>]*>([\s\S]*?)<\/t[dh]>/g)) o[m[1]] = strip(m[2]); return o; }
@@ -73,4 +75,13 @@ function bb(b) {
 const out = {};
 for (const [id, name] of ALL) out[id] = { name, api: api(ids[id]), bb: bb(BBREF[id]) };
 fs.writeFileSync(new URL('facts.json', WORK), JSON.stringify(out, null, 1));
+// baseball-reference's franchise pages: every club code and season each franchise links to, so a club that
+// moved (BRO to LAD) can be told apart from a different club
+const franchises = {};
+for (const code of FRANCHISE_PAGES) {
+  const h = fs.readFileSync(new URL(`raw/franchise_${code}.html`, WORK), 'utf8');
+  const seasons = [...new Set([...h.matchAll(/href="\/teams\/([A-Z]{2,3})\/(\d{4})\.shtml"/g)].map((m) => `${m[1]}/${m[2]}`))];
+  franchises[code] = { url: franchiseUrl(code), title: strip((h.match(/<title>([^<]*)/) || [])[1] || ''), seasons };
+}
+fs.writeFileSync(new URL('franchises.json', WORK), JSON.stringify(franchises, null, 1));
 console.log('wrote', Object.keys(out).length);

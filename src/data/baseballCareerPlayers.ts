@@ -6,6 +6,8 @@ export interface BaseballCareerPlayer {
   teams: string[];
   stats: string[];
   awards: string[];
+  /** franchises, not club names: the Brooklyn and Los Angeles Dodgers count once (the record's teams.franchises) */
+  franchiseCount: number;
 }
 
 export interface BaseballCareerPuzzle {
@@ -28,6 +30,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Angels'],
       stats: ['.290 AVG', '420+ HR', '1,070+ RBI'],
       awards: ['3× AL MVP', 'AL Rookie of the Year (2012)', '12× All-Star', '9× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -40,6 +43,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Dodgers'],
       stats: ['223 W', '2.53 ERA', '3,052 SO'],
       awards: ['NL MVP (2014)', '3× NL Cy Young', '2× World Series Champion (2020, 2025)', '11× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -52,6 +56,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['.310 AVG', '260 HR', '3,465 Hits'],
       awards: ['5× World Series Champion', '2000 World Series MVP', 'AL Rookie of the Year (1996)', 'Hall of Fame (2020)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -64,6 +69,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['St. Louis Cardinals', 'Los Angeles Angels', 'Los Angeles Dodgers'],
       stats: ['.296 AVG', '703 HR', '3,384 Hits'],
       awards: ['3× NL MVP', '2× World Series Champion (2006, 2011)', 'NL Rookie of the Year (2001)', '11× All-Star'],
+      franchiseCount: 3,
     },
   },
   {
@@ -76,6 +82,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Angels', 'Los Angeles Dodgers'],
       stats: ['.281 AVG', '310+ HR', '45+ W', '2.83 ERA'],
       awards: ['4× MVP', '2× World Series Champion (2024, 2025)', 'AL Rookie of the Year (2018)', '6× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -88,6 +95,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['652 SV', '2.21 ERA', '1,173 SO'],
       awards: ['5× World Series Champion', '1999 World Series MVP', 'Hall of Fame (2019)', '13× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -100,6 +108,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Boston Red Sox', 'Los Angeles Dodgers'],
       stats: ['.288 AVG', '310+ HR', '980+ RBI'],
       awards: ['AL MVP (2018)', '4× World Series Champion (2018, 2020, 2024, 2025)', '8× All-Star', '6× Gold Glove'],
+      franchiseCount: 2,
     },
   },
   {
@@ -112,6 +121,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Dodgers', 'Montreal Expos', 'Boston Red Sox', 'New York Mets', 'Philadelphia Phillies'],
       stats: ['219 W', '2.93 ERA', '3,154 SO'],
       awards: ['3× Cy Young', '2004 World Series Champion', 'Hall of Fame (2015)', '8× All-Star'],
+      franchiseCount: 5,
     },
   },
   {
@@ -124,6 +134,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Seattle Mariners', 'New York Yankees', 'Miami Marlins'],
       stats: ['.311 AVG', '117 HR', '3,089 Hits'],
       awards: ['AL MVP (2001)', 'AL Rookie of the Year (2001)', 'Hall of Fame (2025)', '10× All-Star'],
+      franchiseCount: 3,
     },
   },
   {
@@ -136,6 +147,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['.291 AVG', '380+ HR', '870+ RBI'],
       awards: ['3× AL MVP', 'AL Rookie of the Year (2017)', '8× All-Star', '5× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -148,6 +160,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Detroit Tigers', 'Houston Astros', 'New York Mets', 'San Francisco Giants'],
       stats: ['260+ W', '3.33 ERA', '3,560+ SO'],
       awards: ['AL MVP (2011)', '3× AL Cy Young', '2× World Series Champion (2017, 2022)', 'AL Rookie of the Year (2006)'],
+      franchiseCount: 4,
     },
   },
   {
@@ -160,6 +173,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Minnesota Twins', 'Boston Red Sox'],
       stats: ['.286 AVG', '541 HR', '1,768 RBI'],
       awards: ['3× World Series Champion (2004, 2007, 2013)', '2013 World Series MVP', 'Hall of Fame (2022)', '10× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -172,6 +186,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Arizona Diamondbacks', 'Detroit Tigers', 'Washington Nationals', 'Los Angeles Dodgers', 'New York Mets', 'Texas Rangers', 'Toronto Blue Jays'],
       stats: ['220+ W', '3.29 ERA', '3,550+ SO'],
       awards: ['3× Cy Young', '2× World Series Champion (2019, 2023)', '8× All-Star'],
+      franchiseCount: 7,
     },
   },
   {
@@ -184,6 +199,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Washington Nationals', 'Philadelphia Phillies'],
       stats: ['.279 AVG', '390+ HR', '1,130+ RBI'],
       awards: ['2× NL MVP', 'NL Rookie of the Year (2012)', '9× All-Star', '4× Silver Slugger'],
+      franchiseCount: 2,
     },
   },
   {
@@ -196,6 +212,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Seattle Mariners', 'Cincinnati Reds', 'Chicago White Sox'],
       stats: ['.284 AVG', '630 HR', '1,836 RBI'],
       awards: ['AL MVP (1997)', 'Hall of Fame (2016)', '13× All-Star', '10× Gold Glove'],
+      franchiseCount: 3,
     },
   },
   {
@@ -208,6 +225,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Washington Nationals', 'San Diego Padres', 'New York Yankees', 'New York Mets'],
       stats: ['.281 AVG', '270+ HR', '760+ RBI'],
       awards: ['2019 World Series Champion', '5× All-Star', '6× Silver Slugger'],
+      franchiseCount: 4,
     },
   },
   {
@@ -220,6 +238,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Atlanta Braves'],
       stats: ['.285 AVG', '200+ HR', '510+ RBI'],
       awards: ['NL MVP (2023)', 'NL Rookie of the Year (2018)', '5× All-Star', '3× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -232,6 +251,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Atlanta Braves', 'Los Angeles Dodgers'],
       stats: ['.299 AVG', '380+ HR', '1,390+ RBI'],
       awards: ['NL MVP (2020)', '3× World Series Champion (2021, 2024, 2025)', '2024 World Series MVP', '10× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -244,6 +264,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Washington Nationals', 'Los Angeles Dodgers', 'Philadelphia Phillies'],
       stats: ['.291 AVG', '200+ HR', '690+ RBI'],
       awards: ['2019 World Series Champion', '3× All-Star', 'Silver Slugger (2022)'],
+      franchiseCount: 3,
     },
   },
   {
@@ -256,6 +277,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Dodgers', 'Texas Rangers'],
       stats: ['.284 AVG', '240+ HR', '710+ RBI'],
       awards: ['2× World Series Champion (2020, 2023)', '2× World Series MVP', 'NL Rookie of the Year (2016)', '5× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -268,6 +290,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Boston Red Sox', 'New York Yankees', 'Boston Braves'],
       stats: ['.342 AVG', '714 HR', '2,873 Hits'],
       awards: ['7× World Series Champion', 'Hall of Fame (1936)', '2× All-Star'],
+      franchiseCount: 3,
     },
   },
   {
@@ -280,6 +303,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Birmingham Black Barons', 'New York Giants', 'San Francisco Giants', 'New York Mets'],
       stats: ['.301 AVG', '660 HR', '3,293 Hits'],
       awards: ['2× NL MVP', '1954 World Series Champion', 'NL Rookie of the Year (1951)', 'Hall of Fame (1979)'],
+      franchiseCount: 3,
     },
   },
   {
@@ -292,6 +316,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Milwaukee Braves', 'Atlanta Braves', 'Milwaukee Brewers'],
       stats: ['.305 AVG', '755 HR', '3,771 Hits'],
       awards: ['NL MVP (1957)', '1957 World Series Champion', 'Hall of Fame (1982)', '25× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -304,6 +329,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Boston Red Sox'],
       stats: ['.344 AVG', '521 HR', '1,839 RBI'],
       awards: ['2× AL MVP', 'Hall of Fame (1966)', '19× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -316,6 +342,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['.298 AVG', '536 HR', '1,509 RBI'],
       awards: ['3× AL MVP', '7× World Series Champion', 'Hall of Fame (1974)', '20× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -328,6 +355,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Brooklyn Dodgers', 'Los Angeles Dodgers'],
       stats: ['165 W', '2.76 ERA', '2,396 SO'],
       awards: ['NL MVP (1963)', '3× Cy Young', '2× World Series MVP', 'Hall of Fame (1972)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -340,6 +368,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Chicago Cubs', 'Atlanta Braves', 'Los Angeles Dodgers', 'San Diego Padres'],
       stats: ['355 W', '3.16 ERA', '3,371 SO'],
       awards: ['4× NL Cy Young', '1995 World Series Champion', 'Hall of Fame (2014)', '8× All-Star'],
+      franchiseCount: 4,
     },
   },
   {
@@ -352,6 +381,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Montreal Expos', 'Seattle Mariners', 'Houston Astros', 'Arizona Diamondbacks', 'New York Yankees', 'San Francisco Giants'],
       stats: ['303 W', '3.29 ERA', '4,875 SO'],
       awards: ['5× Cy Young', '2001 World Series Champion', '2001 World Series MVP', 'Hall of Fame (2015)'],
+      franchiseCount: 6,
     },
   },
   {
@@ -364,6 +394,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Mets', 'California Angels', 'Houston Astros', 'Texas Rangers'],
       stats: ['324 W', '3.19 ERA', '5,714 SO'],
       awards: ['1969 World Series Champion', 'Hall of Fame (1999)', '8× All-Star'],
+      franchiseCount: 4,
     },
   },
   {
@@ -376,6 +407,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Pittsburgh Pirates'],
       stats: ['.317 AVG', '240 HR', '3,000 Hits'],
       awards: ['NL MVP (1966)', '2× World Series Champion (1960, 1971)', '1971 World Series MVP', 'Hall of Fame (1973)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -388,6 +420,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Baltimore Orioles'],
       stats: ['.276 AVG', '431 HR', '3,184 Hits'],
       awards: ['2× AL MVP', '1983 World Series Champion', 'AL Rookie of the Year (1982)', 'Hall of Fame (2007)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -400,6 +433,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees', 'New York Mets'],
       stats: ['.285 AVG', '358 HR', '1,430 RBI'],
       awards: ['3× AL MVP', '10× World Series Champion', 'Hall of Fame (1972)', '18× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -412,6 +446,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['.340 AVG', '493 HR', '1,995 RBI'],
       awards: ['Hall of Fame (1939)', '7× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -424,6 +459,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Kansas City Monarchs', 'Brooklyn Dodgers'],
       stats: ['.313 AVG', '141 HR', '765 RBI'],
       awards: ['NL MVP (1949)', '1955 World Series Champion', 'Rookie of the Year (1947)', 'Hall of Fame (1962)'],
+      franchiseCount: 2,
     },
   },
   {
@@ -436,6 +472,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['St. Louis Cardinals'],
       stats: ['.331 AVG', '475 HR', '3,630 Hits'],
       awards: ['3× NL MVP', '3× World Series Champion (1942, 1944, 1946)', 'Hall of Fame (1969)', '24× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -448,6 +485,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Yankees'],
       stats: ['.325 AVG', '361 HR', '1,537 RBI'],
       awards: ['3× AL MVP', '9× World Series Champion', 'Hall of Fame (1955)', '13× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -460,6 +498,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['San Diego Padres'],
       stats: ['.338 AVG', '135 HR', '3,141 Hits'],
       awards: ['Hall of Fame (2007)', '15× All-Star', '5× Gold Glove', '7× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -472,6 +511,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Oakland Athletics', 'New York Yankees', 'Toronto Blue Jays', 'San Diego Padres', 'Anaheim Angels', 'New York Mets', 'Seattle Mariners', 'Boston Red Sox', 'Los Angeles Dodgers'],
       stats: ['.279 AVG', '297 HR', '3,055 Hits'],
       awards: ['AL MVP (1990)', '2× World Series Champion (1989, 1993)', 'Hall of Fame (2009)', '10× All-Star'],
+      franchiseCount: 9,
     },
   },
   {
@@ -484,6 +524,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Atlanta Braves'],
       stats: ['.303 AVG', '468 HR', '1,623 RBI'],
       awards: ['NL MVP (1999)', '1995 World Series Champion', 'Hall of Fame (2018)', '8× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -496,6 +537,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Florida Marlins', 'Detroit Tigers'],
       stats: ['.306 AVG', '511 HR', '3,174 Hits'],
       awards: ['2× AL MVP', '2003 World Series Champion', '12× All-Star', '7× Silver Slugger'],
+      franchiseCount: 2,
     },
   },
   {
@@ -508,6 +550,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Los Angeles Dodgers', 'Seattle Mariners', 'Boston Red Sox', 'Texas Rangers'],
       stats: ['.286 AVG', '477 HR', '3,166 Hits'],
       awards: ['Hall of Fame (2024)', '4× All-Star', '5× Gold Glove', '4× Silver Slugger'],
+      franchiseCount: 4,
     },
   },
   {
@@ -520,6 +563,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['San Francisco Giants'],
       stats: ['.302 AVG', '158 HR', '729 RBI'],
       awards: ['NL MVP (2012)', '3× World Series Champion (2010, 2012, 2014)', 'NL Rookie of the Year (2010)', '7× All-Star'],
+      franchiseCount: 1,
     },
   },
   {
@@ -532,6 +576,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Cincinnati Reds'],
       stats: ['.294 AVG', '356 HR', '1,144 RBI'],
       awards: ['NL MVP (2010)', '6× All-Star', 'Gold Glove (2011)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -544,6 +589,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Toronto Blue Jays', 'Philadelphia Phillies'],
       stats: ['203 W', '3.38 ERA', '2,117 SO'],
       awards: ['2× Cy Young', 'Hall of Fame (2019)', '8× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -556,6 +602,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Cincinnati Reds'],
       stats: ['.267 AVG', '389 HR', '1,376 RBI'],
       awards: ['2× NL MVP', '2× World Series Champion (1975, 1976)', '1976 World Series MVP', 'NL Rookie of the Year (1968)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -568,6 +615,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['St. Louis Cardinals'],
       stats: ['251 W', '2.91 ERA', '3,117 SO'],
       awards: ['NL MVP (1968)', '2× NL Cy Young', '2× World Series Champion (1964, 1967)', '2× World Series MVP'],
+      franchiseCount: 1,
     },
   },
   {
@@ -580,6 +628,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Houston Astros'],
       stats: ['.300 AVG', '270+ HR', '930+ RBI'],
       awards: ['AL MVP (2017)', '2× World Series Champion (2017, 2022)', '9× All-Star', 'Gold Glove (2015)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -592,6 +641,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Arizona Diamondbacks', 'St. Louis Cardinals', 'New York Yankees'],
       stats: ['.286 AVG', '390+ HR', '1,280+ RBI'],
       awards: ['NL MVP (2022)', '7× All-Star', '4× Gold Glove', '5× Silver Slugger'],
+      franchiseCount: 3,
     },
   },
   {
@@ -604,6 +654,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Pittsburgh Pirates', 'Houston Astros', 'New York Yankees'],
       stats: ['160+ W', '3.20 ERA', '2,380+ SO'],
       awards: ['AL Cy Young (2023)', '6× All-Star'],
+      franchiseCount: 3,
     },
   },
   {
@@ -616,6 +667,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Mets', 'Texas Rangers'],
       stats: ['100+ W', '2.73 ERA', '2,050+ SO'],
       awards: ['2× NL Cy Young', 'NL Rookie of the Year (2014)', '5× All-Star'],
+      franchiseCount: 2,
     },
   },
   {
@@ -628,6 +680,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Toronto Blue Jays'],
       stats: ['.285 AVG', '190+ HR', '640+ RBI'],
       awards: ['6× All-Star', 'Gold Glove (2022)', '2× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -640,6 +693,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Cleveland Indians', 'New York Mets'],
       stats: ['.270 AVG', '300+ HR', '900+ RBI'],
       awards: ['5× All-Star', '2× Gold Glove', '4× Silver Slugger'],
+      franchiseCount: 2,
     },
   },
   {
@@ -652,6 +706,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Baltimore Orioles', 'Los Angeles Dodgers', 'San Diego Padres'],
       stats: ['.274 AVG', '390+ HR', '1,230+ RBI'],
       awards: ['7× All-Star', '2× Gold Glove', '3× Silver Slugger'],
+      franchiseCount: 3,
     },
   },
   {
@@ -664,6 +719,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Colorado Rockies', 'St. Louis Cardinals', 'Arizona Diamondbacks'],
       stats: ['.280 AVG', '380+ HR', '1,270+ RBI'],
       awards: ['8× All-Star', '10× Gold Glove', '5× Silver Slugger'],
+      franchiseCount: 3,
     },
   },
   {
@@ -676,6 +732,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['New York Mets', 'Baltimore Orioles'],
       stats: ['.255 AVG', '300+ HR', '820+ RBI'],
       awards: ['NL Rookie of the Year (2019)', '5× All-Star', 'Silver Slugger (2025)'],
+      franchiseCount: 2,
     },
   },
   {
@@ -688,6 +745,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Kansas City Royals'],
       stats: ['.288 AVG', '120+ HR', '420+ RBI'],
       awards: ['3× All-Star', '2× Gold Glove', '2× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -700,6 +758,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Seattle Mariners'],
       stats: ['.269 AVG', '130+ HR', '410+ RBI'],
       awards: ['AL Rookie of the Year (2022)', '3× All-Star', '2× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
   {
@@ -712,6 +771,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Chicago Cubs', 'Washington Nationals', 'Boston Red Sox', 'Philadelphia Phillies'],
       stats: ['.231 AVG', '380+ HR', '880+ RBI'],
       awards: ['2016 World Series Champion', '4× All-Star', 'Silver Slugger (2022)'],
+      franchiseCount: 4,
     },
   },
   {
@@ -724,6 +784,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['Houston Astros'],
       stats: ['.300 AVG', '210+ HR', '590+ RBI'],
       awards: ['2022 World Series Champion', 'AL Rookie of the Year (2019)', '4× All-Star', 'Silver Slugger (2022)'],
+      franchiseCount: 1,
     },
   },
   {
@@ -736,6 +797,7 @@ export const baseballCareerPuzzles: BaseballCareerPuzzle[] = [
       teams: ['San Diego Padres'],
       stats: ['.279 AVG', '170+ HR', '470+ RBI'],
       awards: ['3× All-Star', '2× Gold Glove', '2× Silver Slugger'],
+      franchiseCount: 1,
     },
   },
 ];

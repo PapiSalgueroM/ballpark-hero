@@ -8,17 +8,28 @@
  * itself. It reads files only: no network, no database.
  *
  *   1. Pool shape: one row per record row, ids unique, NAMES unique (accents and case folded), surnames unique
- *      (the game accepts a surname guess), no em or en dash anywhere in the data file.
- *   2. Every shown line equals the record: position, draft, first team, teams, stats, awards, word for word.
+ *      (the game accepts a surname guess), no em or en dash anywhere in the data file. Names and surnames use
+ *      the game's own rule, src/lib/careerGuess.ts, bundled in with esbuild so the two cannot drift apart.
+ *   2. Every shown line equals the record: position, draft, first team, teams, stats, awards, word for word,
+ *      and the franchise count the result screen's "suited up for N franchises" reads.
  *   3. The record holds together: two sources on two hosts (one of them the league's), both sides of every line
  *      equal, each line's text rebuilt from its evidence by the rule in the record, a floor at or under the
  *      value and less than one rounding step below it, asOf on every active row and on its rate stats.
+ *      baseball-reference's clubs are the league's clubs by name, not just by count, and the league's team ids
+ *      group a card's clubs into franchises exactly as baseball-reference's franchise pages do (Brooklyn and
+ *      Los Angeles Dodgers one franchise, Milwaukee Braves and Milwaukee Brewers two).
  *   4. Teammates agree on titles: for every World Series title a pool player holds with a club, every other
  *      pool player on that club that season holds it too, or the record lists him in titleExceptions with
  *      both sources' counts. A listed exception that no longer applies fails as well. Every card that shows
  *      a title line shows exactly the record's titles.
  *   5. Current clubs: every active player's last club is the club scripts/data/mlbRosters2026.json (the 40 man
- *      rosters on 2026-09-27) lists him under, and his card's teams include it.
+ *      rosters on 2026-09-27) lists him under, and his card's teams include it. A row classed retired must have
+ *      no 2026 season and no place on those rosters, so a current player cannot slip out of his floors that way.
+ *   6. The read is still current: today (Eastern time) is on or before the record's rereadBy, the day after the
+ *      November 2026 awards, and every active row, award and total is dated to the read or the season's end.
+ *      This one is a clock on purpose: the 2026 World Series and the awards can make an exact line on an active
+ *      player stale while every file stays the same, and the card shows no date. From the day after rereadBy
+ *      it stays red until the chain in scripts/mlbCareerPath/ is rerun on fresh pages and the date moves on.
  *
  * Baseline (the file on main at 5f2622fd, before this round): 35 rows of which 3 were second copies (Griffey,
  * Rivera, Pedro Martinez), so 32 players; measured against this record, 145 of the 396 lines it showed for
@@ -31,25 +42,38 @@
  *
  * Negative controls, one per check, each asserting the string it mutates exists first (exit 2 if it does not,
  * or if the section it aims at stays green; exit 1 means the control fired, the expected result):
- *   SIM_MLBCP_CONTROL=dup            a second Ken Griffey Jr. row                       -> section 1
- *   SIM_MLBCP_CONTROL=harper2022     Harper's card claims the 2022 World Series         -> section 2
- *   SIM_MLBCP_CONTROL=verlander2cy   Verlander's card says 2x AL Cy Young               -> section 2
- *   SIM_MLBCP_CONTROL=floor          Trout's HR floor raised above his total, card and record together -> section 3
- *   SIM_MLBCP_CONTROL=onehost        Trout's two sources both on baseball-reference     -> section 3
- *   SIM_MLBCP_CONTROL=freeman2025    Freeman's 2025 title dropped from card and record together -> section 4
- *   SIM_MLBCP_CONTROL=staleexception Kershaw's 2024 exception deleted                   -> section 4
- *   SIM_MLBCP_CONTROL=roster         Judge's record says his 2026 club is the Mets       -> section 5
+ *   SIM_MLBCP_CONTROL=dup              a second Ken Griffey Jr. row                       -> section 1
+ *   SIM_MLBCP_CONTROL=harper2022       Harper's card claims the 2022 World Series         -> section 2
+ *   SIM_MLBCP_CONTROL=verlander2cy     Verlander's card says 2x AL Cy Young               -> section 2
+ *   SIM_MLBCP_CONTROL=maysfranchises   Mays's card counts 4 club names as 4 franchises    -> section 2
+ *   SIM_MLBCP_CONTROL=floor            Trout's HR floor raised above his total, card and record together -> section 3
+ *   SIM_MLBCP_CONTROL=onehost          Trout's two sources both on baseball-reference     -> section 3
+ *   SIM_MLBCP_CONTROL=bbrefteam        Judge's baseball-reference club NYY becomes NYM (same count) -> section 3
+ *   SIM_MLBCP_CONTROL=franchisesplit   baseball-reference puts Koufax's two Dodgers clubs on two franchises -> section 3
+ *   SIM_MLBCP_CONTROL=freeman2025      Freeman's 2025 title dropped from card and record together -> section 4
+ *   SIM_MLBCP_CONTROL=missingexception Kershaw's needed 2024 exception deleted            -> section 4
+ *   SIM_MLBCP_CONTROL=staleexception   Judge given a 2009 exception no teammate's title needs -> section 4
+ *   SIM_MLBCP_CONTROL=exccount         Kershaw's 2024 exception carries a count neither source gives -> section 4
+ *   SIM_MLBCP_CONTROL=roster           Judge's record says his 2026 club is the Mets       -> section 5
+ *   SIM_MLBCP_CONTROL=retiredjudge     Judge classed retired with exact totals, no asOf, card and record -> section 5
+ *   SIM_MLBCP_CONTROL=stale            the clock moved to the day after rereadBy          -> section 6
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'src/data/baseballCareerPlayers.ts');
 const RECORD = path.join(ROOT, 'scripts/data/mlbCareerPathVerified2026-10.json');
 const ROSTERS = path.join(ROOT, 'scripts/data/mlbRosters2026.json');
 const CONTROL = process.env.SIM_MLBCP_CONTROL || '';
-const CONTROL_SECTION = { dup: 1, harper2022: 2, verlander2cy: 2, floor: 3, onehost: 3, freeman2025: 4, staleexception: 4, roster: 5 };
+const CONTROL_SECTION = {
+  dup: 1, harper2022: 2, verlander2cy: 2, maysfranchises: 2, floor: 3, onehost: 3, bbrefteam: 3, franchisesplit: 3,
+  freeman2025: 4, missingexception: 4, staleexception: 4, exccount: 4, roster: 5, retiredjudge: 5, stale: 6,
+};
+// the harness's own clock, in Eastern time like the site's daily; the stale control moves it past rereadBy
+let TODAY = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 if (CONTROL && !CONTROL_SECTION[CONTROL]) { console.log(`unknown control ${CONTROL}`); process.exit(2); }
 
 const src = fs.readFileSync(DATA, 'utf8');
@@ -69,6 +93,7 @@ function mustHave(cond, what) {
   if (!cond) { console.log(`CONTROL ${CONTROL} DID NOT FIRE: ${what} not found, so the control changes nothing`); process.exit(2); }
 }
 const byId = (list, id) => list.find((x) => x.id === id);
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 // ---- negative controls: mutate the parsed copies only, never the files ----
 if (CONTROL === 'dup') {
@@ -104,9 +129,46 @@ if (CONTROL === 'freeman2025') {
   const a = r.awards.find((x) => x.key === 'ws'); a.text = f.player.awards[i]; a.n = 2; a.years = ['2021', '2024']; a.bbref = 2;
   r.wsTitles = r.wsTitles.filter((t) => t.year !== 2025);
 }
-if (CONTROL === 'staleexception') {
+if (CONTROL === 'missingexception') {
   const r = byId(record.players, 'bc-002'); mustHave(r && (r.titleExceptions || []).some((x) => x.year === 2024), "Kershaw's 2024 exception");
   r.titleExceptions = r.titleExceptions.filter((x) => x.year !== 2024);
+}
+if (CONTROL === 'staleexception') {
+  const r = byId(record.players, 'bc-010'); mustHave(r && r.name === 'Aaron Judge' && !(r.titleExceptions || []).length && !r.seasons.some(([y]) => y === 2009), 'Judge with no exceptions and no 2009 season');
+  r.titleExceptions = [{ year: 2009, team: 'New York Yankees', mlbYears: [], bbrefCount: 0, why: 'control' }];
+}
+if (CONTROL === 'exccount') {
+  const r = byId(record.players, 'bc-002'); const x = r && (r.titleExceptions || []).find((e) => e.year === 2024);
+  mustHave(x && r.wsTitles && x.bbrefCount === r.wsTitles.length, "Kershaw's 2024 exception with both sources' count");
+  x.bbrefCount += 1;
+}
+if (CONTROL === 'maysfranchises') {
+  const m = byId(pool, 'bc-022'); mustHave(m && m.player.name === 'Willie Mays' && m.player.franchiseCount === 3 && m.player.teams.length === 4, "Mays's card: 4 club names, 3 franchises");
+  m.player.franchiseCount = m.player.teams.length; // the count main showed: club names, not franchises
+}
+if (CONTROL === 'bbrefteam') {
+  const r = byId(record.players, 'bc-010'); mustHave(r && same(r.teams.bbref, ['NYY']) && record.bbrefAbbreviations.NYM === 'New York Mets', "Judge's baseball-reference club NYY");
+  r.teams.bbref = ['NYM']; // the right count, the wrong club
+}
+if (CONTROL === 'franchisesplit') {
+  const r = byId(record.players, 'bc-026'); mustHave(r && same(r.teams.bbrefFranchise, ['LAD', 'LAD']) && same(r.teams.bbref, ['BRO', 'LAD']), "Koufax's two Dodgers clubs on one franchise page");
+  r.teams.bbrefFranchise = ['BRO', 'LAD'];
+}
+if (CONTROL === 'retiredjudge') {
+  // the reviewer's case: still playing in 2026 but classed retired, so his totals read exact with no asOf
+  const r = byId(record.players, 'bc-010'); const c = byId(pool, 'bc-010');
+  mustHave(r && r.status === 'active' && r.asOf && c && r.stats.some((s) => s.floor != null), "Judge active with floors");
+  r.status = 'retired'; delete r.asOf; delete r.currentTeam;
+  r.stats.forEach((s, i) => {
+    delete s.asOf;
+    if (s.floor != null) { delete s.floor; s.text = s.text.replace(/^[\d,]+\+/, Number(s.mlb).toLocaleString('en-US')); }
+    c.player.stats[i] = s.text;
+  });
+  for (const a of r.awards) delete a.asOf;
+}
+if (CONTROL === 'stale') {
+  mustHave(/^\d{4}-\d{2}-\d{2}$/.test(record.rereadBy || ''), 'the record\'s rereadBy date');
+  TODAY = new Date(Date.parse(`${record.rereadBy}T12:00:00Z`) + 86400000).toISOString().slice(0, 10);
 }
 if (CONTROL === 'roster') {
   const r = byId(record.players, 'bc-010'); mustHave(r && r.currentTeam && r.currentTeam.team === 'New York Yankees', "Judge's 2026 club");
@@ -116,11 +178,12 @@ if (CONTROL === 'roster') {
 // ---- the checks ----
 const results = {};
 const section = (n, title, fn) => { const bad = []; fn((msg) => bad.push(msg)); results[n] = { title, bad }; };
-const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-const SUFFIX = /^(jr|sr|ii|iii|iv)\.?$/;
-const surname = (name) => { const w = fold(name).split(/\s+/); while (w.length > 1 && SUFFIX.test(w[w.length - 1])) w.pop(); return w[w.length - 1]; };
+// the game's own guess rule (src/lib/careerGuess.ts), bundled here so this check and the hook cannot drift apart
+const { foldName: fold, surnameOf: surname } = await (async () => {
+  const out = await build({ entryPoints: [path.join(ROOT, 'src/lib/careerGuess.ts')], bundle: true, format: 'esm', platform: 'node', write: false, logLevel: 'silent' });
+  return import(`data:text/javascript;base64,${Buffer.from(out.outputFiles[0].text).toString('base64')}`);
+})();
 const fmt = (n) => Number(n).toLocaleString('en-US');
-const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 section(1, 'pool shape: one row per record row, unique ids, names and surnames, no dashes', (fail) => {
   if (pool.length !== record.players.length) fail(`data has ${pool.length} rows, record ${record.players.length}`);
@@ -138,6 +201,7 @@ section(2, 'every shown line equals the record', (fail) => {
     const want = {
       name: r.name, position: r.position.text, draftInfo: r.draftInfo.text, firstTeam: r.firstTeam.text,
       teams: r.teams.text, stats: r.stats.map((s) => s.text), awards: r.awards.map((a) => a.text),
+      franchiseCount: r.teams.franchises,
     };
     for (const [k, v] of Object.entries(want)) if (!same(p.player[k], v)) fail(`${p.id} ${p.player.name} ${k}: shows ${JSON.stringify(p.player[k])}, record ${JSON.stringify(v)}`);
   }
@@ -167,6 +231,10 @@ function awardText(k, n, years, ids) {
 }
 
 section(3, 'the record holds together: two hosts, both sides equal, every text rebuilt from its evidence', (fail) => {
+  for (const [code, pg] of Object.entries(record.bbrefFranchisePages || {})) {
+    let host = ''; try { host = new URL(pg.url).host; } catch { /* fails below */ }
+    if (host !== 'www.baseball-reference.com' || !/^\d{4}-\d{2}-\d{2}$/.test(pg.on || '')) fail(`franchise page ${code}: ${pg.url} read ${pg.on} is not a dated baseball-reference page`);
+  }
   for (const r of record.players) {
     const tag = `${r.id} ${r.name}`;
     const hosts = (r.src || []).map((u) => { try { return new URL(u).host; } catch { return ''; } });
@@ -197,7 +265,16 @@ section(3, 'the record holds together: two hosts, both sides equal, every text r
     // teams
     const seq = []; for (const [, t] of r.seasons) if (!seq.includes(t)) seq.push(t);
     if (!same(r.teams.text, seq)) fail(`${tag}: teams ${JSON.stringify(r.teams.text)}, seasons give ${JSON.stringify(seq)}`);
-    if ((r.teams.bbref || []).length !== seq.length) fail(`${tag}: baseball-reference has ${(r.teams.bbref || []).length} clubs, the league ${seq.length}`);
+    const bbNamed = (r.teams.bbref || []).map((ab) => record.bbrefAbbreviations[ab] || `unknown code ${ab}`);
+    if (!same(bbNamed, seq)) fail(`${tag}: baseball-reference's clubs ${JSON.stringify(r.teams.bbref)} read ${JSON.stringify(bbNamed)}, the league ${JSON.stringify(seq)}`);
+    // franchises: the league's team ids and baseball-reference's franchise pages group the clubs the same way
+    const ids = r.teams.mlbIds || []; const fr = r.teams.bbrefFranchise || [];
+    if (ids.length !== seq.length || fr.length !== seq.length) fail(`${tag}: ${ids.length} league team ids and ${fr.length} franchise codes for ${seq.length} clubs`);
+    for (const [i, code] of fr.entries()) if (code !== (r.teams.bbref || [])[i] && !(record.bbrefFranchisePages || {})[code]) fail(`${tag}: ${seq[i]} is put on franchise ${code}, a page the record never read`);
+    for (let i = 0; i < seq.length; i++) for (let j = i + 1; j < seq.length; j++) {
+      if ((ids[i] === ids[j]) !== (fr[i] === fr[j])) fail(`${tag}: the league ${ids[i] === ids[j] ? 'joins' : 'splits'} ${seq[i]} and ${seq[j]}, baseball-reference does not`);
+    }
+    if (r.teams.franchises !== new Set(ids).size) fail(`${tag}: franchises ${r.teams.franchises}, the league's team ids give ${new Set(ids).size}`);
     if (r.firstTeam.text !== seq[0]) fail(`${tag}: first team ${r.firstTeam.text}, seasons start with ${seq[0]}`);
     // stats
     for (const s of r.stats) {
@@ -251,11 +328,18 @@ section(4, 'teammates agree on every World Series title', (fail) => {
   }
 });
 
-section(5, 'every active player is on the club the 2026 rosters list him under', (fail) => {
+section(5, 'every active player is on the club the 2026 rosters list him under, and no retired one is on them', (fail) => {
   const clubOf = new Map();
   for (const t of Object.values(rosters.teams)) for (const x of t.players || []) clubOf.set(x.name, t.club);
   for (const r of record.players) {
-    if (r.status !== 'active') continue;
+    if (r.status !== 'active') {
+      // a row classed retired must not still be playing: his totals would show exact, with no floor and no asOf
+      const last = r.seasons[r.seasons.length - 1];
+      if (last[0] >= 2026) fail(`${r.name}: classed retired but his seasons run to ${last.join(' ')}`);
+      if (clubOf.has(r.mlbName)) fail(`${r.name}: classed retired but the 2026 rosters list him under ${clubOf.get(r.mlbName)}`);
+      if (r.currentTeam || r.asOf) fail(`${r.name}: classed retired but carries a current club or an asOf`);
+      continue;
+    }
     const c = r.currentTeam;
     if (!c) { fail(`${r.name}: active with no current club`); continue; }
     const listed = clubOf.get(r.mlbName);
@@ -264,6 +348,19 @@ section(5, 'every active player is on the club the 2026 rosters list him under',
     if (last[0] !== 2026 || last[1] !== c.team) fail(`${r.name}: last season ${last.join(' ')} is not ${c.team} in 2026`);
     const card = byId(pool, r.id);
     if (card && !card.player.teams.includes(c.team)) fail(`${r.name}: card teams leave out his current club ${c.team}`);
+  }
+});
+
+section(6, 'the read is still current: today is on or before rereadBy, and every active line is dated to the read', (fail) => {
+  const day = /^\d{4}-\d{2}-\d{2}$/;
+  if (!day.test(record.read || '') || !day.test(record.rereadBy || '') || !(record.rereadBy > record.read)) fail(`read ${record.read} and rereadBy ${record.rereadBy} are not two dates in order`);
+  if (TODAY > record.rereadBy) fail(`today is ${TODAY}, past rereadBy ${record.rereadBy}: the 2026 World Series and the November awards may have made exact lines on active players stale. Rerun the chain in scripts/mlbCareerPath/ with fresh pages, then move rereadBy on.`);
+  for (const r of record.players) {
+    if (r.on !== record.read) fail(`${r.name}: read on ${r.on}, the record on ${record.read}`);
+    if (r.status !== 'active') continue;
+    // career totals run to the last day of the 2026 regular season; the row and its awards to the read
+    for (const s of r.stats) if (s.asOf !== record.seasonEnd) fail(`${r.name}: ${s.text} is dated ${s.asOf}, not the season's end ${record.seasonEnd}`);
+    for (const x of [r, ...r.awards]) if (x.asOf !== r.on) fail(`${r.name}: ${x.text || 'row'} is dated ${x.asOf}, not the read ${r.on}`);
   }
 });
 
@@ -283,5 +380,5 @@ if (CONTROL) {
   console.log(`CONTROL ${CONTROL} fired in section ${target} (exit 1 is the expected result)`);
   process.exit(1);
 }
-console.log(failed ? `simMlbCareerPathFacts: ${failed} section(s) FAILED` : 'simMlbCareerPathFacts: all 5 sections green');
+console.log(failed ? `simMlbCareerPathFacts: ${failed} section(s) FAILED` : `simMlbCareerPathFacts: all ${Object.keys(results).length} sections green`);
 process.exit(failed ? 1 : 0);

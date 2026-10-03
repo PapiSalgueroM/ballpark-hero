@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { WORK } from './paths.mjs';
 import { bbDrafts, blingCount, BLING, bbDate } from './compare.mjs';
 const F = JSON.parse(fs.readFileSync(new URL('facts.json', WORK), 'utf8'));
+const FR = JSON.parse(fs.readFileSync(new URL('franchises.json', WORK), 'utf8'));
 const ON = '2026-10-03';
 const SEASON_END = '2026-09-27';
 const ord = (n) => { n = Number(n); const s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); };
@@ -54,7 +55,24 @@ function teams(a, b, held) {
     if (abbrMap[ab] && abbrMap[ab] !== seqA[i]) abbrConflicts.push(`${ab}: ${abbrMap[ab]} vs ${seqA[i]}`);
     abbrMap[ab] = seqA[i];
   });
-  return { text: seqA, mlb: seqA, bbref: seqB, seasons: a.seasons };
+  // Franchises: the league's team id for each club, and the baseball-reference franchise page each club's
+  // first season sits on (a club on none of them is its own franchise). The two must group the clubs the
+  // same way; the card's "suited up for N franchises" counts the groups.
+  const mlbIds = seqA.map((n) => {
+    const ids = a.teamIds[n] || [];
+    if (ids.length !== 1) throw new Error(`${a.full}: ${n} has team ids ${JSON.stringify(ids)}`);
+    return ids[0];
+  });
+  const bbrefFranchise = seqB.map((ab) => {
+    const y = b.seasons.find((s) => s[1] === ab)[0];
+    return Object.keys(FR).find((code) => FR[code].seasons.includes(`${ab}/${y}`)) || ab;
+  });
+  for (let i = 0; i < seqA.length; i++) for (let j = 0; j < seqA.length; j++) {
+    if ((mlbIds[i] === mlbIds[j]) !== (bbrefFranchise[i] === bbrefFranchise[j])) {
+      throw new Error(`${a.full}: the league groups ${seqA[i]} and ${seqA[j]} ${mlbIds[i] === mlbIds[j] ? 'together' : 'apart'}, baseball-reference does not`);
+    }
+  }
+  return { text: seqA, mlb: seqA, bbref: seqB, seasons: a.seasons, mlbIds, bbrefFranchise, franchises: new Set(mlbIds).size };
 }
 
 function floorOf(n) { return n >= 100 ? Math.floor(n / 10) * 10 : n >= 10 ? Math.floor(n / 5) * 5 : n; }
@@ -127,7 +145,7 @@ for (const [id, { name, api: a, bb: b }] of Object.entries(F)) {
     src: [a.url, b.url], on: ON,
     debut: { mlb: a.debut, bbref: bbDate(b.debut) },
     position: pos, draftInfo: dr, firstTeam: tm ? { text: tm.text[0], mlb: a.seasons[0], bbref: b.seasons[0] } : null,
-    teams: tm ? { text: tm.text, bbref: tm.bbref } : null,
+    teams: tm ? { text: tm.text, bbref: tm.bbref, mlbIds: tm.mlbIds, bbrefFranchise: tm.bbrefFranchise, franchises: tm.franchises } : null,
     seasons: a.seasons,
     stats: st, awards: aw, wsTitles: ws, held,
   });

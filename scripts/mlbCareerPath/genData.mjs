@@ -11,6 +11,8 @@ let out = `export interface BaseballCareerPlayer {
   teams: string[];
   stats: string[];
   awards: string[];
+  /** franchises, not club names: the Brooklyn and Los Angeles Dodgers count once (the record's teams.franchises) */
+  franchiseCount: number;
 }
 
 export interface BaseballCareerPuzzle {
@@ -35,6 +37,7 @@ for (const p of rec.players) {
       teams: ${arr(p.teams.text)},
       stats: ${arr(p.stats.map((s) => s.text))},
       awards: ${arr(p.awards.map((s) => s.text))},
+      franchiseCount: ${p.teams.franchises},
     },
   },
 `;

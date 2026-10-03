@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import { WORK } from './paths.mjs';
 const { players, abbrMap, abbrConflicts } = JSON.parse(fs.readFileSync(new URL('record.players.json', WORK), 'utf8'));
+const franchises = JSON.parse(fs.readFileSync(new URL('franchises.json', WORK), 'utf8'));
 if (abbrConflicts.length) throw new Error('abbreviation conflicts: ' + abbrConflicts.join('; '));
 const bad = players.filter((p) => !p.position || !p.draftInfo || !p.teams || p.stats.length < 3 || p.awards.length < 2);
 if (bad.length) throw new Error('incomplete rows: ' + bad.map((p) => p.id).join(','));
@@ -15,9 +16,13 @@ const record = {
     awards: 'at most four, in the order MVP, Cy Young, World Series titles, World Series MVP, Rookie of the Year, Hall of Fame, All-Star, Gold Glove, Silver Slugger, and only where the league\'s award list and baseball-reference\'s count agree. All-Star counts selections (two games a year from 1959 to 1962). Hall of Fame is the induction class year, the same in both. A line on an active player carries asOf because November awards can move a count.',
     titles: 'wsTitles is the league\'s own World Series Championship list for the player, with the club he played for that season. titleExceptions lists every season a pool teammate won it with him on the roster while his own sources leave it out; the harness fails on any teammate disagreement not listed here.',
     currentTeam: 'for an active player, his 2026 club in the league data, which must match scripts/data/mlbRosters2026.json (the 40 man rosters on the last day of the 2026 regular season).',
+    franchises: 'the card counts franchises, not club names, so the Brooklyn and Los Angeles Dodgers are one. teams.mlbIds is the league\'s team id for each club (the league keeps one id through a move); teams.bbrefFranchise is the baseball-reference franchise page that club\'s first season sits on (bbrefFranchisePages), or the club\'s own code when it sits on none of them. The two must group the clubs the same way, and teams.franchises is the number of groups.',
   },
   read: '2026-10-03',
   seasonEnd: '2026-09-27',
+  rereadBy: '2026-11-23',
+  rereadWhy: 'Read after the 2026 regular season and before its postseason. The 2026 World Series (done by about 1 November) and the November awards (Gold Glove, Silver Slugger, Rookie of the Year, Cy Young and MVP, all announced by about 21 November) can each make an exact title or award line on an active player stale, and the card shows no date. The harness fails from the day after rereadBy until the chain in scripts/mlbCareerPath/ is rerun with fresh pages and this date moves on.',
+  bbrefFranchisePages: Object.fromEntries(Object.entries(franchises).map(([code, f]) => [code, { url: f.url, title: f.title, on: '2026-10-03' }])),
   removedDuplicates: ['bc-028 Ken Griffey Jr. (second copy of bc-015)', 'bc-029 Mariano Rivera (second copy of bc-006)', 'bc-032 Pedro Martinez (second copy of bc-008)'],
   bbrefAbbreviations: abbrMap,
   players,

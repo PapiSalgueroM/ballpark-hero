@@ -3,6 +3,7 @@ import { baseballCareerPuzzles } from '@/data/baseballCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isCareerGuessMatch } from '@/lib/careerGuess';
 
 export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 
@@ -15,15 +16,6 @@ const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
 
 type Puzzle = (typeof baseballCareerPuzzles)[number];
-
-// Round 924: a surname guess skips a trailing Jr. or III, so "griffey" finds Ken Griffey Jr.
-// (it used to need "jr.", which then matched every Jr. in the pool).
-const NAME_SUFFIX = /^(jr|sr|ii|iii|iv)\.?$/;
-function surnameOf(lowerName: string): string {
-  const words = lowerName.trim().split(/\s+/);
-  while (words.length > 1 && NAME_SUFFIX.test(words[words.length - 1])) words.pop();
-  return words[words.length - 1];
-}
 
 export function useBaseballCareer() {
   // ---- MODE ----------------------------------------------------------------
@@ -117,9 +109,8 @@ export function useBaseballCareer() {
 
   const submitGuess = useCallback((guess: string) => {
     if (activeStatus !== 'playing' || !player) return;
-    const normalized = guess.trim().toLowerCase();
-    const target = player.name.toLowerCase();
-    if (normalized === target || normalized === surnameOf(target)) {
+    // Round 924: full name or surname, accents and a trailing Jr. ignored (src/lib/careerGuess.ts)
+    if (isCareerGuessMatch(guess, player.name)) {
       if (mode === 'daily') {
         addDailyAction({ t: 'won' });
       } else {
