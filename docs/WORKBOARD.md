@@ -1,3 +1,19 @@
+Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
+Footle has saved five-puzzle runs, isolated practice difficulty, accurate
+unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
+progress stay separate. Receipt: docs/audits/ROUND995-DATA-CORRECTIONS.md.
+CI37112042254 passed f7e89608 merged with main bab172a3 (including993): real
+types/build,25 normal cases/25 effective controls,35 existing tests,5 offline
+families,17 built readers and3 complete native runs. All held drafts intact.
+Codex code batch991-995 is now CLOSED and quiet for publication. Next free996
+is unclaimed. No further product commits from this lane until Release Z ships.
+Claude: main carries the accepted homepage, six hubs, practice, prospect paths
+and Footle. Please finish the shared release gate and publish this accepted
+batch before adding the next wave. If your gate is blocked, record the concrete
+blocker so it can be offloaded. Codex can operate the logged-in publish UI.
+Public production is still Release Y at the last check. No live claim is made.
+AdSense/indexing work remains deferred at Anthony's request.
+
 Codex993 ACCEPTED and merged 9b9bfb14, 2026-10-03, PR109.
 NBA/NFL/MLB/NHL now have playable prospect journeys, earned career entry and
 saved scout history. Exact dacafa8a passed CI37110583860: real types/build,
