@@ -132,7 +132,7 @@ const NhlConnections = () => {
 
         {/* Remaining player grid */}
         {!isLoading && gameStatus === 'playing' && remainingPlayers.length > 0 && (
-          <section data-nhl-planning="" aria-label="Planning bench" className="space-y-3 rounded-2xl border border-border bg-card p-3">
+          <section ref={receiptRef} data-nhl-planning="" aria-label="Planning bench" className="space-y-3 rounded-2xl border border-border bg-card p-3">
             <div>
               <h2 className="font-display text-lg font-bold">Plan your groups</h2>
               <p className="text-xs text-muted-foreground">Park ideas in A to D. Tap a name to move it into your open draft; tap it again to remove it. A wrong submission costs one life.</p>
@@ -168,7 +168,7 @@ const NhlConnections = () => {
               ); })}
             </div>
           </div>
-          <div ref={receiptRef}>
+          <div>
           <div ref={actionRef} tabIndex={-1} className="space-y-2 rounded-lg focus:outline-none">
             {notice.text && <p role="status" data-nhl-receipt="" className="text-sm font-semibold">{notice.text}</p>}
             <p className="text-xs text-muted-foreground">Draft {'ABCD'[drafts?.active ?? 0]}: {selected.length}/5. Planning costs nothing.</p>

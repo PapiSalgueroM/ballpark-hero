@@ -63,7 +63,7 @@ jobs:
           for harness in simConnectionsLoss simConnectionsShake simHarnessAnchors; do
             ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "nhl-planning-artifacts/$harness.log" || failed=1
           done
-          NO_DOUBLE_ONLY=nhl-connections ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee nhl-planning-artifacts/simNoDoubleRecord.log || failed=1
+          ONLY=simNoDoubleRecord node scripts/runAllSims.mjs 2>&1 | tee nhl-planning-artifacts/simNoDoubleRecord.log || failed=1
           exit "$failed"
       - name: All built readers, search and guide checks
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

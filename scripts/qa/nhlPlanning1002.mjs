@@ -51,10 +51,11 @@ async function visible(locator, page, label) {
   return { label, box };
 }
 async function layout(page, label) {
-  const value = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth,
+  const viewport = page.viewportSize().width;
+  const value = await page.evaluate(viewport => ({ viewport, windowWidth: innerWidth, document: document.documentElement.scrollWidth,
     rows: [...document.querySelectorAll('[data-nhl-planning] button, [data-nhl-planning] p, [data-nhl-final], [role="dialog"]')].map(el => {
       const box = el.getBoundingClientRect(); return { text: el.textContent?.slice(0, 70), left: box.left, right: box.right, width: box.width, client: el.clientWidth, scroll: el.scrollWidth };
-    }).filter(row => row.width) }));
+    }).filter(row => row.width) }), viewport);
   assert(value.document <= value.viewport + 2, label + ': document fits viewport');
   for (const row of value.rows) assert(row.left >= -1 && row.right <= value.viewport + 1 && row.scroll <= row.client + 2, label + ': full text fits ' + JSON.stringify(row));
   return { label, ...value };
@@ -118,10 +119,25 @@ try {
     const pick = async names => { for (const name of names) await activate(button(name), touch); };
     const shoot = async stage => { await settle(page); const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file); result.layouts.push(await layout(page, stage)); };
     const changeMode = async mode => { await activate(modeButton(mode), touch); await readyBench(); assert.equal(await modeButton(mode).getAttribute('aria-pressed'), 'true'); };
+    const planningContext = async stage => {
+      const tabs = await visible(bench.locator('[aria-label="Draft groups"]'), page, stage + '-tabs');
+      const grid = page.getByRole('group', { name: 'Available players', exact: true });
+      const names = await visible(grid, page, stage + '-names');
+      const readable = await grid.evaluate(el => {
+        const frame = el.getBoundingClientRect();
+        return [...el.querySelectorAll('button')].filter(button => {
+          const box = button.getBoundingClientRect();
+          return box.height > 0 && box.top >= Math.max(0, frame.top) && box.bottom <= Math.min(innerHeight, frame.bottom);
+        }).map(button => button.getAttribute('aria-label'));
+      });
+      assert(readable.length >= 2, stage + ': at least two complete editable names remain beside the feedback');
+      return { tabs, names, readable };
+    };
     const receipt = async stage => {
       await settle(page);
       result.visibility.push(await visible(page.locator('[data-nhl-receipt]'), page, stage + '-receipt'));
       result.visibility.push(await visible(button('Submit five'), page, stage + '-action'));
+      result.visibility.push({ stage, context: await planningContext(stage) });
       assert(await page.locator('[data-nhl-receipt]').evaluate(el => document.activeElement?.contains(el)), stage + ': actual receipt owns focus');
     };
     try {
@@ -150,9 +166,12 @@ try {
       assert.deepEqual(await page.evaluate(keys => window.__nhlWrites.filter(write => keys.includes(write.key)), protectedKeys), [], 'Free planning never transiently writes protected state');
       if (width === 320) {
         const style = await bench.getAttribute('style');
+        const originalWidth = await page.evaluate(() => document.documentElement.scrollWidth);
         try {
           await bench.evaluate(el => { el.style.width = '200vw'; });
           assert((await bench.boundingBox()).width > width * 1.5, 'Layout control enlarges the actual bench');
+          const changedWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+          assert(changedWidth > originalWidth + 2 && changedWidth > page.viewportSize().width + 2, 'Layout control increases the measured document beyond the configured viewport');
           await assert.rejects(() => layout(page, 'wide-bench-control'), error => error.name === 'AssertionError' && error.code === 'ERR_ASSERTION' && error.message === 'wide-bench-control: document fits viewport');
         } finally { await bench.evaluate((el, value) => value === null ? el.removeAttribute('style') : el.setAttribute('style', value), style); }
         await layout(page, 'restored-bench'); assert.equal(await stored(noteKey('daily')), dailyNotes);
@@ -190,6 +209,16 @@ try {
         } finally { await target.evaluate((el, value) => value === null ? el.removeAttribute('style') : el.setAttribute('style', value), style); }
         await visible(target, page, 'restored-receipt'); assert.equal(await stored(DAILY), save);
         result.controls.push({ kind: 'native receipt visibility guard', changed: true, rejected: true, restored: true });
+        const position = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+        try {
+          await target.evaluate(el => el.scrollIntoView({ behavior: 'instant', block: 'start' }));
+          const moved = await page.evaluate(() => scrollY), tabs = await bench.locator('[aria-label="Draft groups"]').boundingBox();
+          assert(Math.abs(moved - position.y) > 1 && tabs.y < -1, 'Context control actually hides the draft tabs above the receipt');
+          await assert.rejects(() => planningContext('receipt-only-control'), error => error.name === 'AssertionError' && error.code === 'ERR_ASSERTION' && error.message === 'receipt-only-control-tabs: visible without driver scrolling');
+        } finally { await page.evaluate(value => window.scrollTo({ left: value.x, top: value.y, behavior: 'instant' }), position); }
+        await planningContext('restored-context'); await visible(target, page, 'restored-context-receipt');
+        assert.equal(await stored(DAILY), save);
+        result.controls.push({ kind: 'native revision context guard', changed: true, rejected: true, restored: true });
       }
       await pick([wrong[4], group[0].players[4]]); await activate(button('Submit five'), touch); await receipt('correct');
       assert.match(await page.locator('[data-nhl-receipt]').innerText(), new RegExp('Locked: ' + group[0].theme));
@@ -248,8 +277,8 @@ try {
     } finally { saveReport(); await context.close(); }
   }
   assert.equal(report.cases.length, 4); assert(report.cases.every(value => value.passed), 'Every native planning profile passes; see report.json');
-  assert.equal(report.cases.flatMap(value => value.controls).length, 2);
-  console.log('NHL planning native: four complete 750-point Daily solves, independent notes/reloads, Unlimited reset, native touch/keyboard and two effective geometry controls passed.');
+  assert.equal(report.cases.flatMap(value => value.controls).length, 3);
+  console.log('NHL planning native: four complete 750-point Daily solves, independent notes/reloads, Unlimited reset, native touch/keyboard and three effective geometry controls passed.');
 } finally {
   saveReport(); if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
 }

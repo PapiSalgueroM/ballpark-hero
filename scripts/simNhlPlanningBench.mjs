@@ -60,7 +60,8 @@ if (control === 'all') {
 }
 const held = [];
 for (const relative of [hook, page, helper, testFile, 'src/components/nhl-connections/NhlConnectionsHowToPlay.tsx', 'src/data/nhlConnectionsPuzzles.ts', 'src/hooks/useDailyPuzzle.ts', 'src/hooks/useGameCompletion.ts']) {
-  const file = path.join(root, relative), bytes = await readFile(file);
+  const file = path.join(root, relative);
+  const bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, relative + ' raw bytes held')));
 }
 const env = { ...process.env, FORCE_COLOR: '0' }; delete env.NO_COLOR; delete env.NO_DOUBLE_SWAP;
