@@ -23,9 +23,10 @@
  *
  * scripts/simNhlGmDesk.mjs holds every promise in here to the engine.
  */
-import { type GmDesk, freshGmDesk, gmBlock, withGmBlock } from './gmDesk';
+import { type GmDesk, type GmTileFace, freshGmDesk, gmBlock, withGmBlock } from './gmDesk';
 import {
-  type GmContractLedger, type GmDecision, autoDecide, isValidLedger, noteArrival, openLedger, runDeskOffseason,
+  type GmContractLedger, type GmDecision, autoDecide, expiringMen, isValidLedger, noteArrival, openLedger,
+  runDeskOffseason, undecided,
 } from './gmContracts';
 import { nhlContractHost } from './gmContractsHostNhl';
 import {
@@ -489,4 +490,63 @@ export function nhlDeskOffseason(league: NhlLeague, desk: GmDesk, team: string, 
   next = withGmBlock(next, NHL_DESK_KEYS.staff, staff);
   next = withGmBlock(next, NHL_DESK_KEYS.retained, retained);
   return { ok: true, desk: next, notes: run.engine, lines, autoSettled, applied: run.applied };
+}
+
+/* ------------------------------------------------------------------ */
+/* What each box on the hub says                                       */
+/* ------------------------------------------------------------------ */
+
+const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
+
+/** The staff box. It pulses when a rival is in for one of yours or a chair is empty. */
+export function nhlStaffTile(desk: GmDesk, league: NhlLeague, team: string): GmTileFace {
+  const s = nhlStaffOf(desk, league, team);
+  const posts = NHL_STAFF_PACK.posts;
+  const filled = posts.filter(p => s.block[p.id]).length;
+  const poach = s.block.poach;
+  const edge = Math.round(nhlStaffEdge(s.block) * 100) / 100;
+  return {
+    icon: '📋',
+    value: `${filled} of ${posts.length} jobs filled`,
+    sub: poach ? `${poach.club} want your ${postLabel(poach.postId)}` : edge > 0 ? `+${edge} team strength from the bench` : 'No edge from the bench yet',
+    accent: !!poach || filled < posts.length,
+  };
+}
+
+/** The re-sign box. It pulses once the deadline has passed and somebody is still waiting on you. */
+export function nhlContractsTile(desk: GmDesk, league: NhlLeague, team: string, seasonOver: boolean): GmTileFace {
+  const ledger = nhlContractsOf(desk, league, team);
+  const up = expiringMen(nhlContractHost, league, team);
+  const waiting = undecided(nhlContractHost, league, ledger).length;
+  return {
+    icon: '✍️',
+    value: up.length ? `${plural(up.length, 'deal')} end this summer` : 'Nobody expiring',
+    sub: waiting ? `${waiting} still waiting on you` : up.length ? 'Every call is made' : 'Nobody is out of contract this summer',
+    accent: waiting > 0 && (seasonOver || !nhlTradeWindow(league).open),
+  };
+}
+
+/** The picks box. */
+export function nhlPicksTile(desk: GmDesk, league: NhlLeague, team: string): GmTileFace {
+  const ledger = nhlPicksOf(desk, league);
+  const mine = picksHeldBy(ledger, team);
+  const now = mine.filter(p => p.year === league.season).length;
+  const years = new Set(mine.map(p => p.year)).size;
+  return {
+    icon: '🎟️',
+    value: `${plural(now, 'pick')} in ${league.season}`,
+    sub: `${plural(mine.length, 'pick')} over ${plural(Math.max(years, 1), 'draft')}`,
+    accent: false,
+  };
+}
+
+/** The deal box: packages, and how long until the deadline shuts them. */
+export function nhlDealsTile(league: NhlLeague): GmTileFace {
+  const w = nhlTradeWindow(league);
+  return {
+    icon: '🔁',
+    value: !w.open ? 'Deadline passed' : w.periodsLeft === 0 ? 'Last round to deal' : `${plural(w.periodsLeft, 'round')} to the deadline`,
+    sub: w.open ? 'Players, picks and retained salary' : 'Deals open again after the season',
+    accent: w.open && w.periodsLeft <= 1,
+  };
 }
