@@ -19,8 +19,10 @@
  *  1. Nobody leaves on a flip. Every winter of every run: a man whose deal ran
  *     out and who is no longer on the roster has a recorded decision that let
  *     him go (or the engine retired him, by its own report), and a man the GM
- *     kept is on the roster on exactly the agreed years and salary. Plus the
- *     desk fails closed: with one decision missing nothing runs.
+ *     kept is on the roster on exactly the agreed years and salary. Every man
+ *     the roster itself shows on his last season (read here, never off the
+ *     desk's own list) has a decision applied. Plus the desk fails closed:
+ *     with one decision missing nothing runs.
  *  2. Asks sit inside a band of the cap, in EVERY season of every run, not the
  *     first and the last: each season's median (its five runs pooled) inside
  *     a measured band, plus the median and the 95th percentile of all asks.
@@ -44,15 +46,27 @@
  *          dead money (the GM dumps salary through the engine's own cut); a
  *          man over his ceiling cannot be kept at his ask; a push far over
  *          the rules never signs above them; an Early Bird exception deal runs
- *          two seasons at the least.
+ *          two seasons at the least. Every man the GM keeps is on a figure
+ *          inside the ceiling recomputed here, and a last word over a ceiling
+ *          (the real one, or one imposed at 85 and 65 percent of his ask, where
+ *          his last word lands as a counter and as an insult) is never signed.
+ *          Room also holds back the last tax cheque (the GM's club is handed
+ *          one every other winter, as nbaAssessTax would). Only full Bird
+ *          rights buy a fifth season.
  *     MLB  a drafted man is tendered, not negotiated with, until six seasons;
  *          the qualifying offer is the mean of the 125 highest salaries in the
  *          save, goes to nobody twice (a refuser is signed straight back to
- *          test it), never to a mid season arrival, and a rejection pays one
- *          pick.
+ *          test it), never to a mid season arrival. A rejection pays one pick,
+ *          once a rival has signed him: every other refuser is signed back by
+ *          the GM and the rest by a rival, and each offseason pays exactly one
+ *          pick per man a rival signed the winter before. Each tender pays
+ *          the game's own figure for his service year.
  *     NHL  a drafted man under 27 is restricted; whether a sheet is tabled is
- *          the same on every read; the picks are the published ladder's; a man
- *          whose sheet is not matched joins the rival on the sheet's terms.
+ *          the same on every read; the picks are the PUBLISHED 2025-26
+ *          ladder's, its dollar rungs written here by hand (never read off
+ *          gmContractRules.ts), on every real sheet and at every rung edge and
+ *          middle at four caps; a man whose sheet is not matched joins the
+ *          rival on the sheet's terms.
  *     NFL and MLB: a man let go sits in the pool at his market figure, not
  *          his old deal's (neither pool ever reprices).
  *  5. The books. Every rule has two sources or says it has one, and each
@@ -84,6 +98,16 @@
  *   mutceil      a push is not cut to what the rules allow (8, 16)
  *   earlyone     Early Bird exception deals may run one season (13)
  *   nodeadcap    NBA room ignores next season's dead money (17)
+ *  Added for the second review of 2026-10-02:
+ *   nofinalcap   acceptFinal signs a last word over the ceiling (finding 1)
+ *   ladcap       the ladder left at last season's cap, 88 (2)
+ *   ladder       one rung's picks mistyped, 1 and 3 read 2 and 3 (2)
+ *   underlist    the desk forgets every man whose rating divides by 7:
+ *                section 1, with the case counts still over their floors (3)
+ *   arbstep      the arbitration step off by one (5)
+ *   fiveyears    a Non-Bird deal may run five seasons (12)
+ *   notax        NBA room ignores the tax cheque, in the NBA host (11)
+ *   qoback       a refuser signed back still pays the pick (7)
  *
  * MEASURED 2026-10-02, remeasured after the review fixes on four seed sets
  * (SIM_SEED 0, 100, 200, 300; each is 5 seeds x 10 seasons per sport), every
@@ -95,7 +119,7 @@
  *      All four together 114 to 126: floor 40, on the total, because the NHL
  *      count alone (as low as 1) is too small to floor.
  *   1. cases at the desk                             NFL 218-227, NBA 148-159,
- *      MLB 712-732, NHL 247-270 (floors 150, 90, 400, 150). Left without a
+ *      MLB 710-733, NHL 247-270 (floors 150, 90, 400, 150). Left without a
  *      decision: 0 on every seed. coinflip: 633 findings.
  *   2. ask as a share of the cap the deal is priced against
  *                 median of all  p95          season medians
@@ -120,16 +144,27 @@
  *      the option unused 19-27 (8). NBA Non-Bird 22-24 (8), Early Bird 17-19
  *      (6), capped by the rule 84-111 (40), ask over the ceiling 27-32 (10),
  *      Early Bird exception 10-15 (4), cases with dead money 147-159 (60),
- *      pushes over the rules 148-159 (60). MLB pre arbitration 72-77 (30),
- *      arbitration 142-153 (60), qualifying offers 262-273 (100), mid season
- *      arrivals 50 (20), let go men repriced 158-170 (60), refusers signed
- *      back 20-26 (8), men back after an offer 192-206 (60), picks paid
- *      20-26 (8). NHL restricted 135-141 (60), sheets 54-67 (25), sheet men
- *      at the rival 26-39 (10), picks paid 27-41 (15).
+ *      pushes over the rules 148-159 (60). MLB mid season arrivals 50 (20),
+ *      the rest of MLB below. NHL restricted 135-141 (60), sheets 54-67 (25),
+ *      sheet men at the rival 26-39 (10), picks paid 27-41 (15).
+ *      After the second review (same four sets): NBA cases with a tax cheque
+ *      101-110 (40), last word over an imposed ceiling 296-318 (120), capped
+ *      men kept 47-65 (20), last word over the real ceiling 0-1 (no floor:
+ *      the real ceiling mostly sits so far under the ask that he walks out).
+ *      MLB refusers signed back 11-14 (6), signed by a rival 9-10 (4), picks
+ *      paid 7-9 (3: a man a rival signs in the last winter is paid after the
+ *      run ends), pre arbitration 78-80 (30) and as many tenders priced (30),
+ *      arbitration 129-136 (60) and as many tenders set by the step (50),
+ *      qualifying offers 270-288 (100), men back after an offer 173-209
+ *      (60), let go men repriced 147-164 (60). NHL sheets priced off the published ladder 54-67 (25), and
+ *      the ladder walk is exactly 33 points.
  *      Controls, findings on SIM_SEED 0: optionall 66, nobird 17, noarb 160,
- *      resheet 109, optiontwice 34, keepflags 38, qotwice 33, mutmid 31,
- *      mutmax 2 (the ladder walk: 6 and 9 seasons), muttag 96, noreprice 226,
- *      sheetpool 41, mutceil 149, earlyone 24, nodeadcap 13 (15 on 300).
+ *      resheet 109, optiontwice 34, keepflags 38, qotwice 33 (18 once only
+ *      every other refuser came back), mutmid 31, mutmax 2 (the ladder walk:
+ *      6 and 9 seasons), muttag 96, noreprice 226, sheetpool 41, mutceil 149,
+ *      earlyone 24, nodeadcap 13 (15 on 300). Second review: nofinalcap 299,
+ *      ladcap 18, ladder 32, underlist 173, arbstep 111, fiveyears 24, notax
+ *      4, qoback 10.
  *
  * NOT COVERED HERE, AND WHERE IT IS: the walkout and counter arithmetic of a
  * single push, the reload guard on a push and the corrupt ledger reset are in
@@ -1045,6 +1080,7 @@ for (const cap of [80, 88, 104.3]) {
   });
 }
 console.log(`\n4) NHL offer sheet ladder: ${ladderEdges} rung edges and middles walked against the published 2025-26 table`);
+if (ladderEdges !== 33) fail(4, `nhl: ${ladderEdges} ladder points walked, the table has 33`);
 
 /* ---------- 5. the books ---------- */
 for (const r of rules.CONTRACT_RULES) {
@@ -1071,14 +1107,16 @@ const RULE_FLOORS = {
   nba: {
     'tier non': 8, 'tier early': 6, capped: 40, overCeiling: 10, 'early bird exception': 4,
     'cases with dead money on the books': 60, 'pushes over the rules': 60,
+    'cases with a tax cheque held back': 40, 'last word over an imposed ceiling': 120, 'capped men kept': 20,
   },
   mlb: {
     'pre-arbitration': 30, arbitration: 60, qualifyingOffers: 100, 'mid season arrivals at the desk': 20,
-    'let go men repriced': 60, 'qualifying offer refusers signed back': 8, 'men back after a qualifying offer': 60,
+    'let go men repriced': 60, 'qualifying offer refusers signed back': 6, 'men back after a qualifying offer': 60,
+    'qualifying offer refusers signed by a rival': 4, 'pre-arbitration tenders priced': 30, 'arbitration tenders set by the step': 50,
   },
-  nhl: { restricted: 60, sheets: 25, 'sheet men at the rival': 10 },
+  nhl: { restricted: 60, sheets: 25, 'sheet men at the rival': 10, 'sheets priced off the published ladder': 25 },
 };
-const PICK_FLOORS = { nfl: 0, nba: 0, mlb: 8, nhl: 15 };
+const PICK_FLOORS = { nfl: 0, nba: 0, mlb: 3, nhl: 15 };
 let baseLeft = 0;
 for (const sport of SPORTS) {
   const st = ALL[sport.key];
