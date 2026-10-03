@@ -1,3 +1,4 @@
+import type { Ref } from "react";
 import { Button } from "@/components/ui/button";
 import {
   preDraftChoicePool, preDraftEffectText, preDraftEffectiveEffect, preDraftRoute,
@@ -10,12 +11,13 @@ import {
    its effect from preDraftEffectiveEffect, the same numbers preDraftChoose
    applies, so a button can never promise more than it does. */
 export function PreDraftSeasonCard({
-  desc, state, onPlaySeason, onChoose,
+  desc, state, onPlaySeason, onChoose, choiceRef,
 }: {
   desc: PreDraftDescriptor;
   state: PreDraftState;
   onPlaySeason: () => void;
   onChoose: (optionIndex: number) => void;
+  choiceRef?: Ref<HTMLDivElement>;
 }) {
   const route = preDraftRoute(desc, state.routeId);
   const last = state.lines[state.lines.length - 1];
@@ -64,7 +66,7 @@ export function PreDraftSeasonCard({
       )}
 
       {card && (
-        <div className="space-y-2" data-testid="pre-draft-choice">
+        <div ref={choiceRef} className="space-y-2" data-testid="pre-draft-choice">
           <div className="font-semibold text-sm">{card.title}</div>
           <p className="text-sm text-muted-foreground">{card.body}</p>
           <div className="grid gap-2">

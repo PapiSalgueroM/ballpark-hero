@@ -12,6 +12,8 @@ import { build } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const CONTROL = process.env.CAREER993_CONTROL || '';
+assert(!CONTROL || ['reveal', 'choice'].includes(CONTROL), 'Unknown native prospect control');
 const OUT = path.resolve(process.env.CAREER993_ARTIFACTS || path.join(ROOT, 'prospect-journey-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before the native prospect walk');
@@ -42,7 +44,7 @@ const profiles = [
   ...M.sports.map(sport => ({ sport, width: 390, height: 844, touch: true, reduced: false })),
   { sport: M.sports[1], width: 320, height: 740, touch: true, reduced: true },
   { sport: M.sports[1], width: 1440, height: 1000, touch: false, reduced: false },
-];
+].filter((_, i) => !CONTROL || i === 0);
 const report = { started: new Date().toISOString(), cases: [] };
 const saveReport = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const port = await new Promise((resolve, reject) => {
@@ -70,6 +72,7 @@ async function frames(page) { await page.evaluate(() => new Promise(resolve => r
 async function layout(page) {
   return page.evaluate(() => ({
     width: document.documentElement.clientWidth, scrollWidth: document.documentElement.scrollWidth, scrollY,
+    headings: [...document.querySelectorAll('[data-prospect-journey] h2, #prospect-help h3, [data-testid="pre-draft-choice"]')].map(el => { const r = el.getBoundingClientRect(); return { text: el.textContent?.slice(0, 80), top: r.top, bottom: r.bottom, height: r.height }; }),
     overflow: [...document.querySelectorAll('[data-prospect-journey] *')].filter(el => el.clientWidth && el.scrollWidth > el.clientWidth + 2).map(el => ({ tag: el.tagName, className: String(el.className).slice(0, 140), text: el.textContent?.slice(0, 100), width: el.clientWidth, scrollWidth: el.scrollWidth })),
     controls: [...document.querySelectorAll('[data-prospect-journey] button')].map(el => { const b = el.getBoundingClientRect(); return { text: el.textContent || el.getAttribute('aria-label'), width: b.width, height: b.height }; }),
   }));
@@ -100,7 +103,16 @@ try {
         { name: 'cookie-consent', value: 'essential' }, { name: 'unrelated-prospect-save', value: 'keep this save' },
       ] }] },
     });
-    await context.addInitScript(() => { Math.random = () => .4; });
+    await context.addInitScript(control => {
+      Math.random = () => .4;
+      if (control === 'reveal') Element.prototype.scrollIntoView = function () {};
+      if (control === 'choice') {
+        const reveal = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function (...args) {
+          if (!document.querySelector('[data-prospect-phase="choice"]')) reveal.apply(this, args);
+        };
+      }
+    }, CONTROL);
     await context.route('**/*', route => {
       if (new URL(route.request().url()).origin === BASE) return route.continue();
       const type = route.request().resourceType();
@@ -117,6 +129,18 @@ try {
       assert(measure.scrollWidth <= measure.width + 2, `${stage}: horizontal overflow ${measure.scrollWidth - measure.width}px`);
       for (const control of measure.controls) assert(control.width >= 44 && control.height >= 44, `${stage}: small control ${JSON.stringify(control)}`);
     };
+    const readable = async (selector, label) => {
+      const visible = await page.waitForFunction(sel => {
+        const el = document.querySelector(sel); if (!el) return false;
+        const r = el.getBoundingClientRect();
+        return r.top >= -2 && Math.min(r.bottom, innerHeight) - r.top >= Math.min(r.height, 160);
+      }, selector, { timeout: 2000 }).then(() => true, () => false);
+      const rectangle = await page.locator(selector).evaluate(el => {
+        const r = el.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, height: r.height, viewportHeight: innerHeight, scrollY };
+      });
+      (result.visibility ??= []).push({ label, ...rectangle, visible });
+      assert(visible, `${label} must appear without driver scrolling: ${JSON.stringify(rectangle)}`);
+    };
     let expected;
     const expectSave = async () => assert.deepEqual(JSON.parse(await readSave(page, sport.saveKey)), expected, 'Whole save differs from the expected transition');
     const reload = async phase => {
@@ -126,6 +150,10 @@ try {
       await page.evaluate(() => document.fonts.ready);
       assert.equal(await readSave(page, sport.saveKey), bytes, `Reload wrote the ${phase} save`);
       await expectSave();
+      if (phase === 'choice') {
+        await readable('[data-testid="pre-draft-choice"]', 'Restored choice');
+        await inspect(`restored-choice-${expected.prospect.state.seasonsDone}`);
+      }
     };
     try {
       await page.goto(`${BASE}${result.route}`, { waitUntil: 'domcontentloaded' });
@@ -141,6 +169,9 @@ try {
         archetypeId: sport.create.archetypes[sport.create.defaultPos][0].id, eraId: 'now', appearance: M.defaultAppearance(), seed });
       expected = { c: null, phase: 'prospect', teamQuality: null, coach: null, prospect };
       await expectSave(); await inspect('rules');
+      await readable('[data-prospect-journey] h2', 'Entry title');
+      await readable('#prospect-help h3', 'Entry instructions');
+      await inspect('entry-visible');
       assert.match(await page.locator('#prospect-help').innerText(), /For example:.*knock/s, 'Worked example is missing before play');
       await activate(page.getByRole('button', { name: 'Got it', exact: true }), touch);
       await reload('routes');
@@ -164,7 +195,10 @@ try {
           assert(choice, 'The visible decision must exist in the engine');
         }
         await expectSave();
-        if (expected.prospect.state.phase === 'choice') { await inspect(`choice-${expected.prospect.state.seasonsDone}`); await reload('choice'); }
+        if (expected.prospect.state.phase === 'choice') {
+          await readable('[data-testid="pre-draft-choice"]', 'New choice');
+          await inspect(`choice-${expected.prospect.state.seasonsDone}`); await reload('choice');
+        }
       }
       assert.equal(expected.prospect.state.phase, 'showcase', 'The season route did not reach its showcase');
       await reload('showcase'); await inspect('showcase');
@@ -226,7 +260,12 @@ try {
       fs.writeFileSync(path.join(OUT, `${id}-failure.html`), await page.content().catch(() => 'Page unavailable'));
     } finally { saveReport(); await context.close(); }
   }
-  assert.equal(report.cases.filter(c => c.passed).length, profiles.length, 'All six native journeys must pass');
+  if (CONTROL) {
+    assert.equal(report.cases.length, 1);
+    const label = CONTROL === 'reveal' ? 'Entry title' : 'New choice';
+    assert(!report.cases[0].passed && report.cases[0].error.includes(`${label} must appear without driver scrolling`), 'Disabled reveal must fail its own visibility assertion');
+    console.log(`Native ${CONTROL} control: disabling scrollIntoView fails its own visibility assertion`);
+  } else assert.equal(report.cases.filter(c => c.passed).length, profiles.length, 'All six native journeys must pass');
 } finally {
   await browser?.close(); if (server.exitCode === null && !server.killed) server.kill();
   fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);

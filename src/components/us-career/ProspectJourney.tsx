@@ -22,8 +22,8 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
   const desc = sport.preDraft(prospect.eraId);
   const act = !state ? 0 : state.phase === 'season' || state.phase === 'choice' ? 1 : 2;
   const eventKey = `${state?.phase ?? 'routes'}:${state?.seasonsDone ?? 0}:${state?.pendingChoice ?? ''}`;
-  const screenRef = useRevealScroll<HTMLElement>('prospect');
-  const actionRef = useRevealScroll<HTMLDivElement>(eventKey, { skipFirst: true });
+  const screenRef = useRevealScroll<HTMLElement>('prospect', { enabled: !state, skipFirst: false });
+  const actionRef = useRevealScroll<HTMLDivElement>(eventKey, { enabled: !!state, skipFirst: false });
   const titleRef = useRef<HTMLHeadingElement>(null);
   const actionTitleRef = useRef<HTMLHeadingElement>(null);
   const [help, setHelp] = useState(!state);
@@ -70,7 +70,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         <p>All prospects and results are fictional. The era sets the available teams and routes. The draft uses a simplified order without traded or extra picks; baseball and hockey lotteries are not modeled. Money in your career is a simulation, not a real contract quote. Going undrafted still leads to a camp signing.</p>
         <button className={styles.helpClose} onClick={() => setHelp(false)}>Got it</button>
       </div>}
-      <div ref={actionRef} className={styles.playArea}>
+      <div ref={state?.phase === 'choice' ? undefined : actionRef} className={styles.playArea}>
         <h3 ref={actionTitleRef} tabIndex={-1} className="sr-only">{title}</h3>
         {!state ? <div className={styles.routes}>
           {desc.routes.map(route => <button key={route.id} className={styles.route} onClick={() => { setHelp(false); onChange(preDraftStart(desc, { seed: prospect.seed, routeId: route.id, rating: prospect.rating, pot: prospect.pot, pos: prospect.pos })); }}>
@@ -78,7 +78,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
             <strong>{route.label}</strong><span>{route.blurb}</span>
             <small>Start at age {route.startAge} · Draft at {route.startAge + route.seasons}</small>
           </button>)}
-        </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
+        </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} choiceRef={actionRef} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
           : <DraftShowcaseCard desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))} onRunDraft={() => onChange(preDraftRunDraft(desc, state))} onContinue={onJoin} />}
       </div>
       {state && state.lines.length > 0 && <details className={styles.history}>

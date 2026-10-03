@@ -108,6 +108,7 @@ jobs:
           for harness in simCareerHub simCareerInbox simCareerInboxBeats simCareerParity simCareerRivalryEvents simExtension simHomeFront simNoDoubleRecord simRevealMoments simSessionMarks simUsCareerActionConfirm simUsCoachCareer simUsCareerWeight; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "prospect-journey-artifacts/$harness.log"
           done
+          US_CAREER_ACTION_CONTROL=ownKey node scripts/simUsCareerActionConfirm.mjs 2>&1 | tee prospect-journey-artifacts/action-ownKey.log
       - name: All built readers and guide checks
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
@@ -116,7 +117,11 @@ jobs:
           done
       - name: Actual prospect journeys by touch and keyboard
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: node scripts/qa/career993.mjs 2>&1 | tee prospect-journey-artifacts/native.log
+        run: |
+          node scripts/qa/career993.mjs 2>&1 | tee prospect-journey-artifacts/native.log
+          for control in reveal choice; do
+            CAREER993_CONTROL="$control" CAREER993_ARTIFACTS="prospect-journey-artifacts/native-$control-control" node scripts/qa/career993.mjs 2>&1 | tee "prospect-journey-artifacts/native-$control-control.log"
+          done
       - name: Save review evidence
         if: always()
         uses: actions/upload-artifact@v4
