@@ -41,6 +41,7 @@ import { nbaRivalryTick, nbaRivalryChoiceTick } from './nbaCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -343,7 +344,7 @@ export const NBA_SPEND_ITEMS: NbaSpendItem[] = [
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
   { id: 'chef_nba', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_nba', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
+  { id: 'recovery_nba', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
   { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 25, up to your ceiling' },
   { id: 'sleep_nba', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nba', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
@@ -484,7 +485,7 @@ export function nbaMarketSalary(c: NbaCareerState): number {
 }
 
 function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {
-  const risk = (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240;
+  const risk = careerRecoveryRisk('nba', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240);
   if (rng() < risk) {
     const missed = 8 + Math.floor(rng() * 35);
     return { games: Math.max(20, 82 - missed), note: `Missed ${missed} games hurt.` };
