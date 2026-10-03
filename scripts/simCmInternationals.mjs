@@ -49,19 +49,22 @@
  *     out here from the two confederations) come back with more fitness gone
  *     than those who stayed on their own, compared inside each window kind.
  *
- * MEASURED HEADROOM, 2026-10-03, three batches of 6 squads x 3 seeds
+ * MEASURED HEADROOM, 2026-10-03, after the review fixes (the rest written
+ * into the picked eleven), three batches of 6 squads x 3 seeds
  * (SEED_BASE 0, 10, 20), 49 to 54 breaks a batch:
  *   match after a break, pooled gap      2.21  2.09  2.10   floor 1.5
  *   the September and October window     2.97  2.95  2.97   floor 2.0
  *   the November window                  2.27  2.18  2.27   floor 1.4
  *   the March window                     1.24  1.09  1.07   floor 0.6
  *   share of the two match cost the
- *   assistant's rest wins back           0.51  0.55  0.54   floor 0.40
- * Per squad the rest wins back most of it where the cover stayed home
- * (Arsenal and Real Madrid about all of it) and little where the cover went
- * away too (Chelsea and Liverpool 0.15 to 0.3, City about a third): resting
- * a tired man for a man who is just as tired buys nothing, which is real.
- * The pooled share is the claim, and it is a little over half.
+ *   assistant's rest wins back           0.59  0.65  0.67   floor 0.50
+ *   extra fitness a long trip costs a
+ *   starter (check 7)                   10.46 10.54 10.46   floor 5
+ *   check 6, rested men checked          257   282   302    every rule held
+ * Per squad the rest wins back most of it where the cover stayed home and
+ * less where the cover went away too: resting a tired man for a man who is
+ * just as tired buys nothing, which is real. The pooled share is the claim,
+ * and it is over half, so the floor says "most".
  *
  * NEGATIVE CONTROLS, SIM_CMINTL_CONTROL=<name>, each rewrites one line of
  * the module or the engine as the bundler loads it (it refuses to run unless
@@ -98,7 +101,7 @@ const SEED_BASE = Math.max(0, Number(process.env.SEED_BASE ?? 0));
 /* Bands, set from the measured headroom written in the header. */
 const GAP_FLOOR = 1.5;
 const KIND_FLOOR = { sepoct: 2.0, nov: 1.4, mar: 0.6 };
-const REC_FLOOR = 0.40;
+const REC_FLOOR = 0.50;
 const FAR_FLOOR = 5;
 
 /* Each control rewrites one line of the module, or of the engine where the
