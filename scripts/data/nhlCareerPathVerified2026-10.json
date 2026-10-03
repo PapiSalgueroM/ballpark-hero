@@ -16,7 +16,8 @@
   "stats": "Career NHL regular season. Retired skaters: exact G, A, Pts. Active skaters: each total rounded down to a ten, below the lower of the two sources. Retired goalies: W, GAA, SV%. Active goalies: W and GP rounded down to a ten, SO rounded down to a five.",
   "awards": "Up to four lines: the trophies the old row named when they hold on both sources, then by importance, and the Hall of Fame year last when NHL inHHOF is 1 and hockey-reference and hhof.com give the same year. A single Stanley Cup shows without a year (hockey-reference gives the count only). Counts on active players are as of the read date."
  },
- "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 60) in src/lib/dateUtils.ts, a shuffle per 60 day cycle; the cycle holding the release runs 2026-09-04 to 2026-11-02. The 30 new players sit on the indices dealt 2026-10-04 to 2026-11-02, so a release between 2026-10-04 and 2026-10-20 deals only players the old pool never dealt for at least two weeks.",
+ "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 60) in src/lib/dateUtils.ts, a shuffle per 60 day cycle; the cycle holding the release runs 2026-09-04 to 2026-11-02. The 30 new players sit on the indices dealt 2026-10-04 to 2026-11-02, so a release between 2026-10-04 and 2026-10-20 deals only players the old pool never dealt for at least two weeks. The guarantee ends at the cycle boundary: any release up to releaseBy keeps at least 14 days between a player's last old deal and his first new one, and a release the day after does not.",
+ "releaseBy": "2026-11-02",
  "oldPool": [
   {
    "id": "hc-001",

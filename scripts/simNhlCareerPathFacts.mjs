@@ -29,19 +29,32 @@
  *       count equals the seasons on the NHL value and the count on the
  *       hockey-reference value, a single year equals both, the Hall of Fame
  *       year equals the hockey-reference and hhof.com years, and the team path
- *       equals the NHL team list and the hockey-reference team codes.
+ *       equals the NHL team list and the hockey-reference team codes. The
+ *       flag the Country clue shows is the flag of that country, built from
+ *       its ISO code, so a wrong flag cannot pass by being wrong in both files.
  *    3. The shipped file (src/data/hockeyCareerPlayers.ts) equals the record
  *       word for word, row by row in the record's order, both ways.
- *    4. No repeats: player names, puzzle ids and surnames are unique (the hook
- *       accepts a bare surname, so two players sharing one would accept either).
- *    5. No line the record calls false or unsourced ships, for that player or
- *       any other, and no held out player is in the file.
+ *    4. No repeats: player names and puzzle ids are unique, names compared
+ *       without case or accents (hockey-reference writes Lidström where the
+ *       pool writes Lidstrom, so a raw compare would let one man in twice).
+ *       The game's own guess rule (src/lib/hockeyCareerGuess.ts, bundled)
+ *       takes every player's full name and his surname as written (St. Louis
+ *       too), and no guess it takes belongs to two players.
+ *    5. No line the record calls false or unsourced ships on that player's own
+ *       row (a line false for one man can be true for another; section 3 pins
+ *       every other row to the record), and no held out player is in the
+ *       file, names again compared without case or accents.
  *    6. The daily walk (dailyIndex in src/lib/dateUtils.ts, read live): over
  *       three years every 60 day cycle deals every player exactly once, where
- *       the old pool repeated a player inside every 38 day cycle; and the switch
- *       from 38 rows to 60 on any day from 2026-10-04 to 2026-10-20 deals only
- *       new players for the first 14 days and leaves at least 14 days between a
- *       player's last old deal and his first new one.
+ *       the old pool repeated a player inside every 38 day cycle (cycles
+ *       reshuffle independently, so a player can still come back quickly
+ *       across a cycle boundary; that is measured below, not denied); the
+ *       switch from 38 rows to 60 on any day from 2026-10-04 to 2026-10-20
+ *       deals only new players for the first 14 days; and a release on any day
+ *       from 2026-10-03 to the record's releaseBy leaves at least 14 days
+ *       between a player's last old deal and his first new one, while a
+ *       release the day after releaseBy does not, so the date in the record is
+ *       the real deadline.
  *
  * MEASURED (2026-10-03, deterministic, so one run is every run). Repeats inside
  * 14 days per calendar year, 2026, 2027, 2028: old pool 54, 59, 56 (shortest
@@ -49,9 +62,12 @@
  * days); whole cycles from 2026 to 2028 that repeat a player: old 28 of 28,
  * new 0 of 18. Release window 2026-10-04 to 2026-10-20: 14 of the first 14 deals are
  * new players on every day of it, and the shortest old to new gap is 26 days
- * (Hasek; 40 days before 2026-10-13). After the window it falls: 15 days for a
- * release from 2026-10-21 to 2026-10-28, which is why the window ends where it
- * does. The band of 14 days leaves 12 days of headroom inside the window.
+ * (Hasek; 40 days before 2026-10-13). After it the gap falls to 15 days (Guy
+ * Lafleur, a release on 2026-10-21), and it stays 15 through 2026-11-02, the
+ * last day of the cycle; a release on 2026-11-03 deals Malkin 9 days after the
+ * old pool did. So the record's releaseBy
+ * is 2026-11-02 and the band of 14 days has 1 day of headroom at its worst,
+ * which is enough because the walk is deterministic (no seed moves it).
  *
  * NEGATIVE CONTROLS (NHL_CP_CONTROL). Each edits only an in memory copy (line
  * endings normalised first), refuses to run unless its anchor occurs exactly
@@ -63,6 +79,11 @@
  *   falseline  McDavid's Conn Smythe goes back to the false 2025           3, 5
  *   dup        Kaprizov's row becomes a second Bobby Orr                   3, 4, 6
  *   order      Messier swaps places with a new player dealt 2026-10-05     6
+ *   accentdup  Kaprizov becomes 'Nicklas Lidström' in file AND record      4, 6
+ *   heldoutaccent  Kaprizov becomes 'Félix Potvin' in file AND record      5
+ *   flag       Selanne's flag becomes Sweden's in file AND record          2
+ *   stlouis    the guess rule loses the after-the-first-name form          4
+ *   releaseby  the record's release-by date moves a day late, 2026-11-03    6
  *
  * Nothing here touches the network.
  *
@@ -78,8 +99,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RECORD_PATH = path.join(ROOT, 'scripts/data/nhlCareerPathVerified2026-10.json');
 const DATA = 'src/data/hockeyCareerPlayers.ts';
 const DATES = 'src/lib/dateUtils.ts';
+const GUESS = 'src/lib/hockeyCareerGuess.ts';
 const CONTROL = process.env.NHL_CP_CONTROL || '';
-const EXPECT = { onesource: [1, 2], floor: [2, 3], falseline: [3, 5], dup: [3, 4, 6], order: [6] };
+const EXPECT = {
+  onesource: [1, 2], floor: [2, 3], falseline: [3, 5], dup: [3, 4, 6], order: [6],
+  accentdup: [4, 6], heldoutaccent: [5], flag: [2], stlouis: [4], releaseby: [6],
+};
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`NHL_CP_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
@@ -122,6 +147,8 @@ async function loadModule(rel, override) {
   return import(pathToFileURL(outfile).href);
 }
 const src = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
+// A flag emoji is its ISO code in regional indicator letters, so it is built, never typed.
+const flagOf = (iso) => String.fromCodePoint(...iso.toUpperCase().split('').map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65));
 
 const record = JSON.parse(fs.readFileSync(RECORD_PATH, 'utf8'));
 let dataText = src(DATA);
@@ -169,11 +196,37 @@ if (CONTROL === 'order') {
   const ra = record.players.indexOf(recPlayer('Mark Messier')), rb = record.players.indexOf(recPlayer('Ray Bourque'));
   [record.players[ra], record.players[rb]] = [record.players[rb], record.players[ra]];
 }
+// The next three rename or reflag a row in BOTH the file and the record, so
+// section 3 (file equals record) stays green and only the check aimed at the
+// break can catch it.
+const renameBoth = (from, to) => {
+  dataText = rewrite(dataText, `name: '${from}'`, `name: '${to}'`, `${from}'s name`);
+  recPlayer(from).name = to;
+};
+if (CONTROL === 'accentdup') renameBoth('Kirill Kaprizov', 'Nicklas Lidström');
+if (CONTROL === 'heldoutaccent') renameBoth('Kirill Kaprizov', 'Félix Potvin');
+if (CONTROL === 'flag') {
+  const p = recPlayer('Teemu Selanne');
+  if (p.countryFlag !== flagOf('fi')) cannot('Selanne does not carry the Finnish flag in the record.');
+  dataText = rewrite(dataText, `countryFlag: '${flagOf('fi')}'`, `countryFlag: '${flagOf('se')}'`, "Selanne's flag");
+  p.countryFlag = flagOf('se');
+}
+if (CONTROL === 'releaseby') {
+  if (record.releaseBy !== '2026-11-02') cannot(`the record's releaseBy is ${record.releaseBy}, not 2026-11-02.`);
+  record.releaseBy = '2026-11-03';
+}
+let guessText = src(GUESS);
+if (CONTROL === 'stlouis') guessText = rewrite(guessText, ", words.slice(1).join(' ')]", ']', 'the after-the-first-name guess');
 
 const { hockeyCareerPuzzles: pool } = await loadModule(DATA, dataText);
 const { dailyIndex } = await loadModule(DATES);
+const { acceptedHockeyGuesses, isHockeyGuessRight } = await loadModule(GUESS, guessText);
 
 const fold = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+// Two spellings of one man are one player: hockey-reference and the NHL feed's
+// local-language fields write Lidström, Selänne and Hašek, the pool writes them
+// plain. Every name comparison below goes through this.
+const key = (n) => fold(String(n)).trim().toLowerCase().replace(/\s+/g, ' ');
 const shownLines = (p) => [p.position, p.country, p.draftInfo, p.teams.join(' > '), ...p.stats, ...p.awards];
 const sameList = (a, b) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
 
@@ -307,6 +360,16 @@ function checkAward(p, f, no) {
 let lineCount = 0;
 for (const p of record.players) for (const f of p.facts) { lineCount += 1; checkFact(p, f); }
 console.log(`  ${lineCount} lines checked against their two values`);
+// The Country clue shows countryFlag beside the country, so the flag must be the
+// one for that country (built from its ISO code above, never typed), or a wrong
+// flag would pass as long as the file and the record agreed.
+const FLAG =Object.fromEntries(Object.values(COUNTRY).map(([name, codes]) => [name, flagOf(codes[0])]));
+let flagCount = 0;
+for (const p of record.players) {
+  if (!FLAG[p.country] || p.countryFlag !== FLAG[p.country]) fail(`${p.name}: flag ${p.countryFlag} is not the flag of ${p.country}`);
+  else flagCount += 1;
+}
+console.log(`  ${flagCount} flags match their country`);
 
 // ---------------------------------------------------------------------------
 head(3, `the shipped file equals the record, row by row (${DATA})`);
@@ -324,29 +387,41 @@ console.log(`  ${pool.length} rows in the file, ${record.players.length} in the 
 head(4, 'no repeats: names, ids and surnames');
 const dupes = (list) => [...new Set(list.filter((x, i) => list.indexOf(x) !== i))];
 const names = pool.map((r) => r.player.name);
-const surnames = names.map((n) => n.trim().toLowerCase().split(' ').pop());
-for (const d of dupes(names)) fail(`player ${d} is in the pool more than once`);
+const keys = names.map(key);
+for (const d of dupes(keys)) fail(`player ${d} is in the pool more than once (compared without case or accents)`);
 for (const d of dupes(pool.map((r) => r.id))) fail(`puzzle id ${d} is used more than once`);
-for (const d of dupes(surnames)) fail(`surname '${d}' belongs to two players, and the hook accepts a bare surname`);
-console.log(`  ${new Set(names).size} different players in ${pool.length} rows, ${new Set(surnames).size} surnames`);
+// The guess rule is the game's own (src/lib/hockeyCareerGuess.ts, bundled
+// above). Each player must be guessable by his full name and by his surname as
+// written, and every guess the game accepts must belong to one player only.
+const owner = new Map();
+for (const n of names) {
+  const surname = n.split(' ').slice(1).join(' ');
+  for (const g of [n, n.toUpperCase(), surname, surname.replace(/\./g, '')]) if (!isHockeyGuessRight(g, n)) fail(`${n}: the game refuses the guess '${g}'`);
+  for (const form of acceptedHockeyGuesses(n)) {
+    const prev = owner.get(key(form));
+    if (prev && prev !== n) fail(`the guess '${form}' is accepted for both ${prev} and ${n}`);
+    owner.set(key(form), n);
+  }
+}
+console.log(`  ${new Set(keys).size} different players in ${pool.length} rows, ${owner.size} accepted guesses, each for one player only`);
 
 // ---------------------------------------------------------------------------
 head(5, 'no line the record calls false or unsourced ships, no held out player');
 const banned = record.corrections.filter((c) => c.kind === 'false' || c.kind === 'unsourced');
 if (banned.length < 18) fail(`the record lists only ${banned.length} false or unsourced lines; Round 923 recorded 18 (11 false, 7 unsourced)`);
 for (const c of banned) {
-  for (const row of pool.filter((r) => r.player.name === c.name)) {
+  for (const row of pool.filter((r) => key(r.player.name) === key(c.name))) {
     if (shownLines(row.player).includes(c.old)) fail(`${c.name} shows '${c.old}' again (${c.kind}: ${c.why})`);
   }
 }
-for (const h of record.heldOut) if (names.includes(h.name)) fail(`${h.name} is back in the pool: ${h.why}`);
-console.log(`  ${banned.length} false or unsourced lines, ${record.heldOut.length} held out players, none shipped`);
+for (const h of record.heldOut) if (keys.includes(key(h.name))) fail(`${h.name} is back in the pool: ${h.why}`);
+console.log(`  ${banned.length} false or unsourced lines, ${record.heldOut.length} held out players: ${red.has(5) ? 'SOME SHIPPED' : 'none shipped'}`);
 
 // ---------------------------------------------------------------------------
 head(6, 'the daily walk: every cycle deals every player once, and the switch to 60 rows');
 const dateOf = (day) => new Date(day * 864e5).toISOString().slice(0, 10);
 const dayOf = (d) => Math.floor(Date.parse(d + 'T00:00:00Z') / 864e5);
-const oldNames = record.oldPool.map((p) => p.name);
+const oldNames = record.oldPool.map((p) => key(p.name));
 const dealt = (list, day) => list[dailyIndex(dateOf(day), list.length)];
 function cyclesWithRepeat(list, fromDay, toDay) {
   const n = list.length;
@@ -360,7 +435,7 @@ function cyclesWithRepeat(list, fromDay, toDay) {
   return { cycles, bad };
 }
 const from = dayOf('2026-01-01'), to = dayOf('2029-01-01');
-const nowC = cyclesWithRepeat(names, from, to), oldC = cyclesWithRepeat(oldNames, from, to);
+const nowC = cyclesWithRepeat(keys, from, to), oldC = cyclesWithRepeat(oldNames, from, to);
 console.log(`  2026 to 2028: new pool repeats a player in ${nowC.bad} of ${nowC.cycles} cycles, the old pool in ${oldC.bad} of ${oldC.cycles}`);
 if (nowC.cycles < 15 || nowC.bad !== 0) fail(`the new pool repeats a player inside ${nowC.bad} of ${nowC.cycles} cycles`);
 if (oldC.bad !== oldC.cycles) fail(`baseline moved: the old pool repeated in only ${oldC.bad} of ${oldC.cycles} cycles, so this check is not measuring what it says`);
@@ -370,24 +445,42 @@ const repeats14 = (list, y) => {
   return r;
 };
 const years = [2026, 2027, 2028];
-const newR = years.map((y) => repeats14(names, y)), oldR = years.map((y) => repeats14(oldNames, y));
+const newR = years.map((y) => repeats14(keys, y)), oldR = years.map((y) => repeats14(oldNames, y));
 const mean = (a) => a.reduce((s, x) => s + x, 0) / a.length;
 console.log(`  repeats inside 14 days per year ${years.join(', ')}: new ${newR.join(', ')}, old ${oldR.join(', ')}`);
 if (!(mean(newR) <= 15)) fail(`new pool mean ${mean(newR).toFixed(1)} repeats inside 14 days a year, band 15 (measured 8.0)`);
 if (!(mean(oldR) - mean(newR) >= 30)) fail(`the new pool is not clearly better than the old (old ${mean(oldR).toFixed(1)}, new ${mean(newR).toFixed(1)}, measured gap 48.3, band 30)`);
-const status = new Map(record.players.map((p) => [p.name, p.status]));
-let minGap = Infinity, minWho = '', minDay = '';
+const status = new Map(record.players.map((p) => [key(p.name), p.status]));
 for (let R = dayOf('2026-10-04'); R <= dayOf('2026-10-20'); R++) {
-  const first14 = Array.from({ length: 14 }, (_, k) => dealt(names, R + k));
+  const first14 = Array.from({ length: 14 }, (_, k) => dealt(keys, R + k));
   const kept = first14.filter((x) => status.get(x) !== 'new');
   if (kept.length) fail(`released ${dateOf(R)}: the first 14 days deal ${kept.join(', ')}, who the old pool already dealt`);
+}
+// Shortest gap, for a release on day R, between a player's last deal under the
+// old pool and his first under the new one.
+const gapFor = (R) => {
+  let g = Infinity, w = '';
   for (let a = 1; a <= 60; a++) {
     const who = dealt(oldNames, R - a);
-    for (let b = 0; b < 60; b++) if (dealt(names, R + b) === who) { if (a + b < minGap) { minGap = a + b; minWho = who; minDay = dateOf(R); } break; }
+    for (let b = 0; b < 60; b++) if (dealt(keys, R + b) === who) { if (a + b < g) { g = a + b; w = who; } break; }
   }
+  return { g, w };
+};
+// The guarantee only holds up to the cycle boundary, so the record carries the
+// last release day it holds for, and this proves the date both ways: every day
+// up to it keeps 14 days, and the day after does not.
+const releaseBy = String(record.releaseBy || '');
+if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseBy)) fail('the record carries no releaseBy date');
+let minGap = Infinity, minWho = '', minDay = '';
+for (let R = dayOf('2026-10-03'); R <= dayOf(releaseBy); R++) {
+  const { g, w } = gapFor(R);
+  if (g < minGap) { minGap = g; minWho = w; minDay = dateOf(R); }
 }
-console.log(`  release 2026-10-04 to 2026-10-20: shortest old to new gap ${minGap} days (${minWho}, released ${minDay}); measured 26, band 14`);
+const late = gapFor(dayOf(releaseBy) + 1);
+console.log(`  release 2026-10-03 to ${releaseBy}: shortest old to new gap ${minGap} days (${minWho}, released ${minDay}); measured 15, band 14`);
+console.log(`  RELEASE BY ${releaseBy}: a release on ${dateOf(dayOf(releaseBy) + 1)} deals ${late.w} again ${late.g} days after the old pool did`);
 if (!(minGap >= 14)) fail(`a player comes back ${minGap} days after his last old deal (${minWho}, released ${minDay}); band 14`);
+if (!(late.g < 14)) fail(`releaseBy ${releaseBy} is not the last safe day: ${dateOf(dayOf(releaseBy) + 1)} still keeps ${late.g} days`);
 
 // ---------------------------------------------------------------------------
 fs.rmSync(TMP, { recursive: true, force: true });
