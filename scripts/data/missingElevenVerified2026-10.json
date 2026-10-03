@@ -480,6 +480,156 @@
     { "name": "Dan Connolly", "fact": "Game book lineup C 63 D.Connolly; pfr starters Dan Connolly/C." },
     { "name": "Deion Branch", "fact": "Game book lineup WR 84 D.Branch; pfr starters Deion Branch/WR." }
    ]
+  },
+  {
+   "id": "sb-xliv-no",
+   "game": "Super Bowl XLIV",
+   "matchDate": "2010-02-07",
+   "unit": "offense",
+   "team": "New Orleans Saints",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New Orleans Saints Offense", "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf", "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Saints Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Drew Brees", "QB 9 D.Brees", "Drew Brees/QB"],
+    ["RB", "Pierre Thomas", "RB 23 P.Thomas", "Pierre Thomas/RB"],
+    ["RB", "Reggie Bush", "RB 25 R.Bush", "Reggie Bush/RB"],
+    ["WR", "Marques Colston", "WR 12 M.Colston", "Marques Colston/WR"],
+    ["WR", "Devery Henderson", "WR 19 D.Henderson", "Devery Henderson/WR"],
+    ["TE", "Jeremy Shockey", "TE 88 J.Shockey", "Jeremy Shockey/TE"],
+    ["LT", "Jermon Bushrod", "LT 74 J.Bushrod", "Jermon Bushrod/LT"],
+    ["LG", "Carl Nicks", "LG 77 C.Nicks", "Carl Nicks/LG"],
+    ["C", "Jonathan Goodwin", "C 76 J.Goodwin", "Jonathan Goodwin/C"],
+    ["RG", "Jahri Evans", "RG 73 J.Evans", "Jahri Evans/RG"],
+    ["RT", "Jon Stinchcomb", "RT 78 J.Stinchcomb", "Jon Stinchcomb/RT"]
+   ],
+   "facts": [
+    { "name": "Pierre Thomas", "fact": "Both list two starting running backs (Thomas and Reggie Bush). Scoring: game book 'P.Thomas 16 yd. pass from D.Brees' (Q3 11:41); pfr the same play." },
+    { "name": "Devery Henderson", "fact": "Game book lineup WR 19 D.Henderson; pfr starters Devery Henderson/WR." },
+    { "name": "Jon Stinchcomb", "fact": "Game book lineup RT 78 J.Stinchcomb; pfr starters Jon Stinchcomb/RT." }
+   ]
+  },
+  {
+   "id": "sb-xliv-ind",
+   "game": "Super Bowl XLIV",
+   "matchDate": "2010-02-07",
+   "unit": "offense",
+   "team": "Indianapolis Colts",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Indianapolis Colts Offense", "url": "https://static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf", "via": "https://www.nfl.com/games/saints-at-colts-2009-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Colts Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/201002070clt.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Peyton Manning", "QB 18 P.Manning", "Peyton Manning/QB"],
+    ["RB", "Joseph Addai", "RB 29 J.Addai", "Joseph Addai/RB"],
+    ["H-B", "Gijon Robinson", "H-B 47 G.Robinson", "Gijon Robinson/H-B"],
+    ["WR", "Reggie Wayne", "WR 87 R.Wayne", "Reggie Wayne/WR"],
+    ["WR", "Pierre Garcon", "WR 85 P.Garcon", "Pierre Garcon/WR"],
+    ["TE", "Dallas Clark", "TE 44 D.Clark", "Dallas Clark/TE"],
+    ["LT", "Charlie Johnson", "LT 74 Ch.Johnson", "Charlie Johnson/LT"],
+    ["LG", "Ryan Lilja", "LG 65 R.Lilja", "Ryan Lilja/LG"],
+    ["C", "Jeff Saturday", "C 63 J.Saturday", "Jeff Saturday/C"],
+    ["RG", "Kyle DeVan", "RG 66 K.DeVan", "Kyle DeVan/RG"],
+    ["RT", "Ryan Diem", "RT 71 R.Diem", "Ryan Diem/RT"]
+   ],
+   "facts": [
+    { "name": "Gijon Robinson", "fact": "Game book lineup H-B 47 G.Robinson; pfr starters Gijon Robinson/H-B." },
+    { "name": "Kyle DeVan", "fact": "Game book lineup RG 66 K.DeVan; pfr starters Kyle DeVan/RG." },
+    { "name": "Pierre Garcon", "fact": "Scoring: game book 'P.Garcon 19 yd. pass from P.Manning' (Q1 0:36); pfr 'Pierre Garcon 19 yard pass from Peyton Manning'." }
+   ]
+  },
+  {
+   "id": "sb-xliii-pit",
+   "game": "Super Bowl XLIII",
+   "matchDate": "2009-02-01",
+   "unit": "offense",
+   "team": "Pittsburgh Steelers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Offense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Steelers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Ben Roethlisberger", "QB 7 B.Roethlisberger", "Ben Roethlisberger/QB"],
+    ["RB", "Willie Parker", "RB 39 W.Parker", "Willie Parker/RB"],
+    ["WR", "Hines Ward", "WR 86 H.Ward", "Hines Ward/WR"],
+    ["TE", "Heath Miller", "TE 83 H.Miller", "Heath Miller/TE"],
+    ["TE", "Matt Spaeth", "TE 89 M.Spaeth", "Matt Spaeth/TE"],
+    ["TE", "Sean McHugh", "TE 49 S.McHugh", "Sean McHugh/TE"],
+    ["LT", "Max Starks", "LT 78 M.Starks", "Max Starks/LT"],
+    ["LG", "Chris Kemoeatu", "LG 68 C.Kemoeatu", "Chris Kemoeatu/LG"],
+    ["C", "Justin Hartwig", "C 62 J.Hartwig", "Justin Hartwig/C"],
+    ["RG", "Darnell Stapleton", "RG 72 D.Stapleton", "Darnell Stapleton/RG"],
+    ["RT", "Willie Colon", "RT 74 W.Colon", "Willie Colon/RT"]
+   ],
+   "facts": [
+    { "name": "Sean McHugh", "fact": "Both list three starting tight ends and Hines Ward as the only starting receiver. Game book lists WR 10 S.Holmes under Steelers substitutions and pfr's starters omit him; both scoring tables have 'S.Holmes 6 yd. pass from B.Roethlisberger' / 'Santonio Holmes 6 yard pass from Ben Roethlisberger' (Q4 0:35, 27-23)." },
+    { "name": "Matt Spaeth", "fact": "Game book lineup TE 89 M.Spaeth; pfr starters Matt Spaeth/TE." },
+    { "name": "Darnell Stapleton", "fact": "Game book lineup RG 72 D.Stapleton; pfr starters Darnell Stapleton/RG." }
+   ]
+  },
+  {
+   "id": "sb-xliii-pit-d",
+   "game": "Super Bowl XLIII",
+   "matchDate": "2009-02-01",
+   "unit": "defense",
+   "team": "Pittsburgh Steelers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Defense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Steelers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["DE", "Aaron Smith", "DE 91 Aa.Smith", "Aaron Smith/DE"],
+    ["NT", "Casey Hampton", "NT 98 C.Hampton", "Casey Hampton/NT"],
+    ["DE", "Brett Keisel", "DE 99 B.Keisel", "Brett Keisel/DE"],
+    ["OLB", "LaMarr Woodley", "OLB 56 L.Woodley", "LaMarr Woodley/OLB"],
+    ["LILB", "James Farrior", "LILB 51 J.Farrior", "James Farrior/LILB"],
+    ["RILB", "Larry Foote", "RILB 50 L.Foote", "Larry Foote/RILB"],
+    ["OLB", "James Harrison", "OLB 92 J.Harrison", "James Harrison/OLB"],
+    ["LCB", "Ike Taylor", "LCB 24 I.Taylor", "Ike Taylor/LCB"],
+    ["RCB", "Bryant McFadden", "RCB 20 B.McFadden", "Bryant McFadden/RCB"],
+    ["SS", "Troy Polamalu", "SS 43 T.Polamalu", "Troy Polamalu/SS"],
+    ["FS", "Ryan Clark", "FS 25 R.Clark", "Ryan Clark/FS"]
+   ],
+   "facts": [
+    { "name": "James Harrison", "fact": "Scoring: game book 'J.Harrison 100 yd. interception return' (Q2 0:00); pfr 'James Harrison 100 yard interception return'." },
+    { "name": "Bryant McFadden", "fact": "Game book lineup RCB 20 B.McFadden; pfr starters Bryant McFadden/RCB." },
+    { "name": "Larry Foote", "fact": "Game book lineup RILB 50 L.Foote beside LILB J.Farrior; pfr starters Larry Foote/RILB." }
+   ]
+  },
+  {
+   "id": "sb-xliii-ari",
+   "game": "Super Bowl XLIII",
+   "matchDate": "2009-02-01",
+   "unit": "offense",
+   "team": "Arizona Cardinals",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Arizona Cardinals Offense", "url": "https://static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf", "via": "https://www.nfl.com/games/steelers-at-cardinals-2008-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Cardinals Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200902010crd.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Kurt Warner", "QB 13 K.Warner", "Kurt Warner/QB"],
+    ["RB", "Edgerrin James", "RB 32 E.James", "Edgerrin James/RB"],
+    ["FB", "Terrelle Smith", "FB 45 T.Smith", "Terrelle Smith/FB"],
+    ["WR", "Larry Fitzgerald", "WR 11 L.Fitzgerald", "Larry Fitzgerald/WR"],
+    ["WR", "Anquan Boldin", "WR 81 A.Boldin", "Anquan Boldin/WR"],
+    ["TE", "Leonard Pope", "TE 82 L.Pope", "Leonard Pope/TE"],
+    ["LT", "Mike Gandy", "LT 69 M.Gandy", "Mike Gandy/LT"],
+    ["LG", "Reggie Wells", "LG 74 R.Wells", "Reggie Wells/LG"],
+    ["C", "Lyle Sendlein", "C 63 L.Sendlein", "Lyle Sendlein/C"],
+    ["RG", "Deuce Lutui", "RG 76 D.Lutui", "Deuce Lutui/RG"],
+    ["RT", "Levi Brown", "RT 75 L.Brown", "Levi Brown/RT"]
+   ],
+   "facts": [
+    { "name": "Larry Fitzgerald", "fact": "Scoring: game book 'L.Fitzgerald 64 yd. pass from K.Warner' (Q4 2:37) and '1 yd.' (Q4 7:33); pfr the same two plays." },
+    { "name": "Terrelle Smith", "fact": "Game book lineup FB 45 T.Smith; pfr starters Terrelle Smith/FB." },
+    { "name": "Leonard Pope", "fact": "Game book lineup TE 82 L.Pope; pfr starters Leonard Pope/TE. Ben Patrick, who caught Warner's 1-yard touchdown, is TE 89 B.Patrick in the Cardinals substitutions." }
+   ]
   }
  ]
 }
