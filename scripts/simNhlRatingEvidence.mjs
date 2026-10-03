@@ -40,7 +40,7 @@ const definitions = {
   market: { anchor: 'const ask = league.ratingModelVersion === NHL_RATING_MODEL_VERSION ? nhlSalaryFor(p.ovr, league.ratingModelVersion) : p.salary;', replacement: 'const ask = p.salary;', failed: [8] },
   sign: { anchor: 'nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap, lg.ratingModelVersion)', replacement: 'nhlSign(lg.teams[myTeam], lg.freeAgents, pid, lg.cap)', failed: [8] },
   gmDraft: { anchor: 'nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion)', replacement: 'nhlProspectToPlayer(pr, Math.random)', failed: [9] },
-  aiDraft: { anchor: 'const aiDraft = nhlAiDraftPicks(lg, remaining, order, Math.random);', replacement: 'const aiDraft = nhlAiDraftPicks({ ...lg, draftAffordabilityVersion: undefined }, remaining, order, Math.random);', failed: [9] },
+  aiDraft: { anchor: 'const aiDraft = nhlAiDraftPicks(lg, aiRemaining, order, Math.random);', replacement: 'const aiDraft = nhlAiDraftPicks({ ...lg, draftAffordabilityVersion: undefined }, aiRemaining, order, Math.random);', failed: [9] },
 };
 const mode = process.env.NHL_RATING_EVIDENCE_CONTROL || '';
 assert.ok(mode === '' || mode === 'original' || Object.hasOwn(definitions, mode), 'Known evidence control');

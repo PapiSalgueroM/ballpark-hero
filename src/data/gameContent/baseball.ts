@@ -1126,7 +1126,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           {
             heading: "Draft picks and scouting error",
             items: [
-              "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
+              "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scout grades carry error; true ratings show only after you pick.",
             ],
           },
         ],
@@ -1202,7 +1202,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       { q: "Are the contracts real?", a: "Rosters and ratings come from real data, but every salary, contract and transaction in the sim is fictional." },
       { q: "Where do the rosters come from?", a: "MLB's own data: each club's major league roster on September 27, 2026, the last day of the regular season. The 26 are the 13 hitters and 13 pitchers who carried the most of that club's season. Hitters are rated off their 2026 OPS and pitchers off a number built from strikeouts, walks and homers, and a rating built on very few games says thin 2026 data next to it." },
       { q: "Can I go over the tax line?", a: "No. Moves that break the line do not go through. That squeeze is most of the job." },
-      { q: "Why did my trade get rejected?", a: "The AI wants a premium on rating, age and position. Add one of your 2 picks, or offer someone younger." },
+      { q: "Why did my trade get rejected?", a: "The AI wants a premium on rating, age and position. Use a pick you still own, or offer someone younger." },
       { q: "Can I get fired?", a: "Yes. Ownership grades the mandate every season and tracks trust from 0 to 100. A 70 win season on a win-the-World-Series payroll costs real trust, and at zero the save ends and you take another job." },
     ],
   },
