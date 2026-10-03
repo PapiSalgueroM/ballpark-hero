@@ -38,7 +38,7 @@ export const GM_UNIT_EDGE_MAX = 3;
 const edgeKey = (what: string): GmStaffKey => ({ none: 0, lo: 0, hi: GM_UNIT_EDGE_MAX, mult: false, what });
 const SCOUT_KEY: GmStaffKey = {
   none: GM_SCOUT_SPREAD_NONE, lo: GM_SCOUT_SPREAD_BEST, hi: GM_SCOUT_SPREAD_NONE, mult: false,
-  what: 'how far a scouted grade can sit from the truth, either way',
+  what: 'the scouting spread, so a grade misses by this at most (rounded up) and by a little over half of it on average',
 };
 const GROWTH_KEY: GmStaffKey = { none: 1, lo: 1, hi: 1.1, mult: true, what: 'how fast young players grow where they have room, never past their ceiling' };
 const INJURY_KEY: GmStaffKey = { none: 1, lo: 0.75, hi: 1, mult: true, what: 'how long an injury keeps a player out' };
@@ -63,6 +63,8 @@ function rulesFor<P extends string>(
     matchRaise: 1.25,
     poachFromLevel: 6,
     unpoachable: posts.filter(p => p.head).map(p => p.id),
+    /* An approach nobody answered by the end of the season takes its man. */
+    walkAtSummer: true,
     growChance: 0.32,
     growChanceRoomy: 0.5,
     outsideFrom: from,
@@ -78,6 +80,17 @@ const PRO_FROM = [
   'Ten years in one building, wants a new one',
   'Did the job for a contender a while back',
 ];
+
+/**
+ * The medical chair every pro front office has: the NBA, MLB and NHL engines
+ * all carry an `out` count of rounds a hurt player misses, which is what
+ * injuryWeeks shortens. The NFL's head trainer below is the same job.
+ */
+const medicalPost = <P extends string>(id: P, label: string): GmStaffPost<P> => ({
+  id, label, short: 'Medical', emoji: '\u{1FA79}',
+  blurb: 'Runs the training room and the rehab. Hurt players are back a little sooner, and a short knock stays a short knock.',
+  effects: [{ key: 'injuryWeeks', none: 1, best: 0.75 }],
+});
 
 /** A pro staff is paid by the week over the weeks the game plays; the head coach earns five times the curve. */
 const proMoney = (poachPerLevel: number): Money => ({
@@ -120,6 +133,7 @@ const NFL_POSTS: readonly GmStaffPost<NflStaffPost>[] = [
 export const NFL_STAFF_PACK: GmStaffPack<NflStaffPost> = {
   id: 'nfl',
   game: 'NFL Front Office',
+  headJob: 'head coach',
   posts: NFL_POSTS,
   rules: rulesFor(NFL_POSTS, proMoney(0.01), { hc: 5, oc: 2, dc: 2 }, PRO_FROM, 'A position coach in the building already'),
   keys: {
@@ -134,7 +148,7 @@ export const NFL_STAFF_PACK: GmStaffPack<NflStaffPost> = {
   },
 };
 
-export type NbaStaffPost = 'hc' | 'assistant' | 'development' | 'scouting';
+export type NbaStaffPost = 'hc' | 'assistant' | 'development' | 'scouting' | 'medical';
 
 const NBA_POSTS: readonly GmStaffPost<NbaStaffPost>[] = [
   {
@@ -157,11 +171,13 @@ const NBA_POSTS: readonly GmStaffPost<NbaStaffPost>[] = [
     blurb: 'Runs the draft board. The better he is, the closer a prospect\'s grade sits to what the kid really is.',
     effects: [SCOUT_EFFECT],
   },
+  medicalPost('medical', 'Head athletic trainer'),
 ];
 
 export const NBA_STAFF_PACK: GmStaffPack<NbaStaffPost> = {
   id: 'nba',
   game: 'NBA Front Office',
+  headJob: 'head coach',
   posts: NBA_POSTS,
   rules: rulesFor(NBA_POSTS, proMoney(0.008), { hc: 5, assistant: 2 }, PRO_FROM, 'A video coordinator in the building already'),
   keys: {
@@ -169,6 +185,7 @@ export const NBA_STAFF_PACK: GmStaffPack<NbaStaffPost> = {
     defEdge: edgeKey('rating points at the defensive end'),
     growth: GROWTH_KEY,
     scoutSpread: SCOUT_KEY,
+    injuryWeeks: INJURY_KEY,
   },
   money: {
     wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 9,
@@ -176,7 +193,7 @@ export const NBA_STAFF_PACK: GmStaffPack<NbaStaffPost> = {
   },
 };
 
-export type MlbStaffPost = 'manager' | 'pitching' | 'hitting' | 'scouting' | 'farm';
+export type MlbStaffPost = 'manager' | 'pitching' | 'hitting' | 'scouting' | 'farm' | 'medical';
 
 const MLB_POSTS: readonly GmStaffPost<MlbStaffPost>[] = [
   {
@@ -204,11 +221,13 @@ const MLB_POSTS: readonly GmStaffPost<MlbStaffPost>[] = [
     blurb: 'Runs player development on the farm. Prospects grow a little faster, and nobody grows past his ceiling.',
     effects: [{ key: 'growth', none: 1, best: 1.1 }],
   },
+  medicalPost('medical', 'Head athletic trainer'),
 ];
 
 export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
   id: 'mlb',
   game: 'MLB Front Office',
+  headJob: 'manager',
   posts: MLB_POSTS,
   rules: rulesFor(MLB_POSTS, proMoney(0.007), { manager: 4, pitching: 2, hitting: 2 }, PRO_FROM, 'A coach on the farm already'),
   keys: {
@@ -216,6 +235,7 @@ export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
     pitchEdge: edgeKey('rating points on the pitching staff'),
     scoutSpread: SCOUT_KEY,
     growth: GROWTH_KEY,
+    injuryWeeks: INJURY_KEY,
   },
   money: {
     wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 26, tickWord: 'week', seasonPurse: 11,
@@ -223,7 +243,13 @@ export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
   },
 };
 
-export type NhlStaffPost = 'hc' | 'specialTeams' | 'goalie' | 'scouting';
+/*
+ * OWED BY THE NHL BIND: src/lib/nhlFrontOffice.ts has no special teams model
+ * today (no power play, no penalty kill), so specialTeamsEdge has nothing to
+ * move. The bind round adds one or re-keys this post; until then nothing
+ * reads it, and no screen may show this pack.
+ */
+export type NhlStaffPost = 'hc' | 'specialTeams' | 'goalie' | 'scouting' | 'medical';
 
 const NHL_POSTS: readonly GmStaffPost<NhlStaffPost>[] = [
   {
@@ -246,11 +272,13 @@ const NHL_POSTS: readonly GmStaffPost<NhlStaffPost>[] = [
     blurb: 'Runs the draft table. The better he is, the closer a prospect\'s grade sits to what the kid really is.',
     effects: [SCOUT_EFFECT],
   },
+  medicalPost('medical', 'Head athletic therapist'),
 ];
 
 export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
   id: 'nhl',
   game: 'NHL Front Office',
+  headJob: 'head coach',
   posts: NHL_POSTS,
   rules: rulesFor(NHL_POSTS, proMoney(0.009), { hc: 5, specialTeams: 2 }, PRO_FROM, 'A coach with the minor league team already'),
   keys: {
@@ -259,6 +287,7 @@ export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
     specialTeamsEdge: edgeKey('rating points on the power play and the penalty kill'),
     goalieEdge: edgeKey('rating points on the goalies'),
     scoutSpread: SCOUT_KEY,
+    injuryWeeks: INJURY_KEY,
   },
   money: {
     wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 8,
@@ -273,7 +302,10 @@ export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
  * src/lib/collegeProgram.ts (Round 728) and stay there for now. These are the
  * two jobs a program has around them. Money is program budget points a
  * season, the same pot the coordinators and the recruiting class are paid
- * from, so the desk ticks once a season.
+ * from, so the desk ticks once a season: an approach lands at that tick, the
+ * way the coaching carousel runs after the regular season, and the GM has
+ * the offseason to match it or let him go. Ignored, he goes at the summer
+ * (walkAtSummer), so ignoring an approach is never free.
  */
 export type CollegeStaffPost = 'recruiting' | 'strength';
 
@@ -313,6 +345,7 @@ const COLLEGE_MONEY: Money = {
 export const CFB_STAFF_PACK: GmStaffPack<CollegeStaffPost> = {
   id: 'cfb',
   game: 'CFB Dynasty',
+  headJob: 'head coach',
   posts: COLLEGE_POSTS,
   rules: rulesFor(COLLEGE_POSTS, COLLEGE_MONEY, {}, COLLEGE_FROM, 'A grad assistant on the staff already'),
   keys: COLLEGE_KEYS,
@@ -325,6 +358,7 @@ export const CFB_STAFF_PACK: GmStaffPack<CollegeStaffPost> = {
 export const CBB_STAFF_PACK: GmStaffPack<CollegeStaffPost> = {
   id: 'cbb',
   game: 'CBB Dynasty',
+  headJob: 'head coach',
   posts: COLLEGE_POSTS,
   rules: rulesFor(COLLEGE_POSTS, COLLEGE_MONEY, {}, COLLEGE_FROM, 'A grad assistant on the staff already'),
   keys: COLLEGE_KEYS,
@@ -390,6 +424,17 @@ export const GYM_STAFF_PACK: GmStaffPack<GymStaffPost> = {
 
 /* ------------------------------------------------------------ Australian football */
 
+/*
+ * Sized to src/lib/aussieRulesManager.ts as it plays today: ten rounds, one
+ * season, six clubs, fatigue but no injuries, no draft and no money. So the
+ * fitness boss moves fatigue (the engine's own number), the desk ticks ten
+ * times and is paid over ten rounds. OWED BY THE AFL BIND: the game has no
+ * scouting read for the list manager to move and never reaches a second
+ * season, so the summer (growth, the reset, a walk at the summer) never runs
+ * there until the game plays more than one; the bind round adds both or
+ * drops the post.
+ */
+
 export type AflStaffPost = 'forwards' | 'midfield' | 'backs' | 'list' | 'fitness';
 
 const AFL_POSTS: readonly GmStaffPost<AflStaffPost>[] = [
@@ -415,18 +460,19 @@ const AFL_POSTS: readonly GmStaffPost<AflStaffPost>[] = [
   },
   {
     id: 'fitness', label: 'Fitness boss', short: 'Fitness', emoji: '\u{1F3C3}',
-    blurb: 'Runs the pre season and the rehab group. Injured players are back sooner, never sooner than a week.',
-    effects: [{ key: 'injuryWeeks', none: 1, best: 0.75 }],
+    blurb: 'Runs the conditioning and the recovery group. Players pick up less fatigue from every match and every session.',
+    effects: [{ key: 'fatigueGain', none: 1, best: 0.8 }],
   },
 ];
 
 export const AFL_STAFF_PACK: GmStaffPack<AflStaffPost> = {
   id: 'afl',
   game: 'Aussie Rules Manager',
+  headJob: 'senior coach',
   posts: AFL_POSTS,
   rules: rulesFor(AFL_POSTS, {
-    wageBase: 2, wagePerLevel: 1.2, feeBase: 0.05, feePerLevel: 0.02, severanceTicks: 11, wagePerPurse: 1000, severanceMin: 0.02,
-    poachPerLevel: 0.006, poachWeeks: 2,
+    wageBase: 2, wagePerLevel: 1.2, feeBase: 0.02, feePerLevel: 0.009, severanceTicks: 5, wagePerPurse: 1000, severanceMin: 0.01,
+    poachPerLevel: 0.014, poachWeeks: 2, feeDp: 2,
   }, {}, [
     'A line coach at another club, out of contract',
     'Coached his own side in the state league',
@@ -439,11 +485,11 @@ export const AFL_STAFF_PACK: GmStaffPack<AflStaffPost> = {
     midfieldEdge: edgeKey('rating points through the midfield'),
     backEdge: edgeKey('rating points on the back line'),
     scoutSpread: SCOUT_KEY,
-    injuryWeeks: INJURY_KEY,
+    fatigueGain: { none: 1, lo: 0.8, hi: 1, mult: true, what: 'the fatigue a player picks up from a match or a training session' },
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 23, tickWord: 'round', seasonPurse: 3,
-    purseNote: 'The football department budget the desk opens with, in the game\'s own millions. The game has no other money yet.',
+    wageUnit: 'k a round', purseUnit: 'm', ticksPerSeason: 10, tickWord: 'round', seasonPurse: 1.3,
+    purseNote: 'The football department budget the desk opens with, in the game\'s own millions, over the ten round season aussieRulesManager.ts plays. The game has no other money yet.',
   },
 };
 

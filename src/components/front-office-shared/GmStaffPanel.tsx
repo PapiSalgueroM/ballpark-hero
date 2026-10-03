@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { GmStaffBlock, GmStaffCtx, GmStaffPack, GmStaffPerson, GmStaffPost } from '@/lib/gmStaff';
 import {
-  gmEffectLine, gmHireStaff, gmMatchStaffOffer, gmReleaseToPoacher, gmSackStaff, gmSeverance,
+  gmEffectLine, gmHireStaff, gmMatchedWage, gmMatchStaffOffer, gmReleaseToPoacher, gmSackStaff, gmSeverance,
   gmStaffPayroll, gmStaffPortraitSvg, gmStaffShortlist,
 } from '@/lib/gmStaff';
 
@@ -80,6 +80,9 @@ export function GmStaffPanel<P extends string>({ pack, block, ctx, purse, purseT
   const poachPerson = poach ? seat(poach.postId) : null;
   const payroll = gmStaffPayroll(r, block);
   const example = pack.posts[0];
+  /* A desk that ticks once a season has one deadline, the summer; any other names its ticks. */
+  const onceASeason = pack.money.ticksPerSeason === 1;
+  const deadline = (n: number) => (onceASeason && r.walkAtSummer ? 'answer before the new season' : `answer within ${ticks(n)}${r.walkAtSummer ? ' and before the season ends' : ''}`);
 
   const match = () => {
     const d = gmMatchStaffOffer(r, block);
@@ -184,8 +187,8 @@ export function GmStaffPanel<P extends string>({ pack, block, ctx, purse, purseT
       {poach && poachPerson && (
         <div className="bg-card border border-gold/40 rounded-xl p-3" data-gm-staff-poach={poach.postId}>
           <div className="text-[10px] text-gold uppercase tracking-wider mb-1.5">
-            {postOf(poach.postId).headCoachTrack
-              ? `${poach.club} want your ${label(poach.postId)} as their head coach`
+            {postOf(poach.postId).headCoachTrack && pack.headJob
+              ? `${poach.club} want your ${label(poach.postId)} as their ${pack.headJob}`
               : `${poach.club} want your ${label(poach.postId)}`}
           </div>
           <div className="flex items-center gap-2">
@@ -193,7 +196,7 @@ export function GmStaffPanel<P extends string>({ pack, block, ctx, purse, purseT
             <div className="flex-1 min-w-0">
               <div className="text-xs text-foreground">{poachPerson.name}</div>
               <div className="text-[9px] text-muted-foreground">
-                Level {poachPerson.level} · {wage(poachPerson.wage)} · answer within {poach.weeksLeft} or he goes
+                Level {poachPerson.level} · {wage(poachPerson.wage)} · {deadline(poach.weeksLeft)} or he goes
               </div>
             </div>
           </div>
@@ -210,7 +213,7 @@ export function GmStaffPanel<P extends string>({ pack, block, ctx, purse, purseT
             </button>
           </div>
           <p className="text-[9px] text-muted-foreground mt-1.5">
-            Matching puts {Math.round((r.matchRaise - 1) * 100)}% on his wage for good and spends one of your {r.matchesPerSeason} matches this season.
+            Matching puts him on {wage(gmMatchedWage(r, poachPerson.wage))} for good and spends one of your {r.matchesPerSeason} matches this season.
           </p>
         </div>
       )}
@@ -232,7 +235,7 @@ export function GmStaffPanel<P extends string>({ pack, block, ctx, purse, purseT
           <div className="rounded-lg border border-border bg-secondary/30 p-2 mb-2 text-[10px] text-muted-foreground space-y-1" data-gm-staff-help>
             <p>Every job holds one person, level 1 to {r.maxLevel}. Level 1 or an empty chair is the game as it always played; every level above that adds a little, and the bar shows how far he can still grow.</p>
             <p>Hire off the shortlist for a fee, or promote the one already in the building for nothing. Paying somebody off costs {ticks(r.severanceTicks)} of his wage.</p>
-            <p>Anybody at level {r.poachFromLevel} or better gets noticed. When a rival comes in you have {ticks(r.poachWeeks)} to match them or he goes, and you can match {r.matchesPerSeason} a season.{pack.posts.some(p => p.head) ? ' Nobody comes in for the head coach: he goes when you say so.' : ''}</p>
+            <p>Anybody at level {r.poachFromLevel} or better gets noticed. When a rival comes in, {deadline(r.poachWeeks)} or he goes. Matching raises his wage by about {Math.round((r.matchRaise - 1) * 100)}% (by at least 1 on a small one), and you can match {r.matchesPerSeason} a season.{pack.posts.some(p => p.head) ? ' Nobody comes in for the head coach: he goes when you say so.' : ''}</p>
             <p>Worked example: {exampleLine}</p>
           </div>
         )}

@@ -22,54 +22,89 @@
         takes a reserved key, one head coach per front office and he is
         unpoachable, every effect key declared, every multiplier 1 with
         nobody in the job (Round 95), a full top level desk lands inside each
-        key's bound so the bound never eats a level somebody paid for.
+        key's bound so the bound never eats a level somebody paid for. A pack
+        with an assistant on the head coach track names the job in its own
+        words (headJob), the four front offices each have a medical post, and
+        every pack has walkAtSummer on.
      3) every level from 1 to 10 moves every effect, read three ways: on the
         ladder, on the desk with the man alone, and on the desk with everybody
-        else at the top. 1053 steps; each must be over half an even ninth of
+        else at the top. 1134 steps; each must be over half an even ninth of
         the ladder. Measured: every one is exactly an even ninth.
      4) a corrupt level (NaN, 99, minus a billion, a string) cannot push an
         effect past its two ends, nor a whole corrupt desk past a key's bound.
-     5) draft grade noise shrinks at every level of the scouting post: at
-        level 1 it IS the front offices' constant, Math.floor(u * 9) - 4,
-        draw for draw (and frontOffice.ts is read to prove it still is);
-        measured mean error 2.22, 2.04, 1.85, 1.67, 1.48, 1.30, 1.11, 0.93,
-        0.74, 0.56 over a 9000 point grid, so every step drops 0.185. The
-        floor is 0.09 a step. Deterministic, so it does not move with a seed.
+     5) draft grade noise shrinks at every level of the scouting post, on the
+        WHOLE NUMBER miss the game adds to a grade (stochastic rounding off
+        the same draw): at level 1 it IS the front offices' constant,
+        Math.floor(u * 9) - 4, draw for draw (and frontOffice.ts is read to
+        prove it still is); measured mean miss 2.22, 2.04, 1.85, 1.67, 1.48,
+        1.30, 1.11, 0.93, 0.74, 0.56 over a 9000 point grid, so every step
+        drops 0.185 (floor 0.09), and the mean is 0.556 of the spread at every
+        level, which is the tile's "a little over half". The band a grade is
+        shown in is the worst miss, the spread rounded up (4,4,4,3,3,3,2,2,2,1
+        either way): every grade the scout produces on the grid sits inside
+        it and both ends are reached. That is an exhaustive check of a
+        deterministic function over every draw slot, not a sampled max.
      6) payroll on each game's own money. Measured (share of the season purse:
         a full level 10 desk, a middling owner's day one desk, a level 1 desk,
-        the fees to hire a whole level 10 desk, the pay offs to clear one):
-          nfl 59/34/13/48/30  nba 58/32/12/34/22  mlb 57/31/12/32/20
-          nhl 65/35/14/39/24  cfb 23/15/6/13/23   cbb 26/13/7/15/26
-          fightGym 30/15/6/8/5  afl 54/33/12/42/25
-        Ceilings 85, 60, (floor 3), 60, 60. Deterministic arithmetic.
+        the dearest name on every shortlist at the top, the pay offs to clear
+        a level 10 desk):
+          nfl 59/34/13/48/30  nba 64/36/14/39/24  mlb 62/34/13/35/22
+          nhl 72/38/15/43/27  cfb 23/15/6/13/23   cbb 26/13/7/15/26
+          fightGym 30/15/6/8/5  afl 54/33/12/42/27
+        Ceilings 85, 60, (floor 3), 60, 60. Deterministic arithmetic. The fees
+        are read off the fee each shortlist QUOTES, and every quote is held to
+        the fee rule with the post's pay multiple.
      7) six seasons of every pack's desk for forty owners from smallest to
         biggest, three owner sets: approaches never for a head coach, never
         for anybody under level 6, a strong assistant is called on, matches
         never pass the limit, every hire leaves the purse short by exactly
         the fee, the block passes its own validator after every tick, nobody
         in a room or on a shortlist shares half a name, nobody grows two
-        levels in a summer or past his potential. Approaches a season with
-        everybody on level 8, measured over the three owner sets:
-          nfl 1.33 to 1.40  nba 1.05 to 1.18  mlb 1.27 to 1.38  nhl 1.18 to 1.24
-          cfb 0.32 to 0.36  cbb 0.29 to 0.34  fightGym 1.48 to 1.65  afl 1.38 to 1.60
+        levels in a summer or past his potential. At every approach every
+        man on the desk is paid off in turn: the approach goes only with the
+        man it is for, the block stays valid, hires moves by one; Club
+        Manager's own sackStaff is held to the same for all four coaches.
+        Every approach left unanswered ends with the man gone, at a tick or
+        at the summer (measured left and walked: nfl 428, nba 447, mlb 530,
+        nhl 499, cfb 47, cbb 38, all of the college ones at the summer).
+        Approaches a season with everybody on level 8, measured over the
+        three owner sets:
+          nfl 1.30 to 1.40  nba 1.35 to 1.42  mlb 1.57 to 1.75  nhl 1.48 to 1.53
+          cfb 0.31 to 0.35  cbb 0.29 to 0.33  fightGym 1.47 to 1.60  afl 1.40 to 1.45
         Band: half the lowest to one and a half times the highest. And a
         level 8 desk draws at least 1.3 times what the day one desk draws
         (measured 1.85 at the lowest).
      8) every effect line at every level is read back and held to the value
         the game applies, and GmStaffPanel prints those lines and reads the
-        match limit instead of typing it.
+        match limit instead of typing it. The match card quotes the wage the
+        match pays (gmMatchedWage, 150 post and level pairs read back), the
+        deadline carries its unit and the job is the pack's headJob.
+     9) the trainer's layoff: every injury post in every pack plus two
+        steeper ones, layoffs of 2 to 20 weeks, a 1000 point roll grid:
+        always a whole number, never under a week, never longer than it was,
+        on average exactly what the tile says, and over six weeks or more
+        every level shortens it (measured thinnest step 0.133 weeks, floor
+        0.066).
 
    Negative controls (each bundles a copy with one line changed and refuses
-   to run if the line is not there; each must exit 1):
+   to run if the line is not there; each must exit 1). Counts measured by the
+   review fix round:
      fixturewage  Club Manager pays 2.2 a level instead of 2.1       section 1 (41)
      fixturecore  the shared summer forgets the roomy grow chance     section 1 (19)
-     flat         every effect is nothing until level 10, then all    sections 3, 5 (952)
-     nocap        gmEffectAt loses its clamp                          sections 4, 5 (314)
-     noscout      the scouting error ignores the scouting post        section 5 (9)
+     flat         every effect is nothing until level 10, then all    sections 3, 5, 8, 9 (1918)
+     nocap        gmEffectAt loses its clamp                          sections 4, 5 (338)
+     noscout      the scouting error ignores the scouting post        section 5 (32)
+     roundnear    the scouting miss rounded to the nearest            section 5 (6)
+     bandround    the band rounds the spread to the nearest           section 5 (6)
      poachhead    a rival can come in for the head coach              section 7 (1)
-     nopoach      nobody is ever approached                           sections 1, 7 (77)
-     dearstaff    a pro staff costs three times as much a level       sections 6, 7 (2692)
-     wrongwords   a multiplier tile promises the top level's lift     section 8 (104)
+     nopoach      nobody is ever approached                           sections 1, 7 (86)
+     dearstaff    a pro staff costs three times as much a level       sections 6, 7 (4654)
+     wrongwords   a multiplier tile promises the top level's lift     section 8 (128)
+     sackkeep     a pay off leaves the approach for an empty chair    section 7 (20462)
+     summerwipe   an approach open at the summer just lapses          section 7 (391)
+     feeflat      a hiring fee ignores the post's pay multiple        section 6 (30)
+     injuryfloor  a layoff can be cut to nothing                      section 9 (15278)
+     rawraise     the match pays a raise the card does not quote      sections 1, 8 (28)
    Run one with GM_STAFF_CONTROL=<name>.
 
    Run:    node scripts/simGmStaff.mjs
@@ -88,7 +123,8 @@ const ROOT_URL = ROOT.replaceAll('\\', '/');
 const FIXTURE = path.join(ROOT, 'scripts/data/cmStaffFixture.json');
 const RECORD = process.env.GM_STAFF_RECORD === '1';
 const CONTROL = process.env.GM_STAFF_CONTROL || '';
-const CONTROLS = ['fixturewage', 'fixturecore', 'flat', 'nocap', 'noscout', 'poachhead', 'nopoach', 'dearstaff', 'wrongwords'];
+const CONTROLS = ['fixturewage', 'fixturecore', 'flat', 'nocap', 'noscout', 'roundnear', 'bandround', 'poachhead', 'nopoach', 'dearstaff', 'wrongwords',
+  'sackkeep', 'summerwipe', 'feeflat', 'injuryfloor', 'rawraise'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`GM_STAFF_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -161,8 +197,43 @@ if (CONTROL === 'nocap') {
     'an effect is no longer held between its two ends');
 }
 if (CONTROL === 'noscout') {
-  controlCopy('core', 'return draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE);', 'return draw;',
+  controlCopy('core', 'return Math.floor(draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE) + rest);', 'return draw;',
     'the scouting error ignores who the scouting director is');
+}
+if (CONTROL === 'roundnear') {
+  /* Review finding 9: the miss rounded to the nearest whole number, which leaves level 2 exactly level 1. */
+  controlCopy('core', 'return Math.floor(draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE) + rest);', 'return Math.round(draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE));',
+    'the scouting miss is rounded to the nearest whole number');
+}
+if (CONTROL === 'bandround') {
+  /* The band as first shipped: the spread rounded to the nearest, narrower than the misses the scout makes. */
+  controlCopy('core', 'return { lo: grade - reach, hi: grade + reach, spread };', 'return { lo: Math.round(grade - spread), hi: Math.round(grade + spread), spread };',
+    'the scouting band rounds the spread to the nearest whole number');
+}
+if (CONTROL === 'sackkeep') {
+  /* Review finding 1: a sack that leaves the approach on the desk for an empty chair. */
+  controlCopy('core', '    poach: block.poach?.postId === post ? null : block.poach,', '    poach: block.poach,',
+    'sacking a man leaves the rival\'s approach for him on the desk');
+}
+if (CONTROL === 'summerwipe') {
+  /* Review findings 2 and 10: the summer quietly drops an approach nobody answered. */
+  controlCopy('core', '  if (!rules.walkAtSummer || !old.poach) return null;', '  if (!old.poach || old.poach) return null;',
+    'an approach still open at the summer lapses instead of taking its man');
+}
+if (CONTROL === 'feeflat') {
+  /* Review finding 3: the fee forgets the post's pay multiple, so a head coach costs what a scout costs. */
+  controlCopy('core', 'rules.feeBase + rules.feePerLevel * level * ctx.money * payOf(rules, post)', 'rules.feeBase + rules.feePerLevel * level * ctx.money',
+    'a hiring fee ignores the post\'s pay multiple');
+}
+if (CONTROL === 'rawraise') {
+  /* Findings 5 and 13: the match applies its own raise and the card quotes another. */
+  controlCopy('core', 'const raised: GmStaffPerson = { ...person, wage: gmMatchedWage(rules, person.wage) };', 'const raised: GmStaffPerson = { ...person, wage: Math.ceil(person.wage * rules.matchRaise) };',
+    'the match pays a raise the card does not quote');
+}
+if (CONTROL === 'injuryfloor') {
+  /* Review finding 4: the trainer can clear a player in no time at all. */
+  controlCopy('core', 'return clamp(Math.floor(weeks * gmEffectAt(effect, level) + r), 1, weeks);', 'return clamp(Math.floor(weeks * gmEffectAt(effect, level) + r), 0, weeks);',
+    'a layoff can be cut to nothing');
 }
 if (CONTROL === 'poachhead') {
   controlCopy('core', 'if (rules.unpoachable?.includes(post)) continue;', '',
@@ -464,8 +535,15 @@ console.log('2) Every pack is well formed: its posts, its keys and its bounds ag
 {
   let posts = 0;
   let effects = 0;
-  const DASH = /[–—]/;
+  const DASH = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
   for (const pack of PACKS) {
+    /* The job a strong assistant is approached for, in this sport's words, never typed into the shared panel. */
+    if (pack.posts.some(p => p.headCoachTrack) && !(typeof pack.headJob === 'string' && pack.headJob.trim())) fail(`${pack.id}: a headCoachTrack post and no headJob to name the job he is approached for`);
+    if (pack.headJob && DASH.test(pack.headJob)) fail(`${pack.id}: a dash in headJob "${pack.headJob}"`);
+    /* Brief Part 2: the four pro packs carry a medical chair. */
+    if (['nfl', 'nba', 'mlb', 'nhl'].includes(pack.id) && !pack.posts.some(p => p.effects.some(e => e.key === 'injuryWeeks'))) fail(`${pack.id}: a front office with no medical post`);
+    /* Without it a desk that ticks once a season ignores every approach for free (section 7 measures the walks). */
+    if (pack.rules.walkAtSummer !== true) fail(`${pack.id}: walkAtSummer is off, so an approach still open at the summer just lapses`);
     const ids = pack.posts.map(p => p.id);
     if (new Set(ids).size !== ids.length) fail(`${pack.id}: two posts share an id`);
     if (ids.join('|') !== pack.rules.posts.join('|')) fail(`${pack.id}: the rules list ${pack.rules.posts.join(',')} and the posts are ${ids.join(',')}`);
@@ -601,16 +679,32 @@ console.log('5) Draft grade noise shrinks at every level of scouting director, f
   const stripped = lf(fs.readFileSync(path.join(ROOT, 'src/lib/frontOffice.ts'), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
   if (!stripped.includes('Math.floor(rng() * 9) - 4')) fail('frontOffice.ts no longer draws its scouting error as Math.floor(rng() * 9) - 4, so level 1 here is not "the draft as it is today" any more');
   if (core.gmScoutSpread(1) !== 4 || Math.abs(core.gmScoutSpread(10) - 1) > EPS) fail(`the spread runs ${core.gmScoutSpread(1)} to ${core.gmScoutSpread(10)}, not 4 to 1`);
+  /* The consumer's view: the miss is added to a whole number grade as it is, so it must be a whole number itself. */
+  let notWhole = 0;
+  for (const lv of LEVELS) for (const u of us) if (!Number.isInteger(core.gmScoutNoise(u, lv))) notWhole += 1;
+  if (notWhole) fail(`${notWhole} scouting misses are not whole numbers, so the caller would have to round them (and rounding to the nearest leaves level 2 the same as level 1)`);
   const means = LEVELS.map(meanAbs);
   let thinnest = Infinity;
-  for (let i = 0; i < 9; i++) {
+  /* The band a whole number grade is shown in: its worst case, the spread rounded up. It narrows at three steps only, and says so. */
+  const REACH = [4, 4, 4, 3, 3, 3, 2, 2, 2, 1];
+  for (let i = 0; i < 10; i++) {
+    const lv = i + 1;
+    /* The tile's words: a little over half the spread on average (measured 0.556 of it at every level). */
+    const ratio = means[i] / core.gmScoutSpread(lv);
+    if (!(ratio > 0.5 && ratio < 0.6)) fail(`scouting level ${lv}: the average miss is ${ratio.toFixed(3)} of the spread, the tile says a little over half`);
+    const band = core.gmScoutBand(75, lv);
+    if (band.lo !== 75 - REACH[i] || band.hi !== 75 + REACH[i]) fail(`scouting level ${lv}: a 75 is shown as ${band.lo} to ${band.hi}, the worst miss is ${REACH[i]} either way`);
+    /* Every grade the scout can produce sits inside the band, and both ends are reached, over every draw on the grid. */
+    let lo = Infinity;
+    let hi = -Infinity;
+    for (const u of us) { const g = 75 + core.gmScoutNoise(u, lv); lo = Math.min(lo, g); hi = Math.max(hi, g); }
+    if (lo < band.lo || hi > band.hi) fail(`scouting level ${lv}: a scouted 75 can read ${lo} to ${hi}, outside the band ${band.lo} to ${band.hi} the screen shows`);
+    if (lo > band.lo || hi < band.hi) fail(`scouting level ${lv}: the band ${band.lo} to ${band.hi} is wider than any grade the scout produces (${lo} to ${hi})`);
+    if (i === 9) continue;
     const drop = means[i] - means[i + 1];
     thinnest = Math.min(thinnest, drop);
-    /* Measured: every step drops the mean error by 0.185 (2.222 at level 1, 0.556 at level 10). Half of that is the floor. */
-    if (!(drop > 0.09)) fail(`scouting level ${i + 1} to ${i + 2}: mean error ${means[i].toFixed(3)} to ${means[i + 1].toFixed(3)}, a drop of ${drop.toFixed(3)}`);
-    const a = core.gmScoutBand(75, i + 1);
-    const b = core.gmScoutBand(75, i + 2);
-    if (!(b.spread < a.spread) || b.hi - b.lo > a.hi - a.lo) fail(`scouting level ${i + 1} to ${i + 2}: the band did not tighten (${a.lo} to ${a.hi}, then ${b.lo} to ${b.hi})`);
+    /* Measured on the whole number miss: every step drops the mean error by 0.185 (2.222 at level 1, 0.556 at level 10). Half of that is the floor. */
+    if (!(drop > 0.09)) fail(`scouting level ${lv} to ${lv + 1}: mean error ${means[i].toFixed(3)} to ${means[i + 1].toFixed(3)}, a drop of ${drop.toFixed(3)}`);
   }
   const b1 = core.gmScoutBand(75, 1);
   const b10 = core.gmScoutBand(75, 10);
@@ -645,8 +739,21 @@ console.log('6) A full desk fits inside each game\'s season purse, and still cos
     /* A middling owner's day one desk, the way a bind would open it. */
     const ctx = { owner: `Middling ${pack.id}`, world: 'now', season: 1, week: 1, money: 1, anchor: post => core.gmStatureAnchor(`Middling ${pack.id}`, post, 0.5), inHouse: 2, rivals: () => ['Rival A', 'Rival B'] };
     const day1 = season(core.gmDefaultStaff(r, ctx)) / pack.money.seasonPurse;
-    /* Hiring a whole top level desk off the shortlist: the fees together. */
-    const fees = pack.posts.reduce((t, p) => t + Math.max(r.feeBase, r.feeBase + r.feePerLevel * 10 * (r.pay?.[p.id] ?? 1)), 0) / pack.money.seasonPurse;
+    /* Hiring a whole top level desk: the dearest name on each post's shortlist when the owner attracts level 10,
+       read off the fee the shortlist QUOTES. Every quote is also held to the rule it is supposed to follow,
+       pay multiple included, so a head coach can never come as cheap as a scout (review finding 3). */
+    const topCtx = { ...ctx, anchor: () => 10 };
+    const topBlock = core.gmDefaultStaff(r, ctx);
+    let feeSum = 0;
+    for (const p of pack.posts) {
+      const list = core.gmStaffShortlist(r, topBlock, topCtx, p.id);
+      for (const c of list) {
+        const want = c.person.academy ? 0 : Math.max(r.feeBase, r.feeBase + r.feePerLevel * c.person.level * (r.pay?.[p.id] ?? 1));
+        if (!(Math.abs(c.fee - want) <= 0.5 * 10 ** -(r.feeDp ?? 1) + EPS)) fail(`${pack.id}/${p.id}: a level ${c.person.level} candidate is quoted ${c.fee}, the fee rule (pay ${r.pay?.[p.id] ?? 1}) says ${want.toFixed(4)}`);
+      }
+      feeSum += Math.max(...list.map(c => c.fee));
+    }
+    const fees = feeSum / pack.money.seasonPurse;
     const sev = pack.posts.reduce((t, p) => t + core.gmSeverance(r, { ...person(10), wage: core.gmStaffWage(r, 10, 1, p.id) }), 0) / pack.money.seasonPurse;
     rows.push(`${pack.id} top ${(top * 100).toFixed(0)}% day1 ${(day1 * 100).toFixed(0)}% floor ${(bottom * 100).toFixed(0)}% fees ${(fees * 100).toFixed(0)}% payoffs ${(sev * 100).toFixed(0)}%`);
     if (!(top <= 0.85)) fail(`${pack.id}: a full level 10 desk costs ${(top * 100).toFixed(0)}% of the season purse (ceiling 85%)`);
@@ -671,6 +778,11 @@ const RATES = {};
   let headApproaches = 0;
   let lowApproaches = 0;
   let grew = 0;
+  let sacksUnderApproach = 0;
+  /* Per pack: approaches left standing after the tick they landed in, men who walked (at a tick or at the summer), and the summer's share. */
+  const left = {};
+  const walked = {};
+  const summerWalks = {};
   for (const pack of PACKS) {
     const r = pack.rules;
     const dp = r.purseDp ?? 2;
@@ -699,12 +811,28 @@ const RATES = {};
                 if (post.head) headApproaches += 1;
                 if (post.headCoachTrack) assistantCalls += 1;
                 if (ev.person.level < r.poachFromLevel) lowApproaches += 1;
+                /* Review finding 1: the GM sacks the man a rival is after. The approach goes with him and the
+                   block stays valid; a block left with an approach for an empty chair fails its validator and
+                   the whole desk would read its day one men. Sacking anybody else leaves the approach alone. */
+                for (const sackPost of pack.posts.map(p => p.id)) {
+                  if (!block[sackPost]) continue;
+                  const s = core.gmSackStaff(r, block, sackPost, 1e9);
+                  sacksUnderApproach += 1;
+                  if (!s) { fail(`${pack.id}: could not pay off ${sackPost} with an approach on the desk`); continue; }
+                  const want = sackPost === ev.post ? null : block.poach;
+                  if (s.next.poach !== want && JSON.stringify(s.next.poach) !== JSON.stringify(want)) fail(`${pack.id}: paying off ${sackPost} with an approach for ${ev.post} left the approach as ${JSON.stringify(s.next.poach)}`);
+                  if (!core.gmIsValidStaff(r, s.next)) fail(`${pack.id}: paying off ${sackPost} with an approach for ${ev.post} on the desk left a block that fails its own validator`);
+                  if (s.next.hires !== block.hires + 1) fail(`${pack.id}: a pay off moved hires from ${block.hires} to ${s.next.hires}`);
+                }
                 const turn = answered++ % 3;
                 if (turn === 0) {
                   const m = core.gmMatchStaffOffer(r, block);
                   if (m) { matched += 1; block = m.next; if (m.raised.wage < m.person.wage + 1) fail(`${pack.id}: matching did not raise his wage`); }
                 } else if (turn === 1) block = core.gmReleaseToPoacher(block).next;
+                /* Turn 2 ignores it, and a match refused at the limit leaves it standing too. */
+                if (block.poach) left[pack.id] = (left[pack.id] ?? 0) + 1;
               }
+              if (ev?.kind === 'walked') walked[pack.id] = (walked[pack.id] ?? 0) + 1;
               if (matched > r.matchesPerSeason) fail(`${pack.id}: ${matched} matches in one season, the limit is ${r.matchesPerSeason}`);
               for (const p of pack.posts) {
                 if (block[p.id]) continue;
@@ -725,7 +853,15 @@ const RATES = {};
               const seated = pack.posts.map(p => block[p.id]?.name).filter(Boolean).flatMap(n => n.split(' '));
               if (new Set(seated).size !== seated.length) fail(`${pack.id}: two people on one desk share half a name: ${seated.join(' ')}`);
             }
+            /* An approach still open at the summer takes its man (review findings 2 and 10). */
+            const gone = core.gmSummerWalk(r, block);
             const next = core.gmRolloverStaff(r, block, ctxAt(season + 1, 0));
+            if (gone) {
+              walked[pack.id] = (walked[pack.id] ?? 0) + 1;
+              summerWalks[pack.id] = (summerWalks[pack.id] ?? 0) + 1;
+              if (next[gone.post] !== null || gone.person !== block[gone.post]) fail(`${pack.id}: the summer said ${gone.post} walked and the next season still has ${next[gone.post]?.name}`);
+            } else if (block.poach) fail(`${pack.id}: an approach for ${block.poach.postId} was open at the summer and nobody walked`);
+            if (next.poach !== null) fail(`${pack.id}: an approach carried over the summer`);
             for (const p of pack.posts) {
               const a = block[p.id];
               const b = next[p.id];
@@ -747,7 +883,8 @@ const RATES = {};
      so a desk whose approaches halved or grew by half fails and the spread
      between owner sets (about ten percent) does not. The nopoach control
      reads 0 everywhere. */
-  const STRONG_MEASURED = { nfl: [1.33, 1.40], nba: [1.05, 1.18], mlb: [1.27, 1.38], nhl: [1.18, 1.24], cfb: [0.32, 0.36], cbb: [0.29, 0.34], fightGym: [1.48, 1.65], afl: [1.38, 1.60] };
+  /* Remeasured by the review fix round (walk at the summer, a medical chair on the NBA, MLB and NHL desks, the AFL desk on ten rounds). */
+  const STRONG_MEASURED = { nfl: [1.30, 1.40], nba: [1.35, 1.42], mlb: [1.57, 1.75], nhl: [1.48, 1.53], cfb: [0.31, 0.35], cbb: [0.29, 0.33], fightGym: [1.47, 1.60], afl: [1.40, 1.45] };
   for (const pack of PACKS) {
     const [lo, hi] = STRONG_MEASURED[pack.id] ?? [NaN, NaN];
     for (const salt of ['a', 'b', 'c']) {
@@ -760,6 +897,35 @@ const RATES = {};
   }
   if (headApproaches) fail(`${headApproaches} approaches for a head coach, whom only the GM can let go`);
   if (lowApproaches) fail(`${lowApproaches} approaches for somebody under level 6`);
+  /* Ignoring an approach is never free: every one left standing ends with the man gone, in every pack,
+     the once a season college desks included (before the fix cfb and cbb walked 0 of about 500). */
+  for (const pack of PACKS) {
+    const l = left[pack.id] ?? 0;
+    const w = walked[pack.id] ?? 0;
+    if (!(l > 0)) fail(`${pack.id}: no approach was ever left standing, so the walk is untested`);
+    if (w !== l) fail(`${pack.id}: ${l} approaches left unanswered and ${w} men walked; an ignored approach must cost the man`);
+  }
+  if (!(sacksUnderApproach > 0)) fail('nobody was ever paid off with an approach on the desk, so that path is untested');
+  /* And Club Manager's own desk, through its own sackStaff: pay off the coach a club is after. */
+  {
+    seedRandom('simGmStaff|sack under approach');
+    const career = cm.startCareer('Everton');
+    const good = desk.staffOf(career);
+    for (const post of CM_POSTS) {
+      const withPoach = { ...career, budget: 1e6, staff: { ...good, poach: { postId: post, club: 'Leeds United', weeksLeft: 2 } } };
+      if (!desk.isValidStaff(withPoach.staff)) { fail(`Club Manager: the test block with an approach for ${post} is not valid to begin with`); continue; }
+      const after = desk.sackStaff(withPoach, post);
+      if (!after) { fail(`Club Manager: could not pay off the ${post} coach with an approach for him on the desk`); continue; }
+      if (!desk.isValidStaff(after.staff)) fail(`Club Manager: paying off the ${post} coach under an approach left a block that fails isValidStaff, so the whole desk would reset to day one`);
+      if (after.staff.poach !== null) fail(`Club Manager: paying off the ${post} coach left the approach for him on the desk`);
+      if (desk.staffOf(after).hires !== good.hires + 1) fail(`Club Manager: after the pay off hires reads ${desk.staffOf(after).hires}, it should be ${good.hires + 1}; the desk reset`);
+      const other = CM_POSTS.find(p => p !== post);
+      const kept = desk.sackStaff(withPoach, other);
+      if (!kept || kept.staff.poach?.postId !== post) fail(`Club Manager: paying off the ${other} coach dropped the approach for the ${post} coach`);
+      sacksUnderApproach += 1;
+    }
+  }
+  console.log(`   ${sacksUnderApproach} pay offs with an approach on the desk; left unanswered then walked (of them at the summer): ${PACKS.map(p => `${p.id} ${left[p.id] ?? 0}/${walked[p.id] ?? 0} (${summerWalks[p.id] ?? 0})`).join(', ')}`);
   const line = PACKS.map(p => `${p.id} ${['natural', 'strong'].map(g => ['a', 'b', 'c'].map(s => RATES[`${p.id}|${g}|${s}`].toFixed(2)).join('/')).join(' then ')}`);
   console.log(`   ${ticks} ticks, ${hires} appointments, ${grew} summer steps up; approaches a season (as the desk opens, then all on level 8, three owner sets):\n   ${line.join('\n   ')}`);
 }
@@ -768,7 +934,7 @@ const RATES = {};
 console.log('8) Every effect line, at every level, says the number the game applies');
 {
   let lines = 0;
-  const DASH = /[–—]/;
+  const DASH = new RegExp('[' + String.fromCharCode(0x2013, 0x2014) + ']');
   for (const pack of PACKS) {
     for (const post of pack.posts) {
       for (const e of post.effects) {
@@ -797,10 +963,75 @@ console.log('8) Every effect line, at every level, says the number the game appl
   if (fs.existsSync(panelPath)) {
     const panel = lf(fs.readFileSync(panelPath, 'utf8')).replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/[^\n]*/gm, '');
     for (const need of ['gmEffectLine', 'matchesLeft', 'gmStaffShortlist', 'wageUnit']) if (!panel.includes(need)) fail(`GmStaffPanel.tsx does not use ${need}`);
+    /* Review findings 5 and 13: the match card quotes the wage the match applies, not matchRaise as a percentage. */
+    if (!panel.includes('gmMatchedWage(r, poachPerson.wage)')) fail('GmStaffPanel.tsx does not quote the matched wage from gmMatchedWage');
+    if (/puts \{Math\.round\(\(r\.matchRaise/.test(panel)) fail('GmStaffPanel.tsx promises matchRaise as an exact raise on the match card');
+    /* Findings 6 and 14: the deadline carries its unit. Finding 15: the job is the pack's word. */
+    if (/answer within \{poach\.weeksLeft\}/.test(panel)) fail('GmStaffPanel.tsx prints the approach deadline as a bare number');
+    if (/as their head coach/.test(panel) || !panel.includes('pack.headJob')) fail('GmStaffPanel.tsx types "head coach" instead of reading the pack\'s headJob');
     if (/\b\d+ match(es)? left/.test(panel)) fail('GmStaffPanel.tsx types the match limit as a number instead of reading it');
     if (DASH.test(panel)) fail('a dash in GmStaffPanel.tsx');
   } else fail('src/components/front-office-shared/GmStaffPanel.tsx is missing');
-  console.log(`   ${lines} lines read back against the ladder`);
+  /* The wage the card quotes is the wage the match applies, at every level a rival comes in for, in every pack. */
+  let raises = 0;
+  for (const pack of PACKS) {
+    const r = pack.rules;
+    for (const post of pack.posts) {
+      if (post.head) continue;
+      for (let lv = r.poachFromLevel; lv <= r.maxLevel; lv++) {
+        const b = blockAt(pack, () => 3);
+        b[post.id] = { ...person(lv, post.id), wage: core.gmStaffWage(r, lv, 1, post.id) };
+        b.poach = { postId: post.id, club: 'Rival', weeksLeft: r.poachWeeks };
+        const m = core.gmMatchStaffOffer(r, b);
+        raises += 1;
+        const quoted = core.gmMatchedWage(r, b[post.id].wage);
+        if (!m || m.raised.wage !== quoted) fail(`${pack.id}/${post.id} at level ${lv}: the card quotes ${quoted}, the match pays ${m?.raised.wage}`);
+      }
+    }
+  }
+  console.log(`   ${lines} lines read back against the ladder; ${raises} matched wages read back against the card`);
+}
+
+/* ---------- 9. The trainer's layoff ---------- */
+console.log('9) A trainer shortens a layoff by what his tile says, on average, never under a week and never longer than it was');
+{
+  const ROLLS = Array.from({ length: 1000 }, (_, i) => (i + 0.5) / 1000);
+  let readings = 0;
+  let thinnest = Infinity;
+  /* Every injury post in every pack, plus two steeper trainers than any pack ships, so the one week floor is tested where it binds. */
+  const effects = PACKS.flatMap(p => p.posts.flatMap(post => post.effects.filter(e => e.key === 'injuryWeeks').map(e => ({ tag: `${p.id}/${post.id}`, e }))));
+  if (effects.length < 5) fail(`only ${effects.length} injury posts across the packs`);
+  effects.push({ tag: 'steep', e: { key: 'injuryWeeks', none: 1, best: 0.1 } }, { tag: 'total', e: { key: 'injuryWeeks', none: 1, best: 0 } });
+  for (const { tag, e } of effects) {
+    for (const weeks of [2, 3, 4, 6, 9, 12, 20]) {
+      let prev = Infinity;
+      for (const lv of LEVELS) {
+        let sum = 0;
+        for (const roll of ROLLS) {
+          const out = core.gmInjuryWeeks(weeks, e, lv, roll);
+          readings += 1;
+          if (!Number.isInteger(out) || out < 1 || out > weeks) fail(`${tag}: a ${weeks} week layoff at level ${lv} (roll ${roll}) became ${out}`);
+          sum += out;
+        }
+        const mean = sum / ROLLS.length;
+        const want = Math.max(1, weeks * core.gmEffectAt(e, lv));
+        /* On average it is what the tile says (the floor of a week aside), to within the roll grid's step. */
+        if (tag !== 'steep' && tag !== 'total' && Math.abs(mean - want) > 0.01) fail(`${tag}: a ${weeks} week layoff at level ${lv} averages ${mean.toFixed(3)}, the tile says ${want.toFixed(3)}`);
+        if (weeks >= 6 && lv > 1 && tag !== 'total') {
+          const drop = prev - mean;
+          thinnest = Math.min(thinnest, drop);
+          /* Measured: the thinnest step is 0.133 weeks (the college strength coach on a six week layoff). Half of it is the floor. */
+          if (!(drop > 0.066)) fail(`${tag}: level ${lv - 1} to ${lv} barely shortens a ${weeks} week layoff on average (${prev.toFixed(3)} to ${mean.toFixed(3)}, floor 0.066)`);
+        }
+        prev = mean;
+      }
+    }
+  }
+  for (const [weeks, want] of [[1, 1], [0.4, 0.4], [0, 0], [-2, 0], [NaN, 0]]) {
+    const out = core.gmInjuryWeeks(weeks, effects[0].e, 10);
+    if (!Object.is(out, want)) fail(`a layoff of ${weeks} came back as ${out}, not ${want}`);
+  }
+  console.log(`   ${readings} layoffs read; the thinnest average step over six weeks or more is ${thinnest.toFixed(3)} weeks (floor 0.066)`);
 }
 
 if (CONTROL) {

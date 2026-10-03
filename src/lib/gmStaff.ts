@@ -106,6 +106,14 @@ export interface GmStaffRules<P extends string = string> {
   poachPerLevel: number;
   /** Posts no rival ever comes in for: a head coach leaves because the GM said so, and for no other reason. */
   unpoachable?: readonly P[];
+  /**
+   * An approach still on the desk when the season ends is a yes: he goes at
+   * the summer instead of the offer quietly lapsing. Without it a desk that
+   * ticks once a season could ignore every approach for free. Club Manager
+   * leaves it off (its history is fixed by scripts/data/cmStaffFixture.json);
+   * every pack in src/data/gmStaff/packs.ts turns it on.
+   */
+  walkAtSummer?: boolean;
   /** The chance a man with room grows a level over a summer, and with three or more levels of room. */
   growChance: number;
   growChanceRoomy: number;
@@ -162,10 +170,10 @@ export const gmHashFloat = (key: string): number => gmHash32(key) / 4294967296;
 
 /**
  * The banks every desk but Club Manager's draws from (it keeps its own two,
- * which are older than this file). Old fashioned on purpose: nobody in a
- * dugout, a film room or a corner today is called any pairing of these, and
- * scripts/simInventedNames.mjs multiplies the two banks out against every
- * real name the site ships to prove it.
+ * which are older than this file). Old fashioned on purpose, so a pairing
+ * reads as made up. scripts/simInventedNames.mjs multiplies the two banks
+ * out against every real name the site ships and fails on any match; that
+ * is all it proves, it says nothing about people the site has never heard of.
  */
 const GM_STAFF_FIRST = [
   'Abner', 'Barnaby', 'Cormac', 'Dashiell', 'Ephraim', 'Fenwick', 'Gideon', 'Horatio', 'Ignatius', 'Jethro',
@@ -422,6 +430,16 @@ export function gmSackStaff<P extends string>(
 }
 
 /**
+ * His wage after a match: matchRaise on it, to a whole number, and never
+ * less than one more than it was. On a small wage that is not exactly
+ * matchRaise (3 goes to 4), so a screen quotes this number, never the
+ * percentage.
+ */
+export function gmMatchedWage<P extends string>(rules: GmStaffRules<P>, wage: number): number {
+  return Math.max(wage + 1, Math.round(wage * rules.matchRaise));
+}
+
+/**
  * Match the rival's money. Costs one of the season's matches and puts the
  * raise on his wage for good, which is the whole price of keeping him.
  * Refuses when there is no approach on the desk or no match left.
@@ -433,7 +451,7 @@ export function gmMatchStaffOffer<P extends string>(
   if (!poach || block.matchesLeft <= 0) return null;
   const person = seats(block)[poach.postId];
   if (!person) return null;
-  const raised: GmStaffPerson = { ...person, wage: Math.max(person.wage + 1, Math.round(person.wage * rules.matchRaise)) };
+  const raised: GmStaffPerson = { ...person, wage: gmMatchedWage(rules, person.wage) };
   const next = withSeat(block, poach.postId, raised, { poach: null, matchesLeft: block.matchesLeft - 1 } as Partial<GmStaffBlock<P>>);
   return { next, person, raised, poach };
 }
@@ -500,16 +518,31 @@ export function gmTickStaff<P extends string>(rules: GmStaffRules<P>, block: GmS
 }
 
 /**
+ * Who the summer takes: under rules.walkAtSummer, the man an approach still
+ * sits on when the season ends. gmRolloverStaff empties his chair; this is
+ * the same answer, for the game to write the line in its own voice. Null
+ * when the rules leave it off or nothing is pending.
+ */
+export function gmSummerWalk<P extends string>(rules: GmStaffRules<P>, old: GmStaffBlock<P>): GmStaffEvent<P> | null {
+  if (!rules.walkAtSummer || !old.poach) return null;
+  const person = seats(old)[old.poach.postId];
+  if (!person) return null;
+  return { kind: 'walked', post: old.poach.postId, person, club: old.poach.club };
+}
+
+/**
  * The summer, for an owner who stays: everybody carries, a level better
  * where there was room and the hash says so, the season's spend and the
  * matches reset. A man with room gets better like anybody else, and the more
  * room he has the likelier it is. Hashed, so a season replayed grows the
- * same people. `ctx` is the NEW season.
+ * same people. `ctx` is the NEW season. Under rules.walkAtSummer an approach
+ * nobody answered takes its man first (gmSummerWalk says who).
  */
 export function gmRolloverStaff<P extends string>(rules: GmStaffRules<P>, old: GmStaffBlock<P>, ctx: GmStaffCtx<P>): GmStaffBlock<P> {
   const out: Record<string, unknown> = { v: rules.version };
+  const gone = gmSummerWalk(rules, old)?.post;
   for (const post of rules.posts) {
-    const p = seats(old)[post];
+    const p = post === gone ? null : seats(old)[post];
     let next = p;
     if (p && p.potential - p.level > 0) {
       const chance = p.potential - p.level >= 3 ? rules.growChanceRoomy : rules.growChance;
@@ -558,9 +591,14 @@ export function gmEffectAt(effect: GmStaffEffect, level: number, maxLevel: numbe
 /**
  * A two sided edge around a neutral value, capped either way: the shape a
  * college coordinator carries today (src/lib/collegeProgram.ts,
- * coordinatorEdge: neutral 70, 0.12 a point, capped at 3). It is here so
- * that model can be moved onto this module without changing a number, and
- * src/lib/gmStaff.test.ts holds the two to the same answer at every rating.
+ * coordinatorEdge: neutral 70, 0.12 a point, capped at 3). The EDGE can move
+ * onto this module without changing a number for any finite rating, and
+ * src/lib/gmStaff.test.ts holds the two to the same answer from 0 to 150.
+ * Two things are not the same and a bind must choose: a rating that is not a
+ * number reads 0 here where coordinatorEdge gives NaN, and collegeProgram's
+ * coordinators are poached by a seeded rng() roll in the offseason with no
+ * match, where this desk is hashed, ticked and matchable. Moving them onto
+ * the desk changes that behaviour and the seeded stream; it is not a lift.
  */
 export function gmBoundedEdge(value: number, neutral: number, perStep: number, cap: number): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) return 0;
@@ -579,25 +617,37 @@ export function gmScoutSpread(level: number): number {
 }
 
 /**
- * The scouting error on one prospect, from one draw `u` in 0 up to 1. With
- * nobody in the job it is exactly the constant the front offices use today,
- * Math.floor(u * 9) - 4, a whole number from -4 to 4, so a game that binds
- * the desk and never opens it grades its draft class as it always has. A
- * better scout scales that same draw down, so the read tightens without
- * spending a second draw. The caller rounds the grade, not the noise.
+ * The scouting error on one prospect, a whole number, from one draw `u` in 0
+ * up to 1. With nobody in the job it is exactly the constant the front
+ * offices use today, Math.floor(u * 9) - 4, so a game that binds the desk and
+ * never opens it grades its draft class as it always has. A better scout
+ * scales that same draw down by spread / 4 and rounds it with the part of
+ * the draw the whole number did not use (stochastic rounding), so the miss
+ * stays a whole number, needs no second draw, and its average shrinks by the
+ * same amount at every level. Rounding to the nearest instead would leave
+ * level 2 exactly level 1 for every draw. Add it to the grade as it is.
  */
 export function gmScoutNoise(u: number, level: number): number {
-  const draw = clamp(Math.floor(clamp(u, 0, 1) * (2 * GM_SCOUT_SPREAD_NONE + 1)), 0, 2 * GM_SCOUT_SPREAD_NONE) - GM_SCOUT_SPREAD_NONE;
-  return draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE);
+  const slots = 2 * GM_SCOUT_SPREAD_NONE + 1;
+  const t = clamp(u, 0, 1) * slots;
+  const k = clamp(Math.floor(t), 0, slots - 1);
+  const rest = clamp(t - k, 0, 0.999999);
+  const draw = k - GM_SCOUT_SPREAD_NONE;
+  return Math.floor(draw * (gmScoutSpread(level) / GM_SCOUT_SPREAD_NONE) + rest);
 }
 
 /**
- * The band a scouted grade is shown inside, and the band a trade desk should
- * value a pick or a prospect inside: the grade give or take the spread.
+ * The band a whole number scouted grade is shown inside, and the band a trade
+ * desk should value a pick or a prospect inside: every grade gmScoutNoise can
+ * produce, and no wider. The miss is a whole number, so its worst case is
+ * the spread rounded up: 4 at levels 1 to 3, 3 at 4 to 6, 2 at 7 to 9, 1 at
+ * 10. The band narrows at those three steps only; what narrows at every
+ * step is the average miss (gmScoutNoise), which is what a level buys.
  */
 export function gmScoutBand(grade: number, level: number): { lo: number; hi: number; spread: number } {
   const spread = gmScoutSpread(level);
-  return { lo: Math.round(grade - spread), hi: Math.round(grade + spread), spread };
+  const reach = Math.ceil(spread - 1e-9);
+  return { lo: grade - reach, hi: grade + reach, spread };
 }
 
 /* ------------------------------------------------------------ the packs */
@@ -613,7 +663,7 @@ export interface GmStaffPost<P extends string = string> {
   effects: readonly GmStaffEffect[];
   /** The head coach. The GM appoints and sacks him, and the rules list him as unpoachable. */
   head?: boolean;
-  /** A strong man in this post is approached for a head coach's job elsewhere, and the screen says so. */
+  /** A strong man in this post is approached for the pack's headJob elsewhere, and the screen says so. */
   headCoachTrack?: boolean;
 }
 
@@ -635,6 +685,12 @@ export interface GmStaffPack<P extends string = string> {
   id: string;
   /** The game it belongs to, for the screen and the harness. */
   game: string;
+  /**
+   * The job a headCoachTrack man is approached for, in this sport's words
+   * ("head coach", "manager", "senior coach"). Required of any pack with a
+   * headCoachTrack post; scripts/simGmStaff.mjs section 2 holds it.
+   */
+  headJob?: string;
   posts: readonly GmStaffPost<P>[];
   rules: GmStaffRules<P>;
   keys: Readonly<Record<string, GmStaffKey>>;
@@ -697,10 +753,20 @@ export function gmEffectLine(k: GmStaffKey, effect: GmStaffEffect, level: number
   return `${Math.round(v * 10) / 10}, from ${effect.none} with nobody in the job: ${k.what}.`;
 }
 
-/** Weeks out after the head trainer has had him: never under one week, never longer than it was. */
-export function gmInjuryWeeks(weeks: number, effect: GmStaffEffect, level: number): number {
+/**
+ * Whole weeks out after the trainer has had him, for a layoff of `weeks`
+ * whole weeks: never under one week and never longer than it was. A layoff
+ * of a week or less is left as it is. `roll` (0 up to 1, from the game's own
+ * draw) rounds the shortened layoff up or down so that on average it is
+ * exactly weeks times the effect, which is what the tile's percentage says;
+ * without a roll it rounds to the nearest, and a small lift then does nothing
+ * to a short layoff.
+ */
+export function gmInjuryWeeks(weeks: number, effect: GmStaffEffect, level: number, roll = 0.5): number {
   if (!(weeks > 0)) return 0;
-  return clamp(Math.round(weeks * gmEffectAt(effect, level)), 1, Math.max(1, Math.round(weeks)));
+  if (weeks <= 1) return weeks;
+  const r = typeof roll === 'number' && Number.isFinite(roll) ? clamp(roll, 0, 0.999999) : 0.5;
+  return clamp(Math.floor(weeks * gmEffectAt(effect, level) + r), 1, weeks);
 }
 
 /* ------------------------------------------------------------ the portrait */

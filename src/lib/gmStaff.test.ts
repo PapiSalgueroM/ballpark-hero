@@ -5,13 +5,15 @@ import { createElement, useState } from 'react';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
-  GM_STAFF_EMPTY_LINE, gmBoundedEdge, gmDefaultStaff, gmEffectAt, gmHireStaff, gmIsValidStaff, gmScoutBand,
-  gmScoutNoise, gmScoutSpread, gmStaffEffect, gmStaffOf, gmStaffShortlist, gmStaffWage, gmStatureAnchor, gmTickStaff,
+  GM_STAFF_EMPTY_LINE, gmBoundedEdge, gmDefaultStaff, gmEffectAt, gmHireStaff, gmInjuryWeeks, gmIsValidStaff, gmMatchedWage,
+  gmRolloverStaff, gmSackStaff, gmScoutBand, gmScoutNoise, gmScoutSpread, gmStaffEffect, gmStaffOf, gmStaffShortlist,
+  gmStaffWage, gmStatureAnchor, gmSummerWalk, gmTickStaff,
 } from '@/lib/gmStaff';
 import type { GmStaffBlock, GmStaffCtx } from '@/lib/gmStaff';
 import { coordinatorEdge, STAFF_EDGE_PER_POINT, STAFF_NEUTRAL, STAFF_UNIT_EDGE_MAX } from '@/lib/collegeProgram';
-import { CM_STAFF_RULES, staffWage } from '@/lib/clubManagerStaff';
-import { GM_STAFF_PACKS, NFL_STAFF_PACK } from '@/data/gmStaff/packs';
+import { CM_STAFF_RULES, isValidStaff, sackStaff, staffOf, staffWage } from '@/lib/clubManagerStaff';
+import { startCareer } from '@/lib/clubManager';
+import { CFB_STAFF_PACK, GM_STAFF_PACKS, NFL_STAFF_PACK } from '@/data/gmStaff/packs';
 import type { NflStaffPost } from '@/data/gmStaff/packs';
 import { GmStaffPanel } from '@/components/front-office-shared/GmStaffPanel';
 
@@ -41,13 +43,26 @@ describe('the scouting read', () => {
       expect(gmScoutNoise(u, 1)).toBe(Math.floor(u * 9) - 4);
     }
   });
-  it('tightens at every level, not just between the ends', () => {
+  it('tightens at every level, not just between the ends, on the whole number grade the game shows', () => {
+    const us = Array.from({ length: 1800 }, (_, i) => (i + 0.5) / 1800);
+    const meanMiss = (lv: number) => us.reduce((t, u) => t + Math.abs(gmScoutNoise(u, lv)), 0) / us.length;
     for (let lv = 1; lv < 10; lv++) {
       expect(gmScoutSpread(lv + 1)).toBeLessThan(gmScoutSpread(lv));
-      expect(Math.abs(gmScoutNoise(0.01, lv + 1))).toBeLessThan(Math.abs(gmScoutNoise(0.01, lv)));
+      /* Measured 0.185 a step; rounding the miss to the nearest would make level 2 the same as level 1. */
+      expect(meanMiss(lv) - meanMiss(lv + 1)).toBeGreaterThan(0.09);
     }
-    expect(gmScoutBand(75, 1)).toMatchObject({ lo: 71, hi: 79 });
-    expect(gmScoutBand(75, 10)).toMatchObject({ lo: 74, hi: 76 });
+    for (const u of us) expect(Number.isInteger(gmScoutNoise(u, 2))).toBe(true);
+  });
+  it('shows a band that holds every miss the scout can make, and narrows where the worst miss does', () => {
+    const reach = [4, 4, 4, 3, 3, 3, 2, 2, 2, 1];
+    for (let lv = 1; lv <= 10; lv++) {
+      const band = gmScoutBand(75, lv);
+      expect([band.lo, band.hi]).toEqual([75 - reach[lv - 1], 75 + reach[lv - 1]]);
+      for (let i = 0; i < 900; i++) {
+        const g = 75 + gmScoutNoise((i + 0.5) / 900, lv);
+        expect(g >= band.lo && g <= band.hi).toBe(true);
+      }
+    }
   });
 });
 
@@ -98,6 +113,64 @@ describe('a save', () => {
   });
 });
 
+describe('an approach on the desk', () => {
+  it('goes with the man the GM pays off, in every pack and in Club Manager, and the desk does not reset', () => {
+    for (const pack of GM_STAFF_PACKS) {
+      const ctx = { owner: `${pack.id} sack`, world: 'now', season: 1, week: 1, money: 1, anchor: (post: string) => gmStatureAnchor(`${pack.id} sack`, post, 0.5), inHouse: 2, rivals: () => ['R'] };
+      const base = gmDefaultStaff(pack.rules, ctx);
+      for (const target of pack.posts.filter(p => !p.head)) {
+        const block = { ...base, poach: { postId: target.id, club: 'R', weeksLeft: 2 } } as GmStaffBlock;
+        expect(gmIsValidStaff(pack.rules, block)).toBe(true);
+        const done = gmSackStaff(pack.rules, block, target.id, 1e9)!;
+        expect(done.next.poach).toBeNull();
+        expect(gmIsValidStaff(pack.rules, done.next)).toBe(true);
+        expect(gmStaffOf(pack.rules, done.next, ctx).hires).toBe(base.hires + 1);
+      }
+    }
+    const career = startCareer('Everton');
+    const good = staffOf(career);
+    const withPoach = { ...career, budget: 1e6, staff: { ...good, poach: { postId: 'attack' as const, club: 'Leeds United', weeksLeft: 2 } } };
+    const after = sackStaff(withPoach, 'attack')!;
+    expect(isValidStaff(after.staff)).toBe(true);
+    expect(staffOf(after).poach).toBeNull();
+    expect(staffOf(after).hires).toBe(good.hires + 1);
+  });
+  it('takes its man at the summer when nobody answered, on the once a season college desk too', () => {
+    const r = CFB_STAFF_PACK.rules;
+    const ctx = { owner: 'Summer U', world: 'now', season: 1, week: 1, money: 1, anchor: () => 8, inHouse: 2, rivals: () => ['State'] };
+    const block = { ...gmDefaultStaff(r, ctx), poach: { postId: 'recruiting' as const, club: 'State', weeksLeft: 1 } };
+    const man = block.recruiting!;
+    const gone = gmSummerWalk(r, block)!;
+    expect(gone).toMatchObject({ kind: 'walked', post: 'recruiting', club: 'State' });
+    expect(gone.person).toBe(man);
+    const next = gmRolloverStaff(r, block, { ...ctx, season: 2 });
+    expect(next.recruiting).toBeNull();
+    expect(next.poach).toBeNull();
+    expect(gmIsValidStaff(r, next)).toBe(true);
+    /* Club Manager's own summer is fixed by its fixture and keeps letting a pending approach lapse. */
+    expect(gmSummerWalk(CM_STAFF_RULES, { ...staffOf(startCareer('Everton')), poach: { postId: 'attack' as const, club: 'Leeds United', weeksLeft: 1 } })).toBeNull();
+  });
+});
+
+describe('the trainer', () => {
+  const e = { key: 'injuryWeeks', none: 1, best: 0.75 };
+  it('never clears a player in under a week, never keeps him out longer, and on average cuts what the tile says', () => {
+    const rolls = Array.from({ length: 1000 }, (_, i) => (i + 0.5) / 1000);
+    for (let lv = 1; lv <= 10; lv++) {
+      let sum = 0;
+      for (const roll of rolls) {
+        const out = gmInjuryWeeks(3, e, lv, roll);
+        expect(Number.isInteger(out) && out >= 1 && out <= 3).toBe(true);
+        sum += out;
+      }
+      expect(sum / rolls.length).toBeCloseTo(3 * gmEffectAt(e, lv), 2);
+    }
+    expect(gmInjuryWeeks(2, { key: 'injuryWeeks', none: 1, best: 0 }, 10, 0.9)).toBe(1);
+    expect(gmInjuryWeeks(0.4, e, 10)).toBe(0.4);
+    expect(gmInjuryWeeks(Number.NaN, e, 10)).toBe(0);
+  });
+});
+
 describe('every pack', () => {
   it('opens a valid desk for a small and a big owner', () => {
     for (const pack of GM_STAFF_PACKS) {
@@ -135,6 +208,16 @@ describe('the panel', () => {
     fireEvent.click(getByLabelText('How the staff desk works'));
     expect(container.querySelector('[data-gm-staff-help]')!.textContent).toContain('Worked example');
     expect(container.textContent).not.toMatch(/[\u2013\u2014]/);
+  });
+
+  it('quotes an approach in the sport\'s words, with its deadline unit and the wage a match really pays', () => {
+    const ctx = ctxFor('Poach Club');
+    const block = { ...gmDefaultStaff(NFL_STAFF_PACK.rules, ctx), poach: { postId: 'oc' as const, club: 'Rival One', weeksLeft: 2 } };
+    const { container } = render(createElement(GmStaffPanel<NflStaffPost>, { pack: NFL_STAFF_PACK, block, ctx, purse: 8, onChange: () => {} }));
+    const card = container.querySelector('[data-gm-staff-poach="oc"]')!.textContent!;
+    expect(card).toContain('Rival One want your offensive coordinator as their head coach');
+    expect(card).toContain('answer within 2 weeks and before the season ends or he goes');
+    expect(card).toContain(`Matching puts him on ${gmMatchedWage(NFL_STAFF_PACK.rules, block.oc!.wage)}k a week for good`);
   });
 
   it('hires off the shortlist into an empty chair and charges the quoted fee', () => {
