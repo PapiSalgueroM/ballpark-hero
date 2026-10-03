@@ -35,8 +35,9 @@ import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
  *     pinch-hit homer ("Gibson (1,9th inning off Eckersley 1 on, 2 out)").
  *   - 2016 G7 Cubs: Willson CONTRERAS started at catcher. David Ross (who
  *     homered) only entered in the 5th alongside Jon Lester.
- *   - 2001 G7 Yankees: Shane SPENCER started LF; Knoblauch and Justice were
- *     pinch-hitters only. Clemens batted 9th (NL park, no DH).
+ *   - 2001 G7 Yankees: Shane SPENCER started LF; Knoblauch and Justice only
+ *     came off the bench (Justice pinch-hit; Knoblauch pinch-hit for O'Neill
+ *     and stayed on in left). Clemens batted 9th (NL park, no DH).
  *
  * Guess checking is LOCAL (normalized compare against blankCandidates), no
  * database dependency. Suggestions come from the union of names in this file.
@@ -319,7 +320,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     ],
     blankCandidates: [
       { name: 'Bob Ojeda', slotIndex: 8, nationality: 'USA', fact: 'Started Game 6, not Dwight Gooden, and went six innings.' },
-      { name: 'Mookie Wilson', slotIndex: 6, nationality: 'USA', fact: 'Hit the grounder that went through Bill Buckner\'s legs, and Ray Knight scored the winning run.' },
+      { name: 'Mookie Wilson', slotIndex: 6, nationality: 'USA', fact: 'His 10th-inning grounder went for an error on Bill Buckner at first, and Ray Knight scored the winning run.' },
       { name: 'Rafael Santana', slotIndex: 7, nationality: 'Dominican Republic', fact: 'Started at short and batted eighth; Kevin Elster and Howard Johnson both took turns there later.' },
     ],
     source: 'baseball-almanac box 198610250NYN + baseball-reference box NYN198610250 (same nine, same order) + SABR Games Project recap. Both boxes: Ojeda 6.0 IP as starter; Knight 2 RBI; Carter SF; Mitchell listed ph only. Both player pages bill him Bob Ojeda. Record: scripts/data/missingNineSources.json.',
@@ -892,7 +893,7 @@ export const NINE_LINEUPS: NineLineup[] = [
     blankCandidates: [
       { name: 'Howie Kendrick', slotIndex: 4, nationality: 'USA', fact: 'His two-run homer off Will Harris in the 7th turned a 2-1 deficit into a 3-2 lead.' },
       { name: 'Anthony Rendon', slotIndex: 2, nationality: 'USA', fact: 'His homer off Zack Greinke in the 7th was Washington\'s first run.' },
-      { name: 'Yan Gomes', slotIndex: 7, nationality: 'Brazil', fact: 'Caught the whole game: Max Scherzer\'s five innings and Patrick Corbin\'s three scoreless.' },
+      { name: 'Yan Gomes', slotIndex: 7, nationality: 'Brazil', fact: 'Caught all nine innings, from Max Scherzer\'s start to Daniel Hudson\'s ninth.' },
     ],
     source: 'baseball-almanac box 201910300HOA + baseball-reference box HOU201910300: both list the same nine in the same order (matched by player id). Checked facts and birthplaces: scripts/data/missingNineSources.json.',
   },
