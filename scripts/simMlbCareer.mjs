@@ -30,14 +30,26 @@
    C1e The era gates hold. In a 2004 career a card whose rule did not exist
        yet is never ELIGIBLE (deck C's three batter minimum before 2020,
        checked on the gate every offseason) and never DRAWN (that card, and
-       deck A's pitch clock before 2023). c.year at the draw is the season
-       ahead, as on the board. Exact, no band.
+       deck A's pitch clock before c.year 2024: the card looks back on
+       violations already called, so it needs a 2023 season behind it).
+       c.year at the draw is the season ahead, as on the board. Exact, no
+       band.
    C2  The words are the effect. Every deck C card, 2,000 draws on saves the
        fleet found eligible for it: the line the player reads is parsed back
        and compared with what the save did, nothing outside the stats a card
        may move is touched (the contract above all), and the chip on the
        button names one of the outcomes that happened, both ways of a gamble
-       seen. Exact, no band: one mismatch is a failure.
+       seen. A trade must land on a club of the save's own era, and at
+       least one trade from a 2004 save must be checked (the pool keeps half
+       its saves from each era for this). Exact, no band: one mismatch is a
+       failure.
+   C2r The same check with no headroom given: on the saves as the fleet
+       left them, pushed to every ceiling, and pushed to every floor. The
+       chip is written for the save it is shown on, so a stat that cannot
+       move is not promised. Exact, no band.
+   Since the Round 919 review the fleet also keeps the board's order: a
+   suspended season draws no card, and a season that retires the player
+   ends the career before any card is drawn.
    T   Every life card drawn, in decks A, B and C, carries its category and
        cooldown tags (the table the summer step list reads). The corruption
        deck is untagged on purpose (another lane owns that file tonight).
@@ -46,10 +58,12 @@
    mutates exists and each must turn the run red:
      nodeck     empties the catalog                         -> C1 red
      eraleak    drops the 2020 gate on the three batter card -> C1e red
-     clockleak  drops deck A's 2023 pitch clock gate          -> C1e red
+     clockleak  drops deck A's pitch clock gate (c.year 2024)  -> C1e red
      wordsbreak hides a morale change in a card               -> C2 red
      tradepay   cuts the salary on the trade                  -> C2 red
      notags     strips one deck A card's tags                 -> T red
+     tradeera   the deck C trade forgets the era              -> C2 red
+     chipblind  the chip stops reading the save               -> C2r red
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -60,7 +74,7 @@ import { unlinkSync, readFileSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const CONTROL = process.env.SIM_MLB_CONTROL || '';
-const CONTROLS = ['', 'nodeck', 'eraleak', 'clockleak', 'wordsbreak', 'tradepay', 'notags'];
+const CONTROLS = ['', 'nodeck', 'eraleak', 'clockleak', 'wordsbreak', 'tradepay', 'notags', 'tradeera', 'chipblind'];
 if (!CONTROLS.includes(CONTROL)) {
   console.error(`unknown SIM_MLB_CONTROL "${CONTROL}", expected one of: ${CONTROLS.slice(1).join(', ')}`);
   process.exit(2);
@@ -90,8 +104,16 @@ if (CONTROL === 'notags') {
   /* The kangaroo court card is open to everyone from the second offseason. */
   cutInBundle('the kangaroo court card', 'id: "mlbA_kangaroo_court"', 'category: "clubhouse",', '', 120);
 }
+if (CONTROL === 'tradeera') {
+  /* The trade pool forgets the career's era (the review's mutation). */
+  cutInBundle('the deck C trade', 'moved = `Traded to ', 'mlbEraTeamIds(cc.eraId)', 'mlbEraTeamIds(void 0)', 300);
+}
+if (CONTROL === 'chipblind') {
+  /* The chip stops reading the save, as it did before the review. */
+  cutInBundle('the deck C chip', 'function mlbLifeCChip(', 'canMove(c, key, d)', 'true', 400);
+}
 if (CONTROL === 'clockleak') {
-  cutInBundle('the pitch clock card', 'id: "mlbA_pitch_clock"', 'yrs >= 1 && c.year >= 2023', 'yrs >= 1', 400);
+  cutInBundle('the pitch clock card', 'id: "mlbA_pitch_clock"', 'yrs >= 1 && c.year >= 2024', 'yrs >= 1', 400);
 }
 
 const eng = await import(pathToFileURL(OUT).href);
@@ -99,7 +121,7 @@ const {
   MLB_ARCHETYPES, startMlbCareer, simMlbSeason, mlbProgress, drawMlbEvent, mlbShouldRetire,
   mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbMarketSalary,
   MLB_SPEND_ITEMS, buyMlbItem, mlbAssignRole, mlbCampBattle,
-  MLB_LIFE_C, buildMlbLifeCCard,
+  MLB_LIFE_C, buildMlbLifeCCard, mlbEraTeamIds,
 } = eng;
 unlinkSync(OUT);
 
@@ -111,7 +133,7 @@ const DRAWS_PER_CARD = 2000;
 /* The cards whose rule did not exist in 2004, with the first season it
    applied. Listed here by hand, on purpose: the harness must not learn the
    gate from the file it is checking. */
-const FIRST_SEASON = { mlbC_rp_three_batter: 2020, mlbA_pitch_clock: 2023 };
+const FIRST_SEASON = { mlbC_rp_three_batter: 2020, mlbA_pitch_clock: 2024 };
 
 if (MLB_LIFE_C.length !== DECK_C) throw new Error(`deck C is ${MLB_LIFE_C.length} cards, the harness expects ${DECK_C}`);
 const defOf = id => {
@@ -173,7 +195,8 @@ for (let i = 0; i < CAREERS; i++) {
 
     while (!c.retired && guard++ < 30) {
       // A suspension costs the season.
-      if ((c.suspendedSeasons ?? 0) > 0) {
+      const served = (c.suspendedSeasons ?? 0) > 0;
+      if (served) {
         c.suspendedSeasons -= 1;
         c.seasons.push({
           year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
@@ -197,19 +220,30 @@ for (let i = 0; i < CAREERS; i++) {
       mlbProgress(c, Math.random);
       if (c.ovr > peak) peak = c.ovr;
 
+      /* The board's own order (MlbMyCareerBoard): a suspended season goes
+         straight back to the hub with no card, and a season that ends the
+         career retires it before any card is drawn. Before the Round 919
+         review the fleet drew a card after the last season too, which the
+         board never does and which flattered the veteran cards' reach. */
+      if (!served && mlbShouldRetire(c)) c.retired = true;
+      const drawsCard = !served && !c.retired;
+
       /* Round 919: keep a few of the saves each deck C card was eligible on,
          for section C2, and check the era gates on the gate itself. Reads
          the gate only, draws nothing. */
-      for (const d of MLB_LIFE_C) {
+      if (drawsCard) for (const d of MLB_LIFE_C) {
         if (!d.when(c)) continue;
         cEligible.set(d.id, (cEligible.get(d.id) ?? 0) + 1);
         if (eraId === 'y2004' && FIRST_SEASON[d.id] && c.year < FIRST_SEASON[d.id]) eraLeaks.push(`${d.id} eligible in career ${i}, ${c.year}`);
+        /* Half the pool from each era, so the trade check in C2 sees 2004
+           saves wherever the fleet found any. */
         const pool = pools.get(d.id) ?? [];
-        if (pool.length < POOL_CAP) { pool.push(clone(c)); pools.set(d.id, pool); }
+        const sameEra = pool.filter(p => (p.eraId === 'y2004') === (eraId === 'y2004')).length;
+        if (sameEra < POOL_CAP / 2) { pool.push(clone(c)); pools.set(d.id, pool); }
       }
 
       // draw and resolve an offseason event
-      const ev = drawMlbEvent(c, Math.random);
+      const ev = drawsCard ? drawMlbEvent(c, Math.random) : null;
       if (ev) {
         seenEventIds.add(ev.id);
         if (/^mlb[ABC]_/.test(ev.id)) {
@@ -232,8 +266,6 @@ for (let i = 0; i < CAREERS; i++) {
           if (res) { buyable.add(item.id); shopState = res.state; }
         }
       }
-
-      if (mlbShouldRetire(c)) c.retired = true;
     }
 
     peaks.push(peak);
@@ -270,7 +302,7 @@ const observedChip = d => {
   return bits.length ? bits.sort().join('|') : 'no change';
 };
 
-let c2Draws = 0, c2Bad = 0;
+let c2Draws = 0, c2Bad = 0, c2EraTrades = 0;
 const c2Examples = [];
 const c2NoSave = [];
 const c2Unseen = [];
@@ -285,11 +317,24 @@ for (const def of MLB_LIFE_C) {
        words, and the clamps have their own vitest cases. */
     c.morale = 50; c.fanbase = 50; c.health = 60;
     c.ovr = Math.min(c.ovr, 90); c.pot = Math.max(c.pot, c.ovr + 5);
+    const { k, hit, bad, line } = checkDraw(def, c);
+    c2Draws++;
+    if (hit >= 0) branchSeen[k].add(hit);
+    if (bad.length) {
+      c2Bad++;
+      if (c2Examples.length < 5) c2Examples.push(`${def.id} option ${k}: ${bad.join('; ')} | line: ${line}`);
+    }
+  }
+  branchSeen.forEach((seen, k) => { if (seen.size < branchWant[k]) c2Unseen.push(`${def.id} option ${k}`); });
+}
+
+/* One draw of one card on one save: the line read back against what the
+   save did, the chip against the outcome, and a trade against the era. */
+function checkDraw(def, c) {
     const ev = buildMlbLifeCCard(def, c);
     const k = Math.floor(Math.random() * ev.options.length);
     const before = clone(c);
     const log = ev.options[k].apply(c, Math.random);
-    c2Draws++;
     const delta = {
       ovr: c.ovr - before.ovr, morale: c.morale - before.morale, fanbase: c.fanbase - before.fanbase,
       health: c.health - before.health, earnings: c.earnings - before.earnings,
@@ -310,15 +355,36 @@ for (const def of MLB_LIFE_C) {
     if (!near(earned + worth, delta.netWorth)) bad.push(`net worth moved ${delta.netWorth.toFixed(2)}`);
     if (/Traded to /.test(line) !== delta.team) bad.push(delta.team ? 'moved team without saying so' : 'said traded, team unchanged');
     if (rest(c) !== rest(before)) bad.push('touched a field no card may move');
+    if (delta.team) {
+      if (!mlbEraTeamIds(c.eraId).includes(c.team)) bad.push(`traded to ${c.team}, not a club of the ${c.eraId ?? 'modern'} era`);
+      if (c.eraId === 'y2004') c2EraTrades++;
+    }
     const hit = chipBranches(ev.options[k].effect).indexOf(observedChip(delta));
     if (hit < 0) bad.push(`button said "${ev.options[k].effect}", the save did "${observedChip(delta)}"`);
-    else branchSeen[k].add(hit);
+    return { k, hit, bad, line };
+}
+
+/* C2r: the same check on the saves as the fleet left them, and pushed to
+   the ceilings and the floors, with no headroom given. The chip is written
+   for the save it is shown on, so "health up" must never be offered to a
+   player already at 100. Before the Round 919 review 17 percent of the
+   sure options on real saves promised a move the save could not make. */
+const RAW_DRAWS = 600;
+let c2rDraws = 0, c2rBad = 0;
+const c2rExamples = [];
+for (const def of MLB_LIFE_C) {
+  const pool = pools.get(def.id) ?? [];
+  for (let d = 0; d < (pool.length ? RAW_DRAWS : 0); d++) {
+    const c = clone(pool[d % pool.length]);
+    if (d % 3 === 1) { c.morale = 100; c.fanbase = 100; c.health = 100; c.ovr = Math.min(c.pot + 1, 99); }
+    if (d % 3 === 2) { c.morale = 0; c.fanbase = 0; c.health = 0; c.ovr = 50; }
+    const { k, bad, line } = checkDraw(def, c);
+    c2rDraws++;
     if (bad.length) {
-      c2Bad++;
-      if (c2Examples.length < 5) c2Examples.push(`${def.id} option ${k}: ${bad.join('; ')} | line: ${line}`);
+      c2rBad++;
+      if (c2rExamples.length < 5) c2rExamples.push(`${def.id} option ${k}: ${bad.join('; ')} | line: ${line}`);
     }
   }
-  branchSeen.forEach((seen, k) => { if (seen.size < branchWant[k]) c2Unseen.push(`${def.id} option ${k}`); });
 }
 
 /* ------------------------------ the report ------------------------------ */
@@ -350,7 +416,9 @@ console.log(`  corruption fired : ${[...seenEventIds].filter(id => id.startsWith
 console.log(`shop items usable  : ${buyable.size}/${MLB_SPEND_ITEMS.length}`);
 console.log(`C1e era leaks      : ${eraLeaks.length}  (a gated card eligible or drawn too early in a 2004 career, must be 0)`);
 for (const l of eraLeaks.slice(0, 3)) console.log(`    ${l}`);
-console.log(`C2 words vs effect : ${c2Draws} draws, ${c2Bad} mismatches, ${c2Unseen.length} outcomes never seen, ${c2NoSave.length} cards with no eligible save`);
+console.log(`C2 words vs effect : ${c2Draws} draws, ${c2Bad} mismatches, ${c2Unseen.length} outcomes never seen, ${c2NoSave.length} cards with no eligible save, ${c2EraTrades} trades from a 2004 save checked against the era`);
+console.log(`C2r at the clamps  : ${c2rDraws} draws on saves as left, at the ceilings and at the floors, ${c2rBad} mismatches`);
+for (const ex of c2rExamples) console.log(`    ${ex}`);
 for (const ex of c2Examples) console.log(`    ${ex}`);
 if (c2Unseen.length) console.log(`    unseen         : ${c2Unseen.slice(0, 5).join(', ')}`);
 if (c2NoSave.length) console.log(`    no save        : ${c2NoSave.slice(0, 5).join(', ')}`);
@@ -380,6 +448,8 @@ if (buyable.size < MLB_SPEND_ITEMS.length) fails.push(`${MLB_SPEND_ITEMS.length 
 if (cDistinct < DECK_C_FLOOR) fails.push(`C1 deck C reached ${cDistinct}/${DECK_C}, floor ${DECK_C_FLOOR}`);
 if (eraLeaks.length) fails.push(`C1e ${eraLeaks.length} era leaks`);
 if (c2Bad || c2NoSave.length || c2Unseen.length) fails.push(`C2 ${c2Bad} word mismatches, ${c2NoSave.length} cards untested, ${c2Unseen.length} outcomes unseen`);
+if (!c2EraTrades) fails.push('C2 no trade from a 2004 save was checked against the era');
+if (c2rBad) fails.push(`C2r ${c2rBad} mismatches on saves at their ceilings and floors`);
 if (untagged.size) fails.push(`T ${untagged.size} life cards drawn without tags`);
 if (!lifeDraws) fails.push('T no life card was drawn at all');
 console.log(fails.length ? `\nFAIL: ${fails.join('; ')}` : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged');
