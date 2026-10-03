@@ -161,29 +161,34 @@ export interface Perk {
 }
 
 export const PERKS: Perk[] = [
-  { id: 'longNight', label: 'Long Night', emoji: '🌙', pitch: 'for long days away', cost: [3, 6, 12] },
-  { id: 'nightShift', label: 'Night Shift', emoji: '🔦', pitch: 'for a night away', cost: [3, 6, 12] },
-  { id: 'headStart', label: 'Head Start', emoji: '🚀', pitch: 'for quick runs', cost: [3, 6, 12] },
-  { id: 'scouting', label: 'Scouting Network', emoji: '🔭', pitch: 'for long runs', cost: [3, 6, 12] },
+  { id: 'longNight', label: 'Long Night', emoji: '🌙', pitch: 'for long days away', cost: [3, 5, 8] },
+  { id: 'nightShift', label: 'Night Shift', emoji: '🔦', pitch: 'for a night away', cost: [3, 5, 8] },
+  { id: 'headStart', label: 'Head Start', emoji: '🚀', pitch: 'for quick runs', cost: [3, 5, 8] },
+  { id: 'scouting', label: 'Scouting Network', emoji: '🔭', pitch: 'for long runs', cost: [3, 5, 8] },
 ];
 export const PERK_MAX = 3;
 
 /** away cap by Long Night level, 0 to 3 */
-export const LONG_NIGHT_CAP_MS = [OFFLINE_CAP_MS, ...[12, 16, 24].map(h => h * 3600 * 1000)];
+export const LONG_NIGHT_CAP_MS = [OFFLINE_CAP_MS, ...[16, 20, 24].map(h => h * 3600 * 1000)];
 /** away rate by Night Shift level; every one of them stays under full speed,
  *  because being there has to beat being away */
-export const NIGHT_SHIFT_RATE = [OFFLINE_RATE, 0.6, 0.7, 0.8];
+export const NIGHT_SHIFT_RATE = [OFFLINE_RATE, 0.7, 0.8, 0.95];
 /** the squad a run starts with after a lift, by Head Start level */
 export const HEAD_START_SQUAD: Record<string, number>[] = [
   { ballboy: 1 },
-  { ballboy: 10 },
-  { ballboy: 10, striker: 10 },
-  { ballboy: 10, striker: 10, guard: 10 },
+  { ballboy: 25, striker: 10 },
+  { ballboy: 25, striker: 25, guard: 10 },
+  { ballboy: 25, striker: 25, guard: 25, slugger: 10 },
 ];
-/** the price growth per signing, by Scouting Network level */
-export const SCOUTING_GROWTH = [GROWTH, 1.14, 1.13, 1.12];
+/** Scouting Network finds the top four archetypes cheaper and leaves the rest
+ *  alone, so it pays in a run long enough to sign them in numbers and does
+ *  nothing for a quick one. */
+export const SCOUTED_GENS = ['sniper', 'qb', 'ace', 'champion'];
+/** the price growth per signing of a scouted archetype, by level */
+export const SCOUTING_GROWTH = [GROWTH, 1.11, 1.08, 1.05];
 
-const SQUAD_NAMES: Record<string, string> = { ballboy: 'Ball Boys', striker: 'Sunday Strikers', guard: 'Point Guards' };
+const labelOf = (genId: string) => GENERATORS.find(g => g.id === genId)?.label ?? genId;
+const plural = (genId: string) => `${labelOf(genId)}s`;
 
 /** What one level gives, in the words the trophy room prints. Built from the
  *  same tables the engine reads, so the card cannot promise something else. */
@@ -192,11 +197,13 @@ export function perkEffect(id: Perk['id'], level: number): string {
   if (id === 'longNight') return `Time away pays for up to ${LONG_NIGHT_CAP_MS[l] / 3600000} hours, not ${LONG_NIGHT_CAP_MS[0] / 3600000}`;
   if (id === 'nightShift') return `Time away runs at ${Math.round(NIGHT_SHIFT_RATE[l] * 100)}% speed, not ${Math.round(NIGHT_SHIFT_RATE[0] * 100)}%`;
   if (id === 'headStart') {
-    const squad = Object.entries(HEAD_START_SQUAD[l]).map(([g, n]) => `${n} ${SQUAD_NAMES[g] ?? g}`);
-    return `Every run after a lift starts with ${squad.length > 1 ? squad.slice(0, -1).join(', ') + ' and ' + squad[squad.length - 1] : squad[0]}`;
+    const squad = Object.entries(HEAD_START_SQUAD[l]).map(([g, n]) => `${n} ${plural(g)}`);
+    return `Every run after a lift starts with ${listOf(squad)}`;
   }
-  return `Each signing costs ${Math.round((SCOUTING_GROWTH[l] - 1) * 100)}% more than the last, not ${Math.round((SCOUTING_GROWTH[0] - 1) * 100)}%`;
+  return `Each ${listOf(SCOUTED_GENS.map(labelOf))} you sign costs ${Math.round((SCOUTING_GROWTH[l] - 1) * 100)}% more than the last, not ${Math.round((SCOUTING_GROWTH[0] - 1) * 100)}%`;
 }
+
+const listOf = (xs: string[]) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs[0] ?? '');
 
 export interface ArenaState {
   v: 1;
@@ -287,9 +294,10 @@ export function serialize(s: ArenaState): string {
 export function perkLevel(s: Pick<ArenaState, 'perks'>, id: Perk['id']): number {
   return s.perks?.[id] ?? 0;
 }
-/** the price growth per signing this arena pays (Scouting Network) */
-export function growthOf(s: Pick<ArenaState, 'perks'>): number {
-  return SCOUTING_GROWTH[perkLevel(s, 'scouting')];
+/** the price growth per signing this arena pays for one archetype (Scouting
+ *  Network reaches only the scouted ones) */
+export function growthOf(s: Pick<ArenaState, 'perks'>, genId: string): number {
+  return SCOUTED_GENS.includes(genId) ? SCOUTING_GROWTH[perkLevel(s, 'scouting')] : GROWTH;
 }
 /** the longest one absence keeps paying for (Long Night) */
 export function awayCapMs(s: Pick<ArenaState, 'perks'>): number {
@@ -434,7 +442,7 @@ export function buyGen(s: ArenaState, genId: string, n = 1): ArenaState {
   const g = GENERATORS.find(x => x.id === genId);
   if (!g || n < 1) return s;
   const owned = s.owned[g.id] ?? 0;
-  const cost = genCostN(g, owned, n, growthOf(s));
+  const cost = genCostN(g, owned, n, growthOf(s, g.id));
   if (cost > s.points) return s;
   return withAch({ ...s, points: s.points - cost, owned: { ...s.owned, [g.id]: owned + n } });
 }
