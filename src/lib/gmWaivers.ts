@@ -10,6 +10,13 @@
    loans. A man nobody claims has cleared, and his sport sends him where
    it sends a cleared man (back to the tier, or the free agent pool).
 
+   "Worst record" is the league's own measure: winning percentage in the
+   NFL, the NBA and MLB, the share of possible points in the NHL, where an
+   overtime loss is worth a point (CBA 13.19). Before a club has played this
+   season, the previous season's final standing orders the wire, which is
+   what every league does in its offseason and on opening day; the farm
+   keeps that standing on each club (gmFarm.ts closeSeason).
+
    scripts/simGmFarm.mjs checks the order, that claims happen at all on real
    engine leagues, and that a claimed man never returns. Its control
    removes the claim step below and the waiver check must go red. */
@@ -18,25 +25,49 @@
 export interface WaiverClub {
   abbr: string;
   wins: number;
+  /** Regulation losses (every loss outside the NHL). */
   losses: number;
+  /** NHL: overtime and shootout losses, a point each. */
+  otLosses?: number;
+  /** Last season's final standing on the same measure, when the farm kept one. */
+  prev?: number;
 }
 
-/** Winning share, 0.5 before a club has played. */
-export const winPct = (c: Pick<WaiverClub, 'wins' | 'losses'>): number => {
-  const g = c.wins + c.losses;
+/** How a league measures a record for the wire. */
+export type ClaimBasis = 'winPct' | 'pointsPct';
+
+/** Winning share, wins over games played, 0.5 before a club has played. An NHL overtime loss is a game. */
+export const winPct = (c: Pick<WaiverClub, 'wins' | 'losses' | 'otLosses'>): number => {
+  const g = c.wins + c.losses + (c.otLosses ?? 0);
   return g > 0 ? c.wins / g : 0.5;
 };
 
+/** NHL: points earned over points possible (two a win, one an overtime loss), 0.5 before a club has played. */
+export const pointsPct = (c: Pick<WaiverClub, 'wins' | 'losses' | 'otLosses'>): number => {
+  const g = c.wins + c.losses + (c.otLosses ?? 0);
+  return g > 0 ? (2 * c.wins + (c.otLosses ?? 0)) / (2 * g) : 0.5;
+};
+
+/** The record the wire reads this season. */
+export const standing = (c: WaiverClub, basis: ClaimBasis): number => (basis === 'pointsPct' ? pointsPct(c) : winPct(c));
+
+const played = (c: WaiverClub): number => c.wins + c.losses + (c.otLosses ?? 0);
+
 /**
  * The claim order: every club but the one exposing him, worst record first.
- * Ties go to fewer wins, then by abbreviation so the order never depends on
- * object key order. (The leagues break ties on last season's record, which
- * the engines do not keep; this is the game's own tie break.)
+ * A club that has not played yet is placed by last season's final standing
+ * (prev); ties then go to last season's standing (MLB's own tie break),
+ * then the lower winning share (the NHL's first tie break after points),
+ * then fewer wins, then the abbreviation, so the order never depends on
+ * object key order. A new league has no last season, so before its first
+ * game the abbreviation decides: the game's own fallback.
  */
-export function claimOrder<C extends WaiverClub>(clubs: C[], fromAbbr: string): C[] {
+export function claimOrder<C extends WaiverClub>(clubs: C[], fromAbbr: string, basis: ClaimBasis = 'winPct'): C[] {
+  const now = (c: C) => (played(c) > 0 || c.prev === undefined ? standing(c, basis) : c.prev);
+  const last = (c: C) => c.prev ?? 0.5;
   return clubs
     .filter(c => c.abbr !== fromAbbr)
-    .sort((a, b) => winPct(a) - winPct(b) || a.wins - b.wins || a.abbr.localeCompare(b.abbr));
+    .sort((a, b) => now(a) - now(b) || last(a) - last(b) || winPct(a) - winPct(b) || a.wins - b.wins || a.abbr.localeCompare(b.abbr));
 }
 
 export interface WaiverResult<C> {
@@ -51,8 +82,8 @@ export interface WaiverResult<C> {
  * and need, the sport's rule); the first club in the claim order that wants
  * him gets him. The caller moves him and records the loss with recordLoss.
  */
-export function runWaivers<C extends WaiverClub>(clubs: C[], fromAbbr: string, wants: (c: C) => boolean): WaiverResult<C> {
-  const order = claimOrder(clubs, fromAbbr);
+export function runWaivers<C extends WaiverClub>(clubs: C[], fromAbbr: string, wants: (c: C) => boolean, basis: ClaimBasis = 'winPct'): WaiverResult<C> {
+  const order = claimOrder(clubs, fromAbbr, basis);
   const claimer = order.find(c => wants(c)) ?? null;
   return { claimer, order: order.map(c => c.abbr) };
 }

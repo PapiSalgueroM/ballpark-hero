@@ -40,7 +40,7 @@
    league and every tier, so no new name pool exists here. */
 import { leagueNames } from './foNames';
 import { makeIdMinter } from './entityIds';
-import { runWaivers, recordLoss, waiverReturnRefusal } from './gmWaivers';
+import { runWaivers, recordLoss, waiverReturnRefusal, standing, type ClaimBasis } from './gmWaivers';
 
 export type FarmSport = 'nfl' | 'nba' | 'mlb' | 'nhl';
 
@@ -77,6 +77,8 @@ export interface FarmRules {
   elevationsPerSeason?: number;
   /** NFL: elevations per club per game. */
   elevationsPerGame?: number;
+  /** NBA: the most standard contracts, beside the two way men. */
+  standardMax?: number;
   /** NBA: games a two way man may be active for in a regular season. */
   twoWayGames?: number;
   /** MLB: the 40 man roster, the active roster and September's active roster. */
@@ -95,8 +97,13 @@ export interface FarmRules {
   clearedTo: 'tier' | 'pool';
   /** Where a draftee lands. */
   drafteeTo: 'active' | 'tier';
+  /** How the league measures "worst record" for the wire: winning share, or the NHL's share of possible points. */
+  claimBasis: ClaimBasis;
   /** The engine already ages and grows the tier (the NFL practice squad lives on its team). */
   engineAgesTier: boolean;
+  /** The oldest age at which the engine's own summer still grows a man with room (the game's own, read off each
+      engine's offseason so the tier grows a man exactly as the active roster would). Unused where the engine ages the tier. */
+  growUpTo: number;
   sources: Record<string, FarmSource[]>;
 }
 
@@ -112,12 +119,24 @@ const src = (url: string, says: string): FarmSource => ({ url, read: READ, says 
    option year, the 20 day rule and the five options a season; the NHL's
    eleven game rule for 18 and 19 year olds, the ten game and 30 day re-entry
    window, and the 23 man active roster (the game's own NHL roster is
-   NHL_ROSTER_MAX, which the engine holds). */
+   NHL_ROSTER_MAX, which the engine holds). Also left out, and so
+   simplified: practice squad deals never run out here (the NFL engine
+   keeps its squad men until it cuts them); NHL games for the exemption
+   count the regular season only, though Article 13.4 counts the playoffs
+   too; an MLB man who clears is always outrighted, though a man with three
+   years of service or a previous outright may elect free agency instead;
+   the leagues keep last season's order into the first weeks of a season,
+   where the wire here reads last season only until a club has played;
+   the NHL's tie breaks after winning share (shootout wins left out,
+   head to head points, goal difference) are not kept by the engine, so
+   wins and the abbreviation break the rest; and a free agent the farm
+   signs in the summer joins an NHL farm club without passing waivers,
+   where a real club would expose a veteran in camp. */
 export const FARM_RULES: Record<FarmSport, FarmRules> = {
   nfl: {
     sport: 'nfl', tierName: 'Practice squad', cover: 'elevate',
     tierCap: 16, tierExempt: 1, elevationsPerSeason: 3, elevationsPerGame: 2,
-    injuredCount: true, claimToActive: true, clearedTo: 'tier', drafteeTo: 'active', engineAgesTier: true,
+    injuredCount: true, claimToActive: true, clearedTo: 'tier', drafteeTo: 'active', engineAgesTier: true, growUpTo: 0, claimBasis: 'winPct',
     sources: {
       tierCap: [
         src('https://www.si.com/nfl/bengals/news/nfl-makes-changes-to-practice-squad-rules-ahead-of-2022-season', 'NFL teams will be able to have 16 players on their practice squad (2022 changes).'),
@@ -146,12 +165,16 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
   },
   nba: {
     sport: 'nba', tierName: 'Two way', cover: 'twoWay',
-    tierCap: 3, twoWayGames: 50,
-    injuredCount: true, claimToActive: true, clearedTo: 'pool', drafteeTo: 'active', engineAgesTier: false,
+    tierCap: 3, standardMax: 15, twoWayGames: 50,
+    injuredCount: true, claimToActive: true, clearedTo: 'pool', drafteeTo: 'active', engineAgesTier: false, growUpTo: 24, claimBasis: 'winPct',
     sources: {
       tierCap: [
         src('https://gleague.nba.com/faq/', 'Since the 2023-24 season each team may have up to three players under two way contracts.'),
         src('https://www.hoopsrumors.com/2026/07/2026-27-nba-two-way-contract-tracker.html', 'Teams can carry up to three players on two way contracts (2026-27).'),
+      ],
+      standardMax: [
+        src('https://gleague.nba.com/faq/', 'Up to three two way players, in addition to the maximum 15 players under Standard NBA Contracts.'),
+        src('https://www.hoopsrumors.com/2026/07/2026-27-nba-two-way-contract-tracker.html', 'A team not carrying a full 15 man standard roster limits its two way men to 90 under 15 games.'),
       ],
       twoWayGames: [
         src('https://gleague.nba.com/faq/', 'Two way players spend not more than 50 games with their NBA team.'),
@@ -165,7 +188,7 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
   mlb: {
     sport: 'mlb', tierName: '40 man and minors', cover: 'callUp',
     fortyMan: 40, activeMax: 26, septemberActiveMax: 28, optionYears: 3,
-    injuredCount: false, claimToActive: false, clearedTo: 'tier', drafteeTo: 'tier', engineAgesTier: false,
+    injuredCount: false, claimToActive: false, clearedTo: 'tier', drafteeTo: 'tier', engineAgesTier: false, growUpTo: 25, claimBasis: 'winPct',
     sources: {
       fortyMan: [
         src('https://www.mlb.com/glossary/transactions/40-man-roster', 'To add a man to the 26 man roster he must be on the 40 man roster.'),
@@ -191,7 +214,7 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
   nhl: {
     sport: 'nhl', tierName: 'Farm club', cover: 'callUp',
     contractLimit: 50,
-    injuredCount: false, claimToActive: true, clearedTo: 'tier', drafteeTo: 'tier', engineAgesTier: false,
+    injuredCount: false, claimToActive: true, clearedTo: 'tier', drafteeTo: 'tier', engineAgesTier: false, growUpTo: 23, claimBasis: 'pointsPct',
     sources: {
       contractLimit: [
         src('https://web.archive.org/web/2016id_/http://www.nhl.com/nhl/en/v3/ext/CBA2012/NHL_NHLPA_2013_CBA.pdf', 'Reserve List (a): not more than 50 players signed to an SPC.'),
@@ -268,6 +291,9 @@ export interface FarmClub<P extends FarmMan = FarmMan> {
   lost: string[];
   /** Ids up from the tier for this round only (NFL elevations, NBA two way games). */
   up: string[];
+  /** Last season's final standing on the league's claim measure, kept at closeSeason: the engines zero the record in
+      their offseason, and the wire reads this until the club plays again. Absent in a new league and an old save. */
+  prev?: number;
 }
 
 export interface FarmState<P extends FarmMan = FarmMan> {
@@ -283,9 +309,10 @@ export interface FarmSeat<P extends FarmMan = FarmMan> {
   players: P[];
   reserve: P[];
   club: FarmClub<P>;
-  /** Wins and losses, for the claim order. */
+  /** Wins and losses, for the claim order. Losses are regulation losses; the NHL's overtime losses go in otLosses. */
   wins: number;
   losses: number;
+  otLosses?: number;
 }
 
 /** What a step did, for the screen and the harness. */
@@ -339,19 +366,46 @@ function isLedger(x: unknown): x is FarmLedger {
   return true;
 }
 
-function isClub(x: unknown, sport: FarmSport): x is FarmClub {
-  const c = x as FarmClub;
-  if (!c || typeof c !== 'object') return false;
-  if (!Array.isArray(c.lost) || !c.lost.every(isStr) || !Array.isArray(c.up) || !c.up.every(isStr)) return false;
-  if (!c.ledger || typeof c.ledger !== 'object' || Array.isArray(c.ledger) || !Object.values(c.ledger).every(isLedger)) return false;
-  if (sport === 'nfl') return c.reserve === undefined;
-  return Array.isArray(c.reserve) && c.reserve.every(isFarmMan);
+/**
+ * One club's block, part by part. Each part that is broken resets alone and
+ * is named in `reset` (`ABC.lost`, `ABC.ledger.<id>`, `ABC.reserve.<n>`), so a
+ * bad ledger row never takes the lost list (the only memory of a claim) or
+ * the tier men (who live nowhere else) with it. Null when it is not a club.
+ */
+function loadClub<P extends FarmMan>(x: unknown, sport: FarmSport, abbr: string, reset: string[]): FarmClub<P> | null {
+  const c = x as FarmClub<P>;
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return null;
+  const strs = (v: unknown, part: string): string[] => {
+    if (!Array.isArray(v)) { reset.push(`${abbr}.${part}`); return []; }
+    const ok = v.filter(isStr);
+    if (ok.length !== v.length) reset.push(`${abbr}.${part}`);
+    return ok;
+  };
+  const out: FarmClub<P> = { ledger: {}, lost: strs(c.lost, 'lost'), up: strs(c.up, 'up') };
+  if (!c.ledger || typeof c.ledger !== 'object' || Array.isArray(c.ledger)) reset.push(`${abbr}.ledger`);
+  else for (const [id, row] of Object.entries(c.ledger)) {
+    if (isLedger(row)) out.ledger[id] = row;
+    else reset.push(`${abbr}.ledger.${id}`);
+  }
+  if (sport !== 'nfl') {
+    if (!Array.isArray(c.reserve)) { reset.push(`${abbr}.reserve`); out.reserve = []; }
+    else {
+      out.reserve = [];
+      c.reserve.forEach((p, i) => { if (isFarmMan(p)) out.reserve!.push(p); else reset.push(`${abbr}.reserve.${i}`); });
+    }
+  }
+  if (c.prev !== undefined) {
+    if (isNum(c.prev)) out.prev = c.prev;
+    else reset.push(`${abbr}.prev`);
+  }
+  return out;
 }
 
 /**
  * Read a saved farm block. A save from before this round has none and gets a
- * fresh state. A club block of the wrong shape is reset alone and named in
- * `reset`; a whole block of the wrong shape (or another sport's) resets whole.
+ * fresh state. A broken part of a club resets alone and is named in `reset`;
+ * a club that is not an object at all resets whole under its abbreviation;
+ * a whole block of the wrong shape (or another sport's) resets whole.
  */
 export function loadFarmState<P extends FarmMan = FarmMan>(raw: unknown, sport: FarmSport, season: number, abbrs: string[]): { state: FarmState<P>; reset: string[] } {
   const fresh = newFarmState<P>(sport, season, abbrs);
@@ -361,8 +415,8 @@ export function loadFarmState<P extends FarmMan = FarmMan>(raw: unknown, sport: 
   const reset: string[] = [];
   const clubs: Record<string, FarmClub<P>> = {};
   for (const a of abbrs) {
-    const c = r.clubs[a];
-    if (isClub(c, sport)) clubs[a] = c as FarmClub<P>;
+    const c = r.clubs[a] === undefined ? null : loadClub<P>(r.clubs[a], sport, a, reset);
+    if (c) clubs[a] = c;
     else { clubs[a] = fresh.clubs[a]; reset.push(a); }
   }
   return { state: { v: 1, sport, season: isNum(r.season) ? r.season : season, clubs }, reset };
@@ -458,9 +512,28 @@ export interface FarmCtx<P extends FarmMan = FarmMan> {
   pool: P[];
   season: number;
   events: FarmEvent[];
+  /** The engine's own cap room for this club, $M (capRoom, nbaCapRoom, mlbCapRoom, nhlCapRoom). A call up and a
+      claim add his salary to the club's payroll, so neither may take a club past it. Absent, no cap is applied. */
+  capRoom?: (seat: FarmSeat<P>) => number;
+}
+
+/** Why this club cannot fit his salary under its cap, or null. */
+export function capShort<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, man: FarmMan): string | null {
+  if (!ctx.capRoom) return null;
+  const room = ctx.capRoom(seat);
+  if (man.salary <= room) return null;
+  return `Need $${Math.round((man.salary - room) * 10) / 10}M more cap room to call him up.`;
 }
 
 const ev = (kind: FarmEvent['kind'], team: string, p: FarmMan, extra: Partial<FarmEvent> = {}): FarmEvent => ({ kind, team, playerId: p.id, player: p.name, ...extra });
+
+/** A seat as the wire reads it: this season's record, and last season's standing from the farm's own memory. */
+const wireClub = <P extends FarmMan>(seat: FarmSeat<P>) => ({ seat, abbr: seat.abbr, wins: seat.wins, losses: seat.losses, otLosses: seat.otLosses, prev: seat.club.prev });
+
+/** Offer a man to these seats in the league's claim order; the first that wants him, or null. */
+function offer<P extends FarmMan>(ctx: FarmCtx<P>, seats: FarmSeat<P>[], fromAbbr: string, wants: (s: FarmSeat<P>) => boolean): FarmSeat<P> | null {
+  return runWaivers(seats.map(wireClub), fromAbbr, c => wants(c.seat), ctx.rules.claimBasis).claimer?.seat ?? null;
+}
 
 /** Why this man cannot come up to the active roster right now, or null. */
 export function callUpRefusal<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, id: string): string | null {
@@ -469,7 +542,7 @@ export function callUpRefusal<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat
   if (p.out > 0) return 'He is hurt.';
   if (activeCount(ctx.rules, seat) >= ctx.activeMax(seat)) return `Your active roster is full at ${ctx.activeMax(seat)}.`;
   if (ctx.rules.fortyMan !== undefined && seat.club.ledger[id]?.off40 && fortyManCount(seat) >= ctx.rules.fortyMan) return 'Your 40 man roster is full. Somebody has to come off it first.';
-  return null;
+  return capShort(ctx, seat, p);
 }
 
 /** Up for good (until sent down). Moves him from the tier to the active roster. */
@@ -489,6 +562,7 @@ export function canClaim<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, 
   const r = ctx.rules;
   if (waiverReturnRefusal(seat.club.lost, man.id)) return false;
   if (!isUpgrade(r.sport, seat.players, man)) return false;
+  if (capShort(ctx, seat, man)) return false;
   if (r.contractLimit !== undefined && contractCount(seat) >= r.contractLimit) return false;
   if (r.fortyMan !== undefined) {
     if (fortyManCount(seat) >= r.fortyMan) return false;
@@ -496,6 +570,17 @@ export function canClaim<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, 
     return hasOptions || activeCount(r, seat) < ctx.activeMax(seat);
   }
   return activeCount(r, seat) < ctx.activeMax(seat);
+}
+
+/** Men on the tier list, counting the ones up for this round only (they come back to it after the game). */
+export const tierLoad = (seat: FarmSeat): number => seat.reserve.length + seat.club.up.length;
+
+/** Would a man who clears waivers have a place in this club's tier? Else he goes to the free agent pool. */
+export function clearedRoom(r: FarmRules, seat: FarmSeat): boolean {
+  return r.clearedTo === 'tier'
+    && (r.tierCap === undefined || tierLoad(seat) < r.tierCap)
+    && (r.fortyMan === undefined || seat.reserve.filter(p => seat.club.ledger[p.id]?.off40).length < MLB_OFF40_CAP)
+    && (r.contractLimit === undefined || contractCount(seat) < r.contractLimit);
 }
 
 /**
@@ -510,7 +595,7 @@ export function waive<P extends FarmMan>(ctx: FarmCtx<P>, from: FarmSeat<P>, man
   delete from.club.ledger[man.id];
   ctx.events.push(ev('waived', from.abbr, man));
   const opts = r.sport === 'mlb' && mlbHasOptions(r, ledger, man, ctx.season);
-  const { claimer } = runWaivers(ctx.seats, from.abbr, s => canClaim(ctx, s, man, opts));
+  const claimer = offer(ctx, ctx.seats, from.abbr, s => canClaim(ctx, s, man, opts));
   if (claimer) {
     recordLoss(from.club.lost, man.id);
     delete ledger.off40;
@@ -521,12 +606,7 @@ export function waive<P extends FarmMan>(ctx: FarmCtx<P>, from: FarmSeat<P>, man
     return 'claimed';
   }
   ctx.events.push(ev('cleared', from.abbr, man));
-  const offCount = from.reserve.filter(p => from.club.ledger[p.id]?.off40).length;
-  const tierRoom = r.clearedTo === 'tier'
-    && (r.tierCap === undefined || from.reserve.length < r.tierCap)
-    && (r.sport !== 'mlb' || offCount < MLB_OFF40_CAP)
-    && (r.contractLimit === undefined || contractCount(from) < r.contractLimit);
-  if (tierRoom) {
+  if (clearedRoom(r, from)) {
     from.reserve.push(man);
     /* MLB: an outright assignment takes him off the 40 man. */
     from.club.ledger[man.id] = r.sport === 'mlb' ? { ...ledger, off40: true } : ledger;
@@ -543,6 +623,10 @@ export function sendDownRefusal<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSe
   if (!p) return 'He is not on your active roster.';
   if (ctx.rules.sport === 'nba') return 'A standard contract stays with the big club here. Only two way men move between.';
   if (seat.club.up.includes(id)) return 'He is only up for this game. He goes back on his own.';
+  /* A capped tier (the NFL squad) is reached through waivers: full, a man who cleared would be lost to free agency. */
+  if (ctx.rules.tierCap !== undefined && sendDownRoute(ctx, seat, p) === 'waivers' && !clearedRoom(ctx.rules, seat)) {
+    return `Your ${ctx.rules.tierName.toLowerCase()} is full. A man who cleared waivers would have nowhere to go.`;
+  }
   return null;
 }
 
@@ -686,6 +770,10 @@ export function afterRound<P extends FarmMan>(ctx: FarmCtx<P>, gamesThisRound: n
  */
 export function closeSeason<P extends FarmMan>(ctx: FarmCtx<P>): void {
   for (const seat of ctx.seats) {
+    /* The final standing, kept for the wire: the engines zero the record in their offseason. A club that
+       played nothing keeps what it had. */
+    if (seat.wins + seat.losses + (seat.otLosses ?? 0) > 0)
+    seat.club.prev = Math.round(standing(wireClub(seat), ctx.rules.claimBasis) * 10000) / 10000;
     for (const id of seat.club.up) {
       const i = seat.players.findIndex(p => p.id === id);
       if (i >= 0) seat.reserve.push(seat.players.splice(i, 1)[0]);
@@ -770,8 +858,9 @@ export function rivalSignings<P extends FarmMan>(ctx: FarmCtx<P>, rng: () => num
   for (const seat of ctx.seats) {
     for (const p of [...seat.reserve]) {
       if (p.out > 0 || seat.club.up.includes(p.id) || rng() >= NFL_POACH_CHANCE) continue;
-      const { claimer } = runWaivers(ctx.seats.filter(s => s.abbr !== userTeam), seat.abbr,
-        s => isUpgrade('nfl', s.players, p) && activeCount(ctx.rules, s) < ctx.activeMax(s));
+      /* A club that lost him on waivers never signs him back either. */
+      const claimer = offer(ctx, ctx.seats.filter(s => s.abbr !== userTeam), seat.abbr,
+        s => !waiverReturnRefusal(s.club.lost, p.id) && isUpgrade('nfl', s.players, p) && activeCount(ctx.rules, s) < ctx.activeMax(s) && !capShort(ctx, s, p));
       if (!claimer) continue;
       seat.reserve.splice(seat.reserve.indexOf(p), 1);
       delete seat.club.ledger[p.id];
@@ -849,10 +938,13 @@ export function stockTier<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>,
     && (r.fortyMan === undefined || fortyManCount(seat) < r.fortyMan)
     && (r.contractLimit === undefined || contractCount(seat) < r.contractLimit);
   while (seat.reserve.length - offOf() < want.on && roomOn()) {
-    const p = fromPool() ?? tierProspect(seat, o);
+    const signed = fromPool();
+    const p = signed ?? tierProspect(seat, o);
     seat.reserve.push(p);
-    /* A ledger row only where there is something to keep. */
-    if (r.sport === 'nhl') seat.club.ledger[p.id] = { signedAge: p.age, proSeasons: 1 };
+    /* A ledger row only where there is something to keep. Only a new prospect is on his first contract, so only
+       his NHL exemption clock starts today; a man from the pool has signed before, and with no record of when he
+       is a veteran here, never exempt (Article 13.4 runs the clock from the first contract). */
+    if (r.sport === 'nhl' && !signed) seat.club.ledger[p.id] = { signedAge: p.age, proSeasons: 1 };
     added += 1;
   }
   while (offOf() < want.off && offOf() < MLB_OFF40_CAP) {
@@ -882,7 +974,10 @@ export function farmOffseason<P extends FarmMan>(state: FarmState<P>, ctx: FarmC
       if (!r.engineAgesTier) {
         p.age += 1;
         p.out = 0;
-        if (p.age <= 25 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(o.rng() * 2));
+        /* The engines' own summer growth for a man with room (nbaFrontOffice, mlbFrontOffice, nhlFrontOffice all
+           use 1 + floor(rng * 3), each up to its own age, growUpTo), so the tier's edge for a young man is exactly
+           TIER_GROWTH_BONUS and nobody grows slower in the tier than he would on the roster. */
+        if (p.age <= r.growUpTo && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(o.rng() * 3));
         else if (p.age >= 31) p.ovr = Math.max(50, p.ovr - 1 - Math.floor(o.rng() * 2));
       }
       if (young && p.ovr < p.pot) {
@@ -942,13 +1037,26 @@ export function farmSendDownButton<P extends FarmMan>(ctx: FarmCtx<P>, seat: Far
     return { id: p.id, label: `Option him (option year ${used + 1} of ${ctx.rules.optionYears})`, refusal: null };
   }
   if (route === 'exempt') return { id: p.id, label: 'Send to the farm club (waiver exempt)', refusal: null };
-  return { id: p.id, label: 'Expose to waivers', warn: 'Any club can claim him, worst record first. A claimed man is gone for good.', refusal: null };
+  return { id: p.id, label: 'Expose to waivers', warn: `Any club can claim him, worst record first. A claimed man is gone for good. ${clearedWords(ctx, seat, p)}`, refusal: null };
+}
+
+/** Where a man who clears waivers goes, in words, from the same test waive applies once he is off the roster. */
+export function clearedWords<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, p: P): string {
+  const off = { ...seat, players: seat.players.filter(x => x.id !== p.id) };
+  if (!clearedRoom(ctx.rules, off)) return 'If nobody claims him he becomes a free agent.';
+  if (ctx.rules.fortyMan !== undefined) return 'If nobody claims him he is outrighted to the minors, off the 40 man.';
+  return `If nobody claims him he goes to your ${ctx.rules.tierName.toLowerCase()}.`;
 }
 
 /** The call up button. An MLB man off the 40 has to be added to it first, and the button says so. */
 export function farmCallUpButton<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, p: P): FarmButton {
   const off = ctx.rules.sport === 'mlb' && !!seat.club.ledger[p.id]?.off40;
-  return { id: p.id, label: off ? 'Add to the 40 man and call up' : 'Call up', refusal: callUpRefusal(ctx, seat, p.id) };
+  const refusal = callUpRefusal(ctx, seat, p.id);
+  /* A two way man called up is signed to a standard contract, and a standard contract never goes back down. */
+  if (ctx.rules.cover === 'twoWay') {
+    return { id: p.id, label: 'Sign to a standard contract', warn: 'For good: a standard contract stays with the big club, so he cannot go back to two way.', refusal };
+  }
+  return { id: p.id, label: off ? 'Add to the 40 man and call up' : 'Call up', refusal };
 }
 
 /** The tier's rules in plain words, for the panel and the board's how to play. */
@@ -960,7 +1068,7 @@ export function farmRuleLines(rules: FarmRules): string[] {
       'Any rival can sign a squad man to its active roster.',
     ];
     case 'nba': return [
-      `Up to ${rules.tierCap} two way men beside the 15 standard contracts.`,
+      `Up to ${rules.tierCap} two way men beside the ${rules.standardMax} standard contracts.`,
       `A two way man can be active for ${rules.twoWayGames} games a season.`,
     ];
     case 'mlb': return [

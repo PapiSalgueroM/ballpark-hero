@@ -15,7 +15,7 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import {
   type FarmCtx, type FarmMan, type FarmSeat,
-  contractCount, farmCallUpButton, farmRuleLines, farmSendDownButton, fortyManCount, activeCount, nhlExempt,
+  contractCount, farmCallUpButton, farmRuleLines, farmSendDownButton, fortyManCount, activeCount, nhlExempt, tierLoad,
 } from '@/lib/gmFarm';
 
 interface GmFarmPanelProps<P extends FarmMan> {
@@ -29,8 +29,9 @@ interface GmFarmPanelProps<P extends FarmMan> {
 /** The counts line: each sport's own limits, read off the same functions the caps check uses. */
 function countsLine<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>): string {
   const r = ctx.rules;
-  if (r.sport === 'nfl') return `Practice squad ${seat.reserve.length} of ${r.tierCap}`;
-  if (r.sport === 'nba') return `Two way ${seat.reserve.length} of ${r.tierCap}`;
+  /* The international place counts in the most, so a full squad of 17 never reads as over 16; men up for the game are still his. */
+  if (r.sport === 'nfl') return `Practice squad ${tierLoad(seat)} of ${(r.tierCap ?? 0) + (r.tierExempt ?? 0)}`;
+  if (r.sport === 'nba') return `Two way ${tierLoad(seat)} of ${r.tierCap}`;
   if (r.sport === 'mlb') return `40 man ${fortyManCount(seat)} of ${r.fortyMan} · active ${activeCount(r, seat)} of ${ctx.activeMax(seat)}`;
   return `Contracts ${contractCount(seat)} of ${r.contractLimit}`;
 }
