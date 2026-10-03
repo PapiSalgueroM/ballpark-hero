@@ -87,7 +87,7 @@ describe('a connect 4 refusal reason is always a string by the time it is state'
    what is measured is the game's own end: four in a row flips the phase to
    won for that colour, and a full board with no four flips it to draw. The
    validators are not touched; this only drives the real submit path. */
-type FullHook = Hook & {
+type FullHook = ReturnType<Hook> & {
   grid: Array<Array<{ team: 'red' | 'blue' } | null>>;
   currentTeam: 'red' | 'blue';
   phase: 'playing' | 'won' | 'draw';
