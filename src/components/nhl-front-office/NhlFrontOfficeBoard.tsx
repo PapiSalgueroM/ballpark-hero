@@ -9,7 +9,7 @@ import {
   initNhlLeague, simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
   nhlDraftClass, nhlProspectToPlayer, nhlStrength, nhlCapUsed, nhlCapRoom,
   nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, WESTERN, NHL_FO_DIVISIONS,
-  NHL_FO_ROUNDS, NHL_RATING_MODEL_VERSION, nhlSalaryFor, nhlAiDraftPicks,
+  NHL_FO_ROUNDS, NHL_RATING_MODEL_VERSION, nhlSalaryFor, nhlAiDraftPicks, nhlDraftCapital, nhlConsumeDraftPick,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
   ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
   nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
@@ -87,6 +87,7 @@ type Postseason = { series: NhlSeriesResult[]; champion: string; gradeLine: stri
 interface SaveShape {
   league: NhlLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
   draftClass: NhlProspect[] | null; picksLeft: number;
+  draftBatchesLeft?: number;
   /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
   mandate?: OwnerMandate | null; trust?: number; fired?: boolean;
   /* Round 192. The presser itself is transient (a reload ends the scrum,
@@ -210,6 +211,9 @@ export default function NhlFrontOfficeBoard() {
      the Round 186 rule for reveals. */
   const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
+  const [draftBatchesLeft, setDraftBatchesLeft] = useState<number | null>(null);
+  const draftAction = useRef(false);
+  useEffect(() => { draftAction.current = false; }, [league, draftClass, picksLeft, draftBatchesLeft]);
   const [tradePartner, setTradePartner] = useState('');
   // Round 82: trade finder
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
@@ -249,6 +253,14 @@ export default function NhlFrontOfficeBoard() {
       const parsed: unknown = JSON.parse(raw);
       if (!isFrontOfficeSave(parsed, 'NHL', NHL_FO_ROUNDS)) { setSaveError(true); return; }
       const s = parsed as SaveShape;
+      const capital = nhlDraftCapital(s.league.teams[s.myTeam]);
+      const legacyFinished = s.draftBatchesLeft === undefined && s.phase === 'draft' && s.picksLeft === 0
+        && s.league.round === 1 && s.league.champions.some(c => c.season === s.league.season - 1);
+      if (capital == null || (s.picksLeft ?? 0) > NHL_TEAMS.length * 2
+        || (s.phase === 'draft' && !Number.isInteger(s.picksLeft))
+        || (s.phase === 'draft' && s.league.round !== NHL_FO_ROUNDS && !legacyFinished)
+        || (s.draftBatchesLeft !== undefined && (!Number.isInteger(s.draftBatchesLeft) || s.draftBatchesLeft < 0 || s.draftBatchesLeft > 2
+          || (s.phase === 'draft' && s.picksLeft === 0 && s.draftBatchesLeft === 0)))) { setSaveError(true); return; }
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -258,6 +270,7 @@ export default function NhlFrontOfficeBoard() {
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
+      setDraftBatchesLeft(s.draftBatchesLeft ?? null);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
       setTrust(s.trust ?? FO_TRUST_START);
@@ -288,11 +301,12 @@ export default function NhlFrontOfficeBoard() {
       if (!lg) return;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+        ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
 
   const label = (abbr: string) => {
     const t = NHL_TEAM_MAP.get(abbr);
@@ -368,7 +382,7 @@ export default function NhlFrontOfficeBoard() {
   const my = league?.teams[myTeam];
 
   const playRound = () => {
-    if (!league || !my) return;
+    if (!league || !my || my.players.length > NHL_ROSTER_MAX) return;
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
        Club Manager has had since Round 157. Unscored on purpose: the
        scored completion stays the title. */
@@ -433,12 +447,16 @@ export default function NhlFrontOfficeBoard() {
      passes the save's own fields as the patch, because persist's closure still
      holds the first render's defaults while the load effect runs. */
   const openDraft = (lg: NhlLeague, team: string, patch: Partial<SaveShape> = {}) => {
+    if (draftAction.current) return;
+    const count = nhlDraftCapital(lg.teams[team]);
+    if (count == null) { setSaveError(true); return; }
+    draftAction.current = true;
     const cls = /* Round 211: the class is drawn against every name already in the
        league, so a prospect cannot arrive sharing a name with a man on a
        roster or in the market. */
-    nhlDraftClass(Math.random, 24, leagueNames(lg));
-    setDraftClass(cls); setPicksLeft(2); setDraftNight(null); setPhase('draft');
-    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 2 }, lg, team);
+    nhlDraftClass(Math.random, Math.max(24, count + 10), leagueNames(lg));
+    setDraftClass(cls); setPicksLeft(count); setDraftBatchesLeft(2); setDraftNight(null); setPhase('draft');
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: count, draftBatchesLeft: 2 }, lg, team);
   };
 
   const startDraft = () => {
@@ -447,23 +465,33 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const draftPick = (id: string) => {
-    if (!league || !draftClass || picksLeft <= 0) return;
+    if (!league || !draftClass || picksLeft <= 0 || draftAction.current) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
-    lg.teams[myTeam].players.push(nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion));
+    const mine = lg.teams[myTeam];
+    if (draftBatchesLeft === null && mine.picks.length > picksLeft) mine.picks = mine.picks.slice(-picksLeft);
+    if (!nhlConsumeDraftPick(mine)) return;
+    draftAction.current = true;
+    mine.players.push(nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion));
     const remaining = draftClass.filter(p => p.id !== id);
-    const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
     /* Round 515: the rival picks were applied and thrown away, so real
        decisions the engine made happened where nobody could see them.
        Captured here for the reveal, from the same objects the engine used. */
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
-    const aiDraft = nhlAiDraftPicks(lg, remaining, order, Math.random);
-    for (const { team, prospect } of aiDraft.picks) {
-      rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+    const beforeBatches = draftBatchesLeft ?? Math.min(2, picksLeft);
+    const nextPicks = Math.min(picksLeft - 1, mine.picks.length);
+    const batchCount = nextPicks === 0 ? beforeBatches : Math.min(1, beforeBatches);
+    let aiRemaining = remaining;
+    for (let batch = 0; batch < batchCount; batch++) {
+      const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
+      const aiDraft = nhlAiDraftPicks(lg, aiRemaining, order, Math.random);
+      aiRemaining = aiDraft.remaining;
+      for (const { team, prospect } of aiDraft.picks) {
+        rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+      }
     }
-    const nextClass = aiDraft.remaining;
-    const nextPicks = picksLeft - 1;
+    const nextClass = aiRemaining;
     /* Round 530: every pick builds its reveal, the last one included. Round
        519 had named the final pick as not narrated: it left for the hub in
        this same handler, so its card never reached a render. The screen now
@@ -474,9 +502,17 @@ export default function NhlFrontOfficeBoard() {
       { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
       rivalPicks,
     ));
-    setDraftClass(nextClass); setPicksLeft(nextPicks);
+    setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftBatchesLeft(beforeBatches - batchCount);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
+      finishDraft(lg);
+      return;
+    }
+    setLeague(lg);
+    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount }, lg, myTeam);
+  };
+
+  const finishDraft = (lg: NhlLeague) => {
       const notes = nhlOffseason(lg, Math.random);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
@@ -496,16 +532,49 @@ export default function NhlFrontOfficeBoard() {
          reload skips the reveal and opens where it opened before. */
       setFeedSlam(null); setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
+      setPicksLeft(0); setDraftBatchesLeft(0);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
+  };
+
+  const draftWithoutPicks = () => {
+    if (!league || !draftClass || (picksLeft > 0 && league.teams[myTeam].picks.length > 0) || draftAction.current) return;
+    draftAction.current = true;
+    const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    if (draftBatchesLeft === null && picksLeft === 0 && lg.round === 1 && lg.champions.some(c => c.season === lg.season - 1)) {
+      setDraftBatchesLeft(0);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0 }, lg, myTeam);
+      leaveDraft();
       return;
     }
-    setLeague(lg);
-    persist({ draftClass: nextClass, picksLeft: nextPicks }, lg, myTeam);
+    if (draftBatchesLeft === null && picksLeft === 0) lg.teams[myTeam].picks = [];
+    const batches = draftBatchesLeft ?? Math.min(2, picksLeft);
+    let remaining = draftClass;
+    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+    for (let batch = 0; batch < batches; batch++) {
+      const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
+      const resolved = nhlAiDraftPicks(lg, remaining, order, Math.random);
+      remaining = resolved.remaining;
+      rivalPicks.push(...resolved.picks.map(({ team, prospect }) => ({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade })));
+    }
+    setDraftClass(remaining); setDraftNight(buildDraftNight(null, rivalPicks));
+    finishDraft(lg);
+  };
+
+  const replaceDraftBoard = () => {
+    if (!league || !draftClass || draftClass.length > 0 || picksLeft <= 0 || draftAction.current) return;
+    draftAction.current = true;
+    const cls = nhlDraftClass(Math.random, Math.max(24, picksLeft + 10), leagueNames(league));
+    setDraftClass(cls); persist({ draftClass: cls }, league, myTeam);
   };
 
   /* Round 530: the Continue button under the final pick's card. Nothing to
      persist: the last pick already wrote the hub. */
   const leaveDraft = () => {
+    if (draftBatchesLeft === null && picksLeft === 0 && league?.round === 1) {
+      if (draftAction.current) return;
+      draftAction.current = true;
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0 }, league, myTeam);
+    }
     setPhase('hub');
     setTab(null);
   };
@@ -755,7 +824,9 @@ export default function NhlFrontOfficeBoard() {
        has rolled, so the heading reads the season as it stands rather than
        one on from it, and the board is put away: no picks, no grid, just the
        card and its Continue button. */
-    const draftDone = picksLeft <= 0;
+    const draftDone = picksLeft <= 0 && (draftBatchesLeft === 0 || (draftBatchesLeft === null && league.round === 1));
+    const availablePicks = Math.min(picksLeft, my.picks.length);
+    const noCapital = availablePicks <= 0;
     return (
       <div className="space-y-4">
         <CelebrationStyles />
@@ -767,12 +838,15 @@ export default function NhlFrontOfficeBoard() {
             </p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
+              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. Scout grades carry error.
             </p>
           )}
         </div>
         {draftNight && <DraftNightCard night={draftNight} onContinue={draftDone ? leaveDraft : undefined} />}
-        {!draftDone && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+        {draftDone && !draftNight?.picks.length && <button onClick={leaveDraft} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Continue to the hub</button>}
+        {!draftDone && noCapital && <button onClick={draftWithoutPicks} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Finish the draft and offseason</button>}
+        {!draftDone && !noCapital && draftClass.length === 0 && <div className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground"><p>No prospects remain on this saved board. Generate another board to use your remaining picks.</p><button onClick={replaceDraftBoard} className="mt-2 min-h-11 w-full rounded-full bg-primary px-4 py-2.5 font-bold text-primary-foreground">Generate remaining prospects</button></div>}
+        {!draftDone && !noCapital && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
@@ -831,6 +905,7 @@ export default function NhlFrontOfficeBoard() {
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
   const cutBlock = cutRefusal(my, NHL_ROSTER_MIN);
   const fullBlock = rosterFullRefusal(my, NHL_ROSTER_MAX);
+  const overLimit = Math.max(0, my.players.length - NHL_ROSTER_MAX);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -843,6 +918,11 @@ export default function NhlFrontOfficeBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 3 ? 'text-destructive' : 'text-muted-foreground')}>Cap space <b>${room}M</b></span>
       </div>
+
+      {overLimit > 0 && <div data-roster-limit role="status" className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-xs space-y-2">
+        <p>Your roster has {my.players.length} players, {overLimit} over this simulation's limit of {NHL_ROSTER_MAX}. Waive {overLimit === 1 ? 'one player' : `${overLimit} players`} before you play. Waivers keep the usual dead money costs.</p>
+        {tab !== 'team' && <button onClick={() => openPanel('team')} className="min-h-11 rounded-full border border-border bg-card px-4 py-2 font-bold">Open roster</button>}
+      </div>}
 
       {/* Round 180: the owner card, always visible on the hub. The cut is the
           top 8 of my conference by points, the same read the bracket uses. */}
@@ -907,7 +987,7 @@ export default function NhlFrontOfficeBoard() {
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
                     title={cutBlock ?? `Waive him and $${cost.now}M stays on this season's cap`}
-                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
+                    className={cn('min-h-11 rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
                       arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
                   >
                     {arming ? 'Keep' : `Waive, $${cost.now}M dead`}
@@ -923,13 +1003,13 @@ export default function NhlFrontOfficeBoard() {
                     <div className="flex gap-1.5">
                       <button
                         onClick={() => doRelease(p.id)}
-                        className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
+                        className="min-h-11 flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
                       >
                         Waive him
                       </button>
                       <button
                         onClick={() => setCutArmed(null)}
-                        className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
+                        className="min-h-11 flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
                       >
                         Keep him
                       </button>
@@ -1068,7 +1148,7 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
-          <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          <button onClick={playRound} disabled={overLimit > 0} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>
