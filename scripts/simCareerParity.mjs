@@ -108,6 +108,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CAREERS = Number(process.argv[2] || 40);
@@ -308,16 +309,32 @@ const IMPORTS = [
   { rel: 'src/lib/nbaCareerLoop.ts', re: /from\s+["'](\.\/|@\/lib\/)careerSocial["']/, what: 'the NBA loop reads the fan rule and the paper' },
   { rel: 'src/lib/mlbCareerLoop.ts', re: /from\s+["'](\.\/|@\/lib\/)careerSocial["']/, what: 'the MLB loop reads the fan rule and the paper' },
   { rel: 'src/lib/nhlCareerLoop.ts', re: /from\s+["'](\.\/|@\/lib\/)careerSocial["']/, what: 'the NHL loop reads the fan rule and the paper' },
-  { rel: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', re: /from\s+["']@\/components\/us-career\/MoneyApp["']/, what: 'the NFL board opens the money app' },
-  { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/components\/us-career\/MoneyApp["']/, what: 'the NBA board opens the money app' },
-  { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/components\/us-career\/MoneyApp["']/, what: 'the MLB board opens the money app' },
-  { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/components\/us-career\/MoneyApp["']/, what: 'the NHL board opens the money app' },
-  { rel: 'src/components/nba-my-career/NbaMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nbaCareerLoop["']/, what: 'the NBA board draws the loop' },
-  { rel: 'src/components/mlb-my-career/MlbMyCareerBoard.tsx', re: /from\s+["']@\/lib\/mlbCareerLoop["']/, what: 'the MLB board draws the loop' },
-  { rel: 'src/components/nhl-my-career/NhlMyCareerBoard.tsx', re: /from\s+["']@\/lib\/nhlCareerLoop["']/, what: 'the NHL board draws the loop' },
+  { rel: 'src/lib/nflCareerSport.ts', re: /from\s+["']@\/lib\/nflCareerMoney["']/, what: 'the NFL binding hands the board its money' },
+  { rel: 'src/lib/nbaCareerSport.ts', re: /from\s+["']@\/lib\/nbaCareerMoney["']/, what: 'the NBA binding hands the board its money' },
+  { rel: 'src/lib/mlbCareerSport.ts', re: /from\s+["']@\/lib\/mlbCareerMoney["']/, what: 'the MLB binding hands the board its money' },
+  { rel: 'src/lib/nhlCareerSport.ts', re: /from\s+["']@\/lib\/nhlCareerMoney["']/, what: 'the NHL binding hands the board its money' },
+  { rel: 'src/lib/nbaCareerSport.ts', re: /from\s+["']@\/lib\/nbaCareerLoop["']/, what: 'the NBA binding hands the board its loop' },
+  { rel: 'src/lib/mlbCareerSport.ts', re: /from\s+["']@\/lib\/mlbCareerLoop["']/, what: 'the MLB binding hands the board its loop' },
+  { rel: 'src/lib/nhlCareerSport.ts', re: /from\s+["']@\/lib\/nhlCareerLoop["']/, what: 'the NHL binding hands the board its loop' },
+  /* Round 900: the four boards are one. It opens the money app and draws the
+     loop once, through whichever binding it was handed. */
+  { rel: US_CAREER_BOARD, re: /from\s+["']@\/components\/us-career\/MoneyApp["']/, what: 'the shared US career board opens the money app' },
+  { rel: US_CAREER_BOARD, re: /from\s+["']@\/components\/us-career\/SocialPanel["']/, what: 'the shared US career board draws the loop' },
 ];
 for (const imp of IMPORTS) {
   if (!imp.re.test(code.get(imp.rel) ?? '')) fail(`${imp.rel}: ${imp.what}, and it does not import it`);
+}
+{
+  const board = code.get(US_CAREER_BOARD) ?? '';
+  const USES = [
+    [/sport\.moneyAct\(c, action\)/, 'runs a money action through the sport binding'],
+    [/<MoneyApp\b/, 'draws the money app'],
+    [/sport\.headlinesFor\(/, 'prints the paper through the sport binding'],
+    [/sport\.fanComments\(career\)/, 'reads the fans through the sport binding'],
+    [/<SocialGram\b/, 'draws the feed'],
+  ];
+  for (const [re, what] of USES) if (!re.test(board)) fail(`${US_CAREER_BOARD}: no longer ${what}`);
+  for (const why of allWrapperProblems(ROOT)) fail(why);
 }
 console.log(`   ${code.size} source files scanned, ${RULES.length} rule fingerprints each found once at home, ${copies} private copies, ${IMPORTS.length} imports held`);
 

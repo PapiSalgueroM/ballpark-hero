@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * MLB My Career engine (2026-08-05). Baseball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -42,6 +43,7 @@ import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { countOf, mlbCareerStatBullet, mlbMajorAward, type MlbCareerSums } from './usCareerStatLine';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
 import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -177,7 +179,9 @@ export interface MlbCareerState {
   mvpCys: number;      // MVPs for hitters, Cy Youngs for pitchers
   allStars: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 58 life layer. All optional so pre-R58 saves keep loading. */
   netWorth?: number;
@@ -322,21 +326,21 @@ export function mlbTeamLabelOf(id: string, eraId?: string): string {
 
 export function startMlbCareer(
   name: string, pos: MlbCareerPos, archetype: MlbArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): MlbCareerState {
   /* Round 173: the era decides the year, the league you are drafted into
      and the money. Leaving it off is today's league, byte for byte. */
   const era = mlbEraById(eraId);
   const pool = mlbEraTeamIds(eraId);
-  const base = 64 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
-  const team = pool[Math.floor(rng() * pool.length)];
+  const base = entry?.ratingAfter ?? (64 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 12 + Math.floor(rng() * 14) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(45 - (base - 62) * 4 + rng() * 25));
+  const team = entry?.team ?? pool[Math.floor(rng() * pool.length)];
   const c: MlbCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 21,
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (21),
     ovr: base, pot,
-    morale: 70, fanbase: stock <= 10 ? 50 : 30, health: 100,
+    morale: 70, fanbase: stock > 0 && stock <= 10 ? 50 : 30, health: entry?.health ?? 100,
     salary: Math.max(0.3, Math.round(0.8 * era.moneyScale * 10) / 10),
     contractYears: 6, // team control years, baseball-style
     seasons: [],
@@ -357,6 +361,7 @@ export function startMlbCareer(
   if (era.id !== 'now') c.eraId = era.id;
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -383,7 +388,7 @@ function mlbIncumbentOvr(teamQuality: number, rng: () => number): number {
 export function mlbAssignRole(c: MlbCareerState, teamQuality: number, rng: () => number = Math.random): string {
   if (c.pos === 'RP') { c.role = 'starter'; return '📋 The bullpen has its own ladder. Your arm decides the inning you get.'; }
   const incumbent = mlbIncumbentOvr(teamQuality, rng);
-  if (c.draftPick <= 10) {
+  if (c.draftPick > 0 && c.draftPick <= 10) {
     c.role = 'starter';
     return c.pos === 'SP'
       ? '📋 Top ten picks jump the queue. You break camp in the rotation.'
@@ -440,7 +445,7 @@ function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: 
   const isRp = c.pos === 'RP';
   const full = isSp ? 32 : isRp ? 62 + Math.floor(rng() * 10) : 155 + Math.floor(rng() * 8);
   const floorGames = isSp ? 8 : isRp ? 20 : 45;
-  const risk = (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250;
+  const risk = careerRecoveryRisk('mlb', c.purchased, (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250);
   if (rng() < risk) {
     const frac = 0.35 + rng() * 0.4;
     return { games: Math.max(floorGames, Math.round(full * frac)), note: (isSp || isRp) && rng() < 0.4 ? 'The elbow. Season shortened, surgery whispers.' : 'Injured list stints ate the season.' };
@@ -883,7 +888,7 @@ export function mlbLegacyOf(c: MlbCareerState): MlbLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${countOf(c.mvpCys, award.one, award.many)}, ${c.allStars} All-Star nods`,
     mlbCareerStatBullet(t, c.pos),
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }
@@ -921,7 +926,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
   { id: 'chef_mlb', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for a baseball season, 150k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
+  { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
   { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
   { id: 'sleep_mlb', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_mlb', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },

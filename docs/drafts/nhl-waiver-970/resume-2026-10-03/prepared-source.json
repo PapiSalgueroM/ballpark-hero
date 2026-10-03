@@ -1,0 +1,17 @@
+{
+  "gate": "C:\\Users\\antho\\AppData\\Local\\Temp\\dukb-nhl970-clean-gate-2026-10-03-resume",
+  "sourceBase": "504efc82",
+  "applicationIntegrated": false,
+  "testsExecuted": false,
+  "sourceHashes": {
+    "src/components/nhl-front-office/NhlFrontOfficeBoard.tsx": "8ff85a06869b83c3382f1b2c77af9ec4b01fbcadfb8a97aeb0047fb1b94e35ef",
+    "src/components/nhl-front-office/NhlWaiverReceipt.tsx": "4b87f2de3024cf37b351056af73de05e0fccabeebc607cd0ea121ee99d05cfe8",
+    "src/components/nhl-front-office/NhlWaiverReceipt.module.css": "d11ac20ec8e3f432dafdee7cfc1907af201f90c21ad56cfcdccab6b40d516e30",
+    "src/components/nhl-front-office/NhlWaiverReceipt.test.tsx": "7e54627528465d9be9cff45eaa368c1fc386178de4216941b8723f37e078ede3",
+    "src/test/NhlWaiverReceipt.outcomes.tsx": "b2a8557f7826d28b75516d927b5718a01bb8d8a002c3477956a43bda615c3be3",
+    "scripts/simNhlWaiverReceipt.mjs": "496a3fc66b92189fcd91f94dfab1837d11fce7b92088fda6c8497e9bc5dad8bd",
+    "src/lib/nhlFrontOffice.ts": "9890d798754410fd836f0e9fe666bf1b6b24114286a3ec93e81614a034971c6c",
+    "src/test/frontOfficeSaveRecovery.test.tsx": "7a5dd8fc00928539e89bc300432150fd1a92ef205e857fcdf161a673dc21eb93"
+  },
+  "note": "Prepared source only. Existing eight outcomes and new metadata control must execute. Root app remains pre970."
+}
