@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
@@ -7,7 +7,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
 import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
-  generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
+  generateDraftClass, prospectToPlayer, consumeDraftPick, nflAiDraftPicks, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
@@ -82,6 +82,7 @@ interface SaveShape {
   seasonsPlayed: number;
   draftClass: Prospect[] | null;
   picksLeft: number;
+  draftBatchesLeft?: number;
   /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
   mandate?: OwnerMandate | null;
   trust?: number;
@@ -120,6 +121,9 @@ export default function FrontOfficeBoard() {
      same screen it always did. */
   const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
+  const [draftBatchesLeft, setDraftBatchesLeft] = useState<number | null>(null);
+  const draftAction = useRef(false);
+  useEffect(() => { draftAction.current = false; }, [league, draftClass, picksLeft, draftBatchesLeft]);
   // Round 64: the owner's no scroll rule. You press Play Week at the top and
   // the scoreboard renders underneath it, often below the fold on a phone, so
   // the results pull themselves into view.
@@ -181,6 +185,9 @@ export default function FrontOfficeBoard() {
       const parsed: unknown = JSON.parse(raw);
       if (!isFrontOfficeSave(parsed, 'NFL', REGULAR_WEEKS)) { setSaveError(true); return; }
       const s = parsed as SaveShape;
+      if (s.draftBatchesLeft !== undefined && (!Number.isInteger(s.draftBatchesLeft) || s.draftBatchesLeft < 0
+        || s.draftBatchesLeft > Math.max(3, s.league.teams[s.myTeam].picks.length)
+        || (s.phase === 'draft' && s.draftBatchesLeft === 0))) { setSaveError(true); return; }
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -192,6 +199,7 @@ export default function FrontOfficeBoard() {
       setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null);
       setPicksLeft(s.picksLeft ?? 0);
+      setDraftBatchesLeft(Number.isInteger(s.draftBatchesLeft) && (s.draftBatchesLeft ?? -1) >= 0 ? s.draftBatchesLeft! : null);
       /* Round 180, repair-on-load house pattern: a pre-180 save has no owner
          yet, so ownership walks in and sets the ask from the roster as it
          stands today. */
@@ -224,13 +232,14 @@ export default function FrontOfficeBoard() {
       if (!lg) return;
       const base: SaveShape = {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+        ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
 
   /* Round 828: a new league carries every club's whole roster and practice
      squad. That data is its own chunk, fetched here on the tap rather than
@@ -409,17 +418,21 @@ export default function FrontOfficeBoard() {
      passes the save's own fields as the patch, because persist's closure still
      holds the first render's defaults while the load effect runs. */
   const openDraft = (lg: LeagueState, team: string, patch: Partial<SaveShape> = {}) => {
+    const count = lg.teams[team].picks.length;
+    const batches = Math.max(3, count);
+    const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team).reduce((sum, t) => sum + t.picks.length, 0);
     const cls = /* Round 211: the class is drawn against every name already in the
        league, so a prospect cannot arrive sharing a name with a man on a
        roster or in the market. */
-    generateDraftClass(Math.random, 40, leagueNames(lg));
+    generateDraftClass(Math.random, Math.max(40, count + Math.min(rivalCapital, batches * 6)), leagueNames(lg));
     setDraftClass(cls);
-    setPicksLeft(3);
+    setPicksLeft(count);
+    setDraftBatchesLeft(batches);
     /* Round 515: a new draft opens with an empty card, so last season's
        picks cannot be sitting there when this one starts. */
     setDraftNight(null);
     setPhase('draft');
-    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 3 }, lg, team);
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: count, draftBatchesLeft: batches }, lg, team);
   };
 
   const startDraft = () => {
@@ -428,10 +441,14 @@ export default function FrontOfficeBoard() {
   };
 
   const draftProspect = (id: string) => {
-    if (!league || !draftClass || picksLeft <= 0) return;
+    if (!league || !draftClass || picksLeft <= 0 || draftAction.current) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
+    const mine = lg.teams[myTeam];
+    if (draftBatchesLeft === null && mine.picks.length > picksLeft) mine.picks = mine.picks.slice(-picksLeft);
+    if (!consumeDraftPick(mine)) return;
+    draftAction.current = true;
     let note: string;
     /* Round 519: the position he was actually SIGNED at, captured where pl is
        still in scope. prospectToPlayer rewrites the legacy 'DEF' placeholder
@@ -448,25 +465,22 @@ export default function FrontOfficeBoard() {
       if (pl) lg.teams[myTeam].players.push(pl);
       note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
     }
-    // AI teams grab the rest of the top board between your picks
-    const order = draftOrder(lg.teams).filter(a => a !== myTeam);
-    const remaining = draftClass.filter(p => p.id !== id);
-    const aiTakes = remaining.slice(0, 6);
+    let nextClass = draftClass.filter(p => p.id !== id);
+    const nextPicks = picksLeft - 1;
+    const beforeBatches = draftBatchesLeft ?? Math.min(3, picksLeft);
+    const batches = nextPicks <= 0 ? beforeBatches : Math.min(1, beforeBatches);
     /* Round 515: the rival picks were applied and thrown away, so six real
        decisions the engine made happened where nobody could see them. They are
        captured here for the reveal and are the SAME objects the engine used. */
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
-    for (let i = 0; i < aiTakes.length; i++) {
-      const abbr = order[i % order.length];
-      const taken = aiTakes[i];
-      const pl = prospectToPlayer(taken, Math.random);
-      if (pl) lg.teams[abbr].players.push(pl);
-      rivalPicks.push({ team: abbr, playerName: taken.name, pos: pl ? pl.pos : taken.pos, grade: taken.grade });
+    for (let i = 0; i < batches; i++) {
+      const resolved = nflAiDraftPicks(lg, nextClass, myTeam, Math.random);
+      nextClass = resolved.remaining;
+      rivalPicks.push(...resolved.picks);
     }
-    const nextClass = remaining.filter(p => !aiTakes.includes(p));
-    const nextPicks = picksLeft - 1;
     setDraftClass(nextClass);
     setPicksLeft(nextPicks);
+    setDraftBatchesLeft(beforeBatches - batches);
     /* Round 530: every pick builds its reveal, the last one included. Round
        519 had named the final pick as not narrated: it left for the hub in
        this same handler, so its card never reached a render. The screen now
@@ -479,6 +493,14 @@ export default function FrontOfficeBoard() {
     ));
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
+      finishDraft(lg, note);
+      return;
+    }
+    setLeague(lg);
+    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batches }, lg, myTeam);
+  };
+
+  const finishDraft = (lg: LeagueState, note: string) => {
       /* Round 723: the GM's own tag was decided on this screen; the CPU
          clubs tag inside the offseason, skipping this club. */
       const news = runOffseason(lg, Math.random, myTeam);
@@ -523,11 +545,35 @@ export default function FrontOfficeBoard() {
          reload skips the reveal and opens where it opened before. */
       setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
-      return;
+      setPicksLeft(0);
+      setDraftBatchesLeft(0);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
+  };
+
+  const draftWithoutPicks = () => {
+    if (!league || !draftClass || (picksLeft > 0 && league.teams[myTeam].picks.length > 0) || draftBatchesLeft === 0 || draftAction.current) return;
+    draftAction.current = true;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    if (draftBatchesLeft === null && picksLeft === 0) lg.teams[myTeam].picks = [];
+    let remaining = draftClass;
+    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+    const batches = draftBatchesLeft ?? Math.min(3, picksLeft);
+    for (let i = 0; i < batches; i++) {
+      const resolved = nflAiDraftPicks(lg, remaining, myTeam, Math.random);
+      remaining = resolved.remaining;
+      rivalPicks.push(...resolved.picks);
     }
-    setLeague(lg);
-    persist({ draftClass: nextClass, picksLeft: nextPicks }, lg, myTeam);
+    setDraftClass(remaining);
+    setDraftNight(buildDraftNight(null, rivalPicks));
+    finishDraft(lg, `📥 You had no picks left. The remaining league draft added ${rivalPicks.length} rival prospects.`);
+  };
+
+  const replaceDraftBoard = () => {
+    if (!league || !draftClass || draftClass.length > 0 || picksLeft <= 0) return;
+    const batches = draftBatchesLeft ?? Math.min(3, picksLeft);
+    const cls = generateDraftClass(Math.random, Math.max(40, Math.min(picksLeft, league.teams[myTeam].picks.length) + batches * 6), leagueNames(league));
+    setDraftClass(cls);
+    persist({ draftClass: cls }, league, myTeam);
   };
 
   /* Round 530: the Continue button under the final pick's card. Nothing to
@@ -843,7 +889,7 @@ export default function FrontOfficeBoard() {
        has rolled, so the heading reads the season as it stands rather than
        one on from it, and the board is put away: no picks, no grid, just the
        card and its Continue button. */
-    const draftDone = picksLeft <= 0;
+    const draftDone = picksLeft <= 0 && draftBatchesLeft === 0;
     return (
       <div className="space-y-4">
         <CelebrationStyles />
@@ -862,6 +908,7 @@ export default function FrontOfficeBoard() {
           )}
         </div>
         {draftNight && <DraftNightCard night={draftNight} onContinue={draftDone ? leaveDraft : undefined} />}
+        {draftDone && !draftNight?.picks.length && <button onClick={leaveDraft} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Continue to the hub</button>}
         {/* Round 723: the franchise tag, before the last pick opens free agency. */}
         {!draftDone && (() => {
           const tagged = my.tagUsedFor === league.season + 1 ? my.players.find(p => p.tagSeason === league.season + 1) ?? null : null;
@@ -911,7 +958,19 @@ export default function FrontOfficeBoard() {
             </div>
           );
         })()}
-        {!draftDone && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+        {!draftDone && (picksLeft <= 0 || my.picks.length === 0) && (
+          <div className="rounded-2xl border border-border bg-card p-4 text-center space-y-3">
+            <p className="text-sm text-muted-foreground">You have no owned picks left{picksLeft > 0 ? `, even though this older draft saved ${picksLeft} remaining` : ''}. Make your tag decision above, then run the rival selections and offseason.</p>
+            <button onClick={draftWithoutPicks} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Run the league draft and offseason</button>
+          </div>
+        )}
+        {!draftDone && picksLeft > 0 && my.picks.length > 0 && draftClass.length === 0 && (
+          <div role="alert" className="rounded-2xl border border-border bg-card p-4 text-center space-y-3">
+            <p className="text-sm text-muted-foreground">This saved draft has no prospects left. Replace the remaining board to use your {picksLeft} pick{picksLeft === 1 ? '' : 's'}. Your earlier selections stay on their teams.</p>
+            <button onClick={replaceDraftBoard} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Replace the remaining prospect board</button>
+          </div>
+        )}
+        {!draftDone && picksLeft > 0 && my.picks.length > 0 && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 18).map(pr => (
             <button
               key={pr.id}
