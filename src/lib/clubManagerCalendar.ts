@@ -814,6 +814,10 @@ export function joinClubNow(career: CareerState): CareerState | null {
     /* A new appointment's mandate, the same opening the rollover gives a move. */
     boardConfidence: 62,
     season: career.season,
+    /* Round 978: the new club's international block, played through the
+       run-in in the fresh save's season one, carried onto this season's
+       number so the breaks still to come are not lost with the move. */
+    ...(s.intl ? { intl: { ...s.intl, season: career.season } } : {}),
     startYear: career.startYear,
     eraId: career.eraId,
     trophies: career.trophies,

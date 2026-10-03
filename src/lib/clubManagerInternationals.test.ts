@@ -23,8 +23,8 @@ describe('the window rule', () => {
     }
   });
 
-  it('reproduces the older four window shape FIFA published for 2023-24', () => {
-    // FIFA, Men's International Match Calendar 2023-2030: 4 to 12 September,
+  it('reproduces the older four window shape published for 2023-24', () => {
+    // The governing body's Men's International Match Calendar 2023-2030: 4 to 12 September,
     // 9 to 17 October, 13 to 21 November 2023, 18 to 26 March 2024.
     expect(ruleWindows(2023).map(w => [key(w.start), key(w.end)])).toEqual([
       [20230904, 20230912], [20231009, 20231017], [20231113, 20231121], [20240318, 20240326],

@@ -32,7 +32,19 @@
  *     then gets one from startNextSeason and its first break fires. A damaged
  *     block is dropped on the next play and the season goes on without it.
  *
- * MEASURED HEADROOM (filled in below the run that set the bands).
+ * MEASURED HEADROOM, 2026-10-03, three batches of 6 squads x 3 seeds
+ * (SEED_BASE 0, 10, 20), 49 to 54 breaks a batch:
+ *   match after a break, pooled gap      2.21  2.09  2.10   floor 1.5
+ *   the September and October window     2.97  2.95  2.97   floor 2.0
+ *   the November window                  2.27  2.18  2.27   floor 1.4
+ *   the March window                     1.24  1.09  1.07   floor 0.6
+ *   share of the two match cost the
+ *   assistant's rest wins back           0.51  0.55  0.54   floor 0.40
+ * Per squad the rest wins back most of it where the cover stayed home
+ * (Arsenal and Real Madrid about all of it) and little where the cover went
+ * away too (Chelsea and Liverpool 0.15 to 0.3, City about a third): resting
+ * a tired man for a man who is just as tired buys nothing, which is real.
+ * The pooled share is the claim, and it is a little over half.
  *
  * NEGATIVE CONTROLS, SIM_CMINTL_CONTROL=<name>, each rewrites one line of
  * the module into a temp copy (it refuses to run if the line is not there)
@@ -56,10 +68,11 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cmintl-')).replaceAll('\\', '
 const MODULE = `${ROOT}/src/lib/clubManagerInternationals.ts`;
 const CONTROL = process.env.SIM_CMINTL_CONTROL ?? '';
 const SEEDS = Math.max(1, Number(process.env.SEEDS ?? 3));
+const SEED_BASE = Math.max(0, Number(process.env.SEED_BASE ?? 0));
 /* Bands, set from the measured headroom written in the header. */
-const GAP_FLOOR = 1.0;
-const KIND_FLOOR = 0.5;
-const REC_FLOOR = 0.3;
+const GAP_FLOOR = 1.5;
+const KIND_FLOOR = { sepoct: 2.0, nov: 1.4, mar: 0.6 };
+const REC_FLOOR = 0.40;
 
 const CONTROLS = {
   dates: {
@@ -94,7 +107,9 @@ if (CONTROL) {
     console.error(`control cannot run: clubManagerInternationals.ts is not in the shape SIM_CMINTL_CONTROL=${CONTROL} rewrites`);
     process.exit(2);
   }
-  modulePath = `${path.dirname(MODULE)}/clubManagerInternationals.control-${CONTROL}-${process.pid}.ts`;
+  /* In the run's own temp folder, never in src: every import in the module
+     goes through the @ alias, so it resolves from anywhere. */
+  modulePath = `${TMP}/clubManagerInternationals.control-${CONTROL}.ts`;
   fs.writeFileSync(modulePath, src.replace(c.fixed, c.broken));
   console.log(`CONTROL ${CONTROL}: one line of the module rewritten, its check must go red`);
 }
@@ -195,7 +210,7 @@ console.log('1) The window rule against the verified dates, and a played season 
       else fail(`${id} fired between entries dated ${prev} and ${next}, its first day is ${key(w.start)}`);
     }
     const last = s.intl.last;
-    const note = (s.inbox ?? []).find(m => m.kind === 'intlDuty' && last.called.length && m.playerId === last.called[0].id);
+    const note = (s.inbox ?? []).find(m => m.kind === 'intlDuty' && m.text.includes(`International break, ${last.label}.`));
     if (last.called.length) {
       if (!note) fail(`${last.windowId}: ${last.called.length} went and the inbox says nothing`);
       else if (last.called.every(c => note.text.includes(c.name))) notes += 1;
@@ -221,7 +236,7 @@ const myNextAfter = (st, w) => {
   return -1;
 };
 for (const club of HEAVY) {
-  for (let seed = 1; seed <= SEEDS; seed++) {
+  for (let seed = SEED_BASE + 1; seed <= SEED_BASE + SEEDS; seed++) {
     a = seed * 7919;
     let s = cm.startCareer(club);
     let guard = 0;
@@ -284,9 +299,9 @@ console.log(`2) Harder: the match they come back for, against the same save with
   for (const kind of ['sepoct', 'nov', 'mar']) {
     const list = rows.filter(r => r.kind === kind);
     const g = mean(list, r => r.off - r.start);
-    console.log(`   ${kind.padEnd(7)} ${String(list.length).padStart(2)} breaks, gap ${f2(g)} (floor ${KIND_FLOOR})`);
+    console.log(`   ${kind.padEnd(7)} ${String(list.length).padStart(2)} breaks, gap ${f2(g)} (floor ${KIND_FLOOR[kind]})`);
     if (!list.length) fail(`no ${kind} break was measured`);
-    else if (g < KIND_FLOOR) fail(`the ${kind} break costs only ${f2(g)}, floor ${KIND_FLOOR}`);
+    else if (g < KIND_FLOOR[kind]) fail(`the ${kind} break costs only ${f2(g)}, floor ${KIND_FLOOR[kind]}`);
   }
   console.log(`   ${missedAll} breaks reached the match after in the same play as the note`);
   if (missedAll > 0) fail(`${missedAll} breaks gave the manager no chance to answer before the match`);

@@ -8,40 +8,40 @@
  * engine calls it from a handful of thin hooks (see the Round 978 notes in
  * src/lib/clubManager.ts).
  *
- * THE WINDOWS. FIFA's men's calendar sets the dates, and from 2026 it has
- * three windows inside a club season: one sixteen day window across late
- * September and early October with up to four matches, then nine days in
- * November and nine days in March with up to two each. Before 2026 it was four
- * nine day windows (September, October, November, March). One rule covers each
- * shape (intlWindowsFor) and the seasons whose dates two sources confirm are
- * pinned in VERIFIED_WINDOWS, which scripts/simCmInternationals.mjs holds the
- * rule to. Every other season, the era seasons included, uses the rule as a
- * STRUCTURE only and reads as partial (intlDatesPartial), the same honesty
- * rule as the rosters' CM_PARTIAL, so the screen can say its dates are
- * approximate.
+ * THE WINDOWS. The world governing body's men's calendar sets the dates, and
+ * from 2026 it has three windows inside a club season: one sixteen day window
+ * across late September and early October with up to four matches, then nine
+ * days in November and nine days in March with up to two each. Before 2026 it
+ * was four nine day windows (September, October, November, March). One rule
+ * covers each shape (intlWindowsFor) and the seasons whose dates two sources
+ * confirm are pinned in VERIFIED_WINDOWS, which scripts/simCmInternationals.mjs
+ * holds the rule to. Every other season, the era seasons included, uses the
+ * rule as a STRUCTURE only and reads as partial (intlDatesPartial), the same
+ * honesty rule as the rosters' CM_PARTIAL, so the screen can say its dates
+ * are approximate.
  *
  * Sources, read 2026-10-03:
- *  - FIFA, "Men's International Match Calendar 2023-2030" (the April 2026
- *    edition), digitalhub.fifa.com/m/3123d37097318f7f/original/
+ *  - The governing body's own "Men's International Match Calendar 2023-2030"
+ *    (the April 2026 edition), digitalhub.fifa.com/m/3123d37097318f7f/original/
  *    Men-s-International-Match-Calendar-2023-2030_EN.pdf. 2026: 21 September
  *    to 6 October (4 matches), 9 to 17 November. 2027: 22 to 30 March, 20
  *    September to 5 October, 8 to 16 November. 2028: 20 to 28 March.
- *  - notjustok.com, "FIFA makes major change to international breaks ahead of
- *    2026/27 season": September 21 to October 6, November 9 to 17, March 22
- *    to 30 for 2026-27.
- *  - beIN Sports, "When Is the Next FIFA International Break and Why Is It
- *    Longer Than Usual?" (2026-08-24): 21 September to 6 October 2026 and
- *    9 to 17 November 2026.
+ *  - notjustok.com, its sports desk piece on the merged autumn window ahead of
+ *    2026/27: September 21 to October 6, November 9 to 17, March 22 to 30 for
+ *    2026-27.
+ *  - beIN Sports, its 2026-08-24 explainer on the next international break and
+ *    why it runs longer: 21 September to 6 October 2026 and 9 to 17 November
+ *    2026.
  *  - Groundhopper Soccer Guides, "When Are the Next International Breaks in
  *    English and European Football?": the blank club weekends of 2027-28 are
  *    25 September and 2 October 2027, 13 November 2027 and 25 March 2028, each
- *    inside the FIFA range above, which is the second source for 2027-28.
- *  - FIFA media release, "FIFA Council approves international match
- *    calendars": the three in season windows and their lengths from 2026.
- * The rule below reproduces every FIFA in season date for 2026-27 through
- * 2029-30 and, in the older shape, 2023-24 and 2024-25 exactly (2025-26's
- * March window it puts a week early). That is why seasons past 2027-28 and
- * every era season are structure only.
+ *    inside the governing body's range above, the second source for 2027-28.
+ *  - The FIFA Council media release approving the international match
+ *    calendars: the three in season windows and their lengths from 2026.
+ * The rule below reproduces every published in season date for 2026-27
+ * through 2029-30 and, in the older shape, 2023-24 and 2024-25 exactly
+ * (2025-26's March window it puts a week early). That is why seasons past
+ * 2027-28 and every era season are structure only.
  *
  * WHO GOES. A man is called up when the nationality map knows his country
  * (src/data/playerNationalities.ts, through nationalityOf) and his rating
@@ -102,7 +102,7 @@ function mondayOnOrAfter(date: CalDate): CalDate {
   return addDays(date, (1 - dow + 7) % 7);
 }
 
-/** First season of FIFA's three window shape (the 2026-27 season). */
+/** First season of the three window shape (the 2026-27 season). */
 export const INTL_NEW_SHAPE_FROM = 2026;
 
 /**
@@ -412,9 +412,9 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
   return {
     kind: 'intlDuty',
     from: 'Your assistant',
-    playerName: going[0].name,
-    playerId: going[0].id,
-    text: `🌍 International break, ${brk.label}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
+    playerName: 'Your assistant',
+    playerId: '',
+    text: `International break, ${brk.label}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
     options: fit.length
       ? [
         { label: 'Rest the ones who are spent', effect: 'restIntl' },
@@ -485,11 +485,19 @@ export function backFromDuty(state: Pick<CareerState, 'intl' | 'season' | 'week'
  * skips the legs a match takes out of him (the engine's own mean,
  * MATCH_FITNESS_COST plus half the spread), capped by how far he can still
  * climb, and one man's legs count for one eleventh of the side's condition
- * (CONDITION_PER_FITNESS, the rule myMatchStrength uses).
+ * (CONDITION_PER_FITNESS, the rule myMatchStrength uses). It is then counted
+ * at HALF: the later match is a forecast, not a sure thing (he may not start
+ * it, and the days before it recover a lot of legs either way), and the
+ * match in front of you is certain. Measured with scripts/simCmInternationals.mjs
+ * over 6 squads x 3 seeds: at full weight the rest won back 0.47 of the
+ * break's two match cost and gave away more of the match itself; at half it
+ * won back 0.51 and gave away less.
  */
+const LEGS_LATER_WEIGHT = 0.5;
+
 function legsLaterWorth(fitness: number): number {
   const saved = Math.min(MATCH_FITNESS_COST + MATCH_FITNESS_SPREAD / 2, Math.max(0, 100 - fitness));
-  return (CONDITION_PER_FITNESS * saved) / 11;
+  return (LEGS_LATER_WEIGHT * CONDITION_PER_FITNESS * saved) / 11;
 }
 
 /**
