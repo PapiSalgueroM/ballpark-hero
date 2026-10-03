@@ -447,6 +447,30 @@ function ROOM_CHECKS(rel, { STAGES, HOME, ids, pace, start, LADDER_HELD, TAPS, p
       const got = [Number(m[1]), Number(m[2]), m[3], Number(m[4]), Number(m[5]), Number(m[6]), Number(m[7])];
       if (JSON.stringify(got) !== JSON.stringify(want)) fail(`the page's trophy room example says ${JSON.stringify(got)} and the engine gives ${JSON.stringify(want)}`);
     }
+    /* the guide states the room's numbers in prose; each sentence is rebuilt
+       from the engine's own tables and must appear word for word */
+    const world = fs.readFileSync(path.join(ROOT, 'src', 'data', 'gameContent', 'world.ts'), 'utf8');
+    const at = world.indexOf("'/idle-arena'");
+    const next = world.slice(at + 1).search(/\n\s*'\/[a-z0-9-]+': \{/);
+    const guide = at < 0 ? '' : world.slice(at, next < 0 ? undefined : at + 1 + next);
+    const list = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and then ${xs[xs.length - 1]}` : String(xs[0]);
+    const squad = l => Object.entries(A.HEAD_START_SQUAD[l]).map(([g, n]) => `${n} ${A.GENERATORS.find(x => x.id === g).label}s`);
+    const and = xs => `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`;
+    const costs = A.PERKS[0].cost;
+    if (A.PERKS.some(p => JSON.stringify(p.cost) !== JSON.stringify(costs))) fail('the perks no longer share one price ladder, and the guide prices them as one');
+    const held2 = ex.held - perk.cost[0];
+    const sooner = r ? Math.round(-r.night[ex.perk] * 100 / 5) * 5 : NaN;
+    const want = [
+      `three levels that cost ${and(costs)} trophies`,
+      `from ${A.OFFLINE_CAP_MS / 3600000} hours to ${list(A.LONG_NIGHT_CAP_MS.slice(1).map(ms => ms / 3600000))} hours`,
+      `at ${list(A.NIGHT_SHIFT_RATE.slice(1).map(x => `${Math.round(x * 100)}%`))} speed instead of ${Math.round(A.OFFLINE_RATE * 100)}%`,
+      `${and(squad(1))} at the first level, up to ${and(squad(3))} at the third`,
+      `each ${and(A.SCOUTED_GENS.map(g => A.GENERATORS.find(x => x.id === g).label))} cost ${list(A.SCOUTING_GROWTH.slice(1).map(x => `${Math.round((x - 1) * 100)}%`))} more than the last instead of ${Math.round((A.GROWTH - 1) * 100)}%`,
+      `Say you hold ${ex.held} trophies, which is +${Math.round(ex.held * A.TROPHY_BONUS * 100)}% on everything. Spend ${perk.cost[0]} of them on ${perk.label} and you hold ${held2}, so everything scores +${Math.round(held2 * A.TROPHY_BONUS * 100)}% instead, but every night away now pays at ${Math.round(A.NIGHT_SHIFT_RATE[1] * 100)}% speed rather than ${Math.round(A.OFFLINE_RATE * 100)}%`,
+      `the next trophy comes about ${sooner}% sooner`,
+    ];
+    for (const w of want) if (!guide.includes(w)) fail(`the Idle Arena guide in world.ts does not say "${w}", which is what the engine does (or what this harness measured)`);
+    console.log(`   the guide states ${want.length} trophy room facts, each rebuilt from the engine and found word for word`);
     console.log(`   worked example, ${ex.held} trophies and ${ex.perk}: overnight ${r ? pct(r.night[ex.perk]) : '?'}, sitting and tapping ${r ? pct(r.quick[ex.perk]) : '?'} and ${r ? pct(r.long[ex.perk]) : '?'}`);
   }
   console.log(`   smallest margins measured: ${Object.entries(lo).map(([k, v]) => `${k} ${pct(v)}`).join(', ')}`);

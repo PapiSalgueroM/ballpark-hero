@@ -2353,6 +2353,12 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Spending trophies in the trophy room",
+        items: [
+          "Open the trophy room and spend trophies on perks that never go away. A spent trophy stops paying its 5%, so each perk is a trade, not a free gift.",
+        ],
+      },
+      {
         heading: "Earning points while you are away",
         items: [
           "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back.",
@@ -2381,9 +2387,16 @@ export const WORLD_CONTENT: GameContentMap = {
           {
             heading: "What survives a trophy lift",
             items: [
-              "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
+              "Lifting the trophy clears the points, the squad and the upgrades. Trophies, trophy room perks, badges and the all time total are the only things that carry over, and they carry over forever.",
             ],
           },
+        ],
+      },
+      {
+        heading: "What the trophy room sells",
+        items: [
+          "Four perks, each with three levels that cost 3, 5 and 8 trophies. Long Night stretches time away from 8 hours to 16, 20 and then 24 hours. Night Shift makes time away run at 70%, 80% and then 95% speed instead of 50%.",
+          "Head Start puts a squad on the payroll the moment you lift: 25 Ball Boys and 10 Sunday Strikers at the first level, up to 25 Ball Boys, 25 Sunday Strikers, 25 Point Guards and 10 Sluggers at the third. Scouting Network makes each Sniper, Quarterback, Ace and Champion cost 11%, 8% and then 5% more than the last instead of 15%.",
         ],
       },
       {
@@ -2396,6 +2409,7 @@ export const WORLD_CONTENT: GameContentMap = {
         heading: "Away time running at a slower pace",
         items: [
           "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
+          "Long Night and Night Shift from the trophy room change those two numbers, and nothing else about the rule: one cap for the whole absence, and never full speed.",
         ],
       },
     ],
@@ -2410,6 +2424,12 @@ export const WORLD_CONTENT: GameContentMap = {
         heading: "Reaching the trophy and lifting it",
         paragraphs: [
           "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+        ],
+      },
+      {
+        heading: "Choosing a perk in the trophy room",
+        paragraphs: [
+          "Say you hold 30 trophies, which is +150% on everything. Spend 3 of them on Night Shift and you hold 27, so everything scores +135% instead, but every night away now pays at 70% speed rather than 50%. For somebody who leaves it running overnight that is the better deal: the next trophy comes about 15% sooner. For somebody who sits there tapping and never leaves, it is the worse one, because the squad just scores less. Head Start is the reverse: it suits the quick tapping runs and does little for the long nights.",
         ],
       },
     ],
@@ -2439,6 +2459,13 @@ export const WORLD_CONTENT: GameContentMap = {
           "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
         ],
       },
+      {
+        heading: "Picking a perk for the way you play",
+        items: [
+          "Buy the perk that matches how you actually play. Back once a day: Long Night. Back every morning: Night Shift. Quick tapping runs: Head Start. Long runs where you sign dozens of the top archetypes: Scouting Network. If you tap through every run and never leave, the two away perks do nothing for you, so leave them on the shelf.",
+          "The second and third levels cost more than the first, so they pay best once you hold a big cabinet.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -2447,7 +2474,7 @@ export const WORLD_CONTENT: GameContentMap = {
       },
       {
         q: "Does it keep going when I close the tab?",
-        a: "Yes, at half speed for up to eight hours. Leaving the tab open in the background is the same deal, because a hidden tab stops running properly anyway. The catch up is worked out from the time your last session saved, so switching phones will not carry it over, but reopening the same browser will.",
+        a: "Yes, at half speed for up to eight hours, or longer and faster once you buy Long Night or Night Shift in the trophy room. Leaving the tab open in the background is the same deal, because a hidden tab stops running properly anyway. The catch up is worked out from the time your last session saved, so switching phones will not carry it over, but reopening the same browser will.",
       },
       {
         q: "Why are there no real players in it?",
