@@ -416,7 +416,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
       id: 'nhlB_farewellTour',
       category: 'legacy', cooldown: 99,
       title: 'They want to give you a farewell tour',
-      body: 'Thirty one buildings, thirty one tribute videos, thirty one gifts you have to ship home. You also have not actually decided if this is your last year.',
+      body: 'Every road building in the league, a tribute video in each one, a gift in each one you have to ship home. You also have not actually decided if this is your last year.',
       options: [
         {
           label: 'Announce it, take the tour',
@@ -431,7 +431,7 @@ export function getNhlLifeEventsB(c: NhlCareerState, rng: () => number): NhlCare
         {
           label: 'Ask every stop to donate instead',
           effect: 'No more canoes',
-          apply: (cc) => { fans(cc, 12); mood(cc, 11); return `Thirty one clubs wrote 25k checks to minor hockey instead of buying you a canoe. Fanbase +12, morale +11, 775k raised.`; },
+          apply: (cc) => { fans(cc, 12); mood(cc, 11); return `Every road club wrote a 25k check to minor hockey instead of buying you a canoe. Fanbase +12, morale +11.`; },
         },
       ],
     });

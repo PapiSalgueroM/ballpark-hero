@@ -533,20 +533,24 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  if (yrs >= 2) {
+  /* Round 920: the card tells a playoff story, so it waits for a season that
+     had playoff games in it (poGames is the season line's own count, never a
+     parse of the result string). It used to promise a second round to men
+     whose team had missed the playoffs. */
+  if (yrs >= 2 && (c.seasons[yrs - 1]?.poGames ?? 0) > 0) {
     deck.push({
       id: 'nhlA_broken_hand',
       category: 'body', cooldown: 2,
-      title: 'Round two, broken hand',
-      body: 'A slash on the hands in the second round, and the scan is not close. The doctor is not smiling. He says a needle before every game, a cast liner under the glove, and you can probably hold the stick with two fingers. Probably.',
+      title: 'Playoff run, broken hand',
+      body: 'A slash on the hands in the playoffs, and the scan is not close. The doctor is not smiling. He says a needle before every game, a cast liner under the glove, and you can probably hold the stick with two fingers. Probably.',
       options: [
         {
           label: 'Play with the freeze', effect: 'Playoff legend',
           apply: (cc) => { const f = fan(cc, 13); const h = hp(cc, -13); const m = mor(cc, 6); const g = rate(cc, -1); flag(cc, 'playoffWarrior'); return `A needle before every game and a stick you could barely feel. They still talk about it in that city. Fanbase +${f}, morale +${m}, health ${h}, rating ${g}.`; },
         },
         {
-          label: 'Sit two games, return for the next round', effect: 'Split the difference',
-          apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); const f = fan(cc, -3); return `Two games in a suit, a lot of ice on the hand, and you were back for the next round with a little more grip. Health +${h}, morale +${m}, fanbase ${f}.`; },
+          label: 'Sit two games, then come back', effect: 'Split the difference',
+          apply: (cc) => { const h = hp(cc, 6); const m = mor(cc, 2); const f = fan(cc, -3); return `Two games in a suit, a lot of ice on the hand, and you came back with a little more grip. Health +${h}, morale +${m}, fanbase ${f}.`; },
         },
         {
           label: 'Shut it down and get it fixed', effect: 'Fix it now',
