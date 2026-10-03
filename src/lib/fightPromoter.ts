@@ -108,7 +108,17 @@ export interface PromoterState {
   closed: boolean;
   seed: number;
   rngTick: number;
+  /**
+   * Round 955: how the promotion ended. Absent while it is running. An old save
+   * that is closed without one went broke, because until this round that was
+   * the only way a promotion could close.
+   */
+  exit?: PromoterExit;
+  /** Round 955: what the buyer paid, in millions, when the promotion was handed over. */
+  handedFor?: number;
 }
+
+export type PromoterExit = 'handed' | 'broke';
 
 const POOL_TARGET = 10;
 
@@ -363,14 +373,11 @@ export function runShow(st: PromoterState, plan: ShowPlan, tactics: Tactic[] = [
     ],
   };
   next.pool = refreshPool(next);
-  if (next.money < 0) {
-    next.closed = true;
-    next.log = ['You cannot cover the next room. That is the business.', ...next.log];
-  }
+  const ended = next.money < 0 ? closeBroke(next) : next;
   const headline = bouts.length
     ? `${bouts[0].a.name} against ${bouts[0].b.name}, ${bouts[0].result.method}`
     : 'no fights';
-  return { state: next, result: { venue, attendance, ticketPrice: plan.ticketPrice, gate, purses, rent: venue.rent, profit, bouts, repDelta, headline } };
+  return { state: ended, result: { venue, attendance, ticketPrice: plan.ticketPrice, gate, purses, rent: venue.rent, profit, bouts, repDelta, headline } };
 }
 
 /**
@@ -425,18 +432,88 @@ function refreshPool(st: PromoterState): Fighter[] {
   return out;
 }
 
+/** The only way a promotion closed before Round 955, and still the way it closes when the money runs out. */
+export function closeBroke(st: PromoterState): PromoterState {
+  return {
+    ...st,
+    closed: true,
+    exit: 'broke',
+    log: ['You cannot cover the next room. That is the business.', ...st.log],
+  };
+}
+
+/**
+ * Round 955: HANDING IT OVER. Until this round a promotion could only end by
+ * running out of money, so one that was doing well never saw its verdict and
+ * never finished. Handing over is the deliberate ending, open once you have
+ * put on enough shows for your dates and your name to be worth something.
+ */
+export const HANDOVER_MIN_SHOWS = 10;
+
+/** What a buyer pays for your name and your dates, in millions. */
+export function handOverPrice(st: Pick<PromoterState, 'reputation'>): number {
+  return Math.round((0.1 + (clamp(st.reputation, 0, 100) / 100) ** 1.5 * 3) * 1000) / 1000;
+}
+
+export function canHandOver(st: PromoterState): boolean {
+  return !st.closed && st.history.length >= HANDOVER_MIN_SHOWS;
+}
+
+export function handOver(st: PromoterState): PromoterState | null {
+  if (!canHandOver(st)) return null;
+  const price = handOverPrice(st);
+  return {
+    ...st,
+    money: Math.round((st.money + price) * 1000) / 1000,
+    closed: true,
+    exit: 'handed',
+    handedFor: price,
+    log: [`After ${st.history.length} shows you hand the promotion over for ${price.toFixed(3)}m.`, ...st.log],
+  };
+}
+
+/** True for a promotion that closed because the money ran out, old saves included. */
+export function wentBroke(st: PromoterState): boolean {
+  return st.closed && st.exit !== 'handed';
+}
+
+/** What going under costs the verdict. */
+export const BROKE_PENALTY = 12;
+
+/**
+ * Round 955: the two blocks this round added are optional, and one that does
+ * not read right is dropped on its own so the rest of the save loads.
+ */
+export function sanitizePromoter(st: PromoterState): PromoterState {
+  const out: PromoterState = { ...st };
+  if (out.exit !== undefined && out.exit !== 'handed' && out.exit !== 'broke') delete out.exit;
+  if (out.handedFor !== undefined && !(typeof out.handedFor === 'number' && Number.isFinite(out.handedFor))) delete out.handedFor;
+  return out;
+}
+
 export interface PromoterVerdict { score: number; tier: string; bullets: string[] }
 
 export function promoterVerdict(st: PromoterState): PromoterVerdict {
   const shows = st.history.length;
   const profitable = st.history.filter(h => h.profit > 0).length;
   const crowd = shows ? st.history.reduce((s, h) => s + h.attendance, 0) / shows : 0;
+  /* Round 955: how it ended counts. A promotion handed on as a going concern
+     banks its price, which the money term already counts, and one that ran out
+     of money pays for it here. */
+  const handed = st.closed && st.exit === 'handed';
+  const broke = wentBroke(st);
   const score = clampi(
     st.reputation * 0.62 +
     Math.min(24, st.money * 5) +
-    Math.min(14, profitable * 0.9),
+    Math.min(14, profitable * 0.9) -
+    (broke ? BROKE_PENALTY : 0),
     0, 100,
   );
+  const ending = handed
+    ? `Handed over after ${shows} shows for ${(st.handedFor ?? 0).toFixed(3)}m. Out on your own terms.`
+    : broke
+      ? `The money ran out after ${shows} shows. Going under costs ${BROKE_PENALTY} points.`
+      : null;
   const tier = score >= 86 ? 'The Big Time'
     : score >= 68 ? 'A Real Promoter'
       : score >= 48 ? 'Making a Living'
@@ -446,6 +523,7 @@ export function promoterVerdict(st: PromoterState): PromoterVerdict {
     score,
     tier,
     bullets: [
+      ...(ending ? [ending] : []),
       `${shows} show${shows === 1 ? '' : 's'}, ${profitable} of them in profit.`,
       `Average house ${Math.round(crowd).toLocaleString()}.`,
       `Name ${st.reputation.toFixed(0)} out of 100, ${st.money.toFixed(3)}m in the bank.`,

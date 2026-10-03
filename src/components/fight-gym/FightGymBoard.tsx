@@ -36,9 +36,10 @@ function GymRules() {
           is to his ceiling.
         </p>
         <p>
-          The work also carries into his next fight. A man nobody has worked with goes in at sharpness 50. Every block since
-          his last fight adds 5, up to four blocks, and a conditioning block among them adds 10 more, which is gas for the
-          late rounds. The fight spends it, so the next camp starts from zero.
+          The work also carries into his next fight as sharpness, which is how long he keeps his output before he tires. A
+          man nobody has worked with goes in at 50. Every block since his last fight adds 5, up to four blocks, and a
+          conditioning block among them adds 10 more. It is a little more gas in the late rounds, not a new fighter. The
+          fight spends it, so the next camp starts from zero.
         </p>
         <p className="rounded-md border bg-muted/40 p-2 text-xs">
           Example: you give him power in week 10, conditioning in week 11 and defence in week 12, then fight him in week 12.
@@ -220,7 +221,7 @@ export default function FightGymBoard() {
             <p className="mt-2 text-[11px] text-muted-foreground">
               Sharpness {Math.round(campQualityFor(g, f.id) * 100)}.{' '}
               {campQualityFor(g, f.id) > 0.5
-                ? 'The training since his last fight goes in with him.'
+                ? 'The training since his last fight gives him a bit more gas late.'
                 : 'Nobody has worked with him since his last fight, so he goes in at an even 50.'}
             </p>
           </div>

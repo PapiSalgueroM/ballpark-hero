@@ -10,8 +10,37 @@ import { STYLES, weightById, ratingOf, type Fighter } from '@/lib/fightCareer';
 import {
   newPromoter, runShow, promoterVerdict, appealOf, purseFor, legalMatch,
   drawOf, weightOf, expectedAttendance, houseFill, VENUES, venueById,
+  handOver, canHandOver, handOverPrice, sanitizePromoter, wentBroke,
+  HANDOVER_MIN_SHOWS, BROKE_PENALTY,
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+
+/* Round 955: the new ending, written down where the player can reopen it,
+   because the page's guide lives in a file another lane is editing. */
+function HandOverRules() {
+  return (
+    <HowToPlayPopover title="Handing it over" triggerLabel="How handing over works" floatingTrigger={false}>
+      <div className="space-y-3 text-sm">
+        <p>
+          Once you have put on {HANDOVER_MIN_SHOWS} shows you can hand the promotion over. A buyer pays for your name and
+          your dates, and the better your name the more they pay. Handing over ends the game and shows how you are
+          remembered, with the price in the bank.
+        </p>
+        <p>
+          The other way out is running out of money. That still ends it, but going under takes {BROKE_PENALTY} points off
+          the verdict.
+        </p>
+        <p className="rounded-md border bg-muted/40 p-2 text-xs">
+          Example: after twelve shows your name is 50 and you have 3m in the bank. A buyer offers{' '}
+          {handOverPrice({ reputation: 50 }).toFixed(3)}m, so you walk away with about{' '}
+          {(3 + handOverPrice({ reputation: 50 })).toFixed(2)}m and your verdict. Book one show too many in a
+          room you cannot fill and you could be handing over nothing, with {BROKE_PENALTY} points off.
+        </p>
+      </div>
+    </HowToPlayPopover>
+  );
+}
 
 type Phase = 'setup' | 'hub' | 'result' | 'closed';
 
@@ -26,6 +55,8 @@ export default function FightPromoterBoard() {
   const [card, setCard] = useState<Booking[]>([]);
   const [picking, setPicking] = useState<string | null>(null);
   const [result, setResult] = useState<ShowResult | null>(null);
+  /* Round 955: 'handover' or 'reset' while it waits on a second tap. */
+  const [confirm, setConfirm] = useState<string | null>(null);
 
   const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${st?.show ?? 0}:${card.length}`);
   const verdict = useMemo(() => (st ? promoterVerdict(st) : null), [st]);
@@ -41,8 +72,9 @@ export default function FightPromoterBoard() {
          close. This restore runs after mount, so without the mark every
          reload paid the verdict again. */
       if (s.st.closed) markRestoredFinish('fight-promoter');
-      setSt(s.st);
-      setPhase(s.st.closed ? 'closed' : 'hub');
+      const st0 = sanitizePromoter(s.st);
+      setSt(st0);
+      setPhase(st0.closed ? 'closed' : 'hub');
     } catch { /* a fresh promotion is the right fallback */ }
   }, []);
 
@@ -54,7 +86,7 @@ export default function FightPromoterBoard() {
 
   const reset = () => {
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
-    setSt(null); setPhase('setup'); setCard([]); setResult(null); setPicking(null);
+    setSt(null); setPhase('setup'); setCard([]); setResult(null); setPicking(null); setConfirm(null);
   };
 
   if (phase === 'setup' || !st) {
@@ -70,6 +102,10 @@ export default function FightPromoterBoard() {
             with him sells tickets tonight. Making the fight people actually want is what gets your name on a
             bigger building.
           </p>
+          <div className="mt-2 flex items-center gap-2 text-[11px] text-muted-foreground">
+            <HandOverRules />
+            <span>After {HANDOVER_MIN_SHOWS} shows you can hand the promotion over and go out on your own terms.</span>
+          </div>
         </div>
         <button onClick={() => persist(newPromoter(name), 'hub')}
           className="min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground">
@@ -113,7 +149,10 @@ export default function FightPromoterBoard() {
       <div className="space-y-4" ref={revealRef}>
         {Header}
         <div className="rounded-lg border bg-card p-4 text-center">
-          <Trophy className="mx-auto mb-2 h-7 w-7 text-amber-500" />
+          <Trophy className={cn('mx-auto mb-2 h-7 w-7', wentBroke(st) ? 'text-muted-foreground' : 'text-amber-500')} />
+          <p className="text-sm font-semibold">
+            {wentBroke(st) ? 'Out of the business' : `Handed over for ${(st.handedFor ?? 0).toFixed(3)}m`}
+          </p>
           <p className="text-xs uppercase tracking-wide text-muted-foreground">How you are remembered</p>
           <p className="text-2xl font-bold text-primary">{verdict.tier}</p>
           <p className="mb-3 text-sm text-muted-foreground">{verdict.score} out of 100</p>
@@ -123,7 +162,9 @@ export default function FightPromoterBoard() {
         </div>
         <ShareButtons gameName="Fight Promoter" gamePath="/fight-promoter"
           score={`${verdict.tier}, ${verdict.score}/100`}
-          customText={`${st.name} put on ${st.history.length} shows and finished as ${verdict.tier}.`} />
+          customText={wentBroke(st)
+            ? `${st.name} put on ${st.history.length} shows and finished as ${verdict.tier}.`
+            : `${st.name} put on ${st.history.length} shows, handed it over and went out as ${verdict.tier}.`} />
         <button onClick={reset} className="min-h-[48px] w-full rounded-md border px-4 py-3 font-semibold">
           <RotateCcw className="mr-2 inline h-4 w-4" />Start again
         </button>
@@ -219,6 +260,10 @@ export default function FightPromoterBoard() {
   return (
     <div className="space-y-4" ref={revealRef}>
       {Header}
+      <div className="flex items-center justify-end gap-2 text-xs text-muted-foreground">
+        <span>Handing over and going under</span>
+        <HandOverRules />
+      </div>
 
       <div className="rounded-lg border bg-card p-4">
         <p className="mb-2 flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
@@ -354,9 +399,64 @@ export default function FightPromoterBoard() {
         </div>
       )}
 
-      <button onClick={reset} className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
-        Close the promotion and start again
-      </button>
+      <div className="rounded-lg border bg-card p-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold">Hand it over</p>
+            <p className="text-[11px] text-muted-foreground">
+              {canHandOver(st)
+                ? `A buyer will pay ${handOverPrice(st).toFixed(3)}m for your name and your dates. Handing over ends it here and shows the verdict.`
+                : `Nobody buys a promotion with no history. Offers start after ${HANDOVER_MIN_SHOWS} shows (${st.history.length} so far).`}
+            </p>
+          </div>
+          <button
+            disabled={!canHandOver(st)}
+            onClick={() => setConfirm(confirm === 'handover' ? null : 'handover')}
+            className="min-h-[36px] shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium disabled:opacity-40">
+            Hand over
+          </button>
+        </div>
+        {confirm === 'handover' && canHandOver(st) && (
+          <div className="mt-2 flex gap-2 border-t pt-2">
+            <button
+              onClick={() => {
+                const h = handOver(st);
+                setConfirm(null); setCard([]); setPicking(null);
+                if (h) persist(h, 'closed');
+              }}
+              className="min-h-[40px] flex-1 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
+              Yes, hand over for {handOverPrice(st).toFixed(3)}m
+            </button>
+            <button onClick={() => setConfirm(null)}
+              className="min-h-[40px] flex-1 rounded-md border px-3 py-1.5 text-xs">
+              Not yet
+            </button>
+          </div>
+        )}
+      </div>
+
+      {confirm === 'reset' ? (
+        <div className="rounded-lg border border-destructive/50 p-3">
+          <p className="mb-2 text-xs text-muted-foreground">
+            Walk away and start a new promotion? This one is gone for good, with no verdict.
+          </p>
+          <div className="flex gap-2">
+            <button onClick={reset}
+              className="min-h-[44px] flex-1 rounded-md border border-destructive/60 px-3 py-2 text-sm text-destructive">
+              Yes, start again
+            </button>
+            <button onClick={() => setConfirm(null)}
+              className="min-h-[44px] flex-1 rounded-md border px-3 py-2 text-sm">
+              Keep this promotion
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button onClick={() => setConfirm('reset')}
+          className="min-h-[44px] w-full rounded-md border px-4 py-2 text-sm text-muted-foreground">
+          Close the promotion and start again
+        </button>
+      )}
     </div>
   );
 }
