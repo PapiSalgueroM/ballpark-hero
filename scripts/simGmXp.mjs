@@ -1,7 +1,60 @@
 /*
  * Round 942 harness: GM XP and skill trees, lifted out of Club Manager.
  *
- * HEADER_PLACEHOLDER
+ * The owner, 2026-10-02: every manager game should behave like the soccer one.
+ * Club Manager has had manager XP and seven skill trees since Round 513; the GM
+ * sims had none. Round 942 moved the level curve and the point spending out of
+ * clubManagerXp.ts into src/lib/gmXp.ts, over a tree list passed in, and gave
+ * the GM seats seven trees of their own as data. This harness fences both.
+ *
+ * Sections:
+ *  1. Club Manager did not move by one point. scripts/data/cmXpFixture.json was
+ *     recorded from origin/main 64d5be42 BEFORE any code moved: every level of
+ *     the curve, levelFor, pointsEarned and levelProgress at every threshold and
+ *     either side of it, 300 seeded spend walks of twelve spends (7200 lines),
+ *     the validation corpus, every effect at every point, 200 seeded season
+ *     awards. 7796 lines, hashed per section, every tenth line kept as text to
+ *     point at a mismatch. Recorded twice: identical bytes. Replayed after the
+ *     lift: identical.
+ *  2. A GM climbs Club Manager's ladder exactly: same XP at every level, same
+ *     level, points and progress either side of every threshold, and 200 paired
+ *     seeded walks of 40 spends refused and accepted identically.
+ *  3. Nothing spent is the game that shipped: every consumer at zero points
+ *     hands back exactly what it was given.
+ *  4. Every point moves its consumer at EVERY step from 1 to 5, for EVERY real
+ *     input, not the mean and not the two ends (Round 513's Media tree passed an
+ *     ends check while points 3 to 5 bought nothing). The inputs are read from
+ *     the shared front office modules: the draft's -4..+4 scouting error, the
+ *     firm and sour trade premiums, frontOfficeCuts' dead money for seven
+ *     salaries, gradeSeason's trust losses, every press gamble's odds. It is all
+ *     deterministic (rolls are a 1000 point grid, not draws), so the measured
+ *     smallest step is exact and each floor is half of it:
+ *       scouting 0.15 (floor 0.07)    negotiation 0.02 (0.01)   cap craft 0.04 (0.02)
+ *       development 0.05 (0.025)      trading 0.08 (0.04)       ownership 1 (0.5)
+ *       media 0.03 (0.015)
+ *  5. Each tile's "at the cap" words match what five points do, within a tenth:
+ *     measured 0.55, 0.90, 0.80, 1.25, 0.60, 0.636 and +0.15.
+ *  6. A point cannot be conjured, a tree takes five, a full board is 35, a spend
+ *     never mutates, and 15 mangled blocks each read as a fresh one without
+ *     touching the save around them.
+ *  7. Earning: every source pays, a title outpays a .700 season, and the same
+ *     good season fills the board at Club Manager's pace (measured 540 GM XP
+ *     against 580, 54.6 seasons against 50.9, ratio 1.07, band 0.83 to 1.2).
+ *
+ * Negative controls (GMXP_CONTROL=...), each refusing to run if its text is gone:
+ *   curvestep   XP_LEVEL_STEP 1.04 to 1.041 in whichever file holds the curve:
+ *               section 1 red (4 sections of the fixture).
+ *   gmcap       a sixth point per GM tree: section 2 red.
+ *   nocap       the shared spend forgets the cap: sections 1, 2 and 6 red.
+ *   saturate    ownership stops paying after two points: section 4 red on
+ *               points 3 to 5, while the ends only line it prints stays 7 of 7.
+ *   notneutral  negotiation shaves every ask at zero points: section 3 red.
+ *   claim       media buys 0.02 a point, the tile still says fifteen: section 5
+ *               red while section 4 stays green.
+ * A control that leaves every check green exits 1.
+ *
+ * Nothing here reads the network: it bundles src/lib modules that import no
+ * client, and reads only the fixture.
  *
  * Run: node scripts/simGmXp.mjs
  * Record the Club Manager fixture (only ever from a tree whose clubManagerXp.ts
@@ -21,7 +74,7 @@ const CM_PATH = `${ROOT}/src/lib/clubManagerXp.ts`;
 const GM_PATH = `${ROOT}/src/lib/gmXp.ts`;
 const RECORD = process.env.GMXP_RECORD === '1';
 const CONTROL = process.env.GMXP_CONTROL || '';
-const KNOWN = ['curvestep'];
+const KNOWN = ['curvestep', 'gmcap', 'nocap', 'saturate', 'notneutral', 'claim'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`GMXP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -37,15 +90,18 @@ const readSrc = p => fs.readFileSync(p, 'utf8').replaceAll('\r\n', '\n');
 
 /* ---------- controls: rewrite a COPY of a module and alias the bundle to it ---------- */
 const overrides = {};
-const swapInto = (file, alias, from, to) => {
-  const src = readSrc(file);
-  if (!src.includes(from)) {
-    console.error(`control cannot run: ${path.basename(file)} does not contain the text GMXP_CONTROL=${CONTROL} rewrites`);
-    console.error(`  looked for: ${from}`);
-    process.exit(1);
+const swapInto = (file, alias, pairs) => {
+  let src = readSrc(file);
+  for (const [from, to] of pairs) {
+    if (!src.includes(from)) {
+      console.error(`control cannot run: ${path.basename(file)} does not contain the text GMXP_CONTROL=${CONTROL} rewrites`);
+      console.error(`  looked for: ${from}`);
+      process.exit(1);
+    }
+    src = src.replace(from, to);
   }
   const copy = `${TMP}/simGmXp.${process.pid}.${path.basename(file)}`;
-  fs.writeFileSync(copy, src.replace(from, to));
+  fs.writeFileSync(copy, src);
   overrides[alias] = copy;
 };
 const HAS_GM = fs.existsSync(GM_PATH);
@@ -54,7 +110,30 @@ if (CONTROL === 'curvestep') {
      (Club Manager before the lift, gmXp after it), the fixture must go red. */
   const anchor = 'export const XP_LEVEL_STEP = 1.04;';
   const holder = HAS_GM && readSrc(GM_PATH).includes(anchor) ? GM_PATH : CM_PATH;
-  swapInto(holder, holder === GM_PATH ? '@/lib/gmXp' : '@/lib/clubManagerXp', anchor, 'export const XP_LEVEL_STEP = 1.041;');
+  swapInto(holder, holder === GM_PATH ? '@/lib/gmXp' : '@/lib/clubManagerXp', [[anchor, 'export const XP_LEVEL_STEP = 1.041;']]);
+} else if (CONTROL === 'gmcap') {
+  /* The GM board grows a sixth point a tree: no longer Club Manager's curve. Section 2. */
+  swapInto(GM_PATH, '@/lib/gmXp', [['export const GM_MAX_TREE_POINTS = 5;', 'export const GM_MAX_TREE_POINTS = 6;']]);
+} else if (CONTROL === 'nocap') {
+  /* The shared spend forgets the tree cap. Sections 1 (Club Manager delegates) and 6. */
+  swapInto(GM_PATH, '@/lib/gmXp', [['  if (now >= set.maxPoints) return null;', '']]);
+} else if (CONTROL === 'saturate') {
+  /* Round 513's real defect in GM clothes: ownership stops paying after two
+     points. Section 4 must catch it; the ends only line it prints must not. */
+  swapInto(GM_PATH, '@/lib/gmXp', [[
+    '  return Math.round(delta * (1 - points * GM_TRUST_CUSHION_PER_POINT));',
+    '  return Math.round(delta * (1 - Math.min(2, points) * GM_TRUST_CUSHION_PER_POINT));',
+  ]]);
+} else if (CONTROL === 'notneutral') {
+  /* Negotiation shaves a point off every ask even with nothing spent. Section 3. */
+  swapInto(GM_PATH, '@/lib/gmXp', [
+    ['  if (points <= 0) return ask;', ''],
+    ['  return ask * (1 - points * GM_ASK_EDGE_PER_POINT);', '  return ask * (0.99 - points * GM_ASK_EDGE_PER_POINT);'],
+  ]);
+} else if (CONTROL === 'claim') {
+  /* The code drifts from the tile: media buys two points of odds, the tile still
+     says fifteen at the cap. Section 4 stays green (it still moves); section 5 must not. */
+  swapInto(GM_PATH, '@/lib/gmXp', [['export const GM_PRESS_ODDS_PER_POINT = 0.03;', 'export const GM_PRESS_ODDS_PER_POINT = 0.02;']]);
 }
 
 /* ---------- bundle the real modules ---------- */
@@ -306,7 +385,7 @@ console.log('2) The GM curve is Club Manager\'s, at every level, and so is every
       }
     }
   }
-  ok(`${checked} XP probes over ${cm.MAX_LEVEL + 5} levels and ${spends} paired spends land the same on both seats`);
+  if (!failures) ok(`${checked} XP probes over ${cm.MAX_LEVEL + 5} levels and ${spends} paired spends land the same on both seats`);
 }
 
 /* ---------- the real numbers each GM consumer is handed ---------- */
@@ -362,6 +441,7 @@ const CONSUMERS = {
 /* ---------- 3. Nothing spent is the game that shipped ---------- */
 console.log('3) A GM who has spent nothing gets exactly the numbers the front office produced');
 {
+  const f0 = failures;
   let checked = 0;
   const xs = [-28, -16, -4, -2.5, -1, 0, 0.45, 0.97, 1, 1.02, 1.15, 2.5, 7, 30];
   for (const x of xs) {
@@ -375,7 +455,7 @@ console.log('3) A GM who has spent nothing gets exactly the numbers the front of
   for (const t of gm.GM_TREES) {
     if (gm.gmTreePoints(fresh, t) !== 0 || gm.gmTreePoints(undefined, t) !== 0) fail(`a fresh or absent block has points in ${t}`);
   }
-  if (!failures) ok(`${checked + 4 * xs.length} readings at zero points hand back exactly what they were given; fresh and absent blocks are empty`);
+  if (failures === f0) ok(`${checked + 4 * xs.length} readings at zero points hand back exactly what they were given; fresh and absent blocks are empty`);
 }
 
 /* ---------- 4. Every point moves its consumer, at every step ---------- */
@@ -414,6 +494,101 @@ console.log('4) Every GM tree point moves the number it feeds, at every step fro
   /* What a 0 against the cap check would have said. It is printed, never relied
      on: GMXP_CONTROL=saturate keeps it green while the per step check goes red. */
   console.log(`   (an ends only check passes ${endsOnly} of ${gm.GM_TREES.length} trees)`);
+}
+
+/* ---------- 5. What each tile promises is what the code applies ---------- */
+console.log('5) Each tile\'s "at the cap" line matches what five points actually do');
+{
+  /* The claim in GM_TREE_INFO[t].atMax, as a number, and the reading it is about:
+     the capped reading over the untouched one (media: the odds added). Within a
+     tenth either way, so the words cannot drift from the code. */
+  const CLAIM = {
+    scouting: { says: 'a little over half', want: 0.55, of: 'ratio' },
+    negotiation: { says: 'about a tenth off', want: 0.9, of: 'ratio' },
+    capCraft: { says: 'about a fifth less', want: 0.8, of: 'ratio' },
+    development: { says: 'about a quarter more', want: 1.25, of: 'ratio' },
+    trading: { says: 'about 40 percent less', want: 0.6, of: 'ratio' },
+    ownership: { says: 'about a third less', want: 2 / 3, of: 'ratio' },
+    media: { says: '15 points more often', want: 0.15, of: 'gain' },
+  };
+  for (const t of gm.GM_TREES) {
+    const c = CONSUMERS[t];
+    const cl = CLAIM[t];
+    const text = gm.GM_TREE_INFO[t]?.atMax ?? '';
+    if (!text.toLowerCase().includes(cl.says)) { fail(`${t}: the tile no longer says "${cl.says}" (it says "${text}"), recheck the claim`); continue; }
+    const lo = mean(c.read(0));
+    const hi = mean(c.read(gm.GM_MAX_TREE_POINTS));
+    const got = cl.of === 'ratio' ? hi / lo : hi - lo;
+    if (Math.abs(got - cl.want) > Math.abs(cl.want) * 0.1) fail(`${t}: the tile says "${cl.says}" but five points give ${got.toFixed(3)}`);
+    else ok(`${t}: "${cl.says}" and five points give ${got.toFixed(3)}`);
+  }
+}
+
+/* ---------- 6. Points cannot be conjured, overfilled or taken back; the block fails closed ---------- */
+console.log('6) Spending rules hold for a GM, and a mangled block resets alone');
+{
+  const f0 = failures;
+  const fresh = gm.defaultGmXp();
+  if (gm.spendGmPoint(fresh, 'scouting') !== null) fail('a GM with no XP bought a point');
+  const rich = { ...fresh, xp: gm.xpForLevel(gm.GM_MAX_LEVEL) + 10 };
+  let b = rich;
+  let bought = 0;
+  for (let i = 0; i < gm.GM_MAX_TREE_POINTS + 3; i++) { const n = gm.spendGmPoint(b, 'trading'); if (n) { b = n; bought += 1; } }
+  if (bought !== gm.GM_MAX_TREE_POINTS) fail(`a rich GM put ${bought} points into one tree, the cap is ${gm.GM_MAX_TREE_POINTS}`);
+  if (gm.spendGmPoint(rich, 'bogus') !== null) fail('a point went into a tree that does not exist');
+  if (rich.points.trading !== 0) fail('spending mutated the block it was handed');
+  const all = gm.GM_TREES.reduce(acc => {
+    let x = acc;
+    for (const t of gm.GM_TREES) for (let i = 0; i < gm.GM_MAX_TREE_POINTS; i++) x = gm.spendGmPoint(x, t) ?? x;
+    return x;
+  }, rich);
+  if (gm.pointsSpent(gm.GM_TREE_SET, all) !== gm.GM_MAX_LEVEL - 1) fail(`a maxed GM spent ${gm.pointsSpent(gm.GM_TREE_SET, all)} points, the board holds ${gm.GM_MAX_LEVEL - 1}`);
+  if (gm.gmPointsFree(all) !== 0) fail('a full board still shows free points');
+
+  const garbage = [undefined, null, 7, 'x', [], {}, { ...fresh, v: 2 }, { ...fresh, xp: -1 }, { ...fresh, xp: NaN },
+    { ...fresh, xp: '9' }, { ...fresh, points: null }, { ...fresh, points: { ...fresh.points, media: 6 } },
+    { ...fresh, points: { ...fresh.points, ownership: 1.5 } }, { ...fresh, points: { ...fresh.points, scouting: -1 } },
+    { v: 1, xp: 50, points: { scouting: 1 } }];
+  garbage.forEach((g, i) => {
+    if (gm.isValidGmXp(g)) fail(`garbage #${i} passed as a GM block`);
+    if (show(gm.gmXpOf(g)) !== show(fresh)) fail(`garbage #${i} did not read as a fresh block`);
+  });
+  const good = { v: 1, xp: 5000, points: { ...fresh.points, ownership: 3 } };
+  if (!gm.isValidGmXp(good) || gm.gmXpOf(good) !== good) fail('a sound block was not read as itself');
+  /* A save with a mangled block: reading it touches nothing else and repairs nothing in place. */
+  const save = { season: 4, champions: ['A', 'B'], gmXp: { v: 1, xp: 'lots' } };
+  const before = JSON.stringify(save);
+  const read = gm.gmXpOf(save.gmXp);
+  if (JSON.stringify(save) !== before || show(read) !== show(fresh)) fail('reading a mangled block changed the save or did not reset the block');
+  if (failures === f0) ok(`cap ${gm.GM_MAX_TREE_POINTS} a tree, ${gm.GM_MAX_LEVEL - 1} points a board, ${garbage.length} mangled blocks reset alone`);
+}
+
+/* ---------- 7. Earning it, and how long the board takes ---------- */
+console.log('7) A GM earns at Club Manager\'s pace, and achievements outpay volume');
+{
+  const f0 = failures;
+  const base = { winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: 0, placesAboveExpectation: 0, prospectsGraduated: 0 };
+  const t0 = gm.gmSeasonXp(base).total;
+  for (const [k, v] of Object.entries({ winPct: 0.6, titles: 1, playoffRoundsWon: 1, mandateSteps: 1, placesAboveExpectation: 1, prospectsGraduated: 1 })) {
+    if (!(gm.gmSeasonXp({ ...base, [k]: v }).total > t0)) fail(`more ${k} did not pay more`);
+  }
+  const winning = gm.gmSeasonXp({ ...base, winPct: 0.7 }).total;
+  const title = gm.gmSeasonXp({ ...base, titles: 1 }).total;
+  if (!(title > winning)) fail(`a title (${title}) did not outpay a .700 season (${winning})`);
+  if (gm.gmSeasonXp({ ...base, winPct: NaN, titles: -2, mandateSteps: 9 }).total !== 2 * gm.GM_XP_PER_MANDATE_STEP) fail('garbage season input was not cleaned');
+  for (const [r, n] of [['title', 2], ['overachieved', 2], ['met', 1], ['missed', 0], ['badly', 0]]) {
+    if (gm.mandateSteps(r) !== n) fail(`mandate ${r} counted ${gm.mandateSteps(r)} steps`);
+  }
+  /* The same good season, priced by each seat. Measured 540 GM against 580 Club
+     Manager, so the GM board fills in about 1.07 times the seasons; the band is
+     a sixth either way, wide of that and narrow enough to catch a doubled rate. */
+  const gmGood = gm.gmSeasonXp({ winPct: 0.6, titles: 1, playoffRoundsWon: 3, mandateSteps: 2, placesAboveExpectation: 2, prospectsGraduated: 1 }).total;
+  const cmGood = cm.seasonXp({ wins: 20, trophies: 1, objectivesMet: 2, placesAboveExpectation: 2, youthPromoted: 1, euroRoundsReached: 3, soldMoreThanBought: true }).total;
+  const board = gm.xpForLevel(gm.GM_MAX_LEVEL);
+  const ratio = (board / gmGood) / (board / cmGood);
+  console.log(`   good season: GM ${gmGood} XP, Club Manager ${cmGood}; whole board ${board} XP = ${(board / gmGood).toFixed(1)} GM seasons, ${(board / cmGood).toFixed(1)} Club Manager seasons`);
+  if (ratio < 5 / 6 || ratio > 6 / 5) fail(`a GM fills the board in ${ratio.toFixed(2)} times Club Manager's seasons`);
+  if (failures === f0) ok(`every source pays, a title beats a .700 season (${title} to ${winning}), pace ratio ${ratio.toFixed(2)}`);
 }
 
 /* ---------- summary ---------- */
