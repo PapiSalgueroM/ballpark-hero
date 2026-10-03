@@ -909,7 +909,10 @@
     "/fight-career": {
       "howToPlay": [
         "Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles.",
+        "Pick a trainer and a manager. The trainer decides which camp weeks count for more and which for less, the manager decides how big your purses are and what he takes out of them. Each tile says its numbers.",
+        "After every fight, deal with what comes in before the next offers open: two cards, and sometimes a move by your rival. Every option says exactly what it does, and one on every card changes nothing that can reach a fight.",
         "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
+        "Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.",
         "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
         "Watch it round by round, or turn that off and take the decision straight away.",
@@ -924,11 +927,17 @@
         "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
         "Reach number one and every offer on the table is for a world title, whichever road got you there.",
         "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
-        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers."
+        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+        "Your trainer takes 10% of every purse and your manager takes his own share, 5% to 25% depending on who you hired. The rest goes in the bank. A card can put you on the tab, and the next purse pays it off first.",
+        "The camp shop sells five upgrades with three levels each, at 0.05m, 0.25m and 1.00m: sparring partners, a strength coach, a conditioning coach, a pad man and a cut man. Coach bonuses are banked a fraction at a time and paid as whole points, and a camp still never takes you past your ceiling.",
+        "Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up, and karma kept at 70 or more hands 2 back each fight.",
+        "Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more, and a card that would move you a division or bring a rematch is dropped rather than throw that fight away.",
+        "Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker."
       ],
       "example": [
         "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
         "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
+        "After your ninth fight your rival goes first: he calls you out, you take it, and the middle offer becomes him at 30% more. Then two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight.",
         "At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off.",
         "Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great."
       ],
