@@ -234,7 +234,8 @@ describe('the tier summer', () => {
     farmOffseason(newFarmState('nfl', 2026, ['AAA']), ctx, { rng: ones, taken: new Set(), genName: () => 'x', minSalary: 1 });
     expect(young.age).toBe(22);
     expect(young.ovr).toBe(60 + TIER_GROWTH_BONUS);
-    expect(s.club.ledger[young.id].elev).toBeUndefined();
+    /* The season's elevations clear, and an empty row goes with them. */
+    expect(s.club.ledger[young.id]).toBeUndefined();
   });
 });
 
@@ -250,5 +251,24 @@ describe('an old save loads unchanged and a broken block resets alone', () => {
     expect(state.clubs.A.reserve!.length).toBe(1);
     expect(state.clubs.B).toEqual({ reserve: [], ledger: {}, lost: [], up: [] });
     expect(loadFarmState(raw, 'nhl', 2026, ['A', 'B']).reset).toEqual(['all']);
+  });
+});
+
+describe('the panel says what the buttons do', () => {
+  it('renders the counts, the rules and each move in the words the engine applies', async () => {
+    const { createElement } = await import('react');
+    const { renderToStaticMarkup } = await import('react-dom/server');
+    const { GmFarmPanel } = await import('@/components/front-office-shared/GmFarmPanel');
+    const vet = man('SP', 70, { age: 30 });
+    const kid = man('SP', 60, { age: 21 });
+    const s = seat('mlb', 'AAA', [vet, man('SP', 80)], [kid]);
+    s.club.lost.push('gone1');
+    const ctx = ctxOf('mlb', [s], 26);
+    const html = renderToStaticMarkup(createElement(GmFarmPanel, { ctx, seat: s, onCallUp: () => {}, onSendDown: () => {} }));
+    expect(html).toContain('40 man 3 of 40');
+    expect(html).toContain('A man can be optioned in 3 seasons.');
+    expect(html).toContain('Call up');
+    expect(html).toContain('Expose to waivers');
+    expect(html).toContain('Lost on waivers: 1.');
   });
 });
