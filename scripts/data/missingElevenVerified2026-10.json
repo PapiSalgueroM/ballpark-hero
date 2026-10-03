@@ -1,0 +1,67 @@
+{
+ "game": "Missing Eleven",
+ "round": 950,
+ "checkedOn": "2026-10-03",
+ "method": "Every starter of every sheet below was read from two hosts on the read date. nfl.com: the official game book PDF linked from the nfl.com game page ('Download Game Book (PDF)'), page 1 'Lineups' block, read with pypdf text extraction; the game book prints the starters as position, jersey number and initial plus surname. pro-football-reference.com: the box score page's Starters table for that team (#vis_starters or #home_starters, which the site ships inside an HTML comment), read from the rendered page in a browser. A sheet ships only when both hosts list the same eleven men; a sheet where they differ on any starter is held out. Positions are the game book's (pfr prints generic OL labels on some tables). Each blank candidate fact is read from the same two hosts (the game book scoring summary or substitution list and the pfr scoring table). Wikipedia was not used.",
+ "starterColumns": ["position", "name", "nfl.com game book line", "pfr starters row"],
+ "sheets": [
+  {
+   "id": "sb-lviii-kc",
+   "game": "Super Bowl LVIII",
+   "matchDate": "2024-02-11",
+   "unit": "offense",
+   "team": "Kansas City Chiefs",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense", "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf", "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #home_starters (Chiefs Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Patrick Mahomes", "QB 15 P.Mahomes", "Patrick Mahomes/QB"],
+    ["RB", "Isiah Pacheco", "RB 10 I.Pacheco", "Isiah Pacheco/RB"],
+    ["WR", "Rashee Rice", "WR 4 R.Rice", "Rashee Rice/WR"],
+    ["WR", "Marquez Valdes-Scantling", "WR 11 M.Valdes-Scantling", "Marquez Valdes-Scantling/WR"],
+    ["TE", "Travis Kelce", "TE 87 T.Kelce", "Travis Kelce/TE"],
+    ["TE", "Noah Gray", "TE 83 N.Gray", "Noah Gray/TE"],
+    ["LT", "Donovan Smith", "LT 79 D.Smith", "Donovan Smith/T"],
+    ["LG", "Nick Allegretti", "LG 73 N.Allegretti", "Nick Allegretti/G"],
+    ["C", "Creed Humphrey", "C 52 C.Humphrey", "Creed Humphrey/C"],
+    ["RG", "Trey Smith", "RG 65 T.Smith", "Trey Smith/G"],
+    ["RT", "Jawaan Taylor", "RT 74 J.Taylor", "Jawaan Taylor/T"]
+   ],
+   "facts": [
+    { "name": "Noah Gray", "fact": "Both books list two starting tight ends, Gray beside Travis Kelce." },
+    { "name": "Nick Allegretti", "fact": "Game book lineup LG 73 N.Allegretti; pfr starters Nick Allegretti/G." }
+   ]
+  },
+  {
+   "id": "sb-lviii-sf",
+   "game": "Super Bowl LVIII",
+   "matchDate": "2024-02-11",
+   "unit": "offense",
+   "team": "San Francisco 49ers",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense", "url": "https://static.www.nfl.com/image/upload/v1707737132/gamecenter/674ddfc1-b342-11ee-aec3-7d8f81bc70be.pdf", "via": "https://www.nfl.com/games/49ers-at-chiefs-2023-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (49ers Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/202402110kan.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["QB", "Brock Purdy", "QB 13 B.Purdy", "Brock Purdy/QB"],
+    ["RB", "Christian McCaffrey", "RB 23 C.McCaffrey", "Christian McCaffrey/RB"],
+    ["FB", "Kyle Juszczyk", "FB 44 K.Juszczyk", "Kyle Juszczyk/FB"],
+    ["WR", "Brandon Aiyuk", "WR 11 B.Aiyuk", "Brandon Aiyuk/WR"],
+    ["WR", "Deebo Samuel", "WR 19 D.Samuel", "Deebo Samuel/WR"],
+    ["TE", "George Kittle", "TE 85 G.Kittle", "George Kittle/TE"],
+    ["LT", "Trent Williams", "LT 71 T.Williams", "Trent Williams/T"],
+    ["LG", "Aaron Banks", "LG 65 A.Banks", "Aaron Banks/OL"],
+    ["C", "Jake Brendel", "C 64 J.Brendel", "Jake Brendel/OL"],
+    ["RG", "Jon Feliciano", "RG 55 J.Feliciano", "Jon Feliciano/OL"],
+    ["RT", "Colton McKivitz", "RT 68 C.McKivitz", "Colton McKivitz/OL"]
+   ],
+   "facts": [
+    { "name": "Christian McCaffrey", "fact": "Scoring: game book 'C.McCaffrey 21 yd. pass from J.Jennings' (Q2 4:23); pfr 'Christian McCaffrey 21 yard pass from Jauan Jennings'. Jennings is in the 49ers substitutions, not the starters, on both." },
+    { "name": "Kyle Juszczyk", "fact": "Game book lineup FB 44 K.Juszczyk; pfr starters Kyle Juszczyk/FB." }
+   ]
+  }
+ ]
+}
