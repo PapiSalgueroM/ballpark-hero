@@ -17,7 +17,7 @@ import {
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
   nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, nbaTipOffPayroll, nbaTaxBill,
   /* Round 824: new deals are priced in the money of the season they start in. */
-  nbaMinContract, nbaDraftSigning,
+  nbaMinContract, nbaDraftSigning, nbaDraftCapital, nbaConsumeDraftPick, nbaAiDraftPicks,
 } from '@/lib/nbaFrontOffice';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 /* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
@@ -116,7 +116,7 @@ type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string 
 
 interface SaveShape {
   league: NbaLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
-  draftClass: NbaProspect[] | null; picksLeft: number;
+  draftClass: NbaProspect[] | null; picksLeft: number; draftAiBatchesLeft?: number;
   /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
   mandate?: OwnerMandate | null; trust?: number; fired?: boolean;
   /* Round 192. The presser itself is transient (a reload ends the scrum,
@@ -160,6 +160,10 @@ export default function NbaFrontOfficeBoard() {
      the Round 186 rule for reveals. */
   const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
+  const [draftAiBatchesLeft, setDraftAiBatchesLeft] = useState<number | null>(null);
+  const [draftError, setDraftError] = useState('');
+  const draftPending = useRef(false);
+  useEffect(() => { draftPending.current = false; }, [phase, draftClass, picksLeft, draftAiBatchesLeft]);
   const [tradePartner, setTradePartner] = useState('');
   const [myTradePiece, setMyTradePiece] = useState('');
   /* Round 631: the man whose Waive button has been tapped once. The second
@@ -200,6 +204,25 @@ export default function NbaFrontOfficeBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s.league || !s.myTeam) return;
+      if (s.phase === 'draft') {
+        const draftTeam = s.league.teams?.[s.myTeam];
+        const capital = draftTeam ? nbaDraftCapital(draftTeam) : null;
+        const completedLegacy = s.picksLeft === 0 && s.draftAiBatchesLeft === undefined
+          && s.league.round === 1 && s.league.champions.some(c => c.season === s.league.season - 1);
+        if (capital == null || !Number.isInteger(s.picksLeft) || s.picksLeft < 0 || s.picksLeft > 60
+          || (s.draftAiBatchesLeft !== undefined && (!Number.isInteger(s.draftAiBatchesLeft)
+            || s.draftAiBatchesLeft < 0 || s.draftAiBatchesLeft > 2))
+          || !Array.isArray(s.draftClass)
+          || s.draftClass.length > 70 || s.draftClass.some(p => !p || typeof p.name !== 'string'
+            || !p.name.trim() || !['G', 'F', 'C'].includes(p.pos) || !Number.isInteger(p.age) || p.age <= 0
+            || !Number.isFinite(p.grade) || p.grade < 0 || p.grade > 99
+            || !Number.isFinite(p.trueOvr) || p.trueOvr < 0 || p.trueOvr > 99)
+          || (!completedLegacy && s.league.round !== NBA_ROUNDS)
+          || (s.picksLeft === 0 && !completedLegacy && s.draftAiBatchesLeft === 0)) {
+          setStartError('Could not restore this draft. Your saved career has not changed. Start another front office to replace it.');
+          return;
+        }
+      }
       /* Round 568: FIRST, above every setState below, because everything
          past this line reads the league by id and a save written before the
          id fix can hold two men under one. The draft class is passed too: it
@@ -208,6 +231,7 @@ export default function NbaFrontOfficeBoard() {
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
+      setDraftAiBatchesLeft(s.draftAiBatchesLeft ?? null);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
       setTrust(s.trust ?? FO_TRUST_START);
@@ -238,11 +262,12 @@ export default function NbaFrontOfficeBoard() {
       if (!lg) return;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+        ...(draftAiBatchesLeft == null ? {} : { draftAiBatchesLeft }),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftAiBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
 
   useEffect(() => {
     if (!rotationOpen && rotationReturn.current) {
@@ -438,12 +463,16 @@ export default function NbaFrontOfficeBoard() {
      passes the save's own fields as the patch, because persist's closure still
      holds the first render's defaults while the load effect runs. */
   const openDraft = (lg: NbaLeague, team: string, patch: Partial<SaveShape> = {}) => {
-    const cls = /* Round 211: the class is drawn against every name already in the
-       league, so a prospect cannot arrive sharing a name with a man on a
-       roster or in the market. */
-    nbaDraftClass(Math.random, 24, leagueNames(lg));
-    setDraftClass(cls); setPicksLeft(2); setDraftNight(null); setPhase('draft');
-    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: 2 }, lg, team);
+    if (draftPending.current) return;
+    const capital = nbaDraftCapital(lg.teams[team]);
+    if (capital == null) { setDraftError('Draft rights are unavailable. Your save has not changed.'); return; }
+    draftPending.current = true;
+    const rivalCapital = Object.values(lg.teams).filter(t => t.abbr !== team)
+      .reduce((total, t) => total + (nbaDraftCapital(t) ?? 0), 0);
+    const cls = nbaDraftClass(Math.random, Math.max(24, capital + Math.min(10, rivalCapital)), leagueNames(lg));
+    setDraftClass(cls); setPicksLeft(capital); setDraftAiBatchesLeft(2);
+    setDraftNight(null); setDraftError(''); setPhase('draft');
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: capital, draftAiBatchesLeft: 2 }, lg, team);
   };
 
   const startDraft = () => {
@@ -451,73 +480,92 @@ export default function NbaFrontOfficeBoard() {
     openDraft(league, myTeam);
   };
 
-  const draftPick = (id: string) => {
-    if (!league || !draftClass || picksLeft <= 0) return;
-    const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    const pr = draftClass.find(p => p.id === id);
-    if (!pr) return;
-    const signing = nbaDraftSigning(lg);
-    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random, signing));
-    const remaining = draftClass.filter(p => p.id !== id);
-    const aiTakes = remaining.slice(0, 5);
-    const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
-    /* Round 515: the rival picks were applied and thrown away, so real
-       decisions the engine made happened where nobody could see them.
-       Captured here for the reveal, from the same objects the engine used. */
-    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
-    aiTakes.forEach((p, i) => {
-      const abbr = order[i % order.length];
-      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random, signing));
-      rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
-    });
-    const nextClass = remaining.filter(p => !aiTakes.includes(p));
-    const nextPicks = picksLeft - 1;
-    /* Round 530: every pick builds its reveal, the last one included. Round
-       519 had named the final pick as not narrated: it left for the hub in
-       this same handler, so its card never reached a render. The screen now
-       stays on the draft after the last pick (no setPhase below) and leaves
-       when the player presses Continue under the card. The offseason still
-       runs right here, in the same order, drawing the same randomness. */
-    setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
-      rivalPicks,
-    ));
-    setDraftClass(nextClass); setPicksLeft(nextPicks);
-    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
-    if (nextPicks <= 0) {
-      /* Round 722: the GM's club is named so the summer leaves it to him. */
-      const notes = nbaOffseason(lg, Math.random, myTeam);
-      /* Round 180: ownership re-reads the roster and sets next season's ask. */
-      /* Round 192: what you said at the podium tilts the ask, then the
-         tilt is spent. */
-      const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
-      setMandate(m);
-      setFeed([
-        `🏛️ The new mandate: ${m.text}`,
-        ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
-          : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
-        ...notes,
-      ].slice(0, 6));
-      setPressTilt(0); setSeasonTradeLine(null);
-      setSeries([]); setChampion(''); setWonNow(false); setTaxClose(null);
-      /* Round 530: the phase stays 'draft' so the last pick's card is seen;
-         leaveDraft moves it on. The save says 'hub' as it always did, so a
-         reload skips the reveal and opens where it opened before. */
-      setFeedSlam(null); setTab(null);
-      setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
-      return;
-    }
-    setLeague(lg);
-    persist({ draftClass: nextClass, picksLeft: nextPicks }, lg, myTeam);
+  const finishDraft = (lg: NbaLeague, showPick: boolean) => {
+    /* Round 722: the GM's club is named so the summer leaves it to him. */
+    const notes = nbaOffseason(lg, Math.random, myTeam);
+    /* Round 180: ownership re-reads the roster and sets next season's ask. */
+    /* Round 192: what you said at the podium tilts the ask, then the
+       tilt is spent. */
+    const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
+    setMandate(m);
+    setFeed([
+      `🏛️ The new mandate: ${m.text}`,
+      ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
+        : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
+      ...notes,
+    ].slice(0, 6));
+    setPressTilt(0); setSeasonTradeLine(null);
+    setSeries([]); setChampion(''); setWonNow(false); setTaxClose(null);
+    /* Round 530: the phase stays 'draft' so the last pick's card is seen;
+       leaveDraft moves it on. The save says 'hub' as it always did, so a
+       reload skips the reveal and opens where it opened before. */
+    setFeedSlam(null); setTab(null);
+    setLeague(lg); setPicksLeft(0); setDraftAiBatchesLeft(0);
+    if (!showPick) { setPhase('hub'); setDraftClass(null); setDraftNight(null); }
+    persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftAiBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
+
   };
 
-  /* Round 530: the Continue button under the final pick's card. Nothing to
-     persist: the last pick already wrote the hub. */
-  const leaveDraft = () => {
-    setPhase('hub');
-    setTab(null);
+  const draftPick = (id: string) => {
+    if (draftPending.current || !league || !draftClass || picksLeft <= 0) return;
+    const pr = draftClass.find(p => p.id === id);
+    if (!pr) return;
+    const lg: NbaLeague = JSON.parse(JSON.stringify(league));
+    const team = lg.teams[myTeam];
+    const capital = nbaDraftCapital(team);
+    if (capital == null || capital === 0) return;
+    if (capital > picksLeft) team.picks = team.picks.slice(-picksLeft);
+    if (!nbaConsumeDraftPick(team)) return;
+    draftPending.current = true;
+    setDraftError('');
+    team.players.push(nbaProspectToPlayer(pr, Math.random, nbaDraftSigning(lg)));
+    let nextClass = draftClass.filter(p => p.id !== id);
+    let batches = draftAiBatchesLeft ?? Math.min(2, picksLeft);
+    const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
+    const nextPicks = Math.min(picksLeft - 1, team.picks.length);
+    do {
+      if (batches === 0) break;
+      const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
+      const result = nbaAiDraftPicks(lg, nextClass, order, Math.random);
+      nextClass = result.remaining; rivalPicks.push(...result.picks); batches--;
+    } while (nextPicks === 0 && batches > 0);
+    setDraftNight(buildDraftNight(
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade }, rivalPicks,
+    ));
+    setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftAiBatchesLeft(batches);
+    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
+    if (nextPicks === 0) { finishDraft(lg, true); return; }
+    setLeague(lg);
+    persist({ draftClass: nextClass, picksLeft: nextPicks, draftAiBatchesLeft: batches }, lg, myTeam);
   };
+
+  const draftWithoutPicks = () => {
+    if (draftPending.current || !league || picksLeft > 0 && (nbaDraftCapital(league.teams[myTeam]) ?? 0) > 0) return;
+    draftPending.current = true;
+    const lg: NbaLeague = JSON.parse(JSON.stringify(league));
+    if (lg.round === 1 && lg.champions.some(c => c.season === lg.season - 1)) {
+      setPhase('hub'); setDraftClass(null); setDraftAiBatchesLeft(0); setPicksLeft(0);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftAiBatchesLeft: 0, postseason: null }, lg, myTeam);
+      return;
+    }
+    lg.teams[myTeam].picks = [];
+    let remaining = draftClass ?? [];
+    for (let batches = draftAiBatchesLeft ?? Math.min(2, picksLeft); batches > 0; batches--) {
+      const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
+      remaining = nbaAiDraftPicks(lg, remaining, order, Math.random).remaining;
+    }
+    finishDraft(lg, false);
+  };
+
+  const recoverDraftClass = () => {
+    if (draftPending.current || !league || picksLeft <= 0) return;
+    draftPending.current = true;
+    const cls = nbaDraftClass(Math.random, Math.max(24, picksLeft + 10), leagueNames(league));
+    setDraftClass(cls); setDraftError('');
+    persist({ draftClass: cls }, league, myTeam);
+  };
+
+  const leaveDraft = () => { setPhase('hub'); setTab(null); };
 
   const doRelease = (pid: string) => {
     if (!league) return;
@@ -610,6 +658,7 @@ export default function NbaFrontOfficeBoard() {
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
     setRotationOpen(false); rotationReturn.current = false;
+    setDraftClass(null); setDraftNight(null); setPicksLeft(0); setDraftAiBatchesLeft(null); setDraftError(''); draftPending.current = false;
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null); setTaxClose(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -790,7 +839,10 @@ export default function NbaFrontOfficeBoard() {
        has rolled, so the heading reads the season as it stands rather than
        one on from it, and the board is put away: no picks, no grid, just the
        card and its Continue button. */
-    const draftDone = picksLeft <= 0;
+    const draftDone = picksLeft <= 0 && league.round === 1;
+    const noRights = (nbaDraftCapital(my) ?? 0) === 0;
+    const availablePicks = Math.min(picksLeft, nbaDraftCapital(my) ?? 0);
+    const needsExit = !draftNight && (picksLeft <= 0 || noRights);
     return (
       <div className="space-y-4">
         <CelebrationStyles />
@@ -802,14 +854,23 @@ export default function NbaFrontOfficeBoard() {
             </p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error.
+              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. Scout grades carry error.
             </p>
           )}
         </div>
         {draftNight && <DraftNightCard night={draftNight} onContinue={draftDone ? leaveDraft : undefined} />}
-        {!draftDone && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+        {draftError && <p role="alert" className="text-xs text-destructive">{draftError}</p>}
+        {needsExit && <div className="rounded-2xl border border-border bg-card p-4 text-center">
+          <p className="text-xs text-muted-foreground">{draftDone ? 'Your new season is ready.' : 'You have no selections remaining. Finish the league draft and offseason to start the next season.'}</p>
+          <button onClick={draftWithoutPicks} className="mt-3 min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">{draftDone ? 'Continue to the hub' : 'Finish draft and offseason'}</button>
+        </div>}
+        {!draftDone && !noRights && draftClass.length === 0 && <div className="rounded-2xl border border-border bg-card p-4 text-center">
+          <p role="alert" className="text-xs text-muted-foreground">This saved draft has no prospects left. Generate a new simulated class to use your remaining rights.</p>
+          <button onClick={recoverDraftClass} className="mt-3 min-h-11 rounded-full bg-primary px-5 py-2 text-sm font-bold text-primary-foreground">Generate replacement class</button>
+        </div>}
+        {!draftDone && !noRights && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
           {draftClass.slice(0, 14).map(pr => (
-            <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
+            <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex min-h-11 items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
                 <span className="block text-sm font-bold text-foreground">{pr.name}</span>
                 <span className="block text-[10px] text-muted-foreground">{pr.pos} · age {pr.age}</span>
