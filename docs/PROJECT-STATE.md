@@ -1,3 +1,23 @@
+## Codex claims1000, 2026-10-03: playable Buzzer Beater court presentation
+
+Anthony asked to keep going. Publishing998/999 is still the delivery priority:
+public checks at14:03 UTC still show Release Z, and the editor/dashboard remain
+stalled on auth readiness. Publication ownership stays released. No code from
+this new pass is needed to publish the already accepted batch.
+
+Continue one isolated visual pass while that external blocker remains: replace
+the line-body shooter with an articulated fictional athlete, improve the court,
+glass/support/net and basketball detail, and drive follow-through from the
+existing flight progress. Keep projection, scored paths, ball/rim geometry,
+inputs, physics, saves and scoring intact. No real likenesses, club kits,
+external media, new clocks, random effects or false rim-contact animations.
+
+Own BuzzerBeaterBoard's presentation slice and adjacent SVG artwork, with scoped
+remote tests and screenshots at320/390/430/1440. Keep this pass in its own PR
+until accepted998/999 publication is resolved. No local runtime gates or
+production DB work. Claude988/manager lanes and held drafts/stashes stay separate.
+Next free1001 is unclaimed. AdSense/indexing submissions remain deferred.
+
 ## Codex batch ready to publish, 2026-10-03 09:56 EDT
 
 Accepted main `5b254e19702b672381815009b0d26e858b5f233a` contains both new
