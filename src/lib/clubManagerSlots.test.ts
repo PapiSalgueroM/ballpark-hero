@@ -113,7 +113,7 @@ describe('deleting and reading', () => {
   });
 
   it('reads the manager, the era and the trophies without opening the save', () => {
-    const c = { ...career('Everton'), eraId: 'era2010', startYear: 2010, season: 3, manager: { name: ' Ada Testfield ', nationality: 'England', background: 'analyst', style: 'possession' }, trophies: [{ name: 'Cup', emoji: '', season: 2 }] };
+    const c = { ...career('Everton'), eraId: 'era2010', startYear: 2010, season: 3, manager: { name: ' Ada Testfield ', nationality: 'England', background: 'analyst', style: 'balanced' }, trophies: [{ name: 'Cup', emoji: '', season: 2 }] };
     localStorage.setItem(parkedKey(2), JSON.stringify(c));
     const s = readSlots()[1].summary!;
     expect(s.managerName).toBe('Ada Testfield');
