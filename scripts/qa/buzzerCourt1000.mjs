@@ -211,6 +211,7 @@ try {
         report.cases.push(result);
         const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch, deviceScaleFactor: 1,
           reducedMotion: reduced ? 'reduce' : 'no-preference', locale: 'en-US', serviceWorkers: 'block',
+          ...(current && width === 390 && !light ? { recordVideo: { dir: OUT, size: { width, height } } } : {}),
           storageState: { cookies: [], origins: [{ origin: base, localStorage: [{ name: 'cookie-consent', value: 'essential' }, { name: DAILY, value: dailyBytes }, { name: 'dukb-theme', value: light ? 'light' : 'dark' }] }] } });
         await context.route('**/*', route => {
           const request = route.request(), url = new URL(request.url());
@@ -343,7 +344,16 @@ try {
           result.passed = false; result.error = String(error.stack || error);
           await page.screenshot({ path: path.join(OUT, `${id}-failure.png`), animations: 'disabled' }).catch(() => {});
           console.error(`${id}: ${result.error}`);
-        } finally { await context.close(); saveReport(); }
+        } finally {
+          const video = page.video();
+          await context.close();
+          if (video) {
+            result.video = 'after-390-dark-play.webm';
+            await video.saveAs(path.join(OUT, result.video));
+            await video.delete();
+          }
+          saveReport();
+        }
       }
     } finally { server.kill(); fs.writeFileSync(path.join(OUT, `${variant}-server.log`), serverLog); }
   }
