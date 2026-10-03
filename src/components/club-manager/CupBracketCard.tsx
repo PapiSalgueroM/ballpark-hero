@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { cn } from '@/lib/utils';
 import { careerLeagueOf } from '@/lib/clubManager';
 import type { CareerState, CupRound } from '@/lib/clubManager';
+import { activeSlot } from '@/lib/clubManagerSlots';
 import { CelebrationStyles, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
 
 /* ---------- Round 983: who just went through ----------
@@ -77,9 +78,15 @@ export function bracketMoment(
    reopened, and it does not outlive a reload, which must play nothing. */
 const lastSeenSettled = new Map<string, number>();
 
-/** One career's one competition. There is no career id, so these stand in. */
+/** One career's one competition. There is no career id, so these stand in.
+ *  Review: the manager slot is part of it, because two slots can hold the
+ *  same club in the same era and season, and they switch without a reload.
+ *  Without it a look at one slot's bracket reset the other's marker and the
+ *  first slot's old result played again on the way back. activeSlot() is the
+ *  slot the career on screen lives in, and reads 1 where there is no
+ *  storage (a server render), the same answer as a single career. */
 export function bracketMarkKey(career: CareerState, comp: 'cup' | 'ucl'): string {
-  return [career.clubName, career.eraId ?? '', career.startYear ?? '', career.season, comp].join('|');
+  return [activeSlot(), career.clubName, career.eraId ?? '', career.startYear ?? '', career.season, comp].join('|');
 }
 
 /**
@@ -110,13 +117,23 @@ export function momentDelay(moment: BracketMoment, key: string): string | undefi
   const i = moment.through.indexOf(key);
   if (i >= 0) return revealDelay(i, MOMENT_START, MOMENT_STEP);
   const j = moment.drawn.indexOf(key);
-  if (j >= 0) return revealDelay(j, revealAfter(moment.through.length, MOMENT_START, MOMENT_STEP));
+  /* Review: the draw keeps the winners' pace. Without the step it fell back
+     to the kit's 0.22s, so one moment ran at two speeds. */
+  if (j >= 0) return revealDelay(j, revealAfter(moment.through.length, MOMENT_START, MOMENT_STEP), MOMENT_STEP);
   return undefined;
 }
 
-/** When the trophy line starts to glow: once the winners have landed. */
-export function trophyDelay(moment: BracketMoment): string {
-  return revealDelay(moment.through.length, MOMENT_START, MOMENT_STEP);
+/* The kit's gold glow loops forever. Here it is part of a moment that plays
+   once, so it glows a set number of times and then rests on its last frame. */
+const TROPHY_GLOWS = 2;
+
+/** The trophy line's glow: it starts once the winners have landed. */
+export function trophyGlow(moment: BracketMoment): CSSProperties {
+  return {
+    animationDelay: revealDelay(moment.through.length, MOMENT_START, MOMENT_STEP),
+    animationIterationCount: TROPHY_GLOWS,
+    animationFillMode: 'forwards',
+  };
 }
 
 /** The pieces of a bracket card a moment touches, worked out once per tie. */
@@ -225,7 +242,7 @@ export function CupBracketCard({ career, onClubClick }: CupBracketCardProps) {
         {winner && (
           <div
             className={cn('text-[10px] font-bold text-gold truncate max-w-[50%] text-right', moment?.wonFinal && 'cm-gold-glow rounded-md')}
-            style={moment?.wonFinal ? { animationDelay: trophyDelay(moment) } : undefined}
+            style={moment?.wonFinal ? trophyGlow(moment) : undefined}
           >
             🏆 {winner}
           </div>

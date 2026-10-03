@@ -13,6 +13,7 @@ import { render } from '@testing-library/react';
 import { CupBracketCard, bracketMoment } from '@/components/club-manager/CupBracketCard';
 import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
 import { startCareer } from '@/lib/clubManager';
+import { SLOTS_INDEX_KEY, activeSlot } from '@/lib/clubManagerSlots';
 import type { CareerState, CupTie, UclTie } from '@/lib/clubManager';
 
 const ORDER = ['R16', 'QF', 'SF', 'F'] as const;
@@ -122,6 +123,10 @@ describe.each([
     /* Winners first, then the draw, every step later than the one before. */
     const order = [...delays(root, '.cm-win-pulse'), ...delays(root, '.cm-tick-in')];
     expect(order.every((d, i) => i === 0 || d > order[i - 1])).toBe(true);
+    /* Review: one pace for the whole moment, the draw included (it once fell
+       back to the kit's default step). */
+    const gaps = order.slice(1).map((d, i) => d - order[i]);
+    expect(gaps.every(g => Math.abs(g - gaps[0]) < 1e-6)).toBe(true);
     expect(root.querySelectorAll('style').length).toBe(1);
     second.unmount();
 
@@ -144,6 +149,12 @@ describe.each([
     view.rerender(<Card career={withBracket(c, qf)} />);
     expect(keysOf(view.container, '.cm-tick-in', 'data-cm-bracket-drawn')).toEqual(['SF-0', 'SF-1']);
     view.unmount();
+    /* Review: the round that settled while the card was open is spent. The
+       mark follows the settled count, not only the career, so the tab
+       reopened on this bracket plays nothing. */
+    const reopened = render(<Card career={withBracket(c, qf)} />);
+    expect(anyMotion(reopened.container)).toBe(0);
+    reopened.unmount();
   });
 
   it('after a missed round plays only the latest, and a final won by the club glows', () => {
@@ -165,12 +176,88 @@ describe.each([
     const final = render(<Card career={withBracket(c, won)} />);
     expect(keysOf(final.container, '.cm-win-pulse', 'data-cm-bracket-through')).toEqual(['F-0']);
     expect(final.container.querySelectorAll('.cm-tick-in').length).toBe(0);
-    const glow = final.container.querySelectorAll('.cm-gold-glow');
+    const glow = final.container.querySelectorAll<HTMLElement>('.cm-gold-glow');
     expect(glow.length).toBe(1);
     expect(glow[0].textContent).toContain(c.clubName);
+    /* Review: the kit's glow loops forever; the moment's glow is counted. */
+    expect(Number(glow[0].style.animationIterationCount)).toBeGreaterThan(0);
     final.unmount();
     const again = render(<Card career={withBracket(c, won)} />);
     expect(anyMotion(again.container)).toBe(0);
     again.unmount();
+  });
+});
+
+describe('the cups tab, both cards at once', () => {
+  /* Review: the Cups tab mounts the two cards side by side (ClubManager.tsx).
+     Each card must keep its own competition's mark, so the two brackets sit
+     at different settled counts here: a card reading the other's mark would
+     replay its round on the reopen below. */
+  it('each card plays its own round once and neither replays on a reopen', () => {
+    const c = careerAt(301);
+    const both = (cup: Tie[], ucl: Tie[]) => {
+      const career = { ...c, cupBracket: cup as CupTie[], uclBracket: ucl as UclTie[] };
+      return render(<><CupBracketCard career={career} /><UclBracketCard career={career} /></>);
+    };
+    const cupR16 = settle(c.cupBracket as Tie[], 'R16');
+    const cupQF = settle(cupR16, 'QF');
+    const uclOpen = uclDraw(c) as Tie[];
+    const uclR16 = settle(uclOpen, 'R16');
+
+    const first = both(cupR16, uclOpen);
+    expect(anyMotion(first.container)).toBe(0);
+    first.unmount();
+
+    const next = both(cupQF, uclR16);
+    const [cupCard, uclCard] = Array.from(next.container.children) as HTMLElement[];
+    expect(keysOf(cupCard, '.cm-win-pulse', 'data-cm-bracket-through')).toEqual(['QF-0', 'QF-1', 'QF-2', 'QF-3']);
+    expect(keysOf(uclCard, '.cm-win-pulse', 'data-cm-bracket-through'))
+      .toEqual(['R16-0', 'R16-1', 'R16-2', 'R16-3', 'R16-4', 'R16-5', 'R16-6', 'R16-7']);
+    next.unmount();
+
+    const reopened = both(cupQF, uclR16);
+    expect(anyMotion(reopened.container)).toBe(0);
+    reopened.unmount();
+  });
+});
+
+describe('two manager slots with the same club', () => {
+  /* Review: two slots can hold the same club in the same era and season, and
+     they switch inside the page. A look at one slot's bracket must not reset
+     the other's mark, or the first slot's old round plays again. */
+  it('a look at the other slot never replays this slot\'s round', () => {
+    const a = careerAt(401);
+    const b = careerAt(401);
+    const aR16 = settle(a.cupBracket as Tie[], 'R16');
+    const aQF = settle(aR16, 'QF');
+    const bR16 = settle(b.cupBracket as Tie[], 'R16');
+    const bQF = settle(bR16, 'QF');
+    const look = (c: CareerState, bracket: Tie[]) => {
+      const view = render(<CupBracketCard career={{ ...c, cupBracket: bracket as CupTie[] }} />);
+      const motion = anyMotion(view.container);
+      view.unmount();
+      return motion;
+    };
+    const toSlot = (n: number) => {
+      if (n === 1) localStorage.removeItem(SLOTS_INDEX_KEY);
+      else localStorage.setItem(SLOTS_INDEX_KEY, JSON.stringify({ v: 1, active: n }));
+    };
+    try {
+      toSlot(1);
+      expect(look(a, aR16)).toBe(0);
+      expect(look(a, aQF)).toBeGreaterThan(0);
+      expect(look(a, aQF)).toBe(0);
+      toSlot(2);
+      expect(activeSlot()).toBe(2);
+      expect(look(b, bR16)).toBe(0);
+      toSlot(1);
+      expect(look(a, aQF)).toBe(0);
+      /* And the other slot still plays its own round when it settles. */
+      toSlot(2);
+      expect(look(b, bQF)).toBeGreaterThan(0);
+      expect(look(b, bQF)).toBe(0);
+    } finally {
+      toSlot(1);
+    }
   });
 });

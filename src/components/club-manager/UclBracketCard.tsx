@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils';
 import type { CareerState, UclKoRound } from '@/lib/clubManager';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 // Round 983: the cup card holds the moment and the club line; this card shares them.
-import { BracketSide, tieKey, tieMoment, trophyDelay, useBracketMoment } from '@/components/club-manager/CupBracketCard';
+import { BracketSide, tieKey, tieMoment, trophyGlow, useBracketMoment } from '@/components/club-manager/CupBracketCard';
 
 const UCL_ROUNDS: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
 
@@ -43,7 +43,7 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
         {champion && (
           <div
             className={cn('text-[10px] font-bold text-gold truncate max-w-[50%] text-right', moment?.wonFinal && 'cm-gold-glow rounded-md')}
-            style={moment?.wonFinal ? { animationDelay: trophyDelay(moment) } : undefined}
+            style={moment?.wonFinal ? trophyGlow(moment) : undefined}
           >
             🏆 {champion}
           </div>

@@ -22,7 +22,11 @@
  *     change with the season and the competition.
  *  2. Behaviour in a DOM: spawns src/test/clubManagerBracketMoment.test.tsx
  *     (round N then N plus 1, classes only on the new ties, a remount plays
- *     nothing, both cards). Green only on the vitest summary and exit code.
+ *     nothing, both cards; since the review also a round settled while the
+ *     card is open and then reopened, both cards mounted together as the Cups
+ *     tab does, two manager slots holding the same club, one pace for the
+ *     whole moment and a glow that stops). Green only on the vitest summary,
+ *     the exit code and at least 9 tests passed.
  *  3. The page must not jump: both cards drawn in chromium with the site's
  *     own Tailwind build, at 390 and 1440 wide. A card that moves from round N
  *     to N plus 1 (the moment plays) is measured against a card mounted on
@@ -53,6 +57,14 @@
  *                                     card in a copy, so the card's space-y
  *                                     gap lands on the header and everything
  *                                     under it moves 12px; section 3 red (60).
+ *   BRACKET_MOMENT_CONTROL=layoutucl  the same in a copy of the Champions League
+ *                                     card, which places the tag itself; section
+ *                                     3 red on the ucl cases only.
+ * Copies go to the gitignored .sim-control/bracketmoment/, never into src.
+ * The vitest file's own checks were proved against hand mutations in the
+ * review: the mark written on [key] only, the Champions League card reading
+ * the cup's mark, the slot left out of the key, the draw at the kit's step
+ * and an endless glow each turn their test red.
  *
  * Nothing here reads dist, the network or the clock. Run:
  *   node scripts/simBracketMoment.mjs
@@ -87,11 +99,16 @@ const sectionFails = {};
 let section = '';
 const fail = m => { failures++; sectionFails[section] = (sectionFails[section] || 0) + 1; console.error('  FAIL: ' + m); };
 
-/* ---------- the card under test, or a control's copy of it ---------- */
+/* ---------- the cards under test, or a control's copy of one ---------- */
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'CupBracketCard.tsx');
+const UCL_CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'UclBracketCard.tsx');
 let cardPath = CARD;
+let uclPath = UCL_CARD;
 if (CONTROL) {
-  let src = fs.readFileSync(CARD, 'utf8');
+  /* Review: the layout control rewrites either card, since each places the
+     kit's style tag itself. */
+  const target = CONTROL === 'layoutucl' ? UCL_CARD : CARD;
+  let src = fs.readFileSync(target, 'utf8');
   const swap = (from, to) => {
     if (!src.includes(from)) { console.error(`control cannot run: the card no longer contains ${JSON.stringify(from)}`); process.exit(2); }
     src = src.replace(from, to);
@@ -100,16 +117,22 @@ if (CONTROL) {
     swap('if (prev === undefined) return null;', 'if (prev === undefined) prev = 0;');
   } else if (CONTROL === 'allrounds') {
     swap('settled.slice(prev).filter(t => t.round === round).map(tieKey)', 'settled.slice(prev).map(tieKey)');
-  } else if (CONTROL === 'layout') {
+  } else if (CONTROL === 'layout' || CONTROL === 'layoutucl') {
     swap('{moment && <CelebrationStyles />}', '');
     swap('<div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-3">',
       '<div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-3">{moment && <CelebrationStyles />}');
   } else {
     console.error(`unknown BRACKET_MOMENT_CONTROL=${CONTROL}`); process.exit(2);
   }
-  cardPath = path.join(ROOT, 'src', 'components', 'club-manager', `.bracketMomentControl-${process.pid}.tsx`);
-  fs.writeFileSync(cardPath, src);
-  process.on('exit', () => { try { fs.unlinkSync(cardPath); } catch { /* already gone */ } });
+  /* Review: the copy lives in the gitignored .sim-control/ (as simExtraTime's
+     do), never in src, where a killed run would leave a stray card inside the
+     type gate's scope. Its '@/' imports resolve from the root tsconfig. */
+  const dir = path.join(ROOT, '.sim-control', 'bracketmoment');
+  fs.mkdirSync(dir, { recursive: true });
+  const copy = path.join(dir, `${path.basename(target, '.tsx')}-${CONTROL}-${process.pid}.tsx`);
+  fs.writeFileSync(copy, src);
+  process.on('exit', () => { try { fs.unlinkSync(copy); } catch { /* already gone */ } });
+  if (target === UCL_CARD) uclPath = copy; else cardPath = copy;
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}`);
 }
 
@@ -251,8 +274,8 @@ if (CONTROL) {
   if (res.status !== 0 || !passed || failedTests) {
     fail('the bracket moment vitest is not green');
     console.error(plain.split('\n').slice(-30).join('\n'));
-  } else if (Number(passed[1]) < 7) {
-    fail(`only ${passed[1]} bracket moment tests ran, 7 were written`);
+  } else if (Number(passed[1]) < 9) {
+    fail(`only ${passed[1]} bracket moment tests ran, 9 were written`);
   }
 }
 
@@ -279,7 +302,6 @@ console.log('3) The page must not jump while the moment plays (chromium, the sit
 
   /* The site's own Tailwind over the two cards (the control's copy when one runs). */
   const CSS = path.join(TMP, 'site.css');
-  const uclPath = path.join(ROOT, 'src', 'components', 'club-manager', 'UclBracketCard.tsx');
   execSync(`"${findBin('tailwindcss')}" -c tailwind.config.ts -i src/index.css --content "${fwd(cardPath)},${fwd(uclPath)}" -o "${CSS}"`, { cwd: ROOT, stdio: 'pipe' });
   const css = fs.readFileSync(CSS, 'utf8');
   if (!css.includes('.space-y-3')) fail('the Tailwind build carries no space-y-3, so the layout check would be blind');
