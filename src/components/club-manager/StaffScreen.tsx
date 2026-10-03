@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn } from '@/lib/clubManager';
+import { growingAtCeiling, money, moneyIn } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
-  STAFF_MATCHES_PER_SEASON, STAFF_MAX, STAFF_POST_IDS, STAFF_POST_INFO,
+  STAFF_MATCHES_PER_SEASON, STAFF_MAX, STAFF_POST_IDS, STAFF_POST_INFO, coachForPosition, postGrowthMult,
   severanceFor, staffEffectLine, staffOf, staffPayrollWeekly, staffPortraitSvg, staffShortlist, staffWageLine,
   hireStaff, sackStaff, matchStaffOffer, releaseToPoacher,
 } from '@/lib/clubManagerStaff';
@@ -22,6 +22,23 @@ interface StaffScreenProps {
   onSack: (post: StaffPostId) => void;
   onMatch: () => void;
   onLetGo: () => void;
+}
+
+/**
+ * Round 963: the effect line, plus the men his lift cannot reach. Growth is
+ * capped at the fastest anyone grows, so a kid already there gets nothing
+ * from a better coach, and the card says how many of his are there rather
+ * than promising every one of them the full percentage.
+ */
+function effectLine(state: CareerState, post: StaffPostId): string {
+  const line = staffEffectLine(state, post);
+  if (post === 'scout' || postGrowthMult(state, post) <= 1) return line;
+  const n = growingAtCeiling(state, p => {
+    const owner = coachForPosition(p.position);
+    return owner === post || (owner === null && post !== 'goalkeeping');
+  }).length;
+  if (n === 0) return line;
+  return `${line} ${n === 1 ? 'One of his players is' : `${n} of his players are`} already growing as fast as anyone can, so he cannot add more there.`;
 }
 
 /** Portrait art: flat shapes from his id, never a photograph and never a real face. */
@@ -188,7 +205,7 @@ export function StaffScreen({ career, onHire, onSack, onMatch, onLetGo }: StaffS
                   </span>
                 </div>
                 {person && <LevelBar level={person.level} potential={person.potential} />}
-                <p className="text-[9px] text-muted-foreground mt-0.5">{staffEffectLine(career, post)}</p>
+                <p className="text-[9px] text-muted-foreground mt-0.5">{effectLine(career, post)}</p>
                 {paying && (
                   <div className="rounded-lg border border-border bg-secondary/30 p-2 mt-2" data-staff-payoff={post}>
                     <p className="text-[11px]">Pay off {person!.name} for {pay === null ? '' : money(pay)}?</p>
@@ -225,7 +242,7 @@ export function StaffScreen({ career, onHire, onSack, onMatch, onLetGo }: StaffS
                   <div className="text-[9px] text-muted-foreground">
                     Level {c.person.level}, can reach {c.person.potential} · {c.person.wage}k a week · {c.from}
                   </div>
-                  {preview && <p className="text-[9px] text-muted-foreground mt-0.5">After: {staffPayrollWeekly(preview)}k a week on staff. {staffEffectLine(preview, open)}</p>}
+                  {preview && <p className="text-[9px] text-muted-foreground mt-0.5">After: {staffPayrollWeekly(preview)}k a week on staff. {effectLine(preview, open)}</p>}
                 </div>
                 <button
                   onClick={() => act(open, preview, c.person.academy ? 'Academy staff member promoted.' : 'Staff member hired.', () => onHire(open, c.person.id))}

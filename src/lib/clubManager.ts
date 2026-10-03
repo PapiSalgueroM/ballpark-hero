@@ -15780,6 +15780,9 @@ export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; em
   youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
 };
 
+/** Round 963: the fastest anybody grows, the top of developmentRate's clamp. */
+export const DEVELOPMENT_RATE_MAX = 2.6;
+
 /**
  * The multiplier on a player's positive growth for the season.
  *
@@ -15813,7 +15816,21 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
      Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
      in the same place for the same reason. The training ground lifts the
      whole squad, the coach lifts his half of the pitch. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, 2.6);
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, DEVELOPMENT_RATE_MAX);
+}
+
+/**
+ * Round 963: the players a growth lift cannot add anything to right now,
+ * because developmentRate is already at its ceiling for them. Every lift sits
+ * inside that clamp on purpose (Rounds 116, 467 and 471), so a kid already
+ * growing as fast as anyone can gets nothing more from a better coach or a
+ * better training ground. The cards that sell those lifts print this count
+ * instead of promising every man the full percentage. Same filter as
+ * developingPlayers: in the building, with room left.
+ */
+export function growingAtCeiling(career: CareerState, applies: (p: CMPlayer) => boolean): CMPlayer[] {
+  return career.squad.filter(p => !p.onLoan && (p.potential ?? p.rating) > p.rating && applies(p)
+    && developmentRate(p, career) >= DEVELOPMENT_RATE_MAX);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
