@@ -69,12 +69,40 @@ export interface GymState {
   prospects: Prospect[];
   history: GymFightLine[];
   titles: number;
-  /** Men who left, and how. The gym is judged on this too. */
-  alumni: { name: string; record: string; damage: number; titles: number }[];
+  /**
+   * Men who left, and how. The gym is judged on this too. Round 955: `fights`
+   * is how many fights he had for the gym. Absent on men who left before this
+   * round, and those count exactly as they did when they left.
+   */
+  alumni: { name: string; record: string; damage: number; titles: number; fights?: number }[];
   closed: boolean;
   log: string[];
   seed: number;
   rngTick: number;
+  /**
+   * Round 955: how the gym ended. Absent while it is open. An old save that is
+   * closed without one went broke, because until this round that was the only
+   * way a gym could close, but it keeps the verdict it was recorded with: see
+   * wentBroke.
+   */
+  exit?: GymExit;
+  /** Round 955: what the buyer paid, in millions, when the gym was sold. */
+  soldFor?: number;
+  /** Round 955: per fighter, the week of his last block and the work since his last fight. */
+  training?: Record<string, GymCamp>;
+}
+
+export type GymExit = 'sold' | 'broke';
+
+/** Round 955: what a training block works on. The same four areas as a career camp. */
+export type TrainFocus = 'conditioning' | 'power' | 'defence' | 'speed';
+export const TRAIN_FOCI: TrainFocus[] = ['conditioning', 'power', 'defence', 'speed'];
+
+export interface GymCamp {
+  /** The week of his last block, which is what holds the one block a week limit. */
+  week: number;
+  /** Blocks since his last fight, by focus. Cleared when he fights. */
+  blocks: Record<TrainFocus, number>;
 }
 
 /** Weekly overhead in millions: rent, coaches, and everybody who eats. */
@@ -188,28 +216,81 @@ export function guessWeight(f: Fighter): WeightId {
 /**
  * A training block. Costs money, moves a fighter toward his ceiling, and the
  * closer he already is the less it buys, exactly as camp does in the career.
+ *
+ * Round 955: ONE BLOCK PER FIGHTER PER WEEK, AND IT WORKS ON ONE THING. Before
+ * this a block bumped all four areas and could be bought as many times a week
+ * as the money allowed, so training was a button you pressed until the cash
+ * ran low rather than a decision. Now each block picks a focus, that area alone
+ * grows, and the work also carries into his next fight: see campQualityFor.
  */
 export const TRAIN_COST = 0.035;
 
-export function trainFighter(g: GymState, fighterId: string): GymState | null {
+/**
+ * Growth per block in the focus area, at full headroom. The number is the one a
+ * whole six week career camp pays (fightCareer.ts runCamp, 2.4 over the camp, so
+ * 0.4 a week), paid here for a single gym block, so a gym block is six times a
+ * career camp week in its one area. That is deliberate: the gym only gets one
+ * block a man a week. Before Round 955 a block gave 2.1 to all four areas (8.4
+ * in all) and could be bought again and again, so a block now buys less growth
+ * in total and the choice of area is the point.
+ */
+const FOCUS_GAIN = 2.4;
+
+const FOCUS_ATTR: Record<TrainFocus, 'stamina' | 'power' | 'defence' | 'speed'> = {
+  conditioning: 'stamina',
+  power: 'power',
+  defence: 'defence',
+  speed: 'speed',
+};
+
+const FOCUS_LINE: Record<TrainFocus, string> = {
+  conditioning: 'ran the hills and did the rounds on the bags',
+  power: 'spent the week on the heavy bag',
+  defence: 'spent the week slipping and blocking',
+  speed: 'spent the week on the pads and the rope',
+};
+
+const noBlocks = (): Record<TrainFocus, number> => ({ conditioning: 0, power: 0, defence: 0, speed: 0 });
+
+/** True when this fighter has already had his block this week. */
+export function trainedThisWeek(g: GymState, fighterId: string): boolean {
+  return g.training?.[fighterId]?.week === g.week;
+}
+
+export function trainFighter(g: GymState, fighterId: string, focus: TrainFocus): GymState | null {
   if (g.closed || g.money < TRAIN_COST) return null;
+  if (!FOCUS_ATTR[focus]) return null;
+  if (trainedThisWeek(g, fighterId)) return null;
   const i = g.roster.findIndex(f => f.id === fighterId);
   if (i < 0) return null;
   const f = { ...g.roster[i], attrs: { ...g.roster[i].attrs } };
-  const pot = f.potential;
-  const bump = (cur: number) => clampi(cur + clamp((pot - cur) / 22, 0, 1) * 2.1, 15, 99);
-  f.attrs.stamina = bump(f.attrs.stamina);
-  f.attrs.defence = bump(f.attrs.defence);
-  f.attrs.speed = bump(f.attrs.speed);
-  f.attrs.power = bump(f.attrs.power);
+  const key = FOCUS_ATTR[focus];
+  f.attrs[key] = clampi(f.attrs[key] + clamp((f.potential - f.attrs[key]) / 22, 0, 1) * FOCUS_GAIN, 15, 99);
   const roster = g.roster.slice();
   roster[i] = f;
+  const prev = g.training?.[fighterId];
+  const blocks = { ...noBlocks(), ...(prev?.blocks ?? {}) };
+  blocks[focus] += 1;
   return {
     ...g,
     money: Math.round((g.money - TRAIN_COST) * 1000) / 1000,
     roster,
-    log: [`${f.name} put in a hard block of work.`, ...g.log],
+    training: { ...(g.training ?? {}), [fighterId]: { week: g.week, blocks } },
+    log: [`${f.name} ${FOCUS_LINE[focus]}.`, ...g.log],
   };
+}
+
+/**
+ * How ready a man is for his next fight, 0 to 1, which simBout reads as the
+ * camp. A man nobody has worked with comes in at the even 0.5 every gym fight
+ * used before Round 955. Each block since his last fight adds a little, up to
+ * four, and a conditioning block among them gives him gas for the late rounds.
+ */
+export function campQualityFor(g: GymState, fighterId: string): number {
+  const b = g.training?.[fighterId]?.blocks;
+  if (!b) return 0.5;
+  const total = b.conditioning + b.power + b.defence + b.speed;
+  return clamp(0.5 + Math.min(total, 4) * 0.05 + (b.conditioning > 0 ? 0.1 : 0), 0, 1);
 }
 
 /**
@@ -278,7 +359,7 @@ export function takeGymFight(g: GymState, fighterId: string, offer: GymOffer, ta
   const fighter = g.roster[i];
   const result = simBout({
     player: fighter, opponent: offer.opponent, rounds: offer.rounds,
-    weight: guessWeight(fighter), tactics, campQuality: 0.5,
+    weight: guessWeight(fighter), tactics, campQuality: campQualityFor(g, fighterId),
   }, rng);
   done(offer.rounds * 6 + 4);
 
@@ -324,9 +405,14 @@ export function takeGymFight(g: GymState, fighterId: string, offer: GymOffer, ta
   if (fighter.damage >= 70) rep -= 2.6;
   if (!won && (result.method === 'KO' || result.method === 'TKO') && fighter.damage > 45) rep -= 3.2;
 
+  /* The camp is spent on the night. The week stays, so the weekly limit still holds. */
+  const camp = g.training?.[fighterId];
+  const training = camp ? { ...g.training, [fighterId]: { week: camp.week, blocks: noBlocks() } } : g.training;
+
   const next: GymState = {
     ...g,
     roster,
+    training,
     money: Math.round((g.money + cut) * 1000) / 1000,
     reputation: clamp(Math.round(rep * 10) / 10, 0, 100),
     titles: g.titles + (offer.title && won ? 1 : 0),
@@ -360,13 +446,31 @@ export function releaseFighter(g: GymState, fighterId: string): GymState | null 
   return retireOut(g, f, 'let go');
 }
 
+/* Sending a man out badly damaged costs the gym its name, and that is the
+   only thing stopping the obvious exploit: fight the broken ones until they
+   stop earning and sign new ones. */
+function exitPenalty(f: Fighter): number {
+  return f.damage >= 70 ? 4.5 : f.damage >= 50 ? 1.8 : 0;
+}
+
+/* Round 955 fix: a man has fought for this gym once his record shows a fight.
+   Every fighter starts 0-0 when he is generated (the starting two and every
+   prospect), so his whole record is gym work. A man signed and gone before he
+   ever fought did not "get out clean" and is not worth anything to a buyer. */
+function foughtForGym(f: Fighter): number {
+  return f.wins + f.losses + f.draws;
+}
+
 function retireOut(g: GymState, f: Fighter, how: string): GymState {
-  /* Sending a man out badly damaged costs the gym its name, and that is the
-     only thing stopping the obvious exploit: fight the broken ones until they
-     stop earning and sign new ones. */
-  const penalty = f.damage >= 70 ? 4.5 : f.damage >= 50 ? 1.8 : 0;
+  const penalty = exitPenalty(f);
+  let training = g.training;
+  if (training && training[f.id]) {
+    training = { ...training };
+    delete training[f.id];
+  }
   return {
     ...g,
+    training,
     roster: g.roster.filter(x => x.id !== f.id),
     reputation: clamp(Math.round((g.reputation - penalty) * 10) / 10, 0, 100),
     alumni: [...g.alumni, {
@@ -374,6 +478,7 @@ function retireOut(g: GymState, f: Fighter, how: string): GymState {
       record: `${f.wins}-${f.losses}${f.draws ? `-${f.draws}` : ''}`,
       damage: f.damage,
       titles: f.rank === 0 ? 1 : 0,
+      fights: foughtForGym(f),
     }],
     log: [`${f.name} is ${how} at ${Math.floor(f.age)}, ${f.wins}-${f.losses}, carrying ${f.damage.toFixed(0)} damage.`, ...g.log],
   };
@@ -395,10 +500,129 @@ export function advanceWeek(g: GymState): GymState {
     reputation: clamp(Math.round((next.reputation - 0.08) * 10) / 10, 0, 100),
   };
   next.prospects = prospectsFor(next);
-  if (next.money < 0) {
-    next = { ...next, closed: true, log: ['The rent went unpaid and the doors closed.', ...next.log] };
-  }
+  if (next.money < 0) next = closeBroke(next);
   return next;
+}
+
+/**
+ * Round 955 fix: EVERY ENDING SETTLES THE ROSTER. The men still under contract
+ * leave the gym's books when it closes, on the same terms as a man let go: a
+ * wrecked one costs the name and counts as wrecked, a clean one counts as
+ * clean. Without this, the verdict only saw men who had already left, so the
+ * last week of a gym could be spent shuffling the roster (keep the wrecked man
+ * signed, let the healthy ones go) and the stewardship rule was beaten by the
+ * ending rather than by how the men were treated.
+ */
+function settleRoster(g: GymState, how: string): GymState {
+  return g.roster.reduce((acc, f) => retireOut(acc, f, how), g);
+}
+
+/** The only way a gym closed before Round 955, and still the way it closes when the rent goes unpaid. */
+export function closeBroke(g: GymState): GymState {
+  const settled = settleRoster(g, 'left without a gym');
+  return { ...settled, closed: true, exit: 'broke', log: ['The rent went unpaid and the doors closed.', ...settled.log] };
+}
+
+/**
+ * Round 955: GOING OUT ON TOP. Until this round a gym could only end by going
+ * broke, so a well run one never saw its verdict and never finished. Selling
+ * is the deliberate ending, open once the gym has been going long enough to be
+ * worth something.
+ */
+export const SELL_MIN_WEEKS = 26;
+
+/**
+ * What a buyer pays for the gym, in millions: the name above the door, the
+ * belts on the wall, and the men under contract who have fought for it, each
+ * worth less for what he is carrying.
+ *
+ * The name is read AFTER the roster is settled, so a wrecked man sold on with
+ * the gym marks the name exactly as letting him go the week before would have.
+ * A man signed and never put in a ring adds nothing: a buyer pays for fighters,
+ * not paper, and otherwise spare cash could be turned into a bigger sale by
+ * signing whoever walked in on the last week.
+ */
+export function salePrice(g: GymState): number {
+  const rep = g.roster.reduce((r, f) => clamp(Math.round((r - exitPenalty(f)) * 10) / 10, 0, 100), g.reputation);
+  const name = (clamp(rep, 0, 100) / 100) ** 1.5 * 2.5;
+  const belts = g.titles * 0.3;
+  const men = g.roster
+    .filter(f => foughtForGym(f) > 0)
+    .reduce((s, f) => s + (ratingOf(f) / 100) ** 2 * 0.6 * (1 - clamp(f.damage, 0, 100) / 100), 0);
+  return Math.round((0.2 + name + belts + men) * 1000) / 1000;
+}
+
+export function canSellGym(g: GymState): boolean {
+  return !g.closed && g.week >= SELL_MIN_WEEKS;
+}
+
+export function sellGym(g: GymState): GymState | null {
+  if (!canSellGym(g)) return null;
+  const price = salePrice(g);
+  const settled = settleRoster(g, 'kept on by the new owner');
+  return {
+    ...settled,
+    money: Math.round((g.money + price) * 1000) / 1000,
+    closed: true,
+    exit: 'sold',
+    soldFor: price,
+    log: [`You sell the gym in week ${g.week} for ${price.toFixed(3)}m and hand over the keys.`, ...settled.log],
+  };
+}
+
+/**
+ * True for a gym that closed because the money ran out. A save closed before
+ * Round 955 carries no exit at all: it did go broke, the only way a gym could
+ * close then, but it was scored and recorded without the penalty, so it is
+ * left out here and its verdict reads exactly as it did when it finished.
+ */
+export function wentBroke(g: GymState): boolean {
+  return g.closed && g.exit === 'broke';
+}
+
+/** Verdict points a sale is worth on top of the record, and what going under costs. */
+const SALE_BONUS_CAP = 8;
+export const BROKE_PENALTY = 12;
+
+/**
+ * Round 955: THE ROUND 955 SAVE CHECK. The three blocks this round added are
+ * optional, and a block that does not read right is dropped on its own so the
+ * rest of the gym loads. Everything older is left exactly as it was saved.
+ */
+export function sanitizeGym(g: GymState): GymState {
+  const out: GymState = { ...g };
+  if (out.exit !== undefined && out.exit !== 'sold' && out.exit !== 'broke') delete out.exit;
+  if (out.soldFor !== undefined && !(typeof out.soldFor === 'number' && Number.isFinite(out.soldFor))) delete out.soldFor;
+  if (Array.isArray(out.alumni) && out.alumni.some(a => a && a.fights !== undefined && !(typeof a.fights === 'number' && Number.isFinite(a.fights) && a.fights >= 0))) {
+    out.alumni = out.alumni.map(a => {
+      if (!a || a.fights === undefined || (typeof a.fights === 'number' && Number.isFinite(a.fights) && a.fights >= 0)) return a;
+      const { fights: _bad, ...rest } = a;
+      return rest;
+    });
+  }
+  if (out.training !== undefined) {
+    const t = out.training as unknown;
+    if (!t || typeof t !== 'object' || Array.isArray(t)) {
+      delete out.training;
+    } else {
+      const clean: Record<string, GymCamp> = {};
+      for (const [id, raw] of Object.entries(t as Record<string, unknown>)) {
+        const c = raw as { week?: unknown; blocks?: Record<string, unknown> } | null;
+        if (!c || typeof c.week !== 'number' || !c.blocks || typeof c.blocks !== 'object') continue;
+        const blocks = noBlocks();
+        let okBlocks = true;
+        for (const k of TRAIN_FOCI) {
+          const v = c.blocks[k];
+          if (v === undefined) continue;
+          if (typeof v !== 'number' || !Number.isFinite(v) || v < 0) { okBlocks = false; break; }
+          blocks[k] = Math.floor(v);
+        }
+        if (okBlocks) clean[id] = { week: c.week, blocks };
+      }
+      out.training = clean;
+    }
+  }
+  return out;
 }
 
 export interface GymVerdict { score: number; tier: string; bullets: string[] }
@@ -410,15 +634,32 @@ export interface GymVerdict { score: number; tier: string; bullets: string[] }
  */
 export function gymVerdict(g: GymState): GymVerdict {
   const wrecked = g.alumni.filter(a => a.damage >= 70).length;
-  const clean = g.alumni.filter(a => a.damage < 45).length;
+  /* Round 955 fix: a man who never fought for the gym did not get out clean,
+     he never got in. Without this, signing whoever walked in and letting him go
+     (or selling him on) bought 2 points a man with idle cash. Men who left
+     before this round carry no count and are read as they always were. */
+  const clean = g.alumni.filter(a => a.damage < 45 && (a.fights === undefined || a.fights > 0)).length;
+  /* Round 955: how it ended counts. A gym sold as a going concern is worth
+     something to somebody, and a gym that ran out of rent is not. */
+  const sold = g.closed && g.exit === 'sold';
+  const broke = wentBroke(g);
+  const exitPoints = sold
+    ? Math.min(SALE_BONUS_CAP, (g.soldFor ?? 0) * 3)
+    : broke ? -BROKE_PENALTY : 0;
   const score = clampi(
     g.reputation * 0.5 +
     g.titles * 13 +
     g.history.filter(h => h.result === 'W').length * 0.7 +
     clean * 2 -
-    wrecked * 5,
+    wrecked * 5 +
+    exitPoints,
     0, 100,
   );
+  const ending = sold
+    ? `Sold in week ${g.week} for ${(g.soldFor ?? 0).toFixed(3)}m. Going out on your own terms.`
+    : broke
+      ? `The rent went unpaid in week ${g.week}. Going under costs the gym ${BROKE_PENALTY} points.`
+      : null;
   const tier = score >= 88 ? 'A Great Gym'
     : score >= 70 ? 'Respected'
       : score >= 50 ? 'Getting Known'
@@ -428,6 +669,7 @@ export function gymVerdict(g: GymState): GymVerdict {
     score,
     tier,
     bullets: [
+      ...(ending ? [ending] : []),
       `${g.history.filter(h => h.result === 'W').length} wins from ${g.history.length} fights over ${g.week} weeks.`,
       g.titles ? `${g.titles} world title${g.titles > 1 ? 's' : ''} out of this gym.` : 'No world titles.',
       `${g.alumni.length} fighters came through. ${clean} got out clean, ${wrecked} did not.`,

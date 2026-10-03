@@ -7,6 +7,9 @@ import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucid
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
+import ShotLabComparison, { type LabShot } from '@/components/buzzer-beater/ShotLabComparison';
+import { CourtArtwork, BallSeams } from '@/components/buzzer-beater/BuzzerCourtArtwork';
 import { getTodayET } from '@/lib/dateUtils';
 import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
 import {
@@ -21,7 +24,7 @@ const SLUG = 'buzzer-beater';
    `made`. The shape is shared (src/lib/arcadeRecord.ts), the word is the
    sport's. */
 const COUNT_FIELD = 'made';
-type Mode = 'daily' | 'unlimited' | 'practice' | 'contest';
+type Mode = 'daily' | 'unlimited' | 'practice' | 'contest' | 'lab';
 type Phase = 'intro' | 'aiming' | 'flying' | 'shotEnd' | 'done';
 
 /* How long the ball is in the air, in milliseconds. One number, used by the
@@ -89,6 +92,14 @@ export default function BuzzerBeaterBoard() {
   const practicePowerRef = useRef<HTMLInputElement | null>(null);
   const practiceActionRef = useRef<HTMLButtonElement | null>(null);
   const [practiceHelp, setPracticeHelp] = useState(false);
+  const [labShots, setLabShots] = useState<LabShot[]>([]);
+  const labSeedRef = useRef(1);
+  const labReleaseLock = useRef(false);
+  const labAttemptRef = useRef(0);
+  const isSteady = mode === 'practice' || mode === 'lab';
+  const labActionRef = useRevealScroll<HTMLDivElement>(`${phase}:${shotIdx}:${labShots[labShots.length - 1]?.attempt ?? 0}`, {
+    enabled: mode === 'lab' && (phase === 'aiming' || phase === 'shotEnd'), skipFirst: false,
+  });
 
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(restored !== null);
@@ -102,13 +113,13 @@ export default function BuzzerBeaterBoard() {
   useGameCompletion(SLUG, isDone && !bookedAlready && (mode === 'daily' || mode === 'unlimited'), score, made);
 
   useEffect(() => {
-    if (mode !== 'practice' && mode !== 'contest') return;
-    const target = phase === 'aiming' && mode === 'practice' ? practicePowerRef.current : practiceActionRef.current;
+    if (mode !== 'practice' && mode !== 'contest' && mode !== 'lab') return;
+    const target = phase === 'aiming' && isSteady ? practicePowerRef.current : practiceActionRef.current;
     target?.focus({ preventScroll: true });
-  }, [phase, mode]);
+  }, [phase, mode, isSteady, shotIdx]);
 
   const practiceKeyDown = (event: ReactKeyboardEvent<HTMLElement>) => {
-    if (mode !== 'practice' && mode !== 'contest') return;
+    if (mode !== 'practice' && mode !== 'contest' && mode !== 'lab') return;
     if ((event.key === ' ' && event.currentTarget.tagName === 'INPUT')
       || (event.repeat && (event.key === 'Enter' || event.key === ' '))) event.preventDefault();
   };
@@ -137,6 +148,9 @@ export default function BuzzerBeaterBoard() {
     aimingRef.current = false;
     chargingRef.current = false;
     setCharging(false);
+    setLabShots([]);
+    labReleaseLock.current = false;
+    labAttemptRef.current = 0;
     const completedDaily = m === 'daily' ? completedDailyRef.current : null;
     setBookedDaily(completedDaily !== null);
     if (completedDaily) {
@@ -150,6 +164,7 @@ export default function BuzzerBeaterBoard() {
       return;
     }
     const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
+    if (m === 'lab') labSeedRef.current = seed;
     rngRef.current = lehmer(seed ^ 0x5eed1234);
     resetFlight();
     setMode(m);
@@ -165,22 +180,31 @@ export default function BuzzerBeaterBoard() {
 
   const release = useCallback(() => {
     if (paused || phase !== 'aiming' || !setup) return;
+    if (mode === 'lab' && (labReleaseLock.current || practiceHelp || document.querySelector('[role="dialog"]'))) return;
+    if (mode === 'lab') labReleaseLock.current = true;
     chargingRef.current = false;
     setCharging(false);
-    const r = takeShot({ x: fade, arc, power }, setup, rngRef.current);
+    const r = mode === 'lab'
+      ? takeShot({ x: fade, arc, power }, setup, lehmer((labSeedRef.current ^ 0x5eed1234) + shotIdx * 7919))
+      : takeShot({ x: fade, arc, power }, setup, rngRef.current);
+    const labShot = mode === 'lab' ? { release: { x: fade, arc, power }, result: r, attempt: ++labAttemptRef.current } : null;
     setResult(r);
     setPhase('flying');
     /* The flight is drawn from the path the rules already computed, so what the
        player watches is what was scored, never a separate animation. The frames
        and the backup timer live in useArcadeFlight, shared with Free Kick. */
     launch(() => {
-      setScore(s => s + (mode === 'contest' ? contestPoints(shotIdx, r.made) : r.points));
-      if (r.made) setMade(n => n + 1);
+      if (labShot) setLabShots(previous => [...previous.slice(-1), labShot]);
+      else {
+        setScore(s => s + (mode === 'contest' ? contestPoints(shotIdx, r.made) : r.points));
+        if (r.made) setMade(n => n + 1);
+      }
       setPhase('shotEnd');
     });
-  }, [paused, phase, setup, fade, arc, power, launch, mode, shotIdx]);
+  }, [paused, phase, setup, fade, arc, power, launch, mode, shotIdx, practiceHelp]);
 
   const beginCharge = useCallback(() => {
+    if (mode === 'lab') return;
     if (mode === 'practice' || paused || phase !== 'aiming' || document.querySelector('[role="dialog"]')) return;
     chargingRef.current = true;
     setCharging(true);
@@ -235,6 +259,20 @@ export default function BuzzerBeaterBoard() {
     setPhase('aiming');
   }, [shotIdx, rounds, resetFlight]);
 
+  const repeatLab = (changeSetup: boolean) => {
+    if (mode !== 'lab' || phase !== 'shotEnd' || !labReleaseLock.current || practiceHelp) return;
+    labReleaseLock.current = false;
+    aimingRef.current = false;
+    resetFlight();
+    setResult(null);
+    if (changeSetup) {
+      setShotIdx(i => (i + 1) % shots.length);
+      setLabShots([]);
+      labAttemptRef.current = 0;
+    }
+    setPhase('aiming');
+  };
+
   /* Save the finished daily once, so a refresh brings back the score instead of
      dealing the same ten shots again with the answers already known. */
   useEffect(() => {
@@ -285,6 +323,19 @@ export default function BuzzerBeaterBoard() {
   };
 
   const best = mode === 'contest' ? MAX_CONTEST_SCORE : shots.length ? maxRunScore(shots) : 0;
+  const labRules = <>
+    <p>Repeat the same shot and see what your adjustment changed. Set Power, Arc and Fade, then tap Shoot. Dragging the court only aims.</p>
+    <p>Try Power 35, Arc 60 and Fade square. Shoot, choose Retry this shot, then change only Power to 40. Compare the two actual paths and rim-height readings. A blocked shot stops at the defender.</p>
+    <p>The amber dashed path is your previous shot. The cyan solid path is your latest. The green dotted preview shows your aim before release.</p>
+    <p>The lab holds release variation steady for each setup: identical settings repeat exactly. Change setup moves to the next distance and defender, with a fresh comparison. No points, saved progress or records.</p>
+  </>;
+  const labEntry = <div className="mt-4 rounded-xl border border-cyan-500/30 bg-cyan-500/5 p-3 text-left">
+    <div className="flex flex-wrap items-center justify-between gap-2">
+      <h2 className="font-display font-bold">Make your next shot better</h2>
+      <Button variant="outline" onClick={() => start('lab')} className="min-h-[44px]">Shot lab</Button>
+    </div>
+    <p className="mt-2 text-xs text-muted-foreground">Same setup, unlimited retries. Try Power 35, Arc 60 and Fade square. Shoot, retry at Power 40, then compare both paths. No points or saved progress.</p>
+  </div>;
   const practiceRules = <>
     <p>Steady practice gives you ten shots with the usual physics and points. Nothing is saved or added to your records.</p>
     <p>Set Power, Arc and Fade with the sliders, or drag the court to aim. Your power stays where you put it. Tap Shoot when ready; dragging does not shoot.</p>
@@ -329,6 +380,7 @@ export default function BuzzerBeaterBoard() {
           </Button>
           <Button variant="outline" onClick={() => start('practice')} className="min-h-[44px]">Steady practice</Button>
         </div>
+        {labEntry}
         <div className="mt-3 space-y-2 text-xs text-muted-foreground">{practiceRules}</div>
         <Button variant="outline" onClick={() => start('contest')} className="mt-4 min-h-[44px]">Three-point contest</Button>
         <div className="mt-3 space-y-2 text-xs text-muted-foreground">{contestRules}</div>
@@ -337,10 +389,12 @@ export default function BuzzerBeaterBoard() {
   }
 
   return (
-    <div className="space-y-3" data-arcade-phase={phase} data-arcade-paused={paused} data-arcade-mode={mode}>
-      {(mode === 'practice' || mode === 'contest') && <div className="flex items-center justify-between gap-2">
-        <p className="text-sm text-muted-foreground">{mode === 'contest' ? 'Three-point contest. Unranked. Five racks, 25 shots, 30 possible points. Nothing is saved.' : 'Steady practice. Unrecorded. Set power, then tap Shoot. Nothing is saved.'}</p>
-        <HowToPlayPopover title={mode === 'contest' ? 'Three-point contest rules' : 'Steady practice rules'} triggerLabel={mode === 'contest' ? 'Three-point contest rules' : 'Steady practice rules'} floatingTrigger={false}
+    <div ref={mode === 'lab' && phase === 'aiming' ? labActionRef : undefined}
+      className="space-y-3" data-arcade-phase={phase} data-arcade-paused={paused} data-arcade-mode={mode}
+      data-shot-lab={mode === 'lab' ? '' : undefined} data-lab-setup={mode === 'lab' ? shotIdx + 1 : undefined}>
+      {(isSteady || mode === 'contest') && <div className="flex items-center justify-between gap-2">
+        <p className="text-sm text-muted-foreground">{mode === 'lab' ? 'Shot lab. Same setup. Your next adjustment.' : mode === 'contest' ? 'Three-point contest. Unranked. Five racks, 25 shots, 30 possible points. Nothing is saved.' : 'Steady practice. Unrecorded. Set power, then tap Shoot. Nothing is saved.'}</p>
+        <HowToPlayPopover title={mode === 'lab' ? 'Shot lab rules' : mode === 'contest' ? 'Three-point contest rules' : 'Steady practice rules'} triggerLabel={mode === 'lab' ? 'Shot lab rules' : mode === 'contest' ? 'Three-point contest rules' : 'Steady practice rules'} floatingTrigger={false}
           className="min-h-[44px] min-w-[44px] shrink-0" open={practiceHelp}
           onOpenChange={open => {
             setPracticeHelp(open);
@@ -349,9 +403,13 @@ export default function BuzzerBeaterBoard() {
               if (mode === 'contest') { clearPointerHold(); chargingRef.current = false; setCharging(false); }
               if (phase === 'aiming' || phase === 'flying') pause();
             }
-          }}>{mode === 'contest' ? contestRules : practiceRules}</HowToPlayPopover>
+          }}>{mode === 'lab' ? labRules : mode === 'contest' ? contestRules : practiceRules}</HowToPlayPopover>
       </div>}
-      <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+      {mode === 'lab' ? <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+        <span className="font-semibold">Setup {shotIdx + 1}/{shots.length}</span>
+        <span className="text-muted-foreground" data-lab-attempt={labShots[labShots.length - 1]?.attempt ?? 0}>{labShots[labShots.length - 1]?.attempt ?? 0} attempts</span>
+        {setup && <span className="w-full text-xs text-muted-foreground">{setup.label}</span>}
+      </div> : <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <span className="rounded-full border border-border bg-card px-3 py-1.5">
           Shot <b className="text-primary">{Math.min(shotIdx + 1, rounds)}</b>/{rounds}
         </span>
@@ -362,7 +420,7 @@ export default function BuzzerBeaterBoard() {
           Points <b className="text-gold" data-contest-score={mode === 'contest' ? score : undefined}>{score}</b>
         </span>
         {setup && <span className="rounded-full border border-border bg-card px-3 py-1.5 text-muted-foreground">{setup.label}</span>}
-      </div>
+      </div>}
       {mode === 'contest' && <p className="text-center text-sm text-muted-foreground" data-contest-rack={Math.floor(shotIdx / BALLS_PER_RACK) + 1} data-contest-ball={shotIdx % BALLS_PER_RACK + 1} data-contest-value={contestShotValue(shotIdx)}>
         Rack {Math.floor(shotIdx / BALLS_PER_RACK) + 1}/{CONTEST_RACKS}, ball {shotIdx % BALLS_PER_RACK + 1}/{BALLS_PER_RACK}. {contestShotValue(shotIdx) === 2 ? 'Money ball, 2 points.' : 'Regular ball, 1 point.'}
       </p>}
@@ -397,21 +455,23 @@ export default function BuzzerBeaterBoard() {
         aria-label={setup ? `Jump shot from ${setup.distance} metres with a ${setup.contestReach ? `${setup.contestReach} metre` : 'no'} contest` : 'Jump shot'}
         onPointerDown={e => {
           if (paused || phase !== 'aiming') return;
-          if (mode === 'practice') { pointerAim(e.clientX, e.clientY); aimingRef.current = true; e.currentTarget.setPointerCapture(e.pointerId); }
+          if (isSteady) { pointerAim(e.clientX, e.clientY); aimingRef.current = true; e.currentTarget.setPointerCapture(e.pointerId); }
           else { beginPointerCharge(e); if (heldPointerRef.current?.id === e.pointerId) pointerAim(e.clientX, e.clientY); }
         }}
-        onPointerMove={e => { if (!paused && phase === 'aiming' && (mode === 'practice' ? aimingRef.current : chargingRef.current && (!heldPointerRef.current || heldPointerRef.current.id === e.pointerId))) pointerAim(e.clientX, e.clientY); }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && (isSteady ? aimingRef.current : chargingRef.current && (!heldPointerRef.current || heldPointerRef.current.id === e.pointerId))) pointerAim(e.clientX, e.clientY); }}
         onPointerUp={e => {
-          if (mode === 'practice') {
+          if (isSteady) {
             aimingRef.current = false;
             if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
           } else finishPointerCharge(e);
         }}
-        onPointerCancel={e => { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); }}
-        onLostPointerCapture={e => { if (e.target === e.currentTarget) { if (mode === 'practice') aimingRef.current = false; else cancelPointerCharge(e); } }}
+        onPointerCancel={e => { if (isSteady) aimingRef.current = false; else cancelPointerCharge(e); }}
+        onLostPointerCapture={e => { if (e.target === e.currentTarget) { if (isSteady) aimingRef.current = false; else cancelPointerCharge(e); } }}
       >
+        <CourtArtwork setup={setup} toX={toX} toY={toY} floorY={FLOOR_Y}
+          rimHeight={RIM_HEIGHT} rimRadius={RIM_RADIUS} releaseHeight={RELEASE_HEIGHT}
+          released={Boolean(result) && phase !== 'aiming'} flight={flight} />
         {/* the floor, with a metre tick every two metres so distance reads */}
-        <rect x={0} y={FLOOR_Y} width={VIEW_W} height={VIEW_H - FLOOR_Y} fill="hsl(28 40% 22%)" />
         <line x1={0} y1={FLOOR_Y} x2={VIEW_W} y2={FLOOR_Y} stroke="hsl(28 25% 45%)" strokeWidth={1.2} />
         {[2, 4, 6, 8].map(m => (
           <line key={m} x1={toX(m)} y1={FLOOR_Y} x2={toX(m)} y2={FLOOR_Y + 5} stroke="hsl(28 25% 45%)" strokeWidth={1} />
@@ -427,42 +487,11 @@ export default function BuzzerBeaterBoard() {
               x2={toX(setup.distance + 0.381)} y2={toY(2.9)}
               stroke="hsl(0 0% 88%)" strokeWidth={2.6}
             />
-            <line
+            <line data-court-rim=""
               x1={toX(setup.distance - RIM_RADIUS)} y1={toY(RIM_HEIGHT)}
               x2={toX(setup.distance + RIM_RADIUS)} y2={toY(RIM_HEIGHT)}
               stroke="hsl(18 85% 55%)" strokeWidth={3.2} strokeLinecap="round"
             />
-            <path
-              d={`M ${toX(setup.distance - RIM_RADIUS)} ${toY(RIM_HEIGHT)} Q ${toX(setup.distance)} ${toY(RIM_HEIGHT - 0.42)} ${toX(setup.distance + RIM_RADIUS)} ${toY(RIM_HEIGHT)}`}
-              fill="none" stroke="hsl(0 0% 82%)" strokeWidth={0.8} opacity={0.6}
-            />
-            <line
-              x1={toX(setup.distance + 0.381)} y1={toY(2.9)}
-              x2={toX(setup.distance + 0.381)} y2={FLOOR_Y}
-              stroke="hsl(0 0% 55%)" strokeWidth={2}
-            />
-
-            {/* the closeout: a body and a hand that really does reach that high */}
-            {setup.contestReach > 0 && (
-              <g>
-                <line
-                  x1={toX(setup.contestDist)} y1={FLOOR_Y}
-                  x2={toX(setup.contestDist)} y2={toY(setup.contestReach - 0.55)}
-                  stroke="hsl(210 55% 52%)" strokeWidth={7} strokeLinecap="round"
-                />
-                <circle cx={toX(setup.contestDist)} cy={toY(setup.contestReach - 0.42)} r={4.4} fill="hsl(210 60% 64%)" />
-                <line
-                  x1={toX(setup.contestDist)} y1={toY(setup.contestReach - 0.5)}
-                  x2={toX(setup.contestDist + 0.12)} y2={toY(setup.contestReach)}
-                  stroke="hsl(210 60% 64%)" strokeWidth={4} strokeLinecap="round"
-                />
-              </g>
-            )}
-
-            {/* the shooter */}
-            <line x1={toX(0)} y1={FLOOR_Y} x2={toX(0)} y2={toY(1.55)} stroke="hsl(45 80% 55%)" strokeWidth={7} strokeLinecap="round" />
-            <circle cx={toX(0)} cy={toY(1.72)} r={4.6} fill="hsl(45 85% 65%)" />
-            <line x1={toX(0)} y1={toY(1.6)} x2={toX(0.1)} y2={toY(RELEASE_HEIGHT)} stroke="hsl(45 85% 65%)" strokeWidth={4} strokeLinecap="round" />
           </>
         )}
 
@@ -475,8 +504,16 @@ export default function BuzzerBeaterBoard() {
           />
         )}
 
+        {mode === 'lab' && labShots.map((shot, index) => {
+          const previous = index < labShots.length - 1;
+          return <path key={shot.attempt} data-lab-path={previous ? 'previous' : 'current'}
+            d={shot.result.path.map((p, i) => `${i ? 'L' : 'M'} ${toX(p.x)} ${toY(p.y)}`).join(' ')}
+            fill="none" stroke={previous ? '#fbbf24' : '#67e8f9'} strokeWidth={2}
+            strokeDasharray={previous ? '5 4' : undefined} opacity={previous ? 0.8 : 1} />;
+        })}
+
         {/* the ball, on the exact path the rules scored */}
-        <circle
+        <circle data-court-ball=""
           cx={ball ? toX(ball.x) : toX(0.1)}
           cy={ball ? toY(ball.y) : toY(RELEASE_HEIGHT)}
           r={BALL_RADIUS * PX_PER_M_X}
@@ -484,6 +521,22 @@ export default function BuzzerBeaterBoard() {
           stroke="hsl(20 40% 25%)"
           strokeWidth={0.8}
         />
+        <BallSeams cx={ball ? toX(ball.x) : toX(0.1)} cy={ball ? toY(ball.y) : toY(RELEASE_HEIGHT)}
+          r={BALL_RADIUS * PX_PER_M_X} flight={ball ? flight : 0} />
+      </svg>
+
+      <div className="flex items-center gap-3">
+        {mode === 'lab' ? <p className="min-w-0 flex-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground" data-lab-legend>
+          <span><span className="text-amber-500">┄</span> Previous: amber dashed</span>
+          <span><span className="text-cyan-500">━</span> Latest: cyan solid</span>
+          <span>Green dotted: aiming preview</span>
+          <span>Far misses sit at the edge of the rim view.</span>
+        </p> : <p className="min-w-0 flex-1 text-xs text-muted-foreground">
+          The rim view helps you line up Fade. Watch the court for height and distance.
+        </p>}
+        <figure className="m-0 w-[72px] shrink-0">
+        <svg data-court-readout="" viewBox="266 6 80 80" width={72} height={72}
+          className="block w-full" aria-hidden="true" focusable="false" pointerEvents="none">
 
         {/* The ring down the line of the shot: the only place a side to side
             miss is visible, so it is the aim readout too. The ball is drawn at
@@ -492,7 +545,7 @@ export default function BuzzerBeaterBoard() {
         <g>
           <circle cx={INSET_CX} cy={INSET_CY} r={34} fill="hsl(28 30% 12%)" stroke="hsl(28 20% 32%)" strokeWidth={1} />
           <circle cx={INSET_CX} cy={INSET_CY} r={RIM_RADIUS * INSET_PX_PER_M} fill="none" stroke="hsl(18 85% 55%)" strokeWidth={2} />
-          {result && phase !== 'aiming' && result.depthWindow > 0 && (
+          {result && phase !== 'aiming' && result.depthWindow > 0 && (mode !== 'lab' || (!result.blocked && result.entryDeg > 0)) && (
             <ellipse
               cx={INSET_CX} cy={INSET_CY}
               rx={result.lateralWindow * INSET_PX_PER_M}
@@ -500,7 +553,7 @@ export default function BuzzerBeaterBoard() {
               fill="none" stroke="hsl(var(--primary))" strokeWidth={0.8} strokeDasharray="2 2" opacity={0.7}
             />
           )}
-          <circle
+          {(mode !== 'lab' || phase === 'aiming') && <circle
             cx={INSET_CX + (result && phase !== 'aiming' ? result.lateral : fade * 0.3) * INSET_PX_PER_M}
             cy={INSET_CY - (result && phase !== 'aiming' ? Math.max(-0.34, Math.min(0.34, result.depth)) : 0) * INSET_PX_PER_M}
             r={BALL_RADIUS * INSET_PX_PER_M}
@@ -508,18 +561,27 @@ export default function BuzzerBeaterBoard() {
             stroke={result && phase !== 'aiming' ? (result.made ? 'hsl(var(--primary))' : 'hsl(0 0% 85%)') : 'hsl(var(--primary))'}
             strokeWidth={1.6}
             opacity={0.9}
-          />
-          <text x={INSET_CX} y={INSET_CY + 46} textAnchor="middle" fontSize={7} fill="hsl(28 15% 62%)">
-            {result && phase !== 'aiming' ? 'where it crossed' : 'where you are aiming'}
-          </text>
+          />}
+          {mode === 'lab' && labShots.map((shot, index) => {
+            if (shot.result.blocked || shot.result.entryDeg <= 0) return null;
+            const previous = index < labShots.length - 1;
+            return <circle key={shot.attempt} data-lab-landing={previous ? 'previous' : 'current'}
+              cx={INSET_CX + Math.max(-0.34, Math.min(0.34, shot.result.lateral)) * INSET_PX_PER_M}
+              cy={INSET_CY - Math.max(-0.34, Math.min(0.34, shot.result.depth)) * INSET_PX_PER_M}
+              r={BALL_RADIUS * INSET_PX_PER_M} fill="none" stroke={previous ? '#fbbf24' : '#67e8f9'}
+              strokeWidth={2} strokeDasharray={previous ? '3 2' : undefined} />;
+          })}
         </g>
-      </svg>
+        </svg>
+        <figcaption className="text-center text-[10px] leading-[14px] text-muted-foreground">Rim view</figcaption>
+        </figure>
+      </div>
 
       {phase === 'aiming' && (
         <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span className="w-14 shrink-0">{mode === 'practice' ? 'Power' : 'Strength'}</span>
-            {mode === 'practice' ? (
+            <span className="w-14 shrink-0">{isSteady ? 'Power' : 'Strength'}</span>
+            {isSteady ? (
               <input ref={practicePowerRef} type="range" min={0} max={1} step={0.01} value={power}
                 disabled={paused} onChange={e => { if (!paused) setPower(Number(e.target.value)); }}
                 onKeyDown={practiceKeyDown}
@@ -540,10 +602,10 @@ export default function BuzzerBeaterBoard() {
               disabled={paused}
               onChange={e => { if (!paused) setArc(Number(e.target.value)); }}
               onKeyDown={practiceKeyDown}
-              className={cn('flex-1 accent-[hsl(var(--primary))]', (mode === 'practice' || mode === 'contest') && 'h-11 min-w-0')}
+              className={cn('flex-1 accent-[hsl(var(--primary))]', (isSteady || mode === 'contest') && 'h-11 min-w-0')}
               aria-label="How high to put the arc on the shot"
             />
-            <span className="w-10 shrink-0 text-right tabular-nums">{Math.round(launchDegFor(arc))}&deg;</span>
+            <span className="w-10 shrink-0 text-right tabular-nums">{mode === 'lab' ? Math.round(arc * 100) : <>{Math.round(launchDegFor(arc))}&deg;</>}</span>
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span className="w-14 shrink-0">Fade</span>
@@ -552,13 +614,13 @@ export default function BuzzerBeaterBoard() {
               disabled={paused}
               onChange={e => { if (!paused) setFade(Number(e.target.value)); }}
               onKeyDown={practiceKeyDown}
-              className={cn('flex-1 accent-[hsl(var(--primary))]', (mode === 'practice' || mode === 'contest') && 'h-11 min-w-0')}
+              className={cn('flex-1 accent-[hsl(var(--primary))]', (isSteady || mode === 'contest') && 'h-11 min-w-0')}
               aria-label="How far to fade off the closeout"
             />
             <span className="w-10 shrink-0 text-right tabular-nums">{fade > 0.05 ? 'right' : fade < -0.05 ? 'left' : 'square'}</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
-            {mode === 'practice' ? (
+            {isSteady ? (
               <Button ref={practiceActionRef} className="min-h-[44px] flex-1" disabled={paused} onClick={release} onKeyDown={practiceKeyDown}>Shoot</Button>
             ) : <Button ref={mode === 'contest' ? practiceActionRef : undefined} size="sm" className={cn('flex-1 touch-none', mode === 'contest' && 'min-h-[44px]', charging && 'ring-2 ring-primary ring-offset-2 ring-offset-background')} disabled={paused}
               onPointerDown={beginPointerCharge} onPointerUp={finishPointerCharge} onPointerCancel={cancelPointerCharge}
@@ -569,12 +631,32 @@ export default function BuzzerBeaterBoard() {
             </Button>}
           </div>
           <p className="text-center text-[11px] text-muted-foreground">
-            {mode === 'practice' ? 'Set Power, Arc and Fade at your own pace. Drag the court to aim, then tap Shoot.' : 'Up and down set the arc, left and right fade off the hand, hold space to load it. Or drag the court and let go.'}
+            {isSteady ? 'Set Power, Arc and Fade at your own pace. Drag the court to aim, then tap Shoot.' : 'Up and down set the arc, left and right fade off the hand, hold space to load it. Or drag the court and let go.'}
           </p>
         </div>
       )}
 
-      {phase === 'shotEnd' && result && (
+      {mode === 'lab' && phase === 'shotEnd' && result && <div ref={labActionRef} data-lab-result className="space-y-2">
+        <p role="status" className="font-semibold">{result.blocked ? 'Blocked at the defender.'
+          : result.entryDeg <= 0 ? 'Never reached rim height.'
+          : result.made ? result.verdict : 'Missed. Compare the path and rim crossing.'}</p>
+        <div className="grid grid-cols-2 gap-2">
+          <Button ref={practiceActionRef} className="min-h-[44px]" onClick={() => repeatLab(false)} onKeyDown={practiceKeyDown}>Retry this shot</Button>
+          <Button variant="outline" className="min-h-[44px]" onClick={() => repeatLab(true)} onKeyDown={practiceKeyDown}>Change setup</Button>
+        </div>
+      </div>}
+      {mode === 'lab' && <ShotLabComparison shots={labShots} />}
+      {mode === 'lab' && <details className="rounded-xl border border-border text-sm">
+        <summary className="min-h-[44px] cursor-pointer px-3 py-3">Leave lab</summary>
+        <div className="grid grid-cols-2 gap-2 p-3 pt-0">
+          <Button variant="outline" className="h-auto min-h-[44px] whitespace-normal px-2 py-2 text-xs" onClick={() => start('daily')}>Today's ten</Button>
+          <Button variant="outline" className="h-auto min-h-[44px] whitespace-normal px-2 py-2 text-xs" onClick={() => start('unlimited')}>Unlimited</Button>
+          <Button variant="outline" className="h-auto min-h-[44px] whitespace-normal px-2 py-2 text-xs" onClick={() => start('practice')}>Steady practice</Button>
+          <Button variant="outline" className="h-auto min-h-[44px] whitespace-normal px-2 py-2 text-xs" onClick={() => start('contest')}>Three-point contest</Button>
+        </div>
+      </details>}
+
+      {mode !== 'lab' && phase === 'shotEnd' && result && (
         <ArcadeShotFeedback key={`${mode}-${shotIdx}`} sport="basket" success={result.made} verdict={result.verdict} points={mode === 'contest' ? contestPoints(shotIdx, result.made) : result.points} detail={<p className="mt-1 text-xs text-muted-foreground">
             Came in at {Math.round(result.entryDeg)}&deg;
             {result.depthWindow > 0
@@ -594,6 +676,7 @@ export default function BuzzerBeaterBoard() {
             {score} points{best ? ` out of a possible ${best}` : ''}.
             {mode === 'contest' ? ' Unranked local contest. Nothing saved.' : made >= 8 ? ' Cold blooded.' : made >= 6 ? ' You would take that shot again.' : made >= 3 ? ' Keep firing.' : ' Long night at the office.'}
           </p>
+          {labEntry}
           {mode !== 'practice' && <div className="mt-3 space-y-2 text-xs text-muted-foreground">{mode === 'contest' ? contestRules : practiceRules}</div>}
           {mode !== 'contest' && <div className="mt-3 space-y-2 text-xs text-muted-foreground">{contestRules}</div>}
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
