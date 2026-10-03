@@ -37,7 +37,7 @@
 .filters button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 12px; border-radius: 7px; font-size: 12px; font-weight: 700; color: hsl(var(--muted-foreground)); }
 .filters button[aria-pressed=true] { background: hsl(var(--foreground)); color: hsl(var(--background)); }
 .filters span { font-size: 10px; opacity: .65; font-variant-numeric: tabular-nums; }
-.search { display: flex; align-items: center; min-height: 44px; width: 230px; gap: 9px; padding-left: 12px; border: 1px solid hsl(var(--border)); border-radius: 8px; background: hsl(var(--card)); }
+.search { display: flex; align-items: center; min-height: 46px; width: 230px; gap: 9px; padding-left: 12px; border: 1px solid hsl(var(--border)); border-radius: 8px; background: hsl(var(--card)); }
 .search > svg { width: 15px; height: 15px; flex-shrink: 0; color: hsl(var(--muted-foreground)); }
 .search input { width: 100%; min-width: 0; padding: 10px 8px 10px 0; outline: none; background: transparent; font-size: 12px; }
 .search:focus-within { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
