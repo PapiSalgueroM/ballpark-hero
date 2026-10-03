@@ -84,4 +84,31 @@ describe('the manager on the career panel', { timeout: 60000 }, () => {
     expect(document.querySelector('[data-edit-manager-sheet]')!.textContent).toContain('fixed');
     expect(container).toBeTruthy();
   });
+
+  /* Round 965 review: Save used to resend the homeland every time, so a
+     Round 303 American who only changed his name came back as the engine's
+     "USA" and his home job market stopped knowing him. */
+  it('leaves the homeland alone when only the name changes', () => {
+    let career: CareerState = startCareer('Inter Miami', undefined, undefined, { ...SPEC, nationality: 'United States' });
+    const g = hooks(e => { career = editManager(career, e) ?? career; });
+    render(<ClubManagerCareerPanel c={career} g={g} nationOffer={null} />);
+    fireEvent.click(screen.getByRole('button', { name: /Edit/ }));
+    fireEvent.change(document.getElementById('edit-manager-name') as HTMLInputElement, { target: { value: 'Robin Ashgrove' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(g.updateManager).toHaveBeenCalledTimes(1);
+    expect(g.updateManager.mock.calls[0][0].nationality).toBeUndefined();
+    expect(career.manager?.name).toBe('Robin Ashgrove');
+    expect(career.manager?.nationality).toBe('United States');
+  });
+
+  it('opens a Skip career at an MLS club on its own country', () => {
+    let career: CareerState = startCareer('Inter Miami');
+    const g = hooks(e => { career = editManager(career, e) ?? career; });
+    const { container } = render(<ClubManagerCareerPanel c={career} g={g} nationOffer={null} />);
+    fireEvent.click(container.querySelector('[data-name-manager]') as HTMLButtonElement);
+    fireEvent.change(document.getElementById('edit-manager-name') as HTMLInputElement, { target: { value: 'Robin Ashgrove' } });
+    fireEvent.click(screen.getByRole('button', { name: /Boardroom/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Name him' }));
+    expect(career.manager?.nationality).toBe('United States');
+  });
 });
