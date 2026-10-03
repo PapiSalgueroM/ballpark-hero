@@ -60,10 +60,10 @@
    "name": "Emmanuel Biumla",
    "club": "Angers",
    "adjudicatedOn": "2026-10-03",
-   "note": "Angers's number 24, aged 24 on ESPN (no appearances yet this season). On both current squad pages; the club lists him among the defenders, ESPN among the midfielders.",
+   "note": "Angers's number 24, aged 21 on ESPN (no appearances yet this season). On both current squad pages; the club lists him among the defenders, ESPN among the midfielders.",
    "sources": [
     {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "listed among the defenders"},
-    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "shirt 24, age 24, France, 0 appearances"}
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "shirt 24, age 21, France, 0 appearances"}
    ]
   }
  ],
@@ -296,12 +296,12 @@
    "to": "Volos",
    "realClub": "Volos",
    "adjudicatedOn": "2026-10-03",
-   "note": "Born 1990-03-08. Left Lille for Olympiacos in 2024, spent the spring of 2026 on loan at Nantes, and joined Volos on a free on 2026-09-14, contract to June 2027; no appearance for them yet. ESPN's player page still heads him as Olympiacos, but Olympiacos's own squad does not list him and ESPN's last match for him is for Nantes on 2026-05-17, so that header is stale.",
+   "note": "Born 1990-03-08. Left Lille for Olympiacos on a free in July 2025, spent the spring of 2026 on loan at Nantes, and joined Volos on a free on 2026-09-14, contract to June 2027; no appearance for them yet. ESPN's player page still heads him as Olympiacos, but Olympiacos's own squad does not list him and ESPN's last match for him is for Nantes on 2026-05-17, so that header is stale.",
    "sources": [
     {"family": "A", "url": "https://www.slgr.gr/en/team/1190/teamComp/25/", "publisher": "Super League Greece (Volos NFC squad, season 2026-2027)", "readOn": "2026-10-03", "says": "5, Remy Cabella, forward, born 1990-03-08, France, 0 appearances"},
     {"family": "A", "url": "https://www.losc.fr/effectif/lille/76", "publisher": "LOSC Lille (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "A", "url": "https://www.olympiacos.org/en/team/", "publisher": "Olympiacos FC (first team squad)", "readOn": "2026-10-03", "says": "not listed"},
-    {"family": "B", "url": "https://us.soccerway.com/player/cabella-remy/hl6k3P1f/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Olympiacos to Volos free 2026-09-14, born 1990-03-08, contract to 2027-06-30"},
+    {"family": "B", "url": "https://us.soccerway.com/player/cabella-remy/hl6k3P1f/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lille to Olympiacos free 2025-07-01, Olympiacos to Nantes loan 2026-01-01, back 2026-06-30, Olympiacos to Volos free 2026-09-14, born 1990-03-08, contract to 2027-06-30"},
     {"family": "B", "url": "https://us.soccerway.com/team/volos/nDZbFBqG/squad/", "publisher": "Soccerway (Volos squad 2026-2027)", "readOn": "2026-10-03", "says": "20, Cabella Remy, midfielder, age 36, 0 minutes"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/166/lille", "publisher": "ESPN (Lille squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
