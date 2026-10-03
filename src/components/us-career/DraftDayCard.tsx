@@ -32,7 +32,7 @@ export interface DraftDayFacts {
 }
 
 export default function DraftDayCard({ pick, teamLabel, playerName, lines, firstRoundEnd }: DraftDayFacts) {
-  const firstRound = pick <= firstRoundEnd;
+  const firstRound = pick > 0 && pick <= firstRoundEnd;
   return (
     <div
       data-draft-day
@@ -48,7 +48,7 @@ export default function DraftDayCard({ pick, teamLabel, playerName, lines, first
           Draft day
         </p>
         <p className="cm-slam mt-1 font-display text-base font-black text-foreground" style={{ animationDelay: '0.25s' }}>
-          With pick <span className={firstRound ? 'text-gold' : 'text-primary'}>{pick}</span>, the {teamLabel} select {playerName}
+          {pick === 0 ? <>{playerName} joins {teamLabel} as an undrafted signing</> : <>With pick <span className={firstRound ? 'text-gold' : 'text-primary'}>{pick}</span>, the {teamLabel} select {playerName}</>}
         </p>
         {lines.length > 0 && (
           <div className="mt-2 space-y-1 text-left">

@@ -22,7 +22,8 @@
    sees). It does not return the state.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, CareerEvent } from './nflMyCareer';
-import { nflEraById, teamLabelOf, NFL_TEAM_NAMES } from './nflMyCareer';
+import { nflEraById, teamLabelOf, NFL_TEAM_NAMES, NFL_SPEND_ITEMS } from './nflMyCareer';
+import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
 
 /* CIRCULAR IMPORT GOTCHA (caught by scripts/simNflCareer.mjs, invisible to tsc):
    nflMyCareer imports this file for its event deck, and this file imports
@@ -353,7 +354,7 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
   }
 
   /* ══ More standalone temptations, situational and repeatable ══ */
-  if (c.draftPick <= 15 && c.seasons.length === 0) {
+  if (c.draftPick > 0 && c.draftPick <= 15 && c.seasons.length === 0) {
     deck.push({
       id: 'corr_combine_sample',
       title: 'The sample was not yours',
@@ -504,8 +505,8 @@ export function getNflCorruptionEvents(c: CareerState, rng: () => number): Caree
       title: 'Where did it go',
       body: `You have earned ${Math.round(c.earnings)}M in this league and your accountant says you are close to broke. Houses, relatives, an advisor, three businesses that never opened. It is the most common story in football.`,
       options: [
-        { label: 'Sell everything and start over', effect: 'Recover cash, lose the lifestyle',
-          apply: (cc) => { D(cc).netWorth = Math.round(((D(cc).netWorth ?? 0) + 4) * 10) / 10; cc.yearlyCosts = 0; cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the second house and the restaurant. Four million back and a much quieter life.'; } },
+        { label: 'Sell lifestyle assets and cancel services', effect: 'Recover cash, lose the lifestyle',
+          apply: (cc) => { D(cc).netWorth = Math.round(((D(cc).netWorth ?? 0) + 4) * 10) / 10; liquidateUsCareerPurchases(cc, NFL_SPEND_ITEMS); cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the second house and the restaurant. Four million back and a much quieter life. Your yearly lifestyle services are canceled. Past training and gifts stay earned.'; } },
         { label: 'Take the money that is being offered', effect: '5M dirty, heat +26',
           apply: (cc) => { dirty(cc, 5); heatUp(cc, 26); return 'You called the number you swore you would never call. Five million, and the meter went straight up. Heat +26.'; } },
         { label: 'Get a real financial team and grind it back', effect: 'Slow, boring, works',
