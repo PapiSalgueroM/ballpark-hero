@@ -97,17 +97,22 @@ export const NBA_TRADE_RULES: GmTradeRules = { sport: 'nba', ...PLAIN };
    2026-10-02:
      https://thehockeywriters.com/nhl-retained-salary-trades/
      https://www.nbcsports.com/nhl/news/heres-the-deal-with-retaining-salary-in-trades
-   One contract can be retained on twice at most: ONE ADDRESS ON RECORD for
-   that (the first page; the second gives 50 percent, three contracts and 15
-   percent of the upper limit and is silent on it).
+   One contract can be retained on twice at most: the first page above, and
+   (read 2026-10-02) "a total of two retentions being the maximum on any one
+   contract" with 50 percent a retention at
+     https://canucksarmy.com/news/how-vancouver-canucks-could-use-double-retention-cash-brendan-gallagher-trade-deadline
+   The second page above gives 50 percent, three contracts and 15 percent
+   of the upper limit and is silent on it.
    NOT MODELLED: the cap on the total a club retains as a share of the
    league's upper limit, and the newer limits on retaining twice in quick
    succession (one source each today).
-   NHL clubs trade the rights to unsigned prospects (deadline deals of March
-   2026 carried them), so prospects is true. Read by the round's review on
-   2026-10-02:
-     https://www.nhl.com/news/topic/trade-coverage/2025-26-nhl-trades
-     https://puckpedia.com/news/nhl-draft-pick-rights-set-expire-june-2026 */
+   NHL clubs trade prospects who are not on the roster, so prospects is
+   true. One deal, read 2026-10-02 on two publishers: on 8 July 2025 Edmonton
+   sent Sam O'Reilly (then with London of the OHL) to Tampa Bay for Isaac
+   Howard, Tampa Bay's draft pick, who had not signed with Tampa Bay and
+   agreed his entry level deal with Edmonton after the trade.
+     https://africa.espn.com/nhl/story/_/id/45698516/oilers-acquire-isaac-howard-lightning-sam-oreilly
+     https://www.tsn.ca/nhl/edmonton-oilers-acquire-top-prospect-isaac-howard-from-tampa-bay-lightning-for-sam-o-reilly-1.2333119 */
 export const NHL_TRADE_RULES: GmTradeRules = {
   sport: 'nhl', maxAssetsPerSide: 5, prospects: true,
   retention: { maxShare: 0.5, maxDealsPerClub: 3, maxTimesPerContract: 2 },

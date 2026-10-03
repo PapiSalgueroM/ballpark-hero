@@ -607,9 +607,10 @@ export const NFL_PICK_RULES: GmPickRules = {
   ],
 };
 
-/* NBA. Two rounds. ONE SOURCE READ for the count (the review confirmed it
-   by search, two rounds since 1989, without a second address):
+/* NBA. Two rounds, picks 1 to 30 and 31 to 60. Read 2026-10-02:
      https://www.si.com/nba/nba-draft-full-history-how-many-rounds
+     https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2
+       (the 2026 draft, 24 June 2026, all 60 picks over its two rounds)
    The lottery: the 14 clubs that missed the playoffs, the first four picks
    drawn, 1,000 combinations shared out 140, 140, 140, 125, 105, 90, 75, 60,
    45, 30, 20, 15, 10, 5, so the worst club picks no lower than fifth.
@@ -666,8 +667,10 @@ export const NBA_PICK_RULES: GmPickRules = {
    the bottom eleven can pick first.
      https://www.nhl.com/news/2026-nhl-draft-lottery-set-for-may-5
      https://sports.yahoo.com/articles/does-nhl-draft-lottery-explaining-111217430.html
-   NOT MODELLED: a club may win the lottery no more than twice in five years
-   (the second page above; the league page read today does not state it).
+   NOT MODELLED: a club may win the lottery no more than twice in five years.
+   Read 2026-10-02 on the second page above and on the league's release of
+   23 March 2021 (which also gives the ten place cap and the two draws):
+     https://www.nhl.com/news/nhl-draft-lottery-changes-announced-for-2021-322838154
    NOT CONFIRMED TWICE: how many drafts ahead a pick can be traded. Three is
    the game's setting. */
 export const NHL_PICK_RULES: GmPickRules = {
@@ -700,13 +703,14 @@ export const NHL_PICK_RULES: GmPickRules = {
    (who gets one turns on club revenue and market size, which the game does
    not carry), so until an engine awards one there is no pick to move.
    Twenty rounds, and a draft lottery since the 2023 draft (the 18 clubs out
-   of the playoffs, the first six picks drawn). Read by the round's review
-   on 2026-10-02 at
+   of the playoffs, the first six picks drawn). Both read 2026-10-02 on both
+   pages: the first gives the CBA's terms in 2022 ("20 rounds", six picks
+   by lottery from 2023, the 18 clubs out of the postseason), the second
+   the 2026 draft's lottery (December 2025: the top six picks by lottery,
+   the 18 clubs out of the 2025 postseason, and only the first round set by
+   the lottery, rounds 2 to 20 apart from it).
      https://www.baseballamerica.com/stories/guide-to-the-new-cba-draft-lottery-expanded-playoffs-and-more/
-   and confirmed a second time by its search (a CBS Sports report of the
-   first MLB lottery, in 2023, and mlb.com's 2026 draft coverage of rounds
-   5 to 20), whose addresses it did not record. Both facts stand; only the
-   second address is owed.
+     https://www.cbssports.com/mlb/news/mlb-draft-lottery-odds-eligible-teams-how-to-watch/
    NOT MODELLED: the lottery itself. Its table of odds has not been read
    twice, so the order here is reverse standings and partial says so.
    Since no ordinary pick can move, the ledger carries this year's draft
