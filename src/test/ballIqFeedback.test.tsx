@@ -175,7 +175,10 @@ describe('Ball IQ committed answer feedback', () => {
     /* Reopened: the same win, shown settled, so no reveal and no confetti replay. */
     expect(moment(view)).toBe('win'); expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
     expect(recordCompletion).toHaveBeenCalledTimes(1);
-  });
+  /* Twelve answered questions and two full result cards: measured 4.0 to 5.8
+     seconds alone on 2026-10-03 and past 5 under a release gate's load, so
+     the default 5 second limit failed a run whose every assertion holds. */
+  }, 20000);
 
   it('walks every rank band onto its result state with the exact squares on the card', async () => {
     const { result, unmount } = renderHook(() => useBallIq()); await act(async () => {});
@@ -203,7 +206,9 @@ describe('Ball IQ committed answer feedback', () => {
       cleanup(); consumeRestoredFinish('ball-iq');
     }
     expect(recordCompletion).not.toHaveBeenCalled();
-  });
+  /* Seven result cards mounted in turn: measured 1.4 to 4.7 seconds alone, the
+     same 5 second edge as the test above. */
+  }, 20000);
 
   it('binds readable answer text and finite reduced-motion rules to actual feedback', async () => {
     const view = await mount(); const { option } = choose(view);

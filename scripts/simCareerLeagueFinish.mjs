@@ -17,7 +17,8 @@
       tier 1, 2, 3, 4), each step of the ladder, not only its two ends;
    4. the current era digest: seeded careers starting in 2020 produce a state
       byte identical to the one recorded from main before this round, once the
-      two new fields are taken out, so the main Math.random stream did not move;
+      two new fields are taken out, so the main Math.random stream did not move
+      (Round 974's story list is taken out too, see LATER_FIELDS below);
    5. the elite boost is era aware: a season played at Man City in 1995 wins
       the title at its tier's rate, at Man City in 2020 at the elite rate, and
       Real Madrid in 1995 at the elite rate (forced seasons over many seeds).
@@ -174,8 +175,20 @@ function runCareer(seed, { era = '2020-24', startYear = 2020, proSeasons = 10, o
    writes into the state goes in, so a moved Math.random stream anywhere in a
    season shows up as a changed hash. */
 const NEW_FIELDS = ['leagueFinish', 'leagueSize'];
+/* Round 974 (the Soccer Career career story) landed beside this round and adds
+   one saved field, the top level story list: each season's year, age, club and
+   log lines, copied out of state the digest already hashes. It draws nothing
+   from Math.random. Measured on the Release AA merge (2026-10-03): over all 16
+   digest seeds the engine makes the same number of Math.random calls at every
+   one of the 85 to 104 steps as the Round 929 tree, and once story is out the
+   two states are equal leaf for leaf. So it leaves the digest by name, and
+   nothing else does; the stream control below still turns section 4 red.
+   Only the top level key goes: a random event card on main already carries
+   its own story id (pendingEvents[n].story, "podcastLaunch"), and that one
+   stays in the hash. */
+const LATER_FIELDS = ['story'];
 function digest(s) {
-  const json = JSON.stringify(s, (k, v) => (NEW_FIELDS.includes(k) ? undefined : v));
+  const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
 const DIGEST_SEEDS = 16;
