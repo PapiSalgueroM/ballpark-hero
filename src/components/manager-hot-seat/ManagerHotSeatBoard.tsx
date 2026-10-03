@@ -15,7 +15,11 @@ import {
   HOT_SEAT_LEASH,
   VERDICT_WORDS,
   answerHotSeatPress,
+  canCarryOn,
+  carryOnInClubManager,
+  carryOnSummary,
   crisisLine,
+  existingClubManagerSave,
   dailyHotSeat,
   hotSeatLeagues,
   hotSeatMeters,
@@ -27,6 +31,7 @@ import {
   shareText,
   startHotSeat,
   upcoming,
+  type ExistingClubManagerSave,
   type HotSeatAction,
   type HotSeatRun,
   type HotSeatSetup,
@@ -97,6 +102,66 @@ function Progress({ run }: { run: HotSeatRun }) {
     <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-sm">
       <span><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points</span>
       <span className="text-muted-foreground">{left} league game{left === 1 ? '' : 's'} left</span>
+    </div>
+  );
+}
+
+/* Round 956: a manager who keeps the job keeps it in Club Manager. The run's
+   own state goes across through Club Manager's save, so the season, the table
+   and the board are the ones on this screen. A full page load opens it, which
+   boots Club Manager from that save the same way a return visit does. */
+function CarryOnCard({ run }: { run: HotSeatRun }) {
+  const s = carryOnSummary(run);
+  const [ask, setAsk] = useState<ExistingClubManagerSave | null>(null);
+  const [note, setNote] = useState<string | null>(null);
+  const [going, setGoing] = useState(false);
+
+  const go = (replace: boolean) => {
+    if (going) return;
+    const res = carryOnInClubManager(run, { replace });
+    if (res === 'confirm') {
+      setAsk(existingClubManagerSave() ?? { club: null, season: null });
+      setNote(null);
+      return;
+    }
+    if (res === 'failed') {
+      setAsk(null);
+      setNote('Your browser would not save it, so nothing changed. Free up some space for this site and try again.');
+      return;
+    }
+    if (res === 'saved') {
+      setGoing(true);
+      window.location.assign('/club-manager');
+    }
+  };
+
+  const keep = () => {
+    setAsk(null);
+    setNote('No problem, your Club Manager career is untouched.');
+  };
+
+  const theirs = ask?.club ? ` (${ask.club}${ask.season ? `, season ${ask.season}` : ''})` : '';
+
+  return (
+    <div className="rounded-lg border border-primary/50 bg-primary/5 p-4" data-testid="hot-seat-carry-on">
+      <div className="text-xs font-semibold uppercase tracking-wide text-primary">Carry on in Club Manager</div>
+      <p className="mt-1 text-sm">
+        The job is yours, so keep it. This exact season goes across: {run.state.clubName}, {ordinal(s.position)} of {s.clubs} on {s.points} points after {s.leaguePlayed} league games, the same squad and the board on {s.board}. You pick it up at the next fixture.
+      </p>
+      {ask ? (
+        <div className="mt-3 rounded-md bg-muted p-3 text-sm" role="alertdialog" aria-label="Replace your Club Manager career?" data-testid="hot-seat-carry-on-confirm">
+          <p>You already have a Club Manager career on this device{theirs}. Carrying on replaces it, and it cannot be brought back.</p>
+          <div className="mt-2 grid grid-cols-2 gap-2">
+            <button type="button" onClick={() => go(true)} disabled={going} className="min-h-[44px] rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Replace it and carry on</button>
+            <button type="button" onClick={keep} className="min-h-[44px] rounded-md border border-border px-3 py-2 text-sm font-semibold">Keep my career</button>
+          </div>
+        </div>
+      ) : (
+        <button type="button" onClick={() => go(false)} disabled={going} className="mt-3 min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">
+          {going ? 'Opening Club Manager...' : 'Carry on in Club Manager'}
+        </button>
+      )}
+      {note && <p className="mt-2 text-xs text-muted-foreground" role="status">{note}</p>}
     </div>
   );
 }
@@ -411,6 +476,7 @@ export default function ManagerHotSeatBoard() {
             >
               <p className="text-sm text-muted-foreground">{VERDICT_WORDS[run.verdict.kind].line}</p>
             </ResultMoment>
+            {canCarryOn(run) && <CarryOnCard run={run} />}
             <div className="rounded-md bg-muted px-3 py-2 text-sm">
               <div><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points from {run.leaguePlayed} league game{run.leaguePlayed === 1 ? '' : 's'} {dotsOf(run)}</div>
               <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
