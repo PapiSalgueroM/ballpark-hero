@@ -8,18 +8,31 @@ import { cn } from '@/lib/utils';
 import { Confetti, ConditionBar, HitFlash } from '@/components/soccer-career/CareerFx';
 import {
   WEIGHT_CLASSES, STYLES, TACTICS, weightById,
-  newFightCareer, runCamp, takeFight, legacyOf, ratingOf, effectiveAttrs,
+  legacyOf, ratingOf, effectiveAttrs,
   conditionTrack,
   type FightCareerState, type Offer, type BoutResult, type CampPlan,
   type Tactic, type FightStyle, type WeightId,
 } from '@/lib/fightCareer';
+/* Round 916: the life between fights. The board starts a career, runs a camp
+   and takes a fight through the life layer's wrappers, which call the same
+   engine functions this file used to call directly. */
+import { lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
+import { lifeNewCareer, lifeRunCamp, lifeTakeFight, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
+import { fmtBank } from '@/lib/fightCareerMoney';
+import { CornerPicker, LifeStepCard, LifeTiles, LifePanel, type LifeView } from '@/components/fight-career/FightLifePanels';
 
 type Phase = 'setup' | 'hub' | 'camp' | 'plan' | 'fight' | 'result' | 'retired';
 
 const SAVE_KEY = 'fight-career-save-v1';
 const CAMP_WEEKS = 6;
 
-interface SaveShape { st: FightCareerState; phase: Phase }
+/* Round 916: `offerId` is the fight the camp was run for. Without it a reload
+   on the game plan screen had a phase and no opponent, and drew nothing. */
+interface SaveShape { st: FightCareerState; phase: Phase; offerId?: string }
+
+/* Round 916: every state the board holds has its life block in place. A save
+   from before the round gets a default one when it is read (ensureLife). */
+type LiveState = FightCareerState & { life: FightLife };
 
 /* A small labelled bar. Kept deliberately plain: this screen already has a lot
    of numbers on it and a phone has about 360 usable pixels across. */
@@ -40,18 +53,32 @@ function Bar({ label, value, max = 99, tone = 'bg-primary' }: {
 
 export default function FightCareerBoard() {
   const [phase, setPhase] = useState<Phase>('setup');
-  const [st, setSt] = useState<FightCareerState | null>(null);
+  const [st, setSt] = useState<LiveState | null>(null);
   const [name, setName] = useState('');
   const [weight, setWeight] = useState<WeightId>('welter');
   const [style, setStyle] = useState<FightStyle>('outboxer');
+  const [trainer, setTrainer] = useState<TrainerId>('allround');
+  const [manager, setManager] = useState<ManagerId>('family');
+  /* Which hub panel is open. Not saved: a reload lands on the hub itself. */
+  const [view, setView] = useState<LifeView>('main');
+  const [takeHome, setTakeHome] = useState(0);
   const [offer, setOffer] = useState<Offer | null>(null);
   const [camp, setCamp] = useState<CampPlan>({ conditioning: 2, power: 2, defence: 1, speed: 1 });
   const [tactics, setTactics] = useState<Tactic[]>(['box', 'press', 'counter']);
   const [result, setResult] = useState<BoutResult | null>(null);
   const [shown, setShown] = useState(0);
   const [animate, setAnimate] = useState(true);
+  /* Round 916 review: a restored game plan save whose fight is not on it.
+     The camp is already on the fighter, so the next pick skips the camp. */
+  const [campDone, setCampDoneState] = useState(false);
+  const campDoneRef = useRef(false);
+  const setCampDone = (v: boolean) => { campDoneRef.current = v; setCampDoneState(v); };
 
-  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${st?.fightNo ?? 0}:${shown}`);
+  /* Round 916: the gap between fights shows one thing at a time, read off the
+     save, so its key is part of what the reveal follows. */
+  const step = st ? nextLifeStep(st) : null;
+  const stepKey = !step ? '' : step.kind === 'beat' ? `b${step.event.id}` : `${step.kind[0]}${step.card.id}`;
+  const revealRef = useRevealScroll<HTMLDivElement>(`${phase}:${st?.fightNo ?? 0}:${shown}:${view}:${stepKey}`);
 
   const legacy = useMemo(() => (st ? legacyOf(st) : null), [st]);
   useGameCompletion('fight-career', !!st?.retired, legacy?.score ?? 0);
@@ -68,17 +95,31 @@ export default function FightCareerBoard() {
          completion hook sees false then true and pays the legacy again on
          every reload. */
       if (s.st.retired) markRestoredFinish('fight-career');
-      setSt(s.st);
+      /* Round 916: a save from before the life layer has no life block and a
+         damaged one may have a bad one. ensureLife leaves the fighter and the
+         record exactly as stored and repairs or adds only that block. Cards
+         that were waiting are ids on the block, so they are still waiting. */
+      setSt(lifeLoadState(s.st));
       /* Never restore straight into a half played bout: the result is not on
          the save, so the fight would have no rounds to show. */
-      setPhase(s.st.retired ? 'retired' : s.phase === 'fight' || s.phase === 'result' ? 'hub' : s.phase);
+      const kept = s.phase === 'plan' ? s.st.offers.find(o => o.id === s.offerId) ?? null : null;
+      if (kept) setOffer(kept);
+      /* A game plan save from before this round has no offerId, and its camp
+         is already on the fighter. It opens on the offers with the camp marked
+         done, so picking a fight goes straight to the game plan and a second
+         camp cannot be run on top of the first (Round 916 review). */
+      if (s.phase === 'plan' && !kept && !s.st.retired) setCampDone(true);
+      setPhase(s.st.retired ? 'retired' : s.phase === 'plan' && kept ? 'plan' : s.phase === 'setup' ? 'setup' : 'hub');
     } catch { /* a fresh career is the right fallback */ }
   }, []);
 
-  const persist = useCallback((next: FightCareerState, ph: Phase) => {
+  const persist = useCallback((next: LiveState, ph: Phase, offerId?: string) => {
     setSt(next);
     setPhase(ph);
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: next, phase: ph })); } catch { /* ignore */ }
+    /* While a restored camp is waiting for its fight, the save keeps saying
+       "plan" so a second reload still knows the camp was run. */
+    const stored = ph === 'hub' && campDoneRef.current ? 'plan' : ph;
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: next, phase: stored, offerId })); } catch { /* ignore */ }
   }, []);
 
   /* ── the bout reveal, beat by beat, and always skippable ── */
@@ -92,21 +133,32 @@ export default function FightCareerBoard() {
   }, [phase, result, shown, animate]);
 
   const start = () => {
-    const next = newFightCareer(name, weight, style);
+    const next = lifeNewCareer(name, weight, style, trainer, manager);
     persist(next, 'hub');
   };
 
-  const chooseOffer = (o: Offer) => { setOffer(o); setPhase('camp'); };
+  const chooseOffer = (o: Offer) => {
+    setOffer(o);
+    if (campDone && st) {
+      setCampDone(false);
+      campDoneRef.current = false;
+      persist(st, 'plan', o.id);
+      return;
+    }
+    setPhase('camp');
+  };
 
   const intoCamp = () => {
     if (!st) return;
-    persist(runCamp(st, camp), 'plan');
+    if (!offer) return;
+    persist(lifeRunCamp(st, camp), 'plan', offer.id);
   };
 
   const fight = () => {
     if (!st || !offer) return;
-    const res = takeFight(st, offer.id, tactics);
+    const res = lifeTakeFight(st, offer.id, tactics);
     if (!res) return;
+    setTakeHome(res.takeHome);
     setResult(res.result);
     setShown(animate ? 0 : res.result.rounds.length);
     setSt(res.state);
@@ -120,12 +172,13 @@ export default function FightCareerBoard() {
     setOffer(null);
     setShown(0);
     setCamp({ conditioning: 2, power: 2, defence: 1, speed: 1 });
+    setView('main');
     setPhase(st.retired ? 'retired' : 'hub');
   };
 
   const reset = () => {
     try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
-    setSt(null); setResult(null); setOffer(null); setShown(0); setPhase('setup');
+    setSt(null); setResult(null); setOffer(null); setShown(0); setView('main'); setPhase('setup'); setCampDone(false);
   };
 
   const campTotal = camp.conditioning + camp.power + camp.defence + camp.speed;
@@ -174,6 +227,8 @@ export default function FightCareerBoard() {
           </div>
         </div>
 
+        <CornerPicker trainer={trainer} manager={manager} onTrainer={setTrainer} onManager={setManager} />
+
         <button onClick={start}
           className="min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground">
           Turn professional
@@ -208,7 +263,7 @@ export default function FightCareerBoard() {
         <Bar label="Damage" value={f.damage} max={82} tone="bg-destructive" />
       </div>
       <p className="mt-2 text-[11px] text-muted-foreground">
-        Purse so far {st.earnings.toFixed(2)}m. Damage never heals, and it is what ends you.
+        Purse so far {st.earnings.toFixed(2)}m · bank {fmtBank(st.life.bank)} · fans {st.life.fanbase} · morale {st.life.morale}. Damage never heals, and it is what ends you.
       </p>
     </div>
   );
@@ -242,13 +297,38 @@ export default function FightCareerBoard() {
 
   /* ═══════════════ hub, the offers ═══════════════ */
   if (phase === 'hub') {
+    /* Round 916: a change made on a hub screen is a change to the save. */
+    const keep = (next: LiveState) => persist(next, 'hub');
+    /* Whatever the gap is waiting on comes first, one thing at a time. It is
+       read off the save, so a reload lands on the same card. */
+    if (step) {
+      return (
+        <div className="space-y-4" ref={revealRef}>
+          {Header}
+          <LifeStepCard st={st} step={step} onChange={keep} />
+        </div>
+      );
+    }
+    if (view !== 'main') {
+      return (
+        <div className="space-y-4" ref={revealRef}>
+          <LifePanel st={st} view={view} onBack={() => setView('main')} onChange={keep} />
+        </div>
+      );
+    }
     return (
       <div className="space-y-4" ref={revealRef}>
         {Header}
+        <LifeTiles st={st} onOpen={setView} />
         <div>
           <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">
             {st.champion ? 'Defend the title' : 'What do you take?'}
           </p>
+          {campDone && (
+            <p className="mb-2 rounded-md border border-primary/40 bg-primary/5 p-2 text-xs">
+              Your camp is already done. Pick the fight it was for and go straight to the game plan.
+            </p>
+          )}
           <div className="space-y-2">
             {st.offers.map(o => {
               const gap = ratingOf(o.opponent) - ratingOf(f);
@@ -352,6 +432,11 @@ export default function FightCareerBoard() {
           <p className="mt-2 text-[11px] text-muted-foreground">
             He will change how he fights if you keep doing one thing, so give him three different looks.
           </p>
+          {lifeSharpness(st) !== 0 && (
+            <p className="mt-1 text-[11px] font-medium text-primary">
+              Tonight you are {lifeSharpness(st) > 0 ? `${lifeSharpness(st)} points sharper` : `${-lifeSharpness(st)} points flatter`} than your numbers (power, speed, stamina, defence).
+            </p>
+          )}
         </div>
         <div className="space-y-3">
           {[0, 1, 2].map(i => (
@@ -499,6 +584,9 @@ export default function FightCareerBoard() {
               </p>
               <p className="text-sm text-muted-foreground">
                 Cards {result.playerCard} to {result.oppCard} · purse {offer.purse.toFixed(2)}m
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {takeHome.toFixed(2)}m of it reaches your bank once the corner is paid.
               </p>
               <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
                 <HeartPulse className="h-3 w-3" />

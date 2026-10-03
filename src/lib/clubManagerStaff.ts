@@ -52,9 +52,24 @@
  * out of the transfer kitty and both recorded on the books' own Staff fees
  * line, because money that leaves the kitty and appears nowhere is a lie the
  * projection would tell every week.
+ *
+ * Round 910: THE MACHINERY LIVES IN src/lib/gmStaff.ts NOW. The person, the
+ * name pick, the wage curve, the shortlist, the fee, the severance, the
+ * approach, the tick and the summer were lifted out so every other manager
+ * game can have this desk with its own posts. What stays here is what is
+ * soccer's: the four posts and what each does to the pitch, the stature
+ * ladder a club's men come off, the two name banks, the numbers in
+ * CM_STAFF_RULES and every headline. scripts/data/cmStaffFixture.json was
+ * recorded before the move (twenty clubs, three seasons, every approach,
+ * hire and pay off) and scripts/simGmStaff.mjs replays it to the byte.
  */
 import type { CareerState, ClubDef } from '@/lib/clubManager';
 import { careerLeagueOf, clubDefFor, eraClubDefFor, isHistoricEra, money } from '@/lib/clubManager';
+import type { GmStaffCtx, GmStaffPerson, GmStaffPoach, GmStaffRules } from '@/lib/gmStaff';
+import {
+  gmDefaultStaff, gmHashInt, gmHireStaff, gmIsValidStaff, gmMatchStaffOffer, gmReleaseToPoacher, gmRolloverStaff,
+  gmSackStaff, gmSeverance, gmStaffPayroll, gmStaffPortraitSvg, gmStaffShortlist, gmStaffWage, gmTickStaff,
+} from '@/lib/gmStaff';
 import type { Position } from '@/types/game';
 
 export type StaffPostId = 'attack' | 'defence' | 'goalkeeping' | 'scout';
@@ -67,29 +82,16 @@ export const STAFF_MATCHES_PER_SEASON = 2;
 /** Weeks an approach sits on the desk before he walks. */
 export const POACH_WEEKS = 2;
 
-export interface StaffPerson {
-  id: string;
-  name: string;
-  /** 1 to 10, what he is worth to you today. */
-  level: number;
-  /** 1 to 10, never under his level. Where he can still get to. */
-  potential: number;
-  /** Thousands a week. */
-  wage: number;
-  /** The season he took the job, for the screen. */
-  since: number;
-  /** True when he came up from the academy staff instead of the shortlist. */
-  academy: boolean;
-}
+/**
+ * One man on the desk: a level and a potential from 1 to 10 (never under his
+ * level), a wage in thousands a week, the season he took the job, and whether
+ * he came up from the academy staff instead of the shortlist. The shape is
+ * the shared one, so a save written before Round 910 is this already.
+ */
+export type StaffPerson = GmStaffPerson;
 
-/** A rival's approach, sitting on the desk. */
-export interface StaffPoach {
-  postId: StaffPostId;
-  /** The real club making the approach. It is a club acting, never a person speaking. */
-  club: string;
-  /** Weeks before he walks if you have not answered. */
-  weeksLeft: number;
-}
+/** A rival's approach, sitting on the desk: the real club making it (a club acting, never a person speaking) and the weeks before he walks. */
+export type StaffPoach = GmStaffPoach<StaffPostId>;
 
 export interface ClubStaff {
   /** Shape version of this block, STAFF_VERSION. */
@@ -137,27 +139,6 @@ export const STAFF_POST_INFO: Record<StaffPostId, { label: string; short: string
 
 const ERA_MONEY = 0.75;
 const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.min(hi, v));
-const round1 = (n: number): number => Math.round(n * 10) / 10;
-const round2 = (n: number): number => Math.round(n * 100) / 100;
-
-/* ---------- the hash everything in this file is built from ---------- */
-
-/** FNV-1a with a final avalanche. Same string, same number, every machine. */
-function sHash32(s: string): number {
-  let h = 2166136261 >>> 0;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619) >>> 0;
-  }
-  h ^= h << 13; h >>>= 0;
-  h ^= h >>> 17;
-  h ^= h << 5; h >>>= 0;
-  return h >>> 0;
-}
-/** A whole number lo to hi inclusive, from a key. */
-const hi = (key: string, lo: number, high: number): number => lo + (sHash32(key) % (high - lo + 1));
-/** 0 up to but not including 1, from a key. */
-const hf = (key: string): number => sHash32(key) / 4294967296;
 
 function careerDef(state: Pick<CareerState, 'clubName' | 'eraId'>): ClubDef {
   return state.eraId && isHistoricEra(state.eraId)
@@ -180,63 +161,71 @@ const STAFF_LAST = [
   'Kettleby', 'Lammert', 'Merrion', 'Nystrand', 'Oldroyd', 'Praeger', 'Quennell', 'Rasmusson', 'Threlfall', 'Vandeley',
 ];
 
-/** Deterministic name from a key. Two banks of twenty, four hundred pairings. */
-function staffName(key: string): string {
-  return `${STAFF_FIRST[sHash32(`f|${key}`) % STAFF_FIRST.length]} ${STAFF_LAST[sHash32(`l|${key}`) % STAFF_LAST.length]}`;
-}
+const OUTSIDE_FROM = [
+  'Out of work since the summer',
+  'Number two at a club in the division below',
+  'Ten years in an academy, wants the first team',
+  'Coached abroad, back for a job at home',
+  'Runs his own coaching business, would take this',
+];
 
 /**
- * A name nobody in this room is already using. Four hundred pairings over
- * four posts plus four shortlists means a collision every so often, and two
- * men called Bram sitting one above the other on the same desk reads like a
- * bug. Salts the key until the pair is free, and gives up after twenty tries
- * rather than looping.
+ * Every number on this desk, in one place, read by the shared machinery in
+ * gmStaff. Two banks of twenty names (four hundred pairings, and gmStaff
+ * keeps two men in one room from sharing either half). A wage of 3 plus 2.1
+ * a level in thousands a week. A fee of 0.2m plus 0.28m a level, a pay off of
+ * half a season's wage. A quarter on his wage to match a rival. Nobody under
+ * level 6 is ever approached, then 0.4 percent a week at 6 rising to 2
+ * percent at 10 (scripts/simClubManagerStaff.mjs section 5 prints the
+ * approaches a season rather than trusting this arithmetic). A man with room
+ * grows a level over a summer about one time in three, one in two with three
+ * levels of room.
  */
-function freeStaffName(key: string, taken: Set<string>): string {
-  /* Each half counts on its own: two men called Bram one above the other on
-     the same desk is what this is for, and so is two men called Ilving. */
-  const clash = (n: string): boolean => n.split(' ').some(part => taken.has(part));
-  let name = staffName(key);
-  for (let salt = 1; salt <= 24 && clash(name); salt++) name = staffName(`${key}|${salt}`);
-  if (clash(name)) {
-    /* Salting is a lottery and a lottery loses sometimes: at eight names in
-       a room roughly one draw in twenty thousand still clashes after all
-       twenty four tries, which over every club on the site is about one
-       shortlist. This walks the banks from a hashed start instead, and with
-       twenty of each against at most nine men in a room it cannot fail. */
-    const start = sHash32(`fb|${key}`);
-    const free = (bank: string[], offset: number): string => {
-      for (let n = 0; n < bank.length; n++) {
-        const v = bank[(start + offset + n) % bank.length];
-        if (!taken.has(v)) return v;
-      }
-      return bank[start % bank.length];
-    };
-    name = `${free(STAFF_FIRST, 0)} ${free(STAFF_LAST, 7)}`;
-  }
-  for (const part of name.split(' ')) taken.add(part);
-  taken.add(name);
-  return name;
+export const CM_STAFF_RULES: GmStaffRules<StaffPostId> = {
+  posts: STAFF_POST_IDS,
+  version: STAFF_VERSION,
+  maxLevel: STAFF_MAX,
+  matchesPerSeason: STAFF_MATCHES_PER_SEASON,
+  poachWeeks: POACH_WEEKS,
+  first: STAFF_FIRST,
+  last: STAFF_LAST,
+  wageBase: 3,
+  wagePerLevel: 2.1,
+  feeBase: 0.2,
+  feePerLevel: 0.28,
+  severanceTicks: 26,
+  wagePerPurse: 1000,
+  severanceMin: 0.05,
+  matchRaise: 1.25,
+  poachFromLevel: 6,
+  poachPerLevel: 0.004,
+  growChance: 0.32,
+  growChanceRoomy: 0.5,
+  outsideFrom: OUTSIDE_FROM,
+  promotedFrom: 'On the academy staff already',
+};
+
+/**
+ * What the shared desk reads off a career: the club and the era are the hash,
+ * the stature ladder is where its men come from, and the club's own academy
+ * coaching level (1 to 20) decides how good the man you can promote is.
+ */
+function ctxOf(state: CareerState): GmStaffCtx<StaffPostId> {
+  return {
+    owner: state.clubName,
+    world: state.eraId ?? 'now',
+    season: state.season ?? 1,
+    week: state.week,
+    money: eraMoney(state),
+    anchor: post => staffStartLevel(careerDef(state), state.clubName, post),
+    inHouse: clamp(Math.round((state.academy?.coaching ?? 8) / 4), 1, 5),
+    rivals: () => careerLeagueOf(state).clubs.filter(c => c !== state.clubName),
+  };
 }
 
 /** What he earns at that level, in thousands a week. */
 export function staffWage(level: number, historic: boolean): number {
-  return Math.max(1, Math.round((3 + 2.1 * clamp(level, 1, STAFF_MAX)) * (historic ? ERA_MONEY : 1)));
-}
-
-/** A man built from a key, at a level you hand it. Pure. */
-function makePerson(key: string, level: number, season: number, historic: boolean, academy: boolean, taken: Set<string>): StaffPerson {
-  const lv = clamp(Math.round(level), 1, STAFF_MAX);
-  const head = academy ? hi(`ph|${key}`, 3, 6) : hi(`ph|${key}`, 0, 3);
-  return {
-    id: `st-${sHash32(key).toString(36)}`,
-    name: freeStaffName(key, taken),
-    level: lv,
-    potential: clamp(lv + head, lv, STAFF_MAX),
-    wage: staffWage(lv, historic),
-    since: season,
-    academy,
-  };
+  return gmStaffWage(CM_STAFF_RULES, level, historic ? ERA_MONEY : 1);
 }
 
 /**
@@ -251,64 +240,21 @@ export function staffStartLevel(def: Pick<ClubDef, 'tier' | 'budget'>, clubName:
   const tierBase = [8, 6, 4, 1][def.tier - 1] ?? 1;
   const tierNorm = [150, 85, 45, 15][def.tier - 1] ?? 15;
   const valueAdj = def.budget >= tierNorm ? 1 : def.budget <= 8 ? -1 : 0;
-  return clamp(tierBase + valueAdj + hi(`start|${clubName}|${post}`, -1, 1), 1, STAFF_MAX);
+  return clamp(tierBase + valueAdj + gmHashInt(`start|${clubName}|${post}`, -1, 1), 1, STAFF_MAX);
 }
 
 function defaultStaff(state: CareerState): ClubStaff {
-  const def = careerDef(state);
-  const historic = !!state.eraId && isHistoricEra(state.eraId);
-  const season = state.season ?? 1;
-  const taken = new Set<string>();
-  const person = (post: StaffPostId): StaffPerson =>
-    makePerson(`day1|${state.clubName}|${state.eraId ?? 'now'}|${post}`, staffStartLevel(def, state.clubName, post), season, historic, false, taken);
-  return {
-    v: STAFF_VERSION,
-    attack: person('attack'),
-    defence: person('defence'),
-    goalkeeping: person('goalkeeping'),
-    scout: person('scout'),
-    poach: null,
-    matchesLeft: STAFF_MATCHES_PER_SEASON,
-    hires: 0,
-    seasonSpend: 0,
-  };
+  return gmDefaultStaff(CM_STAFF_RULES, ctxOf(state));
 }
 
-function isPerson(p: unknown): p is StaffPerson {
-  if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
-  const o = p as Record<string, unknown>;
-  const lvl = (n: unknown): boolean => typeof n === 'number' && Number.isInteger(n) && n >= 1 && n <= STAFF_MAX;
-  return typeof o.id === 'string' && o.id.length > 0
-    && typeof o.name === 'string' && o.name.length > 0
-    && lvl(o.level) && lvl(o.potential) && (o.potential as number) >= (o.level as number)
-    && typeof o.wage === 'number' && Number.isFinite(o.wage) && o.wage >= 0
-    && typeof o.since === 'number' && Number.isFinite(o.since)
-    && typeof o.academy === 'boolean';
-}
-
-function isPoach(p: unknown): p is StaffPoach {
-  if (p === null) return true;
-  if (!p || typeof p !== 'object' || Array.isArray(p)) return false;
-  const o = p as Record<string, unknown>;
-  return STAFF_POST_IDS.includes(o.postId as StaffPostId)
-    && typeof o.club === 'string' && o.club.length > 0
-    && typeof o.weeksLeft === 'number' && Number.isInteger(o.weeksLeft) && o.weeksLeft >= 0;
-}
-
-/** True when the block on the save is exactly the shape this round writes. */
+/**
+ * True when the block on the save is exactly the shape this round writes:
+ * the version, a man or null in each of the four posts (whole levels 1 to
+ * 10, potential never under level, a wage that is a number), an approach
+ * only for a post somebody holds, and the three counters inside their range.
+ */
 export function isValidStaff(s: unknown): s is ClubStaff {
-  if (!s || typeof s !== 'object' || Array.isArray(s)) return false;
-  const o = s as Record<string, unknown>;
-  if (o.v !== STAFF_VERSION) return false;
-  if (!STAFF_POST_IDS.every(id => o[id] === null || isPerson(o[id]))) return false;
-  if (!isPoach(o.poach)) return false;
-  /* An approach for a post nobody holds is a block that contradicts itself. */
-  const poach = o.poach as StaffPoach | null;
-  if (poach && !isPerson(o[poach.postId])) return false;
-  const n = (v: unknown, lo: number, high: number): boolean =>
-    typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= high;
-  return n(o.matchesLeft, 0, STAFF_MATCHES_PER_SEASON) && n(o.hires, 0, 9999)
-    && typeof o.seasonSpend === 'number' && Number.isFinite(o.seasonSpend) && o.seasonSpend >= 0;
+  return gmIsValidStaff(CM_STAFF_RULES, s);
 }
 
 /** The staff block, repaired in place when missing or mangled. Fails closed on shape. */
@@ -372,8 +318,7 @@ export function scoutQualityBonus(state: CareerState): number {
 
 /** Every coach and the lead scout, in thousands a week. Read by staffWagesWeekly. */
 export function staffPayrollWeekly(state: CareerState): number {
-  const s = staffOf(state);
-  return STAFF_POST_IDS.reduce((n, id) => n + (s[id]?.wage ?? 0), 0);
+  return gmStaffPayroll(CM_STAFF_RULES, staffOf(state));
 }
 
 /* ---------- the shortlist ---------- */
@@ -386,14 +331,6 @@ export interface StaffCandidate {
   from: string;
 }
 
-const OUTSIDE_FROM = [
-  'Out of work since the summer',
-  'Number two at a club in the division below',
-  'Ten years in an academy, wants the first team',
-  'Coached abroad, back for a job at home',
-  'Runs his own coaching business, would take this',
-];
-
 /**
  * Who is available for an empty post. Three men from outside plus one
  * promotion from the academy staff, and that last one is where the club's
@@ -405,47 +342,16 @@ const OUTSIDE_FROM = [
  * it and a fresh vacancy draws a fresh three.
  */
 export function staffShortlist(state: CareerState, post: StaffPostId): StaffCandidate[] {
-  const st = staffOf(state);
-  const def = careerDef(state);
-  const historic = !!state.eraId && isHistoricEra(state.eraId);
-  const season = state.season ?? 1;
-  const seed = `cand|${state.clubName}|${state.eraId ?? 'now'}|${post}|${season}|${st.hires}`;
   /* A bigger club attracts a better name, the same stature ladder the day
-     one men come off, and the three are spread around it. */
-  const anchor = staffStartLevel(def, state.clubName, post);
-  /* Nobody on the list shares a name with anybody else on it, or with the
-     three men already on the desk. */
-  const taken = new Set<string>();
-  for (const id of STAFF_POST_IDS) {
-    const held = st[id]?.name;
-    if (held) for (const part of held.split(' ')) taken.add(part);
-  }
-  const out: StaffCandidate[] = [];
-  for (let i = 0; i < 3; i++) {
-    const key = `${seed}|${i}`;
-    const level = clamp(anchor + hi(`sp|${key}`, -2, 2), 1, STAFF_MAX);
-    const person = makePerson(key, level, season, historic, false, taken);
-    out.push({
-      person,
-      fee: round1(Math.max(0.2, 0.2 + 0.28 * level * (historic ? ERA_MONEY : 1))),
-      from: OUTSIDE_FROM[sHash32(`fr|${key}`) % OUTSIDE_FROM.length],
-    });
-  }
-  const coaching = state.academy?.coaching ?? 8;
-  const promoteKey = `${seed}|academy`;
-  out.push({
-    person: makePerson(promoteKey, clamp(Math.round(coaching / 4), 1, 5), season, historic, true, taken),
-    fee: 0,
-    from: 'On the academy staff already',
-  });
-  return out;
+     one men come off, and the three are spread around it. Nobody on the
+     list shares a name with anybody else on it, or with the three men
+     already on the desk. */
+  return gmStaffShortlist(CM_STAFF_RULES, staffOf(state), ctxOf(state), post);
 }
 
 /** What sacking the man in a post costs, in millions: half a season of his wage. */
 export function severanceFor(state: CareerState, post: StaffPostId): number | null {
-  const person = staffIn(state, post);
-  if (!person) return null;
-  return round2(Math.max(0.05, (person.wage * 26) / 1000));
+  return gmSeverance(CM_STAFF_RULES, staffIn(state, post));
 }
 
 /* ---------- the desk ---------- */
@@ -464,19 +370,11 @@ function headline(state: CareerState, line: string): string[] {
  * state it was handed.
  */
 export function hireStaff(career: CareerState, post: StaffPostId, candidateId: string): CareerState | null {
-  const current = staffOf(career);
-  if (current[post]) return null;
-  const cand = staffShortlist(career, post).find(c => c.person.id === candidateId);
-  if (!cand) return null;
-  if (career.budget < cand.fee) return null;
-  const next: ClubStaff = {
-    ...current,
-    [post]: { ...cand.person },
-    hires: current.hires + 1,
-    seasonSpend: round2(current.seasonSpend + cand.fee),
-  };
-  const state = withStaff(career, next);
-  state.budget = round2(career.budget - cand.fee);
+  const done = gmHireStaff(CM_STAFF_RULES, staffOf(career), ctxOf(career), post, candidateId, career.budget);
+  if (!done) return null;
+  const { cand } = done;
+  const state = withStaff(career, done.next);
+  state.budget = done.purse;
   state.aiHeadlines = headline(career, cand.fee > 0
     ? `${STAFF_POST_INFO[post].emoji} ${career.clubName} have appointed ${cand.person.name} as ${STAFF_POST_INFO[post].label.toLowerCase()}, ${money(cand.fee)} to bring him in.`
     : `${STAFF_POST_INFO[post].emoji} ${cand.person.name} steps up from the ${career.clubName} academy staff to ${STAFF_POST_INFO[post].label.toLowerCase()}.`);
@@ -485,21 +383,12 @@ export function hireStaff(career: CareerState, post: StaffPostId, candidateId: s
 
 /** Pay him off. Refuses on an empty post or a kitty that cannot cover it. */
 export function sackStaff(career: CareerState, post: StaffPostId): CareerState | null {
-  const current = staffOf(career);
-  const person = current[post];
-  if (!person) return null;
-  const pay = severanceFor(career, post);
-  if (pay === null || career.budget < pay) return null;
-  const next: ClubStaff = {
-    ...current,
-    [post]: null,
-    /* His approach goes with him, and a fresh vacancy draws a fresh three. */
-    poach: current.poach?.postId === post ? null : current.poach,
-    hires: current.hires + 1,
-    seasonSpend: round2(current.seasonSpend + pay),
-  };
-  const state = withStaff(career, next);
-  state.budget = round2(career.budget - pay);
+  /* His approach goes with him, and a fresh vacancy draws a fresh three. */
+  const done = gmSackStaff(CM_STAFF_RULES, staffOf(career), post, career.budget);
+  if (!done) return null;
+  const { person, pay } = done;
+  const state = withStaff(career, done.next);
+  state.budget = done.purse;
   state.aiHeadlines = headline(career, `${STAFF_POST_INFO[post].emoji} ${career.clubName} have paid off ${person.name}, ${money(pay)} to end it. The ${STAFF_POST_INFO[post].label.toLowerCase()} job is open.`);
   return state;
 }
@@ -510,32 +399,20 @@ export function sackStaff(career: CareerState, post: StaffPostId): CareerState |
  * Refuses when there is no approach on the desk or you have none left.
  */
 export function matchStaffOffer(career: CareerState): CareerState | null {
-  const current = staffOf(career);
-  const poach = current.poach;
-  if (!poach || current.matchesLeft <= 0) return null;
-  const person = current[poach.postId];
-  if (!person) return null;
-  const raised: StaffPerson = { ...person, wage: Math.max(person.wage + 1, Math.round(person.wage * 1.25)) };
-  const next: ClubStaff = {
-    ...current,
-    [poach.postId]: raised,
-    poach: null,
-    matchesLeft: current.matchesLeft - 1,
-  };
-  const state = withStaff(career, next);
+  const done = gmMatchStaffOffer(CM_STAFF_RULES, staffOf(career));
+  if (!done) return null;
+  const { person, raised, poach } = done;
+  const state = withStaff(career, done.next);
   state.aiHeadlines = headline(career, `${STAFF_POST_INFO[poach.postId].emoji} ${person.name} has turned ${poach.club} down and signed on again at ${career.clubName}, now on ${raised.wage}k a week.`);
   return state;
 }
 
 /** Let him go. The post opens and the shortlist is waiting. */
 export function releaseToPoacher(career: CareerState): CareerState | null {
-  const current = staffOf(career);
-  const poach = current.poach;
-  if (!poach) return null;
-  const person = current[poach.postId];
-  if (!person) return null;
-  const next: ClubStaff = { ...current, [poach.postId]: null, poach: null, hires: current.hires + 1 };
-  const state = withStaff(career, next);
+  const done = gmReleaseToPoacher(staffOf(career));
+  if (!done) return null;
+  const { person, poach } = done;
+  const state = withStaff(career, done.next);
   state.aiHeadlines = headline(career, `${STAFF_POST_INFO[poach.postId].emoji} ${person.name} has left ${career.clubName} for ${poach.club}. The ${STAFF_POST_INFO[poach.postId].label.toLowerCase()} job is open.`);
   return state;
 }
@@ -543,58 +420,24 @@ export function releaseToPoacher(career: CareerState): CareerState | null {
 /* ---------- the week ---------- */
 
 /**
- * The chance a rival comes in for the man in a post, in a given week. Good
- * staff get noticed and poor staff never do: nothing at all under level 6,
- * then 0.4 percent a week at 6 rising to 2 percent at 10. Measured over the
- * playable clubs in scripts/simClubManagerStaff.mjs section 5, which prints
- * the approaches a season rather than trusting this arithmetic.
- * Deterministic from the club, the season, the week and the post.
- */
-function poachChance(level: number): number {
-  return level < 6 ? 0 : 0.004 * (level - 5);
-}
-
-/**
  * Every calendar week: an approach on the desk runs down and he walks when
- * it expires, otherwise a rival may come in for somebody. Called from
- * tickWeek on the engine's private copy, so it may write into the block it
- * is handed.
+ * it expires, otherwise a rival may come in for somebody. Good staff get
+ * noticed and poor staff never do (the chance is in CM_STAFF_RULES), and it
+ * is deterministic from the club, the season, the week and the post. Called
+ * from tickWeek on the engine's private copy, so it may write into the block
+ * it is handed. The week itself is gmTickStaff; the two headlines are ours.
  */
 export function tickStaff(state: CareerState): void {
   const s = ensureStaff(state);
-  if (s.poach) {
-    s.poach = { ...s.poach, weeksLeft: s.poach.weeksLeft - 1 };
-    if (s.poach.weeksLeft <= 0) {
-      const post = s.poach.postId;
-      const person = s[post];
-      const club = s.poach.club;
-      s.poach = null;
-      if (person) {
-        s[post] = null;
-        state.aiHeadlines = [
-          `${STAFF_POST_INFO[post].emoji} ${person.name} has gone to ${club} unanswered. ${state.clubName} need a new ${STAFF_POST_INFO[post].label.toLowerCase()}.`,
-          ...state.aiHeadlines,
-        ].slice(0, 8);
-      }
-    }
-    return;
-  }
-  const season = state.season ?? 1;
-  for (const post of STAFF_POST_IDS) {
-    const person = s[post];
-    if (!person) continue;
-    const key = `poach|${state.clubName}|${state.eraId ?? 'now'}|${season}|${state.week}|${post}`;
-    if (hf(key) >= poachChance(person.level)) continue;
-    const rivals = careerLeagueOf(state).clubs.filter(c => c !== state.clubName);
-    if (!rivals.length) continue;
-    const club = rivals[sHash32(`rv|${key}`) % rivals.length];
-    s.poach = { postId: post, club, weeksLeft: POACH_WEEKS };
-    state.aiHeadlines = [
-      `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}. Match them or lose him: ${s.matchesLeft} match${s.matchesLeft === 1 ? '' : 'es'} left this season.`,
-      ...state.aiHeadlines,
-    ].slice(0, 8);
-    break;
-  }
+  const event = gmTickStaff(CM_STAFF_RULES, s, ctxOf(state));
+  if (!event) return;
+  const { post, person, club } = event;
+  state.aiHeadlines = [
+    event.kind === 'walked'
+      ? `${STAFF_POST_INFO[post].emoji} ${person.name} has gone to ${club} unanswered. ${state.clubName} need a new ${STAFF_POST_INFO[post].label.toLowerCase()}.`
+      : `${STAFF_POST_INFO[post].emoji} ${club} have come in for ${person.name}. Match them or lose him: ${s.matchesLeft} match${s.matchesLeft === 1 ? '' : 'es'} left this season.`,
+    ...state.aiHeadlines,
+  ].slice(0, 8);
 }
 
 /**
@@ -608,33 +451,10 @@ export function rolloverStaff(state: CareerState, career: CareerState, moving: b
     state.staff = undefined;
     return;
   }
-  const old = career.staff;
-  const historic = !!state.eraId && isHistoricEra(state.eraId);
-  const season = state.season ?? 1;
-  const grown = (post: StaffPostId): StaffPerson | null => {
-    const p = old[post];
-    if (!p) return null;
-    const head = p.potential - p.level;
-    if (head <= 0) return p;
-    /* A man with room gets better on the training pitch like anybody else,
-       and the more room he has the likelier it is. Hashed, so a season
-       replayed grows the same men. */
-    const chance = head >= 3 ? 0.5 : 0.32;
-    if (hf(`grow|${state.clubName}|${season}|${post}|${p.id}`) >= chance) return p;
-    const level = p.level + 1;
-    return { ...p, level, wage: Math.max(p.wage, staffWage(level, historic)) };
-  };
-  state.staff = {
-    v: STAFF_VERSION,
-    attack: grown('attack'),
-    defence: grown('defence'),
-    goalkeeping: grown('goalkeeping'),
-    scout: grown('scout'),
-    poach: null,
-    matchesLeft: STAFF_MATCHES_PER_SEASON,
-    hires: old.hires,
-    seasonSpend: 0,
-  };
+  /* A man with room gets better on the training pitch like anybody else,
+     and the more room he has the likelier it is. Hashed, so a season
+     replayed grows the same men. `state` is the new season. */
+  state.staff = gmRolloverStaff(CM_STAFF_RULES, career.staff, ctxOf(state));
 }
 
 /* ---------- the screen's words ---------- */
@@ -672,30 +492,7 @@ export function staffEffectLine(state: CareerState, post: StaffPostId): string {
  * eyes, because a hair CIRCLE big enough to look like hair covered the face.
  */
 export function staffPortraitSvg(person: Pick<StaffPerson, 'id'>, size = 44): string {
-  const h = sHash32(`art|${person.id}`);
-  const skins = ['#f2d3b6', '#e0b48c', '#c68a5f', '#9a6440', '#7c5138'];
-  const hairs = ['#241c17', '#4a3524', '#7a5330', '#b0863f', '#8e8e8e', '#d9d3c7'];
-  const shirts = ['#2c5591', '#3a8a5e', '#8f3d50', '#5e518d', '#3c7688', '#7a6238'];
-  const skin = skins[h % skins.length];
-  const hair = hairs[(h >> 3) % hairs.length];
-  const shirt = shirts[(h >> 7) % shirts.length];
-  const hairStyle = (h >> 11) % 3;
-  const beard = ((h >> 14) % 3) === 0;
-  const glasses = ((h >> 17) % 4) === 0;
-  const parts = [
-    `<rect x="0" y="0" width="64" height="64" rx="10" fill="#232a36"/>`,
-    `<circle cx="32" cy="56" r="20" fill="${shirt}"/>`,
-    `<rect x="27" y="38" width="10" height="8" fill="${skin}"/>`,
-    `<circle cx="32" cy="27" r="14" fill="${skin}"/>`,
-  ];
-  /* The crown, an arc over the top of the head that never reaches the eyes. */
-  if (hairStyle === 0) parts.push(`<path d="M18.6 23A14 14 0 0 1 45.4 23Z" fill="${hair}"/>`);
-  else if (hairStyle === 1) parts.push(`<path d="M19.9 20A14 14 0 0 1 44.1 20Z" fill="${hair}"/>`);
-  else parts.push(`<path d="M18.6 23A14 14 0 0 1 45.4 23Z" fill="${hair}"/><rect x="18.4" y="23" width="3.2" height="8" fill="${hair}"/><rect x="42.4" y="23" width="3.2" height="8" fill="${hair}"/>`);
-  if (beard) parts.push(`<rect x="23" y="31" width="18" height="9" rx="4.5" fill="${hair}" opacity="0.9"/>`);
-  parts.push(`<circle cx="27" cy="27" r="1.7" fill="#1b1b1b"/><circle cx="37" cy="27" r="1.7" fill="#1b1b1b"/>`);
-  if (glasses) parts.push(`<rect x="22.5" y="23.5" width="19" height="7" rx="3.5" fill="none" stroke="#1b1b1b" stroke-width="1.4" opacity="0.85"/>`);
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 64 64" role="img" aria-label="staff portrait">${parts.join('')}</svg>`;
+  return gmStaffPortraitSvg(person, size);
 }
 
 /** What the era's money does to a wage, for the screen's own line. */
