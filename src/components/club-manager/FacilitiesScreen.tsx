@@ -7,16 +7,17 @@ import {
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 
 /**
- * Round 963: the training ground's line, plus the men it cannot reach.
- * Growth is capped at the fastest anyone grows, so the card says how many
- * are already there rather than promising all of them the full percentage.
+ * Round 963: the training ground's line, plus the men its lift would be cut
+ * short for. Growth is capped at the fastest anyone grows, so the card says
+ * how many would be there as regulars rather than promising all of them the
+ * full percentage. Only this card: the other three do not touch growth.
  */
 function effectLine(state: CareerState, id: FacilityId): string {
   const line = facilityEffectLine(state, id);
   if (id !== 'trainingGround' || facilityLevel(state, id) <= 1) return line;
   const n = growingAtCeiling(state, () => true).length;
   if (n === 0) return line;
-  return `${line} ${n === 1 ? 'One player is' : `${n} players are`} already growing as fast as anyone can, so it cannot add more for ${n === 1 ? 'him' : 'them'}.`;
+  return `${line} ${n === 1 ? 'As a regular, one player would' : `As regulars, ${n} players would`} be growing as fast as anyone can, so ${n === 1 ? 'he' : 'they'} would get less of the lift.`;
 }
 
 /* ─── Round 467: the facilities desk. ───

@@ -47,26 +47,26 @@ function run(kind = '') {
   assert.ok(!result.error, `${String(result.error)}\n${result.stderr || ''}`);
   assert.ok(fs.existsSync(report), 'The actual component suite must produce a JSON report.');
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
-  assert.equal(json.numTotalTests, 11, `Every actual component case must run. ${result.stdout || ''}\n${result.stderr || ''}`);
+  assert.equal(json.numTotalTests, 12, `Every actual component case must run. ${result.stdout || ''}\n${result.stderr || ''}`);
   assert.equal(json.numPendingTests, 0, 'No focused case may be skipped.');
   assert.equal(Number(json.numUnhandledErrors ?? 0), 0, 'No unhandled error may coexist with the asserted outcomes.');
   const failed = json.testResults.flatMap(file => file.assertionResults).filter(row => row.status === 'failed');
   if (!kind) {
     assert.equal(result.status, 0, failed.map(row => `${row.fullName}: ${row.failureMessages[0]}`).join('\n'));
-    assert.equal(json.numPassedTests, 11);
+    assert.equal(json.numPassedTests, 12);
     assert.equal(failed.length, 0);
-    console.log('Facilities preview: 11/11 actual-screen cases passed with the real career and upgrade engine.');
+    console.log('Facilities preview: 12/12 actual-screen cases passed with the real career and upgrade engine.');
     console.log('Facilities preview: four exact effect/level/budget quotes matched four actual committed upgrades.');
     console.log('Facilities preview: exact-budget purchases, insufficient funds, maximum levels and supported legacy defaults passed.');
     console.log('Facilities preview: rendering stayed read-only; no-op callbacks and native-button key routing/focus stayed intact.');
   } else {
     assert.notEqual(result.status, 0, 'The asserted control must reject the changed quote.');
     assert.deepEqual(failed.map(row => row.fullName).sort(), [...quoteTargets].sort(), 'Only the seven intended quote assertions may fail.');
-    assert.equal(json.numPassedTests, 4);
+    assert.equal(json.numPassedTests, 5);
     assert.ok(failed.every(row => row.failureMessages.some(message => /toHaveTextContent/.test(message))), 'Each targeted failure must be a real rendered quote assertion.');
     console.log(`Facilities preview control ${kind}: a unique actual quote anchor changed in an isolated component copy.`);
-    console.log(`Facilities preview control ${kind}: seven intended rendered quote assertions failed; four independent blockers/callback/focus baselines passed.`);
-    console.log(`Facilities preview control ${kind}: all11 cases ran with zero pending tests and unhandled errors.`);
+    console.log(`Facilities preview control ${kind}: seven intended rendered quote assertions failed; five independent blockers/callback/focus/growth ceiling baselines passed.`);
+    console.log(`Facilities preview control ${kind}: all 12 cases ran with zero pending tests and unhandled errors.`);
     for (const row of failed) console.log(`Facilities preview control ${kind}: rejected ${row.fullName}.`);
   }
   fs.rmSync(report, { force: true });

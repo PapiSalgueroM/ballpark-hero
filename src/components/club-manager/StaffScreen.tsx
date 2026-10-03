@@ -25,10 +25,12 @@ interface StaffScreenProps {
 }
 
 /**
- * Round 963: the effect line, plus the men his lift cannot reach. Growth is
- * capped at the fastest anyone grows, so a kid already there gets nothing
- * from a better coach, and the card says how many of his are there rather
- * than promising every one of them the full percentage.
+ * Round 963: the effect line, plus the men his lift would be cut short for.
+ * Growth is capped at the fastest anyone grows, so a kid at or near it gets
+ * less from a better coach, and the card says how many of his would be there
+ * as regulars rather than promising every one of them the full percentage.
+ * His men: his own unit, and the middle of the park for the two outfield
+ * coaches, exactly the players coachGrowthMult gives his lift to.
  */
 function effectLine(state: CareerState, post: StaffPostId): string {
   const line = staffEffectLine(state, post);
@@ -38,7 +40,7 @@ function effectLine(state: CareerState, post: StaffPostId): string {
     return owner === post || (owner === null && post !== 'goalkeeping');
   }).length;
   if (n === 0) return line;
-  return `${line} ${n === 1 ? 'One of his players is' : `${n} of his players are`} already growing as fast as anyone can, so he cannot add more there.`;
+  return `${line} ${n === 1 ? 'As a regular, one of his players would' : `As regulars, ${n} of his players would`} be growing as fast as anyone can, so ${n === 1 ? 'he' : 'they'} would get less of the lift.`;
 }
 
 /** Portrait art: flat shapes from his id, never a photograph and never a real face. */
