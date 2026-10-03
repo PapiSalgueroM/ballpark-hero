@@ -25,6 +25,16 @@
     {"family": "A", "url": "https://www.legaseriea.it/team/napoli/squad", "publisher": "Lega Serie A (Napoli squad, current: carries Noa Lang and Kevin De Bruyne)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/114/napoli", "publisher": "ESPN (Napoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 33"}
    ]
+  },
+  {
+   "name": "Paulo Dybala",
+   "club": "Roma",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Roma's number 21, aged 32 on ESPN, with five appearances already this season. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/roma/squad", "publisher": "Lega Serie A (Roma squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/104/as-roma", "publisher": "ESPN (AS Roma squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 32, 5 appearances"}
+   ]
   }
  ],
  "movedTo": [
@@ -96,6 +106,62 @@
     {"family": "B", "url": "https://www.fotmob.com/en-GB/players/982633/jordan-zemura", "publisher": "FotMob", "readOn": "2026-10-03", "says": "Watford, on loan from Udinese August 2026 to June 2027, born 1999-11-14, played 2026-09-12"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/283171/jordan-zemura", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Watford, born 1999-11-14, Championship matches from 2026-08-29 to 2026-09-12"}
    ]
+  },
+  {
+   "name": "Stefan de Vrij",
+   "from": "Inter Milan",
+   "to": "Panathinaikos",
+   "realClub": "Panathinaikos",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-02-05. Gone from Inter's current squad; Panathinaikos's number 6, with Greek Super League matches from 2026-08-31 to 2026-09-20.",
+   "sources": [
+    {"family": "A", "url": "https://www.pao.gr/en/team/squad/", "publisher": "Panathinaikos FC (squad page)", "readOn": "2026-10-03", "says": "6, Stefan de Vrij, defender; the club home page gives his birth date 05/02/1992"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/inter/squad", "publisher": "Lega Serie A (Inter squad, current: carries John Stones and Curtis Jones)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/141443/stefan-de-vrij", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Panathinaikos number 6, born 1992-02-05, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/110/internazionale", "publisher": "ESPN (Internazionale squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Loum Tchaouna",
+   "from": "Lazio",
+   "to": "Coventry City",
+   "realClub": "Coventry City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-09-08. Gone from Lazio's current squad; Coventry City's number 17 in the Premier League, a permanent player there (loan flag 0), with league matches from 2026-08-21 to 2026-09-19.",
+   "sources": [
+    {"family": "A", "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad", "publisher": "Premier League data feed (premierleague.com), Coventry City squad, season 2026", "readOn": "2026-10-03", "says": "shirt 17, forward, born 2003-09-08, loan 0"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/324541/loum-tchaouna", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Coventry City number 17, born 2003-09-08, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Albert Gudmundsson",
+   "from": "Fiorentina",
+   "to": "Lazio",
+   "realClub": "Lazio",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Lazio's number 80 on the league page. Not in Fiorentina's current squad on the club, league or ESPN pages; in Lazio's on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 80"},
+    {"family": "A", "url": "https://www.acffiorentina.com/fiorentina-prima-squadra-maschile", "publisher": "ACF Fiorentina (men's first team, current: carries Franco Mastantuono and Radu Dragusin)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "listed among the forwards"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina", "publisher": "ESPN (Fiorentina squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Christian Kouamé",
+   "from": "Fiorentina",
+   "to": "Aris",
+   "realClub": "Aris",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-12-06. Left Fiorentina for Aris on 2026-02-06, contract to June 2027; Aris's number 8, with Greek Super League matches from 2026-08-30 to 2026-09-19.",
+   "sources": [
+    {"family": "A", "url": "https://www.arisfc.com.gr/el/team/players.html", "publisher": "Aris FC (players page)", "readOn": "2026-10-03", "says": "8, Kouame, forward"},
+    {"family": "A", "url": "https://www.acffiorentina.com/fiorentina-prima-squadra-maschile", "publisher": "ACF Fiorentina (men's first team, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/kouame-cristian/6ZevPMzQ/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Fiorentina to Aris 2026-02-06, born 1997-12-06, contract to 2027-06-30, current club Aris"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/241415/christian-kouame", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Aris number 8, born 1997-12-06, played 2026-09-19"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -113,10 +179,44 @@
     {"family": "B", "url": "https://us.soccerway.com/player/pizarro-damian/O8lwaueL/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Audax Italiano 2026-07-29, back to Udinese 2027-06-30, born 2005-03-28"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
+  },
+  {
+   "name": "Joaquín Correa",
+   "from": "Inter Milan",
+   "realClub": "Estudiantes de La Plata",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-08-13. Gone from Inter's current squad; Estudiantes's number 32, with Liga Profesional and Libertadores matches from 2026-08-31 to 2026-09-16. Argentina is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://estudiantesdelaplata.com/futbol/futbol-profesional/", "publisher": "Estudiantes de La Plata (professional squad)", "readOn": "2026-10-03", "says": "32, Joaquin Correa"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/inter/squad", "publisher": "Lega Serie A (Inter squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/195638/joaquin-correa", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estudiantes de La Plata number 32, born 1994-08-13, played 2026-09-16"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/110/internazionale", "publisher": "ESPN (Internazionale squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
   }
  ],
  "notCurrent": [
+  {
+   "name": "Gaetano Castrovilli",
+   "from": "Lazio",
+   "why": "Not at Lazio: he left them on a free to Bari on 2025-08-21 and joined Cesena on 2026-02-02. He is not in Cesena's 2026/2027 squad, and Soccerway shows no current club. Unattached is INFERRED, medium confidence: ESPN still names Cesena but shows no match for him after 2026-05-08. Off Lazio is certain, and neither Cesena (Serie B) nor a free agent is modelled, so the in-game effect, removal, is the same either way. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-02-17.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.cesenafc.com/teams/prima-squadra/team", "publisher": "Cesena FC (first team squad 2026/2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/castrovilli-gaetano/ALBpOZPH/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lazio to Bari free 2025-08-21, Bari to Cesena 2026-02-02, born 1997-02-17, no current club in the header"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/210230/gaetano-castrovilli", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Cesena number 8, born 1997-02-17, last match listed 2026-05-08"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  }
  ],
  "pending": [
+  {
+   "name": "Riccardo Sottil",
+   "club": "Fiorentina",
+   "reason": "The two families disagree. Family A leaves him out: Fiorentina's own first team page and the Lega Serie A Fiorentina squad do not list him, and neither does ESPN's 2026-27 squad page. Family B keeps him at Fiorentina: Soccerway says his loan at Lecce ended on 2026-06-30, he is back at Fiorentina under contract to June 2027 and out with a back injury, and ESPN's player page also names Fiorentina (no match since 2026-02-28, for Lecce). The likeliest reading is an injured player left off the registered list, which keeps him a Fiorentina player, but no source says so in words, so he stays pending at Fiorentina, the club both player pages name.",
+   "tried": "legaseriea.it Fiorentina squad, acffiorentina.com first team page, ESPN Fiorentina squad page and player page 262480, Soccerway transfers page rkQyXmLB, all read 2026-10-03. Born 1999-06-03 on both player pages.",
+   "adjudicatedOn": "2026-10-03"
+  }
  ]
 }
