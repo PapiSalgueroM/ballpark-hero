@@ -2,7 +2,57 @@
  * Round 941 harness: the GM seat (src/lib/gmSeat.ts), the ask from upstairs
  * and the job market after the sack, for every manager seat.
  *
- * HEADER_PLACEHOLDER
+ * THE MODEL. Per pack, one league of that game's size (a 12 gym circuit for
+ * the gym) plays season after season with drifting strength. A GM takes a
+ * random seat, gets the real seat mandate (seatMandate over buildOwnerMandate),
+ * the real grade and the real trust (gradeSeason, applyMandateResult). A
+ * stint ends when trust hits zero (fired), after a title three times in ten
+ * (walked), when a college buyout is taken, or when the contract runs out.
+ * Then the real feed (seatOffers over generateJobOffers): he takes the best
+ * offer through takeSeat and carries on in the same league, or sits a year
+ * out, up to three feeds, and a career stops at 25 seasons. 20,000 tenures
+ * (stints) per pack per seed, about 150,000 league seasons.
+ *
+ * THE CHECKS.
+ *  1. Seat words: every rank, champion flag and press tilt keeps
+ *     buildOwnerMandate's tier, win floor and postseason level; no raw
+ *     placeholder or dash; no program, club or gym ask mentions ownership
+ *     or a franchise. Control `words`.
+ *  2. Fired straight after a 'badly' season: no top tier offer in any feed,
+ *     over 2,500 to 15,500 such feeds per pack. Control `badlyceiling` (the
+ *     engine's own ceiling hides most of it, so section 3 carries it).
+ *  3. The same rule walked up a ladder of 0 to 6 titles, every step: the
+ *     standing rises each step and no top tier offer appears, in a six club
+ *     league where the top tier is one club away. Without the rule the engine
+ *     offers him that club from 5 titles. Control `badlyceiling`.
+ *  4. A title winner who walks: always an offer at his level or above, from
+ *     every tier he can leave. Control `walkguarantee`.
+ *  5. The club you just left never appears in the feed. Control `firedclub`.
+ *  6. The share of sacked GMs whose first feed is empty, per pack, inside a
+ *     band set from measurement. Control `departure` (read every firing as a
+ *     resignation) drops it to 20 to 36 percent, under every floor.
+ *  7. Sacked after a title against sacked after two bad years with no title:
+ *     the mean best offer (tier 1 = 4 points, tier 4 = 1, empty = 0) is
+ *     higher by a floor per pack, and the two-bad-years group draws a top
+ *     half offer at most 3 percent of the time. Control `tierceiling`
+ *     (managerOffers' own tier filter removed, in the bundle only, never on
+ *     disk) lifts that share to 17 to 23 percent.
+ *  8. takeSeat moves the seat (team, trust, mandate) and keeps the league
+ *     object, its season, its champions and its teams. Control `takeseat`.
+ *  9. Only the two college packs ever draw a buyout bid, always one tier up,
+ *     always straight after a title or a season over the ask. The expected
+ *     college list is this file's own, not the flag. Control `poachflag`.
+ *
+ * MEASURED, 20,000 tenures, seeds 1 to 5 (2026-10-02):
+ *   empty feed %  nfl 54.1-55.1  nba 50.4-52.5  nhl 52.6-53.3  mlb 52.9-54.3
+ *                 cfb 55.7-57.5  cbb 42.7-44.7  afl 46.2-51.0  gym 44.0-45.2
+ *   best offer margin  nfl .31-.35  nba .37-.39  nhl .34-.37  mlb .33-.37
+ *                      cfb .25-.28  cbb .54-.57  afl 1.07-1.17  gym .54-.58
+ *   two-bad-years top half share: 0.0 everywhere but afl (0.1-0.2) and the
+ *   gym (0.0-0.1). Bands sit at least four standard errors outside the measured
+ *   spread; margin floors at about two thirds of the lowest seed.
+ *   Under `departure` (seed 1) the empty shares were nfl 31.5 nba 28.0
+ *   nhl 29.9 mlb 31.6 cfb 35.4 cbb 20.1 afl 36.1 gym 25.4.
  *
  * Run: node scripts/simGmSeat.mjs
  * Seeds: SIM_GMSEAT_SEEDS=1,2,3 (the default). Measure only: SIM_GMSEAT_MEASURE=1.
@@ -279,10 +329,10 @@ if (MEASURE) process.exit(0);
 
 /* The bands below were measured; see the header for the runs behind them. */
 const EMPTY_BAND = {
-  nfl: [0, 100], nba: [0, 100], nhl: [0, 100], mlb: [0, 100], cfb: [0, 100], cbb: [0, 100], afl: [0, 100], fight: [0, 100],
+  nfl: [50, 59], nba: [46, 57], nhl: [48, 58], mlb: [48, 59], cfb: [51, 62], cbb: [38, 49], afl: [40, 57], fight: [39, 50],
 };
-const MARGIN_MIN = { nfl: 0, nba: 0, nhl: 0, mlb: 0, cfb: 0, cbb: 0, afl: 0, fight: 0 };
-const BAD_TOP2_MAX = 100;
+const MARGIN_MIN = { nfl: 0.2, nba: 0.24, nhl: 0.22, mlb: 0.22, cfb: 0.15, cbb: 0.35, afl: 0.7, fight: 0.35 };
+const BAD_TOP2_MAX = 3;
 const COLLEGE = ['cfb', 'cbb'];
 const NON_FRANCHISE = ['cfb', 'cbb', 'afl', 'fight'];
 const all = id => results[id];
@@ -320,9 +370,11 @@ console.log("3. the title ladder: three seasons over the ask, 0 to 6 titles, the
 {
   /* Section 2 rarely meets the man this rule exists for, because the engine's
      own ceiling already shuts most of the badly-fired out of the top tier.
-     This walks the decorated ones step by step: at 5 and 6 titles the engine
-     alone would hand him a top tier job (the badlyceiling control shows it). */
-  const teams = Array.from({ length: 32 }, (_, i) => ({ id: `L${String(i).padStart(2, '0')}`, name: `Ladder ${i}`, strength: 100 - i }));
+     This walks the decorated ones step by step, in a six club league where
+     the one other top tier club is always in reach: from 5 titles the engine
+     alone hands him that club (the badlyceiling control shows it; in a 32
+     team league it does so about once in 2,800 offers, too rare to test). */
+  const teams = Array.from({ length: 6 }, (_, i) => ({ id: `L${String(i).padStart(2, '0')}`, name: `Ladder ${i}`, strength: 100 - i }));
   const tiers = S.leagueTiers(teams);
   let prev = -Infinity; let stepBad = 0; let topAll = 0; let offeredAll = 0;
   for (let k = 0; k <= 6; k++) {
@@ -334,7 +386,7 @@ console.log("3. the title ladder: three seasons over the ask, 0 to 6 titles, the
     prev = standing;
     let top = 0; let offered = 0;
     for (let s = 1; s <= 400; s++) {
-      const feed = S.seatOffers(S.GM_SEAT_PACKS.nfl, teams, c, 2040, seeded(s * 31 + k));
+      const feed = S.seatOffers(S.GM_SEAT_PACKS.afl, teams, c, 2040, seeded(s * 31 + k));
       offered += feed.length;
       top += feed.filter(o => o.tier === 1).length;
     }
