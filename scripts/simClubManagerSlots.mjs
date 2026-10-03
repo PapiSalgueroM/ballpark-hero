@@ -30,7 +30,11 @@
  *      where they were. Then a roomy store, and the swap goes through with
  *      all three careers still readable.
  *   4) AN OLD SAVE. A save written before slots, alone at SAVE_KEY with no
- *      index, reads as slot 1, and reading the slots writes nothing.
+ *      index, reads as slot 1, and reading the slots writes nothing. Since
+ *      the second review the save is a lived in one (four seasons and
+ *      fifteen matches of Everton, real meetings in its h2h, written by the engine's saveCareer),
+ *      it opens, and a trip through slot 2 and back returns every field but
+ *      h2h equal, with h2h the last six meetings per opponent.
  *
  * Negative controls (each rewrites a copy of the slots module, after
  * asserting the text it rewrites is there exactly once, and must turn its
@@ -42,6 +46,10 @@
  *                             Section 2.
  *   SLOTS_CONTROL=norollback  a refused incoming write leaves the park and
  *                             the index moved. Section 3.
+ *   SLOTS_CONTROL=oldversion  the tiles accept another save version, so an
+ *                             old save no longer reads as slot 1. Section 4.
+ *   SLOTS_CONTROL=leanmore    the park drops the season history too, so the
+ *                             old save comes back changed. Section 4.
  *
  * MEASURED on the healthy engine, six streams (the default and SIM_SEED 1 to
  * 5), 2026-10-02:
@@ -57,6 +65,10 @@
  *   under what the dupe control leaves (a lean copy of the smallest career),
  *   against a spread of 3,222 between streams. For scale, simClubManagerSaveSize
  *   works against a 5 MB origin quota, and three careers take under a fifth of it.
+ *   section 4 (2026-10-03, default, SIM_SEED 1, 2): the lived in save stands
+ *     at season 5, week 19 with 190 / 196 / 191 h2h rows (115,179 / 116,726 /
+ *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
+ *     is exercised on every stream, and every other field comes back equal.
  *
  * The digest renames the ids the engine builds from a module counter or the
  * clock (see digest below). Those differ between any two runs of one career,
@@ -88,7 +100,7 @@ const SAVE_KEY = 'dukb-club-manager-save';
 const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;
 
 const CONTROL = process.env.SLOTS_CONTROL || '';
-const OWN = { nopark: 1, dupe: 2, norollback: 3 };
+const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
@@ -131,6 +143,16 @@ const SLOT_SWAPS = {
     '  try { localStorage.removeItem(parkedKey(slot)); } catch { /* harmless if it stays */ }\n',
     '',
     'the drop of the incoming parked copy',
+  ],
+  oldversion: [
+    'export const READABLE_SAVE_VERSION = 3;\n',
+    'export const READABLE_SAVE_VERSION = 4;\n',
+    'the save version the tiles accept',
+  ],
+  leanmore: [
+    '  if (outgoing) return JSON.stringify(leanCareer(outgoing));\n',
+    '  if (outgoing) return JSON.stringify({ ...leanCareer(outgoing), history: [] });\n',
+    'the lean park of the career in memory',
   ],
 };
 if (CONTROL) {
@@ -443,14 +465,42 @@ console.log('4) An old save, from before slots: slot 1, and reading writes nothi
 section = 4;
 store.clear();
 clearCareer();
+/* Second review: a save that has been played in, four seasons and fifteen
+   matches of Everton with real meetings in its h2h, written by the engine's own
+   saveCareer (the branch's engine differs from main's by one export keyword,
+   so these are the bytes main writes for the same play). */
 reseed(0, 99);
-const oldBytes = JSON.stringify(startCareer('Everton'));
-store.set(SAVE_KEY, oldBytes);
+let lived = startCareer('Everton');
+for (let k = 0; k < 4; k++) { reseed(0, 99 + k); lived = playOne(lived).next; }
+reseed(0, 103);
+for (let i = 0; i < 15; i++) lived = playNextEntry(lived, { skipHalftime: true }).state;
+saveCareer(lived);
+const oldBytes = store.get(SAVE_KEY);
+const oldH2h = (lived.h2h ?? []).length;
+if (lived.season !== 5 || oldH2h === 0) fail(`the old save fixture is not lived in (season ${lived.season}, ${oldH2h} h2h rows)`, 'fixture');
 const v4 = readSlots();
-if (activeSlot() !== 1 || !v4[0].active || v4[0].summary?.clubName !== 'Everton') fail('an old save does not read as slot 1');
+if (activeSlot() !== 1 || !v4[0].active || v4[0].summary?.clubName !== 'Everton') fail('an old save does not read as slot 1', 'slot1');
 if (v4[1].summary || v4[2].summary) fail('an old save shows careers in slots 2 or 3');
 if (store.size !== 1 || store.get(SAVE_KEY) !== oldBytes) fail('reading the slots wrote to the store');
-console.log(`   old save in slot 1, ${store.size} key on the device, bytes untouched: ${store.get(SAVE_KEY) === oldBytes}`);
+console.log(`   old save (season ${lived.season}, week ${lived.week}, ${oldH2h} h2h rows, ${oldBytes.length} chars) in slot 1, ${store.size} key on the device, bytes untouched: ${store.get(SAVE_KEY) === oldBytes}`);
+/* It opens, and a trip through another slot brings it back whole: every
+   field but h2h equal, and h2h the last six meetings per opponent. */
+const oldOpened = loadCareer();
+if (!oldOpened || oldOpened.clubName !== 'Everton' || oldOpened.season !== 5) fail('loadCareer does not open the old save', 'slot1');
+else {
+  const ok1 = switchSlot(2, oldOpened);
+  saveCareer(startCareer('Lincoln City'));
+  const ok2 = switchSlot(1);
+  const back = loadCareer();
+  if (!ok1 || !ok2 || !back) fail(`the trip through slot 2 did not come back (${ok1}, ${ok2}, ${!!back})`, 'roundtrip');
+  else {
+    if (digest(back) !== digest(oldOpened)) fail(`the old save came back changed at ${firstPath(JSON.parse(digest(oldOpened)), JSON.parse(digest(back)))}`, 'roundtrip');
+    const last6 = c => { const by = {}; for (const h of c.h2h ?? []) (by[h.opp] ??= []).push(JSON.stringify(h)); return JSON.stringify(Object.keys(by).sort().map(k => [k, by[k].slice(-6)])); };
+    if (last6(back) !== last6(oldOpened)) fail('the old save came back without the last six meetings per opponent', 'roundtrip');
+    if ((back.h2h ?? []).length >= oldH2h) fail(`the fixture never reaches the lean cut (h2h ${oldH2h} -> ${(back.h2h ?? []).length})`, 'fixture');
+    console.log(`   through slot 2 and back: equal but h2h ${digest(back) === digest(oldOpened)}, h2h ${oldH2h} -> ${(back.h2h ?? []).length} rows, last six per opponent kept ${last6(back) === last6(oldOpened)}`);
+  }
+}
 
 /* ================================================================== */
 /* The verdict                                                         */
@@ -461,7 +511,7 @@ if (CONTROL) {
   const own = OWN[CONTROL];
   /* The check each control is there to prove, not a neighbour of it: the
      byte fence itself for dupe, a moved store for norollback. */
-  const needTag = { dupe: 'budget', norollback: 'moved' }[CONTROL];
+  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip' }[CONTROL];
   const firedOwn = red.includes(own) && (!needTag || tags[own]?.has(needTag));
   if (firedOwn) {
     console.log(`\nCONTROL FIRED: SLOTS_CONTROL=${CONTROL} turned section ${own} red${needTag ? ` through its ${needTag} check` : ''} (red sections: ${red.join(', ')}), as it must`);
