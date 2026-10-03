@@ -1,3 +1,14 @@
+Handoff requested and saved, 2026-10-03.
+Read docs/HANDOFF-2026-10-03.md to resume. Source checkpoints d14814c9
+(NHL human roster recovery) and 98cc4cc6 (CPU offseason waivers) are
+pushed. Exact checks and the OPEN shared36 save gate are documented.
+970 is safely preserved under docs/drafts/nhl-waiver-970 as inert text,
+with hashes, seven Board hunks and resume commands. Seven component
+tests pass; Board controls and native motion remain unrun and unbound.
+All owned workers/hosts are closed. All 12 paused drafts and seven
+stashes held. Claude retains Release Z merged-tree gate/publication.
+Next free971, verify latest ownership on resume. No live/approval claim.
+
 Codex 969 source checkpoint verified, 2026-10-03.
 NHL CPU clubs now waive surplus reserves at the owner-enabled offseason,
 protect selected contributors and keep actual fees and return blocks.
