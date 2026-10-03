@@ -52,6 +52,8 @@ export interface ElevenBlankCandidate {
   nationality: string;
   /** One-line VERIFIED flavor fact shown on reveal (never invented by the UI). */
   fact?: string;
+  /** Other full names a source prints for the same man (pfr's "Ben Watson"), accepted as a guess. */
+  aliases?: string[];
 }
 
 export interface ElevenLineup {
@@ -242,7 +244,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Laurence Maroney', slotIndex: 1, nationality: 'USA', fact: 'Started at running back for the 18-0 Patriots on the night the perfect season died.' },
-      { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.' },
+      { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.', aliases: ['Ben Watson'] },
     ],
     source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 200802030nwe #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
@@ -1422,11 +1424,12 @@ export function normalizeElevenName(name: string): string {
   return foldSpecialLatin(name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ').replace(/\./g, '').replace(/'/g, ''));
 }
 
-/** A guess is correct if it matches the blanked candidate (full name or surname). */
+/** A guess is correct if it matches the blanked candidate (full name, an alias, or surname). */
 export function isCorrectElevenGuess(guess: string, candidate: ElevenBlankCandidate): boolean {
   const g = normalizeElevenName(guess);
   const target = normalizeElevenName(candidate.name);
   if (g === target) return true;
+  if ((candidate.aliases ?? []).some((a) => normalizeElevenName(a) === g)) return true;
   const surname = target.split(' ').slice(-1)[0];
   return g === surname && surname.length >= 4;
 }

@@ -29,7 +29,8 @@
  *    that turns a true line false cannot pass without changing the record.
  * 4) Every blank can be solved fairly, on all 40 sheets: the blank points at
  *    its own slot, nobody else on the sheet shares its surname (a surname
- *    guess is accepted), and the surname the hints spell out is not a suffix.
+ *    guess is accepted), the surname the hints spell out is not a suffix,
+ *    and a blank a host prints under another full name accepts that name.
  * 5) The daily before the cutover. dailyIndex shuffles in cycles the length
  *    of the pool, so a longer pool deals a different sheet on every date.
  *    Before ELEVEN_GROWN_DAILY_FROM the deal must equal what origin/main
@@ -66,6 +67,7 @@
  *   fact      adds a reveal line to a blank the record has no evidence for (3)
  *   factnum   turns the 21-yard McCaffrey catch into a 12-yard one (3)
  *   slot      points one blank at the wrong slot (4)
+ *   noalias   takes "Ben Watson" off the Benjamin Watson blank (4)
  *   olddeal   deals the daily from the grown pool on every date (5)
  *   reorder   moves the 40th sheet to slot 18 (6)
  *   grow      appends a 41st sheet and deals the daily from 41 (6)
@@ -86,7 +88,7 @@ const RECORD = `${ROOT}/scripts/data/missingElevenVerified2026-10.json`;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simME-')).replace(/\\/g, '/');
 
 const CONTROL = process.env.SIM_ME_CONTROL || '';
-const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, fact: 3, factnum: 3, slot: 4, olddeal: 5, reorder: 6, grow: 6, lte: 6, rerun: 7 };
+const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, fact: 3, factnum: 3, slot: 4, noalias: 4, olddeal: 5, reorder: 6, grow: 6, lte: 6, rerun: 7 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
 const red = new Set();
@@ -107,6 +109,7 @@ if (CONTROL === 'legacyrow') src = mustReplace(src, "S('FB', 'Patrick DiMarco'),
 if (CONTROL === 'swap') src = mustReplace(src, "S('C', 'Jake Brendel'),", "S('C', 'Alex Mack'),", 'the SB LVIII 49ers center');
 if (CONTROL === 'fact') src = mustReplace(src, "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA' }", "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA', fact: 'Snapped every down.' }", 'the Brendel blank');
 if (CONTROL === 'factnum') src = mustReplace(src, "fact: 'Scored on a 21-yard catch,", "fact: 'Scored on a 12-yard catch,", 'the McCaffrey reveal line');
+if (CONTROL === 'noalias') src = mustReplace(src, ", aliases: ['Ben Watson'] }", ' }', 'the Ben Watson alias');
 if (CONTROL === 'slot') src = mustReplace(src, "{ name: 'Noah Gray', slotIndex: 5,", "{ name: 'Noah Gray', slotIndex: 4,", 'the Noah Gray blank');
 if (CONTROL === 'olddeal') src = mustReplace(src, 'return dateStr < ELEVEN_GROWN_DAILY_FROM ? ELEVEN_ORIGINAL_POOL : ELEVEN_GROWN_POOL;', 'return ELEVEN_GROWN_POOL;', 'the daily pool size');
 if (CONTROL === 'lte') src = mustReplace(src, 'return dateStr < ELEVEN_GROWN_DAILY_FROM ?', 'return dateStr <= ELEVEN_GROWN_DAILY_FROM ?', 'the cutover test');
@@ -269,8 +272,29 @@ console.log('4) Every blank can be solved fairly');
       const last = String(c.name).trim().split(/\s+/).pop();
       if (SUFFIX.test(last)) fail(4, `${l.id}: ${c.name} ends in a suffix, so the hints would spell "${last}"`);
       if (!String(c.nationality ?? '').trim()) fail(4, `${l.id}: ${c.name} has no nationality for the first hint`);
+      for (const a of c.aliases ?? []) {
+        if (!m.isCorrectElevenGuess(a, c)) fail(4, `${l.id}: the alias ${a} is not accepted for ${c.name}`);
+        if (fold(surnameOf(a)) !== sur) fail(4, `${l.id}: the alias ${a} does not carry ${c.name}'s surname`);
+        if (names.some((n) => n !== c.name && fold(n) === fold(a))) fail(4, `${l.id}: the alias ${a} is another man on the sheet`);
+      }
     }
   }
+  /* A blank whose man a host prints under another full name (the reread's
+     "pfr prints Ben Watson") accepts that name as a guess, or a player who
+     types what the box score says gets a miss. */
+  let aliased = 0;
+  for (const s of [...rec.sheets, ...(rec.legacyRecheck?.sheets ?? [])]) {
+    const l = byId.get(s.id);
+    if (!l) continue;
+    for (const row of s.starters) {
+      const alias = /^pfr prints (.+)$/.exec(String(row[4] ?? ''))?.[1];
+      const c = l.blankCandidates.find((x) => x.name === row[1]);
+      if (!alias || !c) continue;
+      aliased += 1;
+      if (!m.isCorrectElevenGuess(alias, c)) fail(4, `${s.id}: ${c.name} is a blank and pfr prints him ${alias}, but the guess ${alias} is a miss`);
+    }
+  }
+  console.log(`   ${aliased} blank${aliased === 1 ? '' : 's'} a host prints under another name, each accepting that name`);
   console.log(`   ${blanks} blanks on ${LINEUPS.length} sheets, each on its own slot with a surname nobody else on the sheet has`);
 }
 
