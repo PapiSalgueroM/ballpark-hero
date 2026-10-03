@@ -72,8 +72,8 @@ try {
     console.log(`simQuizBoardAccess ${control}: the asserted copy failed its intended outcome while unchanged checks stayed green.`);
   } else {
     assert.equal(run.status, 0, output.slice(-6000));
-    assert.match(output, /7 passed/);
-    console.log('simQuizBoardAccess: seven actual hook/Board outcomes passed, including clue access, native focus, free skips, exact saved scores, settled feedback and restored completion truth.');
+    assert.match(output, /8 passed/);
+    console.log('simQuizBoardAccess: eight actual hook/Board outcomes passed, including clue access, native focus, free skips, exact saved scores, settled feedback and restored completion truth.');
   }
   assert.equal(await readFile(source, 'utf8'), original, 'Controls must preserve shared production source');
 } finally {

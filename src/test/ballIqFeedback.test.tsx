@@ -33,6 +33,9 @@ const choose = (view: ReturnType<typeof render>, right = true) => {
 };
 const advance = (view: ReturnType<typeof render>) => fireEvent.click(view.getByRole('button', { name: /Next question|See my IQ/ }));
 const settle = () => act(() => { vi.advanceTimersByTime(700); });
+const moment = (view: ReturnType<typeof render>) => view.container.querySelector('[data-result-moment]')?.getAttribute('data-result-moment');
+/* The result card's emoji grid block (ResultScreen draws it aria-hidden in a mono face). */
+const grid = (view: ReturnType<typeof render>) => view.container.querySelector('[role="status"] > div[aria-hidden="true"].font-mono')?.textContent;
 
 beforeEach(() => {
   localStorage.clear(); vi.clearAllMocks(); consumeRestoredFinish('ball-iq');
@@ -165,9 +168,41 @@ describe('Ball IQ committed answer feedback', () => {
     expect(view.getByText('160')).toBeVisible(); expect(view.getByText('12/12 correct')).toBeVisible();
     expect(saved()).toEqual({ chosen, index: 12 });
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/ball-iq', 1600, 'FixtureBaller', 12);
+    /* Round 951: finished here, so the moment plays: a win, not settled. */
+    expect(moment(view)).toBe('win'); expect(view.container.querySelector('[data-result-settled]')).toBeNull();
     cleanup(); view = await mount();
     expect(view.getByText('160')).toBeVisible(); expect(view.container.querySelector('[data-ball-iq-cue]')).toBeNull();
+    /* Reopened: the same win, shown settled, so no reveal and no confetti replay. */
+    expect(moment(view)).toBe('win'); expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
     expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('walks every rank band onto its result state with the exact squares on the card', async () => {
+    const { result, unmount } = renderHook(() => useBallIq()); await act(async () => {});
+    const qs = result.current.questions; unmount();
+    /* values run 200 x3, 400 x3, 600 x2, 800 x2, 1000 x2 (6600 in all); IQ is 55 + 105 * earned / 6600 */
+    const ladder: Array<[number[], number, string, string]> = [
+      [[], 55, 'Does not know ball', 'loss'],
+      [[10], 71, 'Knows of ball', 'loss'],
+      [[10, 11], 87, 'Casual', 'close'],
+      [[10, 11, 8, 0], 103, 'Casual', 'close'],
+      [[10, 11, 8, 3], 106, 'Solid ball knowledge', 'win'],
+      [[6, 7, 8, 9, 10, 11], 131, 'Knows ball', 'win'],
+      [qs.map((_, i) => i), 160, 'Certified ball knower', 'win'],
+    ];
+    for (const [rightAt, iq, rank, state] of ladder) {
+      const right = new Set(rightAt);
+      const chosen = qs.map((q, i) => right.has(i) ? q.clue.answer : q.options.find(option => option !== q.clue.answer)!);
+      localStorage.setItem(key, JSON.stringify({ chosen, index: 12 }));
+      const view = await mount();
+      expect(view.container.querySelector('[data-result-score]')).toHaveTextContent(String(iq));
+      expect(view.getByRole('heading', { name: rank })).toBeVisible();
+      expect(moment(view)).toBe(state);
+      expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
+      expect(grid(view)).toBe(qs.map((_, i) => right.has(i) ? '🟩' : '🟥').join(''));
+      cleanup(); consumeRestoredFinish('ball-iq');
+    }
+    expect(recordCompletion).not.toHaveBeenCalled();
   });
 
   it('binds readable answer text and finite reduced-motion rules to actual feedback', async () => {
