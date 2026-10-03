@@ -3171,8 +3171,8 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
        values table itself. In final table order. Names reuse the 2026 and
        2015 spellings wherever the club exists there, so colours and
        rivalries carry over, and the era's Champions League field already
-       used them. Cesena and Arles-Avignon are the thin squads and the picker
-       says so. */
+       used them. Cesena is the one thin squad of the three leagues and the
+       picker says so. */
     {
       id: 'seriea2010', name: 'Serie A',
       clubs: ['AC Milan', 'Inter Milan', 'Napoli', 'Udinese', 'Lazio', 'Roma', 'Juventus', 'Palermo', 'Fiorentina', 'Genoa', 'Chievo Verona', 'Parma', 'Catania', 'Cagliari', 'Cesena', 'Bologna', 'Lecce', 'Sampdoria', 'Brescia', 'Bari'],

@@ -23,7 +23,8 @@
  *   C. When the offline pulls are on this machine (the lead's paths, or
  *      ERA_PULL and ERA_NEXT), the real 2015-16 bake is rebuilt from the
  *      60 club file it grew from (git show 89d31144) with --check, which must
- *      say byte identical. Without the pulls this part prints SKIPPED and why;
+ *      say byte identical, and since Round 901 the 2010-11 bake the same way
+ *      from its 40 club file (git show 06dc0741). Without the pulls this part prints SKIPPED and why;
  *      A and B do not need them and always run.
  *
  * Negative controls, SIM_ERA_EXTEND_CONTROL=noprove|nostillin|nodupe: the
@@ -222,9 +223,15 @@ console.log('B) every guard dies on its own bad correction');
   if (CASES.length < 26) fail(`only ${CASES.length} guard cases, the lib has 26 a caller can reach`);
 }
 
-/* ---------- C. the real 2015-16 bake rebuilds byte for byte ---------- */
-console.log('C) the 2015-16 bake rebuilds from its 60 club base byte for byte');
-{
+/* ---------- C. the real era bakes rebuild byte for byte ---------- */
+/* Round 901: one entry per era the shared step has extended, each rebuilt
+   from the file it grew from (the commit is the last one before its extend). */
+const REBUILDS = [
+  { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60 },
+  { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40 },
+];
+for (const rb of REBUILDS) {
+  console.log(`C) the ${rb.label} bake rebuilds from its ${rb.clubs} club base byte for byte`);
   const PULL = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
   const NEXT_PULL = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
   let skip = null;
@@ -233,22 +240,20 @@ console.log('C) the 2015-16 bake rebuilds from its 60 club base byte for byte');
   let base = null;
   if (!skip) {
     try {
-      base = path.join(TMP, 'base60.ts');
-      fs.writeFileSync(base, execFileSync('git', ['show', '89d31144:src/data/clubManagerEra2015.ts'], { cwd: ROOT, maxBuffer: 1 << 26 }));
-    } catch { skip = 'git cannot show the 60 club base (89d31144), a shallow clone?'; }
+      base = path.join(TMP, `base-${rb.label}.ts`);
+      fs.writeFileSync(base, execFileSync('git', ['show', `${rb.base}:src/data/${rb.file}`], { cwd: ROOT, maxBuffer: 1 << 26 }));
+    } catch { skip = `git cannot show the ${rb.clubs} club base (${rb.base}), a shallow clone?`; }
   }
-  if (skip) console.log(`   SKIPPED: ${skip}`);
-  else {
-    let out = '';
-    let code = 0;
-    try {
-      out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', 'bakeEra2015.mjs'), '--extend-big-five', '--check',
-        `--base=${base}`, `--pull=${PULL}`, `--next=${NEXT_PULL}`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
-    } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
-    const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
-    console.log(`   ${verdict || '(no verdict line)'}`);
-    if (code !== 0 || !out.includes('byte identical')) fail(`the rebuilt 2015-16 era file does not match the shipped one (exit ${code})`);
-  }
+  if (skip) { console.log(`   SKIPPED: ${skip}`); continue; }
+  let out = '';
+  let code = 0;
+  try {
+    out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', rb.script), '--extend-big-five', '--check',
+      `--base=${base}`, `--pull=${PULL}`, `--next=${NEXT_PULL}`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
+  } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
+  const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
+  console.log(`   ${verdict || '(no verdict line)'}`);
+  if (code !== 0 || !out.includes('byte identical')) fail(`the rebuilt ${rb.label} era file does not match the shipped one (exit ${code})`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });
