@@ -211,6 +211,126 @@ if (WRITE_FIXTURE && !CONTROL) {
   console.log(`   fixture: ${held} of ${pinned.length} pinned clubs read their number through both`);
 }
 
+/* ---- 2. benching a better man costs strength ------------------------------ */
+console.log('2) benching a better man costs strength, on each of 200 walked swaps per sport and seed');
+const WALK = 200;
+const median = xs => { const s = [...xs].sort((a, b) => a - b); return s.length ? s[Math.floor(s.length / 2)] : NaN; };
+const walkCosts = { mlb: [], nhl: [], nfl: [] };
+for (const sport of ['mlb', 'nhl']) {
+  const sp = SPORT[sport];
+  const kinds = { bench: 0, order: 0 };
+  let flat = 0;
+  for (const seed of SEEDS) {
+    const rng = lcg(seed * 13 + 5);
+    const lg = sport === 'mlb' ? hurt(MLB.initMlbLeague(lcg(seed)), lcg(seed + 1)) : hurt(NHL.initNhlLeague(lcg(seed), NHL_OPENING), lcg(seed + 1));
+    const teams = Object.values(lg.teams);
+    let team = pick(rng, teams), choice = {}, walked = 0, tries = 0;
+    while (walked < WALK && tries < WALK * 100) {
+      tries += 1;
+      if (rng() < 0.04) { team = pick(rng, teams); choice = {}; }
+      const lineup = L.gmResolveLineup(sp, team, choice);
+      const g = pick(rng, sp.groups);
+      const slots = L.gmGroupSlots(sp, g, choice);
+      const men = lineup[g.key];
+      const i = Math.floor(rng() * slots.length);
+      const man = men[i];
+      if (!man) continue;
+      const takes = (slot, p) => (slot.accepts ? slot.accepts.includes(p.pos) : L.gmInGroup(g, p.pos));
+      let next = null, kind = '';
+      if (rng() < 0.6) {
+        const placed = new Set(men.filter(Boolean).map(p => p.id));
+        const worse = L.gmGroupPool(g, sp.men(team)).filter(p => !placed.has(p.id) && takes(slots[i], p) && p.ovr < man.ovr);
+        if (!worse.length) continue;
+        next = L.gmLineupSwap(sp, team, choice, g.key, { id: man.id }, { id: pick(rng, worse).id });
+        kind = 'bench';
+      } else {
+        const lighter = men.map((p, j) => j).filter(j => men[j] && slots[j].weight < slots[i].weight && men[j].ovr < man.ovr && takes(slots[j], man) && takes(slots[i], men[j]));
+        if (!lighter.length) continue;
+        next = L.gmLineupSwap(sp, team, choice, g.key, { id: man.id }, { id: men[pick(rng, lighter)].id });
+        kind = 'order';
+      }
+      ok(2, `${sport} seed ${seed}: the swap is taken`, next !== null);
+      if (!next) continue;
+      const before = L.gmLineupStrength(sp, team, choice);
+      const after = L.gmLineupStrength(sp, team, next);
+      ok(2, `${sport} seed ${seed} step ${walked}: ${kind} ${man.id} in ${g.key} costs strength`, after < before, `${after} against ${before}`);
+      if (!(after < before)) flat += 1;
+      walkCosts[sport].push(before - after);
+      kinds[kind] += 1;
+      choice = next;
+      walked += 1;
+    }
+    ok(2, `${sport} seed ${seed}: all ${WALK} swaps walked`, walked === WALK, `${walked} in ${tries} tries`);
+  }
+  console.log(`   ${sport}: ${kinds.bench} bench and ${kinds.order} order swaps, ${flat} did not cost, median cost ${median(walkCosts[sport]).toFixed(4)}`);
+}
+/* The NFL: the men come off the depth chart. (a) Under the default scheme,
+   move a man today's strength counts below a worse man on his chart. That
+   is today's engine pricing the chart, and it is NOT always a cost: shares
+   are dealt by rating among the chart's first men but filled in chart
+   order, so a better man buried behind a hurt one counts toward a share
+   without playing, and benching somebody else can hand that share to him.
+   The lineup must follow today's number through every such move exactly,
+   and the rises are counted and printed for the bind's round, not failed
+   here (this round edits no engine). (b) Under another scheme, bench a man
+   that scheme plays and the default does not (12's second tight end, 21's
+   second back, the 3-4's fourth linebacker) where today's units do not
+   move: only the scheme reads him, so the scheme has to price it. Full
+   rosters only: the fifteen man league has nobody behind its starters. */
+{
+  const sp = SPORT.nfl;
+  let a = 0, b = 0, flat = 0, idle = 0, rises = 0;
+  for (const seed of SEEDS) for (const deep of [true]) {
+    const rng = lcg(seed * 17 + (deep ? 1 : 2));
+    const lg = NFL.initLeague(lcg(seed), { depth: FO_DEPTH });
+    hurt(lg, lcg(seed + 3));
+    const teams = Object.values(lg.teams);
+    let walked = 0, tries = 0;
+    while (walked < WALK && tries < WALK * 100) {
+      tries += 1;
+      const team = pick(rng, teams);
+      const byScheme = rng() < 0.5;
+      const choice = byScheme ? { schemes: { skill: pick(rng, ['12', '21']), def: '34' } } : {};
+      const lineup = L.gmResolveLineup(sp, team, choice);
+      const auto = L.gmResolveLineup(sp, team);
+      let man;
+      if (!byScheme) man = pick(rng, Object.values(sp.base(team)).flat());
+      else {
+        const g = pick(rng, ['skill', 'def']);
+        const inAuto = new Set(auto[g].filter(Boolean).map(p => p.id));
+        man = pick(rng, lineup[g].filter(p => p && !inAuto.has(p.id)));
+      }
+      if (!man) continue;
+      const chart = NFL.depthOrder(team, man.pos);
+      const worse = chart.slice(chart.findIndex(p => p.id === man.id) + 1).filter(p => p.out === 0 && p.ovr < man.ovr);
+      if (!worse.length) continue;
+      const units = t => Object.values(sp.base(t)).flat().map(p => p.ovr).sort((x, y) => x - y).join(',');
+      const was = units(team);
+      const before = L.gmLineupStrength(sp, team, choice);
+      const moved = clone(team);
+      NFL.swapDepth(moved, man.pos, man.id, pick(rng, worse).id);
+      if (units(moved) === was ? !byScheme : byScheme) { idle += 1; continue; }
+      const after = L.gmLineupStrength(sp, moved, choice);
+      if (byScheme) {
+        ok(2, `nfl seed ${seed} step ${walked}: benching ${man.pos} ${man.id} under ${choice.schemes.skill}/${choice.schemes.def} costs strength`, after < before, `${after} against ${before}`);
+        if (!(after < before)) flat += 1;
+        walkCosts.nfl.push(before - after);
+        b += 1;
+      } else {
+        ok(2, `nfl seed ${seed} step ${walked}: the lineup follows today's number through a chart move`, after === NFL.teamStrength(moved), `${after} against ${NFL.teamStrength(moved)}`);
+        if (after > before) rises += 1;
+        a += 1;
+      }
+      teams[teams.indexOf(team)] = moved;
+      lg.teams[team.abbr] = moved;
+      walked += 1;
+    }
+    ok(2, `nfl seed ${seed}: all ${WALK} swaps walked`, walked === WALK, `${walked} in ${tries} tries`);
+  }
+  ok(2, 'nfl: scheme benchings walked on every seed', b >= SEEDS.length * 40, `${b}`);
+  console.log(`   nfl: ${b} scheme benchings, ${flat} did not cost, median cost ${median(walkCosts.nfl).toFixed(4)}; ${a} chart moves followed exactly (${rises} of them RAISED today's number, see above); ${idle} moves that fit neither case were not steps`);
+}
+
 /* ---- summary -------------------------------------------------------------- */
 fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
 for (const f of fails) console.log(`   FAIL ${f}`);
