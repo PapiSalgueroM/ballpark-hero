@@ -22,11 +22,28 @@
       the title at its tier's rate, at Man City in 2020 at the elite rate, and
       Real Madrid in 1995 at the elite rate (forced seasons over many seeds).
 
+   Bands, measured on 2026-10-03 over seed offsets 0, 1, 2 and 3 (756 careers,
+   6048 seasons, 5040 in a verified league, about 870 titles each):
+   - section 3, mean finish share by group: elite 0.089 to 0.107, tier 1 0.198
+     to 0.221, tier 2 0.424 to 0.437, tier 3 0.663 to 0.673, tier 4 0.734 to
+     0.780 (tier 4 is the forced Man City 1990s seasons; no natural career
+     reaches a tier 4 club in a verified league). Smallest step seen per rung:
+     0.091, 0.215, 0.229, 0.061. Required: 0.05, 0.1, 0.1, 0.03, about half.
+   - section 5, title rate over 240 forced seasons: Man City 1992 2.1 to 5.8%,
+     PSG 2002 6.7 to 8.3% (ceiling 30%), Man City 2022 57.9 to 67.9%, Real
+     Madrid 1992 61.3 to 70.0% (floor 45%). The era blind rule gave Man City
+     1992 the elite rate, about 65%.
+   Sections 1, 2 and 4 are exact: zero breaks, and 16 of 16 digests.
+
    Negative controls (each asserts its anchor exists exactly once first):
    SIM_LEAGUE_FINISH_CONTROL=notitle   the title rule leaves the module: a
      title season is drawn a finish like any other. Section 1 must go red.
    SIM_LEAGUE_FINISH_CONTROL=eliteblind the engine reads the era blind list
-     again. Section 5 must go red.
+     again. Sections 3 and 5 must go red: 5 on the title rate, and 3 because
+     the 1990s Man City rows, tier 4 by the era tables, now finish 2nd to 4th
+     (measured tier 4 share 0.070 under the control).
+   SIM_LEAGUE_FINISH_CONTROL=stream    the module makes one Math.random call
+     per season. Section 4 must go red: the digest sees a moved stream.
    Exit 1 when a control did its job, 2 when it proved nothing or its name is
    not one this harness knows.
 
@@ -43,7 +60,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
-const CONTROLS = { notitle: [1], eliteblind: [5], stream: [4] };
+const CONTROLS = { notitle: [1], eliteblind: [3, 5], stream: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
@@ -266,7 +283,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 
 section = 3;
 console.log('3) the tier ladder of mean finish, as a share of the table, every step');
-const STEP_MIN = [0.05, 0.1, 0.1, 0.04];
+const STEP_MIN = [0.05, 0.1, 0.1, 0.03];
 const groupOf = r =>(league.eliteInYear(ELITE, r.club, r.year) ? 'elite' : `tier ${Math.min(4, r.clubTier)}`);
 const LADDER = ['elite', 'tier 1', 'tier 2', 'tier 3', 'tier 4'];
 const groups = Object.fromEntries(LADDER.map(g => [g, []]));
