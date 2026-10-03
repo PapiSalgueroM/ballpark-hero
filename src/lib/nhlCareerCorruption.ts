@@ -24,7 +24,8 @@
    Imported values are only safe inside functions.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
-import { nhlTeamLabelOf } from './nhlMyCareer';
+import { nhlTeamLabelOf, NHL_SPEND_ITEMS } from './nhlMyCareer';
+import { liquidateUsCareerPurchases } from './usCareerAnnualBenefits';
 
 type DirtyState = NhlCareerState & {
   heat?: number;
@@ -321,8 +322,8 @@ export function getNhlCorruptionEvents(c: NhlCareerState, rng: () => number): Nh
       title: 'Where did it go',
       body: `You have earned ${Math.round(c.earnings)}M in this league and your accountant says you are close to broke. Houses, relatives, an advisor, a restaurant that never opened.`,
       options: [
-        { label: 'Sell everything and start over', effect: 'Recover cash',
-          apply: (cc) => { bank(cc, 4); D(cc).yearlyCosts = 0; cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the lake place and the restaurant. Four million back and a much quieter life.'; } },
+        { label: 'Sell lifestyle assets and cancel services', effect: 'Recover cash',
+          apply: (cc) => { bank(cc, 4); liquidateUsCareerPurchases(cc, NHL_SPEND_ITEMS); cc.morale = clamp(cc.morale - 6, 0, 100); return 'You sold the cars, the lake place and the restaurant. Four million back and a much quieter life. Your yearly lifestyle services are canceled. Past training and gifts stay earned.'; } },
         { label: 'Take the money being offered', effect: '5M dirty, heat +26',
           apply: (cc) => { dirty(cc, 5); heatUp(cc, 26); return 'You called the number you swore you never would. Five million, and the meter went straight up. Heat +26.'; } },
         { label: 'Get real advisors and grind it back', effect: 'Boring, works',

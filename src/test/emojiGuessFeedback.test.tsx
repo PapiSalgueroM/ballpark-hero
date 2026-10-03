@@ -34,6 +34,9 @@ const submit = (view: ReturnType<typeof render>, value: string) => {
 const saved = () => JSON.parse(localStorage.getItem(key)!) as { guesses: string[][]; index: number };
 const activeCue = (view: ReturnType<typeof render>, kind: string) => view.container.querySelector(`[data-emoji-cue="${kind}"]`);
 const settle = () => act(() => { vi.advanceTimersByTime(700); });
+const moment = (view: ReturnType<typeof render>) => view.container.querySelector('[data-result-moment]')?.getAttribute('data-result-moment');
+/* The result card's emoji grid block (ResultScreen draws it aria-hidden in a mono face). */
+const grid = (view: ReturnType<typeof render>) => view.container.querySelector('[role="status"] > div[aria-hidden="true"].font-mono')?.textContent;
 const complete = (view: ReturnType<typeof render>) => {
   const puzzles = pickDaily('2026-10-01');
   const guesses: string[][] = [];
@@ -133,17 +136,22 @@ describe('Emoji Guess committed feedback', () => {
     expect(view.getByText(puzzles[0].answer)).toBeVisible(); expect(view.getByRole('status')).toHaveTextContent('Answer revealed, 0 points.');
     fireEvent.click(view.getByRole('button', { name: 'Next puzzle' }));
     for (let i = 1; i < 5; i += 1) { submit(view, puzzles[i].aliases[0]); fireEvent.click(view.getByRole('button', { name: i === 4 ? 'See result' : 'Next puzzle' })); }
-    expect(activeCue(view, 'result')).not.toBeNull(); const status = view.getByRole('status'); expect(status).toHaveTextContent('400 points. 4 of 5 puzzles solved.');
+    /* Round 951: the one status is the shared result card, carrying the result in words. */
+    expect(activeCue(view, 'result')).not.toBeNull(); const status = view.getByRole('status');
+    expect(within(status).getByText('400')).toBeVisible(); expect(within(status).getByText('points · 4/5 solved')).toBeVisible();
+    expect(moment(view)).toBe('win'); expect(view.container.querySelector('[data-result-settled]')).toBeNull();
     const review = [...view.container.querySelectorAll('[data-emoji-review]')]; view.rerender(element());
-    expect(view.getByRole('status')).toBe(status); expect(status).toHaveTextContent('400 points. 4 of 5 puzzles solved.');
+    expect(view.getByRole('status')).toBe(status); expect(within(status).getByText('points · 4/5 solved')).toBeVisible();
     for (let i = 0; i < 5; i += 1) expect(view.container.querySelectorAll('[data-emoji-review]')[i]).toBe(review[i]);
-    settle(); expect(status).toHaveTextContent(''); expect(activeCue(view, 'result')).toBeNull();
-    view.rerender(element()); expect(status).toHaveTextContent(''); expect(recordCompletion).toHaveBeenCalledTimes(1);
+    settle(); expect(activeCue(view, 'result')).toBeNull(); expect(within(status).getByText('400')).toBeVisible();
+    view.rerender(element()); expect(view.getByRole('status')).toBe(status); expect(recordCompletion).toHaveBeenCalledTimes(1);
   });
 
   it('completes the actual Page at 290 with exact original storage and clipboard payload', async () => {
     const view = await mount(), guesses = complete(view);
     expect(saved()).toEqual({ guesses, index: 5 }); expect(view.getByText('290')).toBeVisible(); expect(view.getByText('points · 4/5 solved')).toBeVisible();
+    /* Round 951: the card's grid is exactly the shared squares, never the score line. */
+    expect(grid(view)).toBe('🟩🟨🟧🟥🟩');
     await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Share result' })); });
     expect(fixture.clipboard).toHaveBeenCalledWith('Emoji Guess, 2026-10-01\n🟩🟨🟧🟥🟩\n4/5 solved · 290 pts\ndouknowball.com/emoji-guess');
     expect(recordCompletion).toHaveBeenCalledTimes(1); expect(recordCompletion).toHaveBeenCalledWith('/emoji-guess', 290, 'FixtureBaller', 4);
@@ -156,7 +164,25 @@ describe('Emoji Guess committed feedback', () => {
     expect(localStorage.getItem(key)).toBe(partialRaw); expect(write).not.toHaveBeenCalled(); view.unmount();
     const finished = { guesses: pickDaily('2026-10-01').map(p => [p.aliases[0]]), index: 5 }; localStorage.setItem(key, JSON.stringify(finished)); write.mockClear();
     const done = await mount(); expect(done.getByText('500')).toBeVisible(); expect(done.container.querySelectorAll('[data-emoji-cue]')).toHaveLength(0);
-    expect(done.getByRole('status')).toHaveTextContent(''); expect(write).not.toHaveBeenCalled(); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(within(done.getByRole('status')).getByText('points · 5/5 solved')).toBeVisible(); expect(write).not.toHaveBeenCalled(); expect(recordCompletion).not.toHaveBeenCalled();
+    /* Round 951: a reopened finish shows the same win settled, so no reveal and no confetti replay. */
+    expect(moment(done)).toBe('win'); expect(done.container.querySelector('[data-result-settled]')).not.toBeNull();
+  });
+
+  it('walks every solved count onto its result state with the exact squares on the card', async () => {
+    const puzzles = pickDaily('2026-10-01');
+    const states = ['loss', 'close', 'close', 'win', 'win', 'win'];
+    for (let solved = 0; solved <= 5; solved += 1) {
+      const guesses = puzzles.map((p, i) => i < solved ? [p.aliases[0]] : ['Fixture miss a', 'Fixture miss b', 'Fixture miss c']);
+      localStorage.setItem(key, JSON.stringify({ guesses, index: 5 }));
+      const view = await mount();
+      expect(view.getByText(`points · ${solved}/5 solved`)).toBeVisible();
+      expect(moment(view)).toBe(states[solved]);
+      expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
+      expect(grid(view)).toBe(puzzles.map((_, i) => i < solved ? '🟩' : '🟥').join(''));
+      cleanup();
+    }
+    expect(recordCompletion).not.toHaveBeenCalled();
   });
 
   it('retains current cue and nodes through clones then clears and cancels its owned timer', async () => {
@@ -178,7 +204,7 @@ describe('Emoji Guess committed feedback', () => {
       expect(within(row).getByText(puzzle.answer)).toHaveClass(styles.fullText);
       expect(within(row).getByText(puzzle.answer)).not.toHaveClass('truncate');
     }
-    expect(view.getByRole('button', { name: 'Share result' })).toHaveClass(styles.action);
+    expect(view.getByRole('button', { name: 'Share result' })).toHaveClass('min-h-[44px]');
     const css = readFileSync(process.env.EMOJI_GUESS_CSS || path.resolve('src/components/emoji-guess/EmojiGuessFeedback.module.css'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
     expect(css).toMatch(/\.action\s*\{[^}]*min-height:\s*44px;[^}]*min-width:\s*44px;/);
     expect(css).toMatch(/\.reveal\s*\{\s*animation:\s*clueReveal 360ms ease-out 1;/);

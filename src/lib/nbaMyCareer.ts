@@ -1,3 +1,4 @@
+import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
 /**
  * NBA My Career engine (2026-08-05). Basketball sibling of nflMyCareer.ts:
  * a fictional prospect living a whole career inside the real 30-team
@@ -40,6 +41,8 @@ import type { RivalryEvent } from './careerRivalryEvents';
 import { nbaRivalryTick, nbaRivalryChoiceTick } from './nbaCareerRivalryEvents';
 import type { RivalryChoiceCard } from './careerRivalryChoices';
 import { raiseWithinPotential, ratingRaiseNote } from './careerHeadroom';
+import { applyUsCareerAnnualBenefits } from './usCareerAnnualBenefits';
+import { careerRecoveryRisk } from './usCareerRecovery';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -136,7 +139,9 @@ export interface NbaCareerState {
   allNbas: number;
   finalsMvps: number;
   retired: boolean;
+  /** Zero records an undrafted camp signing. */
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   /** Round 57 life layer. All optional so pre-R57 saves keep loading. */
   netWorth?: number;
@@ -271,21 +276,21 @@ export function nbaTeamLabelOf(id: string, eraId?: string): string {
 
 export function startNbaCareer(
   name: string, pos: NbaCareerPos, archetype: NbaArchetype, rng: () => number = Math.random,
-  appearance?: PlayerAppearance | null, eraId?: string,
+  appearance?: PlayerAppearance | null, eraId?: string, entry?: CareerDraftEntry,
 ): NbaCareerState {
   /* Round 172: the era decides the year, the draft pool and the money. */
   const era = nbaEraById(eraId);
   const teamIds = nbaEraTeamIds(eraId);
-  const base = 68 + Math.floor(rng() * 8) + archetype.ovrBoost;
-  const pot = Math.min(99, base + 10 + Math.floor(rng() * 13) + archetype.potBoost);
-  const stock = Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
-  const team = teamIds[Math.floor(rng() * teamIds.length)];
-  const lottery = stock <= 14;
+  const base = entry?.ratingAfter ?? (68 + Math.floor(rng() * 8) + archetype.ovrBoost);
+  const pot = entry?.pot ?? Math.min(99, base + 10 + Math.floor(rng() * 13) + archetype.potBoost);
+  const stock = entry ? entry.pick ?? 0 : Math.max(1, Math.round(62 - (base - 66) * 5.5 + rng() * 22));
+  const team = entry?.team ?? teamIds[Math.floor(rng() * teamIds.length)];
+  const lottery = stock > 0 && stock <= 14;
   const c: NbaCareerState = {
     name, pos, archetype, team,
-    year: era.startYear, age: 19 + Math.floor(rng() * 3),
+    year: entry ? entry.draftYear + entry.devSeasons.length : era.startYear, age: entry?.ageAfter ?? (19 + Math.floor(rng() * 3)),
     ovr: base, pot,
-    morale: 70, fanbase: lottery ? 60 : 35, health: 100,
+    morale: 70, fanbase: lottery ? 60 : 35, health: entry?.health ?? 100,
     salary: Math.max(0.5, Math.round((lottery ? (16 - stock) * 0.7 + 6 : 2.5) * era.moneyScale * 10) / 10),
     contractYears: 4,
     seasons: [],
@@ -306,6 +311,7 @@ export function startNbaCareer(
   // Round 104: draft the rival at the same moment the player is created.
   c.rival = draftRival(pos, c.ovr, c.pot, c.age, c.team, rng);
   if (era.id !== 'now') c.eraId = era.id;
+  if (entry) c.prospect = entry.prospect;
   return c;
 }
 
@@ -342,8 +348,8 @@ export const NBA_SPEND_ITEMS: NbaSpendItem[] = [
   { id: 'team_stake', name: 'Minority Stake In A Franchise', emoji: '🏆', category: 'invest', cost: 40, desc: 'A real piece of a real team, 40M', oneTime: true, minNetWorth: 70, effect: 'The retirement plan, fanbase +10' },
   // Body
   { id: 'chef_nba', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for 82 games, 150k a year', oneTime: true, effect: 'Health +4 a year' },
-  { id: 'recovery_nba', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M', oneTime: true, minNetWorth: 3, effect: 'Injury risk down' },
-  { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 a year while young' },
+  { id: 'recovery_nba', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
+  { id: 'shot_doctor', name: 'Private Shooting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three All Stars, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 25, up to your ceiling' },
   { id: 'sleep_nba', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_nba', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'biomech_nba', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
@@ -442,7 +448,7 @@ function nbaIncumbentOvr(teamQuality: number, rng: () => number): number {
 /** Draft-night rotation spot. Mutates c.role, returns the feed line. */
 export function nbaAssignRole(c: NbaCareerState, teamQuality: number, rng: () => number = Math.random): string {
   const incumbent = nbaIncumbentOvr(teamQuality, rng);
-  if (c.draftPick <= 5) {
+  if (c.draftPick > 0 && c.draftPick <= 5) {
     c.role = 'starter';
     return '📋 Top five picks do not sit. You open in the starting five.';
   }
@@ -483,7 +489,7 @@ export function nbaMarketSalary(c: NbaCareerState): number {
 }
 
 function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {
-  const risk = (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240;
+  const risk = careerRecoveryRisk('nba', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240);
   if (rng() < risk) {
     const missed = 8 + Math.floor(rng() * 35);
     return { games: Math.max(20, 82 - missed), note: `Missed ${missed} games hurt.` };
@@ -731,6 +737,8 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
      and it is told whether the career goes on (the same nbaShouldRetire the
      board asks right after this returns), so a player who retires this
      summer is never sent a text about next season. */
+  const support = applyUsCareerAnnualBenefits(c, 'nba', c.age - 1);
+  if (support) notes.push(support);
   receiveNbaInboxTexts(c, !nbaShouldRetire(c));
   return notes;
 }
@@ -888,7 +896,7 @@ export function nbaLegacyOf(c: NbaCareerState): NbaLegacy {
   const bullets = [
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.finalsMvps} Finals MVP${c.finalsMvps === 1 ? '' : 's'}, ${c.allNbas} All-NBA`,
     `${t.pts.toLocaleString()} points, ${t.reb.toLocaleString()} rebounds, ${t.ast.toLocaleString()} assists in ${t.games} games`,
-    `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
+    `${Math.round(c.earnings)}M career earnings, ${c.draftPick > 0 ? `drafted pick ${c.draftPick}` : 'undrafted signing'}`,
   ];
   return { score, verdict, hof, bullets };
 }

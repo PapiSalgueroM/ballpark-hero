@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Copy } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
+import { ResultScreen } from '@/components/game/ResultScreen';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { VALUES, type ClueValue } from '@/lib/fetchQuizBoard';
 import { useQuizBoard } from '@/hooks/useQuizBoard';
@@ -12,7 +13,6 @@ export function QuizBoard() {
     loading, categories, board, openTile, score, banked, answeredCount, totalTiles,
     finished, guess, setGuess, select, submit, closeTile, shareText,
   } = useQuizBoard();
-  const [copied, setCopied] = useState(false);
   const [pendingAnswer, setPendingAnswer] = useState<{ category: string; value: ClueValue; clueId: string } | null>(null);
   const [feedback, setFeedback] = useState<{ clueId: string; correct: boolean } | null>(null);
   const opener = useRef<{ node: HTMLButtonElement; clueId: string } | null>(null);
@@ -33,13 +33,14 @@ export function QuizBoard() {
     return () => clearTimeout(timer);
   }, [feedback]);
 
-  const copyShare = async () => {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked */ }
-  };
+  /* What today's board is worth and how much of it went right, read off the
+     tiles the hook already holds, for the result moment's state and label. */
+  const tiles = categories.flatMap(cat => VALUES.flatMap(v => { const t = board[cat]?.[v]; return t ? [t] : []; }));
+  const boardTotal = tiles.reduce((sum, t) => sum + t.clue.value, 0);
+  const correctTiles = tiles.filter(t => t.correct).length;
+  /* Round 951: the moment plays when the board is cleared here, never when a
+     cleared board is reopened or reloaded. */
+  const freshFinish = useFreshFinish(!loading, finished);
 
   if (loading) {
     return (
@@ -187,27 +188,24 @@ export function QuizBoard() {
         )}
       </Dialog>
 
+      {/* Round 951: the cleared board ends on the shared result moment. The
+          board above stays as the review. Half the board's dollars is a win,
+          any bank is a good try, a $0 bank is not this time. */}
       {finished && (
-        <div className="mt-5 rounded-2xl border border-border bg-card p-5 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Board cleared
-          </p>
-          <p className="mt-2 font-display text-5xl font-black text-primary">
-            ${banked}
-          </p>
-          {score < 0 && (
-            <p className="mt-1 text-xs text-muted-foreground">
-              You finished on -${Math.abs(score)}. A cleared board never banks below $0.
-            </p>
-          )}
-          <button
-            onClick={copyShare}
-            className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? 'Copied!' : 'Share score'}
-          </button>
-        </div>
+        <RestoredResult restored={!freshFinish}>
+        <ResultScreen
+          className="mt-5"
+          outcome={banked * 2 >= boardTotal ? 'win' : banked > 0 ? 'close' : 'loss'}
+          score={`$${banked}`}
+          scoreLabel={`banked · ${correctTiles}/${totalTiles} right`}
+          outcomeEmoji="🎓"
+          headline="Board cleared"
+          funFact={score < 0 ? `You finished on -$${Math.abs(score)}. A cleared board never banks below $0.` : undefined}
+          emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
+          share={{ score: `$${banked}`, gameName: 'Sports Quiz Board', gamePath: '/quiz-board', customText: shareText }}
+          playNext={<p className="text-sm text-muted-foreground">A new board tomorrow.</p>}
+        />
+        </RestoredResult>
       )}
 
       <GameNav currentPath="/quiz-board" />

@@ -37,7 +37,7 @@
 export type RevealResultTone = 'title' | 'out' | 'banned';
 
 /** Per-line decoration. Tones only style; the text is untouched. */
-export type RevealLineTone = 'award' | 'sting' | 'plain';
+export type RevealLineTone = 'award' | 'sting' | 'support' | 'plain';
 
 export interface RevealLine {
   text: string;
@@ -73,6 +73,7 @@ const AWARD_LEADS = ['💍', '🏆', '🚀', '🥇'];
 const STING_LEADS = ['🪑', '🚫', '🤕', '📉'];
 
 export function toneOfLine(text: string): RevealLineTone {
+  if (text.startsWith('Yearly support:')) return 'support';
   if (AWARD_LEADS.some(e => text.startsWith(e))) return 'award';
   if (STING_LEADS.some(e => text.startsWith(e))) return 'sting';
   return 'plain';
@@ -128,6 +129,7 @@ export function stageVerdict(a: { iAmChampion: boolean; fired: boolean }): Verdi
    this owns the wording, and the board hands the SAME number to the card,
    so the two can never state different things about one pick. */
 export function draftPressureLine(pick: number, firstRoundEnd: number): string {
+  if (pick === 0) return 'Undrafted. Your camp invitation is a chance to earn your place.';
   if (pick <= 10) return 'The city expects a savior.';
   if (pick <= firstRoundEnd) return 'First round money, first round pressure.';
   return 'Late pick. Everything must be earned.';

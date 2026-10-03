@@ -24,6 +24,18 @@
  *   PROMO_CONTROL=nearlyfull  99 percent counts as sold out     -> section 6
  *   PROMO_CONTROL=roundedpct  the percentage rounds up          -> section 6
  *   PROMO_CONTROL=halfhouse   no room ever gets near full       -> section 6
+ *   PROMO_CONTROL=nohandover  the promotion can never be handed over -> section 7a
+ *   PROMO_CONTROL=noexit      the verdict ignores how it ended  -> section 7b
+ *   PROMO_CONTROL=earlyhandover  handing over is open from show 0 -> section 7c
+ *
+ * ROUND 955 BANDS, measured before they were set (seed bases via PROMO_HAND_SEED):
+ *   7a hand over after 20 shows over the reckless road, paired on the seed, 90
+ *      promotions: +38.1, +38.0, +38.7 on hand seeds 0 to 2, at least 86 seeds
+ *      reaching both endings, so margin 19 (half the lowest). Its control is
+ *      nohandover, because the reckless road also ends poor: with noexit 7a
+ *      still reads +30.3 and 7b is the check that has to catch it.
+ *   7b the same promotion at show 20, handed over against gone under: +14.6,
+ *      +14.5, +14.8, and +2.6 with noexit, so margin 8.
  */
 
 import './lib/seedRandom.mjs';
@@ -64,7 +76,9 @@ const deAlias = (s) => s
 
 const engineSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/careerEngine.ts'), 'utf8'));
 const careerSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/fightCareer.ts'), 'utf8'));
-let promoSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/fightPromoter.ts'), 'utf8'));
+/* Round 955: line endings normalised before any control reads this text, the
+   same as simFightGym. A CRLF checkout cannot match a multi line anchor. */
+let promoSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/fightPromoter.ts'), 'utf8').replaceAll('\r\n', '\n'));
 
 function rewrite(which, anchor, replacement) {
   if (!promoSrc.includes(anchor)) {
@@ -101,6 +115,21 @@ if (CONTROL === 'freerent') {
 } else if (CONTROL === 'halfhouse') {
   rewrite('halfhouse', 'const pull = clamp((cardAppeal / 46) * (0.6 + st.reputation / 110), 0, 1.25);',
     'const pull = clamp((cardAppeal / 46) * (0.6 + st.reputation / 110), 0, 0.5);');
+} else if (CONTROL === 'nohandover') {
+  /* Round 955: the promotion can never be handed over. */
+  rewrite('nohandover',
+    '  return !st.closed && st.history.length >= HANDOVER_MIN_SHOWS;',
+    '  return false;');
+} else if (CONTROL === 'noexit') {
+  /* Round 955: the verdict stops caring how the promotion ended. */
+  rewrite('noexit',
+    '    Math.min(14, profitable * 0.9) -\n    (broke ? BROKE_PENALTY : 0),',
+    '    Math.min(14, profitable * 0.9),');
+} else if (CONTROL === 'earlyhandover') {
+  /* Round 955: a promotion can be handed over before its first show. */
+  rewrite('earlyhandover',
+    '  return !st.closed && st.history.length >= HANDOVER_MIN_SHOWS;',
+    '  return !st.closed;');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -173,13 +202,43 @@ function planFor(st, picker, priceMult = 1) {
   return { venueId: venue.id, ticketPrice: fair * priceMult, bookings };
 }
 
-function runPromoter(seed, picker, shows = 40, priceMult = 1) {
+/* Round 955: two endings on top of any picker. handAt hands the promotion over
+   once that many shows are in the book. reckless is the bankrupt road: every
+   show books the three fights nobody wants to see, in the biggest room the name
+   opens, at the dearest seat the screen allows (600), so the room is empty and
+   paid for.
+   WHY FROM THE FIRST SHOW and not forked later, as the gym's section 7 is. This
+   economy is hard to lose money in once it is going, on purpose (section 1:
+   every sensible promotion survives 40 shows). Two forked drafts were measured
+   and dropped: big room with cheap seats from show 20 sent 2 of 90 under, dear
+   seats 8 of 90. Forked at show 10, 12 or 15 the reckless road did go under
+   (44, 40 and 35 of 60) but only after 30 to 43 shows, and those weak cards turn
+   out to be close fights that BUILD a name, so the bankrupt road outscored a
+   hand over at the fork by 3 to 5 points: it measured a longer career, not an
+   ending. Section 7b is the fork that isolates the ending. */
+function blowPlan(st) {
+  const opts = options(st).sort((x, y) => x.appeal - y.appeal).slice(0, 3);
+  if (!opts.length) return null;
+  const open = pr.VENUES.filter(v => v.needs <= st.reputation);
+  return {
+    venueId: open[open.length - 1].id,
+    ticketPrice: 0.0006,
+    bookings: opts.map(o => ({ aId: o.aId, bId: o.bId, rounds: o.rounds, title: o.title })),
+  };
+}
+
+function runPromoter(seed, picker, shows = 40, priceMult = 1, opts = {}) {
   let st = pr.newPromoter(`P${seed}`, `promo-${seed}`);
   let ran = 0;
   let profitable = 0;
   const crowds = [];
   for (let i = 0; i < shows && !st.closed; i += 1) {
-    const plan = planFor(st, picker, priceMult);
+    if (opts.handAt && st.history.length >= opts.handAt) {
+      const h = pr.handOver(st);
+      if (h) { st = h; break; }
+    }
+    const blowing = !!opts.reckless;
+    const plan = blowing ? blowPlan(st) : planFor(st, picker, priceMult);
     if (!plan) break;
     const r = pr.runShow(st, plan);
     if (!r) break;
@@ -190,7 +249,7 @@ function runPromoter(seed, picker, shows = 40, priceMult = 1) {
   }
   const v = pr.promoterVerdict(st);
   return {
-    closed: st.closed, shows: ran, money: st.money, reputation: st.reputation,
+    closed: st.closed, exit: st.exit, shows: ran, money: st.money, reputation: st.reputation,
     profitable, crowd: crowds.length ? mean(crowds) : 0, score: v.score,
     poolMean: mean(st.pool.map(f => fc.ratingOf(f))),
     hurt: st.pool.filter(f => f.damage >= 40).length,
@@ -441,6 +500,81 @@ console.log('6) "sold out" means every seat, and the percentage never reads full
   else ok('every full room says sold out');
   if (overstated > 0) fail(`${overstated} shows read a fuller percentage than the room was`);
   else ok('the percentage never reads fuller than the room was');
+}
+
+/* ═══════════════ 7) Round 955: going out on your own terms ═══════════════ */
+console.log('7) handing over ends the game with a verdict, and beats going under');
+{
+  const HAND_AT = 20;
+  const HAND_GAP_MARGIN = 19;
+  const FORK_GAP_MARGIN = 8;
+  const HAND_SEED = Number(process.env.PROMO_HAND_SEED || 0);
+  /* 7a THE SAME SEEDS, TWO WAYS TO RUN THEM. One road runs the balanced picker
+     and hands over after HAND_AT shows. The other is the reckless road (see
+     blowPlan) and goes under. Same starting pool, same luck. */
+  const handed = [];
+  const broke = [];
+  for (let i = 0; i < N; i += 1) {
+    const seed = 3000 + i * 47 + HAND_SEED * 7919;
+    handed.push(runPromoter(seed, 'balanced', 60, 1, { handAt: HAND_AT }));
+    broke.push(runPromoter(seed, 'balanced', 200, 1, { reckless: true }));
+  }
+  const handedN = handed.filter(r => r.closed && r.exit === 'handed').length;
+  const brokeN = broke.filter(r => r.closed && r.exit === 'broke').length;
+  console.log(`   handed over after ${HAND_AT} shows: ${handedN} of ${N}; booked past their means and went under: ${brokeN} of ${N}`);
+  if (handedN < N * 0.9) fail(`only ${handedN} of ${N} promotions reached the verdict by handing over (floor 90%)`);
+  else ok(`${handedN} of ${N} promotions closed with exit handed, so a good one reaches its verdict`);
+  const gaps = [];
+  for (let i = 0; i < N; i += 1) {
+    if (handed[i].exit === 'handed' && broke[i].exit === 'broke') gaps.push(handed[i].score - broke[i].score);
+  }
+  const gap = mean(gaps);
+  console.log(`   paired over ${gaps.length} seeds: handing over scores ${gap.toFixed(1)} more than going under`);
+  if (gaps.length < N * 0.5) fail(`only ${gaps.length} seeds reached both endings, too few to compare`);
+  else if (!(gap > HAND_GAP_MARGIN)) fail(`handing over beats going under by only ${gap.toFixed(1)} (margin ${HAND_GAP_MARGIN})`);
+  else ok(`handing over beats going under by ${gap.toFixed(1)} verdict points on the same seeds (margin ${HAND_GAP_MARGIN})`);
+
+  /* 7b THE VERDICT ITSELF, forked at one moment. The same promotion after
+     HAND_AT shows, closed the two ways the game can close it. Nothing else
+     differs, so this is the verdict's own treatment of the two endings. */
+  const forks = [];
+  for (let i = 0; i < N; i += 1) {
+    let st = pr.newPromoter(`F${i}`, `fork-${HAND_SEED}-${i}`);
+    for (let k = 0; k < HAND_AT && !st.closed; k += 1) {
+      const plan = planFor(st, 'balanced', 1);
+      const r = plan && pr.runShow(st, plan);
+      if (!r) break;
+      st = r.state;
+    }
+    if (st.closed) continue;
+    const h = pr.handOver(st);
+    if (!h) continue;
+    forks.push(pr.promoterVerdict(h).score - pr.promoterVerdict(pr.closeBroke(st)).score);
+  }
+  const fg = mean(forks);
+  console.log(`   forked at show ${HAND_AT} over ${forks.length} promotions: handed over scores ${fg.toFixed(1)} more than the same promotion gone under`);
+  if (forks.length < N * 0.5) fail(`only ${forks.length} promotions reached the fork`);
+  else if (!(fg > FORK_GAP_MARGIN)) fail(`the verdict barely tells the endings apart: ${fg.toFixed(1)} (margin ${FORK_GAP_MARGIN})`);
+  else ok(`the verdict tells the endings apart by ${fg.toFixed(1)} points (margin ${FORK_GAP_MARGIN})`);
+
+  /* 7c EVERY STEP OF THE LADDER: refused before HANDOVER_MIN_SHOWS shows, open from it. */
+  let early = 0;
+  let onTime = 0;
+  let st = { ...pr.newPromoter('Ladder', 'ladder-955'), money: 50 };
+  for (let k = 0; k <= pr.HANDOVER_MIN_SHOWS + 4 && !st.closed; k += 1) {
+    const h = pr.handOver(st);
+    if (st.history.length < pr.HANDOVER_MIN_SHOWS && h) early += 1;
+    if (st.history.length >= pr.HANDOVER_MIN_SHOWS && h && h.closed && h.exit === 'handed') onTime += 1;
+    const plan = planFor(st, 'balanced', 1);
+    const r = plan && pr.runShow(st, plan);
+    if (!r) break;
+    st = r.state;
+  }
+  console.log(`   show by show: ${early} hand overs accepted before ${pr.HANDOVER_MIN_SHOWS} shows, ${onTime} of 5 accepted from it`);
+  if (early > 0) fail(`${early} hand overs went through before ${pr.HANDOVER_MIN_SHOWS} shows`);
+  else ok(`no hand over before ${pr.HANDOVER_MIN_SHOWS} shows`);
+  if (onTime < 5) fail(`only ${onTime} of 5 hand overs from ${pr.HANDOVER_MIN_SHOWS} shows on went through`);
+  else ok('every hand over from that show on goes through and closes the promotion');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
