@@ -53,7 +53,33 @@
      noprune       the summer keeps ledger rows of men who left -> 6
      labelswap     an exposed man's button says Option him      -> 7
 
-   MEASURED (filled in from runs, see the bottom of this header). */
+   The invent control also reddens 1 and 3 by design: an invented man
+   overfills the 40 man and changes who is left to expose to the wire. The
+   draftactive control also reddens 1: an MLB draftee on the roster is on
+   the 40 man, and the summer's draft overfills it.
+
+   MEASURED, 2026-10-03, ten seasons a league, seeds 1 to 5 then the default
+   1 to 3 (per seed numbers move a little with the seed list, because the
+   engines' id counters run on across leagues and ids break sort ties):
+     covers a league     NFL 4770 to 4935, NBA 2882 to 3023, MLB 4098 to 4247,
+                         NHL 1337 to 1427. Floors 2400, 1400, 2000, 650.
+     claims a league     NFL 4 to 7 (the GM's stash attempt every fourth
+                         week is its only exposure), MLB 372 to 432, NHL 166
+                         to 186, NBA none (no NBA move exposes a man). Floors
+                         2, 0, 200, 85. An NHL farm club is exempt for its
+                         first seasons, so claims are graded at ten only.
+     engine returns      MLB 5 to 8 per batch of leagues, a claimed man whose
+                         deal ran out re-signed by his old club in free agency
+                         (mlbAiMoves). Printed, not failed: the engines' sign
+                         paths are not this round's (see gmWaivers.ts).
+     growth, NFL         young squad men 2.49 a summer, young active men 1.50,
+                         gap 0.97 to 1.01 per league; nobonus measured 0.01.
+                         Floor 0.5.
+     save bytes          NFL 1253 to 1410, NBA 12326 to 12627, MLB 83769 to
+                         100911, NHL 52626 to 69172 (the leagues themselves
+                         about 330K, 75K, 140K and 86K). Budgets 1800, 16000,
+                         128000, 88000.
+     runtime             about 90 s for the default three seeds. */
 
 import fs from 'node:fs';
 import os from 'node:os';
