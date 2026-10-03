@@ -2720,6 +2720,46 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 899: the 2015-16 Bundesliga and Ligue 1, each fact from two
+     sources read 2026-10-02.
+     - Europe. ESPN's final standings carry the legend (Bundesliga: first to
+       third Champions League, fourth its qualifying, fifth and sixth Europa
+       League, seventh its qualifying; Ligue 1: first and second Champions
+       League, third its qualifying, fourth Europa League, fifth and sixth
+       its qualifying), https://www.espn.com/soccer/standings/_/league/GER.1/season/2015
+       and .../league/FRA.1/season/2015, and RSSSF's 2016-17 European cups
+       record shows who entered where (four German clubs in the Champions
+       League group stage, Gladbach through the play-off; Hertha in the
+       Europa League third qualifying round; Monaco through qualifying),
+       https://www.rsssf.org/ec/ec201617.html. A qualifying route counts as
+       in, as everywhere in this table. The places a CUP handed down are not
+       league places and are not counted, the way premier2015 counts fifth
+       only: Germany's seventh got in because the cup winners Bayern were
+       already in the Champions League, and France's fifth and sixth took
+       the two cup places because PSG won both cups.
+     - Relegation. Germany: seventeenth and eighteenth down, sixteenth into
+       a playoff against the second tier's third (Frankfurt won it); RSSSF,
+       https://www.rsssf.org/tablesd/duit2016.html, and ESPN's legend. The
+       playoff is not played, exactly as on the modern bundesliga row. France:
+       THREE down in 2015-16 (Reims, GFC Ajaccio, Troyes), RSSSF,
+       https://www.rsssf.org/tablesf/fran2016.html, and ESPN's legend
+       (positions 18, 19, 20); the league's vote to cut it to two that
+       season did not stand.
+     - The cups, one per nation: the DFB-Pokal (Bayern beat Dortmund on
+       penalties, RSSSF and ESPN's match report) and the Coupe de France (PSG
+       4-2 Marseille, RSSSF and Sky Sports). The Coupe de la Ligue, which
+       France also played that year, is not modelled.
+     - Level on points. Both final tables split level clubs on goal
+       difference and then goals scored (Bremen above Darmstadt, both minus
+       fifteen; Lyon above Monaco). The step after that was not found in two
+       sources FOR THAT SEASON (the DFL's rule book and the league's own
+       article are later editions), so neither row claims a third step: no
+       tiebreak field, which reads goal difference then goals scored. */
+  bundesliga2015: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
+  },
+  ligue12015: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
 };
@@ -3097,6 +3137,26 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       id: 'seriea2015', name: 'Serie A',
       clubs: ['Juventus', 'Napoli', 'Roma', 'Inter Milan', 'AC Milan', 'Fiorentina', 'Lazio', 'Torino', 'Genoa', 'Sampdoria', 'Sassuolo', 'Udinese', 'Empoli', 'Chievo Verona', 'Palermo', 'Atalanta', 'Bologna', 'Hellas Verona', 'Carpi', 'Frosinone'],
     },
+    /* Round 899: the era becomes a full big five. Membership of both
+       leagues from two publishers that agree on every club, read
+       2026-10-02: RSSSF's season records
+       (https://www.rsssf.org/tablesd/duit2016.html and
+       https://www.rsssf.org/tablesf/fran2016.html) and ESPN's final
+       standings (https://www.espn.com/soccer/standings/_/league/GER.1/season/2015
+       and .../league/FRA.1/season/2015), AND against the market values
+       table itself. In final table order. Names reuse the 2026 spelling
+       wherever the club exists there (Gladbach, Köln, Hamburg, Hertha BSC,
+       Hannover 96, PSG), so colours and rivalries carry over. Ingolstadt
+       and Darmstadt, Angers and GFC Ajaccio, all four promoted that summer,
+       are the thin squads and the picker says so. */
+    {
+      id: 'bundesliga2015', name: 'Bundesliga',
+      clubs: ['Bayern Munich', 'Borussia Dortmund', 'Bayer Leverkusen', 'Gladbach', 'Schalke 04', 'Mainz', 'Hertha BSC', 'Wolfsburg', 'Köln', 'Hamburg', 'Ingolstadt', 'Augsburg', 'Werder Bremen', 'Darmstadt', 'Hoffenheim', 'Eintracht Frankfurt', 'Stuttgart', 'Hannover 96'],
+    },
+    {
+      id: 'ligue12015', name: 'Ligue 1',
+      clubs: ['PSG', 'Lyon', 'Monaco', 'Nice', 'Lille', 'Saint-Étienne', 'Caen', 'Rennes', 'Angers', 'Bastia', 'Bordeaux', 'Montpellier', 'Marseille', 'Nantes', 'Lorient', 'Guingamp', 'Toulouse', 'Reims', 'GFC Ajaccio', 'Troyes'],
+    },
   ].map(leagueFromRow),
   /* Round 176: the 2005-06 season, memberships verified against the season
      records (Wikipedia and worldfootball plus RSSSF final tables, checked
@@ -3388,6 +3448,12 @@ const CLUB_COLORS: Record<string, string> = {
   // Round 191: 2015-16 Serie A clubs not covered above.
   'Sampdoria': '#1b5497', 'Empoli': '#1a5dad', 'Chievo Verona': '#f7d417',
   'Palermo': '#e75ba5', 'Hellas Verona': '#002d72', 'Carpi': '#d02128',
+  // Round 899: 2015-16 Bundesliga and Ligue 1 clubs not covered above, the
+  // same derivation: the club's plain home kit colour from this file's own
+  // palette, no crest art.
+  'Ingolstadt': '#d02128', 'Saint-Étienne': '#0a7040', 'Caen': '#1b458f',
+  'Bastia': '#005ca9', 'Bordeaux': '#002d72', 'Montpellier': '#1b458f',
+  'Guingamp': '#d02128', 'Reims': '#d02128', 'GFC Ajaccio': '#d02128',
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
@@ -9651,6 +9717,9 @@ function strengthOf(state: CareerState, club: string): number {
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
+/* Round 899: simEra2015 reads the rating every match uses, and the
+   association the round of 16 draw uses, for a save from before the round. */
+export { strengthOf, uclClubCountry };
 
 /** Ghost club that gives one side a bye in odd-sized leagues (MLS's 15). */
 const BYE = '__BYE__';
@@ -10034,7 +10103,7 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Manchester City', country: 'England', finish: 'semi_final' },
     { name: 'Bayern Munich', country: 'Germany', finish: 'semi_final' },
     { name: 'Barcelona', country: 'Spain', finish: 'quarter_final' },
-    { name: 'Paris Saint-Germain', country: 'France', finish: 'quarter_final' },
+    { name: 'PSG', country: 'France', finish: 'quarter_final' },
     { name: 'Wolfsburg', country: 'Germany', finish: 'quarter_final' },
     { name: 'Benfica', country: 'Portugal', finish: 'quarter_final' },
     { name: 'Chelsea', country: 'England', finish: 'round_of_16' },
@@ -10052,7 +10121,7 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Galatasaray', country: 'Turkey', finish: 'group_stage' },
     { name: 'Astana', country: 'Kazakhstan', finish: 'group_stage' },
     { name: 'Sevilla', country: 'Spain', finish: 'group_stage' },
-    { name: 'Borussia Mönchengladbach', country: 'Germany', finish: 'group_stage' },
+    { name: 'Gladbach', country: 'Germany', finish: 'group_stage' },
     { name: 'Bayer Leverkusen', country: 'Germany', finish: 'group_stage' },
     { name: 'BATE Borisov', country: 'Belarus', finish: 'group_stage' },
     { name: 'Olympiacos', country: 'Greece', finish: 'group_stage' },
@@ -10063,6 +10132,27 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Lyon', country: 'France', finish: 'group_stage' },
   ],
 };
+
+/* Round 899: the 2015-16 era grew a Bundesliga and a Ligue 1, so six clubs of
+   its Champions League field stopped being foreign and play with their real
+   squads. Two of them were listed under their long names while they were
+   foreign and now carry the engine's own names (PSG, Gladbach), the names
+   their rosters, colours and league rows are keyed by. A save made before
+   this round can still hold the long name in a group it is half way through,
+   so every lookup by field row (the finish derived prior that strengthOf and
+   the board read, and the association the round of 16 draw reads) takes the
+   long name as the club it always was. Keyed by era, so another era's field
+   is never touched. Only read, never written: the next draw uses the names
+   above. */
+const ERA_EURO_OLD_NAMES: Record<string, Record<string, string>> = {
+  era2015: {
+    'Paris Saint-Germain': 'PSG',
+    'Borussia Mönchengladbach': 'Gladbach',
+  },
+};
+function eraEuroName(eraId: string, club: string): string {
+  return ERA_EURO_OLD_NAMES[eraId]?.[club] ?? club;
+}
 
 const ERA_TOP_XI_CACHE = new Map<string, number>();
 function eraTopXI(eraId: string): number {
@@ -10078,7 +10168,8 @@ function eraTopXI(eraId: string): number {
 /** A foreign era club's strength, derived from its real finish that season.
  *  Null for clubs not in the era's verified field. */
 function eraEuroPrior(eraId: string, club: string): number | null {
-  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === club);
+  const name = eraEuroName(eraId, club);
+  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === name);
   if (!row) return null;
   return Math.round((eraTopXI(eraId) - ERA_FINISH_GAP[row.finish]) * 10) / 10;
 }
@@ -10087,7 +10178,8 @@ function eraEuroPrior(eraId: string, club: string): number | null {
  *  the era bake when the club has a real roster, the finish derived prior
  *  when it is a verified foreign participant, 60 as the honest floor. */
 function eraEuroStrength(eraId: string, club: string): number {
-  return eraXIAvg(eraId, club) ?? eraEuroPrior(eraId, club) ?? 60;
+  const name = eraEuroName(eraId, club);
+  return eraXIAvg(eraId, name) ?? eraEuroPrior(eraId, name) ?? 60;
 }
 
 function eraEuroPool(eraId: string): string[] {
@@ -10474,7 +10566,7 @@ function noteUclPair(state: CareerState, home: string, away: string, hg: number,
  * the draw treats as blocking nobody.
  */
 function uclClubCountry(state: CareerState, club: string): string | null {
-  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === club) : undefined;
+  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === eraEuroName(state.eraId!, club)) : undefined;
   if (row) return row.country;
   const lg = state.eraId && isHistoricEra(state.eraId)
     ? eraLeagueOf(club, state.eraId)
