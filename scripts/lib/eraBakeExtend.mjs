@@ -144,7 +144,10 @@ function bakeRow(name, rec) {
  * cfg = {
  *   file, prefix, year,            the shipped era file, 'ERA2015', 2015
  *   rows, nextRows,                the pull's rows (year Y) and the following year's
- *   newLeagues: [{ label, dbToEra }],
+ *   newLeagues: [{ label, dbToEra, empty? }],   empty: [{ club, spellings }], a real
+ *                                  member with no year-Y row at any of those table
+ *                                  spellings (checked), baked as an empty squad
+ *                                  that must also be in expectedThin (Round 901)
  *   worldDbToEra,                  EVERY league of the grown world, table spelling -> engine
  *                                  name (the following-year proof reads destinations by it)
  *   moves, removals, arrivals, folds, namesakes   (see the file header)
@@ -173,6 +176,20 @@ export function extendEra(cfg) {
       if (world.has(c)) die(`${lg.label}: the shipped file already holds ${c}; the extend must not run twice`);
       world.set(c, []);
       newClubs.push(c);
+    }
+    /* Round 901: a real member of the league the table holds no row for at
+       all (2010-11 Arles-Avignon). It joins the world as an empty squad the
+       engine pads with its labelled youth, never with names found elsewhere,
+       so it must be declared thin, and the "no rows" claim is checked here
+       against every table spelling the caller names for it. */
+    for (const e of lg.empty ?? []) {
+      if (world.has(e.club)) die(`${lg.label}: the shipped file already holds ${e.club}; the extend must not run twice`);
+      if (!e.spellings?.length) die(`${lg.label}: the empty member ${e.club} names no table spelling to check`);
+      const hit = rows.find(r => r.year === year && e.spellings.includes(r.club));
+      if (hit) die(`${lg.label}: ${e.club} is declared empty but the pull holds a year-${year} row at "${hit.club}" (${hit.player_name})`);
+      world.set(e.club, []);
+      newClubs.push(e.club);
+      log.push(`${lg.label} ${year}: ${e.club} is a member with no year-${year} row (checked: ${e.spellings.join(', ')})`);
     }
     const lp = leaguePool(rows, year, lg.dbToEra, lg.label);
     log.push(`${lg.label} ${year}: ${lp.size} distinct names`);

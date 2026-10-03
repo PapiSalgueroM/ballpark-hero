@@ -36,13 +36,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM } from './lib/eraBakeExtend.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+/* Round 901: the Serie A, the Bundesliga and Ligue 1 join through the shared
+   step in scripts/lib/eraBakeExtend.mjs (see THE BIG FIVE EXTENSION below). */
+const bigFiveArg = process.argv.includes('--extend-big-five');
 const plArg = process.argv.find(a => a.startsWith('--pl='));
 const llArg = process.argv.find(a => a.startsWith('--laliga='));
-if (!plArg || !llArg) {
-  console.error('Usage: node scripts/bakeEra2010.mjs --pl=pl2010.json --laliga=laliga2010.json');
+if (!bigFiveArg && (!plArg || !llArg)) {
+  console.error('Usage: node scripts/bakeEra2010.mjs --extend-big-five [--base=<the 40 club file>] [--pull=<year 2010 pull>] [--next=<year 2011 pull>] [--dry] [--check]');
+  console.error('   or (Round 146, the original two league bake): node scripts/bakeEra2010.mjs --pl=pl2010.json --laliga=laliga2010.json');
   process.exit(1);
 }
 
@@ -94,22 +99,190 @@ const ERA_ARRIVALS_2010 = [
   { n: 'Mario Balotelli', to: 'Manchester City', position: 'Centre-Forward', age: 19, usd: 28000000 },
 ];
 
-/* Same curves as bakeClubManagerRosters.mjs, verbatim, so a 2010 value and a
- * 2026 value mean the same thing on the rating scale. */
-const POS_MAP = {
-  'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
-  'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
-  'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF',
+/* POS_MAP, ratingOf and gbpM, the same curves as bakeClubManagerRosters.mjs
+ * so a 2010 value and a 2026 value mean the same thing on the rating scale,
+ * come from scripts/lib/eraBakeExtend.mjs (imported at the top since Round
+ * 901, the verbatim copy that sat here removed): one copy of the curve for
+ * every era bake. */
+
+/* ================= Round 901: THE BIG FIVE EXTENSION ================= */
+/* The era grows from two leagues to five IN PLACE, by the move Round 899
+   made for 2015-16, through the same shared step
+   (scripts/lib/eraBakeExtend.mjs; read its header: the shipped 40 club file
+   is the truth for the two leagues it holds, its lines carried through as
+   bytes; the 2010-11 Serie A, Bundesliga and Ligue 1 come from an OFFLINE
+   pull of the base table; every correction is declared below and proved
+   twice). Run:
+
+     node scripts/bakeEra2010.mjs --extend-big-five
+
+   THE DATA, OFFLINE. Production is off limits to a bake, so the lead pulled
+   the base table player_market_values once into two files (defaults below,
+   --pull= and --next= override): every row of years 2005, 2010 and 2015,
+   and every row of 2006, 2011 and 2016. The documented query shape (base
+   table, year = 2010 exact, DISTINCT ON (player_name) ... ORDER BY
+   player_name, market_value_usd DESC, no fallback year) is reproduced from
+   the first file: filter the year and the league's club spellings, keep one
+   row per player_name with the highest value, and break a tie on the lowest
+   id so the bake is deterministic. The second file is used ONLY as the
+   second proof of a summer move: the club the year-2011 row names.
+
+   RUNNING IT AGAIN. The step refuses a file that already holds a new
+   league's club. To regenerate, hand it the 40 club file it grew from:
+     git show 06dc0741:src/data/clubManagerEra2010.ts > base.ts
+     node scripts/bakeEra2010.mjs --extend-big-five --base=base.ts
+   Add --check to rebuild and compare with the shipped file instead of
+   writing (scripts/simEraBakeExtend.mjs does exactly that when the pulls
+   are on the machine).
+
+   THE SPELLINGS LEFT OUT. A handful of year-2010 rows sit at a variant
+   spelling of a member club: "Roma" (three youth forwards), "Genoa" (one),
+   the Primavera sides of Juventus, Napoli, Catania and Sampdoria, and the
+   second teams of Bayern, Schalke, Stuttgart and Wolfsburg. None is a first
+   team regular of 2010-11, so those spellings stay out of the maps and the
+   rows stay out of the world, as Round 899 did with its reserve sides. The
+   row at "FC Bayern Munich" is Mehmet Ekici, who spent 2010-11 on loan at
+   Nurnberg; see the moves. */
+
+/* Table spelling -> engine name, in final table order. Membership of the
+ * 2010-11 Serie A, two sources read 2026-10-03 that agree on all twenty:
+ * RSSSF's season record (https://www.rsssf.org/tablesi/ital2011.html) and
+ * ESPN's final standings
+ * (https://www.espn.com/soccer/standings/_/league/ITA.1/season/2010). Every
+ * spelling was checked against the pull (the step fails on a spelling with
+ * no rows). Names reuse the 2026 and 2015 spellings wherever the club exists
+ * there, so colours and rivalries carry over. */
+const DB_TO_ERA_SA = {
+  'AC Milan': 'AC Milan', 'Inter Milan': 'Inter Milan', 'SSC Napoli': 'Napoli',
+  'Udinese Calcio': 'Udinese', 'SS Lazio': 'Lazio', 'AS Roma': 'Roma',
+  'Juventus FC': 'Juventus', 'Palermo FC': 'Palermo', 'ACF Fiorentina': 'Fiorentina',
+  'Genoa CFC': 'Genoa', 'Chievo Verona': 'Chievo Verona', 'Parma Calcio 1913': 'Parma',
+  'Catania FC': 'Catania', 'Cagliari Calcio': 'Cagliari', 'Cesena FC': 'Cesena',
+  'Bologna FC 1909': 'Bologna', 'US Lecce': 'Lecce', 'UC Sampdoria': 'Sampdoria',
+  'Brescia Calcio': 'Brescia', 'SSC Bari': 'Bari',
 };
-function ratingOf(usd) {
-  if (!usd || usd <= 0) return 48;
-  const r = Math.round(-13.106 + 12.851 * Math.log10(usd));
-  return Math.max(48, Math.min(94, r));
-}
-function gbpM(usd) {
-  const m = (usd * 0.75) / 1e6;
-  return Math.round(m * 10) / 10;
+/* The 2010-11 Bundesliga, the same two publishers, read the same day,
+ * agreeing on all eighteen: RSSSF (https://www.rsssf.org/tablesd/duit2011.html)
+ * and ESPN (https://www.espn.com/soccer/standings/_/league/GER.1/season/2010). */
+const DB_TO_ERA_BL = {
+  'Borussia Dortmund': 'Borussia Dortmund', 'Bayer 04 Leverkusen': 'Bayer Leverkusen',
+  'Bayern Munich': 'Bayern Munich', 'Hannover 96': 'Hannover 96', '1.FSV Mainz 05': 'Mainz',
+  '1.FC Nuremberg': 'Nürnberg', '1.FC Kaiserslautern': 'Kaiserslautern', 'Hamburger SV': 'Hamburg',
+  'SC Freiburg': 'Freiburg', '1.FC Köln': 'Köln', 'TSG 1899 Hoffenheim': 'Hoffenheim',
+  'VfB Stuttgart': 'Stuttgart', 'SV Werder Bremen': 'Werder Bremen', 'FC Schalke 04': 'Schalke 04',
+  'VfL Wolfsburg': 'Wolfsburg', 'Borussia Mönchengladbach': 'Gladbach',
+  'Eintracht Frankfurt': 'Eintracht Frankfurt', 'FC St. Pauli': 'St. Pauli',
+};
+/* The 2010-11 Ligue 1, the same two publishers, read the same day, agreeing
+ * on all twenty: RSSSF (https://www.rsssf.org/tablesf/fran2011.html) and ESPN
+ * (https://www.espn.com/soccer/standings/_/league/FRA.1/season/2010). The
+ * twentieth, Arles-Avignon, has no year-2010 row in the table at all (nor a
+ * year-2011 one): it is declared EMPTY below and plays on the engine's
+ * labelled youth padding, never on names found anywhere else. */
+const DB_TO_ERA_L1 = {
+  'LOSC Lille': 'Lille', 'Olympique Marseille': 'Marseille', 'Olympique Lyon': 'Lyon',
+  'Paris Saint-Germain': 'PSG', 'FC Sochaux-Montbéliard': 'Sochaux', 'Stade Rennais FC': 'Rennes',
+  'FC Girondins Bordeaux': 'Bordeaux', 'FC Toulouse': 'Toulouse', 'AJ Auxerre': 'Auxerre',
+  'AS Saint-Étienne': 'Saint-Étienne', 'FC Lorient': 'Lorient', 'Valenciennes FC': 'Valenciennes',
+  'AS Nancy-Lorraine': 'Nancy', 'Montpellier HSC': 'Montpellier', 'SM Caen': 'Caen',
+  'Stade Brestois 29': 'Brest', 'OGC Nice': 'Nice', 'AS Monaco': 'Monaco', 'RC Lens': 'Lens',
+};
+const L1_EMPTY = [{ club: 'Arles-Avignon', spellings: ['AC Arles-Avignon', 'AC Arles', 'Arles-Avignon', 'AC Arles Avignon'] }];
+
+/* BIG_FIVE_CORRECTIONS_START */
+/* THE FOLDS: two men Round 146 brought INTO the first two leagues as
+ * arrivals from Germany and Italy. Their year-2010 rows now surface in the
+ * new leagues' pulls at the clubs they left; the shipped line stays, the row
+ * is dropped, one man, one club. The step proves each fold is one row (same
+ * position, age and value on both sides). */
+const B5_FOLDS = [
+  { n: 'Mesut Özil', why: 'Werder Bremen to Real Madrid, Round 146 arrival' },
+  { n: 'Mario Balotelli', why: 'Inter to Manchester City, Round 146 arrival' },
+];
+/* THE NAMESAKES: strings worn by two real men each, one in a new league and
+ * one in the shipped world (birth dates in the harness beside the allowlist
+ * that names them, scripts/simEra2010.mjs). The engine keys players by name,
+ * so the standing rule decides: the higher value stays. */
+const B5_NAMESAKES = [
+  { n: 'Pablo Álvarez', why: 'the Catania right-back from Argentina (25) and the Deportivo winger from Spain (29)' },
+  { n: 'Henrique', why: 'the Bordeaux centre-back (26) and the Racing Santander centre-back (23), both Brazilian' },
+  { n: 'Adriano', why: 'the Monaco right-back (27) and the Sevilla left-back (25), both Brazilian' },
+  { n: 'Eduardo', why: 'the Lens forward from Brazil (29) and the Arsenal forward from Croatia (26)' },
+  { n: 'Fernando', why: 'the Bordeaux defensive midfielder from Brazil (28) and the Malaga midfielder from Spain (30)' },
+];
+const B5_MOVES = [];
+const B5_REMOVALS = [];
+const B5_ARRIVALS = [];
+/* BIG_FIVE_CORRECTIONS_END */
+
+/* A 2010-11 Serie A, Bundesliga and Ligue 1 without their own headlines are
+   not those leagues, and the re-audit has to have landed. */
+const BIG_FIVE_ANCHORS = [
+  ['Barcelona', 'Lionel Messi'], ['Real Madrid', 'Cristiano Ronaldo'], ['Manchester United', 'Wayne Rooney'],
+];
+/* Thin only where the table itself is thin (under 8 real rows after the
+   corrections). */
+const BIG_FIVE_THIN = ['Blackpool', 'Arles-Avignon', 'Cesena'];
+
+if (bigFiveArg) {
+  const argOf = (flag, dflt) => {
+    const a = process.argv.find(x => x.startsWith(`${flag}=`));
+    return a ? a.slice(a.indexOf('=') + 1) : dflt;
+  };
+  const file = path.join(ROOT, 'src/data/clubManagerEra2010.ts');
+  const res = runExtend({
+    file: argOf('--base', file), outFile: file, prefix: 'ERA2010', year: 2010,
+    rows: readPull(argOf('--pull', 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json')),
+    nextRows: readPull(argOf('--next', 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json')),
+    newLeagues: [
+      { label: 'Serie A', dbToEra: DB_TO_ERA_SA },
+      { label: 'Bundesliga', dbToEra: DB_TO_ERA_BL },
+      { label: 'Ligue 1', dbToEra: DB_TO_ERA_L1, empty: L1_EMPTY },
+    ],
+    worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
+    folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
+    anchors: BIG_FIVE_ANCHORS,
+    expectedThin: BIG_FIVE_THIN,
+    header: s => [
+      '// AUTO-GENERATED by scripts/bakeEra2010.mjs (Round 146, extended Round 901).',
+      '// The 2010-11 era world: real year-2010 Transfermarkt rows from',
+      `// player_market_values for all ${s.clubs} clubs of the 2010-11 Premier League,`,
+      '// La Liga, Serie A, Bundesliga and Ligue 1. The last three joined in Round',
+      '// 901 through the extend step (scripts/lib/eraBakeExtend.mjs; the new',
+      '// leagues from an offline pull of the base table, the lines already',
+      '// shipped carried through as bytes). Memberships and sources are in the',
+      '// script header. The verified summer 2010 window corrections are applied',
+      `// across all five leagues (${s.moves} rows moved, removed, arrived or folded`,
+      '// in total). Values in £m at the year-2010 snapshot, ratings 48-94 on the',
+      '// same curve as the 2026 bake. Regenerate per the header of',
+      '// scripts/bakeEra2010.mjs.',
+      '// DO NOT EDIT BY HAND.',
+    ],
+  }, { write: !process.argv.includes('--dry') && !process.argv.includes('--check') });
+  const s = res.stats;
+  console.log(`Extended to ${s.players} players across ${s.clubs} clubs (${s.partial.length} partial: ${s.partial.join(', ')}).`);
+  console.log(`Big five corrections: ${s.moved} moved, ${s.removed} removed, ${s.arrived} arrived, ${s.folded} folded, ${s.collisions} namesakes resolved.`);
+  console.log(`Shipped lines: ${s.shippedLines}, of which ${s.shippedKept} are still in the world byte for byte. Touched:`);
+  for (const t of s.touched) console.log(`  ${t}`);
+  console.log(`New club sizes: ${Object.entries(s.sizes).map(([c, n]) => `${c} ${n}`).join(', ')}`);
+  /* --check: rebuild and compare with the shipped file, write nothing (the
+     harness scripts/simEraBakeExtend.mjs runs this from the 40 club base). */
+  if (process.argv.includes('--check')) {
+    const norm = t => t.replace(/\r\n/g, '\n');
+    if (norm(fs.readFileSync(file, 'utf8')) !== norm(res.text)) {
+      console.error('CHECK: the rebuilt era file differs from src/data/clubManagerEra2010.ts');
+      process.exit(1);
+    }
+    console.log('CHECK: the rebuilt era file is byte identical to the shipped one (line endings aside).');
+    process.exit(0);
+  }
+  /* The market's nationality filter reads one map per world, and it must hold
+     exactly this world's names. */
+  if (!process.argv.includes('--dry')) {
+    const n = updateNationalityBlock(path.join(ROOT, 'src/data/playerNationalities.ts'), 'era2010', res);
+    console.log(`Nationalities, era2010 block: ${n.added} added, ${n.changed} re-pointed, ${n.dropped} dropped, ${n.total} entries for ${s.players} players.`);
+  }
+  process.exit(0);
 }
 
 /* ------------------------------------------------------------------ */
