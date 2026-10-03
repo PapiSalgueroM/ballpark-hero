@@ -184,12 +184,12 @@ const NFLCareer = () => {
             "The fewer clues you need, the higher your score!",
           ]}
           examples={[
-            "Tom Brady: 6th Round, Michigan, Patriots → Buccaneers, 7× Super Bowl Champion",
-            "Patrick Mahomes: 1st Round, Texas Tech, Chiefs, 3× Super Bowl MVP",
-            "Aaron Donald: 1st Round, Pitt, Rams, 3× DPOY",
-            "Derrick Henry: 2nd Round, Alabama, Titans → Ravens, 2,000-yard rusher",
-            "Justin Jefferson: 1st Round, LSU, Vikings, 3× Pro Bowl",
-            "Travis Kelce: 3rd Round, Cincinnati, Chiefs, All-time TE receiving leader"
+            "Tom Brady: 6th Round, Michigan, Patriots → Buccaneers, 649 TD passes",
+            "Patrick Mahomes: 1st Round, Texas Tech, Chiefs, 250+ TD passes",
+            "Aaron Donald: 1st Round, Pittsburgh, St. Louis Rams → Los Angeles Rams, 111 career sacks",
+            "Derrick Henry: 2nd Round, Alabama, Titans → Ravens, 10,000+ rushing yards",
+            "Justin Jefferson: 1st Round, LSU, Vikings, 5,000+ receiving yards",
+            "Travis Kelce: 3rd Round, Cincinnati, Chiefs, 11,000+ receiving yards"
           ]}
         />
 

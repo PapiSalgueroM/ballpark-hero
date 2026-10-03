@@ -32,6 +32,10 @@
  *      The floor is 30, so a join that silently matches nothing cannot pass.
  *   7. Controls, run every time: each control plants one defect in an in-memory copy and the
  *      section it targets must go red. A control whose target string is missing refuses to run.
+ *   8. The rules card examples on the page (src/pages/NFLCareer.tsx) are clues too: each one names a
+ *      player in the record and must show his draft round, college, clubs and career stat as the
+ *      record has them. They used to say things no row said (Travis Kelce "All-time TE receiving
+ *      leader", Justin Jefferson "3x Pro Bowl").
  *
  * NEGATIVE CONTROLS (also runnable alone: SIM_NFLCP_CONTROL=<name>, the run must then exit 1)
  *   seattle    puts Seattle back on Matthew Stafford's path                 sections 2, 6
@@ -41,6 +45,7 @@
  *   roster     moves Aaron Rodgers to the Jets in the roster file copy      section 6
  *   order      swaps the first two rows                                     section 1
  *   thin       adds a second thin fact to the record                       section 3
+ *   example    puts "7x Super Bowl Champion" back on the Tom Brady example     section 8
  *
  *   node scripts/simNflCareerPathFacts.mjs
  */
@@ -52,6 +57,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'src/data/nflCareerPlayers.ts');
 const RECORD = path.join(ROOT, 'scripts/data/nflCareerPathVerified2026-10.json');
 const ROSTER = path.join(ROOT, 'scripts/data/nflRosters2026.json');
+const PAGE = path.join(ROOT, 'src/pages/NFLCareer.tsx');
 const THIN_BASELINE = 1;
 const JOIN_FLOOR = 30;
 
@@ -83,7 +89,7 @@ const CLUB_OF = new Map(Object.entries(CLUBS).flatMap(([k, names]) => names.map(
 const FIELDS = ['draftRound', 'draftYear', 'college', 'firstTeam', 'careerStat', 'teams', 'jerseyNumbers'];
 const num = s => parseFloat(String(s).replace(/,/g, ''));
 
-export function check({ rows, record, roster }) {
+export function check({ rows, record, roster, page }) {
   const fail = []; const bad = (sec, msg) => fail.push({ sec, msg });
   const rec = record.rows;
   // 1. order and length
@@ -155,12 +161,32 @@ export function check({ rows, record, roster }) {
     if (!r.roster2026 || r.roster2026.team !== hit[0]) bad(6, `${r.name}: the record's 2026 club ${r.roster2026 && r.roster2026.team} is not the roster file's ${hit[0]}`);
   }
   if (joined < JOIN_FLOOR) bad(6, `only ${joined} rows join the 2026 roster file (floor ${JOIN_FLOOR}, measured 37)`);
+  // 8. the rules card examples are clues too
+  const block = (page || '').match(/examples=\{\[([\s\S]*?)\]\}/);
+  const examples = block ? [...block[1].matchAll(/"([^"]+)"/g)].map(m => m[1]) : [];
+  if (examples.length < 4) bad(8, `found ${examples.length} rules card examples on the page, expected at least 4`);
+  const ORD = n => n + (n % 10 === 1 && n !== 11 ? 'st' : n % 10 === 2 && n !== 12 ? 'nd' : n % 10 === 3 && n !== 13 ? 'rd' : 'th');
+  const nick = t => t.split(' ').slice(-1)[0];
+  for (const ex of examples) {
+    const [who, rest] = ex.split(': ');
+    const r = rec.find(x => x.name === who);
+    if (!r || !rest) { bad(8, `example "${ex}" names nobody in the record`); continue; }
+    const parts = rest.split(', ');
+    const [rd, college, clubs, ...stat] = parts;
+    if (rd !== `${ORD(r.draftRound.value)} Round`) bad(8, `${who} example says "${rd}", the record has round ${r.draftRound.value}`);
+    if (college !== r.college.value) bad(8, `${who} example says college "${college}", the record has "${r.college.value}"`);
+    const shown = (clubs || '').split(' → ');
+    const want = r.teams.value;
+    if (shown.length !== want.length || shown.some((c, i) => c !== want[i] && c !== nick(want[i]))) bad(8, `${who} example says clubs "${clubs}", the record has ${want.join(' > ')}`);
+    if (stat.join(', ') !== r.careerStat.value) bad(8, `${who} example says "${stat.join(', ')}", the record's career stat is "${r.careerStat.value}"`);
+  }
   return { fail, joined, thinCount };
 }
 
 function load() {
   return {
     src: fs.readFileSync(DATA, 'utf8'),
+    page: fs.readFileSync(PAGE, 'utf8'),
     record: JSON.parse(fs.readFileSync(RECORD, 'utf8')),
     roster: JSON.parse(fs.readFileSync(ROSTER, 'utf8')),
   };
@@ -203,6 +229,11 @@ const CONTROLS = {
     const la = c.src.slice(a, c.src.indexOf('\n', a)); const lb = c.src.slice(b, c.src.indexOf('\n', b));
     c.src = c.src.replace(la, '@@A@@').replace(lb, la).replace('@@A@@', lb);
   } },
+  example: { secs: [8], plant(c) {
+    const from = 'Tom Brady: 6th Round, Michigan, Patriots → Buccaneers, 649 TD passes';
+    must(c.page.includes(from), 'Brady example string missing');
+    c.page = c.page.replace(from, 'Tom Brady: 6th Round, Michigan, Patriots → Buccaneers, 7x Super Bowl Champion');
+  } },
   thin: { secs: [3], plant(c) {
     const r = c.record.rows.find(x => x.name === 'Tom Brady');
     must(r && !r.thin, 'Brady already thin');
@@ -210,9 +241,9 @@ const CONTROLS = {
   } },
 };
 
-function run(c) { return check({ rows: parseRows(c.src), record: c.record, roster: c.roster }); }
+function run(c) { return check({ rows: parseRows(c.src), record: c.record, roster: c.roster, page: c.page }); }
 
-const SECTIONS = { 1: 'order and length', 2: 'every field equals the record', 3: 'the record holds up', 4: 'career stat text matches its sources', 5: 'shape', 6: 'active players end at their 2026 club' };
+const SECTIONS = { 1: 'order and length', 2: 'every field equals the record', 3: 'the record holds up', 4: 'career stat text matches its sources', 5: 'shape', 6: 'active players end at their 2026 club', 8: 'the rules card examples match the record' };
 const base = load();
 const only = process.env.SIM_NFLCP_CONTROL;
 if (only) {
@@ -234,7 +265,7 @@ for (const [sec, title] of Object.entries(SECTIONS)) {
 let ctrlBad = 0;
 if (!only) {
   for (const [name, ctl] of Object.entries(CONTROLS)) {
-    const c = clone({ src: base.src, record: base.record, roster: base.roster });
+    const c = clone({ src: base.src, page: base.page, record: base.record, roster: base.roster });
     try { ctl.plant(c); } catch (e) { console.log(`FAIL 7. control ${name}: ${e.message}`); ctrlBad++; continue; }
     const r = run(c);
     const hit = ctl.secs.filter(s => r.fail.some(x => x.sec === s));
