@@ -86,9 +86,12 @@
  *     years. Before this section the verdict read the overall gained and 1,497
  *     of 1,500 real careers drew the big reading (oldtiers puts that back).
  *     Card start, overall range and focus steadiness: 600 of 600 on every seed.
- *   Each run takes 17 to 45 seconds on a busy machine, bundles included.
+ *   Each run takes 17 to 66 seconds on a busy machine, bundles included.
  *   Controls: all twelve FIRED on their own sections (alwayswrite also turns
- *   2 and 5 red, since the stray field shows on the no focus and corrupt arms).
+ *   2 and 5 red, since the stray field shows on the no focus and corrupt arms;
+ *   leak also turns 7 red, since its stray point moves the verdict; norecalc
+ *   left 103 of 427 focused years on a stale overall; oldtiers read big on
+ *   99.3% of real years).
  *
  * Run: node scripts/simCareerAcademy.mjs
  */
