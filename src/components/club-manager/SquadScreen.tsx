@@ -10,6 +10,9 @@ import {
 } from '@/lib/clubManager';
 import type { CMPlayer, CareerState, IncomingBid } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
+/* Round 978: who is just back from international duty, and who you rested. */
+import { backFromDuty, restingIds } from '@/lib/clubManagerInternationals';
+import type { IntlCallUp } from '@/lib/clubManagerInternationals';
 import { ALL_POSITIONS } from '@/lib/positionFit';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -364,9 +367,11 @@ interface SquadRowProps {
   sortKey: SquadSortKey;
   scoutLevel: number;
   money: Money;
+  /* Round 978: back from international duty for the next match, and whether you rested him for it. */
+  duty?: { call: IntlCallUp; resting: boolean } | null;
 }
 
-function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money }: SquadRowProps) {
+function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money, duty = null }: SquadRowProps) {
   /* The no scroll rule: rows open independently, so opening one never closes
      another above it and pulls the one you tapped out from under your thumb.
      If the row sits so low that its detail would open below the fold, the
@@ -410,6 +415,16 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
             {p.transferStatus === 'blocked' && <span className={cn(badge, 'text-red-400 border-red-400/60')}>BLOCKED</span>}
             {/* Round 127: he handed in a transfer request off his own bat. */}
             {p.wantsOut && <span className={cn(badge, 'text-red-400 border-red-400/60')}>WANTS OUT</span>}
+            {/* Round 978: just back from his country, tired, maybe rested for the next one. */}
+            {duty && (
+              <span
+                data-cm-intl-badge={duty.resting ? 'resting' : 'back'}
+                title={`Back from international duty with ${duty.call.nation}: the trip cost him ${duty.call.cost} fitness${duty.call.starts ? ', he started their games' : ''}.${duty.resting ? ' Rested for the next match.' : ''}`}
+                className={cn(badge, duty.resting ? 'text-sky-300 border-sky-400/60' : 'text-emerald-300 border-emerald-400/60')}
+              >
+                🌍 {duty.resting ? 'RESTING' : 'BACK'}
+              </span>
+            )}
           </span>
           {/* Round 73: the stat line. Round 715: on a phone it is the short
               version, and the rest is one tap away in the detail. */}
@@ -480,6 +495,12 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
   const scoutLevel = staffLevel(career, 'scout');
   const money = moneyIn(career);
   const sorted = useMemo(() => sortSquad(squad, sort.key, sort.dir, scoutLevel), [squad, sort, scoutLevel]);
+  /* Round 978: the men back from international duty, while the match they came back for is ahead. */
+  const back = backFromDuty(career);
+  const resting = restingIds(career);
+  const dutyById = new Map(back.map(call => [call.id, call]));
+  const backOpp = career.intl?.last?.backOpponent ?? null;
+  const restNames = back.filter(call => resting.has(call.id)).map(call => call.name);
 
   const pick = (key: SquadSortKey) => setSort(s => (
     s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: SORT_BY_KEY.get(key)?.first ?? 'desc' }
@@ -494,6 +515,14 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
 
   return (
     <div data-cm-squad-list data-cm-sort-key={sort.key} data-cm-sort-dir={sort.dir} className="bg-card border border-border rounded-2xl p-3 md:p-4">
+      {back.length > 0 && (
+        <div data-cm-intl-banner className="mb-2 rounded-lg border border-emerald-400/40 bg-emerald-500/10 px-2.5 py-1.5 text-[11px] text-foreground">
+          <span className="font-bold">🌍 Back from international duty{backOpp ? ` for ${backOpp}` : ''}: {back.length} {back.length === 1 ? 'player' : 'players'}.</span>{' '}
+          {restNames.length > 0
+            ? <span>Resting for that game: {restNames.join(', ')}. They are on the bench if you need them.</span>
+            : <span className="text-muted-foreground">They start tired unless you rest the spent ones: your assistant asks in the inbox.</span>}
+        </div>
+      )}
       <div className="flex items-center justify-between gap-2 pb-1.5 border-b border-border/60 md:border-0 md:pb-0.5">
         <span className="text-[10px] text-muted-foreground uppercase tracking-wide">Player ({squad.length} in squad)</span>
         <span className="flex items-center gap-1 md:hidden">
@@ -557,6 +586,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
           sortKey={sort.key}
           scoutLevel={scoutLevel}
           money={money}
+          duty={dutyById.has(p.id) ? { call: dutyById.get(p.id)!, resting: resting.has(p.id) } : null}
         />
       ))}
       <p className="text-[9px] text-muted-foreground pt-2">

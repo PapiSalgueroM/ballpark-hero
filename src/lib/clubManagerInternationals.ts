@@ -302,6 +302,8 @@ export function callUpsFor(state: CareerState, window: Pick<IntlWindow, 'id' | '
 
 export interface IntlBreak {
   windowId: string;
+  /** The calendar index it landed before: the next entry when it was played. */
+  atWeek: number;
   /** "21 Sep to 6 Oct". */
   label: string;
   /** Calendar index of my first match after the break, -1 when none is left. */
@@ -345,7 +347,7 @@ export function validIntl(block: unknown): block is IntlDuty {
   if (!isInt(b.season) || !Array.isArray(b.fired) || !b.fired.every(isStr)) return false;
   if (b.last !== undefined) {
     const l = b.last as Record<string, unknown> | null;
-    if (!l || typeof l !== 'object' || !isStr(l.windowId) || !isStr(l.label) || !isInt(l.backWeek)) return false;
+    if (!l || typeof l !== 'object' || !isStr(l.windowId) || !isStr(l.label) || !isInt(l.backWeek) || !isInt(l.atWeek)) return false;
     if (l.backOpponent !== null && !isStr(l.backOpponent)) return false;
     if (!Array.isArray(l.called) || !l.called.every(validCallUp)) return false;
   }
@@ -450,7 +452,7 @@ export function fireDueBreaks(state: CareerState): IntlMessage[] {
     });
     const backWeek = myNextMatchWeek(state, state.week);
     const fx = backWeek >= 0 ? fixtureFor(state, state.calendar[backWeek]) : null;
-    const brk: IntlBreak = { windowId: w.id, label: windowLabel(w), backWeek, backOpponent: fx ? fx.opponent : null, called };
+    const brk: IntlBreak = { windowId: w.id, atWeek: state.week, label: windowLabel(w), backWeek, backOpponent: fx ? fx.opponent : null, called };
     intl.last = brk;
     delete intl.rest;
     const msg = breakMessage(brk);

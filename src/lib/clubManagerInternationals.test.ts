@@ -95,11 +95,11 @@ describe('who goes', () => {
 
   it('writes the note as narration from a role, naming everyone, with no dashes', () => {
     const called = callUpsFor(s, { id: '2026-sepoct', matches: 4 });
-    const msg = breakMessage({ windowId: '2026-sepoct', label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton', called });
+    const msg = breakMessage({ windowId: '2026-sepoct', atWeek: 6, label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton', called });
     expect(msg?.from).toBe('Your assistant');
     for (const c of called) expect(msg?.text).toContain(c.name);
     expect(msg?.text).not.toMatch(/[–—]/);
     expect(msg?.text).not.toMatch(/["“”]/);
-    expect(breakMessage({ windowId: 'x', label: 'y', backWeek: 1, backOpponent: null, called: [] })).toBeNull();
+    expect(breakMessage({ windowId: 'x', atWeek: 0, label: 'y', backWeek: 1, backOpponent: null, called: [] })).toBeNull();
   });
 });
