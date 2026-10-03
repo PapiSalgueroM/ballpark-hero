@@ -6,7 +6,8 @@
    talk with no sport in it: when the rating has fallen far enough from the
    career peak, or under a floor, past a set age, the player is asked whether
    it is time. He can stop now, play one more year (and hear it again next
-   year if the slide goes on), or announce a farewell season: the next season
+   year unless he climbs back inside the rule: the talk reads where he stands,
+   not whether he fell again), or announce a farewell season: the next season
    is his last whatever the numbers say.
 
    The sport's own hard stop is untouched. A snapshot marked `forced` means the
@@ -91,7 +92,7 @@ export interface RetirementChoice {
  *  vitest file holds each one to it. */
 export const RETIREMENT_CHOICES: RetirementChoice[] = [
   { id: "retireNow", emoji: "👋", label: "Retire now", detail: "This season was your last. The career ends here." },
-  { id: "oneMore", emoji: "💪", label: "One more year", detail: "Play next season. If the slide keeps going, this talk comes back after it." },
+  { id: "oneMore", emoji: "💪", label: "One more year", detail: "Play next season. Unless you play your way back up, this talk comes back after it." },
   { id: "farewell", emoji: "🎤", label: "Announce a farewell season", detail: "Next season is your last, and everyone knows it. The career ends when it does, whatever the numbers say." },
 ];
 

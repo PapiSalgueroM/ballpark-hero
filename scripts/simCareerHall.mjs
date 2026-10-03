@@ -66,10 +66,10 @@ const CAREERS = Number(process.argv[3] || 2000);
 const CONTROL = process.env.SIM_CONTROL || '';
 
 const ENGINES = {
-  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
-  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
-  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
-  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
+  nfl: { file: 'nflMyCareer.ts', hall: 'NFL_CAREER_HALL', legacy: 'legacyOf', arch: 'ARCHETYPES', start: 'startCareer', season: 'simSeason', progress: 'progress', event: 'drawEvent', stop: 'shouldRetire', roll: 'rollTeamQuality', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'] },
+  nba: { file: 'nbaMyCareer.ts', hall: 'NBA_CAREER_HALL', legacy: 'nbaLegacyOf', arch: 'NBA_ARCHETYPES', start: 'startNbaCareer', season: 'simNbaSeason', progress: 'nbaProgress', event: 'drawNbaEvent', stop: 'nbaShouldRetire', roll: 'nbaRollTeamQuality', positions: ['PG', 'SG', 'SF', 'PF', 'C'], banned: { ppg: 0, rpg: 0, apg: 0 } },
+  mlb: { file: 'mlbMyCareer.ts', hall: 'MLB_CAREER_HALL', legacy: 'mlbLegacyOf', arch: 'MLB_ARCHETYPES', start: 'startMlbCareer', season: 'simMlbSeason', progress: 'mlbProgress', event: 'drawMlbEvent', stop: 'mlbShouldRetire', roll: 'mlbRollTeamQuality', positions: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'] },
+  nhl: { file: 'nhlMyCareer.ts', hall: 'NHL_CAREER_HALL', legacy: 'nhlLegacyOf', arch: 'NHL_ARCHETYPES', start: 'startNhlCareer', season: 'simNhlSeason', progress: 'nhlProgress', event: 'drawNhlEvent', stop: 'nhlShouldRetire', roll: 'nhlRollTeamQuality', positions: ['C', 'LW', 'RW', 'D', 'G'] },
 };
 if (!SPORT) {
   // runAllSims calls every harness with no arguments: run the four sports, one child each.
@@ -89,6 +89,9 @@ if (!E) { console.error(`usage: node scripts/simCareerHall.mjs <${Object.keys(EN
    changes nothing would leave the harness green for the wrong reason. */
 const CONTROLS = {
   everyonein: { file: 'careerHallOfFame.ts', from: 'if (cand.hof) {', to: 'if (true) {' },
+  bindhof: { file: 'careerHallOfFame.ts', from: 'return { score: l.score, hof: l.hof };', to: 'return { score: l.score, hof: true };' },
+  outcomeswap: { file: 'careerHallOfFame.ts', from: 'rules.ballotYears !== null ? "fellOff" : "waiting"', to: 'rules.ballotYears === null ? "fellOff" : "waiting"' },
+  nominationgone: { file: 'careerHallOfFame.ts', from: 'if (cand.score < lines.hofLine * HALL_GAME_RULES.nominationShare) {', to: 'if (false) {' },
   waitoff: { file: `${SPORT}CareerHall.ts`, re: /firstClassOffset: (\d+),/, to: (m, n) => `firstClassOffset: ${Number(n) + 1},` },
   flatfirst: { file: 'careerHallOfFame.ts', from: 'return f + (1 - f) * bandFraction(score, lines);', to: 'return f;' },
   nopromise: { file: 'careerHallOfFame.ts', from: 'if (score >= lines.firstBallotScore) return 1;', to: 'if (score >= lines.firstBallotScore) return 0.5;' },
@@ -117,7 +120,9 @@ const controlPlugin = {
 
 const OUT = path.join(os.tmpdir(), `career-hall-${SPORT}-${CONTROL || 'base'}-${process.pid}.mjs`);
 const entry = [
-  `export { ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
+  // The engine's own legacyOf, read straight from the engine, so the iff check
+  // never goes through the Hall binding it is checking.
+  `export { ${E.legacy} as LEGACY, ${E.arch} as ARCH, ${E.start} as start, ${E.season} as season, ${E.progress} as progress, ${E.event} as drawEvent, ${E.stop} as stop, ${E.roll} as roll } from './src/lib/${E.file}';`,
   `export { ${E.hall} as HALL } from './src/lib/${SPORT}CareerHall.ts';`,
   `export { hallRecordFor, runHallBallot, giveHallSpeech, HALL_SPEECHES } from './src/lib/careerHallOfFame.ts';`,
   `export { retirementTalk } from './src/lib/careerRetirement.ts';`,
@@ -168,7 +173,7 @@ for (let i = 0; i < CAREERS; i += 1) {
       if (talk && c.age < rule.minAge) talkBeforeAge += 1;
       if (talk) { talks += 1; if (firstTalkAge === null) firstTalkAge = c.age; }
     }
-    const legacy = HALL.legacy(c);
+    const legacy = eng.LEGACY(c);
     counting = true;
     const rec = eng.hallRecordFor(HALL, c);
     const again = eng.hallRecordFor(HALL, c);
@@ -177,7 +182,8 @@ for (let i = 0; i < CAREERS; i += 1) {
     counting = false;
     careers.push({
       score: legacy.score, hof: legacy.hof, rec, same: JSON.stringify(rec) === JSON.stringify(again),
-      last: HALL.lastSeasonYear(c), seasons: c.seasons.map(s => ({ team: s.team, games: s.games })),
+      // Read off the save, not through HALL.lastSeasonYear, which is under test.
+      last: c.seasons.at(-1)?.year ?? Number.NaN, seasons: c.seasons.map(s => ({ team: s.team, games: s.games })),
       talks, firstTalkAge, speech, finalAge: c.age, seasonsPlayed: c.seasons.length,
     });
   } catch (err) {
@@ -255,7 +261,34 @@ for (const c of careers) {
   if (c.rec.jersey) jerseys += 1;
 }
 
-const iffMiss = careers.filter(c => (c.rec.outcome === 'inducted') !== c.hof).length;
+const iffMiss = careers.filter(c => (c.rec.outcome === 'inducted') !== c.hof || c.rec.score !== c.score).length;
+
+/* The outcome of every career outside the Hall, read from the rule as the
+   card prints it. Off the ballot exactly under half the Hall line (the game
+   rule nominationShare, 0.5). On the ballot: where the Hall has a ballot limit
+   every one falls off, and only the last ballot may sit under the stay floor;
+   where it claims no limit nobody falls off, so he is still waiting. */
+const NOMINATION = 0.5;
+let outcomeMiss = 0, onBallotOut = 0, offBallot = 0, earlyFalls = 0;
+for (const c of careers) {
+  const r = c.rec;
+  if (r.outcome === 'inducted') continue;
+  const off = c.score < NOMINATION * lines.hofLine;
+  if (off) {
+    offBallot += 1;
+    if (r.outcome !== 'notOnBallot' || r.ballots.length !== 0) outcomeMiss += 1;
+    continue;
+  }
+  onBallotOut += 1;
+  if (r.ballots.length === 0) { outcomeMiss += 1; continue; }
+  const want = rules.ballotYears !== null ? 'fellOff' : 'waiting';
+  if (r.outcome !== want) outcomeMiss += 1;
+  if (rules.stayFloor !== null && r.ballots.slice(0, -1).some(b => b.share < rules.stayFloor)) outcomeMiss += 1;
+  if (rules.ballotYears !== null && r.ballots.length < rules.ballotYears) {
+    earlyFalls += 1;
+    if (!(rules.stayFloor !== null && r.ballots.at(-1).share < rules.stayFloor)) outcomeMiss += 1;
+  }
+}
 const notSame = careers.filter(c => !c.same).length;
 const talked = share(careers, c => c.talks > 0);
 const outcomes = {};
@@ -266,7 +299,7 @@ console.log(`simCareerHall ${SPORT}: ${careers.length} careers, ${crashes} crash
 console.log(`  hof ${pct(inducted.length, careers.length)}% (${inducted.length}), first ballot ${pct(fbAll * 1000, 1000)}% of them; bottom third ${pct(fbLow * 1000, 1000)}%, top third ${pct(fbHigh * 1000, 1000)}%`);
 console.log(`  outcomes ${JSON.stringify(outcomes)}; jerseys ${jerseys}; talk reached ${pct(talked * 1000, 1000)}% of careers`);
 console.log(`  ladder ${ladder.map(v => v.toFixed(3)).join(' ')}; smallest step ${Math.min(...ladderSteps).toFixed(3)}`);
-console.log(`  misses: iff ${iffMiss}, table [${tableDiffs.join(',')}], offset ${offsetMiss}, promise ${promiseMiss}/${promiseN}, draws ${hallDraws}, notSame ${notSame}, sides ${sideMiss}, talk ${talkMismatch}+${talkBeforeAge}, jersey ${jerseyMiss}`);
+console.log(`  misses: iff ${iffMiss}, outcome ${outcomeMiss}, table [${tableDiffs.join(',')}], offset ${offsetMiss}, promise ${promiseMiss}/${promiseN}, draws ${hallDraws}, notSame ${notSame}, sides ${sideMiss}, talk ${talkMismatch}+${talkBeforeAge}, jersey ${jerseyMiss}`);
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : null; };
 console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talks))}; first talk at ${med(careers.filter(c => c.firstTalkAge !== null).map(c => c.firstTalkAge))}; career ends at ${med(careers.map(c => c.finalAge))}; non finite scores ${careers.filter(c => !Number.isFinite(c.score)).length}`);
 
@@ -274,7 +307,8 @@ console.log(`  talk timing: talks a career, median ${med(careers.map(c => c.talk
 const BAND = { minInducted: 0.05, riseGap: 0.20, ladderStep: 0.015, talkReach: 0.70 };
 const checks = [
   ['crashes', crashes === 0 && careers.length === CAREERS, `${crashes} crashed of ${CAREERS}`],
-  ['iff', iffMiss === 0 && inducted.length >= BAND.minInducted * careers.length, `${iffMiss} disagree with legacyOf, ${inducted.length} inducted`],
+  ['iff', iffMiss === 0 && inducted.length >= BAND.minInducted * careers.length, `${iffMiss} disagree with the engine's own legacyOf, ${inducted.length} inducted`],
+  ['outcome', outcomeMiss === 0 && offBallot > 0 && onBallotOut > 0, `${outcomeMiss} careers outside the Hall with the wrong outcome; ${offBallot} off the ballot, ${onBallotOut} on it, ${earlyFalls} early fall offs`],
   ['table', tableDiffs.length === 0 && offsetMiss === 0, `rules off the audit table: [${tableDiffs.join(',')}], ${offsetMiss} careers on the wrong first class`],
   ['rises', fbHigh - fbLow >= BAND.riseGap && Math.min(...ladderSteps) > BAND.ladderStep, `top third minus bottom third ${(100 * (fbHigh - fbLow)).toFixed(1)} points (needs ${100 * BAND.riseGap}), smallest ladder step ${Math.min(...ladderSteps).toFixed(3)} (needs over ${BAND.ladderStep})`],
   ['promise', promiseMiss === 0 && promiseN >= 500, `${promiseMiss} of ${promiseN} promised first ballots missed`],
@@ -286,9 +320,11 @@ const checks = [
 for (const [name, ok, detail] of checks) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}: ${detail}`);
 const red = checks.filter(c => !c[1]).map(c => c[0]);
 if (CONTROL) {
-  const WANT = { everyonein: 'iff', waitoff: 'table', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey' }[CONTROL];
+  const WANT = { everyonein: 'iff', bindhof: 'iff', outcomeswap: 'outcome', nominationgone: 'outcome', waitoff: 'table', flatfirst: 'rises', nopromise: 'promise', mathrandom: 'keyed', sharesides: 'sides', notalk: 'talk', jerseyfirst: 'jersey' }[CONTROL];
   console.log(`simCareerHall ${SPORT} CONTROL ${CONTROL}: wanted ${WANT} red, red [${red.join(',')}], ${red.includes(WANT) ? 'FIRED' : 'DID NOT FIRE'}`);
-  process.exit(red.length ? 1 : 0);
+  // Exit 1 only when the check this control targets went red, so the exit
+  // code alone proves the control hit its own check. Any other red is printed.
+  process.exit(red.includes(WANT) ? 1 : 0);
 }
 console.log(`simCareerHall ${SPORT}: ${red.length ? `RED [${red.join(',')}]` : `all ${checks.length} checks green`}`);
 process.exit(red.length ? 1 : 0);

@@ -67,13 +67,16 @@ describe('the three answers do what their buttons say', () => {
     expect(retirementTalk(RULE, snap({ year: 2031, rating: 60 }), b)).toBeNull();
   });
 
-  it('One more year: he plays on, and the talk comes back if the slide goes on', () => {
+  it('One more year: he plays on, and the talk comes back unless he plays his way back up', () => {
     const b = answerRetirement(undefined, 2030, 'oneMore');
     expect(careerEndsAfter(b, 2030)).toBe(false);
     expect(careerEndsAfter(b, 2031)).toBe(false);
     expect(retirementTalk(RULE, snap({ year: 2030, rating: 60 }), b)).toBeNull();
     expect(retirementTalk(RULE, snap({ year: 2031, rating: 60 }), b)).not.toBeNull();
+    // No further fall: still 8 under the peak, so it comes back, as the button says.
+    expect(retirementTalk(RULE, snap({ year: 2031, rating: 76, peak: 84 }), b)).not.toBeNull();
     expect(retirementTalk(RULE, snap({ year: 2031, rating: 83 }), b)).toBeNull();
+    expect(RETIREMENT_CHOICES.find(c => c.id === 'oneMore')!.detail).toContain('Unless you play your way back up');
   });
 
   it('Farewell season: next season is the last whatever the numbers say', () => {
@@ -137,6 +140,15 @@ describe('the ballot', () => {
         } else {
           expect(r.inductedClass).toBeNull();
           expect(r.ballots.some(b => b.elected)).toBe(false);
+          // Off the ballot exactly under half the line; on it, a Hall with a
+          // limit drops everyone it does not elect, one without keeps them waiting.
+          if (score < 0.5 * lines.hofLine) {
+            expect(r.outcome).toBe('notOnBallot');
+            expect(r.ballots.length).toBe(0);
+          } else {
+            expect(r.outcome).toBe(rules.ballotYears !== null ? 'fellOff' : 'waiting');
+            expect(r.ballots.length).toBeGreaterThan(0);
+          }
         }
         if (r.outcome === 'fellOff' && rules.stayFloor !== null && rules.ballotYears !== null && r.ballots.length < rules.ballotYears) {
           expect(r.ballots.at(-1)!.share).toBeLessThan(rules.stayFloor);
@@ -255,12 +267,13 @@ describe('the four sports, on careers their own engines play', () => {
   type Eng = {
     arch: Record<string, unknown[]>; start: (...a: unknown[]) => any; season: (...a: unknown[]) => unknown;
     progress: (...a: unknown[]) => unknown; roll: (...a: unknown[]) => unknown; stop: (c: any) => boolean;
+    legacy: (c: any) => { score: number; hof: boolean };
   };
   const engines: Record<string, () => Promise<Eng>> = {
-    nfl: async () => { const e = await import('@/lib/nflMyCareer'); return { arch: e.ARCHETYPES as never, start: e.startCareer as never, season: e.simSeason as never, progress: e.progress as never, roll: e.rollTeamQuality as never, stop: e.shouldRetire as never }; },
-    nba: async () => { const e = await import('@/lib/nbaMyCareer'); return { arch: e.NBA_ARCHETYPES as never, start: e.startNbaCareer as never, season: e.simNbaSeason as never, progress: e.nbaProgress as never, roll: e.nbaRollTeamQuality as never, stop: e.nbaShouldRetire as never }; },
-    mlb: async () => { const e = await import('@/lib/mlbMyCareer'); return { arch: e.MLB_ARCHETYPES as never, start: e.startMlbCareer as never, season: e.simMlbSeason as never, progress: e.mlbProgress as never, roll: e.mlbRollTeamQuality as never, stop: e.mlbShouldRetire as never }; },
-    nhl: async () => { const e = await import('@/lib/nhlMyCareer'); return { arch: e.NHL_ARCHETYPES as never, start: e.startNhlCareer as never, season: e.simNhlSeason as never, progress: e.nhlProgress as never, roll: e.nhlRollTeamQuality as never, stop: e.nhlShouldRetire as never }; },
+    nfl: async () => { const e = await import('@/lib/nflMyCareer'); return { arch: e.ARCHETYPES as never, start: e.startCareer as never, season: e.simSeason as never, progress: e.progress as never, roll: e.rollTeamQuality as never, stop: e.shouldRetire as never, legacy: e.legacyOf as never }; },
+    nba: async () => { const e = await import('@/lib/nbaMyCareer'); return { arch: e.NBA_ARCHETYPES as never, start: e.startNbaCareer as never, season: e.simNbaSeason as never, progress: e.nbaProgress as never, roll: e.nbaRollTeamQuality as never, stop: e.nbaShouldRetire as never, legacy: e.nbaLegacyOf as never }; },
+    mlb: async () => { const e = await import('@/lib/mlbMyCareer'); return { arch: e.MLB_ARCHETYPES as never, start: e.startMlbCareer as never, season: e.simMlbSeason as never, progress: e.mlbProgress as never, roll: e.mlbRollTeamQuality as never, stop: e.mlbShouldRetire as never, legacy: e.mlbLegacyOf as never }; },
+    nhl: async () => { const e = await import('@/lib/nhlMyCareer'); return { arch: e.NHL_ARCHETYPES as never, start: e.startNhlCareer as never, season: e.simNhlSeason as never, progress: e.nhlProgress as never, roll: e.nhlRollTeamQuality as never, stop: e.nhlShouldRetire as never, legacy: e.nhlLegacyOf as never }; },
   };
 
   for (const sport of SPORTS) {
@@ -277,7 +290,10 @@ describe('the four sports, on careers their own engines play', () => {
           eng.progress(c, rng);
         }
         const rec = hallRecordFor(sport, c as never);
-        expect(rec.outcome === 'inducted').toBe(sport.legacy(c as never).hof);
+        // The engine's own legacyOf, never the Hall binding under test.
+        const own = eng.legacy(c);
+        expect(rec.outcome === 'inducted').toBe(own.hof);
+        expect(rec.score).toBe(own.score);
         expect(rec.firstClass).toBe(c.seasons.at(-1).year + sport.rules.firstClassOffset);
         expect(hallRecordFor(sport, c as never)).toEqual(rec);
         const snapNow = sport.snapshot(c as never);
