@@ -1,0 +1,122 @@
+{
+ "round": 932,
+ "shard": "Italy and France: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Club Manager Serie A or Ligue 1 (51 rows at origin/main 5f2622fd: Italy 32 across Atalanta, Cagliari, Como, Fiorentina, Frosinone, Inter Milan, Lazio, Lecce, Monza, Napoli, Parma, Roma, Sassuolo, Torino, Udinese and Venezia; France 19 across Angers, Brest, Le Havre, Lens, Lille, Lorient, Lyon, Marseille, Monaco, PSG, Strasbourg, Toulouse and Troyes)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Each row was read on the web on 2026-10-03 with WebFetch and WebSearch. A row leaves pending only when an official page (family A: the Lega Serie A squad page at legaseriea.it, the Ligue 1 club page at ligue1.com, or a club's own squad page or announcement) and an independent publisher on another host (family B: ESPN squad or player pages, Soccerway, FotMob) agree where the man is. Wikipedia and other wikis are never a source. Birth dates go in the note where a source gives one, so a namesake cannot be mistaken for him; every one of the 51 names appears exactly once in src/data/clubManagerRosters.ts at origin/main 5f2622fd, so no namesake in the game is involved. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows (checked against the 368 clubs of src/data/clubManagerRosters.ts at origin/main 5f2622fd); realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "counts": {},
+ "forTheFold": "",
+ "confirmedStill": [
+  {
+   "name": "Mohamed Bamba",
+   "club": "Lorient",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Ivorian forward born 2001-12-10, Lorient's number 9 since January 2024, contract to June 2028. ESPN's Lorient squad lists a Mohamed Bamba at 9 but links him to a namesake's page (a French midfielder born 2004-10-08, now at Gil Vicente), so ESPN is not used for this row.",
+   "sources": [
+    {"family": "A", "url": "https://www.fclorient.bzh/lequipe-professionnelle-2026-2027/", "publisher": "FC Lorient (professional squad 2026-2027)", "readOn": "2026-10-03", "says": "listed, forward, shirt 9"},
+    {"family": "B", "url": "https://us.soccerway.com/player/bamba-muhammad/2ZLbrRiB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "current club Lorient, forward, born 2001-12-10, Ivory Coast, contract to 2028-06-30"}
+   ]
+  },
+  {
+   "name": "Matteo Politano",
+   "club": "Napoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Napoli's number 21, aged 33 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/napoli/squad", "publisher": "Lega Serie A (Napoli squad, current: carries Noa Lang and Kevin De Bruyne)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/114/napoli", "publisher": "ESPN (Napoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 33"}
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Giacomo Raspadori",
+   "from": "Napoli",
+   "to": "Atalanta",
+   "realClub": "Atalanta",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Atalanta's number 18 on the league page. Not in Napoli's current squad on either page; in Atalanta's on both.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/atalanta/squad", "publisher": "Lega Serie A (Atalanta squad, current: carries Franck Kessie, a summer 2026 arrival)", "readOn": "2026-10-03", "says": "listed, forward, shirt 18"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/napoli/squad", "publisher": "Lega Serie A (Napoli squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/105/atalanta", "publisher": "ESPN (Atalanta squad page, season 2026-27)", "readOn": "2026-10-03", "says": "listed among the forwards"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/114/napoli", "publisher": "ESPN (Napoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Nicolò Zaniolo",
+   "from": "Atalanta",
+   "to": "Udinese",
+   "realClub": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Udinese's number 10, aged 27 on ESPN. Not in Atalanta's 2026-27 squad on ESPN; on the current Udinese squad on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current: carries Lazar Jovanovic, signed 2026-09-01)", "readOn": "2026-10-03", "says": "listed, shirt 10, forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 10, age 27"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/105/atalanta", "publisher": "ESPN (Atalanta squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Alexis Sánchez",
+   "from": "Udinese",
+   "to": "CF Montréal",
+   "realClub": "CF Montréal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1988-12-19. Left Udinese for Sevilla in September 2025, left Sevilla when his contract ran out in summer 2026, and signed for CF Montreal as a Designated Player on 2026-08-11, through the 2027 MLS Sprint Season.",
+   "sources": [
+    {"family": "A", "url": "https://en.cfmontreal.com/news/cf-montreal-signs-alexis-sanchez-as-a-designated-player", "publisher": "CF Montreal (club announcement, 2026-08-11)", "readOn": "2026-10-03", "says": "signed as a Designated Player from Sevilla, born 1988-12-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/92055/alexis-sanchez", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "CF Montreal number 10, born 1988-12-19, played 2026-09-26"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Isaak Touré",
+   "from": "Udinese",
+   "to": "Lorient",
+   "realClub": "Lorient",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-28. His loan at Udinese ended in 2025 and he went back to Lorient, where he wears 95 in the 2026-27 squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.fclorient.bzh/lequipe-professionnelle-2026-2027/", "publisher": "FC Lorient (professional squad 2026-2027)", "readOn": "2026-10-03", "says": "listed, defender, shirt 95"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/273/lorient", "publisher": "ESPN (Lorient squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 95, age 23"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/306535/isaak-toure", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lorient number 95, born 2003-03-28"}
+   ]
+  },
+  {
+   "name": "Jordan Zemura",
+   "from": "Udinese",
+   "to": "Watford",
+   "realClub": "Watford, on loan from Udinese",
+   "loan": true,
+   "loanFrom": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-11-14. Joined Watford on a season-long loan from Udinese in August 2026, to June 2027; he played the Championship match against Stoke on 2026-09-12. The two publishers disagree on his shirt (FotMob 26, ESPN 33), not on his club. Watford's own squad and player pages were too large to read, so the official voice is the league page that no longer lists him at Udinese.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.fotmob.com/en-GB/players/982633/jordan-zemura", "publisher": "FotMob", "readOn": "2026-10-03", "says": "Watford, on loan from Udinese August 2026 to June 2027, born 1999-11-14, played 2026-09-12"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/283171/jordan-zemura", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Watford, born 1999-11-14, Championship matches from 2026-08-29 to 2026-09-12"}
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Damián Pizarro",
+   "from": "Udinese",
+   "realClub": "Audax Italiano, on loan from Udinese",
+   "loan": true,
+   "loanFrom": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-03-28. Udinese loaned him to Le Havre (August 2025), then Racing Club (January to June 2026), then Audax Italiano from 2026-07-29 to June 2027. Chile is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.encancha.cl/futbol-chileno/primera/2026/07/29/capacidad-goleadora-damian-pizarro-tiene-nuevo-equipo-en-chile-y-ya-fue-presentado-oficialmente/", "publisher": "Audax Italiano's official announcement, quoted in full by En Cancha (2026-07-29)", "readOn": "2026-10-03", "says": "officially joins on loan from Udinese until June 2027"},
+    {"family": "B", "url": "https://us.soccerway.com/player/pizarro-damian/O8lwaueL/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Audax Italiano 2026-07-29, back to Udinese 2027-06-30, born 2005-03-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  }
+ ],
+ "notCurrent": [
+ ],
+ "pending": [
+ ]
+}
