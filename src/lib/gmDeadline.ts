@@ -38,8 +38,12 @@ export interface GmDeadlineRules {
 
 /* NFL: 4 p.m. ET on the Tuesday after Week 9 (4 November 2025). The owners
    moved it from the Tuesday after Week 8 at the 2024 league meeting.
+   The 2025 date:
      https://www.foxsports.com/stories/nfl/when-2025-nfl-trade-deadline-date-time-notable-trades
-     https://www.chargers.com/news/nfl-trade-deadline-2025 */
+     https://www.chargers.com/news/nfl-trade-deadline-2025
+   The 2024 move (read by the round's review on 2026-10-02):
+     https://www.espn.com/nfl/story/_/id/39813632
+     https://www.nfl.com/news/nfl-owners-extend-trade-deadline-to-follow-week-9-games-of-2024-nfl-season */
 export const NFL_DEADLINE: GmDeadlineRules = {
   sport: 'nfl', share: 9 / 18, shareIsLeagueRule: true,
   real: 'The Tuesday after Week 9 (4 November in the 2025 season).',

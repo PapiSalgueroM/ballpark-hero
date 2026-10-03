@@ -5,6 +5,7 @@ import {
   movePicks, newLedger, pickKey, pickRefusal, pickSwapRefusal, picksHeldBy, reverseStandings,
   rollLedger, roundSlots, runLottery, validateLedger,
 } from './gmPicks';
+import { applyPackage } from './gmTradePackage';
 
 const ids = (n: number) => Array.from({ length: n }, (_, i) => `T${String(i + 1).padStart(2, '0')}`);
 const seeded = (s: number) => () => {
@@ -27,6 +28,33 @@ describe('the rule sets are whole', () => {
     const lg = newLedger(ids(4), 2026, MLB_PICK_RULES);
     expect(pickRefusal(lg, MLB_PICK_RULES, 2026, 'T01', '2026:1:T01')).toMatch(/Only competitive balance picks/);
     expect(pickRefusal(lg, NFL_PICK_RULES, 2026, 'T01', '2026:1:T01')).toBeNull();
+  });
+  it('a club can trade only a pick it holds, its own or one it acquired', () => {
+    let lg = newLedger(ids(4), 2026, NFL_PICK_RULES);
+    expect(pickRefusal(lg, NFL_PICK_RULES, 2026, 'T01', '2026:1:T02')).toMatch(/not theirs/);
+    expect(pickSwapRefusal(lg, NFL_PICK_RULES, 2026, 'T01', ['2026:1:T03'], 'T02', [])).toMatch(/not theirs/);
+    expect(pickSwapRefusal(lg, NFL_PICK_RULES, 2026, 'T01', [], 'T02', ['2026:1:T03'])).toMatch(/not theirs/);
+    lg = movePicks(lg, ['2026:1:T02'], 'T01');
+    expect(pickRefusal(lg, NFL_PICK_RULES, 2026, 'T01', '2026:1:T02')).toBeNull();
+    expect(pickRefusal(lg, NFL_PICK_RULES, 2026, 'T02', '2026:1:T02')).toMatch(/not theirs/);
+  });
+  it('an NFL compensatory pick can be traded, an MLB competitive balance pick once', () => {
+    const nfl = awardPick(newLedger(ids(4), 2026, NFL_PICK_RULES), 2026, 3, 'T01', 'comp');
+    expect(pickRefusal(nfl, NFL_PICK_RULES, 2026, 'T01', '2026:3:T01:comp:1')).toBeNull();
+    const mlb = awardPick(newLedger(ids(4), 2026, MLB_PICK_RULES), 2026, 1, 'T01', 'cb');
+    expect(pickRefusal(mlb, MLB_PICK_RULES, 2026, 'T01', '2026:1:T01:cb:1')).toBeNull();
+    const moved = movePicks(mlb, ['2026:1:T01:cb:1'], 'T02');
+    expect(pickRefusal(moved, MLB_PICK_RULES, 2026, 'T02', '2026:1:T01:cb:1')).toMatch(/traded once already/);
+  });
+  it('applying a package never moves a pick the club does not hold', () => {
+    const lg = newLedger(ids(3), 2026, NFL_PICK_RULES);
+    const team = () => ({ players: [{ id: 'p1' }] });
+    const take = { from: 'T01', to: 'T02', give: [{ kind: 'pick' as const, key: '2026:1:T03' }], get: [{ kind: 'pick' as const, key: '2026:2:T02' }] };
+    expect(applyPackage(take, team(), team(), lg)).toBeNull();
+    const fair = { ...take, give: [{ kind: 'pick' as const, key: '2026:1:T01' }] };
+    const after = applyPackage(fair, team(), team(), lg);
+    expect(after && after.picks.find(p => pickKey(p) === '2026:1:T01')?.holder).toBe('T02');
+    expect(after && after.picks.find(p => pickKey(p) === '2026:2:T02')?.holder).toBe('T01');
   });
 });
 
@@ -156,6 +184,7 @@ describe('the order', () => {
     for (let s = 1; s <= 400; s++) {
       const r = runLottery(pool, NBA_PICK_RULES.lottery!, seeded(s));
       expect(r.wins.length).toBe(4);
+      expect(new Set(r.wins.map(w => w.club)).size).toBe(4);
       expect(r.order.indexOf('T01')).toBeLessThanOrEqual(4);
       const rest = r.order.slice(4);
       expect(rest).toEqual(pool.filter(c => rest.includes(c)));

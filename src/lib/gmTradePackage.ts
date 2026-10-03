@@ -25,13 +25,20 @@
    packageValue.
 
    League differences are data. MLB picks not being tradable is
-   MLB_PICK_RULES.tradableKinds in gmPicks.ts; retained salary existing only
-   in hockey is NHL_TRADE_RULES.retention below. Nothing here reads the
-   sport's name. */
+   MLB_PICK_RULES.tradableKinds in gmPicks.ts; retained salary being
+   modelled only for hockey is NHL_TRADE_RULES.retention below. Nothing here
+   reads the sport's name.
+
+   FOR THE BINDING ROUND. This module does not import foTradeTalks.ts:
+   evaluatePackage is an instant verdict (offer at least the ask), and
+   GmTradeBuilder offers one button, make the trade, when it says yes. Binding it in place of the
+   engines' trade path as it stands would drop Round 190's counters and its
+   stand firm call, so route a package through the talks there, with this
+   module's verdict as the floor the talks open from. */
 
 import {
   type GmPickLedger, type GmPickRules, type GmSportId,
-  movePicks, pickSwapRefusal,
+  findPick, movePicks, pickSwapRefusal,
 } from './gmPicks';
 import { type GmDeadlineRules, deadlineRefusal } from './gmDeadline';
 
@@ -66,31 +73,49 @@ export interface GmTradeRules {
   sport: GmSportId;
   /** Pieces one side can put in a deal. A game setting that keeps the builder a tile, not a page. */
   maxAssetsPerSide: number;
-  /** Whether a prospect who is not on the roster can be part of a deal. */
+  /** Whether a prospect who is not on the roster (his rights, held by the
+      club) can be part of a deal. False is this GAME's limit, never a claim
+      about the league, and the refusal is worded that way. */
   prospects: boolean;
+  /** Absent or null: retained salary is not modelled for this sport. That is
+      the game's limit (a club can still pay a player down in other ways in
+      real life), and the refusal is worded that way. */
   retention: GmRetentionRules | null;
 }
 
+/* NFL and NBA: prospects false and retention null are the game's limits,
+   not league rules. The engines hold no pool of unsigned prospects today
+   (a drafted man joins the roster at once), and nothing sourced says
+   either league bars the trade, so the refusals say "this game". */
 const PLAIN: Omit<GmTradeRules, 'sport'> = { maxAssetsPerSide: 5, prospects: false, retention: null };
 
 export const NFL_TRADE_RULES: GmTradeRules = { sport: 'nfl', ...PLAIN };
 export const NBA_TRADE_RULES: GmTradeRules = { sport: 'nba', ...PLAIN };
 
 /* NHL retained salary: a club can keep paying up to half of a traded
-   player's salary, can carry three retained contracts at a time, and one
-   contract can be retained on twice at most. Read 2026-10-02:
+   player's salary and can carry three retained contracts at a time. Read
+   2026-10-02:
      https://thehockeywriters.com/nhl-retained-salary-trades/
      https://www.nbcsports.com/nhl/news/heres-the-deal-with-retaining-salary-in-trades
+   One contract can be retained on twice at most: ONE ADDRESS ON RECORD for
+   that (the first page; the second gives 50 percent, three contracts and 15
+   percent of the upper limit and is silent on it).
    NOT MODELLED: the cap on the total a club retains as a share of the
    league's upper limit, and the newer limits on retaining twice in quick
-   succession (one source each today). */
+   succession (one source each today).
+   NHL clubs trade the rights to unsigned prospects (deadline deals of March
+   2026 carried them), so prospects is true. Read by the round's review on
+   2026-10-02:
+     https://www.nhl.com/news/topic/trade-coverage/2025-26-nhl-trades
+     https://puckpedia.com/news/nhl-draft-pick-rights-set-expire-june-2026 */
 export const NHL_TRADE_RULES: GmTradeRules = {
-  sport: 'nhl', maxAssetsPerSide: 5, prospects: false,
+  sport: 'nhl', maxAssetsPerSide: 5, prospects: true,
   retention: { maxShare: 0.5, maxDealsPerClub: 3, maxTimesPerContract: 2 },
 };
 
 /* MLB: no ordinary pick can move (gmPicks), so a package is players and
-   prospects. */
+   prospects. retention null is the game's limit: MLB clubs do pay down a
+   traded man's salary with cash, which this game does not model yet. */
 export const MLB_TRADE_RULES: GmTradeRules = { sport: 'mlb', maxAssetsPerSide: 5, prospects: true, retention: null };
 
 export const GM_TRADE_RULES: Record<GmSportId, GmTradeRules> = {
@@ -192,7 +217,7 @@ function retentionRefusal(side: TradeAsset[], club: string, ctx: PackageContext)
   let fresh = 0;
   for (const a of side) {
     if (a.kind !== 'player' || !a.retain) continue;
-    if (!rule) return 'Salary cannot be retained in this league.';
+    if (!rule) return 'Retained salary is not part of this game for this sport yet.';
     if (a.retain < 0 || a.retain > rule.maxShare) {
       return `A club can keep paying at most ${Math.round(rule.maxShare * 100)} percent of a salary.`;
     }
@@ -214,7 +239,7 @@ function pickKeys(side: TradeAsset[]): string[] {
 function assetRulesRefusal(pkg: TradePackage, ctx: PackageContext): string | null {
   const all = [...pkg.give, ...pkg.get];
   if (!ctx.tradeRules.prospects && all.some(a => a.kind === 'prospect')) {
-    return 'Prospects cannot be traded on their own in this league.';
+    return 'Prospects are not part of trades in this game for this sport yet.';
   }
   const picks = pickSwapRefusal(
     ctx.ledger, ctx.pickRules, ctx.season, pkg.from, pickKeys(pkg.give), pkg.to, pickKeys(pkg.get),
@@ -253,8 +278,10 @@ function moveById<P extends { id: string }>(src: P[], dst: P[], id: string): voi
   if (i >= 0) dst.push(src.splice(i, 1)[0]);
 }
 
-function holds(t: PackageTeam, a: TradeAsset): boolean {
-  if (a.kind === 'pick') return true;
+/** Whether club `club` (team `t`, ledger `ledger`) has this piece now. A
+    pick is held when the ledger names the club as its holder. */
+function holds(t: PackageTeam, club: string, ledger: GmPickLedger, a: TradeAsset): boolean {
+  if (a.kind === 'pick') return findPick(ledger, a.key)?.holder === club;
   if (a.kind === 'player') return t.players.some(p => p.id === a.id);
   return !!t.prospects?.some(p => p.id === a.id);
 }
@@ -270,9 +297,9 @@ function moveAsset(src: PackageTeam, dst: PackageTeam, a: TradeAsset): void {
 /** Move everything in an agreed package. Players and prospects move in
     place on the two clubs, the way every engine's own trade function does;
     the ledger comes back new. Returns null, with nothing moved, when a
-    named player or prospect is not where the package says he is. */
+    named player, prospect or pick is not where the package says it is. */
 export function applyPackage(pkg: TradePackage, from: PackageTeam, to: PackageTeam, ledger: GmPickLedger): GmPickLedger | null {
-  if (!pkg.give.every(a => holds(from, a)) || !pkg.get.every(a => holds(to, a))) return null;
+  if (!pkg.give.every(a => holds(from, pkg.from, ledger, a)) || !pkg.get.every(a => holds(to, pkg.to, ledger, a))) return null;
   for (const a of pkg.give) moveAsset(from, to, a);
   for (const a of pkg.get) moveAsset(to, from, a);
   return movePicks(movePicks(ledger, pickKeys(pkg.give), pkg.to), pickKeys(pkg.get), pkg.from);

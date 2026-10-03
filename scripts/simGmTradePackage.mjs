@@ -14,35 +14,43 @@
  *      worth (his raw value is below zero), and the walk must add such men,
  *      so the clamp that protects the rule is actually exercised. An
  *      addition can still be 'invalid' for a hard rule (the cap, a roster,
- *      a pick the league will not let move); those are counted and shown.
+ *      a pick the league will not let move); those are counted and shown,
+ *      and the walk drops that piece and goes on. So what this proves is
+ *      about VALUE: more value never turns a yes into 'rejected'. A piece a
+ *      hard rule bars does make the deal 'invalid', by design.
  *   2. THE LEAGUE'S RULES ARE DATA. An ordinary MLB pick never moves and the
  *      refusal names the rule; a competitive balance pick moves once and no
  *      more; no NBA club is ever left without a first in two drafts running
  *      however the desk trades, while the same desk under NFL and NHL rules
  *      does leave clubs that way; salary retention is walked step by step
  *      (share 0 to 1, deals carried 0 to 4, times retained 0 to 3); a
- *      prospect moves only where the rules say; and a shut window answers
+ *      prospect moves only where the rules say; a club can offer or ask for
+ *      only a pick the right club holds, and applying a deal never moves a
+ *      pick from a club that does not hold it; and a shut window answers
  *      before anything else.
  *   3. THE WINDOW, EVERY PERIOD. For each sport's season length, walked
  *      period by period: open up to this harness's own deadline period and
  *      shut after it, counting down by one, and open at any point once the
  *      season has closed.
  *   4. BUYERS AND SELLERS. At the deadline every club in a playoff place
- *      buys, every seller's record is worse than every buyer's, a club
+ *      buys, the playoff line is the last club in (its gap is zero and the
+ *      first club out is measured from it), every seller's record is worse
+ *      than every buyer's, a club
  *      walked from no wins to all wins goes seller, holding, buyer and
  *      never back, and a seller says yes to a pick for its veteran more
  *      often than a buyer does.
  *
  * BANDS, FROM MEASURED HEADROOM (seeds 11, 23, 37, 59, 71; 2026-10-02):
- *   The walk: 600 accepted packages a sport, 2,516 to 7,376 additions, of
+ *   The walk: 600 accepted packages a sport, 2,208 to 7,376 additions, of
  *   which 42 (NFL) to 74 (MLB) added a man worth less than nothing; the
  *   floor for those is 20. Additions stopped by a hard rule: NFL 472, NBA
- *   814, NHL 473, MLB 5,252 (MLB mostly its picks, step 3).
+ *   814, NHL 180, MLB 5,252 (MLB mostly its picks, step 3; NHL fell from
+ *   473 when its prospects became tradable, remeasured 2026-10-02).
  *   MLB: 1,786 packages carried an ordinary pick and all 1,786 were refused
  *   by the pick rule; the floor for packages tried is 500.
  *   Firsts: the NBA desk was refused 5,611 times for two drafts running and
  *   left no club short (floor for refusals 100); the same desk left 67 NFL
- *   and 69 NHL clubs short (floor 10), which is what makes the NBA zero mean
+ *   and 63 NHL clubs short (floor 10), which is what makes the NBA zero mean
  *   something.
  *   Sellers at the deadline, summed over the five seeds: NFL 37, NBA 9,
  *   NHL 44, MLB 31; the floors are about half (18, 4, 22, 15).
@@ -61,6 +69,9 @@
  *   retain    the retained share allowed up to 90 percent
  *   noreopen  the window stays shut after the season closes
  *   sellers   a club far off the line is called a buyer
+ *   foreignpick   a club may offer or ask for a pick a third club holds
+ *   applyanypick  applying a deal moves a pick whoever holds it
+ *   linefirstout  the playoff line is measured from the first club out
  *
  * Run: node scripts/simGmTradePackage.mjs
  */
@@ -75,8 +86,14 @@ const SWAPS = {
   retain: { pkg: [['  retention: { maxShare: 0.5, maxDealsPerClub: 3, maxTimesPerContract: 2 },', '  retention: { maxShare: 0.9, maxDealsPerClub: 3, maxTimesPerContract: 2 },']] },
   noreopen: { deadline: [['  if (seasonClosed) return { open: true, deadlineAfter: after, periodsLeft: after, reason: null };', '  if (seasonClosed && after < 0) return { open: true, deadlineAfter: after, periodsLeft: after, reason: null };']] },
   sellers: { deadline: [["      else if (z >= SELLER_Z) stance[r.id] = 'seller';", "      else if (z >= SELLER_Z) stance[r.id] = 'buyer';"]] },
+  foreignpick: { picks: [["  if (!p || p.holder !== from) return 'That pick is not theirs to trade.';", "  if (!p) return 'That pick is not theirs to trade.';"]] },
+  applyanypick: { pkg: [["  if (a.kind === 'pick') return findPick(ledger, a.key)?.holder === club;", "  if (a.kind === 'pick') return true;"]] },
+  linefirstout: { deadline: [['    const line = sorted[Math.min(spots, sorted.length) - 1];', '    const line = sorted[Math.min(spots, sorted.length)];']] },
 };
-const EXPECT = { noclamp: [1], mlbpicks: [2], stepien: [2], retain: [2], noreopen: [3], sellers: [4] };
+const EXPECT = {
+  noclamp: [1], mlbpicks: [2], stepien: [2], retain: [2], noreopen: [3], sellers: [4],
+  foreignpick: [2], applyanypick: [2], linefirstout: [4],
+};
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`GM_TRADE_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
   process.exit(1);
@@ -275,18 +292,24 @@ for (const key of ['nfl', 'nhl']) {
     const lg2 = makeLeague(sport, gm, 9);
     const pkg = { from: 'C01', to: 'C02', give: [{ ...firstMan(lg2, 'C01'), retain: 0.25 }], get: [firstMan(lg2, 'C02')] };
     const v = gm.pkg.evaluatePackage(pkg, plainCtx(sport, lg2));
-    ok(2, `${key}: salary cannot be retained, and the rule says so`, v.verdict === 'invalid' && v.step === 3 && /retained/.test(v.reason ?? ''), `${v.verdict} ${v.reason ?? ''}`);
+    ok(2, `${key}: salary cannot be retained here, and the refusal says it is the game's limit`,
+      v.verdict === 'invalid' && v.step === 3 && /retained/i.test(v.reason ?? '') && /this game/.test(v.reason ?? ''), `${v.verdict} ${v.reason ?? ''}`);
   }
   const split = gm.pkg.splitRetained(8, 0.5);
   ok(2, 'a salary of 8 retained at half splits 4 and 4', split.kept === 4 && split.moved === 4, JSON.stringify(split));
 }
 
-/* 2d. Prospects, the shape of a deal, and which check answers first. */
+/* 2d. Prospects, the shape of a deal, and which check answers first. Where a
+   prospect can move is this harness's own copy: MLB and NHL clubs trade
+   prospects' rights (sources beside NHL_TRADE_RULES); for the NFL and NBA
+   it is the game's limit, and the refusal must say "this game". */
+const PROSPECTS_MOVE = { nfl: false, nba: false, nhl: true, mlb: true };
 for (const sport of SPORTS) {
   const lg = makeLeague(sport, gm, 13);
   const kid = { kind: 'prospect', id: lg.teams.C01.prospects[0].id };
   const v = gm.pkg.proposePackage({ from: 'C01', to: 'C02', give: [kid], get: [firstMan(lg, 'C02')] }, lg.teams.C01, lg.teams.C02, plainCtx(sport, lg));
-  const allowed = sport.key === 'mlb';
+  const allowed = PROSPECTS_MOVE[sport.key];
+  if (!allowed) ok(2, `${sport.key}: the prospect refusal is worded as the game's limit`, /this game/.test(v.verdict.reason ?? ''), v.verdict.reason ?? '');
   ok(2, `${sport.key}: a prospect ${allowed ? 'can' : 'cannot'} be part of a deal`,
     allowed ? (v.verdict.verdict === 'accepted' && lg.teams.C02.prospects.some(p => p.id === kid.id) && !lg.teams.C01.prospects.some(p => p.id === kid.id))
       : (v.verdict.verdict === 'invalid' && v.verdict.step === 3), `${v.verdict.verdict} ${v.verdict.reason ?? ''}`);
@@ -313,6 +336,35 @@ for (const sport of SPORTS) {
   ok(2, `${sport.key}: the engine's money check is asked, and its words come back`, money.verdict === 'invalid' && money.step === 4 && money.reason === 'no money');
   const low = gm.pkg.evaluatePackage({ from: 'C01', to: 'C02', give: [a], get: [b] }, { ...ctx, premium: 1.5 });
   ok(2, `${sport.key}: an offer short of the ask is rejected, with how far short`, low.verdict === 'rejected' && low.step === 5 && Math.abs(low.short - 5) < 1e-9, `${low.verdict} short ${low.short}`);
+}
+
+/* 2e. A pick moves only from the club holding it. C03 holds a pick (an
+   ordinary one, or in MLB an awarded competitive balance one). C01 offering
+   it, or asking C02 for it, is refused at step 3 by name, and applying such
+   a deal directly moves nothing. The same pick offered by C03 goes through,
+   so the refusal is about the holder and not the pick. */
+for (const sport of SPORTS) {
+  const lg = makeLeague(sport, gm, 15);
+  const rules = gm.picks.GM_PICK_RULES[sport.key];
+  if (!rules.tradableKinds.includes('std')) lg.ledger = gm.picks.awardPick(lg.ledger, lg.season, 1, 'C03', 'cb');
+  const theirs = gm.picks.picksHeldBy(lg.ledger, 'C03')
+    .find(p => rules.tradableKinds.includes(gm.picks.pickKind(p)) && p.orig === 'C03');
+  ok(2, `${sport.key}: C03 holds a pick that can be traded`, !!theirs);
+  if (!theirs) continue;
+  const pick = { kind: 'pick', key: gm.picks.pickKey(theirs) };
+  const ctx = plainCtx(sport, lg);
+  const offer = gm.pkg.evaluatePackage({ from: 'C01', to: 'C02', give: [pick], get: [firstMan(lg, 'C02')] }, ctx);
+  ok(2, `${sport.key}: offering a pick a third club holds is refused at step 3`,
+    offer.verdict === 'invalid' && offer.step === 3 && /not theirs/.test(offer.reason ?? ''), `${offer.verdict} step ${offer.step} ${offer.reason ?? ''}`);
+  const ask = gm.pkg.evaluatePackage({ from: 'C01', to: 'C02', give: [firstMan(lg, 'C01')], get: [pick] }, ctx);
+  ok(2, `${sport.key}: asking for a pick the other club does not hold is refused at step 3`,
+    ask.verdict === 'invalid' && ask.step === 3 && /not theirs/.test(ask.reason ?? ''), `${ask.verdict} step ${ask.step} ${ask.reason ?? ''}`);
+  const own = gm.pkg.evaluatePackage({ from: 'C03', to: 'C02', give: [pick], get: [firstMan(lg, 'C02')] }, ctx);
+  ok(2, `${sport.key}: the holder itself can trade that pick`, own.verdict === 'accepted', `${own.verdict} ${own.reason ?? ''}`);
+  const before = JSON.stringify(lg.ledger);
+  const direct = gm.pkg.applyPackage({ from: 'C01', to: 'C02', give: [pick], get: [firstMan(lg, 'C02')] }, lg.teams.C01, lg.teams.C02, lg.ledger);
+  ok(2, `${sport.key}: applying a deal with a pick the giver does not hold moves nothing`,
+    direct === null && JSON.stringify(lg.ledger) === before && gm.picks.findPick(lg.ledger, pick.key)?.holder === 'C03', direct === null ? 'ledger changed' : 'applied');
 }
 
 /* ---- 3. the window, every period ------------------------------------------ */
@@ -407,6 +459,13 @@ for (const [key, counts] of Object.entries(sellerCounts)) {
   }
   ok(4, 'a club walked from no wins to all wins never steps back', back === 0, `${back} steps back`);
   ok(4, 'and passes through seller, holding and buyer', seen.size === 3, [...seen].join(', '));
+  /* where the line sits: the last club in a place (F7, 22 of 40 with 8
+     places) is the line, so its gap is zero, and the first club out (F6,
+     20 of 40) is two wins of 40 games off it */
+  const { gap } = gm.deadline.deadlineStances(league, 8);
+  const wantOut = (22 / 40 - 20 / 40) / Math.sqrt(0.25 / G);
+  ok(4, 'the playoff line is the last club in: its gap is zero', gap.F7 === 0, `${gap.F7}`);
+  ok(4, 'the first club out is measured from the last club in', Math.abs(gap.F6 - wantOut) < 1e-9, `${gap.F6} against ${wantOut}`);
   const fresh = gm.deadline.deadlineStances(league.map(r => ({ ...r, wins: 0, losses: 0 })), 8).stance;
   ok(4, 'before a game is played everybody holds', Object.values(fresh).every(s => s === 'holding'));
   const w = gm.deadline.STANCE_WEIGHTS;

@@ -13,7 +13,9 @@
 
    EVERY LEAGUE RULE BELOW WAS READ TWICE ON 2026-10-02, the league's own
    page and one independent publisher, with both addresses beside the
-   value. Where only one source could be read the value says so, and where
+   value. Where a second read was made later (by the round's review) the
+   comment says so, where only one address is on record the value says so,
+   and where
    none could, the rule is left out and the gap is named (the MLB lottery,
    how far ahead NFL and NHL picks trade). A number nobody confirmed is not
    in this file.
@@ -470,7 +472,11 @@ export interface DraftOrder {
 }
 
 /** `missed`: the clubs out of the playoffs, worst first (reverseStandings).
-    `playoff`: the playoff clubs in the order they pick, first out first. */
+    `playoff`: the playoff clubs in the order they pick, which the caller
+    decides (first out first is the NFL's shape). Every later round is
+    missed then playoff for every sport: the game's simplification where a
+    league orders a later round by record over all clubs (the NBA), named
+    in that rule set's partial. */
 export function draftOrder(missed: string[], playoff: string[], rules: GmPickRules, rng: () => number): DraftOrder {
   const lottery = rules.lottery ? runLottery(missed, rules.lottery, rng) : null;
   return {
@@ -556,13 +562,16 @@ export function compensatoryAwards(
    Compensatory picks: as many as 32 a draft, no club more than four, at the
    end of rounds three to seven, for the net loss of compensatory free agents
    (both pages above).
+   Compensatory picks can be traded like any other since the 2017 draft
+   (the owners' resolution of 2016). Read by the round's review on 2026-10-02:
+     https://www.nfl.com/news/compensatory-picks-to-be-tradable-beginning-in-2017-0ap3000000592818
+     https://overthecap.com/front-office-scheme-bolstered-ability-trade-compensatory-picks
    NOT CONFIRMED TWICE, so not claimed: how many drafts ahead a pick can be
-   traded, and whether a compensatory pick can be. The ledger carries three
-   drafts as a game setting, and a compensatory pick stays where it lands. */
+   traded. The ledger carries three drafts as a game setting. */
 export const NFL_PICK_RULES: GmPickRules = {
   sport: 'nfl',
   rounds: 7,
-  tradableKinds: ['std'],
+  tradableKinds: ['std', 'comp'],
   singleTradeKinds: [],
   ledgerYears: 3,
   ledgerYearsIsLeagueRule: false,
@@ -570,12 +579,12 @@ export const NFL_PICK_RULES: GmPickRules = {
   lottery: null,
   comp: { leagueMax: 32, perClubMax: 4, firstRound: 3, lastRound: 7 },
   partial: [
-    'Compensatory picks stay with the club they were awarded to.',
     'How a lost free agent is valued is this game\'s own sum; the league does not publish its formula in full.',
   ],
 };
 
-/* NBA. Two rounds.
+/* NBA. Two rounds. ONE SOURCE READ for the count (the review confirmed it
+   by search, two rounds since 1989, without a second address):
      https://www.si.com/nba/nba-draft-full-history-how-many-rounds
    The lottery: the 14 clubs that missed the playoffs, the first four picks
    drawn, 1,000 combinations shared out 140, 140, 140, 125, 105, 90, 75, 60,
@@ -584,8 +593,20 @@ export const NFL_PICK_RULES: GmPickRules = {
        prints that year's values with level records averaged, 11.5 and 11.5
        for the fourth and fifth seeds, which is this table's 12.5 and 10.5)
      https://www.si.com/nba/how-does-the-nba-draft-lottery-work-explained-odds
-   This is the table the 2026 draft used. One source read today said the
-   owners were to vote on a new format in May 2026; nothing here models it.
+   This is the table the 2026 draft used, and the last draft to use it: on
+   28 May 2026 the Board of Governors approved a new lottery from the 2027
+   draft (more clubs, flatter odds). The first page above says so, and the
+   league's release does too (read by the round's review on 2026-10-02):
+     https://pr.nba.com/nba-board-of-governors-approves-new-draft-lottery-system-to-address-tanking/
+   Its table has not been read twice, so the game keeps the old one for
+   every draft and partial tells the player. Model the new one only once its
+   table is read twice.
+   NOT MODELLED: the league orders picks 15 to 30 and the whole second
+   round by regular season record over all 30 clubs (both reviews of this
+   round; not read twice here). The caller hands draftOrder its playoff
+   clubs in the order they pick, so round one can follow record, but in the
+   later rounds every club that missed the playoffs picks ahead of every
+   playoff club, and partial says so.
    A club may not be left without a first round pick in two future drafts
    running (an acquired first counts), and picks trade seven drafts ahead.
      https://basketball.realgm.com/analysis/249279/CBA-Encyclopedia-Stepien-Rule
@@ -607,7 +628,10 @@ export const NBA_PICK_RULES: GmPickRules = {
     table: 'the 2026 draft',
   },
   comp: null,
-  partial: ['The lottery table is the one the 2026 draft used.'],
+  partial: [
+    'The lottery table is the one the 2026 draft used. The league switched to a new lottery from the 2027 draft, and this game does not model it yet.',
+    'In the second round, every club that missed the playoffs picks ahead of every playoff club here.',
+  ],
 };
 
 /* NHL. Seven rounds.
@@ -651,12 +675,18 @@ export const NHL_PICK_RULES: GmPickRules = {
    sport's name. No Competitive Balance picks are dealt out by this round
    (who gets one turns on club revenue and market size, which the game does
    not carry), so until an engine awards one there is no pick to move.
-   ONE SOURCE ONLY for 20 rounds (a search summary on 2026-10-02), so the
-   board must not print the number as a fact; it sizes the ledger and no more.
-   NOT MODELLED: the league has had a draft lottery since the 2023 draft.
-   Its table could not be read twice today, so the order here is reverse
-   standings and partial says so. Since no ordinary pick can move, the ledger
-   carries this year's draft alone. */
+   Twenty rounds, and a draft lottery since the 2023 draft (the 18 clubs out
+   of the playoffs, the first six picks drawn). Read by the round's review
+   on 2026-10-02 at
+     https://www.baseballamerica.com/stories/guide-to-the-new-cba-draft-lottery-expanded-playoffs-and-more/
+   and confirmed a second time by its search (a CBS Sports report of the
+   first MLB lottery, in 2023, and mlb.com's 2026 draft coverage of rounds
+   5 to 20), whose addresses it did not record. Both facts stand; only the
+   second address is owed.
+   NOT MODELLED: the lottery itself. Its table of odds has not been read
+   twice, so the order here is reverse standings and partial says so.
+   Since no ordinary pick can move, the ledger carries this year's draft
+   alone. */
 export const MLB_PICK_RULES: GmPickRules = {
   sport: 'mlb',
   rounds: 20,

@@ -56,7 +56,8 @@ function Column({ title, tiles, selected, onToggle, full }: {
         {tiles.map(t => {
           const key = assetKey(t.asset);
           const on = selected.has(key);
-          const locked = !!t.blocked || (!on && full);
+          /* a piece already in the deal can always come out, blocked or not */
+          const locked = !on && (!!t.blocked || full);
           return (
             <li key={key}>
               <button
