@@ -186,6 +186,7 @@ const untagged = new Set();      // life card ids drawn without their tags
 const pools = new Map();         // deck C id -> saves the fleet found eligible
 let benchSeasons = 0, eraCareers = 0, lifeDraws = 0;
 let beat318Rolls = 0, beat318SameTeam = 0;   // R1
+let r2Save = null;                           // R2: one fleet save with a rival
 const POOL_CAP = 40;
 const clone = x => JSON.parse(JSON.stringify(x));
 
@@ -235,6 +236,7 @@ for (let i = 0; i < CAREERS; i++) {
 
       nbaProgress(c, Math.random);
       if (c.ovr > peak) peak = c.ovr;
+      if (!r2Save && c.rival) r2Save = clone(c);
 
       /* Round 918: keep a few of the saves each deck C card was eligible on,
          for section C2. Reads the gate only, draws nothing. */
@@ -391,7 +393,7 @@ for (const def of NBA_LIFE_C) {
 const R2_IDS = [318, 319, 320, 321, 322, 323];
 const R2_STATS = [['Morale', 'morale'], ['Fanbase', 'fanbase'], ['Health', 'health'], ['Rating', 'ovr']];
 const r2Bad = [];
-const r2Base = [...pools.values()].find(p => p.length)?.[0];
+const r2Base = r2Save;
 if (!r2Base) r2Bad.push('no save to run the beats on');
 for (const id of r2Base ? R2_IDS : []) {
   const b = beatOf(id);
