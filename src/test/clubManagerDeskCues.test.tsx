@@ -21,13 +21,17 @@ import type { FacilityId } from '@/lib/clubManagerFacilities';
    some other change must both say nothing, and a desk reopened on a save that
    already changed must not replay the line.
 
-   Negative control, run by hand: in deskCue.tsx change
-   `career && career !== request.before ? request.read(career) : null` to
-   `request.read(request.before)`. The refused and the moved cases then show a
-   line for a deal that never happened (renewRead reads the old save, finds
-   the old terms, and must still give null; the facility read gives null too),
-   and the "only once" cases fail because the cue no longer waits for the save.
-   Second control: drop the `if (text)` guard and the refused cases fail. */
+   Negative controls, each a one line mutation run by hand against this file
+   (2026-10-03, 11 cases; each fired, and the source was restored byte for byte):
+   - read the line off the save from BEFORE the press
+     (deskCue.tsx: `request.read(request.before)`): 8 fail, every positive case;
+   - show the line whatever the save says (`setCue({ ..., text: text ?? 'Done.' })`
+     in place of `if (text) setCue(...)`): 3 fail, exactly the refused and moved cases;
+   - seed the cue state with an old line (as if it outlived the desk): 5 fail,
+     the cases that open on an empty line or reopen a desk;
+   - a timer that never clears: 1 fails, the timer case;
+   - pulse pip `level` instead of `level - 1` (FacilitiesScreen.tsx): 2 fail;
+   - drop cm-tick-in from the Now line: 1 fails. */
 
 const fx = { players: 'Existing real career players from the shipped data; only contract years and the kitty are set here.' };
 
