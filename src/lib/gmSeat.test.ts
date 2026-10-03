@@ -19,6 +19,8 @@ const career = (team: string, tier: 1 | 2 | 3 | 4, grades: FoGradeResult[], ende
   return ended ? endSeatStint(c, ended) : c;
 };
 const PACKS = Object.values(GM_SEAT_PACKS);
+/* The en and em dash, built from char codes so this file never carries one. */
+const DASHES = new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`);
 
 describe('seat words', () => {
   it('keeps the ladder of buildOwnerMandate at every rank and changes only the words', () => {
@@ -29,7 +31,7 @@ describe('seat words', () => {
           const mine = seatMandate(pack, rank, 30, champ, 2026);
           expect({ ...mine, text: '' }).toEqual({ ...base, text: '' });
           expect(mine.text).not.toMatch(/[{}]/);
-          expect(mine.text).not.toMatch(/[–—]/);
+          expect(mine.text).not.toMatch(DASHES);
         }
       }
     }

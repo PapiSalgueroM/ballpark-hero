@@ -335,6 +335,8 @@ const MARGIN_MIN = { nfl: 0.2, nba: 0.24, nhl: 0.22, mlb: 0.22, cfb: 0.15, cbb: 
 const BAD_TOP2_MAX = 3;
 const COLLEGE = ['cfb', 'cbb'];
 const NON_FRANCHISE = ['cfb', 'cbb', 'afl', 'fight'];
+/* The en and em dash, built from char codes so this file never carries one. */
+const DASHES = new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`);
 const all = id => results[id];
 const sum = (id, k) => all(id).reduce((a, st) => a + st[k], 0);
 
@@ -348,7 +350,7 @@ console.log("1. seat words: buildOwnerMandate's ladder at every rank, champion f
       const mine = S.seatMandate(pack, rank, n, champ, 2026, tilt);
       checked += 1;
       if (mine.tier !== base.tier || mine.winFloor !== base.winFloor || mine.reqLevel !== base.reqLevel || mine.season !== base.season) ladderBad += 1;
-      if (/[{}–—]/.test(mine.text)) textBad += 1;
+      if (/[{}]/.test(mine.text) || DASHES.test(mine.text)) textBad += 1;
       if (NON_FRANCHISE.includes(pack.id) && /ownership|franchise/i.test(mine.text)) leak += 1;
     }
   }
