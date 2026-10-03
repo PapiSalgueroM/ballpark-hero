@@ -165,6 +165,9 @@ describe('actual Sports Quiz Board access and committed feedback', () => {
     expect(view.getByRole('heading', { name: 'Board cleared' })).toBeVisible();
     expect(view.container.querySelector('[data-result-score]')).toHaveTextContent('$0');
     expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'loss');
+    /* Round 951: cleared here, so the moment plays (not settled), and the card's grid is the squares alone. */
+    expect(view.container.querySelector('[data-result-settled]')).toBeNull();
+    expect(view.container.querySelector('[role="status"] > div[aria-hidden="true"].font-mono')?.textContent).toBe('🟥🟥🟥🟥🟥');
     expect(stored().score).toBe(-3000);
     expect(stored().results).toEqual(Object.fromEntries(VALUES.map(value => [`fixture-${value}`, false])));
     expect(vi.mocked(useGameCompletion).mock.calls.at(-1)).toEqual(['jeopardy', true, 0, 0]);
@@ -184,5 +187,28 @@ describe('actual Sports Quiz Board access and committed feedback', () => {
     expect(vi.mocked(useGameCompletion).mock.calls.at(-1)).toEqual(['jeopardy', true, 3000, 5]);
     view.rerender(<MemoryRouter><QuizBoard /></MemoryRouter>);
     expect(view.container.querySelector('[data-quiz-feedback]')).toBeNull();
+    /* Round 951: reopened, so the same win shows settled: no reveal, no confetti replay. */
+    expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
+  });
+
+  it('walks the bank up the result states, half the board the line between a good try and a win', async () => {
+    /* A one column board is worth $3000 and a cleared bank is 2 x right - 3000,
+       so the two banks either side of half are $1400 and $1800. */
+    const ladder: Array<[number[], number, string]> = [
+      [[], 0, 'loss'], [[200], 0, 'loss'], [[600, 1000], 200, 'close'],
+      [[400, 800, 1000], 1400, 'close'], [[600, 800, 1000], 1800, 'win'], [[...VALUES], 3000, 'win'],
+    ];
+    for (const [right, bank, state] of ladder) {
+      const score = 2 * right.reduce((sum, v) => sum + v, 0) - 3000;
+      localStorage.setItem(KEY, JSON.stringify({ results: Object.fromEntries(VALUES.map(v => [`fixture-${v}`, right.includes(v)])), score }));
+      const view = draw();
+      await waitFor(() => expect(view.getByRole('heading', { name: 'Board cleared' })).toBeVisible());
+      expect(view.container.querySelector('[data-result-score]')).toHaveTextContent(`$${bank}`);
+      expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', state);
+      expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
+      expect(view.container.querySelector('[role="status"] > div[aria-hidden="true"].font-mono')?.textContent)
+        .toBe(VALUES.map(v => (right.includes(v) ? '🟩' : '🟥')).join(''));
+      cleanup(); localStorage.clear();
+    }
   });
 });

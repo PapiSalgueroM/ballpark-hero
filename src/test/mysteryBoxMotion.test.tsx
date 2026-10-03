@@ -197,15 +197,37 @@ describe('Mystery Box settled card and slot feedback', () => {
     expect(screen.getAllByText('48')).toHaveLength(2);
     expect(view.container.querySelector('[data-mystery-card]')).toBeNull();
     expect(view.container.querySelector('[data-placement]')).toBeNull();
-    /* Round 951: the shared result moment shows the same rating, and a short
-       XI is a good try, never a win. */
+    /* Round 951: the shared result moment shows the same rating, and one
+       player kept is not this time. It mounted finished, so it is settled. */
     expect(view.container.querySelector('[data-result-score]')).toHaveTextContent('48');
-    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'close');
+    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'loss');
+    expect(view.container.querySelector('[data-result-settled]')).not.toBeNull();
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Share result' })));
     expect(writeText).toHaveBeenCalledExactlyOnceWith(state.shareText);
-    state = { ...state, filled: 11 };
+    vi.unstubAllGlobals();
+  });
+
+  it('walks every filled count onto its result state, with the grid cut from a share text in the hook layout', () => {
+    const share = 'Mystery Box, 2026-10-02\n🟪🟨🟩⬜🟫🟩🟩⬜⬜🟫🟨🟩⬜⬜🟫\nXI rating 70 · 11/11 filled · best pull: Generated Fixture 0\nBeat my pulls: douknowball.com/mystery-box';
+    for (let filled = 0; filled <= 11; filled += 1) {
+      const squad = empty(); for (let i = 0; i < filled; i += 1) squad[i] = player(String(i));
+      state = { ...state, packIndex: 15, squad, filled, discards: 15 - filled, rating: 70, finished: true, bestPull: squad[0] ?? null, shareText: share };
+      const view = render(draw());
+      expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', filled === 11 ? 'win' : filled >= 6 ? 'close' : 'loss');
+      expect(view.container.querySelector('[role="status"] > div[aria-hidden="true"].font-mono')).toHaveTextContent(/^🟪🟨🟩⬜🟫🟩🟩⬜⬜🟫🟨🟩⬜⬜🟫$/);
+      cleanup();
+    }
+  });
+
+  it('plays the moment for a finish that happens on this mount, and only then', () => {
+    const view = render(draw());
+    expect(view.container.querySelector('[data-result-moment]')).toBeNull();
+    const squad = empty(); for (let i = 0; i < 11; i += 1) squad[i] = player(String(i));
+    state = { ...state, packIndex: 15, squad, filled: 11, discards: 4, rating: 83, finished: true, bestPull: squad[0]! };
     view.rerender(draw());
     expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'win');
-    vi.unstubAllGlobals();
+    expect(view.container.querySelector('[data-result-settled]')).toBeNull();
+    cleanup(); const reopened = render(draw());
+    expect(reopened.container.querySelector('[data-result-settled]')).not.toBeNull();
   });
 });
