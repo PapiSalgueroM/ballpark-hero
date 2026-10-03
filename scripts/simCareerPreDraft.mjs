@@ -26,16 +26,18 @@
  *   7. Growth never passes the ceiling.                          Control `ceiling`.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
- * and era each, 20,000 lottery draws per era each), 2026-10-02:
- *   - section 3 Spearman(stock, pick rank): -0.93 to -0.97 across the eight
- *     sport and era pairs and five sets. Floor set at -0.80.
- *   - section 3 top decile median pick over bottom decile median pick: at most
- *     0.10 everywhere. Ceiling set at 0.35.
- *   - section 4 largest |z| of a seed's pick 1 frequency: 0.9 to 2.9 over the
- *     ten runs (two eras by five sets). Band set at |z| <= 4.5 per seed.
- *   - section 4 chi-square (13 df modern, 12 df 2003): 5.1 to 19.8. Ceiling
+ * and era each, 20,000 lottery draws per era each), 2026-10-03:
+ *   - section 3 Spearman(stock, pick rank): -0.966 to -0.978 across the eight
+ *     sport and era pairs and five sets (40 values). Floor set at -0.90.
+ *   - section 3 top decile median pick over bottom decile median pick: 0.036
+ *     (NFL) to 0.136 (NBA 2003-04) over the same 40 values. Ceiling set at
+ *     0.35. The bottom two deciles go undrafted in every pair, so their
+ *     median is the past the last pick rank and the ratio is a real fall.
+ *   - section 4 largest |z| of a seed's pick 1 frequency: 1.10 to 3.29 over
+ *     the ten runs (two eras by five sets). Band set at |z| <= 4.5 per seed.
+ *   - section 4 chi-square (13 df modern, 12 df 2003): 3.2 to 20.1. Ceiling
  *     set at 36 (about the 0.999 quantile of 13 df).
- *   Under the controls: flatlottery puts seed 1 at |z| above 20 in both eras.
+ *   What each control did when measured is listed beside CONTROLS below.
  *
  * Run:      node scripts/simCareerPreDraft.mjs
  * Control:  SIM_PRE_DRAFT_CONTROL=<name> node scripts/simCareerPreDraft.mjs   (must exit 1)
@@ -229,7 +231,7 @@ for (const d of DESCS) {
 
 /* ─── Section 3: stock moves the pick ─── */
 console.log('\n3. Median pick falls as the stock decile rises');
-const SPEARMAN_MAX = -0.80;
+const SPEARMAN_MAX = -0.90;
 const TOP_OVER_BOTTOM_MAX = 0.35;
 function ranks(xs) {
   const idx = xs.map((x, i) => [x, i]).sort((a, b) => a[0] - b[0]);
