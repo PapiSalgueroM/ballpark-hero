@@ -80,6 +80,11 @@ export interface RecruitingSport {
   ratingBase: number;
   /** A recruit's NIL ask is this per star plus 0 to 7, in the dynasty's NIL units. */
   nilPerStar: number;
+  /** The prestige a man of 0 to 5 stars expects to hear from, and how many
+   *  points short of it cost his whole attention. Basketball's table is the
+   *  top of its sport, so its needs sit higher and its span is tighter. */
+  starNeed: readonly number[];
+  reachSpan: number;
   /** The portal: how many outside men are in it, how long it runs, the hours, and the sit downs. */
   portalSize: number;
   portalWeeks: number;
@@ -93,12 +98,14 @@ export const CFB_RECRUITING: RecruitingSport = {
   boardSize: 24,
   classCap: 5,
   weeks: 10,
-  hoursPerWeek: 12,
+  hoursPerWeek: 20,
   visitLimit: 4,
   oneAndDone: false,
   eliteLine: 90,
   ratingBase: 54,
   nilPerStar: 9,
+  starNeed: [0, 50, 60, 70, 80, 88],
+  reachSpan: 25,
   portalSize: 8,
   portalWeeks: 2,
   portalHours: 10,
@@ -108,15 +115,17 @@ export const CFB_RECRUITING: RecruitingSport = {
 export const CBB_RECRUITING: RecruitingSport = {
   sport: 'cbb',
   positions: ['PG', 'SG', 'SF', 'PF', 'C'],
-  boardSize: 16,
+  boardSize: 20,
   classCap: 3,
   weeks: 8,
-  hoursPerWeek: 10,
+  hoursPerWeek: 16,
   visitLimit: 3,
   oneAndDone: true,
   eliteLine: 88,
   ratingBase: 56,
   nilPerStar: 8,
+  starNeed: [0, 60, 72, 80, 86, 91],
+  reachSpan: 9,
   portalSize: 7,
   portalWeeks: 2,
   portalHours: 8,
@@ -138,20 +147,22 @@ export const PITCH_BASE = 2;
  *  about something not on his list gets only the base. */
 export const PITCH_RANK_BONUS = [9, 5, 2.5];
 /** An official visit, and how a home week moves it. */
-export const VISIT_GAIN = 10;
+export const VISIT_GAIN = 24;
 export const VISIT_HOME_WIN = 1.7;
 export const VISIT_HOME_LOSS = 0.9;
 /** A NIL offer at his ask adds this, scaled by where NIL sits on his list. */
-export const NIL_GAIN = 14;
+export const NIL_GAIN = 36;
 export const NIL_RANK_MULT = [1.5, 1.0, 0.7];
 export const NIL_OFF_LIST_MULT = 0.4;
 /** Money from a program that never called him counts for half. */
 export const NIL_COLD_MULT = 0.5;
 /** An offer past this multiple of his ask buys nothing more. */
 export const NIL_ASK_CAP = 1.5;
+/** A standing offer adds this share of its first pull again every week it stands, the week it is made included. */
+export const NIL_WEEKLY_SHARE = 0.25;
 
 /** A school leading at this interest, by this much, gets the commitment. */
-export const COMMIT_AT = 100;
+export const COMMIT_AT = 80;
 export const COMMIT_LEAD = 12;
 /** In the portal men decide fast: a lower line. */
 export const PORTAL_COMMIT_AT = 55;
@@ -253,7 +264,17 @@ export const HOME_SHARE = 0.4;
 export const RIVALS_PER_RECRUIT = 3;
 /** Rivals' weekly pull: a base, plus this much per prestige point over 60. */
 export const RIVAL_BASE = 2;
-export const RIVAL_PER_PRESTIGE = 0.22;
+export const RIVAL_PER_PRESTIGE = 0.16;
+
+/** Who listens. A man of this many stars expects to hear from a program of
+ *  at least the sport's starNeed; every point short of it costs a share of
+ *  what my work does with him, down to REACH_MIN. A low prestige school can
+ *  still land a five star, it just has to outwork everyone to do it. */
+export const REACH_MIN = 0.25;
+export function reach(sport: RecruitingSport, stars: number, prestige: number): number {
+  const need = sport.starNeed[clamp(Math.round(stars), 0, sport.starNeed.length - 1)];
+  return clamp(1 - Math.max(0, need - prestige) / sport.reachSpan, REACH_MIN, 1);
+}
 
 /** How well my program can back a pitch up, 0.2 to 1.5. */
 export function pitchFit(p: RecruitPriority, ctx: ProgramPitchContext, r: Pick<TrailRecruit, 'pos' | 'home' | 'nilAsk'>): number {
@@ -333,13 +354,14 @@ export function drawPriorities(sport: RecruitingSport, stars: number, trueOvr: n
 /** The schools a recruit of this many stars hears from: blue bloods chase
  *  five stars, the middle of the map works the threes. Plus, more often than
  *  not, a school from his own state when there is one. */
-export function pickRivals(stars: number, home: string, schools: RecruitingSchool[], mine: string, rng: () => number): string[] {
+export function pickRivals(sport: RecruitingSport, stars: number, home: string, schools: RecruitingSchool[], mine: string, rng: () => number): string[] {
+  const need = sport.starNeed;
   const others = schools.filter(s => s.id !== mine);
   const fits = (s: RecruitingSchool) =>
-    stars >= 5 ? s.prestige >= 88
-      : stars === 4 ? s.prestige >= 80
-        : stars === 3 ? s.prestige >= 70 && s.prestige <= 90
-          : s.prestige <= 82;
+    stars >= 5 ? s.prestige >= need[5]
+      : stars === 4 ? s.prestige >= need[4]
+        : stars === 3 ? s.prestige >= need[3] && s.prestige <= need[5] + 2
+          : s.prestige <= need[4] + 2;
   const pool = others.filter(fits);
   const from = pool.length >= RIVALS_PER_RECRUIT ? pool : others;
   const out: string[] = [];
@@ -374,7 +396,7 @@ export function openTrail(
     const stars = roll > 93 ? 5 : roll > 72 ? 4 : roll > 34 ? 3 : 2;
     const trueOvr = sport.ratingBase + stars * 5 + Math.floor(rng() * 9);
     const home = ctx.state && (rng() < HOME_SHARE || !states.length) ? ctx.state : (states.length ? pick(states, rng) : '');
-    const rivals = pickRivals(stars, home, schools, ctx.schoolId, rng);
+    const rivals = pickRivals(sport, stars, home, schools, ctx.schoolId, rng);
     const interest: Record<string, number> = { [me.id]: startInterest(me, home, rng) };
     for (const id of rivals) interest[id] = startInterest(byId.get(id)!, home, rng);
     const { lo, hi } = bandAround(trueOvr, BAND_START, rng);
@@ -426,24 +448,25 @@ function narrow(r: TrailRecruit, rng: () => number): boolean {
 }
 
 /** One action of mine. False when the rules refuse it (nothing is spent). */
-function applyAction(t: RecruitingTrail, r: TrailRecruit, a: TrailAction, ctx: ProgramPitchContext, wk: TrailWeek, rng: () => number): boolean {
+function applyAction(sport: RecruitingSport, t: RecruitingTrail, r: TrailRecruit, a: TrailAction, ctx: ProgramPitchContext, wk: TrailWeek, rng: () => number): boolean {
   const me = t.mySchool;
+  const k = reach(sport, r.stars, ctx.prestige);
   switch (a.kind) {
     case 'evaluate':
       return narrow(r, rng);
     case 'contact':
-      r.interest[me] = (r.interest[me] ?? 0) + CONTACT_GAIN;
+      r.interest[me] = (r.interest[me] ?? 0) + CONTACT_GAIN * k;
       r.known = Math.min(r.priorities.length, r.known + 1);
       r.contacted = true;
       return true;
     case 'pitch':
       if (!a.priority || !RECRUIT_PRIORITIES.includes(a.priority)) return false;
-      r.interest[me] = (r.interest[me] ?? 0) + pitchGain(r, a.priority, ctx);
+      r.interest[me] = (r.interest[me] ?? 0) + pitchGain(r, a.priority, ctx) * k;
       return true;
     case 'visit': {
       if (t.visitsLeft <= 0 || r.visited) return false;
       const mult = wk.home ? (wk.won ? VISIT_HOME_WIN : VISIT_HOME_LOSS) : 1;
-      r.interest[me] = (r.interest[me] ?? 0) + VISIT_GAIN * mult;
+      r.interest[me] = (r.interest[me] ?? 0) + VISIT_GAIN * mult * k;
       r.visited = true;
       t.visitsLeft -= 1;
       return true;
@@ -453,7 +476,7 @@ function applyAction(t: RecruitingTrail, r: TrailRecruit, a: TrailAction, ctx: P
       if (amount <= 0 || r.nilOffer > 0) return false;
       t.nilLeft -= amount;
       r.nilOffer = amount;
-      r.interest[me] = (r.interest[me] ?? 0) + nilGain(r, amount);
+      r.interest[me] = (r.interest[me] ?? 0) + nilGain(r, amount) * k;
       return true;
     }
   }
@@ -492,11 +515,11 @@ export interface TrailWeekResult { spent: number; refused: number; notes: string
  * last week ends in signing day.
  */
 export function runTrailWeek(
-  t: RecruitingTrail, actions: TrailAction[], ctx: ProgramPitchContext, wk: TrailWeek,
+  sport: RecruitingSport, t: RecruitingTrail, actions: TrailAction[], ctx: ProgramPitchContext, wk: TrailWeek,
   schools: RecruitingSchool[], rng: () => number,
 ): TrailWeekResult {
   const notes: string[] = [];
-  if (t.done || t.week >= t.weeks) return { spent: 0, refused: actions.length, notes };
+  if (t.done || t.week >= t.weeks || t.sport !== sport.sport) return { spent: 0, refused: actions.length, notes };
   const byId = new Map(t.recruits.map(r => [r.id, r]));
   const seen = new Set<string>();
   let spent = 0;
@@ -505,9 +528,14 @@ export function runTrailWeek(
     const r = byId.get(a.recruitId);
     const key = `${a.kind}:${a.recruitId}`;
     const cost = HOURS[a.kind];
-    if (!r || r.signedWith || seen.has(key) || spent + cost > t.hoursPerWeek || !applyAction(t, r, a, ctx, wk, rng)) { refused += 1; continue; }
+    if (!r || r.signedWith || seen.has(key) || spent + cost > t.hoursPerWeek || !applyAction(sport, t, r, a, ctx, wk, rng)) { refused += 1; continue; }
     seen.add(key);
     spent += cost;
+  }
+  /* A standing NIL offer keeps talking every week until signing day. */
+  for (const r of t.recruits) {
+    if (r.signedWith || r.nilOffer <= 0) continue;
+    r.interest[t.mySchool] = (r.interest[t.mySchool] ?? 0) + nilGain(r, r.nilOffer) * NIL_WEEKLY_SHARE * reach(sport, r.stars, ctx.prestige);
   }
   const schoolOf = new Map(schools.map(s => [s.id, s]));
   for (const r of t.recruits) {
@@ -619,7 +647,7 @@ export function openPortal(
     const home = states.length ? pick(states, rng) : (ctx.state ?? '');
     let priorities = drawPriorities(sport, stars, trueOvr, rng);
     if (rng() < 0.5) priorities = ['playing-time' as RecruitPriority, ...priorities.filter(p => p !== 'playing-time')].slice(0, 3);
-    const rivals = pickRivals(stars, home, schools, ctx.schoolId, rng);
+    const rivals = pickRivals(sport, stars, home, schools, ctx.schoolId, rng);
     const interest: Record<string, number> = { [me.id]: startInterest(me, home, rng) };
     for (const id of rivals) interest[id] = startInterest(byId.get(id)!, home, rng);
     recruits.push({
