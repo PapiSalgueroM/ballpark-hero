@@ -63,6 +63,9 @@
  *     observed against 40, 25 and 15 stated (one standard error is 0.35,
  *     0.31 and 0.25 points). Band 1.5 points, over four standard errors, and
  *     the liar control lands about 20 points out.
+ *   reported only: the desk block on a save is a mean 1987 bytes, 90th
+ *     percentile 2427, on the default seed (3276 and 3785 before closed
+ *     cards dropped their buttons). simClubManagerSaveSize stayed green.
  */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
@@ -212,7 +215,12 @@ function careerOf(E, club, seed, seasons, onEntry) {
 
 const CLUBS = ['Arsenal', 'Everton', 'Brighton'];
 const deskSeen = [];
-const noteDesk = s => { for (const d of D.deskOf(s)) if (!deskSeen.some(x => x.id === d.id && x.resolved === d.resolved)) deskSeen.push(d); };
+/* What the desk adds to a save, in bytes of JSON, for the save size budget. */
+const deskBytes = [];
+const noteDesk = s => {
+  deskBytes.push(JSON.stringify(s.decisions ?? []).length);
+  for (const d of D.deskOf(s)) if (!deskSeen.some(x => x.id === d.id && x.resolved === d.resolved)) deskSeen.push(d);
+};
 
 /* ---------- 5. declining everything is main ---------- */
 /* Run first and in pairs, so each engine copy's own module counters (the
@@ -425,6 +433,11 @@ for (const d of deskSeen) {
   }
 }
 console.log(`6. words: ${deskSeen.length} desk cards read`);
+const sortedBytes = [...deskBytes].sort((x, y) => x - y);
+const p90Bytes = sortedBytes[Math.floor(sortedBytes.length * 0.9)] ?? 0;
+const meanBytes = Math.round(deskBytes.reduce((n, b) => n + b, 0) / Math.max(1, deskBytes.length));
+/* Reported for the save size budget (simClubManagerSaveSize), never asserted. */
+console.log(`   the desk block on the save: mean ${meanBytes} bytes, 90th percentile ${p90Bytes}, over ${deskBytes.length} readings`);
 
 if (globalThis.__netCalls) fail(0, `the engine tried the network ${globalThis.__netCalls} times`);
 fs.rmSync(TMP, { recursive: true, force: true });

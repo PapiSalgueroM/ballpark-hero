@@ -58,6 +58,8 @@ export interface DeskItem {
   /** A role, never a real person. */
   from: string;
   text: string;
+  /** Emptied once the card closes: a closed card shows its outcome line, not
+   *  its buttons, and the save is the smaller for it. */
   options: DeskOption[];
   /** Set once answered or once the next match closes it. */
   resolved?: string;
@@ -345,8 +347,8 @@ export function settleDecisionDesk(state: CareerState, straightReds: string[], o
   let desk: DeskItem[] = before.map(d => {
     if (d.resolved) return d;
     return d.kind === 'appeal'
-      ? { ...d, outcome: 'expired' as const, resolved: `No appeal went in before the next match, so the ${plural(d.ban ?? 0, 'match')} ban stood.` }
-      : { ...d, resolved: 'Nobody answered before the next match, so nothing changed.' };
+      ? { ...d, options: [], outcome: 'expired' as const, resolved: `No appeal went in before the next match, so the ${plural(d.ban ?? 0, 'match')} ban stood.` }
+      : { ...d, options: [], resolved: 'Nobody answered before the next match, so nothing changed.' };
   });
   const fresh: DeskItem[] = [];
   for (const id of straightReds) {
@@ -379,7 +381,7 @@ export function answerDecision(career: CareerState, id: string, optionIdx: numbe
   const close = (resolved: string, outcome?: DeskItem['outcome'], extra: Partial<CareerState> = {}): CareerState => ({
     ...career,
     ...extra,
-    decisions: desk.map(d => (d.id === id ? { ...d, resolved, ...(outcome ? { outcome } : {}) } : d)),
+    decisions: desk.map(d => (d.id === id ? { ...d, options: [], resolved, ...(outcome ? { outcome } : {}) } : d)),
   });
   const effect = opt.effect;
 
