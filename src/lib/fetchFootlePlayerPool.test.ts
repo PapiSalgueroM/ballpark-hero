@@ -100,4 +100,15 @@ describe('fetchFootlePlayerPool', () => {
 
     expect(pool).toEqual([]);
   });
+
+  it('preserves unknown counts and real zero in both fetched tiers', async () => {
+    setResponses(
+      { data: [{ ...famous, goals: null, assists: 0 }], error: null },
+      { data: [{ ...obscure, goals: 0, assists: null }], error: null },
+      { data: [], error: null },
+    );
+    const pool = await fetchFootlePlayerPool();
+    expect(pool.find(player => player.name === famous.player_name)).toMatchObject({ goals: null, assists: 0 });
+    expect(pool.find(player => player.name === obscure.player_name)).toMatchObject({ goals: 0, assists: null });
+  });
 });

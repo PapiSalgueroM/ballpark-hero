@@ -42,7 +42,7 @@ const input = (view: ReturnType<typeof render>, id: string) => view.container.qu
 const check = (view: ReturnType<typeof render>, id: string) => fireEvent.click(input(view, id));
 const apply = (view: ReturnType<typeof render>) => view.getByRole('button', { name: 'Apply contributors' });
 const auto = (view: ReturnType<typeof render>) => view.getByRole('button', { name: 'Use automatic' });
-const status = (view: ReturnType<typeof render>) => view.getByRole('status');
+const status = (view: ReturnType<typeof render>) => within(view.getByRole('region', { name: 'Simulation contributors' })).getByRole('status');
 const replace = (view: ReturnType<typeof render>) => { check(view, 'f0'); check(view, 'f6'); };
 const noBooking = () => { expect(recordCompletion).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled(); };
 

@@ -4,14 +4,21 @@ import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD, usCareerSport } from './lib/usCareerFiles.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = 'src/components/us-career/USCareerActionConfirm.tsx';
 const test = 'src/test/usCareerActionConfirm.test.tsx';
-const board = sport => `src/components/${sport.toLowerCase()}-my-career/${sport[0]}${sport.slice(1).toLowerCase()}MyCareerBoard.tsx`;
+const board = sport => usCareerSport(sport).wrapper;
 const sports = ['NFL', 'NBA', 'MLB', 'NHL'];
 const boards = sports.map(board);
-const files = [component, test, ...boards, 'src/hooks/useGameCompletion.ts', 'src/lib/restoredFinish.ts', ...sports.map(sport => `src/lib/${sport.toLowerCase()}MyCareer.ts`)];
+/* Round 900: the four boards are thin wrappers around one shared board plus a
+   binding per sport. The wiring this harness mutates lives in the shared
+   board now, so one edit there has to fail the same case in all four sports;
+   a sport that stayed green would be a sport that is not on that board. */
+const sharedBoard = US_CAREER_BOARD;
+const bindings = sports.map(sport => usCareerSport(sport).binding);
+const files = [component, test, sharedBoard, ...bindings, ...boards, 'src/hooks/useGameCompletion.ts', 'src/lib/restoredFinish.ts', ...sports.map(sport => `src/lib/${sport.toLowerCase()}MyCareer.ts`)];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
 const baselineTitle = sport => `'${sport}' preserves live restore and engine state as an independent baseline`;
@@ -37,10 +44,10 @@ const controls = {
   initial: [component, cancelBlock, cancelBlock.replace('<AlertDialogCancel ', '<button onClick={() => changeOpen(false)} ').replace('</AlertDialogCancel>', '</button>'), [titles.focus('retire'), titles.focus('restart'), titles.keyboard]],
   focus: [component, 'triggerRef.current.focus({ preventScroll: true });', 'triggerRef.current.focus();', [titles.focus('retire'), titles.focus('restart')]],
   unmount: [component, '          event.preventDefault();', '          event.preventDefault();\n          if (!triggerRef.current?.isConnected) onConfirm();', [titles.unmount]],
-  retireWiring: [board('NFL'), '<USCareerActionConfirm action="retire" sport="NFL" onConfirm={retireNow}>', '<USCareerActionConfirm action="retire" sport="NFL" onConfirm={reset}>', [retirementTitle('NFL')]],
-  restartWiring: [board('NFL'), '<USCareerActionConfirm action="restart" sport="NFL" onConfirm={reset}>', '<USCareerActionConfirm action="restart" sport="NFL" onConfirm={retireNow}>', [restartTitle('NFL')]],
-  ownKey: [board('NFL'), 'localStorage.removeItem(SAVE_KEY);', 'localStorage.clear();', [restartTitle('NFL')]],
-  legacy: [board('NFL'), "useGameCompletion('nfl-my-career', done, career ? legacyOf(career).score : 0);", "useGameCompletion('nfl-my-career', done, career ? legacyOf(career).score + 1 : 0);", [retirementTitle('NFL')]],
+  retireWiring: [sharedBoard, '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={retireNow}>', '<USCareerActionConfirm action="retire" sport={sport.label} onConfirm={reset}>', sports.map(retirementTitle)],
+  restartWiring: [sharedBoard, '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset}>', '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={retireNow}>', sports.map(restartTitle)],
+  ownKey: [sharedBoard, 'const reset = () => {\n    localStorage.removeItem(sport.saveKey);', 'const reset = () => {\n    localStorage.clear();', sports.map(restartTitle)],
+  legacy: [sharedBoard, 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);', 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score + 1 : 0);', sports.map(retirementTitle)],
 };
 const control = process.env.US_CAREER_ACTION_CONTROL || '';
 assert.ok(!control || control in controls, 'Known career-confirmation control');
