@@ -110,6 +110,19 @@ if (CONTROL === 'dupe') {
     `  { player1: "Ray Allen", player2: "Kevin Garnett", sport: "NBA", answer: true, funFact: "Celtics teammates.", difficulty: 2 },\n  // MEDIUM (difficulty 2), less obvious`, 'the medium difficulty comment');
 }
 if (CONTROL === 'spellgap') rec = rewrite(rec, '{"t":"spell","team":"Seattle Seahawks","first":"2012","last":"2015"}', '{"t":"spell","team":"Seattle Seahawks","first":"2012","last":"2014"}', 'the Seahawks spell claim');
+/* the reviewer's mutation M4, in file AND record, with the denial in the
+   funFact rewritten too so that section 1 cannot be what catches it */
+const RONALDO_MESSI = 'Despite being the greatest rivals, they never played on the same club team.';
+const RONALDO_MESSI_YES = 'Despite being the greatest rivals, they were Juventus teammates.';
+if (CONTROL === 'legacypin') {
+  src = rewrite(src, `answer: false, funFact: "${RONALDO_MESSI}"`, `answer: true, funFact: "${RONALDO_MESSI_YES}"`, 'the Ronaldo and Messi row');
+  rec = rewrite(rec, `"answer":false,"funFact":"${RONALDO_MESSI}"`, `"answer":true,"funFact":"${RONALDO_MESSI_YES}"`, 'the Ronaldo and Messi record row');
+}
+/* the same flip with the funFact left alone: section 1's scoped shapes catch it */
+if (CONTROL === 'legacyflip') {
+  src = rewrite(src, `answer: false, funFact: "${RONALDO_MESSI}"`, `answer: true, funFact: "${RONALDO_MESSI}"`, 'the Ronaldo and Messi row');
+  rec = rewrite(rec, `"answer":false,"funFact":"${RONALDO_MESSI}"`, `"answer":true,"funFact":"${RONALDO_MESSI}"`, 'the Ronaldo and Messi record row');
+}
 if (CONTROL === 'thindeal') {
   src = rewrite(src, 'difficulty: 1 }', 'difficulty: 2 }', 'an easy row', true);
   rec = rewrite(rec, '"difficulty":1,', '"difficulty":2,', 'an easy record row', true);
@@ -135,7 +148,10 @@ const SPORTS = new Set(['NBA', 'NFL', 'Soccer', 'MLB', 'NHL']);
 /* lifted from simTeammatesPairs section 1, which this file replaces: find the
    clauses that assert they played together and check the sign against the
    answer, rather than demanding a keyword a good row may not use */
-const TOGETHER = /(both (played|were)|played together|were teammates|became .{0,20}teammates|teammates (on|from|since|in|for))/i;
+/* the last two shapes are the scoped ones Round 921 writes ("Never NBA
+   teammates", "never played on the same club team"): without them a legacy
+   NO row flipped to YES kept its denial and passed */
+const TOGETHER = /(both (played|were)|played together|were teammates|became .{0,20}teammates|teammates (on|from|since|in|for)|\b(club|NBA|NFL|MLB|NHL) teammates\b|on the same (club |NBA |NFL |MLB |NHL |major league )?team\b)/i;
 const NEGATED = /\b(never|not|no longer|n't)\b/i;
 for (const r of rows) {
   if (r.p1 === r.p2) fail(1, `${r.p1} is paired with himself`);
@@ -218,6 +234,35 @@ for (const [k, a] of Object.entries(adjudications)) {
 }
 const legacy = rows.filter(r => recRows.get(pairKey(r))?.legacy);
 for (const r of legacy) if (r.sport !== 'Soccer') fail(4, `${pairKey(r)} is marked legacy, and only the old soccer rows may be`);
+/* A legacy row has no hosts behind it, so sections 5 to 7 cannot derive its
+   answer and a flip made in the file AND the record used to ship green. Each
+   answer is pinned here as it shipped before Round 921 (two of them spot
+   checked by review on 2026-10-02 and all fifteen standing since the old
+   harness's live table check). A pin is a fence, not a verification: a row
+   leaves this list only when it is verified into the record, and a legacy row
+   with no pin, or one that disagrees with its pin, fails. */
+const LEGACY_ANSWERS = {
+  'Soccer|Lionel Messi + Neymar': true,
+  'Soccer|Cristiano Ronaldo + Lionel Messi': false,
+  'Soccer|David Beckham + Zlatan Ibrahimovic': true,
+  'Soccer|Lionel Messi + Thierry Henry': true,
+  'Soccer|Robin van Persie + Wayne Rooney': true,
+  'Soccer|Lionel Messi + Sergio Ramos': true,
+  'Soccer|Andrea Pirlo + David Villa': true,
+  'Soccer|Andrea Pirlo + Frank Lampard': true,
+  'Soccer|Cristiano Ronaldo + Ronaldinho': false,
+  'Soccer|Pierre-Emerick Aubameyang + Robert Lewandowski': true,
+  'Soccer|Kylian Mbappé + Neymar': true,
+  'Soccer|Eden Hazard + Kevin De Bruyne': true,
+  'Soccer|Cristiano Ronaldo + Karim Benzema': true,
+  'Soccer|Kylian Mbappé + Vinícius Jr.': true,
+  'Soccer|Erling Haaland + Jude Bellingham': true,
+};
+for (const r of legacy) {
+  const pin = LEGACY_ANSWERS[pairKey(r)];
+  if (pin === undefined) fail(4, `${pairKey(r)} is a legacy row with no pinned answer, so a flip in file and record would ship unseen`);
+  else if (pin !== r.answer) fail(4, `${pairKey(r)} ships answer ${r.answer} against its pinned ${pin}: a legacy answer changed with nothing verified behind it`);
+}
 if (legacy.length > LEGACY_CEILING) fail(4, `${legacy.length} legacy rows against a ceiling of ${LEGACY_CEILING}: a new row went in unverified`);
 console.log(`  ${Object.keys(players).length} players and ${Object.keys(adjudications).length} adjudications checked; ${legacy.length} legacy soccer rows (ceiling ${LEGACY_CEILING})`);
 
@@ -483,6 +528,23 @@ for (const r of rows) bySport[r.sport] = (bySport[r.sport] || 0) + 1;
 console.log(`  bank by sport: ${Object.entries(bySport).map(([s, n]) => `${s} ${n}`).join(', ')}`);
 
 // ---------------------------------------------------------------------------
+console.log('\n--- 10. the reveal a player sees says what the record checked ---');
+/* The record settles club and league teams only (the rules card says so), so
+   a bare "NEVER teammates" is false for Kobe and LeBron (2008 Olympics),
+   Gretzky and Lemieux (1987 Canada Cup) and every other pair who shared a
+   national team. The NO reveal has to name the league, or "club" for soccer,
+   and no line on the page may deny teammates without a scope. Read from the
+   code with comments stripped, so prose about the rule cannot satisfy it. */
+let pageSrc = fs.readFileSync(path.join(ROOT, PAGE), 'utf8').replace(/\r\n/g, '\n');
+const SCOPED_NO = "`They were NEVER ${currentPair.sport === 'Soccer' ? 'club' : currentPair.sport} teammates.`";
+if (CONTROL === 'unscopedbanner') pageSrc = rewrite(pageSrc, SCOPED_NO, "'They were NEVER teammates.'", 'the scoped NO reveal');
+const pageCode = pageSrc.replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<![:'"])\/\/[^\n]*/g, ' ');
+const bare = pageCode.match(/\bnever\s+teammates\b/gi) || [];
+if (bare.length) fail(10, `${PAGE} denies teammates ${bare.length} time(s) with no league or club named: "${bare[0]}"`);
+if (!/NEVER \$\{[^}]*currentPair\.sport[^}]*\} teammates/.test(pageCode)) fail(10, `the NO reveal in ${PAGE} does not name the league the pair was checked in`);
+console.log(`  ${bare.length} unscoped denial(s) on the page; the NO reveal names the league: ${/NEVER \$\{[^}]*currentPair\.sport/.test(pageCode) ? 'yes' : 'NO'}`);
+
+// ---------------------------------------------------------------------------
 /* 9. LIVE, opt in. Sections 3 and 4 of simTeammatesPairs, which this file
    replaces, moved here unchanged in logic: the soccer rows against
    public.soccer_player_club_stints. That reads the production database, so it
@@ -556,6 +618,9 @@ const EXPECT = {
   longdash: [1, 3],      /* the dash, and a file that no longer says what the record says */
   shortdeal: [8],
   widepool: [8],
+  unscopedbanner: [10],
+  legacypin: [4],
+  legacyflip: [1, 4],    /* the denial now contradicts the answer, and the pin */
 };
 let code = 0;
 if (CONTROL) {
