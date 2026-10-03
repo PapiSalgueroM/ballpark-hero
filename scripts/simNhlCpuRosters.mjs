@@ -81,6 +81,7 @@ try {
       const currentBytes = await readFile(path.join(root, file));
       assert.deepEqual(currentBytes, bytes, 'Source bytes held: ' + file);
     }
+    for (const outcome of report.rows) console.log(`simNhlCpuRosters ${name}: ${outcome.status}: ${outcome.title}`);
     console.log('simNhlCpuRosters ' + name + ':8 outcomes, ' + expected.length + ' exact assertion rejects, ' + (8 - expected.length) + ' held.');
   }
   await writeFile(path.join(receipts, 'verified-summary.json'), JSON.stringify({ rows, reference: { commit: 'd14814c9', engineNormalizedSha256: hash(before) }, sourceHashes: Object.fromEntries([...held].map(([file, { bytes }]) => [file, hash(bytes)])), limits: 'Eight engine outcomes. Actual seed17 season/draft and human trade/four-choice paths use unchanged constructor data; directed CPU rosters, market and salaries are labelled fictional test fixtures. Exact single-offseason RNG, actual waivers and JSON identity, not historical data verification, global multiyear RNG equality, advanced AI, native input or a completed browser season. Actual Board owner-forwarding proof is separate.' }, null, 2));
