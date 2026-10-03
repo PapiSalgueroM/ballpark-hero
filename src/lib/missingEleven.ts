@@ -116,7 +116,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Malcolm Mitchell', slotIndex: 2, nationality: 'USA', fact: 'The rookie wideout started ahead of Danny Amendola.' },
       { name: 'Martellus Bennett', slotIndex: 5, nationality: 'USA', fact: 'Started at tight end with Gronkowski out injured for the Super Bowl run.' },
     ],
-    source: 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
+    source: 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201702050atl #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 2. Super Bowl LI, Atlanta Falcons (the 28-3 offense)
@@ -148,7 +148,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Patrick DiMarco', slotIndex: 2, nationality: 'USA', fact: 'A fullback starting a Super Bowl, the MVP-season Falcons ran a two-back look.' },
       { name: 'Mohamed Sanu', slotIndex: 4, nationality: 'USA', fact: 'Started opposite Julio Jones; Taylor Gabriel was the third receiver off the bench.' },
     ],
-    source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match.',
+    source: 'pfr box 201702050atl #home_starters (Chrome-rendered DOM) + Wikipedia "Super Bowl LI" Starting lineups table, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201702050atl #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
   // 3. Super Bowl XLIX, New England Patriots (the Malcolm Butler game)
   // Verified 2026-07-22: pfr 201502010sea #vis_starters + Wikipedia "Super
@@ -180,7 +180,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Michael Hoomanawanui', slotIndex: 5, nationality: 'USA', fact: 'The second tight end in the opening two-TE look, the surname nobody can spell.' },
       { name: 'Brandon LaFell', slotIndex: 2, nationality: 'USA', fact: 'The forgotten starter of the receiving corps alongside Edelman and Gronkowski.' },
     ],
-    source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
+    source: 'pfr box 201502010sea #vis_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201502010sea #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 4. Super Bowl XLIX, Seattle Seahawks (the goal-line interception)
@@ -211,7 +211,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Jermaine Kearse', slotIndex: 3, nationality: 'USA', fact: 'His juggling catch put Seattle at the goal line moments before the interception.' },
       { name: 'Luke Willson', slotIndex: 5, nationality: 'Canada', fact: 'The Canadian tight end from LaSalle, Ontario started with Seattle one yard from a repeat.' },
     ],
-    source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match.',
+    source: 'pfr box 201502010sea #home_starters (Chrome DOM) + Wikipedia SB XLIX Starting lineups, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201502010sea #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 5. Super Bowl XLII, New England Patriots (18-1)
@@ -244,7 +244,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Laurence Maroney', slotIndex: 1, nationality: 'USA', fact: 'Started at running back for the 18-0 Patriots on the night the perfect season died.' },
       { name: 'Benjamin Watson', slotIndex: 4, nationality: 'USA', fact: 'Started at tight end for the record-setting 2007 offense.' },
     ],
-    source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter.',
+    source: 'pfr box 200802030nwe #home_starters (Chrome DOM) + Wikipedia SB XLII Starting lineups, 11/11 match. Giants side dropped: sources disagree on the 11th starter. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 200802030nwe #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 6. Super Bowl 50, Denver Broncos (Peyton's last ride)
@@ -278,7 +278,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Owen Daniels', slotIndex: 4, nationality: 'USA', fact: 'The veteran tight end started in the last game of the Manning era.' },
       { name: 'Vernon Davis', slotIndex: 5, nationality: 'USA', fact: "The former 49er started as the second tight end in Peyton's final game." },
     ],
-    source: 'pfr box 201602070den #home_starters (Chrome DOM) + Wikipedia Super Bowl 50 Starting lineups, 11/11 match. Panthers side dropped: sources disagree on the receiver slots.',
+    source: 'pfr box 201602070den #home_starters (Chrome DOM) + Wikipedia Super Bowl 50 Starting lineups, 11/11 match. Panthers side dropped: sources disagree on the receiver slots. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201602070den #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 7. Super Bowl LVII, Kansas City Chiefs (the Kelce Bowl)
@@ -309,7 +309,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Noah Gray', slotIndex: 5, nationality: 'USA', fact: 'The second tight end behind Travis Kelce, the starter nobody remembers.' },
       { name: 'JuJu Smith-Schuster', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver in his single season as a Chief.' },
     ],
-    source: 'pfr box 202302120phi #vis_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match (wiki resolves pfr\'s generic OL labels).',
+    source: 'pfr box 202302120phi #vis_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match (wiki resolves pfr\'s generic OL labels). Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 202302120phi #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 8. Super Bowl LVII, Philadelphia Eagles
@@ -340,7 +340,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Jason Kelce', slotIndex: 8, nationality: 'USA', fact: 'Faced his brother Travis, the first brothers ever to play each other in a Super Bowl.' },
       { name: 'Jordan Mailata', slotIndex: 6, nationality: 'Australia', fact: 'The Australian former rugby league player started at left tackle.' },
     ],
-    source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match.',
+    source: 'pfr box 202302120phi #home_starters (Chrome DOM) + Wikipedia SB LVII Starting lineups, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 202302120phi #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
   // 9. Super Bowl XLV, Pittsburgh Steelers (the jumbo look)
   // Verified 2026-07-22: pfr 201102060pit #vis_starters + Wikipedia "Super
@@ -372,7 +372,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Rashard Mendenhall', slotIndex: 1, nationality: 'USA', fact: 'Started at running back, his fourth-quarter fumble swung the game.' },
       { name: 'David Johnson', slotIndex: 2, nationality: 'USA', fact: 'Not THAT David Johnson, the Steelers fullback in the jumbo opening look.' },
     ],
-    source: 'pfr box 201102060pit #vis_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Only one WR started; Brown/Wallace off the bench.',
+    source: 'pfr box 201102060pit #vis_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Only one WR started; Brown/Wallace off the bench. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201102060pit #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 10. Super Bowl XLV, Green Bay Packers (four wide, no tight end)
@@ -403,7 +403,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Jordy Nelson', slotIndex: 5, nationality: 'USA', fact: 'One of FOUR wide receivers in the no-tight-end opening look.' },
       { name: 'James Jones', slotIndex: 4, nationality: 'USA', fact: 'The third of four wideouts Rodgers threw to all night.' },
     ],
-    source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Four-WR set, no TE started.',
+    source: 'pfr box 201102060pit #home_starters (Chrome DOM) + Wikipedia SB XLV Starting lineups, 11/11 match. Four-WR set, no TE started. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201102060pit #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 11. Super Bowl LIV, San Francisco 49ers (the fourth-quarter collapse)
@@ -436,7 +436,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Ben Garland', slotIndex: 8, nationality: 'USA', fact: 'Started at center with Weston Richburg out for the season.' },
       { name: 'Tevin Coleman', slotIndex: 1, nationality: 'USA', fact: 'Started at running back over Raheem Mostert, who had run for 220 yards in the NFC Championship.' },
     ],
-    source: 'pfr box 202002020kan #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match (wiki resolves pfr generic OL labels).',
+    source: 'pfr box 202002020kan #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match (wiki resolves pfr generic OL labels). Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 202002020kan #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 12. Super Bowl LIV, Kansas City Chiefs (Mahomes\' comeback)
@@ -467,7 +467,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Laurent Duvernay-Tardif', slotIndex: 9, nationality: 'Canada', fact: 'The starting right guard also holds a medical degree from McGill.' },
       { name: 'Mecole Hardman', slotIndex: 4, nationality: 'USA', fact: 'The rookie second-round pick started as the third receiver next to Tyreek Hill and Sammy Watkins.' },
     ],
-    source: 'pfr box 202002020kan #home_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match.',
+    source: 'pfr box 202002020kan #home_starters (Chrome DOM) + Wikipedia "Super Bowl LIV" Starting lineups table, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 202002020kan #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 13. Super Bowl LII, Philadelphia Eagles (the Philly Special)
@@ -500,7 +500,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'LeGarrette Blount', slotIndex: 1, nationality: 'USA', fact: 'Started at running back a year after winning Super Bowl LI with the Patriots he was now beating.' },
       { name: 'Torrey Smith', slotIndex: 3, nationality: 'USA', fact: 'The third receiver alongside Alshon Jeffery and Nelson Agholor.' },
     ],
-    source: 'pfr box 201802040nwe #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match.',
+    source: 'pfr box 201802040nwe #vis_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201802040nwe #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 14. Super Bowl LII, New England Patriots (613 yards and a loss)
@@ -531,7 +531,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Dion Lewis', slotIndex: 1, nationality: 'USA', fact: 'Started at running back as the Patriots piled up a Super Bowl-record 613 yards, and lost.' },
       { name: 'James Develin', slotIndex: 2, nationality: 'USA', fact: 'The fullback in New England\'s two-back opening set.' },
     ],
-    source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match.',
+    source: 'pfr box 201802040nwe #home_starters (Chrome DOM) + Wikipedia "Super Bowl LII" Starting lineups table, 11/11 match. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201802040nwe #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // -------------------------------------------------------------------------
@@ -644,7 +644,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Walter Thurmond', slotIndex: 6, nationality: 'USA', fact: 'Seattle opened in the nickel, so the official card lists three starting corners. Thurmond held the slot.' },
       { name: 'Byron Maxwell', slotIndex: 8, nationality: 'USA', fact: 'Started opposite Sherman after stepping in for Brandon Browner late that season.' },
     ],
-    source: 'Official NFL gamebook PDF (static.www.nfl.com, Lineups page: nickel starters verbatim, M.Smith and B.Irvin listed as substitutions) + PFT starters-remaining enumeration + SI All-22 film review; Wright start also in Wikipedia K.J. Wright prose.',
+    source: 'Official NFL gamebook PDF (static.www.nfl.com, Lineups page: nickel starters verbatim, M.Smith and B.Irvin listed as substitutions) + PFT starters-remaining enumeration + SI All-22 film review; Wright start also in Wikipedia K.J. Wright prose. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201402020den #vis_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 18. Super Bowl 50, Denver Broncos defense (the No Fly Zone)
@@ -677,7 +677,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Malik Jackson', slotIndex: 2, nationality: 'USA', fact: "Fell on Cam Newton's fumble in the end zone for the game's first touchdown." },
       { name: 'Darian Stewart', slotIndex: 10, nationality: 'USA', fact: 'Wade Phillips named him the free safety, with T.J. Ward at strong.' },
     ],
-    source: 'B/R position-by-position SB 50 preview + AMNY defenses-at-a-glance + NFL.com postgame film review (front three named) + Wikipedia player pages ("started in Super Bowl 50" for Marshall, Trevathan; Stewart FS/Ward SS assignment), 11/11 across 2+ publishers each.',
+    source: 'B/R position-by-position SB 50 preview + AMNY defenses-at-a-glance + NFL.com postgame film review (front three named) + Wikipedia player pages ("started in Super Bowl 50" for Marshall, Trevathan; Stewart FS/Ward SS assignment), 11/11 across 2+ publishers each. Rechecked 2026-10-03 (Round 950): the nfl.com game book and the pro-football-reference.com box score 201602070den #home_starters both list these 11; row in scripts/data/missingElevenVerified2026-10.json.',
   },
 
   // 19. Super Bowl LVIII, Kansas City Chiefs offense

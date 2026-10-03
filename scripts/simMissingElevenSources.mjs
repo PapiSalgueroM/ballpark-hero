@@ -12,14 +12,17 @@
  * scripts/data/missingElevenVerified2026-10.json with both hosts' own text.
  *
  * 1) Every sheet's source note names at least two different hosts, and a
- *    wiki is not counted as one. Sheets written before the rule that name
- *    fewer are frozen in LEGACY_ONE_HOST: a RATCHET, so no new sheet may
- *    join it and a sheet that gains its second host must leave it.
+ *    wiki is not counted as one. Sixteen of the 18 older sheets named only
+ *    pfr shorthand and Wikipedia (or one host); Round 950 reread all 16 from
+ *    the same two hosts, every one agreed 11/11, and their notes now say so.
  * 2) Every record sheet is in the file with the same eleven men in the same
  *    order and positions, the same match facts and the same blanks, and each
  *    record row agrees with itself across both hosts (the game book's initial
  *    and surname, pfr's full name). The record's two sources are on two
  *    different non wiki hosts and their URLs are on the hosts they name.
+ *    The 16 reread older sheets (legacyRecheck) are held to the same rows,
+ *    names in order, with pfr's spelling recorded where it differs (Ben
+ *    Watson, Steve Neal, Michael Person).
  * 3) Every reveal line on a record sheet has evidence for that man in the
  *    record, so no line is written from memory.
  * 4) Every blank can be solved fairly, on all 40 sheets: the blank points at
@@ -35,8 +38,9 @@
  *    end of the first full cycle.
  *
  * Every check here is exact, there is no sampled statistic and so no band
- * to set. Measured 2026-10-03: 40 sheets (24 naming two hosts, 16 frozen),
- * 22 record sheets with 242 starter rows, 40 reveal lines with evidence,
+ * to set. Measured 2026-10-03: 40 sheets all naming two hosts, 22 record
+ * sheets with 242 starter rows plus 16 reread sheets with 176, 40 reveal
+ * lines with evidence,
  * 123 blanks, 9 of 9 frozen main deals matched, 3 full cycles after the
  * cutover with all 40 sheets in each and 0 repeats. Every control fires.
  *
@@ -45,7 +49,7 @@
  * went red:
  *   onehost   drops pro-football-reference.com from one new source note (1)
  *   wikihost  swaps that host for en.wikipedia.org (1, a wiki is no host)
- *   legacy    gives a legacy sheet a second host but leaves it frozen (1)
+ *   legacyrow replaces a starter on a reread older sheet (2)
  *   swap      replaces one starter in the file with a man not in the record (2)
  *   recordpfr blanks one pfr cell in the record (2)
  *   fact      adds a reveal line to a blank the record has no evidence for (3)
@@ -66,7 +70,7 @@ const RECORD = `${ROOT}/scripts/data/missingElevenVerified2026-10.json`;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simME-')).replace(/\\/g, '/');
 
 const CONTROL = process.env.SIM_ME_CONTROL || '';
-const CONTROLS = { onehost: 1, wikihost: 1, legacy: 1, swap: 2, recordpfr: 2, fact: 3, slot: 4, olddeal: 5 };
+const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, fact: 3, slot: 4, olddeal: 5 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
 const red = new Set();
@@ -83,7 +87,7 @@ const mustReplace = (text, from, to, what) => {
 };
 if (CONTROL === 'onehost') src = mustReplace(src, 'pro-football-reference.com box score 202402110kan #vis_starters', 'box score 202402110kan #vis_starters', 'the SB LVIII 49ers pfr host');
 if (CONTROL === 'wikihost') src = mustReplace(src, 'pro-football-reference.com box score 202402110kan #vis_starters', 'en.wikipedia.org box score 202402110kan #vis_starters', 'the SB LVIII 49ers pfr host');
-if (CONTROL === 'legacy') src = mustReplace(src, 'pfr box 201702050atl #vis_starters (Chrome-rendered DOM)', 'pro-football-reference.com box 201702050atl #vis_starters and nfl.com', 'the SB LI Patriots legacy note');
+if (CONTROL === 'legacyrow') src = mustReplace(src, "S('FB', 'Patrick DiMarco'),", "S('FB', 'Mike Tolbert'),", 'the SB LI Falcons fullback');
 if (CONTROL === 'swap') src = mustReplace(src, "S('C', 'Jake Brendel'),", "S('C', 'Alex Mack'),", 'the SB LVIII 49ers center');
 if (CONTROL === 'fact') src = mustReplace(src, "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA' }", "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA', fact: 'Snapped every down.' }", 'the Brendel blank');
 if (CONTROL === 'slot') src = mustReplace(src, "{ name: 'Noah Gray', slotIndex: 5,", "{ name: 'Noah Gray', slotIndex: 4,", 'the Noah Gray blank');
@@ -117,30 +121,15 @@ const registrable = (h) => h.toLowerCase().split('.').slice(-2).join('.');
 const hostsOf = (note) => [...new Set((String(note).match(HOST_RE) ?? []).map(registrable))];
 const realHosts = (note) => hostsOf(note).filter((h) => !WIKI.test(h));
 
-/* Sheets written before the two host rule whose note names fewer than two
-   hosts, measured 2026-10-03. A ratchet: it may only shrink. */
-const LEGACY_ONE_HOST = [
-  'sb-li-ne', 'sb-li-atl', 'sb-xlix-ne', 'sb-xlix-sea', 'sb-xlii-ne', 'sb-50-den', 'sb-lvii-kc',
-  'sb-lvii-phi', 'sb-xlv-gb', 'sb-xlv-pit', 'sb-liv-sf', 'sb-liv-kc', 'sb-lii-phi', 'sb-lii-ne',
-  'sb-xlviii-sea-d', 'sb-50-den-d',
-];
-
 console.log('1) Every sheet names two hosts, and a wiki is not one');
 {
   let two = 0;
-  const ids = new Set(LINEUPS.map((l) => l.id));
   for (const l of LINEUPS) {
     const hosts = realHosts(l.source);
-    const frozen = LEGACY_ONE_HOST.includes(l.id);
-    if (hosts.length >= 2) {
-      two += 1;
-      if (frozen) fail(1, `${l.id} now names ${hosts.join(' and ')}, so it must leave LEGACY_ONE_HOST`);
-    } else if (!frozen) {
-      fail(1, `${l.id} names ${hosts.length ? hosts.join(', ') : 'no host'}; a sheet needs two hosts that are not wikis`);
-    }
+    if (hosts.length >= 2) two += 1;
+    else fail(1, `${l.id} names ${hosts.length ? hosts.join(', ') : 'no host'}; a sheet needs two hosts that are not wikis`);
   }
-  for (const id of LEGACY_ONE_HOST) if (!ids.has(id)) fail(1, `LEGACY_ONE_HOST lists ${id}, which is not a sheet`);
-  console.log(`   ${LINEUPS.length} sheets: ${two} name two hosts or more, ${LINEUPS.length - two} frozen from before the rule`);
+  console.log(`   ${two} of ${LINEUPS.length} sheets name two hosts or more`);
 }
 
 /* The game book prints "LG 73 N.Allegretti" or "LT 74 Ch.Johnson"; the
@@ -191,7 +180,30 @@ const byId = new Map(LINEUPS.map((l) => [l.id, l]));
     if (wantC !== gotC) fail(2, `${s.id}: blanks differ from the record (${gotC})`);
     if (!realHosts(l.source).includes('nfl.com') || !realHosts(l.source).includes('pro-football-reference.com')) fail(2, `${s.id}: the source note does not name both of the record's hosts`);
   }
-  console.log(`   ${rec.sheets.length} record sheets, ${rows} starter rows, each read the same on both hosts`);
+  const older = rec.legacyRecheck?.sheets ?? [];
+  let olderRows = 0;
+  for (const s of older) {
+    const l = byId.get(s.id);
+    if (!l) { fail(2, `reread sheet ${s.id} is not in the file`); continue; }
+    const hosts = [...new Set(s.sources.map((x) => registrable(x.host)))].filter((h) => !WIKI.test(h));
+    if (hosts.length < 2) fail(2, `${s.id}: the reread names ${hosts.length} non wiki host(s)`);
+    if (s.agree !== '11/11') fail(2, `${s.id}: the reread says ${s.agree}`);
+    const fileNames = l.slots.map((x) => x.name).join(', ');
+    if (fileNames !== s.starters.map((r) => r[1]).join(', ')) fail(2, `${s.id}: the file's eleven differ from the reread`);
+    for (const [, name, book, pfr, note] of s.starters) {
+      olderRows += 1;
+      const tail = String(book).replace(/^\S+\s+\d+\s*/, '');
+      if (fold(bookSurname(book)) !== fold(name.split(/\s+/).slice(1).join(' ').replace(/\s+(Jr\.?|III|II)$/i, '')) || fold(tail)[0] !== fold(name)[0]) fail(2, `${s.id} ${name}: the game book prints ${book}`);
+      const alias = /^pfr prints (.+)$/.exec(String(note ?? ''))?.[1];
+      if (!String(pfr).startsWith(name + '/') && !(alias && String(pfr).startsWith(alias + '/'))) fail(2, `${s.id} ${name}: pfr prints ${pfr}`);
+    }
+  }
+  /* The two older defenses whose notes already name two publishers of their
+     own (check 1 holds them to that); Round 950 did not reread them. */
+  const OWN_TWO_HOSTS = ['sb-xx-chi-d', 'sb-xxxv-bal-d'];
+  const covered = new Set([...rec.sheets, ...older].map((s) => s.id).concat(OWN_TWO_HOSTS));
+  for (const l of LINEUPS) if (!covered.has(l.id)) fail(2, `${l.id} is in neither the record nor the reread, so nothing holds it to its sources`);
+  console.log(`   ${rec.sheets.length} record sheets, ${rows} starter rows, and ${older.length} reread older sheets, ${olderRows} rows, each read the same on both hosts`);
 }
 
 console.log('3) Every reveal line on a Round 950 sheet has evidence in the record');
@@ -304,4 +316,4 @@ if (failures > 0) {
   console.error(`simMissingElevenSources: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);
 }
-console.log(`simMissingElevenSources: green. ${LINEUPS.length} sheets, ${rec.sheets.length} of them row for row against the record.`);
+console.log(`simMissingElevenSources: green. ${LINEUPS.length} sheets, ${rec.sheets.length + (rec.legacyRecheck?.sheets?.length ?? 0)} of them row for row against the record.`);

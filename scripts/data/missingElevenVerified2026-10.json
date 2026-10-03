@@ -2970,5 +2970,1421 @@
    "id": "sb-xlii-nyg",
    "why": "Super Bowl XLII Giants offense. On 2026-10-03 the game book (WR Burress, LT Diehl, LG Seubert, C O'Hara, RG Snee, RT McKenzie, TE Boss, WR Toomer, QB Manning, TE M.Matthews, RB Jacobs) and pfr #vis_starters agree 11/11, but the file dropped this side in an earlier round because its sources then disagreed on the 11th starter. Left out here rather than overturning that call without the third source that disagreed; the lead can add it from this row."
   }
- ]
+ ],
+ "legacyRecheck": {
+  "note": "The 16 sheets written before Round 950 whose notes named fewer than two hosts, reread on 2026-10-03 from the same two hosts as the new sheets. The file keeps its own position labels for these (pfr style in places), so the third column is matched on the surname only. Every one agreed 11/11; nothing on them changed.",
+  "sheets": [
+   {
+    "id": "sb-li-ne",
+    "team": "New England Patriots",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630446/gamecenter/10012017-0205-001b-9dc2-c021acd5615a.pdf",
+      "via": "https://www.nfl.com/games/patriots-at-falcons-2016-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Patriots Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201702050atl.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Tom Brady",
+      "QB 12 T.Brady",
+      "Tom Brady/QB"
+     ],
+     [
+      "RB",
+      "Dion Lewis",
+      "RB 33 D.Lewis",
+      "Dion Lewis/RB"
+     ],
+     [
+      "WR",
+      "Malcolm Mitchell",
+      "WR 19 M.Mitchell",
+      "Malcolm Mitchell/WR"
+     ],
+     [
+      "WR",
+      "Chris Hogan",
+      "WR 15 C.Hogan",
+      "Chris Hogan/WR"
+     ],
+     [
+      "WR",
+      "Julian Edelman",
+      "WR 11 J.Edelman",
+      "Julian Edelman/WR"
+     ],
+     [
+      "TE",
+      "Martellus Bennett",
+      "TE 88 M.Bennett",
+      "Martellus Bennett/TE"
+     ],
+     [
+      "LT",
+      "Nate Solder",
+      "LT 77 N.Solder",
+      "Nate Solder/LT"
+     ],
+     [
+      "LG",
+      "Joe Thuney",
+      "LG 62 J.Thuney",
+      "Joe Thuney/LG"
+     ],
+     [
+      "C",
+      "David Andrews",
+      "C 60 D.Andrews",
+      "David Andrews/C"
+     ],
+     [
+      "RG",
+      "Shaq Mason",
+      "RG 69 S.Mason",
+      "Shaq Mason/RG"
+     ],
+     [
+      "RT",
+      "Marcus Cannon",
+      "RT 61 M.Cannon",
+      "Marcus Cannon/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-li-atl",
+    "team": "Atlanta Falcons",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Atlanta Falcons Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630446/gamecenter/10012017-0205-001b-9dc2-c021acd5615a.pdf",
+      "via": "https://www.nfl.com/games/patriots-at-falcons-2016-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Falcons Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201702050atl.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Matt Ryan",
+      "QB 2 M.Ryan",
+      "Matt Ryan/QB"
+     ],
+     [
+      "RB",
+      "Devonta Freeman",
+      "RB 24 D.Freeman",
+      "Devonta Freeman/RB"
+     ],
+     [
+      "FB",
+      "Patrick DiMarco",
+      "FB 42 P.DiMarco",
+      "Patrick DiMarco/FB"
+     ],
+     [
+      "WR",
+      "Julio Jones",
+      "WR 11 J.Jones",
+      "Julio Jones/WR"
+     ],
+     [
+      "WR",
+      "Mohamed Sanu",
+      "WR 12 M.Sanu",
+      "Mohamed Sanu/WR"
+     ],
+     [
+      "TE",
+      "Levine Toilolo",
+      "TE 80 L.Toilolo",
+      "Levine Toilolo/TE"
+     ],
+     [
+      "LT",
+      "Jake Matthews",
+      "LT 70 J.Matthews",
+      "Jake Matthews/LT"
+     ],
+     [
+      "LG",
+      "Andy Levitre",
+      "LG 67 A.Levitre",
+      "Andy Levitre/LG"
+     ],
+     [
+      "C",
+      "Alex Mack",
+      "C 51 A.Mack",
+      "Alex Mack/C"
+     ],
+     [
+      "RG",
+      "Chris Chester",
+      "RG 65 C.Chester",
+      "Chris Chester/RG"
+     ],
+     [
+      "RT",
+      "Ryan Schraeder",
+      "RT 73 R.Schraeder",
+      "Ryan Schraeder/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlix-ne",
+    "team": "New England Patriots",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630905/gamecenter/10012015-0201-0057-4cc3-823c5f304662.pdf",
+      "via": "https://www.nfl.com/games/patriots-at-seahawks-2014-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Patriots Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201502010sea.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Tom Brady",
+      "QB 12 T.Brady",
+      "Tom Brady/QB"
+     ],
+     [
+      "RB",
+      "Shane Vereen",
+      "RB 34 S.Vereen",
+      "Shane Vereen/RB"
+     ],
+     [
+      "WR",
+      "Brandon LaFell",
+      "WR 19 B.LaFell",
+      "Brandon LaFell/WR"
+     ],
+     [
+      "WR",
+      "Julian Edelman",
+      "WR 11 J.Edelman",
+      "Julian Edelman/WR"
+     ],
+     [
+      "TE",
+      "Rob Gronkowski",
+      "TE 87 R.Gronkowski",
+      "Rob Gronkowski/TE"
+     ],
+     [
+      "TE",
+      "Michael Hoomanawanui",
+      "TE 47 M.Hoomanawanui",
+      "Michael Hoomanawanui/TE"
+     ],
+     [
+      "LT",
+      "Nate Solder",
+      "LT 77 N.Solder",
+      "Nate Solder/LT"
+     ],
+     [
+      "LG",
+      "Dan Connolly",
+      "LG 63 D.Connolly",
+      "Dan Connolly/LG"
+     ],
+     [
+      "C",
+      "Bryan Stork",
+      "C 66 B.Stork",
+      "Bryan Stork/C"
+     ],
+     [
+      "RG",
+      "Ryan Wendell",
+      "RG 62 R.Wendell",
+      "Ryan Wendell/RG"
+     ],
+     [
+      "RT",
+      "Sebastian Vollmer",
+      "RT 76 S.Vollmer",
+      "Sebastian Vollmer/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlix-sea",
+    "team": "Seattle Seahawks",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Seattle Seahawks Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630905/gamecenter/10012015-0201-0057-4cc3-823c5f304662.pdf",
+      "via": "https://www.nfl.com/games/patriots-at-seahawks-2014-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Seahawks Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201502010sea.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Russell Wilson",
+      "QB 3 R.Wilson",
+      "Russell Wilson/QB"
+     ],
+     [
+      "RB",
+      "Marshawn Lynch",
+      "RB 24 M.Lynch",
+      "Marshawn Lynch/RB"
+     ],
+     [
+      "WR",
+      "Doug Baldwin",
+      "WR 89 D.Baldwin",
+      "Doug Baldwin/WR"
+     ],
+     [
+      "WR",
+      "Jermaine Kearse",
+      "WR 15 J.Kearse",
+      "Jermaine Kearse/WR"
+     ],
+     [
+      "WR",
+      "Ricardo Lockette",
+      "WR 83 R.Lockette",
+      "Ricardo Lockette/WR"
+     ],
+     [
+      "TE",
+      "Luke Willson",
+      "TE 82 L.Willson",
+      "Luke Willson/TE"
+     ],
+     [
+      "LT",
+      "Russell Okung",
+      "LT 76 R.Okung",
+      "Russell Okung/LT"
+     ],
+     [
+      "LG",
+      "James Carpenter",
+      "LG 77 J.Carpenter",
+      "James Carpenter/LG"
+     ],
+     [
+      "C",
+      "Max Unger",
+      "C 60 M.Unger",
+      "Max Unger/C"
+     ],
+     [
+      "RG",
+      "J.R. Sweezy",
+      "RG 64 J.Sweezy",
+      "J.R. Sweezy/RG"
+     ],
+     [
+      "RT",
+      "Justin Britt",
+      "RT 68 J.Britt",
+      "Justin Britt/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlii-ne",
+    "team": "New England Patriots",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677631553/gamecenter/10012008-0203-00d1-c381-50c19c704227.pdf",
+      "via": "https://www.nfl.com/games/giants-at-patriots-2007-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Patriots Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/200802030nwe.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Tom Brady",
+      "QB 12 T.Brady",
+      "Tom Brady/QB"
+     ],
+     [
+      "RB",
+      "Laurence Maroney",
+      "RB 39 L.Maroney",
+      "Laurence Maroney/RB"
+     ],
+     [
+      "WR",
+      "Randy Moss",
+      "WR 81 R.Moss",
+      "Randy Moss/WR"
+     ],
+     [
+      "WR",
+      "Wes Welker",
+      "WR 83 W.Welker",
+      "Wes Welker/WR"
+     ],
+     [
+      "TE",
+      "Benjamin Watson",
+      "TE 84 B.Watson",
+      "Ben Watson/TE",
+      "pfr prints Ben Watson"
+     ],
+     [
+      "TE",
+      "Kyle Brady",
+      "TE 88 K.Brady",
+      "Kyle Brady/TE"
+     ],
+     [
+      "LT",
+      "Matt Light",
+      "LT 72 M.Light",
+      "Matt Light/LT"
+     ],
+     [
+      "LG",
+      "Logan Mankins",
+      "LG 70 L.Mankins",
+      "Logan Mankins/LG"
+     ],
+     [
+      "C",
+      "Dan Koppen",
+      "C 67 D.Koppen",
+      "Dan Koppen/C"
+     ],
+     [
+      "RG",
+      "Stephen Neal",
+      "RG 61 S.Neal",
+      "Steve Neal/RG",
+      "pfr prints Steve Neal"
+     ],
+     [
+      "RT",
+      "Nick Kaczur",
+      "RT 77 N.Kaczur",
+      "Nick Kaczur/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-50-den",
+    "team": "Denver Broncos",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Denver Broncos Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630317/gamecenter/10012016-0207-0053-41d9-193aafc21e5e.pdf",
+      "via": "https://www.nfl.com/games/panthers-at-broncos-2015-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Broncos Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201602070den.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Peyton Manning",
+      "QB 18 P.Manning",
+      "Peyton Manning/QB"
+     ],
+     [
+      "RB",
+      "C.J. Anderson",
+      "RB 22 C.Anderson",
+      "C.J. Anderson/RB"
+     ],
+     [
+      "WR",
+      "Demaryius Thomas",
+      "WR 88 D.Thomas",
+      "Demaryius Thomas/WR"
+     ],
+     [
+      "WR",
+      "Emmanuel Sanders",
+      "WR 10 E.Sanders",
+      "Emmanuel Sanders/WR"
+     ],
+     [
+      "TE",
+      "Owen Daniels",
+      "TE 81 O.Daniels",
+      "Owen Daniels/TE"
+     ],
+     [
+      "TE",
+      "Vernon Davis",
+      "TE 80 V.Davis",
+      "Vernon Davis/TE"
+     ],
+     [
+      "LT",
+      "Ryan Harris",
+      "LT 68 R.Harris",
+      "Ryan Harris/LT"
+     ],
+     [
+      "LG",
+      "Evan Mathis",
+      "LG 69 E.Mathis",
+      "Evan Mathis/LG"
+     ],
+     [
+      "C",
+      "Matt Paradis",
+      "C 61 M.Paradis",
+      "Matt Paradis/C"
+     ],
+     [
+      "RG",
+      "Louis Vasquez",
+      "RG 65 L.Vasquez",
+      "Louis Vasquez/RG"
+     ],
+     [
+      "RT",
+      "Michael Schofield",
+      "RT 79 M.Schofield",
+      "Michael Schofield/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-50-den-d",
+    "team": "Denver Broncos",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Denver Broncos Defense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630317/gamecenter/10012016-0207-0053-41d9-193aafc21e5e.pdf",
+      "via": "https://www.nfl.com/games/panthers-at-broncos-2015-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Broncos Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201602070den.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "DE",
+      "Derek Wolfe",
+      "DE 95 D.Wolfe",
+      "Derek Wolfe/DE"
+     ],
+     [
+      "NT",
+      "Sylvester Williams",
+      "NT 92 S.Williams",
+      "Sylvester Williams/NT"
+     ],
+     [
+      "DE",
+      "Malik Jackson",
+      "DE 97 M.Jackson",
+      "Malik Jackson/DE"
+     ],
+     [
+      "OLB",
+      "Von Miller",
+      "SLB 58 V.Miller",
+      "Von Miller/SLB"
+     ],
+     [
+      "ILB",
+      "Brandon Marshall",
+      "ILB 54 B.Marshall",
+      "Brandon Marshall/ILB"
+     ],
+     [
+      "ILB",
+      "Danny Trevathan",
+      "ILB 59 D.Trevathan",
+      "Danny Trevathan/ILB"
+     ],
+     [
+      "OLB",
+      "DeMarcus Ware",
+      "WLB 94 D.Ware",
+      "DeMarcus Ware/WLB"
+     ],
+     [
+      "CB",
+      "Aqib Talib",
+      "LCB 21 A.Talib",
+      "Aqib Talib/LCB"
+     ],
+     [
+      "CB",
+      "Chris Harris Jr.",
+      "RCB 25 C.Harris",
+      "Chris Harris Jr./RCB"
+     ],
+     [
+      "SS",
+      "T.J. Ward",
+      "SS 43 T.Ward",
+      "T.J. Ward/SS"
+     ],
+     [
+      "FS",
+      "Darian Stewart",
+      "FS 26 D.Stewart",
+      "Darian Stewart/FS"
+     ]
+    ]
+   },
+   {
+    "id": "sb-lvii-kc",
+    "team": "Kansas City Chiefs",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677627380/gamecenter/70e5ba20-9aaa-11ed-99e5-6b206f74937e.pdf",
+      "via": "https://www.nfl.com/games/chiefs-at-eagles-2022-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Chiefs Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/202302120phi.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Patrick Mahomes",
+      "QB 15 P.Mahomes",
+      "Patrick Mahomes/QB"
+     ],
+     [
+      "RB",
+      "Isiah Pacheco",
+      "RB 10 I.Pacheco",
+      "Isiah Pacheco/RB"
+     ],
+     [
+      "WR",
+      "Marquez Valdes-Scantling",
+      "WR 11 M.Valdes-Scantling",
+      "Marquez Valdes-Scantling/WR"
+     ],
+     [
+      "WR",
+      "JuJu Smith-Schuster",
+      "WR 9 J.Smith-Schuster",
+      "JuJu Smith-Schuster/WR"
+     ],
+     [
+      "TE",
+      "Travis Kelce",
+      "TE 87 T.Kelce",
+      "Travis Kelce/TE"
+     ],
+     [
+      "TE",
+      "Noah Gray",
+      "TE 83 N.Gray",
+      "Noah Gray/TE"
+     ],
+     [
+      "LT",
+      "Orlando Brown Jr.",
+      "LT 57 O.Brown",
+      "Orlando Brown Jr./T"
+     ],
+     [
+      "LG",
+      "Joe Thuney",
+      "LG 62 J.Thuney",
+      "Joe Thuney/OL"
+     ],
+     [
+      "C",
+      "Creed Humphrey",
+      "C 52 C.Humphrey",
+      "Creed Humphrey/C"
+     ],
+     [
+      "RG",
+      "Trey Smith",
+      "RG 65 T.Smith",
+      "Trey Smith/OL"
+     ],
+     [
+      "RT",
+      "Andrew Wylie",
+      "RT 77 A.Wylie",
+      "Andrew Wylie/G"
+     ]
+    ]
+   },
+   {
+    "id": "sb-lvii-phi",
+    "team": "Philadelphia Eagles",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677627380/gamecenter/70e5ba20-9aaa-11ed-99e5-6b206f74937e.pdf",
+      "via": "https://www.nfl.com/games/chiefs-at-eagles-2022-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Eagles Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/202302120phi.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Jalen Hurts",
+      "QB 1 J.Hurts",
+      "Jalen Hurts/QB"
+     ],
+     [
+      "RB",
+      "Miles Sanders",
+      "RB 26 M.Sanders",
+      "Miles Sanders/RB"
+     ],
+     [
+      "WR",
+      "A.J. Brown",
+      "WR 11 A.Brown",
+      "A.J. Brown/WR"
+     ],
+     [
+      "WR",
+      "DeVonta Smith",
+      "WR 6 D.Smith",
+      "DeVonta Smith/WR"
+     ],
+     [
+      "WR",
+      "Quez Watkins",
+      "WR 16 Q.Watkins",
+      "Quez Watkins/WR"
+     ],
+     [
+      "TE",
+      "Dallas Goedert",
+      "TE 88 D.Goedert",
+      "Dallas Goedert/TE"
+     ],
+     [
+      "LT",
+      "Jordan Mailata",
+      "LT 68 J.Mailata",
+      "Jordan Mailata/T"
+     ],
+     [
+      "LG",
+      "Landon Dickerson",
+      "LG 69 L.Dickerson",
+      "Landon Dickerson/G"
+     ],
+     [
+      "C",
+      "Jason Kelce",
+      "C 62 J.Kelce",
+      "Jason Kelce/C"
+     ],
+     [
+      "RG",
+      "Isaac Seumalo",
+      "RG 56 I.Seumalo",
+      "Isaac Seumalo/G"
+     ],
+     [
+      "RT",
+      "Lane Johnson",
+      "RT 65 L.Johnson",
+      "Lane Johnson/T"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlv-pit",
+    "team": "Pittsburgh Steelers",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Pittsburgh Steelers Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630495/gamecenter/10012011-0206-003c-762b-aa0518f546ab.pdf",
+      "via": "https://www.nfl.com/games/steelers-at-packers-2010-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Steelers Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201102060pit.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Ben Roethlisberger",
+      "QB 7 B.Roethlisberger",
+      "Ben Roethlisberger/QB"
+     ],
+     [
+      "RB",
+      "Rashard Mendenhall",
+      "RB 34 R.Mendenhall",
+      "Rashard Mendenhall/RB"
+     ],
+     [
+      "FB",
+      "David Johnson",
+      "FB 85 D.Johnson",
+      "David Johnson/FB"
+     ],
+     [
+      "WR",
+      "Hines Ward",
+      "WR 86 H.Ward",
+      "Hines Ward/WR"
+     ],
+     [
+      "TE",
+      "Heath Miller",
+      "TE 83 H.Miller",
+      "Heath Miller/TE"
+     ],
+     [
+      "TE",
+      "Matt Spaeth",
+      "TE 89 M.Spaeth",
+      "Matt Spaeth/TE"
+     ],
+     [
+      "LT",
+      "Jonathan Scott",
+      "LT 72 J.Scott",
+      "Jonathan Scott/LT"
+     ],
+     [
+      "LG",
+      "Chris Kemoeatu",
+      "LG 68 C.Kemoeatu",
+      "Chris Kemoeatu/LG"
+     ],
+     [
+      "C",
+      "Doug Legursky",
+      "C 64 D.Legursky",
+      "Doug Legursky/C"
+     ],
+     [
+      "RG",
+      "Ramon Foster",
+      "RG 73 R.Foster",
+      "Ramon Foster/RG"
+     ],
+     [
+      "RT",
+      "Flozell Adams",
+      "RT 71 F.Adams",
+      "Flozell Adams/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlv-gb",
+    "team": "Green Bay Packers",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Green Bay Packers Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630495/gamecenter/10012011-0206-003c-762b-aa0518f546ab.pdf",
+      "via": "https://www.nfl.com/games/steelers-at-packers-2010-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Packers Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201102060pit.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Aaron Rodgers",
+      "QB 12 A.Rodgers",
+      "Aaron Rodgers/QB"
+     ],
+     [
+      "RB",
+      "James Starks",
+      "RB 44 J.Starks",
+      "James Starks/RB"
+     ],
+     [
+      "WR",
+      "Donald Driver",
+      "WR 80 D.Driver",
+      "Donald Driver/WR"
+     ],
+     [
+      "WR",
+      "Greg Jennings",
+      "WR 85 G.Jennings",
+      "Greg Jennings/WR"
+     ],
+     [
+      "WR",
+      "James Jones",
+      "WR 89 J.Jones",
+      "James Jones/WR"
+     ],
+     [
+      "WR",
+      "Jordy Nelson",
+      "WR 87 J.Nelson",
+      "Jordy Nelson/WR"
+     ],
+     [
+      "LT",
+      "Chad Clifton",
+      "LT 76 C.Clifton",
+      "Chad Clifton/LT"
+     ],
+     [
+      "LG",
+      "Daryn Colledge",
+      "LG 73 D.Colledge",
+      "Daryn Colledge/LG"
+     ],
+     [
+      "C",
+      "Scott Wells",
+      "C 63 S.Wells",
+      "Scott Wells/C"
+     ],
+     [
+      "RG",
+      "Josh Sitton",
+      "RG 71 J.Sitton",
+      "Josh Sitton/RG"
+     ],
+     [
+      "RT",
+      "Bryan Bulaga",
+      "RT 75 B.Bulaga",
+      "Bryan Bulaga/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-liv-sf",
+    "team": "San Francisco 49ers",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, San Francisco 49ers Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677629254/gamecenter/10012020-0202-00b8-acb1-7ee139d04911.pdf",
+      "via": "https://www.nfl.com/games/49ers-at-chiefs-2019-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (49ers Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/202002020kan.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Jimmy Garoppolo",
+      "QB 10 J.Garoppolo",
+      "Jimmy Garoppolo/QB"
+     ],
+     [
+      "RB",
+      "Tevin Coleman",
+      "RB 26 T.Coleman",
+      "Tevin Coleman/RB"
+     ],
+     [
+      "FB",
+      "Kyle Juszczyk",
+      "FB 44 K.Juszczyk",
+      "Kyle Juszczyk/FB"
+     ],
+     [
+      "WR",
+      "Deebo Samuel",
+      "WR 19 D.Samuel",
+      "Deebo Samuel/WR"
+     ],
+     [
+      "WR",
+      "Emmanuel Sanders",
+      "WR 17 E.Sanders",
+      "Emmanuel Sanders/WR"
+     ],
+     [
+      "TE",
+      "George Kittle",
+      "TE 85 G.Kittle",
+      "George Kittle/TE"
+     ],
+     [
+      "LT",
+      "Joe Staley",
+      "LT 74 J.Staley",
+      "Joe Staley/T"
+     ],
+     [
+      "LG",
+      "Laken Tomlinson",
+      "LG 75 L.Tomlinson",
+      "Laken Tomlinson/OL"
+     ],
+     [
+      "C",
+      "Ben Garland",
+      "C 63 B.Garland",
+      "Ben Garland/OL"
+     ],
+     [
+      "RG",
+      "Mike Person",
+      "RG 68 M.Person",
+      "Michael Person/OL",
+      "pfr prints Michael Person"
+     ],
+     [
+      "RT",
+      "Mike McGlinchey",
+      "RT 69 M.McGlinchey",
+      "Mike McGlinchey/T"
+     ]
+    ]
+   },
+   {
+    "id": "sb-liv-kc",
+    "team": "Kansas City Chiefs",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Kansas City Chiefs Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677629254/gamecenter/10012020-0202-00b8-acb1-7ee139d04911.pdf",
+      "via": "https://www.nfl.com/games/49ers-at-chiefs-2019-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Chiefs Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/202002020kan.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Patrick Mahomes",
+      "QB 15 P.Mahomes",
+      "Patrick Mahomes/QB"
+     ],
+     [
+      "RB",
+      "Damien Williams",
+      "RB 26 Dam.Williams",
+      "Damien Williams/RB"
+     ],
+     [
+      "WR",
+      "Tyreek Hill",
+      "WR 10 T.Hill",
+      "Tyreek Hill/WR"
+     ],
+     [
+      "WR",
+      "Sammy Watkins",
+      "WR 14 S.Watkins",
+      "Sammy Watkins/WR"
+     ],
+     [
+      "WR",
+      "Mecole Hardman",
+      "WR 17 M.Hardman",
+      "Mecole Hardman/WR"
+     ],
+     [
+      "TE",
+      "Travis Kelce",
+      "TE 87 T.Kelce",
+      "Travis Kelce/TE"
+     ],
+     [
+      "LT",
+      "Eric Fisher",
+      "LT 72 E.Fisher",
+      "Eric Fisher/T"
+     ],
+     [
+      "LG",
+      "Stefen Wisniewski",
+      "G 61 S.Wisniewski",
+      "Stefen Wisniewski/G"
+     ],
+     [
+      "C",
+      "Austin Reiter",
+      "C 62 A.Reiter",
+      "Austin Reiter/C"
+     ],
+     [
+      "RG",
+      "Laurent Duvernay-Tardif",
+      "RG 76 L.Duvernay-Tardif",
+      "Laurent Duvernay-Tardif/G"
+     ],
+     [
+      "RT",
+      "Mitchell Schwartz",
+      "RT 71 M.Schwartz",
+      "Mitchell Schwartz/T"
+     ]
+    ]
+   },
+   {
+    "id": "sb-lii-phi",
+    "team": "Philadelphia Eagles",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Philadelphia Eagles Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677629529/gamecenter/10012018-0204-00f8-9eca-052dd7e9e25e.pdf",
+      "via": "https://www.nfl.com/games/eagles-at-patriots-2017-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Eagles Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201802040nwe.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Nick Foles",
+      "QB 9 N.Foles",
+      "Nick Foles/QB"
+     ],
+     [
+      "RB",
+      "LeGarrette Blount",
+      "RB 29 L.Blount",
+      "LeGarrette Blount/RB"
+     ],
+     [
+      "WR",
+      "Alshon Jeffery",
+      "WR 17 A.Jeffery",
+      "Alshon Jeffery/WR"
+     ],
+     [
+      "WR",
+      "Torrey Smith",
+      "WR 82 T.Smith",
+      "Torrey Smith/WR"
+     ],
+     [
+      "WR",
+      "Nelson Agholor",
+      "WR 13 N.Agholor",
+      "Nelson Agholor/WR"
+     ],
+     [
+      "TE",
+      "Zach Ertz",
+      "TE 86 Z.Ertz",
+      "Zach Ertz/TE"
+     ],
+     [
+      "LT",
+      "Halapoulivaati Vaitai",
+      "LT 72 H.Vaitai",
+      "Halapoulivaati Vaitai/LT"
+     ],
+     [
+      "LG",
+      "Stefen Wisniewski",
+      "LG 61 S.Wisniewski",
+      "Stefen Wisniewski/LG"
+     ],
+     [
+      "C",
+      "Jason Kelce",
+      "C 62 J.Kelce",
+      "Jason Kelce/C"
+     ],
+     [
+      "RG",
+      "Brandon Brooks",
+      "RG 79 B.Brooks",
+      "Brandon Brooks/RG"
+     ],
+     [
+      "RT",
+      "Lane Johnson",
+      "RT 65 L.Johnson",
+      "Lane Johnson/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-lii-ne",
+    "team": "New England Patriots",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, New England Patriots Offense",
+      "url": "https://static.www.nfl.com/image/upload/v1677629529/gamecenter/10012018-0204-00f8-9eca-052dd7e9e25e.pdf",
+      "via": "https://www.nfl.com/games/eagles-at-patriots-2017-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #home_starters (Patriots Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201802040nwe.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "QB",
+      "Tom Brady",
+      "QB 12 T.Brady",
+      "Tom Brady/QB"
+     ],
+     [
+      "RB",
+      "Dion Lewis",
+      "RB 33 D.Lewis",
+      "Dion Lewis/RB"
+     ],
+     [
+      "FB",
+      "James Develin",
+      "FB 46 J.Develin",
+      "James Develin/FB"
+     ],
+     [
+      "WR",
+      "Brandin Cooks",
+      "WR 14 B.Cooks",
+      "Brandin Cooks/WR"
+     ],
+     [
+      "WR",
+      "Chris Hogan",
+      "WR 15 C.Hogan",
+      "Chris Hogan/WR"
+     ],
+     [
+      "TE",
+      "Rob Gronkowski",
+      "TE 87 R.Gronkowski",
+      "Rob Gronkowski/TE"
+     ],
+     [
+      "LT",
+      "Nate Solder",
+      "LT 77 N.Solder",
+      "Nate Solder/LT"
+     ],
+     [
+      "LG",
+      "Joe Thuney",
+      "LG 62 J.Thuney",
+      "Joe Thuney/LG"
+     ],
+     [
+      "C",
+      "David Andrews",
+      "C 60 D.Andrews",
+      "David Andrews/C"
+     ],
+     [
+      "RG",
+      "Shaq Mason",
+      "RG 69 S.Mason",
+      "Shaq Mason/RG"
+     ],
+     [
+      "RT",
+      "Cameron Fleming",
+      "RT 71 C.Fleming",
+      "Cameron Fleming/RT"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xlviii-sea-d",
+    "team": "Seattle Seahawks",
+    "agree": "11/11",
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Seattle Seahawks Defense",
+      "url": "https://static.www.nfl.com/image/upload/v1677630861/gamecenter/10012014-0202-00a8-5550-fbffa4f7d8ed.pdf",
+      "via": "https://www.nfl.com/games/seahawks-at-broncos-2013-post-4",
+      "read": "2026-10-03"
+     },
+     {
+      "host": "pro-football-reference.com",
+      "what": "Box score #vis_starters (Seahawks Starters Table)",
+      "url": "https://www.pro-football-reference.com/boxscores/201402020den.htm",
+      "read": "2026-10-03"
+     }
+    ],
+    "starters": [
+     [
+      "LDE",
+      "Cliff Avril",
+      "LDE 56 C.Avril",
+      "Cliff Avril/LDE"
+     ],
+     [
+      "LDT",
+      "Michael Bennett",
+      "LDT 72 M.Bennett",
+      "Michael Bennett/LDT"
+     ],
+     [
+      "RDT",
+      "Clinton McDonald",
+      "RDT 69 C.McDonald",
+      "Clinton McDonald/RDT"
+     ],
+     [
+      "RDE",
+      "Chris Clemons",
+      "RDE 91 C.Clemons",
+      "Chris Clemons/RDE"
+     ],
+     [
+      "OLB",
+      "K.J. Wright",
+      "OLB 50 K.Wright",
+      "K.J. Wright/OLB"
+     ],
+     [
+      "MLB",
+      "Bobby Wagner",
+      "MLB 54 B.Wagner",
+      "Bobby Wagner/MLB"
+     ],
+     [
+      "CB",
+      "Walter Thurmond",
+      "CB 28 W.Thurmond",
+      "Walter Thurmond/CB"
+     ],
+     [
+      "LCB",
+      "Richard Sherman",
+      "LCB 25 R.Sherman",
+      "Richard Sherman/LCB"
+     ],
+     [
+      "RCB",
+      "Byron Maxwell",
+      "RCB 41 B.Maxwell",
+      "Byron Maxwell/RCB"
+     ],
+     [
+      "SS",
+      "Kam Chancellor",
+      "SS 31 K.Chancellor",
+      "Kam Chancellor/SS"
+     ],
+     [
+      "FS",
+      "Earl Thomas",
+      "FS 29 E.Thomas",
+      "Earl Thomas/FS"
+     ]
+    ]
+   }
+  ]
+ }
 }
