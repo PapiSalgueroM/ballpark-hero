@@ -109,11 +109,15 @@ if (CONTROL === 'notags') {
 }
 if (CONTROL === 'tradeera') {
   /* The trade pool forgets the career's era (the review's mutation). */
-  cutInBundle('the deck C trade', 'moved = `Traded to ', 'mlbEraTeamIds(cc.eraId)', 'mlbEraTeamIds(void 0)', 300);
+  /* Round 988: the trade is the shared engine's; MLB's era reaches it
+     through the sport's settings, so that is where the era is dropped. */
+  cutInBundle('the deck C trade', 'var MLB_DECK_C = {', 'mlbEraTeamIds(c.eraId)', 'mlbEraTeamIds(void 0)', 300);
 }
 if (CONTROL === 'chipblind') {
   /* The chip stops reading the save, as it did before the review. */
-  cutInBundle('the deck C chip', 'function mlbLifeCChip(', 'canMove(c, key, d)', 'true', 400);
+  /* Round 988: the chip is the shared engine's, and MLB's settings say
+     whether it reads the save. */
+  cutInBundle('the deck C chip', 'var MLB_DECK_C = {', 'chipReadsSave: true', 'chipReadsSave: false', 300);
 }
 if (CONTROL === 'clockleak') {
   cutInBundle('the pitch clock card', 'id: "mlbA_pitch_clock"', 'yrs >= 1 && c.year >= 2024', 'yrs >= 1', 400);
@@ -159,7 +163,7 @@ if (CONTROL === 'wordsbreak') {
 }
 if (CONTROL === 'tradepay') {
   const o = defOf('mlbC_bench_out_of_options').options[0];
-  if (!o.trade || typeof o.say !== 'string') throw new Error('control tradepay: option 0 of mlbC_bench_out_of_options is not the plain trade');
+  if (o.move !== 'trade' || typeof o.say !== 'string') throw new Error('control tradepay: option 0 of mlbC_bench_out_of_options is not the plain trade');
   const line = o.say;
   o.say = c => { c.salary = Math.round(c.salary * 0.8 * 10) / 10; return line; };
 }

@@ -20,10 +20,13 @@
    - Backup seasons measured 28 to 31 percent, average peak rating 81.6 to
      82.2 (81.7 on the old fleet before deck C). Printed, not banded: they are
      simDepthChart's and simCareerRealism's to judge.
-   - Words against effects, 2,000 draws a card: see the section below.
+   - Words against effects: since Round 988 deck C runs on the shared engine
+     (src/lib/usCareerDeckC.ts) and its words, coin flip odds, era money and
+     "nothing else moves" checks moved with it to scripts/simUsCareerDeckC.mjs,
+     one check for all four sports. The controls brokencard, paycut,
+     loadedflip and flatcash went with them (there: tallylie, paycut, loaded,
+     flatmoney). What stays here is who gets dealt what.
    - Controls, each of which must turn the run red:
-       NFL_CAREER_CONTROL=brokencard   (605 disagreements, one card, measured)
-       NFL_CAREER_CONTROL=paycut       (768 disagreements, the restructure card)
        NFL_CAREER_CONTROL=nodeck       (deck C fired 0 of 36)
 
    Round 917 review, three checks the first version did not have:
@@ -46,8 +49,6 @@
        NFL_CAREER_CONTROL=nogate       (the 2020 rule reaches 2019: 32 failures)
        NFL_CAREER_CONTROL=nobackup     (a backup card reaches starters: 160)
        NFL_CAREER_CONTROL=earlywindow  (the second year card at yrs 2: 8)
-       NFL_CAREER_CONTROL=loadedflip   (every flip at 0.6: 16 failures)
-       NFL_CAREER_CONTROL=flatcash     (deck C pays 2026 money in 2005: 640)
 
    Round 917 second review, two gaps the first fix left:
    - POSITION AND AGE GATES. Pointing the tight end block at 'WR', or the
@@ -76,24 +77,11 @@ import { pathToFileURL } from 'node:url';
    of the source as it is bundled (nothing on disk changes) and the run must
    then FAIL. Each control refuses to run when the string it replaces is not
    in the file, so a green run can never mean "the control did not fire".
-     brokencard  one deck C card applies fanbase -4 under a button that says
-                 fanbase -3: the words against effects check must go red.
-     paycut      the restructure card takes a million off the salary: the
-                 "a restructure is not a pay cut" check must go red.
-     nodeck      drawEvent stops adding deck C: the coverage check must go red. */
+     nodeck      drawEvent stops adding deck C: the coverage check must go red.
+   Round 988: brokencard, paycut, loadedflip and flatcash moved with the
+   words check to scripts/simUsCareerDeckC.mjs. */
 const CONTROL = process.env.NFL_CAREER_CONTROL || '';
 const CONTROLS = {
-  brokencard: {
-    file: 'nflCareerLifeC.ts',
-    old: "{ health: 8, fanbase: -3 }, 'You shared the load",
-    neu: "{ health: 8, fanbase: -4 }, 'You shared the load",
-  },
-  paycut: {
-    file: 'nflCareerLifeC.ts',
-    old: "const s = L(c);\n  const b = {",
-    neu: "const s = L(c);\n  if (story.startsWith('The check cleared and the team used the room')) c.salary = c.salary - 1;\n  const b = {",
-    needs: "'The check cleared and the team used the room",
-  },
   nodeck: {
     file: 'nflMyCareer.ts',
     old: 'deck.push(...getNflLifeEventsC(c, rng));',
@@ -114,16 +102,6 @@ const CONTROLS = {
     file: 'nflCareerLifeC.ts',
     old: "if (yrs === 1) {\n    deck.push({\n      id: 'lifeC_second_year_jump',",
     neu: "if (yrs >= 1 && yrs <= 2) {\n    deck.push({\n      id: 'lifeC_second_year_jump',",
-  },
-  loadedflip: { /* every "Coin flip:" button wins 60 percent of the time */
-    file: 'nflCareerLifeC.ts',
-    old: '(rng() < 0.5 ? land(cc, win, winStory)',
-    neu: '(rng() < 0.6 ? land(cc, win, winStory)',
-  },
-  flatcash: { /* deck C pays 2026 money in every era */
-    file: 'nflCareerLifeC.ts',
-    old: 'Math.max(0.1, r1(nflEraById(c.eraId).moneyScale * m))',
-    neu: 'Math.max(0.1, r1(m))',
   },
   /* Round 917 second review: the position and age gates. */
   wrongpos: { /* the tight end cards go to receivers, tight ends get none */
@@ -187,8 +165,6 @@ const LIFE_C_CARDS = 36;
 const LIFE_C_MIN_FIRED = 34;
 const LIFE_C_FLEET_FLOOR = 400;
 const LIFE_C_SHARE = [0.04, 0.16];
-const FLIP_CHECKS_MIN = 32; /* 16 coin flip buttons, two rolls each */
-const CASH_CHECKS_MIN = 700; /* measured 768 (deterministic: the grid draws no rng), see the header */
 const POSITIONS = ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'];
 
 const seenEventIds = new Set();
@@ -275,20 +251,12 @@ for (let i = 0; i < CAREERS; i++) {
   }
 }
 
-/* ── Round 917: WORDS AGAINST EFFECTS, deck C ────────────────────────────────
-   Every deck C card is found on a fixture it is eligible for and played
-   DRAWS_PER_CARD times, options in turn. Three things are checked on every
-   single draw, and one per option:
-     - the log line's words (parsed, not trusted) equal what moved on the save;
-     - nothing the words cannot name moved: salary, contract years, team,
-       position, ceiling, earnings (a restructure is not a pay cut);
-     - a plain option's button says exactly what was applied; a "Coin flip:"
-       button names every outcome that was seen, and every outcome it names
-       was seen.
-   The fixture sits mid range (morale 50, health 60, rating 15 under its
-   ceiling) so no clamp hides a wrong number; a second pass at the ceilings
-   then proves the log still tells the truth when a clamp does bite. */
-const DRAWS_PER_CARD = 2000;
+/* ── Round 917: fixtures and parsers for the deck C checks below ─────────────
+   Round 988: the words against effects check that used to sit here (the log
+   against the save, nothing else moves, the button, coin flip odds, era
+   money) moved with the machinery it checks to scripts/simUsCareerDeckC.mjs,
+   one check for all four sports. These helpers serve who gets dealt what and
+   the rivalry beat words. */
 const mulberry = seed => () => {
   seed = (seed + 0x6d2b79f5) | 0;
   let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
@@ -305,7 +273,6 @@ function parseWords(text) {
 }
 const vecKey = v => FIELDS.map(f => `${f}:${Math.round(v[f] * 10) / 10}`).join('|');
 const snapshot = s => ({ morale: s.morale, fanbase: s.fanbase, health: s.health, rating: s.ovr, cash: s.netWorth ?? 0 });
-const HELD = ['salary', 'contractYears', 'team', 'pos', 'pot', 'earnings', 'age', 'year'];
 
 function fixtureFor(pos, o) {
   const s = startCareer('Words Check', pos, ARCHETYPES[pos][0], mulberry(7), null, o.eraId);
@@ -327,105 +294,9 @@ const LIFE_C_SRC = readFileSync('src/lib/nflCareerLifeC.ts', 'utf8').replace(/\r
   .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 const LIFE_C_IDS = [...LIFE_C_SRC.matchAll(/id: '(lifeC_[a-z0-9_]+)'/g)].map(m => m[1]);
 
-const wordFails = [];
-let wordDraws = 0, wordCards = 0, clampDraws = 0, flipChecks = 0, cashChecks = 0;
-const ERA_SCALE = nflEraById('y2005').moneyScale;
-for (const id of LIFE_C_IDS) {
-  /* every fixture the card is eligible on: an era card is checked in both. */
-  const homes = [];
-  for (const pos of POSITIONS) for (const g of GRID) {
-    if (getNflLifeEventsC(fixtureFor(pos, g), mulberry(1)).some(e => e.id === id)) homes.push({ pos, g });
-  }
-  if (!homes.length) { wordFails.push(`${id}: no fixture in the grid makes this card eligible, so it was not checked`); continue; }
-  wordCards++;
-  const card0 = getNflLifeEventsC(fixtureFor(homes[0].pos, homes[0].g), mulberry(1)).find(e => e.id === id);
-  const seen = card0.options.map(() => new Set());
-  const buttons = card0.options.map(() => new Set());
-  const rng = mulberry(917 + wordCards);
-  for (let d = 0; d < DRAWS_PER_CARD; d++) {
-    const home = homes[d % homes.length];
-    const hi = d % 10 === 9; /* one draw in ten at the ceilings */
-    const s = fixtureFor(home.pos, { ...home.g, hi });
-    const card = getNflLifeEventsC(s, rng).find(e => e.id === id);
-    if (!card) { if (!hi) wordFails.push(`${id}: eligible on a fixture and then missing from the deck on the same fixture`); continue; }
-    const k = Math.floor(d / homes.length) % card.options.length;
-    const before = snapshot(s), held = HELD.map(f => s[f]);
-    const log = card.options[k].apply(s, rng);
-    const after = snapshot(s);
-    const moved = Object.fromEntries(FIELDS.map(f => [f, Math.round((after[f] - before[f]) * 10) / 10]));
-    const said = parseWords(log);
-    if (vecKey(said) !== vecKey(moved)) wordFails.push(`${id} option ${k + 1}: the log says [${vecKey(said)}] and the save moved [${vecKey(moved)}]`);
-    HELD.forEach((f, i) => { if (s[f] !== held[i]) wordFails.push(`${id} option ${k + 1}: ${f} changed from ${held[i]} to ${s[f]}, and no deck C card may touch it`); });
-    if (hi) { clampDraws++; continue; }
-    wordDraws++;
-    seen[k].add(vecKey(moved));
-    /* the button on THIS fixture (money is in the era's own scale) */
-    const effect = card.options[k].effect;
-    buttons[k].add(effect);
-    const promised = /^Coin flip: /.test(effect)
-      ? effect.replace(/^Coin flip: /, '').split(' or ').map(p => vecKey(parseWords(p)))
-      : [vecKey(parseWords(effect))];
-    if (!promised.includes(vecKey(moved))) wordFails.push(`${id} option ${k + 1}: the button says "${effect}" and the code applied [${vecKey(moved)}]`);
-    if (/^Coin flip: /.test(effect) && promised.length !== 2) wordFails.push(`${id} option ${k + 1}: a coin flip button must name two outcomes, "${effect}"`);
-  }
-  card0.options.forEach((o, k) => {
-    /* A button's words change with the era's money and the year's rule, so
-       the count is per distinct button: one outcome each when plain, two
-       when it is a coin flip. */
-    const flips = [...buttons[k]].filter(b => /^Coin flip: /.test(b)).length;
-    const want = (buttons[k].size - flips) + flips * 2;
-    if (seen[k].size > want) wordFails.push(`${id} option ${k + 1}: ${buttons[k].size} button wording(s) and ${seen[k].size} different outcomes`);
-    if (flips && seen[k].size < 2) wordFails.push(`${id} option ${k + 1}: a coin flip button and only one outcome ever seen`);
-  });
-  /* Round 917 review: "Coin flip:" promises even odds, and seeing both ends
-     says nothing about the odds. Each flip is played at a roll of 0.4999 and
-     of 0.5001 on a fresh mid range fixture: the first must land the outcome
-     the button names first, the second the other, so a chance of 0.45 or
-     0.55 cannot pass. (Control: loadedflip.) */
-  card0.options.forEach((o, k) => {
-    if (!/^Coin flip: /.test(o.effect)) return;
-    const promised = o.effect.replace(/^Coin flip: /, '').split(' or ').map(p => vecKey(parseWords(p)));
-    [0.4999, 0.5001].forEach((roll, side) => {
-      const s = fixtureFor(homes[0].pos, homes[0].g);
-      const card = getNflLifeEventsC(s, mulberry(1)).find(e => e.id === id);
-      const before = snapshot(s);
-      card.options[k].apply(s, () => roll);
-      const after = snapshot(s);
-      const moved = vecKey(Object.fromEntries(FIELDS.map(f => [f, Math.round((after[f] - before[f]) * 10) / 10])));
-      flipChecks++;
-      if (moved !== promised[side]) wordFails.push(`${id} option ${k + 1}: "${o.effect}" is sold as a coin flip, and a roll of ${roll} landed [${moved}], not its ${side ? 'second' : 'first'} outcome`);
-    });
-  });
-  /* Round 917 review: deck C's money is the era's money. Every home in
-     today's game is paired with the same fixture in the 2005 era, and the
-     bank must move by the 2026 amount at the era's scale: to the tenth, and
-     at most 0.1 over it where the floor of 0.1 bites. (Control: flatcash.) */
-  for (const h of homes) {
-    if (h.g.eraId) continue;
-    const twin = homes.find(t => t.g.eraId === 'y2005' && t.pos === h.pos && t.g.year === h.g.year
-      && t.g.role === h.g.role && t.g.yrs === h.g.yrs && t.g.age === h.g.age);
-    if (!twin) continue;
-    card0.options.forEach((_, k) => {
-      for (const roll of [0.25, 0.75]) {
-        const a = fixtureFor(h.pos, h.g), b = fixtureFor(twin.pos, twin.g);
-        const na = a.netWorth, nb = b.netWorth;
-        getNflLifeEventsC(a, mulberry(1)).find(e => e.id === id).options[k].apply(a, () => roll);
-        getNflLifeEventsC(b, mulberry(1)).find(e => e.id === id).options[k].apply(b, () => roll);
-        const dNow = Math.round((a.netWorth - na) * 10) / 10, dEra = Math.round((b.netWorth - nb) * 10) / 10;
-        if (!dNow) continue;
-        cashChecks++;
-        const want = Math.abs(dNow) * ERA_SCALE;
-        if (Math.sign(dEra) !== Math.sign(dNow) || Math.abs(dEra) < want - 0.051 || Math.abs(dEra) > want + 0.1) {
-          wordFails.push(`${id} option ${k + 1}: the bank moves ${dNow}M today and ${dEra}M in 2005, where the era's scale says about ${(Math.sign(dNow) * want).toFixed(2)}M`);
-        }
-      }
-    });
-  }
-}
-const wordFailCount = wordFails.length;
 
 /* ── Round 917 review: WHERE A CARD MAY AND MAY NOT BE DEALT ─────────────────
-   The words check above proves what a card does once it is dealt; nothing
+   The words check (simUsCareerDeckC) proves what a card does once dealt; nothing
    proved it is dealt only to the careers its words are true for. Removing
    the 2020 gate from the practice squad card, or the backup gate from a
    backup card, stayed green. Each rule below is checked on both sides of its
@@ -596,12 +467,7 @@ console.log(`  lifeC share      : ${pct(lifeCTotalDraws, eventDraws)} of offseas
 console.log(`  backup seasons   : ${pct(backupSeasons, seasonsPlayed)} of seasons were played as the backup`);
 console.log(`  corruption fired : ${[...seenEventIds].filter(id => id.startsWith('corr_')).length}`);
 console.log(`shop items usable  : ${buyable.size}/${NFL_SPEND_ITEMS.length}`);
-console.log(`words vs effects   : ${wordCards}/${LIFE_C_IDS.length} deck C cards checked, ${wordDraws} draws mid range and ${clampDraws} at the ceilings, ${wordFailCount} disagreements`);
-const wordKinds = [...new Set(wordFails)];
-for (const f of wordKinds.slice(0, 8)) console.log(`  WORDS: ${f}`);
-if (wordKinds.length > 8) console.log(`  WORDS: and ${wordKinds.length - 8} more kinds`);
-console.log(`coin flip odds     : ${flipChecks} rolls at 0.4999 and 0.5001 across every "Coin flip:" button`);
-console.log(`era money          : ${cashChecks} bank moves compared today against 2005 (scale ${ERA_SCALE})`);
+console.log('words vs effects   : deck C is checked in scripts/simUsCareerDeckC.mjs since Round 988');
 console.log(`who gets dealt what: ${gateChecks} checks on both sides of every rule line, ${gateFailCount} failed`);
 const gateKinds = [...new Set(gateFails)];
 for (const f of gateKinds.slice(0, 8)) console.log(`  GATE: ${f}`);
@@ -639,15 +505,8 @@ if (CAREERS >= LIFE_C_FLEET_FLOOR) {
 } else {
   console.log(`\nNOTE: deck C coverage and share are only judged on a fleet of ${LIFE_C_FLEET_FLOOR} careers or more; this run had ${CAREERS}.`);
 }
-if (wordFailCount) fails.push(`${wordFailCount} deck C words against effects disagreements`);
-if (wordCards < LIFE_C_IDS.length) fails.push(`${LIFE_C_IDS.length - wordCards} deck C cards never reached the words check`);
-/* Round 917 review: the floors below are the counts measured on the shipped
-   deck (see the header), so a check that silently stops running goes red. */
-if (flipChecks < FLIP_CHECKS_MIN) fails.push(`only ${flipChecks} coin flip rolls checked, the deck has ${FLIP_CHECKS_MIN / 2} coin flip buttons`);
-if (cashChecks < CASH_CHECKS_MIN) fails.push(`only ${cashChecks} era money comparisons made, the floor is ${CASH_CHECKS_MIN}`);
-if (!(ERA_SCALE < 0.9)) fails.push(`the 2005 money scale is ${ERA_SCALE}, too close to 1 for the era money check to mean anything`);
 if (gateFailCount) fails.push(`${gateFailCount} cards dealt where their words are not true, or not dealt where they are`);
 if (rivalFails.length) fails.push(`${rivalFails.length} rivalry beat words against effects disagreements`);
 if (CONTROL) console.log(`\nCONTROL ${CONTROL} is on: this run is EXPECTED to fail.`);
-console.log(fails.length ? `\nFAIL: ${fails.join('; ')}` : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C drawn and its words true, its coin flips even, its money in the era, every card dealt only where its words hold, and the six new rivalry beats doing what they say');
+console.log(fails.length ? `\nFAIL: ${fails.join('; ')}` : '\nPASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDeckC), and the six new rivalry beats doing what they say');
 process.exit(fails.length ? 1 : 0);

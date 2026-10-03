@@ -117,11 +117,13 @@ if (CONTROL === 'notags') {
 if (CONTROL === 'eraleaktrade') {
   /* The slip deck A already made once: the team list asked for without the
      era, so a 2003-04 trade can land on a franchise that did not exist. */
+  /* Round 988: the trade is the shared engine's; the NBA's era reaches it
+     through the sport's settings, so that is where the era is dropped. */
   const src = readFileSync(OUT, 'utf8');
-  const call = 'nbaEraTeamIds(cc.eraId).filter(';
+  const call = 'teamIds: (c) => nbaEraTeamIds(c.eraId),';
   const n = src.split(call).length - 1;
   if (n !== 1) throw new Error(`control eraleaktrade: expected the trade's team list call once in the bundle, found ${n}`);
-  writeFileSync(OUT, src.replace(call, 'nbaEraTeamIds().filter('));
+  writeFileSync(OUT, src.replace(call, 'teamIds: (c) => nbaEraTeamIds(),'));
 }
 if (CONTROL === 'eraleaka' || CONTROL === 'serviceleak') {
   /* Deck A's send down card: drop its era check, or give it back the five
@@ -187,7 +189,7 @@ if (CONTROL === 'wordsbreak') {
 }
 if (CONTROL === 'tradepay') {
   const o = defOf('nbaC_rule_salary_match').options[0];
-  if (!o.trade || typeof o.say !== 'string') throw new Error('control tradepay: option 0 of nbaC_rule_salary_match is not the plain trade');
+  if (o.move !== 'trade' || typeof o.say !== 'string') throw new Error('control tradepay: option 0 of nbaC_rule_salary_match is not the plain trade');
   const line = o.say;
   o.say = c => { c.salary = Math.round(c.salary * 0.8 * 10) / 10; return line; };
 }
