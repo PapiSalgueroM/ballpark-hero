@@ -889,6 +889,13 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
     315: [nhlFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     316: [nhlFixture({ age: 30 }), rivalFixture()],
     317: [nhlFixture({ age: 34 }), rivalFixture()],
+    /* Round 920: the six new NHL beats. */
+    318: [nhlFixture({ pos: 'C' }), rivalFixture({ pos: 'C' })],
+    319: [nhlFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
+    320: [nhlFixture(), rivalFixture({ ovr: 85 })],
+    321: [nhlFixture({ age: 24 }), rivalFixture()],
+    322: [nhlFixture({ age: 28 }), rivalFixture()],
+    323: [nhlFixture({ cups: 1 }), rivalFixture({ rings: 1 })],
   };
   let reachable = 0, correct = 0;
   const total = nhlRivalry.NHL_RIVALRY_EVENTS.length;
