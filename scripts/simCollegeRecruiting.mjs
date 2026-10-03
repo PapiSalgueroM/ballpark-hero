@@ -3,7 +3,67 @@
    descriptors). Every run is seeded; the policies below are coaches written
    against the module's public API, not reaching into it.
 
-   HEADER_NUMBERS_PLACEHOLDER
+   Four programs a sport, spread from the bottom of the table to the top
+   (cfb UNLV, LOU, MIA, OSU; cbb CUSE, LOU, BAMA, KU), 120 seeds each. A
+   class score is each signee's TRUE rating over 50, summed.
+
+     1) the right pitch. Same targets, same hours, same draws: a coach who
+        sells each man's top priority signs a better class than one who
+        sells a random one, and both beat a coach who does nothing.
+     2) equal budget. All NIL and no contact (offers at his ask, best man
+        first, while the pot covers it, made cold in week one) against a
+        balanced coach spending the same pot under the same rule plus calls,
+        pitches and visits. Balanced wins.
+     3) a low prestige program (UNLV, CUSE) working in-state three stars
+        signs a better class than the same program chasing the stars.
+     4) on every run of every section, plus a greedy coach who asks for
+        everything every week: every man signs exactly once, no school
+        passes the cap, signings match commitments, the pot never goes
+        negative and NIL paid is exactly my signees' offers, no week spends
+        more hours than it has, visits stay inside the limit, nothing moves
+        after signing day, and a second signing day changes nothing.
+     4b) a commitment can still flip: a coach who stops working his commits
+        loses more of them than one who keeps at it.
+     5) the scouting band: evaluation walks 16, 8, 4, 2 exactly (every step,
+        not just the ends), never leaves the old band, always holds the
+        truth; no other action ever moves a band.
+     6) the portal: a man I sat down with never leaves, the sit down does
+        not change who else goes (one draw a man), no senior and no one and
+        done freshman enters, a good man stuck behind a starter leaves at
+        the module's rate and far more than a starter, outside men carry
+        exact tape, the window is short, everyone signs, the cap holds.
+     7) the official visit: home win week > away week > home loss week > 0.
+
+   Measured, seed bases 0 / 1000 / 2000 (COLLEGE_RECRUITING_SEED_BASE), and
+   each floor is about half the smallest of the three:
+
+     1  top minus random   cfb 81.9 / 79.8 / 79.0  floor 40   cbb 45.8 / 49.1 / 44.3  floor 22
+     1  random minus none  cfb 23.9 / 23.8 / 25.8  floor 12   cbb 23.0 / 22.6 / 26.1  floor 11
+     2  balanced minus NIL cfb 110.6 / 110.7 / 110.3 floor 55 cbb 69.3 / 70.8 / 70.4  floor 35
+     3  home minus chase   cfb 47.2 / 53.4 / 51.9  floor 24   cbb 40.2 / 33.1 / 35.7  floor 16
+     4b neglect flips away cfb 2.40 / 2.48 / 2.40  floor 1.2  cbb 0.81 / 0.81 / 0.84  floor 0.4
+        (a steady coach lost 0.00 on every base)
+     6  stuck men leave .309 / .303 / .303 of about 1,000 (band 0.25 to 0.37,
+        about four standard errors each way); starters .016 / .016 / .026,
+        so the gap floor is 0.2
+     7  a home win visit is worth 1.70 of an away one
+
+   Negative controls, COLLEGE_RECRUITING_CONTROL=<name>. Each asserts its
+   anchor is in the bundle exactly once before it edits, and the run passes
+   only if the sections it names went red:
+
+     nopitch    the pitch bonus is zeroed                -> 1 red (and 4b)
+     nowork     calls, pitches, visits and drift do nothing, cold money counts full -> 2 red
+     noreach    a five star listens to anyone            -> 3 red
+     nocap      every school always has room             -> 4 red
+     overspend  a NIL offer stops checking the pot       -> 4 red
+     unsigned   a committed man never signs              -> 4 red
+     noflip     a commitment can never flip              -> 4b red
+     badband    evaluation can narrow past the truth     -> 5 red
+     noretain   a sit down keeps nobody                  -> 6 red
+     visitflat  a home win visit is worth an away one    -> 7 red
+
+   Run: node scripts/simCollegeRecruiting.mjs (about 25 s)
 */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -35,7 +95,7 @@ const CONTROLS = {
     ],
   },
   noreach: { red: ['3'], edits: [['return clamp(1 - Math.max(0, need - prestige) / sport.reachSpan, REACH_MIN, 1);', 'return 1;']] },
-  nocap: { red: ['4'], edits: [['const hasRoom = (t, id) => id === OFF_BOARD || (t.commits[id] ?? 0) < t.classCap;', 'const hasRoom = (t, id) => true;']] },
+  nocap: { red: ['4'], edits: [['var hasRoom = (t, id) => id === OFF_BOARD || (t.commits[id] ?? 0) < t.classCap;', 'var hasRoom = (t, id) => true;']] },
   overspend: { red: ['4'], edits: [['const amount = Math.floor(Math.min(a.amount ?? r.nilAsk, t.nilLeft));', 'const amount = Math.floor(a.amount ?? r.nilAsk);']] },
   unsigned: { red: ['4'], edits: [['r.signedWith = r.committedTo;', 'r.signedWith = null;']] },
   noflip: { red: ['4b'], edits: [['FLIP_MARGIN = 10;', 'FLIP_MARGIN = 1e9;']] },
