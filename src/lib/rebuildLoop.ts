@@ -8,6 +8,7 @@ import {
   CURRENT_DECK, SWAP_DISCOUNT, LOAN_FEE, PUNISH_DECK,
   type ManagerOption, type BoardEnvelope, type BoardObjective, type FinEvent, type FortuneCard,
   type ReplacementDeal, type RebuildPreset, type RivalPlan, type PunishCard, type ForcedSwap, type DeckVersion,
+  type PerkKind,
 } from '@/lib/rebuildDeck';
 
 /**
@@ -324,6 +325,45 @@ export function peekedEnvelope(s: RunState): FinEvent | null {
   return s.peeked === null ? null : drawFinEvent(s.seed, s.peeked, s.deck);
 }
 
+/** Transfer moves (a sale, a signing, a loan, a promotion) still to make
+ *  before envelope `index` lands: one or two for the next one. */
+export function movesUntilEnvelope(s: RunState, index: number): number {
+  return Math.max(0, 2 * index - s.actions);
+}
+
+/** The most transfer moves the window can still make, counted only as far as
+ *  two because the next envelope never needs more. A shirt still to settle
+ *  can be a sale and a signing (a hole, or a man already sold, only the
+ *  signing), and a second spin can sell a kept man and sign for his shirt. */
+function movesLeftAtMost(s: RunState): number {
+  if (s.phase === 'manager' || s.phase === 'envelopes') return 2;
+  if (s.phase !== 'spin' || s.verdict) return 0;
+  let n = 0;
+  s.formation.slots.forEach((_, i) => {
+    if (i in s.decided) return;
+    const inc = s.baseXi[i];
+    const stillHis = !!inc && !s.sold.some(x => x.name === inc.name);
+    n += stillHis && (i !== s.spun || !s.deal || s.swapOpen) ? 2 : 1;
+  });
+  if (s.perks.respin > 0) {
+    if (n > 0) n += 1;
+    for (const k of Object.keys(s.decided).map(Number)) {
+      const man = s.decided[k];
+      if (man && (s.signed.some(p => p.name === man.name) || isOnLoan(s, man.name))) continue;
+      n += man && s.baseXi[k]?.name === man.name ? 2 : 1;
+    }
+  }
+  return Math.min(2, n);
+}
+
+/** Can a sneak peek be played now. Round 980 review: a peek played after the
+ *  last transfer move the window could make showed an envelope that never
+ *  landed, so it is refused unless the envelope it shows can still arrive. */
+export function canPeek(s: RunState): boolean {
+  if ((s.phase !== 'spin' && s.phase !== 'manager') || s.verdict || s.perks.peek <= 0 || s.peeked !== null) return false;
+  return movesLeftAtMost(s) >= movesUntilEnvelope(s, nextEnvelopeIndex(s));
+}
+
 /** Does this man belong to a season loan? Nobody can sell him, and he is not a signing. */
 export function isOnLoan(s: RunState, name: string): boolean {
   return s.loans.some(l => l.player.name === name);
@@ -331,12 +371,20 @@ export function isOnLoan(s: RunState, name: string): boolean {
 
 /* ---------------- the envelopes and the manager ---------------- */
 
+/** A power up an envelope deals goes in the pocket. The veto stops at one:
+ *  the whistle blows once and takes one veto, so a second copy would sit in
+ *  the pocket as a promise nothing can keep (Round 980 review). */
+function gainPerk(perks: Perks, kind: PerkKind | undefined): Perks {
+  if (!kind) return perks;
+  if (kind === 'veto' && perks.veto > 0) return perks;
+  return { ...perks, [kind]: perks[kind] + 1 };
+}
+
 export function pickFinance(s: RunState, index: number): RunState {
   if (s.phase !== 'envelopes' || s.financeCard) return s;
   const card = s.financeDeck[index];
   if (!card) return s;
-  const perks = { ...s.perks };
-  if (card.perk) perks[card.perk] += 1;
+  const perks = gainPerk(s.perks, card.perk);
   return {
     ...s,
     financeCard: card,
@@ -424,8 +472,7 @@ function bump(s: RunState): RunState {
   if (actions % 2 !== 0) return { ...s, actions };
   const index = actions / 2;
   const ev = drawFinEvent(s.seed, index, s.deck);
-  const perks = { ...s.perks };
-  if (ev.perk) perks[ev.perk] += 1;
+  const perks = gainPerk(s.perks, ev.perk);
   const landed = { ...s, actions, extraFunds: s.extraFunds + ev.delta, perks, post: [...s.post, ev] };
   return s.peeked === index ? { ...landed, peeked: null } : landed;
 }
@@ -601,7 +648,7 @@ export function secondSpin(s: RunState, slot: number): RunState {
 
 /** Sneak peek: the next envelope as you go, face up until it lands. */
 export function usePeek(s: RunState): RunState {
-  if ((s.phase !== 'spin' && s.phase !== 'manager') || s.verdict || s.perks.peek <= 0 || s.peeked !== null) return s;
+  if (!canPeek(s)) return s;
   return { ...s, perks: { ...s.perks, peek: s.perks.peek - 1 }, peeked: nextEnvelopeIndex(s) };
 }
 
@@ -720,7 +767,7 @@ export function vetoPreview(s: RunState, k: number, instead: PunishCard | null):
   return settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, instead);
 }
 
-/** Take every card as drawn and keep the veto in the drawer. */
+/** Take every card as drawn. The veto goes unplayed: the window is over. */
 export function acceptVerdict(s: RunState): RunState {
   if (!s.verdict || s.phase !== 'spin') return s;
   return settleWindow({ ...s, verdict: false }, null);

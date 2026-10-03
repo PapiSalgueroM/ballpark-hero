@@ -21,7 +21,7 @@ export default function Rebuild() {
         howToPlay={[
           'Say who is playing: just you, or two to four seats on one phone, each a friend (pass and play) or the CPU. Then pick a market restriction (open, top five leagues, under 25s, wonderkids or the bargain bin) and a club. Tiers run from elite (Real Madrid, Arsenal) to modest (Southampton, Genk), and no two seats can take the same club.',
           'Open the envelopes: the board\'s, with its mood, its money and its demands, and one of twenty finance envelopes you pick blind. Then hire a manager or keep the man you have.',
-          'SPIN and the wheel draws one of your XI shirts in a hidden order. Every shirt gets exactly one spin.',
+          'SPIN and the wheel draws one of your XI shirts in a hidden order. Every shirt comes up once, and only a second spin power up brings the wheel back to one you already settled.',
           'Keep the man you drew, or sell him for his market value. Selling is final: the scouts bring three priced replacements, promoting from your own bench is free, and a 40 overall is always there if you cannot afford anyone.',
           'You can spend up to €60M past zero. Finish in debt and shirts are force sold at random until the books balance.',
           'Miss a board demand and you draw a punishment card. One card in the five is safe.',

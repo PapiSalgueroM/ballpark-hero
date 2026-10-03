@@ -186,8 +186,10 @@ function scorerOf(s: RunState): { read: BoardRead; lift: (p: Player) => number; 
   return { read, lift, score };
 }
 
-/** Round 980: what a sneak peek showed is money the policy can count on (or
- *  has to keep back for), because it lands before the window is much older. */
+/** Round 980: what a sneak peek showed is money the policy plans with (or
+ *  keeps back for). The engine only allows a peek while the envelope can
+ *  still land (loop.canPeek), and the spending it pays for is made of the
+ *  transfer moves that bring it in. */
 function peekShift(s: RunState): number {
   return loop.peekedEnvelope(s)?.delta ?? 0;
 }
@@ -451,7 +453,7 @@ export function policyMove(s: RunState, policy: RebuildPolicy): PolicyMove {
     if (policy.spun(s) === 'sell') return { what: 'sell', next: loop.sell(s) };
     return { what: 'keep', next: loop.keep(s) };
   }
-  if (s.perks.peek > 0 && s.peeked === null && policy.peek?.(s)) return { what: 'peek', next: loop.usePeek(s) };
+  if (loop.canPeek(s) && policy.peek?.(s)) return { what: 'peek', next: loop.usePeek(s) };
   if (s.perks.respin > 0 && policy.respin) {
     const slot = policy.respin(s);
     if (slot !== null) return { what: `secondSpin ${slot}`, next: loop.secondSpin(s, slot) };

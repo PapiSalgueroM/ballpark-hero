@@ -163,7 +163,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Spinning the wheel and deciding each shirt",
         items: [
-          "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
+          "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up once (only the second spin power up brings the wheel back to a shirt you already settled).",
           "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
         ],
       },
@@ -178,7 +178,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Sharing a table of two to four seats",
         items: [
-          "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
+          "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins, plus any second spin its envelopes hand it. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
         ],
       },
       {
@@ -213,12 +213,12 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Playing the eight power ups",
         items: [
           "A power up sits in your pocket until you play it, and each one is used up when you do. The finance envelope can hold one, and so can any envelope that lands as you go.",
-          "Fresh list: ask the scouts for a new three, once, whenever a list is open. 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.",
+          "Fresh list: ask the scouts for a new three, once, whenever their list is open (not during a part exchange). 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.",
           "Second spin: between spins, bring the wheel back to a shirt you already settled (not one you bought or borrowed). A man you kept is sold, a squad man you promoted goes back to the bench, and the scouts deal a new list for the shirt.",
-          "Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell and keep the veto.",
+          "Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell instead. You hold one veto at a time, because the whistle only takes one.",
           "Part exchange: when the wheel lands on a man, see the scouts' three before you decide. Take one and your man goes the other way, with the new man 25 percent under his value. Call it off and he stays, but the exchange is gone.",
-          "Loan: when a list is open, borrow one of the three for the season at 40 percent of his value. He plays, nobody can sell him, he goes back after the season, and he does not count as a signing for the board's demands.",
-          "Sneak peek: see the next envelope before it lands, money or power up, so you know how hard to spend before it arrives.",
+          "Loan: when the scouts' list is open (not during a part exchange), borrow one of the three for the season at 40 percent of his value. He plays, nobody can sell him, he goes back after the season, and he does not count as a signing for the board's demands.",
+          "Sneak peek: see the next envelope before it lands, money or power up, so you know how hard to spend. It lands after your next transfer move or two (a sale, a signing, a loan or a promotion), so the peek is only offered while one can still come, and if the whistle goes first it never arrives.",
         ],
       },
       {
@@ -284,7 +284,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     faqs: [
       {
         q: "What order does the wheel spin in?",
-        a: "A seeded order fixed when you pick the club, hidden from you, every shirt exactly once. There is no re-spinning to reach your striker early.",
+        a: "A seeded order fixed when you pick the club, hidden from you, every shirt once. There is no re-spinning to reach your striker early: the second spin power up only brings the wheel back to a shirt you already settled.",
       },
       {
         q: "What is in the envelopes?",

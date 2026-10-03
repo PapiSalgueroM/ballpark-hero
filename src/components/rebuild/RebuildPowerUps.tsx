@@ -1,5 +1,5 @@
 import { PERK_KINDS, PERK_LABEL, type FinEvent, type PunishCard, type BoardObjective } from '@/lib/rebuildDeck';
-import type { RunState } from '@/lib/rebuildLoop';
+import { canPeek, movesUntilEnvelope, type RunState } from '@/lib/rebuildLoop';
 
 /* Round 980: the pocket (every power up you hold, with the buttons for the
    ones you play between spins) and the verdict (the board's cards face up
@@ -29,7 +29,7 @@ export function PowerUpPocket({ run, peeked, canSecondSpin, secondSpin, sneakPee
           <span className="text-muted-foreground">: {PERK_LABEL[k].long}</span>
         </p>
       ))}
-      {perks.peek > 0 && !peeked && (run.phase === 'spin') && (
+      {!peeked && run.phase === 'spin' && canPeek(run) && (
         <button
           onClick={sneakPeek}
           disabled={busy || run.verdict}
@@ -37,6 +37,11 @@ export function PowerUpPocket({ run, peeked, canSecondSpin, secondSpin, sneakPee
         >
           {PERK_LABEL.peek.emoji} Peek at the next envelope
         </button>
+      )}
+      {perks.peek > 0 && !peeked && run.phase === 'spin' && !run.verdict && !canPeek(run) && (
+        <p className="mt-2 text-[10px] text-muted-foreground">
+          {PERK_LABEL.peek.emoji} No transfer move left in this window can bring the next envelope in, so there is nothing to peek at.
+        </p>
       )}
       {peeked && (
         <p className="mt-2 rounded-lg border border-border bg-background px-2 py-1.5 text-xs text-foreground">
@@ -48,7 +53,9 @@ export function PowerUpPocket({ run, peeked, canSecondSpin, secondSpin, sneakPee
               {peeked.delta >= 0 ? '+' : ''}€{peeked.delta}M
             </span>
           )}
-          <span className="block text-[10px] text-muted-foreground">It lands after your next transfer moves.</span>
+          <span className="block text-[10px] text-muted-foreground">
+            It lands after your next {run.peeked !== null && movesUntilEnvelope(run, run.peeked) > 1 ? 'two transfer moves' : 'transfer move'} (a sale, a signing, a loan or a promotion). If the whistle goes first, it never arrives.
+          </span>
         </p>
       )}
       {perks.respin > 0 && reopenable.length > 0 && (

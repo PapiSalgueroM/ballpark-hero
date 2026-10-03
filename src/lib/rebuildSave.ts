@@ -310,7 +310,9 @@ type Migration = (o: Record<string, unknown>) => Record<string, unknown> | null;
  * One step per old version, keyed by the version it reads. A shape change
  * adds its step here and bumps REBUILD_SAVE_VERSION; nothing else has to move.
  * 1 to 2 (Round 980): every opened seat was played on the three perk deck, so
- * it gets deck 1; a seat never opened gets nothing and opens on today's deck.
+ * it gets deck 1; a seat never opened gets nothing and, when it opens, takes
+ * the deck of the table's first opened seat (table.openWindow), so a table
+ * saved mid way plays every seat on deck 1.
  */
 const MIGRATIONS: Record<number, Migration> = {
   1: o => {
