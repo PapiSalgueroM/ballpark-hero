@@ -45,6 +45,16 @@
         { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "defender, shirt 6" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Serge Raux Yao, defender, shirt 6, age 27" }
       ]
+    },
+    {
+      "name": "Krystof Danek",
+      "club": "LASK",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder, shirt 9, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (Profis squad page)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, 7 games 1 goal 1 assist" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4411", "publisher": "ESPN (LASK Linz squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, age 23" }
+      ]
     }
   ],
   "movedTo": [
@@ -59,9 +69,59 @@
         { "family": "A", "url": "https://www.ogcnice.com/fr/f/equipes/2026-2027/equipe-pro", "publisher": "OGC Nice (2026-2027 first team squad page)", "readOn": "2026-10-03", "says": "attacker, shirt 21" },
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/282597/isak-jansson", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nice, forward, shirt 21, born 2002-01-31, Sweden, two Ligue 1 substitute appearances in 2026-27" }
       ]
+    },
+    {
+      "name": "Lovro Zvonarek",
+      "from": "Sturm Graz",
+      "to": "Estrela Amadora",
+      "realClub": "Estrela Amadora",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian midfielder born 2005-05-08. Sturm Graz was a 2024-25 loan from Bayern; he spent 2025-26 on loan at Grasshoppers and Estrela bought him from Bayern on 2026-07-16. Absent from Sturm's 2026-27 squad on the league's own page. The destination rests on two independent publishers that agree, with league starts for Estrela on 2026-09-14 and 2026-09-20: Estrela's own site did not resolve and Liga Portugal's club pages returned 404, so no official page for the new club was read.",
+      "sources": [
+        { "family": "A", "url": "https://www.bundesliga.at/team/sk-puntigamer-sturm-graz/6505/kader", "publisher": "Austrian Bundesliga (Sturm Graz 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/346760/lovro-zvonarek", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estrela, shirt 14, born 2005-05-08, started at Academico de Viseu 2026-09-20 and against Rio Ave 2026-09-14 in the Portuguese Liga" },
+        { "family": "B", "url": "https://www.soccerway.com/player/zvonarek-lovro/lAIL4mGi/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Bayern to Estrela 2026-07-16, 1.5m transfer, contract to 2029-06-30; loan at Grasshoppers 2025-07-29 to 2026-06-30" }
+      ]
     }
   ],
-  "removedClubNotModelled": [],
+  "removedClubNotModelled": [
+    {
+      "name": "Robert Zulj",
+      "from": "LASK",
+      "realClub": "Ratchaburi FC (Thailand)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian forward born 1992-02-05. Left LASK on a free to Buriram United on 2025-07-08 and joined Ratchaburi on a free on 2026-09-16. Thailand is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (Profis squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/150652/robert-zulj", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Ratchaburi FC, born 1992-02-05, Austria; last listed starts for Buriram United in the AFC Champions League Elite" },
+        { "family": "B", "url": "https://www.soccerway.com/player/zulj-robert/UTHdgaQb/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "LASK to Buriram 2025-07-08 free; Buriram to Ratchaburi 2026-09-16 free; contract to 2027-06-30" }
+      ]
+    },
+    {
+      "name": "Mario Kröpfl",
+      "from": "Hartberg",
+      "realClub": "ATUS Velden (Austrian amateur football)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian midfielder born 1989-12-21. Not in Hartberg's 2026/2027 squad on the league's page or on ESPN's squad page. Soccerway has him leaving Hartberg for ATUS Velden on 2024-07-01; that destination is one source only, but nothing places him at any club the game models. ESPN's player index still names Hartberg, a stale profile its own squad page contradicts.",
+      "sources": [
+        { "family": "A", "url": "https://www.bundesliga.at/team/tsv-egger-glas-hartberg/6522/kader", "publisher": "Austrian Bundesliga (Hartberg 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6907", "publisher": "ESPN (TSV Hartberg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kropfl-mario/WW53Ta3N/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-12-21; Lafnitz to Hartberg 2022-01-01; Hartberg to Atus Velden 2024-07-01 free" }
+      ]
+    },
+    {
+      "name": "Emanuel Schreiner",
+      "from": "Altach",
+      "realClub": "Union Weisskirchen (Austrian amateur football)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian born 1989-02-02. Not in Altach's 2026/2027 squad on the league's page or on ESPN's squad page. Soccerway has him leaving Altach for Weisskirchen on 2023-07-01 after ten seasons; that destination is one source only, but nothing places him at any club the game models. ESPN's player index still names Altach, a stale profile its own squad page contradicts.",
+      "sources": [
+        { "family": "A", "url": "https://www.bundesliga.at/team/scr-altach/6495/kader", "publisher": "Austrian Bundesliga (Altach 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4405", "publisher": "ESPN (SC Rheindorf Altach squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/schreiner-emanuel/QT80kXI0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-02-02; Altach to Weisskirchen 2023-07-01" }
+      ]
+    }
+  ],
   "notCurrent": [],
   "pending": []
 }
