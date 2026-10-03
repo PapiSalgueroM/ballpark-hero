@@ -63,6 +63,15 @@ const MARK = 'data-dukb-fresh-start';
 const FRESH_LABEL = 'Start a fresh game';
 const BROKE = 'This page broke';
 const NAME = 'Broken Save Test';
+/* Routes that load their game data from the database before they read the
+   save, so with the database aborted they stop at their own retry screen and
+   this walk cannot judge them. Each is named with the reason; a new route that
+   stops the same way fails until it is either judged or excused here. The
+   vitest file src/test/routeErrorRecovery.test.tsx still covers the button on
+   these routes. */
+const OFFLINE_ONLY = {
+  '/hall-of-champions': 'the championship archive comes from the database before the museum save is read',
+};
 
 /* Comments and strings are different things; a guard reads code, not prose. */
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -160,6 +169,10 @@ function readScreen({ broke, name }) {
     buttons: buttons.length,
     sample: buttons.slice(0, 3).map(b => (b.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 24)),
     drewName: text.includes(name),
+    /* The game's own data load failed (the database is aborted here) and the
+       only thing on offer is its retry: the save was never even read. */
+    offline: /couldn'?t load|could not load/i.test(text) && buttons.length > 0
+      && buttons.every(b => /^try again$/i.test((b.textContent || '').trim())),
   };
 }
 
@@ -234,6 +247,12 @@ async function walk(browser, e, variant) {
       s = await settle(page);
     }
     r.sample = s.sample;
+    if (!s.broke && s.offline) {
+      r.outcome = 'not judged offline';
+      if (OFFLINE_ONLY[e.path]) r.ok = true;
+      else r.why = 'its data never loaded with the database aborted, so the save was never read, and the route is not excused in OFFLINE_ONLY';
+      return r;
+    }
     if (s.broke) r.why = 'still on the error page';
     else if (s.dialog) r.why = 'a dialog still covers the screen';
     else if (s.buttons < 1) r.why = 'no usable button on the screen';
@@ -258,7 +277,8 @@ try {
       const r = await walk(browser, e, variant);
       results.push(r);
       const how = `${r.outcome}, ${r.clicks} click(s)${r.sample.length ? `, buttons: ${r.sample.join(' | ')}` : ''}`;
-      console.log(r.ok ? `  PASS  ${r.route} ${r.variant}: ${how}` : `  FAIL  ${r.route} ${r.variant}: ${r.why} (${r.outcome || 'no outcome'})`);
+      const tag = r.outcome === 'not judged offline' ? 'SKIP' : 'PASS';
+      console.log(r.ok ? `  ${tag}  ${r.route} ${r.variant}: ${how}` : `  FAIL  ${r.route} ${r.variant}: ${r.why} (${r.outcome || 'no outcome'})`);
     }
   }
 } finally {
@@ -270,8 +290,18 @@ const failed = results.filter(r => !r.ok);
 const needed = results.filter(r => r.outcome === 'needed the button');
 const coped = results.filter(r => r.outcome === 'coped without the button');
 const drew = results.filter(r => r.outcome === 'drew the save itself');
+const unjudged = results.filter(r => r.outcome === 'not judged offline');
+/* An excuse is a ratchet: a route that can be judged now must leave the list. */
+for (const p of Object.keys(OFFLINE_ONLY)) {
+  const walked = results.filter(r => r.route === p);
+  if (walked.length && walked.every(r => r.outcome !== 'not judged offline')) {
+    failed.push({ route: p, variant: 'all', why: 'excused in OFFLINE_ONLY but judged fine offline now, so remove the excuse' });
+    console.log(`  FAIL  ${p}: excused in OFFLINE_ONLY but judged offline now, remove the excuse`);
+  }
+}
+for (const r of unjudged.filter(x => x.ok)) console.log(`  note  ${r.route} ${r.variant} not judged offline: ${OFFLINE_ONLY[r.route]}`);
 console.log('');
-console.log(`${results.length} broken saves over ${routes.length} long games: ${needed.length} reached the error page and needed the button, ${coped.length} were coped with by the game, ${drew.length} drew the broken save without throwing, ${failed.length} trapped`);
+console.log(`${results.length} broken saves over ${routes.length} long games: ${needed.length} reached the error page and needed the button, ${coped.length} were coped with by the game, ${drew.length} drew the broken save without throwing, ${unjudged.length} could not be judged offline, ${failed.length} trapped`);
 
 if (CONTROL) {
   if (needed.length === 0) { console.error('playCorruptSaves control: CANNOT FIRE. No broken save reached the error page, so hiding the button changes nothing here.'); process.exit(1); }
