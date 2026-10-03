@@ -1,15 +1,26 @@
+import { useState } from 'react';
+import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
-import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, money } from '@/lib/clubManager';
+import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, MANAGER_AGE_BANDS, money, managerLookOf } from '@/lib/clubManager';
 import type { CareerState, nationOfferFor } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 import JobHuntCard from '@/components/club-manager/JobHuntCard';
+import ManagerAvatar from '@/components/club-manager/ManagerAvatar';
+import EditManagerSheet from '@/components/club-manager/EditManagerSheet';
 import { huntBusy } from '@/lib/clubManagerJobHunt';
+import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 
 export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer'>;
+  g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>;
   nationOffer: ReturnType<typeof nationOfferFor>;
 }) {
+  /* Round 965: the Edit manager sheet, and for a Skip career the way to name
+     the man in the dugout after all. */
+  const [editing, setEditing] = useState(false);
+  const look = managerLookOf(c.manager?.appearance);
+  const bg = c.manager ? MANAGER_BACKGROUNDS[c.manager.background] : undefined;
+  const bgTree = c.manager ? BACKGROUND_TREE[c.manager.background] : undefined;
   return (
                 <>
                 {/* Round 202: the international job. Club football is
@@ -92,16 +103,42 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
                   {/* Round 303: the created manager's card line. Absent spec, the
                       panel reads exactly as it always has. */}
-                  {c.manager && (
-                    <div className="flex items-center gap-2 mb-2 rounded-lg border border-border bg-background/60 px-2.5 py-1.5">
-                      <FlagImg name={c.manager.nationality} size={14} />
-                      <span className="text-xs font-bold text-foreground truncate">{c.manager.name}</span>
-                      <span className="text-[9px] text-muted-foreground truncate">
-                        {MANAGER_BACKGROUNDS[c.manager.background]?.emoji} {MANAGER_BACKGROUNDS[c.manager.background]?.label}
-                        {' · '}{CLUB_IDENTITIES[c.manager.style]?.emoji} {CLUB_IDENTITIES[c.manager.style]?.label}
-                      </span>
+                  {c.manager ? (
+                    <div data-manager-card className="flex items-center gap-2.5 mb-2 rounded-lg border border-border bg-background/60 px-2.5 py-2">
+                      {/* Round 965: his face, when he has one. A Round 303
+                          manager has none until he builds it in the sheet. */}
+                      {look && <ManagerAvatar look={look} size={56} className="rounded-lg bg-secondary/40" />}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <FlagImg name={c.manager.nationality} size={14} />
+                          <span className="text-xs font-bold text-foreground truncate">{c.manager.name}</span>
+                          {look && <span className="text-[9px] text-muted-foreground">{MANAGER_AGE_BANDS[look.ageBand].label}</span>}
+                        </div>
+                        <div className="text-[9px] text-muted-foreground truncate">
+                          {bg?.emoji} {bg?.label}
+                          {' · '}{CLUB_IDENTITIES[c.manager.style]?.emoji} {CLUB_IDENTITIES[c.manager.style]?.label}
+                        </div>
+                        {bgTree && <div className="text-[9px] font-bold text-gold">+1 {TREE_INFO[bgTree].label} from his background</div>}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setEditing(true)}
+                        className="shrink-0 inline-flex items-center gap-1 rounded-full border border-border px-2 py-1 text-[10px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                      >
+                        <Pencil className="w-3 h-3" /> Edit
+                      </button>
                     </div>
+                  ) : (
+                    <button
+                      type="button"
+                      data-name-manager
+                      onClick={() => setEditing(true)}
+                      className="w-full mb-2 inline-flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-2 text-[11px] font-bold text-muted-foreground hover:text-foreground hover:border-primary transition-colors"
+                    >
+                      <UserPlus className="w-3.5 h-3.5" /> Name your manager
+                    </button>
                   )}
+                  <EditManagerSheet career={c} open={editing} onOpenChange={setEditing} onSave={g.updateManager} />
                   <div className="grid grid-cols-3 gap-2 text-center mb-2">
                     <div>
                       <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>

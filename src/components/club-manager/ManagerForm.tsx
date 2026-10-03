@@ -1,18 +1,21 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Briefcase } from 'lucide-react';
-import { NATIONS, CLUB_IDENTITIES, MANAGER_BACKGROUNDS, validateManagerName } from '@/lib/clubManager';
-import type { ManagerSpec, ManagerBackground, ClubIdentity } from '@/lib/clubManager';
-import { FlagImg } from '@/components/FlagImg';
+import { CLUB_IDENTITIES, MANAGER_BACKGROUNDS, validateManagerName, defaultManagerLook, managerHomelandFor } from '@/lib/clubManager';
+import type { ManagerSpec, ManagerBackground, ClubIdentity, ManagerLook } from '@/lib/clubManager';
+import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
+import ManagerLookEditor from '@/components/club-manager/ManagerLookEditor';
+import HomelandSelect from '@/components/club-manager/HomelandSelect';
 import { MIDSEASON_ENTRY } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 
 /**
  * Round 303, off the owner's tweaks list: "customizable created manager".
- * The last step of the picker: who is in the dugout. A name, a homeland off
- * the same NATIONS table the picker runs on, a background badge, and a
- * preferred football that sets the day one tactics the way a founding club
- * identity does. All of it optional: the skip button starts the same second
+ * The last step of the picker: who is in the dugout. A name, a homeland (since
+ * Round 965 any nation the international engine runs, grouped by
+ * confederation), a face, a background that starts him with one skill point,
+ * and a preferred football that sets the day one tactics the way a founding
+ * club identity does. All of it optional: the skip button starts the same second
  * person career the game has always run, so nobody is forced through a form
  * to play a football game.
  *
@@ -35,11 +38,12 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
      started and stays the default. */
   const [entry, setEntry] = useState<MidSeasonEntry | null>(null);
   const [name, setName] = useState('');
-  const [nationality, setNationality] = useState(
-    NATIONS.some(n => n.name === defaultNation) ? defaultNation : NATIONS[0].name,
-  );
+  const [nationality, setNationality] = useState(() => managerHomelandFor(defaultNation));
   const [background, setBackground] = useState<ManagerBackground>('exPlayer');
   const [style, setStyle] = useState<ClubIdentity>('balanced');
+  /* Round 965: his face, on a fixed starting look (no roll in an initialiser,
+     the house rule); the Roll one button is the random path. */
+  const [look, setLook] = useState<ManagerLook>(defaultManagerLook);
   const [triedSubmit, setTriedSubmit] = useState(false);
 
   const nameError = useMemo(() => validateManagerName(name), [name]);
@@ -47,7 +51,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
   const create = () => {
     setTriedSubmit(true);
     if (nameError) return;
-    onConfirm({ name: name.trim(), nationality, background, style }, entry ?? undefined);
+    onConfirm({ name: name.trim(), nationality, background, style, appearance: look }, entry ?? undefined);
   };
 
   return (
@@ -63,7 +67,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         <div>
           <h2 className="text-lg font-bold font-display text-foreground">Who is in the dugout?</h2>
           <p className="text-[11px] text-muted-foreground">
-            Name your manager, or skip it and just manage. Style sets your day one tactics, nothing else: the football stays the football.
+            Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the career tab.
           </p>
         </div>
 
@@ -81,23 +85,16 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
         </div>
 
         <div>
-          <span id="manager-homeland-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Homeland</span>
-          <p className="text-[10px] text-muted-foreground mb-1.5">Your federation for the national team call, and the leagues that know your name.</p>
-          <div role="group" aria-labelledby="manager-homeland-label" className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
-            {NATIONS.map(n => (
-              <button
-                key={n.id}
-                onClick={() => setNationality(n.name)}
-                className={cn(
-                  'rounded-lg border px-2 py-1.5 text-left transition-all flex items-center gap-1.5',
-                  nationality === n.name ? 'bg-primary/10 border-primary' : 'bg-background border-border hover:border-primary',
-                )}
-              >
-                <FlagImg name={n.name} size={12} />
-                <span className={cn('text-[10px] font-bold truncate', nationality === n.name ? 'text-primary' : 'text-foreground')}>{n.name}</span>
-              </button>
-            ))}
+          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Look</span>
+          <div className="mt-1.5">
+            <ManagerLookEditor look={look} onChange={setLook} />
           </div>
+        </div>
+
+        <div>
+          <span id="manager-homeland-label" className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Homeland</span>
+          <p className="text-[10px] text-muted-foreground mb-1.5">Any country with a national team. Your federation for the national team call, and the leagues that know your name.</p>
+          <HomelandSelect value={nationality} onChange={setNationality} labelledBy="manager-homeland-label" />
         </div>
 
         <div>
@@ -116,6 +113,7 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
                 >
                   <div className={cn('text-[11px] font-bold', background === k ? 'text-primary' : 'text-foreground')}>{b.emoji} {b.label}</div>
                   <div className="text-[9px] text-muted-foreground mt-0.5">{b.blurb}</div>
+                  <div className="text-[9px] font-bold text-gold mt-0.5">+1 {TREE_INFO[BACKGROUND_TREE[k]].label}</div>
                 </button>
               );
             })}

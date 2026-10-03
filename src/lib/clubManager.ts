@@ -4125,15 +4125,16 @@ export const CLUB_IDENTITIES: Record<ClubIdentity, {
   balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'Play what the afternoon asks for.', formationIndex: 1, mentality: 'balanced' },
   /* Round 965. Same rule as the five above: a formation and a mentality the
      engine already reads, nothing hidden. The index is the shape's place in
-     FORMATIONS (16 is 4-2-3-1 wide, 15 the 3-5-2 with high wing backs, 6 is
+     FORMATIONS (0 is 4-3-3, 15 the 3-5-2 with high wing backs, 6 is
      3-4-3, 13 is 5-4-1, 12 is 4-1-4-1), and simManagerSpec checks every row
-     lands on a real shape and that no two rows share a pair. */
-  wingplay: { label: 'Wing play', emoji: '🪽', blurb: 'Get it wide, get it in the box.', formationIndex: 16, mentality: 'balanced' },
+     lands on a real shape and that no two rows field the same eleven in the
+     same mentality, which is what the engine actually reads. */
+  wingplay: { label: 'Wing play', emoji: '🪽', blurb: 'Get it wide, get it in the box.', formationIndex: 0, mentality: 'attacking' },
   direct: { label: 'Direct', emoji: '🎯', blurb: 'Skip the midfield. Two up top and in behind.', formationIndex: 1, mentality: 'attacking' },
   wingbacks: { label: 'Wing backs', emoji: '🏃', blurb: 'Three at the back and two who never stop running.', formationIndex: 15, mentality: 'attacking' },
   totalfootball: { label: 'Total football', emoji: '🌀', blurb: 'Everybody attacks, everybody defends.', formationIndex: 6, mentality: 'attacking' },
   catenaccio: { label: 'Catenaccio', emoji: '🔒', blurb: 'Five at the back, one up top, one nil.', formationIndex: 13, mentality: 'defensive' },
-  shield: { label: 'Midfield shield', emoji: '🛡️', blurb: 'A holder in front of the back four. Nothing through the middle.', formationIndex: 12, mentality: 'balanced' },
+  shield: { label: 'Midfield shield', emoji: '🛡️', blurb: 'A holder in front of the back four. Nothing through the middle.', formationIndex: 12, mentality: 'defensive' },
 };
 
 /** Round 965: the style a manager plays, read safely. An id this build does
@@ -4258,6 +4259,19 @@ export function defaultManagerLook(): ManagerLook {
  *  own table, so whichever one is picked the federation call can run. */
 export function managerHomelands(): string[] {
   return Object.keys(NATION_CONFED).sort((a, b) => a.localeCompare(b));
+}
+
+/* The one league nation the international engine spells differently. */
+const HOMELAND_ALIAS: Record<string, string> = { 'United States': 'USA' };
+
+/** Round 965: the homeland a picker opens on for this nation: itself when the
+ *  engine runs it, its engine spelling when it has one, England otherwise. */
+export function managerHomelandFor(nation: string): string {
+  const all = managerHomelands();
+  if (all.includes(nation)) return nation;
+  const alias = HOMELAND_ALIAS[nation];
+  if (alias && all.includes(alias)) return alias;
+  return all.includes('England') ? 'England' : all[0];
 }
 
 /** Round 965: the spec as it is stored. The style is read safely and a look
@@ -16168,6 +16182,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
        already did, and the same person picked both, so the club's badge
        wins that tie. A starting point, not a lock, the Round 160 rule. */
     state.manager = cleanManagerSpec(manager);
+    /* Round 965: his background point is on the board from the first screen,
+       not from the first ball kicked. Only here, inside the manager branch,
+       so a Skip career's day one is exactly what it was. */
+    ensureXp(state);
     if (!custom?.identity) {
       const st = CLUB_IDENTITIES[styleOf(manager.style)];
       state.formationIndex = clamp(st.formationIndex, 0, FORMATIONS.length - 1);

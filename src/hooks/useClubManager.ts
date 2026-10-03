@@ -19,12 +19,13 @@ import {
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
   applyForJob, joinClubInSummer,
+  editManager,
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
-import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
+import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
@@ -600,6 +601,12 @@ export function useClubManager() {
   }, []);
   /* Round 513: a point into a tree. One way only, so it never needs a refund
      path, and null when there is nothing free to spend. */
+  /* Round 965: the Edit manager sheet. editManager returns null on a refused
+     edit (a real name, a country the engine does not run, a new background),
+     and ?? prev leaves the save alone, the shape every action here uses. */
+  const updateManager = useCallback((edit: ManagerEdit) => {
+    setCareer(prev => (prev ? editManager(prev, edit) ?? prev : prev));
+  }, []);
   const spendPoint = useCallback((tree: SkillTree) => {
     setCareer(prev => (prev ? spendSkillPoint(prev, tree) ?? prev : prev));
   }, []);
@@ -860,7 +867,7 @@ export function useClubManager() {
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
-    appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint,
+    appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,

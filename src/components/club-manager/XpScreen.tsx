@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import type { CareerState } from '@/lib/clubManager';
+import { MANAGER_BACKGROUNDS } from '@/lib/clubManager';
 import {
   MAX_LEVEL, MAX_TREE_POINTS, SKILL_TREES, TREE_INFO,
   levelFor, levelProgress, pointsFree, pointsSpent, xpForLevel, xpOf,
@@ -87,6 +88,13 @@ export function XpScreen({ career, onSpendPoint }: XpScreenProps) {
             ? `${free} point${free === 1 ? '' : 's'} to spend`
             : `${spent} of ${SKILL_TREES.length * MAX_TREE_POINTS} points spent`}
         </div>
+        {/* Round 965: the point his background brought with him. It works
+            exactly like a bought one and never cost a level. */}
+        {block.gift && (
+          <div data-cm-xp-gift className="text-[10px] text-foreground">
+            🎁 One {TREE_INFO[block.gift].label} point came with your background{career.manager ? ` (${MANAGER_BACKGROUNDS[career.manager.background]?.label ?? 'your past'})` : ''}. It works like any other and cost you no XP.
+          </div>
+        )}
         <p className="text-[9px] text-muted-foreground">
           You earn XP for wins, trophies, board objectives, bringing a boy through the academy,
           going deep in Europe, finishing above what the board asked for, and a summer that sold
