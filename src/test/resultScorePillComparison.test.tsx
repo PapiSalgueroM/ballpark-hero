@@ -16,9 +16,13 @@
  * higherLowerScore and Face Off's from the real totals(), so a fixture can
  * never hold a score the game could not reach.
  *
- * Negative control, run by hand in Round 986: delete the score prop from one
- * page's ResultScreen call and that page's two cases fail (the pill falls back
- * to the emoji, so [data-result-score] is missing).
+ * Negative controls, run by hand in Round 986 and measured:
+ *   1. the score prop deleted from all sixteen calls: 32 of 33 cases fail
+ *      ("expected null to be '145'"), every page case, and only the fixture
+ *      check that holds no page passes;
+ *   2. the NBA page handed correctCount in place of totalScore: both NBA cases
+ *      fail ("expected '8' to be '145'"), so a pill showing the wrong number of
+ *      the page's own is caught, not just a missing one.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, cleanup, render } from '@testing-library/react';
