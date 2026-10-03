@@ -167,6 +167,11 @@ export const PERKS: Perk[] = [
   { id: 'scouting', label: 'Scouting Network', emoji: '🔭', pitch: 'for long runs', cost: [3, 5, 8] },
 ];
 export const PERK_MAX = 3;
+/** The worked example the rules print: with this many trophies held, the first
+ *  level of this perk beats keeping the trophies for somebody who leaves it
+ *  running overnight, and loses to keeping them for somebody who sits and
+ *  taps. scripts/simIdleArena.mjs section 6 plays exactly this case. */
+export const ROOM_EXAMPLE = { held: 30, perk: 'nightShift' } as const;
 
 /** away cap by Long Night level, 0 to 3 */
 export const LONG_NIGHT_CAP_MS = [OFFLINE_CAP_MS, ...[16, 20, 24].map(h => h * 3600 * 1000)];
