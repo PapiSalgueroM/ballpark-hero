@@ -73,6 +73,36 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/hamburger-sv/squad", "publisher": "Bundesliga (Hamburger SV squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the midfielders"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/127/ger.hamburg", "publisher": "ESPN (Hamburg SV squad page, season 2026-27)", "readOn": "2026-10-02", "says": "midfielder, shirt 10, age 25"}
    ]
+  },
+  {
+   "name": "Lukas Klostermann",
+   "club": "RB Leipzig",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Leipzig's number 16, aged 30 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/rb-leipzig/squad", "publisher": "Bundesliga (RB Leipzig squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/11420/ger.rb_leipzig", "publisher": "ESPN (RB Leipzig squad page, season 2026-27)", "readOn": "2026-10-02", "says": "defender, shirt 16, age 30"}
+   ]
+  },
+  {
+   "name": "Ameen Al-Dakhil",
+   "club": "Stuttgart",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Stuttgart's number 2, aged 24 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/vfb-stuttgart/squad", "publisher": "Bundesliga (VfB Stuttgart squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart", "publisher": "ESPN (VfB Stuttgart squad page, season 2026-27)", "readOn": "2026-10-02", "says": "defender, shirt 2, age 24"}
+   ]
+  },
+  {
+   "name": "Marin Ljubicic",
+   "club": "Union Berlin",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Union's number 27, aged 24 on ESPN. On both 2026-27 squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fc-union-berlin/squad", "publisher": "Bundesliga (1. FC Union Berlin squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/598/ger.union_berlin", "publisher": "ESPN (FC Union Berlin squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 27, age 24"}
+   ]
   }
  ],
  "movedTo": [
@@ -231,6 +261,35 @@
     {"family": "B", "url": "https://www.soccerway.com/player/dompe-jean-luc/GOw3GAue/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Hamburger SV to Konyaspor 2026-08-28 as a free agent, born 1995-08-12, contract to June 2028"},
     {"family": "B", "url": "https://haberkenti.com/konyaspor-jean-luc-dompe-ile-anlasti", "publisher": "Haber Kenti, from the Ihlas news agency (2026-08-28)", "readOn": "2026-10-02", "says": "two year contract signed at the Konyaspor Museum, shirt 91"}
    ]
+  },
+  {
+   "name": "Yussuf Poulsen",
+   "from": "RB Leipzig",
+   "to": "Hamburg",
+   "realClub": "Hamburger SV",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1994-06-15, the Danish striker. Left Leipzig for Hamburg on 2025-07-13 and is their number 15 in 2026-27, with a Bundesliga goal this season.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/hamburger-sv/squad", "publisher": "Bundesliga (Hamburger SV squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/rb-leipzig/squad", "publisher": "Bundesliga (RB Leipzig squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/127/ger.hamburg", "publisher": "ESPN (Hamburg SV squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 15, age 32, 3 appearances and 1 goal in 2026-27"},
+    {"family": "B", "url": "https://ca.soccerway.com/player/poulsen-yussuf/SrWbvhrI/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "RB Leipzig to Hamburger SV 2025-07-13, born 1994-06-15, contract to June 2027"}
+   ]
+  },
+  {
+   "name": "Marvin Ducksch",
+   "from": "Werder Bremen",
+   "to": "Birmingham City",
+   "realClub": "Birmingham City",
+   "adjudicatedOn": "2026-10-02",
+   "note": "Born 1994-03-07. Sold by Werder to Birmingham on 2025-08-07, contract to June 2028. A deadline day loan to Valencia was called off on 2026-09-01 when Birmingham would not let him go, and he played for Birmingham on 2026-09-19. Family A here confirms only that he left Werder (Birmingham's own pages would not load); where he is rests on three independent publishers that agree.",
+   "sources": [
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/sv-werder-bremen/squad", "publisher": "Bundesliga (Werder Bremen squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/392/eng.birmingham", "publisher": "ESPN (Birmingham City squad page, season 2026-27)", "readOn": "2026-10-02", "says": "forward, shirt 33, age 32, 4 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/ducksch-marvin/8McNJcKC/transfers/", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Werder Bremen to Birmingham 2025-08-07, born 1994-03-07, contract to June 2028"},
+    {"family": "B", "url": "https://www.fotmob.com/players/343757/marvin-ducksch", "publisher": "FotMob", "readOn": "2026-10-02", "says": "Birmingham City, born 1994-03-07, played 19 minutes against Middlesbrough on 2026-09-19"},
+    {"family": "B", "url": "https://www.comuniate.com/noticias/37654/se-descarta-el-fichaje-de-marvin-ducksch", "publisher": "Comuniate (2026-09-01)", "readOn": "2026-10-02", "says": "the Valencia loan is off because Birmingham would not release him so late in the window"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -332,6 +391,18 @@
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/hannover-96/squad", "publisher": "Bundesliga (Hannover 96 squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
     {"family": "B", "url": "https://us.soccerway.com/player/matondo-rabbi/j1r9Csqe/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "status free agent; Rangers to Brann 2026-03-31; loan at Hannover ended 2025-06-30; born 2000-09-09"},
     {"family": "B", "url": "https://africasoccer.com/welsh-winger-rabbi-matondo-becomes-unattached-after-sk-brann-exit/", "publisher": "AfricaSoccer (2026-08-29)", "readOn": "2026-10-02", "says": "without a club from 2026-08-29 after leaving Brann"}
+   ]
+  },
+  {
+   "name": "Pascal Stenzel",
+   "from": "Stuttgart",
+   "why": "Unattached. Born 1996-03-20. Stuttgart announced on 2026-05-26 that he was leaving after seven years, his contract having run to 2026-06-30, and he is on neither 2026-27 Stuttgart squad page. No new club was found up to 2026-10-02. Disagreement recorded: the Soccerway player page still names Stuttgart, with no transfer after 2020, which reads as not yet updated after his contract ran out. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-02",
+   "sources": [
+    {"family": "A", "url": "https://www.vfb.de/en/vfb/latest/news/professionals/2526/abgang-pascal-stenzel-/", "publisher": "VfB Stuttgart (club announcement, 2026-05-26)", "readOn": "2026-10-02", "says": "leaves VfB after seven years"},
+    {"family": "A", "url": "https://www.bundesliga.com/en/bundesliga/clubs/vfb-stuttgart/squad", "publisher": "Bundesliga (VfB Stuttgart squad, season 2026-2027)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/134/ger.vfb_stuttgart", "publisher": "ESPN (VfB Stuttgart squad page, season 2026-27)", "readOn": "2026-10-02", "says": "not listed"},
+    {"family": "B", "url": "https://www.365scores.com/de/football/player/pascal-stenzel-27714", "publisher": "365Scores", "readOn": "2026-10-02", "says": "free agent, last played for VfB Stuttgart, born 1996-03-20"}
    ]
   }
  ],
