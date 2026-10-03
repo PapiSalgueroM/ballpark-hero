@@ -1,3 +1,14 @@
+Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
+Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
+component/helper plus focused tests, native QA and remote workflow. Reuse the
+existing physics for repeatable same-setup shots, retained controls and a visible
+comparison of actual trajectories/landings. Add worked help. Keep the existing
+ten-shot Steady practice, daily, unlimited and contest scoring/save behavior.
+No real sports data or shared arcade engines change. No local runtime gates;
+remote CI carries type/build, outcomes/controls, existing regressions and browser
+proof. Claude's Release Z/988 and all held drafts remain outside this scope.
+Next free998 is unclaimed. Publication ownership is not claimed yet.
+
 Codex996 PUBLISHED, 2026-10-03, live verification completed06:32 EDT.
 Lovable confirmed "Your website was updated" for synchronized main5667485d.
 Live entry is now /assets/index-DS-YzsM8.js. Public NHL/NBA/NFL/MLB create
