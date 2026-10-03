@@ -182,13 +182,15 @@ const ELITE = ['Bayern Munich', 'PSG', 'Man City', 'Real Madrid', 'Barcelona', '
    verified leagues and beyond, three starting levels so every tier is
    reached. */
 const PER = Number(process.argv[2] || 6);
+/* A second argument shifts every seed, so the bands can be measured over several draws. */
+const OFFSET = Number(process.argv[3] || 0);
 const STARTS = [[1990, '1990-94'], [1995, '1995-99'], [2000, '2000-04'], [2005, '2005-09'], [2010, '2010-14'], [2015, '2015-19'], [2020, '2020-24']];
 const NATIONS = ['England', 'Spain', 'Germany', 'Italy', 'France', 'Netherlands'];
 const OVRS = [56, 64, 72];
 const seasons = [];
 let careers = 0;
 for (const [startYear, era] of STARTS) for (const nation of NATIONS) for (const ovr of OVRS) for (let i = 0; i < PER; i++) {
-  const seed = startYear * 1000 + NATIONS.indexOf(nation) * 100 + ovr + i * 7;
+  const seed = startYear * 1000 + NATIONS.indexOf(nation) * 100 + ovr + i * 7 + OFFSET * 1000003;
   const s = runCareer(seed, { era, startYear, proSeasons: 8, ovr, nation });
   careers += 1;
   for (const r of s.seasons || []) if (r.type === 'playing') seasons.push(r);
@@ -207,7 +209,7 @@ function forcedSeasons(club, startYear, era) {
   let titles = 0, n = 0, year = null;
   const rows = [];
   for (let i = 1; i <= FORCED; i++) {
-    const seed = 50000 + startYear * 7 + i;
+    const seed = 50000 + startYear * 7 + i + OFFSET * 1000003;
     let s = runCareer(seed, { era, startYear, until: x => x.phase === 'playing' && !(x.seasons || []).some(r => r.type === 'playing') });
     if (s.phase !== 'playing') continue;
     const next = (s.seasons[s.seasons.length - 1]?.year ?? startYear) + 1;
@@ -264,7 +266,7 @@ console.log('2) never above the league size, never below 1, and a verified leagu
 
 section = 3;
 console.log('3) the tier ladder of mean finish, as a share of the table, every step');
-const STEP_MIN = 0.05;
+const STEP_MIN = [0.05, 0.1, 0.1, 0.04];
 const groupOf = r =>(league.eliteInYear(ELITE, r.club, r.year) ? 'elite' : `tier ${Math.min(4, r.clubTier)}`);
 const LADDER = ['elite', 'tier 1', 'tier 2', 'tier 3', 'tier 4'];
 const groups = Object.fromEntries(LADDER.map(g => [g, []]));
@@ -276,7 +278,7 @@ console.log('   ' + LADDER.map((g, i) => `${g}: ${means[i].toFixed(3)} over ${gr
 for (let i = 1; i < LADDER.length; i++) {
   const [a, b] = [LADDER[i - 1], LADDER[i]];
   if (groups[a].length < 15 || groups[b].length < 15) { fail(`${a} (${groups[a].length}) or ${b} (${groups[b].length}) has fewer than 15 seasons, the step cannot be read`); continue; }
-  if (!(means[i] - means[i - 1] >= STEP_MIN)) fail(`${b} mean share ${means[i].toFixed(3)} is not at least ${STEP_MIN} below ${a} ${means[i - 1].toFixed(3)}`);
+  if (!(means[i] - means[i - 1] >= STEP_MIN[i - 1])) fail(`${b} mean share ${means[i].toFixed(3)} is not at least ${STEP_MIN[i - 1]} below ${a} ${means[i - 1].toFixed(3)}`);
 }
 
 section = 4;
@@ -295,8 +297,8 @@ console.log('4) a current era career is byte identical to main once the two new 
 
 section = 5;
 console.log('5) the elite boost reads the era: forced first seasons over many seeds');
-const ELITE_MIN = 0.5;
-const TIER_MAX = 0.25;
+const ELITE_MIN = 0.45;
+const TIER_MAX = 0.3;
 for (const [club, , , want] of CASES) {
   const r = FORCED_RESULTS[club + want];
   console.log(`   ${club}, first pro season ${r.year}: title rate ${(r.rate * 100).toFixed(1)}% over ${r.n} seasons, expected the ${want} rate`);

@@ -107,7 +107,7 @@ function forkRng(key: string): () => number {
    Bands as shares of the table, so a 22 club season and an 18 club one read
    the same way: the elite chase the title from 2nd to 4th, a tier 1 club sits
    in the top two fifths, tier 2 around mid table, tier 3 in the bottom half,
-   tier 4 and below in the bottom two fifths. A big season from the player
+   tier 4 and below in the bottom third. A big season from the player
    (7.5 or better) lifts the band a tenth of the table, a poor one (under 6.3)
    drops it a tenth. 2nd is the ceiling, because 1st is the title. */
 export function finishBand(tier: number, elite: boolean, size: number, rating: number): [number, number] {
@@ -117,7 +117,7 @@ export function finishBand(tier: number, elite: boolean, size: number, rating: n
   else if (tier <= 1) { lo = 2; hi = at(0.4); }
   else if (tier === 2) { lo = at(0.25); hi = at(0.65); }
   else if (tier === 3) { lo = at(0.45); hi = size; }
-  else { lo = at(0.6); hi = size; }
+  else { lo = at(0.65); hi = size; }
   const nudge = rating >= 7.5 ? -at(0.1) : rating < 6.3 ? at(0.1) : 0;
   lo = Math.min(size, Math.max(2, lo + nudge));
   hi = Math.min(size, Math.max(lo, hi + nudge));
@@ -147,6 +147,21 @@ export function drawLeagueFinish(input: LeagueFinishInput): LeagueFinish {
   const rng = forkRng(input.seedKey);
   const finish = lo + Math.floor(rng() * (hi - lo + 1));
   return { leagueFinish: Math.min(size, Math.max(2, finish)), leagueSize: size };
+}
+
+/** The finish as a saved season holds it, checked before anything prints it.
+ *  Saves are the player's own storage, so a hand edited or half written row
+ *  is possible: a finish that is not a whole number, sits outside its table,
+ *  or disagrees with the title flag reads as no finish at all, and a bad size
+ *  alone drops just the size. The rest of the season is untouched. */
+export function readLeagueFinish(r: { leagueFinish?: unknown; leagueSize?: unknown; leagueTitle?: unknown }): { finish: number; size: number | null } | null {
+  const f = r.leagueFinish;
+  if (typeof f !== "number" || !Number.isInteger(f) || f < 1 || f > 40) return null;
+  if ((f === 1) !== (r.leagueTitle === true)) return null;
+  const z = r.leagueSize;
+  const size = typeof z === "number" && Number.isInteger(z) && z >= 2 && z <= 40 ? z : null;
+  if (size !== null && f > size) return null;
+  return { finish: f, size };
 }
 
 /** "La Liga", "Serie A", "MLS", but "the Premier League", "the Bundesliga":

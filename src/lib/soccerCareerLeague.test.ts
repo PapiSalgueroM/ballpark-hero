@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawLeagueFinish, eliteInYear, finishBand, leagueSizeFor, ordinal } from "./soccerCareerLeague";
+import { drawLeagueFinish, eliteInYear, finishBand, leagueSizeFor, leagueWithArticle, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -85,6 +85,33 @@ describe("finishBand", () => {
         expect(lo).toBeLessThanOrEqual(hi);
       }
     }
+  });
+});
+
+describe("readLeagueFinish", () => {
+  it("passes a sound row through", () => {
+    expect(readLeagueFinish({ leagueFinish: 3, leagueSize: 20, leagueTitle: false })).toEqual({ finish: 3, size: 20 });
+    expect(readLeagueFinish({ leagueFinish: 1, leagueTitle: true })).toEqual({ finish: 1, size: null });
+  });
+  it("reads an old save as no finish", () => {
+    expect(readLeagueFinish({ leagueTitle: true })).toBeNull();
+    expect(readLeagueFinish({ leagueTitle: false })).toBeNull();
+  });
+  it("drops a corrupt finish and keeps the rest of the row alone", () => {
+    expect(readLeagueFinish({ leagueFinish: "3", leagueSize: 20, leagueTitle: false })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 2.5, leagueTitle: false })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 0, leagueTitle: false })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 21, leagueSize: 20, leagueTitle: false })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 1, leagueSize: 20, leagueTitle: false })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 4, leagueSize: 20, leagueTitle: true })).toBeNull();
+    expect(readLeagueFinish({ leagueFinish: 4, leagueSize: "x", leagueTitle: false })).toEqual({ finish: 4, size: null });
+  });
+});
+
+describe("leagueWithArticle", () => {
+  it("reads like a sentence", () => {
+    expect(["Premier League", "La Liga", "Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"].map(leagueWithArticle))
+      .toEqual(["the Premier League", "La Liga", "the Bundesliga", "Serie A", "Ligue 1", "MLS", "Eredivisie"]);
   });
 });
 
