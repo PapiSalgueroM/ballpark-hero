@@ -83,8 +83,14 @@ describe('Footle practice mounted outcomes', () => {
     expect(savedRun().index).toBe(0);
     expect(JSON.stringify(savedRun().pool)).toBe(snapshot);
     expect(view.getByRole('combobox')).toBeVisible();
-    fireEvent.change(view.getByRole('combobox'), { target: { value: wrong.name } });
-    expect(view.queryAllByRole('option')).toHaveLength(0);
+    const search = view.getByRole('combobox');
+    const beforeDuplicate = localStorage.getItem(FOOTLE_PRACTICE_KEY);
+    fireEvent.change(search, { target: { value: wrong.name } });
+    expect(view.queryAllByRole('option').some(option => option.firstElementChild?.textContent === wrong.name)).toBe(false);
+    fireEvent.keyDown(search, { key: 'Escape' });
+    fireEvent.keyDown(search, { key: 'Enter' });
+    expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBe(beforeDuplicate);
+    expect(savedRun().rounds[0].guesses).toEqual([wrong.name]);
     submit(view, initial.targets[0]);
     expect(view.getByTestId('practice-feedback')).toHaveTextContent('Solved!');
     expect(view.getByTestId('practice-feedback')).not.toHaveTextContent('Changed after the run');
