@@ -40,7 +40,19 @@
  *   cardlie       the card prints the before value as the after    -> section 4
  *   corrupt       a foreign focus is trusted without a check       -> section 5
  *
- * MEASURED: (filled in from the first green run, see the bottom of the file)
+ * MEASURED on the round's tree, seeds 0 to 4 (SIM_CAREER_ACADEMY_SEED):
+ *   section 1: 2,838 to 2,990 saves compared against the merge base, 60 of
+ *     60 academy years each with a report, every save identical.
+ *   section 2: 427 focused academy years a seed; the rungs came up as
+ *     +2 x177 to x184, +1 x157 to x164, 0 x86 (the 0 rung is the 14 legacy
+ *     saves whose ceiling sits on or under the overall). Floors are about
+ *     half the lowest: +2 at least 90, +1 at least 75, 0 at least 40. These
+ *     are coverage floors (the rung has to be exercised), never a max.
+ *   section 3: 0 careers lifted past their ceiling on every seed.
+ *   section 4: 2,611 report lines a seed, 0 wrong, 0 draws, 0 unstable.
+ *   Each run takes 14 to 20 seconds plus the two bundles.
+ *   Controls: all seven FIRED on their own sections (alwayswrite also turns 2
+ *   and 5 red, since the stray field shows on the no focus and corrupt arms).
  *
  * Run: node scripts/simCareerAcademy.mjs
  */
@@ -377,7 +389,7 @@ async function main() {
   check(academy.academyFocusBonus(70, 70) === 0 && academy.academyFocusBonus(75, 70) === 0, 'a focus still adds on or past the ceiling');
   console.log(`   ${walked} rungs walked against four ceilings; ${breaches} real careers lifted past their ceiling by a focus; ${nearSeen} focused years started the rule within ${promise.near} of the ceiling`);
   check(breaches === 0, `${breaches} focused academy years ended above a ceiling the plain year stayed under`);
-  check(rungs[2] >= 150 && rungs[1] >= 25 && rungs[0] >= 8, `every rung has to come up on real saves (+2 x${rungs[2]}, +1 x${rungs[1]}, 0 x${rungs[0]})`);
+  check(rungs[2] >= 90 && rungs[1] >= 75 && rungs[0] >= 40, `every rung has to come up on real saves (+2 x${rungs[2]}, +1 x${rungs[1]}, 0 x${rungs[0]})`);
 
   /* 4 */
   section = 4;
