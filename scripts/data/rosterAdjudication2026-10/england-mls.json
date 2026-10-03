@@ -1,0 +1,114 @@
+{
+ "round": 933,
+ "shard": "England and MLS: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Championship (the game's 2026-27 English second tier, which holds all thirteen English clubs in this shard: Blackburn Rovers, Bolton Wanderers, Burnley, Cardiff City, Middlesbrough, Portsmouth, QPR, Swansea City, Watford, West Brom, West Ham, Wolves, Wrexham) or in MLS, both conferences (49 rows at origin/main 5f2622fd: 24 English, 25 MLS)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "IN PROGRESS, rewritten when the shard is done.",
+ "counts": {"rows": 49, "confirmedStill": 0, "movedTo": 0, "removedClubNotModelled": 0, "notCurrent": 0, "pending": 0},
+ "forTheFold": "IN PROGRESS, rewritten when the shard is done.",
+ "confirmedStill": [
+  {
+   "name": "Theodore Ku-DiPietro",
+   "club": "Colorado Rapids",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-01-28 (MLS and ESPN agree), listed by both as Ted Ku-Dipietro. His last ESPN appearance is 2026-03-14, so he may be injured, but he is on the club's current roster.",
+   "sources": [
+    {"family": "A", "url": "https://www.coloradorapids.com/roster/", "publisher": "Colorado Rapids roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000J)", "readOn": "2026-10-03", "says": "Ted Ku-Dipietro, shirt 21, born 2002-01-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/288873/ted-ku-dipietro", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Colorado Rapids, born 2002-01-28; MLS appearances for Colorado from 2026-02-23 to 2026-03-14"}
+   ]
+  },
+  {
+   "name": "Jared Stroud",
+   "club": "D.C. United",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-07-10 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.dcunited.com/roster/", "publisher": "D.C. United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000D)", "readOn": "2026-10-03", "says": "Jared Stroud, shirt 8, born 1996-07-10"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/271884/jared-stroud", "publisher": "ESPN", "readOn": "2026-10-03", "says": "D.C. United; MLS appearances for D.C. from 2026-08-19 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Marco Reus",
+   "club": "LA Galaxy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-05-31 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.lagalaxy.com/roster/", "publisher": "LA Galaxy roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000G)", "readOn": "2026-10-03", "says": "Marco Reus, shirt 18, born 1989-05-31"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/122356/marco-reus", "publisher": "ESPN", "readOn": "2026-10-03", "says": "LA Galaxy; MLS appearances for LA from 2026-09-06 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Bongokuhle Hlongwane",
+   "club": "Minnesota United",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-06-20 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mnufc.com/roster/", "publisher": "Minnesota United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000L)", "readOn": "2026-10-03", "says": "Bongokuhle Hlongwane, shirt 21, born 2000-06-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/287784/bongokuhle-hlongwane", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Minnesota United FC; MLS appearances for Minnesota from 2026-08-02 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Indiana Vassilev",
+   "club": "Philadelphia Union",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-16 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.philadelphiaunion.com/roster/", "publisher": "Philadelphia Union roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000002)", "readOn": "2026-10-03", "says": "Indiana Vassilev, shirt 19, born 2001-02-16"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/266026/indiana-vassilev", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Philadelphia Union; MLS appearances for Philadelphia from 2026-09-05 to 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Dominik Marczuk",
+   "club": "Real Salt Lake",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-11-01 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.rsl.com/roster/", "publisher": "Real Salt Lake roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000R)", "readOn": "2026-10-03", "says": "Dominik Marczuk, shirt 11, born 2003-11-01"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/364658/dominik-marczuk", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Real Salt Lake; MLS appearances for RSL from 2026-08-22 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Marcus Ingvartsen",
+   "club": "San Diego FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-01-04 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.sandiegofc.com/roster/", "publisher": "San Diego FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000065)", "readOn": "2026-10-03", "says": "Marcus Ingvartsen, shirt 7, born 1996-01-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/186324/marcus-ingvartsen", "publisher": "ESPN", "readOn": "2026-10-03", "says": "San Diego FC; MLS appearances for San Diego from 2026-08-16 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Jordan Morris",
+   "club": "Seattle Sounders",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-10-26 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.soundersfc.com/roster/", "publisher": "Seattle Sounders roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000S)", "readOn": "2026-10-03", "says": "Jordan Morris, shirt 13, born 1994-10-26"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/210252/jordan-morris", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Seattle Sounders FC; MLS appearances for Seattle from 2026-09-13 to 2026-10-02"}
+   ]
+  },
+  {
+   "name": "Tomas Totland",
+   "club": "St. Louis City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-09-28 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.stlcitysc.com/roster/", "publisher": "St. Louis CITY SC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00001L)", "readOn": "2026-10-03", "says": "Tomas Totland, shirt 14, born 1999-09-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/252749/tomas-totland", "publisher": "ESPN", "readOn": "2026-10-03", "says": "St. Louis CITY SC; MLS appearances for St. Louis from 2026-09-10 to 2026-09-30"}
+   ]
+  },
+  {
+   "name": "Enso González",
+   "club": "Wolves",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-01-20 (ESPN). Both lists give him shirt 30. ESPN shows no league appearance for Wolves this season, so he is a squad player, not a regular, but he is in the squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "forwards: 30 Enso Gonzalez"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/380", "publisher": "ESPN (Wolverhampton Wanderers squad, season 2026-27)", "readOn": "2026-10-03", "says": "Enso González, shirt 30, forward, born 2005-01-20"}
+   ]
+  }
+ ],
+ "movedTo": [],
+ "removedClubNotModelled": [],
+ "notCurrent": [],
+ "pending": []
+}
