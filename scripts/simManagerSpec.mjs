@@ -24,6 +24,49 @@
    in a bundled copy and the refusal test must stop refusing, proving the
    gate is load bearing rather than decorative.
 
+   Round 965, off the owner's 2026-08-26 item 11 ("managers as first class
+   citizens"), adds:
+
+   6. every background starts a new career with exactly one point in its own
+      tree and nothing free; a career with no manager holds none;
+   7. a Round 303 save (a manager with no face and no gift) loads byte equal,
+      gets its background point once and never twice, and plays a week;
+   8. the face is stored, survives a save and a load, and a broken one is
+      dropped alone while the manager stays;
+   9. every style lands on a real formation with a full eleven, no two styles
+      share a shape and mentality pair, an unknown style reads Balanced;
+  10. every homeland outside the league nations is called by its own
+      federation and carried into the job market;
+  11. the Edit manager sheet: rename through the real name gate, homeland,
+      face; background fixed; a Skip career names its manager and gets his
+      point; the career handed in is never mutated;
+  12. a Skip career plays a byte identical season to the engine with this
+      round's two manager hooks taken out;
+  13. every style changes what the match engine plays: a style with its own
+      mentality moves goals for plus goals against, signed in its mentality's
+      direction, by at least 0.25 a game against Balanced on the same seeds.
+      Measured over four clubs by three seeds (468 league games an arm), the
+      smallest of the nine styles at each base: 0.515 at base 500, 0.558 at
+      2000, 0.494 at 3500, 0.596 at 5000; the largest anywhere 0.925. The one
+      style that keeps Balanced's mentality, Tiki-taka, moved 0.066 to 0.212
+      (unsigned), which is seed noise, so it is held on the eleven it fields
+      instead. The first draft used the unsigned sum at two seeds, and there
+      Tiki-taka's noise reached 0.308, above the floor: signing the sum and
+      adding a seed is what separated the two. And no two styles field the
+      same eleven in the same mentality at every club.
+
+   Round 965 controls, each asserting its anchor exists first:
+     SIM_MANAGER_CONTROL=noappearance  the stored spec drops its face; section
+                                        8 and ONLY section 8 must go red.
+     SIM_MANAGER_CONTROL=leak           the background grant reaches careers
+                                        with no manager; section 12 must go red.
+     SIM_MANAGER_CONTROL=twinstyle      Wing play back on 4-2-3-1 wide, this
+                                        round's own first draft, which is
+                                        Gegenpress twice; section 13 must go red.
+     SIM_MANAGER_CONTROL=deadmentality  the defensive mentality stops moving
+                                        the scoring rates; section 13 must go red.
+   SPEC_STYLE_BASE and SPEC_STYLE_SEEDS move section 13's seeds.
+
    Run: node scripts/simManagerSpec.mjs
 */
 import { execSync } from 'node:child_process';
@@ -444,12 +487,12 @@ section = '13'; console.log('13) every style changes what the match engine plays
      plays each one for a league season from the same seeds as Balanced and
      reads the outcome the engine produced: league goals for and against a
      game. The bands are set below from measured headroom. */
-  /* Measured headroom, |delta for| + |delta against| a game against Balanced,
-     four clubs by two seeds (312 league games an arm), for the styles with a
-     mentality of their own: PENDING, filled in from the bases below. */
+  /* Measured headroom (see the header, section 13): smallest signed shift
+     per base 0.494 to 0.596, seed noise on a shape only style up to 0.212.
+     The floor sits 0.244 under the smallest measurement and above the noise. */
   const STYLE_SHIFT_FLOOR = 0.25;
   const CLUBS = ['Arsenal', 'Napoli', 'Ajax', 'Wolves'];
-  const SEEDS = Number(process.env.SPEC_STYLE_SEEDS || 2);
+  const SEEDS = Number(process.env.SPEC_STYLE_SEEDS || 3);
   const BASE = Number(process.env.SPEC_STYLE_BASE || 500);
   const profile = style => {
     let gf = 0, ga = 0, n = 0;
@@ -479,7 +522,11 @@ section = '13'; console.log('13) every style changes what the match engine plays
   for (const id of Object.keys(cm.CLUB_IDENTITIES)) {
     if (id === 'balanced') continue;
     const p = profile(id);
-    const shift = Math.abs(p.gf - base.gf) + Math.abs(p.ga - base.ga);
+    /* Signed in the mentality's own direction: attacking raises both sides' scoring
+       rates and defensive lowers both, so the two deltas add. Shape noise has no
+       direction and mostly cancels here, which is why this beats the absolute sum. */
+    const dir = cm.CLUB_IDENTITIES[id].mentality === 'attacking' ? 1 : cm.CLUB_IDENTITIES[id].mentality === 'defensive' ? -1 : 0;
+    const shift = dir !== 0 ? dir * ((p.gf - base.gf) + (p.ga - base.ga)) : Math.abs(p.gf - base.gf) + Math.abs(p.ga - base.ga);
     /* The deterministic half: the eleven the engine fields on day one. */
     let xiMoved = 0, ratingGap = 0;
     for (const club of CLUBS) {
@@ -500,11 +547,11 @@ section = '13'; console.log('13) every style changes what the match engine plays
      Floor set from measured headroom: see STYLE_SHIFT_FLOOR below. */
   for (const s of shifts) {
     if (s.sameMentality) continue;
-    if (!(s.shift >= STYLE_SHIFT_FLOOR)) fail(`${s.id} moved goals for and against by only ${s.shift.toFixed(3)} a game against Balanced (floor ${STYLE_SHIFT_FLOOR})`);
+    if (!(s.shift >= STYLE_SHIFT_FLOOR)) fail(`${s.id} moved goals for plus against by only ${s.shift.toFixed(3)} a game in its mentality's direction against Balanced (floor ${STYLE_SHIFT_FLOOR})`);
   }
   /* 13b. A style that keeps Balanced's mentality (Tiki-taka) changes the match
      through its shape alone, and a season of goals cannot see that past the
-     noise (measured 0.045 and 0.115, the same size as two seeds of one style),
+     noise (measured 0.066 to 0.212 at three seeds, the size of seed noise),
      so it is NOT asserted on goals. What the engine reads from a shape is the
      eleven it fields, so that is what is held: a different eleven at most
      clubs. */
