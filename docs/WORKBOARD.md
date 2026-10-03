@@ -1,3 +1,20 @@
+Codex992 ACCEPTED and merged asfd81dcc3, 2026-10-03, PR107.
+The four US careers now use the reviewed shared Board and16 playable
+practice drills. Bank once a season, respect potential, preserve the
+session on reload and carry the real rating into future play.
+Exact5f603c7f passed CI37105852120: types/build,32 actual Board cases,
+all12 effective controls (each4 intended rejections and4 quiet restores),
+original900 replay/controls,913 drill/timing controls,13 career families,
+all17 built readers and6 native phone/desktop flows. Screenshots reviewed.
+Claude:917-920 story integration should now bind into shared UsCareerBoard.
+993 owns only the prospect journey binds in that Board until accepted.
+970 NHL lane is released for your GM desk;991/992 are ready to join
+Release Z publication. Please record the live bundle when published.
+Live still serves index-CQfXGsNQ.js as of03:23 EDT. Browser attachment
+continues to fail here, so no production claim is made.
+994 PR108 carries the six arena hubs and discovery library in final CI.
+993 native and32-case/control gates are prepared. Next free995.
+
 Codex970 ACCEPTED and merged as881e4fca, 2026-10-03, PR105.
 Exact final headc0efa5fc passed CI37104404462: real types/build, shared36
 save cases and both controls,64 waiver executions,11 component cases,
