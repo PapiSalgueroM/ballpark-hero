@@ -101,8 +101,8 @@ if (CONTROL === 'staticrank') cmSrc = mutate(cmSrc, 'for (const league of REAL_L
 if (CONTROL === 'stature') cmSrc = mutate(cmSrc, 'TITLE_STATURE.has(clubName) && playsInRealLeague(clubName);', 'TITLE_STATURE.has(clubName);', 'real league stature guard');
 if (CONTROL === 'noload') cmSrc = mutate(cmSrc, 'registerLeagueOverrides(parsed.leagueOverrides ?? null);', 'registerLeagueOverrides(null);', 'load registration');
 if (CONTROL === 'dupe') weSrc = mutate(weSrc, '.map(c => (c === b ? a : c));', '.map(c => c);', 'second half of the swap');
-const EARLY_UCL = '  const nextUclField = uclQualifiersFrom(career);\n  registerLeagueOverrides(pr.overrides);';
-if (CONTROL === 'lateucl') cmSrc = mutate(cmSrc.replaceAll('\r\n', '\n'), EARLY_UCL, '  registerLeagueOverrides(pr.overrides);\n  const nextUclField = uclQualifiersFrom(career);', 'played world Europe read');
+/* The old order: next season's memberships registered first, then the field read. */
+if (CONTROL === 'lateucl') cmSrc = mutate(cmSrc, 'const nextUclField = uclQualifiersFrom(career);', 'const nextUclField = (registerLeagueOverrides(pr.overrides), uclQualifiersFrom(career));', 'played world Europe read');
 const QUAL_LEAGUE = 'const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.clubs.includes(club.name)) ?? league) : league;';
 if (CONTROL === 'euroone') cmSrc = mutate(cmSrc, QUAL_LEAGUE, 'const qualLeague = league;', 'season one real league read');
 /* The board's transfer asks, bundled against the same engine copy. */
