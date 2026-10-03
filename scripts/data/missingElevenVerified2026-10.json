@@ -630,6 +630,39 @@
     { "name": "Terrelle Smith", "fact": "Game book lineup FB 45 T.Smith; pfr starters Terrelle Smith/FB." },
     { "name": "Leonard Pope", "fact": "Game book lineup TE 82 L.Pope; pfr starters Leonard Pope/TE. Ben Patrick, who caught Warner's 1-yard touchdown, is TE 89 B.Patrick in the Cardinals substitutions." }
    ]
+  },
+  {
+   "id": "sb-xlii-nyg-d",
+   "game": "Super Bowl XLII",
+   "matchDate": "2008-02-03",
+   "unit": "defense",
+   "team": "New York Giants",
+   "sources": [
+    { "host": "nfl.com", "what": "Official game book PDF, page 1 Lineups, New York Giants Defense", "url": "https://static.www.nfl.com/image/upload/v1677631553/gamecenter/10012008-0203-00d1-c381-50c19c704227.pdf", "via": "https://www.nfl.com/games/giants-at-patriots-2007-post-4", "read": "2026-10-03" },
+    { "host": "pro-football-reference.com", "what": "Box score #vis_starters (Giants Starters Table)", "url": "https://www.pro-football-reference.com/boxscores/200802030nwe.htm", "read": "2026-10-03" }
+   ],
+   "agree": "11/11",
+   "starters": [
+    ["LE", "Michael Strahan", "LE 92 M.Strahan", "Michael Strahan/LDE"],
+    ["DT", "Barry Cofield", "DT 96 B.Cofield", "Barry Cofield/DT"],
+    ["DT", "Fred Robbins", "DT 98 F.Robbins", "Fred Robbins/DT"],
+    ["RE", "Osi Umenyiora", "RE 72 O.Umenyiora", "Osi Umenyiora/RDE"],
+    ["SLB", "Reggie Torbor", "SLB 53 R.Torbor", "Reggie Torbor/SLB"],
+    ["MLB", "Antonio Pierce", "MLB 58 A.Pierce", "Antonio Pierce/MLB"],
+    ["WLB", "Kawika Mitchell", "WLB 55 K.Mitchell", "Kawika Mitchell/WLB"],
+    ["LCB", "Aaron Ross", "LCB 31 A.Ross", "Aaron Ross/LCB"],
+    ["RCB", "Corey Webster", "RCB 23 C.Webster", "Corey Webster/RCB"],
+    ["SS", "James Butler", "SS 37 Ja.Butler", "James Butler/SS"],
+    ["FS", "Gibril Wilson", "FS 28 G.Wilson", "Gibril Wilson/FS"]
+   ],
+   "facts": [
+    { "name": "Fred Robbins", "fact": "Game book lists DE 91 J.Tuck under Giants substitutions and pfr's starters omit him; Robbins and Barry Cofield are the two starting tackles on both." },
+    { "name": "Reggie Torbor", "fact": "Game book lineup SLB 53 R.Torbor; pfr starters Reggie Torbor/SLB." },
+    { "name": "Kawika Mitchell", "fact": "Game book lineup WLB 55 K.Mitchell; pfr starters Kawika Mitchell/WLB. Both scoring tables: the Patriots scored 14 points (a Maroney run and a Moss catch)." }
+   ]
   }
+ ],
+ "notShipped": [
+  { "id": "sb-xlii-nyg", "why": "Super Bowl XLII Giants offense. On 2026-10-03 the game book (WR Burress, LT Diehl, LG Seubert, C O'Hara, RG Snee, RT McKenzie, TE Boss, WR Toomer, QB Manning, TE M.Matthews, RB Jacobs) and pfr #vis_starters agree 11/11, but the file dropped this side in an earlier round because its sources then disagreed on the 11th starter. Left out here rather than overturning that call without the third source that disagreed; the lead can add it from this row." }
  ]
 }
