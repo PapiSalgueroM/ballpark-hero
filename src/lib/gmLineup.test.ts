@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   type GmLineupMan, type GmLineupSport, type GmSlotGroup,
-  gmFillByRating, gmGroupPool, gmLineupReading, gmLineupReset, gmLineupSetOpen, gmLineupSetScheme,
-  gmLineupStrength, gmLineupSwap, gmResolveLineup, gmSanitizeLineupChoice, gmStartValue, gmWalkRotation,
+  gmFillByRating, gmGroupPool, gmLineupHeld, gmLineupReading, gmLineupReset, gmLineupSetOpen, gmLineupSetScheme,
+  gmLineupStrength, gmLineupSwap, gmResolveLineup, gmSanitizeLineupChoice, gmSkippedSlots, gmStartValue, gmWalkRotation,
 } from './gmLineup';
 import { mlbLineupSport, nflLineupSport, nhlLineupSport } from './gmLineupSports';
 import { type MlbGmTeam, mlbStrength } from './mlbFrontOffice';
@@ -79,6 +79,34 @@ describe('gmLineup core', () => {
     t.players.find(p => p.id === 'a1')!.out = 0;
     expect(gmResolveLineup(toy, t, choice).top.map(p => p?.id)).toEqual(['a1', 'a2', 'a4']);
   });
+
+  it('a tap made while a saved man is hurt keeps his slot for him', () => {
+    const t = toyTeam();
+    const choice = gmLineupSwap(toy, t, {}, 'top', { id: 'a3' }, { id: 'a4' })!;
+    t.players.find(p => p.id === 'a1')!.out = 1;
+    expect(gmLineupHeld(toy, t, choice, 'top').map(p => p?.id ?? null)).toEqual(['a1', null, null]);
+    /* an unrelated tap: the 2nd and 3rd trade places */
+    const tapped = gmLineupSwap(toy, t, choice, 'top', { id: 'a2' }, { id: 'a4' })!;
+    expect(tapped.slots?.top).toEqual(['a1', 'a4', 'a2']);
+    expect(gmResolveLineup(toy, t, tapped).top.map(p => p?.id)).toEqual(['a3', 'a4', 'a2']);
+    t.players.find(p => p.id === 'a1')!.out = 0;
+    expect(gmResolveLineup(toy, t, tapped).top.map(p => p?.id)).toEqual(['a1', 'a4', 'a2']);
+    /* moving a man into the slot he holds hands it over, and says so */
+    t.players.find(p => p.id === 'a1')!.out = 1;
+    const over = gmLineupSwap(toy, t, choice, 'top', { id: 'a3' }, { id: 'a4' })!;
+    expect(over.slots?.top).toEqual(['a4', 'a2', 'a3']);
+    expect(gmLineupHeld(toy, t, over, 'top').every(p => p === null)).toBe(true);
+  });
+
+  it('a saved man only fills a slot that takes his position', () => {
+    const picky: GmLineupSport<Toy> = {
+      ...toy,
+      groups: [{ key: 'pp', label: 'Unit', share: 0.1, counted: 0, fallback: 50, positions: ['A', 'P'], slots: [{ label: 'F', weight: 1, accepts: ['A'] }, { label: 'D', weight: 1, accepts: ['P'] }] }],
+    };
+    const t = toyTeam();
+    expect(gmResolveLineup(picky, t, { slots: { pp: ['p1', 'a1'] } }).pp.map(p => p?.id)).toEqual(['a1', 'p1']);
+    expect(gmLineupSwap(picky, t, {}, 'pp', { id: 'a1' }, { id: 'p1' })).toBeNull();
+  });
 });
 
 describe('gmLineup rotation', () => {
@@ -91,6 +119,7 @@ describe('gmLineup rotation', () => {
     ]);
     const open = gmLineupSetOpen(toy, t, {}, 'arms', 2, true)!;
     expect(open.slots?.arms).toEqual(['p1', 'p2', null]);
+    expect(open.open).toEqual({ arms: [2] });
     const two = gmResolveLineup(toy, t, open).arms;
     expect(gmWalkRotation(two, 4, rule, 50).starts.map(s => s.value)).toEqual([70, 60, 70, 60]);
     expect(gmLineupReading(toy, t, open).groups.find(g => g.key === 'arms')!.mine).toBe(65);
@@ -109,6 +138,31 @@ describe('gmLineup rotation', () => {
     expect(gmStartValue(man('x', 'P', 70), 1, rule)).toBe(65);
     expect(gmStartValue(man('x', 'P', 70), 9, rule)).toBe(70);
   });
+
+  it('a last spot empty for want of a healthy man is not a skip, and a swap never makes it one', () => {
+    const t = toyTeam();
+    for (const id of ['p3', 'p4']) t.players.find(p => p.id === id)!.out = 1;
+    expect(gmResolveLineup(toy, t).arms.map(p => p?.id ?? null)).toEqual(['p1', 'p2', null]);
+    expect(gmLineupSetOpen(toy, t, {}, 'arms', 2, true)).toBeNull();
+    expect(gmLineupSetOpen(toy, t, {}, 'arms', 2, false)).toBeNull();
+    const swapped = gmLineupSwap(toy, t, {}, 'arms', { id: 'p1' }, { id: 'p2' })!;
+    expect(swapped.open).toBeUndefined();
+    expect(gmSkippedSlots(toy, toyGroups[1], swapped).size).toBe(0);
+    t.players.find(p => p.id === 'p3')!.out = 0;
+    expect(gmResolveLineup(toy, t, swapped).arms.map(p => p?.id ?? null)).toEqual(['p2', 'p1', 'p3']);
+  });
+
+  it('a skip on purpose stays skipped when the men are fit, and its own button takes it back', () => {
+    const t = toyTeam();
+    const open = gmLineupSetOpen(toy, t, {}, 'arms', 2, true)!;
+    const swapped = gmLineupSwap(toy, t, open, 'arms', { id: 'p1' }, { id: 'p2' })!;
+    expect(swapped.open).toEqual({ arms: [2] });
+    expect(gmResolveLineup(toy, t, swapped).arms.map(p => p?.id ?? null)).toEqual(['p2', 'p1', null]);
+    expect(gmLineupSwap(toy, t, swapped, 'arms', { slot: 2 }, { id: 'p3' })).toBeNull();
+    const back = gmLineupSetOpen(toy, t, swapped, 'arms', 2, false)!;
+    expect(back.open).toBeUndefined();
+    expect(gmResolveLineup(toy, t, back).arms.map(p => p?.id ?? null)).toEqual(['p2', 'p1', 'p3']);
+  });
 });
 
 describe('gmLineup saves', () => {
@@ -119,6 +173,23 @@ describe('gmLineup saves', () => {
     expect(gmSanitizeLineupChoice(toy, { slots: { top: ['a1', 7, 'a2'], arms: ['p1'] } })).toEqual({});
     const nfl = nflLineupSport();
     expect(gmSanitizeLineupChoice(nfl, { schemes: { skill: '12', def: '99' }, slots: { qb: ['x'] } })).toEqual({ schemes: { skill: '12' } });
+    /* a skip is kept only on a rotation's optional slot, beside its slots */
+    expect(gmSanitizeLineupChoice(toy, { slots: { arms: ['p1', 'p2', null] }, open: { arms: [2] } })).toEqual({ slots: { arms: ['p1', 'p2', null] }, open: { arms: [2] } });
+    expect(gmSanitizeLineupChoice(toy, { slots: { arms: ['p1', 'p2', null] }, open: { arms: [0] } })).toEqual({ slots: { arms: ['p1', 'p2', null] } });
+    expect(gmSanitizeLineupChoice(toy, { open: { arms: [2], top: [2] } })).toEqual({});
+  });
+
+  it('a sport with schemes and men picked by hand keeps the men saved under the scheme', () => {
+    const shaped: GmLineupSport<Toy> = {
+      ...toy,
+      schemes: { top: [{ key: 'three', label: 'Three', slots: toyGroups[0].slots }, { key: 'two', label: 'Two', slots: toyGroups[0].slots.slice(0, 2) }] },
+    };
+    const raw = { schemes: { top: 'two' }, slots: { top: ['a2', 'a1'] } };
+    expect(gmSanitizeLineupChoice(shaped, raw)).toEqual(raw);
+    expect(gmSanitizeLineupChoice(shaped, { slots: { top: ['a2', 'a1'] } })).toEqual({});
+    expect(gmResolveLineup(shaped, toyTeam(), raw).top.map(p => p?.id)).toEqual(['a2', 'a1']);
+    /* switching the shape drops the men saved for the old one */
+    expect(gmLineupSetScheme(shaped, raw, 'top', 'three')).toEqual({});
   });
 
   it('a scheme switch saves only off the default, and a reset forgets the group', () => {

@@ -18,7 +18,8 @@ import { ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   type GmLineupChoice, type GmLineupMan, type GmLineupSport, type GmPick,
-  gmGroupPool, gmGroupSlots, gmLineupReading, gmLineupReset, gmLineupSetOpen, gmLineupSetScheme, gmLineupSwap, gmResolveLineup,
+  gmGroupPool, gmGroupSlots, gmLineupHeld, gmLineupReading, gmLineupReset, gmLineupSetOpen, gmLineupSetScheme, gmLineupSwap,
+  gmResolveLineup, gmSkippedSlots,
 } from '@/lib/gmLineup';
 
 interface GmLineupPanelProps<T> {
@@ -78,7 +79,7 @@ export function GmLineupPanel<T>({ sport, team, choice, onChange, onBack }: GmLi
       {!group && (
         <>
           <p className="text-center text-[10px] text-muted-foreground">
-            Tap a group to set it. Anything you leave alone stays the sim's pick, best men first.
+            Tap a group to set it. Anything you leave alone stays the sim's pick.
           </p>
           <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
             {sport.groups.map(g => {
@@ -121,6 +122,8 @@ export function GmLineupPanel<T>({ sport, team, choice, onChange, onBack }: GmLi
     const delta = reading.groups.find(x => x.key === group.key)?.delta ?? 0;
     const schemes = sport.schemes?.[group.key];
     const optional = group.rotation ? slots.length - group.rotation.optional : -1;
+    const skipped = gmSkippedSlots(sport, group, choice);
+    const held = gmLineupHeld(sport, team, choice, group.key);
     const isPicked = (p: GmPick) => !!picked && pickKey(picked) === pickKey(p);
     return (
       <div data-lineup-group-open={group.key} className="space-y-2">
@@ -164,24 +167,30 @@ export function GmLineupPanel<T>({ sport, team, choice, onChange, onBack }: GmLi
                 )}
               >
                 <span className="min-w-0">
-                  <span className="block text-[10px] text-muted-foreground">{slot.label}</span>
-                  <span className="block truncate font-bold text-foreground">{p ? p.name ?? p.id : i >= optional && optional >= 0 ? 'Skipped' : 'Open'}</span>
+                  <span className="block text-[10px] text-muted-foreground">
+                    {slot.label}
+                    {held[i] && <span data-lineup-held={held[i]!.id}>, kept for {held[i]!.name ?? held[i]!.id} (hurt)</span>}
+                  </span>
+                  <span className="block truncate font-bold text-foreground">{p ? p.name ?? p.id : skipped.has(i) ? 'Skipped' : 'Open'}</span>
                 </span>
                 {p && <b className="ml-2 shrink-0 text-primary">{p.ovr}</b>}
               </button>
             );
           })}
         </div>
-        {optional >= 0 && (
+        {/* Offered only where it can do something: a skip to take back, or a
+            man in the last spot to leave out. A spot empty because nobody
+            healthy is left gets no button. */}
+        {optional >= 0 && (skipped.has(optional) || placed[optional] !== null) && (
           <div className="text-center">
             <button
               data-lineup-open
-              onClick={() => commit(gmLineupSetOpen(sport, team, choice, group.key, optional, placed[optional] !== null))}
+              onClick={() => commit(gmLineupSetOpen(sport, team, choice, group.key, optional, !skipped.has(optional)))}
               className="text-[11px] font-bold text-primary hover:underline"
             >
-              {placed[optional] === null
+              {skipped.has(optional)
                 ? 'Use the last spot again'
-                : 'Skip the last spot (everyone else then pitches on short rest, and every start costs)'}
+                : 'Skip the last spot (everyone else then starts on short rest, and every start costs)'}
             </button>
           </div>
         )}

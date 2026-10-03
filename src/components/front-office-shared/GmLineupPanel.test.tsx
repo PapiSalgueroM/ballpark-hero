@@ -65,6 +65,28 @@ describe('GmLineupPanel', () => {
     expect(container.querySelector('[data-lineup-group="rotation"]')!.textContent).toContain('Your pick');
   });
 
+  it('a last spot empty for want of a fit starter reads Open with no button, and a hurt man\'s slot says it is kept', () => {
+    const team = mlbTeam();
+    for (const id of ['s4', 's5']) team.players.find(p => p.id === id)!.out = 2;
+    team.players.find(p => p.id === 's0')!.out = 2;
+    const spy = vi.fn();
+    const { container, rerender } = render(<Harness sport={mlbLineupSport()} team={team} spy={spy} />);
+    fireEvent.click(container.querySelector('[data-lineup-group="rotation"]')!);
+    expect(container.querySelector('[data-lineup-slot="4"]')!.textContent).toContain('Open');
+    expect(container.querySelector('[data-lineup-slot="4"]')!.textContent).not.toContain('Skipped');
+    expect(container.querySelector('[data-lineup-open]')).toBeNull();
+    /* a bats save, then its leadoff man gets hurt: the slot says who it is kept for */
+    fireEvent.click(container.querySelector('[data-lineup-back]')!);
+    fireEvent.click(container.querySelector('[data-lineup-group="bats"]')!);
+    fireEvent.click(container.querySelector('[data-lineup-slot="7"]')!);
+    fireEvent.click(container.querySelector('[data-lineup-slot="8"]')!);
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-lineup-held]')).toBeNull();
+    team.players.find(p => p.id === 'b9')!.out = 2;
+    rerender(<Harness sport={mlbLineupSport()} team={team} spy={spy} />);
+    expect(container.querySelector('[data-lineup-slot="0"] [data-lineup-held="b9"]')).not.toBeNull();
+  });
+
   it('NFL: the chart fills the slots, the GM picks the scheme', () => {
     const team = Object.values(initLeague(lcg(9)).teams)[0];
     const spy = vi.fn();
