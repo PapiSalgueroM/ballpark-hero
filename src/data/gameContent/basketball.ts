@@ -1883,7 +1883,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Draft classes and scouting uncertainty",
         items: [
-          "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
+          "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects, and rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades can miss the truth by a few points either way.",
         ],
       },
       {
