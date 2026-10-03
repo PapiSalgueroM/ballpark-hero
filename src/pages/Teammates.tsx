@@ -180,7 +180,7 @@ const Teammates = () => {
           description="Test your sports knowledge: were these two athletes ever on the same team? Covers the NFL, NBA, MLB, NHL and soccer with fun facts and shareable scores."
           howToPlay={[
             "Two athlete names are shown from the NFL, NBA, MLB, NHL or soccer",
-            "Decide if they ever played on the same team",
+            "Decide if they ever played on the same club or league team (national teams and All-Star games don't count)",
             "Tap YES or NO to answer",
             "Learn fun facts after each answer: 10 questions per round",
           ]}
