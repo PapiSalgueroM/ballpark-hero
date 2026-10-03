@@ -20,6 +20,13 @@
         nothing, and a starter hurt mid walk sends the next men out short.
      4. The spread of team strength sits inside a band set from the real
         league's win percentage spread (numbers and sources at SPREAD below).
+     5. Every lineup on the field is legal: fit, in the group, in a slot that
+        takes his position, once. Every state of section 1, every scheme,
+        and scrambled saves naming hurt and wrong position men.
+     6. A tap made while a saved man is hurt keeps his slot for him: he is
+        back in it once fit.
+     7. A last rotation slot empty for want of a fit starter is not a skip: a
+        reorder does not keep it empty once the men are fit.
 
    Controls, through GM_LINEUP_CONTROL. Each edits a bundled copy, refuses to
    run if the text it edits is missing, and must turn its section red:
@@ -28,6 +35,10 @@
      contributors the NHL base ignores the GM's contributors   -> 1
      rest         a short rest start costs nothing             -> 3
      inflate      the lineup term is worth forty times more    -> 4
+     hurt         the NFL fill takes hurt men off the chart     -> 5
+     accepts      a saved man may fill a slot not his position -> 5
+     held         a tap hands a hurt man's slot to his fill-in -> 6
+     vacancy      an empty last rotation slot reads as a skip  -> 7
 
    MEASURED 2026-10-03, five seeds (11 29 47 83 131), 13 s a run:
      1. 600 MLB, 800 NHL and 640 NFL clubs x 3 ways, 0 off; fixture 25 of 25.
@@ -35,8 +46,17 @@
         benchings, none flat; median cost MLB 0.248, NHL 0.052, NFL 0.153.
         700 NFL chart moves followed today's number exactly, 4 of them RAISED
         it (today's engine, see section 2).
-     3. 925 starters, 150 five and 150 four man turns, 150 of 150 hurt walks.
-     4. bands and their 17 seed measurement are at BAND. */
+     3. 925 starters, 150 five and 150 four man turns, 150 of 150 hurt walks,
+        150 of 150 read short through the strength after an injury.
+     4. bands and their 17 seed measurement are at BAND.
+   Added by the review fixes, same day and seeds, 15 s a run:
+     5. MLB 3600 group lineups, NHL 6400, NFL 17920, 0 not allowed; 1209,
+        1591 and 2168 hurt men on the rosters read. Control hurt puts hurt
+        men in NFL scheme lineups, control accepts a D on a forward's power
+        play spot: NFL 8509 and NHL 1929 men not allowed, both red.
+     6. MLB 300 of 300 and NHL 480 of 480 back in their slot; control held
+        takes it to 0 of 300 and 0 of 480.
+     7. 150 of 150 fifth slots filled again; control vacancy, 0 of 150. */
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -49,7 +69,7 @@ const SPORTS = path.join(ROOT, 'src', 'lib', 'gmLineupSports.ts');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'gmLineupFixture.json');
 const CONTROL = process.env.GM_LINEUP_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-fixture');
-const EXPECT = { ignore: [2], share: [1], contributors: [1], rest: [3], inflate: [4] };
+const EXPECT = { ignore: [2], share: [1], contributors: [1], rest: [3], inflate: [4], hurt: [5], accepts: [5], held: [6], vacancy: [7] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`GM_LINEUP_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -68,8 +88,12 @@ const req = createRequire(path.join(ROOT, 'package.json'));
 const CORE_SWAPS = {
   ignore: [['const m = choice ? gmGroupRich(g, gmGroupSlots(sport, g, choice), mine[g.key]) : a;', 'const m = a;']],
   inflate: [['const delta = g.share * (m - a);', 'const delta = 40 * g.share * (m - a);']],
+  accepts: [['if (p && !used.has(p.id) && accepts(g, slots[i], p)) { keep.push(p);', 'if (p && !used.has(p.id)) { keep.push(p);']],
+  held: [['return placed.map((p, i) => held[i]?.id ?? p?.id ?? null);', 'return placed.map((p, i) => p?.id ?? null);']],
+  vacancy: [['const skip = gmSkippedSlots(sport, g, choice);\n    const used = new Set<string>();', 'const skip = new Set(saved.flatMap((id, i) => (id === null && g.rotation && i >= slots.length - g.rotation.optional ? [i] : [])));\n    const used = new Set<string>();']],
 };
 const SPORT_SWAPS = {
+  hurt: [['const chart = depthOrder(t, pos).filter(p => p.out === 0);', 'const chart = depthOrder(t, pos);']],
   share: [["key: 'bats', label: 'Batting order', share: 0.55,", "key: 'bats', label: 'Batting order', share: 0.56,"]],
   contributors: [['    if (t.contributors !== undefined) {\n      const s = nhlContributors(t);', '    if (false) {\n      const s = nhlContributors(t);']],
   rest: [['rotation: { fullRest: 4, shortRestCost: 4, optional: 1 },', 'rotation: { fullRest: 4, shortRestCost: 0, optional: 1 },']],
@@ -343,7 +367,7 @@ console.log('3) a starter on short rest is weaker');
   const sp = SPORT.mlb;
   const rot = sp.groups.find(g => g.key === 'rotation');
   const rule = rot.rotation;
-  let men = 0, fours = 0, fives = 0, hurtWalks = 0, shortAfterHurt = 0;
+  let men = 0, fours = 0, fives = 0, hurtWalks = 0, shortAfterHurt = 0, strengthShort = 0;
   for (const seed of SEEDS) for (const t of Object.values(MLB.initMlbLeague(lcg(seed)).teams)) {
     for (const p of t.players.filter(q => q.pos === 'SP')) {
       men += 1;
@@ -373,8 +397,20 @@ console.log('3) a starter on short rest is weaker');
     hurtWalks += 1;
     if (short.length) shortAfterHurt += 1;
     ok(3, `${t.abbr}: a hurt starter sends the turn out short, and every short start is weaker`, short.length > 0 && short.every(s => s.value < five.find(p => p.id === s.id).ovr), `${short.length} short starts`);
+    /* The same through the strength's own path (gmLineupReading, no walk
+       carried over): the club keeps only its five starters, one is hurt, no
+       spare is left, so the sim's own turn is four men and reads short. */
+    const cut = clone(t);
+    const five_ = new Set(five.map(p => p.id));
+    cut.players = cut.players.filter(p => p.pos !== 'SP' || five_.has(p.id));
+    cut.players.find(p => p.id === five[1].id).out = 2;
+    const turn4 = L.gmResolveLineup(sp, cut).rotation.filter(Boolean);
+    const read4 = L.gmLineupReading(sp, cut).groups.find(g => g.key === 'rotation');
+    const plain4 = turn4.reduce((s, p) => s + p.ovr, 0) / turn4.length;
+    if (turn4.length === 4 && read4.auto < plain4) strengthShort += 1;
+    ok(3, `${t.abbr}: a starter hurt with no spare sends the strength's own turn out short`, turn4.length === 4 && read4.auto < plain4, `${turn4.length} men, ${read4.auto} against ${plain4}`);
   }
-  console.log(`   ${men} starters priced a game short; ${fives} five man turns on full rest, ${fours} four man turns all short and weaker, ${shortAfterHurt} of ${hurtWalks} walks went short after a starter was hurt`);
+  console.log(`   ${men} starters priced a game short; ${fives} five man turns on full rest, ${fours} four man turns all short and weaker, ${shortAfterHurt} of ${hurtWalks} walks went short after a starter was hurt, ${strengthShort} of ${hurtWalks} clubs read short through the strength after one`);
   ok(3, 'enough turns walked', fours >= 100 && hurtWalks >= 100, `${fours}, ${hurtWalks}`);
 }
 
@@ -445,6 +481,147 @@ for (const sport of ['mlb', 'nhl', 'nfl']) {
   ok(4, `${sport}: the sim's season spread sits within ${BAND.real.join(' to ')} of the real league's`, r >= BAND.real[0] && r <= BAND.real[1], r.toFixed(3));
   ok(4, `${sport}: GM lineups keep the spread within ${BAND.lineup.join(' to ')} of the sim's own`, m >= BAND.lineup[0] && m <= BAND.lineup[1], m.toFixed(3));
   console.log(`   ${sport}: real spread ${real.toFixed(4)}; sim season spread / real ${ratios[sport].map(r => r.toFixed(3)).join(' ')}; with GM lineups / without ${moved[sport].map(r => r.toFixed(3)).join(' ')}`);
+}
+
+/* ---- 5. every lineup on the field is one the rules allow ------------------
+   Whatever the choice, each man the resolver puts out is fit, belongs to
+   the group, plays a slot that takes his position and plays it once. Read
+   over every state of section 1 (hurt men in most of them), under every
+   scheme the sport offers, and, where the GM picks men, a scrambled save
+   that names hurt men, men of the wrong position and nobody at random: the
+   save a stale or hand edited file could hold. */
+console.log('5) every lineup on the field is one the rules allow');
+for (const sport of ['mlb', 'nhl', 'nfl']) {
+  const sp = SPORT[sport];
+  let lineups = 0, men = 0, bad = 0, hurtOnRoster = 0, hurtNamed = 0;
+  const schemeChoices = sp.schemes
+    ? Object.entries(sp.schemes).reduce((acc, [k, list]) => acc.flatMap(c => list.map(s => ({ ...c, [k]: s.key }))), [{}]).map(schemes => ({ schemes }))
+    : [];
+  for (const seed of SEEDS) {
+    const rng = lcg(seed * 41 + 9);
+    for (const [label, lg] of states(sport, seed)) for (const t of Object.values(lg.teams)) {
+      const roster = sp.men(t);
+      hurtOnRoster += roster.filter(p => p.out > 0).length;
+      const choices = [undefined, ...schemeChoices];
+      if (!sp.chartOnly) {
+        const scrambled = {};
+        for (const g of sp.groups) {
+          const ids = [...roster].sort(() => rng() - 0.5).map(p => p.id).slice(0, g.slots.length);
+          while (ids.length < g.slots.length) ids.push(null);
+          scrambled[g.key] = ids.map(id => (rng() < 0.15 ? null : id));
+          hurtNamed += scrambled[g.key].filter(id => id && roster.find(p => p.id === id).out > 0).length;
+        }
+        choices.push({ slots: scrambled });
+      }
+      for (const choice of choices) {
+        const lineup = L.gmResolveLineup(sp, t, choice);
+        for (const g of sp.groups) {
+          const slots = L.gmGroupSlots(sp, g, choice);
+          const seen = new Set();
+          lineups += 1;
+          lineup[g.key].forEach((p, i) => {
+            if (!p) return;
+            men += 1;
+            const takes = slots[i].accepts ? slots[i].accepts.includes(p.pos) : L.gmInGroup(g, p.pos);
+            const twice = seen.has(p.id);
+            const legal = p.out === 0 && L.gmInGroup(g, p.pos) && takes && !twice;
+            seen.add(p.id);
+            if (!legal) { bad += 1; ok(5, `${sport} ${label} seed ${seed} ${t.abbr} ${g.key} ${JSON.stringify(choice?.schemes ?? (choice ? 'scrambled' : 'sim'))}: slot ${i} holds ${p.pos} ${p.id}`, false, `out ${p.out}, takes ${takes}, twice ${twice}`); }
+          });
+        }
+      }
+    }
+  }
+  console.log(`   ${sport}: ${lineups} group lineups, ${men} men placed, ${bad} not allowed; ${hurtOnRoster} hurt men on the rosters read${sp.chartOnly ? '' : `, hurt men named ${hurtNamed} times in scrambled saves`}`);
+  ok(5, `${sport}: the check read hurt men`, hurtOnRoster > 100, `${hurtOnRoster}`);
+  if (!sp.chartOnly) ok(5, `${sport}: scrambled saves named hurt men`, hurtNamed > 50, `${hurtNamed}`);
+  ok(5, `${sport}: enough lineups read`, lineups > 1000, `${lineups}`);
+}
+
+/* ---- 6. a tap made while a saved man is hurt keeps his slot for him -------
+   Every group a GM picks men for, on every club: save a lineup with one
+   swap, hurt the man in its first slot, make one tap that does not touch
+   that slot, then heal him. He has to be back in his slot. */
+console.log('6) a tap made while a saved man is hurt keeps his slot for him');
+for (const sport of ['mlb', 'nhl']) {
+  const sp = SPORT[sport];
+  let walks = 0, back = 0;
+  for (const seed of SEEDS) for (const team of Object.values(opening(sport, seed).teams)) for (const g of sp.groups) {
+    const t = clone(team);
+    const slots = L.gmGroupSlots(sp, g);
+    /* Spare men below the club's worst until the group has two more than
+       its slots, so a hurt man always has a fill-in (a 13 man NHL roster has
+       none, and an empty slot refills by rating whatever the save says,
+       which would prove nothing). Two at least of each position the group
+       takes: copies of the club's own men with new ids. */
+    const pool0 = L.gmGroupPool(g, t.players);
+    if (!pool0.length) continue;
+    const low = Math.min(...pool0.map(p => p.ovr));
+    const kinds = [...new Map(pool0.map(p => [p.pos, p])).values()];
+    for (let k = 0; k < kinds.length * 2 || L.gmGroupPool(g, t.players).length < slots.length + 2; k++) t.players.push({ ...clone(kinds[k % kinds.length]), id: `spare-${g.key}-${k}`, ovr: low - 1 - k, out: 0 });
+    const takes = (slot, p) => (slot.accepts ? slot.accepts.includes(p.pos) : L.gmInGroup(g, p.pos));
+    const ids = () => L.gmResolveLineup(sp, t, choice)[g.key].map(p => p?.id ?? null);
+    let choice = {};
+    /* the save: the first two filled slots that take each other's man trade places */
+    const placed = L.gmResolveLineup(sp, t)[g.key];
+    const pairs = [];
+    for (let i = 1; i < slots.length; i++) for (let j = i + 1; j < slots.length; j++) if (placed[i] && placed[j] && takes(slots[i], placed[j]) && takes(slots[j], placed[i])) pairs.push([i, j]);
+    if (!placed[0] || pairs.length < 2) continue;
+    choice = L.gmLineupSwap(sp, t, choice, g.key, { id: placed[pairs[0][0]].id }, { id: placed[pairs[0][1]].id }) ?? {};
+    if (!choice.slots?.[g.key]) continue;
+    const star = placed[0];
+    t.players.find(p => p.id === star.id).out = 2;
+    const during = L.gmResolveLineup(sp, t, choice)[g.key];
+    const [i, j] = pairs[pairs.length - 1];
+    ok(6, `${sport} seed ${seed} ${t.abbr} ${g.key}: a fill-in plays the hurt man's slot`, !!during[0] && during[0].id !== star.id);
+    if (!during[0] || !during[i] || !during[j]) continue;
+    const tapped = L.gmLineupSwap(sp, t, choice, g.key, { id: during[i].id }, { id: during[j].id });
+    ok(6, `${sport} seed ${seed} ${t.abbr} ${g.key}: the tap during the injury is taken`, tapped !== null);
+    if (!tapped) continue;
+    t.players.find(p => p.id === star.id).out = 0;
+    choice = tapped;
+    walks += 1;
+    const healed = ids();
+    if (healed[0] === star.id) back += 1;
+    ok(6, `${sport} seed ${seed} ${t.abbr} ${g.key}: ${star.id} is back in slot 1 once fit`, healed[0] === star.id, `slot 1 holds ${healed[0]}`);
+  }
+  console.log(`   ${sport}: ${back} of ${walks} hurt men were back in their slot once fit, after a tap made while they were out`);
+  ok(6, `${sport}: enough walks`, walks >= 100, `${walks}`);
+}
+
+/* ---- 7. a last slot empty for want of a fit man is not a skip --------------
+   MLB clubs cut to their four best healthy starters (the fifth and the rest
+   hurt): the rotation reads [A, B, C, D, empty]. The GM reorders it with one
+   tap, then the men heal. The fifth slot has to fill again, and the strength
+   has to read the five man turn, not a four man one on short rest. */
+console.log('7) a last slot empty for want of a fit man is not a skip');
+{
+  const sp = SPORT.mlb;
+  const rot = sp.groups.find(g => g.key === 'rotation');
+  let walks = 0, filled = 0;
+  for (const seed of SEEDS) for (const team of Object.values(MLB.initMlbLeague(lcg(seed)).teams)) {
+    const t = clone(team);
+    const arms = t.players.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr);
+    if (arms.length < 5) continue;
+    for (const p of arms.slice(4)) p.out = 3;
+    const four = L.gmResolveLineup(sp, t).rotation;
+    if (four[4] !== null || four.slice(0, 4).some(p => !p)) continue;
+    const tapped = L.gmLineupSwap(sp, t, {}, 'rotation', { id: four[0].id }, { id: four[1].id });
+    ok(7, `${t.abbr}: the reorder is taken`, tapped !== null);
+    if (!tapped) continue;
+    ok(7, `${t.abbr}: the reorder marks no skip`, L.gmSkippedSlots(sp, rot, tapped).size === 0, JSON.stringify(tapped.open ?? null));
+    for (const p of arms) p.out = 0;
+    walks += 1;
+    const healed = L.gmResolveLineup(sp, t, tapped).rotation;
+    const reading = L.gmLineupReading(sp, t, tapped).groups.find(g => g.key === 'rotation');
+    const five = healed.filter(Boolean);
+    const full = five.reduce((s, p) => s + p.ovr, 0) / five.length;
+    if (healed[4]) filled += 1;
+    ok(7, `${t.abbr}: the fifth slot fills again once the men are fit`, !!healed[4], JSON.stringify(healed.map(p => p?.id ?? null)));
+    ok(7, `${t.abbr}: and the strength reads the five man turn on full rest`, five.length === 5 && Math.abs(reading.mine - full) < 1e-9, `${reading.mine} against ${full}`);
+  }
+  console.log(`   ${filled} of ${walks} reordered four man rotations filled their fifth slot again once the men were fit`);
+  ok(7, 'enough walks', walks >= 100, `${walks}`);
 }
 
 /* ---- summary -------------------------------------------------------------- */
