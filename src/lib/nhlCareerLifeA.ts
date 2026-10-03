@@ -68,6 +68,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs === 0 && c.age <= 20) {
     deck.push({
       id: 'nhlA_billet_family',
+      category: 'callup', cooldown: 99,
       title: 'The billet family',
       body: 'Sixteen years old, a spare room in a stranger\'s basement, and a billet mom who packs your lunch with a note in it. Your last junior year starts in September.',
       options: [
@@ -81,6 +82,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs === 0) {
     deck.push({
       id: 'nhlA_junior_final_year',
+      category: 'callup', cooldown: 99,
       title: 'One more year of junior',
       body: 'Your coach wants you on the ice for thirty minutes a night and every faceoff that matters. It is your draft year and everyone is watching.',
       options: [
@@ -94,6 +96,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs <= 3 && c.ovr < 78) {
     deck.push({
       id: 'nhlA_ahl_bus',
+      category: 'callup', cooldown: 2, story: 'ahlAssignment',
       title: 'The bus league',
       body: 'They are sending you down for conditioning. Ten hours to the next barn in a seat that does not recline and a per diem that buys gas station sushi.',
       options: [
@@ -107,6 +110,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && yrs <= 6 && c.ovr < 80) {
     deck.push({
       id: 'nhlA_waiver_wire',
+      category: 'callup', cooldown: 2, story: 'waivers',
       title: 'Waiver wire Saturday',
       body: 'To send you down they have to expose you first. Thirty one other teams have until noon tomorrow to change your entire life.',
       options: [
@@ -120,6 +124,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs === 0) {
     deck.push({
       id: 'nhlA_nhl_debut',
+      category: 'callup', cooldown: 99,
       title: 'Your first NHL game',
       body: `Warmup, the anthem, your parents crying in row 14 of ${teamName}. Your first shift lasts 32 seconds and you remember none of it.`,
       options: [
@@ -133,6 +138,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs <= 2) {
     deck.push({
       id: 'nhlA_vet_mentor',
+      category: 'callup', cooldown: 2,
       title: 'The 38 year old winger',
       body: 'Two Cups, one working knee, and the locker right next to yours. He offers to drive you to the rink every morning at 7.',
       options: [
@@ -146,6 +152,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs <= 1) {
     deck.push({
       id: 'nhlA_jersey_number',
+      category: 'callup', cooldown: 99,
       title: 'That number is taken',
       body: 'The veteran who owns the number you have worn since novice will sell it. He wants a watch and a week in Cabo for his family.',
       options: [
@@ -162,6 +169,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs <= 1) {
     deck.push({
       id: 'nhlA_rookie_dinner',
+      category: 'lockerRoom', cooldown: 99,
       title: 'The rookie dinner',
       body: 'Nine veterans, a steakhouse, and a wine list they are treating like a personal challenge. The leather folder gets slid in front of you.',
       options: [
@@ -175,6 +183,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && yrs <= 12) {
     deck.push({
       id: 'nhlA_kangaroo_court',
+      category: 'lockerRoom', cooldown: 2,
       title: 'The kangaroo court',
       body: 'Late for the bus is 200. Sneakers with a suit is 500. Somehow you are the leading fine earner on the team and it is only November.',
       options: [
@@ -188,6 +197,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (!isG && yrs >= 1) {
     deck.push({
       id: 'nhlA_goalie_screen',
+      category: 'lockerRoom', cooldown: 2,
       title: 'The goalie hates screens',
       body: 'Your starter says you are standing in his eyes on every kill. He said it loud, in the room, with everyone sitting there.',
       options: [
@@ -201,6 +211,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (isG && yrs >= 1) {
     deck.push({
       id: 'nhlA_screen_machine',
+      category: 'lockerRoom', cooldown: 2,
       title: 'Your defenseman is a curtain',
       body: 'Every power play he plants himself in your lane like he is waiting for a bus. Four goals this month you never saw leave a stick.',
       options: [
@@ -214,6 +225,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 4 && c.ovr >= 80) {
     deck.push({
       id: 'nhlA_captain_vote',
+      category: 'lockerRoom', cooldown: 99, story: 'captaincy',
       title: 'The letter',
       body: 'The room voted and it was close. Two names on the sheet and one of them is yours.',
       options: [
@@ -227,6 +239,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.ovr < 84 || c.morale < 62) {
     deck.push({
       id: 'nhlA_healthy_scratch',
+      category: 'lockerRoom', cooldown: 2, story: 'healthyScratch',
       title: 'Healthy scratch',
       body: 'The coach reads the lineup and your name is not in it. You watch from the press box in a suit that suddenly feels ridiculous.',
       options: [
@@ -244,6 +257,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_bad_presser',
+      category: 'media', cooldown: 1,
       title: 'Six words after a 6-1 loss',
       body: 'You said to ask the guys who were actually trying. It is already a graphic on three different shows.',
       options: [
@@ -257,6 +271,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && rng() < 0.65) {
     deck.push({
       id: 'nhlA_bench_cam',
+      category: 'media', cooldown: 1,
       title: 'Bench cam got you',
       body: 'Twelve million views of your face during a line change. Someone added sad piano and your cousins will not stop sending it.',
       options: [
@@ -270,6 +285,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (CANADA.includes(c.team)) {
     deck.push({
       id: 'nhlA_canadian_market',
+      category: 'media', cooldown: 1,
       title: 'Seven panelists and a countdown clock',
       body: `In ${teamName} there is a television show about the morning skate. A show. About the skate.`,
       options: [
@@ -283,6 +299,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.fanbase >= 45 || c.ovr >= 84) {
     deck.push({
       id: 'nhlA_doc_crew',
+      category: 'media', cooldown: 2,
       title: 'The documentary crew',
       body: 'They want cameras in your kitchen, your truck and your rehab table. Ten episodes, streaming in the fall.',
       options: [
@@ -296,6 +313,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.ovr >= 83 && c.allStars === 0 && yrs >= 2) {
     deck.push({
       id: 'nhlA_allstar_snub',
+      category: 'media', cooldown: 2, story: 'allStarSnub',
       title: 'The All Star snub',
       body: 'Top of your team in ice time, top three in scoring, and the list came out without your name on it anywhere.',
       options: [
@@ -309,6 +327,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.ovr >= 88 || c.fanbase >= 72) {
     deck.push({
       id: 'nhlA_cover_athlete',
+      category: 'media', cooldown: 99, story: 'coverAthlete',
       title: 'The cover',
       body: 'They want you on the front of the hockey game. Your billet mom will buy nine copies of a game she cannot play.',
       options: [
@@ -326,6 +345,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && (c.health <= 94 || rng() < 0.45)) {
     deck.push({
       id: 'nhlA_quiet_room',
+      category: 'body', cooldown: 2,
       title: 'The quiet room',
       body: 'You took a shoulder up high and the trainer is asking what city you are in. You know the answer. You think you know the answer.',
       options: [
@@ -339,6 +359,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 2) {
     deck.push({
       id: 'nhlA_broken_hand',
+      category: 'body', cooldown: 2,
       title: 'Round two, broken hand',
       body: 'The scan is not close and the doc is not smiling. He says a needle, a cast liner, and you can hold the stick with two fingers.',
       options: [
@@ -352,6 +373,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (!isG && c.health <= 88) {
     deck.push({
       id: 'nhlA_shoulder_surgery',
+      category: 'body', cooldown: 3,
       title: 'The shoulder',
       body: 'It comes out on faceoffs now, and once in your sleep. Surgery is five months, which means no camp and no October.',
       options: [
@@ -365,6 +387,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (isG && (c.age >= 26 || c.health <= 90)) {
     deck.push({
       id: 'nhlA_goalie_hips',
+      category: 'body', cooldown: 2,
       title: 'Goalie hips',
       body: 'Twenty years of butterfly and the labrum is fraying on both sides. The surgeon says do it now or do it at 34 when it is worse.',
       options: [
@@ -378,6 +401,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_sleep_program',
+      category: 'body', cooldown: 2,
       title: 'The sleep guy',
       body: 'The team hired a sleep scientist who wants your phone out of the bedroom and blackout curtains taped up in every hotel.',
       options: [
@@ -391,6 +415,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.age <= 28) {
     deck.push({
       id: 'nhlA_skating_coach',
+      category: 'body', cooldown: 2,
       title: 'Rebuilding the stride',
       body: 'A power skating coach wants to take your stride apart down to the studs. It will feel wrong until roughly Christmas.',
       options: [
@@ -404,6 +429,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (rng() < 0.7) {
     deck.push({
       id: 'nhlA_nutritionist',
+      category: 'body', cooldown: 2,
       title: 'The nutritionist versus the postgame pizza',
       body: 'She wants to kill the four slice tradition after home wins. The room has extremely strong feelings about this.',
       options: [
@@ -421,6 +447,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_playoff_beard',
+      category: 'hockey', cooldown: 1,
       title: 'The playoff beard',
       body: 'Round one starts and the razors go in a drawer. Yours has come in patchy since juniors and the boys have noticed.',
       options: [
@@ -434,6 +461,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (!isG && yrs >= 1) {
     deck.push({
       id: 'nhlA_unwanted_fight',
+      category: 'hockey', cooldown: 2,
       title: 'He dropped his gloves and looked at you',
       body: 'You have never fought in your life. He is 6 foot 4, he has done this 40 times, and the whole building is standing up.',
       options: [
@@ -447,6 +475,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_enforcer_teammate',
+      category: 'hockey', cooldown: 2,
       title: 'The tough guy is getting waived',
       body: 'He fought everyone in the league for you, he cannot skate anymore, and management wants his roster spot for a kid.',
       options: [
@@ -460,6 +489,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (rng() < 0.7) {
     deck.push({
       id: 'nhlA_superstition',
+      category: 'hockey', cooldown: 2,
       title: 'The routine got out of hand',
       body: isG
         ? 'Same tape job, same water bottle angle, same three taps on each post, and now a specific song at a specific volume. It is 40 minutes long.'
@@ -475,6 +505,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 2) {
     deck.push({
       id: 'nhlA_chirp_war',
+      category: 'hockey', cooldown: 1,
       title: 'The chirp war',
       body: 'Their center has been in your ear for three seasons and this time he brought up your minus rating in front of a hot mic.',
       options: [
@@ -488,6 +519,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.seasons.some(s => s.teamResult !== 'Missed the playoffs')) {
     deck.push({
       id: 'nhlA_handshake_line',
+      category: 'hockey', cooldown: 1,
       title: 'The handshake line',
       body: 'Game 7 is over and the worst line in sports starts moving. Twenty guys who hate each other, all telling the truth for nine seconds.',
       options: [
@@ -501,6 +533,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (!isG && yrs >= 1) {
     deck.push({
       id: 'nhlA_three_teeth',
+      category: 'hockey', cooldown: 2,
       title: 'Three teeth and a team photo',
       body: 'A deflection took out the front three on Tuesday. The dentist can build the bridge now or you can wait until June like everybody else.',
       options: [
@@ -518,6 +551,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_western_canada_trip',
+      category: 'season', cooldown: 1,
       title: 'The Western Canada trip',
       body: 'Six nights, four cities, three time zones, and minus 31 in the middle of it. Nobody comes home from this the same.',
       options: [
@@ -531,6 +565,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (rng() < 0.55) {
     deck.push({
       id: 'nhlA_outdoor_game',
+      category: 'season', cooldown: 2,
       title: 'The outdoor game',
       body: 'A football stadium, 68,000 people, real snow, and ice the crew has been babysitting since Tuesday. It is not good ice.',
       options: [
@@ -544,6 +579,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 2) {
     deck.push({
       id: 'nhlA_deadline_rumor',
+      category: 'season', cooldown: 2,
       title: 'Your name is in the deadline graphic',
       body: `The insider put you on the board at 8am. Your wife saw it before you did and the ${teamName} group chat has gone very quiet.`,
       options: [
@@ -557,6 +593,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && (c.morale < 75 || rng() < 0.5)) {
     deck.push({
       id: 'nhlA_coach_fired',
+      category: 'season', cooldown: 2,
       title: 'They fired the coach on a Tuesday',
       body: 'Eleven games under .500 and he is gone before the morning skate. The assistant runs practice in a track suit and nobody makes eye contact.',
       options: [
@@ -570,6 +607,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_losing_streak',
+      category: 'season', cooldown: 2,
       title: 'Nine in a row',
       body: `The city is taking this personally. Someone put a bag over their head at the ${teamName} home game and the camera stayed on him for a while.`,
       options: [
@@ -583,6 +621,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1) {
     deck.push({
       id: 'nhlA_dads_trip',
+      category: 'season', cooldown: 3,
       title: 'The dads trip',
       body: 'Two games, one charter, and 22 fathers in matching jackets losing their minds in the press box. Yours has never been on a plane like this.',
       options: [
@@ -601,6 +640,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
     const gear = isG ? 'pads, blocker and a painted mask' : isD ? 'sticks, skates and shin pads' : 'sticks and skates';
     deck.push({
       id: 'nhlA_gear_deal',
+      category: 'money', cooldown: 2,
       title: 'The gear deal',
       body: `A brand wants your name on their ${gear}. The big one pays more but their stuff feels wrong in your hands.`,
       options: [
@@ -614,6 +654,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.fanbase >= 40 || yrs >= 3) {
     deck.push({
       id: 'nhlA_card_show',
+      category: 'money', cooldown: 1,
       title: 'The card show',
       body: 'A convention center, a folding table, and 900 people who want your signature on a rookie card. Four hours, flat fee, all above board.',
       options: [
@@ -627,6 +668,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (c.fanbase >= 35) {
     deck.push({
       id: 'nhlA_truck_ad',
+      category: 'money', cooldown: 2,
       title: 'The truck dealership ad',
       body: 'Local dealer, green screen, one line of dialogue about zero percent financing. They will pay you and give you a truck.',
       options: [
@@ -640,6 +682,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (net >= 2 || c.earnings >= 6) {
     deck.push({
       id: 'nhlA_parents_house',
+      category: 'money', cooldown: 99, story: 'parentsHouse',
       title: 'The house for your parents',
       body: 'They drove you to 5am practice for twelve years in a car with a dying heater. You can end their mortgage this week.',
       options: [
@@ -653,6 +696,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (net >= 1.5 || c.earnings >= 5) {
     deck.push({
       id: 'nhlA_teammate_loan',
+      category: 'money', cooldown: 2,
       title: 'A teammate needs 300 grand',
       body: 'His brother in law has a restaurant concept and a pitch deck with three fonts on it. He is asking you, quietly, at the back of the plane.',
       options: [
@@ -666,6 +710,7 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
   if (yrs >= 1 && c.contractYears >= 2) {
     deck.push({
       id: 'nhlA_rent_or_buy',
+      category: 'money', cooldown: 99,
       title: 'Rent or buy in this city',
       body: `You have ${c.contractYears} years left with ${teamName} and a realtor with a house that has a rink sized garage.`,
       options: [

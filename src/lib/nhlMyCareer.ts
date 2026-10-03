@@ -195,6 +195,15 @@ export interface NhlCareerEvent {
   title: string;
   body: string;
   options: { label: string; effect: string; apply: (c: NhlCareerState, rng: () => number) => string }[];
+  /** Round 920: the table the summer step list will read, the same three
+   *  fields the flagship's cards carry (soccerCareerEngine RandomEvent).
+   *  Read by nothing yet, so the draw is byte for byte what it was.
+   *  category is the deck's own section; cooldown is seasons the card sits
+   *  out after it fires (99 means once a career); cards sharing a story
+   *  share one cooldown ledger entry. All optional. */
+  category?: string;
+  cooldown?: number;
+  story?: string;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
