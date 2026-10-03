@@ -47,7 +47,10 @@ async function enter(view: Page, start = true) {
   await flush();
 }
 function fill(view: Page, order: string[]) {
-  for (const name of order) fireEvent.click(view.container.querySelector<HTMLButtonElement>(`[data-rank-player="${name.replaceAll('"', '\\"')}"]`)!);
+  for (const name of order) {
+    const button = [...view.container.querySelectorAll<HTMLButtonElement>('[data-rank-player]')].find(element => element.dataset.rankPlayer === name);
+    expect(button).toBeDefined(); fireEvent.click(button!);
+  }
 }
 function next(view: Page) { click(view, saved().index === 2 ? 'View circuit results' : 'Next sport'); }
 
