@@ -478,8 +478,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'One career stat, five greats, one shot at the right order, most to fewest. A new daily ranking across the NBA, NHL and MLB plus unlimited. Free sports quiz.',
   },
   '/teammates': {
-    title: 'Teammates or Not? NFL, NBA and Soccer Quiz',
-    description: 'Two athletes from the NFL, NBA or soccer. Did they ever wear the same shirt? Call it yes or no and learn which careers crossed. Free sports trivia game.',
+    title: 'Teammates or Not? NFL, NBA, MLB, NHL and Soccer Quiz',
+    description: 'Two athletes from the NFL, NBA, MLB, NHL or soccer. Were they ever on the same club or league team? Call it yes or no in this free sports quiz.',
   },
   '/olympics': {
     title: 'The Medal Games: Guess the Olympic Athlete',

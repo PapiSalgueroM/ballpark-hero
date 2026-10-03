@@ -54,6 +54,10 @@ const GENERATORS = [
   /* Round 471: the four men on the Club Manager staff desk, and the men on
      every shortlist they are hired off. */
   { file: 'src/lib/clubManagerStaff.ts', first: 'STAFF_FIRST', last: 'STAFF_LAST', what: 'Club Manager staff' },
+  /* Round 910: everybody on every other game's staff desk (the front
+     offices, the college programs, the fight gym, Australian football),
+     drawn through src/lib/gmStaff.ts from these two banks. */
+  { file: 'src/lib/gmStaff.ts', first: 'GM_STAFF_FIRST', last: 'GM_STAFF_LAST', what: 'GM staff desks' },
   /* Runtime-guarded: makeGeneratedName re-rolls the surname until the pair
      is not a real player, so its raw cross-product legitimately contains
      collisions (Bruno + Fernandes among them) that it can never emit.

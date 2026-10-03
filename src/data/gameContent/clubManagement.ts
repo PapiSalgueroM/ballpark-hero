@@ -176,7 +176,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       },
       {
         q: "Does my career save?",
-        a: "One save on this device. Close the tab mid season and the game resumes where you stopped.",
+        a: "Yes, on this device, and you can keep three managers going at once, each in its own slot. Close the tab mid season and the game resumes where you stopped.",
       },
       {
         q: "Are the players real?",
