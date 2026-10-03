@@ -105,6 +105,67 @@
     {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "forwards: 30 Enso Gonzalez"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/380", "publisher": "ESPN (Wolverhampton Wanderers squad, season 2026-27)", "readOn": "2026-10-03", "says": "Enso González, shirt 30, forward, born 2005-01-20"}
    ]
+  },
+  {
+   "name": "Augustus Kargbo",
+   "club": "Blackburn Rovers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-08-24 (ESPN). Both lists give him shirt 7. ESPN records no appearance for him since October 2025, so he may be injured, but both carry him in the 2026-27 squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "forwards: 7 Augustus Kargbo, wide forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/365", "publisher": "ESPN (Blackburn Rovers squad, season 2026-27)", "readOn": "2026-10-03", "says": "Augustus Kargbo, shirt 7, forward, born 1999-08-24"}
+   ]
+  },
+  {
+   "name": "John McAtee",
+   "club": "Bolton Wanderers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-23 (ESPN). Both lists give him shirt 45.",
+   "sources": [
+    {"family": "A", "url": "https://www.bwfc.co.uk/squad/68", "publisher": "Bolton Wanderers FC (first team squad page)", "readOn": "2026-10-03", "says": "forwards: 45 John McAtee"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/255851/john-mcatee", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Bolton Wanderers, shirt 45, born 1999-07-23; Championship appearances for Bolton from 2026-08-22 to 2026-09-08"}
+   ]
+  },
+  {
+   "name": "Jordan Beyer",
+   "club": "Burnley",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-05-19 (Burnley and ESPN agree). Both lists give him shirt 36. He has made no appearance in 2026-27 (Burnley's own profile shows 0) and ESPN's log for him stops in December 2023; Burnley's biography mentions a long injury. Low playing time, but both carry him in the current squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "Jordan Beyer, defender, jersey number 36, born 19/05/2000"},
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/player-profile/241231", "publisher": "Burnley FC (player profile)", "readOn": "2026-10-03", "says": "2026/27 stats: 0 appearances"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/379", "publisher": "ESPN (Burnley squad, season 2026-27)", "readOn": "2026-10-03", "says": "Jordan Beyer, shirt 36, defender, born 2000-05-19"}
+   ]
+  },
+  {
+   "name": "Perry Ng",
+   "club": "Cardiff City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-06-24 (ESPN).",
+   "sources": [
+    {"family": "A", "url": "https://www.cardiffcityfc.co.uk/squad/594", "publisher": "Cardiff City FC (first team squad page)", "readOn": "2026-10-03", "says": "Perry Ng listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/205676/perry-ng", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Cardiff City, born 1996-06-24; Championship appearances for Cardiff from 2026-09-02 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Daniel Bachmann",
+   "club": "Watford",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Austrian goalkeeper, born 1994-07-09 (ESPN). Both lists give him shirt 26.",
+   "sources": [
+    {"family": "A", "url": "https://www.watfordfc.com/teams/first-team", "publisher": "Watford FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "goalkeepers: 26 Daniel Bachmann"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/395", "publisher": "ESPN (Watford squad, season 2026-27)", "readOn": "2026-10-03", "says": "Daniel Bachmann, shirt 26, goalkeeper, born 1994-07-09; played for Watford v Peterborough, Carabao Cup, 2026-08-25"}
+   ]
+  },
+  {
+   "name": "Danny Ward",
+   "club": "Wrexham",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Wales goalkeeper, born 1993-06-22 (ESPN), not the striker of the same name born 1990: the baked row is a goalkeeper aged 32, and both lists give the goalkeeper shirt 21.",
+   "sources": [
+    {"family": "A", "url": "https://www.wrexhamafc.co.uk/teams/first-team", "publisher": "Wrexham AFC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "goalkeepers: 21 Danny Ward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/352", "publisher": "ESPN (Wrexham squad, season 2026-27)", "readOn": "2026-10-03", "says": "Danny Ward, shirt 21, goalkeeper, born 1993-06-22"}
+   ]
   }
  ],
  "movedTo": [
@@ -215,6 +276,97 @@
     {"family": "A", "url": "https://www.newyorkredbulls.com/roster/", "publisher": "New York Red Bulls roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000B)", "readOn": "2026-10-03", "says": "Ethan Horvath, shirt 34, born 1995-06-09"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/192027/ethan-horvath", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Red Bull New York; MLS appearances from 2026-09-06 to 2026-09-30"}
    ]
+  },
+  {
+   "name": "Joe Rankin-Costello",
+   "from": "Blackburn Rovers",
+   "to": "Charlton Athletic",
+   "realClub": "Charlton Athletic",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-26 (ESPN). Both lists give him shirt 26. Charlton's squad page does not mark him as a loan (it tags its loanees 'In on loan'), and Blackburn's page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.cafc.co.uk/squad/8", "publisher": "Charlton Athletic FC (first team squad page)", "readOn": "2026-10-03", "says": "midfielders: 26 Joe Rankin-Costello"},
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/243354/joe-rankin-costello", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Charlton Athletic, shirt 26; Charlton appearances from 2026-08-26 to 2026-09-09"}
+   ]
+  },
+  {
+   "name": "Karlan Grant",
+   "from": "West Brom",
+   "to": "Charlton Athletic",
+   "realClub": "Charlton Athletic",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-09-18 (ESPN). Both lists give him shirt 9. Not marked as a loan on Charlton's page, and West Brom's squad page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.cafc.co.uk/squad/8", "publisher": "Charlton Athletic FC (first team squad page)", "readOn": "2026-10-03", "says": "forwards: 9 Karlan Grant"},
+    {"family": "A", "url": "https://www.wba.co.uk/players/1053", "publisher": "West Bromwich Albion FC (squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/212520/karlan-grant", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Charlton Athletic, shirt 9, born 1997-09-18; Charlton appearances from 2026-09-02 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Jeremy Sarmiento",
+   "from": "Burnley",
+   "to": "Middlesbrough",
+   "realClub": "Middlesbrough",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Ecuador international, born 2002-06-16 (ESPN; Middlesbrough's biography says born in Madrid in June 2002). Middlesbrough's own biography: after a 2025-26 loan at Cremonese he was recalled by Brighton and joined Boro in January 2026, a loan that became permanent. Both lists give him shirt 16. Burnley's squad page does not list him.",
+   "sources": [
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/mens/jeremysarmiento", "publisher": "Middlesbrough FC (player profile, read through r.jina.ai)", "readOn": "2026-10-03", "says": "joined Boro in January 2026, initially on loan, made permanent"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "16 Jeremy Sarmiento, forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/328013/jeremy-sarmiento", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Middlesbrough, shirt 16, born 2002-06-16; Middlesbrough appearances from 2026-08-22 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Joe Worrall",
+   "from": "Burnley",
+   "to": "Wrexham",
+   "realClub": "Wrexham",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-01-10 (Burnley and ESPN agree). He played for Burnley in the Carabao Cup on 2026-08-08 and for Wrexham from 2026-09-11. Burnley's squad page still carries him at shirt 4, which points to a loan, but no loan announcement was read, so the loan fields are left off. He is placed at the club he plays for either way, the ledger's loanPolicy.",
+   "sources": [
+    {"family": "A", "url": "https://www.wrexhamafc.co.uk/teams/first-team", "publisher": "Wrexham AFC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "defenders: 6 Joe Worrall"},
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "Joe Worrall, defender, jersey number 4 (still listed)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/352", "publisher": "ESPN (Wrexham squad, season 2026-27)", "readOn": "2026-10-03", "says": "Joe Worrall, shirt 6, defender, born 1997-01-10; played for Wrexham v West Ham 2026-09-11; not on ESPN's Burnley squad"}
+   ]
+  },
+  {
+   "name": "John Swift",
+   "from": "West Brom",
+   "to": "Portsmouth",
+   "realClub": "Portsmouth",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-06-23 (ESPN). ESPN has him playing for Portsmouth since at least April 2026 and in 2026-27; both lists give him shirt 8. West Brom's squad page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.portsmouthfc.co.uk/teams/first-team/", "publisher": "Portsmouth FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "midfielders: 8 John Swift"},
+    {"family": "A", "url": "https://www.wba.co.uk/players/1053", "publisher": "West Bromwich Albion FC (squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/4775/john-swift", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Portsmouth, shirt 8, born 1995-06-23; Portsmouth appearances 2026-04-14 to 2026-05-02 and 2026-08-08 to 2026-08-29"}
+   ]
+  },
+  {
+   "name": "Daniel Bentley",
+   "from": "Wolves",
+   "to": "Coventry City",
+   "realClub": "Coventry City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The goalkeeper, born 1993-07-13 (Premier League and ESPN agree). Played for Wolves up to 2026-08-14 and joined Coventry on 2026-08-21, not on loan.",
+   "sources": [
+    {"family": "A", "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad", "publisher": "Premier League data feed (premierleague.com)", "readOn": "2026-10-03", "says": "Coventry City 2026/27: Dan Bentley, shirt 25, goalkeeper, joined 2026-08-21, loan 0, born 1993-07-13"},
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/143007/daniel-bentley", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Coventry City; Wolves appearances to 2026-08-14, Coventry appearances 2026-08-25 and 2026-09-16"}
+   ]
+  },
+  {
+   "name": "Zan Celar",
+   "from": "QPR",
+   "to": "Basel",
+   "realClub": "FC Basel",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Slovenia striker, born 1999-03-14 (ESPN). Spent spring 2026 at Fortuna Düsseldorf and is now in Basel's squad (friendly v Juventus 2026-07-18). QPR's page lists him neither in the squad nor among its loaned out players. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel 1893 (first team players page)", "readOn": "2026-10-03", "says": "Angriff: 9 Zan Celar"},
+    {"family": "A", "url": "https://www.qpr.co.uk/teams/first-team", "publisher": "Queens Park Rangers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/279948/zan-celar", "publisher": "ESPN", "readOn": "2026-10-03", "says": "FC Basel, born 1999-03-14; Düsseldorf appearances March and April 2026, Basel v Juventus 2026-07-18"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -291,6 +443,32 @@
     {"family": "A", "url": "https://avai.com.br/elenco-profissional/leo-chu/", "publisher": "Avaí F.C. (professional squad profile)", "readOn": "2026-10-03", "says": "Atacante, Leonardo Alves Chú Franco, born 06/04/2000"},
     {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000005)", "readOn": "2026-10-03", "says": "not listed"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/300110/leo-chu", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Avaí, born 2000-04-06; Série B appearances 2026-08-19 to 2026-09-09; not on ESPN's FC Dallas 2026 squad"}
+   ]
+  },
+  {
+   "name": "Danny Ings",
+   "from": "West Ham",
+   "realClub": "Wycombe Wanderers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-07-23 (ESPN). He spent 2025-26 at Sheffield United and is now at Wycombe, in League One, which the game does not model. Wycombe's page does not tag him as a loanee (it tags its loanees 'Loaned in'), and West Ham's page lists him neither in the squad nor among its players on loan. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.wwfc.com/teams/first-team", "publisher": "Wycombe Wanderers FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "28 Danny Ings"},
+    {"family": "A", "url": "https://www.whufc.com/en/teams/mens-team", "publisher": "West Ham United FC (men's first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among players on loan"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/141706/danny-ings", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Wycombe Wanderers, shirt 28, born 1992-07-23; Sheffield United appearances to 2026-05-02, scored for Wycombe v Reading 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Florian Bianchini",
+   "from": "Swansea City",
+   "realClub": "Clermont Foot, on loan from Swansea City",
+   "loan": true,
+   "loanFrom": "Swansea City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.swanseacity.com/players/149", "publisher": "Swansea City AFC (players page)", "readOn": "2026-10-03", "says": "Out on Loan: Florian Bianchini"},
+    {"family": "A", "url": "https://www.clermontfoot.com/equipes", "publisher": "Clermont Foot 63 (squad page)", "readOn": "2026-10-03", "says": "Attaquant: 7 Florian Bianchini"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"}
    ]
   }
  ],
