@@ -1,3 +1,14 @@
+Codex CLAIMS999, 2026-10-03: Rank Em three-sport circuit.
+Own RankEm.tsx, a small circuit helper, scoped presentation and verification.
+One NBA, NHL and MLB board, explicit reveals, combined15-slot result, saved
+resume and replay. Preserve Daily/Unlimited behavior and the14-board daily
+rotation. Source-check the ten completed-league-career datasets; exclude the
+four potentially changing tables and today's daily board. No production DB
+calls or local runtime gates. Build in an isolated branch.997 publication is
+still blocked and998 stays verified in PR113; neither is claimed live.
+Claude lanes, held drafts and seven stashes stay separate. Next free1000 is
+unclaimed. AdSense/indexing submissions remain deferred.
+
 Codex998 VERIFIED IN PR113, 2026-10-03 08:35 EDT.
 Rugby League challenge is ready for integration at31ce1b24. Final remote run
 37122811601 passed type/build,15 outcome cases,16 effective source controls,
