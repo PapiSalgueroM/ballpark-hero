@@ -595,9 +595,11 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   /* Round 919: the big leagues had no pitch clock until the 2023 season
      (espn.com/mlb/story/_/id/35631564 ; cbssports.com, "MLB new rules: pitch
      clock, shift ban and new bases all in play on Opening Day 2023", both
-     read 2026-10-02). c.year is the season ahead, so a 2004 career meets the
-     clock from 2023 on and a 2026 career is unchanged. */
-  if (yrs >= 1 && c.year >= 2023) {
+     read 2026-10-02). c.year is the season ahead and this card looks back
+     on violations already called, so it waits for c.year 2024, the winter
+     after the first season with a clock (review fix: at 2023 it looked back
+     on 2022, which had none). A 2026 career is unchanged. */
+  if (yrs >= 1 && c.year >= 2024) {
     deck.push({
       id: 'mlbA_pitch_clock',
       category: 'body', cooldown: 2,

@@ -6,7 +6,7 @@ import {
   MLB_LIFE_C, applyMlbLifeCFx, mlbLifeCChip, buildMlbLifeCCard, getMlbLifeEventsC,
 } from './mlbCareerLifeC';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
-import { MLB_ARCHETYPES, startMlbCareer } from './mlbMyCareer';
+import { MLB_ARCHETYPES, startMlbCareer, mlbEraTeamIds } from './mlbMyCareer';
 import type { MlbCareerPos, MlbCareerState } from './mlbMyCareer';
 
 const seeded = (seed: number) => () => {
@@ -85,11 +85,15 @@ describe('gates', () => {
     expect(idsFor(career('RP'))).toContain('mlbC_rp_three_batter');
   });
 
-  it('holds deck A\'s pitch clock card for 2023 in a 2004 career', () => {
+  it('holds deck A\'s pitch clock card until a 2023 season is behind a 2004 career', () => {
+    /* c.year at the draw is the season ahead, and the card looks back on
+       violations already called, so c.year 2023 (the winter after 2022) is
+       still too early. */
     const a = (c: MlbCareerState) => getMlbLifeEventsA(c, () => 0.99).map(e => e.id);
     expect(a(career('SS', { year: 2012 }, 3, 'y2004'))).not.toContain('mlbA_pitch_clock');
     expect(a(career('SS', { year: 2022 }, 3, 'y2004'))).not.toContain('mlbA_pitch_clock');
-    expect(a(career('SS', { year: 2023 }, 3, 'y2004'))).toContain('mlbA_pitch_clock');
+    expect(a(career('SS', { year: 2023 }, 3, 'y2004'))).not.toContain('mlbA_pitch_clock');
+    expect(a(career('SS', { year: 2024 }, 3, 'y2004'))).toContain('mlbA_pitch_clock');
     expect(a(career('SS'))).toContain('mlbA_pitch_clock');
   });
 
@@ -101,12 +105,49 @@ describe('gates', () => {
     expect(bench(career('RP', { role: 'backup' }, 5))).toHaveLength(0);
   });
 
-  it('keeps rookie cards to the first two years and veteran cards to the old', () => {
-    const has = (c: MlbCareerState, cat: string) => getMlbLifeEventsC(c, () => 0.5).some(e => e.category === cat);
-    expect(has(career('2B', {}, 1), 'rookie')).toBe(true);
-    expect(has(career('2B', {}, 4), 'rookie')).toBe(false);
-    expect(has(career('2B', { age: 26 }, 4), 'veteran')).toBe(false);
-    expect(has(career('2B', { age: 34 }, 10), 'veteran')).toBe(true);
+  it('keeps rookie cards to the first two years and veteran cards to the old, on every step', () => {
+    /* Every rung of both ladders, not only the two ends: an off by one on
+       any one card's gate changes one row here. */
+    const ids = (c: MlbCareerState, cat: string) =>
+      getMlbLifeEventsC(c, () => 0.5).filter(e => e.category === cat).map(e => e.id).sort();
+    const rookie: Record<number, string[]> = {
+      0: [],
+      1: ['mlbC_rookie_book', 'mlbC_rookie_home', 'mlbC_rookie_per_diem', 'mlbC_rookie_sophomore'],
+      2: ['mlbC_rookie_book'],
+      3: [], 4: [], 5: [],
+    };
+    for (const [yrs, want] of Object.entries(rookie)) {
+      expect(ids(career('2B', { age: 24 }, Number(yrs)), 'rookie')).toEqual(want);
+    }
+    /* Veterans by age, with ten seasons behind them. */
+    const byAge: Record<number, string[]> = {
+      30: [],
+      31: ['mlbC_vet_kids_ask'],
+      32: ['mlbC_vet_kids_ask', 'mlbC_vet_tick_lost'],
+      33: ['mlbC_vet_kids_ask', 'mlbC_vet_spring_schedule', 'mlbC_vet_tick_lost'],
+      34: ['mlbC_vet_kids_ask', 'mlbC_vet_maintenance', 'mlbC_vet_spring_schedule', 'mlbC_vet_tick_lost'],
+    };
+    for (const [age, want] of Object.entries(byAge)) {
+      expect(ids(career('2B', { age: Number(age) }, 10), 'veteran')).toEqual(want);
+    }
+    /* And by seasons played, at 34. */
+    const byYrs: Record<number, string[]> = {
+      5: ['mlbC_vet_maintenance', 'mlbC_vet_spring_schedule'],
+      6: ['mlbC_vet_maintenance', 'mlbC_vet_spring_schedule', 'mlbC_vet_tick_lost'],
+      7: ['mlbC_vet_kids_ask', 'mlbC_vet_maintenance', 'mlbC_vet_spring_schedule', 'mlbC_vet_tick_lost'],
+    };
+    for (const [yrs, want] of Object.entries(byYrs)) {
+      expect(ids(career('2B', { age: 34 }, Number(yrs)), 'veteran')).toEqual(want);
+    }
+  });
+
+  it('holds the arbitration card to the three winters on the original control clock', () => {
+    const arb = (yrs: number, patch: Partial<MlbCareerState> = {}) =>
+      idsFor(career('3B', { contractYears: 6 - yrs, ...patch }, yrs)).includes('mlbC_rule_arbitration');
+    expect([2, 3, 4, 5, 6].map(y => arb(y))).toEqual([false, true, true, true, false]);
+    /* Signed a longer deal: more years left than the control clock. */
+    expect(arb(4, { contractYears: 3 })).toBe(false);
+    expect(arb(3, { contractYears: 4 })).toBe(false);
   });
 
   it('draws nothing from rng', () => {
@@ -173,5 +214,62 @@ describe('the words are the effect', () => {
     expect(c.contractYears).toBe(3);
     expect(['MON', 'ANA', 'FLA', 'TBD', 'OAK', 'CLV', 'NYY', 'BOS', 'BAL', 'TOR', 'MIN', 'CHW', 'DET', 'KCR', 'TEX', 'SEA',
       'ATL', 'PHI', 'NYM', 'STL', 'HOU', 'CHC', 'CIN', 'PIT', 'MIL', 'LAD', 'SFG', 'SDP', 'COL', 'ARI']).toContain(c.team);
+  });
+
+  it('a 2004 trade never lands on a club that only exists in the modern era, at any roll', () => {
+    /* The modern only ids (TBR, CLE, LAA, ATH, MIA, WSN) are all reached
+       somewhere on this walk if the trade forgets the era. */
+    const def = MLB_LIFE_C.find(d => d.id === 'mlbC_bench_out_of_options')!;
+    const era = mlbEraTeamIds('y2004');
+    const modernOnly = mlbEraTeamIds(undefined).filter(id => !era.includes(id));
+    expect(modernOnly.length).toBeGreaterThan(0);
+    const landed = new Set<string>();
+    for (let k = 0; k < 40; k++) {
+      const c = career('LF', { role: 'backup' }, 5, 'y2004');
+      buildMlbLifeCCard(def, c).options[0].apply(c, () => (k + 0.5) / 40);
+      landed.add(c.team);
+      expect(era).toContain(c.team);
+    }
+    expect(landed.size).toBeGreaterThan(20);
+  });
+});
+
+describe('the odds of a gamble', () => {
+  it('wins below the stated chance and loses above it, on every gamble in the deck', () => {
+    let gambles = 0;
+    for (const def of MLB_LIFE_C) {
+      def.options.forEach((o, k) => {
+        if (!('p' in o)) return;
+        gambles++;
+        const say = (side: 'win' | 'lose', c: MlbCareerState) => {
+          const s = o[side].say;
+          return typeof s === 'function' ? s(c) : s;
+        };
+        const pos: MlbCareerPos = def.id.includes('_sp_') || def.id.includes('innings') ? 'SP' : def.id.includes('_rp_') ? 'RP' : '2B';
+        const lo = career(pos, { role: 'backup' }, 3);
+        const winSay = say('win', lo);
+        expect(buildMlbLifeCCard(def, lo).options[k].apply(lo, () => o.p - 0.01).startsWith(winSay)).toBe(true);
+        const hi = career(pos, { role: 'backup' }, 3);
+        const loseSay = say('lose', hi);
+        expect(winSay).not.toBe(loseSay);
+        expect(buildMlbLifeCCard(def, hi).options[k].apply(hi, () => o.p + 0.01).startsWith(loseSay)).toBe(true);
+      });
+    }
+    expect(gambles).toBeGreaterThan(20);
+  });
+});
+
+describe('the chip reads the save it is shown on', () => {
+  it('never promises a stat that is already at its ceiling or floor', () => {
+    const top = career('SP', { health: 100, morale: 100, fanbase: 100, ovr: 93, pot: 92 });
+    expect(mlbLifeCChip({ fx: { health: 6, morale: -2 } }, top)).toBe('morale down');
+    expect(mlbLifeCChip({ fx: { rating: 2, fanbase: 3 } }, top)).toBe('no change');
+    const bottom = career('SP', { health: 0, morale: 0, ovr: 50 });
+    expect(mlbLifeCChip({ fx: { health: -8, morale: -3, rating: -1, fanbase: 2 } }, bottom)).toBe('fans up');
+    const def = MLB_LIFE_C.find(d => d.id === 'mlbC_sp_rain_delay')!;
+    const ev = buildMlbLifeCCard(def, top);
+    expect(ev.options[1].effect).toBe('No change');
+    expect(ev.options[1].apply(top, () => 0.5)).toBe('You kept the four zeros and a fresh arm. The win went to a reliever and you were fine with that.');
+    expect(top.health).toBe(100);
   });
 });

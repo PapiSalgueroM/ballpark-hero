@@ -220,7 +220,8 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
     id: 218, emoji: "🪞", title: "One Line Apart",
     description: (_s, r) => `${r.name} plays your position, and every list of the best at it this year has the two of you one line apart.`,
     consequence: "Morale +4, the rivalry heats up",
-    when: (s, r) => !r.retired && r.pos === s.pos,
+    /* One line apart means close ratings, not just the same position. */
+    when: (s, r) => !r.retired && r.pos === s.pos && Math.abs(r.ovr - s.ovr) <= 3,
     apply: s => {
       s.morale = clamp(s.morale + 4, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
@@ -230,7 +231,8 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
     id: 219, emoji: "⚔️", title: "The Eighth Inning Matchup",
     description: (_s, r) => `Tie game, eighth inning, and it comes down to you against ${r.name}, pitcher against hitter, with the whole park standing.`,
     consequence: "Fanbase +5, the rivalry heats up",
-    when: (s, r) => !r.retired && (s.pos === "SP" || s.pos === "RP") !== (r.pos === "SP" || r.pos === "RP"),
+    /* Pitcher against hitter needs two clubs: a teammate never faces you. */
+    when: (s, r) => !r.retired && r.team !== s.team && (s.pos === "SP" || s.pos === "RP") !== (r.pos === "SP" || r.pos === "RP"),
     apply: s => {
       s.fanbase = clamp(s.fanbase + 5, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);

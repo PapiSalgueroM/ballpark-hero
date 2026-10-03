@@ -32,6 +32,14 @@
      going through waivers. True in 2004 and now.
      baseballscouter.com/what-are-mlb-minor-league-options ;
      thecubreporter.com/book/export/html/3521
+     An optioned player also has a minimum stay before he can be recalled
+     (unless he replaces a player going on the injured list), and an option
+     year is only used up by a long enough stay down in one season. The day
+     counts are left out of the card on purpose, so no era has to be
+     checked for them.
+     mlb.com/glossary/transactions/minor-league-options ;
+     baseballscouter.com/what-are-mlb-minor-league-options (both read
+     2026-10-02, Round 919 review fix)
    - Salary arbitration: the panel picks the player's figure or the club's,
      never one in between. In place since the 1970s.
      mlb.com/glossary/transactions/salary-arbitration ;
@@ -74,8 +82,9 @@ export interface MlbLifeCFx {
 
 interface Outcome { say: string | ((c: MlbCareerState) => string); fx: MlbLifeCFx; trade?: boolean }
 type Extra = { flag?: string };
-type SureDef = { label: string } & Outcome & Extra;
-type GambleDef = { label: string; p: number; win: Outcome; lose: Outcome } & Extra;
+type Label = string | ((c: MlbCareerState) => string);
+type SureDef = { label: Label } & Outcome & Extra;
+type GambleDef = { label: Label; p: number; win: Outcome; lose: Outcome } & Extra;
 export type MlbLifeCOptionDef = SureDef | GambleDef;
 
 export type MlbLifeCCategory = 'position' | 'rookie' | 'veteran' | 'bench' | 'rules';
@@ -136,15 +145,28 @@ export function applyMlbLifeCFx(c: MlbCareerState, fx: MlbLifeCFx): string {
   return parts.length ? `${capital(parts.join(', '))}.` : '';
 }
 
-/** The short promise on the button, written from the same data. */
-export function mlbLifeCChip(o: { fx: MlbLifeCFx; trade?: boolean }): string {
+/** Whether a stat can still move that way on this save, under the same
+ *  clamps applyMlbLifeCFx uses: a raise stops at pot + 1 and at 99, a drop
+ *  at 50, and the meters run 0 to 100. */
+function canMove(c: MlbCareerState, key: 'rating' | 'morale' | 'fanbase' | 'health', d: number): boolean {
+  if (key === 'rating') return d > 0 ? c.ovr < Math.min(c.pot + 1, 99) : c.ovr > 50;
+  return d > 0 ? c[key] < 100 : c[key] > 0;
+}
+
+/** The short promise on the button, written from the same data. Given the
+ *  save the card is shown on, it leaves out a stat that is already at its
+ *  ceiling or floor, so "health up" is never shown to a player at 100. */
+export function mlbLifeCChip(o: { fx: MlbLifeCFx; trade?: boolean }, c?: MlbCareerState): string {
   const bits: string[] = [];
-  const dir = (name: string, d: number | undefined) => { if (d) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`); };
-  dir('rating', o.fx.rating);
-  dir('morale', o.fx.morale);
-  dir('fans', o.fx.fanbase);
-  dir('health', o.fx.health);
-  const cash = (o.fx.earned ?? 0) + (o.fx.netWorth ?? 0);
+  const dir = (name: string, key: 'rating' | 'morale' | 'fanbase' | 'health', d: number | undefined) => {
+    if (d && (!c || canMove(c, key, d))) bits.push(`${name} ${d > 0 ? 'up' : 'down'}`);
+  };
+  dir('rating', 'rating', o.fx.rating);
+  dir('morale', 'morale', o.fx.morale);
+  dir('fans', 'fanbase', o.fx.fanbase);
+  dir('health', 'health', o.fx.health);
+  const scale = c ? mlbEraById(c.eraId).moneyScale : 1;
+  const cash = round2(scale * (o.fx.earned ?? 0)) + round2(scale * (o.fx.netWorth ?? 0));
   if (cash) bits.push(cash > 0 ? 'money in' : 'money out');
   if (o.trade) bits.push('new team');
   return bits.length ? bits.join(', ') : 'no change';
@@ -164,11 +186,13 @@ function settle(cc: MlbCareerState, r: () => number, o: Outcome): string {
   return [story, moved, applyMlbLifeCFx(cc, o.fx)].filter(Boolean).join(' ');
 }
 
-function toOption(o: MlbLifeCOptionDef): Option {
+/** One button, for the save it is shown on: the label can read the
+ *  position, and the chip reads the stats' room to move. */
+function toOption(o: MlbLifeCOptionDef, c: MlbCareerState): Option {
   if ('p' in o) {
     return {
-      label: o.label,
-      effect: `Could go either way: ${mlbLifeCChip(o.win)}, or ${mlbLifeCChip(o.lose)}`,
+      label: text(o.label, c),
+      effect: `Could go either way: ${mlbLifeCChip(o.win, c)}, or ${mlbLifeCChip(o.lose, c)}`,
       apply: (cc, r) => {
         if (o.flag) bump(cc, o.flag);
         return settle(cc, r, r() < o.p ? o.win : o.lose);
@@ -176,8 +200,8 @@ function toOption(o: MlbLifeCOptionDef): Option {
     };
   }
   return {
-    label: o.label,
-    effect: capital(mlbLifeCChip(o)),
+    label: text(o.label, c),
+    effect: capital(mlbLifeCChip(o, c)),
     apply: (cc, r) => {
       if (o.flag) bump(cc, o.flag);
       return settle(cc, r, o);
@@ -194,7 +218,7 @@ export function buildMlbLifeCCard(def: MlbLifeCDef, c: MlbCareerState): MlbCaree
     ...(def.story ? { story: def.story } : {}),
     title: text(def.title, c),
     body: text(def.body, c),
-    options: def.options.map(toOption),
+    options: def.options.map(o => toOption(o, c)),
   };
 }
 
@@ -287,7 +311,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
         lose: { say: 'The fastball was two ticks short and so was the lead. Then the arm needed a week.', fx: { health: -7, morale: -4 } },
       },
       { label: 'Tell him the truth: it is tired', say: 'He said thank you and meant it. Someone else got the eighth and you got the day.', fx: { health: 5, morale: 1 } },
-      { label: 'Volunteer for one batter only', say: 'One hitter, one groundball, back to the bench. He remembered it in September.', fx: { morale: 3, health: -2 } },
+      { label: 'Volunteer to get the last out of the inning', say: 'One out, one groundball, back to the bench. He remembered it in September.', fx: { morale: 3, health: -2 } },
     ],
   },
   {
@@ -433,7 +457,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     body: 'The fans behind you in the outfield have a chant for you, a sign for you, and a running bit about your batting average. It has been going since April.',
     options: [
       { label: 'Toss them a ball every inning', say: 'You became their favorite, and the chant turned friendly by the end of May.', fx: { fanbase: 7, morale: 3 } },
-      { label: 'Send pizza out to the section', say: 'Forty pizzas in the eighth inning. The section put your number on a bedsheet.', fx: { fanbase: 8, netWorth: -0.03 } },
+      { label: 'Buy the section pizza for a month', say: 'Pizza for the whole section every home game in August. The section put your number on a bedsheet.', fx: { fanbase: 8, netWorth: -0.03 } },
       { label: 'Tune it all out', say: 'Earbuds in during batting practice and eyes on the hitter after that. It stopped mattering.', fx: { morale: 2, rating: 1 } },
     ],
   },
@@ -596,12 +620,12 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
       ? 'The starter got knocked out in the second inning and the bullpen phone is for you. You have not pitched in nine days and you need to be ready in four minutes.'
       : 'You have not seen a pitch in five days. Now it is the ninth, the tying run is on second, and the manager just said your name.'),
     options: [
-      { label: 'Go up looking for one pitch', p: 0.4,
+      { label: c => (isSp(c) ? 'Throw strikes from the first pitch' : 'Go up looking for one pitch'), p: 0.4,
         win: { say: c => (isSp(c) ? 'Five innings of relief that nobody will remember except the manager.' : 'You got the pitch and you did not miss it. The dugout came over the rail.'), fx: { fanbase: 6, morale: 8 } },
         lose: { say: 'It did not go your way, and you went back to the end of the bench.', fx: { morale: -4 } },
       },
       { label: 'Ask for a set routine to stay ready', say: 'The coaches gave you a pregame plan, and you were never cold again.', fx: { rating: 1, morale: 2 } },
-      { label: 'Ask for more work in the cage or the pen', say: 'Extra work every day so the big moments felt normal.', fx: { rating: 1, health: -2 } },
+      { label: c => (isSp(c) ? 'Ask for more work in the bullpen' : 'Ask for more work in the cage'), say: 'Extra work every day so the big moments felt normal.', fx: { rating: 1, health: -2 } },
     ],
   },
   {
@@ -612,9 +636,9 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
       ? 'The manager says the fastest way back into the rotation is to be the guy who can start one day and close out a game the next. It is a strange job and it is a real one.'
       : 'The bench coach says the man who can play three positions gets three times the chances. He wants you taking ground balls and fly balls everywhere this spring.'),
     options: [
-      { label: 'Say yes to everything', say: 'You learned the new spots and got into more games than anyone expected.', fx: { rating: 1, morale: 4, health: -2 } },
-      { label: 'Stay focused on your own spot', say: 'You stayed sharp at what you do and waited for the door to open.', fx: { morale: 1 } },
-      { label: 'Pick one new spot and learn it well', say: 'One more glove in the bag and a real case to be in the lineup more.', fx: { rating: 1, morale: 2 } },
+      { label: 'Say yes to everything', say: c => (isSp(c) ? 'You started some, finished some, and got into more games than anyone expected.' : 'You learned the new spots and got into more games than anyone expected.'), fx: { rating: 1, morale: 4, health: -2 } },
+      { label: c => (isSp(c) ? 'Wait for a spot in the rotation' : 'Stay focused on your own spot'), say: 'You stayed sharp at what you do and waited for the door to open.', fx: { morale: 1 } },
+      { label: c => (isSp(c) ? 'Learn to warm up fast' : 'Pick one new spot and learn it well'), say: c => (isSp(c) ? 'You learned to get loose in ten pitches, and the manager started calling your name in the late innings.' : 'One more glove in the bag and a real case to be in the lineup more.'), fx: { rating: 1, morale: 2 } },
     ],
   },
   {
@@ -628,7 +652,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
       { label: 'Ask them to trade you before waivers', say: 'The front office found a deal in a week and you started over somewhere new.', fx: { morale: 3 }, trade: true },
       { label: 'Make the roster spot impossible to cut', p: 0.5,
         win: { say: 'You made yourself the most useful man on the bench, and nobody brought up your spot again.', fx: { rating: 1, morale: 5 } },
-        lose: { say: 'You pressed every at bat and it showed. The weekly meeting kept talking about you.', fx: { morale: -6 } },
+        lose: { say: 'You pressed every time they used you and it showed. The weekly meeting kept talking about you.', fx: { morale: -6 } },
       },
       { label: 'Keep your head down', say: 'You said nothing and stayed ready, and the meeting found someone else to talk about.', fx: { morale: -1, health: 2 } },
     ],
@@ -639,10 +663,10 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     id: 'mlbC_rule_optioned', category: 'rules', cooldown: 2, story: 'options',
     when: c => yrsOf(c) >= 1 && yrsOf(c) <= 3 && c.ovr < 80,
     title: 'Optioned is not traded',
-    body: 'They sent you to Triple A in May and you did not know what it meant. Your agent explains: you stay on the 40 man roster, the club still owns you, they can bring you back any time, and one of your option years is gone.',
+    body: 'They sent you to Triple A in May and you did not know what it meant. Your agent explains: you stay on the 40 man roster and the club still owns you. There is a minimum stay down there before they can call you back, unless somebody up top gets hurt, and a long enough stay this season uses up one of your option years.',
     options: [
       { label: 'Play angry in Triple A', p: 0.6,
-        win: { say: 'You hit everything in the minors and they called you back in a month.', fx: { rating: 2, morale: 3 } },
+        win: { say: c => (isHitter(c) ? 'You hit everything in the minors and they called you back in a month.' : 'You struck out everybody in the minors and they called you back in a month.'), fx: { rating: 2, morale: 3 } },
         lose: { say: 'You pressed in Triple A and stayed there longer than you wanted.', fx: { morale: -6 } },
       },
       { label: 'Ask the club what they want you to fix', say: 'They gave you one clear thing to work on, and you went and fixed it.', fx: { rating: 1, morale: 4 } },
@@ -658,7 +682,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     body: c => `Rosters expanded in September and ${team(c)} called up a kid from Triple A who plays your position. He is 22, he is fast, and the front office wants to see him play.`,
     options: [
       { label: 'Show him around and help him', say: 'You took him to dinner and told him where everything was. He got better and you looked like a leader.', fx: { morale: 4, fanbase: 2 } },
-      { label: 'Make sure he does not take your at bats', p: 0.55,
+      { label: c => (isHitter(c) ? 'Make sure he does not take your at bats' : 'Make sure he does not take your innings'), p: 0.55,
         win: { say: 'You played the best month of your season and the kid sat and watched.', fx: { rating: 1, morale: 4 } },
         lose: { say: 'You pressed and slumped, and the kid got more starts than you did in the last two weeks.', fx: { morale: -6 } },
       },
@@ -666,11 +690,16 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     ],
   },
   {
-    id: 'mlbC_rule_arbitration', category: 'rules', cooldown: 99, story: 'arbitration',
+    id: 'mlbC_rule_arbitration', category: 'rules', cooldown: 1, story: 'arbitration',
     /* Final offer arbitration: the panel picks one figure or the other, in
-       2004 and now (sources in the header). Gated to the years a player is
-       still under the club's control. */
-    when: c => yrsOf(c) >= 3 && yrsOf(c) <= 5 && c.contractYears >= 1 && c.contractYears <= 3,
+       2004 and now (sources in the header). Gated to the winters after the
+       third, fourth and fifth seasons while the player is still on the six
+       years of control the career starts on (contractYears 6, one off per
+       season), the same three winters as the inbox's arbitration beat. A
+       player who signed a longer deal (deck B's extensions add years) has
+       more years left than that clock and no salary to argue about. Three
+       real winters, so the tag is a yearly cooldown, not once a career. */
+    when: c => yrsOf(c) >= 3 && yrsOf(c) <= 5 && c.contractYears >= 1 && c.contractYears <= 6 - yrsOf(c),
     title: 'Your number or theirs',
     body: 'You and the club are apart on next year\'s salary. You file a number, they file a number, and if nobody budges a panel picks one of the two. Not in between. In the hearing the club has to argue that you are not as good as you think.',
     options: [
@@ -690,7 +719,7 @@ export const MLB_LIFE_C: MlbLifeCDef[] = [
     options: [
       { label: 'Tell the papers what happened', say: 'You said it out loud and the fans took your side. The front office did not love it.', fx: { fanbase: 5, morale: -2 } },
       { label: 'Let your agent handle it quietly', say: 'Your agent remembered, and so will you when the time comes to talk money.', fx: { morale: 2 } },
-      { label: 'Use the anger in the batting cage', say: 'You played like somebody owed you something. Somebody did.', fx: { rating: 1, morale: -1 } },
+      { label: c => (isHitter(c) ? 'Use the anger in the batting cage' : 'Use the anger in the bullpen sessions'), say: 'You played like somebody owed you something. Somebody did.', fx: { rating: 1, morale: -1 } },
     ],
   },
   {
