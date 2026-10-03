@@ -320,13 +320,19 @@ const ALSO_REAL_ELSEWHERE = [
   /* Round 883, Liga MX: two Mexican league men the nationality map the
      harness reads does not carry yet. */
   'Alan Medina', 'Javier Ruiz',
+  /* Round 899: Kian Hansen, the Danish defender, left the 2015-16 world in
+     its second review fix (Nantes to Midtjylland, May 2015) and is in no
+     Club Manager world now. He is still a real man, and listing him here
+     keeps the guard's set exactly what it was, so no seed re-rolls. */
+  'Kian Hansen',
 ];
 
 /**
  * Round 832: every real player in the three era bakes whose name this
  * generator could build (a GEN_FIRST name, a space, a GEN_LAST name). The
  * guard used to read the era rosters themselves, which only ever mattered for
- * these eleven, because the generator can produce nothing else. The era
+ * these few (eleven then, fourteen since Round 899), because the generator
+ * can produce nothing else. The era
  * rosters now load with their era, so reading them here would make a name
  * depend on which eras this tab happened to open, and a modern save would
  * re-roll differently after a look at 2010. This list keeps the guard exactly
@@ -337,6 +343,13 @@ const ALSO_REAL_ELSEWHERE = [
 export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
   'Bruno Fernandes', 'Gabriel Silva', 'Hugo Ibarra', 'Javier Garrido', 'Javier Paredes', 'Jorge Andrade',
   'Lorenzo Reyes', 'Lucas Silva', 'Mateo Kovacic', 'Pedro Mendes', 'Pedro Pereira',
+  /* Round 899: the 2015-16 Bundesliga and Ligue 1 brought three more real men
+     the generator could have named a made up youth after. (Jonas Hofmann
+     left the era world in the review fix, back at Dortmund that summer; the
+     2026 rosters still carry him, so the filler still cannot build him. Kian
+     Hansen left it in the second review fix, Nantes to Midtjylland in May
+     2015, and moved to ALSO_REAL_ELSEWHERE so the guard's set is unchanged.) */
+  'Jesper Hansen', 'Thiago Silva', 'Yannick Carrasco',
 ];
 
 function realNames(): Set<string> {
@@ -830,8 +843,8 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(2015),
     startYear: 2015,
     emoji: '\u{1F98A}',
-    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Juventus chasing five straight. Premier League, La Liga and Serie A, 2015-16.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2015')} with their real 2015 ages and values, all 60 clubs of the 2015-16 Premier League, La Liga and Serie A. Thin squads are padded with made up youth players and say so.`; },
+    blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Lewandowski at Bayern, Ibrahimovic at PSG. All of the big five, 2015-16.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2015')} with their real 2015 ages and values, all 98 clubs of the 2015-16 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2010',

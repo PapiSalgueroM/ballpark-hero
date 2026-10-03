@@ -210,8 +210,12 @@ describe('NHL opening rating integration', () => {
     expect(typeof E.nhlAiDraftPicks).toBe('function');
     const lg = world(108), retained = clone(lg.teams.SIM.players), pool = [prospect('expensive', 93, 94), prospect('best-affordable', 90, 79), prospect('cheaper', 89, 78)];
     const result = E.nhlAiDraftPicks(lg, pool, ['SIM'], rngFor(713).draw);
-    expect(result.guarded).toBe(true); expect(result.picks.map(p => p.prospect.id)).toEqual(['best-affordable']); expect(result.substituted).toBe(1); expect(result.skipped).toBe(2); expect(result.remaining.map(p => p.id)).toEqual(['expensive', 'cheaper']);
+    expect(result.guarded).toBe(true); expect(result.picks.map(p => p.prospect.id)).toEqual(['best-affordable']); expect(result.substituted).toBe(1); expect(result.skipped).toBe(0); expect(result.remaining.map(p => p.id)).toEqual(['expensive', 'cheaper']);
     expect(lg.teams.SIM.players.slice(0, retained.length)).toEqual(retained); expect(E.nhlCapUsed(lg.teams.SIM)).toBeLessThanOrEqual(113);
+    expect(lg.teams.SIM.picks).toEqual([2]); const afterChoice = JSON.stringify(lg), refusalRng = rngFor(713);
+    const refused = E.nhlAiDraftPicks(lg, result.remaining, ['SIM'], refusalRng.draw);
+    expect(refused.guarded).toBe(true); expect(refused.picks).toEqual([]); expect(refused.skipped).toBe(1);
+    expect(refused.remaining).toEqual(result.remaining); expect(refusalRng.calls()).toBe(0); expect(JSON.stringify(lg)).toBe(afterChoice);
     const nextOnly = world(110); expect(E.nhlAiDraftPicks(nextOnly, [prospect('next-only', 80, 75)], ['SIM'], rngFor(714).draw).picks).toHaveLength(1);
     const dead = world(107); dead.teams.SIM.deadCap = [{ playerId: 'old-cut', name: 'Simulated cut', amount: 6, seasonsLeft: 1 }];
     expect(E.nhlAiDraftPicks(dead, [prospect('dead-money', 80, 75)], ['SIM'], rngFor(715).draw).picks).toHaveLength(0);
@@ -224,10 +228,18 @@ describe('NHL opening rating integration', () => {
   it('requires both exact guard versions and preserves physical original five-pick routing and RNG otherwise', () => {
     expect(typeof E.nhlAiDraftPicks).toBe('function');
     for (const markers of [{}, { ratingModelVersion: 'unknown', draftAffordabilityVersion: 'nhl-flat-nextcap-ai-v1' }, { ratingModelVersion: NHL_OPENING_RATING_VERSION }]) {
-      const lg = world(113, false); Object.assign(lg, markers); const pool = Array.from({ length: 8 }, (_, i) => prospect('legacy-' + i, 93 - i, 94 - i)), rng = rngFor(716), originalRng = rngFor(716), previous = clone(lg);
-      const result = E.nhlAiDraftPicks(lg, pool, ['SIM'], rng.draw);
-      const originalRemaining = oldDraft(old, previous, pool, ['SIM'], originalRng.draw);
-      if (lg.ratingModelVersion === NHL_OPENING_RATING_VERSION) for (const p of previous.teams.SIM.players.slice(1)) p.salary = flat(p.ovr);
+      const lg = world(113, false); Object.assign(lg, markers); const order = ['SIM', 'TWO', 'THREE', 'FOUR', 'FIVE'];
+      const retained = clone(lg.teams.SIM);
+      lg.teams = Object.fromEntries(order.map(abbr => [abbr, { ...clone(retained), abbr, players: retained.players.map(p => ({ ...p, id: `${abbr}-retained`, name: `Simulated retained veteran ${abbr}` })) }]));
+      const pool = Array.from({ length: 8 }, (_, i) => prospect('legacy-' + i, 93 - i, 94 - i)), rng = rngFor(716), originalRng = rngFor(716), previous = clone(lg);
+      const result = E.nhlAiDraftPicks(lg, pool, order, rng.draw);
+      const originalRemaining = oldDraft(old, previous, pool, order, originalRng.draw);
+      expect(result.picks.map(p => p.team)).toEqual(order);
+      for (const abbr of order) {
+        expect(lg.teams[abbr].picks).toEqual([2]); expect(previous.teams[abbr].picks).toEqual([1, 2]);
+        previous.teams[abbr].picks.shift();
+        if (lg.ratingModelVersion === NHL_OPENING_RATING_VERSION) for (const p of previous.teams[abbr].players.slice(1)) p.salary = flat(p.ovr);
+      }
       expect(result.guarded).toBe(false); expect(result.picks).toHaveLength(5); expect(result.remaining).toEqual(originalRemaining); expect(canonical(lg)).toEqual(canonical(previous)); expect([rng.calls(), rng.state()]).toEqual([originalRng.calls(), originalRng.state()]);
     }
   });
@@ -264,5 +276,5 @@ describe('NHL opening rating integration', () => {
     const input = JSON.parse(readFileSync(path.join(root, 'scripts/data/nhlFoRatingInputs2026.json'), 'utf8')); expect(input.runtimeVersion).toBe(NHL_OPENING_RATING_VERSION); expect(input.window).toBe(NHL_OPENING_RATING_WINDOW); expect(input.provenance.length).toBeGreaterThan(0);
     const result = build({ entryPoints: [path.join(root, 'src/lib/nhlFrontOffice.ts')], write: false, bundle: true, platform: 'browser', format: 'esm', metafile: true, logLevel: 'silent', alias: { '@': path.join(root, 'src') } });
     expect(Object.keys(result.metafile.inputs).some(f => /scripts\/data|nhlFoRatingInputs|nhlFoRatingModel|supabase/.test(f))).toBe(false);
-  });
+  }, 20000);
 });

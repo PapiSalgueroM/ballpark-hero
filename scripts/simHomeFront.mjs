@@ -83,6 +83,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD, US_CAREER_SPORTS, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROLS = {
@@ -483,14 +484,14 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/wonderkid-factory': ['src/lib/wonderkidFactory.ts'],
     '/rebuild': ['src/lib/rebuildSave.ts'],
     '/front-office': ['src/components/front-office/FrontOfficeBoard.tsx', 'src/lib/frontOffice.ts'],
-    '/nfl-my-career': ['src/components/nfl-my-career/NflMyCareerBoard.tsx', 'src/lib/nflMyCareer.ts'],
+    '/nfl-my-career': ['src/lib/nflCareerSport.ts', 'src/lib/nflMyCareer.ts'],
     '/cfb-dynasty': ['src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'src/lib/cfbDynasty.ts'],
     '/cbb-dynasty': ['src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'src/lib/cbbDynasty.ts'],
     '/nba-front-office': ['src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'src/lib/nbaFrontOffice.ts'],
-    '/nba-my-career': ['src/components/nba-my-career/NbaMyCareerBoard.tsx', 'src/lib/nbaMyCareer.ts'],
-    '/mlb-my-career': ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', 'src/lib/mlbMyCareer.ts'],
+    '/nba-my-career': ['src/lib/nbaCareerSport.ts', 'src/lib/nbaMyCareer.ts'],
+    '/mlb-my-career': ['src/lib/mlbCareerSport.ts', 'src/lib/mlbMyCareer.ts'],
     '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
-    '/nhl-my-career': ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', 'src/lib/nhlMyCareer.ts'],
+    '/nhl-my-career': ['src/lib/nhlCareerSport.ts', 'src/lib/nhlMyCareer.ts'],
     '/nhl-front-office': ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/lib/nhlFrontOffice.ts'],
     '/aussie-rules-manager': ['src/lib/aussieRulesManager.ts'],
     '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
@@ -506,6 +507,17 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   };
   const SAVE_CONST = /\bconst\s+[A-Z_]*SAVE_KEY\s*=\s*(['"])([^'"]+)\1/g;
   const code = rel => stripComments(read(rel));
+
+  /* Round 900: the four US careers are one board. Each sport's binding
+     declares its key (the first file listed for it above), and the shared
+     board is the file that writes the save, so the wrapper check in d reads
+     it there. Every other game writes its save from its first file. */
+  const WRITER = Object.fromEntries(US_CAREER_SPORTS.map(s => [s.route, US_CAREER_BOARD]));
+  for (const why of allWrapperProblems(ROOT)) fail(7, why);
+  for (const s of US_CAREER_SPORTS) {
+    if (!code(s.binding).includes('saveKey: SAVE_KEY,')) fail(7, `${s.binding} does not hand the board the key it declares`);
+  }
+  if (!code(US_CAREER_BOARD).includes('localStorage.setItem(sport.saveKey, JSON.stringify({ c,')) fail(7, `${US_CAREER_BOARD} no longer writes the save under the binding's key`);
 
   /* a: live games, one card each */
   const paths = CONTINUE_SAVES.map(e => e.path);
@@ -559,7 +571,8 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
         fieldsChecked += 1;
         /* a one or two letter wrapper is what the board hands JSON.stringify */
         if (i === 0 && seg.length <= 2) {
-          if (!new RegExp(`JSON\\.stringify\\(\\{\\s*${seg}\\b`).test(code(files[0]))) fail(7, `${e.path} reads the save through ${JSON.stringify(seg)}, and ${files[0]} does not write a save wrapped in it`);
+          const writer = WRITER[e.path] ?? files[0];
+          if (!new RegExp(`JSON\\.stringify\\(\\{\\s*${seg}\\b`).test(code(writer))) fail(7, `${e.path} reads the save through ${JSON.stringify(seg)}, and ${writer} does not write a save wrapped in it`);
           return;
         }
         if (!new RegExp(`\\b${seg}\\??\\s*:`).test(src)) fail(7, `${e.path} reads ${JSON.stringify(fieldPath.join('.'))} and ${JSON.stringify(seg)} is not a property ${files.join(' or ')} declares`);

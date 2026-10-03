@@ -28,7 +28,15 @@
       tree gave the same hashes), and re-taken from main's own tree at
       f3b1ea14 when Release P changed the match engine (CM_RULES_ROOT pointed
       at a git archive of main's src, nothing of this branch in it); the
-      branch then matched it hash for hash.
+      branch then matched it hash for hash. Round 899 rewrote the eras and
+      pure entries three times, each time after attribution: the branch tree
+      with the round's change taken back out reproduced the old entries
+      exactly (eras 7/0 and pure 30/0 for the two new leagues; eras 9/0 and
+      pure 32/0 for the review's window corrections, and again eras 9/0 and
+      pure 32/0 for the second review's, which also move two 2005 digests in
+      "whole"; the 2015-16 data file and its nationality block were the only
+      difference between the two trees, so the data moved them, by a path
+      this harness does not isolate).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -336,7 +344,9 @@ async function partEras() {
   for (const [eraId, leagues] of Object.entries(mod.cm.ERA_LEAGUES)) {
     for (const l of leagues) saves.push({ key: `${eraId}|${l.id}`, club: l.clubs[0], eraId, second: false });
   }
-  if (saves.length !== 7) fail(`the eras hold ${saves.length} leagues where this round found 7`);
+  /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
+     regenerates the baseline on purpose, like a modern one). */
+  if (saves.length !== 9) fail(`the eras hold ${saves.length} leagues where Round 899 left 9`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }
