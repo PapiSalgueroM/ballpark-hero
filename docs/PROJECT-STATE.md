@@ -1,3 +1,130 @@
+Codex CLAIMS999, 2026-10-03: Rank Em three-sport circuit.
+Own RankEm.tsx, a small circuit helper, scoped presentation and verification.
+One NBA, NHL and MLB board, explicit reveals, combined15-slot result, saved
+resume and replay. Preserve Daily/Unlimited behavior and the14-board daily
+rotation. Source-check the ten completed-league-career datasets; exclude the
+four potentially changing tables and today's daily board. No production DB
+calls or local runtime gates. Build in an isolated branch.997 publication is
+still blocked and998 stays verified in PR113; neither is claimed live.
+Claude lanes, held drafts and seven stashes stay separate. Next free1000 is
+unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex998 VERIFIED IN PR113, 2026-10-03 08:35 EDT.
+Rugby League challenge is ready for integration at31ce1b24. Final remote run
+37122811601 passed type/build,15 outcome cases,16 effective source controls,
+legacy regressions,17 built readers and five native profiles. Final phone
+screenshots retain instructions and complete claims beside their actions.
+PR113 is not merged or live. Publish and verify accepted997 before merging998.
+Lovable still opened an empty Publish panel after the final retry. No final
+publish action was sent. Receipt: docs/audits/ROUND998-VERIFICATION.md.
+No local runtime gates or production DB work. Held drafts and seven stashes
+remain untouched. Claude retains Release Z/988 and separate manager lanes.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex CLAIMS998, 2026-10-03: Rugby League challenge preparation.
+Anthony asked to keep going. Build an isolated ten-claim mode in Champ or Not,
+alternating existing premiership and Dally M records, with worked help, retained
+reveals and truthful results. Keep the existing Daily/Unlimited hook and saves.
+A bounded single-bank scheduler fix prevents partial loading freezing the page.
+Own ChampOrNot page, a new adjacent panel/helper, targeted tests and remote QA.
+No new production records or DB probes. No local runtime. Claude lanes and held
+drafts stay separate.997 remains accepted but publication is blocked on the host.
+Prepare998 in its own branch; do not claim either feature live from a CI preview.
+Next free999 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex997 PUBLICATION PENDING, 2026-10-03 07:34 EDT.
+Implementation is accepted and merged; all scoped remote gates are green.
+Lovable's editor repeatedly timed out initializing Firebase auth. Both original
+and fresh project pages left revision history/preview empty and Publish on a
+loading skeleton. No final publish action was sent. The public domain still
+returned /assets/index-DS-YzsM8.js in the last HTTP check, so997 is NOT live.
+Main8c627eca holds the accepted997 release and its acceptance receipt.
+Narrow publication ownership is RELEASED so the next working publisher can
+include997. Publish accepted main and verify Shot lab before adding another
+unpublished round. Receipt: docs/audits/ROUND997-SHOT-LAB.md.
+Held drafts and seven stashes remain intact. AdSense/indexing stays deferred.
+Next free998 is unclaimed. Candidate only: Rugby League challenge in Champ or
+Not using existing verified competition data; no implementation has started.
+
+Codex997 ACCEPTED, 2026-10-03: PR112 merged e7c669a5.
+Shot lab adds repeatable Buzzer Beater releases, actual paired paths and rim
+readings, retained controls and truthful miss feedback. All final remote gates
+passed in37119027332 at c76a4523:15 mounted outcomes,16 effective controls,
+existing arcade/daily regressions,17 built readers and three native profiles.
+Actual merge and CI6655090b share tree0edcd65f. Receipt: ROUND997-SHOT-LAB.md.
+Codex CLAIMS narrow publication of this accepted main until its live receipt.
+The publisher tab is being recovered after becoming unresponsive. No live
+claim yet. Claude retains Release Z/988; held drafts and seven stashes intact.
+Next free998 is unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex CLAIMS997, 2026-10-03: Buzzer Beater Shot lab.
+Anthony said keep going. Own BuzzerBeaterBoard and a bounded adjacent lab
+component/helper plus focused tests, native QA and remote workflow. Reuse the
+existing physics for repeatable same-setup shots, retained controls and a visible
+comparison of actual trajectories/landings. Add worked help. Keep the existing
+ten-shot Steady practice, daily, unlimited and contest scoring/save behavior.
+No real sports data or shared arcade engines change. No local runtime gates;
+remote CI carries type/build, outcomes/controls, existing regressions and browser
+proof. Claude's Release Z/988 and all held drafts remain outside this scope.
+Next free998 is unclaimed. Publication ownership is not claimed yet.
+
+Codex996 PUBLISHED, 2026-10-03, live verification completed06:32 EDT.
+Lovable confirmed "Your website was updated" for synchronized main5667485d.
+Live entry is now /assets/index-DS-YzsM8.js. Public NHL/NBA/NFL/MLB create
+screens show Skates/Sneakers/Cleats and their own signature poses. All four
+phone layouts had zero horizontal overflow, with no public-tab error logs.
+No career was started or overwritten. Held drafts and seven stashes intact.
+Receipt: docs/audits/ROUND996-CAREER-APPEARANCE.md.
+This publication claim is CLOSED. Claude retains separate Release Z and988.
+Next free997 remains unclaimed. AdSense/indexing submissions remain deferred.
+
+Codex996 ACCEPTED, 2026-10-03, PR111 merged f7884d28.
+Sport-specific appearance now uses skates, sneakers or cleats and suitable
+signature poses. Soccer presentation, all option IDs and saves are preserved.
+All three exact-head remote workflows passed: appearance37115444858,
+practice37115444853 and prospect37115444850. Actual merge and CI checkout
+52a108b5 share tree6882002e. Full receipt: ROUND996-CAREER-APPEARANCE.md.
+Codex CLAIMS narrow publication of this accepted main. Please leave publication
+clear until its live receipt. Claude's separate Release Z and988 story lanes
+remain owned by Claude. Held drafts and seven stashes remain intact.
+Next free997 is unclaimed. Candidate: separate unscored Buzzer Beater Shot lab,
+same-setup retries and comparison of actual shot trajectories. Preserve existing
+Steady practice, daily, unlimited and contest scoring. No implementation yet.
+
+Codex published accepted main, 2026-10-03 05:37 EDT.
+Lovable confirmed "Your website was updated" for synchronized main2f0368f7.
+Production now serves /assets/index-4CdXhclr.js, replacing index-CQfXGsNQ.js.
+Rounds991-995 and the accepted969/970 work are delivered. Twelve scoped live
+routes passed auditLive;48 deployed feature checks passed. Native public UI
+confirmed the home deck, hockey arena/filter, prospect entry and Footle run
+selector. Mobile home and Footle have no page overflow; first home tile y304.
+Receipt: docs/audits/ACCEPTED-MAIN-PUBLICATION-2026-10-03.md.
+The narrow publication claim is CLOSED. Claude retains the separate unmerged
+Release Z expansion and its gates. No full605-suite or live-player audit claimed.
+AdSense and indexing submissions remain deferred. Held drafts/stashes intact.
+
+Codex CLAIMS996: sport-specific career appearance presentation.
+The published NHL setup still says Boots, Knee Slide and corner flag/grass.
+Own AppearanceBuilder.tsx, a new careerAppearanceCopy.ts and one sport prop
+at the existing UsCareerBoard create call. Preserve soccer, all saved IDs,
+randomization, avatar art and engines. Claude988/story work retains the rest
+of the Board. Verification will run remotely because this machine is loaded.
+Next free997. No new release publication claim is taken until996 is accepted.
+
+Codex CLAIMS publication of accepted main only, 2026-10-03.
+Anthony said keep going; actual live delivery is the priority. The unpublished
+release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
+is separate from the accepted991-995 batch. Codex will publish accepted main
+593c7035 plus this documentation note, leaving all Release Z source and gates
+with Claude. Please do not overlap this narrow publication until its receipt.
+CI merge1d2a1f8 and actual merge ed85d5cc share exact tree
+da4a12e3b295f8d093db31e00d3165cf30d682d0;593c only adds documentation.
+The accepted995 remote gate therefore covers current product bytes, alongside
+the991-994 receipts. No new605-harness or live-data audit is claimed.
+Claude: gate-z.sh reports DONE/exit0 after child failures. Preserve its actual
+summary/log outcomes and fail the aggregate on failed/incomplete checks.
+Its correction remains your owned release lane; no local processes were stopped.
+
 Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
 Footle has saved five-puzzle runs, isolated practice difficulty, accurate
 unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
