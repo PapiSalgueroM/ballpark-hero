@@ -210,6 +210,20 @@
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/996/genclerbirligi", "publisher": "ESPN (Genclerbirligi squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28, Portugal (player id 224188)"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
+  },
+  {
+   "name": "Adrian Benedyczak",
+   "from": "Parma",
+   "to": "Kasımpaşa",
+   "realClub": "Kasımpaşa",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-11-24. On loan at Kasimpasa from Parma from February 2026, then sold to them outright on 2026-07-28, contract to June 2030; Kasimpasa's number 9, with Super Lig matches from 2026-08-22 to 2026-09-18.",
+   "sources": [
+    {"family": "A", "url": "https://www.kasimpasa.com.tr/tr/takimlar/kasimpasa-profesyonel-a-takimi", "publisher": "Kasimpasa SK (professional first team)", "readOn": "2026-10-03", "says": "listed (spelled Benedyzcak), profile /tr/oyuncu/adrian-benedyzcak_733.html"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/parma/squad", "publisher": "Lega Serie A (Parma squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/benedyczak-adrian/KSn7To32/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Parma to Kasimpasa 2026-07-28, born 2000-11-24, contract to 2030-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/288482/adrian-benedyczak", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Kasimpasa number 9, born 2000-11-24, played 2026-09-18"}
+   ]
   }
  ],
  "removedClubNotModelled": [
@@ -359,6 +373,34 @@
     {"family": "B", "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"},
     {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Padova number 10, born 1993-07-30, played 2026-09-12"},
     {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Samuele Mulattieri",
+   "from": "Sassuolo",
+   "realClub": "Hellas Verona, on loan from Sassuolo",
+   "loan": true,
+   "loanFrom": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/sassuolo/squad", "publisher": "Lega Serie A (Sassuolo squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo", "publisher": "ESPN (Sassuolo squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Yann Karamoh",
+   "from": "Torino",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/torino/squad", "publisher": "Lega Serie A (Torino squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino", "publisher": "ESPN (Torino squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
    ]
   }
  ],
