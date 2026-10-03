@@ -10,7 +10,13 @@
  *   2. THE DRAWS. Over DRAWS simulated lotteries per seed, each club's share
  *      of first picks sits inside a sampling band of the published odds, a
  *      capped climb never passes its cap, and the NBA's worst club never
- *      picks lower than fifth.
+ *      picks lower than fifth. No club wins two draws in one lottery, and
+ *      every club's share of EVERY drawn slot and of the first slot after
+ *      them (NBA picks 1 to 5, NHL 1 to 3) sits inside a sampling band of
+ *      the exact chance the published table implies, worked out here by
+ *      enumerating every order of distinct winners. Section 1 checks that
+ *      the exact chances match the league's published row for the worst
+ *      NBA club (14.0, 13.4, 12.7, 12.0 and 47.9 percent at fifth).
  *   3. MIGRATION. An old save's number[], after any number of old style
  *      trades, becomes a ledger with every marker kept, club by club and
  *      round by round, and the result reads back as a valid block.
@@ -28,10 +34,16 @@
  *   published chance, in standard errors: median 0.64, 95th percentile 1.79.
  *   The band is 4.5, so a healthy module sits far inside it, and the
  *   flatlottery control lands dozens of standard errors outside.
+ *   Later slots (NBA 2 to 5, NHL 2 and 3): 320 club and slot shares against
+ *   the exact chance, median 0.58, 95th percentile 1.98, same band. The
+ *   repeatwin control puts the worst NBA club fifth 24.7 percent of the
+ *   time against 47.9, a z of about 93.
  *   Ten seasons, smallest to largest of the five seeds:
- *     deals made       NFL 411 to 466, NBA 357 to 421, NHL 577 to 650, MLB 69 to 90
- *     picks moved      NFL 945 to 1045, NBA 645 to 771, NHL 1357 to 1483, MLB 0
- *     offseason deals  NFL 109 to 129, NBA 68 to 88, NHL 103 to 133, MLB 9 to 23
+ *     deals made       NFL 411 to 466, NBA 357 to 421, NHL 934 to 1002, MLB 69 to 90
+ *     picks moved      NFL 945 to 1045, NBA 645 to 771, NHL 1989 to 2144, MLB 0
+ *     offseason deals  NFL 109 to 129, NBA 68 to 88, NHL 165 to 193, MLB 9 to 23
+ *   (NHL remeasured 2026-10-02 after its prospects became tradable; it was
+ *   577 to 650 deals before, and its floors were set from those.)
  *   The floors are about half the smallest of each. Tries after the deadline
  *   are not a band: they are counted exactly (periods left x tries x seasons).
  *   A control exits 0 when the sections it should turn red went red and no
@@ -46,6 +58,7 @@
  *   dropmarker  migration forgets a club's second extra marker in a round
  *   leak        the summer roll drops every traded first round pick
  *   latetrade   the window stays open one period past the deadline
+ *   repeatwin   a club that has won a draw can win the next one too
  *
  * Run: node scripts/simGmPicks.mjs
  */
@@ -60,9 +73,13 @@ const SWAPS = {
   dropmarker: { picks: [['      for (let k = 1; k < c; k++) extras.push(id);', '      for (let k = 2; k < c; k++) extras.push(id);']] },
   leak: { picks: [['  const picks = ledger.picks.filter(p => p.year > closedSeason);', '  const picks = ledger.picks.filter(p => p.year > closedSeason && !(p.round === 1 && p.holder !== p.orig));']] },
   latetrade: { deadline: [['  if (periodsPlayed <= after) {', '  if (periodsPlayed <= after + 1) {']] },
+  repeatwin: { picks: [
+    ['    for (let i = 0; i < pool.length; i++) if (!won.has(pool[i])) total += weight[i];', '    for (let i = 0; i < pool.length; i++) total += weight[i];'],
+    ['      if (won.has(pool[i]) || weight[i] <= 0) continue;', '      if (weight[i] <= 0) continue;'],
+  ] },
 };
 const EXPECT = {
-  odds: [1, 2], flatlottery: [2], noclimbcap: [2], dropmarker: [3], leak: [4], latetrade: [5],
+  odds: [1, 2], flatlottery: [2], noclimbcap: [2], dropmarker: [3], leak: [4], latetrade: [5], repeatwin: [2],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`GM_PICKS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -113,6 +130,51 @@ for (const [key, pub] of Object.entries(PUBLISHED)) {
 }
 for (const key of ['nfl', 'mlb']) ok(1, `${key} draws no lottery here`, gm.picks.GM_PICK_RULES[key].lottery === null);
 
+/* The exact chance of every seed at every slot, from the published table
+   alone and not from the module: draw `draws` DISTINCT winners, each
+   weighted by its share of the odds still in the pool (a redraw on a repeat
+   winner comes to the same thing), then place them by the published rule:
+   the winner of draw d takes slot d, a capped climb stops maxClimb places
+   above its seed, and the clubs passed keep their order. exact[seed][slot]. */
+function exactSlots(pub) {
+  const n = pub.clubs;
+  const exact = Array.from({ length: n }, () => new Array(n).fill(0));
+  const walk = (won, prob) => {
+    if (won.length === pub.draws) {
+      const order = Array.from({ length: n }, (_, i) => i);
+      won.forEach((seed, d) => {
+        let slot = d + 1;
+        if (pub.maxClimb !== null && seed + 1 - slot > pub.maxClimb) slot = seed + 1 - pub.maxClimb;
+        const at = order.indexOf(seed);
+        if (at > slot - 1) { order.splice(at, 1); order.splice(slot - 1, 0, seed); }
+      });
+      order.forEach((seed, slot) => { exact[seed][slot] += prob; });
+      return;
+    }
+    const left = pub.odds.reduce((s, o, i) => s + (won.includes(i) ? 0 : o), 0);
+    for (let i = 0; i < n; i++) {
+      if (won.includes(i) || pub.odds[i] <= 0) continue;
+      walk([...won, i], prob * pub.odds[i] / left);
+    }
+  };
+  walk([], 1);
+  return exact;
+}
+const EXACT = { nba: exactSlots(PUBLISHED.nba), nhl: exactSlots(PUBLISHED.nhl) };
+/* The league's own row for its worst club, picks 1 to 5, in percent: the
+   nba.com explainer cited beside the table (read by the round's review on
+   2026-10-02). It is what the table implies, so it pins the enumeration. */
+const NBA_WORST_ROW = [14.0, 13.4, 12.7, 12.0, 47.9];
+{
+  const got = EXACT.nba[0].slice(0, 5).map(p => Math.round(p * 1000) / 10);
+  ok(1, 'nba: the exact chances match the published row for the worst club', JSON.stringify(got) === JSON.stringify(NBA_WORST_ROW), JSON.stringify(got));
+  for (const [key, ex] of Object.entries(EXACT)) {
+    const bad = ex.filter(row => Math.abs(row.reduce((a, b) => a + b, 0) - 1) > 1e-9).length
+      + ex[0].map((_, s) => ex.reduce((a, row) => a + row[s], 0)).filter(t => Math.abs(t - 1) > 1e-9).length;
+    ok(1, `${key}: every seed lands somewhere and every slot is filled, exactly`, bad === 0, `${bad}`);
+  }
+}
+
 /* ---- 2. the draws --------------------------------------------------------- */
 const DRAWS = 40000;
 /* A club's share of first picks over DRAWS lotteries wobbles around its true
@@ -128,6 +190,7 @@ function firstPickChance(pub) {
   });
 }
 const zSeen = [];
+const zSlots = [];
 for (const [key, pub] of Object.entries(PUBLISHED)) {
   const lot = gm.picks.GM_PICK_RULES[key].lottery;
   if (!lot) continue;
@@ -137,10 +200,15 @@ for (const [key, pub] of Object.entries(PUBLISHED)) {
     const rng = makeRng(seed * 7919 + pub.clubs);
     const first = new Array(pub.clubs).fill(0);
     const draw1 = new Array(pub.clubs).fill(0);
-    let climbedTooFar = 0, notAShuffle = 0, worstTooLow = 0, wrongDraws = 0, restMoved = 0;
+    let climbedTooFar = 0, notAShuffle = 0, worstTooLow = 0, wrongDraws = 0, restMoved = 0, repeatWinners = 0;
+    /* slots 1 to draws + 1: every drawn slot and the first one after them */
+    const SLOTS = pub.draws + 1;
+    const atSlot = Array.from({ length: pub.clubs }, () => new Array(SLOTS).fill(0));
     for (let d = 0; d < DRAWS; d++) {
       const r = gm.picks.runLottery(pool, lot, rng);
       first[pool.indexOf(r.order[0])]++;
+      for (let s = 0; s < SLOTS && s < r.order.length; s++) atSlot[pool.indexOf(r.order[s])][s]++;
+      if (new Set(r.wins.map(w => w.club)).size !== r.wins.length) repeatWinners++;
       if (r.wins.length !== pub.draws) wrongDraws++;
       if (r.wins.length) draw1[r.wins[0].seed - 1]++;
       if (new Set(r.order).size !== pool.length || r.order.length !== pool.length) notAShuffle++;
@@ -158,6 +226,18 @@ for (const [key, pub] of Object.entries(PUBLISHED)) {
     ok(2, `${key} seed ${seed}: no club climbs past the cap`, climbedTooFar === 0, `${climbedTooFar}`);
     ok(2, `${key} seed ${seed}: the worst club picks no lower than slot ${pub.draws + 1}`, worstTooLow === 0, `${worstTooLow}`);
     ok(2, `${key} seed ${seed}: clubs that did not win keep their order`, restMoved === 0, `${restMoved}`);
+    ok(2, `${key} seed ${seed}: no club wins two draws in one lottery`, repeatWinners === 0, `${repeatWinners} lotteries`);
+    for (let i = 0; i < pub.clubs; i++) {
+      for (let s = 1; s < SLOTS; s++) {
+        const p = EXACT[key][i][s];
+        const got = atSlot[i][s];
+        if (p === 0) { ok(2, `${key} seed ${seed}: club ${i + 1} never picks ${s + 1}`, got === 0, `${got}`); continue; }
+        const z = (got / DRAWS - p) / Math.sqrt(p * (1 - p) / DRAWS);
+        zSlots.push(Math.abs(z));
+        ok(2, `${key} seed ${seed}: club ${i + 1} picks ${s + 1} at ${(p * 100).toFixed(1)} percent`, Math.abs(z) <= Z_BAND,
+          `${(got / DRAWS * 100).toFixed(2)} percent, z ${z.toFixed(2)}`);
+      }
+    }
     for (let i = 0; i < pub.clubs; i++) {
       for (const [what, got, p] of [['picks first', first[i], expectFirst[i] / 100], ['wins draw one', draw1[i], pub.odds[i] / 100]]) {
         if (p === 0) { ok(2, `${key} seed ${seed}: club ${i + 1} never ${what}`, got === 0, `${got}`); continue; }
@@ -171,6 +251,8 @@ for (const [key, pub] of Object.entries(PUBLISHED)) {
 }
 zSeen.sort((a, b) => a - b);
 MEASURED.lotteryZ = { n: zSeen.length, median: zSeen[Math.floor(zSeen.length / 2)], p95: zSeen[Math.floor(zSeen.length * 0.95)] };
+zSlots.sort((a, b) => a - b);
+MEASURED.slotZ = { n: zSlots.length, median: zSlots[Math.floor(zSlots.length / 2)], p95: zSlots[Math.floor(zSlots.length * 0.95)] };
 
 /* ---- 3. migration --------------------------------------------------------- */
 /* The old engines, replayed: every club starts on the list its engine dealt,
@@ -307,6 +389,7 @@ for (const [n, s] of [...bySection.entries()].sort((a, b) => a[0] - b[0])) {
   console.log(`   ${n}. ${SECTION_NAMES[n]}: ${s.n} checks${s.bad ? `, ${s.bad} FAILED` : ''}`);
 }
 console.log(`   measured: lottery |z| over ${MEASURED.lotteryZ.n} club shares, median ${MEASURED.lotteryZ.median.toFixed(2)}, 95th percentile ${MEASURED.lotteryZ.p95.toFixed(2)} (band ${Z_BAND})`);
+console.log(`   measured: later slot |z| over ${MEASURED.slotZ.n} club and slot shares, median ${MEASURED.slotZ.median.toFixed(2)}, 95th percentile ${MEASURED.slotZ.p95.toFixed(2)} (band ${Z_BAND})`);
 for (const [k, v] of Object.entries(MEASURED.trades)) console.log(`   measured: ${k} deals/picks moved/late tries/offseason deals per seed: ${v.join('  ')}`);
 if (CONTROL) {
   const red = [...bySection.entries()].filter(([, s]) => s.bad > 0).map(([n]) => n).sort((a, b) => a - b);
