@@ -1,5 +1,10 @@
 # Prepared NHL waiver receipt, round 970
 
+Read `resume-2026-10-03/README.md` for the newest unexecuted preparation:
+whole-save outcomes, corrected pre970 reference, one additional control and
+native fixture. Its manifest keeps acceptance explicitly open. The original
+five artifacts and hashes below remain unchanged as the prior checkpoint.
+
 This is an unbound draft, preserved for the requested handoff. These text
 artifacts are outside app imports and simulation harness discovery.
 They do not add a receipt to the current game.
