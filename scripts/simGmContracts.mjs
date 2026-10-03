@@ -163,7 +163,7 @@
  *      every other refuser came back), mutmid 31, mutmax 2 (the ladder walk:
  *      6 and 9 seasons), muttag 96, noreprice 226, sheetpool 41, mutceil 149,
  *      earlyone 24, nodeadcap 13 (15 on 300). Second review: nofinalcap 299,
- *      ladcap 18, ladder 32, underlist 173, arbstep 111, fiveyears 24, notax
+ *      ladcap 18, ladder 32, underlist 183, arbstep 98, fiveyears 24, notax
  *      4, qoback 10.
  *
  * NOT COVERED HERE, AND WHERE IT IS: the walkout and counter arithmetic of a
