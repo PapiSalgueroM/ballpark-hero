@@ -1,0 +1,81 @@
+name: Buzzer court presentation verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/buzzer-court.yml
+      - scripts/qa/buzzerCourt1000.mjs
+      - scripts/simBuzzerCourtPresentation.mjs
+      - src/components/buzzer-beater/**
+      - src/test/buzzerCourtPresentation.test.tsx
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: buzzer-court-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install verification dependencies
+        run: |
+          mkdir -p buzzer-court-artifacts
+          git rev-parse HEAD | tee buzzer-court-artifacts/commit.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Type check and current build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee buzzer-court-artifacts/types.log
+          npm run build 2>&1 | tee buzzer-court-artifacts/build.log
+      - name: Actual court presentation and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: BUZZER_COURT_CONTROL=all ONLY=simBuzzerCourtPresentation node scripts/runAllSims.mjs 2>&1 | tee buzzer-court-artifacts/mounted.log
+      - name: Source anchor compatibility
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee buzzer-court-artifacts/anchors.log
+      - name: Build the fixed before image
+        id: before
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          baseline=f5e5a7254f4387155c042a69bcc5ee9a15c6d2d7
+          before="$RUNNER_TEMP/dukb-court-before"
+          mkdir -p "$before"
+          git archive "$baseline" | tar -x -C "$before"
+          cmp "$before/package-lock.json" package-lock.json
+          ln -s "$GITHUB_WORKSPACE/node_modules" "$before/node_modules"
+          printf '%s\n' "$baseline" > buzzer-court-artifacts/baseline.txt
+          (cd "$before" && npm run build) 2>&1 | tee buzzer-court-artifacts/baseline-build.log
+      - name: Same-scenario before and after with native geometry guards
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.before.outcome == 'success' }}
+        env:
+          BUZZER_COURT_BASELINE_DIR: ${{ runner.temp }}/dukb-court-before/dist
+        run: node scripts/qa/buzzerCourt1000.mjs 2>&1 | tee buzzer-court-artifacts/native.log
+      - name: Preserve evidence for independent visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: buzzer-court-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: buzzer-court-artifacts/
