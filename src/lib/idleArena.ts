@@ -137,6 +137,67 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'trophy10', label: 'Cabinet', blurb: 'Hold ten trophies.', test: s => s.trophies >= 10 },
 ];
 
+/**
+ * Round 957: the trophy room. Until this round a trophy was a flat +5% and
+ * nothing else, so lifting one was automatic and then forgotten. Now a trophy
+ * can be spent on a permanent perk instead, and spending it gives up its 5%,
+ * so every purchase is a trade: a bigger multiplier on everything, or one
+ * thing that suits the way you play.
+ *
+ * Each perk is a ladder of three levels. `cost` is the trophies the NEXT level
+ * takes, so level two of Long Night costs cost[1] on top of what level one
+ * already took. The numbers were tuned by scripts/simIdleArena.mjs section 6:
+ * every level makes the next trophy come sooner for the player it is meant for,
+ * and every perk makes it come later for somebody it is not meant for.
+ */
+export interface Perk {
+  id: 'longNight' | 'nightShift' | 'headStart' | 'scouting';
+  label: string;
+  emoji: string;
+  /** who it is for, in a few words */
+  pitch: string;
+  /** trophies each level costs, in order */
+  cost: number[];
+}
+
+export const PERKS: Perk[] = [
+  { id: 'longNight', label: 'Long Night', emoji: '🌙', pitch: 'for long days away', cost: [3, 6, 12] },
+  { id: 'nightShift', label: 'Night Shift', emoji: '🔦', pitch: 'for a night away', cost: [3, 6, 12] },
+  { id: 'headStart', label: 'Head Start', emoji: '🚀', pitch: 'for quick runs', cost: [3, 6, 12] },
+  { id: 'scouting', label: 'Scouting Network', emoji: '🔭', pitch: 'for long runs', cost: [3, 6, 12] },
+];
+export const PERK_MAX = 3;
+
+/** away cap by Long Night level, 0 to 3 */
+export const LONG_NIGHT_CAP_MS = [OFFLINE_CAP_MS, ...[12, 16, 24].map(h => h * 3600 * 1000)];
+/** away rate by Night Shift level; every one of them stays under full speed,
+ *  because being there has to beat being away */
+export const NIGHT_SHIFT_RATE = [OFFLINE_RATE, 0.6, 0.7, 0.8];
+/** the squad a run starts with after a lift, by Head Start level */
+export const HEAD_START_SQUAD: Record<string, number>[] = [
+  { ballboy: 1 },
+  { ballboy: 10 },
+  { ballboy: 10, striker: 10 },
+  { ballboy: 10, striker: 10, guard: 10 },
+];
+/** the price growth per signing, by Scouting Network level */
+export const SCOUTING_GROWTH = [GROWTH, 1.14, 1.13, 1.12];
+
+const SQUAD_NAMES: Record<string, string> = { ballboy: 'Ball Boys', striker: 'Sunday Strikers', guard: 'Point Guards' };
+
+/** What one level gives, in the words the trophy room prints. Built from the
+ *  same tables the engine reads, so the card cannot promise something else. */
+export function perkEffect(id: Perk['id'], level: number): string {
+  const l = Math.max(1, Math.min(PERK_MAX, Math.floor(level)));
+  if (id === 'longNight') return `Time away pays for up to ${LONG_NIGHT_CAP_MS[l] / 3600000} hours, not ${LONG_NIGHT_CAP_MS[0] / 3600000}`;
+  if (id === 'nightShift') return `Time away runs at ${Math.round(NIGHT_SHIFT_RATE[l] * 100)}% speed, not ${Math.round(NIGHT_SHIFT_RATE[0] * 100)}%`;
+  if (id === 'headStart') {
+    const squad = Object.entries(HEAD_START_SQUAD[l]).map(([g, n]) => `${n} ${SQUAD_NAMES[g] ?? g}`);
+    return `Every run after a lift starts with ${squad.length > 1 ? squad.slice(0, -1).join(', ') + ' and ' + squad[squad.length - 1] : squad[0]}`;
+  }
+  return `Each signing costs ${Math.round((SCOUTING_GROWTH[l] - 1) * 100)}% more than the last, not ${Math.round((SCOUTING_GROWTH[0] - 1) * 100)}%`;
+}
+
 export interface ArenaState {
   v: 1;
   points: number;
@@ -154,6 +215,9 @@ export interface ArenaState {
   /** away time already paid for in the absence being served, against the cap */
   awayMs: number;
   started: number;
+  /** Round 957: trophy room levels, perk id to level 1..3. A save from before
+   *  the round has no such field and loadSave reads it as none bought. */
+  perks: Partial<Record<Perk['id'], number>>;
 }
 
 /** A fresh arena starts with one Ball Boy on the payroll, so something is
@@ -162,7 +226,20 @@ export function newState(now: number = Date.now()): ArenaState {
   const owned: Record<string, number> = {};
   for (const g of GENERATORS) owned[g.id] = 0;
   owned.ballboy = 1;
-  return { v: 1, points: 0, earned: 0, allTime: 0, taps: 0, owned, upgrades: [], trophies: 0, runs: 0, ach: [], lastTick: now, awayMs: 0, started: now };
+  return { v: 1, points: 0, earned: 0, allTime: 0, taps: 0, owned, upgrades: [], trophies: 0, runs: 0, ach: [], lastTick: now, awayMs: 0, started: now, perks: {} };
+}
+
+/** A perks block is coerced level by level: an unknown id is dropped, a level
+ *  that is not a whole number from 1 to PERK_MAX is clamped or dropped, and
+ *  anything that is not an object at all reads as nothing bought. */
+function loadPerks(raw: unknown): ArenaState['perks'] {
+  const out: ArenaState['perks'] = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  for (const p of PERKS) {
+    const level = Math.min(PERK_MAX, Math.floor(finite((raw as Record<string, unknown>)[p.id])));
+    if (level >= 1) out[p.id] = level;
+  }
+  return out;
 }
 
 const finite = (n: unknown, fallback = 0): number => (typeof n === 'number' && Number.isFinite(n) && n >= 0 ? n : fallback);
@@ -178,6 +255,7 @@ export function loadSave(raw: string | null, now: number = Date.now()): ArenaSta
     for (const g of GENERATORS) owned[g.id] = Math.floor(finite((p.owned as Record<string, unknown> | undefined)?.[g.id]));
     const known = new Set(UPGRADES.map(u => u.id));
     const knownAch = new Set(ACHIEVEMENTS.map(a => a.id));
+    const perks = loadPerks(p.perks);
     return {
       v: 1,
       points: finite(p.points),
@@ -190,8 +268,9 @@ export function loadSave(raw: string | null, now: number = Date.now()): ArenaSta
       runs: Math.floor(finite(p.runs)),
       ach: Array.isArray(p.ach) ? [...new Set(p.ach.filter((a): a is string => typeof a === 'string' && knownAch.has(a)))] : [],
       lastTick: finite(p.lastTick, now) || now,
-      awayMs: Math.min(finite(p.awayMs), OFFLINE_CAP_MS),
+      awayMs: Math.min(finite(p.awayMs), LONG_NIGHT_CAP_MS[perks.longNight ?? 0]),
       started: finite(p.started, now) || now,
+      perks,
     };
   } catch {
     return null;
@@ -202,23 +281,55 @@ export function serialize(s: ArenaState): string {
   return JSON.stringify(s);
 }
 
+/* ── the trophy room's levers, read by the rules below ─────────────────── */
+
+/** the level owned of one perk, 0 when none */
+export function perkLevel(s: Pick<ArenaState, 'perks'>, id: Perk['id']): number {
+  return s.perks?.[id] ?? 0;
+}
+/** the price growth per signing this arena pays (Scouting Network) */
+export function growthOf(s: Pick<ArenaState, 'perks'>): number {
+  return SCOUTING_GROWTH[perkLevel(s, 'scouting')];
+}
+/** the longest one absence keeps paying for (Long Night) */
+export function awayCapMs(s: Pick<ArenaState, 'perks'>): number {
+  return LONG_NIGHT_CAP_MS[perkLevel(s, 'longNight')];
+}
+/** the share of full speed an absence pays (Night Shift) */
+export function awayRate(s: Pick<ArenaState, 'perks'>): number {
+  return NIGHT_SHIFT_RATE[perkLevel(s, 'nightShift')];
+}
+/** trophies the next level of a perk takes, or null at the top of its ladder */
+export function perkCost(s: Pick<ArenaState, 'perks'>, id: Perk['id']): number | null {
+  const p = PERKS.find(x => x.id === id);
+  const level = perkLevel(s, id);
+  if (!p || level >= PERK_MAX) return null;
+  return p.cost[level];
+}
+/** every trophy that has gone into the room, worked out from the levels */
+export function trophiesSpent(s: Pick<ArenaState, 'perks'>): number {
+  let n = 0;
+  for (const p of PERKS) for (let l = 0; l < perkLevel(s, p.id); l++) n += p.cost[l];
+  return n;
+}
+
 /** cost of the next one, given how many are owned */
-export function genCost(g: Generator, owned: number): number {
-  return Math.ceil(g.baseCost * Math.pow(GROWTH, owned));
+export function genCost(g: Generator, owned: number, growth: number = GROWTH): number {
+  return Math.ceil(g.baseCost * Math.pow(growth, owned));
 }
 
 /** cost of the next n, summed */
-export function genCostN(g: Generator, owned: number, n: number): number {
+export function genCostN(g: Generator, owned: number, n: number, growth: number = GROWTH): number {
   let total = 0;
-  for (let i = 0; i < n; i++) total += genCost(g, owned + i);
+  for (let i = 0; i < n; i++) total += genCost(g, owned + i, growth);
   return total;
 }
 
 /** how many can be afforded from here */
-export function affordable(g: Generator, owned: number, points: number): number {
+export function affordable(g: Generator, owned: number, points: number, growth: number = GROWTH): number {
   let n = 0, spend = 0;
   while (n < 1000) {
-    const c = genCost(g, owned + n);
+    const c = genCost(g, owned + n, growth);
     if (spend + c > points) break;
     spend += c; n += 1;
   }
@@ -309,10 +420,13 @@ export function tick(s: ArenaState, now: number): { state: ArenaState; earned: n
  * after somebody comes back sets it to zero, so the next absence is a new one.
  */
 export function applyOffline(s: ArenaState, now: number): { state: ArenaState; earned: number; seconds: number } {
-  const left = Math.max(0, OFFLINE_CAP_MS - s.awayMs);
+  /* Round 957: the cap and the rate are the trophy room's (Long Night, Night
+     Shift), eight hours at half speed when neither is bought. Same one meter
+     for the whole absence, whatever the cap is. */
+  const left = Math.max(0, awayCapMs(s) - s.awayMs);
   const away = Math.min(Math.max(0, now - s.lastTick), left);
   const seconds = away / 1000;
-  const earned = totalRate(s) * seconds * OFFLINE_RATE;
+  const earned = totalRate(s) * seconds * awayRate(s);
   return { state: withAch({ ...s, points: s.points + earned, earned: s.earned + earned, allTime: s.allTime + earned, lastTick: now, awayMs: s.awayMs + away }), earned, seconds };
 }
 
@@ -320,7 +434,7 @@ export function buyGen(s: ArenaState, genId: string, n = 1): ArenaState {
   const g = GENERATORS.find(x => x.id === genId);
   if (!g || n < 1) return s;
   const owned = s.owned[g.id] ?? 0;
-  const cost = genCostN(g, owned, n);
+  const cost = genCostN(g, owned, n, growthOf(s));
   if (cost > s.points) return s;
   return withAch({ ...s, points: s.points - cost, owned: { ...s.owned, [g.id]: owned + n } });
 }
@@ -336,14 +450,27 @@ export function buyUpgrade(s: ArenaState, id: string): ArenaState {
 export function lift(s: ArenaState, now: number = Date.now()): ArenaState {
   const gained = trophiesFor(s.earned);
   if (gained < 1) return s;
+  /* Round 957: Head Start decides the squad the new run opens with; level 0 is
+     the one Ball Boy every arena has always started with. */
   const owned: Record<string, number> = {};
-  for (const g of GENERATORS) owned[g.id] = 0;
-  owned.ballboy = 1;
+  for (const g of GENERATORS) owned[g.id] = HEAD_START_SQUAD[perkLevel(s, 'headStart')][g.id] ?? 0;
   return withAch({
     ...s,
     points: 0, earned: 0, taps: s.taps, owned, upgrades: [],
     trophies: s.trophies + gained, runs: s.runs + 1, lastTick: now,
   });
+}
+
+/**
+ * Round 957: spend trophies on the next level of a perk. The trophies leave the
+ * cabinet, so their +5% each goes with them from this moment; the perk stays
+ * for good. Refused, and the same state handed back, when the ladder is at
+ * the top or the cabinet cannot cover the price.
+ */
+export function buyPerk(s: ArenaState, id: Perk['id']): ArenaState {
+  const cost = perkCost(s, id);
+  if (cost === null || cost > s.trophies) return s;
+  return { ...s, trophies: s.trophies - cost, perks: { ...s.perks, [id]: perkLevel(s, id) + 1 } };
 }
 
 function withAch(s: ArenaState): ArenaState {
