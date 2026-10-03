@@ -49,7 +49,7 @@ function submit(view: ReturnType<typeof render>, name: string) {
 }
 async function start(view: ReturnType<typeof render>) {
   await view.findByRole('combobox');
-  fireEvent.click(view.getByRole('button', { name: 'Five-puzzle run', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Five-puzzle run' }));
   await waitFor(() => expect(view.getByRole('button', { name: 'Start run' })).toBeEnabled());
   fireEvent.click(view.getByRole('button', { name: 'Start run' }));
   expect(view.getByTestId('practice-progress')).toHaveTextContent('Puzzle 1 of 5');
@@ -99,7 +99,7 @@ describe('Footle practice mounted outcomes', () => {
     fireEvent.click(view.getByRole('button', { name: 'Next puzzle' }));
     submit(view, initial.targets[2]);
     fireEvent.click(view.getByRole('button', { name: 'Next puzzle' }));
-    fireEvent.click(view.getByRole('button', { name: 'Give up', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Give up' }));
     fireEvent.click(view.getByRole('button', { name: 'Yes, reveal it' }));
     expect(savedRun().rounds[3]).toEqual({ guesses: [], status: 'lost' });
     fireEvent.click(view.getByRole('button', { name: 'Next puzzle' }));
@@ -164,7 +164,7 @@ describe('Footle practice mounted outcomes', () => {
   it('offers practice from the daily result without resetting that result', async () => {
     const view = await page();
     await view.findByRole('combobox');
-    fireEvent.click(view.getByRole('button', { name: 'Give up', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Give up' }));
     fireEvent.click(view.getByRole('button', { name: 'Yes, reveal it' }));
     const bytes = localStorage.getItem(`footle-daily-${getTodayET()}`);
     expect(JSON.parse(bytes!).gameStatus).toBe('lost');
@@ -219,7 +219,7 @@ describe('Footle practice mounted outcomes', () => {
     fixture.pool = fixture.pool.filter(player => player.difficulty !== 'easy').concat(fixture.pool.slice(0, 4));
     const view = await page();
     await view.findByRole('combobox');
-    fireEvent.click(view.getByRole('button', { name: 'Five-puzzle run', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Five-puzzle run' }));
     expect(view.getByRole('button', { name: 'Start run' })).toBeDisabled();
     expect(view.getByRole('status')).toHaveTextContent('needs five available players');
     expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBeNull();
