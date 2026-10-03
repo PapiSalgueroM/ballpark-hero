@@ -41,6 +41,7 @@ const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubM
 const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
+const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
@@ -306,37 +307,25 @@ const ClubManager = () => {
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 
-  /* ================= RESUME PROMPT ================= */
-  if (g.phase === 'resume' && g.career) {
+  /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
+  if (g.phase === 'resume') {
     const c = g.career;
     return shell(
-      <div className="max-w-md mx-auto">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
-          <p className="text-muted-foreground text-sm">A saved career was found on this device.</p>
-        </header>
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <div className="text-3xl mb-2">💼</div>
-          <div className="text-xl font-bold font-display text-foreground">{c.clubName}</div>
-          <div className="text-sm text-muted-foreground mt-1">
-            {worldSeasonLabel(c)} · Season {c.season} · Week {Math.min(c.week + 1, c.calendar.length)} of {c.calendar.length} · Board {Math.round(c.boardConfidence)}/100
-          </div>
-          <div className="text-xs text-muted-foreground mt-0.5">🏆 {c.trophies.length} trophies won so far</div>
-          <div className="flex gap-3 mt-5">
-            <button onClick={g.resume} className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity">
-              Resume Career
-            </button>
-            <button onClick={g.startNew} className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors">
-              Start Fresh
-            </button>
-          </div>
-        </div>
-      </div>
+      <ScreenLoading>
+        <ManagerSlotsScreen
+          slots={g.slots}
+          activeDetail={c ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          note={g.slotNote}
+          onContinue={g.openSlot}
+          onNew={g.newInSlot}
+          onDelete={g.removeSlot}
+        />
+      </ScreenLoading>
     );
   }
 
   /* ================= CLUB SELECT (Round 70: nation -> league -> team) ================= */
-  if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
+  if (g.phase === 'clubSelect') {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
     const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
@@ -439,6 +428,14 @@ const ClubManager = () => {
             <p className="text-[10px] text-center mt-1">
               <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] px-2 text-primary hover:underline">How the real Champions League format changed, and what each era here plays</Link>
             </p>
+            {/* Round 928: a way back to the other managers from a new one's picker. */}
+            {g.slots.some(v => v.summary && !v.active) && (
+              <p className="text-[11px] text-center mt-1">
+                <button onClick={g.showSlots} className="inline-flex items-center min-h-[32px] px-2 text-muted-foreground hover:text-primary hover:underline">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back to your managers
+                </button>
+              </p>
+            )}
           </div>
         )}
 
@@ -859,6 +856,10 @@ const ClubManager = () => {
             ))}
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
+          {/* Round 928: back to the three manager slots, this career saved first. */}
+          <button onClick={g.showSlots} data-testid="cm-show-slots" className="underline underline-offset-2 hover:text-primary transition-colors">
+            Managers
+          </button>
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}

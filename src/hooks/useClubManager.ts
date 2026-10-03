@@ -28,6 +28,7 @@ import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/l
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -127,16 +128,41 @@ export function useClubManager() {
   const [bootTry, setBootTry] = useState(0);
   const retryBoot = useCallback(() => setBootTry(n => n + 1), []);
 
+  /* Round 928: the three manager slots, as read off the store without opening
+     a save, and a note when a swap was refused. slotEpoch reruns the boot
+     below after a swap, so the incoming career opens through the very same
+     path a page load takes (its era's squads first). goStraightIn is set by
+     Continue on a parked slot, so that career opens on its hub rather than
+     back on the slots screen. */
+  const [slots, setSlots] = useState<SlotView[]>([]);
+  const [slotNote, setSlotNote] = useState<string | null>(null);
+  const [slotEpoch, setSlotEpoch] = useState(0);
+  const goStraightIn = useRef(false);
+
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
     let alive = true;
     const open = () => {
       const saved = loadCareer();
+      const views = readSlots();
+      setSlots(views);
       if (saved) {
         setCareer(saved);
         if (saved.pendingSummary) setSummary(saved.pendingSummary);
+        if (goStraightIn.current) {
+          goStraightIn.current = false;
+          setPhase(saved.sacked ? 'sacked' : saved.pendingSummary ? 'seasonEnd' : 'hub');
+          setActiveTab('overview');
+        } else {
+          setPhase('resume');
+        }
+      } else if (views.some(v => v.summary)) {
+        /* Round 928: nothing playable in the active slot, but another slot
+           holds a career, so the slots screen, never a picker over them. */
+        goStraightIn.current = false;
         setPhase('resume');
       } else {
+        goStraightIn.current = false;
         setPhase('clubSelect');
       }
     };
@@ -161,7 +187,7 @@ export function useClubManager() {
       },
     );
     return () => { alive = false; };
-  }, [bootTry]);
+  }, [bootTry, slotEpoch]);
 
   /* Round 634: whether the last write was refused. saveCareer swallowed every
      throw until this round, so a browser out of storage for this site, or one
@@ -276,6 +302,80 @@ export function useClubManager() {
     setSummary(null);
     setPendingClub(null);
     setPhase('clubSelect');
+  }, []);
+
+  /* ---------- Round 928: the manager slots ---------- */
+
+  /* The career in memory is written before anything moves, and handed to the
+     swap as the copy to park, so the parked career is the freshest one. Then
+     careerRef is emptied synchronously, for Round 567's reason: the pagehide
+     write must never put the outgoing career back over the incoming one. */
+  const leaveActive = useCallback((slot: number): boolean => {
+    const out = careerRef.current;
+    if (out) saveCareer(out);
+    if (!switchSlot(slot, out)) {
+      setSlotNote('This browser would not save the switch, so nothing moved. Your managers are all where they were. Free up some site storage and try again.');
+      setSlots(readSlots());
+      return false;
+    }
+    setSlotNote(null);
+    careerRef.current = null;
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+    setPendingClub(null);
+    return true;
+  }, []);
+
+  /** Continue a slot's career. The active one opens straight away; a parked
+   *  one is swapped in and opened through the boot, era squads first. */
+  const openSlot = useCallback((slot: number) => {
+    if (slot === activeSlot() && career) { resume(); return; }
+    if (!leaveActive(slot)) return;
+    goStraightIn.current = true;
+    setPhase('boot');
+    setSlotEpoch(n => n + 1);
+  }, [career, resume, leaveActive]);
+
+  /** A new manager in an empty slot: the current career is parked, and the
+   *  picker starts a fresh one that lands in this slot. */
+  const newInSlot = useCallback((slot: number) => {
+    /* Only ever an empty or unreadable slot: a career is deleted on purpose,
+       behind the screen's confirm, never by starting over it. */
+    if (readSlots()[slot - 1]?.summary) return;
+    if (slot !== activeSlot() && !leaveActive(slot)) return;
+    /* Clears the engine's registrations; SAVE_KEY is already empty for a
+       slot just switched to, and a damaged active one is cleared for good. */
+    clearCareer();
+    careerRef.current = null;
+    setCareer(null);
+    setSlots(readSlots());
+    setPhase('clubSelect');
+  }, [leaveActive]);
+
+  /** Delete one slot's career for good (the screen asks first). */
+  const removeSlot = useCallback((slot: number) => {
+    if (slot === activeSlot()) {
+      clearCareer();
+      careerRef.current = null;
+      setCareer(null);
+      setReport(null);
+      setSummary(null);
+    } else {
+      deleteSlot(slot);
+    }
+    const views = readSlots();
+    setSlots(views);
+    setSlotNote(null);
+    if (!views.some(v => v.summary || v.damaged)) setPhase('clubSelect');
+  }, []);
+
+  /** Back to the slots screen from inside a career. */
+  const showSlots = useCallback(() => {
+    if (careerRef.current) saveCareer(careerRef.current);
+    setSlots(readSlots());
+    setSlotNote(null);
+    setPhase('resume');
   }, []);
 
   const chooseClub = useCallback((clubName: string) => {
@@ -852,6 +952,7 @@ export function useClubManager() {
     simToWeek,
     saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
     bootError, retryBoot,
+    slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
