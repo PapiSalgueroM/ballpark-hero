@@ -135,13 +135,22 @@ export function gmWalkRotation(
   last?: Record<string, number>,
   from = 0,
 ): { starts: GmStart[]; last: Record<string, number> } {
-  const turn = order.filter((p): p is GmLineupMan => !!p && p.out === 0);
+  const able = order.map(p => (p && p.out === 0 ? p : null));
+  const turn = able.filter((p): p is GmLineupMan => !!p);
   const seen: Record<string, number> = { ...(last ?? {}) };
   if (!last) turn.forEach((p, i) => { seen[p.id] = from + i - turn.length; });
+  /* The turn carries on from the man after whoever pitched last, hurt or not. */
+  let at = 0;
+  if (last) {
+    let latest = -Infinity;
+    order.forEach((p, i) => { if (p && p.id in seen && seen[p.id] > latest) { latest = seen[p.id]; at = i + 1; } });
+  }
   const out: GmStart[] = [];
   for (let g = from; g < from + starts; g++) {
     if (turn.length === 0) { out.push({ id: null, rest: rule.fullRest, value: fallback }); continue; }
-    const p = turn[(g - from) % turn.length];
+    while (!able[at % able.length]) at += 1;
+    const p = able[at % able.length]!;
+    at += 1;
     const rest = p.id in seen ? g - seen[p.id] - 1 : rule.fullRest;
     seen[p.id] = g;
     out.push({ id: p.id, rest, value: gmStartValue(p, rest, rule) });

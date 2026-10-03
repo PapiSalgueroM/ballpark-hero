@@ -331,6 +331,47 @@ for (const sport of ['mlb', 'nhl']) {
   console.log(`   nfl: ${b} scheme benchings, ${flat} did not cost, median cost ${median(walkCosts.nfl).toFixed(4)}; ${a} chart moves followed exactly (${rises} of them RAISED today's number, see above); ${idle} moves that fit neither case were not steps`);
 }
 
+/* ---- 3. a starter on short rest is weaker --------------------------------- */
+console.log('3) a starter on short rest is weaker');
+{
+  const sp = SPORT.mlb;
+  const rot = sp.groups.find(g => g.key === 'rotation');
+  const rule = rot.rotation;
+  let men = 0, fours = 0, fives = 0, hurtWalks = 0, shortAfterHurt = 0;
+  for (const seed of SEEDS) for (const t of Object.values(MLB.initMlbLeague(lcg(seed)).teams)) {
+    for (const p of t.players.filter(q => q.pos === 'SP')) {
+      men += 1;
+      ok(3, `${t.abbr} ${p.id}: a start a game short of full rest rates lower`, L.gmStartValue(p, rule.fullRest - 1, rule) < L.gmStartValue(p, rule.fullRest, rule));
+      ok(3, `${t.abbr} ${p.id}: full rest rates his own number, and more rest adds nothing`, L.gmStartValue(p, rule.fullRest, rule) === p.ovr && L.gmStartValue(p, rule.fullRest + 3, rule) === p.ovr);
+    }
+    const five = L.gmResolveLineup(sp, t).rotation;
+    if (five.filter(Boolean).length < 5) continue;
+    const w5 = L.gmWalkRotation(five, 20, rule, rot.fallback).starts;
+    ok(3, `${t.abbr}: a five man turn starts every man on full rest`, w5.every(s => s.rest === rule.fullRest && s.value === five.find(p => p.id === s.id).ovr));
+    fives += 1;
+    const four = L.gmLineupSetOpen(sp, t, {}, 'rotation', 4, true);
+    ok(3, `${t.abbr}: the fifth slot can be left open`, four !== null);
+    if (!four) continue;
+    const turn = L.gmResolveLineup(sp, t, four).rotation;
+    const w4 = L.gmWalkRotation(turn, 20, rule, rot.fallback).starts;
+    ok(3, `${t.abbr}: a four man turn sends every start out short and weaker`, w4.every(s => s.rest === rule.fullRest - 1 && s.value < turn.find(p => p && p.id === s.id).ovr));
+    const reading = L.gmLineupReading(sp, t, four).groups.find(g => g.key === 'rotation');
+    const plain = turn.filter(Boolean).reduce((s, p) => s + p.ovr, 0) / 4;
+    ok(3, `${t.abbr}: the four man turn's rating carries the rest`, reading.mine < plain, `${reading.mine} against ${plain}`);
+    fours += 1;
+    /* hurt mid walk: ten starts, the second man goes down, the walk carries on */
+    const first = L.gmWalkRotation(five, 10, rule, rot.fallback);
+    const after = five.map((p, i) => (i === 1 ? { ...p, out: 2 } : p));
+    const rest = L.gmWalkRotation(after, 8, rule, rot.fallback, first.last, 10).starts;
+    const short = rest.filter(s => s.rest < rule.fullRest);
+    hurtWalks += 1;
+    if (short.length) shortAfterHurt += 1;
+    ok(3, `${t.abbr}: a hurt starter sends the turn out short, and every short start is weaker`, short.length > 0 && short.every(s => s.value < five.find(p => p.id === s.id).ovr), `${short.length} short starts`);
+  }
+  console.log(`   ${men} starters priced a game short; ${fives} five man turns on full rest, ${fours} four man turns all short and weaker, ${shortAfterHurt} of ${hurtWalks} walks went short after a starter was hurt`);
+  ok(3, 'enough turns walked', fours >= 100 && hurtWalks >= 100, `${fours}, ${hurtWalks}`);
+}
+
 /* ---- summary -------------------------------------------------------------- */
 fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
 for (const f of fails) console.log(`   FAIL ${f}`);
