@@ -148,7 +148,12 @@ const abort = m => { console.error(m); cleanup(); process.exit(1); };
 /* ---------------- the controls' rewrites ---------------- */
 const ROLL = '  if (tryTriggerMoralDilemma(s)) {\n    s.phase = "moral_dilemma";\n    return s;\n  }\n';
 const SOCIAL_HEAD = 'export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {\n';
-const ACTED = '  s.socialMediaActionUsedThisSeason = true;\n';
+/* Round 835 moved the "posted this summer" flag into the shared post rule
+   (careerSocial.ts, set through the sport's descriptor), so the engine no
+   longer holds that line. The control hooks the engine's own call of the
+   shared rule instead: the line that returns early for a refused post, so the
+   second roll still happens only when a post was really made. */
+const ACTED = '  if (!applySocialPost(s, actionId, SOCCER_SOCIAL)) return s;\n';
 const DISMISS_HEAD ='export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {\n  const s = { ...prev };\n  s.pendingMoralDilemma = null;\n';
 const APPLY_HEAD = 'export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {\n  const s = { ...prev };\n';
 const APPLY_TAIL = '  // Stay on moral_dilemma phase, UI calls dismissMoralDilemma to continue\n  s.phase = "moral_dilemma";\n  return s;\n';
@@ -178,7 +183,7 @@ function rewrite(src) {
     return src.slice(0, at) + body.replace(ROLL, '') + src.slice(end);
   }
   if (CONTROL === 'tworolls') {
-    if (count(src, ACTED) !== 1) abort(`control tworolls cannot run: applySocialMediaAction's used flag line is in the engine ${count(src, ACTED)} times, expected 1`);
+    if (count(src, ACTED) !== 1) abort(`control tworolls cannot run: applySocialMediaAction's call of the shared post rule is in the engine ${count(src, ACTED)} times, expected 1`);
     return src.replace(ACTED, `${ACTED}  tryTriggerMoralDilemma(s);\n`);
   }
   if (CONTROL === 'twice') {
