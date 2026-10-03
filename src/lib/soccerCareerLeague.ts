@@ -149,6 +149,12 @@ export function drawLeagueFinish(input: LeagueFinishInput): LeagueFinish {
   return { leagueFinish: Math.min(size, Math.max(2, finish)), leagueSize: size };
 }
 
+/** "La Liga", "Serie A", "MLS", but "the Premier League", "the Bundesliga":
+ *  the phone feed's rule, plus MLS, which takes no article. */
+export function leagueWithArticle(name: string): string {
+  return /^(la |serie |ligue |eredivisie|primeira|liga |mls$)/i.test(name) ? name : `the ${name}`;
+}
+
 /** "1st", "2nd", "3rd", "11th", "22nd". */
 export function ordinal(n: number): string {
   const tens = n % 100;

@@ -13,6 +13,8 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+/* Round 929: every season's league finish, and the era aware elite rule. */
+import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -163,6 +165,13 @@ export interface SeasonRecord {
       parent club's name, so the record always says where you really belonged. */
   onLoanFrom?: string | null;
   leagueTitle: boolean;
+  /** Round 929: where the club finished in the league, 1 exactly when
+      leagueTitle is true. Absent on saves from before that round, on a
+      season cut short, and on a non title season in a league whose size is
+      not verified (soccerCareerLeague.ts), so nothing false is ever printed. */
+  leagueFinish?: number;
+  /** Round 929: clubs in that league that season, only where verified. */
+  leagueSize?: number;
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
@@ -3856,7 +3865,11 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
-  const isElite = ELITE_CLUBS.includes(state.currentClub);
+  /* Round 929: elite only in a season where the era tier rules leave the club
+     at tier 1, so Man City and PSG stop winning two leagues in three in the
+     1990s. Same Math.random calls below, only the threshold moves. */
+  const seasonYear = lastYear + 1;
+  const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);
   const performanceBoost = (overall >= 85 && rating >= 7.5) ? 0.15 :
                            (overall >= 80 && rating >= 7.0) ? 0.10 :
                            (overall >= 75 && rating >= 6.8) ? 0.05 : 0;
@@ -3872,13 +3885,19 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
 
   const winLeague = Math.random() < leagueChance;
   const winCup = Math.random() < cupChance;
+  /* Round 929: the league finish, from its own generator seeded off this
+     season, so the main Math.random stream does not move. */
+  const finish = drawLeagueFinish({
+    league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
+    seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
+  });
 
   return {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
-    leagueTitle: winLeague, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
+    leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -4996,7 +5015,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
          If it is a tournament summer it is played without him, so the
          calendar moving on never skips a World Cup. Before this the year had
          no row and no money at all. */
-      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };
+      /* Round 929: the league finish goes with the title roll, the table was never finished for him. */
+      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);

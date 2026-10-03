@@ -68,6 +68,8 @@ import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
+import { ordinal, leagueWithArticle } from "@/lib/soccerCareerLeague";
+import type { WorldSeason } from "@/lib/soccerPhone";
 /* Round 131: height, weight and the specifics under each family. */
 import {
   type PlayerPhysique, type AttrShape,
@@ -370,6 +372,16 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
             <span className="text-[10px] text-muted-foreground">{season.apps}A · {season.goals}G · {season.assists}As</span>
+            {/* Round 929: where the club finished. Absent on old saves and in
+                leagues whose size is not verified, so it prints nothing there. */}
+            {season.leagueFinish !== undefined && (
+              <span
+                className={`text-[9px] font-bold px-1 rounded tabular-nums ${season.leagueFinish === 1 ? "bg-amber-500/20 text-amber-400" : "bg-muted/60 text-muted-foreground"}`}
+                title={season.leagueSize ? `Finished ${ordinal(season.leagueFinish)} of ${season.leagueSize}` : `Finished ${ordinal(season.leagueFinish)}`}
+              >
+                {ordinal(season.leagueFinish)}
+              </span>
+            )}
             {trophies.length > 0 && <span className="text-[11px]">{trophies.join("")}</span>}
           </div>
         )}
@@ -495,8 +507,13 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null }) {
+function SeasonSummaryCard({ season, position, onContinue, appearance, league, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; league?: string; world?: WorldSeason | null }) {
   const isGK = position === "GK";
+  /* Round 929: the champion is the one the phone's world already crowned for
+     this season, so the card and the feed can never name two winners. */
+  const champion = season.leagueFinish !== undefined && season.leagueFinish !== 1 && league && world && world.year === season.year
+    ? (world.leagues[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
+    : null;
   const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
 
@@ -506,6 +523,14 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       <div className="text-center">
         <h3 className="text-lg font-black">Season Summary</h3>
         <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={season.clubCountry} size={14} />{season.club}{season.onLoanFrom ? ` (on loan from ${season.onLoanFrom})` : ""} · {season.year}/{(season.year + 1).toString().slice(-2)}</p>
+        {season.leagueFinish !== undefined && (
+          <p className="text-xs font-semibold mt-1">
+            {season.leagueFinish === 1
+              ? <>Champions{league ? ` of ${leagueWithArticle(league)}` : ""}{season.leagueSize ? `, top of ${season.leagueSize}` : ""}</>
+              : <>Finished {ordinal(season.leagueFinish)}{season.leagueSize ? ` of ${season.leagueSize}` : ""}{league ? ` in ${leagueWithArticle(league)}` : ""}</>}
+            {champion && <span className="font-normal text-muted-foreground"> · {champion} won it</span>}
+          </p>
+        )}
       </div>
 
       {/* Round 530: the finals, printed in place. They used to count up from
@@ -3646,7 +3671,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance} />
+            <SeasonSummaryCard season={career.pendingSummary} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
+              league={clubs.find(c => c.name === career.pendingSummary?.club)?.league} world={career.phone?.world} />
           )}
 
           {/* OVERLAY: Contract Offers (youth → pro) */}

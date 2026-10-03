@@ -43,7 +43,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
-const CONTROLS = { notitle: [3, 1], eliteblind: [5] };
+const CONTROLS = { notitle: [1], eliteblind: [5], stream: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
@@ -69,6 +69,11 @@ if (CONTROL === 'notitle') {
   fs.writeFileSync(path.join(WORK, 'soccerCareerLeague.ts'), relocate(league));
   enginePath = path.join(WORK, 'soccerCareerEngine.ts');
   fs.writeFileSync(enginePath, relocate(fs.readFileSync(`${ROOT}/src/lib/soccerCareerEngine.ts`, 'utf8'), 'soccerCareerLeague'));
+} else if (CONTROL === 'stream') {
+  const league = mutate('soccerCareerLeague.ts', 'const rng = forkRng(input.seedKey);', 'const rng = forkRng(input.seedKey); Math.random();');
+  fs.writeFileSync(path.join(WORK, 'soccerCareerLeague.ts'), relocate(league));
+  enginePath = path.join(WORK, 'soccerCareerEngine.ts');
+  fs.writeFileSync(enginePath, relocate(fs.readFileSync(`${ROOT}/src/lib/soccerCareerEngine.ts`, 'utf8'), 'soccerCareerLeague'));
 } else if (CONTROL === 'eliteblind') {
   const engine = mutate('soccerCareerEngine.ts', 'const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);', 'const isElite = ELITE_CLUBS.includes(state.currentClub);');
   enginePath = path.join(WORK, 'soccerCareerEngine.ts');
@@ -82,9 +87,11 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${enginePath.replaceAll('\\', '/')}');
 export const engine = mod;
+export const league = await import('${lib}soccerCareerLeague.ts');
+export const eras = await import('${lib}careerEras.ts');
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
-const { engine } = await import(pathToFileURL(OUT).href);
+const { engine, league, eras } = await import(pathToFileURL(OUT).href);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'dismissDebut', 'dismissWorldCup', 'dismissRivalryEvent', 'dismissBallonDor', 'applyEventChoice', 'dismissMoralDilemma', 'dismissSocialMediaPhase', 'dismissAppealResult', 'applyBdorSpeech', 'applyWorldCupSpeech', 'acceptRetirementSuggestion', 'stayAtClub', 'applyRehabChoice', 'FALLBACK_CLUBS'];
 for (const k of NEED) if (!engine[k]) { console.error('engine export missing: ' + k + ', so nothing below measures anything'); process.exit(1); }
@@ -128,15 +135,18 @@ function step(s) {
   }
 }
 
-function runCareer(seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64 } = {}) {
+function runCareer(seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64, nation = 'England', until = null } = {}) {
   const realRandom = Math.random;
   Math.random = seeded(seed * 7919 + 13);
   try {
     const position = POSITIONS[seed % POSITIONS.length];
-    let s = engine.initCareer(`Sim ${seed}`, 'England', position, era, stats(ovr), ovr, startYear, clubs, null, 82);
+    let s = engine.initCareer(`Sim ${seed}`, nation, position, era, stats(ovr), ovr, startYear, clubs, null, 82);
     let guard = 0;
     const played = () => (s.seasons || []).filter(r => r.type === 'playing').length;
-    while (!s.retired && guard++ < 500 && played() < proSeasons) s = step(s);
+    while (!s.retired && guard++ < 500 && played() < proSeasons) {
+      if (until && until(s)) return s;
+      s = step(s);
+    }
     return s;
   } finally {
     Math.random = realRandom;
@@ -161,3 +171,148 @@ if (RECORD) {
   console.log(JSON.stringify(out));
   process.exit(0);
 }
+
+let failures = 0;
+const red = new Set();
+let section = 0;
+const fail = m => { failures += 1; red.add(section); console.error('  FAIL: ' + m); };
+const ELITE = ['Bayern Munich', 'PSG', 'Man City', 'Real Madrid', 'Barcelona', 'Liverpool'];
+
+/* The pool: every era start, six nations whose academies feed the five
+   verified leagues and beyond, three starting levels so every tier is
+   reached. */
+const PER = Number(process.argv[2] || 6);
+const STARTS = [[1990, '1990-94'], [1995, '1995-99'], [2000, '2000-04'], [2005, '2005-09'], [2010, '2010-14'], [2015, '2015-19'], [2020, '2020-24']];
+const NATIONS = ['England', 'Spain', 'Germany', 'Italy', 'France', 'Netherlands'];
+const OVRS = [56, 64, 72];
+const seasons = [];
+let careers = 0;
+for (const [startYear, era] of STARTS) for (const nation of NATIONS) for (const ovr of OVRS) for (let i = 0; i < PER; i++) {
+  const seed = startYear * 1000 + NATIONS.indexOf(nation) * 100 + ovr + i * 7;
+  const s = runCareer(seed, { era, startYear, proSeasons: 8, ovr, nation });
+  careers += 1;
+  for (const r of s.seasons || []) if (r.type === 'playing') seasons.push(r);
+}
+const leagueOf = name => (clubs.find(c => c.name === name) || {}).league || '';
+const sized = seasons.filter(r => league.leagueSizeFor(leagueOf(r.club), r.year));
+console.log(`pool: ${careers} careers, ${seasons.length} playing seasons, ${sized.length} in a league with a verified size, ${seasons.filter(r => r.leagueTitle).length} titles`);
+if (seasons.length < careers * 4) { section = 1; fail(`only ${seasons.length} playing seasons over ${careers} careers, the walk is not reaching the season loop`); }
+
+/* Forced seasons: a career walked to its first pro season, then put at one
+   club, era correct tier and league, for one season, over many seeds. They
+   feed section 5, and the Man City 1990s rows give section 3 its tier 4 step,
+   which no natural career reaches in a verified league. */
+const FORCED = 240;
+function forcedSeasons(club, startYear, era) {
+  let titles = 0, n = 0, year = null;
+  const rows = [];
+  for (let i = 1; i <= FORCED; i++) {
+    const seed = 50000 + startYear * 7 + i;
+    let s = runCareer(seed, { era, startYear, until: x => x.phase === 'playing' && !(x.seasons || []).some(r => r.type === 'playing') });
+    if (s.phase !== 'playing') continue;
+    const next = (s.seasons[s.seasons.length - 1]?.year ?? startYear) + 1;
+    const adj = eras.adjustClubsForYear(clubs, next).find(c => c.name === club);
+    s = { ...s, currentClub: club, currentClubTier: adj.tier, currentLeague: adj.league, currentClubCountry: adj.country };
+    const realRandom = Math.random;
+    Math.random = seeded(seed * 31 + 7);
+    try { s = engine.advanceProSeason(s, clubs); } finally { Math.random = realRandom; }
+    const row = (s.seasons || []).filter(r => r.type === 'playing').pop();
+    if (!row || row.club !== club) continue;
+    n += 1; year = row.year; rows.push(row); if (row.leagueTitle) titles += 1;
+  }
+  return { rate: n ? titles / n : 0, n, year, rows };
+}
+const CASES = [
+  ['Man City', 1990, '1990-94', 'tier'], ['Man City', 2020, '2020-24', 'elite'],
+  ['Real Madrid', 1990, '1990-94', 'elite'], ['PSG', 2000, '2000-04', 'tier'],
+];
+const FORCED_RESULTS = {};
+for (const [club, startYear, era, want] of CASES) FORCED_RESULTS[club + want] = forcedSeasons(club, startYear, era);
+
+section = 1;
+console.log('1) finish is 1 exactly when leagueTitle is true');
+{
+  let bad = 0, titled = 0, titledNoFinish = 0, firstsNoTitle = 0;
+  for (const r of seasons) {
+    if (r.leagueTitle) { titled += 1; if (r.leagueFinish !== 1) { titledNoFinish += 1; bad += 1; } }
+    else if (r.leagueFinish === 1) { firstsNoTitle += 1; bad += 1; }
+  }
+  console.log(`   ${titled} title seasons, ${titledNoFinish} of them without a 1st; ${firstsNoTitle} seasons 1st without the title`);
+  if (titled < 20) fail(`only ${titled} title seasons in the pool, too few to say anything`);
+  if (bad) fail(`${bad} seasons break the rule`);
+}
+
+section = 2;
+console.log('2) never above the league size, never below 1, and a verified league always carries both');
+{
+  let over = 0, under = 0, missing = 0, wrongSize = 0, unsizedClaim = 0, cutShort = 0;
+  for (const r of seasons) {
+    const size = league.leagueSizeFor(leagueOf(r.club), r.year);
+    if (r.leagueFinish !== undefined && r.leagueFinish < 1) under += 1;
+    if (r.leagueSize !== undefined && r.leagueFinish > r.leagueSize) over += 1;
+    /* A severe injury stops the season at the rehab choice and drops the
+       title roll (Round 850); the finish goes with it, by design. */
+    if (size && r.leagueFinish === undefined && r.injurySevere && !r.leagueTitle) { cutShort += 1; continue; }
+    if (size && (r.leagueFinish === undefined || r.leagueSize !== size)) { if (r.leagueFinish === undefined) missing += 1; else wrongSize += 1; }
+    if (!size && r.leagueSize !== undefined) unsizedClaim += 1;
+    if (!size && r.leagueFinish !== undefined && r.leagueFinish !== 1) unsizedClaim += 1;
+  }
+  console.log(`   over ${over}, under ${under}, verified without a finish ${missing}, wrong size ${wrongSize}, a claim in an unverified league ${unsizedClaim}; ${cutShort} seasons cut short by a severe injury carry none, by design`);
+  if (sized.length < seasons.length * 0.3) fail(`only ${sized.length} of ${seasons.length} seasons in a verified league, the pool is not testing the sizes`);
+  if (over + under + missing + wrongSize + unsizedClaim) fail('a finish sits outside its table, or a size is claimed where none is verified');
+}
+
+section = 3;
+console.log('3) the tier ladder of mean finish, as a share of the table, every step');
+const STEP_MIN = 0.05;
+const groupOf = r =>(league.eliteInYear(ELITE, r.club, r.year) ? 'elite' : `tier ${Math.min(4, r.clubTier)}`);
+const LADDER = ['elite', 'tier 1', 'tier 2', 'tier 3', 'tier 4'];
+const groups = Object.fromEntries(LADDER.map(g => [g, []]));
+const forcedLow = FORCED_RESULTS['Man Citytier'].rows;
+for (const r of [...sized, ...forcedLow]) if (r.leagueFinish !== undefined && r.leagueSize) groups[groupOf(r)].push(r.leagueFinish / r.leagueSize);
+const mean = a => a.reduce((x, y) => x + y, 0) / (a.length || 1);
+const means = LADDER.map(g => mean(groups[g]));
+console.log('   ' + LADDER.map((g, i) => `${g}: ${means[i].toFixed(3)} over ${groups[g].length}`).join(', '));
+for (let i = 1; i < LADDER.length; i++) {
+  const [a, b] = [LADDER[i - 1], LADDER[i]];
+  if (groups[a].length < 15 || groups[b].length < 15) { fail(`${a} (${groups[a].length}) or ${b} (${groups[b].length}) has fewer than 15 seasons, the step cannot be read`); continue; }
+  if (!(means[i] - means[i - 1] >= STEP_MIN)) fail(`${b} mean share ${means[i].toFixed(3)} is not at least ${STEP_MIN} below ${a} ${means[i - 1].toFixed(3)}`);
+}
+
+section = 4;
+console.log('4) a current era career is byte identical to main once the two new fields are out');
+{
+  let same = 0, withFinish = 0, totalSeasons = 0;
+  for (let i = 1; i <= DIGEST_SEEDS; i++) {
+    const s = runCareer(i);
+    if (digest(s) === BASELINE[i - 1]) same += 1;
+    for (const r of s.seasons || []) if (r.type === 'playing') { totalSeasons += 1; if (r.leagueFinish !== undefined) withFinish += 1; }
+  }
+  console.log(`   ${same} of ${DIGEST_SEEDS} careers match the main digest; ${withFinish} of their ${totalSeasons} playing seasons carry a finish`);
+  if (same !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - same} careers moved: the main Math.random stream or something else in the state changed`);
+  if (withFinish === 0) fail('no digest season carries a finish, so the match above proves nothing about the new fields');
+}
+
+section = 5;
+console.log('5) the elite boost reads the era: forced first seasons over many seeds');
+const ELITE_MIN = 0.5;
+const TIER_MAX = 0.25;
+for (const [club, , , want] of CASES) {
+  const r = FORCED_RESULTS[club + want];
+  console.log(`   ${club}, first pro season ${r.year}: title rate ${(r.rate * 100).toFixed(1)}% over ${r.n} seasons, expected the ${want} rate`);
+  if (r.n < FORCED * 0.6) { fail(`${club}: only ${r.n} forced seasons landed, the setup is not reaching the season`); continue; }
+  if (want === 'elite' && r.rate < ELITE_MIN) fail(`${club} ${r.year}: ${(r.rate * 100).toFixed(1)}% is under the elite floor ${ELITE_MIN * 100}%`);
+  if (want === 'tier' && r.rate > TIER_MAX) fail(`${club} ${r.year}: ${(r.rate * 100).toFixed(1)}% is over the era tier ceiling ${TIER_MAX * 100}%, the era blind boost is back`);
+}
+
+console.log('');
+if (CONTROL) {
+  const want = CONTROLS[CONTROL];
+  const got = [...red].sort();
+  const same = got.length === want.length && want.every(w => red.has(w));
+  if (same) { console.log(`simCareerLeagueFinish: control ${CONTROL} turned section ${want.join(', ')} red and nothing else. The check works.`); process.exit(1); }
+  console.log(`simCareerLeagueFinish: control ${CONTROL} should have reddened exactly section ${want.join(', ')}, got [${got.join(', ') || 'none'}]. The control proves nothing.`);
+  process.exit(2);
+}
+if (failures) { console.error(`simCareerLeagueFinish: ${failures} failure(s) in section(s) ${[...red].sort().join(', ')}`); process.exit(1); }
+console.log(`simCareerLeagueFinish: green. ${careers} careers, ${seasons.length} seasons, ${sized.length} in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.`);
