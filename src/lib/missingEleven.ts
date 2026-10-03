@@ -22,7 +22,10 @@ import { dailyIndex, dateSeed, getTodayET } from '@/lib/dateUtils';
  * line are in scripts/data/missingElevenVerified2026-10.json, and
  * scripts/simMissingElevenSources.mjs holds this file to that record. A side
  * the two hosts disagree on is held out, the same rule that dropped the
- * SB XLII Giants offense and the SB 50 Panthers below.
+ * SB XLII Giants offense and the SB 50 Panthers below. The venue line has a
+ * second read too (profootballarchives.com, espn.com for the city), and a
+ * blank's Nationality hint rests on two birthplace reads (pfr and
+ * espn.com); a man with only one is a starter on his sheet but not a blank.
  *
  * THE TRAPS ARE THE POINT, double-confirmed, do NOT "fix" them:
  *   - SB LI Patriots: Dion LEWIS started at RB. LeGarrette Blount and James
@@ -831,7 +834,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       S('RT', 'Tristan Wirfs'),
     ],
     blankCandidates: [
-      { name: 'Scott Miller', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench.' },
+      { name: 'Scott Miller', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench.', aliases: ['Scotty Miller'] },
       { name: 'Rob Gronkowski', slotIndex: 5, nationality: 'USA', fact: 'Caught two first-half touchdown passes from Tom Brady.' },
       { name: 'Aaron Stinnie', slotIndex: 9, nationality: 'USA' },
     ],
@@ -1145,7 +1148,6 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Henry Hynoski', slotIndex: 2, nationality: 'USA' },
-      { name: 'Jake Ballard', slotIndex: 5, nationality: 'USA' },
       { name: 'Ahmad Bradshaw', slotIndex: 1, nationality: 'USA', fact: 'Scored the winning 6-yard touchdown run with 57 seconds left.' },
     ],
     source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf) + pro-football-reference.com box score 201202050nwe #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
@@ -1176,7 +1178,6 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Nate Solder', slotIndex: 5, nationality: 'USA', fact: 'Wore 77 and was listed as a starting tight end next to Gronkowski.' },
-      { name: 'Dan Connolly', slotIndex: 8, nationality: 'USA' },
       { name: 'Deion Branch', slotIndex: 3, nationality: 'USA', fact: 'Started at receiver alongside Wes Welker.' },
     ],
     source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677630587/gamecenter/10012012-0205-00bb-c38f-1f97f8af3cca.pdf) + pro-football-reference.com box score 201202050nwe #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
@@ -1208,7 +1209,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     blankCandidates: [
       { name: 'Pierre Thomas', slotIndex: 1, nationality: 'USA', fact: 'Started in a two-back set with Reggie Bush and caught a 16-yard touchdown.' },
       { name: 'Devery Henderson', slotIndex: 4, nationality: 'USA', fact: 'Started at receiver opposite Marques Colston.' },
-      { name: 'Jon Stinchcomb', slotIndex: 10, nationality: 'USA' },
+      { name: 'Jon Stinchcomb', slotIndex: 10, nationality: 'USA', aliases: ['Jonathan Stinchcomb'] },
     ],
     source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf) + pro-football-reference.com box score 201002070clt #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
   },
@@ -1238,7 +1239,6 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Gijon Robinson', slotIndex: 2, nationality: 'USA' },
-      { name: 'Kyle DeVan', slotIndex: 9, nationality: 'USA' },
       { name: 'Pierre Garcon', slotIndex: 4, nationality: 'USA', fact: 'Caught a 19-yard touchdown from Peyton Manning in the first quarter.' },
     ],
     source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631473/gamecenter/10012010-0207-00e1-2890-45de8ffd3cb3.pdf) + pro-football-reference.com box score 201002070clt #home_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',
@@ -1269,7 +1269,6 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
     ],
     blankCandidates: [
       { name: 'Sean McHugh', slotIndex: 5, nationality: 'USA', fact: 'Pittsburgh opened with three tight ends. Santonio Holmes, who caught the winning touchdown, came off the bench.' },
-      { name: 'Matt Spaeth', slotIndex: 4, nationality: 'USA', fact: 'One of three starting tight ends, with Heath Miller and Sean McHugh.' },
       { name: 'Darnell Stapleton', slotIndex: 9, nationality: 'USA' },
     ],
     source: 'nfl.com game book (static.www.nfl.com/image/upload/v1677631650/gamecenter/10012009-0201-005b-8ea3-b4ab4e2b8bea.pdf) + pro-football-reference.com box score 200902010crd #vis_starters, read 2026-10-03, 11/11 match; full row in scripts/data/missingElevenVerified2026-10.json.',

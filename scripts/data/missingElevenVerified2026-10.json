@@ -3,7 +3,8 @@
  "round": 950,
  "checkedOn": "2026-10-03",
  "method": "Every starter of every sheet below was read from two hosts on the read date. nfl.com: the official game book PDF linked from the nfl.com game page ('Download Game Book (PDF)'), page 1 'Lineups' block, read with pypdf text extraction; the game book prints the starters as position, jersey number and initial plus surname. pro-football-reference.com: the box score page's Starters table for that team (#vis_starters or #home_starters, which the site ships inside an HTML comment), read from the rendered page in a browser. A sheet ships only when both hosts list the same eleven men; a sheet where they differ on any starter is held out. Positions are the game book's (pfr prints generic OL labels on some tables). Each blank candidate fact is read from the same two hosts (the game book scoring summary or substitution list and the pfr scoring table). Wikipedia was not used.",
- "nationalityMethod": "The first hint says Nationality. Every blank on a Round 950 sheet carries USA because its pro-football-reference.com player page (pfrPlayer on the candidate, read 2026-10-03) gives a birthplace in a US state (bornPerPfr). That is one host, not two: a birthplace was not read from a second source. All 66 were born in a US state, so none is a borderline case.",
+ "nationalityMethod": "The first hint says Nationality. Every blank on a Round 950 sheet carries USA because two hosts put his birthplace in a US state: his pro-football-reference.com player page (pfrPlayer, bornPerPfr) and his espn.com athlete record (espnPlayer, bornPerEspn, read 2026-10-03 from ESPN's athlete API; the id came from that Super Bowl's ESPN box score where he has a line, and from ESPN's player search where he does not). Both hosts put all 62 in a US state, which is the fact the hint states. They print the same town for 51 of 62 and the same state for 58; where they differ (cityAgrees false) espn.com mostly prints what reads as a hometown (Garcon: Carmel, NY on pfr, West Palm Beach, FL on espn.com), and both towns are in the US either way, so the hint stands. ESPN prints two men under another first name (espnName: Scotty Miller, Jonathan Stinchcomb), and the file accepts that name as a guess. Four men had no second birthplace read anywhere (espn.com has none on file, nfl.com prints no hometown for them): Jake Ballard, Dan Connolly, Kyle DeVan and Matt Spaeth. They stay on their sheets as starters, which two hosts confirm, and are held out of the blanks (heldBlanks on the sheet).",
+ "venueMethod": "The line under each sheet reads stadium, city. The game book prints it on page 1 (venueAsPrinted). The second read is the profootballarchives.com box score for the same game (\"Location\" and \"Venue\", venueReads), which prints the stadium under its name on the day. The espn.com game summary is a third read for the city only: ESPN names some stadiums by their current name (State Farm Stadium for University of Phoenix Stadium, Hard Rock Stadium for Sun Life Stadium, Caesars Superdome for the Mercedes-Benz Superdome). One disagreement: for Super Bowl LVIII the game book and espn.com print Las Vegas, NV, and profootballarchives.com prints Paradise, NV, the unincorporated town the stadium stands in. The sheet keeps Las Vegas, which two hosts print and which the league uses.",
  "starterColumns": [
   "position",
   "name",
@@ -122,7 +123,11 @@
      "nationality": "USA",
      "bornPerPfr": "Leominster, MA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/G/GrayNo00.htm",
-     "reveal": "Started as the second tight end next to Travis Kelce."
+     "reveal": "Started as the second tight end next to Travis Kelce.",
+     "bornPerEspn": "Leominster, MA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4240472",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4240472",
+     "cityAgrees": true
     },
     {
      "name": "Nick Allegretti",
@@ -130,7 +135,11 @@
      "nationality": "USA",
      "bornPerPfr": "Frankfort, IL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/A/AlleNi00.htm",
-     "reveal": "Started at left guard as the Chiefs won it 25-22 in overtime."
+     "reveal": "Started at left guard as the Chiefs won it 25-22 in overtime.",
+     "bornPerEspn": "Frankfort, IL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3115922",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3115922",
+     "cityAgrees": true
     },
     {
      "name": "Isiah Pacheco",
@@ -138,7 +147,29 @@
      "nationality": "USA",
      "bornPerPfr": "Vineland, NJ",
      "pfrPlayer": "https://www.pro-football-reference.com/players/P/PachIs00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Vineland, NJ",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4361529",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4361529",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2023nfl335.html",
+     "read": "2026-10-03",
+     "venue": "Allegiant Stadium",
+     "location": "Paradise, NV"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401547378",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401547378",
+     "read": "2026-10-03",
+     "venue": "Allegiant Stadium",
+     "location": "Las Vegas, NV",
+     "espnVenueId": "6501"
     }
    ]
   },
@@ -253,7 +284,11 @@
      "nationality": "USA",
      "bornPerPfr": "Castle Rock, CO",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/McCaCh01.htm",
-     "reveal": "Scored on a 21-yard catch, and the pass came from receiver Jauan Jennings."
+     "reveal": "Scored on a 21-yard catch, and the pass came from receiver Jauan Jennings.",
+     "bornPerEspn": "Castle Rock, CO",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3117251",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3117251",
+     "cityAgrees": true
     },
     {
      "name": "Kyle Juszczyk",
@@ -261,7 +296,11 @@
      "nationality": "USA",
      "bornPerPfr": "Medina, OH",
      "pfrPlayer": "https://www.pro-football-reference.com/players/J/JuszKy00.htm",
-     "reveal": "San Francisco opened with a fullback on the field, and it was him."
+     "reveal": "San Francisco opened with a fullback on the field, and it was him.",
+     "bornPerEspn": "Medina, OH",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/16002",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/16002",
+     "cityAgrees": true
     },
     {
      "name": "Jake Brendel",
@@ -269,7 +308,29 @@
      "nationality": "USA",
      "bornPerPfr": "Madison, WI",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BrenJa01.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Plano, TX",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2577185",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2577185",
+     "cityAgrees": false
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2023nfl335.html",
+     "read": "2026-10-03",
+     "venue": "Allegiant Stadium",
+     "location": "Paradise, NV"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401547378",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401547378",
+     "read": "2026-10-03",
+     "venue": "Allegiant Stadium",
+     "location": "Las Vegas, NV",
+     "espnVenueId": "6501"
     }
    ]
   },
@@ -388,7 +449,11 @@
      "nationality": "USA",
      "bornPerPfr": "Amite City, LA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/SmitDe07.htm",
-     "reveal": "Caught a 46-yard touchdown from Jalen Hurts in the third quarter."
+     "reveal": "Caught a 46-yard touchdown from Jalen Hurts in the third quarter.",
+     "bornPerEspn": "Amite, LA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4241478",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4241478",
+     "cityAgrees": false
     },
     {
      "name": "Jahan Dotson",
@@ -396,7 +461,11 @@
      "nationality": "USA",
      "bornPerPfr": "Newark, NJ",
      "pfrPlayer": "https://www.pro-football-reference.com/players/D/DotsJa00.htm",
-     "reveal": "The third starting receiver, alongside A.J. Brown and DeVonta Smith."
+     "reveal": "The third starting receiver, alongside A.J. Brown and DeVonta Smith.",
+     "bornPerEspn": "Nazareth, PA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4361409",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4361409",
+     "cityAgrees": false
     },
     {
      "name": "Mekhi Becton",
@@ -404,7 +473,29 @@
      "nationality": "USA",
      "bornPerPfr": "Highland Springs, VA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BectMe00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Highland Springs, VA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4240090",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4240090",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2024nfl334.html",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401671889",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401671889",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA",
+     "espnVenueId": "3493"
     }
    ]
   },
@@ -519,7 +610,11 @@
      "nationality": "USA",
      "bornPerPfr": "Sioux Falls, SD",
      "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeJeCo00.htm",
-     "reveal": "Returned an interception 38 yards for a touchdown in the second quarter."
+     "reveal": "Returned an interception 38 yards for a touchdown in the second quarter.",
+     "bornPerEspn": "Odebolt, IA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4682618",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4682618",
+     "cityAgrees": false
     },
     {
      "name": "Oren Burks",
@@ -527,7 +622,11 @@
      "nationality": "USA",
      "bornPerPfr": "Alexandria, VA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BurkOr00.htm",
-     "reveal": "Started at linebacker beside Zack Baun."
+     "reveal": "Started at linebacker beside Zack Baun.",
+     "bornPerEspn": "Fairfax Station, VA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3051746",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3051746",
+     "cityAgrees": false
     },
     {
      "name": "Jordan Davis",
@@ -535,7 +634,29 @@
      "nationality": "USA",
      "bornPerPfr": "Charlotte, NC",
      "pfrPlayer": "https://www.pro-football-reference.com/players/D/DaviJo03.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Charlotte, NC",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4381558",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4381558",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2024nfl334.html",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401671889",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401671889",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA",
+     "espnVenueId": "3493"
     }
    ]
   },
@@ -654,7 +775,12 @@
      "nationality": "USA",
      "bornPerPfr": "Barrington, IL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/MillSc01.htm",
-     "reveal": "Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench."
+     "reveal": "Started at receiver. Antonio Brown, who caught a touchdown that night, came off the bench.",
+     "bornPerEspn": "Barrington, IL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3914397",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3914397",
+     "espnName": "Scotty Miller",
+     "cityAgrees": true
     },
     {
      "name": "Rob Gronkowski",
@@ -662,7 +788,11 @@
      "nationality": "USA",
      "bornPerPfr": "Amherst, NY",
      "pfrPlayer": "https://www.pro-football-reference.com/players/G/GronRo00.htm",
-     "reveal": "Caught two first-half touchdown passes from Tom Brady."
+     "reveal": "Caught two first-half touchdown passes from Tom Brady.",
+     "bornPerEspn": "Amherst, NY",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/13229",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/13229",
+     "cityAgrees": true
     },
     {
      "name": "Aaron Stinnie",
@@ -670,7 +800,29 @@
      "nationality": "USA",
      "bornPerPfr": "Charlottesville, VA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/StinAa00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Charlottesville, VA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3049339",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3049339",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2020nfl269.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401220403",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401220403",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
     }
    ]
   },
@@ -785,7 +937,11 @@
      "nationality": "USA",
      "bornPerPfr": "Springhill, LA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WhitDe02.htm",
-     "reveal": "This defense held the Chiefs to three field goals and no touchdowns."
+     "reveal": "This defense held the Chiefs to three field goals and no touchdowns.",
+     "bornPerEspn": "Springhill, LA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4035434",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4035434",
+     "cityAgrees": true
     },
     {
      "name": "Jamel Dean",
@@ -793,7 +949,11 @@
      "nationality": "USA",
      "bornPerPfr": "Cocoa, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeanJa00.htm",
-     "reveal": "Tampa Bay opened in the nickel, so three corners started. Dean was one of them."
+     "reveal": "Tampa Bay opened in the nickel, so three corners started. Dean was one of them.",
+     "bornPerEspn": "Cocoa, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3873935",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3873935",
+     "cityAgrees": true
     },
     {
      "name": "Jordan Whitehead",
@@ -801,7 +961,29 @@
      "nationality": "USA",
      "bornPerPfr": "Aliquippa, PA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WhitJo03.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Aliquippa, PA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3895798",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3895798",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2020nfl269.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401220403",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401220403",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
     }
    ]
   },
@@ -920,7 +1102,11 @@
      "nationality": "USA",
      "bornPerPfr": "Portland, OR",
      "pfrPlayer": "https://www.pro-football-reference.com/players/R/RemmMi00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Portland, OR",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/15422",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/15422",
+     "cityAgrees": true
     },
     {
      "name": "Andrew Wylie",
@@ -928,7 +1114,11 @@
      "nationality": "USA",
      "bornPerPfr": "Midland, MI",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WyliAn00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Midland, MI",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3042702",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3042702",
+     "cityAgrees": true
     },
     {
      "name": "Byron Pringle",
@@ -936,7 +1126,29 @@
      "nationality": "USA",
      "bornPerPfr": "Tampa, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/P/PrinBy00.htm",
-     "reveal": "The third starting receiver, with Tyreek Hill and Demarcus Robinson."
+     "reveal": "The third starting receiver, with Tyreek Hill and Demarcus Robinson.",
+     "bornPerEspn": "Tampa, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4036416",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4036416",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2020nfl269.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401220403",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401220403",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
     }
    ]
   },
@@ -1055,7 +1267,11 @@
      "nationality": "USA",
      "bornPerPfr": "Blue Springs, MO",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BlanKe01.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Blue Springs, MO",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3122103",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3122103",
+     "cityAgrees": true
     },
     {
      "name": "Van Jefferson",
@@ -1063,7 +1279,11 @@
      "nationality": "USA",
      "bornPerPfr": "Brentwood, TN",
      "pfrPlayer": "https://www.pro-football-reference.com/players/J/JeffVa00.htm",
-     "reveal": "The third starting receiver, with Odell Beckham Jr. and Cooper Kupp."
+     "reveal": "The third starting receiver, with Odell Beckham Jr. and Cooper Kupp.",
+     "bornPerEspn": "Brentwood, TN",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3930066",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3930066",
+     "cityAgrees": true
     },
     {
      "name": "Cooper Kupp",
@@ -1071,7 +1291,29 @@
      "nationality": "USA",
      "bornPerPfr": "Yakima, WA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/K/KuppCo00.htm",
-     "reveal": "Caught the 1-yard touchdown with 1:25 left that won it 23-20."
+     "reveal": "Caught the 1-yard touchdown with 1:25 left that won it 23-20.",
+     "bornPerEspn": "Yakima, WA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2977187",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2977187",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2021nfl333.html",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401326638",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401326638",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA",
+     "espnVenueId": "7065"
     }
    ]
   },
@@ -1190,7 +1432,11 @@
      "nationality": "USA",
      "bornPerPfr": "Fontana, CA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WeddEr99.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Alta Loma, CA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/10481",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/10481",
+     "cityAgrees": false
     },
     {
      "name": "Greg Gaines",
@@ -1198,7 +1444,11 @@
      "nationality": "USA",
      "bornPerPfr": "La Habra, CA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/G/GainGr00.htm",
-     "reveal": "Started at nose tackle between A'Shawn Robinson and Aaron Donald."
+     "reveal": "Started at nose tackle between A'Shawn Robinson and Aaron Donald.",
+     "bornPerEspn": "La Habra, CA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3127294",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3127294",
+     "cityAgrees": true
     },
     {
      "name": "Darious Williams",
@@ -1206,7 +1456,29 @@
      "nationality": "USA",
      "bornPerPfr": "Jacksonville, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WillDa09.htm",
-     "reveal": "One of three starting corners, with Jalen Ramsey and David Long."
+     "reveal": "One of three starting corners, with Jalen Ramsey and David Long.",
+     "bornPerEspn": "Jacksonville, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4239833",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4239833",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2021nfl333.html",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401326638",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401326638",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA",
+     "espnVenueId": "7065"
     }
    ]
   },
@@ -1325,7 +1597,11 @@
      "nationality": "USA",
      "bornPerPfr": "Oakley, CA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/MixoJo00.htm",
-     "reveal": "The running back threw a 6-yard touchdown pass to Tee Higgins."
+     "reveal": "The running back threw a 6-yard touchdown pass to Tee Higgins.",
+     "bornPerEspn": "Oakley, CA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3116385",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3116385",
+     "cityAgrees": true
     },
     {
      "name": "Isaiah Prince",
@@ -1333,7 +1609,11 @@
      "nationality": "USA",
      "bornPerPfr": "Greenbelt, MD",
      "pfrPlayer": "https://www.pro-football-reference.com/players/P/PrinIs00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Greenbelt, MD",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3915532",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3915532",
+     "cityAgrees": true
     },
     {
      "name": "Hakeem Adeniji",
@@ -1341,7 +1621,29 @@
      "nationality": "USA",
      "bornPerPfr": "Garland, TX",
      "pfrPlayer": "https://www.pro-football-reference.com/players/A/AdenHa00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Garland, TX",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4046557",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4046557",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2021nfl333.html",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401326638",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401326638",
+     "read": "2026-10-03",
+     "venue": "SoFi Stadium",
+     "location": "Inglewood, CA",
+     "espnVenueId": "7065"
     }
    ]
   },
@@ -1460,7 +1762,11 @@
      "nationality": "USA",
      "bornPerPfr": "Huntsville, AL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/F/FlowTr00.htm",
-     "reveal": "This defense gave up one field goal all night in a 13-3 win."
+     "reveal": "This defense gave up one field goal all night in a 13-3 win.",
+     "bornPerEspn": "Huntsville, AL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2574519",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2574519",
+     "cityAgrees": true
     },
     {
      "name": "Jonathan Jones",
@@ -1468,7 +1774,11 @@
      "nationality": "USA",
      "bornPerPfr": "Carrollton, GA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/J/JoneJo03.htm",
-     "reveal": "The nickel back on the opening card."
+     "reveal": "The nickel back on the opening card.",
+     "bornPerEspn": "Carrollton, GA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2971027",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2971027",
+     "cityAgrees": true
     },
     {
      "name": "Malcom Brown",
@@ -1476,7 +1786,29 @@
      "nationality": "USA",
      "bornPerPfr": "Brenham, TX",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BrowMa01.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Brenham, TX",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2971698",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2971698",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2018nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Stadium",
+     "location": "Atlanta, GA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401038115",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401038115",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Stadium",
+     "location": "Atlanta, GA",
+     "espnVenueId": "5348"
     }
    ]
   },
@@ -1595,7 +1927,11 @@
      "nationality": "USA",
      "bornPerPfr": "San Antonio, TX",
      "pfrPlayer": "https://www.pro-football-reference.com/players/R/ReynJo00.htm",
-     "reveal": "The third starting receiver, with Robert Woods and Brandin Cooks."
+     "reveal": "The third starting receiver, with Robert Woods and Brandin Cooks.",
+     "bornPerEspn": "San Antonio, TX",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3115306",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3115306",
+     "cityAgrees": true
     },
     {
      "name": "Austin Blythe",
@@ -1603,7 +1939,11 @@
      "nationality": "USA",
      "bornPerPfr": "Williamson, IA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BlytAu00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Williamsburg, IA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2582448",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2582448",
+     "cityAgrees": false
     },
     {
      "name": "John Sullivan",
@@ -1611,7 +1951,29 @@
      "nationality": "USA",
      "bornPerPfr": "Mt. Kisco, NY",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/SullJo24.htm",
-     "reveal": "Snapped for an offense that managed one field goal all night."
+     "reveal": "Snapped for an offense that managed one field goal all night.",
+     "bornPerEspn": "Mount Kisco, NY",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/11421",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/11421",
+     "cityAgrees": false
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2018nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Stadium",
+     "location": "Atlanta, GA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401038115",
+     "page": "https://www.espn.com/nfl/game/_/gameId/401038115",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Stadium",
+     "location": "Atlanta, GA",
+     "espnVenueId": "5348"
     }
    ]
   },
@@ -1730,7 +2092,11 @@
      "nationality": "USA",
      "bornPerPfr": "New Orleans, LA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/J/JoneJa03.htm",
-     "reveal": "Caught a 56-yard touchdown and returned a kickoff 108 yards for another."
+     "reveal": "Caught a 56-yard touchdown and returned a kickoff 108 yards for another.",
+     "bornPerEspn": "New Orleans, LA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/10517",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/10517",
+     "cityAgrees": true
     },
     {
      "name": "Vonta Leach",
@@ -1738,7 +2104,11 @@
      "nationality": "USA",
      "bornPerPfr": "Lumberton, NC",
      "pfrPlayer": "https://www.pro-football-reference.com/players/L/LeacVo00.htm",
-     "reveal": "Baltimore opened with a fullback and three receivers, no tight end."
+     "reveal": "Baltimore opened with a fullback and three receivers, no tight end.",
+     "bornPerEspn": "Lumberton, NC",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/6301",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/6301",
+     "cityAgrees": true
     },
     {
      "name": "Bryant McKinnie",
@@ -1746,7 +2116,29 @@
      "nationality": "USA",
      "bornPerPfr": "Woodbury, NJ",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/McKiBr21.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Woodbury, NJ",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3535",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3535",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2012nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Superdome",
+     "location": "New Orleans, LA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=330203025",
+     "page": "https://www.espn.com/nfl/game/_/gameId/330203025",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA",
+     "espnVenueId": "3493"
     }
    ]
   },
@@ -1865,7 +2257,11 @@
      "nationality": "USA",
      "bornPerPfr": "Pomona, CA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/W/WalkHu00.htm",
-     "reveal": "The second starting tight end, next to Vernon Davis."
+     "reveal": "The second starting tight end, next to Vernon Davis.",
+     "bornPerEspn": "Pomona, CA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/9761",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/9761",
+     "cityAgrees": true
     },
     {
      "name": "Randy Moss",
@@ -1873,7 +2269,11 @@
      "nationality": "USA",
      "bornPerPfr": "Rand, WV",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/MossRa00.htm",
-     "reveal": "Started at receiver opposite Michael Crabtree."
+     "reveal": "Started at receiver opposite Michael Crabtree.",
+     "bornPerEspn": "Rand, WV",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/1433",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/1433",
+     "cityAgrees": true
     },
     {
      "name": "Jonathan Goodwin",
@@ -1881,7 +2281,29 @@
      "nationality": "USA",
      "bornPerPfr": "Columbia, SC",
      "pfrPlayer": "https://www.pro-football-reference.com/players/G/GoodJo23.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Columbia, SC",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3682",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3682",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2012nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Mercedes-Benz Superdome",
+     "location": "New Orleans, LA"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=330203025",
+     "page": "https://www.espn.com/nfl/game/_/gameId/330203025",
+     "read": "2026-10-03",
+     "venue": "Caesars Superdome",
+     "location": "New Orleans, LA",
+     "espnVenueId": "3493"
     }
    ]
   },
@@ -2000,15 +2422,11 @@
      "nationality": "USA",
      "bornPerPfr": "Ellysburg, PA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/H/HynoHe01.htm",
-     "reveal": null
-    },
-    {
-     "name": "Jake Ballard",
-     "slotIndex": 5,
-     "nationality": "USA",
-     "bornPerPfr": "Springboro, OH",
-     "pfrPlayer": "https://www.pro-football-reference.com/players/B/BallJa21.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Mount Carmel, PA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/14608",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/14608",
+     "cityAgrees": false
     },
     {
      "name": "Ahmad Bradshaw",
@@ -2016,7 +2434,37 @@
      "nationality": "USA",
      "bornPerPfr": "Bluefield, VA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BradAh00.htm",
-     "reveal": "Scored the winning 6-yard touchdown run with 57 seconds left."
+     "reveal": "Scored the winning 6-yard touchdown run with 57 seconds left.",
+     "bornPerEspn": "Bluefield, VA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/10693",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/10693",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2011nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Lucas Oil Stadium",
+     "location": "Indianapolis, IN"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=320205017",
+     "page": "https://www.espn.com/nfl/game/_/gameId/320205017",
+     "read": "2026-10-03",
+     "venue": "Lucas Oil Stadium",
+     "location": "Indianapolis, IN",
+     "espnVenueId": "3812"
+    }
+   ],
+   "heldBlanks": [
+    {
+     "name": "Jake Ballard",
+     "slotIndex": 5,
+     "bornPerPfr": "Springboro, OH",
+     "reason": "No second host prints a birthplace (espn.com has none on file, nfl.com prints no hometown), so the Nationality hint has one source. He stays on the sheet as a starter and is not blanked."
     }
    ]
   },
@@ -2135,15 +2583,11 @@
      "nationality": "USA",
      "bornPerPfr": "Denver, CO",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/SoldNa00.htm",
-     "reveal": "Wore 77 and was listed as a starting tight end next to Gronkowski."
-    },
-    {
-     "name": "Dan Connolly",
-     "slotIndex": 8,
-     "nationality": "USA",
-     "bornPerPfr": "St. Louis, MO",
-     "pfrPlayer": "https://www.pro-football-reference.com/players/C/ConnDa21.htm",
-     "reveal": null
+     "reveal": "Wore 77 and was listed as a starting tight end next to Gronkowski.",
+     "bornPerEspn": "Buena Vista, CO",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/13964",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/13964",
+     "cityAgrees": false
     },
     {
      "name": "Deion Branch",
@@ -2151,7 +2595,37 @@
      "nationality": "USA",
      "bornPerPfr": "Albany, GA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/B/BranDe00.htm",
-     "reveal": "Started at receiver alongside Wes Welker."
+     "reveal": "Started at receiver alongside Wes Welker.",
+     "bornPerEspn": "Albany, GA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3593",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3593",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2011nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Lucas Oil Stadium",
+     "location": "Indianapolis, IN"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=320205017",
+     "page": "https://www.espn.com/nfl/game/_/gameId/320205017",
+     "read": "2026-10-03",
+     "venue": "Lucas Oil Stadium",
+     "location": "Indianapolis, IN",
+     "espnVenueId": "3812"
+    }
+   ],
+   "heldBlanks": [
+    {
+     "name": "Dan Connolly",
+     "slotIndex": 8,
+     "bornPerPfr": "St. Louis, MO",
+     "reason": "No second host prints a birthplace (espn.com has none on file, nfl.com prints no hometown), so the Nationality hint has one source. He stays on the sheet as a starter and is not blanked."
     }
    ]
   },
@@ -2270,7 +2744,11 @@
      "nationality": "USA",
      "bornPerPfr": "Chicago, IL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/T/ThomPi00.htm",
-     "reveal": "Started in a two-back set with Reggie Bush and caught a 16-yard touchdown."
+     "reveal": "Started in a two-back set with Reggie Bush and caught a 16-yard touchdown.",
+     "bornPerEspn": "Chicago, IL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/10713",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/10713",
+     "cityAgrees": true
     },
     {
      "name": "Devery Henderson",
@@ -2278,7 +2756,11 @@
      "nationality": "USA",
      "bornPerPfr": "Lafayette, LA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/H/HendDe00.htm",
-     "reveal": "Started at receiver opposite Marques Colston."
+     "reveal": "Started at receiver opposite Marques Colston.",
+     "bornPerEspn": "Lafayette, LA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/5575",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/5575",
+     "cityAgrees": true
     },
     {
      "name": "Jon Stinchcomb",
@@ -2286,7 +2768,30 @@
      "nationality": "USA",
      "bornPerPfr": "Atlanta, GA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/StinJo20.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Atlanta, GA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4495",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4495",
+     "espnName": "Jonathan Stinchcomb",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2009nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Sun Life Stadium",
+     "location": "Miami Gardens, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=300207011",
+     "page": "https://www.espn.com/nfl/game/_/gameId/300207011",
+     "read": "2026-10-03",
+     "venue": "Hard Rock Stadium",
+     "location": "Miami Gardens, FL",
+     "espnVenueId": "3948"
     }
    ]
   },
@@ -2405,15 +2910,11 @@
      "nationality": "USA",
      "bornPerPfr": "Denver, CO",
      "pfrPlayer": "https://www.pro-football-reference.com/players/R/RobiGi21.htm",
-     "reveal": null
-    },
-    {
-     "name": "Kyle DeVan",
-     "slotIndex": 9,
-     "nationality": "USA",
-     "bornPerPfr": "Sacramento, CA",
-     "pfrPlayer": "https://www.pro-football-reference.com/players/D/DeVaKy00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Denver, CO",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/10965",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/10965",
+     "cityAgrees": true
     },
     {
      "name": "Pierre Garcon",
@@ -2421,7 +2922,37 @@
      "nationality": "USA",
      "bornPerPfr": "Carmel, NY",
      "pfrPlayer": "https://www.pro-football-reference.com/players/G/GarcPi00.htm",
-     "reveal": "Caught a 19-yard touchdown from Peyton Manning in the first quarter."
+     "reveal": "Caught a 19-yard touchdown from Peyton Manning in the first quarter.",
+     "bornPerEspn": "West Palm Beach, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/11439",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/11439",
+     "cityAgrees": false
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2009nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Sun Life Stadium",
+     "location": "Miami Gardens, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=300207011",
+     "page": "https://www.espn.com/nfl/game/_/gameId/300207011",
+     "read": "2026-10-03",
+     "venue": "Hard Rock Stadium",
+     "location": "Miami Gardens, FL",
+     "espnVenueId": "3948"
+    }
+   ],
+   "heldBlanks": [
+    {
+     "name": "Kyle DeVan",
+     "slotIndex": 9,
+     "bornPerPfr": "Sacramento, CA",
+     "reason": "No second host prints a birthplace (espn.com has none on file, nfl.com prints no hometown), so the Nationality hint has one source. He stays on the sheet as a starter and is not blanked."
     }
    ]
   },
@@ -2540,15 +3071,11 @@
      "nationality": "USA",
      "bornPerPfr": "Springfield, MA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/McHuSe00.htm",
-     "reveal": "Pittsburgh opened with three tight ends. Santonio Holmes, who caught the winning touchdown, came off the bench."
-    },
-    {
-     "name": "Matt Spaeth",
-     "slotIndex": 4,
-     "nationality": "USA",
-     "bornPerPfr": "St. Michael, MN",
-     "pfrPlayer": "https://www.pro-football-reference.com/players/S/SpaeMa00.htm",
-     "reveal": "One of three starting tight ends, with Heath Miller and Sean McHugh."
+     "reveal": "Pittsburgh opened with three tight ends. Santonio Holmes, who caught the winning touchdown, came off the bench.",
+     "bornPerEspn": "Springfield, MA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/5766",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/5766",
+     "cityAgrees": true
     },
     {
      "name": "Darnell Stapleton",
@@ -2556,7 +3083,37 @@
      "nationality": "USA",
      "bornPerPfr": "Union, NJ",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/StapDa20.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Union, NJ",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/11086",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/11086",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2008nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=290201022",
+     "page": "https://www.espn.com/nfl/game/_/gameId/290201022",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
+    }
+   ],
+   "heldBlanks": [
+    {
+     "name": "Matt Spaeth",
+     "slotIndex": 4,
+     "bornPerPfr": "St. Michael, MN",
+     "reason": "No second host prints a birthplace (espn.com has none on file, nfl.com prints no hometown), so the Nationality hint has one source. He stays on the sheet as a starter and is not blanked."
     }
    ]
   },
@@ -2675,7 +3232,11 @@
      "nationality": "USA",
      "bornPerPfr": "Akron, OH",
      "pfrPlayer": "https://www.pro-football-reference.com/players/H/HarrJa23.htm",
-     "reveal": "Returned an interception 100 yards for a touchdown as the first half ended."
+     "reveal": "Returned an interception 100 yards for a touchdown as the first half ended.",
+     "bornPerEspn": "Akron, OH",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4433",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4433",
+     "cityAgrees": true
     },
     {
      "name": "Bryant McFadden",
@@ -2683,7 +3244,11 @@
      "nationality": "USA",
      "bornPerPfr": "Hollywood, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/McFaBr20.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Hollywood, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/8476",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/8476",
+     "cityAgrees": true
     },
     {
      "name": "Larry Foote",
@@ -2691,7 +3256,29 @@
      "nationality": "USA",
      "bornPerPfr": "Detroit, MI",
      "pfrPlayer": "https://www.pro-football-reference.com/players/F/FootLa20.htm",
-     "reveal": "Started inside next to James Farrior."
+     "reveal": "Started inside next to James Farrior.",
+     "bornPerEspn": "Detroit, MI",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/3656",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/3656",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2008nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=290201022",
+     "page": "https://www.espn.com/nfl/game/_/gameId/290201022",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
     }
    ]
   },
@@ -2810,7 +3397,11 @@
      "nationality": "USA",
      "bornPerPfr": "Minneapolis, MN",
      "pfrPlayer": "https://www.pro-football-reference.com/players/F/FitzLa00.htm",
-     "reveal": "Scored twice in the fourth quarter, the second on a 64-yard catch."
+     "reveal": "Scored twice in the fourth quarter, the second on a 64-yard catch.",
+     "bornPerEspn": "Minneapolis, MN",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/5528",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/5528",
+     "cityAgrees": true
     },
     {
      "name": "Terrelle Smith",
@@ -2818,7 +3409,11 @@
      "nationality": "USA",
      "bornPerPfr": "West Covina, CA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/S/SmitTe00.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "West Covina, CA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2227",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2227",
+     "cityAgrees": true
     },
     {
      "name": "Leonard Pope",
@@ -2826,7 +3421,29 @@
      "nationality": "USA",
      "bornPerPfr": "Americus, GA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/P/PopeLe00.htm",
-     "reveal": "Started at tight end. Ben Patrick, who caught a touchdown, came off the bench."
+     "reveal": "Started at tight end. Ben Patrick, who caught a touchdown, came off the bench.",
+     "bornPerEspn": "Americus, GA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/9658",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/9658",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2008nfl332.html",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=290201022",
+     "page": "https://www.espn.com/nfl/game/_/gameId/290201022",
+     "read": "2026-10-03",
+     "venue": "Raymond James Stadium",
+     "location": "Tampa, FL",
+     "espnVenueId": "3886"
     }
    ]
   },
@@ -2945,7 +3562,11 @@
      "nationality": "USA",
      "bornPerPfr": "Pensacola, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/R/RobbFr20.htm",
-     "reveal": "Started at tackle. Justin Tuck came off the bench in this game."
+     "reveal": "Started at tackle. Justin Tuck came off the bench in this game.",
+     "bornPerEspn": "Pensacola, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/2186",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/2186",
+     "cityAgrees": true
     },
     {
      "name": "Reggie Torbor",
@@ -2953,7 +3574,11 @@
      "nationality": "USA",
      "bornPerPfr": "Baton Rouge, LA",
      "pfrPlayer": "https://www.pro-football-reference.com/players/T/TorbRe20.htm",
-     "reveal": null
+     "reveal": null,
+     "bornPerEspn": "Baton Rouge, LA",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/5622",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/5622",
+     "cityAgrees": true
     },
     {
      "name": "Kawika Mitchell",
@@ -2961,7 +3586,29 @@
      "nationality": "USA",
      "bornPerPfr": "Winter Springs, FL",
      "pfrPlayer": "https://www.pro-football-reference.com/players/M/MitcKa20.htm",
-     "reveal": "Started at weak-side linebacker in a game the Patriots scored 14 in."
+     "reveal": "Started at weak-side linebacker in a game the Patriots scored 14 in.",
+     "bornPerEspn": "Winter Springs, FL",
+     "espnPlayer": "https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/4505",
+     "espnPage": "https://www.espn.com/nfl/player/_/id/4505",
+     "cityAgrees": true
+    }
+   ],
+   "venueReads": [
+    {
+     "host": "profootballarchives.com",
+     "url": "https://www.profootballarchives.com/nflboxscores2/2007nfl267.html",
+     "read": "2026-10-03",
+     "venue": "University of Phoenix Stadium",
+     "location": "Glendale, AZ"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=280203017",
+     "page": "https://www.espn.com/nfl/game/_/gameId/280203017",
+     "read": "2026-10-03",
+     "venue": "State Farm Stadium",
+     "location": "Glendale, AZ",
+     "espnVenueId": "3970"
     }
    ]
   }
