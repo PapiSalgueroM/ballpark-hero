@@ -15,18 +15,21 @@
        2004 era so the era gates are exercised. The default fleet went from
        80 careers to 400 for this: a position group card is eligible in only
        one career in eleven.
-       Measured, 400 careers, SIM_SEED 1 to 6 and the default seed: 36 of
-       36 on every run, and the rarest card was drawn 1, 4, 1, 1, 1, 3 and 2
-       times (the innings limit card most often: it is eligible in only
+       Measured, 400 careers, SIM_SEED 1 to 6 and the default seed, after
+       the review put the fleet in the board's order (no card after the
+       last season): 36, 36, 35, 36, 36, 36 and 36 of 36, and the rarest
+       card was drawn 3, 1, 0, 2, 2, 1 and 1 times (the innings limit card
+       most often, and it is the one seed 3 missed: it is eligible in only
        about 185 offseasons, a young starter's first five). A card gets
        roughly one draw per hundred and fifty offseasons it is eligible in,
        because the press room's big moments take a large share of the
-       offseasons. So one card missing a fleet can happen and three missing
-       is not a thing that happens; the floor of 34 is the brief's and
-       leaves two. Nothing asserts on the rarest card. Deck C costs the
-       rating curve nothing measurable: average peak 82.1 to 82.5 with it,
-       82.4 with the catalog emptied (control nodeck, default seed).
-       C2 measured 72,000 draws, 0 mismatches, on every seed.
+       offseasons. So one card missing a fleet happens (seed 3) and three
+       missing is not a thing that happens; the floor of 34 is the brief's
+       and leaves two. Nothing asserts on the rarest card. Deck C costs the
+       rating curve nothing measurable: average peak 82.3 to 82.6 with it,
+       82.5 with the catalog emptied (control nodeck, default seed).
+       C2 measured 72,000 draws, 0 mismatches, and 420 to 464 trades from a
+       2004 save, on every seed; C2r 21,600 draws, 0 mismatches.
    C1e The era gates hold. In a 2004 career a card whose rule did not exist
        yet is never ELIGIBLE (deck C's three batter minimum before 2020,
        checked on the gate every offseason) and never DRAWN (that card, and
