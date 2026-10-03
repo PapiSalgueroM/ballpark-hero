@@ -203,6 +203,9 @@ describe('Mystery Box settled card and slot feedback', () => {
     expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'close');
     await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Share result' })));
     expect(writeText).toHaveBeenCalledExactlyOnceWith(state.shareText);
+    state = { ...state, filled: 11 };
+    view.rerender(draw());
+    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'win');
     vi.unstubAllGlobals();
   });
 });
