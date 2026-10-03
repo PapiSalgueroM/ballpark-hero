@@ -1,0 +1,48 @@
+{
+  "_about": "Round 948 source record for Missing Nine (src/lib/missingNine.ts). One row per sheet: the game, the two box scores it was read from (two different hosts, never a wiki), the nine starters in batting order exactly as both boxes agree, and every blank with its nationality (birthplace as both player pages give it) and its fact as checked. scripts/simMissingNineSources.mjs holds the data file to this record. Box reads: 2026-10-02 (new sheets, 2016 G7) and 2026-10-03 (2001, 1988, 1986, 2013); player pages read 2026-10-03 on baseball-reference.com/players and baseball-almanac.com/players. Starters are the un-indented almanac batting rows and the baseball-reference Starting Lineups table, matched by player id; positions are the starting position (almanac lists every position played, the first one is the start).",
+  "playerPages": {
+    "read": "2026-10-03",
+    "hosts": ["baseball-reference.com", "baseball-almanac.com"],
+    "townDisagreements": [
+      "Reggie Jackson: baseball-reference Abington, PA; baseball-almanac Wyncote, Pennsylvania. Both USA.",
+      "Sandy Amoros: baseball-reference Matanzas, Cuba; baseball-almanac Havana, Cuba. Both Cuba.",
+      "Dave Parker: baseball-reference Grenada, MS; baseball-almanac Calhoun, Mississippi. Both USA.",
+      "Yu Darvish: baseball-reference Habikino, Osaka; baseball-almanac Osaka. Both Japan."
+    ],
+    "nameDisagreements": [
+      "Nori Aoki: baseball-reference bills him Nori Aoki, baseball-almanac Norichika Aoki. The sheet uses Nori Aoki, the name he played under; the surname is what the game checks."
+    ]
+  },
+  "sheets": [
+    {
+      "id": "ws-2016-g7-chc",
+      "game": "2016 World Series Game 7, 2016-11-02, Progressive Field: Cubs 8, Indians 7 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201611020CLE", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/CLE/CLE201611020.shtml", "read": "2026-10-02" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-2-2016-cubs-end-world-series-curse-with-thrilling-game-7-victory/", "read": "2026-10-02", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["CF Dexter Fowler", "DH Kyle Schwarber", "3B Kris Bryant", "1B Anthony Rizzo", "LF Ben Zobrist", "SS Addison Russell", "C Willson Contreras", "RF Jason Heyward", "2B Javier Baez"],
+      "blanks": [
+        { "name": "Kyle Schwarber", "nationality": "USA", "born": "Middletown, Ohio", "fact": "Had three hits as the DH before Albert Almora Jr. ran for him in the 10th and scored the go-ahead run.", "checked": "almanac 5-0-3-0 and Almora Jr. pr,dh scoring a run; bref subs: Almora pinch runs for Schwarber, top 10th, and pbp: Zobrist double at 6-6, Almora scores; SABR: Almora ran for Schwarber and scored on the Zobrist double. Old fact (knee ligaments, seven months) dropped: SABR says leg ligaments and almost seven months, no second host." },
+        { "name": "Willson Contreras", "nationality": "Venezuela", "born": "Puerto Cabello, Carabobo, Venezuela", "fact": "Started behind the plate, David Ross (who homered) only entered in the 5th with Jon Lester.", "checked": "bref subs bottom 5th: Lester replaces Hendricks, Ross replaces Contreras; SABR: along with Lester came David Ross, fifth inning; Ross HR 6th off Miller on both boxes." },
+        { "name": "Ben Zobrist", "nationality": "USA", "born": "Eureka, Illinois", "fact": "His 10th-inning double off Bryan Shaw broke the 6-6 tie.", "checked": "both boxes: 2B off Shaw; bref pbp top 10th at 6-6, Almora scores; SABR same. Old 'Series MVP' dropped: not in either box." }
+      ]
+    },
+    {
+      "id": "ws-2016-g7-cle",
+      "game": "2016 World Series Game 7, 2016-11-02, Progressive Field: Cubs 8, Indians 7 (10 inn)",
+      "sources": [
+        { "host": "baseball-almanac.com", "url": "https://www.baseball-almanac.com/box-scores/boxscore.php?boxid=201611020CLE", "read": "2026-10-02" },
+        { "host": "baseball-reference.com", "url": "https://www.baseball-reference.com/boxes/CLE/CLE201611020.shtml", "read": "2026-10-02" },
+        { "host": "sabr.org", "url": "https://sabr.org/gamesproj/game/november-2-2016-cubs-end-world-series-curse-with-thrilling-game-7-victory/", "read": "2026-10-02", "role": "recap for the inning by inning facts" }
+      ],
+      "starters": ["DH Carlos Santana", "2B Jason Kipnis", "SS Francisco Lindor", "1B Mike Napoli", "3B Jose Ramirez", "RF Lonnie Chisenhall", "CF Rajai Davis", "LF Coco Crisp", "C Roberto Perez"],
+      "blanks": [
+        { "name": "Rajai Davis", "nationality": "USA", "born": "Norwich, Connecticut", "fact": "His two-run, two-out homer off Aroldis Chapman in the 8th tied Game 7 at 6-6.", "checked": "both boxes: HR 8th off Chapman, 1 on, 2 out; bref pbp bottom 8th at 4-6; SABR: two-run, game-tying home run in the eighth." },
+        { "name": "Roberto Perez", "nationality": "Puerto Rico", "born": "Mayaguez, Puerto Rico", "fact": "Batted ninth and caught the start, Yan Gomes only entered late.", "checked": "both boxes: Perez c 9th, Gomes c indented sub; bref subs: Gomes in at catcher top 8th after Naquin ran for Perez." },
+        { "name": "Coco Crisp", "nationality": "USA", "born": "Los Angeles, California", "fact": "Doubled and scored Cleveland's first run; Michael Martinez later replaced him in the field.", "checked": "both boxes: 2B off Hendricks, Martinez indented sub; bref pbp bottom 3rd: Crisp double, Santana single, Crisp scores; SABR: Santana singled in Crisp, who had reached on a double. DISAGREEMENT: SABR puts Martinez's entry in the eighth, bref pbp in the top of the 9th, so the old 'in the 8th' is dropped and no inning is claimed." }
+      ]
+    }
+  ]
+}
