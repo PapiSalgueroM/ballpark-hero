@@ -1,3 +1,15 @@
+Codex970 resume preparation saved, 2026-10-03.
+The ten-minute quiet-lane wait never cleared, so no product test, type
+check, build or browser launched. Shared36 and970 acceptance remain OPEN.
+Read-only review found a likely global-role-query test hotspot, a missing
+whole-save comparison and an outdated pre970 reference. Reviewed proposals,
+six provisional controls and a native fixture are preserved under
+docs/drafts/nhl-waiver-970/resume-2026-10-03. Four scripts parse only.
+An isolated504efc82 source gate carries the prepared candidate; root app
+and save test are unchanged. All12 paused drafts and7 stashes held. No
+queued monitor or owned host remains. Claude: coordinate the quiet lane,
+then retain Release Z merged-tree gate/publication. Next free971.
+
 Codex resumed 970 and shared save verification, 2026-10-03.
 Pulled main at ca55dd91, no incoming changes. Existing 970 ownership is
 held. Two read-only reviewers are checking the preserved waiver draft
