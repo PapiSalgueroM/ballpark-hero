@@ -95,6 +95,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/noDoubleRecord.test.tsx';
@@ -134,7 +135,7 @@ const VITEST_CONTROLS = {
     /* Round 900: the four US careers are one board, so this one edit has to
        turn all four rows red. A sport that stayed green here would be a
        sport that is not on the shared board. */
-    edits: [{ file: 'src/components/us-career/UsCareerBoard.tsx', from: "  const done = phase === 'retired' || phase === 'coach';", to: "  const done = phase === 'retired';" }],
+    edits: [{ file: US_CAREER_BOARD, from: "  const done = phase === 'retired' || phase === 'coach';", to: "  const done = phase === 'retired';" }],
     why: 'the shared US career board counts only the retired screen as done again, so every coaching round trip re-arms the recorder in all four My Careers',
     red: row => /^(nfl|nba|mlb|nhl)-my-career$/.test(row.title),
     point: /coaching round trip 1 records nothing/,

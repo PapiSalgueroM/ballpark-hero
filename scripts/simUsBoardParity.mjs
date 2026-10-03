@@ -11,7 +11,8 @@
  * A) The fixture is whole: four sports, every screen the round names reached
  *    on each path (event card, extension talk, free agency window, rival beat,
  *    rival choice, both confirmations answered no and yes, retirement, the
- *    coach career, a reload), at least 12 seasons, the six required saves.
+ *    coach career, a reload, an older-era career), at least 12 seasons, the
+ *    six required saves and the five old-shape saves the restore repairs.
  * B) The replay: src/test/usBoardFixture.test.tsx mounts the real boards in
  *    jsdom with the fixture's seeds and clock and presses the same buttons.
  *    After every press the save's bytes and the document's markup must hash to
@@ -21,6 +22,10 @@
  * Measured when it was written (2026-10-02, this machine): 436, 506, 475 and
  * 442 clicks on the four paths (23 or 24 seasons each) and 1,860 more steps
  * across the ten fixed saves per sport; one replay takes about 160 seconds.
+ * After the review that added the five old-shape saves and an older-era
+ * second career in every sport (re-recorded from main 4ae96019): 439, 506,
+ * 475 and 441 clicks, fifteen fixed saves per sport and 701, 721, 688 and
+ * 688 screen steps; the fixture is 1,875,117 bytes.
  * Recorded twice from the same tree, the fixture came out byte for byte the
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either

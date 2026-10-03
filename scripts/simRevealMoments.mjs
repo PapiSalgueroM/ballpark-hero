@@ -78,6 +78,7 @@ import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -118,7 +119,7 @@ function walk(dir, out = []) {
 
 const KIT = 'src/components/club-manager/Celebration.tsx';
 /* Round 900: the four US career boards are one; the control copies that one. */
-const US_BOARD = 'src/components/us-career/UsCareerBoard.tsx';
+const US_BOARD = US_CAREER_BOARD;
 const DRAFT_NIGHT = 'src/components/front-office-shared/DraftNightCard.tsx';
 const DRAFT_DAY = 'src/components/us-career/DraftDayCard.tsx';
 const TYCOON = 'src/pages/StadiumTycoon.tsx';

@@ -4,19 +4,20 @@ import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { US_CAREER_BOARD, usCareerSport } from './lib/usCareerFiles.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = 'src/components/us-career/USCareerActionConfirm.tsx';
 const test = 'src/test/usCareerActionConfirm.test.tsx';
-const board = sport => `src/components/${sport.toLowerCase()}-my-career/${sport[0]}${sport.slice(1).toLowerCase()}MyCareerBoard.tsx`;
+const board = sport => usCareerSport(sport).wrapper;
 const sports = ['NFL', 'NBA', 'MLB', 'NHL'];
 const boards = sports.map(board);
 /* Round 900: the four boards are thin wrappers around one shared board plus a
    binding per sport. The wiring this harness mutates lives in the shared
    board now, so one edit there has to fail the same case in all four sports;
    a sport that stayed green would be a sport that is not on that board. */
-const sharedBoard = 'src/components/us-career/UsCareerBoard.tsx';
-const bindings = sports.map(sport => `src/lib/${sport.toLowerCase()}CareerSport.ts`);
+const sharedBoard = US_CAREER_BOARD;
+const bindings = sports.map(sport => usCareerSport(sport).binding);
 const files = [component, test, sharedBoard, ...bindings, ...boards, 'src/hooks/useGameCompletion.ts', 'src/lib/restoredFinish.ts', ...sports.map(sport => `src/lib/${sport.toLowerCase()}MyCareer.ts`)];
 const holdSource = bytes => ({ bytes, source: bytes.toString('utf8').replaceAll('\r\n', '\n') });
 const held = await Promise.all(files.map(async file => [file, holdSource(await readFile(path.join(root, file)))]));
