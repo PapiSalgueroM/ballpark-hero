@@ -18,9 +18,10 @@ import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
-import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
+import { getBadgeState, BADGE_DEFS, ownTotals, viewedTotals, type BadgeState, type ServerTotals } from '@/lib/badges';
 import AchievementCase from '@/components/profile/AchievementCase';
 import StreakHistory from '@/components/profile/StreakHistory';
+import YourCareers from '@/components/profile/YourCareers';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
 
@@ -145,7 +146,7 @@ export default function Profile() {
   const [editing, setEditing] = useState(false);
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
-  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number } | null>(null);
+  const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number; last_played_at?: string | null } | null>(null);
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
@@ -230,7 +231,7 @@ export default function Profile() {
       const [scoresRes, recentRes, userScoreRes, gamesCountRes, gameTypesRes, bracketRes, todayRes, prefsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
         supabase.from('user_game_scores').select('game_type, score, created_at').eq('user_id', targetUserId).order('created_at', { ascending: false }).limit(5),
-        supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
+        supabase.from('user_scores').select('current_streak, longest_streak, total_points, last_played_at').eq('user_id', targetUserId).maybeSingle(),
         // Round 301, audit finding 1: a head-only count of the player's
         // finished plays, the real Games Played number for viewed profiles.
         supabase.from('user_game_scores').select('*', { count: 'exact', head: true }).eq('user_id', targetUserId),
@@ -244,7 +245,9 @@ export default function Profile() {
 
       setBestScores(scoresRes.data || []);
       setRecentGames((recentRes.data || []) as unknown as RecentGame[]);
-      if (userScoreRes.data) setUserScoreData(userScoreRes.data as any);
+      /* Round 981: reset as well as set, so moving from someone else's
+         profile to your own never carries their numbers across. */
+      setUserScoreData((userScoreRes.data as any) ?? null);
       setServerTotalGames(gamesCountRes.count ?? 0);
       setPlayedGameTypes((gameTypesRes.data || []).map((r: any) => r.game_type));
       if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
@@ -283,17 +286,35 @@ export default function Profile() {
     loadProfile();
   }, [username, user, profile, authLoading, navigate]);
 
+  /* Round 981: the account's half of the numbers, as loaded above. On your
+     own profile it is merged with this browser's half (ownTotals), so a
+     second device shows the account's games, streaks and badges instead of
+     a real points total beside Games 0 and Streak 0. */
+  const serverTotals = useMemo<ServerTotals | null>(
+    () => (userScoreData || serverTotalGames > 0
+      ? {
+          gamesPlayed: serverTotalGames,
+          totalPoints: userScoreData?.total_points ?? 0,
+          currentStreak: userScoreData?.current_streak ?? 0,
+          longestStreak: userScoreData?.longest_streak ?? 0,
+          lastPlayedAt: userScoreData?.last_played_at ?? null,
+        }
+      : null),
+    [userScoreData, serverTotalGames],
+  );
+
   /* ── Badges (#103): own-profile only, local-first, loaded once profile/auth is settled ── */
   useEffect(() => {
     // Round 301, audit finding 10: reset to the all-locked seed, never [],
     // so any consumer of badges.length keeps a real denominator.
     if (authLoading || !isOwnProfile) { setBadges(BADGE_DEFS.map(def => ({ ...def, earned: false }))); return; }
     let cancelled = false;
-    getBadgeState(profile).then(result => {
+    // Round 981: the server half goes in too, the same numbers the tiles show.
+    getBadgeState(profile, serverTotals).then(result => {
       if (!cancelled) setBadges(result);
     });
     return () => { cancelled = true; };
-  }, [authLoading, isOwnProfile, profile]);
+  }, [authLoading, isOwnProfile, profile, serverTotals]);
 
   /* ── Time tracking (increment every minute while this page is visible) ── */
   /* Round 301, audit finding 11: one interval, created once on mount and
@@ -409,20 +430,29 @@ export default function Profile() {
      all_time_score) column, so the old fallbacks were dead and someone
      else's profile always showed Games Played 0. Viewed profiles now use
      the counted user_game_scores rows fetched above. */
-  const totalGames = isOwnProfile ? localTotalPlays : serverTotalGames;
-  // Local-first (see useStreaks() above): on isOwnProfile this is always
-  // the local browser's own streak, which is correct since a player viewing
-  // their own profile is on their own device by definition. On someone
-  // else's profile, local streak data is this visitor's, not the viewed
-  // player's, so the viewed player's user_scores streaks (written on every
-  // signed in completion since Round 300) are shown instead.
-  const currentStreak = isOwnProfile
-    ? globalCurrentStreak
-    : (userScoreData?.current_streak ?? 0);
-  const longestStreak = isOwnProfile
-    ? globalLongestStreak
-    : (userScoreData?.longest_streak ?? 0);
-  const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
+  /* Round 981: games, both streaks and the average come from one merge.
+     Your own profile takes the larger of this browser and the account for
+     each (a player on a second device is not "on their own device by
+     definition", which is what this used to assume, and saw Games 0 and
+     Streak 0 beside a real points total). Someone else's profile has only
+     the account's half. A server streak counts only while its last play
+     was today or yesterday, the same grace the local streak gets. The
+     average divides points and games from the same half. */
+  const totals = isOwnProfile
+    ? ownTotals(
+        { plays: localTotalPlays, points: localTotalPoints, currentStreak: globalCurrentStreak, longestStreak: globalLongestStreak },
+        serverTotals,
+      )
+    : viewedTotals(serverTotals);
+  const totalGames = totals.gamesPlayed;
+  const currentStreak = totals.currentStreak;
+  const longestStreak = totals.longestStreak;
+  const averageScore = totals.averageScore;
+  /* Round 981: every day of a live play streak was a day you visited, so
+     the visit run is at least the play run. On a second device this
+     browser has no visits yet, and Days in a Row 0 beside Streak 9 was a
+     zero that was simply not true. */
+  const daysInARow = Math.max(visitStreakDays, currentStreak);
 
   /* Round 301, audit findings 7 and 13: both halves count DISTINCT games
      completed today, the local slug set for instant credit and the server's
@@ -688,7 +718,7 @@ export default function Profile() {
               // not a lifetime total. Own-profile only: this browser's visit
               // history has no meaning when looking at someone else's profile.
               ...(isOwnProfile
-                ? [{ icon: <CalendarCheck className="w-5 h-5 text-gold" />, value: visitStreakDays, label: 'Days in a Row' }]
+                ? [{ icon: <CalendarCheck className="w-5 h-5 text-gold" />, value: daysInARow, label: 'Days in a Row' }]
                 : []),
             ].map((stat, i) => (
               <Card key={i} className="border-border/40">
@@ -700,6 +730,11 @@ export default function Profile() {
               </Card>
             ))}
           </div>
+
+          {/* ═══════════════ 3a. YOUR CAREERS (Round 981) ═══════════════ */}
+          {/* Own profile only: the saves are this browser's, the same list
+              the home page's Continue playing row reads. */}
+          {isOwnProfile && <YourCareers />}
 
           {/* ═══════════════ 3b. PER-GAME BEST STREAKS (#101/#100) ═══════════════ */}
           {/* Own-profile only: per-game streaks are local-first and only meaningful for this browser's own history. */}
