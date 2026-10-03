@@ -121,6 +121,9 @@ import { getRealismEvents } from "./soccerCareerRealism";
 import { getCriticEvents, soccerCriticArticle, soccerCriticDisgraceArticle } from "./soccerCareerCritic";
 /* Round 473: the signature boot, same one way runtime edge. */
 import { getBootEvents } from "./soccerCareerBoot";
+/* Round 973: the academy focus. soccerCareerAcademy imports nothing from
+   here, so this is a one way edge. */
+import { applyAcademyFocus } from "./soccerCareerAcademy";
 import {
   runInternationalSummer, tournamentForYear, offYearCaps, toHistoryEntry,
   nationStrength as intlNationStrength, confederationOf, pickSquad,
@@ -4484,6 +4487,10 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.physical = growStat(s.physical, s.age, true, false, s.primeType, pot, s.overall, devY);
   s.reflexes = growStat(s.reflexes, s.age, true, false, s.primeType, pot, s.overall, devY);
   s.overall = calcOverall(s, s.position);
+  /* Round 973: the academy focus, if one was picked. It lands after all seven
+     natural growth draws and draws nothing itself, so every other stat is
+     exactly what it would have been, and with no focus it writes nothing. */
+  if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,

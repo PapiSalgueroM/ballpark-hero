@@ -6,8 +6,8 @@ import { NflConnect4HowToPlay } from '@/components/nfl-connect4/NflConnect4HowTo
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
-import { RotateCcw, Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
-import ShareButtons from '@/components/game/ShareButtons';
+import { Loader2, AlertCircle, HelpCircle, SkipForward, ArrowDown } from 'lucide-react';
+import { Connect4Finish, Connect4FinishStatus } from '@/components/connect4/Connect4Finish';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -118,32 +118,8 @@ const NflConnect4 = () => {
           </div>
         )}
 
-        {/* Win / Draw banner */}
-        {phase === 'won' && winInfo && (
-          <div className="text-center mb-4 animate-fade-in">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-primary/10 border border-primary/30">
-              <div
-                className={cn(
-                  'w-6 h-6 rounded-full',
-                  winInfo.winner === 'red' ? 'bg-red-500' : 'bg-blue-500'
-                )}
-              />
-              <span className="text-xl font-bold text-primary font-display">
-                {winInfo.winner === 'red' ? 'Red' : 'Blue'} Wins! 🏆
-              </span>
-            </div>
-          </div>
-        )}
-
-        {phase === 'draw' && (
-          <div className="text-center mb-4 animate-fade-in">
-            <div className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-secondary border border-border">
-              <span className="text-xl font-bold text-foreground font-display">
-                It's a Draw! 🤝
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Round 952: who won, at the turn row's height so the board stays put */}
+        <Connect4FinishStatus phase={phase} winner={winInfo?.winner} />
 
         {/* Board name */}
         <p className="text-center text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold">
@@ -171,9 +147,13 @@ const NflConnect4 = () => {
                   )}
                 >
                   {attr}
-                  {selectedCol === c && (
-                    <ArrowDown className="w-3 h-3 mx-auto mt-0.5 animate-bounce" />
-                  )}
+                  {/* Round 952: every header keeps the arrow's room, so the row does not
+                     grow when a column is picked and shrink after the drop, and the
+                     board does not jump when the last disc ends the game */}
+                  <ArrowDown
+                    aria-hidden="true"
+                    className={cn('w-3 h-3 mx-auto mt-0.5', selectedCol === c ? 'animate-bounce' : 'invisible')}
+                  />
                 </button>
               ))}
 
@@ -288,23 +268,14 @@ const NflConnect4 = () => {
           </div>
         )}
 
-        {/* Reset */}
-        {(phase === 'won' || phase === 'draw') && (
-          <div className="flex flex-col items-center mt-6">
-            <ShareButtons
-              score={phase === 'draw' ? 'Draw' : `${winInfo?.winner === 'red' ? 'Red' : 'Blue'} wins`}
-              gameName="NFL Connect 4"
-              gamePath="/nfl-connect-4"
-            />
-            <button
-              onClick={resetGame}
-              className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
-            >
-              <RotateCcw className="w-4 h-4" />
-              New Game
-            </button>
-          </div>
-        )}
+        {/* Round 952: the shared result moment, under the board where the answer box was */}
+        <Connect4Finish
+          phase={phase}
+          winner={winInfo?.winner}
+          gameName="NFL Connect 4"
+          gamePath="/nfl-connect-4"
+          onNewGame={resetGame}
+        />
 
         <GameSeoContent
           pageHasOwnH1
