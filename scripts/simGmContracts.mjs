@@ -128,8 +128,8 @@
  *      at the rival 26-39 (10), picks paid 27-41 (15).
  *      Controls, findings on SIM_SEED 0: optionall 66, nobird 17, noarb 160,
  *      resheet 109, optiontwice 34, keepflags 38, qotwice 33, mutmid 31,
- *      mutmax 2 (the ladder walk: 6 and 9 seasons), muttag 95, noreprice 226,
- *      sheetpool 41, mutceil 139, earlyone 20, nodeadcap 14 (15 on 300).
+ *      mutmax 2 (the ladder walk: 6 and 9 seasons), muttag 96, noreprice 226,
+ *      sheetpool 41, mutceil 149, earlyone 24, nodeadcap 13 (15 on 300).
  *
  * NOT COVERED HERE, AND WHERE IT IS: the walkout and counter arithmetic of a
  * single push, the reload guard on a push and the corrupt ledger reset are in
