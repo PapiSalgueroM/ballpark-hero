@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FlagImg } from "@/components/FlagImg";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { Confetti } from "@/components/soccer-career/CareerFx";
+import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices } from "@/components/career/AwardsNightCard";
 import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
 import type {
@@ -100,6 +102,90 @@ function TableCard({ rows, nation, title }: { rows: IntlTableRow[]; nation: stri
 
 type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
 
+/* Round 926: the end of a tournament is a moment, and a moment plays once.
+   It plays when the card first lands, never again when a tile is opened and
+   closed, and never when a save still sitting on this card is reopened: on a
+   reload, in a new tab, or after the browser was closed. The save is not ours
+   to write (the engine owns it), so the memory is a short list in the same
+   localStorage the save lives in, with an in memory set behind it.
+
+   The key is the run, not just the edition. Tournament years follow a fixed
+   calendar, so a second career with the same nation reaches the same World
+   Cup in the same year; the key therefore carries this run's own numbers (his
+   games, his ratings, the scores) through a small hash, and a different
+   career's win is a different key and gets its own moment.
+
+   What happens when the memory fails: if storage cannot be read, the card
+   plays. That is the storage the save is read from, so a browser that cannot
+   read it has not reopened this save from it; the card in front of it is new.
+   The save lives only in this browser's localStorage (no export, no sync), so
+   it cannot turn up somewhere that has not seen its moment. Two cases do play
+   it again, both rare: a save already sitting on a won card when this shipped
+   has an empty list and plays the moment once on its next load; and if
+   setItem keeps throwing (storage full or blocked), nothing is remembered past
+   this load, so every reload plays it. The list keeps the newest MOMENT_KEEP
+   keys and drops the oldest; only one save exists, so the card on screen is
+   always among the newest. */
+const MOMENT_STORE = "dukb-intl-moments";
+const MOMENT_KEEP = 60;
+const momentsThisLoad = new Set<string>();
+
+/** FNV-1a over a string, as 8 hex digits. Not security, just a short tag. */
+function shortHash(s: string): string {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+
+function momentKey(t: IntlTournament): string {
+  const run = JSON.stringify([
+    t.champion, t.runnerUp, t.playerApps, t.playerGoals, t.playerAssists, t.playerAvgRating,
+    t.squad?.myScore,
+    (t.matches ?? []).map(m => [m.round, m.home, m.away, m.homeGoals, m.awayGoals, m.playerGoals, m.playerAssists, m.playerRating]),
+    (t.bracket ?? []).map(b => [b.round, b.slot, b.home, b.away, b.homeGoals, b.awayGoals]),
+  ]);
+  return `${t.nation}|${t.name}|${t.year}|${t.myResult}|${shortHash(run)}`;
+}
+
+function readMoments(): string[] {
+  const raw = window.localStorage.getItem(MOMENT_STORE);
+  if (!raw) return [];
+  try {
+    const list: unknown = JSON.parse(raw);
+    return Array.isArray(list) ? list.filter((k): k is string => typeof k === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function momentPlayed(key: string): boolean {
+  if (momentsThisLoad.has(key)) return true;
+  try {
+    return readMoments().includes(key);
+  } catch {
+    return false;
+  }
+}
+
+function markMomentPlayed(key: string): void {
+  momentsThisLoad.add(key);
+  try {
+    const kept = readMoments().filter(k => k !== key);
+    kept.push(key);
+    window.localStorage.setItem(MOMENT_STORE, JSON.stringify(kept.slice(-MOMENT_KEEP)));
+  } catch {
+    /* Storage blocked or full: the in memory set still stops a replay this visit. */
+  }
+}
+
+/** The card's entrance pace: the kit's stagger, started early and stepped a
+    little tighter than a season feed, because it carries up to fourteen beats
+    and the speech should not wait three seconds behind them. */
+const beatDelay = (i: number) => revealDelay(i, 0.1, 0.16);
+
 /** 1st, 2nd, 3rd, 4th. */
 function ordinal(n: number): string {
   const s = n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th";
@@ -123,6 +209,15 @@ export function TournamentCard({
      that return is React error #310. */
   const [table, setTable] = useState<"group" | "road">("group");
   const revealRef = useRevealScroll<HTMLDivElement>(screen);
+  /* Round 926: true only on the first landing of this tournament's card.
+     Read here (pure, so a discarded render reads the same answer), written
+     in the effect below once the render has committed. Opening any tile
+     turns it off, so Back does not replay the entrance. */
+  const momentId = momentKey(t);
+  const [fresh, setFresh] = useState(() => !momentPlayed(momentId));
+  useEffect(() => {
+    if (fresh) markMomentPlayed(momentId);
+  }, [fresh, momentId]);
   const isWinner = t.myResult === "Winner";
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
@@ -334,18 +429,47 @@ export function TournamentCard({
     { key: "matches", emoji: "⚽", label: "Your Games", sub: `${t.playerApps} apps` },
   ];
 
+  /* Round 926: a won tournament lands as the biggest night of the career.
+     Gold confetti, the trophy and the title slam in, and every line under
+     them ticks in on the kit's pace. This is every tournament the engine
+     runs, not only the World Cup: the Euros, the Copa, the Africa Cup of
+     Nations, the Asian Cup, the Gold Cup and the OFC Nations Cup too.
+     Anything else (out in the group, beaten
+     in the final, never picked) stays quiet: the card rises in once, no shake
+     and no confetti. Every animated class sits on a wrapper, never on a
+     control, and every number prints its final value from the first frame.
+     Transforms and opacity only, so the card's box never moves. */
+  const won = fresh && isWinner;
+  const quiet = fresh && !isWinner;
+  let beat = 0;
+  const nextBeat = () => ({ animationDelay: beatDelay(beat++) });
+
   return (
-    <div ref={revealRef} className={`relative rounded-xl border-2 ${border} bg-gradient-to-b ${grad} to-transparent p-4 space-y-3`}>
+    <div
+      ref={revealRef}
+      data-intl-moment={won ? "won" : quiet ? "quiet" : "none"}
+      className={`relative rounded-xl border-2 ${border} bg-gradient-to-b ${grad} to-transparent p-4 space-y-3${quiet ? " cm-rise" : ""}`}
+    >
       <div className="text-center space-y-1.5">
-        <div className="text-3xl">{isWinner ? "🏆" : missed ? "😞" : "🌍"}</div>
-        <h3 className="text-lg font-black leading-tight">{t.name} {t.year}</h3>
-        <div className="flex items-center justify-center gap-1.5 flex-wrap">
+        <div className={`text-3xl${won ? " cm-slam" : ""}`} style={won ? nextBeat() : undefined}>
+          {isWinner ? "🏆" : missed ? "😞" : "🌍"}
+        </div>
+        <h3 className={`text-lg font-black leading-tight${won ? " cm-slam" : ""}`} style={won ? nextBeat() : undefined}>
+          {t.name} {t.year}
+        </h3>
+        <div
+          className={`flex items-center justify-center gap-1.5 flex-wrap${won ? " cm-rise" : ""}`}
+          style={won ? nextBeat() : undefined}
+        >
           <span className="text-xs font-bold flex items-center gap-1">
             <FlagImg name={t.nation} size={16} />{t.nation}
           </span>
           <ResultPill result={t.myResult} />
         </div>
-        <p className="text-[11px] text-muted-foreground flex items-center justify-center gap-1 flex-wrap">
+        <p
+          className={`text-[11px] text-muted-foreground flex items-center justify-center gap-1 flex-wrap${won ? " cm-rise" : ""}`}
+          style={won ? nextBeat() : undefined}
+        >
           Champions: <FlagImg name={t.champion} size={14} />
           <span className="font-bold text-foreground">{t.champion}</span>
           {t.runnerUp && <span>beat {t.runnerUp} in the final</span>}
@@ -360,7 +484,11 @@ export function TournamentCard({
             { l: "Assists", v: t.playerAssists },
             { l: "Rating", v: t.playerAvgRating.toFixed(1) },
           ].map(s => (
-            <div key={s.l} className="text-center bg-muted/20 rounded-lg p-1.5">
+            <div
+              key={s.l}
+              className={`text-center bg-muted/20 rounded-lg p-1.5${won ? " cm-tick-in" : ""}`}
+              style={won ? nextBeat() : undefined}
+            >
               <div className="text-base font-black">{s.v}</div>
               <div className="text-[9px] text-muted-foreground">{s.l}</div>
             </div>
@@ -369,7 +497,10 @@ export function TournamentCard({
       )}
 
       {(t.bestPlayer || t.goldenBoot) && (
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center space-y-0.5">
+        <div
+          className={`bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center space-y-0.5${won ? " cm-rise" : ""}`}
+          style={won ? nextBeat() : undefined}
+        >
           {t.bestPlayer && <div className="text-xs font-bold">🌟 Best Player of the tournament</div>}
           {t.goldenBoot && <div className="text-xs font-bold">👟 Golden Boot, {t.playerGoals} goals</div>}
         </div>
@@ -377,27 +508,46 @@ export function TournamentCard({
 
       <div className="grid grid-cols-2 gap-1.5">
         {tiles.map(tile => (
-          <button
+          /* Round 926: the entrance sits on this wrapper, not the button, so
+             the button's hover still works once the animation has filled. It
+             is the gated rise because a tile is a control: hidden (so it cannot
+             be tapped) through its delay, since one tap ends the moment. */
+          <div
             key={tile.key}
-            onClick={() => setScreen(tile.key)}
-            className="bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"
+            data-intl-tile={tile.key}
+            className={`min-w-0${won ? " cm-rise-gated" : ""}`}
+            style={won ? nextBeat() : undefined}
           >
-            <div className="text-base leading-none">{tile.emoji}</div>
-            <div className="text-[11px] font-bold truncate">{tile.label}</div>
-            <div className="text-[9px] text-muted-foreground truncate">{tile.sub}</div>
-          </button>
+            <button
+              onClick={() => { setFresh(false); setScreen(tile.key); }}
+              className="w-full h-full bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"
+            >
+              <div className="text-base leading-none">{tile.emoji}</div>
+              <div className="text-[11px] font-bold truncate">{tile.label}</div>
+              <div className="text-[9px] text-muted-foreground truncate">{tile.sub}</div>
+            </button>
+          </div>
         ))}
       </div>
 
       {isWinner ? (
         /* Round 834: the shared speech buttons, from the same options the
-           engine applies (SOCCER_WORLD_CUP_SPEECHES). */
-        <SpeechChoices prompt="The microphone is yours" options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
+           engine applies (SOCCER_WORLD_CUP_SPEECHES). Round 926: on the
+           night itself they land last and cannot be pressed before they show
+           (cm-rise-gated keeps them hidden through the delay). */
+        <div className={won ? "cm-rise-gated" : undefined} style={won ? nextBeat() : undefined}>
+          <SpeechChoices prompt="The microphone is yours" options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
+        </div>
       ) : (
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
           Continue →
         </Button>
       )}
+      {/* Round 926: last child on purpose. It is absolutely positioned over
+          the whole card, and as the first child it would push the headline
+          down by the space-y gap. Pointer events off, aria hidden, and it
+          renders nothing for a visitor who asked for less motion. */}
+      {won && <Confetti pieces={60} gold />}
     </div>
   );
 }
