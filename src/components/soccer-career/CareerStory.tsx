@@ -6,6 +6,7 @@
    live log. Lines are rendered on read, the same way the Latest Events card
    draws them (money in the player's currency, flags as images). */
 import { useState } from "react";
+import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { focusDialogOnMount, escapeCloses } from "@/lib/dialogA11y";
 import { TextWithFlags } from "@/components/FlagImg";
 import { localizeMoney as money } from "@/lib/soccerCurrency";
@@ -45,23 +46,23 @@ export function storyStartsLate(career: StorySource, tiles: StoryTile[]): number
 
 function SeasonTiles({ tiles, retired, onOpen }: { tiles: StoryTile[]; retired: boolean; onOpen: (key: string) => void }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2" data-story-tiles>
+    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2" data-story-tiles>
       {tiles.map(t => (
         <button
           key={t.key}
           type="button"
           data-story-tile={t.key}
           onClick={() => onOpen(t.key)}
-          className={`rounded-xl border p-2.5 text-left transition-colors ${t.current ? "border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20" : "border-border bg-muted/20 hover:bg-muted/40"}`}
+          className={`min-w-0 rounded-xl border p-2 text-left transition-colors ${t.current ? "border-emerald-500/50 bg-emerald-500/10 hover:bg-emerald-500/20" : "border-border bg-muted/20 hover:bg-muted/40"}`}
         >
           <span className="flex items-center justify-between gap-1">
-            <span className="text-base font-black tabular-nums">{t.year}</span>
+            <span className="text-sm font-black tabular-nums">{t.year}</span>
             {t.current && (
-              <span className="rounded bg-emerald-500 px-1.5 py-0.5 text-[9px] font-black text-black">{retired ? "LAST" : "NOW"}</span>
+              <span className="rounded bg-emerald-500 px-1 py-0.5 text-[8px] font-black text-black">{retired ? "LAST" : "NOW"}</span>
             )}
           </span>
-          <span className="block text-[10px] text-muted-foreground truncate">Age {t.age}, {t.club}</span>
-          <span className="block text-[10px] text-muted-foreground">{t.lines.length + (t.more ?? 0)} {t.lines.length + (t.more ?? 0) === 1 ? "moment" : "moments"}</span>
+          <span className="block text-[10px] text-foreground/80 truncate">{t.club}</span>
+          <span className="block text-[10px] text-muted-foreground">Age {t.age} · {t.lines.length + (t.more ?? 0)} {t.lines.length + (t.more ?? 0) === 1 ? "moment" : "moments"}</span>
         </button>
       ))}
     </div>
@@ -92,17 +93,23 @@ function SeasonPage({ tile, retired, onBack }: { tile: StoryTile; retired: boole
 
 function StoryBody({ career }: { career: StorySource & { retired: boolean } }) {
   const [open, setOpen] = useState<string | null>(null);
+  /* the no scroll rule: a season opened from the bottom of a long list, or
+     the list come back to, shows its top without the player hunting for it */
+  const revealRef = useRevealScroll<HTMLDivElement>(open ?? "tiles");
   const tiles = storyTiles(career);
   const tile = open === null ? null : tiles.find(t => t.key === open) ?? null;
-  if (tile) return <SeasonPage tile={tile} retired={career.retired} onBack={() => setOpen(null)} />;
   const startsLate = storyStartsLate(career, tiles);
   return (
-    <div className="space-y-2">
-      {tiles.length === 0
-        ? <p className="text-xs text-muted-foreground">Nothing written yet. Play a season and it starts here.</p>
-        : <SeasonTiles tiles={tiles} retired={career.retired} onOpen={setOpen} />}
-      {startsLate !== null && (
-        <p className="text-[10px] text-muted-foreground" data-story-starts-late>The book starts in {startsLate}. Seasons before that were played before the story was kept.</p>
+    <div ref={revealRef} className="space-y-2">
+      {tile ? <SeasonPage tile={tile} retired={career.retired} onBack={() => setOpen(null)} /> : (
+        <>
+          {tiles.length === 0
+            ? <p className="text-xs text-muted-foreground">Nothing written yet. Play a season and it starts here.</p>
+            : <SeasonTiles tiles={tiles} retired={career.retired} onOpen={setOpen} />}
+          {startsLate !== null && (
+            <p className="text-[10px] text-muted-foreground" data-story-starts-late>The book starts in {startsLate}. Seasons before that were played before the story was kept.</p>
+          )}
+        </>
       )}
     </div>
   );
