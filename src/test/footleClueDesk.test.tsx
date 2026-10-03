@@ -118,15 +118,28 @@ describe('Footle clue desk outcomes', () => {
   });
 
   it('resets selected history when mode and puzzle change with equal guess counts', async () => {
-    const initial = run(); const view = await page(); await view.findByRole('combobox');
+    const initial = run(); vi.spyOn(Math, 'random').mockReturnValue(0);
+    const view = await page(); await view.findByRole('combobox');
     submit(view, initial.pool[0].name); submit(view, initial.pool[1].name);
     fireEvent.click(view.getByRole('button', { name: `View guess 1: ${initial.pool[0].name}` }));
     fireEvent.click(view.getByRole('button', { name: /Unlimited/ }));
     submit(view, initial.pool[20].name); submit(view, initial.pool[21].name);
+    fireEvent.click(view.getByRole('button', { name: `View guess 1: ${initial.pool[20].name}` }));
     fireEvent.click(view.getByRole('button', { name: 'Five-puzzle run' }));
     expect(desk(view).getAttribute('data-clue-guess')).toBe('2');
     expect(within(desk(view)).getByRole('heading', { level: 2 })).toHaveTextContent(initial.pool[1].name);
     expect(view.container.querySelector('[data-footle-review]')).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: /Unlimited/ }));
+    submit(view, initial.pool[0].name);
+    expect(view.getByRole('status')).toHaveTextContent('Correct!');
+    fireEvent.click(view.getByRole('button', { name: `View guess 1: ${initial.pool[20].name}` }));
+    expect(desk(view).getAttribute('data-clue-guess')).toBe('1');
+    fireEvent.click(view.getByRole('button', { name: 'Play Again' }));
+    for (const index of [20, 21, 22]) submit(view, initial.pool[index].name);
+    expect(desk(view).getAttribute('data-clue-guess'), 'Same-answer replay selects the latest new guess').toBe('3');
+    expect(within(desk(view)).getByRole('heading', { level: 2 })).toHaveTextContent(initial.pool[22].name);
+    submit(view, initial.pool[0].name);
+    expect(view.getByRole('status')).toHaveTextContent('Correct!');
   });
 
   it('reviews every finished round from frozen clues after reload without saved record writes', async () => {
@@ -146,7 +159,7 @@ describe('Footle clue desk outcomes', () => {
         assertClues(desk(view), compareGuess(initial.pool.find(player => player.name === name)!, answer));
       }
     }
-    expect(records()).toEqual(held); expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBe(bytes);
+    expect(records(), 'Review never writes saved run or completion records').toEqual(held); expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBe(bytes);
     expect(write).not.toHaveBeenCalled();
     expect(fixture.completion.mock.calls.every(([, complete, score]) => !complete && score === 0)).toBe(true);
   });

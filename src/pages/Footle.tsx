@@ -53,7 +53,6 @@ const Index = () => {
   const practicePlaying = inPractice && !!practiceRun && !practiceComplete;
   const searchArea = useRevealScroll<HTMLDivElement>(returnSerial);
   const practicePanel = useRevealScroll<HTMLElement>(`${inPractice}:${practiceRun?.index}:${gameStatus}`, { enabled: inPractice && !showRules, skipFirst: false });
-  const reviewArea = useRevealScroll<HTMLDivElement>(reviewRound, { enabled: inPractice && practiceComplete && reviewRound !== null && !showRules });
   const reviewGuesses = useMemo(() => {
     if (!practiceComplete || !practiceRun || reviewRound === null) return [];
     const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[reviewRound])!;
@@ -289,12 +288,10 @@ const Index = () => {
                     <span className="block">{index + 1}</span><span className="block text-[10px]">{round.status === 'won' ? 'Solved' : 'Missed'}</span>
                   </button>)}
                 </div>
-                {reviewRound !== null && <div ref={reviewArea} className="mt-4" data-footle-review={reviewRound + 1}>
-                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                    <p className="min-w-0 break-words text-sm font-semibold">Puzzle {reviewRound + 1} · {practiceRun.targets[reviewRound]}</p>
-                    <button onClick={() => { setReviewRound(null); reviewOpener.current?.focus({ preventScroll: true }); reviewOpener.current?.scrollIntoView({ block: 'nearest' }); }} className="min-h-[44px] rounded-lg border border-border px-3 text-xs font-semibold">Back to run results</button>
-                  </div>
-                  <FootleClueDesk key={reviewRound} guesses={reviewGuesses} playing={false} reviewing helpOpen={showRules} onReturn={returnToSearch} />
+                {reviewRound !== null && <div className="mt-4" data-footle-review={reviewRound + 1}>
+                  <p className="mb-3 min-w-0 break-words text-sm font-semibold">Puzzle {reviewRound + 1} · {practiceRun.targets[reviewRound]}</p>
+                  <FootleClueDesk key={reviewRound} guesses={reviewGuesses} playing={false} reviewing helpOpen={showRules}
+                    onReturn={() => { setReviewRound(null); reviewOpener.current?.focus({ preventScroll: true }); reviewOpener.current?.scrollIntoView({ block: 'nearest' }); }} />
                 </div>}
                 <details className="mt-3"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">All five player details</summary>
                 <ol className="mt-4 grid gap-2 sm:grid-cols-2">

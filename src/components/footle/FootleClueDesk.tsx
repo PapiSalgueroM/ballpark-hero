@@ -19,26 +19,30 @@ export default function FootleClueDesk({ guesses, playing, helpOpen, onReturn, r
   const heading = useRef<HTMLHeadingElement>(null);
   const previousCount = useRef(guesses.length);
   const initialReview = useRef(reviewing);
-  const reveal = useRevealScroll<HTMLElement>(guesses.length, { enabled: !helpOpen && playing && !reviewing && guesses.length > 0 });
+  const reveal = useRevealScroll<HTMLElement>(guesses.length, { enabled: (playing || reviewing) && (guesses.length > 0 || reviewing), skipFirst: false });
   useEffect(() => {
     if (!helpOpen && ((playing && guesses.length > previousCount.current) || initialReview.current)) heading.current?.focus({ preventScroll: true });
     initialReview.current = false;
+    if (guesses.length < previousCount.current) setSelection(null);
     previousCount.current = guesses.length;
   }, [guesses.length, playing, reviewing, helpOpen]);
 
-  if (!guess) return <section className={styles.empty} data-footle-clue-empty="">
-    <h2 ref={heading} tabIndex={-1} className={styles.eyebrow}>{reviewing ? 'Puzzle review' : 'Your clue desk'}</h2>
+  if (!guess) return <section ref={helpOpen ? null : reveal} className={styles.empty} data-footle-clue-empty="">
+    <div className={styles.heading}>
+      <h2 ref={heading} tabIndex={-1} className={styles.eyebrow}>{reviewing ? 'Puzzle review' : 'Your clue desk'}</h2>
+      {reviewing && <button className={styles.return} onClick={onReturn}>Back to run results</button>}
+    </div>
     <p>{reviewing ? 'No guesses were made for this puzzle.' : 'Your first guess opens eight clues. Read them, then choose your next player.'}</p>
     {!reviewing && <div className={styles.attempts} aria-label="Eight guesses available">{Array.from({ length: 8 }, (_, i) => <span key={i} aria-hidden="true">{i + 1}</span>)}</div>}
   </section>;
 
-  return <section ref={reveal} className={styles.desk} data-footle-clue-desk="" data-clue-guess={selected + 1} aria-label={reviewing ? 'Saved puzzle clues' : 'Revealed clues'}>
+  return <section ref={helpOpen ? null : reveal} className={styles.desk} data-footle-clue-desk="" data-clue-guess={selected + 1} aria-label={reviewing ? 'Saved puzzle clues' : 'Revealed clues'}>
     <div className={styles.heading}>
       <div className={styles.title}>
         <p className={styles.eyebrow}>{reviewing ? 'Puzzle review' : 'Your clue desk'} · Guess {selected + 1} of {guesses.length}</p>
         <h2 ref={heading} tabIndex={-1}>{guess.playerName}</h2>
       </div>
-      {playing && <button className={styles.return} onClick={onReturn}>Back to search <span aria-hidden="true">↑</span></button>}
+      {(playing || reviewing) && <button className={styles.return} onClick={onReturn}>{reviewing ? 'Back to run results' : <>Back to search <span aria-hidden="true">↑</span></>}</button>}
     </div>
     <div className={styles.history} role="group" aria-label="Guess history">
       {guesses.map((value, index) => <button key={value.playerName} aria-label={`View guess ${index + 1}: ${value.playerName}`} aria-pressed={index === selected}

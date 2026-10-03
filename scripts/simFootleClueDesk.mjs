@@ -27,9 +27,10 @@ const controls = {
   history: { file: component, from: 'setSelection({ index, count: guesses.length })', to: 'setSelection({ index: guesses.length - 1, count: guesses.length })', title: titles.history, message: /expected '2' to be '1'/ },
   focus: { file: page, from: "searchArea.current?.querySelector<HTMLInputElement>('input[role=\"combobox\"]')?.focus({ preventScroll: true });", to: 'void searchArea.current;', title: titles.history, message: /toHaveFocus/ },
   identity: { file: page, from: "key={`${mode}:${targetPlayer?.name ?? ''}`}", to: '', title: titles.identity, message: /expected '1' to be '2'/ },
+  replay: { file: component, from: 'if (guesses.length < previousCount.current) setSelection(null);', to: 'void previousCount.current;', title: titles.identity, message: /Same-answer replay selects the latest new guess/ },
   round: { file: page, from: 'const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[reviewRound])!;', to: 'const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[0])!;', title: titles.review, message: /keeps the actual comparison|gives the actual direction/ },
   snapshot: { file: page, from: 'compareGuess(practiceRun.pool.find(player => player.name === name)!, answer)', to: 'compareGuess({ ...practiceRun.pool.find(player => player.name === name)!, goals: 91 }, answer)', title: titles.review, message: /goals keeps the actual/ },
-  write: { file: page, from: 'reviewOpener.current = event.currentTarget; setReviewRound(index);', to: "reviewOpener.current = event.currentTarget; localStorage.setItem('dukb-local-completions', '[]'); setReviewRound(index);", title: titles.review, message: /dukb-local-completions/ },
+  write: { file: page, from: 'reviewOpener.current = event.currentTarget; setReviewRound(index);', to: "reviewOpener.current = event.currentTarget; localStorage.setItem('dukb-local-completions', '[]'); setReviewRound(index);", title: titles.review, message: /Review never writes saved run or completion records/ },
   empty: { file: component, from: 'No guesses were made for this puzzle.', to: 'No review is available.', title: titles.empty, message: /toBeVisible/ },
   help: { file: page, from: 'Each guess opens eight cards.', to: 'Each guess opens a table.', title: titles.help, message: /Each guess opens eight cards/ },
 };
@@ -83,7 +84,7 @@ try {
       console.log(`simFootleClueDesk ${label}: ${report.numPassedTests} passed, ${report.numFailedTests} expected failures, ${report.numPendingTests} intentional skips; ${held.length} raw inputs held.`);
     } catch (error) { problems.push({ mode: label, name: error.name, message: error.message }); console.error(`${label}: ${error.message}`); }
   }
-  await writeFile(path.join(output, 'summary.json'), JSON.stringify({ outcomes, problems, hashes, scope: 'Eight mounted actual-page/hook cases with fictional fixtures. Ten copied executable controls retain two independent original-engine baselines. No live player-data or browser-layout claim.' }, null, 2));
+  await writeFile(path.join(output, 'summary.json'), JSON.stringify({ outcomes, problems, hashes, scope: 'Eight mounted actual-page/hook cases with fictional fixtures. Eleven copied executable controls retain two independent original-engine baselines. No live player-data or browser-layout claim.' }, null, 2));
   assert.deepEqual(problems, []);
 } finally {
   for (const file of copies) await rm(file, { force: true });

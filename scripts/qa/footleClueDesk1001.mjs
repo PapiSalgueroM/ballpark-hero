@@ -162,6 +162,20 @@ try {
       assert.match(long.name, /Longname/); assert.match(long.club, /Northern Valley/);
       await guess(long.name); await compare(compareGuess(long, target), 'longest fixture guess'); await layout('longest fixture guess');
       await visible(page.locator('[data-footle-clue-desk] h2'), 'long guess heading'); await visible(page.getByRole('button', { name: /Back to search/ }), 'long guess return'); await screenshot('long-name-club');
+      if (width === 320) {
+        const heading = page.locator('[data-footle-clue-desk] h2'), before = await heading.boundingBox();
+        const scroll = await page.evaluate(() => ({ x: scrollX, y: scrollY })); let rejection;
+        try {
+          await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
+          const changed = await heading.boundingBox();
+          assert.ok(changed.y >= height && changed.y > before.y, 'Vertical control restores the real first-clue heading below the viewport');
+          try { await visible(heading, 'below-fold clue control'); } catch (error) { rejection = { name: error.name, message: error.message }; }
+          assert.equal(rejection?.name, 'AssertionError'); assert.match(rejection.message, /below-fold clue control: visible before any driver scroll or focus/);
+          checks.push({ label: 'effective native vertical control', before, changed, rejection });
+        } finally { await page.evaluate(({ x, y }) => window.scrollTo({ left: x, top: y, behavior: 'instant' }), scroll); }
+        assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), scroll, 'Vertical control restores the exact prior scroll');
+        await visible(heading, 'restored clue after vertical control');
+      }
       const second = initial.pool.find(player => player.name !== target.name && player.name !== long.name);
       await guess(second.name); await compare(compareGuess(second, target), 'second practice guess');
       const history = page.getByRole('button', { name: `View guess 1: ${long.name}`, exact: true });
@@ -192,6 +206,8 @@ try {
         await visible(review.getByRole('button', { name: 'Back to run results' }), `review ${index + 1} return`);
         if (finished.rounds[index].guesses.length) {
           const name = finished.rounds[index].guesses.at(-1), answer = initial.pool.find(player => player.name === initial.targets[index]);
+          await visible(review.locator('[data-footle-clue-desk] h2'), `review ${index + 1} actual guess heading`);
+          await visible(review.locator('[data-clue]').first().locator('dd').first(), `review ${index + 1} first actual clue`);
           await compare(compareGuess(initial.pool.find(player => player.name === name), answer), `round ${index + 1} frozen latest`); await layout(`round ${index + 1} review`);
           if (index === 1) {
             const first = finished.rounds[index].guesses[0];
@@ -210,6 +226,7 @@ try {
       const previous = await readDesk(); await activate(page.getByRole('button', { name: 'How to play', exact: true }), 'reopen clue rules', 30);
       await help.waitFor(); await activate(help.getByRole('button', { name: "Let's Play!" }), 'close clue rules');
       assert.ok(await page.getByRole('button', { name: 'How to play', exact: true }).evaluate(node => node === document.activeElement));
+      await visible(page.getByRole('button', { name: 'How to play', exact: true }), 'help trigger stays visible after closing review rules');
       assert.deepEqual(await readDesk(), previous); assert.deepEqual(await records(), beforeReview, 'Review and rules retain every run/daily/completion byte');
       const savedWrites = await page.evaluate(keys => window.__clueDeskStorage.filter(row => keys.includes(row.key)), recordKeys);
       assert.deepEqual(savedWrites, [], 'Review attempts no saved run or record writes');
