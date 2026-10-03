@@ -29,6 +29,7 @@ import { build } from 'esbuild';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { US_CAREER_BOARD, US_CAREER_SPORTS, readUsSource, stripComments, wrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'usCoachCareerEntry.mjs');
@@ -479,16 +480,25 @@ console.log('8) Copy check');
   }
   // And the four boards have to be wired. A round that builds the panel and
   // forgets to import it is exactly what Round 113 did.
-  for (const [dir, file] of [
-    ['nfl-my-career', 'NflMyCareerBoard.tsx'],
-    ['nba-my-career', 'NbaMyCareerBoard.tsx'],
-    ['mlb-my-career', 'MlbMyCareerBoard.tsx'],
-    ['nhl-my-career', 'NhlMyCareerBoard.tsx'],
-  ]) {
-    const src = fs.readFileSync(path.join(ROOT, 'src/components', dir, file), 'utf8');
-    if (!/usCoachCareer|CoachCareerPanel/.test(src)) fail(`${file} does not import the coaching career, so that game still stops at retirement`);
+  // Round 900: the four boards are one board plus a binding per sport, so the
+  // wiring is checked in the shared board (code only, its comments stripped),
+  // and each sport is checked for naming itself and for being on that board.
+  {
+    const board = stripComments(readUsSource(ROOT, US_CAREER_BOARD));
+    const WIRED = [
+      ["from '@/lib/usCoachCareer'", 'does not import the coaching career, so every game still stops at retirement'],
+      ['startCoachCareer(sport.slug, career, career.year, Math.random)', 'never starts a coaching career for the sport it was handed'],
+      ['ensureCoachCareer(s.coach, sport.slug)', 'does not restore a saved coaching career for the sport it was handed'],
+      ['<CoachCareerPanel', 'never draws the coaching career'],
+      ['<CoachStartCard sport={sport.slug}', 'never offers the coaching career on the retirement screen'],
+    ];
+    for (const [needle, why] of WIRED) if (!board.includes(needle)) fail(`${US_CAREER_BOARD} ${why}`);
+    for (const s of US_CAREER_SPORTS) {
+      if (!stripComments(readUsSource(ROOT, s.binding)).includes(`slug: '${s.slug}',`)) fail(`${s.binding} does not name its sport, so its coaching career would be another sport's`);
+      for (const why of wrapperProblems(ROOT, s)) fail(why);
+    }
   }
-  console.log('   all four boards import the coaching career');
+  console.log('   all four careers reach the coaching career through the one board');
 }
 
 fs.rmSync(OUT, { force: true });

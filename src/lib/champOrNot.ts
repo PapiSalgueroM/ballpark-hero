@@ -269,6 +269,8 @@ export const DAILY_ROUNDS = 10;
  * then extra draws (no back-to-back repeats) up to DAILY_ROUNDS.
  */
 export function buildDailySlots(compKeys: string[], seedPrefix: string, count: number = DAILY_ROUNDS): string[] {
+  if (compKeys.length === 0) return [];
+  if (compKeys.length === 1) return Array.from({ length: count }, () => compKeys[0]);
   const order = shuffledRange(compKeys.length, `${seedPrefix}:comps`).map(i => compKeys[i]);
   const slots = order.slice(0, count);
   let k = 0;

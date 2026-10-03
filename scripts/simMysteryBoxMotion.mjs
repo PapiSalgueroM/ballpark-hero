@@ -10,12 +10,12 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const control = process.env.MYSTERY_BOX_MOTION_CONTROL || '';
 const controls = {
-  unreveal: { failed: 2, passed: 6, changes: [['className={motion.drawn}', 'className=""']] },
-  uncue: { failed: 2, passed: 6, changes: [['highlight && <span', 'false && <span']] },
-  unplaced: { failed: 1, passed: 7, changes: [["p && placedSlot === i ? motion.placed : ''", "false ? motion.placed : ''"]] },
-  wrongslot: { failed: 2, passed: 6, changes: [['onClick={() => place(i)}', 'onClick={() => place((i + 1) % 11)}']] },
-  notitle: { failed: 2, passed: 6, changes: [['title={p.name}', '']] },
-  restorecue: { failed: 2, passed: 6, changes: [['if (packIndex !== previous.current.packIndex)', 'if (true)'], ['packIndex > previous.current.packIndex && added >= 0', 'added >= 0']] },
+  unreveal: { failed: 2, passed: 8, changes: [['className={motion.drawn}', 'className=""']] },
+  uncue: { failed: 2, passed: 8, changes: [['highlight && <span', 'false && <span']] },
+  unplaced: { failed: 1, passed: 9, changes: [["p && placedSlot === i ? motion.placed : ''", "false ? motion.placed : ''"]] },
+  wrongslot: { failed: 2, passed: 8, changes: [['onClick={() => place(i)}', 'onClick={() => place((i + 1) % 11)}']] },
+  notitle: { failed: 2, passed: 8, changes: [['title={p.name}', '']] },
+  restorecue: { failed: 2, passed: 8, changes: [['if (packIndex !== previous.current.packIndex)', 'if (true)'], ['packIndex > previous.current.packIndex && added >= 0', 'added >= 0']] },
 };
 assert.ok(!control || control in controls, 'Unknown Mystery Box motion control');
 const sourcePath = path.join(root, 'src/components/mystery-box/MysteryBoxBoard.tsx');
@@ -50,8 +50,8 @@ try {
     console.log(`simMysteryBoxMotion ${control}: ${controls[control].failed} intended Board checks rejected the changed copy; ${controls[control].passed} unaffected checks passed.`);
   } else {
     assert.equal(run.status, 0, output.slice(-6000));
-    assert.match(output, /8 passed/);
-    console.log('simMysteryBoxMotion: eight actual Board checks passed for settled card values/tiers, exact slot callbacks, stable controls, committed placement, quiet restoration and unchanged sharing.');
+    assert.match(output, /10 passed/);
+    console.log('simMysteryBoxMotion: ten actual Board checks passed for settled card values/tiers, exact slot callbacks, stable controls, committed placement, quiet restoration and unchanged sharing.');
   }
   assert.equal(await readFile(sourcePath, 'utf8'), original, 'Controls must leave production source unchanged');
 } finally {

@@ -1,0 +1,115 @@
+.deck {
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--surface-1));
+}
+
+.sports {
+  display: flex;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  border-bottom: 1px solid hsl(var(--border));
+  background: hsl(var(--surface-2));
+}
+
+.sportLink {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-right: 1px solid hsl(var(--border));
+  color: hsl(var(--foreground));
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.sportLink:last-child { border-right: 0; }
+.sportLink:hover { background: hsl(var(--tile) / 0.12); }
+.sportGlyph { width: 18px; height: 18px; color: hsl(var(--tile)); }
+.games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: hsl(var(--border)); }
+
+.game {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  min-height: 112px;
+  overflow: hidden;
+  background: hsl(var(--surface-1));
+  color: hsl(var(--foreground));
+}
+
+.game::after { content: ''; position: absolute; inset: auto 0 0; height: 3px; background: hsl(var(--tile)); }
+.game:focus-visible, .sportLink:focus-visible, .continueCard:focus-visible { outline: 3px solid hsl(var(--primary)); outline-offset: -3px; }
+.game:hover .title { color: hsl(var(--primary)); }
+.lead { grid-column: 1 / -1; min-height: 208px; }
+.art { position: absolute; top: 0; right: -8px; width: 90px; height: 78px; }
+.lead .art { inset: 0 0 0 34%; width: auto; height: auto; }
+.shade { position: absolute; inset: 0; background: linear-gradient(to top, hsl(var(--surface-1)) 24%, hsl(var(--surface-1) / 0.3) 72%, transparent); }
+.lead .shade { background: linear-gradient(90deg, hsl(var(--surface-1)) 12%, hsl(var(--surface-1) / 0.94) 42%, hsl(var(--surface-1) / 0.25) 80%, transparent); }
+.copy { position: relative; z-index: 1; display: flex; min-height: inherit; flex-direction: column; justify-content: flex-end; gap: 5px; padding: 12px 10px; }
+.lead .copy { max-width: 76%; justify-content: center; gap: 8px; padding: 18px 16px; }
+.kicker { display: none; align-items: center; gap: 6px; color: hsl(var(--muted-foreground)); font-size: 11px; font-weight: 600; }
+.lead .kicker { display: flex; }
+.kickerGlyph { width: 15px; height: 15px; color: hsl(var(--tile)); }
+.title { margin: 0; font-size: 13px; font-weight: 700; line-height: 1.15; overflow-wrap: anywhere; }
+.lead .title { font-size: 27px; line-height: 1.05; letter-spacing: -0.045em; }
+.description { margin: 0; color: hsl(var(--muted-foreground)); font-size: 12px; line-height: 1.45; }
+.secondaryDescription, .saveNote { display: none; }
+.cta { display: inline-flex; align-items: center; gap: 5px; color: hsl(var(--primary)); font-size: 11px; font-weight: 700; line-height: 1.3; }
+.cta svg { width: 13px; height: 13px; flex-shrink: 0; }
+.primaryCta { align-self: flex-start; min-height: 44px; margin-top: 2px; padding: 0 13px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: 12px; white-space: nowrap; clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%); }
+.primaryCta svg { width: 15px; height: 15px; }
+
+.continueSection { min-width: 0; padding: 12px; border: 1px solid hsl(var(--border)); border-radius: 12px; background: hsl(var(--surface-1)); }
+.continueHeading { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; font-size: 15px; font-weight: 700; line-height: 24px; }
+.continueHeading svg { width: 17px; height: 17px; color: hsl(var(--primary)); }
+.continueRail { overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: thin; padding-bottom: 4px; }
+.continueList { display: flex; width: max-content; gap: 10px; }
+.continueList > li { scroll-snap-align: start; }
+.continueCard { display: flex; align-items: center; gap: 10px; width: 248px; height: 72px; padding: 0 12px; border: 1px solid hsl(var(--border)); border-left: 3px solid hsl(var(--tile)); border-radius: 7px; background: hsl(var(--background)); }
+.continueCard:hover { background: hsl(var(--tile) / 0.08); }
+.continueIcon { position: relative; display: grid; width: 36px; height: 36px; flex-shrink: 0; place-items: center; font-size: 23px; }
+.continueSport { position: absolute; right: -4px; bottom: -3px; width: 16px; height: 16px; padding: 2px; border-radius: 50%; background: hsl(var(--surface-1)); color: hsl(var(--tile)); }
+.continueText { min-width: 0; flex: 1; }
+.continueName { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: hsl(var(--foreground)); font-size: 13px; font-weight: 700; line-height: 20px; }
+.continueLine { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: hsl(var(--muted-foreground)); font-size: 12px; line-height: 16px; }
+.continueArrow { width: 15px; height: 15px; flex-shrink: 0; color: hsl(var(--primary)); }
+
+@media (min-width: 640px) {
+  .art { right: 0; width: 122px; height: 102px; }
+  .copy { padding: 16px; }
+  .title { font-size: 17px; }
+  .lead .copy { max-width: 65%; padding: 24px; }
+  .lead .title { font-size: 34px; }
+  .description { font-size: 14px; }
+  .cta { font-size: 12px; }
+  .primaryCta { padding: 0 18px; font-size: 14px; }
+}
+
+@media (min-width: 900px) {
+  .games { grid-template-columns: minmax(0, 1.8fr) repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(172px, auto)); }
+  .lead { grid-column: 1; grid-row: 1 / 3; }
+  .wide { grid-column: 2 / 4; }
+  .lead .copy { max-width: 84%; height: 100%; gap: 12px; padding: 28px; }
+  .lead .title { font-size: 40px; }
+  .lead .art { left: 22%; }
+  .lead .shade { background: linear-gradient(90deg, hsl(var(--surface-1)) 0%, hsl(var(--surface-1) / 0.93) 36%, hsl(var(--surface-1) / 0.2) 100%); }
+  .lead .description { max-width: 260px; font-size: 15px; }
+  .saveNote { display: block; color: hsl(var(--muted-foreground)); font-size: 11px; }
+  .wide .copy { width: 65%; height: 100%; justify-content: center; gap: 8px; padding: 20px; }
+  .wide .kicker { display: flex; }
+  .wide .title { font-size: 24px; }
+  .wide .art { top: 0; right: -6px; width: 43%; height: 100%; }
+  .wide .shade { background: linear-gradient(90deg, hsl(var(--surface-1)) 22%, hsl(var(--surface-1) / 0.94) 45%, transparent 90%); }
+  .secondaryDescription { display: block; color: hsl(var(--muted-foreground)); font-size: 12px; line-height: 1.4; }
+  .small .art { top: -8px; right: -15px; width: 174px; height: 126px; }
+  .small .copy { padding: 18px 16px; }
+  .small .title { max-width: 160px; font-size: 20px; }
+  .small .cta { font-size: 12px; }
+}

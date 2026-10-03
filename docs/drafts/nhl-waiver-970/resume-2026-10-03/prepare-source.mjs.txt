@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { createHash } from 'node:crypto';
+const root = 'C:/Users/antho/ballpark-hero';
+const dir = path.join(process.env.TEMP, 'dukb-nhl970-resume-2026-10-03');
+const gate = path.join(process.env.TEMP, 'dukb-nhl970-clean-gate-2026-10-03-resume');
+const drafts = path.join(root, 'docs/drafts/nhl-waiver-970');
+const normalize = value => value.replaceAll('\r\n', '\n');
+const hash = value => createHash('sha256').update(value).digest('hex');
+const manifest = JSON.parse(fs.readFileSync(path.join(drafts, 'manifest.json')));
+const hunks = JSON.parse(fs.readFileSync(path.join(drafts, 'board-hunks.json'))).hunks;
+const boardPath = 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx';
+const rootBefore = fs.readFileSync(path.join(root, boardPath));
+let candidate = normalize(fs.readFileSync(path.join(gate, boardPath), 'utf8'));
+assert.equal(hash(candidate), manifest.BoardBaseSha256, 'Gate is the actual pre970 Board');
+assert.equal(hash(normalize(rootBefore.toString())), manifest.BoardBaseSha256, 'Root remains pre970');
+for (const row of manifest.rows) {
+  const source = fs.readFileSync(path.join(drafts, row.artifact));
+  assert.equal(hash(normalize(source.toString())), row.normalizedSha256, 'Preserved draft hash');
+  assert.ok(!fs.existsSync(path.join(gate, row.restorePath)), 'No gate file overwritten');
+  fs.writeFileSync(path.join(gate, row.restorePath), source);
+}
+for (const { before, after } of hunks) {
+  assert.equal(candidate.split(before).length - 1, 1, 'One current Board anchor per owned hunk');
+  candidate = candidate.replace(before, after);
+}
+assert.equal(hash(candidate), manifest.candidateNormalizedSha256, 'Exact seven-hunk candidate');
+assert.ok(candidate.includes('nhlOffseason(lg, Math.random, myTeam)'), 'Round969 owner is held');
+fs.writeFileSync(path.join(gate, boardPath), candidate);
+fs.copyFileSync(path.join(dir, 'NhlWaiverReceipt.outcomes.tsx'), path.join(gate, 'src/test/NhlWaiverReceipt.outcomes.tsx'));
+const harnessPath = path.join(gate, 'scripts/simNhlWaiverReceipt.mjs');
+let harness = normalize(fs.readFileSync(harnessPath, 'utf8'));
+const reference = "const referenceCommit = process.env.NHL_WAIVER_REFERENCE_COMMIT || '4ac35aad';";
+assert.equal(harness.split(reference).length - 1, 1);
+harness = harness.replace(reference, reference.replace('4ac35aad', '98cc4cc6'));
+const control = 'const controls = {\n';
+assert.equal(harness.split(control).length - 1, 1);
+harness = harness.replace(control, control + "  metadata: ['        mandate, trust, fired, pressTilt, seasonTradeLine,',\n    '        mandate, trust, fired, pressTilt: 0, seasonTradeLine: null,', [1, 3, 4, 5, 6, 7]],\n");
+fs.writeFileSync(harnessPath, harness);
+fs.writeFileSync(path.join(dir, 'simNhlWaiverReceipt.mjs'), harness);
+assert.deepEqual(fs.readFileSync(path.join(root, boardPath)), rootBefore, 'Root Board is unbound and untouched');
+const files = [boardPath, ...manifest.rows.map(row => row.restorePath), 'src/lib/nhlFrontOffice.ts', 'src/test/frontOfficeSaveRecovery.test.tsx'];
+fs.writeFileSync(path.join(dir, 'prepared-source.json'), JSON.stringify({ gate, sourceBase: '504efc82', applicationIntegrated: false, testsExecuted: false,
+  sourceHashes: Object.fromEntries(files.map(file => [file, hash(fs.readFileSync(path.join(gate, file)))])),
+  note: 'Prepared source only. Existing eight outcomes and new metadata control must execute. Root app remains pre970.' }, null, 2));
+console.log('Prepared exact seven970 Board hunks in isolated source gate; root app remains unbound.');
