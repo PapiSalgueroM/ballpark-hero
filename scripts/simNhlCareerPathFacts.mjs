@@ -46,7 +46,8 @@
  * MEASURED (2026-10-03, deterministic, so one run is every run). Repeats inside
  * 14 days per calendar year, 2026, 2027, 2028: old pool 54, 59, 56 (shortest
  * gap 1 day), new pool 6, 11, 7 (all at a cycle boundary, shortest gap 2, 2, 6
- * days). Release window 2026-10-04 to 2026-10-20: 14 of the first 14 deals are
+ * days); whole cycles from 2026 to 2028 that repeat a player: old 28 of 28,
+ * new 0 of 18. Release window 2026-10-04 to 2026-10-20: 14 of the first 14 deals are
  * new players on every day of it, and the shortest old to new gap is 26 days
  * (Hasek; 40 days before 2026-10-13). After the window it falls: 15 days for a
  * release from 2026-10-21 to 2026-10-28, which is why the window ends where it
@@ -57,10 +58,10 @@
  * once and the edit changed something, and must turn exactly its predicted
  * sections red. Under a control the harness exits 1 when exactly those are red
  * (the break was caught) and 2 when not (the control proves nothing).
- *   onesource  Gretzky's goals fact loses its hockey-reference value     1
+ *   onesource  Gretzky's goals fact loses its hockey-reference value     1, 2
  *   floor      Crosby's goal floor is raised above both sources            2, 3
  *   falseline  McDavid's Conn Smythe goes back to the false 2025           3, 5
- *   dup        Kaprizov's row becomes a second Bobby Orr                   3, 4
+ *   dup        Kaprizov's row becomes a second Bobby Orr                   3, 4, 6
  *   order      Messier swaps places with a new player dealt 2026-10-05     6
  *
  * Nothing here touches the network.
@@ -78,7 +79,7 @@ const RECORD_PATH = path.join(ROOT, 'scripts/data/nhlCareerPathVerified2026-10.j
 const DATA = 'src/data/hockeyCareerPlayers.ts';
 const DATES = 'src/lib/dateUtils.ts';
 const CONTROL = process.env.NHL_CP_CONTROL || '';
-const EXPECT = { onesource: [1], floor: [2, 3], falseline: [3, 5], dup: [3, 4], order: [6] };
+const EXPECT = { onesource: [1, 2], floor: [2, 3], falseline: [3, 5], dup: [3, 4, 6], order: [6] };
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`NHL_CP_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(2);
