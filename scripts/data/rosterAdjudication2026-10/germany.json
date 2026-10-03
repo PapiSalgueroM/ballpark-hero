@@ -203,10 +203,11 @@
    "to": "Kaiserslautern",
    "realClub": "1. FC Kaiserslautern",
    "adjudicatedOn": "2026-10-02",
-   "note": "Born 1996-05-11. Augsburg had him on loan from Hoffenheim only for the second half of 2024-25; he went back to Hoffenheim on 2025-06-30 and joined Kaiserslautern on a free on 2026-02-02, contract to June 2027.",
+   "note": "Born 1998-05-11 (corrected on 2026-10-03 from a wrong 1996 in the first draft; both family B pages below give 1998). Augsburg had him on loan from Hoffenheim only for the second half of 2024-25; he went back to Hoffenheim on 2025-06-30 and joined Kaiserslautern on a free on 2026-02-02, contract to June 2027.",
    "sources": [
     {"family": "A", "url": "https://www.bundesliga.com/en/2bundesliga/clubs/1-fc-kaiserslautern/squad", "publisher": "Bundesliga (Kaiserslautern squad, season 2026-2027)", "readOn": "2026-10-02", "says": "listed among the strikers"},
-    {"family": "B", "url": "https://us.soccerway.com/player/berisha-mergim/KWrYlSTD/transfers", "publisher": "Soccerway", "readOn": "2026-10-02", "says": "Hoffenheim to Kaiserslautern 2026-02-02, born 1996-05-11, current club Kaiserslautern"}
+    {"family": "B", "url": "https://us.soccerway.com/player/berisha-mergim/KWrYlSTD/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Age: 28 (May 11, 1998); forward, Kaiserslautern; Hoffenheim to Kaiserslautern 2026-02-02 as a free agent; Augsburg to Hoffenheim 2025-06-30, return from loan"},
+    {"family": "B", "url": "https://africa.espn.com/football/player/bio/_/id/251413/mergim-berisha", "publisher": "ESPN (player bio)", "readOn": "2026-10-03", "says": "born 11/5/1998 (28), team Kaiserslautern"}
    ]
   },
   {
