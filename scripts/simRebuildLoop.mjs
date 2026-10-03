@@ -57,8 +57,9 @@
  *        more than the other four together).
  *        second copies: played in respin 33, swap 65, loan 31, peek 66 of 66
  *        (floors 15, 30, 15, 30) and adding +0.212, +0.169, +0.613 (floors
- *        0.05, 0.05, 0.15). The second spin changed the shirt's man 440 times
- *        in 539 (floor 60 percent): the rest the new list put him back.
+ *        0.05, 0.05, 0.15). The second spin changed the shirt's man in 498 of
+ *        its 613 plays, first and second copies (floor 60 percent): in the
+ *        rest the policy's pick off the new list was the same man or the 40.
  *        the new deck against the old over the same seeds: thinking +1.577 on
  *        deck 1 (main's number) and +1.874 on deck 2, a lift of +0.297
  *        (probes +0.33 to +0.35). Band +0.1 to +0.6: the perks have to lift

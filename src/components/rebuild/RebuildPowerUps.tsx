@@ -53,7 +53,7 @@ export function PowerUpPocket({ run, peeked, canSecondSpin, secondSpin, sneakPee
       )}
       {perks.respin > 0 && reopenable.length > 0 && (
         <div className="mt-2">
-          <p className="text-[10px] text-muted-foreground">Second spin, pick a settled shirt:</p>
+          <p className="text-[10px] text-muted-foreground">Second spin, pick a settled shirt (a man you kept there is sold, a squad man goes back to the bench):</p>
           <div className="mt-1 flex flex-wrap gap-1.5">
             {reopenable.map(i => (
               <button
@@ -115,7 +115,7 @@ export function VetoVerdict({ verdict, vetoCard, acceptVerdict }: VerdictProps) 
         onClick={acceptVerdict}
         className="mt-3 w-full rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:border-primary/50"
       >
-        Take them as they fell, keep the veto
+        Take them as they fell
       </button>
     </div>
   );
