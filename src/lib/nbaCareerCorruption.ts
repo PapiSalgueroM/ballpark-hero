@@ -174,7 +174,7 @@ export function getNbaCorruptionEvents(c: NbaCareerState, rng: () => number): Nb
   }
 
   /* ══ Standalone temptations ══ */
-  if (c.draftPick <= 20 && pro === 0) {
+  if (c.draftPick > 0 && c.draftPick <= 20 && pro === 0) {
     deck.push({
       id: 'ncorr_agent_advance',
       title: 'Money before the draft',

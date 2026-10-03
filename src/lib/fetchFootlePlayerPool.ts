@@ -333,8 +333,8 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
         club: row.club,
         nationality: row.nationality,
         league: enrichment.league,
-        goals: row.goals ?? 0,
-        assists: row.assists ?? 0,
+        goals: row.goals,
+        assists: row.assists,
         position,
         kitNumber: enrichment.kitNumber,
         age: row.age,
@@ -374,8 +374,8 @@ export async function fetchFootlePlayerPool(): Promise<Player[]> {
           club: row.club,
           nationality: row.nationality,
           league,
-          goals: row.goals ?? 0,
-          assists: row.assists ?? 0,
+          goals: row.goals,
+          assists: row.assists,
           position,
           // No kit-number data for players this obscure; null is the "no
           // squad number on file" value getEnrichment returns. getEnrichment
