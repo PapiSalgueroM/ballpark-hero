@@ -514,6 +514,8 @@ const ERA_BAKES: Record<string, () => Promise<EraBake>> = {
   era2010: () => import('@/data/clubManagerEra2010').then(m => ({ rosters: m.ERA2010_ROSTERS, partial: m.ERA2010_PARTIAL, players: m.ERA2010_META.players })),
   era2015: () => import('@/data/clubManagerEra2015').then(m => ({ rosters: m.ERA2015_ROSTERS, partial: m.ERA2015_PARTIAL, players: m.ERA2015_META.players })),
   era2005: () => import('@/data/clubManagerEra2005').then(m => ({ rosters: m.ERA2005_ROSTERS, partial: m.ERA2005_PARTIAL, players: m.ERA2005_META.players })),
+  /* Round 971: the 2020-21 big five, its own chunk like the other three. */
+  era2020: () => import('@/data/clubManagerEra2020').then(m => ({ rosters: m.ERA2020_ROSTERS, partial: m.ERA2020_PARTIAL, players: m.ERA2020_META.players })),
 };
 
 /** The era bakes that have arrived, keyed by era id. Filled by
@@ -601,6 +603,17 @@ const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
      era tracks how far that era's money sits below 2026's, which is why it
      climbs as the seasons get older: 0.6, 0.7, 1.67. */
   era2005: { pivot: 80, gain: 1.67 },
+  /* Round 971, calibrated off the measured 2020 bake by the rule the three
+     above follow, the gain tracking how far the era's money sits below
+     2026's. Measured over the top 50 of each bake (the median ratio of an
+     era's k-th best value to the 2026 bake's k-th best): 0.25 in 2005, 0.33
+     in 2010, 0.50 in 2015 and 0.93 in 2020, which is 7.8, 6.2, 3.8 and 0.4
+     rating points on the bake curve. The shipped gains are 0.21, 0.11 and
+     0.16 per point of that gap, a mean of 0.16, and 0.16 times 0.4 is 0.06.
+     2020 money is 2026 money give or take, so the uplift is close to
+     nothing: raw Mbappé 93 lands at the modern best of 94, raw Messi, De
+     Bruyne and Salah 91 at 92, and everyone at 88 or below stays put. */
+  era2020: { pivot: 80, gain: 0.06 },
 };
 
 export function eraUpliftRating(eraId: string | undefined, r: number): number {
@@ -837,6 +850,18 @@ export const CM_ERAS: CMEra[] = [
        They say what the squads really are now. */
     blurb: 'Today. Real squads as of August 2026, thin ones topped up with made up youth.',
     honesty: 'Real data: every real player has his real name, age and value as of August 2026. Thin squads are padded with made up youth players and say so.',
+  },
+  /* Round 971: the fourth past season, the newest, so it sits first. The
+     blurb names only squads the bake carries (its anchors in
+     scripts/bakeEra2020.mjs), and the honesty line owns up to the summer
+     movers no dated record placed. */
+  {
+    id: 'era2020',
+    label: seasonLabel(2020),
+    startYear: 2020,
+    emoji: '\u{1F3DF}\u{FE0F}',
+    blurb: 'Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG, Bruno at United, Lewandowski at Bayern. All of the big five, 2020-21.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Summer 2020 signings are at their new clubs where a dated record shows the move, and the ones no record covered still sit at their old club. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2015',

@@ -2619,6 +2619,9 @@ export interface LeagueRules {
 }
 
 const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through the season; it is played here as a straight double round robin.';
+/* Round 971: the 2020-21 tables fed the first Conference League (2021-22),
+   which a historic era's Europe does not play. */
+const CONFERENCE_LEAGUE_UNPLAYED = 'The Conference League place this table really earned (the competition began the season after) is not played.';
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
@@ -2760,6 +2763,64 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
   },
   ligue12015: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  /* Round 971: the 2020-21 big five, each fact from two sources read
+     2026-10-03: RSSSF's season records (https://www.rsssf.org/tablese/eng2021.html,
+     tabless/span2021.html, tablesi/ital2021.html, tablesd/duit2021.html,
+     tablesf/fran2021.html) and ESPN's final standings with their legends
+     (https://www.espn.com/soccer/standings/_/league/ENG.1/season/2020 and
+     ESP.1, ITA.1, GER.1, FRA.1 for the same season), with RSSSF's 2021-22
+     European cups record (https://www.rsssf.org/ec/ec202122.html) for who
+     entered where.
+     - Europe, counted the way the 2015-16 rows count it: league places only,
+       a qualifying route counted as in, and a place a CUP handed down not
+       counted. England, Spain, Italy and Germany sent four to the Champions
+       League and their fifth to the Europa League; the sixth that also went
+       (West Ham, Real Betis, Lazio, Leverkusen) took the place of a cup
+       winner already qualified by the league (Leicester won the FA Cup and
+       finished fifth; Barcelona, Juventus and Dortmund won their cups and
+       finished in the top four; RSSSF's season records name each final).
+       France sent its first two straight in and
+       its third (Monaco) through qualifying, its fourth (Lyon) to the Europa
+       League, and its fifth (Marseille) on PSG's Coupe de France place.
+     - The Conference League began in 2021-22, the season these tables fed,
+       and each league's next place went there (Tottenham, Roma, Union
+       Berlin, Rennes). The era's Europe draws Champions League fields only,
+       so uecl stays 0, as on every era row, and the line below says so.
+     - Relegation: three down in England, Spain and Italy. Germany sent two
+       down and its sixteenth (Köln) into a playoff it won; France sent two
+       down and its eighteenth (Nantes) into a playoff it lost on aggregate
+       and still stayed up. Neither playoff is played, as on the modern rows.
+     - The cups: the FA Cup (Leicester), the Copa del Rey (Barcelona), the
+       Coppa Italia (Juventus), the DFB-Pokal (Dortmund) and the Coupe de
+       France (PSG), each named in RSSSF's record.
+     - Level on points: La Liga and Serie A split on head to head (RSSSF
+       prints the head to head records; Granada sit above Athletic Club on
+       46 points with the worse goal difference in both tables); England
+       reads goal difference then goals scored, as its 2015-16 row does; the
+       Bundesliga and Ligue 1 tables order their level clubs by goal
+       difference (Stuttgart above Freiburg, Reims above Strasbourg above
+       Lorient) and no later step was two sourced for that season, so those
+       rows claim none. */
+  premier2020: {
+    nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring',
+    simplified: CONFERENCE_LEAGUE_UNPLAYED,
+  },
+  laliga2020: {
+    nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    simplified: CONFERENCE_LEAGUE_UNPLAYED,
+  },
+  seriea2020: {
+    nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    simplified: CONFERENCE_LEAGUE_UNPLAYED,
+  },
+  bundesliga2020: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: `The real relegation playoff (sixteenth against the 2. Bundesliga's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
+  },
+  ligue12020: {
+    nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: `The real relegation playoff (eighteenth against Ligue 2's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
+  },
   premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
 };
@@ -3158,6 +3219,38 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       clubs: ['PSG', 'Lyon', 'Monaco', 'Nice', 'Lille', 'Saint-Étienne', 'Caen', 'Rennes', 'Angers', 'Bastia', 'Bordeaux', 'Montpellier', 'Marseille', 'Nantes', 'Lorient', 'Guingamp', 'Toulouse', 'Reims', 'GFC Ajaccio', 'Troyes'],
     },
   ].map(leagueFromRow),
+  /* Round 971: the 2020-21 season, a full big five from the start. Every
+     membership is the final table of that season from two publishers that
+     agree on every club, read 2026-10-03: RSSSF's season records and ESPN's
+     final standings (the URLs are on the premier2020 rules row), AND the
+     market values table itself (scripts/bakeEra2020.mjs reads each club's
+     year-2020 rows). In final table order. Names reuse the 2026 spelling
+     wherever the club exists there and an earlier era's spelling where only
+     an era has it, so colours and rivalries carry over. Crotone, Elche,
+     Arminia Bielefeld, Benevento and Cádiz, all promoted in 2020, are the
+     thin squads and the picker says so. */
+  era2020: [
+    {
+      id: 'premier2020', name: 'Premier League',
+      clubs: ['Manchester City', 'Manchester United', 'Liverpool', 'Chelsea', 'Leicester City', 'West Ham', 'Tottenham', 'Arsenal', 'Leeds United', 'Everton', 'Aston Villa', 'Newcastle', 'Wolves', 'Crystal Palace', 'Southampton', 'Brighton', 'Burnley', 'Fulham', 'West Brom', 'Sheffield United'],
+    },
+    {
+      id: 'laliga2020', name: 'La Liga',
+      clubs: ['Atlético Madrid', 'Real Madrid', 'Barcelona', 'Sevilla', 'Real Sociedad', 'Real Betis', 'Villarreal', 'Celta Vigo', 'Granada', 'Athletic Club', 'Osasuna', 'Cádiz', 'Valencia', 'Levante', 'Getafe', 'Alavés', 'Elche', 'Huesca', 'Valladolid', 'Eibar'],
+    },
+    {
+      id: 'seriea2020', name: 'Serie A',
+      clubs: ['Inter Milan', 'AC Milan', 'Atalanta', 'Juventus', 'Napoli', 'Lazio', 'Roma', 'Sassuolo', 'Sampdoria', 'Verona', 'Genoa', 'Bologna', 'Fiorentina', 'Udinese', 'Spezia', 'Cagliari', 'Torino', 'Benevento', 'Crotone', 'Parma'],
+    },
+    {
+      id: 'bundesliga2020', name: 'Bundesliga',
+      clubs: ['Bayern Munich', 'RB Leipzig', 'Borussia Dortmund', 'Wolfsburg', 'Eintracht Frankfurt', 'Bayer Leverkusen', 'Union Berlin', 'Gladbach', 'Stuttgart', 'Freiburg', 'Hoffenheim', 'Mainz', 'Augsburg', 'Hertha BSC', 'Arminia Bielefeld', 'Köln', 'Werder Bremen', 'Schalke 04'],
+    },
+    {
+      id: 'ligue12020', name: 'Ligue 1',
+      clubs: ['Lille', 'PSG', 'Monaco', 'Lyon', 'Marseille', 'Rennes', 'Lens', 'Montpellier', 'Nice', 'Metz', 'Saint-Étienne', 'Bordeaux', 'Angers', 'Reims', 'Strasbourg', 'Lorient', 'Brest', 'Nantes', 'Nîmes', 'Dijon'],
+    },
+  ].map(leagueFromRow),
   /* Round 176: the 2005-06 season, memberships verified against the season
      records (Wikipedia and worldfootball plus RSSSF final tables, checked
      2026-08-19) AND against the market values table itself. Cadiz and
@@ -3454,6 +3547,9 @@ const CLUB_COLORS: Record<string, string> = {
   'Ingolstadt': '#d02128', 'Saint-Étienne': '#0a7040', 'Caen': '#1b458f',
   'Bastia': '#005ca9', 'Bordeaux': '#002d72', 'Montpellier': '#1b458f',
   'Guingamp': '#d02128', 'Reims': '#d02128', 'GFC Ajaccio': '#d02128',
+  // Round 971: 2020-21 clubs not covered above, the same derivation.
+  'Huesca': '#7d1c2a', 'Valladolid': '#5c2d91', 'Spezia': '#d9d9d9', 'Benevento': '#f5d800',
+  'Crotone': '#d02128', 'Nîmes': '#d02128', 'Dijon': '#d02128',
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
@@ -10130,6 +10226,52 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Maccabi Tel Aviv', country: 'Israel', finish: 'group_stage' },
     { name: 'Valencia', country: 'Spain', finish: 'group_stage' },
     { name: 'Lyon', country: 'France', finish: 'group_stage' },
+  ],
+  /* Round 971: the 2020-21 field, all 32 clubs of the eight groups, from
+     two publishers read 2026-10-03 that agree on every club: RSSSF's season
+     record (https://www.rsssf.org/ec/ec202021.html, the groups and every
+     knockout tie) and ESPN's group standings
+     (https://www.espn.com/soccer/standings/_/league/UEFA.CHAMPIONS/season/2020),
+     with the knockout rounds from RSSSF and UEFA's own results page, "All
+     the 2020/21 UEFA Champions League results" (uefa.com, 29 May 2021):
+     Chelsea beat Manchester City in the final; Real Madrid and PSG went out
+     in the semis; Liverpool, Bayern, Dortmund and Porto in the quarters
+     (PSG past Bayern and Porto past Juventus on away goals). Names use this
+     file's spellings, so the nineteen clubs of the five leagues play with
+     their real 2020-21 squads. */
+  era2020: [
+    { name: 'Chelsea', country: 'England', finish: 'winner' },
+    { name: 'Manchester City', country: 'England', finish: 'runner_up' },
+    { name: 'Real Madrid', country: 'Spain', finish: 'semi_final' },
+    { name: 'PSG', country: 'France', finish: 'semi_final' },
+    { name: 'Liverpool', country: 'England', finish: 'quarter_final' },
+    { name: 'Bayern Munich', country: 'Germany', finish: 'quarter_final' },
+    { name: 'Borussia Dortmund', country: 'Germany', finish: 'quarter_final' },
+    { name: 'Porto', country: 'Portugal', finish: 'quarter_final' },
+    { name: 'Barcelona', country: 'Spain', finish: 'round_of_16' },
+    { name: 'RB Leipzig', country: 'Germany', finish: 'round_of_16' },
+    { name: 'Atlético Madrid', country: 'Spain', finish: 'round_of_16' },
+    { name: 'Lazio', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Atalanta', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Gladbach', country: 'Germany', finish: 'round_of_16' },
+    { name: 'Juventus', country: 'Italy', finish: 'round_of_16' },
+    { name: 'Sevilla', country: 'Spain', finish: 'round_of_16' },
+    { name: 'RB Salzburg', country: 'Austria', finish: 'group_stage' },
+    { name: 'Lokomotiv Moscow', country: 'Russia', finish: 'group_stage' },
+    { name: 'Shakhtar Donetsk', country: 'Ukraine', finish: 'group_stage' },
+    { name: 'Inter Milan', country: 'Italy', finish: 'group_stage' },
+    { name: 'Olympiacos', country: 'Greece', finish: 'group_stage' },
+    { name: 'Marseille', country: 'France', finish: 'group_stage' },
+    { name: 'Ajax', country: 'Netherlands', finish: 'group_stage' },
+    { name: 'FC Midtjylland', country: 'Denmark', finish: 'group_stage' },
+    { name: 'Krasnodar', country: 'Russia', finish: 'group_stage' },
+    { name: 'Rennes', country: 'France', finish: 'group_stage' },
+    { name: 'Club Brugge', country: 'Belgium', finish: 'group_stage' },
+    { name: 'Zenit', country: 'Russia', finish: 'group_stage' },
+    { name: 'Dynamo Kyiv', country: 'Ukraine', finish: 'group_stage' },
+    { name: 'Ferencváros', country: 'Hungary', finish: 'group_stage' },
+    { name: 'Manchester United', country: 'England', finish: 'group_stage' },
+    { name: 'Başakşehir', country: 'Turkey', finish: 'group_stage' },
   ],
 };
 

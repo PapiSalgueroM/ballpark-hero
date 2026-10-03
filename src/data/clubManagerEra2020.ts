@@ -4,7 +4,7 @@
 // La Liga, Serie A, Bundesliga and Ligue 1, baked through the shared extend
 // step (scripts/lib/eraBakeExtend.mjs) from an empty era and an offline pull
 // of the base table. Memberships and sources are in the script header. The
-// summer 2020 window corrections with a dated record are applied (234 rows
+// summer 2020 window corrections with a dated record are applied (237 rows
 // moved, arrived or removed). Values in £m at the year-2020 snapshot,
 // ratings 48-94 on the same curve as the 2026 bake.
 // Regenerate per the header of scripts/bakeEra2020.mjs.
@@ -13,9 +13,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const ERA2020_META = {
   year: 2020,
-  players: 1788,
+  players: 1789,
   clubs: 98,
-  moves: 234,
+  moves: 237,
 };
 
 /** 2020 clubs where the year-2020 table runs thin (under 8 real players);
@@ -232,7 +232,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Frenkie de Jong', p: 'CM', a: 22, v: 58.5, r: 88 },
     { n: 'Ousmane Dembélé', p: 'ST', a: 22, v: 57, r: 88 },
     { n: 'Miralem Pjanić', p: 'CM', a: 29, v: 52.5, r: 88 },
-    { n: 'Arthur Melo', p: 'CM', a: 23, v: 48.8, r: 87 },
     { n: 'Philippe Coutinho', p: 'CAM', a: 27, v: 48.8, r: 87 },
     { n: 'Clément Lenglet', p: 'CB', a: 24, v: 40.5, r: 86 },
     { n: 'Jordi Alba', p: 'LB', a: 30, v: 32.3, r: 85 },
@@ -366,6 +365,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Manuel Akanji', p: 'CB', a: 24, v: 20.3, r: 82 },
     { n: 'Mats Hummels', p: 'CB', a: 31, v: 19.5, r: 82 },
     { n: 'Thomas Meunier', p: 'RB', a: 28, v: 19.5, r: 82 },
+    { n: 'Reinier', p: 'CAM', a: 17, v: 18, r: 82 },
     { n: 'Axel Witsel', p: 'CDM', a: 30, v: 17.3, r: 81 },
     { n: 'Thomas Delaney', p: 'CM', a: 28, v: 14.3, r: 80 },
     { n: 'Nico Schulz', p: 'LB', a: 26, v: 12.8, r: 80 },
@@ -842,6 +842,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
   'Juventus': [
     { n: 'Paulo Dybala', p: 'CF', a: 26, v: 72.8, r: 90 },
     { n: 'Matthijs de Ligt', p: 'CB', a: 20, v: 60.8, r: 89 },
+    { n: 'Arthur Melo', p: 'CM', a: 23, v: 48.8, r: 87 },
     { n: 'Cristiano Ronaldo', p: 'ST', a: 34, v: 48.8, r: 87 },
     { n: 'Rodrigo Bentancur', p: 'CDM', a: 22, v: 40.5, r: 86 },
     { n: 'Federico Chiesa', p: 'RW', a: 22, v: 39, r: 86 },
@@ -1178,6 +1179,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Benoît Badiashile', p: 'CB', a: 18, v: 20.3, r: 82 },
     { n: 'Aleksandr Golovin', p: 'CAM', a: 23, v: 16.5, r: 81 },
     { n: 'Gelson Martins', p: 'RW', a: 24, v: 16.5, r: 81 },
+    { n: 'Florentino', p: 'CDM', a: 20, v: 14.3, r: 80 },
     { n: 'Aurélien Tchouaméni', p: 'CDM', a: 19, v: 13.5, r: 80 },
     { n: 'Axel Disasi', p: 'CB', a: 21, v: 12, r: 79 },
     { n: 'Youssouf Fofana', p: 'CDM', a: 20, v: 10.5, r: 79 },
@@ -1445,7 +1447,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marco Asensio', p: 'CAM', a: 23, v: 32.3, r: 85 },
     { n: 'Karim Benzema', p: 'ST', a: 32, v: 26.3, r: 84 },
     { n: 'Luka Jović', p: 'ST', a: 22, v: 26.3, r: 84 },
-    { n: 'Reinier', p: 'CAM', a: 17, v: 18, r: 82 },
     { n: 'Álvaro Odriozola', p: 'RB', a: 24, v: 12.8, r: 80 },
     { n: 'Lucas Vázquez', p: 'RB', a: 28, v: 12.8, r: 80 },
     { n: 'Marcelo', p: 'LB', a: 31, v: 12.8, r: 80 },

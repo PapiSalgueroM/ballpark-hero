@@ -4220,6 +4220,7 @@ era2020: {
   'Filippo Romagna': 'Italy',
   'Flavien Tait': 'France',
   'Florent Mollet': 'France',
+  'Florentino': 'Portugal',
   'Florian Grillitsch': 'Austria',
   'Florian Lejeune': 'France',
   'Florian Miguel': 'France',

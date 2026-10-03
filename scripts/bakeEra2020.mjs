@@ -152,16 +152,16 @@ export const DB_TO_ERA_L1 = {
  * year-2021 row names another club, and every year-2020 row outside the
  * pools whose year-2021 row names a club of this world, was crossed against
  * those tables by name: 638 candidates. A line below exists for each one a
- * dated record places (133 moves, 66 arrivals, 35 removals). The tables
+ * dated record places (135 moves, 67 arrivals, 35 removals). The tables
  * list the principal transfers, not every one, so a mover with no line in
  * them stays where the year-2020 row has him, whatever his value, and the
  * harness (scripts/simEra2020.mjs) prints the biggest of them by name every
  * run (Morata at Atletico, Lazaro at Newcastle, Bas Dost at Frankfurt and
  * Biraghi at Inter among them), so the gap is measured, not hidden. A move
  * the records place but the year-2021 row cannot prove is not made either:
- * Kubo (Villarreal on loan, Getafe by 2021), Pellistri (Manchester United,
- * Alaves by 2021) and Ivo Grbic (Atletico, Lille by 2021) are not in this
- * world. */
+ * Kubo (on loan at Villarreal, his year-2021 row at Getafe), Pellistri
+ * (Manchester United, the row at Alaves) and Ivo Grbic (Atletico, the row at
+ * Lille) are not in this world. */
 
 /* Moves inside the world: the record named on each line, plus the year-2021 row. */
 export const ERA2020_MOVES = [
@@ -170,6 +170,7 @@ export const ERA2020_MOVES = [
   { n: 'Leroy Sané', to: 'Bayern Munich', why: 'Manchester City to Bayern Munich, transfer, 3 Jul 2020 (MF-EN)' },
   { n: 'Timo Werner', to: 'Chelsea', why: 'RB Leipzig to Chelsea, transfer, 18 Jun 2020 (MF-EN)' },
   { n: 'Miralem Pjanić', to: 'Barcelona', why: 'Juventus Turin to FC Barcelone, transfer, 29 Jun 2020 (MF-IT)' },
+  { n: 'Arthur Melo', to: 'Juventus', why: 'FC Barcelone to Juventus Turin, transfer, 29 Jun 2020 (MF-IT, where he is "Arthur")' },
   { n: 'Achraf Hakimi', to: 'Inter Milan', why: 'Real Madrid to Inter Milan, transfer, 2 Jul 2020 (MF-IT)' },
   { n: 'Philippe Coutinho', to: 'Barcelona', why: 'Bayern Munich to FC Barcelone, loan return, 2 Sep 2020 (MF-ES)' },
   { n: 'Ben Chilwell', to: 'Chelsea', why: 'Leicester City to Chelsea, transfer, 26 Aug 2020 (MF-EN)' },
@@ -209,6 +210,7 @@ export const ERA2020_MOVES = [
   { n: 'Ruben Loftus-Cheek', to: 'Fulham', why: 'Chelsea to Fulham, loan, 5 Oct 2020 (MF-EN prints the two clubs the other way round; premierleague.com, "Transfer Deadline Day Summer 2020: All the confirmed deals", 6 Oct 2020)' },
   { n: 'Timothy Castagne', to: 'Leicester City', why: 'Atalanta Bergame to Leicester City, transfer, 3 Sep 2020 (MF-IT)' },
   { n: 'Thomas Meunier', to: 'Borussia Dortmund', why: 'Paris SG to Borussia Dortmund, free, 25 Jun 2020 (MF-DE)' },
+  { n: 'Reinier', to: 'Borussia Dortmund', why: 'Real Madrid to Borussia Dortmund, loan, 19 Aug 2020 (MF-ES, where he is "Reinier Carvalho")' },
   { n: 'Jean-Philippe Gbamin', to: 'Everton', why: 'Mainz to Everton, transfer, 2 Aug 2019 (MF-DE-S19); the year-2020 row files him at Metz, which no record does' },
   { n: 'Ross Barkley', to: 'Aston Villa', why: 'Chelsea to Aston Villa, loan, 30 Sep 2020 (MF-EN)' },
   { n: 'Matt Doherty', to: 'Tottenham', why: 'Wolverhampton to Tottenham, transfer, 30 Aug 2020 (MF-EN)' },
@@ -324,6 +326,7 @@ export const ERA2020_ARRIVALS = [
   { n: 'Carlos Vinícius', from: 'SL Benfica', to: 'Tottenham', why: 'Benfica Lisbonne to Tottenham, loan, 2 Oct 2020 (MF-EN)' },
   { n: 'Alexander Sørloth', from: 'Trabzonspor', to: 'RB Leipzig', why: 'Crystal Palace to RB Leipzig, transfer, 22 Sep 2020 (MF-EN)' },
   { n: 'Aleksey Miranchuk', from: 'Lokomotiv Moscow', to: 'Atalanta', why: 'Lokomotiv Moscou to Atalanta Bergame, transfer, 30 Aug 2020 (MF-IT)' },
+  { n: 'Florentino', from: 'SL Benfica', to: 'Monaco', why: 'Benfica Lisbonne to Monaco, loan, 25 Sep 2020 (MF-FR, where he is "Florentino Luis")' },
   { n: 'Marc Roca', from: 'RCD Espanyol Barcelona', to: 'Bayern Munich', why: 'Espanyol Barcelone to Bayern Munich, transfer, 4 Oct 2020 (MF-ES)' },
   { n: 'Óscar Rodríguez', from: 'CD Leganés', to: 'Sevilla', why: 'Real Madrid to FC Seville, transfer, 30 Aug 2020 (MF-ES)' },
   { n: 'Hee-chan Hwang', from: 'Red Bull Salzburg', to: 'RB Leipzig', why: 'Red Bull Salzbourg to RB Leipzig, transfer, 8 Jul 2020 (MF-DE)' },
