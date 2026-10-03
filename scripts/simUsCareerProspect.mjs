@@ -76,6 +76,14 @@ if (CONTROL === 'before') {
   const changed = source.replace(control.from, control.to);
   assert.notEqual(changed, source, `${CONTROL} changed nothing`);
   writeControl(control.file, changed);
+  if (CONTROL === 'outcome') {
+    // Route the reader's relative engine import through the same mutated module.
+    const reader = 'src/lib/usCareerProspect.ts';
+    const source = fs.readFileSync(path.join(ROOT, reader), 'utf8');
+    assert(source.includes("from './careerPreDraft'"), 'Outcome control must reach the actual saved-prospect reader');
+    writeControl(reader, source);
+    assert(fs.readFileSync(owned.at(-1), 'utf8').includes("from '@/lib/careerPreDraft'"), 'Outcome reader still bypasses the mutated engine');
+  }
 }
 const require = createRequire(path.join(ROOT, 'package.json'));
 const vitest = path.join(path.dirname(require.resolve('vitest/package.json')), 'vitest.mjs');
