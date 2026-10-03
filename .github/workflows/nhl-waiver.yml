@@ -81,15 +81,19 @@ jobs:
       - name: Related NHL regressions, serial and offline
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
+          failed=0
           for harness in simNhlContributors simNhlContributorsBoard simNhlOpeningRatings simNhlRatingEvidence simNhlDraftCapital simNhlRosterLimit simNhlCpuRosters simFrontOfficeCuts simFrontOfficeRoster simFrontOfficeSchedule; do
-            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "nhl-waiver-artifacts/$harness.log"
+            if ! ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "nhl-waiver-artifacts/$harness.log"; then failed=1; fi
           done
+          exit "$failed"
       - name: All built readers, search and guide checks, serial and offline
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
+          failed=0
           for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings; do
-            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "nhl-waiver-artifacts/$harness.log"
+            if ! ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "nhl-waiver-artifacts/$harness.log"; then failed=1; fi
           done
+          exit "$failed"
       - name: Prepare isolated native source gate
         id: native_prepare
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

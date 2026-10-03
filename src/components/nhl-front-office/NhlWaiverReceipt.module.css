@@ -49,5 +49,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .receipt, .value { animation: none; opacity: 1; transform: none; }
+  .receipt, .value { animation: none; animation-duration: 0s !important; opacity: 1; transform: none; }
 }

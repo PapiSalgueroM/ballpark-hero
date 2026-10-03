@@ -135,6 +135,7 @@ describe('NHL committed waiver receipt', () => {
     const reduced = css.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{\s*\.receipt,\s*\.value\s*\{([^}]+)\}/)?.[1];
     expect(reduced).toBeDefined();
     expect(reduced).toMatch(/animation:\s*none\s*;/);
+    expect(reduced).toMatch(/animation-duration:\s*0s\s*!important\s*;/);
     expect(reduced).toMatch(/opacity:\s*1\s*;/);
     expect(reduced).toMatch(/transform:\s*none\s*;/);
   });
