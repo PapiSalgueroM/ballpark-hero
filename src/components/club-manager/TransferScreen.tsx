@@ -21,6 +21,8 @@ import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapFrom } from '@/lib/clubManager
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+/* Round 927: the deal moment borrows the shared celebration kit. */
+import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 
 type PosFilter = 'ALL' | 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -150,6 +152,46 @@ export function TransferScreen({
     setBid('');
     setTerms(null);
   }, [negName]);
+
+  /* Round 927: the deal moment. A negotiation leaving 'open' used to change a
+     border colour and three words. Now the card lands (or stings) ONCE, at the
+     flip. The key and the row count are seeded from the first render, so
+     reopening the tab or reloading onto a deal that already closed plays
+     nothing. State is adjusted during render rather than in an effect so the
+     flipped card never paints one frame without its class. A market player
+     has no id, so the key is his name and club plus the status. */
+  const negKey = neg ? `${neg.player.name}|${neg.player.club}|${neg.status}` : '';
+  const signingRows = (career.seasonSignings ?? []).length;
+  const [seenDeal, setSeenDeal] = useState({ key: negKey, rows: signingRows });
+  const [dealMoment, setDealMoment] = useState<{ status: 'agreed' | 'collapsed' | 'hijacked'; freshFrom: number } | null>(null);
+  if (negKey !== seenDeal.key || signingRows !== seenDeal.rows) {
+    setSeenDeal({ key: negKey, rows: signingRows });
+    if (negKey !== seenDeal.key) {
+      setDealMoment(neg && neg.status !== 'open' ? { status: neg.status, freshFrom: seenDeal.rows } : null);
+    }
+  }
+  const landed = dealMoment?.status === 'agreed';
+  const stung = dealMoment !== null && dealMoment.status !== 'agreed';
+
+  /* Round 927: what the agreed fee came with, as the save holds it. The man
+     who went the other way has left the squad by now, so his id finds nobody;
+     the settlement writes his OUT row straight after the arrival's IN row, and
+     that row is where his name is read from. */
+  const slipExtras: string[] = [];
+  if (neg && neg.status === 'agreed' && neg.agreedExtras) {
+    const x = neg.agreedExtras;
+    if (x.addOn) slipExtras.push(`plus ${money(x.addOn)} in add-ons`);
+    if (x.sellOnPct) slipExtras.push(`a ${x.sellOnPct} percent sell-on`);
+    if (x.swapId) {
+      const rows = career.seasonSignings ?? [];
+      let at = -1;
+      rows.forEach((r, i) => { if (r.dir === 'in' && !r.loan && r.name === neg.player.name) at = i; });
+      const next = at >= 0 ? rows[at + 1] : undefined;
+      slipExtras.push(next && next.dir === 'out' && !next.loan
+        ? `${next.name} going the other way`
+        : 'one of yours going the other way');
+    }
+  }
 
   /* Round 506: when the clubs shake hands his agent puts an opening sheet on
      the table, and that sheet is what the panel starts from. Keyed on the
@@ -337,19 +379,48 @@ export function TransferScreen({
           neg.status === 'agreed' ? 'border-emerald-500/50 bg-emerald-500/10'
             : neg.status === 'open' ? 'border-gold/50 bg-gold/5'
             : 'border-red-500/40 bg-red-500/5',
-        )}>
+          /* Round 927: one pulse for a deal that lands, one shake for one that
+             is lost. The card is a plain wrapper, so no control inherits a
+             filled animation, and both touch only shadow or transform, so the
+             box is the same size with the class as without it. */
+          landed && 'cm-win-pulse',
+          stung && 'cm-loss-shake',
+        )} data-testid="cm-deal-card" data-deal-moment={dealMoment ? dealMoment.status : undefined}>
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="text-xs font-bold text-foreground flex items-center gap-1.5">
               <Handshake className="w-3.5 h-3.5" />
-              {neg.status === 'open'
-                ? (neg.phase === 'terms' ? 'Personal terms' : 'Negotiating')
-                : neg.status === 'agreed' ? 'DEAL DONE' : neg.status === 'hijacked' ? 'HIJACKED' : 'DEAL COLLAPSED'}: {neg.player.name}
+              {/* The slam sits on the two status words alone and grows from its
+                  left edge, so at 1.6 scale it stays inside the card on a 320
+                  phone whatever the length of the name beside it. */}
+              <span>
+                <span data-testid="cm-deal-status" className={cn('inline-block origin-left', landed && 'cm-slam')}>
+                  {neg.status === 'open'
+                    ? (neg.phase === 'terms' ? 'Personal terms' : 'Negotiating')
+                    : neg.status === 'agreed' ? 'DEAL DONE' : neg.status === 'hijacked' ? 'HIJACKED' : 'DEAL COLLAPSED'}
+                </span>: {neg.player.name}
+              </span>
             </div>
             <span className={cn('text-sm font-bold font-display', ratingTint(neg.player.rating))}>{neg.player.rating}</span>
           </div>
           <div className="text-[10px] text-muted-foreground mb-1.5">
             {neg.player.club} · {neg.player.position} · {neg.player.age}y · {valuationLine(career, neg.player)}
           </div>
+
+          {/* Round 927: the slip. Who, from where, for how much and with what
+              on top, every figure read straight off the negotiation the save
+              holds. It is always here on an agreed deal; only the rise is the
+              moment's, so the card has one shape either way. */}
+          {neg.status === 'agreed' && typeof neg.agreedFee === 'number' && (
+            <div
+              data-testid="cm-deal-slip"
+              className={cn('text-[11px] text-foreground mb-1.5', landed && 'cm-rise')}
+              style={landed ? { animationDelay: revealDelay(0, 0.3) } : undefined}
+            >
+              {neg.player.name} signs from {neg.player.club} for{' '}
+              <span data-testid="cm-deal-fee" className="font-bold text-gold">{money(neg.agreedFee)}</span>
+              {slipExtras.map(x => `, ${x}`).join('')}.
+            </div>
+          )}
 
           {neg.status === 'open' && neg.phase !== 'terms' && (
             <>
@@ -667,6 +738,14 @@ export function TransferScreen({
             </>
           )}
         </div>
+      )}
+
+      {/* Round 927: the ledger under a done deal. This list only ever showed
+          with the window shut, which is the one time no row can arrive, so a
+          new row had nowhere to be seen landing. Under the card it is the
+          receipt: the latest few rows, the ones this deal wrote ticking in. */}
+      {neg && neg.status === 'agreed' && windowOpen && (
+        <ClosedWindowBusiness career={career} tail={4} freshFrom={landed && dealMoment ? dealMoment.freshFrom : null} />
       )}
 
       {/* AI headlines */}
@@ -1141,27 +1220,54 @@ export function TransferScreen({
           </div>
         </div>
       )}
+      {/* Round 927: last on purpose. The stack spaces every child after the
+          first, so a style tag at the top would push the whole screen down. */}
+      <CelebrationStyles />
     </div>
   );
 }
 
 /** This season's in/out list, shown when the window is shut. */
-function ClosedWindowBusiness({ career }: { career: CareerState }) {
+function ClosedWindowBusiness({ career, tail, freshFrom = null }: {
+  career: CareerState;
+  /** Round 927: show only the latest rows, and say how many came before. */
+  tail?: number;
+  /** Round 927: rows from this index on arrived with the deal that just
+      landed, and tick in. Null means nothing is new, which is every reopen. */
+  freshFrom?: number | null;
+}) {
+  const all = career.seasonSignings ?? [];
+  const skip = tail === undefined ? 0 : Math.max(0, all.length - tail);
   return (
-    <div className="bg-card border border-border rounded-xl p-4">
+    <div className="bg-card border border-border rounded-xl p-4" data-testid="cm-season-business">
       <div className="text-xs font-bold text-foreground mb-2">This season's business</div>
-      {career.seasonSignings.length === 0 && (
+      {all.length === 0 && (
         <p className="text-xs text-muted-foreground">No transfers yet this season.</p>
       )}
-      {career.seasonSignings.map((t, i) => (
-        <p key={i} className="text-xs py-0.5">
-          {t.dir === 'in'
-            ? <span className="text-emerald-400">IN&nbsp;&nbsp;</span>
-            : <span className="text-red-400">OUT</span>}
-          <span className="text-foreground ml-2">{t.name}</span>
-          <span className="text-muted-foreground ml-1">({money(t.fee)}{t.loan ? ', loan' : ''})</span>
-        </p>
-      ))}
+      {skip > 0 && (
+        <p className="text-[10px] text-muted-foreground pb-0.5">{skip} earlier {skip === 1 ? 'deal' : 'deals'} this season.</p>
+      )}
+      {all.slice(skip).map((t, j) => {
+        const i = skip + j;
+        const fresh = freshFrom !== null && i >= freshFrom;
+        return (
+          <p
+            key={i}
+            data-fresh-row={fresh ? 'yes' : undefined}
+            className={cn('text-xs py-0.5', fresh && 'cm-tick-in')}
+            style={fresh ? { animationDelay: revealDelay(i - (freshFrom ?? 0), 0.6) } : undefined}
+          >
+            {t.dir === 'in'
+              ? <span className="text-emerald-400">IN&nbsp;&nbsp;</span>
+              : <span className="text-red-400">OUT</span>}
+            <span className="text-foreground ml-2">{t.name}</span>
+            {/* Round 927: the career's own symbol. This line read the bare
+                formatter, so a save started in another currency printed pounds
+                here and its own symbol on the slip one card above. */}
+            <span className="text-muted-foreground ml-1">({money(t.fee, career)}{t.loan ? ', loan' : ''})</span>
+          </p>
+        );
+      })}
     </div>
   );
 }
