@@ -38,6 +38,13 @@ export default defineConfig({
       ...(process.env.POLL_FIXTURES
         ? { "@/data/pollFixtures": path.resolve(process.env.POLL_FIXTURES) }
         : {}),
+      /* Round 900 negative controls. scripts/simUsBoardParity.mjs writes a copy
+         of one US career file with one thing changed (a label, an extra draw)
+         and points the fixture replay at it: the module id to replace and the
+         copy's path. Same ordering rule: above "@". Off in every ordinary run. */
+      ...(process.env.US_BOARD_CONTROL_ALIAS && process.env.US_BOARD_CONTROL_FILE
+        ? { [process.env.US_BOARD_CONTROL_ALIAS]: path.resolve(process.env.US_BOARD_CONTROL_FILE) }
+        : {}),
       /* Round 503 negative control. scripts/simDailyRecord.mjs writes a copy of
          the daily engine carrying the pre 503 stale closure reads in addGuess
          and sets this variable, so src/test/dailyRecord.test.tsx can be pointed

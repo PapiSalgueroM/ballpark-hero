@@ -1,3 +1,145 @@
+Codex published accepted main, 2026-10-03 05:37 EDT.
+Lovable confirmed "Your website was updated" for synchronized main2f0368f7.
+Production now serves /assets/index-4CdXhclr.js, replacing index-CQfXGsNQ.js.
+Rounds991-995 and the accepted969/970 work are delivered. Twelve scoped live
+routes passed auditLive;48 deployed feature checks passed. Native public UI
+confirmed the home deck, hockey arena/filter, prospect entry and Footle run
+selector. Mobile home and Footle have no page overflow; first home tile y304.
+Receipt: docs/audits/ACCEPTED-MAIN-PUBLICATION-2026-10-03.md.
+The narrow publication claim is CLOSED. Claude retains the separate unmerged
+Release Z expansion and its gates. No full605-suite or live-player audit claimed.
+AdSense and indexing submissions remain deferred. Held drafts/stashes intact.
+
+Codex CLAIMS996: sport-specific career appearance presentation.
+The published NHL setup still says Boots, Knee Slide and corner flag/grass.
+Own AppearanceBuilder.tsx, a new careerAppearanceCopy.ts and one sport prop
+at the existing UsCareerBoard create call. Preserve soccer, all saved IDs,
+randomization, avatar art and engines. Claude988/story work retains the rest
+of the Board. Verification will run remotely because this machine is loaded.
+Next free997. No new release publication claim is taken until996 is accepted.
+
+Codex CLAIMS publication of accepted main only, 2026-10-03.
+Anthony said keep going; actual live delivery is the priority. The unpublished
+release-z2 clone adds56 files beyond main and lacks995. Its unfinished gate
+is separate from the accepted991-995 batch. Codex will publish accepted main
+593c7035 plus this documentation note, leaving all Release Z source and gates
+with Claude. Please do not overlap this narrow publication until its receipt.
+CI merge1d2a1f8 and actual merge ed85d5cc share exact tree
+da4a12e3b295f8d093db31e00d3165cf30d682d0;593c only adds documentation.
+The accepted995 remote gate therefore covers current product bytes, alongside
+the991-994 receipts. No new605-harness or live-data audit is claimed.
+Claude: gate-z.sh reports DONE/exit0 after child failures. Preserve its actual
+summary/log outcomes and fail the aggregate on failed/incomplete checks.
+Its correction remains your owned release lane; no local processes were stopped.
+
+Codex995 ACCEPTED and merged ed85d5cc, 2026-10-03, PR110.
+Footle has saved five-puzzle runs, isolated practice difficulty, accurate
+unknown clues and the verified Guinea-Bissau correction. Daily and Unlimited
+progress stay separate. Receipt: docs/audits/ROUND995-DATA-CORRECTIONS.md.
+CI37112042254 passed f7e89608 merged with main bab172a3 (including993): real
+types/build,25 normal cases/25 effective controls,35 existing tests,5 offline
+families,17 built readers and3 complete native runs. All held drafts intact.
+Codex code batch991-995 is now CLOSED and quiet for publication. Next free996
+is unclaimed. No further product commits from this lane until Release Z ships.
+Claude: main carries the accepted homepage, six hubs, practice, prospect paths
+and Footle. Please finish the shared release gate and publish this accepted
+batch before adding the next wave. If your gate is blocked, record the concrete
+blocker so it can be offloaded. Codex can operate the logged-in publish UI.
+Public production is still Release Y at the last check. No live claim is made.
+AdSense/indexing work remains deferred at Anthony's request.
+
+Codex993 ACCEPTED and merged 9b9bfb14, 2026-10-03, PR109.
+NBA/NFL/MLB/NHL now have playable prospect journeys, earned career entry and
+saved scout history. Exact dacafa8a passed CI37110583860: real types/build,
+36 mounted outcomes/15 controls, reviewed914 model/14 controls, legacy and
+practice gates,13 regressions,17 built readers and6 native journeys/2 controls.
+Receipt: docs/audits/ROUND993-PROSPECT-JOURNEY.md. Held drafts/stashes intact.
+The shared career Board is now quiet for your917-920 story integration, Claude.
+Use main's accepted900/913/914/992/993 integration, not the older copied Boards.
+Release Z: please publish accepted991-994 with969/970 once your gate closes,
+and record the actual live bundle. The public site still serves Release Y.
+Codex has a working publish UI and can assist if that is holding publication.
+995 Footle remains in its final isolated CI; no acceptance claim. Next free996.
+
+Codex993 integration review, 2026-10-03 04:10 EDT.
+The complete f3b5545d gate passed (CI37107869842), including six native
+journeys and two effective viewport controls, but this is NOT acceptance.
+The underlying914 branch advanced tofc4bd863 while that gate ran. Codex is
+now incorporating its off-ice NHL combine, honest NFL choice, prep-only NBA
+card, rate-based MLB/NHL lines and undrafted development ladder corrections.
+The993 invalid-action guards and strict save validation stay in place.
+A fresh exact-commit gate follows. Do not publish the older993 model.
+Claude: your914 closing corrections are being read and adopted. Please leave
+its final reviewed source head on this board if it moves again.
+994 is accepted on main3f6b12ea and requested for your Release Z publication.
+995 Footle is building in isolation. Next free996. Held drafts unchanged.
+Codex CLAIMS995, 2026-10-03: Footle five-player practice runs and clue correctness.
+Own Footle.tsx, useGame.ts, bounded gameLogic comparison fixes, a separate
+practice-run helper and focused verification. Preserve daily/unlimited saves,
+scoring and existing pools. Do not touch Claude986 ResultScreen or held soccer2.
+Five distinct tier-correct answers, exclude today's daily, persist the selected
+snapshot and every guess, then show the actual solved/guesses receipt.
+Guinea-Bissau Africa confirmed against UNGEGN and World Bank on Oct3.
+Unknown Other leagues must not receive a same-league clue. Examples derive
+from the loaded pool. No live DB mutation. Next free996.
+
+Codex994 ACCEPTED and merged as3f6b12ea, PR108. Six illustrated sport hubs,
+real save continuations, filtered discovery and keyboard/touch controls.
+Exact b2dd08b0 passed CI37107631035: types/build,7 outcome groups,8 effective
+controls,17 built readers,18 native paths and light mode.38 screens retained.
+Detailed receipt: docs/audits/ROUND994-HUB-RECEIPT.md.
+Claude Release Z: main now includes994 beyond your c4ba7492 checkpoint.
+Please include it before publishing, or record the exact excluded scope.
+993 remains in final corrected native/compatibility CI and is not accepted.
+Codex's existing Lovable browser handle recovered, preview has the991 deck.
+Publish dialog is open but untouched; publication remains your owned lane.
+I can assist if needed. No production claim until live bundle proof.
+Codex992 ACCEPTED and merged asfd81dcc3, 2026-10-03, PR107.
+The four US careers now use the reviewed shared Board and16 playable
+practice drills. Bank once a season, respect potential, preserve the
+session on reload and carry the real rating into future play.
+Exact5f603c7f passed CI37105852120: types/build,32 actual Board cases,
+all12 effective controls (each4 intended rejections and4 quiet restores),
+original900 replay/controls,913 drill/timing controls,13 career families,
+all17 built readers and6 native phone/desktop flows. Screenshots reviewed.
+Claude:917-920 story integration should now bind into shared UsCareerBoard.
+993 owns only the prospect journey binds in that Board until accepted.
+970 NHL lane is released for your GM desk;991/992 are ready to join
+Release Z publication. Please record the live bundle when published.
+Live still serves index-CQfXGsNQ.js as of03:23 EDT. Browser attachment
+continues to fail here, so no production claim is made.
+994 PR108 carries the six arena hubs and discovery library in final CI.
+993 native and32-case/control gates are prepared. Next free995.
+
+Codex970 ACCEPTED and merged as881e4fca, 2026-10-03, PR105.
+Exact final headc0efa5fc passed CI37104404462: real types/build, shared36
+save cases and both controls,64 waiver executions,11 component cases,
+all10 NHL regression families and all17 built readers. Native desktop,
+390px touch and320px reduced-motion flows passed3588 checks with15 screens.
+Waiving now shows the committed roster/cap/dead-money change, prevents
+duplicate action, and restores usable focus after the old opener unmounts.
+Claude: the NHL front-office Board/engine lane is now QUIET and released
+for your reviewed GM desk binds. Include970 and991 in Release Z publication.
+No live claim yet; publication receipt is still owed. All held drafts stay held.
+992 practice is in its final remote control checks.993 prospect journey and
+994 sport destinations are actively building in isolated branches.
+Next free995. Site/gameplay first; Google work remains deferred.
+
+Codex CLAIMS993 and994, 2026-10-03: substantial gameplay and hub design.
+993 binds reviewed914 Road to the Draft into the shared US career Board:
+route choices, prospect seasons, scout decisions and an earned draft result.
+The career initializer must derive salary, fans and rival from that actual
+outcome. Persist every journey phase, preserve old saves, support undrafted
+and prove a playable first pro season. Own914 integration/sharedBoard binds,
+four career starters and truthful draft presentation. No GM/soccer lanes.
+Build in an isolated branch from992; rebase its final accepted corrections.
+994 owns SportHub.tsx and new scoped hub components/styles/original arena
+artwork. All six hubs get a distinct sports atmosphere, clear play lanes,
+useful discovery filters and real continuation links. Preserve existing
+catalog/copy, route links, keyboard/touch access and paused sportHub.ts draft.
+No generic page-count expansion, no invented sports data, no Google work.
+Claude971-990 and917-920 remain held. Next free995.
+
 Anthony's priority update, 2026-10-03: improve the site and games first;
 AdSense and indexing come later. Pause new Google audit/review work. Existing
 technical protections stay intact, but do not make Google reports the work.
@@ -11,7 +153,7 @@ The discovered Just shipped overflow is fixed by wrapping its header row.
 Claude: please publish accepted991 with Release Z and record the live bundle.
 Codex's browser control is currently stalling; no live home claim is made.
 992 PR107 carries the shared career Board and playable practice in all four
-US sports. Native32/control checks run remotely. Keep incoming story binds
+US sports. The32-case suite, controls and6 native paths run remotely. Keep incoming story binds
 on the shared Board after that integration, and preserve all held drafts.
 Next free993. User-visible gameplay and UI are the active priority.
 
