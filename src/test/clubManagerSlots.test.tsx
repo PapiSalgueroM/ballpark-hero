@@ -110,6 +110,13 @@ describe('Club Manager: three manager slots', () => {
     expect(onDelete).toHaveBeenCalledWith(1);
     act(() => { r.getByRole('button', { name: 'New manager' }).click(); });
     expect(onNew).toHaveBeenCalledWith(2);
+    /* Review: clearing an unreadable save asks first too. */
+    onNew.mockClear();
+    act(() => { r.getByRole('button', { name: 'Clear it, new manager' }).click(); });
+    expect(onNew).not.toHaveBeenCalled();
+    expect(tile(3).textContent).toContain('no undo');
+    act(() => { r.getByRole('button', { name: 'Clear it' }).click(); });
+    expect(onNew).toHaveBeenCalledWith(3);
     r.unmount();
   });
 
@@ -132,4 +139,117 @@ describe('Club Manager: three manager slots', () => {
     expect(localStorage.getItem(SAVE_KEY)).toBeNull();
     r.unmount();
   });
+});
+
+/* Round 928 review: two tabs on one store. Tab A holds Everton (slot 1);
+   tab B switches to Lincoln City (slot 2), which moves Lincoln to SAVE_KEY
+   and drops its parked copy. Before the fix, A's next write (closing it, or
+   any change) put Everton over Lincoln, and Lincoln was gone for good. */
+let tabA: any = null;
+let tabB: any = null;
+function TabA() { tabA = useClubManager(); return null; }
+function TabB() { tabB = useClubManager(); return null; }
+const names = () => readSlots().map(v => v.summary?.clubName ?? null);
+
+async function twoCareersOnSlotOne() {
+  const a = render(<TabA />);
+  await waitFor(() => expect(tabA.phase).toBe('clubSelect'));
+  act(() => tabA.chooseClub('Everton'));
+  act(() => tabA.confirmClub());
+  act(() => tabA.showSlots());
+  act(() => tabA.newInSlot(2));
+  act(() => tabA.chooseClub('Lincoln City'));
+  act(() => tabA.confirmClub());
+  act(() => tabA.showSlots());
+  act(() => tabA.openSlot(1));
+  await waitFor(() => expect(tabA.phase).toBe('hub'));
+  expect(tabA.career.clubName).toBe('Everton');
+  expect(activeSlot()).toBe(1);
+  expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  const b = render(<TabB />);
+  await waitFor(() => expect(tabB.phase).toBe('resume'));
+  act(() => tabB.openSlot(2));
+  await waitFor(() => expect(tabB.phase).toBe('hub'));
+  expect(tabB.career.clubName).toBe('Lincoln City');
+  expect(activeSlot()).toBe(2);
+  expect(clubAt(SAVE_KEY)).toBe('Lincoln City');
+  expect(clubAt(parkedKey(1))).toBe('Everton');
+  return { a, b };
+}
+
+describe('Club Manager slots: two tabs on one device', () => {
+  beforeEach(() => { tabA = null; tabB = null; });
+
+  it('closing the old tab after a switch in another never wipes the career switched in', async () => {
+    const { a, b } = await twoCareersOnSlotOne();
+    b.unmount();
+    a.unmount();
+    expect(clubAt(SAVE_KEY)).toBe('Lincoln City');
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  });
+
+  it('a change in the old tab writes nothing over the other career and goes back to the managers', async () => {
+    const { a, b } = await twoCareersOnSlotOne();
+    act(() => tabA.setMentality('attacking'));
+    await waitFor(() => expect(tabA.phase).toBe('resume'));
+    expect(tabA.slotNote).toContain('another tab');
+    expect(clubAt(SAVE_KEY)).toBe('Lincoln City');
+    /* The old tab can still open Everton, which parks Lincoln where it belongs. */
+    act(() => tabA.openSlot(1));
+    await waitFor(() => expect(tabA.phase).toBe('hub'));
+    expect(tabA.career.clubName).toBe('Everton');
+    expect(clubAt(parkedKey(2))).toBe('Lincoln City');
+    a.unmount();
+    b.unmount();
+    expect(names()).toEqual(['Everton', 'Lincoln City', null]);
+  });
+});
+
+describe('Club Manager slots: Retire and Start New Career keep the career', () => {
+  it('parks the career and starts the new one in an empty slot, and with every slot full deletes nothing', async () => {
+    const r = render(<Harness />);
+    await start('Everton');
+    act(() => api.startNew());
+    expect(api.phase).toBe('clubSelect');
+    expect(clubAt(parkedKey(1))).toBe('Everton');
+    await start('Lincoln City');
+    act(() => api.startNew());
+    await start('Millwall');
+    expect(names()).toEqual(['Everton', 'Lincoln City', 'Millwall']);
+    act(() => api.startNew());
+    expect(api.phase).toBe('resume');
+    expect(api.slotNote).toContain('All three slots');
+    expect(names()).toEqual(['Everton', 'Lincoln City', 'Millwall']);
+    r.unmount();
+  });
+});
+
+/* Round 928 review: opening a parked era slot must wait for that era's
+   squads. The squads are taken away again after the save is made, so the
+   hook has to fetch them itself; a slot that loads straight from SAVE_KEY
+   without them never reaches its hub. */
+describe('Club Manager slots: a parked era career', () => {
+  it('opens through the era boot, squads first', async () => {
+    const eras = await import('@/lib/clubManagerEras');
+    const { startCareer, trimCareer, leanCareer } = await import('@/lib/clubManager');
+    await eras.ensureEraRosters('era2010');
+    const barca = startCareer('Barcelona', 'era2010');
+    localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(startCareer('Everton'))));
+    localStorage.setItem(parkedKey(2), JSON.stringify(leanCareer(barca)));
+    delete eras.HISTORIC_ROSTERS.era2010;
+    delete eras.HISTORIC_PARTIAL.era2010;
+    expect(eras.eraRostersLoaded('era2010')).toBe(false);
+
+    const r = render(<Harness />);
+    await waitFor(() => expect(api.phase).toBe('resume'));
+    expect(api.slots[1].summary?.eraId).toBe('era2010');
+    act(() => api.openSlot(2));
+    await waitFor(() => expect(api.phase).toBe('hub'), { timeout: 15000 });
+    expect(api.career.clubName).toBe('Barcelona');
+    expect(api.career.eraId).toBe('era2010');
+    expect(eras.eraRostersLoaded('era2010')).toBe(true);
+    expect(activeSlot()).toBe(2);
+    expect(clubAt(parkedKey(1))).toBe('Everton');
+    r.unmount();
+  }, 30000);
 });

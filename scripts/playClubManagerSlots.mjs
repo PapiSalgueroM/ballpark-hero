@@ -28,6 +28,9 @@ const suppliedBase = !!process.env.SWEEP_BASE;
 const BASE = process.env.SWEEP_BASE || `http://127.0.0.1:${PORT}`;
 const KEY = 'dukb-club-manager-save';
 const V = !!process.env.VERBOSE;
+/* Round 928 review: PLAY_SLOTS_CONTROL=unparked removes slot 1's parked copy
+   while the page is away, and the walk must then go RED. */
+const CONTROL = process.env.PLAY_SLOTS_CONTROL || '';
 
 let failures = 0;
 const fail = m => { failures += 1; console.log('  FAIL: ' + m); };
@@ -84,15 +87,16 @@ async function clearRoom() {
 const saved = async () => page.evaluate(k => { const raw = localStorage.getItem(k); return raw ? JSON.parse(raw).clubName : null; }, KEY);
 const slotText = async n => ((await page.locator(`[data-testid="cm-slot-${n}"]`).innerText().catch(() => '')) || '').replace(/\s+/g, ' ');
 
-/** The picker, today's world, England, the Premier League, the first club
-    on the list that is not `avoid`, then skip the dugout form. */
-async function takeJob(avoid) {
-  await tap(/2026-27/i, 'the 2026-27 era');
+/** The picker, an era (today's world unless told), England, the Premier
+    League, the first club on the list that is not `avoid`, then skip the
+    dugout form. */
+async function takeJob(avoid, era = /2026-27/i) {
+  await tap(era, `the ${era.source} era`);
   await page.getByRole('button', { name: /England/i }).first().waitFor({ timeout: 8000 }).catch(() => {});
   await tap(/England/i, 'England');
   await page.getByRole('button', { name: /Premier League/i }).first().waitFor({ timeout: 8000 }).catch(() => {});
   await tap(/Premier League/i, 'Premier League');
-  const pool = ['Everton', 'Fulham', 'Brentford', 'Crystal Palace', 'Brighton'].filter(c => c !== avoid);
+  const pool = ['Everton', 'Fulham', 'Brentford', 'Crystal Palace', 'Brighton', 'Aston Villa', 'Chelsea'].filter(c => ![].concat(avoid).includes(c));
   const clubBtn = page.locator('button').filter({ hasText: new RegExp(pool.join('|')) }).first();
   await clubBtn.waitFor({ timeout: 8000 }).catch(() => {});
   await clubBtn.click({ timeout: 5000 }).catch(() => {});
@@ -126,6 +130,15 @@ try {
   console.log('3) Leave the page, come back');
   await page.goto(BASE + '/', { waitUntil: 'domcontentloaded', timeout: 20000 });
   await page.waitForTimeout(800);
+  if (CONTROL === 'unparked') {
+    /* The negative control: the store a swap that never parked would leave
+       (slot 1's copy gone). Step 3 must go red, which proves it reads the
+       store rather than passing on whatever the page shows. */
+    const had = await page.evaluate(() => localStorage.getItem('dukb-cm-slot-1') !== null);
+    if (!had) { console.log('CONTROL REFUSED: there was no parked slot 1 to remove'); process.exit(3); }
+    await page.evaluate(() => localStorage.removeItem('dukb-cm-slot-1'));
+    console.log('   CONTROL unparked: slot 1 removed from the store');
+  }
   await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 20000 });
   await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 10000 }).catch(() => {});
   const s1 = await slotText(1), s2 = await slotText(2);
@@ -144,6 +157,31 @@ try {
   const parked2 = await page.evaluate(() => { const raw = localStorage.getItem('dukb-cm-slot-2'); return raw ? JSON.parse(raw).clubName : null; });
   if (parked2 !== second) fail(`slot 2's parked save holds ${parked2}, not ${second}`);
   else ok(`${second} parked in slot 2`);
+
+  /* Round 928 review: the era path. A 2010-11 manager in slot 3, then a
+     fresh page that opens today's slot 1 first, so the 2010-11 squads are
+     not in the page when slot 3 is opened: the boot has to fetch them. */
+  console.log('5) A 2010-11 manager in slot 3, opened from a fresh page after another slot');
+  await page.locator('[data-testid="cm-show-slots"]').click({ timeout: 4000 }).catch(() => fail('no Managers button on slot 1\'s hub'));
+  await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 8000 }).catch(() => {});
+  if (!(await tap(/^new manager$/i, 'New manager in slot 3', page.locator('[data-testid="cm-slot-3"]')))) fail('no New manager button in slot 3');
+  await page.waitForTimeout(600);
+  const third = await takeJob([first, second], /2010-11/i);
+  const thirdEra = await page.evaluate(k => { const raw = localStorage.getItem(k); return raw ? JSON.parse(raw).eraId : null; }, KEY);
+  if (!third || thirdEra !== 'era2010') { fail(`the 2010-11 manager did not start (club ${third}, era ${thirdEra})`); throw new Error('blocked'); }
+  ok(`manager 3 at ${third}, 2010-11`);
+  await page.goto(BASE + '/club-manager', { waitUntil: 'domcontentloaded', timeout: 20000 });
+  await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 10000 }).catch(() => {});
+  await tap(/^resume career$/i, 'Resume Career in slot 1', page.locator('[data-testid="cm-slot-1"]'));
+  await page.locator('[data-testid="cm-show-slots"]').waitFor({ timeout: 10000 }).catch(() => {});
+  await page.locator('[data-testid="cm-show-slots"]').click({ timeout: 4000 }).catch(() => fail('no Managers button after opening slot 1'));
+  await page.locator('[data-testid="cm-slots"]').waitFor({ timeout: 8000 }).catch(() => {});
+  await tap(/^resume career$/i, 'Resume Career in slot 3', page.locator('[data-testid="cm-slot-3"]'));
+  await page.locator('[data-testid="cm-show-slots"]').waitFor({ timeout: 15000 }).catch(() => {});
+  const h3 = ((await page.locator('h1').first().innerText().catch(() => '')) || '').trim();
+  if (h3 !== third) fail(`Resume Career on slot 3 opened "${h3}", not ${third}`);
+  else ok(`slot 3 opened on ${third}'s 2010-11 hub, squads fetched by the boot`);
+  if (await page.locator('[data-testid="cm-era-load-failed"]').count().catch(() => 0)) fail('the 2010-11 squads did not load');
 } catch (e) {
   if (String(e && e.message) !== 'blocked') fail(`the walk threw: ${e && e.message ? e.message : e}`);
 } finally {

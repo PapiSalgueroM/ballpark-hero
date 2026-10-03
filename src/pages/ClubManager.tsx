@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -84,7 +84,7 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
-function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () => void; onBack?: () => void }) {
+function EraLoadFailed({ label, onRetry, onBack, backLabel = 'Pick another season' }: { label: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
   return (
     <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
       <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
@@ -102,7 +102,7 @@ function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () 
           onClick={onBack}
           className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
         >
-          Pick another season
+          {backLabel}
         </button>
       )}
     </div>
@@ -197,6 +197,16 @@ const ClubManager = () => {
      tactics tab to open that tile on arrival; the tab hands the request back. */
   const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
+  /* Round 928 review: the managers screen is where one career is swapped for
+     another, so the hub's open panel, rival view, live viewer switch and
+     tactics request belong to the career being left, not the one coming in. */
+  useEffect(() => {
+    if (g.phase !== 'resume') return;
+    setHubPanel(null);
+    setClubView(null);
+    setWatchMode(false);
+    setTacticsTile(null);
+  }, [g.phase]);
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
      entry in any static table and resolves through the save's registered
@@ -303,7 +313,10 @@ const ClubManager = () => {
        says so with a way to try again, never a blank page and never a fresh
        start offered over the career. */
     if (g.bootError) {
-      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} />);
+      /* Round 928 review: opening an era slot moves the index first, so a
+         failed fetch used to leave the player stuck here, away from managers
+         that would open fine. The way back to them is right beside the retry. */
+      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
     }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
@@ -760,6 +773,10 @@ const ClubManager = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
+        <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }
@@ -774,6 +791,9 @@ const ClubManager = () => {
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
+        <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }

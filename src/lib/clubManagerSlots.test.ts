@@ -4,9 +4,10 @@
  * file holds the storage rules one at a time.
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SAVE_KEY, startCareer, leanCareer, trimCareer } from '@/lib/clubManager';
+import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel } from '@/lib/clubManager';
 import {
   SLOTS_INDEX_KEY, parkedKey, activeSlot, readSlots, switchSlot, deleteSlot, slotEraId, summarize,
+  READABLE_SAVE_VERSION,
 } from '@/lib/clubManagerSlots';
 
 const career = (club: string) => startCareer(club);
@@ -125,6 +126,28 @@ describe('deleting and reading', () => {
     expect(slotEraId(2)).toBe('era2010');
     expect(slotEraId(1)).toBeNull();
     expect(slotEraId(3)).toBeNull();
+  });
+
+  /* Round 928 review: a save loadCareer refuses used to get a Resume Career
+     tile that could not open, and New manager refused the slot. */
+  it('reads a save loadCareer would refuse as unreadable, never as a career', () => {
+    expect(career('Everton').saveVersion).toBe(READABLE_SAVE_VERSION);
+    const good = career('Everton');
+    expect(summarize(JSON.stringify(good))?.clubName).toBe('Everton');
+    expect(summarize(JSON.stringify({ ...good, saveVersion: 2 }))).toBeNull();
+    for (const field of ['squad', 'calendar', 'xiIds', 'table'] as const) {
+      expect(summarize(JSON.stringify({ ...good, [field]: undefined }))).toBeNull();
+    }
+    localStorage.setItem(parkedKey(2), JSON.stringify({ ...good, saveVersion: 2 }));
+    expect(readSlots()[1]).toMatchObject({ summary: null, damaged: true });
+  });
+
+  it('labels the world season with the engine\'s own rule', () => {
+    const c = career('Everton');
+    expect(summarize(JSON.stringify({ ...c, season: 4 }))?.worldSeason).toBe(worldSeasonLabel({ ...c, season: 4 }));
+    const noClock = { ...c, season: 2 } as Partial<typeof c>;
+    delete noClock.startYear;
+    expect(summarize(JSON.stringify(noClock))?.worldSeason).toBe(worldSeasonLabel(noClock as typeof c));
   });
 
   it('ignores an index that names no slot', () => {

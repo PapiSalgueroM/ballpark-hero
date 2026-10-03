@@ -17,8 +17,8 @@
  * browser refuses is rolled back, so a full store can stop a swap but can
  * never cost a career.
  */
-import { SAVE_KEY, leanCareer, type CareerState } from './clubManager';
-import { eraById, isHistoricEra, seasonLabel } from './clubManagerEras';
+import { SAVE_KEY, leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
+import { eraById, isHistoricEra } from './clubManagerEras';
 
 export const SLOT_COUNT = 3;
 export const SLOTS_INDEX_KEY = 'dukb-cm-slots';
@@ -71,22 +71,33 @@ export function slotStorageKey(slot: number): string {
   return slot === activeSlot() ? SAVE_KEY : parkedKey(slot);
 }
 
+/** The engine's SAVE_VERSION (clubManager.ts keeps it private). Round 928
+ *  review: clubManagerSlots.test.ts fails the day the two part. */
+export const READABLE_SAVE_VERSION = 3;
+
 /** The summary of a stored career, read with JSON.parse alone: no repair,
- *  no registration, nothing loadCareer does. Null when it is not a career. */
+ *  no registration, nothing loadCareer does. Null when it is not a career.
+ *  Review: held to the same shape test loadCareer applies before it opens a
+ *  save, so a tile never offers Resume Career on a save that will not open
+ *  (it shows as unreadable instead, with Clear it behind a confirm). */
 export function summarize(raw: string | null): SlotSummary | null {
   if (!raw) return null;
   try {
     const c = JSON.parse(raw) as Partial<CareerState> | null;
     if (!c || typeof c !== 'object' || typeof c.clubName !== 'string' || typeof c.season !== 'number') return null;
+    if (
+      c.saveVersion !== READABLE_SAVE_VERSION ||
+      !Array.isArray(c.squad) || !Array.isArray(c.calendar) || !Array.isArray(c.xiIds) || !Array.isArray(c.table)
+    ) return null;
     const eraId = typeof c.eraId === 'string' ? c.eraId : null;
     const era = eraById(eraId ?? undefined);
-    const start = typeof c.startYear === 'number' ? c.startYear : era.startYear;
     const name = c.manager && typeof c.manager.name === 'string' && c.manager.name.trim() ? c.manager.name.trim() : null;
     return {
       managerName: name,
       clubName: c.clubName,
       season: c.season,
-      worldSeason: seasonLabel(start + Math.max(0, c.season - 1)),
+      /* Review: the engine's own label, fallback and all, not a second copy. */
+      worldSeason: worldSeasonLabel(c as CareerState),
       trophies: Array.isArray(c.trophies) ? c.trophies.length : 0,
       eraId,
       eraLabel: era.label,

@@ -97,12 +97,31 @@ export default function ManagerSlotsScreen({ slots, activeDetail, note, onContin
                     {v.damaged ? 'This save could not be read.' : 'Empty slot'}
                   </div>
                   <div className="mt-auto pt-3">
-                    <button
-                      onClick={() => onNew(v.slot)}
-                      className="w-full px-4 py-2.5 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors"
-                    >
-                      {v.damaged ? 'Clear it, new manager' : 'New manager'}
-                    </button>
+                    {/* Round 928 review: clearing an unreadable save erases its
+                        bytes for good, so it asks first, like Delete. */}
+                    {v.damaged && confirming === v.slot ? (
+                      <div className="text-xs">
+                        <div className="text-foreground mb-2">Clear this save for good and start a new manager here? There is no undo.</div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => { setConfirming(null); onNew(v.slot); }}
+                            className="flex-1 px-3 py-2 rounded-lg bg-destructive text-destructive-foreground font-bold"
+                          >
+                            Clear it
+                          </button>
+                          <button onClick={() => setConfirming(null)} className="flex-1 px-3 py-2 rounded-lg bg-secondary text-foreground font-bold">
+                            Keep
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => (v.damaged ? setConfirming(v.slot) : onNew(v.slot))}
+                        className="w-full px-4 py-2.5 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors"
+                      >
+                        {v.damaged ? 'Clear it, new manager' : 'New manager'}
+                      </button>
+                    )}
                   </div>
                 </>
               )}
