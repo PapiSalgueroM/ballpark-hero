@@ -42,6 +42,12 @@
       round's tree the two 2010-11 leagues moved, its three new ones were
       added, the views gained them, and the 2015-16 and 2005-06 saves moved
       in "whole" only (laliga2005 in "start" too), the path Round 899 met.
+      Its review fix rewrote them again: the pre-fix head e8515be9 matched
+      the entries (the review ran eras and pure green on it), and the fix
+      changed only the 2010-11 data file and its nationality block in src;
+      on the fixed tree the five 2010-11 leagues moved, the 2015-16 and
+      2005-06 saves in "whole" only, and pure in the day one objectives of
+      laliga2010, bundesliga2010 and ligue12010.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
