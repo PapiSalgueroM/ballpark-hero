@@ -17,6 +17,7 @@ import type { CareerRival } from './careerRival';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
 import { getMlbLifeEventsB } from './mlbCareerLifeB';
+import { getMlbLifeEventsC } from './mlbCareerLifeC';
 import { getMlbCorruptionEvents } from './mlbCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
@@ -238,6 +239,13 @@ export interface MlbCareerEvent {
   title: string;
   body: string;
   options: { label: string; effect: string; apply: (c: MlbCareerState, rng: () => number) => string }[];
+  /** Round 919: the deck section a card sits under, the seasons it rests
+      after it fires (99 means once a career), and a key shared by cards that
+      tell one story. All optional and read by nothing yet, so the draw is
+      byte for byte what it was. */
+  category?: string;
+  cooldown?: number;
+  story?: string;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
@@ -828,6 +836,7 @@ export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEve
   // ── Round 58: 90 life events and the corruption deck join the draw ──
   deck.push(...getMlbLifeEventsA(c, rng));
   deck.push(...getMlbLifeEventsB(c, rng));
+  deck.push(...getMlbLifeEventsC(c, rng)); /* Round 919: deck C, 36 cards, draws nothing from rng */
   const corrupt = getMlbCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['signs', 'sticky', 'clinic', 'tips', 'academy', 'wash'].includes(k));
