@@ -197,6 +197,27 @@
         { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-ittihad/squad", "publisher": "Saudi Pro League (Al Ittihad squad page)", "readOn": "2026-10-03", "says": "defender, shirt 2" },
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2276", "publisher": "ESPN (Al Ittihad squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 2, age 35" }
       ]
+    },
+    {
+      "name": "Stavro Pilo",
+      "club": "AEK Athens",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Albanian left back born 2000-12-10, at AEK since 2023-07-01, shirt 3, five league appearances in 2026-27. The league and ESPN spell him Stavros Pilios; Soccerway's page carries both forms and the same birth date, so it is one man.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1186/teamComp/25/", "publisher": "Super League Greece (AEK 2026-2027 roster)", "readOn": "2026-10-03", "says": "Stavros Pilios, defender, shirt 3, born 2000-12-10, 5 appearances" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/887", "publisher": "ESPN (AEK Athens squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Stavros Pilios, defender, shirt 3, age 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/pilios-stavros/MBLcgFGf/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Stavro Pilo, AEK Athens, born 2000-12-10, Albania, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Taxiarchis Fountas",
+      "club": "OFI",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 1995-09-04, shirt 11, five league appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1196/teamComp/25/", "publisher": "Super League Greece (OFI 2026-2027 roster)", "readOn": "2026-10-03", "says": "forward, shirt 11, born 1995-09-04, 5 appearances" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/1010", "publisher": "ESPN (OFI Crete squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 31" }
+      ]
     }
   ],
   "movedTo": [
@@ -435,6 +456,22 @@
         { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/175064/glen-kamara", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Queens Park Rangers, shirt 18, born 1995-10-28, Championship games 2026-09-05, 2026-09-09, 2026-09-12, 2026-09-19" },
         { "family": "B", "url": "https://www.soccerway.com/player/kamara-glen/IPBMorSq/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "QPR on loan from Rennes 2026-08-03 to 2027-06-30; Al Shabab loan ended 2025-06-30; 7 Championship appearances in 2026/2027" }
       ]
+    },
+    {
+      "name": "Lucas Chaves",
+      "from": "Panetolikos",
+      "to": "Panathinaikos",
+      "realClub": "Panathinaikos, on loan from Argentinos Juniors",
+      "loan": true,
+      "loanFrom": "Argentinos Juniors",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Argentine goalkeeper born 1995-08-09. Panetolikos was a loan from Argentinos Juniors that ended on 2025-12-31; Argentinos loaned him to Panathinaikos on 2026-01-06 until 2027-06-30. Shirt 12, no appearance yet in 2026-27. Not in Panetolikos' 2026-2027 roster. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1197/teamComp/25/", "publisher": "Super League Greece (Panathinaikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "goalkeeper, shirt 12, born 1995, Argentina, 0 appearances" },
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1198/teamComp/25/", "publisher": "Super League Greece (Panetolikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/215870/lucas-chaves", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Panathinaikos, shirt 12, born 1995-08-09" },
+        { "family": "B", "url": "https://www.soccerway.com/player/chavez-lucas/APZUiQNn/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Panathinaikos on loan from Argentinos Jrs 2026-01-06 to 2027-06-30; Panetolikos loan ended 2025-12-31" }
+      ]
     }
   ],
   "removedClubNotModelled": [
@@ -569,13 +606,63 @@
         { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21446", "publisher": "ESPN (Al Faisaly squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
         { "family": "B", "url": "https://www.soccerway.com/player/majrashi-mohammed/SbH1Vole/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Anwar (Saudi Division 1), forward, born 1991-05-20, Al Fayha to Al-Faisaly 2024-08-18, Al-Faisaly to Al Anwar 2025-09-20 free" }
       ]
+    },
+    {
+      "name": "Michael Gardawski",
+      "from": "Asteras Tripolis",
+      "realClub": "Eintracht Hohkeppel (German Regionalliga West)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "German midfielder born 1990-09-25. Left Asteras for Ionikos on 2023-09-29 and joined Eintracht Hohkeppel on 2024-07-18. Not in Asteras' 2026-2027 roster on the league's page or on ESPN. The destination is Soccerway alone; ESPN's player index still names Asteras, a stale profile its own squad page contradicts. German regional football is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1188/teamComp/25/", "publisher": "Super League Greece (Asteras Aktor 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/8354", "publisher": "ESPN (Asteras Tripoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/gardawski-michael/Oxf2y87M/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Eintracht Hohkeppel (Regionalliga West), born 1990-09-25, Asteras to Ionikos 2023-09-29, Ionikos to Hohkeppel 2024-07-18" }
+      ]
+    },
+    {
+      "name": "Denzel Jubitana",
+      "from": "Atromitos",
+      "realClub": "Neftci Baku (Azerbaijan)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Surinamese forward born 1999-05-06. Left Atromitos on a free for Neftci Baku on 2026-08-28. Not in Atromitos' 2026-2027 roster on the league's page or on ESPN. Azerbaijan is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1189/teamComp/25/", "publisher": "Super League Greece (Atromitos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jubitana-denzel/OC7MNNXt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Neftci Baku, born 1999-05-06, Atromitos to Neftci Baku 2026-08-28 free, contract to 2028-06-30, 1 league appearance in 2026/2027" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Denzel%20Jubitana&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/255745/denzel-jubitana)", "readOn": "2026-10-03", "says": "Neftchi" }
+      ]
+    },
+    {
+      "name": "Ramiro Macagno",
+      "from": "Levadiakos",
+      "realClub": "Independiente Rivadavia (Argentina), on loan from Levadiakos",
+      "loan": true,
+      "loanFrom": "Levadiakos",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Argentine goalkeeper born 1997-03-18. Joined Levadiakos on a free on 2025-02-03 and was loaned to Independiente Rivadavia in January 2026, playing in Argentina's Liga Profesional in 2026. Not in Levadiakos' 2026-2027 roster on the league's page or on ESPN. Per loanPolicy he is placed at the club he plays for, which the game does not model; Soccerway dates the loan's end to 2026-12-31, so re-check in January.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1194/teamComp/25/", "publisher": "Super League Greece (Levadiakos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/macagno-ramiro/nBQsG1sc/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Ind. Rivadavia on loan from Levadiakos, born 1997-03-18, loan return dated 2026-12-31, Liga Profesional appearances in 2026" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Ramiro%20Macagno&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/227881/ramiro-macagno)", "readOn": "2026-10-03", "says": "Independiente Rivadavia (Copa Argentina)" }
+      ]
+    },
+    {
+      "name": "Sergio Díaz",
+      "from": "Panetolikos",
+      "realClub": "Barcelona SC (Ecuador)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Paraguayan forward born 1998-03-05 (baked age 27 matches), at Panetolikos in 2023-24 and 2024-25. Left on a free for Sportivo Luqueno on 2025-07-01 and joined Barcelona SC on a free on 2026-07-13, nine Liga Pro appearances in 2026. Not in Panetolikos' 2026-2027 roster on the league's page or on ESPN. Ecuador is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1198/teamComp/25/", "publisher": "Super League Greece (Panetolikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/diaz-sergio/Ugta8ie0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Barcelona SC (Ecuador), born 1998-03-05, Paraguay, Panetolikos to Sp. Luqueno 2025-07-01 free, Sp. Luqueno to Barcelona SC 2026-07-13 free" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Sergio%20Diaz&limit=20", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/93381/sergio-diaz)", "readOn": "2026-10-03", "says": "Sergio Diaz, Barcelona SC" }
+      ]
     }
   ],
   "notCurrent": [
     {
       "name": "Henry Onyekuru",
       "from": "Al-Fayha",
-      "why": "Unattached on the evidence read. Nigerian forward born 1997-06-05. He left Al Fayha on a free for Gencerbirligi on 2025-07-21 and played for them into April 2026, but is not in Gencerbirligi's 2026-27 squad on ESPN, has no 2026-27 appearance on ESPN, and Soccerway now lists him as a free agent with no club. Not in Al Fayha's squad on the league's page or on ESPN. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
+      "why": "Unattached on the evidence read. Nigerian forward born 1997-06-05. He left Al Fayha on a free for Genclerbirligi on 2025-07-21 and played for them into April 2026, but is not in Genclerbirligi's 2026-27 squad on ESPN, has no 2026-27 appearance on ESPN, and Soccerway now lists him as a free agent with no club. Not in Al Fayha's squad on the league's page or on ESPN. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
       "officialPageRead": false,
       "adjudicatedOn": "2026-10-03",
       "sources": [
