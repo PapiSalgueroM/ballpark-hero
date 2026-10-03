@@ -12,14 +12,16 @@
        night role, a camp battle every season) because four of the cards are
        for a second unit player, and one career in four starts in the 2003-04
        era so the era gates are exercised.
-       Measured, 400 careers, SIM_SEED 1 to 6: 36 of 36 on every seed, and
-       the rarest card was drawn 5, 2, 4, 4, 5, 2 times (a card gets about one
-       draw per hundred offseasons it is eligible in, and the narrowest gate,
-       a rookie year card, is eligible 400 times). So one card missing a
-       fleet is rare and three missing is not a thing that happens; the floor
-       of 34 is the brief's and leaves two. Nothing asserts on the rarest
-       card. Deck C costs the rating curve little: average peak 85.9 to 86.3
-       with it, 85.7 and 85.8 on the same fleet with the catalog emptied.
+       Measured again after the review fixes (the national TV card now needs
+       an All-NBA or MVP year in the last three, deck A's send down card is
+       modern only), 400 careers, default seed and SIM_SEED 1 to 6: 36 of 36
+       on every run, and the rarest card was drawn 4, 3, 2, 4, 6, 2, 4 times
+       (a card gets about one draw per hundred offseasons it is eligible in,
+       and the narrowest gate, a rookie year card, is eligible 400 times). So
+       one card missing a fleet is rare and three missing is not a thing that
+       happens; the floor of 34 is the brief's and leaves two. Nothing
+       asserts on the rarest card. Average peak with the deck 85.8 to 86.3
+       over those seven runs.
    C1e The era gates hold. A modern only card (G League assignment, the two
        way deal, the national TV rest rule, the awards games line, the shot
        chart meeting, and deck A's send down card) is never offered or drawn
@@ -42,15 +44,18 @@
        that era's label. Exact, no band: one mismatch is a failure.
    T   Every life card drawn, in decks A, B and C, carries its category and
        cooldown tags (the table the summer step list reads).
-   R1  The rivalry beat that has the two of you guarding each other (318) is
+   R1  The rivalry beats whose words need two teams, 318 (the two of you
+       guarding each other) and 320 (your team tried to trade for him), are
        never rolled while the rival is on your own team. The rival is
        drafted onto the player's team and keeps it, so this is the common
-       case, not an edge: before the gate was fixed it was 211 of 248 rolls.
-       Exact, no band. The beat must also still be rolled at least once, so
-       the check cannot pass by the beat going quiet: measured 22, 32 and 42
-       rolls (default seed, SIM_SEED 1 and 2, 400 careers), far from 0. The
-       same three runs checked 543, 317 and 302 trades in 2003-04 careers
-       for the C2 era wall, whose floor is also one.
+       case, not an edge: before 318's gate was fixed it was 211 of 248
+       rolls, and 320 without its team check was 95 of 104. Exact, no
+       band. Each beat must also still be rolled at least once, so the check
+       cannot pass by the beat going quiet. Measured, 400 careers, default
+       seed and SIM_SEED 1 to 6: beat 318 rolled 40, 37, 33, 22, 39, 28, 24
+       times and beat 320 rolled 9, 14, 14, 14, 21, 17, 16 times, far from 0.
+       The same runs checked 282, 333, 632, 489, 451, 373, 208 trades in
+       2003-04 careers for the C2 era wall, whose floor is also one.
    R2  The six Round 918 rivalry beats (318 to 323): every number in the
        consequence line is what apply moves, and "the rivalry heats up" is
        said exactly when the rivalry meter rises. Exact, no band.
