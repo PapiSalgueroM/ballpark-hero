@@ -49,12 +49,11 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     else tm.contributors = nhlContributors(tm);
     const raw = JSON.stringify(saved);
     const { view, writes, removes } = mount(raw);
-    const rosterButton = view.getByRole('button', { name: /^👔\s*Roster/ });
-    expect(rosterButton).toBeVisible();
+    expect(view.getByRole('button', { name: /^👔\s*Roster/ })).toBeVisible();
     expect(view.getByText(new RegExp(`${c.sport === 'NFL' ? 'Week' : 'Round'} 4/`))).toBeVisible();
     expect(view.queryByRole('alert')).toBeNull();
     expect(localStorage.getItem(c.key)).toBe(raw); expect(writes).not.toHaveBeenCalled(); expect(removes).not.toHaveBeenCalled();
-    fireEvent.click(rosterButton);
+    fireEvent.click(view.getByRole('button', { name: /^👔\s*Roster/ }));
     expect(view.getByText(saved.league.teams[c.team].players[0].name)).toBeVisible();
     expect(localStorage.getItem(c.key)).toBe(raw);
   });
