@@ -53,7 +53,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { runExtend, readPull, updateNationalityBlock } from './lib/eraBakeExtend.mjs';
+import { runExtend, readPull, updateNationalityBlock, POS_MAP, ratingOf, gbpM } from './lib/eraBakeExtend.mjs';
 
 const ROOT =path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -405,8 +405,15 @@ const DB_TO_ERA_L1 = {
  * Every correction below is proved twice: a published record of the transfer
  * AND the table's own year-2016 row, which the shared step CHECKS in code
  * (a move or an arrival dies unless a year-2016 row names the destination; a
- * removal dies if a year-2016 row still sits inside the world). Values stay
- * the year-2015 snapshot for every player, moved or not.
+ * removal dies if a year-2016 row still sits inside the world). That code
+ * check proves WHERE, never WHEN: a year-2016 row can already show a January
+ * 2016 or a summer 2016 move (Roy Beerens' row says Reading, where he went in
+ * July 2016). So the timing of every correction rests on its dated record,
+ * and a man whose year-2016 club he only reached later is left where the
+ * snapshot has him (Szalai, Hannover from 7 Jan 2016; Ayhan and Nico Schulz,
+ * January 2016; Bedimo, Marseille in July 2016; Kevin-Prince Boateng, under
+ * contract at Schalke until 8 Dec 2015). Values stay the year-2015 snapshot
+ * for every player, moved or not.
  *
  * The published records, all read 2026-10-02, cited below by these keys:
  *   WS-EN, WS-FR, WS-DE, WS-IT, WS-ES  World Soccer, "Summer 2015 transfers,
@@ -418,10 +425,14 @@ const DB_TO_ERA_L1 = {
  *   and for the late August deals the World Soccer list predates, the report
  *   named on the line (ESPN, Goal, Sports Illustrated, the club's own site).
  *
- * WHAT COUNTS AS GLARING. Every mover valued at 4.5m pounds or more in the
- * year-2015 snapshot was looked at, plus every smaller move the two lists
- * above already prove. Smaller moves with no published record at hand stay
- * where the snapshot has them: thin evidence is not a reason to move a man. */
+ * WHAT COUNTS AS GLARING. Every man in the two new leagues valued at 4.5m
+ * pounds or more whose year-2016 row names another club, plus every move MF
+ * dates inside the window for a man in the Ligue 1 pull, plus the German
+ * moves the records above date. The first pass missed four over the line and
+ * a run of MF lines; two adversarial reviews found them and they are in the
+ * lists below under "Review fix". Smaller moves with no dated record at hand
+ * stay where the snapshot has them: thin evidence is not a reason to move a
+ * man. The ones still standing are named in the round's record. */
 
 /* THE FOLDS: thirteen men Rounds 175 and 191 brought INTO the first three
  * leagues as arrivals from Germany or France. Their year-2015 rows now
@@ -527,6 +538,41 @@ const B5_MOVES = [
   { n: 'Rémy Cabella', to: 'Marseille', why: 'Newcastle loaned him to Marseille, Aug 2015 (MF)' },
   { n: 'Emiliano Insúa', to: 'Stuttgart', why: 'Atletico to Stuttgart (WS-DE); the shipped line sat at his 2014-15 loan club Rayo Vallecano' },
   { n: 'Frederik Sørensen', to: 'Köln', why: 'Juventus to Koln (WS-DE); the shipped line sat at his 2014-15 loan club Hellas Verona' },
+  /* Review fix (two adversarial reviews of this round): movers the first pass
+     left at their year-2015 club. Each record below is dated inside the
+     summer 2015 window, which the year-2016 row the step checks cannot do on
+     its own (a year-2016 row can already show a January or a summer 2016
+     move, see the header). Valued over the line first. */
+  { n: 'Divock Origi', to: 'Liverpool', why: 'back at Liverpool after the 2014-15 loan to Lille, July 2015 (Sports Illustrated, 29 Jul 2014: Liverpool signs Origi and loans him back for the season; LFChistory.net, his Liverpool record from 2015-16)' },
+  { n: 'Ricky van Wolfswinkel', to: 'Real Betis', why: 'Norwich loaned him to Betis, 1 Sep 2015, after his 2014-15 loan at Saint-Etienne (ESPN, Ricky Van Wolfswinkel leaves Norwich for Real Betis loan; Sky Sports; canaries.co.uk)' },
+  // Germany, under the line.
+  { n: 'Oriol Romeu', to: 'Southampton', why: 'Chelsea to Southampton, 13 Aug 2015, after his 2014-15 loan at Stuttgart (Sky Sports, Southampton sign Oriol Romeu from Chelsea; World Soccer Talk)' },
+  { n: 'Moritz Leitner', to: 'Borussia Dortmund', why: 'back at Dortmund as his Stuttgart loan ended in summer 2015 (spox, July 2015, on his return); sold to Lazio only in August 2016 (ESPN, FourFourTwo)' },
+  { n: 'Ju-ho Park', to: 'Borussia Dortmund', why: 'Mainz to Dortmund, 29 Aug 2015 (ESPN, 2015 German Bundesliga transfers)' },
+  { n: 'Ja-cheol Koo', to: 'Augsburg', why: 'Mainz to Augsburg, 31 Aug 2015 (ESPN, 2015 German Bundesliga transfers)' },
+  { n: 'Vedad Ibisevic', to: 'Hertha BSC', why: 'Stuttgart to Hertha, 30 Aug 2015 (ESPN, 2015 German Bundesliga transfers)' },
+  // France, every line in MF (the whole window) with its date.
+  { n: 'Allan Saint-Maximin', to: 'Hannover 96', why: 'Saint-Etienne to Monaco, then loaned to Hannover, 31 Jul 2015 (MF, both lines; WS-DE)' },
+  { n: 'Yassine Benzia', to: 'Lille', why: 'Lyon to Lille, 31 Aug 2015 (MF)' },
+  { n: 'Vincent Pajot', to: 'Saint-Étienne', why: 'Rennes to Saint-Etienne, 2 Jun 2015 (MF)' },
+  { n: 'Benjamin Moukandjo', to: 'Lorient', why: 'Reims to Lorient, 5 Aug 2015 (MF)' },
+  { n: 'Issiaga Sylla', to: 'GFC Ajaccio', why: 'Toulouse loaned him to GFC Ajaccio, July 2015 (MF)' },
+  { n: "Georges-Kevin N'Koudou", to: 'Marseille', why: 'Nantes to Marseille, 12 Jun 2015 (MF)' },
+  { n: 'Jean-Christophe Bahebeck', to: 'Saint-Étienne', why: 'PSG loaned him to Saint-Etienne, 10 Aug 2015 (MF)' },
+  { n: 'Mario Lemina', to: 'Juventus', why: 'Marseille loaned him to Juventus, 31 Aug 2015 (MF)' },
+  { n: 'Anthony Mounier', to: 'Bologna', why: 'Montpellier to Bologna, 29 Aug 2015 (MF)' },
+  { n: 'Lenny Nangis', to: 'Lille', why: 'Caen to Lille, 31 Aug 2015 (MF)' },
+  { n: 'Ronny Rodelin', to: 'Caen', why: 'Lille loaned him to Caen, 31 Aug 2015 (MF)' },
+  { n: 'Neal Maupay', to: 'Saint-Étienne', why: 'Nice to Saint-Etienne, 10 Aug 2015 (MF)' },
+  { n: 'Tiago Ilori', to: 'Liverpool', why: 'back at Liverpool as his Bordeaux loan ended, 9 Jun 2015 (MF); his Aston Villa loan came only in January 2016' },
+  { n: 'Gilles Sunu', to: 'Angers', why: 'Evian to Angers, 20 Jun 2015 (MF); the year-2015 row is his earlier club Lorient' },
+  { n: 'Ermir Lenjani', to: 'Nantes', why: 'Rennes loaned him to Nantes, 18 Aug 2015 (MF)' },
+  { n: 'Mehdi Zeffane', to: 'Rennes', why: 'Lyon to Rennes, 12 Aug 2015 (MF)' },
+  { n: 'Chaker Alhadhur', to: 'Caen', why: 'Nantes to Caen, 15 Jun 2015 (MF)' },
+  { n: 'Axel Ngando', to: 'Bastia', why: 'Rennes to Bastia, 31 Aug 2015 (MF); the year-2015 row is his loan club Angers' },
+  { n: 'Hervin Ongenda', to: 'PSG', why: 'back at PSG as his Bastia loan ended, 1 Jun 2015 (MF)' },
+  { n: 'Jérémy Pied', to: 'Nice', why: 'back at Nice after the 2014-15 loan at Guingamp, played on at full-back under Claude Puel (ogcnice.com, the club\'s own player page)' },
+  { n: 'Maarten Stekelenburg', to: 'Southampton', why: 'Fulham loaned him to Southampton, 22 Jun 2015, after his 2014-15 loan at Monaco (Sky Sports, Southampton sign Maarten Stekelenburg on season-long loan; ESPN; MF lists the Monaco loan ending)' },
 ];
 /* OUT OF THE WORLD. A removal, unlike a placement, cannot invent anything
  * (the Round 191 asymmetry), so it is also the honest answer for a man who
@@ -548,6 +594,25 @@ const B5_REMOVALS = [
   { n: 'Mevlüt Erdinç', why: 'Saint-Etienne to Hannover (WS-DE, MF)', later: 'the year-2016 row is Guingamp, his January 2016 loan, so Hannover cannot be proved from the table' },
   { n: 'Papy Djilobodji', why: 'Nantes to Chelsea, 1 Sep 2015 (MF)', later: 'the year-2016 row is Werder Bremen, his January 2016 loan, so Chelsea cannot be proved from the table' },
   { n: 'Stephan El Shaarawy', why: 'a shipped AC Milan line: Milan loaned him to Monaco that summer (WS-FR, MF)', later: 'the year-2016 row is Roma, his January 2016 loan, so Monaco cannot be proved from the table; Round 191 left him at Milan because Monaco was outside its world' },
+  /* Review fix: men the first pass left at a club they had already left,
+     each record dated inside the summer 2015 window. */
+  { n: 'Eduardo', why: 'the Nice attacking midfielder Carlos Eduardo: his loan from Porto ended, back to Porto 1 Jun 2015 (MF), then Al-Hilal by his year-2016 row' },
+  { n: 'Davie Selke', why: 'Bremen to RB Leipzig, then in the second division, 1 Jul 2015 (sport1, Nov 2015, Davie Selke ueber Wechsel zu RB Leipzig; deichstube.de)' },
+  { n: 'Andreas Beck', why: 'Hoffenheim to Besiktas, 4 Jul 2015 (Goal.com Germany, 4 Jul 2015, Hoffenheim-Kapitaen Andreas Beck wechselt zu Besiktas; sport1, July 2015)' },
+  { n: 'Lucas Barrios', why: 'his Montpellier loan ended and Spartak sold him to Palmeiras, 14 Jul 2015 (ESPN, Lucas Barrios unveiled as Palmeiras 24th new signing in 2015; The Star, 14 Jul 2015)' },
+  { n: 'Lucas Piazón', why: 'Chelsea loaned him to Reading, 31 Aug 2015, after his loan in the Bundesliga (ESPN, Chelsea loan forward Lucas Piazon to Reading; Sky Sports)' },
+  { n: 'Christopher Glombard', why: 'Reims loaned him to Paris FC, 1 Jul 2015 (parisfootballclub.com, Christopher Glombard premiere recrue du Paris FC; foot-sur7.fr)' },
+  { n: 'Jonathan Kodjia', why: 'Angers to Bristol City, 1 Aug 2015 (MF)' },
+  { n: 'Grégoire Puel', why: 'out of contract at Nice, to Le Havre, 19 Aug 2015 (MF)' },
+  { n: 'Anders Konradsen', why: 'Rennes to Rosenborg, 16 Aug 2015 (MF)' },
+  { n: 'Lionel Carole', why: 'Troyes to Galatasaray, 3 Jul 2015 (MF)' },
+  { n: 'David Djigla', why: 'out of contract at Bordeaux, to Niort, 8 Jul 2015 (MF)' },
+  { n: 'Joris Delle', why: 'Nice to Lens, 3 Jul 2015 (MF)' },
+  { n: 'Zacharie Boucher', why: 'Toulouse to Auxerre, 10 Jun 2015 (MF)' },
+  { n: 'Issa Cissokho', why: 'Nantes to Genoa, 20 Jul 2015 (MF); his year-2016 row is Bari, so Genoa cannot be proved from the table and he is taken out rather than placed on one proof' },
+  { n: 'Jonas Hofmann', why: 'back at Dortmund as his Mainz loan ended in June 2015 (bayer04.de and bundesliga.com career profiles)', later: 'the year-2016 row is Gladbach, who bought him on 1 Jan 2016, so Dortmund cannot be proved from the table' },
+  { n: 'Kevin Großkreutz', why: 'Dortmund to Galatasaray, announced 2 Sep 2015 after a deadline day filing failed; he trained there and never played for Dortmund again (sport1, Sep 2015, Galatasaray Istanbul vermeldet Transfer von Kevin Grosskreutz; ESPN, transfer delayed)', later: 'the year-2016 row is Stuttgart, where he signed in January 2016' },
+  { n: 'Abdelhamid El Kaoutari', why: 'Montpellier to Palermo, 27 Jul 2015 (MF)', later: 'the year-2016 row is Reims, his loan from 1 Feb 2016 (africatopsports.com, 2 Feb 2016; footmercato.net), so Palermo cannot be proved from the table' },
 ];
 
 /* ARRIVALS: a year-2015 row at a club outside the two new leagues' pulls,
@@ -628,8 +693,9 @@ if (bigFiveArg) {
       ['Barcelona', 'Lionel Messi'], ['Juventus', 'Paulo Dybala'],
     ],
     /* Thin only where the table itself is thin (under 8 real rows after
-       the corrections). Re-measured 2026-10-02: Ingolstadt 7 and Darmstadt 7
-       (both promoted that summer), Angers 5 and GFC Ajaccio 2 (likewise). */
+       the corrections). Re-measured 2026-10-02 after the review fix:
+       Ingolstadt 7 and Darmstadt 7 (both promoted that summer), Angers 4
+       (Kodjia left, Sunu came) and GFC Ajaccio 3 (Issiaga Sylla came). */
     expectedThin: ['Las Palmas', 'Frosinone', 'Angers', 'GFC Ajaccio', 'Ingolstadt', 'Darmstadt'],
     header: s => [
       '// AUTO-GENERATED by scripts/bakeEra2015.mjs (Round 175, extended Rounds 191 and 899).',
@@ -663,23 +729,13 @@ if (bigFiveArg) {
   process.exit(0);
 }
 
-/* Same curves as bakeClubManagerRosters.mjs, verbatim, so a 2015 value and a
- * 2026 value mean the same thing on the rating scale. */
-const POS_MAP = {
-  'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
-  'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
-  'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF',
-};
-function ratingOf(usd) {
-  if (!usd || usd <= 0) return 48;
-  const r = Math.round(-13.106 + 12.851 * Math.log10(usd));
-  return Math.max(48, Math.min(94, r));
-}
-function gbpM(usd) {
-  const m = (usd * 0.75) / 1e6;
-  return Math.round(m * 10) / 10;
-}
+/* POS_MAP, ratingOf and gbpM, the same curves as bakeClubManagerRosters.mjs
+ * so a 2015 value and a 2026 value mean the same thing on the rating scale,
+ * come from scripts/lib/eraBakeExtend.mjs (imported at the top): one copy of
+ * the curve for every era bake, never a second one here to drift. The Round
+ * 191 Serie A mode below still runs its own inline extend code; it is kept
+ * as it shipped because it is a one shot (it refuses to run on a file that
+ * already holds Serie A) and it can no longer run against this file. */
 
 /* ------------------- Round 191: the extend mode ------------------- */
 if (extendArg) {

@@ -26,22 +26,24 @@
  *      pre-title Leicester squad untouched below the pivot.
  *
  * ROUND 899: the era is a full big five (the Bundesliga and Ligue 1 joined,
- * 98 clubs, 1,722 real players). What grew:
+ * 98 clubs, 1,705 real players). What grew:
  *   1. Bayern and PSG get their real squads name for name, both directions.
  *   3. The ladder runs over all 98 clubs of five leagues; Bayern and PSG are
  *      told to win it; the four promoted thin squads are told no such thing;
  *      each new nation's cup is named in the cup demand.
  *   4. Measured 2026-10-02 over six seeds each (the streams in the code):
- *      Bayern finish 1,1,1,1,2,1 (mean 1.17), PSG 1,1,1,1,1,1 (mean 1.00),
- *      GFC Ajaccio, the thinnest squad of the era with two real players,
- *      17,20,18,17,20,18 (mean 18.33). Barcelona moved to 1,2,1,2,1,2 (mean
- *      1.5) and Las Palmas stayed 20 six times, because a bigger world draws
- *      the random stream differently. The bands are on the MEANS: a giant
- *      must average 3.5 or better (2.3 places of headroom over the worst
- *      giant measured) and the thin club 11 or worse (7.3 places of
+ *      Bayern finish 2,1,1,1,1,1 (mean 1.17), PSG 1,1,1,2,1,1 (mean 1.17),
+ *      GFC Ajaccio, the thinnest squad of the era with three real players
+ *      once the review fix moved Issiaga Sylla there, 20,20,18,19,19,19
+ *      (mean 19.17). Barcelona moved to 2,2,1,2,1,2 (mean 1.67) and Las
+ *      Palmas stayed 20 six times, because a bigger world draws the random
+ *      stream differently. (Before the review fix: Bayern 1.17, PSG 1.00,
+ *      GFC Ajaccio 18.33 with two players.) The bands are on the MEANS: a
+ *      giant must average 3.5 or better (2.3 places of headroom over the
+ *      worst giant measured) and the thin club 11 or worse (8.2 places of
  *      headroom). No band reads a single worst seed.
- *   5. The extension's accounting: 98 clubs, 1,722 players, 258 corrections,
- *      316 Bundesliga and 296 Ligue 1 players, the six thin clubs by name,
+ *   5. The extension's accounting: 98 clubs, 1,705 players, 303 corrections,
+ *      311 Bundesliga and 277 Ligue 1 players, the six thin clubs by name,
  *      one man at one club in the whole world, the eight men earlier rounds
  *      removed who are home now, the thirteen folds, a sample of the window.
  * Four negative controls, SIM_ERA2015_CONTROL=dupe|stale|threeleagues|longname,
@@ -314,10 +316,11 @@ console.log('2) Three worlds (2026, 2015, 2010), and none of them leak');
      2026-08-18: the 2010 Atletico winger Simao (b. 1979) vs Levante's 2015
      Simao Mate Junior (b. 1988); the 2010 Fernando (b. 1980 vintage row) vs
      Manchester City's 2015 Brazilian Fernando (b. 1987). */
-  /* Round 899, verified 2026-10-02: Arsenal's 2010 striker Eduardo (Eduardo Alves da Silva, b. 1983-02-25,
-     Playmakerstats and Wikidata) against Nice's 2015 midfielder Eduardo (Carlos Eduardo de Oliveira Alves,
-     b. 1989-10-17, Playmakerstats' Nice and Porto pages and his reference page). */
-  const NAMESAKES_2010 = new Set(['Simão', 'Fernando', 'David López', 'Eduardo']); // Round 191: Athletic's 2010 winger (b. 1982) vs Napoli's 2015 defender (b. 1989)
+  /* Round 899 first allowlisted 'Eduardo' here (Arsenal's 2010 striker
+     against Nice's 2015 Carlos Eduardo), but its review found that Carlos
+     Eduardo had gone back to Porto on 1 Jun 2015, so the bake takes him out
+     of the 2015 world and the entry is gone with him. */
+  const NAMESAKES_2010 = new Set(['Simão', 'Fernando', 'David López']); // Round 191: Athletic's 2010 winger (b. 1982) vs Napoli's 2015 defender (b. 1989)
   const oldByName = new Map();
   for (const roster of Object.values(ERA2010_ROSTERS)) for (const p of roster) oldByName.set(p.n, p);
   let shared10 = 0, weird10 = 0, namesakes10 = 0;
@@ -425,7 +428,7 @@ else {
   if (mean(lp) < 11) fail(`Las Palmas averaged position ${mean(lp).toFixed(1)}, the thinnest squad is overperforming wildly`);
 
   /* Round 899: the two new leagues, six seeds each, the giants and the
-     thinnest squad of the whole era (GFC Ajaccio, two real players). The
+     thinnest squad of the whole era (GFC Ajaccio, three real players). The
      measured finishes are in the header; the bands are means, never a max. */
   const bayern = [1, 2, 3, 4, 5, 6].map(i => posOf('Bayern Munich', 'era2015', i * 7919));
   const psg = [1, 2, 3, 4, 5, 6].map(i => posOf('PSG', 'era2015', i * 7919));
@@ -433,8 +436,8 @@ else {
   console.log(`   Bayern finishes: ${bayern.join(',')} · PSG finishes: ${psg.join(',')} · GFC Ajaccio finishes: ${gfc.join(',')}`);
   console.log(`   means: Bayern ${mean(bayern).toFixed(2)}, PSG ${mean(psg).toFixed(2)}, GFC Ajaccio ${mean(gfc).toFixed(2)}`);
   if (mean(bayern) > 3.5) fail(`2015 Bayern averaged position ${mean(bayern).toFixed(2)} over six seeds, measured 1.17`);
-  if (mean(psg) > 3.5) fail(`2015 PSG averaged position ${mean(psg).toFixed(2)} over six seeds, measured 1.00`);
-  if (mean(gfc) < 11) fail(`GFC Ajaccio averaged position ${mean(gfc).toFixed(2)} over six seeds, measured 18.33; two real players and youth padding are overperforming wildly`);
+  if (mean(psg) > 3.5) fail(`2015 PSG averaged position ${mean(psg).toFixed(2)} over six seeds, measured 1.17`);
+  if (mean(gfc) < 11) fail(`GFC Ajaccio averaged position ${mean(gfc).toFixed(2)} over six seeds, measured 19.17; three real players and youth padding are overperforming wildly`);
 
   // Season two exists, is 2016-17, and the WORLD aged with it.
   Math.random = seeded(31337);
@@ -480,11 +483,11 @@ console.log('5) The bake file tells the truth about itself');
   const at = (club, name) => (R[club] ?? []).some(p => p.n === name);
   const clubsOf = name => Object.entries(R).filter(([, list]) => list.some(p => p.n === name)).map(([c]) => c);
   if (ERA2015_META.clubs !== 98) fail(`meta clubs ${ERA2015_META.clubs}, the big five of 2015-16 are 98`);
-  if (ERA2015_META.players !== 1722) fail(`meta players ${ERA2015_META.players}, the Round 899 bake wrote 1722`);
-  if (ERA2015_META.moves !== 258) fail(`meta moves ${ERA2015_META.moves}: 134 before Round 899 plus 63 moved, 13 removed, 35 arrived and 13 folded is 258`);
+  if (ERA2015_META.players !== 1705) fail(`meta players ${ERA2015_META.players}, the Round 899 bake wrote 1705`);
+  if (ERA2015_META.moves !== 303) fail(`meta moves ${ERA2015_META.moves}: 134 before Round 899 plus 91 moved, 30 removed, 35 arrived and 13 folded is 303`);
   const leagueTotal = id => (ERA_LEAGUES['era2015'].find(l => l.id === id)?.clubs ?? []).reduce((s, c) => s + (R[c]?.length ?? 0), 0);
-  if (leagueTotal('bundesliga2015') !== 316) fail(`the 2015-16 Bundesliga holds ${leagueTotal('bundesliga2015')} players, the bake wrote 316`);
-  if (leagueTotal('ligue12015') !== 296) fail(`the 2015-16 Ligue 1 holds ${leagueTotal('ligue12015')} players, the bake wrote 296`);
+  if (leagueTotal('bundesliga2015') !== 311) fail(`the 2015-16 Bundesliga holds ${leagueTotal('bundesliga2015')} players, the bake wrote 311`);
+  if (leagueTotal('ligue12015') !== 277) fail(`the 2015-16 Ligue 1 holds ${leagueTotal('ligue12015')} players, the bake wrote 277`);
   const worldClubs = new Set(ERA_LEAGUES['era2015'].flatMap(l => l.clubs));
   for (const c of Object.keys(R)) if (!worldClubs.has(c)) fail(`the bake holds ${c}, which no 2015 league lists`);
   for (const c of worldClubs) if (!R[c]) fail(`${c} is in a 2015 league and has no bake entry`);
@@ -513,12 +516,25 @@ console.log('5) The bake file tells the truth about itself');
   for (const [name, club, old] of [['Julian Draxler', 'Wolfsburg', 'Schalke 04'], ['Dante', 'Wolfsburg', 'Bayern Munich'],
     ['Gonzalo Castro', 'Borussia Dortmund', 'Bayer Leverkusen'], ['Layvin Kurzawa', 'PSG', 'Monaco'], ['Kevin Trapp', 'PSG', 'Eintracht Frankfurt'],
     ['Lucas Ocampos', 'Marseille', 'Monaco'], ['Abdul Rahman Baba', 'Chelsea', 'Augsburg'], ['Florian Thauvin', 'Newcastle', 'Marseille'],
-    ['Rafael', 'Lyon', 'Manchester United'], ['Benjamin Stambouli', 'PSG', 'Tottenham']]) {
+    ['Rafael', 'Lyon', 'Manchester United'], ['Benjamin Stambouli', 'PSG', 'Tottenham'],
+    // The review fix: movers the first pass left behind.
+    ['Divock Origi', 'Liverpool', 'Lille'], ['Ricky van Wolfswinkel', 'Real Betis', 'Saint-Étienne'],
+    ['Oriol Romeu', 'Southampton', 'Stuttgart'], ['Moritz Leitner', 'Borussia Dortmund', 'Stuttgart'],
+    ['Tiago Ilori', 'Liverpool', 'Bordeaux'], ['Issiaga Sylla', 'GFC Ajaccio', 'Toulouse'], ['Jérémy Pied', 'Nice', 'Guingamp'],
+    ['Yassine Benzia', 'Lille', 'Lyon'], ['Mario Lemina', 'Juventus', 'Marseille']]) {
     if (!at(club, name)) fail(`${name} is not at 2015-16 ${club}`);
     if (at(old, name)) fail(`${name} is still at ${old}`);
   }
+  /* The review fix also left five men where the snapshot has them on purpose,
+     because the club their year-2016 row names is one they reached later
+     (dated in the bake header): they must still be at their year-2015 club. */
+  for (const [name, club] of [['Ádám Szalai', 'Hoffenheim'], ['Kaan Ayhan', 'Schalke 04'], ['Nico Schulz', 'Hertha BSC'],
+    ['Henri Bedimo', 'Lyon'], ['Kevin-Prince Boateng', 'Schalke 04']]) {
+    if (clubsOf(name).join(',') !== club) fail(`${name} should still be at ${club}, he is at: ${clubsOf(name).join(',') || 'nowhere'}`);
+  }
   // Left the world, or left his club with no provable season start club.
-  for (const name of ['André-Pierre Gignac', 'Jefferson Farfán', 'Christian Fuchs', 'Giannelli Imbula', 'Ciro Immobile', 'Stephan El Shaarawy']) {
+  for (const name of ['André-Pierre Gignac', 'Jefferson Farfán', 'Christian Fuchs', 'Giannelli Imbula', 'Ciro Immobile', 'Stephan El Shaarawy',
+    'Eduardo', 'Davie Selke', 'Andreas Beck', 'Lucas Barrios', 'Christopher Glombard', 'Jonathan Kodjia', 'Jonas Hofmann', 'Kevin Großkreutz']) {
     if (clubsOf(name).length) fail(`${name} is still in this world at ${clubsOf(name).join(',')}`);
   }
   console.log(`   big five accounting: Bundesliga ${leagueTotal('bundesliga2015')}, Ligue 1 ${leagueTotal('ligue12015')}, ${dupes} names at two clubs`);
