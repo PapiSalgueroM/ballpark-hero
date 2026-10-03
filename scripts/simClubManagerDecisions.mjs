@@ -38,8 +38,31 @@
  *   CM_DECISIONS_CONTROL=leaky        board patience answers also add money (4)
  *   CM_DECISIONS_CONTROL=dice         the settle draws one Math.random (5)
  *   CM_DECISIONS_CONTROL=yellowappeal a second yellow is offered an appeal (1)
+ *   CM_DECISIONS_CONTROL=quote        the appeal card quotes the secretary (6)
  *
- * MEASURED BANDS: see the constants block below, each with its numbers.
+ * Each was run on 2026-10-03 and went red in its own section and nowhere
+ * else: freeloss 12 findings in section 3 (a lost appeal left the ban where
+ * the button said it would grow), liar 3 in section 2 (every tier about half
+ * its stated rate), leaky 94 in section 4, dice 4 in section 5 (all four
+ * declined seasons parted from main), yellowappeal 5 in section 1, quote 35
+ * in section 6.
+ * MEASURED BANDS, 2026-10-03, default seed 979 and SIM_SEED 1, 2, 3 and 4
+ * (three clubs, two seasons each, plus four declined seasons against main):
+ *   section 5: 4 of 4 seasons byte identical on every seed, with 114, 120,
+ *     73, 114 and 92 desk cards met and declined. Floor 40.
+ *   section 1: 13, 15, 11, 16 and 16 straight reds (5, 9, 1, 3 and 7 second
+ *     yellows, never an appeal for one), an appeal for every straight red.
+ *     Floor 6.
+ *   section 3: lost appeals 10, 9, 7, 8 and 6, so the lost branch is walked
+ *     on every seed; the pooled end to end win rate was 31 of 71 (43.7%),
+ *     against a stated 40% on almost every card. Reported, never asserted.
+ *   section 4: 418 to 521 answers applied, all 18 answers of the 7 cards
+ *     walked on every seed, 3 to 14 of them meeting a bound. Floor 200.
+ *   section 2: the verdict reads a hash, not Math.random, so it does not move
+ *     with the seed: over 20000 ids a tier, 40.39%, 25.37% and 15.04%
+ *     observed against 40, 25 and 15 stated (one standard error is 0.35,
+ *     0.31 and 0.25 points). Band 1.5 points, over four standard errors, and
+ *     the liar control lands about 20 points out.
  */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
@@ -54,7 +77,7 @@ const TMP = path.join(os.tmpdir(), `cmDecisions-${process.pid}`).replaceAll('\\'
 fs.mkdirSync(TMP, { recursive: true });
 
 const CONTROL = process.env.CM_DECISIONS_CONTROL || '';
-const KNOWN = ['freeloss', 'liar', 'leaky', 'dice', 'yellowappeal'];
+const KNOWN = ['freeloss', 'liar', 'leaky', 'dice', 'yellowappeal', 'quote'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_DECISIONS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -95,6 +118,8 @@ if (CONTROL === 'freeloss') {
   desk = swap(desk, '  const before = deskOf(state);', '  Math.random();\n  const before = deskOf(state);', 'clubManagerDecisions.ts');
 } else if (CONTROL === 'yellowappeal') {
   engine = swap(engine, '      events.push(`🟥 ${sq.name} picked up a second yellow and walked.`);', '      events.push(`🟥 ${sq.name} picked up a second yellow and walked.`);\n      straightReds.push(sq.id);', 'clubManager.ts');
+} else if (CONTROL === 'quote') {
+  desk = swap(desk, 'The club secretary rates an appeal at', 'The club secretary says "we fancy this one" and rates an appeal at', 'clubManagerDecisions.ts');
 }
 const deskCopy = `${TMP}/clubManagerDecisions.ts`;
 fs.writeFileSync(deskCopy, desk);
@@ -150,10 +175,10 @@ const BASE_SEED = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process
 /* ---------- sizes and bands (measured, see the header) ---------- */
 const S5_CLUBS = 2;            // clubs replayed against main, per mode
 const S5_SEASONS = 1;          // seasons per replay
-const S5_MIN_CARDS = 8;        // desk cards that must be met while declining
+const S5_MIN_CARDS = 40;       // desk cards that must be met while declining (measured 73 to 120)
 const PLAY_SEASONS = 2;        // seasons per club in sections 1, 3 and 4
-const MIN_STRAIGHT_REDS = 4;   // straight reds the play seasons must contain
-const MIN_SITUATIONS = 10;     // situation answers the play seasons must apply
+const MIN_STRAIGHT_REDS = 6;   // straight reds the play seasons must contain (measured 11 to 16)
+const MIN_SITUATIONS = 200;    // answers applied, seasons plus kept states (measured 418 to 521)
 const ODDS_SAMPLE = 20000;     // synthetic verdicts per tier in section 2
 const ODDS_BAND = 1.5;         // points either side of the stated odds
 
