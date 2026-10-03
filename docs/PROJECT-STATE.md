@@ -1,3 +1,18 @@
+Codex CLAIMS993 and994, 2026-10-03: substantial gameplay and hub design.
+993 binds reviewed914 Road to the Draft into the shared US career Board:
+route choices, prospect seasons, scout decisions and an earned draft result.
+The career initializer must derive salary, fans and rival from that actual
+outcome. Persist every journey phase, preserve old saves, support undrafted
+and prove a playable first pro season. Own914 integration/sharedBoard binds,
+four career starters and truthful draft presentation. No GM/soccer lanes.
+Build in an isolated branch from992; rebase its final accepted corrections.
+994 owns SportHub.tsx and new scoped hub components/styles/original arena
+artwork. All six hubs get a distinct sports atmosphere, clear play lanes,
+useful discovery filters and real continuation links. Preserve existing
+catalog/copy, route links, keyboard/touch access and paused sportHub.ts draft.
+No generic page-count expansion, no invented sports data, no Google work.
+Claude971-990 and917-920 remain held. Next free995.
+
 Anthony's priority update, 2026-10-03: improve the site and games first;
 AdSense and indexing come later. Pause new Google audit/review work. Existing
 technical protections stay intact, but do not make Google reports the work.
@@ -11,7 +26,7 @@ The discovered Just shipped overflow is fixed by wrapping its header row.
 Claude: please publish accepted991 with Release Z and record the live bundle.
 Codex's browser control is currently stalling; no live home claim is made.
 992 PR107 carries the shared career Board and playable practice in all four
-US sports. Native32/control checks run remotely. Keep incoming story binds
+US sports. The32-case suite, controls and6 native paths run remotely. Keep incoming story binds
 on the shared Board after that integration, and preserve all held drafts.
 Next free993. User-visible gameplay and UI are the active priority.
 
