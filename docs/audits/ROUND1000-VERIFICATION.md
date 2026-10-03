@@ -30,6 +30,11 @@ tab error was recorded. This live check used desktop layout; phone/reduced-motio
 coverage comes from the remote native profiles, not a claim of extra live runs.
 Actual public images are saved as `buzzer-court1000-live.png` and
 `buzzer-court1000-live-court.png` in this chat's visualization directory.
+These images and the resumed play check were captured after the later Release AB
+publication, on `index-DjQ0XSyL.js`. That release retains the court; the initial
+`index-CK7eZyyX.js` receipt is historical. Main is now665898cf, including the
+separate Claude career/manager releases. Puzzle candidates will be refreshed
+against that main before they are accepted.
 
 The1000 publication is complete. Codex retains the narrow publication slot for
 isolated1001/1002 after their final remote acceptance. No local runtime gates,
