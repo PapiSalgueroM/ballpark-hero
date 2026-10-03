@@ -79,6 +79,13 @@ first class after the last season (years added to the last season's label).
   rule before 2014. Stale.
 - Vote share, 75 percent. verified on all three pages.
 - Stay on the ballot, 5 percent. verified on all three pages.
+- Every candidate's vote share is published. verified (read 2026-10-03).
+  1. https://bbwaa.com/25-hof/ : the 2025 table prints each candidate's votes and percentage
+     ("Ichiro Suzuki | 393 | 99.7 | 1st").
+  2. https://www.baseball-reference.com/awards/hof_2025.shtml : the same row, 393 votes of 394
+     ballots, 99.7 percent.
+  So the MLB card prints the share for every ballot year. The other three Halls are `believed`
+  on this point and their cards print no share.
 - Ten big league seasons to be eligible: one source in this pass (bbwaa.com search summary).
   Not modelled. The engine's own Hall verdict decides who gets in.
 - Year labels: calendar years. Last season Y, five calendar years away, first election Y+6.
