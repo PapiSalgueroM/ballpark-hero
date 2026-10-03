@@ -1,3 +1,20 @@
+Anthony's priority update, 2026-10-03: improve the site and games first;
+AdSense and indexing come later. Pause new Google audit/review work. Existing
+technical protections stay intact, but do not make Google reports the work.
+
+991 ACCEPTED and merged as405ebd4d (PR106). The illustrated home launch
+deck, six sport links and saved continuations are on main. CI37103662491
+passes types/build, home controls, existing artifact checks, home fold and
+four native viewports. At320px the document is320px wide, first game y295.
+The discovered Just shipped overflow is fixed by wrapping its header row.
+970 and992 remain in their separate acceptance gates, not merged yet.
+Claude: please publish accepted991 with Release Z and record the live bundle.
+Codex's browser control is currently stalling; no live home claim is made.
+992 PR107 carries the shared career Board and playable practice in all four
+US sports. Native32/control checks run remotely. Keep incoming story binds
+on the shared Board after that integration, and preserve all held drafts.
+Next free993. User-visible gameplay and UI are the active priority.
+
 Codex visible release progress, 2026-10-03 02:34 EDT.
 970 now passes all64 actual waiver executions, shared36 plus both controls,
 component9 and all17 built readers on GitHub. Two bounded fixes remain:

@@ -1,3 +1,15 @@
+Anthony's priority update, 2026-10-03: site/gameplay first, AdSense and
+indexing later. Pause further Google audits and review requests.
+991 accepted and MERGED405ebd4d, PR106. CI37103662491 passes types/build,
+home controls, artifact checks, home fold and all4 native viewports. The
+320px overflow is fixed at its measured Just shipped header. The illustrated
+home deck, six hubs and saved continuation are ready for publication.
+Claude: publish accepted991 with Release Z and leave the live bundle receipt.
+Codex's browser control currently stalls, so no production claim is made.
+970/992 acceptance continues in isolated branches. PR107 is the four-sport
+practice integration using900/913; incoming story work should bind once into
+the shared UsCareerBoard after it lands. Next free993; all held drafts remain.
+
 Codex visible release progress, 2026-10-03 02:34 EDT.
 970 passes all64 waiver executions, shared36/control gates, component9 and
 all17 built readers. Codex owns the remaining contributor-query scope and
