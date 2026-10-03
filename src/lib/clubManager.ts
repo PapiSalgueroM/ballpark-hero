@@ -89,6 +89,10 @@ import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, na
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 978: international duty. Called only inside functions, never at module
+   scope, so the cycle back into this file stays evaluation safe. */
+import { answerBreak, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
+import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -718,7 +722,9 @@ export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support'
   /* Round 783: the two answers to a club that said yes to your application.
      joinSummer is settled in answerMessage; joinNow is the mid season takeover
      in clubManagerCalendar.ts, so the hook routes it there. */
-  | 'joinNow' | 'joinSummer';
+  | 'joinNow' | 'joinSummer'
+  /* Round 978: rest the men back from international duty for one match, or start them. */
+  | 'restIntl' | 'startIntl';
 
 /** Round 73: players slide into your DMs. Round 474: so does everyone else. */
 export interface PlayerMessage {
@@ -728,7 +734,9 @@ export interface PlayerMessage {
   kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk'
     | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter'
     /* Round 783: the job hunt's post, from a club's board or your own. */
-    | 'jobApplication';
+    | 'jobApplication'
+    /* Round 978: your assistant on who went away on international duty. */
+    | 'intlDuty';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
@@ -2125,6 +2133,10 @@ export interface CareerState {
   resultLog?: ResultLogEntry[];
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
+  /** Round 978: international duty this season (src/lib/clubManagerInternationals.ts).
+      Absent on every older save, and absent means no windows until the next
+      season, which startNextSeason writes one for. */
+  intl?: IntlDuty;
   /** Round 73: player ids you promised a start; break it and they notice. */
   promisedStarts?: string[];
   /** Round 116: the youth setup, the scouts on the road and the kids on the books. */
@@ -8011,6 +8023,12 @@ function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>
   state.inbox = inbox.slice(0, 8);
 }
 
+/** Round 978: play every international window the save has reached and post
+ *  your assistant's note on who went. Draws nothing from the seeded stream. */
+function runIntlBreaks(state: CareerState): void {
+  for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
+}
+
 /** Rolled after each match: someone in the squad has something to say. */
 function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean, margin: number): void {
   const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
@@ -8497,6 +8515,19 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       /* The takeover lives in clubManagerCalendar.ts and the hook routes this
          answer there before it ever reaches this switch. Unchanged here. */
       return career;
+
+    /* ---- Round 978: back from international duty ---- */
+    case 'restIntl':
+    case 'startIntl': {
+      const answer = answerBreak(career, opt.effect === 'restIntl');
+      return {
+        ...career,
+        ...(answer ? { intl: answer.intl } : {}),
+        inbox: inbox.map(m => (m.id === messageId
+          ? { ...m, resolved: answer ? answer.resolved : 'That game has been and gone.' }
+          : m)),
+      };
+    }
   }
 
   return {
@@ -11919,17 +11950,22 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
   const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
   const used = new Set<string>();
   const out: XiSlot[] = [];
+  /* Round 978: the men you rested for the match after an international
+     break sit this one out, and the slot fills the same way as for an
+     injured man. Empty on every other match, so this is the old rule there. */
+  const resting = restingIds(state);
   formation.slots.forEach((slot, i) => {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
-    if (!p || !isAvailable(p) || used.has(p.id)) {
+    if (!p || !isAvailable(p) || used.has(p.id) || resting.has(p.id)) {
       /* Round 505: the best available man for the slot as the match will
          read him, his rating less the price he pays there (a natural fit
          pays nothing, so he still comes first at equal rating), and a
          position he has retrained into counts as natural. */
-      p = state.squad
-        .filter(x => isAvailable(x) && !used.has(x.id))
+      const best = (pool: CMPlayer[]) => pool
         .sort((a, b) => (b.rating - fitPenalty(b, slot)) - (a.rating - fitPenalty(a, slot)) || b.rating - a.rating)[0];
+      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
+      p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
     if (p) {
       used.add(p.id);
@@ -12018,6 +12054,13 @@ function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
   const condition = clamp((fit - 78) * 0.14 + (mor - 68) * 0.06, -7, 4);
   const formBonus = state.form.reduce((s, f) => s + (f === 'W' ? 0.7 : f === 'L' ? -0.7 : 0), 0);
   return avg + condition + formBonus;
+}
+
+/** Round 978: the strength the eleven that would take the field right now
+ *  plays at, by the engine's own rule. Read by scripts/simCmInternationals.mjs
+ *  to price an international break; no screen depends on it. */
+export function matchStrengthNow(state: CareerState): number {
+  return myMatchStrength(state, effectiveXIWithSlots(state));
 }
 
 function scorerWeight(p: CMPlayer): number {
@@ -16019,6 +16062,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   /* Round 505: day one armband and takers, so the tactics screen has them before a ball is kicked. */
   ensureSetPieces(state);
+  /* Round 978: this season's international windows. */
+  state.intl = freshIntl(state);
   generateHeadlines(state);
   return state;
 }
@@ -16068,11 +16113,18 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureBoardAsks(state);
   // Round 505: and the armband and the set piece takers.
   ensureSetPieces(state);
+  // Round 978: and a damaged international block goes, that block alone.
+  ensureIntl(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
        same loop, so a tap on a quiet Tuesday never plays the match after it. */
     if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
+    /* Round 978: an international window the calendar has reached is played
+       before the next entry. Normally the hook after my match below has
+       already done it, so this only catches a break that falls between two
+       entries the world plays without me. */
+    if (!state.live) runIntlBreaks(state);
     /* Round 504: a match already kicked off and paused (the save closed mid
        match) is picked back up, never kicked off a second time over the top
        of itself. The quick sim finishes it without you, which is what a
@@ -16162,6 +16214,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     }
     const report = playMyMatch(state, entry, live);
     state.week = live.week + 1;
+    /* Round 978: the break, if it falls before my next entry, happens now,
+       so the note on who went is waiting before the match they come back
+       for and you can rest them. */
+    runIntlBreaks(state);
     return { state, kind: 'match', report };
   }
   return { state, kind: 'seasonOver' };
@@ -16505,6 +16561,8 @@ export function resumeMatch(career: CareerState): PlayResult {
   state.live = null;
   const report = playMyMatch(state, entry, live);
   state.week = live.week + 1;
+  /* Round 978: same hook as the quick sim's, see playNextEntry. */
+  runIntlBreaks(state);
   return { state, kind: 'match', report };
 }
 
@@ -18292,6 +18350,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
+  /* Round 978: the new season's international windows. An older save gets its
+     first block here, so its first season with windows is a whole one. */
+  state.intl = freshIntl(state);
   generateHeadlines(state);
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
@@ -18497,6 +18558,9 @@ export function loadCareer(): CareerState | null {
        all read the world year now, so it has to be right before any of them
        renders rather than at the first kick off. */
     ensureClock(parsed);
+    /* Round 978: a damaged international block goes on the way in, so the
+       squad screen never reads half of one. */
+    ensureIntl(parsed);
     /* Round 462: the pair ledger, empty and honest on a save from before it
        existed, and the round of 16 week an era save's old calendar lacks,
        both before any screen reads the table or the calendar. */
