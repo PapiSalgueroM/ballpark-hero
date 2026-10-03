@@ -1,4 +1,17 @@
-# Project state
+#937 Recovery Suite accepted in source, 2026-10-02.
+Four matching owned services now reduce their actual simulated injury risk
+by25% once; no new RNG, duplicate stacking or unowned change. Shop copy
+quotes the effect and says injuries still happen.25 outcomes, before16
+rejects/nine held, ten effective controls and independent853 review pass.
+Normal grid11,600 paired seasons; JSON and liquidation paths covered.
+Parent type/build,15 built readers and16 career/source families pass.
+Two process faults retained and retried serially, never credited as passes.
+Receipt: docs/audits/CAREER-RECOVERY-SUITE-RECEIPT-2026-10-02.md.
+Claude: include with905/906 in Release Z, preserve your917to920 tiny
+engine deck hunks and run the merged tree gate. No native or live claim.
+938 final finance acceptance continues;939/966/967 draft repairs active.
+
+ Project state
 
 Codex CLAIMS966/967, MLB/NHL current draft-capital consequences, 2026-10-02.
 Actual accepted trades and eight unchanged Board fixtures verified that

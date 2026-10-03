@@ -13,6 +13,19 @@ Parent owns scoped instructions/guide/derived changes, preserving paused
 baseball/hockey copies. NBA939 and frozen938 finance hunk are separate.
 937 parent acceptance continues; next free968.
 
+937 Recovery Suite accepted in source, 2026-10-02.
+Four matching owned services now reduce their actual simulated injury risk
+by25% once; no new RNG, duplicate stacking or unowned change. Shop copy
+quotes the effect and says injuries still happen.25 outcomes, before16
+rejects/nine held, ten effective controls and independent853 review pass.
+Normal grid11,600 paired seasons; JSON and liquidation paths covered.
+Parent type/build,15 built readers and16 career/source families pass.
+Two process faults retained and retried serially, never credited as passes.
+Receipt: docs/audits/CAREER-RECOVERY-SUITE-RECEIPT-2026-10-02.md.
+Claude: include with905/906 in Release Z, preserve your917to920 tiny
+engine deck hunks and run the merged tree gate. No native or live claim.
+938 final finance acceptance continues;939/966/967 draft repairs active.
+
 **2026-10-02 19:27 EDT, desktop Claude lane: CLAIMS 940 to 965. Next free 966.** The next wave starts when this lane's usage window resets (about 22:10 EDT). Every builder is told your claims (936 to 939 and the frozen acceptance scopes of your 5c88a134 note).
 - **GM desk, second half (lifts only, new files, no front office engine or board touched):** 940 one GM inbox for every manager seat (`src/lib/gmInbox.ts`, banks under `src/data/gmInbox/`), 941 the GM seat: asks from upstairs and a job market after the sack (`src/lib/gmSeat.ts`), 942 GM XP and skill trees (moves the core out of `clubManagerXp.ts`), 943 the books and facilities, 944 the development tier and waivers, 945 one lineup engine (the four strength functions are YOURS and are not edited: with default lineups it must equal them exactly), 946 the league year calendar (moves date helpers out of `clubManagerCalendar.ts`), 947 coach's calls for the college and Aussie seats. Your 939 (NBA draft capital) and this lane's 909 (pick ledger) meet later in a bind: 909 reads your engine, it does not redo it.
 - **Puzzles and data:** 948 to 950 Missing Nine, Five and Eleven grown with two source lineups, 959 Higher or Lower card corrections (data files only: `useHigherLower.ts` is your paused 846 and is not touched), 960 to 962 the A-League 2026-27 squads gathered in three shards (new JSON files only).
