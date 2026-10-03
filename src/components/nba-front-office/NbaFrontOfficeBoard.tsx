@@ -15,7 +15,7 @@ import {
   type NbaLeague, type NbaGmPlayer, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
-  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN,
+  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, nbaTipOffPayroll, nbaTaxBill,
   /* Round 824: new deals are priced in the money of the season they start in. */
   nbaMinContract, nbaDraftSigning,
 } from '@/lib/nbaFrontOffice';
@@ -873,6 +873,8 @@ export default function NbaFrontOfficeBoard() {
      the first round waits on a waiver; below fourteen the league fills in. */
   const tipBlock = league.round === 1 ? nbaTipOffRefusal(my) : null;
   const tipShort = league.round === 1 ? Math.max(0, NBA_TIPOFF_MIN - my.players.length) : 0;
+  const tipPayroll = nbaTipOffPayroll(my, league.cap);
+  const tipTax = view.pending ? null : nbaTaxBill(tipPayroll, league.cap, view.repeater, league.taxScale);
   const apronNote = nbaApronNote(my, league.cap, league.taxScale);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
@@ -886,7 +888,7 @@ export default function NbaFrontOfficeBoard() {
         <span className="rounded-full border border-border bg-card px-3 py-1 text-muted-foreground">Strength <b className="text-primary">{strength}</b></span>
         <span className={cn('rounded-full border border-border bg-card px-3 py-1', room < 5 ? 'text-destructive' : 'text-muted-foreground')}>Cap room <b>${room}M</b></span>
         {/* Round 722: the projected bill, all season. */}
-        <span data-tax-chip className={cn('rounded-full border border-border bg-card px-3 py-1', view.bill > 0 ? 'text-destructive' : 'text-muted-foreground')}>Tax <b>{view.bill > 0 ? `$${view.bill}M` : 'none'}</b></span>
+        <span data-tax-chip className={cn('rounded-full border border-border bg-card px-3 py-1', view.bill > 0 ? 'text-destructive' : 'text-muted-foreground')}>{view.pending ? 'Tax inactive' : 'Current tax est.'} <b>{view.pending ? 'this season' : view.bill > 0 ? `$${view.bill}M` : 'none'}</b></span>
       </div>
 
       {/* Round 180: the owner card, always visible on the hub. */}
@@ -926,12 +928,18 @@ export default function NbaFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-3">
           {/* Round 722: the shared cap panel, the NBA's tax and tip off floor passed as its descriptor. */}
           <FoCapPanel
-            headline={`Payroll $${nbaCapUsed(my)}M of $${league.cap}M`}
+            headline={`Payroll $${nbaCapUsed(my)}M of $${league.cap}M (current)`}
             dead={dead}
             note={capNote()}
             tax={view}
             roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
+          {tipShort > 0 && (
+            <div data-nba-tipoff-forecast className="mb-3 rounded-lg border border-border bg-background p-2 text-center text-[11px] text-muted-foreground">
+              <p>No other moves: {tipShort} minimum contract{tipShort === 1 ? '' : 's'} at ${nbaMinContract(league.cap)}M add{tipShort === 1 ? 's' : ''} ${Math.round((tipPayroll - view.payroll) * 10) / 10}M at tip-off.</p>
+              <p>Tip-off payroll <b className="text-foreground">${tipPayroll}M</b>. {tipTax == null ? 'No tax this season; starts next season.' : <>Tax estimate <b className="text-foreground">${tipTax}M</b>.</>}</p>
+            </div>
+          )}
           <button ref={rotationOpener} type="button" onClick={() => setRotationOpen(true)} className="mb-3 min-h-[44px] w-full rounded-lg border border-primary/50 bg-primary/10 px-3 text-xs font-bold text-primary">Set rotation</button>
           <p data-rating-legend className="mb-3 text-[11px] text-muted-foreground">
             OVR, ages, potential and contracts are simulated. {my.players.some(p => openingEvidence(p))
