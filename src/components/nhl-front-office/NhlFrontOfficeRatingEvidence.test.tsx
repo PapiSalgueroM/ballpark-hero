@@ -235,6 +235,7 @@ describe('NHL actual opening ratings and readable saved evidence', () => {
 
   it('forwards saved quote version through an actual GM pick and guarded AI draft', () => {
     const league = engine.initNhlLeague(rng(88), NHL_OPENING_RATINGS);
+    league.round = engine.NHL_FO_ROUNDS;
     const draftClass = engine.nhlDraftClass(rng(8981), 24, leagueNames(league)), chosen = draftClass[0];
     const ai = vi.spyOn(engine, 'nhlAiDraftPicks'); seed(league, 'ANA', draftClass);
     render(<NhlFrontOfficeBoard />);
