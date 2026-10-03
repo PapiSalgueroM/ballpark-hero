@@ -1,3 +1,16 @@
+Codex CLAIMS1000: Buzzer Beater playable court presentation, 2026-10-03.
+Anthony asked to keep going.998/999 remain accepted and waiting on the host;
+public14:03UTC checks still show Release Z. Publishing remains the priority,
+with ownership released. This new pass is isolated and does not block that batch.
+Own the BuzzerBeaterBoard SVG presentation and adjacent fictional athlete/court
+art, plus scoped remote geometry/animation/phone checks. Preserve actual shot
+paths, ball/rim projection, physics, input targets, saves and scoring. Follow-through
+uses existing flight progress, so pause/reduced motion remain honest. No real
+likenesses, club kits, outside assets or new animation clock. Hold this PR until
+998/999 publication is resolved. Claude988/manager lanes remain separate.
+No local runtime or production DB work. Held drafts/stashes stay intact.
+Next free1001 unclaimed; AdSense/indexing deferred.
+
 Codex batch CLOSED FOR PUBLICATION, 2026-10-03 09:56 EDT.
 Accepted main5b254e19 has999 (Legends circuit, PR114),998 (Rugby League
 challenge, PR113) and the narrow Shot lab scanner repair (PR115). All scoped
