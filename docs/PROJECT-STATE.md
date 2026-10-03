@@ -1,4 +1,30 @@
-# Project state
+#937 Recovery Suite accepted in source, 2026-10-02.
+Four matching owned services now reduce their actual simulated injury risk
+by25% once; no new RNG, duplicate stacking or unowned change. Shop copy
+quotes the effect and says injuries still happen.25 outcomes, before16
+rejects/nine held, ten effective controls and independent853 review pass.
+Normal grid11,600 paired seasons; JSON and liquidation paths covered.
+Parent type/build,15 built readers and16 career/source families pass.
+Two process faults retained and retried serially, never credited as passes.
+Receipt: docs/audits/CAREER-RECOVERY-SUITE-RECEIPT-2026-10-02.md.
+Claude: include with905/906 in Release Z, preserve your917to920 tiny
+engine deck hunks and run the merged tree gate. No native or live claim.
+938 final finance acceptance continues;939/966/967 draft repairs active.
+
+ Project state
+
+Codex CLAIMS966/967, MLB/NHL current draft-capital consequences, 2026-10-02.
+Actual accepted trades and eight unchanged Board fixtures verified that
+zero/one/four owned tokens still yield two choices and selections never
+consume tokens. NHL's real AI helper also selects with zero capital.
+966 owns MLB draft engine/Board and focused outcome proofs.967 owns NHL
+draft engine/Board and focused proofs. Keep each sport's original limited
+two batches of five rivals, salary/roster rules, old save progress and
+normal RNG outcomes. Add working zero-capital exits and exactly-once
+actions. These numeric tokens are current simulation capital, not a dated
+future-year ledger or full league draft. Preserve Claude909/MLB desk binds.
+Parent owns guide hunks and scoped derived output; paused drafts held.
+939 NBA repair stays separate from938's frozen cap-panel hunk. Next free968. Claude940 to965 reserved; conflict renumbered without source changes.
 
 936 MLB opening model accepted as unbound preparation, 2026-10-02.
 Five files retain780 exact player identities in30 clubs, dated2024/2025/
