@@ -269,9 +269,9 @@ const RankEm = () => {
         className={cn(styles.board, isCircuit && styles.circuitPage)}
         help={isCircuit ? 'none' : 'auto'}
         title={isCircuit ? 'LEGENDS CIRCUIT' : "📊 RANK 'EM"}
-        subtitle={isCircuit ? 'Three sports. Fifteen places. One run.' : 'Put five players in order by the stat, most to fewest.'}
+        subtitle={isCircuit ? circuit.phase === 'intro' ? 'Three sports. Fifteen places. One run.' : undefined : 'Put five players in order by the stat, most to fewest.'}
         headerExtra={
-          <div className="flex flex-wrap items-center justify-center gap-1 mt-4 bg-secondary rounded-xl p-1 w-fit mx-auto">
+          <div className={cn('flex flex-wrap items-center justify-center gap-1 mt-4 bg-secondary rounded-xl p-1 w-fit mx-auto', isCircuit && styles.circuitModes)}>
             {(['daily', 'unlimited'] as const).map((m) => (
               <button
                 key={m}
@@ -285,7 +285,7 @@ const RankEm = () => {
                 {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
               </button>
             ))}
-            <button onClick={enterCircuit} onKeyDown={guardRepeat} aria-pressed={isCircuit} className={cn(`rounded-lg px-3 py-1.5 text-xs font-semibold ${styles.action}`, isCircuit ? 'bg-primary text-primary-foreground' : 'text-primary hover:bg-primary/10')}>Legends circuit</button>
+            <button onClick={enterCircuit} onKeyDown={guardRepeat} aria-label="Legends circuit" aria-pressed={isCircuit} className={cn(`rounded-lg px-3 py-1.5 text-xs font-semibold ${styles.action}`, isCircuit ? 'bg-primary text-primary-foreground' : 'text-primary hover:bg-primary/10')}>{isCircuit ? 'Circuit' : 'Legends circuit'}</button>
           </div>
         }
       >
@@ -302,17 +302,17 @@ const RankEm = () => {
                 </HowToPlayPopover>
               </div>
               <div className="mb-3 grid grid-cols-3 gap-2" aria-label="Circuit progress">
-                {CIRCUIT_SPORTS.map((sport, i) => <div key={sport} className={cn('rounded-xl border px-2 py-2 text-center', i === circuitIndex ? 'border-primary bg-primary/10' : 'border-border bg-card')}>
-                  <span aria-hidden="true" className="text-xl">{['🏀', '🏒', '⚾'][i]}</span><span className="block text-xs font-bold">{sport}</span>
+                {CIRCUIT_SPORTS.map((sport, i) => <div key={sport} className={cn('rounded-xl border px-2 py-1 text-center', i === circuitIndex ? 'border-primary bg-primary/10' : 'border-border bg-card')}>
+                  <span className="flex items-center justify-center gap-1"><span aria-hidden="true" className="text-lg">{['🏀', '🏒', '⚾'][i]}</span><span className="text-xs font-bold">{sport}</span></span>
                   <span className="block text-xs text-muted-foreground">{circuit.orders[i] ? `${scoreRankGuess(circuit.orders[i]!, circuitRound(circuit, i))} / 5` : i === circuit.index && circuit.phase !== 'intro' ? 'Up now' : 'To play'}</span>
                 </div>)}
               </div>
               {saveFailed && <p role="alert" className="mb-3 rounded-lg border border-destructive/50 p-3 text-sm">Your run is open, but this browser could not save it. Keep this tab open to finish.</p>}
               {circuit.phase === 'intro' && <div className="rounded-2xl border border-primary/30 bg-card p-4 text-sm">
                 <h2 className="text-lg font-bold">Put the legends in order.</h2>
-                <p className="mt-2 text-muted-foreground">Pick five names from most to fewest. Move or remove picks before Lock order. Each exact position earns one point.</p>
-                <div className="my-3 rounded-xl bg-secondary p-3"><strong>Worked example</strong><p className="mt-1">30, 20, 10 is the right order. Put 20 first and 30 second: only 10 keeps its correct place. These are example numbers.</p></div>
-                <p className="mb-3 text-muted-foreground">Play one NBA, one NHL and one MLB board. Your picks and reveals save here; your Daily stays separate.</p>
+                <p className="mt-2 text-muted-foreground">Pick five names, most to fewest. Edit with arrows or Remove, then Lock order. One point per exact place.</p>
+                <div className="my-3 rounded-xl bg-secondary p-3"><strong>Worked example</strong><p className="mt-1">30, 20, 10 is correct. Swap 30 and 20: only 10 stays right. Example numbers, not player stats.</p></div>
+                <p className="mb-3 text-muted-foreground">Three sports, 15 places. Picks save on this device. Daily stays separate.</p>
                 <button ref={circuitAction} onClick={circuitStep} onKeyDown={guardRepeat} className={`w-full rounded-xl bg-primary px-3 py-3 font-bold text-primary-foreground ${styles.action}`}>Start circuit</button>
               </div>}
               {circuit.phase === 'done' && reviewIndex === null && <div data-circuit-result="" className="rounded-2xl border border-primary/30 bg-card p-4 text-center">
@@ -325,7 +325,7 @@ const RankEm = () => {
               </div>}
             </>}
             {(!isCircuit || circuit.phase === 'playing' || circuit.phase === 'reveal' || reviewIndex !== null) && <>
-            <div className="text-center mb-4">
+            <div className={cn('text-center', isCircuit ? 'mb-2' : 'mb-4')}>
               <p ref={circuitHeading} tabIndex={-1} className="text-sm font-bold text-primary">{round.sport} · {round.statLabel}</p>
               <p className="text-xs text-muted-foreground mt-0.5 inline-flex items-center gap-1">
                 Rank most <ArrowDown className="w-3 h-3" /> fewest
@@ -427,7 +427,7 @@ const RankEm = () => {
             )}
             {isCircuit && over && <div ref={resultRef} role="region" aria-label="Circuit round result" tabIndex={-1} data-circuit-reveal="" className={cn('rounded-2xl border border-primary/30 bg-card p-3', committed && styles.committed)}>
               <h2 className="mb-2 text-center text-lg font-bold">{correctCount} / 5 exact places</h2>
-              <ol className="space-y-1">{round.items.map((item, i) => <li key={item.name} className={cn('grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-2 py-2 text-sm', submittedOrder?.[i] === item.name ? 'bg-correct/10' : 'bg-secondary/60')}>
+              <ol className="space-y-1">{round.items.map((item, i) => <li key={item.name} className={cn('grid grid-cols-[20px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-2 py-1.5 text-sm', submittedOrder?.[i] === item.name ? 'bg-correct/10' : 'bg-secondary/60')}>
                 <strong>{i + 1}</strong><span className="min-w-0"><span className="block font-semibold">{item.name}</span><span className="block text-xs text-muted-foreground">Your #{submittedOrder!.indexOf(item.name) + 1}{submittedOrder?.[i] === item.name ? ', correct' : ''}</span></span><span className="text-right text-xs tabular-nums">{item.value.toLocaleString()}<span className="block text-muted-foreground">{round.unit}</span></span>
               </li>)}</ol>
               {reviewIndex !== null ? <button ref={circuitAction} onClick={() => { circuitFocus.current = document.activeElement; setReviewIndex(null); }} className={`mt-3 w-full rounded-xl bg-primary px-3 py-3 font-semibold text-primary-foreground ${styles.action}`}>Back to circuit results</button> : <button ref={circuitAction} onClick={circuitStep} onKeyDown={guardRepeat} className={`mt-3 w-full rounded-xl bg-primary px-3 py-3 font-semibold text-primary-foreground ${styles.action}`}>{circuit.index === 2 ? 'View circuit results' : 'Next sport'}</button>}

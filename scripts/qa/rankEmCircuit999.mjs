@@ -91,6 +91,55 @@ async function layout(page, panel, stage) {
     stage + ': full names and text fit their cards ' + JSON.stringify(row));
   return { stage, ...sizes };
 }
+async function scrollVisibilityControl(control, page, stage) {
+  const baseline = await visible(control, page, stage);
+  const before = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+  let changed, rejection;
+  try {
+    await page.evaluate(y => scrollTo({ left: scrollX, top: y, behavior: 'instant' }), before.y + baseline.box.y + baseline.box.height + 4);
+    changed = { scroll: await page.evaluate(() => ({ x: scrollX, y: scrollY })), box: await control.boundingBox() };
+    assert(changed.scroll.y > before.y + 1 && changed.box.y < baseline.box.y - 1, stage + ': control changes actual scroll and target geometry');
+    try { await visible(control, page, stage); }
+    catch (error) {
+      assert(error instanceof assert.AssertionError && error.message === stage + ': complete context is visible without driver scrolling', stage + ': only the intended visibility assertion earns control credit');
+      rejection = error.message;
+    }
+    assert(rejection, stage + ': misplaced context must be rejected');
+  } finally {
+    await page.evaluate(position => scrollTo({ left: position.x, top: position.y, behavior: 'instant' }), before);
+  }
+  const restored = await visible(control, page, stage);
+  assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), before, stage + ': original scroll is restored');
+  return { kind: 'scroll visibility', stage, baseline, before, changed, rejection, restored };
+}
+async function widthOverflowControl(row, page, panel, stage) {
+  const baseline = await layout(page, panel, stage), style = await row.getAttribute('style'), originalBox = await row.boundingBox();
+  const before = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
+  let changed, rejection;
+  try {
+    await row.evaluate(el => {
+      el.style.width = `${innerWidth * 2}px`;
+      el.style.minWidth = `${innerWidth * 2}px`;
+      el.style.maxWidth = 'none';
+    });
+    changed = { style: await row.getAttribute('style'), box: await row.boundingBox() };
+    assert(changed.style !== style && changed.box.width > originalBox.width + 1 && changed.box.x + changed.box.width > baseline.viewport + 1, stage + ': control changes row style and width');
+    try { await layout(page, panel, stage); }
+    catch (error) {
+      assert(error instanceof assert.AssertionError && (error.message === stage + ': no page overflow'
+        || error.message.startsWith(stage + ': full names and text fit their cards ')), stage + ': only the intended overflow assertion earns control credit');
+      rejection = error.message;
+    }
+    assert(rejection, stage + ': oversized result row must be rejected');
+  } finally {
+    await row.evaluate((el, previous) => previous === null ? el.removeAttribute('style') : el.setAttribute('style', previous), style);
+    await page.evaluate(position => scrollTo({ left: position.x, top: position.y, behavior: 'instant' }), before);
+  }
+  assert.equal(await row.getAttribute('style'), style, stage + ': original inline style is restored');
+  const restored = await layout(page, panel, stage);
+  assert.deepEqual(await row.boundingBox(), originalBox, stage + ': original row geometry is restored');
+  return { kind: 'width overflow', stage, baseline, originalBox, changed, rejection, restored };
+}
 const protectedState = page => page.evaluate(keys => keys.map(key => [key, localStorage.getItem(key)]), protectedKeys);
 
 try {
@@ -104,7 +153,7 @@ try {
   ]) {
     const { width, height, touch, reduced, light, restores } = profile;
     const id = `${width}-${light ? 'light' : 'dark'}-${touch ? 'touch' : 'keyboard'}${reduced ? '-reduced' : ''}`;
-    const result = { id, ...profile, rounds: [], reviews: [], restores: [], screenshots: [], layouts: [], visibility: [],
+    const result = { id, ...profile, rounds: [], reviews: [], restores: [], screenshots: [], layouts: [], visibility: [], controls: [],
       pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], protectedWrites: [] };
     report.cases.push(result);
     const context = await browser.newContext({
@@ -229,6 +278,11 @@ try {
       result.visibility.push(await visible(panel.getByText('Worked example', { exact: true }).locator('..'), page, 'intro worked example'));
       result.visibility.push(await visible(button('Start circuit'), page, 'intro start'));
       result.layouts.push(await layout(page, panel, 'intro')); await shot('intro');
+      if (width === 320) {
+        const held = await saveBytes();
+        result.controls.push(await scrollVisibilityControl(panel.getByText('Worked example', { exact: true }).locator('..'), page, 'intro worked example scroll control'));
+        assert.equal(await saveBytes(), held, 'Intro geometry control preserves circuit bytes');
+      }
       await activate(button('Start circuit'), touch); await phase('playing');
       const played = [];
       for (let index = 0; index < (light ? 1 : 3); index++) {
@@ -266,6 +320,12 @@ try {
         assert.deepEqual(saved.orders[index], order, 'One real lock persists the submitted order');
         await isolate(before); await shot('reveal-' + round.sport);
         if (index === 0) {
+          if (width === 320) {
+            const held = await saveBytes(), reveal = panel.locator('[data-circuit-reveal]');
+            result.controls.push(await scrollVisibilityControl(reveal, page, 'complete first reveal scroll control'));
+            result.controls.push(await widthOverflowControl(reveal.locator('li').first(), page, panel, 'first reveal width control'));
+            assert.equal(await saveBytes(), held, 'Reveal geometry controls preserve circuit bytes');
+          }
           const revealed = await panel.locator('[data-circuit-reveal]').innerText();
           await activate(button('Legends circuit rules'), touch);
           const dialog = page.getByRole('dialog', { name: 'Legends circuit rules', exact: true });
@@ -340,7 +400,10 @@ try {
   }
   assert.equal(report.cases.length, 4);
   assert(report.cases.every(row => row.passed), 'Every native circuit profile must pass');
+  assert.equal(report.cases.flatMap(row => row.controls).length, 3, 'All three native geometry controls must reject and restore');
 } finally {
+  const controls = report.cases.flatMap(row => row.controls);
+  report.geometryControls = { expected: 3, rejected: controls.filter(row => row.rejection).length, restored: controls.filter(row => row.restored).length };
   report.finished = new Date().toISOString(); saveReport();
   await browser?.close(); server.kill();
   fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
