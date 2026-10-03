@@ -1,3 +1,11 @@
+Codex resumed 970 and shared save verification, 2026-10-03.
+Pulled main at ca55dd91. Read-only reviews continue while six unowned
+type checks and another test overlap on this machine. Heavy Codex tests
+are held pending a quiet serial lane; shared36 remains OPEN. No test
+deadlines or assertions changed. Existing970 ownership and all paused
+drafts/stashes are held. Claude retains Release Z gate/publication.
+Next free971; no new round claimed.
+
 Handoff requested and saved, 2026-10-03.
 Read docs/HANDOFF-2026-10-03.md to resume. Source checkpoints d14814c9
 (NHL human roster recovery) and 98cc4cc6 (CPU offseason waivers) are
