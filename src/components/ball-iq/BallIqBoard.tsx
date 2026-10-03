@@ -1,14 +1,14 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Copy, X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { useBallIq } from '@/hooks/useBallIq';
 import styles from './BallIqFeedback.module.css';
 
 export function BallIqBoard() {
   const { loading, questions, index, current, status, correctCount, iq, rank, answer, next, shareText } =
     useBallIq();
-  const [copied, setCopied] = useState(false);
   const nextRef = useRef<HTMLButtonElement>(null);
   const pendingAnswer = useRef<{ index: number; id: string; chosen: string; opener: Element | null } | null>(null);
   const [cue, setCue] = useState<{ id: string; chosen: string } | null>(null);
@@ -44,14 +44,6 @@ export function BallIqBoard() {
     next();
   };
 
-  const copyShare = async () => {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked */ }
-  };
-
   if (loading) {
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
@@ -75,30 +67,20 @@ export function BallIqBoard() {
   if (status === 'finished') {
     return (
       <div className="mx-auto max-w-xl px-4 py-8">
-        <div className="rounded-2xl border border-border bg-card p-8 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Your Ball Knowledge IQ
-          </p>
-          <p className="mt-2 font-display text-7xl font-black text-primary">{iq}</p>
-          <p className="mt-1 font-display text-xl font-bold text-gold">{rank}</p>
-          <p className="mt-3 text-sm text-muted-foreground">
-            {correctCount}/{questions.length} correct
-          </p>
-
-          <div className="mt-5 flex flex-wrap justify-center gap-1 text-xl">
-            {questions.map((q, i) => (
-              <span key={i}>{q.chosen === q.clue.answer ? '🟩' : '🟥'}</span>
-            ))}
-          </div>
-
-          <button
-            onClick={copyShare}
-            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? 'Copied!' : 'Share my IQ'}
-          </button>
-        </div>
+        {/* Round 951: the test ends on the shared result moment, the answer
+            review stays under it. The state follows the game's own rank
+            bands: Solid ball knowledge (105) or better is a win, Casual (85)
+            a good try, below that not this time. */}
+        <ResultScreen
+          outcome={iq >= 105 ? 'win' : iq >= 85 ? 'close' : 'loss'}
+          score={iq}
+          scoreLabel="Ball Knowledge IQ"
+          outcomeEmoji="🧠"
+          headline={rank}
+          statLine={`${correctCount}/${questions.length} correct`}
+          emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
+          share={{ score: `IQ ${iq}`, gameName: 'Ball Knowledge IQ', gamePath: '/ball-iq', customText: shareText }}
+        />
 
         <div className="mt-6 space-y-2">
           {questions.map((q, i) => {

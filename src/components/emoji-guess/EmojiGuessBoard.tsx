@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from 'react';
-import { Check, Copy, Lightbulb } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 import { GameNav } from '@/components/game/GameNav';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { useEmojiGuess } from '@/hooks/useEmojiGuess';
 import styles from './EmojiGuessFeedback.module.css';
 
@@ -15,10 +16,9 @@ export function EmojiGuessBoard() {
   const { rounds, index, current, finished, totalScore, solvedCount, hintVisible, guess, next, shareText } =
     useEmojiGuess();
   const [input, setInput] = useState('');
-  const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
-  const shareRef = useRef<HTMLButtonElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
   const live = useRef({ index, current, finished });
   const pending = useRef<{ kind: 'guess' | 'next'; index: number; id: string; count: number; opener: Element | null } | null>(null);
   const [cue, setCue] = useState<{ kind: 'miss' | 'solved' | 'failed' | 'next' | 'result'; id: string; count: number } | null>(null);
@@ -34,7 +34,8 @@ export function EmojiGuessBoard() {
       target = current.done ? nextRef.current : inputRef.current;
     } else if (request.kind === 'next' && index === request.index + 1) {
       setCue({ kind: finished ? 'result' : 'next', id: current?.puzzle.id ?? request.id, count: 0 });
-      target = finished ? shareRef.current : inputRef.current;
+      /* The shared card's first button is its Share result. */
+      target = finished ? resultRef.current?.querySelector<HTMLButtonElement>('button') ?? null : inputRef.current;
     }
     const active = document.activeElement;
     if (target && (active === request.opener || active === document.body || !active?.isConnected)) target.focus({ preventScroll: true });
@@ -50,8 +51,10 @@ export function EmojiGuessBoard() {
     return () => window.clearTimeout(timer);
   }, [cue]);
 
-  const guardRepeat = (event: KeyboardEvent<HTMLInputElement | HTMLButtonElement>) => {
-    if (event.repeat && (event.key === 'Enter' || (event.key === ' ' && event.currentTarget.tagName === 'BUTTON'))) event.preventDefault();
+  /* Reads the key's target, not the listener, so the result card's wrapper
+     guards the shared share buttons exactly as the board's own controls are. */
+  const guardRepeat = (event: KeyboardEvent<HTMLElement>) => {
+    if (event.repeat && (event.key === 'Enter' || (event.key === ' ' && (event.target as HTMLElement).tagName === 'BUTTON'))) event.preventDefault();
   };
   const submitGuess = () => {
     if (!input.trim() || !current || current.done || pending.current || live.current.finished || live.current.index !== index || live.current.current?.guesses.length !== current.guesses.length) return;
@@ -65,45 +68,24 @@ export function EmojiGuessBoard() {
     next();
   };
 
-  const copyShare = async () => {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked, text on screen */ }
-  };
-
   if (finished) {
     return (
       <div className={`mx-auto max-w-xl px-4 py-8 ${styles.board}`} data-emoji-phase="finished">
-        <div data-emoji-cue={cue?.kind === 'result' ? 'result' : undefined} className={`rounded-2xl border border-border bg-card p-6 text-center ${cue?.kind === 'result' ? styles.success : ''}`}>
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Today's result
-          </p>
-          <p className="mt-3 font-display text-5xl font-black text-primary">{totalScore}</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            points · {solvedCount}/{rounds.length} solved
-          </p>
-          <p role="status" aria-live="polite" className="sr-only">{cue?.kind === 'result' ? `${totalScore} points. ${solvedCount} of ${rounds.length} puzzles solved.` : ''}</p>
-          <div className="mt-4 flex justify-center gap-1 text-2xl">
-            {rounds.map((r, i) => (
-              <span key={r.puzzle.id} role="img" aria-label={`Puzzle ${i + 1}: ${r.solved ? `${r.points} points` : 'missed'}`}>
-                {!r.solved ? '🟥' : r.points === 100 ? '🟩' : r.points === 60 ? '🟨' : '🟧'}
-              </span>
-            ))}
-          </div>
-          <p className="mt-2 text-[11px] text-muted-foreground">
-            🟩 first try · 🟨 second · 🟧 third · 🟥 missed
-          </p>
-          <button
-            ref={shareRef}
-            onClick={copyShare}
-            onKeyDown={guardRepeat}
-            className={`mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90 ${styles.action}`}
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? 'Copied!' : 'Share result'}
-          </button>
+        {/* Round 951: today's five end on the shared result moment, which is
+            the one status a screen reader hears. The wrapper keeps the fresh
+            finish cue (never set on a restore) and the held key guard for the
+            share row. Most puzzles solved is a win, any solved a good try. */}
+        <div ref={resultRef} data-emoji-cue={cue?.kind === 'result' ? 'result' : undefined} onKeyDown={guardRepeat}>
+          <ResultScreen
+            outcome={solvedCount * 2 > rounds.length ? 'win' : solvedCount > 0 ? 'close' : 'loss'}
+            score={totalScore}
+            scoreLabel={`points · ${solvedCount}/${rounds.length} solved`}
+            outcomeEmoji="🤔"
+            headline="Today's result"
+            funFact="🟩 first try · 🟨 second · 🟧 third · 🟥 missed"
+            emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
+            share={{ score: `${totalScore} pts`, gameName: 'Emoji Guess', gamePath: '/emoji-guess', customText: shareText }}
+          />
         </div>
 
         <div className="mt-6 space-y-2">

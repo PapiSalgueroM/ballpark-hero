@@ -162,19 +162,22 @@ describe('actual Sports Quiz Board access and committed feedback', () => {
     for (const value of VALUES) answer(view, value, '');
     expect(scoreNode(view)).toHaveTextContent('$-3000');
     expect(view.getByText('5/5 answered')).toBeVisible();
-    expect(view.getByText('Board cleared').nextElementSibling).toHaveTextContent('$0');
+    expect(view.getByRole('heading', { name: 'Board cleared' })).toBeVisible();
+    expect(view.container.querySelector('[data-result-score]')).toHaveTextContent('$0');
+    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'loss');
     expect(stored().score).toBe(-3000);
     expect(stored().results).toEqual(Object.fromEntries(VALUES.map(value => [`fixture-${value}`, false])));
     expect(vi.mocked(useGameCompletion).mock.calls.at(-1)).toEqual(['jeopardy', true, 0, 0]);
-    await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Share score' })); });
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: 'Share result' })); });
     expect(writeText).toHaveBeenCalledExactlyOnceWith('Sports Quiz Board, 2026-09-30\n🟥🟥🟥🟥🟥\n$0\ndouknowball.com/quiz-board');
   });
 
   it('restores a completed winning board quietly with the original completion and share truth', async () => {
     localStorage.setItem(KEY, JSON.stringify({ results: Object.fromEntries(VALUES.map(value => [`fixture-${value}`, true])), score: 3000 }));
     const view = draw();
-    await waitFor(() => expect(view.getByText('Board cleared')).toBeVisible());
-    expect(view.getByText('Board cleared').nextElementSibling).toHaveTextContent('$3000');
+    await waitFor(() => expect(view.getByRole('heading', { name: 'Board cleared' })).toBeVisible());
+    expect(view.container.querySelector('[data-result-score]')).toHaveTextContent('$3000');
+    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'win');
     expect(view.getAllByRole('group')).toHaveLength(5);
     expect(view.container.querySelector('[data-quiz-feedback]')).toBeNull();
     expect(view.queryByRole('button', { name: /Fictional showcase, \$/ })).toBeNull();

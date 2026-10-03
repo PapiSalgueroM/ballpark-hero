@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, Copy, Package, Trash2 } from 'lucide-react';
+import { Package, Trash2 } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
+import { ResultScreen } from '@/components/game/ResultScreen';
 import { playerRating } from '@/lib/squadDeal';
 import { TOTAL_PACKS, useMysteryBox } from '@/hooks/useMysteryBox';
 import type { PackTier } from '@/lib/fetchPackPool';
@@ -21,7 +22,6 @@ export function MysteryBoxBoard() {
     loading, formation, packIndex, current, revealed, squad, compatibleSlots,
     discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
   } = useMysteryBox();
-  const [copied, setCopied] = useState(false);
   const [placedSlot, setPlacedSlot] = useState<number | null>(null);
   const previous = useRef({ packIndex, squad });
 
@@ -32,14 +32,6 @@ export function MysteryBoxBoard() {
     }
     previous.current = { packIndex, squad };
   }, [packIndex, squad]);
-
-  const copyShare = async () => {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch { /* clipboard blocked */ }
-  };
 
   if (loading) {
     return (
@@ -92,26 +84,22 @@ export function MysteryBoxBoard() {
       </div>
 
       {/* Finished */}
+      {/* Round 951: the last pack ends on the shared result moment, the XI
+          below stays as the review. A full XI is a win, a short one a good
+          try. */}
       {finished && (
-        <div className="mt-4 rounded-2xl border border-border bg-card p-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Final squad
-          </p>
-          <p className="mt-2 font-display text-6xl font-black text-primary">{rating}</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {filled}/11 filled{bestPull ? <> · best pull: <span className="font-semibold text-gold">{bestPull.name}</span></> : null}
-          </p>
-          <button
-            onClick={copyShare}
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? 'Copied!' : 'Beat my pulls'}
-          </button>
-          <p className="mt-3 text-[11px] text-muted-foreground">
-            Same boxes for everyone today, the skill is what you keep.
-          </p>
-        </div>
+        <ResultScreen
+          className="mt-4"
+          outcome={filled === 11 ? 'win' : 'close'}
+          score={rating}
+          scoreLabel="XI rating"
+          outcomeEmoji="📦"
+          headline="Final squad"
+          statLine={<>{filled}/11 filled{bestPull ? <> · best pull: <span className="font-semibold text-gold">{bestPull.name}</span></> : null}</>}
+          funFact="Same boxes for everyone today, the skill is what you keep."
+          emojiGrid={shareText.split('\n').slice(1, -2).join('\n')}
+          share={{ score: `XI ${rating}`, gameName: 'Mystery Box', gamePath: '/mystery-box', customText: shareText }}
+        />
       )}
 
       {/* Pack area */}

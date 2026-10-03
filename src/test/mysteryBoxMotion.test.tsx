@@ -197,11 +197,12 @@ describe('Mystery Box settled card and slot feedback', () => {
     expect(screen.getAllByText('48')).toHaveLength(2);
     expect(view.container.querySelector('[data-mystery-card]')).toBeNull();
     expect(view.container.querySelector('[data-placement]')).toBeNull();
-    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Beat my pulls' })));
+    /* Round 951: the shared result moment shows the same rating, and a short
+       XI is a good try, never a win. */
+    expect(view.container.querySelector('[data-result-score]')).toHaveTextContent('48');
+    expect(view.container.querySelector('[data-result-moment]')).toHaveAttribute('data-result-moment', 'close');
+    await act(async () => fireEvent.click(screen.getByRole('button', { name: 'Share result' })));
     expect(writeText).toHaveBeenCalledExactlyOnceWith(state.shareText);
-    expect(screen.getByRole('button', { name: 'Copied!' })).toBeInTheDocument();
-    act(() => vi.advanceTimersByTime(2000));
-    expect(screen.getByRole('button', { name: 'Beat my pulls' })).toBeInTheDocument();
     vi.unstubAllGlobals();
   });
 });
