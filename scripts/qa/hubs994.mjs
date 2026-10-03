@@ -43,13 +43,16 @@ try {
         await locator.scrollIntoViewIfNeeded();
         const box = await locator.boundingBox();
         assert.ok(box && box.height >= 44 && box.width >= 30, 'Hub action has a usable native target');
-        if (touch) await locator.tap();
+        let scroll;
+        if (touch) { scroll = await page.evaluate(() => ({ x: scrollX, y: scrollY })); await locator.tap(); }
         else {
           await locator.focus();
           await page.keyboard.press('Tab'); await page.keyboard.press('Shift+Tab');
           assert.ok(await locator.evaluate(element => document.activeElement === element), 'Tab returns to the intended usable control');
+          scroll = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
           await page.keyboard.press('Enter');
         }
+        return scroll;
       };
       const enter = async value => {
         const input = surface.getByRole('textbox');
@@ -89,17 +92,22 @@ try {
           const selected = games.filter(game => game[flag]);
           if (selected.length) { await activate(surface.getByRole('button', { name: new RegExp(`^${label}`) })); assert.deepEqual(await shown(), want(selected)); await layout(label); }
         }
-        await enter('zzzx994-no-such-game');
+        await enter('z'.repeat(160));
         assert.deepEqual(await shown(), []);
+        await layout('long-query');
         assert.ok(await surface.getByRole('button', { name: 'Pick a game for me' }).isDisabled());
-        await activate(surface.getByRole('button', { name: `Show all ${hub.navLabel} games` }));
+        const resetScroll = await activate(surface.getByRole('button', { name: `Show all ${hub.navLabel} games` }));
+        assert.ok(await surface.getByRole('textbox').evaluate(input => document.activeElement === input), 'Reset immediately restores search focus');
+        assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), resetScroll, 'Reset focus preserves the current scroll position');
         assert.deepEqual(await shown(), want(games));
         assert.equal(await surface.getByRole('textbox').inputValue(), '');
         const query = games.at(-1).label;
         await enter(query);
         const subset = games.filter(game => `${game.label} ${game.description}`.toLowerCase().includes(query.toLowerCase()));
         assert.deepEqual(await shown(), want(subset));
-        await activate(surface.getByRole('button', { name: 'Clear game search' }));
+        const clearScroll = await activate(surface.getByRole('button', { name: 'Clear game search' }));
+        assert.ok(await surface.getByRole('textbox').evaluate(input => document.activeElement === input), 'Clear immediately restores search focus');
+        assert.deepEqual(await page.evaluate(() => ({ x: scrollX, y: scrollY })), clearScroll, 'Clear focus preserves the current scroll position');
         assert.deepEqual(await shown(), want(games));
         await enter(query);
         await activate(surface.getByRole('button', { name: 'Pick a game for me' }));

@@ -19,6 +19,7 @@ const controls = {
   reset: ["setQuery(''); setFilter('all');", "setQuery(''); setFilter('daily');", [4]],
   random: ['visible[Math.floor(Math.random() * visible.length)]', 'games[0]', [5]],
   saves: ['const saved = games.filter(game => continuations[game.path]);', 'const saved = savedGames(window.localStorage).map(({ game }) => game);', [6]],
+  focus: ['searchRef.current?.focus({ preventScroll: true });', '', [3, 4], true],
 };
 const mode = process.env.HUB_EXPERIENCE_CONTROL || '';
 assert.ok(!mode || mode === 'all' || Object.hasOwn(controls, mode), 'Known hub control');
@@ -32,7 +33,8 @@ try {
     if (current) {
       const [anchor, replacement] = controls[current];
       assert.ok(source.includes(anchor), `Executable source contains the ${current} control anchor`);
-      actual = source.replace(anchor, replacement);
+      if (controls[current][3]) assert.equal(source.split(anchor).length - 1, 2, 'Both clear and reset focus bindings are controlled');
+      actual = controls[current][3] ? source.replaceAll(anchor, replacement) : source.replace(anchor, replacement);
       assert.notEqual(actual, source, 'The source control changed actual code');
     }
     const built = await build({

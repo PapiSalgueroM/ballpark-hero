@@ -52,7 +52,8 @@ const cases: [string, () => void][] = [
         const needle = query.toLowerCase();
         assert.deepEqual(paths(view), expected(item.games.filter(game => `${game.label} ${game.description}`.toLowerCase().includes(needle))));
       }
-      fireEvent.click(view.getByRole('button', { name: 'Clear game search' }));
+      const clear = view.getByRole('button', { name: 'Clear game search' }); clear.focus(); fireEvent.click(clear);
+      assert.ok(document.activeElement === view.getByRole('textbox'), 'Clear returns keyboard focus to search immediately');
       assert.deepEqual(paths(view), expected(item.games));
       cleanup();
     }
@@ -64,7 +65,8 @@ const cases: [string, () => void][] = [
       enter(view, 'zzzx994-no-such-game');
       assert.deepEqual(paths(view), []);
       assert.equal((view.getByRole('button', { name: 'Pick a game for me' }) as HTMLButtonElement).disabled, true);
-      fireEvent.click(view.getByRole('button', { name: `Show all ${item.hub.navLabel} games` }));
+      const reset = view.getByRole('button', { name: `Show all ${item.hub.navLabel} games` }); reset.focus(); fireEvent.click(reset);
+      assert.ok(document.activeElement === view.getByRole('textbox'), 'Reset returns keyboard focus to search immediately');
       assert.equal((view.getByRole('textbox') as HTMLInputElement).value, '');
       assert.equal(filter(view, 'All games').getAttribute('aria-pressed'), 'true');
       assert.deepEqual(paths(view), expected(item.games));
