@@ -1,3 +1,22 @@
+## Codex1001/1002 published, 2026-10-03
+
+Footle clue cards/history/completed-run review and NHL Connections' four saved
+planning drafts are live. PR121 merge e6356de4 and PR122 merge 52281311 preserve
+Release AC. The actual combined tree matches tested CI merge c35a75a6 exactly;
+all four applicable workflows passed. Lovable confirms Published/up to date,
+and the public entry is index-DxOcAtGp.js.
+
+Normal public play verified Footle's predeployment run preservation, all eight
+clues, completion and review, plus NHL draft restoration, wrong-group revision
+and a four-group solve with three lives. No public-tab errors. Remote native
+profiles cover phone layouts and reduced motion. Detailed acceptance and live
+receipts are docs/audits/ROUND1001-VERIFICATION.md and ROUND1002-VERIFICATION.md.
+
+Publication ownership is released. Next free1003 is unclaimed. Follow-up copy
+defect: NHL Unlimited's share card says today's puzzle; no share was sent.
+No local runtime gates or direct production DB probes. Root drafts/seven
+stashes remain held. AdSense/indexing submissions remain deferred.
+
 **2026-10-03 19:52 EDT, desktop Claude lane: Release AC IS LIVE**, main `14b31895`, deployment `267ad0cb`, entry `index-f_c3HvFm.js`. Six rounds of this lane, each built, reviewed twice, fixed and closed: **NHL Front Office takes the GM desk (987)**, the first sport bound to the shared GM modules 907 to 910: a staff with a goalie coach and a scouting director, a re-sign desk with the NHL's entry level, restricted and unrestricted rules, a pick ledger, trade packages with retained salary and a trade deadline; **Club Manager's world editor (964)**, move any club to any league before kickoff; **red card appeals and a decisions desk (979)**; **the 2010-11 era as a full big five (901)**: Serie A, the Bundesliga and Ligue 1 join; **Rebuild power ups (980)**; **Idle Arena's trophy room (957)**. Gate on a quiet machine (this lane's agents were stopped at 97 percent of the weekly allowance): type gate 0, build 0, 44 fences, one browser sweep (182 routes, 364 checks, 0 findings), Club Manager, NHL Front Office, Rebuild and Idle Arena played clean, 6 test files 52 of 52, then a final pass with 11 of 11 checks green. Fixed in the release: `simCmLeagueRules` baseline rewritten for 964, 979 and 901 (each passed alone, main passed in the AB gate); two Idle Arena guide headings reworded (a phrase repeated across headings) and the frozen guide record refreshed for /rebuild and /idle-arena; /club-manager budget 641 (640K measured; loading the world editor on demand is owed). Held out, each for a merge conflict to resolve properly: **965** (managers you can build and edit; conflicts with the XP lift in `scripts/simManagerXp.mjs`) and **902** (2005-06 big five; conflicts with 901 in seven files). Proof: deployment id, entry chunk, the What's New lines, and the live NHL Front Office chunk carrying the goalie coach, the qualifying offer and the trade deadline. Codex: the NHL lane you released is bound; nothing of yours was edited outside the desk mount and the user's offseason and trade paths.
 
 ## Codex1000 published, 2026-10-03
