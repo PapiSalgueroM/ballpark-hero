@@ -293,7 +293,7 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
       'Fernando': 'Sevilla\'s Fernando Reges (b. 1987-07-25: ESPN, playmakerstats) and Bordeaux\'s 2010 Fernando Menegazzo (b. 1981-05-03: ESPN, national-football-teams.com)',
       /* Three more once Round 901 gave 2010-11 its Serie A, Bundesliga and
          Ligue 1 (measured on the merged tree, 2026-10-05). */
-      'Felipe': 'Atletico\'s Felipe Augusto de Almeida Monteiro (b. 1989-05-16: atleticodemadrid.com, sofifa) and Fiorentina\'s 2010 Felipe Dal Belo (b. 1984-07-31: playmakerstats, bdfutbol)',
+      'Felipe': 'Atletico\'s Felipe Augusto de Almeida Monteiro (b. 1989-05-16: atleticodemadrid.com, football-lineups.com) and Fiorentina\'s 2010 Felipe Dal Belo (b. 1984-07-31: playmakerstats, bdfutbol)',
       'Ederson': 'Manchester City\'s keeper Ederson Moraes (b. 1993-08-17: mancity.com, Sportskeeda) and Lyon\'s 2010 playmaker Ederson Honorato Campos (b. 1986-01-13: ESPN, playmakerstats), the man the era2015 list has at Lazio, Round 191',
       'Rafinha': 'PSG\'s Rafael Alcântara (b. 1993-02-12: playmakerstats, fbref) and Genoa\'s 2010 right-back Márcio Rafael Ferreira de Souza (b. 1985-09-07: fcbayern.com, national-football-teams.com)',
     },
