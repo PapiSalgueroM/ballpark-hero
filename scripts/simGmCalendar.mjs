@@ -164,11 +164,11 @@ console.log('1) Club Manager\'s date helpers and calendar replay the pre-lift fi
   if (fixture.careers.length !== now.careers.length) fail('career count changed');
   fixture.careers.forEach((rec, i) => {
     const got = now.careers[i];
-    for (const k of ['entryDates', 'seasonDays', 'monthGrid', 'taps']) cmp(`${rec.club} ${k}`, rec[k], got[k]);
+    for (const k of ['entryDates', 'seasonDays', 'monthGrid', 'dateRule']) cmp(`${rec.club} ${k}`, rec[k], got[k]);
     compared += 1;
     if (rec.fastForwards !== got.fastForwards) fail(`${rec.club} fast forwards changed`);
   });
-  console.log(`   ${compared} sections compared against the record from ${fixture.recordedFrom}, ${fixture.days.lines} days, taps ${fixture.careers.map(c => c.taps.lines).join('/')}`);
+  console.log(`   ${compared} sections compared against the record from ${fixture.recordedFrom}, ${fixture.days.lines} days, date rule ${fixture.careers.map(c => c.dateRule.lines).join('/')}`);
 }
 
 const G = B.gm;

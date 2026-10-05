@@ -46,4 +46,4 @@ if (!sha) { try { sha = execSync('git rev-parse --short=8 HEAD', { cwd: ROOT }).
 const fixture = { recordedFrom: sha, note: 'Round 946 pre-lift record of the Club Manager date helpers and calendar; see scripts/lib/calDateProbe946.mjs', ...data };
 const out = process.env.CALDATE_FIXTURE_OUT || path.join(ROOT, 'scripts/data/calDateFixture946.json');
 fs.writeFileSync(out, JSON.stringify(fixture, null, 1) + '\n');
-console.log(`wrote ${out}: ${data.days.lines} days, ${data.careers.length} careers, taps ${data.careers.map(c => c.taps.lines).join('/')}`);
+console.log(`wrote ${out}: ${data.days.lines} days, ${data.careers.length} careers, date rule ${data.careers.map(c => c.dateRule.lines).join('/')}`);

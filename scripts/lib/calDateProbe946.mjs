@@ -13,7 +13,9 @@
  *    date of every entry, the season's days, every month of the grid at all
  *    three training intensities, the four fast forwards, and a chain of taps
  *    (simToDate) every ten days to the end of the season, each tap's halt,
- *    week and save hash.
+ *    week, last fixture and a hash of the calendar fields of the save (not
+ *    the whole save: since the fixer pass of 2026-10-03, after Round 978's
+ *    new save field turned every tap red without moving a date).
  *
  * scripts/recordCalDateFixture946.mjs ran this once against origin/main
  * before anything moved; scripts/simGmCalendar.mjs section 1 replays it
@@ -86,7 +88,7 @@ export function probeCalDate(mods) {
   try {
     for (const [club, era, seed] of CAREERS) {
       Math.random = mulberry(seed);
-      let s = cm.startCareer(club, era);
+      const s = cm.startCareer(club, era);
       const rec = { club, era, seed };
       const wy = cal.worldYearOf(s);
       const entryDates = cal.dateOfEntries(wy, s.calendar);
@@ -104,18 +106,24 @@ export function probeCalDate(mods) {
       rec.monthGrid = section(grid);
       rec.fastForwards = norm(cal.fastForwardTargets(s, sd));
 
-      /* A chain of taps, every ten days from the season's start to its end. */
-      const taps = [];
-      let date = sd.seasonStart;
-      for (let i = 0; i < 40; i++) {
-        date = cal.addDays(date, 10);
-        const run = cal.simToDate(s, date);
-        if (!run) { taps.push(`${fmt(date)} none week${s.week}`); continue; }
-        s = run.state;
-        taps.push(`${fmt(date)} halt=${run.halt} week${s.week} last=${run.lastReport ? norm(run.lastReport).length : 0} save=${sha(norm(s))}`);
-        if (run.halt === 'seasonOver' || run.halt === 'sacked') break;
+      /* The tap rule, simToDate's step from a day to a week: for every week
+         the save can sit on and every day from a week before the season to a
+         week after it, the week a tap plays to (or none). Pure calendar. Until
+         the fixer pass of 2026-10-03 this was a chain of real taps through the
+         engine with a hash of the whole save, which tied the record to every
+         Club Manager engine change: Round 978 added a save field and moved
+         one career's approach halts without moving a single date, and every
+         tap went red. simToWeek, the loop behind a tap, did not move in the
+         lift; scripts/simClubManagerCalendar.mjs plays it. */
+      const rule = [];
+      const from = cal.addDays(sd.seasonStart, -7);
+      const span = cal.daysBetween(from, cal.addDays(sd.seasonEnd, 7));
+      for (let w = 0; w <= s.calendar.length; w++) {
+        const t = [];
+        for (let i = 0; i <= span; i++) t.push(cal.targetWeekForDate(entryDates, w, cal.addDays(from, i)) ?? '-');
+        rule.push(`w${w} ${t.join(',')}`);
       }
-      rec.taps = section(taps);
+      rec.dateRule = section(rule);
       out.careers.push(rec);
     }
   } finally {
