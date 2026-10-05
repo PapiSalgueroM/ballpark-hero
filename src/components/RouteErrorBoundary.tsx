@@ -65,7 +65,9 @@ export class RouteErrorBoundary extends Component<Props, State> {
      dated backup key first (src/lib/brokenSaveRecovery.ts copies it, reads the
      copy back, and only then removes the original), then opens the game's own
      address, which with no save is its start screen. If the copy fails nothing
-     is removed and the screen says so. */
+     is removed and the screen says so. This screen cannot tell a broken save
+     from a code bug, so the move is reversible: on the game's page
+     src/components/BrokenSaveRestore.tsx offers the backup back. */
   startFresh = () => {
     const entry = this.state.recover;
     if (!entry) return;
