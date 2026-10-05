@@ -1,0 +1,101 @@
+name: Career decision outcome verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-decision-outcome.yml
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/us-career/CareerDecisionOutcome.tsx
+      - src/lib/usCareerDecisionOutcome.ts
+      - src/lib/usCareerSport.ts
+      - src/lib/*CareerSport.ts
+      - src/test/careerDecisionOutcome.test.tsx
+      - src/test/fixtures/careerDecisionOutcome1009.ts
+      - scripts/simCareerDecisionOutcome.mjs
+      - scripts/qa/careerDecisionOutcome1009.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: career-decision-outcome-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install verification dependencies
+        run: |
+          mkdir -p career-decision-outcome-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-decision-outcome-artifacts/types.log
+          npm run build 2>&1 | tee career-decision-outcome-artifacts/build.log
+      - name: Generate candidate update snapshot
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee career-decision-outcome-artifacts/snapshot.log
+          node scripts/genSitemap.mjs 2>&1 | tee career-decision-outcome-artifacts/sitemap-generation.log
+          mkdir -p career-decision-outcome-artifacts/generated/public/whats-new career-decision-outcome-artifacts/generated/scripts/data
+          cp public/whats-new/index.html career-decision-outcome-artifacts/generated/public/whats-new/
+          cp public/sitemap.xml career-decision-outcome-artifacts/generated/public/
+          cp scripts/data/lastmod.json career-decision-outcome-artifacts/generated/scripts/data/
+          npm run build 2>&1 | tee career-decision-outcome-artifacts/rebuild.log
+      - name: Actual decision changes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_DECISION_OUTCOME_CONTROL=all ONLY=simCareerDecisionOutcome node scripts/runAllSims.mjs 2>&1 | tee career-decision-outcome-artifacts/review.log
+      - name: Existing careers, saves and scoring
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simNbaCareer simNflCareer simMlbCareer simNhlCareer simUsCareerRecovery simUsCareerPractice simUsCareerActionConfirm simUsCareerWeight simCareerInbox simNoDoubleRecord simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "career-decision-outcome-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Unapproved inbox cap copy still fails
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          INBOX_CONTROL=privatecap ONLY=simCareerInbox node scripts/runAllSims.mjs 2>&1 | tee career-decision-outcome-artifacts/privatecap.log
+          status=${PIPESTATUS[0]}
+          set -e
+          test "$status" -eq 1
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const output = fs.readFileSync('career-decision-outcome-artifacts/privatecap.log', 'utf8');
+          assert(output.includes('src/lib/inboxCapNegativeControl.ts carries a private copy of the drop-oldest-answered cap'));
+          assert.equal(output.split('\n').filter(line => /^\s*FAIL:/.test(line)).length, 1);
+          assert(output.includes('1 harness not green.'));
+          console.log('The injected private cap was rejected; the distinct GM week cap remains allowed.');
+          NODE
+      - name: Native career decision outcomes across four sports
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/careerDecisionOutcome1009.mjs 2>&1 | tee career-decision-outcome-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-decision-outcome-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: career-decision-outcome-artifacts/

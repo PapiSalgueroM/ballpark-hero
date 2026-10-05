@@ -64,6 +64,8 @@ import { createUsCareerProspect, loadUsCareerProspect, type UsCareerProspect } f
 import { loadPreDraft, type PreDraftState } from '@/lib/careerPreDraft';
 import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
+import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';
+import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
@@ -139,6 +141,29 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [archetypeId, setArchetypeId] = useState(sport.create.archetypes[sport.create.defaultPos][0].id);
   const [feed, setFeed] = useState<string[]>([]);
   const [pendingEvent, setPendingEvent] = useState<CareerEvent | null>(null);
+  const [decisionOutcome, setDecisionOutcome] = useState<CareerDecisionOutcomeData | null>(null);
+  const consumedEvent = useRef<CareerEvent | null>(null);
+  const decisionReturn = useRef(false);
+  useEffect(() => {
+    if (phase !== 'season') {
+      setDecisionOutcome(null);
+      decisionReturn.current = false;
+    }
+  }, [phase]);
+  useEffect(() => {
+    if (decisionOutcome || !decisionReturn.current) return;
+    decisionReturn.current = false;
+    const target = careerEntryButton.current;
+    target?.focus({ preventScroll: true });
+    if (!target) return;
+    const frame = requestAnimationFrame(() => {
+      const box = target.getBoundingClientRect();
+      if (box.top < 0 || box.bottom > window.innerHeight) target.scrollIntoView({
+        block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [decisionOutcome]);
   const [lastLine, setLastLine] = useState<SeasonLine | null>(null);
   /* Round 179: the open market. Not persisted on purpose: a reload lands on
      the season hub and the next Play click rebuilds a fresh window, the same
@@ -197,6 +222,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);
 
   useEffect(() => {
+    setDecisionOutcome(null);
+    consumedEvent.current = null;
+    decisionReturn.current = false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (!raw) return;
@@ -412,6 +440,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       return;
     }
     const ev = sport.drawEvent(c, Math.random);
+    consumedEvent.current = null;
     setPendingEvent(ev);
     setCareer(c);
     setFeed(newFeed);
@@ -420,12 +449,17 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   };
 
   const chooseOption = (idx: number) => {
-    if (!career || !pendingEvent) return;
+    if (!career || !pendingEvent || phase !== 'event' || consumedEvent.current === pendingEvent || !pendingEvent.options[idx]) return;
+    consumedEvent.current = pendingEvent;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const outcome = pendingEvent.options[idx].apply(c, Math.random);
     const tq = sport.rollTeamQuality(teamQuality, Math.random);
     setTeamQuality(tq);
     setCareer(c);
+    setDecisionOutcome(buildCareerDecisionOutcome({
+      title: pendingEvent.title, choice: pendingEvent.options[idx].label,
+      before: career, after: c, teamLabel: sport.teamLabelOf,
+    }));
     setFeed(f => [outcome, ...f].slice(0, 6));
     setPendingEvent(null);
     setPhase('season');
@@ -561,6 +595,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setFeed([]);
     setLastLine(null);
     setPendingEvent(null);
+    setDecisionOutcome(null);
+    consumedEvent.current = null;
+    decisionReturn.current = false;
     setFaWindow(null);
     setTalkLine(null);
     setDraftDay(null);
@@ -720,6 +757,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         <SeasonRevealCard reveal={reveal} onContinue={() => setReveal(null)} />
       </div>
     );
+  }
+
+  if (decisionOutcome && phase === 'season') {
+    return <CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
+      decisionReturn.current = true;
+      setDecisionOutcome(null);
+    }} />;
   }
 
   /* ------------------- Round 521: a pending rivalry beat -------------------
@@ -1077,13 +1121,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} />
         </div>
       ) : phase === 'event' && pendingEvent ? (
-        <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
+        <div ref={revealRef} data-career-decision-event={pendingEvent.id} className="rounded-2xl border border-gold/40 bg-card p-4">
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>
           <div className="mt-3 grid gap-1.5">
             {pendingEvent.options.map((o, i) => (
               <button
                 key={i}
+                data-career-decision-option={i}
                 onClick={() => chooseOption(i)}
                 className="rounded-xl border border-border bg-background px-3 py-2 text-left hover:border-primary/60"
               >
