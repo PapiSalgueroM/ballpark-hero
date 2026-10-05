@@ -16,7 +16,11 @@ import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
  * blocked) nothing is removed and the caller is told so.
  *
  * The backup key is the game's own key plus BROKEN_SAVE_MARK plus a stamp, so
- * it sorts next to the save it came from and no game ever reads it back.
+ * it sorts next to the save it came from and no game ever reads it by
+ * mistake. The way back is src/components/BrokenSaveRestore.tsx: on the
+ * game's own page it offers to put the newest backup back (restoreBackup),
+ * because the crash that led to a fresh start may have been a code bug that
+ * a later deploy fixes, and the career must still be there when it does.
  *
  * Kept out of the boundary on purpose: the boundary is the last thing standing
  * when something has already failed, and scripts/simErrorBoundary.mjs holds its
@@ -30,7 +34,7 @@ export const BROKEN_SAVE_MARK = '.broken-';
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 /** The browser's storage, or null where reading it throws (privacy modes). */
-export function browserStorage(): SaveStorage | null {
+export function browserStorage(): ListableStorage | null {
   try {
     return typeof window !== 'undefined' && window.localStorage ? window.localStorage : null;
   } catch {
@@ -126,7 +130,72 @@ export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, n
   try {
     storage.removeItem(entry.saveKey);
   } catch {
+    /* The copy landed but the original would not go. Take the copy back out,
+       so the screen's "left it where it was" stays true and a retry does not
+       stack up backups of the same save. */
+    try { storage.removeItem(backupKey); } catch { /* a duplicate copy is harmless */ }
     return { ok: false };
   }
   return { ok: true, backupKey };
+}
+
+export type ListableStorage = SaveStorage & Pick<Storage, 'length' | 'key'>;
+
+/** Stamp order, then the -2, -3 suffix of a same second start, as a number. */
+function backupOrder(key: string): [string, number] {
+  const tail = key.slice(key.indexOf(BROKEN_SAVE_MARK) + BROKEN_SAVE_MARK.length);
+  return [tail.slice(0, 19), Number(tail.slice(20)) || 1];
+}
+
+/**
+ * Every backup of this game's save in this browser, newest first. This is
+ * what keeps a fresh start reversible: a crash the save did not cause (a code
+ * bug, later fixed) must not cost the player the career for good.
+ */
+export function backupKeysOf(entry: ContinueSave, storage: ListableStorage | null): string[] {
+  if (!storage) return [];
+  const prefix = `${entry.saveKey}${BROKEN_SAVE_MARK}`;
+  const out: string[] = [];
+  try {
+    for (let i = 0; i < storage.length; i += 1) {
+      const k = storage.key(i);
+      if (k && k.startsWith(prefix)) out.push(k);
+    }
+  } catch {
+    return [];
+  }
+  return out.sort((a, b) => {
+    const [sa, na] = backupOrder(a);
+    const [sb, nb] = backupOrder(b);
+    return sa === sb ? nb - na : sa < sb ? 1 : -1;
+  });
+}
+
+/**
+ * Puts a set-aside save back under the game's own key. A save the player has
+ * now (one started since the fresh start) is set aside first, the same way,
+ * so the swap never deletes anything. The backup goes only after the restored
+ * copy reads back identical. Never throws.
+ */
+export function restoreBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null, now: Date = new Date()): { ok: boolean } {
+  if (!storage || !backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return { ok: false };
+  let raw: string | null;
+  try {
+    raw = storage.getItem(backupKey);
+  } catch {
+    return { ok: false };
+  }
+  if (raw === null) return { ok: false };
+  if (!setAsideSave(entry, storage, now).ok) return { ok: false };
+  try {
+    storage.setItem(entry.saveKey, raw);
+    if (storage.getItem(entry.saveKey) !== raw) throw new Error('restore did not read back');
+  } catch {
+    /* The backup is untouched, and the save the player had is in its own
+       backup, so nothing is lost; the game key just stays empty. */
+    try { storage.removeItem(entry.saveKey); } catch { /* nothing more to do */ }
+    return { ok: false };
+  }
+  try { storage.removeItem(backupKey); } catch { /* a duplicate copy is harmless */ }
+  return { ok: true };
 }

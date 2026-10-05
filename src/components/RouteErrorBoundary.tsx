@@ -84,8 +84,10 @@ export class RouteErrorBoundary extends Component<Props, State> {
        bug button below gives the player a way to tell us in their own words. */
     console.error('A page failed to render:', error, info.componentStack);
     /* Round 958: looked up here, once, and not in render, which stays free of
-       storage reads. Null on any route without a save in this browser. */
-    this.setState({ recover: heldSaveHere(), recoverFailed: false });
+       storage reads. Null on any route without a save in this browser, and
+       null for a chunk that failed to load: that is the network or a deploy,
+       never the save, so the reload is the only honest offer there. */
+    this.setState({ recover: isStaleChunkError(error) ? null : heldSaveHere(), recoverFailed: false });
   }
 
   componentDidUpdate(prev: Props) {
@@ -138,13 +140,14 @@ export class RouteErrorBoundary extends Component<Props, State> {
           </div>
           {this.state.recover && !this.state.recoverFailed && (
             <p className="mt-4 text-xs text-muted-foreground">
-              If trying again keeps breaking, start a fresh game. Your old save gets moved aside to a
-              backup in this browser, not deleted.
+              If trying again keeps breaking, you can start a fresh game. Your old save gets moved
+              aside to a backup in this browser, not deleted, and the game offers to put it back
+              next time you open it.
             </p>
           )}
           {this.state.recoverFailed && (
             <p role="alert" className="mt-4 text-xs text-muted-foreground">
-              Your browser would not let us copy the old save aside, so we left it exactly where it
+              Your browser would not let us move the old save aside, so we left it exactly where it
               was and did not start over.
             </p>
           )}
