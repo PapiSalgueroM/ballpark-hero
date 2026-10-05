@@ -4,6 +4,8 @@ import { ArrowLeft, Search as SearchIcon, X } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { CATEGORIES, FEATURED_GAMES, TOTAL_GAMES, type CategoryTitle } from '@/data/gameRegistry';
 import { searchSite, groupBySport, isBrowse, type SearchResult } from '@/lib/siteSearch';
+import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
+import { useGamePicks } from '@/hooks/useGamePicks';
 
 /**
  * ROUND 526: the whole site in one box.
@@ -42,6 +44,7 @@ export default function Search() {
   const [params, setParams] = useSearchParams();
   const [query, setQuery] = useState(() => params.get('q') ?? '');
   const [sport, setSport] = useState<string>(ALL_SPORTS);
+  const { paths: gamePicks, toggle: toggleGamePick, storageFailed: picksStorageFailed } = useGamePicks();
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -202,6 +205,9 @@ export default function Search() {
         </label>
       </div>
 
+      <p className="mb-3 text-xs text-muted-foreground">Pin a game to keep it on Home.</p>
+      {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
+
       <p className="text-xs text-muted-foreground mb-6" role="status">
         {browsing
           ? `${shown.length} ${shown.length === 1 ? 'game' : 'games'}, sport by sport. Start typing to narrow it down.`
@@ -225,7 +231,7 @@ export default function Search() {
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {group.results.map(result => (
-                  <ResultTile key={result.game.path} result={result} browsing={browsing} />
+                  <ResultTile key={result.game.path} result={result} browsing={browsing} pinned={gamePicks.includes(result.game.path)} onTogglePick={toggleGamePick} />
                 ))}
               </div>
             </section>
@@ -249,14 +255,20 @@ const REASON: Partial<Record<SearchResult['matchedOn'], string>> = {
    emoji-then-text shape. Copying the classes rather than inventing a second
    card style is the point: a person who has used the home grid has already
    learned this control. */
-function ResultTile({ result, browsing }: { result: SearchResult; browsing: boolean }) {
+function ResultTile({ result, browsing, pinned, onTogglePick }: {
+  result: SearchResult;
+  browsing: boolean;
+  pinned: boolean;
+  onTogglePick: (path: string) => void;
+}) {
   const { game } = result;
   const reason = browsing ? null : REASON[result.matchedOn];
   return (
+    <div className="relative h-full">
     <Link
       to={game.path}
       data-result=""
-      className="group flex items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 focus-visible:border-primary focus-visible:-translate-y-0.5 transition-all duration-200"
+      className="group flex h-full items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 pr-16 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 focus-visible:border-primary focus-visible:-translate-y-0.5 transition-all duration-200"
     >
       <span className="text-2xl shrink-0 mt-0.5" aria-hidden="true">{game.emoji}</span>
       <div className="min-w-0 flex-1">
@@ -283,6 +295,8 @@ function ResultTile({ result, browsing }: { result: SearchResult; browsing: bool
         )}
       </div>
     </Link>
+    <GamePickButton game={game} pinned={pinned} onToggle={onTogglePick} className="absolute right-1.5 top-1.5" />
+    </div>
   );
 }
 

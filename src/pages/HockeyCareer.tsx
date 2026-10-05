@@ -172,7 +172,7 @@ const HockeyCareer = () => {
               statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
               funFact={
                 <>
-                  💡 Did you know? {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
+                  💡 Did you know? {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) played for {player!.teams.length} {player!.teams.length === 1 ? 'club' : 'clubs'}.
                 </>
               }
               statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
@@ -202,7 +202,7 @@ const HockeyCareer = () => {
             "Wayne Gretzky: Oilers → Kings → Blues → Rangers, C, 2,857 points",
             "Sidney Crosby: Penguins, C, 3× Stanley Cup, 2× MVP",
             "Alexander Ovechkin: Capitals, LW, 800+ goals, Hart Trophy",
-            "Connor McDavid: Oilers, C, 4× Art Ross, 3× Hart Trophy",
+            "Connor McDavid: Oilers, C, 6× Art Ross, 3× Hart Trophy",
             "Mario Lemieux: Penguins, C, 2× Stanley Cup, 690 goals",
             "Patrick Roy: Canadiens → Avalanche, G, 4× Stanley Cup"
           ]}

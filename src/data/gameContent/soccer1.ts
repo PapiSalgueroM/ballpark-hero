@@ -149,7 +149,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
           {
             heading: "Drafting a real club and two opening envelopes",
             items: [
-              "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+              "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of twenty finance envelopes blind and live with it.",
             ],
           },
         ],
@@ -163,7 +163,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Spinning the wheel and deciding each shirt",
         items: [
-          "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
+          "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up once (only the second spin power up brings the wheel back to a shirt you already settled).",
           "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
         ],
       },
@@ -178,7 +178,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Sharing a table of two to four seats",
         items: [
-          "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
+          "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins, plus any second spin its envelopes hand it. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
         ],
       },
       {
@@ -206,7 +206,19 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Missing demands, punishment cards and new envelopes",
         items: [
           "Demands are things like three under 25s, two marquee buys, a clearout or money in the bank. They are judged on the window as you closed it, before the board's own clawback. Every miss draws a punishment card from a five card deck, without replacement: a forced sale of your best, a random exit, a 25 million clawback, a dressing room turn worth two rating points, and exactly one card that lets it go.",
-          "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a perk (a fresh scouts' list, 20 percent off your next signing, no bidding war on your next buy).",
+          "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a power up instead of money (the eight are below).",
+        ],
+      },
+      {
+        heading: "Playing the eight power ups",
+        items: [
+          "A power up sits in your pocket until you play it, and each one is used up when you do. The finance envelope can hold one, and so can any envelope that lands as you go.",
+          "Fresh list: ask the scouts for a new three, once, whenever their list is open (not during a part exchange). 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.",
+          "Second spin: between spins, bring the wheel back to a shirt you already settled (not one you bought or borrowed). A man you kept is sold, a squad man you promoted goes back to the bench, and the scouts deal a new list for the shirt.",
+          "Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell instead. You hold one veto at a time, because the whistle only takes one.",
+          "Part exchange: when the wheel lands on a man, see the scouts' three before you decide. Take one and your man goes the other way, with the new man 25 percent under his value. Call it off and he stays, but the exchange is gone.",
+          "Loan: when the scouts' list is open (not during a part exchange), borrow one of the three for the season at 40 percent of his value. He plays, nobody can sell him, he goes back after the season, and he does not count as a signing for the board's demands.",
+          "Sneak peek: see the next envelope before it lands, money or power up, so you know how hard to spend. It lands after your next transfer move or two (a sale, a signing, a loan or a promotion), so the peek is only offered while one can still come, and if the whistle goes first it never arrives.",
         ],
       },
       {
@@ -223,6 +235,16 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Setting a modest club's target on a tight pot",
         paragraphs: [
           "A modest club with a 74 rated XI makes the target 81 on a 65 million pot. The board is in a plain mood, the finance envelope is a sell on clause worth 20 million, and you hire the youth coach for 5 million. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
+        ],
+      },
+      {
+        heading: "Playing the power ups, worked through",
+        paragraphs: [
+          "Part exchange: the wheel lands on your 71 rated right back, worth 20 million. You play the exchange and the scouts show a 76 rated right back worth 40 million. Take him and he costs 30 million, your man's 20 goes the other way, so the swap costs you 10 million net for five points in the shirt.",
+          "Loan: the scouts' three for a hole at centre back include an 80 rated man worth 50 million you could never buy. A loan puts him in the XI for 20 million. If the board wants three signings, though, he is not one of them.",
+          "Second spin: you promoted a 66 rated squad man at left wing early, then an envelope brought 30 million. Play the second spin on that shirt, he goes back to the bench, and the new list has a 74 you can now afford.",
+          "Veto: you missed two demands and drew The big sale and The clawback. Send The big sale back and it is shuffled in with itself and the three cards the board has not dealt (Somebody goes, The dressing room turns, The board lets it go). It is about a one in four chance it comes straight back and about one in four it is the safe card, while The dressing room turns costs two points of rating, so it is a real call.",
+          "Sneak peek: you are about to go 40 million into the overdraft on a striker. Peek first: the next envelope is a 25 million sponsor scandal, so you take the cheaper option and finish out of debt.",
         ],
       },
       {
@@ -262,11 +284,11 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     faqs: [
       {
         q: "What order does the wheel spin in?",
-        a: "A seeded order fixed when you pick the club, hidden from you, every shirt exactly once. There is no re-spinning to reach your striker early.",
+        a: "A seeded order fixed when you pick the club, hidden from you, every shirt once. There is no re-spinning to reach your striker early: the second spin power up only brings the wheel back to a shirt you already settled.",
       },
       {
         q: "What is in the envelopes?",
-        a: "The board's envelope carries its mood, a change to the pot and the demands. The finance envelope is one of fifteen you pick blind: best case is a 60 million takeover, worst is a 35 million clause nobody read, and three of them hold a perk instead of money. The deck order is seeded per run, so there is no re-rolling your luck.",
+        a: "The board's envelope carries its mood, a change to the pot and the demands. The finance envelope is one of twenty you pick blind: best case is a 60 million takeover, worst is a 35 million clause nobody read, and eight of them hold a power up instead of money. The deck order is seeded per run, so there is no re-rolling your luck.",
       },
       {
         q: "What happens if I miss a board demand?",

@@ -28,6 +28,7 @@ import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/l
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
+import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -38,6 +39,7 @@ import { hireStaff, matchStaffOffer, releaseToPoacher, sackStaff } from '@/lib/c
 import type { StaffPostId } from '@/lib/clubManagerStaff';
 import { spendSkillPoint } from '@/lib/clubManagerXp';
 import { setStartOption } from '@/lib/clubManagerStart';
+import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
 
@@ -127,16 +129,53 @@ export function useClubManager() {
   const [bootTry, setBootTry] = useState(0);
   const retryBoot = useCallback(() => setBootTry(n => n + 1), []);
 
+  /* Round 928: the three manager slots, as read off the store without opening
+     a save, and a note when a swap was refused. slotEpoch reruns the boot
+     below after a swap, so the incoming career opens through the very same
+     path a page load takes (its era's squads first). goStraightIn is set by
+     Continue on a parked slot, so that career opens on its hub rather than
+     back on the slots screen. */
+  const [slots, setSlots] = useState<SlotView[]>([]);
+  const [slotNote, setSlotNote] = useState<string | null>(null);
+  const [slotEpoch, setSlotEpoch] = useState(0);
+  const goStraightIn = useRef(false);
+  /* Round 928 review: the slot whose career this page holds. Another tab can
+     switch managers under it, and then the index names another slot and
+     SAVE_KEY holds that slot's career, whose parked copy the swap has already
+     dropped. Every write this page makes (the effect, pagehide, unmount, a
+     tab switch, a swap of its own) checks the index against this first, and
+     a page whose slot has moved writes nothing over the other career. */
+  const ownSlot = useRef(1);
+  const holdsActiveSlot = useCallback(() => activeSlot() === ownSlot.current, []);
+
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
     let alive = true;
     const open = () => {
+      ownSlot.current = activeSlot();
       const saved = loadCareer();
+      const views = readSlots();
+      setSlots(views);
       if (saved) {
         setCareer(saved);
         if (saved.pendingSummary) setSummary(saved.pendingSummary);
+        if (goStraightIn.current) {
+          goStraightIn.current = false;
+          setPhase(saved.sacked ? 'sacked' : saved.pendingSummary ? 'seasonEnd' : 'hub');
+          setActiveTab('overview');
+        } else {
+          setPhase('resume');
+        }
+      } else if (views.some(v => v.summary)) {
+        /* Round 928: nothing playable in the active slot, but another slot
+           holds a career, so the slots screen, never a picker over them. A
+           career the player just asked for that would not open says so,
+           rather than dropping him back on the tiles without a word. */
+        if (goStraightIn.current) setSlotNote('That career would not open on this version of the game. It is still saved in its slot, and your other managers are fine.');
+        goStraightIn.current = false;
         setPhase('resume');
       } else {
+        goStraightIn.current = false;
         setPhase('clubSelect');
       }
     };
@@ -161,7 +200,7 @@ export function useClubManager() {
       },
     );
     return () => { alive = false; };
-  }, [bootTry]);
+  }, [bootTry, slotEpoch]);
 
   /* Round 634: whether the last write was refused. saveCareer swallowed every
      throw until this round, so a browser out of storage for this site, or one
@@ -178,8 +217,24 @@ export function useClubManager() {
 
   // Persist the career on every change.
   useEffect(() => {
-    if (career) note(saveCareer(career));
-  }, [career, note]);
+    if (!career) return;
+    if (!holdsActiveSlot()) {
+      /* Round 928 review: another tab switched managers. This career was
+         parked by that switch, as it stood at its last write, so nothing is
+         lost by not writing it; writing it would put it over the other one.
+         The page goes back to the slots, as read now, and says why. */
+      setCareer(null);
+      setReport(null);
+      setSummary(null);
+      setPendingClub(null);
+      setDeskNote(null);
+      setSlots(readSlots());
+      setSlotNote('You switched managers in another tab, so this one has stepped back to your managers. Pick one to carry on.');
+      setPhase('resume');
+      return;
+    }
+    note(saveCareer(career));
+  }, [career, note, holdsActiveSlot]);
 
   /* ---------- Round 567: and persist it when the page goes away ---------- */
 
@@ -216,7 +271,10 @@ export function useClubManager() {
        cannot reach the screen (the page is going), but one at a tab switch
        can, and the banner is there when the tab comes back. Same career,
        same bytes, so a write that repeats the effect's own is harmless. */
-    const write = () => { const c = careerRef.current; if (c) note(saveCareer(c)); };
+    /* Round 928 review: and never once another tab has switched managers
+       (holdsActiveSlot): closing this page must not write its career over
+       the one that tab switched in. */
+    const write = () => { const c = careerRef.current; if (c && holdsActiveSlot()) note(saveCareer(c)); };
     const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
     window.addEventListener('pagehide', write);
     document.addEventListener('visibilitychange', onHidden);
@@ -264,19 +322,132 @@ export function useClubManager() {
     setActiveTab('overview');
   }, [career]);
 
-  const startNew = useCallback(() => {
-    clearCareer();
-    /* Round 567: synchronously, not on the next commit. The handler above
-       writes whatever this ref holds when the page goes, and a player who
-       taps Start Fresh and then leaves before React has re-rendered must not
-       have the career he just deleted written back over the empty slot. */
+  /* ---------- Round 928: the manager slots ---------- */
+
+  /* The career in memory is written before anything moves, and handed to the
+     swap as the copy to park, so the parked career is the freshest one. Then
+     careerRef is emptied synchronously, for Round 567's reason: the pagehide
+     write must never put the outgoing career back over the incoming one.
+     Review: a page whose slot another tab has moved hands nothing in, so the
+     swap parks what SAVE_KEY really holds (that tab's career) under the slot
+     it really belongs to. */
+  const leaveActive = useCallback((slot: number): boolean => {
+    const out = holdsActiveSlot() ? careerRef.current : null;
+    if (out) saveCareer(out);
+    if (!switchSlot(slot, out)) {
+      setSlotNote('This browser would not save the switch, so nothing moved. Your managers are all where they were. Free up some site storage and try again.');
+      setSlots(readSlots());
+      return false;
+    }
+    ownSlot.current = slot;
+    setSlotNote(null);
     careerRef.current = null;
     setCareer(null);
     setReport(null);
     setSummary(null);
     setPendingClub(null);
+    /* Review: the transfer desk's last refusal was about the outgoing club. */
+    setDeskNote(null);
+    return true;
+  }, [holdsActiveSlot]);
+
+  /* Review: once another tab has switched managers, the career this page
+     holds sits parked in its slot as of its last write, so the copy in memory
+     is let go. Kept, its week and board were shown on the other career's tile. */
+  const letGoIfStale = useCallback(() => {
+    if (!careerRef.current || holdsActiveSlot()) return;
+    careerRef.current = null;
+    setCareer(null);
+    setReport(null);
+    setSummary(null);
+  }, [holdsActiveSlot]);
+
+  /* Review: the managers screen follows a change another tab makes to the
+     slots, so its tiles never offer what is no longer there. Only while it is
+     on screen, since every career write in another tab fires this. */
+  useEffect(() => {
+    if (phase !== 'resume') return;
+    const onStorage = () => { letGoIfStale(); setSlots(readSlots()); };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [phase, letGoIfStale]);
+
+  /** Continue a slot's career. The active one opens straight away; a parked
+   *  one is swapped in and opened through the boot, era squads first. */
+  const openSlot = useCallback((slot: number) => {
+    if (slot === activeSlot() && holdsActiveSlot() && career) { resume(); return; }
+    if (!leaveActive(slot)) return;
+    goStraightIn.current = true;
+    setPhase('boot');
+    setSlotEpoch(n => n + 1);
+  }, [career, resume, leaveActive, holdsActiveSlot]);
+
+  /** A new manager in an empty slot: the current career is parked, and the
+   *  picker starts a fresh one that lands in this slot. */
+  const newInSlot = useCallback((slot: number) => {
+    /* Only ever an empty or unreadable slot: a career is deleted on purpose,
+       behind the screen's confirm, never by starting over it. */
+    if (readSlots()[slot - 1]?.summary) {
+      /* Review: only a tile drawn before another tab filled this slot gets
+         here. Show the slots as they are now and say why nothing happened. */
+      setSlots(readSlots());
+      setSlotNote('That slot holds a career now, so nothing was started over it. Here are your managers as they stand.');
+      return;
+    }
+    if (slot !== activeSlot() && !leaveActive(slot)) return;
+    /* Clears the engine's registrations; SAVE_KEY is already empty for a
+       slot just switched to, and a damaged active one is cleared for good
+       (the screen asks first). The career the picker starts is this slot's. */
+    clearCareer();
+    ownSlot.current = slot;
+    careerRef.current = null;
+    setCareer(null);
+    setDeskNote(null);
+    setSlots(readSlots());
     setPhase('clubSelect');
+  }, [leaveActive]);
+
+  /** Delete one slot's career for good (the screen asks first). */
+  const removeSlot = useCallback((slot: number) => {
+    if (slot === activeSlot()) {
+      clearCareer();
+      ownSlot.current = slot;
+      careerRef.current = null;
+      setCareer(null);
+      setReport(null);
+      setSummary(null);
+    } else {
+      deleteSlot(slot);
+    }
+    const views = readSlots();
+    setSlots(views);
+    setSlotNote(null);
+    if (!views.some(v => v.summary || v.damaged)) setPhase('clubSelect');
   }, []);
+
+  /** Back to the slots screen from inside a career, or from an era whose
+   *  squads would not load (review: that screen had no way back). */
+  const showSlots = useCallback(() => {
+    if (careerRef.current && holdsActiveSlot()) saveCareer(careerRef.current);
+    letGoIfStale();
+    setBootError(null);
+    setSlots(readSlots());
+    setSlotNote(null);
+    setPhase('resume');
+  }, [holdsActiveSlot, letGoIfStale]);
+
+  /* Retire at the season's end, or Start New Career once sacked. Before
+     Round 928 both wiped the career in one tap; the review found they still
+     did after the slots came in, which is exactly what the round promised
+     would stop. Now the career stays in its slot (Delete on the managers
+     screen is the only way to end one for good) and the new one starts in an
+     empty slot. With all three taken, the managers screen says so. */
+  const startNew = useCallback(() => {
+    const empty = readSlots().find(v => !v.summary && !v.damaged);
+    if (empty) { newInSlot(empty.slot); return; }
+    showSlots();
+    setSlotNote('All three slots hold a career. Delete one you are done with to make room for a new manager.');
+  }, [newInSlot, showSlots]);
 
   const chooseClub = useCallback((clubName: string) => {
     setPendingClub(clubName);
@@ -286,9 +457,13 @@ export function useClubManager() {
      current era, which is the world this game has always started in.
      Round 303: the optional manager spec rides the same way; absent means
      the second person career this has always been. */
-  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry) => {
+  /* Round 964: and so does a world editor edit, null or absent for the real world.
+     It passes validWorldEdit on the way in, so an edit the editor could not
+     have made (a club in two leagues, a league the wrong size) starts the
+     real world rather than a broken one. */
+  const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null) => {
     if (!pendingClub) return;
-    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager);
+    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager, undefined, validWorldEdit(worldEdit ?? null));
     /* Round 549: a mid season takeover plays the run-in first, under the
        manager before you, and hands the club over where it stands. */
     const s = entry ? startMidSeason(fresh, entry) : fresh;
@@ -801,9 +976,11 @@ export function useClubManager() {
     const next = markLiveMinute(now, minute);
     if (next === now) return;
     careerRef.current = next;
-    saveCareer(next);
+    /* Round 928 review: the live clock of a page whose slot another tab has
+       switched must not write over the career that tab switched in. */
+    if (holdsActiveSlot()) saveCareer(next);
     setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
-  }, []);
+  }, [holdsActiveSlot]);
 
   /* ---------- Round 135: the microphone and the dressing room ---------- */
   /* Tapping the tone you already picked takes it back, so a mis-tap is not a
@@ -852,6 +1029,7 @@ export function useClubManager() {
     simToWeek,
     saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
     bootError, retryBoot,
+    slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,

@@ -26,6 +26,17 @@
             summer rolled at level 1 and at level 10 over ten clubs, mean
             positive drift of everybody with headroom, and no player past
             his ceiling either way (the Round 96 and 116 rule).
+          the clamp (Round 963): the per position kid sits on a pinned
+            academy, provably under developmentRate's 2.6 ceiling; then a
+            grid of academies, loads, game time and headroom, every coach on
+            10 alone, where every reading must be min(ceiling, rate without
+            him times his multiplier) exactly, and growingAtCeiling (the count
+            the staff and facilities cards print) must name exactly the kids
+            the ceiling would short change over a regular's season, at three
+            ages, leaving out the man turning thirty who never grows. Which
+            men each card counts is held by src/test/staffScreen.test.tsx and
+            src/test/facilitiesPreview.test.tsx (simStaffScreen and
+            simFacilitiesPreview run them).
           scouting: every week played TWICE from the same state and the same
             point in the stream, once at lead scout 1 and once at 10, and
             only that week's reports compared, so the two runs cannot drift
@@ -56,6 +67,14 @@
    Negative controls (house rule: prove the checks can fail):
      CM_STAFF_CONTROL=nolift bundles a copy of the engine with the coach
        factor taken back out of developmentRate. Section 3 must go red.
+     CM_STAFF_CONTROL=nocard bundles a copy of the engine whose
+       growingAtCeiling never counts anybody, so the cards would promise the
+       full lift to a kid on the ceiling. Section 3 must go red.
+     CM_STAFF_CONTROL=seasonsofar bundles a copy whose growingAtCeiling
+       reads today's appearances, which are zero all summer, when a manager
+       hires. Section 3 must go red.
+     CM_STAFF_CONTROL=oldlegs bundles a copy whose growingAtCeiling counts
+       men turning thirty, who never grow. Section 3 must go red.
      CM_STAFF_CONTROL=tax bundles a copy of the desk whose post multiplier
        reads 1.05 at level 1. Section 4 must go red.
      CM_STAFF_CONTROL=freewage bundles a copy of the books whose weekly
@@ -73,6 +92,18 @@
        not. The strong reading in this section is the per position one above
        it, which is exact; the season drift is the outcome behind it and
        carries agePlayer's whole point rounding.
+     the clamp and the card (Round 963, measured 2026-10-03; the grid is
+       pure arithmetic on Everton's day one state, so it does not move with
+       the seed, only with a re-bake of Everton's training ground or staff):
+       3456 readings, 462 short changed by the ceiling, 342 of them on it
+       before the coach arrived; 10368 card counts, 2016 counted, 1092 of
+       those not yet short changed on today's apps (what the seasonsofar
+       control misses), 1008 short changed men turning thirty left out (what
+       the oldlegs control counts). The floors are reach checks at roughly
+       a fifth to a half of those: 100 clipped, 20 on the ceiling, 1000
+       counted, 500 only as regulars, 500 turning thirty, so a re-bake that
+       moves the grid a little stays green and one that empties a side
+       fails by name.
      scouting, mean paired lift in the ceiling of the boys a week brings
        home: +6.00 exactly on all three seeds, on 70 to 76 weeks that
        produced a report, which is the 6 the desk adds with the 93 clamp
@@ -98,7 +129,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_STAFF_CONTROL || '';
-if (CONTROL && !['nolift', 'tax', 'freewage'].includes(CONTROL)) {
+if (CONTROL && !['nolift', 'nocard', 'seasonsofar', 'oldlegs', 'tax', 'freewage'].includes(CONTROL)) {
   console.error(`CM_STAFF_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -121,6 +152,33 @@ if (CONTROL === 'nolift') {
   enginePath = `${TMP}/clubManagerStaff.nolift.ts`;
   fs.writeFileSync(enginePath, src.replace(fixed, broken));
   console.log('NEGATIVE CONTROL ON: the coaches no longer reach developmentRate');
+}
+if (CONTROL === 'nocard') {
+  const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8'));
+  const fixed = '&& developmentRate({ ...p, apps: Math.max(p.apps ?? 0, REGULAR_APPS) }, career) >= DEVELOPMENT_RATE_MAX);';
+  const broken = '&& false);';
+  if (!src.includes(fixed)) { console.error('control cannot run: clubManager.ts is not in the shape CM_STAFF_CONTROL=nocard rewrites'); process.exit(1); }
+  enginePath = `${TMP}/clubManagerStaff.nocard.ts`;
+  fs.writeFileSync(enginePath, src.replace(fixed, broken));
+  console.log('NEGATIVE CONTROL ON: the cards never own up to the ceiling');
+}
+if (CONTROL === 'seasonsofar') {
+  const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8'));
+  const fixed = '&& developmentRate({ ...p, apps: Math.max(p.apps ?? 0, REGULAR_APPS) }, career) >= DEVELOPMENT_RATE_MAX);';
+  const broken = '&& developmentRate(p, career) >= DEVELOPMENT_RATE_MAX);';
+  if (!src.includes(fixed)) { console.error('control cannot run: clubManager.ts is not in the shape CM_STAFF_CONTROL=seasonsofar rewrites'); process.exit(1); }
+  enginePath = `${TMP}/clubManagerStaff.seasonsofar.ts`;
+  fs.writeFileSync(enginePath, src.replace(fixed, broken));
+  console.log('NEGATIVE CONTROL ON: the cards count on the appearances so far, zero all summer');
+}
+if (CONTROL === 'oldlegs') {
+  const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8'));
+  const fixed = '&& ageDriftBand(p.age + 1)[1] > 0 && applies(p)';
+  const broken = '&& applies(p)';
+  if (!src.includes(fixed)) { console.error('control cannot run: clubManager.ts is not in the shape CM_STAFF_CONTROL=oldlegs rewrites'); process.exit(1); }
+  enginePath = `${TMP}/clubManagerStaff.oldlegs.ts`;
+  fs.writeFileSync(enginePath, src.replace(fixed, broken));
+  console.log('NEGATIVE CONTROL ON: the cards count men turning thirty, who never grow');
 }
 if (CONTROL === 'tax') {
   const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerStaff.ts'), 'utf8'));
@@ -148,6 +206,7 @@ export const engine = await import('${enginePath}');
 export const desk = await import('${deskPath}');
 export const books = await import('${booksPath}');
 export { NATIONALITY_BY_WORLD } from '${ROOT_URL}/src/data/playerNationalities.ts';
+export { ageDriftBand } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
 `);
 /* Every module under test is aliased in by its import path, so the engine's
    own imports resolve to the control copy when one is on. */
@@ -164,8 +223,9 @@ const cm = mod.engine;
 await cm.ensureAllEraRosters();
 const st = mod.desk;
 const fin = mod.books;
+const { ageDriftBand } = mod;
 const {
-  startCareer, playNextEntry, finishSeason, startNextSeason, developmentRate, clubDefFor, eraClubDefFor,
+  startCareer, playNextEntry, finishSeason, startNextSeason, developmentRate, DEVELOPMENT_RATE_MAX, growingAtCeiling, clubDefFor, eraClubDefFor,
   playableClubs, REAL_LEAGUES, eraPlayableClubs, eraLeaguesFor, CM_ERAS, loadCareer, SCOUT_REGIONS, hireScout,
 } = cm;
 const {
@@ -373,7 +433,22 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
   const POSITIONS = m ? [...m[1].matchAll(/'([^']+)'/g)].map(x => x[1]) : [];
   if (POSITIONS.length < 12) fail(`only ${POSITIONS.length} positions read out of the Position union`);
   const base = startCareer('Everton');
+  /* Round 963: the exact reading needs a kid the clamp cannot touch. His
+     speed used to ride on Everton's academy as the stream happened to roll
+     it, and once the stream moved the roll (coaching 13, building 11) put him
+     at 2.554 of developmentRate's 2.6 ceiling: the clamp ate the coach and
+     this read 1.018 against a 1.099 multiplier, on main, for weeks. The
+     academy is pinned at 8 and 8 now, which puts him near 2.23 bare and 2.45
+     with a level 10 coach whatever the stream does, and the check below fails
+     by name if a later formula pushes him into the clamp again. The clamp
+     itself is read on its own further down. */
+  base.academy = { ...base.academy, coaching: 8, facilities: 8 };
   const kid = { id: 'k', name: 'k', position: 'CM', rating: 60, age: 19, potential: 80, apps: 20, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0, isYouth: false, seasonGoals: 0, seasonAssists: 0 };
+  if (DEVELOPMENT_RATE_MAX !== 2.6) fail(`developmentRate's ceiling reads ${DEVELOPMENT_RATE_MAX}, not 2.6; re-measure this harness before moving it`);
+  for (const pos of POSITIONS) {
+    const top = developmentRate({ ...kid, position: pos }, setAll(base, STAFF_MAX));
+    if (!(top < DEVELOPMENT_RATE_MAX - 0.05)) fail(`the per position kid reads ${top.toFixed(4)} as a ${pos} with every coach on 10, too close to the ${DEVELOPMENT_RATE_MAX} ceiling for an exact reading`);
+  }
   const owners = {};
   let covered = 0, shared = 0;
   for (const pos of POSITIONS) {
@@ -402,6 +477,74 @@ console.log('3) Each effect runs the right way, on every position, and stays bou
     }
   }
   console.log(`   ${POSITIONS.length} positions in the union, ${covered} owned by one coach and ${shared} split between the two; ${exact} exact developmentRate readings, each coach moving only his own unit by x${full.toFixed(3)}`);
+
+  /* Round 963: the clamp, which is where the card has to own up. Every lift
+     sits inside developmentRate's 2.6 ceiling on purpose (section 4 reads
+     it), so the engine's real formula is min(ceiling, rate without him times
+     his multiplier), and a kid already at the ceiling gets nothing at all.
+     Read over a grid of academies, training loads, game time and headroom,
+     every post on 10 alone: each reading must be that formula exactly, and
+     growingAtCeiling, the count the staff and facilities cards print, must
+     name exactly the kids whose promised lift was not delivered in full. */
+  let gridReads = 0, gridClipped = 0, gridFull = 0, gridCounts = 0, gridCounted = 0, gridEarly = 0, gridOld = 0;
+  /* A regular's season, the grid's own fullest game time, read by the
+     harness rather than taken from the engine's REGULAR_APPS. */
+  const REGULAR_SEASON = 34;
+  /* The age split below rests on these two bands: still growing turning 29, never turning 30. */
+  if (!(ageDriftBand(29)[1] > 0 && ageDriftBand(30)[1] <= 0)) fail(`ageDriftBand moved (29 tops out at ${ageDriftBand(29)[1]}, 30 at ${ageDriftBand(30)[1]}); re-read which ages the cards may count`);
+  for (const level of [1, 8, 14, 20]) {
+    for (const intensity of ['light', 'normal', 'double']) {
+      const room = clone(base);
+      room.academy = { ...room.academy, coaching: level, facilities: level };
+      room.training = { intensity, focus: 'balanced' };
+      const without = emptyAll(room);
+      for (const post of ['attack', 'defence', 'goalkeeping']) {
+        const solo = onlyPost(room, post, STAFF_MAX);
+        for (const pos of POSITIONS) {
+          const want = coachGrowthMult(solo, pos) / coachGrowthMult(without, pos);
+          if (want <= 1) continue;
+          for (const apps of [0, 8, 20, 34]) {
+            for (const potential of [62, 66, 72, 80]) {
+              const p = { ...kid, position: pos, apps, potential };
+              const was = developmentRate(p, without);
+              const got = developmentRate(p, solo);
+              const promised = was * want;
+              const formula = Math.min(DEVELOPMENT_RATE_MAX, promised);
+              gridReads++;
+              if (was >= DEVELOPMENT_RATE_MAX) {
+                gridFull++;
+                if (got !== DEVELOPMENT_RATE_MAX) fail(`a kid already on the ceiling moved to ${got} with a level 10 ${post} coach`);
+              } else if (!near(got, formula, 1e-9)) fail(`${post} coach at 10, ${pos}, academy ${level}, ${intensity}, ${apps} apps, potential ${potential}: developmentRate ${got.toFixed(4)}, the clamp formula says ${formula.toFixed(4)}`);
+              const shortChanged = got < promised - 1e-9;
+              if (shortChanged) gridClipped++;
+              /* The card reads a regular's season, because agePlayer reads the
+                 rate on the whole season's appearances at the summer and the
+                 card is read at any week, mostly in the summer when today's
+                 apps are zero. So the kid it must count is the one the
+                 ceiling short changes once he has played a full season, and
+                 only if he can still grow: a man turning thirty tops out at
+                 zero drift and never reads the rate. */
+              const regular = { ...p, apps: Math.max(apps, REGULAR_SEASON) };
+              const regularShort = developmentRate(regular, solo) < developmentRate(regular, without) * want - 1e-9;
+              for (const age of [19, 28, 29]) {
+                const should = regularShort && ageDriftBand(age + 1)[1] > 0;
+                const counted = growingAtCeiling({ ...solo, squad: [{ ...p, age }] }, () => true).length === 1;
+                gridCounts++;
+                if (should) gridCounted++;
+                if (should && !shortChanged) gridEarly++;
+                if (regularShort && !should) gridOld++;
+                if (counted !== should) fail(`${post} coach at 10, ${pos}, age ${age}, academy ${level}, ${intensity}, ${apps} apps, potential ${potential}: the card ${counted ? 'counts' : 'does not count'} him, yet as a regular he would get ${developmentRate(regular, solo).toFixed(4)} of a promised ${(developmentRate(regular, without) * want).toFixed(4)}${regularShort ? ' and he turns ' + (age + 1) : ''}`);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (gridClipped < 100 || gridFull < 20 || gridClipped >= gridReads) fail(`the clamp grid is not reaching both sides of the ceiling: ${gridClipped} clipped, ${gridFull} already on it, of ${gridReads}`);
+  console.log(`   the clamp: ${gridReads} grid readings all min(${DEVELOPMENT_RATE_MAX}, rate times multiplier); ${gridClipped} short changed by the ceiling (${gridFull} of them on it before the coach arrived)`);
+  if (gridCounted < 1000 || gridEarly < 500 || gridOld < 500 || gridCounted >= gridCounts) fail(`the card grid is not reaching every side: ${gridCounted} counted of ${gridCounts}, ${gridEarly} only as regulars, ${gridOld} turning 30`);
+  console.log(`   the card: ${gridCounts} counts, ${gridCounted} who would be short changed as regulars counted and nobody else; ${gridEarly} of them not yet short changed on today's apps; ${gridOld} short changed men turning 30 left out`);
 
   /* Nobody grows past his ceiling, whoever is coaching. */
   const atCeiling = developmentRate({ ...kid, rating: 80 }, setAll(base, STAFF_MAX));
@@ -550,7 +693,11 @@ console.log('4) Every effect is exactly neutral at level 1 and on an empty chair
     .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const dev = engineSrc.match(/export function developmentRate\([\s\S]*?\n}\n/);
   if (!dev) fail('could not find developmentRate in the engine');
-  else if (!/return clamp\([^;]*coachGrowthMult\(career, p\.position\)[^;]*, 0\.1, 2\.6\);/.test(dev[0])) fail('the coach factor is not inside developmentRate\'s clamp');
+  else if (!/return clamp\([^;]*coachGrowthMult\(career, p\.position\)[^;]*, 0\.1, DEVELOPMENT_RATE_MAX\);/.test(dev[0])) fail('the coach factor is not inside developmentRate\'s clamp');
+  /* Round 963: the ceiling is one named number, and the card's count reads the same one. */
+  if (!/export const DEVELOPMENT_RATE_MAX = 2\.6;/.test(engineSrc)) fail('DEVELOPMENT_RATE_MAX is not the 2.6 the clamp was measured at');
+  const card = engineSrc.match(/export function growingAtCeiling\([\s\S]*?\n}\n/);
+  if (!card || !/developmentRate\(\{ \.\.\.p, apps: [^}]*\}, career\) >= DEVELOPMENT_RATE_MAX/.test(card[0])) fail('growingAtCeiling does not read developmentRate against DEVELOPMENT_RATE_MAX on a season of appearances');
   const strength = engineSrc.match(/function myMatchStrength\([\s\S]*?\n}\n/);
   if (!strength) fail('could not find myMatchStrength in the engine');
   else if (/staffOf|coachGrowthMult|staffLevel|STAFF_POST/.test(strength[0])) fail('myMatchStrength reads the staff desk');
