@@ -259,10 +259,13 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
      men wearing one string. Each pair below says who the two men are.
      Pairs earlier rounds verified with two publishers carry that round's
      name (the birth years are in scripts/simEra2015.mjs beside its own
-     lists). Pairs new in this round rest on the table's own ages, which put
-     the two births at least five years apart in two different worlds, and
-     on ESPN's player file (its date of birth) where one was found, read
-     2026-10-03; a second outside publisher was not read for these. */
+     lists). Pairs new in this round name both men in full with a date of
+     birth from two outside publishers each (Wikipedia used as a spot check
+     only, never as one of the two), read 2026-10-05 for the closing check;
+     the table's own ages agree with every date within the year a snapshot
+     wobbles. That reading corrected two lines: the 2010 table's Fernando is
+     Bordeaux's Menegazzo, not a Malaga man, and the 2020 table's Pedro
+     Mendes is Montpellier's centre-back, not a striker. */
   const PAIRS = {
     now: {
       'Luis Suárez': 'Atletico\'s Uruguayan (b. 1987) and the Colombian striker (b. 1997), Round 175',
@@ -272,35 +275,38 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
       'Idrissa Gueye': 'PSG\'s Idrissa Gana Gueye (b. 1989) and Udinese\'s striker (b. 2006), Round 899',
       'Pedro': 'Roma\'s Pedro Rodriguez (b. 1987) and Flamengo\'s Pedro (b. 1997), Round 876',
       'Gabriel Silva': 'Saint-Etienne\'s Brazilian left-back, Udinese\'s in 2015 (b. 1991), and Santa Clara\'s, Round 191',
-      'João Pedro': 'Cagliari\'s forward (27 in the 2020 table, so born about 1992) and Chelsea\'s (ESPN: b. 2001-09-26)',
-      'Danilo': 'Juventus\' full-back (ESPN: b. 1991-07-15, 28 in the 2020 table) and Botafogo\'s midfielder (24 today, born about 2001)',
-      'Matheus Pereira': 'West Brom\'s playmaker (23 in the 2020 table, born about 1996) and Toronto FC\'s (25 today, born about 2001)',
+      'João Pedro': 'Cagliari\'s João Pedro Galvão (b. 1992-03-09: national-football-teams.com, playmakerstats) and Chelsea\'s João Pedro Junqueira de Jesus (b. 2001-09-26: ESPN, chelseafc.com)',
+      'Danilo': 'Juventus\' Danilo Luiz da Silva (b. 1991-07-15: ESPN, besoccer) and Botafogo\'s Danilo dos Santos de Oliveira (b. 2001-04-29: ESPN, footballtransfers.com)',
+      'Matheus Pereira': 'West Brom\'s Matheus Fellipe Costa Pereira (b. 1996-05-05: premierleague.com, playmakerstats) and Toronto FC\'s Matheus Pereira de Souza (b. 2000-12-21: torontofc.ca, ESPN)',
     },
     era2015: {
       'Gabriel': 'Arsenal\'s centre-back (b. 1997) and Carpi\'s 2015 keeper (b. 1992), Round 191',
       'Paulinho': 'Leverkusen\'s Paulinho (b. 2000) and Tottenham\'s 2015 midfielder (b. 1988), Round 876',
       'Danilo': 'Juventus\' full-back (ESPN: b. 1991-07-15) and Udinese\'s 2015 centre-back (b. 1984), Round 191',
       'Ederson': 'Manchester City\'s keeper (b. 1993) and Lazio\'s 2015 playmaker (b. 1986), Round 191',
-      'Sergio Álvarez': 'Eibar\'s midfielder (27 in the 2020 table, born about 1992) and Celta\'s 2015 keeper (28 in the 2015 table, born about 1987)',
+      'Sergio Álvarez': 'Eibar\'s Sergio Álvarez Díaz (b. 1992-01-23: ESPN, laliga.com) and Celta\'s 2015 keeper Sergio Álvarez Conde (b. 1986-08-03: ESPN, Sports Mole)',
     },
     era2010: {
-      'David García': 'Osasuna\'s centre-back (25 in the 2020 table, born about 1994) and Espanyol\'s 2010 defender (28 in the 2010 table; ESPN: David Garcia de la Cruz, b. 1981-01-16)',
-      'Fernando': 'Sevilla\'s Brazilian midfielder (32 in the 2020 table, born about 1987) and Malaga\'s 2010 Fernando (30 in the 2010 table, born about 1980), the pair simEra2015 already lists',
+      'David García': 'Osasuna\'s David García Zubiria (b. 1994-02-14: playmakerstats, besoccer) and Espanyol\'s 2010 defender David García de la Cruz (b. 1981-01-16: ESPN, playmakerstats)',
+      /* Closing check fix: the 2010 table's Fernando is Bordeaux's, 28 and a
+         holding midfielder, not Malaga's as this line used to say. */
+      'Fernando': 'Sevilla\'s Fernando Reges (b. 1987-07-25: ESPN, playmakerstats) and Bordeaux\'s 2010 Fernando Menegazzo (b. 1981-05-03: ESPN, national-football-teams.com)',
       /* Three more once Round 901 gave 2010-11 its Serie A, Bundesliga and
-         Ligue 1 (measured on the merged tree, 2026-10-05). The table's own
-         ages put each pair's births five or more years apart. */
-      'Felipe': 'Atletico\'s centre-back (30 in the 2020 table, born about 1990) and Fiorentina\'s 2010 centre-back (25 in the 2010 table, born about 1985)',
-      'Ederson': 'Manchester City\'s keeper (b. 1993) and Lyon\'s 2010 playmaker (23 in the 2010 table), the 1986 man the era2015 list has at Lazio, Round 191',
-      'Rafinha': 'PSG\'s midfielder (26 in the 2020 table, born about 1994) and Genoa\'s 2010 right-back (24 in the 2010 table, born about 1986)',
+         Ligue 1 (measured on the merged tree, 2026-10-05). */
+      'Felipe': 'Atletico\'s Felipe Augusto de Almeida Monteiro (b. 1989-05-16: atleticodemadrid.com, sofifa) and Fiorentina\'s 2010 Felipe Dal Belo (b. 1984-07-31: playmakerstats, bdfutbol)',
+      'Ederson': 'Manchester City\'s keeper Ederson Moraes (b. 1993-08-17: mancity.com, Sportskeeda) and Lyon\'s 2010 playmaker Ederson Honorato Campos (b. 1986-01-13: ESPN, playmakerstats), the man the era2015 list has at Lazio, Round 191',
+      'Rafinha': 'PSG\'s Rafael Alcântara (b. 1993-02-12: playmakerstats, fbref) and Genoa\'s 2010 right-back Márcio Rafael Ferreira de Souza (b. 1985-09-07: fcbayern.com, national-football-teams.com)',
     },
     era2005: {
-      'Dani García': 'Athletic\'s midfielder (ESPN: b. 1990-05-24) and Espanyol\'s 2005 Dani Garcia (30 in the 2005 table, born about 1975)',
-      'Manu Sánchez': 'Atletico\'s left-back (ESPN: b. 2000-08-24) and Malaga\'s 2005 Manu Sanchez (25 in the 2005 table, born about 1980)',
-      'José Izquierdo': 'Brighton\'s Colombian winger (ESPN: b. 1992-07-07) and Osasuna\'s 2005 Jose Izquierdo (24 in the 2005 table, born about 1981)',
-      'Álex Fernández': 'Cadiz\'s midfielder (ESPN: b. 1992-10-15) and Espanyol\'s 2005 Alex Fernandez (30 in the 2005 table, born about 1975)',
-      'Pedro Mendes': 'Montpellier\'s striker (ESPN: b. 1990-10-01) and Tottenham\'s 2005 midfielder (ESPN: b. 1979-02-26)',
-      'David García': 'Osasuna\'s centre-back (born about 1994) and Espanyol\'s 2005 defender, the 2010 man above (23 in the 2005 table)',
-      'Fernando': 'Sevilla\'s Brazilian midfielder (born about 1987) and Betis\' 2005 Fernando (25 in the 2005 table, born about 1980)',
+      'Dani García': 'Athletic\'s Daniel García Carrillo (b. 1990-05-24: ESPN, athletic-club.eus) and Espanyol\'s 2005 striker Daniel García Lara (b. 1974-12-22: national-football-teams.com, playmakerstats)',
+      'Manu Sánchez': 'Atletico\'s Manuel Sánchez de la Peña (b. 2000-08-24: ESPN, playmakerstats) and Malaga\'s 2005 Antonio Manuel Sánchez Gómez (b. 1979-01-25: ESPN, bdfutbol)',
+      'José Izquierdo': 'Brighton\'s José Heriberto Izquierdo Mena (b. 1992-07-07: ESPN, besoccer) and Osasuna\'s 2005 right-back José Izquierdo Martínez (b. 1980-08-03: bdfutbol, ceroacero)',
+      'Álex Fernández': 'Cadiz\'s Alejandro Fernández Iglesias (b. 1992-10-15: ESPN, cadizcf.com) and Espanyol\'s 2005 Àlex Fernández Sánchez (b. 1974-02-14: ESPN, playmakerstats)',
+      /* Closing check fix: the 2020 table's Pedro Mendes is Montpellier's
+         centre-back, not a striker as this line used to say. */
+      'Pedro Mendes': 'Montpellier\'s centre-back Pedro Filipe Teodósio Mendes (b. 1990-10-01: ESPN, Sports Mole) and Tottenham\'s 2005 midfielder Pedro Miguel da Silva Mendes (b. 1979-02-26: ESPN, tottenhamhotspur.com)',
+      'David García': 'Osasuna\'s David García Zubiria (b. 1994) and Espanyol\'s 2005 defender, the 2010 man above (b. 1981, same sources)',
+      'Fernando': 'Sevilla\'s Fernando Reges (b. 1987, sources above) and Betis\' 2005 Fernando Varela Ramos (b. 1979-09-01: bdfutbol, playmakerstats)',
     },
   };
   const byName = rosters => { const m = new Map(); for (const roster of Object.values(rosters)) for (const p of roster) m.set(p.n, p); return m; };
