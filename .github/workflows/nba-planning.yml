@@ -53,7 +53,7 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee nba-planning-artifacts/types.log
           npm run build 2>&1 | tee nba-planning-artifacts/build.log
-      - name: Planning outcomes and effective controls
+      - name: Refresh the release snapshot on the remote runner
         # Remove this one-time refresh once the generated files are committed.
         # The final verification run must check the committed snapshots unchanged.
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
