@@ -20,7 +20,10 @@
  *      `earned`; a watched win, draw and loss pay 3, 1 and 0, a title 20 and a
  *      runner-up 6 on top, an away win 1, and a replayed full time 0
  *   S8 scouting unchanged: 500 scout finds are byte identical to the baseline
- *      committed before this round (scripts/data/academyScoutBaseline.json)
+ *      committed before this round (scripts/data/academyScoutBaseline.json).
+ *      A generated name later found to be a real man is renamed in that file
+ *      only by genAcademyScoutBaseline.mjs --rename, which lists it under
+ *      `renamed` (Round 899's Lamine Gassama, 2 finds); every other byte holds
  *   S9 rollback: an academy save with pack kids loads in the frozen V1 loader
  *   S10 fences: one writer of the ledger key, no `.earned =` outside the ledger,
  *      no Math.random in the ledger, no timer or confetti on the panel, and none
