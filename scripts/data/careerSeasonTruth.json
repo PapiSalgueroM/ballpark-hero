@@ -1,6 +1,6 @@
 {
   "checked": "2026-09-07",
-  "policy": "A quarantined row stays absent until club, goals, assists, appearances and market value each have two independent sources. A transfer season may need multiple club rows.",
+  "policy": "A quarantined tuple never returns as it was. A new row for the same player, season and club may be written only from new research recorded in scripts/data/careerSeason2025.json (added), with club, goals and appearances each carried by two independent non-wiki hosts; assists null and market value 0 mean n/a unless two sources agree on them (the Round 784 convention, 20261001120000 lines 51 and 52). Amended in Round 1010b; simCareerSeasonTruth section 6 holds it. A transfer season may need multiple club rows.",
   "batchEvidence": {
     "id": "career-2025-2026-generated-seed",
     "season": "2025-2026",

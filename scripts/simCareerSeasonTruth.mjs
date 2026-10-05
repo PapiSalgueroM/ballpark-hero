@@ -11,8 +11,16 @@
    4. The 27 later researched live tuples remain outside the quarantine.
    5. After both migrations are applied, live must equal those 27 tuples.
 
-   Set CAREER_SEASON_LOCAL_ONLY=1 to run sections 1 through 4 without reading
-   live state. The live section remains mandatory in the normal suite.
+   Round 1010b: the season ledger (scripts/data/careerSeason2025.json) adds
+   researched 2025-2026 rows. Sections 2 and 5 expect the 27 plus the
+   ledger's 2025-2026 rows (the count read from the ledger); section 5 also
+   accepts the live table on the side before the 1010 migration (exactly the
+   27), never between. Section 6 holds the amended policy: a 2025-2026 row on
+   the key of a quarantined tuple (player, season, club) exists only as a
+   ledger row with two non-wiki hosts on each of club, goals and appearances.
+
+   Set CAREER_SEASON_LOCAL_ONLY=1 to run sections 1 through 4 and 6 without
+   reading live state. The live section remains mandatory in the normal suite.
 
    Negative controls:
      SIM_CAREER_SEASON_CONTROL=sources
@@ -21,9 +29,10 @@
      SIM_CAREER_SEASON_CONTROL=migration
      SIM_CAREER_SEASON_CONTROL=preserve
      SIM_CAREER_SEASON_CONTROL=live
+     SIM_CAREER_SEASON_CONTROL=readded (drops one source from Isak's ledger row)
 
    Each control changes an in-memory fixture, then must turn only its own
-   section red. All six controls work with CAREER_SEASON_LOCAL_ONLY=1.
+   section red. All seven controls work with CAREER_SEASON_LOCAL_ONLY=1.
 
    Run locally:
      CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
@@ -32,17 +41,18 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { LEDGER_FILE as SEASON_LEDGER_FILE, hostsFor } from './lib/careerSeasonLedger.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_SEASON_CONTROL || '';
 const LOCAL_ONLY = process.env.CAREER_SEASON_LOCAL_ONLY === '1';
-const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live'];
+const CONTROLS = ['sources', 'evidence', 'fallback', 'migration', 'preserve', 'live', 'readded'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error('Unknown control "' + CONTROL + '". Expected ' + CONTROLS.join(', '));
   process.exit(1);
 }
 
-const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
 let section = 0;
 const fail = message => {
   failures[section] += 1;
@@ -207,6 +217,11 @@ function checkMigrationShape(parsed, expectedCount) {
 }
 
 const ledger = JSON.parse(read('scripts/data/careerSeasonTruth.json'));
+/* Round 1010b: the researched 2025-2026 rows the season ledger adds, as tuples */
+const seasonLedger = JSON.parse(read(SEASON_LEDGER_FILE));
+const ledgerAdded2025 = (seasonLedger.added ?? []).filter(row => row.season === '2025-2026').map(row => ({
+  player: row.player, season: row.season, club: row.club, goals: row.goals, assists: row.assists, appearances: row.appearances, marketValue: row.marketValue,
+}));
 
 section = 1;
 console.log('1) Ledger provenance matches the seed, fallback snapshot and Git history');
@@ -301,7 +316,7 @@ console.log('1) Ledger provenance matches the seed, fallback snapshot and Git hi
 }
 
 section = 2;
-console.log('2) Current fallback carries exactly the 27 researched 2025-2026 rows and no projection');
+console.log('2) Current fallback carries exactly the 27 researched 2025-2026 rows plus the season ledger rows, and no projection');
 {
   const fallbackRows = parseFallback(read('src/data/careerPlayers.ts'));
   if (fallbackRows.length < 1500) abort('fallback parser found only ' + fallbackRows.length + ' season rows');
@@ -317,7 +332,9 @@ console.log('2) Current fallback carries exactly the 27 researched 2025-2026 row
      rule was simply "none", because every 2025-2026 row it had was a
      projection. */
   const currentSeason = fallbackRows.filter(row => row.season === '2025-2026');
-  compareSets('fallback 2025-2026 rows', ledger.preservedResearchedLiveRows, currentSeason, tupleKey);
+  /* Round 1010b: plus the season ledger's researched rows; the bake is
+     committed after its migration (the Round 784 precedent) */
+  compareSets('fallback 2025-2026 rows', [...ledger.preservedResearchedLiveRows, ...ledgerAdded2025], currentSeason, tupleKey);
   const present = new Set(fallbackRows.map(tupleKey));
   const lingering = ledger.fallbackProjectionRows.filter(row => present.has(tupleKey(row)));
   if (lingering.length) fail(lingering.length + ' exact quarantined fallback tuple(s) remain');
@@ -340,7 +357,7 @@ console.log('2) Current fallback carries exactly the 27 researched 2025-2026 row
   if (puzzleIds.length !== impact.retainedPuzzleCount || puzzleIds.length !== 885) fail('Transfer Path pull has ' + puzzleIds.length + ' puzzles instead of 885');
 
   console.log('   ' + fallbackRows.length + ' fallback seasons and ' + transferRows.length + ' Transfer Path spells parsed');
-  console.log('   all 77 projected tuples absent, 27 researched spells preserved, 17 unreachable puzzles quarantined');
+  console.log('   all 77 projected tuples absent, 27 researched spells preserved plus ' + ledgerAdded2025.length + ' season ledger rows, 17 unreachable puzzles quarantined');
 }
 
 section = 3;
@@ -446,18 +463,63 @@ console.log('5) Live 2025-2026 state equals the 27 preserved researched tuples')
   }
 
   if (liveRows) {
-    compareSets('live preserved state', ledger.preservedResearchedLiveRows, liveRows, liveTupleKey);
+    /* Round 1010b: the 27 preserved tuples (sort order included) plus, once
+       the 1010 migration is applied, exactly the season ledger's rows (their
+       sort order is each man's max plus one, so it is not compared) */
+    const preservedKeys = new Set(ledger.preservedResearchedLiveRows.map(liveTupleKey));
+    const preservedLive = liveRows.filter(row => preservedKeys.has(liveTupleKey(row)));
+    const rest = liveRows.filter(row => !preservedKeys.has(liveTupleKey(row)));
+    compareSets('live preserved state', ledger.preservedResearchedLiveRows, preservedLive, liveTupleKey);
+    const restKeys = rest.map(tupleKey).sort().join('\n');
+    const addedKeys = ledgerAdded2025.map(tupleKey).sort().join('\n');
+    const state = rest.length === 0 ? 'before' : restKeys === addedKeys ? 'after' : 'mixed';
+    if (state === 'mixed') fail('live 2025-2026 carries ' + rest.length + ' row(s) beyond the 27 that are not exactly the ' + ledgerAdded2025.length + ' season ledger rows: only before or after the 1010 migration is valid');
     const seedKeys = new Set(ledger.liveSeedRows.map(liveTupleKey));
     const lingering = liveRows.filter(row => seedKeys.has(liveTupleKey(row)));
     if (lingering.length) fail(lingering.length + ' seed-derived live tuple(s) remain');
-    if (liveRows.length !== 27) fail('live has ' + liveRows.length + ' 2025-2026 rows instead of 27');
-    console.log('   ' + liveRows.length + ' exact live tuples checked against the preservation fixture');
+    const expected = state === 'after' ? 27 + ledgerAdded2025.length : 27;
+    if (liveRows.length !== expected) fail('live has ' + liveRows.length + ' 2025-2026 rows instead of ' + expected);
+    console.log('   ' + liveRows.length + ' exact live tuples checked against the preservation fixture; the 1010 season rows are ' + (state === 'after' ? 'applied' : state === 'before' ? 'PENDING (' + path.basename(seasonLedger.migration ?? 'the 1010 migration') + ' not applied)' : 'MIXED'));
   }
+}
+
+section = 6;
+console.log('6) a 2025-2026 row on a quarantined key exists only as a ledger row with two hosts on club, goals and appearances');
+{
+  const added = clone(seasonLedger.added ?? []);
+  if (CONTROL === 'readded') {
+    /* Isak's row carries three hosts, so dropping one source leaves two; the
+       control keeps only his LFChistory sources, one host */
+    const isak = added.find(row => row.player === 'Alexander Isak' && row.season === '2025-2026');
+    if (!isak) abort('readded control cannot run: Isak has no 2025-2026 ledger row');
+    const before = isak.sources.length;
+    isak.sources = isak.sources.filter(source => /lfchistory\.net/.test(source.url));
+    if (isak.sources.length >= before || isak.sources.length === 0) abort('readded control changed nothing');
+    console.log('   NEGATIVE CONTROL ON: Isak 2025-2026 Liverpool keeps only its LFChistory sources');
+  }
+  const quarantined = new Map();
+  for (const row of [...ledger.liveSeedRows, ...ledger.fallbackProjectionRows]) quarantined.set(transferTupleKey(row), row);
+  const fullQuarantined = new Set([...ledger.liveSeedRows, ...ledger.fallbackProjectionRows].map(tupleKey));
+  const ledgerByKey = new Map(added.map(row => [transferTupleKey(row), row]));
+  const onKeys = new Map();
+  for (const row of parseFallback(read('src/data/careerPlayers.ts'))) if (row.season === '2025-2026' && quarantined.has(transferTupleKey(row))) onKeys.set(transferTupleKey(row), row);
+  for (const row of added) if (quarantined.has(transferTupleKey(row))) onKeys.set(transferTupleKey(row), row);
+  for (const [key, row] of onKeys) {
+    const research = ledgerByKey.get(key);
+    const who = row.player + ' ' + row.season + ' ' + row.club;
+    if (!research) { fail(who + ' sits on a quarantined key and is not a season ledger row'); continue; }
+    if (fullQuarantined.has(tupleKey(research))) fail(who + ' returns exactly as it was quarantined');
+    for (const field of ['club', 'goals', 'appearances']) {
+      const hosts = hostsFor(research.sources, field);
+      if (hosts.size < 2) fail(who + ' sits on a quarantined key with ' + field + ' carried by ' + hosts.size + ' non-wiki host(s): ' + [...hosts].join(', '));
+    }
+  }
+  console.log('   ' + onKeys.size + ' row(s) on quarantined keys (' + [...onKeys.values()].map(row => row.player).sort().join(', ') + '), each a season ledger row with two hosts on club, goals and appearances');
 }
 
 const total = Object.values(failures).reduce((sum, count) => sum + count, 0);
 if (CONTROL) {
-  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5 }[CONTROL];
+  const ownSection = { sources: 1, evidence: 1, fallback: 2, migration: 3, preserve: 4, live: 5, readded: 6 }[CONTROL];
   const otherFailures = Object.entries(failures)
     .filter(([number]) => Number(number) !== ownSection)
     .reduce((sum, [, count]) => sum + count, 0);
