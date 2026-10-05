@@ -133,34 +133,36 @@ describe('a chain ends on the shared result moment', () => {
     { game: '/ufc-chain', badgeAt: getEarnedBadge },
   ];
 
-  /* The bands are read off each game's own table as a threshold (the shortest
-     run it rewards), not rebuilt from chainOutcome's body, so the walk checks
-     the rule against the table rather than one copy of the code against
-     another. Whether the board shows them is guessFinishChainBoards' job. */
-  it('follows each game\'s own badge bands at every length from 0 to 25', () => {
+  /* Every chain ends on a break, so the state never follows the badge. The
+     walk runs every length from 0 to 25, and each game's own table is checked
+     to reward some of those lengths and not others, so the walk covers a
+     close run with a badge and one without. Whether the board shows them is
+     guessFinishChainBoards' job. */
+  it('calls every chain that added a link close, badge or not, at every length from 0 to 25', () => {
     for (const { badgeAt } of tables) {
       const firstBadge = Array.from({ length: 26 }, (_, n) => n).find(n => badgeAt(n) !== undefined)!;
       expect(firstBadge).toBeGreaterThan(1);
       for (let length = 0; length <= 25; length++) {
-        const band = length === 0 ? 'loss' : length < firstBadge ? 'close' : 'win';
-        expect(chainOutcome(length, badgeAt(length) !== undefined)).toBe(band);
+        expect(chainOutcome(length)).toBe(length === 0 ? 'loss' : 'close');
       }
     }
   });
 
   it('shows the chain length, the badge the game earned and the reason it gave, and plays only when live', () => {
     for (const { game, badgeAt } of tables) {
+      expect(badgeAt(2)).toBeUndefined();
+      expect(badgeAt(12)).toBeDefined();
       for (const length of [0, 2, 12]) {
         const badge = badgeAt(length);
         const reason = length === 0 ? 'You gave up!' : 'Incorrect! That link does not hold.';
         for (const live of [true, false]) {
           const view = render(<ChainFinishMoment chainLength={length} badge={badge} reason={reason} gamePath={game} live={live} />);
-          expect(moment(view)).toHaveAttribute('data-result-moment', chainOutcome(length, Boolean(badge)));
+          expect(moment(view)).toHaveAttribute('data-result-moment', length === 0 ? 'loss' : 'close');
           expect(pill(view)).toBe(String(length));
           expect(view.getByRole('heading', { level: 2 })).toHaveTextContent(badge ? badge.name : 'Game Over!');
           expect(view.getByText(reason)).toBeVisible();
           expect(settled(view)).toBe(!live);
-          expect(confetti(view)).toBe(live && badge ? 28 : 0);
+          expect(confetti(view)).toBe(0);
           cleanup();
         }
       }

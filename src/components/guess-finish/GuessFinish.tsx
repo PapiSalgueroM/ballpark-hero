@@ -40,13 +40,15 @@ export function useLiveFinish(gameKey: string | null, finished: boolean): boolea
 }
 
 /**
- * A chain has no finish line, so its state follows the game's own badge
- * bands: a run long enough to earn a badge is a win, a run that added at
- * least one link and then broke (a wrong link, a repeat, or giving up) is
- * close, and a run that never got past the starting name is a loss.
+ * A chain has no finish line: every run ends on a break (a wrong link, a
+ * repeat, or giving up), and the board's reason for that break sits right
+ * under the state line. So a chain is never called a win, which would put
+ * "Nailed it" over "Incorrect guess!": a run that added at least one link is
+ * close whatever badge it earned (the badge still heads the card), and a run
+ * that never got past the starting name is a loss. NBA Chain, the chain that
+ * was already on the shared moment, says "Good try" the same way.
  */
-export function chainOutcome(chainLength: number, earnedBadge: boolean): ResultOutcome {
-  if (earnedBadge) return 'win';
+export function chainOutcome(chainLength: number): ResultOutcome {
   return chainLength > 0 ? 'close' : 'loss';
 }
 
@@ -92,7 +94,7 @@ export function ChainFinishMoment({ chainLength, badge, reason, gamePath, live, 
   live: boolean;
   className?: string;
 }) {
-  const outcome = chainOutcome(chainLength, Boolean(badge));
+  const outcome = chainOutcome(chainLength);
   return (
     <FinishFrame live={live} win={outcome === 'win'} gamePath={gamePath}>
       <ResultMoment

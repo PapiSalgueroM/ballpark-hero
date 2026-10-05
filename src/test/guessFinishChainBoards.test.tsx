@@ -108,15 +108,18 @@ for (const game of games) describe(game.label, () => {
     expect(q(view, '[data-guess-finish]')).toHaveAttribute('data-guess-finish', 'live');
   });
 
-  it(`${game.label}: a run to the first badge is a win under that badge, with confetti`, async () => {
+  /* The run still broke on a wrong link, so it is close under its badge, never
+     "Nailed it" above the board's own "Incorrect" line. */
+  it(`${game.label}: a run to the first badge is close under that badge, the reason under it, no confetti`, async () => {
     const view = await play(game, firstBadge, 'wrong link');
     expect(links(view)).toBe(firstBadge + 1);
-    expect(q(view, '[data-result-moment]')).toHaveAttribute('data-result-moment', 'win');
+    expect(q(view, '[data-result-moment]')).toHaveAttribute('data-result-moment', 'close');
     expect(pill(view)).toBe(String(firstBadge));
     expect(view.getByRole('heading', { level: 2 })).toHaveTextContent(game.badgeAt(firstBadge)!.name);
+    expect(q(view, '[data-chain-end-reason]')?.textContent).toBeTruthy();
     expect(filedScore()).toBe(finalScore(view));
     expect(finalScore(view)).toBeGreaterThan(0);
-    expect(confetti(view)).toBe(28);
+    expect(confetti(view)).toBe(0);
     expect(q(view, '[data-guess-finish]')).toHaveAttribute('data-guess-finish', 'live');
   });
 });

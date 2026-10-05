@@ -13,8 +13,9 @@
  *   - useLiveFinish on its own: the menu forgets the game, so a live finish
  *     reopened under the same key stays settled, and a different game that
  *     arrives already finished stays settled;
- *   - the chain bands, read off each game's own badge table as a threshold at
- *     every length 0 to 25, and ChainFinishMoment drawing the facts it is given.
+ *   - the chain states at every length 0 to 25 (a run of none a loss, any run
+ *     that added a link close, badge or not, since every chain ends on a
+ *     break), and ChainFinishMoment drawing the facts it is given.
  *   src/test/guessFinishClueBoards.test.tsx
  *   - CBB program, F1 constructor, tennis player and NASCAR driver, each MOUNTED
  *     and played: a win after a miss shows the board's own "pts" line and the
@@ -23,8 +24,9 @@
  *   src/test/guessFinishChainBoards.test.tsx
  *   - Tennis, NASCAR and Combat Chain, each MOUNTED (validator and leaderboard
  *     stubbed) and played: a give up on the starting name is a loss at 0, a
- *     wrong link after two is close at 2, a run to the first badge is a win
- *     under that badge; the pill is checked against the links the test added
+ *     wrong link after two is close at 2, a run to the first badge that then
+ *     breaks is close under that badge with the board's reason below it, and
+ *     no chain rains confetti; the pill is checked against the links the test added
  *     and the timeline the board drew, the Final Score against the score filed.
  * The baseline must be exactly 30 passing tests, so a test deleted or skipped
  * cannot leave the run green.
@@ -39,6 +41,8 @@
  *   noclear        the menu never forgets the game it watched
  *   alwayslive     every finish plays, restored or not
  *   bands          a one link chain is called a loss
+ *   badgewin       a chain that earned a badge is called a win again (the
+ *                  rule before the 2026-10-05 closing check)
  *   chainoffbyone  NASCAR Chain hands the moment chain.length, not the links
  *   cbbscore       CBB program hands the moment the points still available
  *   boardlive      tennis player hands the moment live={true}
@@ -75,7 +79,7 @@ const T = {
   menu: 'keeps an old daily settled when it is reopened from the menu',
   hookMenu: 'forgets the game at the menu',
   hookKeyed: 'keeps a different game that arrives already finished settled',
-  bands: "follows each game's own badge bands",
+  bands: 'calls every chain that added a link close',
   chainShow: 'shows the chain length, the badge the game earned',
   ...Object.fromEntries(CLUE.flatMap(b => [
     [`${b}/win`, `${b}: a live win after a miss`], [`${b}/loss`, `${b}: a live loss after a miss`], [`${b}/reload`, `${b}: a daily plays live once`],
@@ -92,6 +96,7 @@ const CONTROLS = {
   noclear: { file: MOMENT, from: 'if (playedKey !== null) setPlayedKey(null);', to: '/* control: the menu never forgets */', red: [T.hookMenu] },
   alwayslive: { file: MOMENT, from: 'return finished && gameKey !== null && playedKey === gameKey;', to: 'return finished;', red: [T.reload, T.menu, T.hookMenu, T.hookKeyed, ...CLUE.map(b => T[`${b}/reload`])] },
   bands: { file: MOMENT, from: "return chainLength > 0 ? 'close' : 'loss';", to: "return chainLength > 1 ? 'close' : 'loss';", red: [T.bands] },
+  badgewin: { file: MOMENT, from: 'const outcome = chainOutcome(chainLength);', to: "const outcome = badge ? 'win' : chainOutcome(chainLength);", red: [T.chainShow, ...CHAIN.map(b => T[`${b}/badge`])] },
   chainoffbyone: { file: 'src/components/nascar-chain/NascarChainBoard.tsx', from: 'chainLength={chainLength}', to: 'chainLength={gameState.chain.length}', red: [T['NASCAR Chain/giveup'], T['NASCAR Chain/close'], T['NASCAR Chain/badge']] },
   cbbscore: { file: 'src/components/cbb-program/CbbProgramBoard.tsx', from: 'gamePath="/guess-cbb-team" score={score}', to: 'gamePath="/guess-cbb-team" score={pointsForCurrentClue}', red: [T['CBB Program/loss']] },
   boardlive: { file: 'src/components/tennis-player/TennisPlayerBoard.tsx', from: 'score={score} live={liveFinish}', to: 'score={score} live={true}', red: [T['Tennis Player/reload']] },
