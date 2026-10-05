@@ -451,7 +451,7 @@ head(3, 'the shipped file equals the record, row by row, both ways');
   }
   console.log(`  ${same} of ${players.length} rows equal the record, every ISO code equal to FlagImg's code for the country`);
 
-  // The result screen says how many franchises the path runs through. Counted
+  // The result screen says how many franchises he played for. Counted
   // here from the basketball-reference codes and the record's franchise grouping,
   // independently of the file's name map.
   const F = record.franchises || {};
