@@ -26,6 +26,9 @@
  * this historical projection. Its callbacks, saved IDs and random draws stay
  * live; sport-specific presentation is covered by appearanceSportCopy and
  * native career creation checks instead of changing the recorded fixture.
+ * Round 1009 continues past only the new transient decision receipt using
+ * the Board's real callback. Its original event application, random draws,
+ * saves, feed and following screen still match the unchanged recording.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -76,6 +79,16 @@ vi.mock('@/components/us-career/CareerSeasonReview', async () => {
     </div>
   </div> };
 });
+/* The historical path recorded the hub immediately after an ordinary choice.
+   Keep that projection through the real Continue callback, without replacing
+   any engine, storage or RNG behavior. The receipt has its own focused suite. */
+vi.mock('@/components/us-career/CareerDecisionOutcome', async () => {
+  const { useEffect } = await import('react');
+  return { default: function HistoricalDecisionOutcome({ onContinue }: ComponentProps<typeof import('@/components/us-career/CareerDecisionOutcome').default>) {
+    useEffect(() => { onContinue(); }, [onContinue]);
+    return null;
+  } };
+});
 
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
@@ -121,7 +134,9 @@ const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
   copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]').forEach(el => el.remove());
   copy.querySelectorAll('[data-career-hub-buttons]').forEach(el => el.replaceWith(...el.childNodes));
-  copy.querySelectorAll('[data-career-event]').forEach(el => el.removeAttribute('data-career-event'));
+  for (const attribute of ['data-career-event', 'data-career-decision-event', 'data-career-decision-option']) {
+    copy.querySelectorAll(`[${attribute}]`).forEach(el => el.removeAttribute(attribute));
+  }
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
