@@ -159,15 +159,15 @@ export function seasonDerbies(input: { club: string; league: string; year: numbe
   if (derbyMeetings(league, year) === null) return [];
   const canon = canonClub(club);
   const world = adjustClubsForYear(clubs, year);
-  const out: DetectedDerby[] = [];
+  const detected: DetectedDerby[] = [];
   for (const row of CLUB_RIVALRIES) {
     if (row.a !== canon && row.b !== canon) continue;
     const other = row.a === canon ? row.b : row.a;
     const rival = world.find(c => c.name !== club && canonClub(c.name) === other && c.league === league);
     if (!rival) continue;
-    out.push({ rival: rival.name, name: row.name, kind: row.kind });
+    detected.push({ rival: rival.name, name: row.name, kind: row.kind });
   }
-  return out;
+  return detected;
 }
 
 /* ─── The meeting model ───
