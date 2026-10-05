@@ -2858,13 +2858,20 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        its third (Monaco) through qualifying, its fourth (Lyon) to the Europa
        League, and its fifth (Marseille) on PSG's Coupe de France place.
      - The Conference League began in 2021-22, the season these tables fed,
-       and each league's next place went there (Tottenham, Roma, Union
-       Berlin, Rennes). The era's Europe draws Champions League fields only,
-       so uecl stays 0, as on every era row, and the line below says so.
+       and four leagues' next place went there (Tottenham, Roma, Union
+       Berlin, Rennes). Spain's went unused: Villarreal, seventh, won the
+       Europa League and took a Champions League place instead (RSSSF's
+       ec202122 lists no Spanish club in the Conference League;
+       footballtransfers.com, May 2021, has Villarreal as Spain's fifth
+       Champions League side; read 2026-10-05). The era's Europe draws
+       Champions League fields only, so uecl stays 0, as on every era row,
+       and the line below says so on the four rows that really earned one.
      - Relegation: three down in England, Spain and Italy. Germany sent two
        down and its sixteenth (Köln) into a playoff it won; France sent two
-       down and its eighteenth (Nantes) into a playoff it lost on aggregate
-       and still stayed up. Neither playoff is played, as on the modern rows.
+       down and its eighteenth (Nantes) into a playoff that finished 2-2 on
+       aggregate, Nantes staying up on away goals (RSSSF's fran2021: Toulouse
+       1-2 Nantes, Nantes 0-1 Toulouse; France 3 Pays de la Loire, 30 May
+       2021, read 2026-10-05). Neither playoff is played, as on the modern rows.
      - The cups: the FA Cup (Leicester), the Copa del Rey (Barcelona), the
        Coppa Italia (Juventus), the DFB-Pokal (Dortmund) and the Coupe de
        France (PSG), each named in RSSSF's record.
@@ -2882,7 +2889,6 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   },
   laliga2020: {
     nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
-    simplified: CONFERENCE_LEAGUE_UNPLAYED,
   },
   seriea2020: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',

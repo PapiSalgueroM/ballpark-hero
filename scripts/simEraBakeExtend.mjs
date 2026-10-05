@@ -24,7 +24,9 @@
  *      ERA_PULL and ERA_NEXT), the real 2015-16 bake is rebuilt from the
  *      60 club file it grew from (git show 89d31144) with --check, which must
  *      say byte identical, and since Round 901 the 2010-11 bake the same way
- *      from its 40 club file (git show 06dc0741). Without the pulls this part prints SKIPPED and why;
+ *      from its 40 club file (git show 06dc0741). Since Round 971 the 2020-21
+ *      bake too, which grows from an empty era of its own and reads one pull
+ *      (ERA_PULL_2020). Without the pulls this part prints SKIPPED and why;
  *      A and B do not need them and always run.
  *
  * Round 901 review fix: a name with rows at two clubs of the new leagues is
@@ -35,6 +37,9 @@
  * harness imports a COPY of the lib with that guard cut out (it first proves
  * the guarded line is in the lib, and refuses with exit 2 if not), and the
  * run must then end red. Nothing on disk outside the temp folder changes.
+ * SIM_ERA_EXTEND_CONTROL=stale2020 (Round 971) leaves the lib alone and runs
+ * the 2020-21 rebuild against a copy of the shipped era file with one name
+ * edited by hand: part C must go red on it.
  *
  * Run: node scripts/simEraBakeExtend.mjs
  */
@@ -59,8 +64,13 @@ const CONTROLS = {
   nosplit: ['if (undeclaredSplit.length) die(', 'if (false) die('],
 };
 const CONTROL = process.env.SIM_ERA_EXTEND_CONTROL ?? '';
+/* Round 971 review fix: the one control aimed at part C rather than the lib.
+   It hands the 2020-21 rebuild a copy of the shipped era file with one
+   player's name changed, the way a hand edit of the generated file would,
+   and the run must end red on that rebuild. */
+const C_CONTROL = CONTROL === 'stale2020';
 let libUrl = pathToFileURL(LIB).href;
-if (CONTROL) {
+if (CONTROL && !C_CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
   const src = fs.readFileSync(LIB, 'utf8');
@@ -242,30 +252,49 @@ console.log('B) every guard dies on its own bad correction');
 /* ---------- C. the real era bakes rebuild byte for byte ---------- */
 /* Round 901: one entry per era the shared step has extended, each rebuilt
    from the file it grew from (the commit is the last one before its extend). */
+/* Round 971 review fix: 2020-21 is the third. It grows from an EMPTY era the
+   bake writes itself (no git base) and reads one pull holding both years
+   (ERA_PULL_2020 overrides), so a change to the shared step or a hand edit
+   of src/data/clubManagerEra2020.ts that undoes a summer 2020 correction
+   turns this red. Before it, only a manual --check would have seen either. */
+const PULL_0515 = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
+const NEXT_0515 = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
+const PULL_2020 = process.env.ERA_PULL_2020 ?? 'C:/Users/antho/dukb-handoff/data/market-base-2020-2021.json';
 const REBUILDS = [
-  { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60 },
-  { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40 },
+  { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60, pulls: [PULL_0515, NEXT_0515] },
+  { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40, pulls: [PULL_0515, NEXT_0515] },
+  { label: '2020-21', script: 'bakeEra2020.mjs', base: null, file: 'clubManagerEra2020.ts', clubs: 0, pulls: [PULL_2020] },
 ];
 for (const rb of REBUILDS) {
   console.log(`C) the ${rb.label} bake rebuilds from its ${rb.clubs} club base byte for byte`);
-  const PULL = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
-  const NEXT_PULL = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
   let skip = null;
-  if (CONTROL) skip = 'a control run checks A and B only';
-  else if (!fs.existsSync(PULL) || !fs.existsSync(NEXT_PULL)) skip = `the offline pulls are not on this machine (${PULL}, ${NEXT_PULL}); set ERA_PULL and ERA_NEXT to run it`;
+  if (CONTROL && !(C_CONTROL && rb.label === '2020-21')) skip = 'a control run checks A and B only (stale2020 also runs the 2020-21 rebuild)';
+  else if (!rb.pulls.every(p => fs.existsSync(p))) skip = `the offline pulls are not on this machine (${rb.pulls.join(', ')}); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it`;
   let base = null;
-  if (!skip) {
+  if (!skip && rb.base) {
     try {
       base = path.join(TMP, `base-${rb.label}.ts`);
       fs.writeFileSync(base, execFileSync('git', ['show', `${rb.base}:src/data/${rb.file}`], { cwd: ROOT, maxBuffer: 1 << 26 }));
     } catch { skip = `git cannot show the ${rb.clubs} club base (${rb.base}), a shallow clone?`; }
   }
   if (skip) { console.log(`   SKIPPED: ${skip}`); continue; }
+  const args = rb.base
+    ? ['--extend-big-five', '--check', `--base=${base}`, `--pull=${rb.pulls[0]}`, `--next=${rb.pulls[1]}`]
+    : ['--check', `--pull=${rb.pulls[0]}`];
+  if (C_CONTROL && rb.label === '2020-21') {
+    const shipped = fs.readFileSync(path.join(ROOT, 'src', 'data', rb.file), 'utf8');
+    const was = "n: 'Kai Havertz'";
+    if (!shipped.includes(was)) { console.error(`CONTROL stale2020 did not apply: the shipped era file has no "${was}"`); process.exit(2); }
+    const stale = path.join(TMP, `stale-${rb.file}`);
+    fs.writeFileSync(stale, shipped.replace(was, "n: 'Kai Havertz Edited'"));
+    args.push(`--against=${stale}`);
+    console.log(`   CONTROL stale2020 applied: the rebuild is compared with a copy where "${was}" was edited by hand`);
+  }
   let out = '';
   let code = 0;
   try {
-    out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', rb.script), '--extend-big-five', '--check',
-      `--base=${base}`, `--pull=${PULL}`, `--next=${NEXT_PULL}`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
+    out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', rb.script), ...args],
+      { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
   } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
   const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
   console.log(`   ${verdict || '(no verdict line)'}`);

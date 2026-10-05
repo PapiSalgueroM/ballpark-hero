@@ -15,6 +15,7 @@
  *   node scripts/bakeEra2020.mjs            write src/data/clubManagerEra2020.ts
  *   node scripts/bakeEra2020.mjs --dry      run every check, write nothing
  *   node scripts/bakeEra2020.mjs --check    rebuild and compare with the shipped file
+ *                                           (--against=<file> compares with another copy)
  *
  * THE DATA, OFFLINE. Production is off limits to a bake, so the lead pulled
  * the base table once (2026-10-03) into
@@ -493,8 +494,11 @@ console.log(`Window: ${s.moved} moved, ${s.arrived} arrived, ${s.removed} remove
 console.log(`Club sizes: ${Object.entries(s.sizes).sort((a, b) => a[1] - b[1]).map(([c, n]) => `${c} ${n}`).join(', ')}`);
 if (check) {
   const norm = t => t.replace(/\r\n/g, '\n');
-  if (!fs.existsSync(OUT) || norm(fs.readFileSync(OUT, 'utf8')) !== norm(res.text)) {
-    console.error('CHECK: the rebuilt era file differs from src/data/clubManagerEra2020.ts');
+  /* --against= names another copy to compare with (simEraBakeExtend's
+     control hands it a mutated one); the default is the shipped file. */
+  const against = argOf('--against', OUT);
+  if (!fs.existsSync(against) || norm(fs.readFileSync(against, 'utf8')) !== norm(res.text)) {
+    console.error(`CHECK: the rebuilt era file differs from ${against === OUT ? 'src/data/clubManagerEra2020.ts' : against}`);
     process.exit(1);
   }
   console.log('CHECK: the rebuilt era file is byte identical to the shipped one (line endings aside).');
