@@ -5,6 +5,12 @@ export interface NbaCareerPlayer {
   countryFlag: string;
   draftInfo: string;
   teams: string[];
+  /**
+   * The last team is his 2026-27 team on both hosts and he had not played a
+   * regular season game for it on the read date (the record's teams fact
+   * carries it as `current`).
+   */
+  lastTeamNotYetPlayed?: true;
   stats: string[];
   awards: string[];
 }
@@ -24,13 +30,27 @@ export const NBA_SAME_FRANCHISE: Record<string, string> = {
   'New Orleans Hornets': 'New Orleans Pelicans',
 };
 
+const franchiseOf = (team: string) => NBA_SAME_FRANCHISE[team] ?? team;
+
 /**
- * How many franchises a player's path runs through: a return stint counts
- * once, and so does a renamed or moved franchise. The path is `teams`, so it
- * includes a current team he may not have played for yet.
+ * How many franchises he has played for: a return stint counts once, and so
+ * does a renamed or moved franchise. A current team he has not played for yet
+ * is left out.
  */
-export function nbaPathFranchises(player: NbaCareerPlayer): number {
-  return new Set(player.teams.map((t) => NBA_SAME_FRANCHISE[t] ?? t)).size;
+export function nbaFranchisesPlayed(player: NbaCareerPlayer): number {
+  const played = player.lastTeamNotYetPlayed ? player.teams.slice(0, -1) : player.teams;
+  return new Set(played.map(franchiseOf)).size;
+}
+
+/**
+ * The franchise he has joined and not played for yet, when it is a new one
+ * to him (a return to an old franchise gives null, it is already counted).
+ */
+export function nbaFranchiseJoined(player: NbaCareerPlayer): string | null {
+  if (!player.lastTeamNotYetPlayed) return null;
+  const last = player.teams[player.teams.length - 1];
+  const before = new Set(player.teams.slice(0, -1).map(franchiseOf));
+  return before.has(franchiseOf(last)) ? null : last;
 }
 
 /**
@@ -48,7 +68,8 @@ export function nbaPathFranchises(player: NbaCareerPlayer): number {
  *
  * Players who played in 2025-26 show floor totals ('43,400+ Pts') so the row
  * cannot go stale; retired players show exact totals. An active player whose
- * current team is not the last one he played for has it appended to his teams.
+ * current team is not the last one he played for has it appended to his teams
+ * and lastTeamNotYetPlayed set, so the result screen never counts it as played.
  *
  * ORDER MATTERS. The daily deal is dailyIndex(dateET, 50), a fresh shuffle every
  * 50 days. The 30 players added in Round 925 sit on the indices dealt first after
@@ -118,6 +139,7 @@ export const nbaCareerPuzzles: NbaCareerPuzzle[] = [
       countryFlag: '🇺🇸',
       draftInfo: '1st Round, 1st Pick (2003)',
       teams: ['Cleveland Cavaliers', 'Miami Heat', 'Cleveland Cavaliers', 'Los Angeles Lakers', 'Philadelphia 76ers'],
+      lastTeamNotYetPlayed: true,
       stats: ['43,400+ Pts', '12,000+ Reb', '12,000+ Ast'],
       awards: ['4× MVP', '4× NBA Champion', '4× Finals MVP', '22× All-Star'],
     },
@@ -144,6 +166,7 @@ export const nbaCareerPuzzles: NbaCareerPuzzle[] = [
       countryFlag: '🇺🇸',
       draftInfo: '1st Round, 1st Pick (2012)',
       teams: ['New Orleans Hornets', 'New Orleans Pelicans', 'Los Angeles Lakers', 'Dallas Mavericks', 'Washington Wizards'],
+      lastTeamNotYetPlayed: true,
       stats: ['19,300+ Pts', '1,800+ Blk'],
       awards: ['NBA Champion', '10× All-Star', '5× All-NBA', '5× All-Defensive'],
     },
@@ -235,6 +258,7 @@ export const nbaCareerPuzzles: NbaCareerPuzzle[] = [
       countryFlag: '🇺🇸',
       draftInfo: '1st Round, 15th Pick (2011)',
       teams: ['San Antonio Spurs', 'Toronto Raptors', 'Los Angeles Clippers', 'Toronto Raptors'],
+      lastTeamNotYetPlayed: true,
       stats: ['16,500+ Pts', '1,300+ Stl'],
       awards: ['2× NBA Champion', '2× Finals MVP', '2× Defensive Player of the Year', '7× All-Star'],
     },
@@ -417,6 +441,7 @@ export const nbaCareerPuzzles: NbaCareerPuzzle[] = [
       countryFlag: '🇬🇷',
       draftInfo: '1st Round, 15th Pick (2013)',
       teams: ['Milwaukee Bucks', 'Miami Heat'],
+      lastTeamNotYetPlayed: true,
       stats: ['21,500+ Pts', '8,800+ Reb'],
       awards: ['2× MVP', 'NBA Champion', 'Finals MVP (2021)', 'Defensive Player of the Year (2020)'],
     },

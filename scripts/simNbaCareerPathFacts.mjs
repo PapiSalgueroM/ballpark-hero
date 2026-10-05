@@ -38,12 +38,18 @@
  *       built from the record's ISO code, and that code must be the one the
  *       site's FlagImg map (src/components/FlagImg.tsx) gives the country name,
  *       so a copy pasted code cannot pass by being wrong in both files, and a
- *       country with no flag in the map fails. The result screen's "runs
- *       through N franchises" (nbaPathFranchises in the data file, read by
- *       src/pages/NbaCareer.tsx) equals the count the basketball-reference
- *       codes give through the record's franchise grouping, the file's
- *       lineage map equals the record's, each lineage has an nba.com and a
- *       basketball-reference source, and the page counts with the helper,
+ *       country with no flag in the map fails. A row whose path ends on a
+ *       current team carries lastTeamNotYetPlayed, as the record's `current`
+ *       says. The result screen's "played for N franchises"
+ *       (nbaFranchisesPlayed in the data file, read by src/pages/NbaCareer.tsx)
+ *       equals the count the basketball-reference codes give through the
+ *       record's franchise grouping, so a team he has not played for yet is
+ *       never counted; "before joining the X" (nbaFranchiseJoined) names that
+ *       team exactly when its franchise is new to him (LeBron James, Anthony
+ *       Davis, Giannis Antetokounmpo; Kawhi Leonard's return to Toronto is not
+ *       new). Both stay true after the season opens. The file's lineage map
+ *       equals the record's, each lineage has an nba.com and a
+ *       basketball-reference source, and the page counts with the helpers,
  *       never with teams.length (which counted return stints, renames and the
  *       current team as extra franchises on 13 of 50 rows).
  *    4. No repeats: ids and names unique (names compared without case or
@@ -67,7 +73,11 @@
  *       src/hooks/useDailyPuzzle.ts loads it when the index is equal, so it
  *       would land on another player). A release the day after releaseBy
  *       breaks one of those, so the date in the record is the real deadline.
- *       The later days to avoid are printed for the lead.
+ *       The later days to avoid are printed for the lead. And
+ *       src/hooks/useNbaCareer.ts passes getPuzzleId: saves written after the
+ *       release carry the id, so a later reorder cannot do this; the release
+ *       morning itself can only be kept apart by the order, because the old
+ *       bundle wrote no id.
  *
  * MEASURED (2026-10-03, window rerun 2026-10-05; the walk is deterministic,
  * so one run is every run). Release window 2026-10-04 to 2026-10-30: the
@@ -106,6 +116,9 @@
  *   franchise  the file's lineage map loses SuperSonics to Thunder          3
  *   pageline   the page counts the result line with teams.length again      3
  *   accent     Nikola Jokic gets the nba.com accent in both files           4
+ *   joined     Giannis Antetokounmpo's row loses lastTeamNotYetPlayed, so   3
+ *              the Miami Heat would count as played
+ *   noid       the hook stops passing getPuzzleId                           6
  *
  * Run: node scripts/simNbaCareerPathFacts.mjs
  *      NBA_CP_CONTROL=<name> node scripts/simNbaCareerPathFacts.mjs
@@ -127,7 +140,7 @@ const CONTROL = process.env.NBA_CP_CONTROL || '';
 const EXPECT = {
   onesource: [1, 2], floor: [2, 3], year: [2], falseline: [3, 5], staleteams: [3, 5],
   dup: [3, 4, 6], flag: [3], order: [3, 6], releaseby: [6], guessrule: [4],
-  iso: [3], franchise: [3], pageline: [3], accent: [4], collide: [6],
+  iso: [3], franchise: [3], pageline: [3], accent: [4], collide: [6], joined: [3], noid: [6],
 };
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`NBA_CP_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -254,7 +267,14 @@ if (CONTROL === 'franchise') {
   dataText = rewrite(dataText, "  'Seattle SuperSonics': 'Oklahoma City Thunder',\n", '', 'the SuperSonics to Thunder lineage');
 }
 if (CONTROL === 'pageline') {
-  pageText = rewrite(pageText, 'runs through {nbaPathFranchises(player!)} {nbaPathFranchises(player!) === 1', 'runs through {player!.teams.length} {player!.teams.length === 1', 'the result line count');
+  pageText = rewrite(pageText, 'played for {nbaFranchisesPlayed(player!)} {nbaFranchisesPlayed(player!) === 1', 'played for {player!.teams.length} {player!.teams.length === 1', 'the result line count');
+}
+if (CONTROL === 'joined') {
+  // Giannis's Miami Heat loses its flag, so the line would say he played for 2 franchises
+  dataText = rewrite(dataText, "teams: ['Milwaukee Bucks', 'Miami Heat'],\n      lastTeamNotYetPlayed: true,\n", "teams: ['Milwaukee Bucks', 'Miami Heat'],\n", "Giannis Antetokounmpo's not yet played flag");
+}
+if (CONTROL === 'noid') {
+  hookText = rewrite(hookText, '    getPuzzleId: (p) => p.id,\n', '', "the hook's getPuzzleId");
 }
 if (CONTROL === 'accent') {
   // the nba.com spelling copied into both files
@@ -400,7 +420,7 @@ head(2, 'every line follows from its source values by the record\'s rules');
 }
 
 // ---------------------------------------------------------------------------
-const { nbaCareerPuzzles, NBA_SAME_FRANCHISE, nbaPathFranchises } = await loadModule(DATA, dataText);
+const { nbaCareerPuzzles, NBA_SAME_FRANCHISE, nbaFranchisesPlayed, nbaFranchiseJoined } = await loadModule(DATA, dataText);
 const { dailyIndex, dayNumber } = await loadModule(DATES);
 const { FLAG_CODES } = await loadModule(FLAGS);
 head(3, 'the shipped file equals the record, row by row, both ways');
@@ -412,9 +432,12 @@ head(3, 'the shipped file equals the record, row by row, both ways');
     const row = nbaCareerPuzzles[i]; const rec = players[i];
     if (!row || !rec) { fail(`row ${i} exists on one side only`); continue; }
     const got = row.player;
+    const cur = rec.facts.find((x) => x.field === 'teams')?.current;
     const want = {
       name: rec.name, position: rec.position, country: rec.country, countryFlag: flagOf(rec.countryIso),
       draftInfo: rec.draftInfo, teams: rec.teams, stats: rec.stats, awards: rec.awards,
+      // the appended current team is flagged, so the result line never counts it as played
+      ...(cur ? { lastTeamNotYetPlayed: true } : {}),
     };
     const diffs = [];
     if (row.id !== rec.id) diffs.push(`id ${row.id} vs ${rec.id}`);
@@ -445,20 +468,29 @@ head(3, 'the shipped file equals the record, row by row, both ways');
     if (nameFr[t.name] && nameFr[t.name] !== t.franchise) fail(`${t.name} sits in two franchises`);
     nameFr[t.name] = t.franchise;
   }
-  let counted = 0;
+  // Played: the basketball-reference codes only (a team he has not played for
+  // yet is not in them). Joined: the current team both hosts name, when its
+  // franchise is not one he has played for.
+  let counted = 0, joinedRows = 0;
   for (let i = 0; i < Math.min(nbaCareerPuzzles.length, players.length); i++) {
     const rec = players[i]; const f = rec.facts.find((x) => x.field === 'teams');
     if (!f) continue;
     const fr = new Set(String(f.second).split(' ').map((c) => record.teamCodes[c]?.franchise ?? `?${c}`));
-    if (f.current) fr.add(nameFr[f.current.second] ?? `?${f.current.second}`);
-    const got = nbaPathFranchises(nbaCareerPuzzles[i].player);
-    if (got !== fr.size) fail(`${rec.name}: the result screen would say ${got} franchises, the codes give ${fr.size} (${[...fr].join(' ')})`); else counted += 1;
+    const curFr = f.current ? (nameFr[f.current.second] ?? `?${f.current.second}`) : null;
+    const wantJoined = curFr && !fr.has(curFr) ? f.current.official : null;
+    const got = nbaFranchisesPlayed(nbaCareerPuzzles[i].player);
+    const gotJoined = nbaFranchiseJoined(nbaCareerPuzzles[i].player);
+    if (got !== fr.size) fail(`${rec.name}: the result screen would say he played for ${got} franchises, the codes give ${fr.size} (${[...fr].join(' ')})`);
+    else if (gotJoined !== wantJoined) fail(`${rec.name}: the result screen would say he joined ${gotJoined}, the record gives ${wantJoined}`);
+    else counted += 1;
+    if (wantJoined) joinedRows += 1;
   }
-  // the page has to use that count, not the length of the path
+  // the page has to use those helpers, not the length of the path
   const code = pageText.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  if (!code.includes('runs through {nbaPathFranchises(player!)}')) fail(`${PAGE} no longer counts the result line with nbaPathFranchises`);
-  if (/teams\.length/.test(code)) fail(`${PAGE} reads teams.length again, which counts return stints and renames as extra franchises`);
-  console.log(`  ${counted} of ${players.length} result lines count the franchises the codes give`);
+  if (!code.includes('played for {nbaFranchisesPlayed(player!)}')) fail(`${PAGE} no longer counts the result line with nbaFranchisesPlayed`);
+  if (!code.includes('before joining the ${nbaFranchiseJoined(player!)}')) fail(`${PAGE} no longer names a team he has joined but not played for, so it would count it as played or drop it`);
+  if (/teams\.length/.test(code)) fail(`${PAGE} reads teams.length again, which counts return stints, renames and a team not played for yet as extra franchises`);
+  console.log(`  ${counted} of ${players.length} result lines count the franchises he played for (${joinedRows} name a team joined and not played for yet)`);
 }
 
 // ---------------------------------------------------------------------------
@@ -544,10 +576,15 @@ head(6, 'the daily walk: full cycles, fewer quick repeats, and a safe release wi
     if (!(w * 2 <= o)) fail(`${y}: the new pool repeats inside 14 days ${w} times, not at most half the old pool's ${o}`);
   }
   // (c) a release on any day of the window: new players first, a gap for the old
-  // ones, and no morning save that loads on another player. A save carries the
-  // old index and no puzzle id (useNbaCareer passes none, and saves from before
-  // the release could not carry one), and useDailyPuzzle loads it when the new
-  // index is equal.
+  // ones, and no morning save that loads on another player. A save from the
+  // release morning was written by the old bundle, so it carries the old index
+  // and no puzzle id, and useDailyPuzzle loads an id-less save when the new
+  // index is equal (Round 718 keeps old saves loading). The hook passes
+  // getPuzzleId from Round 925 on, so this window is the last time the order
+  // alone has to keep saves apart; it cannot protect the release day itself.
+  const hookCode = hookText.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  if (!/getPuzzleId:\s*\(p\)\s*=>\s*p\.id,/.test(hookCode)) fail(`${HOOK} no longer passes getPuzzleId: (p) => p.id, so every later reorder of the pool can load a save on another player`);
+  else console.log('  the hook passes getPuzzleId, so saves written from the release on carry the puzzle id');
   const collideAt = (R) => {
     const oi = dailyIndex(iso(R), 20), ni = dailyIndex(iso(R), SIZE);
     return oi === ni && pool[ni].player.name !== oldNames[oi] ? `${oldNames[oi]}'s morning save would load on ${pool[ni].player.name} (index ${ni})` : '';

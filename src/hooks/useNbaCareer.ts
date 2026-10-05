@@ -34,6 +34,10 @@ export function useNbaCareer() {
   } = useDailyPuzzle<Puzzle, CareerAction>({
     gameSlug: 'nba-career',
     puzzles: nbaCareerPuzzles,
+    // Round 925: saves carry the puzzle id from here on, so a later reorder or
+    // growth of the pool cannot load a save onto another player. Saves written
+    // before this have no id and load as before (useDailyPuzzle, Round 718).
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999, // game ends only via isWon / isLost
     isWon: (g) => g.some(a => a.t === 'won'),
     isLost: (g) => g.some(a => a.t === 'give'),

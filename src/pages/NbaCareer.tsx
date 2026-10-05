@@ -2,7 +2,7 @@ import { TextWithFlags } from '@/components/FlagImg';
 import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useNbaCareer } from '@/hooks/useNbaCareer';
-import { nbaPathFranchises } from '@/data/nbaCareerPlayers';
+import { nbaFranchisesPlayed, nbaFranchiseJoined } from '@/data/nbaCareerPlayers';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
@@ -177,7 +177,7 @@ const NbaCareer = () => {
               statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
               funFact={
                 <>
-                  💡 Did you know? The career path of {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) runs through {nbaPathFranchises(player!)} {nbaPathFranchises(player!) === 1 ? 'franchise' : 'franchises'}{player!.awards.length ? `, and his honors include ${player!.awards[0]}` : ''}.
+                  💡 Did you know? {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) played for {nbaFranchisesPlayed(player!)} {nbaFranchisesPlayed(player!) === 1 ? 'franchise' : 'franchises'}{nbaFranchiseJoined(player!) ? ` before joining the ${nbaFranchiseJoined(player!)}` : ''}{player!.awards.length ? `, and his honors include ${player!.awards[0]}` : ''}.
                 </>
               }
               statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
