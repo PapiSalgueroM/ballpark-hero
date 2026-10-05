@@ -622,7 +622,7 @@ let r1010Caught = false;
     const d = deriveHint(graphs[r.rule], a, b);
     const want = d ? { minSteps: d.minSteps, hint: d.hint } : null;
     if (!sameValue(r.next, want)) fail8(`${r.id} under ${r.rule}: the 1010 migration writes ${r.next ? `${r.next.minSteps} "${r.next.hint}"` : 'no path'}, the search on the bake says ${want ? `${want.minSteps} "${want.hint}"` : 'no path'}`, key);
-    if (r.next && (/[–—]/.test(r.next.hint) || r.next.hint.length > 200)) fail8(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
+    if (r.next && (/[\u2013\u2014]/.test(r.next.hint) || r.next.hint.length > 200)) fail8(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
   }
   let beaten = 0;
   for (const [id, p] of live) for (const rule of SEASON_RULES) {

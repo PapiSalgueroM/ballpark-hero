@@ -128,7 +128,7 @@ console.log('1) the ledger shape: seasons, clubs, sources');
   for (const h of L.held ?? []) if (!h.reason || !pre.some(p => p.name === h.player)) fail(`${h.player}: held without a reason or not in the pool`);
   for (const r of L.removed ?? []) if (!r.keptAs || !r.copy || r.copy.name !== r.player) fail(`${r.player}: removed without the man he is kept as or a copy of his entry`);
   const text = JSON.stringify(L);
-  if (/[–—]/.test(text)) fail('the ledger carries a long dash');
+  if (/[\u2013\u2014]/.test(text)) fail('the ledger carries a long dash');
   console.log(`   ${rows} added rows, ${(L.changed ?? []).length} changed fields, ${(L.ended ?? []).length} ended, ${(L.held ?? []).length} held, ${(L.removed ?? []).length} removed; every season, club and source holds`);
 }
 
