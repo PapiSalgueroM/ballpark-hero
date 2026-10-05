@@ -29,3 +29,27 @@ source or runtime behavior changed. Claude's manager lane stays untouched.
 
 Generated update snapshot and final integrated acceptance remain pending.
 All runtime verification is remote and offline. No production database probes.
+## Integrated verification, 2026-10-05
+
+Candidate d42b695e passed type/build, all existing engine/save regressions,
+the original four-sport full replay and its draw/restore controls, and all
+16 native sport/profile walks. Four additional pending NBA event round trips
+kept the exact event, saves and draw/write counts, then resolved normally.
+156 measured stages and160 screenshots had no page, console or local-asset
+errors, and no review scoring writes. Both geometry controls failed for their
+intended clipping/overflow and returned to passing baselines.
+
+Artifact11367613229 was downloaded and SHA256 verified as
+5ea14ddb4eb6bb8e22a5ae42cf76fa9f33fe804f55fec6d6f6cdd691c80a19b5.
+The generated update snapshot, sitemap and ledger are now committed and the
+temporary generation step removed. Other workflow built-reader failures
+were the missing committed update snapshot.
+
+Two test expectations need a final run: React's first async act internally
+consumes one random value, so initialize it before the measured review
+interval; and the inbox runner suppresses its child's summary, so require
+exactly the injected diagnostic and one failure in the actual runner output.
+The distinct GM cap remains allowed; an unapproved copy remains rejected.
+The native run used fallback fonts. Final native verification explicitly
+loads the template's real font faces before measuring. No final acceptance
+or publication is claimed until this final candidate passes.
