@@ -63,9 +63,74 @@ export interface SeasonDerby {
    year not listed claims nothing, so no derby is played there. Seasons after
    the latest one read keep the latest window.
 
-   CADENCE_SOURCES_PENDING */
+   A full double round robin is two meetings: every club plays every other
+   club home and away, which a table shows as 2 x (clubs - 1) games each.
+   Each window was read on 2026-10-05 from two sources, the per season tables
+   at rsssf.org and the per season pages at statscrew.com (their records sum
+   to the games played), at both ends and at the latest season either covers:
+
+   Premier League, from 1990/91 (the game labels the First Division seasons
+   1990/91 and 1991/92 Premier League too): 20 clubs and 38 games in
+   1990/91, 22 and 42 in 1991/92, 20 and 38 in 1995/96 and 2023/24.
+     rsssf.org/engpaul/FLA/1990-91.html, 1991-92.html, 1995-96.html;
+     statscrew.com/worldfootball/l-ENGPRE/y-1990, y-1991, y-1995, y-2023.
+   La Liga: 20 and 38 in 1990/91, 22 and 42 in 1995/96, 20 and 38 in 1998/99
+     and 2023/24. rsssf.org/tabless/spanhist8999.html;
+     statscrew.com/worldfootball/l-SPAPRI/y-1990, y-2023.
+   Serie A: 18 and 34 in 1990/91, 20 and 38 in 2023/24.
+     rsssf.org/tablesi/ital91.html, ital2024.html;
+     statscrew.com/worldfootball/l-ITASEA/y-1990, y-2023.
+   Bundesliga: 18 and 34 in 1990/91, 20 and 38 in 1991/92, 18 and 34 in
+     2023/24. rsssf.org/tablesd/duit91.html, duit92.html, duit2024.html;
+     statscrew.com/worldfootball/l-GERBUN/y-1990, y-1991, y-2023.
+   Ligue 1: 20 and 38 in 1990/91, 1993/94, 2018/19 and 2020/21, 18 and 34
+     in 2023/24. 2019/20 is HELD: the season was abandoned on 28 April 2020
+     (rsssf: PSG had played 27; statscrew: 28 games a club), so not every
+     pair met twice. rsssf.org/tablesf/fran94.html, fran2020.html,
+     fran2021.html, fran2024.html; statscrew.com/worldfootball/l-FRALG1/
+     y-1990, y-2018, y-2019, y-2020, y-2023.
+   Primeira Liga: 20 and 38 in 1990/91, 18 and 34 in 2019/20 (finished after
+     the break) and 2023/24. rsssf.org/tablesp/porthist199091.html,
+     port2020.html; statscrew.com/worldfootball/l-PORPRI/y-1990, y-2019,
+     y-2023.
+
+   CALENDAR YEAR LEAGUES. The game prints season Y as Y/Y+1, so a league that
+   runs inside one calendar year or splits its year in two needs a rule:
+   Brasileirao: season Y is the Brasileirao of calendar year Y (it runs from
+     about May to December, most of which sits inside Y/Y+1). Double round
+     robin from 2003 only: 24 clubs and 46 games in 2003, 20 and 38 in 2024
+     (rsssf.org/tablesb/braz03.html, braz2024.html; the turno e returno
+     format since 2003 in Lance!, lance.com.br/lancepedia/campeoes-da-era-
+     dos-pontos-corridos-do-brasileirao.html, and Olympics.com,
+     olympics.com/pt/noticias/brasileirao-pontos-campeao-torneio). 2002 was
+     26 clubs meeting once and then playoffs (rsssf braz02.html), and the
+     years before had their own formats, so nothing is claimed before 2003:
+     season 2002 has no derby and season 2003 has two meetings.
+   Liga MX: season Y is the Apertura (Invierno until 2001) of year Y plus the
+     Clausura (Verano) of year Y+1. Each short tournament is a single round
+     robin, 18 clubs and 17 games, so a season is two meetings, from
+     Invierno 1996 (rsssf.org/tablesm/mex97.html, mex2024.html; Claro Sports,
+     clarosports.com/futbol/liga-mx/historia-torneos-cortos-liga-mx). Nothing
+     is claimed before 1996/97, and 2019/20 is HELD: the Clausura 2020 was
+     cancelled after ten rounds (Mediotiempo, mediotiempo.com/futbol/liga-mx/
+     liga-mx-cancela-clausura-2020-pandemia-coronavirus; CBS Sports,
+     cbssports.com/soccer/news/liga-mx-cancels-clausura-2020-season).
+     Liguilla playoff meetings are never counted.
+   Liga Profesional (Argentina): Apertura and Clausura, Inicial and Final,
+     the 2015 thirty club season, the Superliga and the 2020s league and cup
+     each meet a different number of times, and no window was two sourced in
+     this round, so Argentina claims nothing and the Superclasico stays
+     dormant. */
 interface CadenceWindow { from: number; to?: number; meetings: number }
 export const DERBY_CADENCE: Record<string, CadenceWindow[]> = {
+  "Premier League": [{ from: 1990, meetings: 2 }],
+  "La Liga": [{ from: 1990, meetings: 2 }],
+  "Serie A": [{ from: 1990, meetings: 2 }],
+  "Bundesliga": [{ from: 1990, meetings: 2 }],
+  "Ligue 1": [{ from: 1990, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],
+  "Primeira Liga": [{ from: 1990, meetings: 2 }],
+  "Brasileirao": [{ from: 2003, meetings: 2 }],
+  "Liga MX": [{ from: 1996, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],
 };
 
 /** League meetings per season between two clubs of that league in the
