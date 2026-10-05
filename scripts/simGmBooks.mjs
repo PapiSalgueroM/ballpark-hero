@@ -39,6 +39,20 @@
       trust by nothing, the close moves it by the held tier's one point, and
       across the chaotic seasons of section 1 trust never moves more than a
       point at a close.
+   8. A trust cut after a building spree (four sports, three tiers, three
+      seeds: ten greedy seasons at full trust, six at trust 1, ten back at
+      full). Running costs alone can then overrun the smaller budget, and
+      nothing can refuse them, so the overrun must carry as a debt to the
+      $k, no building may be started with money the debt already spent, the
+      books must show the budget net of the debt, and a seat back at full
+      trust must pay the debt off inside the ten seasons it is given.
+      Measured 2026-10-05: 26 of 144 cut seasons overran (big 0, middle 7,
+      small 19; the floor is 8), 41 seasons opened on a debt, the debt
+      cleared in 1 to 4 seasons back at full trust. A seat in debt after a
+      spree sits at its ceiling, where nothing is cheap enough to buy with
+      or without the debt (0 of the 41 bought, control or not), so the
+      refusal is also asked directly of a fresh seat: a debt the size of its
+      free money must refuse all 48 level 2 buildings it can buy debt free.
 
    Measured on 2026-10-03 (printed again on every run): see each section's
    BANDS comment; section 3 big over middle 1.2601, middle over small 1.2227
@@ -55,6 +69,8 @@
      noreserve   a purchase forgets the upkeep its own new level adds: section 6 must fail.
      swapbudget  next season's budget is called with trust and cap swapped: section 6 must fail.
      bigverdict  ownership's premium verdict is three points: section 7 must fail.
+     forgivedebt the summer carry forgives an overrun (clamped at zero): section 8 must fail.
+     buyindebt   free money ignores a debt carried in: section 8 must fail.
 */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -118,6 +134,11 @@ if (CONTROL === 'dropcost') {
   rewrite('noreserve', 'return Math.max(0, opsFreeK(b, ctx) - Math.max(0, extra));', 'return Math.max(0, opsFreeK(b, ctx) + 0 * extra);');
 } else if (CONTROL === 'swapbudget') {
   rewrite('swapbudget', 'opsBudget: opsBudgetFor(b.marketTier, trust, nextCap),', 'opsBudget: opsBudgetFor(b.marketTier, nextCap, trust),');
+} else if (CONTROL === 'forgivedebt') {
+  rewrite('forgivedebt', 'const carry = b.opsBudget + b.opsCarry - opsSpentK(b);', 'const carry = Math.max(0, b.opsBudget + b.opsCarry - opsSpentK(b));');
+} else if (CONTROL === 'buyindebt') {
+  rewrite('buyindebt', 'return Math.max(0, b.opsBudget + b.opsCarry - opsSpentK(b) - sum3(runningCostsLeftK(b, ctx)));',
+    'return Math.max(0, b.opsBudget + Math.max(0, b.opsCarry) - opsSpentK(b) - sum3(runningCostsLeftK(b, ctx)));');
 } else if (CONTROL === 'bigverdict') {
   rewrite('bigverdict', 'export const TICKET_TRUST: Record<GmTicketTier, number> = { 0: -1, 1: 0, 2: 1 };',
     'export const TICKET_TRUST: Record<GmTicketTier, number> = { 0: -1, 1: 0, 2: 3 };');
@@ -428,6 +449,78 @@ console.log(`   chaotic seasons of section 1: ${ticketCloses} of ${seasons} clos
 if (ticketCloses < seasons / 4) fail(`only ${ticketCloses} chaotic seasons closed off standard, so the verdict barely ran`);
 if (trustJumps === 0) ok('no chaotic season moved trust by more than a point at the close');
 else fail(`${trustJumps} chaotic seasons moved trust by more than a point at the close`);
+
+/* ---------- 8: a trust cut after a building spree ---------- */
+console.log('\n8. A trust cut after a building spree: the overrun is carried as a debt and blocks building until it is paid');
+const CUT = [{ trust: 100, n: 10, phase: 'spree' }, { trust: 1, n: 6, phase: 'cut' }, { trust: 100, n: 10, phase: 'back' }];
+let cutOverruns = 0, debtBuys = 0, debtCarryMiss = 0, debtShownMiss = 0, debtSeasons = 0, debtBuySeasons = 0;
+const clearAfter = { 1: [], 2: [], 3: [] };
+const overByTier = { 1: 0, 2: 0, 3: 0 };
+for (const sp of SPORTS) {
+  for (const tier of [1, 2, 3]) {
+    for (const seed of [7, 19, 31]) {
+      const rng = rngFrom(seed * 4099 + tier * 13);
+      let state = { books: B.newGmBooks(B.GM_BOOKS_SPORTS[sp.id], tier, 100, sp.cap), fac: F.newFacilities(sp.pack, tier) };
+      let backSeasons = 0, cleared = null;
+      for (const ph of CUT) {
+        for (let k = 0; k < ph.n; k += 1) {
+          if (state.books.opsCarry < 0) debtSeasons += 1;
+          const shown = B.projectGmBooks(state.books, { sport: B.GM_BOOKS_SPORTS[sp.id], cap: sp.cap, payroll: sp.cap * 0.95, deadMoney: 0, scale: 1, facilities: { pack: sp.pack, state: state.fac } }).opsBudget;
+          if (shown !== B.toM(state.books.opsBudget + state.books.opsCarry)) debtShownMiss += 1;
+          const r = playSeason(state, sp, rng, { greedy: true, winP: 0.5, payrollShare: 0.95, deadShare: 0, playoffHome: 0, taxM: 0, trust: ph.trust });
+          const c = r.closed;
+          const spent = c.staff + c.scouting + c.upkeep + c.facilities;
+          const room = r.opsBudgetAtOpen + r.opsCarryAtOpen;
+          if (ph.phase === 'cut' && spent > room) { cutOverruns += 1; overByTier[tier] += 1; }
+          if (r.opsCarryAtOpen < 0 && c.facilities > 0) {
+            debtBuySeasons += 1;
+            if (spent > room) debtBuys += 1;
+          }
+          if (r.next.opsCarry !== room - spent) debtCarryMiss += 1;
+          if (ph.phase === 'back') {
+            backSeasons += 1;
+            if (cleared === null && r.next.opsCarry >= 0) cleared = backSeasons;
+          }
+          state = r.state;
+        }
+      }
+      clearAfter[tier].push(cleared);
+    }
+  }
+}
+const showClear = (t) => clearAfter[t].map(v => (v === null ? 'never' : v)).join(',');
+console.log(`   ${cutOverruns} cut seasons overran on running costs alone (big ${overByTier[1]}, middle ${overByTier[2]}, small ${overByTier[3]}); ${debtSeasons} seasons opened on a debt, ${debtBuySeasons} of them still bought; seasons back at full trust to clear the debt: big ${showClear(1)}, middle ${showClear(2)}, small ${showClear(3)}`);
+if (cutOverruns < 8) fail(`only ${cutOverruns} cut seasons overran, so the debt rule barely ran`);
+if (debtCarryMiss === 0) ok('every summer through the cut carries budget plus carry less spend to the $k: an overrun is a debt, never forgiven');
+else fail(`${debtCarryMiss} summers through the cut carried the wrong amount (a debt forgiven or misbooked)`);
+if (debtBuys === 0) ok('no building was started with money the debt had already spent');
+else fail(`${debtBuys} seasons started a building the budget left after the debt and the running costs could not pay for`);
+if (debtShownMiss === 0) ok('the books show the budget net of the debt (budget plus carry), so the cut is on screen');
+else fail(`${debtShownMiss} seasons showed a budget that is not budget plus carry`);
+/* The spree leaves a seat in debt at its ceiling, where nothing is cheap
+   enough to buy anyway, so the refusal is also asked directly: a fresh seat
+   carrying a debt the size of its free money must be refused every
+   building, each of which it can afford with no debt. */
+let refusedDebt = 0, affordable = 0, debtCases = 0;
+for (const sp of SPORTS) {
+  for (const tier of [1, 2, 3]) {
+    const sport = B.GM_BOOKS_SPORTS[sp.id];
+    const fresh = B.newGmBooks(sport, tier, 60, sp.cap);
+    const ctx = { sport, cap: sp.cap, payroll: sp.cap * 0.95, deadMoney: 0, scale: 1, facilities: { pack: sp.pack, state: F.newFacilities(sp.pack, tier) } };
+    const inDebt = { ...fresh, opsCarry: -B.opsFreeK(fresh, ctx) };
+    for (const d of sp.pack.facilities) {
+      debtCases += 1;
+      if (B.buyFacility(fresh, ctx, d.id)) affordable += 1;
+      if (!B.buyFacility(inDebt, ctx, d.id)) refusedDebt += 1;
+    }
+  }
+}
+if (affordable !== debtCases) fail(`only ${affordable} of ${debtCases} level 2 buildings were affordable with no debt, so the refusal below proves nothing`);
+if (refusedDebt === debtCases) ok(`a seat whose debt eats its free money is refused all ${debtCases} buildings it could buy without the debt`);
+else fail(`${debtCases - refusedDebt} of ${debtCases} buildings were started with money a debt had already spent`);
+const neverCleared = [1, 2, 3].reduce((n, t) => n + clearAfter[t].filter(v => v === null).length, 0);
+if (neverCleared === 0) ok(`every seat back at full trust has paid the debt off within the ${CUT[2].n} seasons it is given (measured at most 4)`);
+else fail(`${neverCleared} seats back at full trust still carried a debt after ${CUT[2].n} seasons, so a cut traps them out of building`);
 
 fs.rmSync(TMP, { recursive: true, force: true });
 console.log(`\nsimGmBooks: ${failures === 0 ? 'ALL GREEN' : `${failures} FAILURE(S)`}${CONTROL ? ` (control ${CONTROL})` : ''}`);

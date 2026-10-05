@@ -7,8 +7,12 @@
  * the engines already carry from src/lib/leagueCaps.ts (sourced there), so a
  * training centre costs the same share of the cap in every sport. The other
  * packs run on a game scale of their own, said plainly in goodSeasonSource,
- * because those engines keep no money of the same kind (the college
- * dynasties and Australian football keep none at all).
+ * because those engines keep no money of the same kind: the college
+ * dynasties keep a program budget in points, not dollars (nilBudgetFor in
+ * cfbDynasty.ts and cbbNilFor in cbbDynasty.ts, opened by collegeProgram.ts
+ * openProgramOffseason), which pays the staff and then the NIL pot, and
+ * Australian football keeps none at all. Whether a building is paid out of
+ * that program budget, and at what rate, is the binding round's call.
  *
  * Every effect is neutral at level 1 and every seat opens with every building
  * at level 1, whatever its market (startLevel is [1, 1, 1] in every pack, and
@@ -115,7 +119,7 @@ export const COLLEGE_FACILITY_PACK: FacilityPack = {
   startLevel: [1, 1, 1],
   upkeepPerLevel: 0.004,
   goodSeasonIncome: 12,
-  goodSeasonSource: 'Game scale, not any real program\'s budget: the college dynasties keep no money yet, so this is the facility fund a good season is meant to bring in, and the round that binds the pack sets its income against it.',
+  goodSeasonSource: 'Game scale, not any real program\'s budget: the college dynasties keep a program budget in points, not dollars, and nothing yet pays a building out of it, so this is the facility fund a good season is meant to bring in, and the round that binds the pack sets its income against it.',
   facilities: [
     {
       id: 'stadium', label: 'Stadium', emoji: '\u{1F3DF}️', costFactor: 1.5,

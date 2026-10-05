@@ -24,8 +24,10 @@
       market at full trust (buildings are paid from nothing else), which
       simGmBooks measures and holds. For the fight gym it is measured here,
       by running src/lib/fightGym.ts with simFightGym's careful policy for
-      three years (an established gym's purse cuts). College and Australian
-      football keep no money yet: their number is DECLARED, not measured,
+      three years (an established gym's purse cuts). College keeps a program
+      budget in points, not dollars, that nothing yet spends on a building,
+      and Australian football keeps no money at all: their number is
+      DECLARED, not measured,
       the check only holds the ladder to the pack's own statement, and the
       round that binds each owes the measurement.
    3. An upgrade takes its build time: a level opens after exactly the
