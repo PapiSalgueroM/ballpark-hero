@@ -60,7 +60,17 @@
       attribution: Round 899's head (06dc0741, a git archive of its src,
       CM_RULES_ROOT) reproduced the old entries exactly (eras 9/0, pure
       32/0), and the round's own diff is that era's data file, its
-      nationality block and its rows in the engine. MERGE_ATTRIBUTION_TODO
+      nationality block and its rows in the engine. Landing it on main
+      after Release AC (211da297, Round 901 included), the merge took main's
+      file and re-took eras and pure on the merged tree, whose only Club
+      Manager difference from main is that era's data, nationality block and
+      rows: modern stayed 22/22 with main's entries, every 2010-11 and
+      2015-16 entry of eras and pure matched main's untouched (eras 10 of 15,
+      pure 32 of 38), and what moved is exactly this round's footprint (the
+      2005-06 Premier League and La Liga saves and day one objectives, the
+      three new 2005-06 leagues, and the views' leagueNations and euroSlots).
+      The new pure entries for 2005-06 equal the ones the branch wrote before
+      the merge, value for value.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
