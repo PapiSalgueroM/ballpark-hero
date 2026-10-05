@@ -273,9 +273,9 @@ const CAP = 5; // the harness's own copy of the rule, so a changed engine cap ca
 const fourOdds = cands => {
   const groups = new Map();
   for (const c of cands) { const k = `${c.league}|${c.tier}`; groups.set(k, (groups.get(k) || 0) + 1); }
-  let w = 0; let four = 0;
-  for (const [k, n] of groups) { const wt = Math.min(n, CAP); w += wt; if (FOUR.has(k.split('|')[0])) four += wt; }
-  return { four, w };
+  let w = 0; let four = 0; let bites = false;
+  for (const [k, n] of groups) { const wt = Math.min(n, CAP); w += wt; if (n > CAP) bites = true; if (FOUR.has(k.split('|')[0])) four += wt; }
+  return { four, w, bites };
 };
 const handSets = [[1], [2], [3], [4], [1, 2], [2, 3], [3, 4]];
 for (const tiers of handSets) {
@@ -385,13 +385,16 @@ const offersOf = s => {
    carry a club that a pickAcrossLeagues call returned in that same step. */
 function playSeed(seed, startYear, careers, era) {
   seedRandom(seed);
-  const r = { draws: 0, measured: 0, expected: 0, variance: 0, offers: 0, uncovered: [], byLeague: new Map(), marketFour: 0, marketAll: 0, rivals: [] };
+  const r = { draws: 0, measured: 0, expected: 0, variance: 0, bDraws: 0, bMeasured: 0, bExpected: 0, bVariance: 0, offers: 0, uncovered: [], byLeague: new Map(), marketFour: 0, marketAll: 0, rivals: [] };
   let stepPicks = new Set();
   globalThis.__poolDrawLog = (cands, p) => {
-    const { four, w } = fourOdds(cands);
+    const { four, w, bites } = fourOdds(cands);
     const q = four / w;
-    r.draws += 1; r.expected += q; r.variance += q * (1 - q);
-    if (FOUR.has(p.league)) r.measured += 1;
+    const won = FOUR.has(p.league) ? 1 : 0;
+    r.draws += 1; r.expected += q; r.variance += q * (1 - q); r.measured += won;
+    /* the draws where the cap changes the odds (some league group over CAP):
+       the only draws that can tell a capped draw from a plain one */
+    if (bites) { r.bDraws += 1; r.bExpected += q; r.bVariance += q * (1 - q); r.bMeasured += won; }
     stepPicks.add(p);
   };
   const seen = new WeakSet();
@@ -429,27 +432,39 @@ function playSeed(seed, startYear, careers, era) {
    (4 to 11). Each floor is half the minimum, rounded down, at least 1; the
    nopool control gives 0. */
 const F_MIN_DISTINCT = { 'Premier League': 1, Championship: 3, 'La Liga': 2, Brasileirao: 2 };
-/* Four leagues' wins over their expected wins, per seed: 0.911 to 1.080
-   over the same 12 seeds (z -1.90 to 1.70, about 1150 to 1230 draws each,
-   one seed's ratio sd about 0.05). The band 0.2 is about four sd and twice
-   the worst seed; the uncapped control lands far outside it. */
-const D_RATIO = 0.2;
+/* Gated only on the draws where the cap changes the odds (a league group
+   over CAP in the candidate list): over all draws the uncapped control
+   moved the ratio to just 1.07 to 1.14, inside the healthy spread, because
+   most draws never reach the cap. On the capped draws, over the same 12
+   seeds: 233 to 284 draws a seed, about 50 four league wins expected, ratio
+   0.822 to 1.172 (z -1.41 to 1.41, one seed's sd about 0.13), while the
+   uncapped control gave 1.456 to 1.886 over 6 seeds. One seed is too small
+   to separate the two cleanly, so the gate is the ratio over all the run's
+   seeds: 0.970 over the first 6 healthy seeds and 0.959 over all 12 (sd of a
+   6 seed ratio about 0.053), against 1.68 for the uncapped control. The band
+   0.25 is about 4.7 sd of the 6 seed ratio and sits well clear of both. The
+   draw floor is half the fewest capped draws a seed showed. */
+const D_RATIO = 0.25;
+const B_MIN_DRAWS = 115;
 const SEED_LIST = Array.from({ length: SEEDS }, (_, i) => 0x1013a + i * 7919);
 const results = [];
 const t0 = Date.now();
 for (const seed of SEED_LIST) {
   const r = playSeed(seed, 2020, CAREERS, '2020s');
   results.push(r);
-  const ratio = r.measured / r.expected;
-  const z = (r.measured - r.expected) / Math.sqrt(r.variance || 1);
+  const ratio = r.bMeasured / r.bExpected;
+  const z = (r.bMeasured - r.bExpected) / Math.sqrt(r.bVariance || 1);
   const leagues = [...FOUR].map(l => `${l} ${r.byLeague.get(l)?.size ?? 0}`).join(', ');
-  console.log(`  seed ${seed}: ${r.draws} draws, four leagues ${r.measured} vs ${r.expected.toFixed(1)} expected (ratio ${ratio.toFixed(3)}, z ${z.toFixed(2)}); ${r.offers} offers; distinct generated clubs offered: ${leagues}; uncovered ${r.uncovered.length}`);
+  console.log(`  seed ${seed}: ${r.draws} draws (four leagues ${r.measured} vs ${r.expected.toFixed(1)}), ${r.bDraws} where the cap bites (four leagues ${r.bMeasured} vs ${r.bExpected.toFixed(1)}, ratio ${ratio.toFixed(3)}, z ${z.toFixed(2)}); ${r.offers} offers; distinct generated clubs offered: ${leagues}; uncovered ${r.uncovered.length}`);
   for (const l of FOUR) ok((r.byLeague.get(l)?.size ?? 0) >= F_MIN_DISTINCT[l], `seed ${seed}: ${l} offered ${r.byLeague.get(l)?.size ?? 0} distinct generated clubs, at least ${F_MIN_DISTINCT[l]} expected`);
-  ok(r.draws >= 200, `seed ${seed}: only ${r.draws} pickAcrossLeagues draws, the comparison needs at least 200`);
-  ok(Math.abs(ratio - 1) <= D_RATIO, `seed ${seed}: the four leagues won ${r.measured} draws against ${r.expected.toFixed(1)} on the draws' own odds (ratio ${ratio.toFixed(3)}, band 1 +/- ${D_RATIO})`);
+  ok(r.bDraws >= B_MIN_DRAWS, `seed ${seed}: only ${r.bDraws} draws where the cap bites, the comparison needs at least ${B_MIN_DRAWS}`);
   ok(!r.uncovered.length, `seed ${seed}: market offers that no pickAcrossLeagues call produced: ${r.uncovered.slice(0, 5).join(', ')}`);
 }
-const ratios = results.map(r => r.measured / r.expected);
+const ratios = results.map(r => r.bMeasured / r.bExpected);
+const agg = results.reduce((a, r) => ({ m: a.m + r.bMeasured, e: a.e + r.bExpected, v: a.v + r.bVariance }), { m: 0, e: 0, v: 0 });
+const aggRatio = agg.m / agg.e;
+console.log(`  over all ${SEED_LIST.length} seeds, where the cap bites: four leagues won ${agg.m} against ${agg.e.toFixed(1)} expected (ratio ${aggRatio.toFixed(3)}, z ${((agg.m - agg.e) / Math.sqrt(agg.v || 1)).toFixed(2)})`);
+ok(Math.abs(aggRatio - 1) <= D_RATIO, `where the cap bites the four leagues won ${agg.m} draws against ${agg.e.toFixed(1)} on the draws' own odds (ratio ${aggRatio.toFixed(3)}, band 1 +/- ${D_RATIO}): the market is not drawing on the capped weights`);
 const mins = [...FOUR].map(l => `${l} ${Math.min(...results.map(r => r.byLeague.get(l)?.size ?? 0))}`).join(', ');
 console.log(`  ratio range ${Math.min(...ratios).toFixed(3)} to ${Math.max(...ratios).toFixed(3)}; per league minimum distinct generated clubs: ${mins}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
 const mk = results.reduce((a, r) => [a[0] + r.marketFour, a[1] + r.marketAll], [0, 0]);
