@@ -136,9 +136,12 @@ export function nhlLineupSport(): GmLineupSport<NhlGmTeam> {
        https://operations.nfl.com/learn-the-game/nfl-basics/terms-glossary/
      the linebackers (three in a 4-3 base set, four in a 3-4) a second time:
        https://bleacherreport.com/articles/1212418-football-101-linebacker-assignments-and-alignment
-     The linemen and defensive back counts rest on the glossary alone: no
-     second source read that day states them, so they are flagged for a
-     second read in the round's report rather than claimed twice. */
+     the whole front a second time, read 2026-10-05: 4-3 four linemen, three
+     linebackers, two corners and two safeties; 3-4 three linemen, four
+     linebackers, two corners and two safeties; nickel a fifth defensive back:
+       https://gorout.com/defensive-football-formations/
+     and the linemen and linebackers a third time, read 2026-10-05:
+       https://nflmocks.com/2015/05/11/explaining-jargon-3-4-versus-4-3/ */
 const personnel = (rb: number, wr: number, te: number): GmSlot[] =>
   [...slots('RB', rb, 1, ['RB']), ...slots('WR', wr, 1, ['WR']), ...slots('TE', te, 1, ['TE'])];
 const front = (dl: number, lb: number): GmSlot[] =>
