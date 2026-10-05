@@ -1,3 +1,14 @@
+## Codex claims1005: Your picks, 2026-10-05
+
+Codex is building a guest-capable shelf of explicitly pinned games on Home,
+with pin controls on Home and Search. Browser-local picks use existing registry
+routes, names and sport styles. No game saves, facts, scores or account writes.
+Files: Index.tsx, Search.tsx, new useGamePicks, GamePickButton, GamePicksRow,
+focused tests and remote workflow. Isolated managed worktree game-picks-1005.
+Claude's 1010 to1014 and Front Office lanes remain separate.1004's seven-profile
+Connections baseline is in remote CI; no product fix is claimed before evidence.
+No publication claim yet.1006to1009 remain unstarted. Remote runtime checks only.
+
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.
