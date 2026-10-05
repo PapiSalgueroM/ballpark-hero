@@ -324,11 +324,14 @@ console.log('0. the rule table');
   const metrics = new Set(Object.values(BADGE_RULES).map(r => r.metric));
   console.log(`   ${defIds.length} badges, ${Object.keys(BADGE_RULES).length} rules, ${metrics.size} facts`);
   // the words a player reads promise the rule's number (Perfect Week and All
-  // Rounder say what they count in words, not a number)
+  // Rounder say what they count in words, not a number, and are skipped by
+  // name so section 2's control, which rewrites Perfect Week's rule, stays
+  // out of this section)
+  const IN_WORDS = ['perfect-week', 'all-rounder'];
   let worded = 0;
   for (const d of BADGE_DEFS) {
     const r = BADGE_RULES[d.id];
-    if (!r || typeof r.atLeast !== 'number' || r.metric === 'fullWeeks') continue;
+    if (!r || typeof r.atLeast !== 'number' || IN_WORDS.includes(d.id)) continue;
     const said = (d.desc.match(/\d[\d,]*/g) ?? []).map(s => Number(s.split(',').join('')));
     worded += 1;
     if (!said.includes(r.atLeast)) fail(`${d.id} unlocks at ${r.atLeast} but says "${d.desc}"`);
