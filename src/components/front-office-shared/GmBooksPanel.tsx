@@ -64,6 +64,9 @@ export function GmBooksPanel({ books, ctx, onTicketTier }: GmBooksPanelProps) {
           <p className="text-[10px] text-muted-foreground">Operations budget</p>
           <p className="text-sm font-bold tabular-nums">{fmt(p.opsFree)} free</p>
           <p className="text-[10px] text-muted-foreground">of {fmt(p.opsBudget)} for staff, scouts and buildings. Never players.</p>
+          {p.opsCarry < 0 && (
+            <p data-gm-ops-debt className="text-[10px] text-destructive">That's after the {fmt(-p.opsCarry)} you ran over last season.</p>
+          )}
         </div>
       </div>
       <Lines title="Money in" lines={p.income} />

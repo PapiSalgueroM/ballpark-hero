@@ -487,7 +487,10 @@ export interface GmFinanceProjection {
   spendProjected: number;
   resultActual: number;
   resultProjected: number;
+  /** This season's budget plus the carry, in $M. */
   opsBudget: number;
+  /** The part of opsBudget carried from last season in $M: unspent money, or below zero an overrun being paid back. */
+  opsCarry: number;
   opsFree: number;
   caveat: string;
 }
@@ -548,6 +551,7 @@ export function projectGmBooks(b: GmBooks, ctx: GmBooksContext): GmFinanceProjec
     resultActual: toM(toK(incomeActual) - toK(spendActual)),
     resultProjected: toM(toK(incomeProjected) - toK(spendProjected)),
     opsBudget: toM(b.opsBudget + b.opsCarry),
+    opsCarry: toM(b.opsCarry),
     opsFree: toM(opsFreeK(b, ctx)),
     caveat: 'Counts the regular season left at today\'s prices and payroll. Playoff gates and a tax bill land when they happen and are not guessed at.',
   };

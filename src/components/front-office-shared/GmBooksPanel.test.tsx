@@ -29,6 +29,15 @@ describe('GmBooksPanel', () => {
     expect(screen.getByText(/Finish a season on these and ownership adds a point of trust/)).toBeTruthy();
     expect(closeGmSeason(setGmTicketTier(books, 2).books, 60, 165).trust).toBe(61);
   });
+
+  it('names an overrun carried from last season, and says nothing when there is none', () => {
+    const books = newGmBooks(GM_BOOKS_SPORTS.nba, 2, 60, 165);
+    const { container, unmount } = render(<GmBooksPanel books={books} ctx={ctx} />);
+    expect(container.querySelector('[data-gm-ops-debt]')).toBeNull();
+    unmount();
+    render(<GmBooksPanel books={{ ...books, opsCarry: -1800 }} ctx={ctx} />);
+    expect(screen.getByText(/after the \$1\.8M you ran over last season/)).toBeTruthy();
+  });
 });
 
 describe('GmFacilitiesPanel', () => {
