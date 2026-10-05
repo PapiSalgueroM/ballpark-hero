@@ -9,6 +9,8 @@ import { isFootleLog } from '@/lib/dailySaveShapes';
 import { getTodayET, getDailyTier, dailyIndex } from '@/lib/dateUtils';
 import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
 import { createPracticeRun, FOOTLE_PRACTICE_KEY, giveUpPractice, guessPractice, loadPracticeRun, nextPractice, practiceCandidates, practiceFinished, type FootlePracticeRun } from '@/lib/footlePracticeRun';
+import { createUnlimitedSession, FOOTLE_UNLIMITED_KEY, giveUpUnlimited, guessUnlimited, nextUnlimitedPuzzle, parseUnlimitedSession, reshuffleUnlimited, selectUnlimitedTier, unlimitedRemaining, type FootleUnlimitedSession } from '@/lib/footleUnlimitedSession';
+import { normalizeName } from '@/lib/playerSearch';
 
 const MAX_GUESSES = 8;
 
@@ -53,11 +55,6 @@ function buildTargetPool(tier: Difficulty, pool: Player[]): Player[] {
   return pure.length > 0 ? pure : buildPool(tier, pool);
 }
 
-function selectRandomPlayer(diff: Difficulty, pool: Player[]): Player {
-  const filtered = buildTargetPool(diff, pool);
-  return filtered[Math.floor(Math.random() * filtered.length)];
-}
-
 // ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
@@ -67,7 +64,23 @@ export function useGame() {
   const [practiceRun, setPracticeRun] = useState(loadPracticeRun);
   const practiceRef = useRef(practiceRun);
   const [practiceSaveFailed, setPracticeSaveFailed] = useState(false);
-  const [mode, setMode] = useState<FootleMode>(() => practiceRun?.active ? 'practice' : 'daily');
+  const [initialUnlimited] = useState(() => {
+    try { return { session: parseUnlimitedSession(localStorage.getItem(FOOTLE_UNLIMITED_KEY)) ?? createUnlimitedSession(), failed: false }; }
+    catch { return { session: createUnlimitedSession(), failed: true }; }
+  });
+  const [unlimitedSession, setUnlimitedSession] = useState(initialUnlimited.session);
+  const unlimitedRef = useRef(unlimitedSession);
+  const [unlimitedSaveFailed, setUnlimitedSaveFailed] = useState(initialUnlimited.failed);
+  const [mode, setMode] = useState<FootleMode>(() => practiceRun?.active ? 'practice' : initialUnlimited.session.active ? 'unlimited' : 'daily');
+  const saveUnlimited = useCallback((session: FootleUnlimitedSession) => {
+    if (session === unlimitedRef.current) return;
+    unlimitedRef.current = session;
+    setUnlimitedSession(session);
+    try {
+      localStorage.setItem(FOOTLE_UNLIMITED_KEY, JSON.stringify(session));
+      setUnlimitedSaveFailed(false);
+    } catch { setUnlimitedSaveFailed(true); }
+  }, []);
   const savePractice = useCallback((run: FootlePracticeRun) => {
     if (run === practiceRef.current) return;
     practiceRef.current = run;
@@ -155,15 +168,24 @@ export function useGame() {
   // that on refresh the hook restores the correct 'lost' state.
   const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
 
-  // First selection waits for the same resolved pool as the daily.
-  const [difficulty, setDifficultyState] = useState<Difficulty>('easy');
+  // Each Unlimited tier keeps its own frozen puzzle and answer deck.
+  const difficulty = unlimitedSession.tier;
   const [practiceDifficulty, setPracticeDifficulty] = useState<Difficulty>(() => practiceRun?.tier ?? 'easy');
-  const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);
-  const [unlimitedGuesses, setUnlimitedGuesses] = useState<GuessResult[]>([]);
-  const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   useEffect(() => {
-    if (!isLoadingPool && !unlimitedTarget) setUnlimitedTarget(selectRandomPlayer(difficulty, playerPool));
-  }, [isLoadingPool, unlimitedTarget, difficulty, playerPool]);
+    if (mode !== 'unlimited' || isLoadingPool || !dailyTarget) return;
+    const session = unlimitedRef.current;
+    const prepared = selectUnlimitedTier(session, session.tier, playerPool, dailyTarget.name);
+    saveUnlimited(prepared.active ? prepared : { ...prepared, active: true });
+  }, [mode, isLoadingPool, playerPool, dailyTarget, saveUnlimited]);
+  const unlimitedDeck = unlimitedSession.decks[difficulty];
+  const savedUnlimitedTarget = unlimitedDeck?.pool.find(player => player.name === unlimitedDeck.current.target) ?? null;
+  const unlimitedPaused = !!savedUnlimitedTarget && effectiveDailyStatus === 'playing'
+    && !!dailyTarget && normalizeName(savedUnlimitedTarget.name) === normalizeName(dailyTarget.name);
+  const unlimitedTarget = isLoadingPool || unlimitedPaused ? null : savedUnlimitedTarget;
+  const unlimitedGuesses = useMemo(() => unlimitedDeck && unlimitedTarget
+    ? unlimitedDeck.current.guesses.map(name => compareGuess(unlimitedDeck.pool.find(player => player.name === name)!, unlimitedTarget))
+    : [], [unlimitedDeck, unlimitedTarget]);
+  const unlimitedStatus = unlimitedPaused ? 'playing' : unlimitedDeck?.current.status ?? 'playing';
   const practiceRound = practiceRun?.rounds[practiceRun.index];
   const practiceTarget = practiceRun?.pool.find(player => player.name === practiceRun.targets[practiceRun.index]) ?? null;
   const practiceGuesses = useMemo(() => practiceRun && practiceTarget
@@ -181,15 +203,20 @@ export function useGame() {
     setMode(newMode);
     const run = practiceRef.current;
     if (run && run.active !== (newMode === 'practice')) savePractice({ ...run, active: newMode === 'practice' });
-  }, [savePractice]);
+    const session = unlimitedRef.current;
+    if (newMode !== 'unlimited' && session.active) saveUnlimited({ ...session, active: false });
+  }, [savePractice, saveUnlimited]);
 
   const startPractice = useCallback(() => {
     if (isLoadingPool || !dailyTarget) return;
     const current = practiceRef.current;
     if (current && !practiceFinished(current)) return;
     const run = createPracticeRun(playerPool, practiceDifficulty, dailyTarget.name);
-    if (run) { savePractice(run); setMode('practice'); }
-  }, [isLoadingPool, dailyTarget, playerPool, practiceDifficulty, savePractice]);
+    if (run) {
+      savePractice(run); setMode('practice');
+      if (unlimitedRef.current.active) saveUnlimited({ ...unlimitedRef.current, active: false });
+    }
+  }, [isLoadingPool, dailyTarget, playerPool, practiceDifficulty, savePractice, saveUnlimited]);
 
   const advancePractice = useCallback(() => {
     const run = practiceRef.current;
@@ -208,17 +235,9 @@ export function useGame() {
     if (mode === 'daily') {
       addDailyGuess(result);
     } else {
-      setUnlimitedGuesses(prev => {
-        const next = [...prev, result];
-        if (result.isCorrect) {
-          setUnlimitedStatus('won');
-        } else if (next.length >= MAX_GUESSES) {
-          setUnlimitedStatus('lost');
-        }
-        return next;
-      });
+      saveUnlimited(guessUnlimited(unlimitedRef.current, player.name));
     }
-  }, [mode, gameStatus, targetPlayer, addDailyGuess, savePractice]);
+  }, [mode, gameStatus, targetPlayer, addDailyGuess, savePractice, saveUnlimited]);
 
   const giveUp = useCallback(() => {
     if (mode === 'practice') {
@@ -226,7 +245,7 @@ export function useGame() {
       if (run) savePractice(giveUpPractice(run));
       return;
     }
-    if (gameStatus !== 'playing') return;
+    if (gameStatus !== 'playing' || (mode === 'unlimited' && (!unlimitedTarget || isLoadingPool))) return;
 
     if (mode === 'daily') {
       // Persist the forfeited state to localStorage using useDailyPuzzle's
@@ -245,9 +264,9 @@ export function useGame() {
       } catch { /* quota or private browsing, silently skip */ }
       setForfeited(true);
     } else {
-      setUnlimitedStatus('lost');
+      saveUnlimited(giveUpUnlimited(unlimitedRef.current));
     }
-  }, [mode, gameStatus, todayStr, dailyPuzzleIndex, dailyGuesses, savePractice]);
+  }, [mode, gameStatus, todayStr, dailyPuzzleIndex, dailyGuesses, savePractice, saveUnlimited, unlimitedTarget, isLoadingPool]);
 
   const resetGame = useCallback(() => {
     if (mode === 'practice' || isLoadingPool) return;
@@ -255,11 +274,15 @@ export function useGame() {
       setForfeited(false);
       resetDailyHook();
     } else {
-      setUnlimitedTarget(selectRandomPlayer(difficulty, playerPool));
-      setUnlimitedGuesses([]);
-      setUnlimitedStatus('playing');
+      if (!dailyTarget || unlimitedPaused) return;
+      saveUnlimited(nextUnlimitedPuzzle(unlimitedRef.current, dailyTarget.name));
     }
-  }, [mode, difficulty, playerPool, resetDailyHook, isLoadingPool]);
+  }, [mode, resetDailyHook, isLoadingPool, dailyTarget, unlimitedPaused, saveUnlimited]);
+
+  const reshuffleUnlimitedDeck = useCallback(() => {
+    if (mode !== 'unlimited' || isLoadingPool || !dailyTarget || unlimitedPaused) return;
+    saveUnlimited(reshuffleUnlimited(unlimitedRef.current, playerPool, dailyTarget.name));
+  }, [mode, isLoadingPool, dailyTarget, unlimitedPaused, playerPool, saveUnlimited]);
 
   const changeDifficulty = useCallback((newDiff: Difficulty) => {
     // Daily difficulty is locked; practice and Unlimited keep separate tiers.
@@ -269,11 +292,9 @@ export function useGame() {
       return;
     }
     if (newDiff === difficulty) return;
-    setDifficultyState(newDiff);
-    setUnlimitedTarget(selectRandomPlayer(newDiff, playerPool));
-    setUnlimitedGuesses([]);
-    setUnlimitedStatus('playing');
-  }, [mode, difficulty, playerPool, isLoadingPool]);
+    if (!dailyTarget) return;
+    saveUnlimited(selectUnlimitedTier(unlimitedRef.current, newDiff, playerPool, dailyTarget.name));
+  }, [mode, difficulty, playerPool, isLoadingPool, dailyTarget, saveUnlimited]);
 
   // ---- AUTOCOMPLETE --------------------------------------------------------
 
@@ -286,11 +307,12 @@ export function useGame() {
       if (!dailyTarget) return playerPool;
       return ensureAnswerInList(playerPool, dailyTarget.name, p => p.name, dailyTarget);
     }
-    return unlimitedTarget ? ensureAnswerInList(playerPool, unlimitedTarget.name, p => p.name, unlimitedTarget) : playerPool;
-  }, [mode, playerPool, dailyTarget, unlimitedTarget, practiceRun]);
+    return unlimitedPaused || isLoadingPool ? [] : unlimitedDeck?.pool ?? playerPool;
+  }, [mode, playerPool, dailyTarget, practiceRun, unlimitedDeck, unlimitedPaused, isLoadingPool]);
 
   const examplePlayer = playerPool.find(player => player.name !== dailyTarget?.name
-    && player.name !== unlimitedTarget?.name && !practiceRun?.targets.includes(player.name));
+    && !Object.values(unlimitedSession.decks).some(deck => deck && normalizeName(deck.current.target) === normalizeName(player.name))
+    && !practiceRun?.targets.includes(player.name));
 
   const guessedPlayerNames = useMemo(() => guesses.map(g => g.playerName), [guesses]);
 
@@ -322,7 +344,7 @@ export function useGame() {
     availablePlayers,
     guessedPlayerNames,
     maxGuesses: MAX_GUESSES,
-    isLoading: mode === 'daily' ? isLoading : mode === 'unlimited' && !unlimitedTarget,
+    isLoading: mode === 'daily' ? isLoading : mode === 'unlimited' && isLoadingPool,
     isLoadingPool,
     practiceRun,
     practiceSaveFailed,
@@ -330,6 +352,11 @@ export function useGame() {
     advancePractice,
     practiceComplete: practiceRun ? practiceFinished(practiceRun) : false,
     practiceReady: !isLoadingPool && !!dailyTarget && practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5,
+    unlimitedSession,
+    unlimitedSaveFailed,
+    unlimitedRemaining: dailyTarget ? unlimitedRemaining(unlimitedSession, dailyTarget.name) : 0,
+    unlimitedPaused,
+    reshuffleUnlimited: reshuffleUnlimitedDeck,
     examplePlayer,
   };
 }
