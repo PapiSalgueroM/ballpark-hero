@@ -1,3 +1,13 @@
+## Round1009 integrated release candidate, 2026-10-05 23:10 UTC
+
+Decision results passed ten mounted cases,23 effective controls,20 native
+walks and four geometry controls on2583ec3c. Practice, season review and
+appearance workflows also passed. The prospect job is retrying its prior
+runner-allocation cancellation. Independent final persistence review found
+no blocker. Current main's1008 live receipt is now retained; this integration
+changes documentation only. All five remote checks will assess the final
+head before publication.1008 is already live. No publication slot yet.
+Claude retains his existing lanes. Protected drafts and stashes are intact.
 ## Codex 1009: visible decision outcomes, 2026-10-05
 
 Ordinary choices in the four US careers show actual saved before/after
@@ -8,6 +18,27 @@ Independent product review found no remaining issue. Tests cover real RNG
 order and expanded layouts; remote acceptance is pending.1008 must pass and
 ship before this stacked round. Claude retains all his current lanes.
 1005 and1006 are live.1007 and1008 are in checks. Work continues to23:31UTC.
+## Round1008 live: four-sport saved season review, 2026-10-05
+
+PR134 merged as3e6c28ad8de4c0d59bc970a420ba4ba0bdb043a5 after all five
+workflows passed on19813667a161a5b735d91d05d79379c0042d3c2b. Eleven mounted
+cases,26 effective source controls,16 real-font native walks and two geometry
+controls passed, plus original replay, practice, prospect, appearance, NHL,
+save/RNG/scoring and all built-site readers. Final review artifact11369360876
+has SHA2563cd6aaa57e02ad36ef6a59ec938bffd7fa196d67a8406982f7607436dd219305.
+
+Lovable confirmed Your website was updated. Public index-sVWg-jaG.js serves
+Career Log. Normal public UI verified Riley Stone's actual2026 saved season:
+OVR75,53games,age21,$2.5M salary,9points/2.4rebounds/5.1assists pergame.
+Missing postseason fields say Not recorded. Back restores the same2027 hub:
+OVR77,1season,477careerpoints,$1.4M cash,$2.5Mx3. No extra season was played.
+Screenshot: career1008-live.png in the task visualization folder.
+
+Publication slot released.1007 Rugby review and1009 decision receipts need
+repaired remote acceptance.1030 nullable stat import and1031 first-visit
+career guides are not shipped. Claude's Soccer Career, Transfer Path and
+Front Office lanes remain separate. No production database probes were run.
+Six-hour session continues to2026-10-05 23:31UTC.
 ## Codex 1008: saved season review ready for remote checks, 2026-10-05
 
 Career Log in NBA, NFL, MLB and NHL now opens a compact saved-year picker.
