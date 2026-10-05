@@ -33,7 +33,7 @@
      Who is exempt is decided in nhlCareerWaivers.ts (games and years, read
      2026-10-03), which decks A and C both ask, so they cannot disagree.
    - A conditioning loan sends a player to the minors for game minutes
-     without waivers. pensionplanpuppets.com/2021/2/16/22284010 ;
+     without waivers. dkpittsburghsports.com/2018/09/29/nhl-waiver-faq-calculator-tlh ;
      mylittlefalls.com/ahl-off-season-primer-explaining-contracts-waivers-and-the-development-rule
    - Entry level contracts can carry performance bonuses tied to the season
      a young player has. dkpittsburghsports.com/2019/06/17/nhl-signing-performance-bonuses-faq-tlh ;
@@ -83,7 +83,7 @@ export type NhlLifeCOptionDef = DeckCOptionDef<NhlCareerState>;
 export type NhlLifeCDef = DeckCDef<NhlCareerState, 'position' | 'rookie' | 'veteran' | 'bench' | 'rules'>;
 
 /** The NHL as the engine plays it: cents, the report line, direction chips
- *  that do not read the save (the reviewed pack's button), and a rating
+ *  that read the save (a stat at its limit is not promised), and a rating
  *  drop that stops at deck A's floor of 55. Functions only, so nothing
  *  imported is read at module scope (nhlMyCareer.ts imports this file). */
 const NHL_DECK_C: DeckCSport<NhlCareerState> = {
@@ -91,7 +91,7 @@ const NHL_DECK_C: DeckCSport<NhlCareerState> = {
   money: 'cents',
   log: 'report',
   chip: 'directions',
-  chipReadsSave: false,
+  chipReadsSave: true,
   ratingFloor: before => Math.min(55, before),
   teamIds: c => nhlEraTeamIds(c.eraId),
   teamLabel: (id, c) => nhlTeamLabelOf(id, c.eraId),
@@ -110,9 +110,10 @@ export function applyNhlLifeCFx(c: NhlCareerState, fx: NhlLifeCFx): string {
   return applyDeckCFx(NHL_DECK_C, c, fx);
 }
 
-/** The short promise on the button, written from the same data. */
-export function nhlLifeCChip(o: { fx: NhlLifeCFx; move?: 'trade' | 'claim' }): string {
-  return deckCChip(NHL_DECK_C, o);
+/** The short promise on the button, written from the same data and, given
+ *  the save it will land on, without a stat already at its limit. */
+export function nhlLifeCChip(o: { fx: NhlLifeCFx; move?: 'trade' | 'claim' }, c?: NhlCareerState): string {
+  return deckCChip(NHL_DECK_C, o, c);
 }
 
 /** One card, built for this career. Works on any save, eligible or not. */
@@ -556,9 +557,11 @@ export const NHL_LIFE_C: NhlLifeCDef[] = [
     ],
   },
   {
-    /* Entry level contracts can carry performance bonuses. */
+    /* Entry level contracts can carry performance bonuses. For a top 40
+       pick; draftPick 0 is an undrafted camp signing (the Road to the
+       Draft), not a pick, so it is held out the way nhlMyCareer.ts is. */
     id: 'nhlC_rule_entry_level_bonuses', category: 'rules', cooldown: 99, story: 'entryLevel',
-    when: c => ruleFrom(2013)(c) && yrsOf(c) <= 2 && c.draftPick <= 40,
+    when: c => ruleFrom(2013)(c) && yrsOf(c) <= 2 && c.draftPick > 0 && c.draftPick <= 40,
     title: 'The bonuses in your first contract',
     body: 'Your entry level deal has performance bonuses in it: goals, points, ice time, the awards. Your agent has the list on his fridge. The coach does not care about any of it and wants you to play the system.',
     options: [

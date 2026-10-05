@@ -430,7 +430,9 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     id: 'nbaC_vet_new_game', category: 'veteran', cooldown: 4,
     when: c => c.age >= 32 && c.ovr >= 72,
     title: 'The first step is gone',
-    body: 'You tried the move that has worked for a decade and the defender was just there, waiting, a kid who was in grade school the night you were drafted. The burst is not coming back. The question is what replaces it.',
+    /* draftPick 0 is an undrafted camp signing (the Road to the Draft): he
+       was never drafted, so his line names the day he signed instead */
+    body: c => `You tried the move that has worked for a decade and the defender was just there, waiting, a kid who was in grade school ${c.draftPick > 0 ? 'the night you were drafted' : 'the summer you signed your first deal'}. The burst is not coming back. The question is what replaces it.`,
     options: [
       {
         label: 'Rebuild your whole game around craft and angles', p: 0.6,

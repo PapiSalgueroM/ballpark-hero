@@ -18,8 +18,12 @@
      chip       NBA, MLB and NHL say which way a stat goes ("Rating up");
                 the NFL prints the numbers ("Morale +5") and sells only even
                 odds, as a "Coin flip".
-     chipReadsSave  NBA and MLB leave a stat already at its limit off the
-                button; the NHL's button does not read the save.
+     chipReadsSave  all four set it: a button reads the save it is shown
+                on, so a stat already at its limit is left off it and a
+                number is what will really move (a review of this round
+                found the NHL and NFL buttons promising moves a save at its
+                limit could not make, on a third of the NHL's deck C draws
+                and two in five of the NFL's in real careers).
      ratingFloor    the NHL's drop stops at its deck A's 55, the rest at 50.
      tradeFans  an NBA trade starts the fans over at 44, decks A and B's move.
 
@@ -103,7 +107,8 @@ export interface DeckCSport<S extends DeckCCareer> {
    *  or y". 'numbers': "Morale +5, health -2" in the order the card writes
    *  them, a gamble "Coin flip: x or y" (even odds only). */
   chip: 'directions' | 'numbers';
-  /** A directions chip leaves out a stat already at its limit on the save. */
+  /** The chip reads the save it is shown on: a directions chip leaves out a
+   *  stat already at its limit, a numbers chip prints what will really move. */
   chipReadsSave: boolean;
   /** The lowest a drop takes a rating; 50 when not given. */
   ratingFloor?: (before: number) => number;
@@ -208,15 +213,28 @@ function canMove<S extends DeckCCareer>(sport: DeckCSport<S>, c: S, key: 'rating
   return d > 0 ? c[key] < 100 : c[key] > 0;
 }
 
-/** The numbers, in the order the card writes them: "Morale +5, net worth -0.3M". */
-function numbers<S extends DeckCCareer>(sport: DeckCSport<S>, fx: DeckCFx, c: S): string {
+/** The save a chip reads: the one it is shown on, when the sport's chip
+ *  reads it. */
+const chipSave = <S extends DeckCCareer>(sport: DeckCSport<S>, c?: S): S | undefined => (sport.chipReadsSave ? c : undefined);
+
+/** The numbers, in the order the card writes them: "Morale +5, net worth
+ *  -0.3M". Given a sport whose chip reads the save, they are what the option
+ *  will really move on it (played on a copy, through the same clamps), so
+ *  "Morale +2" is never shown to a player at 100. */
+function numbers<S extends DeckCCareer>(sport: DeckCSport<S>, o: { fx: DeckCFx; move?: 'trade' | 'claim' }, c: S): string {
+  const save = chipSave(sport, c);
+  const fx = save ? fxOn(sport, o, save) : o.fx;
+  /* land moves top level numbers only, so a shallow copy keeps the save whole */
+  const m = save ? land(sport, { ...save }, fx) : undefined;
   const bits: string[] = [];
-  for (const [k, v] of Object.entries(fx) as [keyof DeckCFx, number | undefined][]) {
+  for (const k of Object.keys(fx) as (keyof DeckCFx)[]) {
+    const v = m ? m[k] : k === 'netWorth' || k === 'earned' ? (fx[k] ? deckCMoney(sport, c, fx[k] as number) : 0) : fx[k];
     if (!v) continue;
-    if (k === 'netWorth') bits.push(`net worth ${signed(deckCMoney(sport, c, v))}M`);
-    else if (k === 'earned') bits.push(`earned ${deckCMoney(sport, c, v)}M`);
+    if (k === 'netWorth') bits.push(`net worth ${signed(v)}M`);
+    else if (k === 'earned') bits.push(`earned ${v}M`);
     else bits.push(`${k} ${signed(v)}`);
   }
+  if (o.move) bits.push('new team');
   return bits.length ? capital(bits.join(', ')) : 'No change';
 }
 
@@ -224,7 +242,7 @@ function numbers<S extends DeckCCareer>(sport: DeckCSport<S>, fx: DeckCFx, c: S)
  *  on (and a sport whose chip reads it), a stat already at its ceiling or
  *  floor is left out, so "health up" is never shown to a player at 100. */
 export function deckCChip<S extends DeckCCareer>(sport: DeckCSport<S>, o: { fx: DeckCFx; move?: 'trade' | 'claim' }, c?: S): string {
-  const save = sport.chipReadsSave ? c : undefined;
+  const save = chipSave(sport, c);
   const fx = save ? fxOn(sport, o, save) : o.fx;
   const bits: string[] = [];
   const dir = (name: string, key: 'rating' | 'morale' | 'fanbase' | 'health') => {
@@ -270,7 +288,10 @@ const bump = (c: DeckCCareer, k: string) => {
 
 /** One button, for the save it is shown on. */
 export function deckCOption<S extends DeckCCareer>(sport: DeckCSport<S>, o: DeckCOptionDef<S>, c: S): DeckCOption<S> {
-  const say = (x: { fx: DeckCFx; move?: 'trade' | 'claim' }) => (sport.chip === 'numbers' ? numbers(sport, x.fx, c) : deckCChip(sport, x, c));
+  /* a trade or a claim needs the era's teams to land on; a sport without
+     them fails here, when the card is dealt, and never sets a team to nothing */
+  if (!sport.teamIds && ('p' in o ? o.win.move || o.lose.move : o.move)) throw new Error('deck C: a trade or a claim on a sport with no teamIds');
+  const say = (x: { fx: DeckCFx; move?: 'trade' | 'claim' }) => (sport.chip === 'numbers' ? numbers(sport, x, c) : deckCChip(sport, x, c));
   if ('p' in o) {
     const effect = sport.chip === 'numbers'
       ? `Coin flip: ${lower(say(o.win))} or ${lower(say(o.lose))}`

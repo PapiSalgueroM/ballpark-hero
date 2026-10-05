@@ -72,19 +72,23 @@ import type { DeckCFx, DeckCSport } from './usCareerDeckC';
    against it; now they are written from the effect, in the order the card
    writes it ("Morale +5, health -2"). Before the lift every typed line was
    compared with the computed one on 94,224 buttons and not one differed, so
-   no button changed a character. */
+   the lift changed no button. The review of Round 988 then found that the
+   numbers were the card's, not the save's: "Morale +2" shown to a player
+   already at 100. The button now reads the save it is shown on and prints
+   what the option will really move there (played on a copy, through the
+   same clamps), so a stat at its limit drops off it. */
 
 /** The NFL as the engine plays it: money to the tenth and never under a
  *  tenth, the log tallies what moved ("No change." when nothing did), and
- *  the button prints the numbers, a gamble only ever at even odds ("Coin
- *  flip"). Functions only, so nothing imported is read at module scope
- *  (nflMyCareer.ts imports this file). */
+ *  the button prints the numbers this save will really move, a gamble only
+ *  ever at even odds ("Coin flip"). Functions only, so nothing imported is
+ *  read at module scope (nflMyCareer.ts imports this file). */
 const NFL_DECK_C: DeckCSport<CareerState> = {
   moneyScale: c => nflEraById(c.eraId).moneyScale,
   money: 'tenths',
   log: 'tally',
   chip: 'numbers',
-  chipReadsSave: false,
+  chipReadsSave: true,
 };
 
 /** A fixed amount in the career's era money, never rounding to nothing. */

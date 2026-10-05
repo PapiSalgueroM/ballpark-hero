@@ -217,3 +217,14 @@ describe('the words are the effect', () => {
     expect(ev.options[0].apply(lose, () => 0.9)).toContain('Morale -6, fanbase -3.');
   });
 });
+
+describe('an undrafted signing', () => {
+  it('is never told about the night he was drafted (draftPick 0 is the Road to the Draft camp signing)', () => {
+    const def = NBA_LIFE_C.find(d => d.id === 'nbaC_vet_new_game')!;
+    const drafted = buildNbaLifeCCard(def, career('SF', { age: 33, ovr: 80, draftPick: 14 }));
+    expect(drafted.body).toContain('the night you were drafted');
+    const undrafted = buildNbaLifeCCard(def, career('SF', { age: 33, ovr: 80, draftPick: 0 }));
+    expect(undrafted.body).not.toContain('drafted');
+    expect(undrafted.body).toContain('the summer you signed your first deal');
+  });
+});

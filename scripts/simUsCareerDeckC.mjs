@@ -14,6 +14,13 @@
    with a seeded stream. The hashes were recorded on the pack branches' code
    BEFORE the lift (DECKC_RECORD=1 writes scripts/data/usCareerDeckCDigest.json)
    and must match after it: the lift moves no card, no word and no number.
+   Re-recorded once since, on 2026-10-05, when the review fix made the NFL and
+   NHL buttons read the save. That fix was proven to move buttons only: a copy
+   of this harness that hashes everything except the button words recorded
+   the same digest, all four sports, every card and every draw line, on the
+   tree before the fix and the tree after it. The full digest then changed
+   on 36 NFL cards (66 of 1,920 draws) and 19 NHL cards (13 of 1,200 draws),
+   and not at all for the NBA and MLB.
 
    Section 2, WORDS AGAINST EFFECTS (see its own comment below): the log,
    the button, the gamble's odds, the era's money, the trade's league and
@@ -27,19 +34,29 @@
    pairs / trades or claims:
      nfl  8,460 / 1,294 / 182 / 0      nba 11,268 / 1,464 / 370 / 320
      mlb 11,892 / 2,394 / 384 / 80     nhl 11,882 / 2,222 / 252 / 556
-   The floors in FLOORS sit about ten percent under. One run of all four
-   sports takes about five minutes on this machine under load.
+   The floors in FLOORS sit about ten percent under. Since 2026-10-05 the
+   buttons are checked on every save, the ceilings included (the counts did
+   not move), and every non ceiling home is played a second time with its
+   rating AT its potential, the one boundary the grid's 75, 84 and 91 never
+   touch: nfl 6,738, nba 7,132, mlb 8,828, nhl 7,744 plays (POT_FLOORS). One
+   run of all four sports takes about eight minutes on this machine under
+   load.
 
    Controls, DECKC_CONTROL=<name>, each rewrites one string of the shared
    engine as it is bundled and must turn the named check red (measured on
-   one sport each, DECKC_ONLY):
-     lieword    the report says one more morale than moved  9,590 [words] (nhl)
-     tallylie   the NFL tally says one less health           2,662 [words] (nfl)
+   one sport each, DECKC_ONLY; remeasured 2026-10-05 with the second pass):
+     lieword    the report says one more morale than moved 15,728 [words] (nhl)
+     tallylie   the NFL tally says one less health           4,784 [words] (nfl)
      blindchip  the chip stops reading the save               919 [button] (nba)
-     loaded     every gamble wins ten points more often     1,965 [odds] (nhl)
+                                                              962 [button] (nfl)
+                                                              478 [button] (nhl)
+     loaded     every gamble wins ten points more often     3,488 [odds] (nhl)
      flatmoney  deck C pays today's money in every era        132 [era money] (mlb)
      eraless    a trade forgets the career's era               16 [trade] (nba)
-     paycut     a morale lift over 3 cuts the salary         2,110 [held] (nfl)
+     paycut     a morale lift over 3 cuts the salary         3,780 [held] (nfl)
+     potedge    a rating at its potential reads as stuck     2,450 [button] (nba)
+                (pot + 1 becomes pot, the review's            2,366 [button] (mlb)
+                mutation B, green here before the pass)       1,444 [button] (nhl)
 
    Run: node scripts/simUsCareerDeckC.mjs        (DECKC_ONLY=nfl for one sport)
 */
@@ -97,11 +114,13 @@ const CONTROLS = {
   tallylie: { check: 'words', /* the NFL tally misstates health */
     old: 'if (m.health) bits.push(`health ${signed(m.health)}`);', neu: 'if (m.health) bits.push(`health ${signed(m.health - 1)}`);' },
   blindchip: { check: 'button', /* the chip stops reading the save */
-    old: 'const save = sport.chipReadsSave ? c : undefined;', neu: 'const save = (sport.chipReadsSave && false) ? c : undefined;' },
+    old: '(sport.chipReadsSave ? c : undefined);', neu: '((sport.chipReadsSave && false) ? c : undefined);' },
   loaded: { check: 'odds', /* every gamble wins ten points more often than its data says */
     old: 'return settle(sport, cc, r, r() < o.p ? o.win : o.lose);', neu: 'return settle(sport, cc, r, r() < o.p + 0.1 ? o.win : o.lose);' },
   flatmoney: { check: 'era money', /* deck C pays today's money in every era */
     old: 'const scaled = sport.moneyScale(c) * m;', neu: 'const scaled = m;' },
+  potedge: { check: 'button', /* the button thinks a rating at its potential cannot rise */
+    old: 'return d > 0 ? c.ovr < Math.min(c.pot + 1, 99)', neu: 'return d > 0 ? c.ovr < Math.min(c.pot, 99)' },
   eraless: { check: 'trade', /* a trade forgets the career's era */
     old: 'const pool = (sport.teamIds ? sport.teamIds(cc) : [])', neu: 'const pool = (sport.teamIds ? sport.teamIds({ ...cc, eraId: undefined }) : [])' },
   paycut: { check: 'held', /* a big morale lift quietly cuts the salary */
@@ -214,17 +233,17 @@ function replay(eng, sp) {
      held       nothing else moved: no salary, contract, position, ceiling,
                 age or season; earnings only with pay, the team only with a
                 trade or a claim, and at most one flag, by one;
-     button     the button names exactly what moved: the numbers on a mid
-                range save (NFL), the directions on every save where the chip
-                reads the save (NBA, MLB) and on mid range saves where it
-                does not (NHL);
+     button     the button names exactly what moved, on every save, at the
+                ceilings too: the numbers (NFL) or the directions (NBA, MLB,
+                NHL). Every sport's chip reads the save since the review of
+                Round 988 found NFL numbers and NHL directions promising
+                moves a save at its limit could not make;
      odds       a roll just under the gamble's chance lands its first outcome
                 and just over lands its second ("Coin flip" is 0.5);
      era money  the same card on the same save in the older era moves the
                 bank by today's amount at the era's scale;
      trade      a trade or a claim lands on another team of the career's era. */
 const HOMES_PER_CARD = 40;
-const READS_SAVE = { nba: true, mlb: true, nhl: false, nfl: false };
 const r2 = x => Math.round(x * 100) / 100;
 /** The gamble's roll first, then a seeded stream for what follows it (a
  *  trade's new team), so trades land all over the era's league and not on
@@ -244,6 +263,10 @@ const FLOORS = {
   mlb: [11000, 2200, 350, 60],
   nhl: [11000, 2000, 230, 480],
 };
+/** The same for the second pass, every non ceiling home replayed with its
+ *  rating at its potential. Measured 2026-10-05 (exact, as above): nfl 6,738,
+ *  nba 7,132, mlb 8,828, nhl 7,744; the floors sit about ten percent under. */
+const POT_FLOORS = { nfl: 6000, nba: 6400, mlb: 7900, nhl: 7000 };
 /** "Rating +1 to 72, morale -3, net worth -0.3M, earned 1.2M" into numbers. */
 function parseNumbers(text) {
   const out = { rating: 0, morale: 0, fanbase: 0, health: 0, netWorth: 0, earned: 0 };
@@ -280,14 +303,20 @@ function words(eng, sp, key, r, fails) {
   const oldEra = r.grid.find(g => g.eraId)?.eraId;
   const scaleOld = oldEra ? eng[sp.era](oldEra).moneyScale / eng[sp.era](undefined).moneyScale : 1;
   const catalog = sp.catalog ? eng[sp.catalog] : null;
-  let plays = 0, eraPairs = 0, trades = 0, oddsPlays = 0;
+  let plays = 0, eraPairs = 0, trades = 0, oddsPlays = 0, potPlays = 0;
   const fail = (tag, msg) => fails.push(`${key} [${tag}] ${msg}`);
   for (const [id, gis] of r.homes) {
     const step = Math.max(1, Math.floor(gis.length / HOMES_PER_CARD));
-    for (let h = 0; h < gis.length; h += step) {
+    for (let h = 0; h < gis.length; h += step) for (const atPot of [false, true]) {
       const g = r.grid[gis[h]];
       const frozen = fixture(eng, sp, g);
+      /* the second pass: the same save with its rating AT its potential, the
+         one place a raise of one is still allowed and a raise of more is cut
+         (the grid's 75, 84 and 91 never sit there); counted apart, so the
+         floors on the first pass keep their meaning */
+      if (atPot) { if (g.hi) continue; frozen.ovr = frozen.pot; }
       const card = eng[sp.getC](structuredClone(frozen), mulberry(1)).find(e => e.id === id);
+      if (!card && atPot) continue; /* a gate on the rating can close at the ceiling */
       if (!card) { fail('words', `${id} was dealt on save ${gis[h]} in the replay and not here`); continue; }
       card.options.forEach((o, k) => {
         const flip = /^Coin flip: /.test(o.effect);
@@ -301,7 +330,7 @@ function words(eng, sp, key, r, fails) {
           const seed = 4000 + gis[h] * 64 + k * 8 + ri;
           const s = structuredClone(frozen);
           const log = o.apply(s, rolled(roll, seed, p !== null));
-          plays++;
+          if (atPot) potPlays++; else plays++;
           const moved = movedOf(frozen, s);
           const traded = s.team !== frozen.team;
           /* words */
@@ -326,21 +355,21 @@ function words(eng, sp, key, r, fails) {
             const say = side ? def.lose.say : def.win.say;
             if (typeof say === 'string' && !log.startsWith(say)) fail('odds', `${id} option ${k + 1}: a roll of ${roll} against ${p} did not land its ${side ? 'second' : 'first'} outcome`);
           }
-          if (atEdge) oddsPlays++;
+          if (atEdge && !atPot) oddsPlays++;
           const tag = atEdge ? 'odds' : 'button';
           const promise = outcomes[side] ?? '';
           if (sp.lib === 'nflMyCareer') {
-            if (!g.hi && vkey(parseNumbers(promise)) !== vkey(moved)) fail(tag, `${id} option ${k + 1} at ${roll}: the button says "${promise}" and the code applied [${vkey(moved)}]`);
-          } else if (READS_SAVE[key] || !g.hi) {
-            if (dirKey(promise) !== dirsOf(moved, traded)) fail(tag, `${id} option ${k + 1} at ${roll}: the button says "${promise}" and the save moved [${dirsOf(moved, traded)}]`);
+            if (vkey(parseNumbers(promise)) !== vkey(moved)) fail(tag, `${id} option ${k + 1} at ${roll}: the button says "${promise}" and the code applied [${vkey(moved)}]`);
+          } else if (dirKey(promise) !== dirsOf(moved, traded)) {
+            fail(tag, `${id} option ${k + 1} at ${roll}: the button says "${promise}" and the save moved [${dirsOf(moved, traded)}]`);
           }
           /* trade */
           if (traded) {
-            trades++;
+            if (!atPot) trades++;
             if (!sp.teams || !eng[sp.teams](s.eraId).includes(s.team)) fail('trade', `${id} option ${k + 1}: traded to ${s.team}, which is not a team of the career's era (${s.eraId ?? 'today'})`);
           }
           /* era money: the same save in the older era */
-          if (!g.eraId && oldEra && (moved.netWorth || moved.earned)) {
+          if (!atPot && !g.eraId && oldEra && (moved.netWorth || moved.earned)) {
             const twin = fixture(eng, sp, { ...g, eraId: oldEra });
             const tc = eng[sp.getC](structuredClone(twin), mulberry(1)).find(e => e.id === id);
             if (tc) {
@@ -363,7 +392,9 @@ function words(eng, sp, key, r, fails) {
   }
   console.log(`   words against effects: ${plays} plays, ${oddsPlays} at a gamble's edge, ${eraPairs} era money pairs, ${trades} trades or claims`);
   if (!plays) fail('words', 'no card was played');
+  console.log(`   and ${potPlays} plays again with the rating at its potential`);
   const [fp, fe, fm, ft] = FLOORS[key];
+  if (potPlays < POT_FLOORS[key]) fail('coverage', `the potential ceiling pass ran ${potPlays} plays, under its floor ${POT_FLOORS[key]}`);
   if (plays < fp || oddsPlays < fe || eraPairs < fm || trades < ft) {
     fail('coverage', `section 2 ran ${plays}/${oddsPlays}/${eraPairs}/${trades} plays, edges, era pairs and trades, under the floors ${fp}/${fe}/${fm}/${ft}`);
   }

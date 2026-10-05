@@ -93,6 +93,15 @@ describe('gates', () => {
     expect(idsFor(career('C', { ...rfa, year: 2010 }, 4, 'y2006'))).toContain('nhlC_rule_offer_sheet');
     expect(idsFor(career('C', { ...rfa, contractYears: 2 }, 4))).not.toContain('nhlC_rule_offer_sheet');
     expect(idsFor(career('C', { ...rfa, age: 29 }, 4))).not.toContain('nhlC_rule_offer_sheet');
+    /* the boundary itself: restricted through 26, unrestricted at 27 */
+    expect(idsFor(career('C', { ...rfa, age: 26 }, 4))).toContain('nhlC_rule_offer_sheet');
+    expect(idsFor(career('C', { ...rfa, age: 27 }, 4))).not.toContain('nhlC_rule_offer_sheet');
+  });
+
+  it('keeps the entry level bonuses for a top 40 pick, never an undrafted signing (draftPick 0)', () => {
+    expect(idsFor(career('C', { draftPick: 40 }, 1))).toContain('nhlC_rule_entry_level_bonuses');
+    expect(idsFor(career('C', { draftPick: 41 }, 1))).not.toContain('nhlC_rule_entry_level_bonuses');
+    expect(idsFor(career('C', { draftPick: 0 }, 1))).not.toContain('nhlC_rule_entry_level_bonuses');
   });
 
   it('reads the letter and clause flags decks A and B leave behind', () => {
