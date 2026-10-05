@@ -74,3 +74,15 @@ Product source is awaiting independent static review and remote verification.
 No runtime acceptance or publication is claimed. Root owns Git, CI, integration
 and release receipts. No local test, build, browser, install or database probe
 was run for this implementation.
+
+## Integrated remote check and repairs, 2026-10-05
+
+fce4beae passed mounted decisions, effective controls and engine/save checks.
+Native failure exposed the existing season activity included in the receipt
+interval, plus an actual stylesheet font with no filename extension. The
+driver now validates exactly one unscored same-sport setup activity before
+starting the strict zero-write receipt interval, and allows only exact font
+URLs declared by the template stylesheet with redirects disabled. No product
+change was needed. The season-review focus control now targets its unique
+return expression. The verified generated update snapshot is committed for
+the final built readers. Native acceptance and publication remain pending.
