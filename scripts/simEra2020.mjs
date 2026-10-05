@@ -38,6 +38,21 @@
  *   sit at about half the men measured as shared: 821 with today, 572 with
  *   2015, 80 with 2010 and 10 with 2005.
  *
+ * RE-MEASURED 2026-10-05 on the tree merged with Release AC (main's engine
+ *   moved the random stream), under ten seed families (family f uses seeds
+ *   i * 7919 + f * 1000003, family 0 is this harness's own, the scheme
+ *   simEra2010 records). Manchester City's family means: 4.67, 2.00, 2.17,
+ *   3.00, 2.33, 2.67, 1.83, 2.50, 2.33, 2.17 (centre about 2.6, spread
+ *   about 0.8, and family 0 is the tail: 2,9,1,3,9,4). Against the 5.0 giant
+ *   band that was a coin toss, so City has its own band, 6.0, over four
+ *   spreads out and still far under the 10.5 a coin flip of a strength
+ *   model averages. Bayern (1.00, 1.67, 2.67, 1.00, 1.33, 1.50, 1.00, 1.33,
+ *   1.50, 1.33) and PSG (1.00, 1.50, 1.50, 1.00, 1.00, 1.83, 1.00, 1.00,
+ *   1.17, 1.00) keep the 5.0 band with over two places to spare in every
+ *   family, and Crotone (19.67, 19.50, 19.50, 19.83, 20.00, 19.83, 19.50,
+ *   20.00, 20.00, 19.67) keeps its 14 floor. The bigger 2010-11 world shares
+ *   165 names with 2020 now, five of them listed pairs of two men.
+ *
  * Four negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield,
  * each of which must end the run red (see the block where they are defined).
  *
@@ -86,6 +101,9 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const seeded = s => { let x = (s >>> 0) || 1; return () => { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; };
 /* Section 4's bands, set from the measured runs in the header. */
 const BAND_GIANT = 5.0;
+/* City has a band of its own: the Premier League is the tightest of the
+   five and this harness's own seed family is its tail (see the header). */
+const BAND_CITY = 6.0;
 const BAND_THIN = 14;
 
 /* NEGATIVE CONTROLS. SIM_ERA2020_CONTROL=<name> breaks one thing IN MEMORY
@@ -226,6 +244,12 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
     era2010: {
       'David García': 'Osasuna\'s centre-back (25 in the 2020 table, born about 1994) and Espanyol\'s 2010 defender (28 in the 2010 table; ESPN: David Garcia de la Cruz, b. 1981-01-16)',
       'Fernando': 'Sevilla\'s Brazilian midfielder (32 in the 2020 table, born about 1987) and Malaga\'s 2010 Fernando (30 in the 2010 table, born about 1980), the pair simEra2015 already lists',
+      /* Three more once Round 901 gave 2010-11 its Serie A, Bundesliga and
+         Ligue 1 (measured on the merged tree, 2026-10-05). The table's own
+         ages put each pair's births five or more years apart. */
+      'Felipe': 'Atletico\'s centre-back (30 in the 2020 table, born about 1990) and Fiorentina\'s 2010 centre-back (25 in the 2010 table, born about 1985)',
+      'Ederson': 'Manchester City\'s keeper (b. 1993) and Lyon\'s 2010 playmaker (23 in the 2010 table), the 1986 man the era2015 list has at Lazio, Round 191',
+      'Rafinha': 'PSG\'s midfielder (26 in the 2020 table, born about 1994) and Genoa\'s 2010 right-back (24 in the 2010 table, born about 1986)',
     },
     era2005: {
       'Dani García': 'Athletic\'s midfielder (ESPN: b. 1990-05-24) and Espanyol\'s 2005 Dani Garcia (30 in the 2005 table, born about 1975)',
@@ -338,7 +362,7 @@ else {
      single worst seed. */
   if (mean(bayern) > BAND_GIANT) fail(`2020 Bayern averaged position ${mean(bayern).toFixed(2)} over six seeds (band ${BAND_GIANT})`);
   if (mean(psg) > BAND_GIANT) fail(`2020 PSG averaged position ${mean(psg).toFixed(2)} over six seeds (band ${BAND_GIANT})`);
-  if (mean(city) > BAND_GIANT) fail(`2020 Manchester City averaged position ${mean(city).toFixed(2)} over six seeds (band ${BAND_GIANT})`);
+  if (mean(city) > BAND_CITY) fail(`2020 Manchester City averaged position ${mean(city).toFixed(2)} over six seeds (band ${BAND_CITY})`);
   if (mean(crotone) < BAND_THIN) fail(`Crotone, three real players and youth padding, averaged position ${mean(crotone).toFixed(2)} (band ${BAND_THIN} or worse)`);
 
   // Season two exists, is 2021-22, and the world aged with it.

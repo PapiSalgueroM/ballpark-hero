@@ -858,7 +858,8 @@ async function partChunks() {
   const mod = await bundleEngine(null);
   await mod.eras.ensureAllEraRosters?.();
   const worlds = { now: mod.cm.CM_ROSTERS, ...mod.eras.HISTORIC_ROSTERS };
-  if (Object.keys(worlds).length !== 4) { fail(`the bundle holds ${Object.keys(worlds).length} worlds`); return; }
+  /* Round 971: five, today plus the 2005, 2010, 2015 and 2020 eras. */
+  if (Object.keys(worlds).length !== 5) { fail(`the bundle holds ${Object.keys(worlds).length} worlds`); return; }
   /* A probe is the start of one roster row as the minifier prints it, for a
      plain ASCII name, kept only when no other world has the same name, age
      and position, so a probe found in a file belongs to exactly one world. */

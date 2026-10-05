@@ -48,6 +48,13 @@ if (ERA_CONTROL === 'drop') {
 const noteNamed = body => { for (const n of DROP) if ((body ?? '').includes(n.split(' ').pop())) stillNamed.add(n); };
 
 const browser = await chromium.launch();
+/* Every page this walk opens has the database host blocked: the era is all
+   local data, and a walk must never put load on the live project. */
+const newPage = async opts => {
+  const page = await browser.newPage(opts);
+  await page.route(/supabase\.co/, route => route.abort());
+  return page;
+};
 
 async function openEra(page) {
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -77,7 +84,7 @@ const cleanErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS
 
 /* ---------- Walk one: the menu, then Germany ---------- */
 {
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await newPage({ viewport: { width: 390, height: 844 } });
   if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -119,7 +126,7 @@ const cleanErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS
 
 /* ---------- Walk two: England and the summer's Chelsea ---------- */
 {
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await newPage({ viewport: { width: 390, height: 844 } });
   if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -145,7 +152,7 @@ const cleanErrors = errors => errors.filter(e => !/supabase|Failed to fetch|CORS
 
 /* ---------- Walk three: Italy and Juventus ---------- */
 {
-  const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  const page = await newPage({ viewport: { width: 390, height: 844 } });
   if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
