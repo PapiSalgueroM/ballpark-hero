@@ -206,24 +206,23 @@ function matchdayStarters(club: LeagueClub, squad: string[]): string[] {
   return automaticLineup({ ...club, players: club.players.filter(player => squad.includes(player.id)) }).starters;
 }
 /**
- * A final level after four quarters: EXTRA_TIME.periods periods of
- * EXTRA_TIME.minutes, then one minute calls until somebody scores, bounded.
- * Every call is v1's quarter, so each charges one quarter's fatigue (game rule).
+ * A final level after four quarters (Regulation 2.8(a), two sourced in aussieRulesFormat.ts):
+ * blocks of EXTRA_TIME.periods periods of EXTRA_TIME.minutes, repeated until somebody leads.
+ * No golden score. Every period is v1's quarter, so each charges one quarter's fatigue (game
+ * rule), and the block bound only guards the loop: the harness shows it is never reached.
  */
-export function settleLevelFinal<C extends LeagueClub>(clubs: C[], match: Match, seed: number, lineups: (clubs: C[], match: Match) => [string[], string[]], tactics: [Tactic, Tactic]): { clubs: C[]; match: Match; extraTime: boolean; calls: number } {
+export function settleLevelFinal<C extends LeagueClub>(clubs: C[], match: Match, seed: number, lineups: (clubs: C[], match: Match) => [string[], string[]], tactics: [Tactic, Tactic]): { clubs: C[]; match: Match; extraTime: boolean; blocks: number } {
   let result = { clubs, match };
-  if (match.homeScore.total !== match.awayScore.total) return { ...result, extraTime: false, calls: 0 };
-  for (let period = 0; period < EXTRA_TIME.periods; period += 1) {
-    const [home, away] = lineups(result.clubs, result.match);
-    result = quarter(result.clubs, result.match, seed, home, away, tactics[0], tactics[1], EXTRA_TIME.minutes);
+  if (match.homeScore.total !== match.awayScore.total) return { ...result, extraTime: false, blocks: 0 };
+  let blocks = 0;
+  while (blocks < EXTRA_TIME.blockBound && result.match.homeScore.total === result.match.awayScore.total) {
+    for (let period = 0; period < EXTRA_TIME.periods; period += 1) {
+      const [home, away] = lineups(result.clubs, result.match);
+      result = quarter(result.clubs, result.match, seed, home, away, tactics[0], tactics[1], EXTRA_TIME.minutes);
+    }
+    blocks += 1;
   }
-  let calls = 0;
-  while (calls < EXTRA_TIME.nextScoreBound && result.match.homeScore.total === result.match.awayScore.total) {
-    const [home, away] = lineups(result.clubs, result.match);
-    result = quarter(result.clubs, result.match, seed, home, away, tactics[0], tactics[1], 1);
-    calls += 1;
-  }
-  return { ...result, extraTime: true, calls };
+  return { ...result, extraTime: true, blocks };
 }
 function simulateTie(clubs: LeagueClub[], seed: number, round: number, homeId: string, awayId: string): { clubs: LeagueClub[]; match: Match; extraTime: boolean } {
   const played = simulateOtherMatch({ clubs, seed, round }, homeId, awayId);
@@ -537,7 +536,8 @@ export function isLeagueAction(value: unknown): value is LeagueAction {
     && item.starters.length === 18 && item.bench.length === 5 && [...item.starters, ...item.bench].every(isPlayerId);
 }
 
-/** Raw save cap: the measured 40 season peak plus margin (simAussieRulesSeason section 8). */
+/** Raw save cap. Measured peak 150,647 chars at 40 seasons, growing about 390 a season from history
+ *  rows (simAussieRulesSeason header), so this leaves room for several hundred more seasons. */
 export const MAX_SAVE_CHARS = 400000;
 const int = (value: unknown, low: number, high: number): value is number => Number.isInteger(value) && (value as number) >= low && (value as number) <= high;
 const num = (value: unknown, low: number, high: number): value is number => typeof value === 'number' && Number.isFinite(value) && value >= low && value <= high;
@@ -548,17 +548,18 @@ const MATCH_KEYS = ['round', 'homeId', 'awayId', 'quarter', 'homeScore', 'awaySc
 const EVENT_KEYS = ['id', 'clubId', 'playerId', 'quarter', 'minute', 'kind', 'points'];
 const PHASES: LeaguePhase[] = ['prepare', 'quarter', 'break', 'report', 'seasonOver', 'summer', 'draft'];
 const EXITS: FinalsExit[] = ['missed', 'wildcard', 'elimination', 'semi', 'preliminary', 'runnerUp', 'premiers'];
-const MAX_QUARTER = 4 + EXTRA_TIME.periods + EXTRA_TIME.nextScoreBound;
+// Read at call time, never at module scope (an imported value).
+const maxQuarter = () => 4 + EXTRA_TIME.periods * EXTRA_TIME.blockBound;
 const validScore = (score: unknown): score is Score => exactKeys(score, ['goals', 'behinds', 'total']) && int(score.goals, 0, 999) && int(score.behinds, 0, 999) && score.total === (score.goals as number) * 6 + (score.behinds as number);
 function validMatch(value: unknown, live: boolean): value is Match {
   if (!exactKeys(value, MATCH_KEYS) || !int(value.round, 0, ROUNDS + 8) || !isClubId(value.homeId) || !isClubId(value.awayId) || value.homeId === value.awayId) return false;
-  if (!int(value.quarter, 0, MAX_QUARTER) || !validScore(value.homeScore) || !validScore(value.awayScore)) return false;
+  if (!int(value.quarter, 0, maxQuarter()) || !validScore(value.homeScore) || !validScore(value.awayScore)) return false;
   if (!Array.isArray(value.events) || !Array.isArray(value.homeSquad) || !Array.isArray(value.awaySquad)) return false;
   if (!live) return value.events.length === 0 && value.homeSquad.length === 0 && value.awaySquad.length === 0;
   if (![0, 23].includes(value.homeSquad.length) || value.homeSquad.length !== value.awaySquad.length || ![...value.homeSquad, ...value.awaySquad].every(isPlayerId)) return false;
   const count = (clubId: unknown, kind: string) => (value.events as Record<string, unknown>[]).filter(event => event.clubId === clubId && event.kind === kind).length;
   return value.events.every(event => exactKeys(event, EVENT_KEYS) && typeof event.id === 'string' && (event.clubId === value.homeId || event.clubId === value.awayId) && isPlayerId(event.playerId)
-      && int(event.quarter, 1, MAX_QUARTER) && int(event.minute, 1, 20) && ((event.kind === 'goal' && event.points === 6) || (event.kind === 'behind' && event.points === 1)))
+      && int(event.quarter, 1, maxQuarter()) && int(event.minute, 1, 20) && ((event.kind === 'goal' && event.points === 6) || (event.kind === 'behind' && event.points === 1)))
     && count(value.homeId, 'goal') === (value.homeScore as Score).goals && count(value.homeId, 'behind') === (value.homeScore as Score).behinds
     && count(value.awayId, 'goal') === (value.awayScore as Score).goals && count(value.awayId, 'behind') === (value.awayScore as Score).behinds;
 }

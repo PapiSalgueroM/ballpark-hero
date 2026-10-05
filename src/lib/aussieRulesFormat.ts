@@ -15,10 +15,19 @@ export const AFL_FORMAT_VERIFIED_ON = '2026-10-05';
 export interface AflFormatSource { id: string; publisher: string; title: string; url: string }
 
 export const AFL_FORMAT_SOURCES: AflFormatSource[] = [
-  { id: 'aflwildcard', publisher: 'AFL.com.au', title: 'Biggest finals shake-up in 25 years as Wildcard Round introduced', url: 'https://www.afl.com.au/news/1451972/biggest-finals-shake-up-in-25-years-as-wildcard-round-introduced' },
-  { id: 'aflwildcardexplained', publisher: 'AFL.com.au', title: 'What is Wildcard Round and how does it work?', url: 'https://www.afl.com.au/news/1589531/what-is-wildcard-round-and-how-does-it-work-rankings-system-explained-finals-history-and-more' },
+  { id: 'reg26', publisher: 'AFL', title: 'AFL Regulations, Final 11 February 2026', url: 'https://resources.afl.com.au/afl/document/2026/02/13/54c158af-15e9-483b-a195-62a0f4e33b11/AFL-Regulations-Final-11-February-2026-.pdf' },
+  { id: 'aflwildcard', publisher: 'AFL', title: 'Biggest finals shake-up in 25 years as Wildcard Round introduced', url: 'https://www.afl.com.au/news/1451972/biggest-finals-shake-up-in-25-years-as-wildcard-round-introduced' },
+  { id: 'aflwildcardexplained', publisher: 'AFL', title: 'What is Wildcard Round and how does it work?', url: 'https://www.afl.com.au/news/1589531/what-is-wildcard-round-and-how-does-it-work-rankings-system-explained-finals-history-and-more' },
+  { id: 'aflfixture', publisher: 'AFL', title: '2026 Toyota AFL Premiership Fixture Confirmed', url: 'https://www.afl.com.au/news/1452366/2026-toyota-afl-premiership-fixture-confirmed' },
+  { id: 'afldraftorder', publisher: 'AFL', title: 'Draft order, week of 2026-10-05', url: 'https://www.afl.com.au/news/1625557/draft-order-how-hawthorn-hawks-can-get-deals-done-for-ben-king-and-zach-merrett-melbourne-demons-hold-two-top-pi' },
   { id: 'abcwildcard', publisher: 'ABC News', title: 'AFL gives teams finishing 10th chance to win premiership through wildcard round in finals', url: 'https://www.abc.net.au/news/2025-11-10/afl-introduces-wildcard-round-to-finals/105990434' },
   { id: 'abc2026', publisher: 'ABC News', title: "From rule changes to new wildcard round, here's what's new in AFL for 2026", url: 'https://www.abc.net.au/news/2026-03-03/whats-new-in-the-afl-for-2026-rule-change-wildcard-round-sub/106376360' },
+  { id: 'abcpercentage', publisher: 'ABC News', title: 'The maths that will decide the AFL finals', url: 'https://www.abc.net.au/news/2017-06-19/the-maths-that-will-decide-the-afl-finals/8630874' },
+  { id: 'espnextratime', publisher: 'ESPN', title: 'AFL dumps golden score for tied finals', url: 'https://www.espn.com.au/afl/story/_/id/28323336/afl-dumps-golden-score-tied-finals' },
+  { id: 'senfinaleight', publisher: 'SEN', title: '31 years of the final eight', url: 'https://www.sen.com.au/news/2025/11/12/afl-final-eight-when-did-it-start' },
+  { id: 'zhladder', publisher: 'Zero Hanger', title: 'AFL Ladder 2026', url: 'https://www.zerohanger.com/afl/afl-ladder/' },
+  { id: 'zhdraftorder', publisher: 'Zero Hanger', title: 'AFL Draft Order 2026', url: 'https://www.zerohanger.com/afl/afl-draft-order-2026/' },
+  { id: 'afltables2026', publisher: 'AFL Tables', title: '2026 season page (documented statistics dataset)', url: 'https://afltables.com/afl/seas/2026.html' },
 ];
 
 /** A fact is either two-sourced or this game's own rule. */
@@ -27,16 +36,20 @@ export type FormatFact = { verified: true; sources: string[]; value: string } | 
 const verified = (value: string, ...sources: string[]): FormatFact => ({ verified: true, sources, value });
 const gameRule = (value: string): FormatFact => ({ gameRule: true, value });
 
+/** Receipts with the line relied on and the read date: docs/audits/AUSSIE-RULES-FORMAT-SOURCES-2026-10.md. */
 export const AFL_FORMAT_FACTS: Record<string, FormatFact> = {
   finals2026: verified('From 2026 the finals are a final ten: 7th hosts 10th and 8th hosts 9th in a Wildcard Round on the old pre-finals bye weekend, the higher ranked winner becomes the 7th seed and the lower the 8th, then the final eight runs as it has since 2000.', 'aflwildcard', 'abcwildcard'),
-  finalEight: gameRule('Qualifying finals 1v4 and 2v3, elimination finals 5v8 and 6v7, semi finals loser QF1 v winner EF1 and loser QF2 v winner EF2, preliminary finals winner QF1 v winner SF2 and winner QF2 v winner SF1, then the Grand Final.'),
-  extraTime: gameRule('A final level after four quarters plays two extra time periods, and if it is still level, play goes on until the next score.'),
-  ladderPoints: gameRule('Four points for a win and two for a draw, then percentage (points for divided by points against, times 100).'),
-  ladderTiebreak: gameRule('Level on points and percentage, the club listed first in the club list ranks higher.'),
-  clubs: gameRule('Eighteen clubs.'),
-  season: gameRule('Twenty three home and away games each, played as 23 rounds with no byes.'),
-  draftOrder: gameRule('Clubs that missed the finals pick first in reverse ladder order, then finalists by the week they went out, lower ladder place first, with the runner up second last and the premier last. The order repeats until every list is back to 36.'),
-  draftAge: gameRule('Draftees are 18.'),
+  finalEight: verified('Qualifying finals 1v4 and 2v3, elimination finals 5v8 and 6v7, semi finals loser QF1 v winner EF1 and loser QF2 v winner EF2, preliminary finals winner QF1 v winner SF2 and winner QF2 v winner SF1, then the Grand Final. The top four have the double chance.', 'aflwildcardexplained', 'senfinaleight'),
+  extraTime: verified('A drawn final, the Grand Final included, plays two 3 minute periods of extra time; if still level, another two, repeated until there is a winner. No golden score.', 'reg26', 'espnextratime'),
+  ladderPoints: verified('Four points for a win, two for a draw, none for a loss.', 'reg26', 'zhladder'),
+  percentage: verified('Percentage is points for divided by points against, times 100, and splits clubs level on points.', 'reg26', 'abcpercentage'),
+  ladderTiebreak: gameRule('Level on points and percentage, the club listed first in the club list ranks higher. The real ladder goes to head to head results and then a draw by lot.'),
+  clubs: verified('Eighteen clubs.', 'aflfixture', 'zhladder'),
+  games: verified('Twenty three home and away games for each club: 17 opponents once and 6 twice.', 'aflfixture', 'afltables2026'),
+  season: gameRule('The games are played as 23 rounds with no byes. The real season has an Opening Round and 24 more rounds with two byes per club.'),
+  draftOrder: verified('Clubs that missed the finals pick first in reverse ladder order, then the wildcard losers, the elimination final, semi final and preliminary final losers, each group in reverse ladder order, then the runner up and the premier.', 'afldraftorder', 'zhdraftorder'),
+  draftRepeat: gameRule('The order repeats until every list is back to 36. Priority, father son, academy and compensation picks are not modelled.'),
+  draftAge: gameRule('Draftees are 18. The real rule: 18 by 31 December of the draft year.'),
   listSize: gameRule('Thirty six players on every list.'),
 };
 
@@ -72,8 +85,9 @@ export const FINALS_PRESETS: Record<AussieFinalsFormat, { qualifiers: number; ti
 /** The format a new season starts under. A save keeps the format its season began with. */
 export const CURRENT_FINALS_FORMAT: AussieFinalsFormat = 'wildcard';
 
-/** Extra time in this game's dice minutes (a quarter is 20). */
-export const EXTRA_TIME = { periods: 2, minutes: 3, nextScoreBound: 60 };
+/** Extra time in this game's dice minutes (a quarter is 20): blocks of two flat 3 minute periods, repeated until
+ *  somebody leads. blockBound only guards the loop; simAussieRulesSeason shows it is never reached. */
+export const EXTRA_TIME = { periods: 2, minutes: 3, blockBound: 20 };
 
 /** How far a club went, from the id of the tie it lost. */
 export type FinalsExit = 'missed' | 'wildcard' | 'elimination' | 'semi' | 'preliminary' | 'runnerUp' | 'premiers';

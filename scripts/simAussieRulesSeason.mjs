@@ -20,7 +20,27 @@
  * AUSSIE_SEASON_LONG=1 is the measuring mode: 5 seeds x 40 seasons. Run it
  * detached (it takes several minutes). The bands below came from it.
  *
- * MEASURED (fill: see BANDS)
+ * MEASURED 2026-10-05, AUSSIE_SEASON_LONG=1 (5 seeds x 40 seasons, 41,400 home
+ * and away games, 2188 s) against the 3 seed x 8 season baseline (4,968 games):
+ *   team score 79.95 (seeds 79.54 to 80.23; baseline 80.10), goals 11.67,
+ *   behinds 9.93, accuracy 0.5403 (baseline 0.5409), draws 0.77% (baseline
+ *   0.72%), mean margin 38.78 (baseline 39.58), late (rounds 18 to 23) over
+ *   early (1 to 6) 0.9665 (seeds 0.961 to 0.970; baseline 0.9614). The late
+ *   dip is the fresh first rounds: RECOVERY 26 gave 0.974 and 32 gave 0.981
+ *   in a 4 seed probe, so v1's 20 stays and the band sits around it.
+ *   Paired +10 skill lift in win share 0.139 (sd 0.069, 24 pairs; baseline
+ *   0.144, sd 0.064, 8 pairs); the floor 0.05 is 4 standard errors under the
+ *   baseline mean. League mean skill at season start 63.3 to 68.6 across 40
+ *   seasons, slope -0.031 to 0.013 a season, player spread 10.3 to 10.6
+ *   (15 in the generated first season; the 24 season baseline run, seed 61,
+ *   dips to 7.4 as draft cohorts converge). Save peak 150,647 chars at 40
+ *   seasons, growing 374 to 393 chars a season (history rows only).
+ *   Extra time: 16 of 2,200 finals; constructed level finals need 1 block
+ *   almost always (the bound of 20 is never reached).
+ *   Printed, not asserted: the bot's club won 155 of 200 flags (it counters
+ *   every read, worth 18 strength points a quarter); AI ladder leaders won
+ *   16 to 17.5 of 23 and AI bottom clubs 5.5 to 6.8 in tier probes from +-6
+ *   to +-12, against a two sourced real shape of 17 to 19 and 1 to 3.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -46,7 +66,7 @@ const CONTROLS = {
   crossover: [FORMAT, "home: { loserOf: 'QF1' }, away: { winnerOf: 'EF1' } }", "home: { loserOf: 'QF1' }, away: { winnerOf: 'EF2' } }", 4, 2],
   doublechance: [FORMAT, "{ id: 'SF1', week: offset + 1, home: { loserOf: 'QF1' }", "{ id: 'SF1', week: offset + 1, home: { seed: 9 }", 4, 2],
   seven: [FORMAT, 'qualifiers: 10,', 'qualifiers: 7,', 4, 2],
-  noextratime: [LEAGUE, 'if (match.homeScore.total !== match.awayScore.total) return { ...result, extraTime: false, calls: 0 };', 'if (true) return { ...result, extraTime: false, calls: 0 };', 4, 2],
+  noextratime: [LEAGUE, 'if (match.homeScore.total !== match.awayScore.total) return { ...result, extraTime: false, blocks: 0 };', 'if (true) return { ...result, extraTime: false, blocks: 0 };', 4, 2],
   behind: [V1, 'total: goals * 6 + behinds', 'total: goals * 5 + behinds', 5, 2],
   accuracy: [V1, 'const goal = accuracy < clamp(0.42 + value * 0.002, 0.3, 0.7);', 'const goal = accuracy < clamp(0.52 + value * 0.002, 0.3, 0.7);', 5, 2],
   fatigue: [LEAGUE, 'fatigue: Math.max(0, player.fatigue - RECOVERY)', 'fatigue: player.fatigue', 5, 2],
@@ -62,7 +82,8 @@ const CONTROLS = {
   legacylost: [LEAGUE, "return legacy && legacy.state.phase !== 'complete' ? 'legacy' : 'menu';", "return 'menu';", 10, 2],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
-const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+const ONLY = process.env.AUSSIE_SEASON_ONLY || ''; // e.g. "7,8" while iterating; a gate run never sets it
+const RUN = CONTROL ? new Set([CONTROLS[CONTROL][3], CONTROLS[CONTROL][4]]) : ONLY ? new Set(ONLY.split(',').map(Number)) : new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
 const readSrc = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n');
 let patched = false;
@@ -329,9 +350,10 @@ if (RUN.has(4)) {
   check(pathFaults === 0, 'premier paths: top four lose at most a qualifying final, QF winners play QF, PF, GF, 5th and 6th play EF, SF, PF, GF, 7th to 10th add the wildcard');
   check(countFaults === 0, 'eleven finals a season');
   check(levelFinals === 0, 'no final ends level');
-  /* Extra time on a constructed level match, and the next score loop's bound. */
+  /* Extra time on a constructed level match, and the bound on repeated extra time blocks. */
   const s0 = L.createLeague(4242, 'club-00');
-  let calls = [], bound = 0, settledLevel = 0;
+  const blocks = [];
+  let bound = 0, settledLevel = 0;
   for (let i = 0; i < 300; i += 1) {
     const home = CLUB_IDS[i % 18], away = CLUB_IDS[(i + 5) % 18];
     const sc = { goals: 10, behinds: 8, total: 68 };
@@ -340,9 +362,9 @@ if (RUN.has(4)) {
     const r = L.settleLevelFinal(s0.clubs, level, 1000 + i, () => [lu(home).starters, lu(away).starters], ['control', 'pressure']);
     if (!r.extraTime) settledLevel += 1;
     if (r.match.homeScore.total === r.match.awayScore.total) bound += 1;
-    calls.push(r.calls);
+    blocks.push(r.blocks);
   }
-  console.log(`  300 constructed level finals: next score calls mean ${mean(calls).toFixed(2)}, most ${Math.max(...calls)} (printed, not asserted), bound ${L.FMT.EXTRA_TIME.nextScoreBound}, still level ${bound}`);
+  console.log(`  300 constructed level finals: extra time blocks mean ${mean(blocks).toFixed(2)}, most ${Math.max(...blocks)} (printed, not asserted), bound ${L.FMT.EXTRA_TIME.blockBound}, still level ${bound}`);
   check(settledLevel === 0 && bound === 0, 'a final level after four quarters goes to extra time and ends with a winner');
   check(LONG || extraTimes >= 1 || seasons < 20, `extra time happened in the run (${extraTimes})`);
   /* The resolver alone over 2000 random outcome sets. */
@@ -371,8 +393,8 @@ if (RUN.has(4)) {
 
 /* Measured bands (see the header). Each is [low, high]. */
 const BANDS = {
-  teamScore: [40, 140], goals: [5, 25], behinds: [3, 20], accuracy: [0.4, 0.7], drawRate: [0.001, 0.05], margin: [10, 60], lateOverEarly: [0.8, 1.2],
-  strengthLift: 0.05, leagueSkill: [45, 85], leagueSpread: [5, 20], skillSlope: 0.5,
+  teamScore: [76, 84], goals: [11.0, 12.4], behinds: [9.3, 10.6], accuracy: [0.52, 0.56], drawRate: [0.0025, 0.0135], margin: [36, 42], lateOverEarly: [0.94, 0.99],
+  strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25,
 };
 const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
 
@@ -525,7 +547,7 @@ if (RUN.has(7)) {
     const means = run.seasons.map(x => mean(x.start.clubs.flatMap(c => c.players.map(p => p.skill))));
     const spreads = run.seasons.map(x => sd(x.start.clubs.flatMap(c => c.players.map(p => p.skill))));
     const b = slope(means);
-    console.log(`  seed ${run.seed}: league mean skill ${means[0].toFixed(2)} to ${means.at(-1).toFixed(2)} (slope ${b.toFixed(3)} a season), spread ${mean(spreads).toFixed(2)}`);
+    console.log(`  seed ${run.seed}: league mean skill ${means[0].toFixed(2)} to ${means.at(-1).toFixed(2)} (range ${Math.min(...means).toFixed(2)} to ${Math.max(...means).toFixed(2)}, slope ${b.toFixed(3)} a season), player spread ${Math.min(...spreads).toFixed(2)} to ${Math.max(...spreads).toFixed(2)}`);
     check(means.every(m => inBand(m, BANDS.leagueSkill)) && spreads.every(v => inBand(v, BANDS.leagueSpread)), `seed ${run.seed}: league mean skill and spread stay inside their bands`);
     check(Math.abs(b) < BANDS.skillSlope, `seed ${run.seed}: no drift in league skill across ${means.length} seasons`);
   }
@@ -650,5 +672,6 @@ if (CONTROL) {
   console.log(`\nsimAussieRulesSeason control ${CONTROL}: DID NOT FIRE (section ${target} failures ${t}, independent section ${indep} failures ${i}) in ${secs} s`);
   process.exit(3);
 }
-console.log(`\nsimAussieRulesSeason: ${totalFails ? `${totalFails} checks FAILED` : 'all eleven sections green'} in ${secs} s`);
+const scope = RUN.size === 11 ? 'all eleven sections green' : `the ${RUN.size} selected sections green (AUSSIE_SEASON_ONLY=${ONLY}, not a gate run)`;
+console.log(`\nsimAussieRulesSeason: ${totalFails ? `${totalFails} checks FAILED` : scope} in ${secs} s`);
 process.exit(totalFails ? 1 : 0);
