@@ -112,6 +112,8 @@ const HigherLowerGame = () => {
           <div className="mt-8 flex justify-center">
             <ResultScreen
               won={false}
+              score={streak}
+              scoreLabel="in a row"
               outcomeEmoji={lossReaction.emoji}
               headline="Game Over!"
               statLine={lossReaction.message}
