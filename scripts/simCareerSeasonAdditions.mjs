@@ -38,7 +38,11 @@
  *   7. REHEARSAL in PGlite, never on production: the pool before the ledger
  *      and the puzzles live after Round 784 are loaded, the migration runs,
  *      the tables read back equal to the pool after the ledger, and a second
- *      run fails closed. Where PGlite is not installed (it is in no manifest,
+ *      run stops at its row count guard. The tables are built as the repo
+ *      records production (unique player_name, smallint sort orders, the
+ *      Transfer Path pair checks, nullable assists as the generated types read
+ *      it). Measured 2026-10-05 with PGlite 0.5.8 (Postgres 18.3): green, 252
+ *      players and 3634 seasons. Where PGlite is not installed (it is in no manifest,
  *      and a builder lane never runs npm install) the section is RED unless
  *      the ledger's `rehearsal` record carries the sha256 of this exact
  *      migration text, written by a passing run with --record-rehearsal. The
@@ -53,6 +57,10 @@
  *   uncovered  one added row removed in memory, must be named (section 2)
  *   reads      Salah's 2025-2026 goals typed 21, read 12      (section 1)
  *   twin       Alisson cloned as Alisson Becker               (section 5)
+ *   rehearse      Salah's 2024-2025 update writes 33 goals    (section 7)
+ *   rehearsehint  tpa-762's active entry written as 3 steps  (section 7)
+ * The two rehearsal controls rewrite only the SQL handed to PGlite and refuse
+ * to run where PGlite is not resolvable, since they would prove nothing there.
  *
  * Reads no network and no database. Run: node scripts/simCareerSeasonAdditions.mjs
  */
@@ -66,7 +74,12 @@ import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, care
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_ADD_CONTROL || '';
-const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, uncovered: 2, twin: 5 };
+const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, uncovered: 2, twin: 5, rehearse: 7, rehearsehint: 7 };
+/* what the two rehearsal controls rewrite in the migration text, in memory only */
+const REHEARSE_CONTROLS = {
+  rehearse: ['update public.career_seasons set goals = 34, assists = 23, appearances = 52', 'update public.career_seasons set goals = 33, assists = 23, appearances = 52'],
+  rehearsehint: ["('tpa-762', 'Alisson', 'Mikel Oyarzabal', 'active', null::smallint, null::text, 2, ", "('tpa-762', 'Alisson', 'Mikel Oyarzabal', 'active', null::smallint, null::text, 3, "],
+};
 if (CONTROL && !OWN[CONTROL]) { console.error(`SIM_SEASON_ADD_CONTROL=${CONTROL} is not a control this harness knows: ${Object.keys(OWN).join(', ')}`); process.exit(1); }
 /*
  * THE COVERAGE RATCHET (section 2). The men of the pool who still stop at the
@@ -320,6 +333,7 @@ console.log('7) rehearsal of the migration in PGlite (never on production)');
   const rec = ledger.rehearsal;
   let PGlite = null;
   try { ({ PGlite } = await import('@electric-sql/pglite')); } catch { PGlite = null; }
+  if (!PGlite && REHEARSE_CONTROLS[CONTROL]) abort(`SIM_SEASON_ADD_CONTROL=${CONTROL} needs @electric-sql/pglite resolvable: without it section 7 reads the ledger's record and the control proves nothing`);
   if (!PGlite) {
     if (rec?.migrationSha256 === migrationSha) {
       console.log(`   PGlite is not installed here; the ledger records a rehearsal of this exact migration (sha256 ${migrationSha.slice(0, 12)}, ${rec.with}, ${rec.on})`);
@@ -329,11 +343,11 @@ console.log('7) rehearsal of the migration in PGlite (never on production)');
     }
   } else {
     const before = failures[7];
-    await rehearse(PGlite);
+    const engine = await rehearse(PGlite);
     const passed = failures[7] === before;
     if (passed && process.argv.includes('--record-rehearsal') && !CONTROL) {
       const onDisk = JSON.parse(read(LEDGER_FILE));
-      onDisk.rehearsal = { migrationSha256: migrationSha, with: '@electric-sql/pglite', on: new Date().toISOString().slice(0, 10) };
+      onDisk.rehearsal = { migrationSha256: migrationSha, with: engine ? `@electric-sql/pglite, ${engine}` : '@electric-sql/pglite', on: new Date().toISOString().slice(0, 10) };
       fs.writeFileSync(path.join(ROOT, LEDGER_FILE), formatLedger(onDisk));
       console.log(`   recorded the rehearsal of ${migrationSha.slice(0, 12)} in ${LEDGER_FILE}; commit it`);
     } else if (passed && rec?.migrationSha256 !== migrationSha) {
@@ -346,26 +360,48 @@ console.log('7) rehearsal of the migration in PGlite (never on production)');
 async function rehearse(PGlite) {
   const { liveAfter784 } = await import('./genCareerSeasonAdditions.mjs');
   const db = new PGlite();
+  const engine = (await db.query('select version() as v')).rows[0].v.split(' on ')[0];
+  /* the tables as the repo records production: 20260525000002_career_tables.sql,
+     20260526000001_transfer_path_puzzles.sql and 20260905_round_460_transfer_path_mode_columns.sql,
+     with assists nullable as src/integrations/supabase/types.ts reads it (the Round 784
+     migration wrote null there). The unique name, the smallint sort orders and the
+     pair checks are what a wrong migration would trip on, so they are all here. */
   await db.exec(`
-    create table public.career_players (id uuid primary key, player_name text not null, nationality text not null, position text not null);
-    create table public.career_seasons (id bigserial primary key, player_id uuid not null references public.career_players(id) on delete cascade,
-      season text not null, club text not null, goals integer not null default 0, assists integer, appearances integer not null default 0,
-      market_value integer not null default 0, sort_order integer not null default 0);
-    create table public.transfer_path_puzzles (puzzle_id text not null unique, player_a text not null, player_b text not null,
-      min_steps smallint not null, hint text not null, active_min_steps smallint, active_hint text, europe_min_steps smallint, europe_hint text);`);
+    create table public.career_players (id uuid not null default gen_random_uuid() primary key, player_name text not null unique,
+      nationality text not null, position text not null, created_at timestamptz not null default now());
+    create index career_players_name_idx on public.career_players (player_name);
+    create table public.career_seasons (id uuid not null default gen_random_uuid() primary key,
+      player_id uuid not null references public.career_players(id) on delete cascade,
+      season text not null, club text not null, goals integer not null default 0, assists integer default 0, appearances integer not null default 0,
+      market_value integer not null default 0, sort_order smallint not null, created_at timestamptz not null default now());
+    create index career_seasons_sort_order_idx on public.career_seasons (player_id, sort_order);
+    create table public.transfer_path_puzzles (id uuid not null default gen_random_uuid() primary key, puzzle_id text not null unique,
+      player_a text not null, player_b text not null, min_steps smallint not null, hint text not null, sort_order smallint not null,
+      created_at timestamptz not null default now(), active_min_steps smallint, active_hint text, europe_min_steps smallint, europe_hint text,
+      constraint transfer_path_puzzles_active_pair check ((active_min_steps is null) = (active_hint is null)),
+      constraint transfer_path_puzzles_europe_pair check ((europe_min_steps is null) = (europe_hint is null)));
+    alter table public.career_players enable row level security;
+    alter table public.career_seasons enable row level security;
+    alter table public.transfer_path_puzzles enable row level security;`);
   const ids = new Map();
   for (const l of [ledger.added, ledger.changed, ledger.ended, ledger.held, ledger.removed]) for (const r of l ?? []) if (r.playerId) ids.set(r.player, r.playerId);
   for (const r of ledger.removed ?? []) ids.set(r.keptAs, r.keptId);
   let k = 0;
   const idOf = name => ids.get(name) ?? ids.set(name, `00000000-0000-4000-8000-${String(++k).padStart(12, '0')}`).get(name);
   for (const p of pre) {
-    await db.query('insert into public.career_players values ($1, $2, $3, $4)', [idOf(p.name), p.name, p.nationality, p.position]);
+    await db.query('insert into public.career_players (id, player_name, nationality, position) values ($1, $2, $3, $4)', [idOf(p.name), p.name, p.nationality, p.position]);
     let order = 0;
     for (const s of p.career) await db.query('insert into public.career_seasons (player_id, season, club, goals, assists, appearances, market_value, sort_order) values ($1, $2, $3, $4, $5, $6, $7, $8)', [idOf(p.name), s.season, s.club, s.goals, s.assists, s.appearances, s.marketValue, order++]);
   }
   const live = liveAfter784(ROOT);
-  for (const [id, p] of live) await db.query('insert into public.transfer_path_puzzles values ($1, $2, $3, $4, $5, $6, $7, $8, $9)', [id, p.a, p.b, p.classic.minSteps, p.classic.hint, p.active?.minSteps ?? null, p.active?.hint ?? null, p.europe?.minSteps ?? null, p.europe?.hint ?? null]);
-  const sql = read(MIGRATION_OUT);
+  let puzzleOrder = 0;
+  for (const [id, p] of live) await db.query('insert into public.transfer_path_puzzles (puzzle_id, player_a, player_b, min_steps, hint, sort_order, active_min_steps, active_hint, europe_min_steps, europe_hint) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)', [id, p.a, p.b, p.classic.minSteps, p.classic.hint, puzzleOrder++, p.active?.minSteps ?? null, p.active?.hint ?? null, p.europe?.minSteps ?? null, p.europe?.hint ?? null]);
+  let sql = read(MIGRATION_OUT);
+  if (REHEARSE_CONTROLS[CONTROL]) {
+    const [from, to] = REHEARSE_CONTROLS[CONTROL];
+    if (sql.split(from).length !== 2) abort(`control ${CONTROL}: the migration does not carry exactly one ${JSON.stringify(from)}, so the control would change nothing`);
+    sql = sql.replace(from, to);
+  }
   try { await db.exec(sql); } catch (e) { fail(`the migration raised on the pool before the ledger: ${e.message}`); return; }
   const players = (await db.query('select id, player_name, nationality, position from public.career_players order by player_name')).rows;
   const seasons = (await db.query('select player_id, season, club, goals, assists, appearances, market_value from public.career_seasons order by player_id, sort_order')).rows;
@@ -383,14 +419,23 @@ async function rehearse(PGlite) {
   for (const r of gen.rewrites) expected.get(r.id)[r.rule] = r.next;
   const entry = (min, hint) => (min === null ? null : { minSteps: Number(min), hint });
   let puzzleDiffs = 0;
-  for (const row of (await db.query('select * from public.transfer_path_puzzles')).rows) {
+  const puzzleRows = (await db.query('select * from public.transfer_path_puzzles')).rows;
+  if (puzzleRows.length !== expected.size) fail(`the rehearsed table holds ${puzzleRows.length} Transfer Path puzzles, the companion ${expected.size}`);
+  for (const row of puzzleRows) {
     const e = expected.get(row.puzzle_id);
     const got = { a: row.player_a, b: row.player_b, classic: entry(row.min_steps, row.hint), europe: entry(row.europe_min_steps, row.europe_hint), active: entry(row.active_min_steps, row.active_hint) };
     if (!e || JSON.stringify(got) !== JSON.stringify(e)) puzzleDiffs += 1;
   }
   if (puzzleDiffs) fail(`${puzzleDiffs} rehearsed Transfer Path rows differ from the companion with the renames and rewrites applied`);
-  try { await db.exec(sql); fail('the migration ran a second time instead of failing closed'); } catch { /* fails closed, as it must */ }
-  console.log(`   rehearsed: ${after.length} players read back equal to the bake; a second run fails closed`);
+  /* a second run must stop at its first guard, the row count, and change nothing */
+  let second = null;
+  try { await db.exec(sql); } catch (e) { second = e.message; }
+  if (second === null) fail('the migration ran a second time instead of failing closed');
+  else if (!second.includes(`expected ${pre.length} career_players rows before this migration, found ${post.length}`)) fail(`a second run failed, but not at the row count guard: ${second.slice(0, 160)}`);
+  const again = (await db.query('select count(*)::int as n from public.career_seasons')).rows[0].n;
+  if (again !== seasons.length) fail(`the failed second run left ${again} season rows, not ${seasons.length}`);
+  console.log(`   rehearsed: ${after.length} players and ${seasons.length} seasons read back equal to the bake, ${puzzleRows.length} puzzles equal to the companion with the renames and rewrites; a second run stops at the row count guard and changes nothing (${engine})`);
+  return engine;
 }
 
 console.log('');

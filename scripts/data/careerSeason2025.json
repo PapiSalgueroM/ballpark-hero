@@ -652,5 +652,10 @@
       "europe": 19,
       "active": 16
     }
+  },
+  "rehearsal": {
+    "migrationSha256": "11e13a4af8deb1dcd46ba985aee2a110ebf7f10a8ef7eb4237c0757ab013c4b2",
+    "with": "@electric-sql/pglite, PostgreSQL 18.3 (PGlite 0.5.8)",
+    "on": "2026-10-05"
   }
 }
