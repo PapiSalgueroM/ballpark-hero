@@ -23,6 +23,7 @@ import { NBA_BADGES } from '@/lib/careerBadges';
 import { nbaUnreadInboxCount, answerNbaInboxMessage, nbaDraftNightInbox, NBA_CALENDAR } from '@/lib/nbaCareerInbox';
 import { dismissNbaRivalryEvent, resolveNbaRivalryChoice } from '@/lib/nbaCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -70,6 +71,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   legacyOf: nbaLegacyOf,
   teamLabelOf: nbaTeamLabelOf,
   statLine: s => nbaStatLine(s),
+  reviewStats: s => nbaSeasonReview(s),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     ppg: 0, rpg: 0, apg: 0, awards: [], teamResult: 'SUSPENDED', salary: 0,

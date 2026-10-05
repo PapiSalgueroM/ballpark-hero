@@ -34,12 +34,24 @@
  *   5. THE THRESHOLD HAS MEASURED HEADROOM on both sides.
  *   6. THE TROPHY EXAMPLE REPRODUCES through trophiesFor, in the panel and in
  *      the rules and tips copy.
+ *   7. THE TROPHY ROOM KEEPS THE PROMISE (Round 957). Long Night stretches the
+ *      cap and Night Shift raises the rate; every level of each, in all
+ *      sixteen pairings, pays its own cap at its own rate once per absence
+ *      whatever the tab did, a reload in the middle of the absence or after
+ *      the cap is full included, and the desk still pays in full at full rate.
  *
+
  * Negative controls, each reproducing the defect this round fixed:
  *   IDLE_CAP_CONTROL=uncapped  puts the old tick back (every gap paid in full at
  *                              full rate) and section 3 must go red.
  *   IDLE_CAP_CONTROL=example   puts "four trophies" back in the panel and section
  *                              6 must go red.
+ *   IDLE_CAP_CONTROL=perkcap   the away meter ignores Long Night, so the perk
+ *                              pays the old eight hours: section 7 must go red.
+ *   IDLE_CAP_CONTROL=reloadclamp  loadSave clamps the meter to the old eight
+ *                              hours, so a Long Night player who reloads mid
+ *                              absence is paid past the cap: section 7 (the
+ *                              reload shapes) must go red.
  *
  * Run: node scripts/simIdleArenaCap.mjs
  */
@@ -72,6 +84,19 @@ if (CONTROL === 'uncapped') {
      however long is paid in full at full rate */
   engineSrc = swap(engineSrc, 'gap > AWAY_AFTER_MS', 'false', 'src/lib/idleArena.ts');
   console.log('CONTROL uncapped: tick takes the away branch never, the way it did before Round 438.');
+} else if (CONTROL === 'perkcap') {
+  /* Round 957: the card says Long Night pays sixteen hours and the meter still
+     stops at eight */
+  engineSrc = swap(engineSrc, 'const left = Math.max(0, awayCapMs(s) - s.awayMs);', 'const left = Math.max(0, OFFLINE_CAP_MS - s.awayMs);', 'src/lib/idleArena.ts');
+  console.log('CONTROL perkcap: the away meter ignores Long Night, so the perk pays the old eight hours. Section 7 must go red.');
+} else if (CONTROL === 'reloadclamp') {
+  /* Round 957 review: loadSave clamping the meter to the old eight hours, so a
+     Long Night player who reloads mid absence is paid past the cap */
+  engineSrc = swap(engineSrc, 'awayMs: Math.min(finite(p.awayMs), LONG_NIGHT_CAP_MS[perks.longNight ?? 0]),', 'awayMs: Math.min(finite(p.awayMs), OFFLINE_CAP_MS),', 'src/lib/idleArena.ts');
+  console.log('CONTROL reloadclamp: loadSave clamps the away meter to eight hours whatever Long Night says, so a reload refills the absence. Section 7 must go red.');
+} else if (CONTROL && CONTROL !== 'example') {
+  console.error(`unknown IDLE_CAP_CONTROL ${CONTROL}`);
+  process.exit(2);
 }
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'idleArenaCap-'));
 const SRC = path.join(TMP, 'engine.ts');
@@ -101,6 +126,13 @@ function run(s, gapsMs) {
   return s;
 }
 const repeat = (gap, count) => { const out = new Array(count); out.fill(gap); return out; };
+/** open the page again at `now` on the save `s` wrote, the way the hook boots:
+ *  loadSave, then the away rule against the saved timestamp */
+function reload(s, now) {
+  const loaded = A.loadSave(A.serialize(s), now);
+  if (!loaded) { fail('a save the engine wrote does not load'); return s; }
+  return A.applyOffline(loaded, now).state;
+}
 
 console.log('1) the clock measured here is the clock the hook installs');
 {
@@ -109,6 +141,7 @@ console.log('1) the clock measured here is the clock the hook installs');
     ['tick(s, Date.now())', 'the clock advances the real engine off the real time'],
     ['}, TICK_MS);', 'the interval period is TICK_MS, not a number of its own'],
     ['applyOffline(loaded, now)', 'the load path runs the away rule against the saved timestamp'],
+    ['loadSave(raw, now)', 'the load path reads the save through loadSave, which section 7 reloads through'],
   ];
   for (const [needle, why] of want) if (!hook.includes(needle)) fail(`useIdleArena.ts no longer has ${JSON.stringify(needle)}, so ${why} is no longer true and this harness is measuring something the game does not do`);
   console.log(`   hook drives tick(s, Date.now()) every TICK_MS (${A.TICK_MS}ms) and boots through applyOffline`);
@@ -239,6 +272,50 @@ console.log('6) the trophy example reproduces through the real formula');
   }
   if (A.trophiesFor(A.TROPHY_FLOOR) !== 1 || A.trophiesFor(4 * A.TROPHY_FLOOR) !== 2 || A.trophiesFor(9 * A.TROPHY_FLOOR) !== 3) fail('trophiesFor is not the square root the copy describes');
   console.log(`   every one of them matches trophiesFor: 1M pays ${A.trophiesFor(A.TROPHY_FLOOR)}, 4M pays ${A.trophiesFor(4 * A.TROPHY_FLOOR)}, 9M pays ${A.trophiesFor(9 * A.TROPHY_FLOOR)}`);
+}
+
+console.log('7) the trophy room stretches the cap without breaking it');
+{
+  /* Round 957: Long Night lengthens the cap and Night Shift raises the rate.
+     Every level of both, in every pairing, must keep the promise sections 2 to
+     4 prove for the base rule: one cap for the whole absence however the tab
+     was left, the level's own numbers paid exactly, and somebody sitting there
+     still paid in full at full rate. */
+  const shapes = [
+    ['closed', s => A.applyOffline(s, s.lastTick + DAY).state],
+    ['frozen', s => run(s, [DAY])],
+    ['a minute a tick', s => run(s, repeat(60_000, DAY / 60_000))],
+    ['a second then a minute', s => run(s, [...repeat(1000, 300), ...repeat(60_000, (DAY - 300_000) / 60_000)])],
+    ['ten minutes a tick', s => run(s, repeat(600_000, DAY / 600_000))],
+    /* the tab throttled for half the day, the save it wrote then, and the
+       page opened again at the end of the day: loadSave keeps the meter */
+    ['a minute a tick, reloaded halfway', s => reload(run(s, repeat(60_000, DAY / 2 / 60_000)), s.lastTick + DAY)],
+  ];
+  let combos = 0;
+  for (let ln = 0; ln <= A.PERK_MAX; ln++) for (let ns = 0; ns <= A.PERK_MAX; ns++) {
+    const withPerks = () => ({ ...settled(), perks: { ...(ln ? { longNight: ln } : {}), ...(ns ? { nightShift: ns } : {}) } });
+    const capMs = A.LONG_NIGHT_CAP_MS[ln];
+    const rate = A.NIGHT_SHIFT_RATE[ns];
+    const want = RATE * (Math.min(capMs, DAY) / 1000) * rate;
+    if (capMs > DAY) fail(`Long Night level ${ln} caps an absence at ${A.fmtDuration(capMs / 1000)}, past the day every shape here is away for, so this section cannot see the cap`);
+    if (!(rate < 1)) fail(`Night Shift level ${ns} pays away time at ${rate * 100}% speed, so being away pays as well as being there`);
+    for (const [label, drive] of shapes) {
+      const out = drive(withPerks());
+      if (!near(out.earned, want)) fail(`Long Night ${ln}, Night Shift ${ns}, tab ${label}: a day away paid ${A.fmt(out.earned)}, and the room promises ${A.fmtDuration(capMs / 1000)} at ${Math.round(rate * 100)}% speed, ${A.fmt(want)}`);
+    }
+    const stillAway = run(run(withPerks(), [DAY]), [DAY]);
+    if (!near(stillAway.earned, want)) fail(`Long Night ${ln}, Night Shift ${ns}: a second day away with nobody coming back paid more, so the stretched cap refills on its own`);
+    /* a meter already full when the save is written stays full through the
+       reload, so a page opened a day later pays nothing more */
+    const full = reload(run(withPerks(), repeat(60_000, (capMs + HOUR) / 60_000)), withPerks().lastTick + capMs + HOUR + DAY);
+    const wantFull = RATE * (capMs / 1000) * rate;
+    if (!near(full.earned, wantFull)) fail(`Long Night ${ln}, Night Shift ${ns}: a full ${A.fmtDuration(capMs / 1000)} meter saved, then the page opened a day later, paid ${A.fmt(full.earned)} against the cap's ${A.fmt(wantFull)}, so a reload refills the absence`);
+    const live = run(withPerks(), repeat(A.TICK_MS, HOUR / A.TICK_MS));
+    if (!near(live.earned, RATE * 3600)) fail(`Long Night ${ln}, Night Shift ${ns}: an hour at the desk paid ${A.fmt(live.earned)} instead of ${A.fmt(RATE * 3600)}`);
+    combos += 1;
+  }
+  console.log(`   ${combos} pairings of Long Night and Night Shift, ${shapes.length} tab shapes each: every one pays its own cap at its own rate, once per absence, and the desk pays in full`);
+  console.log(`   caps ${A.LONG_NIGHT_CAP_MS.map(ms => A.fmtDuration(ms / 1000)).join(', ')}; rates ${A.NIGHT_SHIFT_RATE.map(r => `${Math.round(r * 100)}%`).join(', ')}`);
 }
 
 console.log('');

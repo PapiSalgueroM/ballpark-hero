@@ -4,7 +4,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
   '/club-manager': {
     intro: [
       "Club Manager is the site's big one: a full management sim in your browser. 368 real clubs across 22 leagues in 19 countries, from the Premier League to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A and Liga MX, over 4,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
-      "Pick when you start too: today's game, or one of three real past seasons. 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. The 2015-16 season holds all 98 clubs of that year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG); the older seasons hold all 40 Premier League and La Liga clubs; every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
+      "Pick when you start too: today's game, or one of three real past seasons. 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. The 2015-16 season holds all 98 clubs of that year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG); 2010-11 holds all 98 clubs of its big five as well; 2005-06 holds all 40 Premier League and La Liga clubs; every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     headings: {
       howToPlay: "How to play Club Manager, a free online football management game",
@@ -24,6 +24,13 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
             heading: "Or found a club of your own",
             items: [
               "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
+            ],
+          },
+          {
+            heading: "Or move clubs between leagues with the world editor",
+            items: [
+              "In today's world, the World editor tile on the nation step lets you rebuild the map before you pick: tap a club, then tap the club in another league it swaps with. Every move is a swap, so every league keeps its real size, its fixtures and its places, and you can make as many as you like, from one club to a whole super league.",
+              "Example: swap Celtic with Brentford and take Celtic. You play a full Premier League season and the FA Cup, Brentford play in Scotland, and both boards judge their club against its new league, so Brentford are asked to win the Scottish Premiership and Celtic are asked to stay up. Your first season's Europe goes to the clubs who really qualified last season, wherever they play now; after that your edited tables decide it, and the edited leagues promote and relegate like any other. Reset puts the real world back.",
             ],
           },
         ],
