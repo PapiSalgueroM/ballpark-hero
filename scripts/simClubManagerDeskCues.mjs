@@ -139,7 +139,8 @@ function checkBanner() {
 }
 
 const held = [test, DESK[1], FAC[1], ACAD[1], CON[1], 'src/components/CookieConsent.tsx'];
-const heldBytes = held.map(rel => fs.readFileSync(path.join(root, rel)));
+/* Held as normalised text: the harness only ever writes copies under .sim-control, so any change to a real file here would be content, never line endings. */
+const heldText = held.map(read);
 const parent = path.join(root, '.sim-control');
 fs.mkdirSync(parent, { recursive: true });
 const folder = fs.mkdtempSync(path.join(parent, 'desk-cues982-'));
@@ -197,6 +198,6 @@ try {
   else if (control && control !== 'bannerdrift') run(control);
 } finally {
   fs.rmSync(folder, { recursive: true, force: true });
-  held.forEach((rel, i) => assert.deepEqual(fs.readFileSync(path.join(root, rel)), heldBytes[i], `${rel} must stay byte identical through the harness.`));
+  held.forEach((rel, i) => assert.equal(read(rel), heldText[i], `${rel} must stay unchanged through the harness.`));
 }
 console.log('simClubManagerDeskCues: green');
