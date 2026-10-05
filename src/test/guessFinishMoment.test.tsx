@@ -1,8 +1,8 @@
-import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
-import { ChainFinishMoment, chainOutcome } from '@/components/guess-finish/GuessFinish';
+import { ChainFinishMoment, chainOutcome, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { getTennisEarnedBadge } from '@/types/tennisChain';
 import { getNascarEarnedBadge } from '@/types/nascarChain';
 import { getEarnedBadge } from '@/types/ufcChain';
@@ -102,6 +102,30 @@ describe('a clue guesser ends on the shared result moment', () => {
   });
 });
 
+describe('useLiveFinish plays only a finish it watched', () => {
+  const watch = () => renderHook(({ gameKey, done }: { gameKey: string | null; done: boolean }) => useLiveFinish(gameKey, done), { initialProps: { gameKey: null as string | null, done: false } });
+
+  it('forgets the game at the menu, so a live finish reopened under the same key stays settled', () => {
+    const view = watch();
+    view.rerender({ gameKey: 'daily:fixture', done: false });
+    expect(view.result.current).toBe(false);
+    view.rerender({ gameKey: 'daily:fixture', done: true });
+    expect(view.result.current).toBe(true);
+    view.rerender({ gameKey: null, done: false });
+    view.rerender({ gameKey: 'daily:fixture', done: true });
+    expect(view.result.current).toBe(false);
+  });
+
+  it('keeps a different game that arrives already finished settled', () => {
+    const view = watch();
+    view.rerender({ gameKey: 'unlimited:fixture-a', done: false });
+    view.rerender({ gameKey: 'unlimited:fixture-a', done: true });
+    expect(view.result.current).toBe(true);
+    view.rerender({ gameKey: 'daily:fixture-b', done: true });
+    expect(view.result.current).toBe(false);
+  });
+});
+
 describe('a chain ends on the shared result moment', () => {
   const tables = [
     { game: '/tennis-chain', badgeAt: getTennisEarnedBadge },
@@ -109,17 +133,18 @@ describe('a chain ends on the shared result moment', () => {
     { game: '/ufc-chain', badgeAt: getEarnedBadge },
   ];
 
+  /* The bands are read off each game's own table as a threshold (the shortest
+     run it rewards), not rebuilt from chainOutcome's body, so the walk checks
+     the rule against the table rather than one copy of the code against
+     another. Whether the board shows them is guessFinishChainBoards' job. */
   it('follows each game\'s own badge bands at every length from 0 to 25', () => {
     for (const { badgeAt } of tables) {
-      let wins = 0;
+      const firstBadge = Array.from({ length: 26 }, (_, n) => n).find(n => badgeAt(n) !== undefined)!;
+      expect(firstBadge).toBeGreaterThan(1);
       for (let length = 0; length <= 25; length++) {
-        const badge = badgeAt(length);
-        const expected = badge ? 'win' : length > 0 ? 'close' : 'loss';
-        expect(chainOutcome(length, Boolean(badge))).toBe(expected);
-        if (badge) wins++;
+        const band = length === 0 ? 'loss' : length < firstBadge ? 'close' : 'win';
+        expect(chainOutcome(length, badgeAt(length) !== undefined)).toBe(band);
       }
-      expect(wins).toBeGreaterThan(0);
-      expect(chainOutcome(0, false)).toBe('loss');
     }
   });
 

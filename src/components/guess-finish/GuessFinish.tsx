@@ -25,12 +25,16 @@ import { ConfettiBurst } from '@/components/club-manager/Celebration';
  * the page still mounted: a player who finishes an unlimited run, returns to
  * the menu and opens today's daily that was already done is looking at an old
  * result, and a flag that only remembered "saw some play" would replay it.
- * gameKey is null while there is no game (the mode menu, a load).
+ * gameKey is null while there is no game (the mode menu, a load), and the
+ * menu forgets the game: a finish watched live and then reopened from the
+ * menu, same key and all, is an old result and stays settled.
  */
 export function useLiveFinish(gameKey: string | null, finished: boolean): boolean {
   const [playedKey, setPlayedKey] = useState<string | null>(null);
   useEffect(() => {
-    if (gameKey !== null && !finished && playedKey !== gameKey) setPlayedKey(gameKey);
+    if (gameKey === null) {
+      if (playedKey !== null) setPlayedKey(null);
+    } else if (!finished && playedKey !== gameKey) setPlayedKey(gameKey);
   }, [gameKey, finished, playedKey]);
   return finished && gameKey !== null && playedKey === gameKey;
 }
