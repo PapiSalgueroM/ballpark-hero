@@ -37,6 +37,10 @@
  *   seasons, growing 374 to 393 chars a season (history rows only).
  *   Extra time: 16 of 2,200 finals; constructed level finals need 1 block
  *   almost always (the bound of 20 is never reached).
+ *   League mean fatigue after each home and away round (section 5, measured
+ *   the same day over 5 seeds x 40 seasons): rounds 1 to 6 46.80, rounds 18
+ *   to 23 57.37 (seeds 56.34 to 58.35; baseline 56.48). With no between round
+ *   recovery (the fatigue control) it reads 78.94, so the band is [50, 63].
  *   Printed, not asserted: the bot's club won 155 of 200 flags (it counters
  *   every read, worth 18 strength points a quarter); AI ladder leaders won
  *   16 to 17.5 of 23 and AI bottom clubs 5.5 to 6.8 in tier probes from +-6
@@ -64,7 +68,7 @@ const CONTROLS = {
   percentage: [V1, 'row.percentage = row.pointsAgainst ? row.pointsFor / row.pointsAgainst * 100 : row.pointsFor ? 100 : 0;', 'row.percentage = row.pointsFor - row.pointsAgainst;', 3, 2],
   lexical: [LEAGUE, "id: `club-${String(index).padStart(2, '0')}`", 'id: `club-${index}`', 3, 0],
   crossover: [FORMAT, "home: { loserOf: 'QF1' }, away: { winnerOf: 'EF1' } }", "home: { loserOf: 'QF1' }, away: { winnerOf: 'EF2' } }", 4, 2],
-  doublechance: [FORMAT, "{ id: 'SF1', week: offset + 1, home: { loserOf: 'QF1' }", "{ id: 'SF1', week: offset + 1, home: { seed: 9 }", 4, 2],
+  doublechance: [FORMAT, "{ id: 'SF1', week: offset + 1, home: { loserOf: 'QF1' }", "{ id: 'SF1', week: offset + 1, home: { loserOf: 'EF2' }", 4, 2],
   seven: [FORMAT, 'qualifiers: 10,', 'qualifiers: 7,', 4, 2],
   noextratime: [LEAGUE, 'if (match.homeScore.total !== match.awayScore.total) return { ...result, extraTime: false, blocks: 0 };', 'if (true) return { ...result, extraTime: false, blocks: 0 };', 4, 2],
   behind: [V1, 'total: goals * 6 + behinds', 'total: goals * 5 + behinds', 5, 2],
@@ -128,6 +132,9 @@ const check = (cond, m) => (cond ? ok(m) : fail(m));
 const head = (n, title) => { section = n; console.log(`\n${n}. ${title}`); };
 
 /* ---------- the bot and the runs ---------- */
+/* An engine throw ends that career and is recorded here; every section that plays careers fails on one. */
+const crashes = [];
+const noCrash = () => check(crashes.length === 0, `no career crashed (${crashes.length}${crashes.length ? `, first: ${crashes[0]}` : ""})`);
 const COUNTER = { direct: 'control', pressure: 'direct', control: 'pressure' };
 function botAction(s) {
   if (s.phase === 'prepare') {
@@ -149,19 +156,21 @@ function runCareer(seed, clubId, seasons, opts = {}) {
   let s = L.createLeague(seed, clubId);
   if (opts.tweak) s = opts.tweak(s);
   const out = { seed, clubId, seasons: [], steps: 0, sizes: [], tiles: [], states: opts.keepStates ? [] : null, myMatches: [] };
-  let current = { start: s, rounds: [], lastHomeAway: null, closed: null, preSummer: null, postSummer: null, draftDone: null };
+  let current = { start: s, rounds: [], fatigue: [], lastHomeAway: null, closed: null, preSummer: null, postSummer: null, draftDone: null };
   while (s.season <= seasons && out.steps < 200000) {
     out.steps += 1;
     if (opts.onStep) opts.onStep(s);
     const action = botAction(s);
-    const next = L.reduceLeague(s, action);
+    let next;
+    try { next = L.reduceLeague(s, action); } catch (e) { out.crash = `${s.phase}/${s.stage} season ${s.season} round ${s.round + 1}: ${String(e).slice(0, 90)}`; crashes.push(`seed ${seed} ${clubId}: ${out.crash}`); break; }
     if (next === s) { out.stuck = `${s.phase}/${s.stage}/${action.type}`; break; }
     if (s.phase === 'report' && s.stage === 'homeAway') current.rounds.push(s.results.length);
     if (next.phase === 'report' && next.match) out.myMatches.push(next.match);
     if (next.phase === 'report' && next.stage === 'homeAway' && next.round === L.ROUNDS - 1) current.lastHomeAway = next;
     if (next.phase === 'seasonOver') current.closed = next;
     if (next.phase === 'summer') { current.preSummer = s; current.postSummer = next; }
-    if (s.phase === 'draft' && next.phase === 'prepare') { current.draftDone = s; out.seasons.push(current); current = { start: next, rounds: [] }; }
+    if (next.phase === 'report' && next.stage === 'homeAway') current.fatigue.push(mean(next.clubs.flatMap(c => c.players.map(p => p.fatigue))));
+    if (s.phase === 'draft' && next.phase === 'prepare') { current.draftDone = s; out.seasons.push(current); current = { start: next, rounds: [], fatigue: [] }; }
     s = next;
   }
   out.final = s;
@@ -225,6 +234,9 @@ if (RUN.has(0)) {
     check(fact.sources.every(id => !/wiki/i.test(sources.get(id)?.url || '') && !/wiki/i.test(sources.get(id)?.publisher || '')), `${key}: no wiki source`);
   }
   check(facts.every(([, f]) => f.verified || f.gameRule), 'every fact is either verified or labelled a game rule');
+  const deny = new Set(L.FMT.NICKNAME_DENY_LIST.map(n => n.toLowerCase().replace(/s$/, '')));
+  const clash = L.CLUBS.filter(c => deny.has(c.nickname.toLowerCase().replace(/s$/, '')));
+  check(L.FMT.NICKNAME_DENY_LIST.length >= 40 && clash.length === 0, `no club nickname is on the ${L.FMT.NICKNAME_DENY_LIST.length} name deny list${clash.length ? ` (${clash.map(c => c.nickname).join(', ')})` : ''}`);
   const preset = L.FMT.FINALS_PRESETS[L.FMT.CURRENT_FINALS_FORMAT];
   check(!!L.FMT.AFL_FORMAT_FACTS[preset.fact], `the default finals format (${L.FMT.CURRENT_FINALS_FORMAT}) names its fact`);
 }
@@ -272,6 +284,7 @@ if (RUN.has(2)) {
 
 if (RUN.has(3)) {
   head(3, "Ladder maths: the engine's ladder against the harness's own, after every round");
+  noCrash();
   let compared = 0, mismatched = 0, draws = 0, sums = 0;
   for (const season of mainSeasons) {
     const all = season.closed.results;
@@ -309,6 +322,7 @@ if (RUN.has(3)) {
 
 if (RUN.has(4)) {
   head(4, 'Finals: the 2026 wildcard week then the final eight, against a bracket hard coded from the receipts');
+  noCrash();
   let seasons = 0, pairFaults = 0, reappear = 0, qualFaults = 0, levelFinals = 0, extraTimes = 0, pathFaults = 0, countFaults = 0, exitFaults = 0;
   const byPremierSeed = new Map();
   for (const season of mainSeasons.filter(x => x.closed.format === 'wildcard')) {
@@ -394,12 +408,13 @@ if (RUN.has(4)) {
 /* Measured bands (see the header). Each is [low, high]. */
 const BANDS = {
   teamScore: [76, 84], goals: [11.0, 12.4], behinds: [9.3, 10.6], accuracy: [0.52, 0.56], drawRate: [0.0025, 0.0135], margin: [36, 42], lateOverEarly: [0.94, 0.99],
-  strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25,
+  strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25, lateFatigue: [50, 63],
 };
 const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
 
 if (RUN.has(5)) {
   head(5, 'Score realism and the long season');
+  noCrash();
   const scores = [], goals = [], behinds = [], margins = [], early = [], late = [];
   let games = 0, drawn = 0;
   for (const season of mainSeasons) for (const m of season.closed.results) {
@@ -418,14 +433,18 @@ if (RUN.has(5)) {
     const sc = run.seasons.flatMap(x => x.closed.results.flatMap(m => [total(m.homeScore), total(m.awayScore)]));
     const e = run.seasons.flatMap(x => x.closed.results.filter(m => m.round <= 5).flatMap(m => [total(m.homeScore), total(m.awayScore)]));
     const l = run.seasons.flatMap(x => x.closed.results.filter(m => m.round >= 17).flatMap(m => [total(m.homeScore), total(m.awayScore)]));
-    console.log(`  seed ${run.seed}: team score ${mean(sc).toFixed(2)}, late over early ${(mean(l) / mean(e)).toFixed(4)}`);
+    console.log(`  seed ${run.seed}: team score ${mean(sc).toFixed(2)}, late over early ${(mean(l) / mean(e)).toFixed(4)}, late fatigue ${mean(run.seasons.flatMap(x => x.fatigue.slice(17))).toFixed(2)}`);
   }
   check(games > 0, `${games} games measured`);
+  const earlyFatigue = mean(mainSeasons.flatMap(x => x.fatigue.slice(0, 6))), lateFatigue = mean(mainSeasons.flatMap(x => x.fatigue.slice(17)));
+  console.log(`  league mean fatigue after each round: rounds 1 to 6 ${earlyFatigue.toFixed(2)}, rounds 18 to 23 ${lateFatigue.toFixed(2)}`);
+  check(inBand(lateFatigue, BANDS.lateFatigue), `late season league fatigue ${lateFatigue.toFixed(2)} inside [${BANDS.lateFatigue.join(', ')}]`);
   for (const key of ['teamScore', 'goals', 'behinds', 'accuracy', 'drawRate', 'margin', 'lateOverEarly']) check(inBand(stats[key], BANDS[key]), `${key} ${stats[key].toFixed(4)} inside [${BANDS[key].join(', ')}]`);
 }
 
 if (RUN.has(6)) {
   head(6, 'Strength decides: one club at +10 skill against the same seeds unmodified');
+  noCrash();
   const target = 'club-09';
   const boost = s => ({ ...s, clubs: s.clubs.map(c => c.id !== target ? c : { ...c, players: c.players.map(p => ({ ...p, skill: Math.min(99, p.skill + 10), potential: Math.max(Math.min(99, p.skill + 10), p.potential) })) }) });
   const share = run => { const st = run.seasons[0].closed; const row = L.leagueLadder(st).find(r => r.clubId === target); return (row.wins + row.draws / 2) / row.played; };
@@ -500,6 +519,7 @@ if (RUN.has(7)) {
     if (ownDraftOrder(x.closed, vacancies).join() !== done.draft.order.join()) orderFaults += 1;
     for (const id of CLUB_IDS) if (done.draft.made.filter(m => m.clubId === id).length !== vacancies.get(id)) pickFaults += 1;
   }
+  noCrash();
   console.log(`  ${seasons.length} summers (${CAREERS} extra careers x ${YEARS} seasons plus the main runs), ${starts} season starts`);
   console.log(`  faults: list size ${startFaults}, floors ${floorFaults}, above potential ${aboveCap}, gain at ceiling ${ceilingGain}, ages ${ageFaults}, retirements ${retireFaults}, draftee ages ${draftAgeFaults}, names ${nameFaults}, draft order ${orderFaults}, picks vs vacancies ${pickFaults}`);
   console.log(`  young players with headroom: ${youngGain.length}, mean gain ${mean(youngGain).toFixed(2)}; name bank load ${maxNames} of ${L.NAME_BANK_SIZE} (${(100 * maxNames / L.NAME_BANK_SIZE).toFixed(1)}%)`);
@@ -555,6 +575,7 @@ if (RUN.has(7)) {
 
 if (RUN.has(8)) {
   head(8, 'Save: round trips in every phase, size over many seasons, refusals');
+  noCrash();
   /* Round trip at every step for three seasons; the result must equal an uninterrupted run. */
   /* This bot plays every third match quarter by quarter, with a swap at some breaks, so every phase is saved. */
   const bot8 = s => {
@@ -607,6 +628,7 @@ if (RUN.has(8)) {
 
 if (RUN.has(9)) {
   head(9, 'Determinism and dice');
+  noCrash();
   const a = runCareer(41, 'club-07', 1), b = runCareer(41, 'club-07', 1);
   check(hashOf(a.final) === hashOf(b.final) && a.steps === b.steps, `the same seed and actions give the same state (${a.steps} actions)`);
   let s = L.createLeague(42, 'club-01');
@@ -634,6 +656,7 @@ if (RUN.has(9)) {
 
 if (RUN.has(10)) {
   head(10, 'Tiles and routing');
+  noCrash();
   const seen = new Set();
   let checked = 0, empty = 0, roundFaults = 0, ladderFaults = 0;
   const extraStates = [];

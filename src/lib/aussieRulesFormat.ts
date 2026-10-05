@@ -99,18 +99,19 @@ export function exitForTie(tieId: string): FinalsExit {
   return 'runnerUp';
 }
 export const EXIT_LABELS: Record<FinalsExit, string> = {
-  missed: 'Missed the finals', wildcard: 'Out in the Wildcard Round', elimination: 'Out in week one', semi: 'Out in a semi final',
+  missed: 'Missed the finals', wildcard: 'Out in the Wildcard Round', elimination: 'Out in an elimination final', semi: 'Out in a semi final',
   preliminary: 'Out in a preliminary final', runnerUp: 'Runner up', premiers: 'Premiers',
 };
 
 /**
- * Club nicknames this game must never use: senior men's and women's clubs in the
+ * Club nicknames this game must never use (research section 12): senior clubs in the
  * AFL, AFLW, VFL, SANFL, WAFL and NRL. A guard against a fictional club wearing
  * a real one's name, not a claim about any of them.
  */
 export const NICKNAME_DENY_LIST = [
-  'Crows', 'Lions', 'Blues', 'Magpies', 'Bombers', 'Dockers', 'Cats', 'Suns', 'Giants', 'Hawks', 'Demons', 'Kangaroos', 'Roos',
-  'Power', 'Tigers', 'Saints', 'Swans', 'Eagles', 'Bulldogs', 'Broncos', 'Raiders', 'Sharks', 'Dolphins', 'Titans', 'Sea Eagles',
-  'Storm', 'Knights', 'Cowboys', 'Eels', 'Panthers', 'Rabbitohs', 'Dragons', 'Roosters', 'Warriors', 'Zebras', 'Seagulls', 'Bullants',
-  'Redlegs', 'Bloods', 'Double Blues', 'Royals', 'Thunder', 'Falcons', 'Borough', 'Stingrays',
+  'Bears', 'Blues', 'Bloods', 'Bombers', 'Borough', 'Broncos', 'Bulldogs', 'Bullants', 'Cats', 'Chiefs', 'Cowboys', 'Crows', 'Dees',
+  'Demons', 'Devils', 'Dockers', 'Dogs', 'Dolphins', 'Double Blues', 'Dragons', 'Eagles', 'Eels', 'Falcons', 'Giants', 'Hawks',
+  'Kangaroos', 'Knights', 'Lions', 'Magpies', 'Panthers', 'Pies', 'Power', 'Rabbitohs', 'Raiders', 'Redlegs', 'Roos', 'Roosters',
+  'Royals', 'Saints', 'Sea Eagles', 'Seagulls', 'Sharks', 'Stingrays', 'Storm', 'Suns', 'Swans', 'Thunder', 'Tigers', 'Titans',
+  'Warriors', 'Zebras',
 ];

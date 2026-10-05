@@ -81,13 +81,14 @@ export type LeagueAction =
   | { type: 'draftAuto' };
 
 /** The 18 clubs: fixed data, so the menu draws nothing. Places and nicknames are invented. */
+// Places are invented and checked against near misses of real towns (research section 12); nicknames avoid NICKNAME_DENY_LIST.
 export const CLUBS: { id: string; place: string; nickname: string; style: Tactic; tier: number }[] = [
   ['Caldermere', 'Comets', 'control', 1], ['Mosswick', 'Kites', 'direct', 3], ['Tarnwick', 'Foxes', 'pressure', 2],
-  ['Alderfen', 'Herons', 'control', 4], ['Verrendale', 'Embers', 'direct', 2], ['Cresswick', 'Gales', 'pressure', 5],
+  ['Alderfen', 'Herons', 'control', 4], ['Verrendale', 'Embers', 'direct', 2], ['Quillmere', 'Gales', 'pressure', 5],
   ['Brindlefern', 'Currawongs', 'control', 3], ['Hollowmere', 'Plovers', 'direct', 1], ['Kelworth', 'Quolls', 'pressure', 4],
   ['Fallmere', 'Wattles', 'control', 2], ['Glenwick', 'Ironbarks', 'direct', 5], ['Haverfen', 'Bandicoots', 'pressure', 3],
-  ['Darnwick', 'Lorikeets', 'control', 4], ['Bellmere', 'Numbats', 'direct', 2], ['Elverfern', 'Larrikins', 'pressure', 1],
-  ['Tressvale', 'Pelicans', 'control', 3], ['Westmere', 'Kestrels', 'direct', 4], ['Fernwick', 'Echidnas', 'pressure', 5],
+  ['Darnwick', 'Lorikeets', 'control', 4], ['Belvarra', 'Numbats', 'direct', 2], ['Elverfern', 'Larrikins', 'pressure', 1],
+  ['Tressvale', 'Pelicans', 'control', 3], ['Vantmere', 'Kestrels', 'direct', 4], ['Fernwick', 'Echidnas', 'pressure', 5],
 ].map(([place, nickname, style, tier], index) => ({ id: `club-${String(index).padStart(2, '0')}`, place: place as string, nickname: nickname as string, style: style as Tactic, tier: tier as number }));
 export const clubLabel = (id: string) => { const club = CLUBS.find(value => value.id === id); return club ? `${club.place} ${club.nickname}` : id; };
 export const placeOf = (id: string) => CLUBS.find(value => value.id === id)?.place ?? id;
