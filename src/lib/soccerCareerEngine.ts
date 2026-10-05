@@ -169,6 +169,11 @@ export interface SeasonRecord {
   yellowCards: number;
   redCards: number;
   rating: number;
+  /** Round 1011: the overall this season was played at, the number
+      calcSeasonRating rated. Same meaning as SeasonLine.ovr in the four US
+      My Careers. Absent on rows from before that round and on rows with no
+      season played (bans, prison, retirement, academy), so nothing is guessed. */
+  ovr?: number;
   injury?: string | null;
   injuryWeeks?: number;
   injurySevere?: boolean;
@@ -3877,6 +3882,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",

@@ -187,8 +187,20 @@ const NEW_FIELDS = ['leagueFinish', 'leagueSize'];
    its own story id (pendingEvents[n].story, "podcastLaunch"), and that one
    stays in the hash. */
 const LATER_FIELDS = ['story'];
+/* Round 1011 (every season's rating in the history) adds one key to each
+   played season row, ovr, the overall the season was played at. It is copied
+   from state.overall when the row is built and draws nothing from
+   Math.random. Measured on 2026-10-05 by scripts/simCareerSeasonRatings.mjs
+   section 3: over 16 seeds the engine with the key and a copy without it make
+   the same number of Math.random calls at every step, and once ovr is out of
+   the season rows the two states are equal leaf for leaf. So it leaves the
+   digest on season shaped objects only (they carry both rating and
+   leagueTitle, which also covers pendingSummary); an ovr anywhere else stays
+   in the hash. The stream control below still turns section 4 red. */
+const SEASON_ROW_FIELDS = ['ovr'];
+const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
 function digest(s) {
-  const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) ? undefined : v; });
+  const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) || (SEASON_ROW_FIELDS.includes(k) && isSeasonRow(this)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
 const DIGEST_SEEDS = 16;
