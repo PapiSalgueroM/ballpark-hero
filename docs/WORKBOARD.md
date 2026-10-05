@@ -1,4 +1,4 @@
-## Round 1005 is live, 2026-10-05 18:54 UTC
+## Round 1005 is live, 2026-10-05
 
 PR130 merged as 9fe088e6 after final candidate 1ee37af4 passed all four remote
 workflows. Lovable confirmed publication and douknowball.com now loads
