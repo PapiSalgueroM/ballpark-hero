@@ -89,6 +89,7 @@ import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState, LegacyTier } from '@/lib/soccerCareerEngine';
 import SoccerCareer, { InternationalDebutCard, LegacyCard, RivalrySummaryCard } from '@/pages/SoccerCareer';
 import { resetCareerMomentsForTest, settleLoadedMoments } from '@/components/soccer-career/careerMoments';
+import { TournamentCard } from '@/components/soccer-career/InternationalPanel';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 
 const SAVE_KEY = 'soccerCareerSave';
@@ -143,6 +144,26 @@ function fixtureTotals(c: CareerState): ReturnType<typeof E.getCareerTotals> {
   };
 }
 const TROPHIES = 5 + 4 + 2 + 1 + 1;
+
+/* A won tournament in a simulated future year, for Round 926's card, which
+   follows the same rule since this round. */
+function wonCup(): E.IntlTournament {
+  const row = (nation: string, won: number, lost: number): E.IntlTableRow =>
+    ({ nation, played: won + lost, won, drawn: 0, lost, gf: won * 2, ga: lost, points: won * 3 });
+  return {
+    year: 2034, name: 'World Cup', short: 'WC', kind: 'World Cup', confederation: null, nation: 'Brazil', teams: 48,
+    qualifying: { confederation: 'CONMEBOL', table: [row('Brazil', 6, 1), row('Chile', 4, 3)], myPosition: 1, through: 1, qualified: true, automatic: false },
+    qualified: true,
+    squad: { called: true, role: 'Starter', reason: 'You are in.', myRank: 1, poolSize: 8, places: 3, myScore: 80, cutScore: 72 },
+    groupTable: [row('Brazil', 3, 0), row('Serbia', 2, 1), row('Ghana', 1, 2), row('Japan', 0, 3)],
+    groupLabel: 'Group G', thirdsThrough: 8,
+    bracket: [{ round: 'F', slot: 0, home: 'Brazil', away: 'France', homeGoals: 2, awayGoals: 1, winner: 'Brazil', mine: true }],
+    champion: 'Brazil', runnerUp: 'France', myResult: 'Winner',
+    matches: [{ round: 'Final', home: 'Brazil', away: 'France', homeGoals: 2, awayGoals: 1, pens: false, playerGoals: 1, playerAssists: 0, playerRating: 8.4 }],
+    playerApps: 7, playerGoals: 5, playerAssists: 2, playerAvgRating: 7.9,
+    goldenBoot: false, bestPlayer: false,
+  };
+}
 
 const wrap = (el: JSX.Element) => <HelmetProvider><MemoryRouter>{el}</MemoryRouter></HelmetProvider>;
 const beats = (root: HTMLElement) => Array.from(root.querySelectorAll<HTMLElement>('[data-beat]'));
@@ -429,6 +450,24 @@ describe('Round 985: through the real page, a reload never replays the moment', 
     resetCareerMomentsForTest();
     const fresh = render(wrap(<InternationalDebutCard career={c} onDismiss={() => undefined} />));
     expect(animatedIn(fresh.container).length).toBe(5);
+  });
+
+  it('a save left sitting on a won tournament loads still too (one rule for every moment), and the control plays', async () => {
+    const t = wonCup();
+    const c: CareerState = { ...baseCareer('Page Cup'), phase: 'world_cup', pendingTournament: t };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(c));
+    const page = render(wrap(<SoccerCareer />));
+    for (let i = 0; i < 6; i++) await tick();
+    const shown = page.container.querySelector<HTMLElement>('[data-intl-moment]');
+    expect(shown, 'the tournament card on the page').toBeTruthy();
+    expect(shown!.querySelector('h3')?.textContent).toBe('World Cup 2034');
+    expect(shown!.dataset.intlMoment).toBe('none');
+    expect(animatedIn(shown!).length).toBe(0);
+    page.unmount();
+
+    resetCareerMomentsForTest();
+    const fresh = render(wrap(<TournamentCard t={t} onDismiss={() => undefined} onSpeech={() => undefined} />));
+    expect(fresh.container.querySelector<HTMLElement>('[data-intl-moment]')!.dataset.intlMoment).toBe('won');
   });
 });
 

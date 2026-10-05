@@ -17,11 +17,14 @@
  *     last, and every control on the won card is gated so it cannot be
  *     pressed before it shows;
  *  4. the moment plays once, on the won AND the quiet path: opening a tile and
- *     coming Back, a second mount, a reload, and a new tab (session storage
- *     gone, the save still in local storage) all leave it quiet; the control
- *     (local storage cleared) proves the memory does the stopping;
- *  5. the memory is per run: a different career reaching the same edition
- *     with the same nation and the same result still gets its moment.
+ *     coming Back, a second mount, and a reload or a new tab (the page settles
+ *     the save it loads, careerMoments.ts since Round 985) all leave it quiet,
+ *     even on the first load of a save that never played it; the control (a
+ *     load that settled nothing, a tournament that ended in this visit) plays;
+ *  5. the key is per run: a different career reaching the same edition with
+ *     the same nation and the same result still gets its moment;
+ *  6. it needs no storage (a storage that throws changes nothing), and a card
+ *     not yet seen holds its beats and its confetti and settles nothing.
  *
  * Rendered with testing-library rather than react-dom/server because the
  * confetti draws in an effect (it honours reduced motion there), and a static
@@ -32,7 +35,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { TournamentCard } from '@/components/soccer-career/InternationalPanel';
-import type { IntlTournament, IntlTableRow } from '@/lib/soccerCareerEngine';
+import { resetCareerMomentsForTest, tournamentMomentKey } from '@/components/soccer-career/careerMoments';
+import type { CareerState, IntlTournament, IntlTableRow } from '@/lib/soccerCareerEngine';
 
 const row = (nation: string, won: number, drawn: number, lost: number, gf: number, ga: number): IntlTableRow => ({
   nation, played: won + drawn + lost, won, drawn, lost, gf, ga, points: won * 3 + drawn,
@@ -85,9 +89,14 @@ function mount(t: IntlTournament, Card: typeof TournamentCard = TournamentCard) 
   );
 }
 
-/** The card from a fresh copy of its module, as a page reload would load it
-    (call vi.resetModules first). */
-async function reload(): Promise<typeof TournamentCard> {
+/** The card from fresh copies of its modules, as a page reload would load it
+    (call vi.resetModules first), after the page's restore step has settled
+    the save it loaded, which sits on the tournament `save`. Pass null for the
+    control: a load that settled nothing, as when the tournament ends in this
+    visit. */
+async function reload(save: IntlTournament | null): Promise<typeof TournamentCard> {
+  const moments = await import('@/components/soccer-career/careerMoments');
+  if (save) moments.settleLoadedMoments({ pendingTournament: save } as CareerState);
   return (await import('@/components/soccer-career/InternationalPanel')).TournamentCard;
 }
 
@@ -166,7 +175,7 @@ function winnerOtherRun(year = 2030): IntlTournament {
   };
 }
 
-beforeEach(() => { window.sessionStorage.clear(); window.localStorage.clear(); });
+beforeEach(() => { window.sessionStorage.clear(); window.localStorage.clear(); resetCareerMomentsForTest(); });
 afterEach(() => { cleanup(); });
 
 describe('Round 926: the won tournament moment', () => {
@@ -269,25 +278,24 @@ describe('Round 926: the moment plays once', () => {
     expect(card(next.container).dataset.intlMoment).toBe('won');
   });
 
-  it('a reload, or a new tab days later (session storage gone, the save still there), does not replay it; the control with the memory cleared does', async () => {
+  it('a reload or a new tab finds the save on this card and draws it still, even a save that never played it; the control plays', async () => {
     mount(winner(2036));
     cleanup();
     vi.resetModules();
-    const reloaded = await reload();
-    const after = mount(winner(2036), reloaded);
+    const after = mount(winner(2036), await reload(winner(2036)));
     expect(card(after.container).dataset.intlMoment).toBe('none');
+    expect(confettiPieces(after.container)).toBe(0);
     cleanup();
-    window.sessionStorage.clear();
+    /* The case the first version had to replay: a save already sitting on a
+       won card, loaded where it never played (the day this shipped). */
     vi.resetModules();
-    const newTab = await reload();
-    const later = mount(winner(2036), newTab);
-    expect(card(later.container).dataset.intlMoment).toBe('none');
-    expect(confettiPieces(later.container)).toBe(0);
+    const firstLoad = mount(winner(2043), await reload(winner(2043)));
+    expect(card(firstLoad.container).dataset.intlMoment).toBe('none');
     cleanup();
-    window.localStorage.clear();
+    /* The control: a load that settled nothing plays the same card, so the
+       page's settle is what stopped it above. */
     vi.resetModules();
-    const cleared = await reload();
-    const control = mount(winner(2036), cleared);
+    const control = mount(winner(2036), await reload(null));
     expect(card(control.container).dataset.intlMoment).toBe('won');
   });
 
@@ -295,38 +303,54 @@ describe('Round 926: the moment plays once', () => {
     mount(winner(2041));
     expect(winnerOtherRun(2041).name).toBe(winner(2041).name);
     expect(winnerOtherRun(2041).nation).toBe(winner(2041).nation);
+    expect(tournamentMomentKey(winnerOtherRun(2041))).not.toBe(tournamentMomentKey(winner(2041)));
     cleanup();
     const sameTab = mount(winnerOtherRun(2041));
     expect(card(sameTab.container).dataset.intlMoment).toBe('won');
     cleanup();
     vi.resetModules();
-    const reloaded = await reload();
+    const reloaded = await reload(winner(2041));
     expect(card(mount(winner(2041), reloaded).container).dataset.intlMoment).toBe('none');
     cleanup();
-    expect(card(mount(winnerOtherRun(2041), reloaded).container).dataset.intlMoment).toBe('none');
+    expect(card(mount(winnerOtherRun(2041), reloaded).container).dataset.intlMoment).toBe('won');
   });
 
-  it('a memory that is not a list is read as empty, and the card still plays once', () => {
-    window.localStorage.setItem('dukb-intl-moments', '{not json');
-    const first = mount(winner(2037));
-    expect(card(first.container).dataset.intlMoment).toBe('won');
-    cleanup();
-    expect(card(mount(winner(2037)).container).dataset.intlMoment).toBe('none');
-    expect(JSON.parse(window.localStorage.getItem('dukb-intl-moments') ?? '[]')).toHaveLength(1);
+  it('needs no storage: a storage that throws on every call changes nothing, and nothing is written', () => {
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('blocked'); });
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('blocked'); });
+    try {
+      expect(card(mount(winner(2037)).container).dataset.intlMoment).toBe('won');
+      cleanup();
+      expect(card(mount(winner(2037)).container).dataset.intlMoment).toBe('none');
+      expect(get).not.toHaveBeenCalled();
+      expect(set).not.toHaveBeenCalled();
+    } finally {
+      get.mockRestore();
+      set.mockRestore();
+    }
+    expect(window.localStorage.length).toBe(0);
   });
 
-  it('a full memory drops its oldest key, never the one just played, so a reload stays settled', async () => {
-    const old = Array.from({ length: 60 }, (_, i) => `old-${i}`);
-    window.localStorage.setItem('dukb-intl-moments', JSON.stringify(old));
-    expect(card(mount(winner(2043)).container).dataset.intlMoment).toBe('won');
-    const kept = JSON.parse(window.localStorage.getItem('dukb-intl-moments') ?? '[]') as string[];
-    expect(kept).toHaveLength(60);
-    expect(kept[0]).toBe('old-1');
-    expect(kept).not.toContain('old-0');
-    cleanup();
-    vi.resetModules();
-    const reloaded = await reload();
-    expect(card(mount(winner(2043), reloaded).container).dataset.intlMoment).toBe('none');
+  it('a card not yet seen holds its beats on the first frame, keeps its confetti back, and settles nothing', () => {
+    class Unseen { observe() {} unobserve() {} disconnect() {} takeRecords() { return []; } }
+    vi.stubGlobal('IntersectionObserver', Unseen);
+    try {
+      const first = mount(winner(2047));
+      expect(card(first.container).dataset.intlMoment).toBe('won');
+      const beats = [...card(first.container).querySelectorAll<HTMLElement>('[style]')]
+        .filter(el => el.style.animationDelay && !el.closest('[aria-hidden="true"]'));
+      expect(beats.length).toBe(14);
+      expect(beats.filter(el => el.style.animationPlayState !== 'paused')).toEqual([]);
+      expect(confettiPieces(first.container)).toBe(0);
+      cleanup();
+      expect(card(mount(winner(2047)).container).dataset.intlMoment).toBe('won');
+      cleanup();
+      const quiet = card(mount(groupExit(2048)).container);
+      expect(quiet.dataset.intlMoment).toBe('quiet');
+      expect(quiet.style.animationPlayState).toBe('paused');
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });
 
@@ -363,7 +387,7 @@ describe('Round 926: the quiet card also plays once', () => {
     cleanup();
     window.sessionStorage.clear();
     vi.resetModules();
-    const newTab = await reload();
+    const newTab = await reload(groupExit(2042));
     const later = mount(groupExit(2042), newTab);
     expect(card(later.container).dataset.intlMoment).toBe('none');
     expect(card(later.container).className).not.toContain('cm-rise');
