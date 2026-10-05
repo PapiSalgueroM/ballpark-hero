@@ -63,7 +63,15 @@ accepted generated files still require release integration.
 
 ## Status
 
-Source is prepared for remote verification. No local build, test, browser,
-installation or database probe was run for this implementation. Round 1009 is
-awaiting its repair run; no 1031 acceptance, integration or publication is claimed.
+Head 1dace697 passed eight mounted outcomes, eighteen effective controls and all
+sixteen native walks with three changed-and-restored DOM controls in remote run
+37372556475. The remaining failures were stale generated search metadata and
+twelve explicitly added guide sentences absent from the preserved original
+fixture. The repair requires those exact additions once in their intended parts
+and adds a deletion control while preserving the frozen fixture bytes. Search
+metadata is generated remotely for later artifact integration.
+
+No local build, test, browser, installation or database probe was run for this
+implementation. Round 1009 is awaiting acceptance; no 1031 acceptance, integration
+or publication is claimed. The repaired candidate still requires remote checks.
 Root owns Git, remote acceptance, generated-file integration and publication.

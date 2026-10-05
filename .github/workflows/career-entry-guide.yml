@@ -22,6 +22,8 @@ on:
       - src/test/fixtures/careerDecisionOutcome1009.ts
       - scripts/simCareerEntryGuide.mjs
       - scripts/qa/careerEntryGuide1031.mjs
+      - scripts/simGuideHeadings.mjs
+      - src/data/searchKeywords.json
       - public/nba-my-career/index.html
       - public/nfl-my-career/index.html
       - public/mlb-my-career/index.html
@@ -66,6 +68,11 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
+      - name: Generate candidate search keywords
+        run: |
+          node scripts/genSearchKeywords.mjs 2>&1 | tee career-entry-guide-artifacts/search-keywords-generation.log
+          mkdir -p career-entry-guide-artifacts/generated/src/data
+          cp src/data/searchKeywords.json career-entry-guide-artifacts/generated/src/data/
       - name: Type check and build
         id: build
         run: |
@@ -96,6 +103,17 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-entry-guide-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Frozen and reviewed guide sentences retain effective controls
+        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        run: |
+          for control in skiplevel nokeyword lostline careerline unconvert snapdrift; do
+            set +e
+            GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs 2>&1 | tee "career-entry-guide-artifacts/guide-$control.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            test "$status" -eq 1
+            grep -E "simGuideHeadings control $control: section [1-4] red and every other section green" "career-entry-guide-artifacts/guide-$control.log"
+          done
       - name: Native guides and career controls across four sports
         if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
         run: node scripts/qa/careerEntryGuide1031.mjs 2>&1 | tee career-entry-guide-artifacts/native.log

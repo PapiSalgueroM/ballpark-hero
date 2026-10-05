@@ -6,8 +6,9 @@ can reopen help. Prerender never opens or records the guide, and blocked storage
 still permits dismissal. Help, main Play and season Continue have 44px minimum
 targets. Existing guides explain saved-season review and actual capped changes.
 
-Source checks are complete; remote type, build, mounted controls and native
-acceptance are pending. Historical drivers explicitly model returning visitors,
+Head 1dace697 passed remote type/build, all nineteen mounted modes and sixteen
+native walks plus three DOM controls. Exact guide additions and stale generated
+search metadata need a narrow verification repair. Historical drivers model returning visitors,
 and the recorded fixture JSON is unchanged. Runtime stays remote. Round 1009
 is awaiting its repair run and must be accepted before integration and release.
 No 1031 publication is claimed. See docs/audits/ROUND1031-DESIGN.md.
