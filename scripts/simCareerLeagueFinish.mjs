@@ -205,8 +205,28 @@ function digest(s) {
 }
 const DIGEST_SEEDS = 16;
 /* Recorded with --record on the untouched tree at origin/main 5f2622fd, before
-   any line of this round existed, and twice to prove the digest is stable. */
-const BASELINE = ['539858d7000e4591', 'e62cdae073abe906', 'da4789abe4543321', '92f21863034d5bce', '707970f71384bd3d', '5879c7a10fb90659', '1a9c7b940f5968e4', '69e1d33d413b0656', '8cdcb230d5724e65', '4ebd88d3d4b6a6a0', '48ca4ba73be9e9fe', '74d8b0a22eed6238', 'de756b5070df2302', '197b2357e2742487', '2dc97ee74f43440b', '6009b15056656286'];
+   any line of this round existed, and twice to prove the digest is stable.
+   RE-RECORDED by Round 1012 (club derbies in Soccer Career), on purpose. The
+   derby swing moves popularity and morale, which gate events and dilemmas, so
+   the stream after a derby season legitimately moves. What was measured first
+   (2026-10-05, on the Round 1012 tree):
+   - the round's three rewords alone (event 1 "Late Winner!", tunnel_brawl and
+     ultras_tattoo no longer say derby), in a build with the derbies switched
+     off, give 16 of these 16 old digests unchanged;
+   - scripts/simCareerDerbies.mjs section 5 runs these same 16 careers in a
+     build with no derbies and a build that resolves them with the swing off:
+     16 of 16 equal once the derbies key is dropped, with 140 derby seasons
+     played, so detecting and resolving a derby draws nothing from
+     Math.random; only the bounded swing moves the stream.
+   The new list below was recorded twice on that tree, identical both times;
+   2 of the 16 (careers that never played a derby) did not change. The old
+   list was ['539858d7000e4591', 'e62cdae073abe906', 'da4789abe4543321',
+   '92f21863034d5bce', '707970f71384bd3d', '5879c7a10fb90659',
+   '1a9c7b940f5968e4', '69e1d33d413b0656', '8cdcb230d5724e65',
+   '4ebd88d3d4b6a6a0', '48ca4ba73be9e9fe', '74d8b0a22eed6238',
+   'de756b5070df2302', '197b2357e2742487', '2dc97ee74f43440b',
+   '6009b15056656286']. The stream control below still turns section 4 red. */
+const BASELINE = ['28d4d1a0ac175409', '8cc9d65204580d31', 'da4789abe4543321', '179482f89c80f08d', '954c6270437d8639', '84fe9f772b83a2bb', '288a292a53ec033d', '96d019d0eaa13a3b', '7b5e3a9a5308d3b9', '65e33253ea25162e', '80051cac00e627a6', '74d8b0a22eed6238', '933ce4efc0b06960', '50a412d6e4bb19aa', '4e674089f1ecbc38', '71e21dfef610d69c'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));

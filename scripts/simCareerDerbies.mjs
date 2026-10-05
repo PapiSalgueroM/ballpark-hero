@@ -230,11 +230,27 @@ let section = 0;
 const fail = m => { failures += 1; red.add(section); console.error('  FAIL: ' + m); };
 const DASH = /[\u2013\u2014]/;
 
-/* BANDS, measured over seed offsets 0 to 3 (numbers in the comment beside
-   each); every floor or ceiling sits at roughly half the measured headroom. */
+/* BANDS, measured on 2026-10-05 over seed offsets 0, 1, 2 and 3 (200 pool
+   careers, 1440 forced and 720 ladder seasons, 80 long careers each way):
+   - 6b win share by strength gap +2, +1, 0, -1, -2: 0.569 to 0.591, 0.455 to
+     0.472, 0.358 to 0.377, 0.266 to 0.277, 0.168 to 0.204, at least 880
+     meetings a rung. Smallest step seen 0.066; required 0.03, about half.
+   - 6c draw share 0.265 to 0.272 (the model's 0.27); band 0.24 to 0.30.
+   - 6e swing on minus swing off, the largest seen: final popularity 0.90,
+     final morale 3.55, sponsorship 0.076, net worth 1.95, Hall of Fame lines
+     per career 0.037. Bands at about twice that. No sim career divorced in
+     either run at any offset, so that count is printed and never asserted:
+     a zero beside a zero would pass for the wrong reason.
+   - 6d Derby Hero seasons per derby season, with 720 more forced seasons at
+     clubs with two or three rivals: attackers 0.084 to 0.098, midfield 0.052
+     to 0.067, defenders 0.020 to 0.034, keepers 0 of 435 to 535. Smallest
+     gaps seen 0.021 (attack over midfield) and 0.030 (midfield over defence);
+     required 0.01 and 0.013. Without the extra seasons the first gap was
+     once 0.015, a coin toss, which is why they are there. */
 const BANDS = {
-  rungMin: 50, rungStep: 0.02, drawLo: 0.2, drawHi: 0.34, heroStep: 0.01,
-  popDiff: 100, moraleDiff: 100, sponsorDiff: 1e9, worthDiff: 1e9, divorceDiff: 1, hofDiff: 100,
+  rungMin: 400, rungStep: 0.03, drawLo: 0.24, drawHi: 0.30,
+  heroAttMid: 0.01, heroMidDef: 0.013,
+  popDiff: 2, moraleDiff: 7, sponsorDiff: 0.15, worthDiff: 4, hofDiff: 0.08,
   digestDerbySeasons: 70, // 140 derby seasons over the 16 fixed digest careers (deterministic, offset free)
 };
 
@@ -531,8 +547,12 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
 
   /* 6d: Derby Hero seasons per derby season, by position group. */
   const GROUP = { ST: 'att', LW: 'att', RW: 'att', CAM: 'att', CM: 'mid', CDM: 'mid', LM: 'mid', RM: 'mid', CB: 'def', LB: 'def', RB: 'def', GK: 'gk' };
+  /* More derby seasons for this one: the attacker to midfield gap is about
+     0.03 and the pool alone measured it as low as 0.015, a coin toss. */
+  const heroRows = [];
+  for (const club of ['Sao Paulo', 'Corinthians', 'Club America', 'Arsenal', 'Real Madrid', 'Benfica']) heroRows.push(...forcedSeasons(engine, club, 2021 + OFFSET));
   const grp = {};
-  for (const { r, position } of [...poolRows, ...forcedRows, ...ladderRows]) {
+  for (const { r, position } of [...poolRows, ...forcedRows, ...ladderRows, ...heroRows]) {
     if (!derby.readSeasonDerbies(r).length) continue;
     const g = GROUP[position] || 'mid';
     grp[g] = grp[g] || { n: 0, h: 0 };
@@ -541,7 +561,8 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
   }
   const rate = g => (grp[g] && grp[g].n ? grp[g].h / grp[g].n : NaN);
   console.log(`   6d: hero rate ${['att', 'mid', 'def', 'gk'].map(g => `${g} ${rate(g).toFixed(3)} (${grp[g]?.n || 0})`).join(', ')}`);
-  if (!(rate('att') - rate('mid') >= BANDS.heroStep && rate('mid') - rate('def') >= BANDS.heroStep / 2 && rate('def') > 0)) fail('6d: hero rate not ordered attackers, midfield, defenders with margin');
+  if (!(rate('att') - rate('mid') >= BANDS.heroAttMid)) fail(`6d: attackers ${rate('att').toFixed(3)} not ahead of midfield ${rate('mid').toFixed(3)} by ${BANDS.heroAttMid}`);
+  if (!(rate('mid') - rate('def') >= BANDS.heroMidDef && rate('def') > 0)) fail(`6d: midfield ${rate('mid').toFixed(3)} not ahead of defenders ${rate('def').toFixed(3)} by ${BANDS.heroMidDef}, or defenders never heroes`);
   if (!grp.gk || grp.gk.n < 20 || grp.gk.h !== 0) fail(`6d: keepers ${grp.gk?.h ?? '?'} hero seasons out of ${grp.gk?.n ?? 0}, must be 0 out of at least 20`);
 
   /* 6e: the same pool with the swing off (bundle B). The swing feeds
@@ -563,7 +584,6 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
     ['final morale', x => x.morale, BANDS.moraleDiff],
     ['sponsorship', x => x.sponsorshipIncome || 0, BANDS.sponsorDiff],
     ['net worth', x => x.netWorth || 0, BANDS.worthDiff],
-    ['divorced share', x => (x.family && x.family.isDivorced ? 1 : 0), BANDS.divorceDiff],
     ['hall of fame lines', hof, BANDS.hofDiff],
   ];
   for (const [label, f, band] of M) {
