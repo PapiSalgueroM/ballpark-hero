@@ -278,7 +278,7 @@ function gymYears(seed) {
         if (res) g = res.state;
       }
     } else if (g.money > gym.TRAIN_COST * 3 && g.roster.length) {
-      const t = gym.trainFighter(g, g.roster[0].id);
+      const t = gym.trainFighter(g, g.roster[0].id, 'conditioning');
       if (t) g = t;
     }
     g = gym.advanceWeek(g);
