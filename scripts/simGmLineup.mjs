@@ -64,7 +64,7 @@
      6. MLB 300 of 300 and NHL 480 of 480 back in their slot; control held
         takes it to 0 of 300 and 0 of 480.
      7. 150 of 150 fifth slots filled again; control vacancy, 0 of 150.
-   Added 2026-10-05 (the closing check's residual), same seeds, 20 s a run:
+   Added 2026-10-05 (the closing check's residual), same seeds, 10 s a run:
      8. MLB 450 reorder taps, 450 held, 450 back once fit with the stand-in
         the one gone, 450 swaps back handed over; 450 bench taps, 0 held.
         NHL 640 reorder, all four 640; 640 bench, 160 held: the power play,
