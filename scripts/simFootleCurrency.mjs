@@ -19,9 +19,17 @@ try {
   delete env.NO_DOUBLE_SWAP;
   if (control) {
     const source = original.toString('utf8');
-    const needle = '${fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}';
-    assert.equal(source.split(needle).length - 1, 1, 'Executable formatter mutation occurs once');
-    const changed = source.replace(needle, '€${targetPlayer.marketValue}M');
+    const mutations = [
+      { needle: '${fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}', replacement: '€${targetPlayer.marketValue}M', label: 'Daily' },
+      { needle: 'valued at {fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}.', replacement: 'valued at €{targetPlayer.marketValue}M.', label: 'Unlimited' },
+    ];
+    let changed = source;
+    for (const { needle, replacement, label } of mutations) {
+      assert.equal(changed.split(needle).length - 1, 1, `${label}: executable formatter mutation occurs once`);
+      const next = changed.replace(needle, replacement);
+      assert.notEqual(next, changed, `${label}: control changes actual result code`);
+      changed = next;
+    }
     assert.notEqual(changed, source, 'The control changes actual result code');
     const copy = path.join(folder, 'Footle.tsx');
     await writeFile(copy, changed);

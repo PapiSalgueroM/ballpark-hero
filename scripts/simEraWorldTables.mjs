@@ -328,7 +328,10 @@ console.log('7) the verified Champions League fields, and the full eight group d
      baked leagues, which is exactly what a misspelling silently lowers */
   /* Round 899: the 2015-16 era grew a Bundesliga and a Ligue 1, so six more clubs of its real field are
      baked league clubs now (Bayern, Wolfsburg, Gladbach, Leverkusen, PSG, Lyon): eleven became seventeen. */
-  const IN_LEAGUE = { era2005: 8, era2010: 7, era2015: 17 };
+  /* Round 901: the 2010-11 era grew a Serie A, a Bundesliga and a Ligue 1, so nine more clubs of its real
+     field are baked league clubs now (Inter, Milan, Roma, Bayern, Schalke, Bremen, Lyon, Marseille,
+     Auxerre): seven became sixteen. */
+  const IN_LEAGUE = { era2005: 8, era2010: 16, era2015: 17 };
   let erasChecked = 0;
   for (const [eraId, field] of Object.entries(ERA_UCL_FIELDS)) {
     erasChecked += 1;

@@ -23,6 +23,7 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -69,6 +70,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   legacyOf: nhlLegacyOf,
   teamLabelOf: nhlTeamLabelOf,
   statLine: (s, pos) => nhlStatLine(s, pos as NhlCareerPos),
+  reviewStats: (s, pos) => nhlSeasonReview(s, pos as NhlCareerPos),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,

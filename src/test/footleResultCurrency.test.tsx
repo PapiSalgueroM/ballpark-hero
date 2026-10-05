@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cleanup, render, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Footle from '@/pages/Footle';
 import { compareGuess } from '@/lib/gameLogic';
@@ -26,16 +26,21 @@ const targets: Record<'daily' | 'unlimited', Player> = {
 
 function state(mode: 'daily' | 'unlimited', gameStatus: 'playing' | 'won' | 'lost'): ReturnType<typeof useGame> {
   const targetPlayer = targets[mode];
-  const guesses = Array.from({ length: gameStatus === 'playing' ? 1 : 8 }, (_, index) => {
-    const guess = gameStatus === 'won' && index === 7 ? targetPlayer : { ...targetPlayer, name: `Fixture guess ${index}` };
-    return compareGuess(guess, targetPlayer);
-  });
+  const guessPlayers = Array.from({ length: gameStatus === 'playing' ? 1 : 8 }, (_, index) =>
+    gameStatus === 'won' && index === 7 ? targetPlayer : { ...targetPlayer, name: `Fixture guess ${index}` });
+  const guesses = guessPlayers.map(guess => compareGuess(guess, targetPlayer));
   return {
     mode, gameStatus, targetPlayer, guesses, dailyTier: 'easy', difficulty: 'easy', maxGuesses: 8,
     switchMode: vi.fn(), changeDifficulty: vi.fn(), makeGuess: vi.fn(), giveUp: vi.fn(), resetGame: vi.fn(),
     availablePlayers: [targetPlayer], guessedPlayerNames: guesses.map(guess => guess.playerName), isLoading: false, isLoadingPool: false,
     practiceRun: null, practiceSaveFailed: false, practiceComplete: false, practiceReady: false,
     startPractice: vi.fn(), advancePractice: vi.fn(), examplePlayer: undefined,
+    unlimitedSession: { v: 1, active: mode === 'unlimited', tier: 'easy', decks: { easy: {
+      pool: [targetPlayer, ...guessPlayers.filter(player => player.name !== targetPlayer.name)],
+      seen: [targetPlayer.name.toLowerCase()],
+      current: { target: targetPlayer.name, guesses: guesses.map(guess => guess.playerName), status: gameStatus },
+    } } },
+    unlimitedSaveFailed: false, unlimitedRemaining: 8, unlimitedPaused: false, reshuffleUnlimited: vi.fn(),
   };
 }
 
@@ -54,10 +59,18 @@ describe('Footle result currency follows the stored USD value', () => {
     expect(result).toHaveTextContent(outcome === 'won' ? 'Correct!' : 'Game Over');
     expect(result).toHaveTextContent(`valued at ${amount}.`);
     expect(result).not.toHaveTextContent('€');
-    expect(view.getAllByText(amount)).toHaveLength(8);
+    const history = within(view.getByRole('group', { name: 'Guess history' })).getAllByRole('button');
+    expect(history).toHaveLength(8);
+    for (const button of history) {
+      fireEvent.click(button);
+      const clueDesk = view.container.querySelector('[data-footle-clue-desk]') as HTMLElement;
+      expect(clueDesk.querySelector('[data-clue="marketValue"] dd')).toHaveTextContent(amount);
+      expect(within(clueDesk).getAllByText(amount)).toHaveLength(1);
+    }
     expect(JSON.stringify(fixture.game.targetPlayer)).toBe(original);
-    if (mode === 'daily') expect(within(result).queryByRole('button', { name: 'Play Again' })).toBeNull();
-    else expect(within(result).getByRole('button', { name: 'Play Again' })).toBeEnabled();
+    expect(within(result).queryByRole('button', { name: 'Play Again' })).toBeNull();
+    if (mode === 'daily') expect(within(result).queryByRole('button', { name: 'Next puzzle' })).toBeNull();
+    else expect(within(result).getByRole('button', { name: 'Next puzzle' })).toBeEnabled();
   });
 
   it('keeps the answer value concealed during play while the original USD guess tile stays visible', () => {

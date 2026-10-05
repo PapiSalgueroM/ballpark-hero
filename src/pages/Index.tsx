@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
@@ -12,6 +12,9 @@ import { FeaturedStage } from '@/components/home/FeaturedStage';
 import { DailyRail } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
 import { ContinueRow } from '@/components/home/ContinueRow';
+import { GamePicksRow } from '@/components/home/GamePicksRow';
+import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
+import { useGamePicks } from '@/hooks/useGamePicks';
 import { FavouriteSport } from '@/components/home/FavouriteSport';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
@@ -82,6 +85,24 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
+  const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
+  const dailyGamesRef = useRef<HTMLDivElement>(null);
+  const pickAnchor = useRef<{ node: HTMLElement; top: number } | null>(null);
+  const toggleGamePick = (path: string, node?: HTMLElement) => {
+    const changesShelf = gamePicks.length === 0 || (gamePicks.length === 1 && gamePicks[0] === path);
+    const box = node?.getBoundingClientRect();
+    pickAnchor.current = changesShelf && node && box && box.bottom > 0 && box.top < window.innerHeight
+      ? { node, top: box.top }
+      : null;
+    changeGamePick(path);
+  };
+  useLayoutEffect(() => {
+    const anchor = pickAnchor.current;
+    pickAnchor.current = null;
+    if (!anchor?.node.isConnected) return;
+    const movement = anchor.node.getBoundingClientRect().top - anchor.top;
+    if (Math.abs(movement) > 1) window.scrollBy({ top: movement, behavior: 'instant' });
+  }, [gamePicks]);
 
   /* Round 717: the favourite sport. Read on the first render, so the sport
      sections are in this visitor's order from the first frame and nothing
@@ -285,6 +306,9 @@ export default function Index() {
             </div>
           </div>
 
+          <p className="-mt-3 mb-4 text-xs text-muted-foreground">Pin a game to keep it on Home.</p>
+          {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
+
           {/* Search results replace everything under the title row, so they
               arrive right under the box with nothing to scroll past. */}
           {isSearching ? (
@@ -296,7 +320,7 @@ export default function Index() {
             ) : filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGames.map(game => (
-                  <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
+                  <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                 ))}
               </div>
             ) : (
@@ -309,7 +333,7 @@ export default function Index() {
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
                   {getPopularFallbackGames().map(game => (
-                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
+                    <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                   ))}
                 </div>
               </div>
@@ -329,6 +353,7 @@ export default function Index() {
                     unchanged; playHomeFold section 6 plants saves and holds
                     the first tile where it was. */}
                 <ContinueRow />
+                <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
               </div>
 
               {/* ─── DAILY PUZZLES ───
@@ -340,7 +365,7 @@ export default function Index() {
                   your dailies I would say get rid of it"). Nothing on the
                   rail reads a visitor's record, and simHomeFront renders it
                   with and without one to prove it. */}
-              <div className="space-y-4">
+              <div ref={dailyGamesRef} className="space-y-4">
                 <DailyRail />
 
                 {/* A line, not a gate. Everything on this site plays signed
@@ -381,7 +406,7 @@ export default function Index() {
                     <RevealSection>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {games.map((game, i) => (
-                          <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                          <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                         ))}
                       </div>
                     </RevealSection>
@@ -417,7 +442,7 @@ export default function Index() {
                 <RevealSection>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {FEATURED_GAMES.map((game, i) => (
-                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                      <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                     ))}
                   </div>
                 </RevealSection>
@@ -467,7 +492,7 @@ export default function Index() {
                   <RevealSection>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {cat.games.map((game, i) => (
-                        <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                        <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                       ))}
                     </div>
                   </RevealSection>
@@ -646,10 +671,13 @@ function HomeTileStyles() {
   return (
     <style>{`
       [data-tile-reveal="out"] .home-tile { opacity: 0; }
+      [data-tile-reveal="out"] [data-home-game-card] > [data-game-pick] { opacity: 0; }
       @keyframes homeTileIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: none; } }
       [data-tile-reveal="in"] .home-tile { animation: homeTileIn 0.45s ease-out both; }
+      [data-tile-reveal="in"] [data-home-game-card] > [data-game-pick] { animation: homeTileIn 0.45s ease-out both; animation-delay: inherit; }
       @media (prefers-reduced-motion: reduce) {
         [data-tile-reveal="out"] .home-tile, [data-tile-reveal="in"] .home-tile { animation: none; opacity: 1; transform: none; }
+        [data-tile-reveal] [data-home-game-card] > [data-game-pick] { animation: none; opacity: 1; transform: none; }
       }
     `}</style>
   );
@@ -683,18 +711,26 @@ const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
-function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?: number; revealIndex?: number }) {
+function GameCard({ game, bestScore, revealIndex, pinned, onTogglePick }: {
+  game: GameDef;
+  bestScore?: number;
+  revealIndex?: number;
+  pinned: boolean;
+  onTogglePick: (path: string, node?: HTMLElement) => void;
+}) {
   /* Round 447: the NEW badge is derived from the day the game shipped, not
      read from a flag ("u call like everything new": 111 of 131 tiles wore
      it). The day is pinned once at mount, the same rule every daily game
      follows, so the tiles cannot disagree with each other across midnight. */
   const todayStr = useRef(getTodayET()).current;
+  const cardRef = useRef<HTMLDivElement>(null);
   const sport = sportOf(game.path);
   return (
+    <div ref={cardRef} data-home-game-card="" className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
     <Link
       to={game.path}
       data-sport={sport}
-      className="home-tile group relative flex items-start gap-3 overflow-hidden rounded-xl border border-border/80 bg-surface-1 p-4 pt-[18px] hover:border-tile/50 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
+      className="home-tile group relative flex h-full items-start gap-3 overflow-hidden rounded-xl border border-border/80 bg-surface-1 p-4 pr-16 pt-[18px] hover:border-tile/50 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
       style={{ ...sportStyle(sport), ...(revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : {}) }}
     >
       <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-tile" />
@@ -732,5 +768,7 @@ function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?:
         )}
       </div>
     </Link>
+    <GamePickButton game={game} pinned={pinned} onToggle={path => onTogglePick(path, cardRef.current ?? undefined)} className="absolute right-1.5 top-1.5" />
+    </div>
   );
 }

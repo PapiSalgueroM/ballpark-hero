@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useNhlConnections } from '@/hooks/useNhlConnections';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -18,17 +19,10 @@ import { Skeleton } from '@/components/ui/skeleton';
  */
 
 const DIFFICULTY_COLORS: Record<string, string> = {
-  yellow: 'bg-yellow-500/20 border-yellow-500/40 text-yellow-200',
-  green: 'bg-emerald-500/20 border-emerald-500/40 text-emerald-200',
-  blue: 'bg-blue-500/20 border-blue-500/40 text-blue-200',
-  purple: 'bg-purple-500/20 border-purple-500/40 text-purple-200',
-};
-
-const DIFFICULTY_HEADER: Record<string, string> = {
-  yellow: 'bg-yellow-500 text-yellow-950',
-  green: 'bg-emerald-500 text-emerald-950',
-  blue: 'bg-blue-500 text-blue-950',
-  purple: 'bg-purple-500 text-purple-950',
+  yellow: 'bg-yellow-500/10 border-yellow-500/40 text-foreground',
+  green: 'bg-emerald-500/10 border-emerald-500/40 text-foreground',
+  blue: 'bg-blue-500/10 border-blue-500/40 text-foreground',
+  purple: 'bg-purple-500/10 border-purple-500/40 text-foreground',
 };
 
 const NhlConnections = () => {
@@ -38,6 +32,11 @@ const NhlConnections = () => {
     puzzle,
     remainingPlayers,
     selected,
+    drafts,
+    selectDraft,
+    notice,
+    notesWarning,
+    canSubmit,
     togglePlayer,
     submitSelection,
     deselectAll,
@@ -51,12 +50,36 @@ const NhlConnections = () => {
   } = useNhlConnections();
 
   const [showRules, setShowRules] = useState(false);
+  const actionRef = useRef<HTMLDivElement>(null);
+  const focusedReceipt = useRef(0);
+  const receiptRef = useRevealScroll(showRules ? null : `${mode}:${notice.id}:${gameStatus}`);
+  useEffect(() => {
+    if (notice.id > focusedReceipt.current && notice.text && !showRules) {
+      focusedReceipt.current = notice.id;
+      actionRef.current?.focus({ preventScroll: true });
+      const frame = requestAnimationFrame(() => {
+        const bench = receiptRef.current;
+        const action = actionRef.current;
+        if (!bench || !action || gameStatus !== 'playing') return;
+        const benchBox = bench.getBoundingClientRect();
+        const actionBox = action.getBoundingClientRect();
+        if (benchBox.top >= 0 && actionBox.bottom > window.innerHeight) {
+          bench.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start',
+          });
+        }
+      });
+      return () => cancelAnimationFrame(frame);
+    }
+  }, [notice.id, notice.text, showRules, gameStatus, receiptRef]);
 
   useEffect(() => {
-    const seen = localStorage.getItem('nhlconn-rules-seen');
+    let seen = false;
+    try { seen = Boolean(localStorage.getItem('nhlconn-planning-rules-seen-v1')); } catch { /* Rules remain reachable. */ }
     if (!seen) {
       setShowRules(true);
-      localStorage.setItem('nhlconn-rules-seen', '1');
+      try { localStorage.setItem('nhlconn-planning-rules-seen-v1', '1'); } catch { /* Session only. */ }
     }
   }, []);
 
@@ -79,8 +102,9 @@ const NhlConnections = () => {
                 <button
                   key={m}
                   onClick={() => switchMode(m)}
+                  aria-pressed={mode === m}
                   className={cn(
-                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    'min-h-[44px] px-5 py-1.5 rounded-full text-sm font-semibold transition-colors',
                     mode === m
                       ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground'
@@ -96,13 +120,13 @@ const NhlConnections = () => {
                 Groups found: <span className="font-semibold text-primary">{foundGroups}</span>/4
               </span>
               <span className="text-muted-foreground">
-                Lives: <span className="font-semibold text-foreground">{'❤️'.repeat(lives)}{'🖤'.repeat(Math.max(0, 4 - lives))}</span>
+                <span aria-label={`${lives} lives remaining`}>Lives: <span className="font-semibold text-foreground">{lives}/4</span></span>
               </span>
             </div>
 
             <button
               onClick={() => setShowRules(true)}
-              className="mt-2 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+              className="mt-2 min-h-[44px] inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -120,78 +144,73 @@ const NhlConnections = () => {
           </div>
         )}
 
-        {/* Solved groups */}
-        {!isLoading && solvedGroups.length > 0 && (
-          <div className="space-y-3 mb-6">
-            {solvedGroups.map((group) => (
-              <div
-                key={group.theme}
-                className={cn(
-                  'rounded-xl border p-4 animate-cell-reveal',
-                  DIFFICULTY_COLORS[group.difficulty]
-                )}
-              >
-                <p className={cn(
-                  'text-xs font-bold uppercase tracking-wider mb-2 px-2 py-1 rounded-md inline-block',
-                  DIFFICULTY_HEADER[group.difficulty]
-                )}>
-                  {group.theme}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {group.players.map((p) => (
-                    <span key={p} className="text-sm font-semibold">{p}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* Remaining player grid */}
         {!isLoading && gameStatus === 'playing' && remainingPlayers.length > 0 && (
-          <div className={cn('mb-6', shakeWrong && 'animate-pulse')}>
+          <section ref={receiptRef} data-nhl-planning="" aria-label="Planning bench" className="space-y-3 rounded-2xl border border-border bg-card p-3">
+            <div>
+              <h2 className="font-display text-lg font-bold">Plan your groups</h2>
+              <p className="text-xs text-muted-foreground">Park ideas in A to D. Tap a name to move it into your open draft; tap it again to remove it. A wrong submission costs one life.</p>
+            </div>
+            <div className="grid grid-cols-4 gap-1" aria-label="Draft groups">
+              {['A', 'B', 'C', 'D'].map((label, index) => <button key={label}
+                aria-label={`Draft ${label}`} aria-pressed={drafts?.active === index}
+                onClick={() => { if (!showRules) selectDraft(index); }}
+                className={cn('min-h-[44px] rounded-lg border px-1 text-sm font-semibold', drafts?.active === index ? 'border-primary bg-primary/10 text-foreground' : 'border-border text-muted-foreground')}>
+                {label} <span className="text-xs tabular-nums">{drafts?.groups[index].length ?? 0}/5</span>
+              </button>)}
+            </div>
+            <div role="group" aria-label="Available players" tabIndex={0} className={cn('max-h-[272px] overflow-y-auto overscroll-contain rounded-lg p-1', shakeWrong && 'motion-safe:animate-pulse')}>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              {remainingPlayers.map((name) => (
+              {remainingPlayers.map((name) => {
+                const assignment = drafts?.groups.findIndex(group => group.includes(name)) ?? -1;
+                return (
                 <button
                   key={name}
-                  onClick={() => togglePlayer(name)}
+                  aria-label={name} aria-pressed={selected.includes(name)}
+                  aria-description={assignment >= 0 ? `In draft ${'ABCD'[assignment]}` : 'Not assigned to a draft'}
+                  onClick={() => { if (!showRules) togglePlayer(name); }}
                   className={cn(
-                    'px-3 py-3 rounded-xl border text-sm font-semibold transition-all text-center leading-tight',
+                    'relative min-h-[52px] px-2 py-2 rounded-xl border text-sm font-semibold transition-colors text-center leading-tight',
                     selected.includes(name)
-                      ? 'bg-primary text-primary-foreground border-primary'
+                      ? 'bg-primary/15 text-foreground border-primary'
                       : 'bg-card border-border text-foreground hover:border-primary/50'
                   )}
                 >
-                  {name}
+                  <span className="block pr-3">{name}</span>
+                  {assignment >= 0 && <span aria-hidden="true" className="absolute right-1 top-1 text-[10px] font-bold text-primary">{'ABCD'[assignment]}</span>}
                 </button>
-              ))}
+              ); })}
             </div>
           </div>
-        )}
-
-        {/* Action buttons */}
-        {!isLoading && gameStatus === 'playing' && (
-          <div className="flex items-center justify-center gap-3">
+          <div>
+          <div ref={actionRef} tabIndex={-1} className="space-y-2 rounded-lg focus:outline-none">
+            {notice.text && <p role="status" data-nhl-receipt="" className="text-sm font-semibold">{notice.text}</p>}
+            <p className="text-xs text-muted-foreground">Draft {'ABCD'[drafts?.active ?? 0]}: {selected.length}/5. Planning costs nothing.</p>
+          <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={deselectAll}
+              onClick={() => { if (!showRules) deselectAll(); }}
               disabled={selected.length === 0}
-              className="px-5 py-2.5 rounded-xl border border-border text-muted-foreground font-semibold text-sm hover:text-foreground transition-colors disabled:opacity-30"
+              className="min-h-[44px] px-2 py-2 rounded-xl border border-border text-muted-foreground font-semibold text-sm hover:text-foreground transition-colors disabled:opacity-30"
             >
-              Deselect All
+              Clear draft
             </button>
             <button
-              onClick={submitSelection}
-              disabled={selected.length !== 5}
-              className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-30"
+              onClick={() => { if (!showRules) submitSelection(); }}
+              disabled={!canSubmit}
+              className="min-h-[44px] px-2 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-30"
             >
-              Submit ({selected.length}/5)
+              Submit five
             </button>
           </div>
+          </div>
+          </div>
+          {notesWarning && <p role="alert" className="text-xs text-amber-600 dark:text-amber-400">Notes could not be saved in this browser. Keep this tab open to keep planning.</p>}
+          </section>
         )}
 
         {/* Game complete */}
         {!isLoading && gameStatus === 'complete' && (
-          <div className="mt-6 flex justify-center">
+          <div ref={receiptRef} data-nhl-final="" className="mt-4 flex justify-center">
             <ResultScreen
               won={lives > 0}
               outcomeEmoji={lives > 0 ? '🏆' : '🏒'}
@@ -204,8 +223,8 @@ const NhlConnections = () => {
               }
               emojiGrid={lives > 0 ? `🏆 NHL Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `🏒 NHL Connections: ${foundGroups}/4 groups`}
               share={{
-                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's NHL Connections` : `${foundGroups}/4 groups on today's NHL Connections`,
-                gameName: 'NHL Connections',
+                score: `${lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `${foundGroups}/4 groups`} on ${mode === 'daily' ? "today's NHL Connections" : 'NHL Connections Unlimited'}`,
+                gameName: mode === 'daily' ? 'NHL Connections' : 'NHL Connections Unlimited',
                 gamePath: '/nhl-connections',
               }}
               onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
@@ -213,6 +232,13 @@ const NhlConnections = () => {
             />
           </div>
         )}
+
+        {!isLoading && solvedGroups.length > 0 && <div className="mt-4 space-y-2" aria-label="Revealed groups">
+          {solvedGroups.map(group => <details key={group.theme} className={cn('rounded-xl border px-3', DIFFICULTY_COLORS[group.difficulty])}>
+            <summary className="min-h-[44px] cursor-pointer py-3 text-sm font-bold">{group.theme}</summary>
+            <p className="pb-3 text-sm">{group.players.join(', ')}</p>
+          </details>)}
+        </div>}
 
         <GameSeoContent
           pageHasOwnH1
