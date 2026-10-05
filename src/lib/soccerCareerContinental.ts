@@ -81,8 +81,8 @@ export function clubConfederation(country: string): Confederation {
  * records it (the note above CONTINENTAL_PERIODS), and so is the NAME,
  * because the name is the honour a player keeps.
  *
- * THE MARKER. A row whose name or final rests on fewer than two publishers
- * outside Wikipedia is listed in SC_CONTINENTAL_PARTIAL, the same shape
+ * THE MARKER. A row whose name, first season or final rests on fewer than
+ * two publishers outside Wikipedia is listed in SC_CONTINENTAL_PARTIAL, the same shape
  * Club Manager's CM_PARTIAL takes for thin data. Wikipedia was read as a spot
  * check on every row and is never counted as one of the two.
  */
@@ -113,9 +113,27 @@ const RSSSF_ASIA = 'RSSSF, "Asian Champions\' Cup", https://www.rsssf.org/tables
 const AFC_SITE = 'AFC, "AFC Champions League Elite", https://www.the-afc.com/en/club/afc_champions_league_elite.html, read 2026-10-03: the 2026/27 edition and its league stage under that name';
 const RSSSF_AFRICA = 'RSSSF, "African Champions\' Cup", https://www.rsssf.org/tablesa/af1.html, read 2026-10-03: a Champions League format from 1997, two legged finals every year except the three listed as one match, 2020 (Al-Ahly 2-1 Zamalek), 2021 (Al-Ahly 3-0 Kaizer Chiefs) and 2022 (Wydad 2-0 Al-Ahly)';
 
+/* The second publishers, read 2026-10-05, one per fact the rows rest on. */
+const CONMEBOL_FINAL = 'CONMEBOL, "La CONMEBOL Libertadores se definira en final unica a partir de 2019", https://www.conmebol.com/noticias/la-conmebol-libertadores-se-definira-en-final-unica-partir-de-2019-con-mayores-beneficios-los-clubes/, 23 February 2018, read 2026-10-05: a single final from 2019, and 2018 the last final played home and away';
+const SKY_LIB = 'Sky Sports, "Copa Libertadores: Flamengo beat River Plate with late goals", https://www.skysports.com/football/news/11095/11868761/copa-libertadores-flamengo-beat-river-plate-with-late-goals, 23 November 2019, read 2026-10-05: the Copa Libertadores final in Lima, the first at a neutral venue';
+const CONCACAF_EVOLUTION = 'CONCACAF, "The evolution of CONCACAF club competitions", https://www.concacaf.com/competitions/champions-cup/news/the-evolution-of-concacaf-club-competitions, 1 February 2018, read 2026-10-05: the Champions Cup from 1962, its era closing with the 2008 final (Pachuca 3-2 on aggregate), and the first Champions League in 2008/09 (Atlante 2-0 on aggregate)';
+const CONCACAF_HISTORY = 'CONCACAF, "The Champions Cup history: 2000-2024", https://www.concacaf.com/champions-cup/news/the-champions-cup-history-2000-2024/, 3 February 2025, read 2026-10-05: a one match final in 2000, the 2001 tournament canceled, finals on aggregate in 2003, 2004, 2005, 2022 (Seattle 5-2 Pumas) and 2023 (Leon 3-1 LAFC)';
+const CONCACAF_2024 = 'CONCACAF, "2024 Concacaf Champions Cup: All You Need to Know", https://www.concacaf.com/news/2024-concacaf-champions-cup-all-you-need-to-know-x5951, 6 June 2023, read 2026-10-05: "Beginning with the 2024 edition, the Concacaf Champions Cup will replace the Champions League", and a final of one match';
+const FOX_CONCACAF = 'FOX Sports, "CONCACAF Champions League tweaking name of competition, set to expand", https://www.foxsports.com/stories/soccer/concacaf-champions-league-tweaking-name-of-competition-set-to-expand, 6 June 2023, read 2026-10-05: the CONCACAF Champions Cup from 2024 on, Champions Cup the original name from 1962, renamed Champions League "15 years ago", that is 2008';
+const CONCACAF_CCL_FINALS = 'CONCACAF, "CCL Final: All-Time Results & Scorers", https://www.concacaf.com/competitions/champions-cup/news/ccl-final-all-time-results-scorers, 6 February 2018, read 2026-10-05: the Champions League finals of 2008/09 to 2012/13, each over two legs';
+const AFC_2003 = 'AFC, "Dawn of a new era: A look back at the 2003 ACL final", https://www.the-afc.com/en/club/afc_champions_league/news/dawn_of_a_new_era_a_look_back_at_the_2003_acl_final.html, 28 October 2021, read 2026-10-05: the Asian Club Championship, Cup Winners\' Cup and Super Cup merged into the AFC Champions League, whose first final, in 2003, was two legs';
+const NATIONAL_2024 = 'The National, "Al Ain defeat Yokohama F Marinos to lift Asian Champions League crown for second time", https://www.thenationalnews.com/sport/football/2024/05/25/al-ain-defeat-yokohama-f-marinos-to-lift-asian-champions-league-crown-for-second-time/, 25 May 2024, read 2026-10-05: the AFC Champions League, the 2003 side winning the inaugural rebranded Champions League, and the 2024 final over two legs (6-3 on aggregate)';
+const AFC_ELITE_FIRST = 'AFC, "AFC Champions League Elite unveils top-class lineup for inaugural season", https://www.the-afc.com/en/club/afc_champions_league_elite/news/afc_champions_league_elite_unveils_top-class_lineup_for_inaugural_season.html, 27 June 2024, read 2026-10-05: the maiden AFC Champions League Elite from August 2024';
+const ESPN_ELITE = 'ESPN, "The new AFC Champions League format explained", https://www.espn.com/soccer/story/_/id/41270886/new-afc-champions-league-format-explained/, 15 September 2024, read 2026-10-05: the AFC Champions League Elite from 2024-25, in place of the AFC Champions League, every tie from the quarter-finals one match';
+const CAF_HISTORY = 'CAF, "All you need to know about past winners of the CAF Champions League", https://www.cafonline.com/caf-champions-league/news/all-you-need-to-know-about-past-winners-of-the-caf-champions-league/, 7 May 2026, read 2026-10-05: first contested in 1964 as the African Cup of Champions Clubs, rebranded in 1997, and the 2025/26 final over two legs';
+const SUPERSPORT_CAF = 'SuperSport, "CAF Champions League: All You Need to Know", https://supersport.com/football/caf-champions-league/news/57ab7006-ead3-4091-a51f-ab1f1724317a/caf-champions-league-all-you-need-to-know, 20 November 2024, read 2026-10-05: the CAF Champions League, formerly called the African Cup of Champions Clubs';
+const SUPERSPORT_CAF_AZ = 'SuperSport, "A-Z of the CAF Champions League", https://supersport.com/football/news/04c766a9-295a-49a9-8028-609aaeb82941/a-z-of-the-caf-champions-league, 20 November 2024, read 2026-10-05: the Champions League format from 1997, before it a knockout with every tie over two legs, and now a final over two legs';
+
 /* THE FINAL, SEASON BY SEASON. Each row's finalLegs is RSSSF's record of the
- * finals in its seasons (the source strings above say which), one publisher,
- * so every row stays in SC_CONTINENTAL_PARTIAL. Three things about the years:
+ * finals in its seasons (the source strings above say which). Where a second
+ * publisher confirms every final of a row, the row says so in its sources;
+ * where it does not, the row stays in SC_CONTINENTAL_PARTIAL, whose comment
+ * lists the finals still on RSSSF alone. Three things about the years:
  *   The pandemic pushed three finals out of their seasons (CONCACAF's 2020
  *   final to December 2020, CAF's 2019-20 final to November 2020 and its
  *   2020-21 final to July 2021). Those editions stay on the season they
@@ -126,27 +144,27 @@ const RSSSF_AFRICA = 'RSSSF, "African Champions\' Cup", https://www.rsssf.org/ta
  *   CONCACAF's final rounds of 1993, 1995 and 1996 were a group of four, not
  *   a final; they are played here as one match. */
 export const CONTINENTAL_PERIODS: ClubCupPeriod[] = [
-  { id: 'lib-two-leg-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 1900, to: 2018, name: 'Copa Libertadores', finalLegs: 2, sources: [RSSSF_LIB] },
-  { id: 'lib-one-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 2019, to: null, name: 'Copa Libertadores', finalLegs: 1, sources: [RSSSF_LIB] },
-  { id: 'concacaf-champions-cup-to-1991', cup: 'concacaf', confederation: 'CONCACAF', from: 1900, to: 1991, name: "CONCACAF Champions' Cup", finalLegs: 2, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-cup-1992-2000', cup: 'concacaf', confederation: 'CONCACAF', from: 1992, to: 2000, name: "CONCACAF Champions' Cup", finalLegs: 1, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-cup-2002', cup: 'concacaf', confederation: 'CONCACAF', from: 2002, to: 2002, name: "CONCACAF Champions' Cup", finalLegs: 1, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-cup-2003-2007', cup: 'concacaf', confederation: 'CONCACAF', from: 2003, to: 2007, name: "CONCACAF Champions' Cup", finalLegs: 2, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-league', cup: 'concacaf', confederation: 'CONCACAF', from: 2008, to: 2018, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-league-2019-2020', cup: 'concacaf', confederation: 'CONCACAF', from: 2019, to: 2020, name: 'CONCACAF Champions League', finalLegs: 1, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-league-2021-2022', cup: 'concacaf', confederation: 'CONCACAF', from: 2021, to: 2022, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF] },
-  { id: 'concacaf-champions-cup', cup: 'concacaf', confederation: 'CONCACAF', from: 2023, to: null, name: 'CONCACAF Champions Cup', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_SITE] },
-  { id: 'asian-club-championship', cup: 'afc', confederation: 'AFC', from: 1900, to: 2001, name: 'Asian Club Championship', finalLegs: 1, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-2002-2008', cup: 'afc', confederation: 'AFC', from: 2002, to: 2008, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-2009-2012', cup: 'afc', confederation: 'AFC', from: 2009, to: 2012, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-2013-2019', cup: 'afc', confederation: 'AFC', from: 2013, to: 2019, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-2020-2021', cup: 'afc', confederation: 'AFC', from: 2020, to: 2021, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-2022-2023', cup: 'afc', confederation: 'AFC', from: 2022, to: 2023, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA] },
-  { id: 'afc-champions-league-elite', cup: 'afc', confederation: 'AFC', from: 2024, to: null, name: 'AFC Champions League Elite', finalLegs: 1, sources: [RSSSF_ASIA, AFC_SITE] },
-  { id: 'african-cup-of-champions', cup: 'caf', confederation: 'CAF', from: 1900, to: 1996, name: 'African Cup of Champions Clubs', finalLegs: 2, sources: [RSSSF_AFRICA] },
-  { id: 'caf-champions-league', cup: 'caf', confederation: 'CAF', from: 1997, to: 2018, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA] },
-  { id: 'caf-champions-league-2019-2021', cup: 'caf', confederation: 'CAF', from: 2019, to: 2021, name: 'CAF Champions League', finalLegs: 1, sources: [RSSSF_AFRICA] },
-  { id: 'caf-champions-league-from-2022', cup: 'caf', confederation: 'CAF', from: 2022, to: null, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA] },
+  { id: 'lib-two-leg-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 1900, to: 2018, name: 'Copa Libertadores', finalLegs: 2, sources: [RSSSF_LIB, CONMEBOL_FINAL, SKY_LIB] },
+  { id: 'lib-one-final', cup: 'libertadores', confederation: 'CONMEBOL', from: 2019, to: null, name: 'Copa Libertadores', finalLegs: 1, sources: [RSSSF_LIB, CONMEBOL_FINAL, SKY_LIB] },
+  { id: 'concacaf-champions-cup-to-1991', cup: 'concacaf', confederation: 'CONCACAF', from: 1900, to: 1991, name: 'CONCACAF Champions Cup', finalLegs: 2, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, FOX_CONCACAF] },
+  { id: 'concacaf-champions-cup-1992-2000', cup: 'concacaf', confederation: 'CONCACAF', from: 1992, to: 2000, name: 'CONCACAF Champions Cup', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, FOX_CONCACAF, CONCACAF_HISTORY] },
+  { id: 'concacaf-champions-cup-2002', cup: 'concacaf', confederation: 'CONCACAF', from: 2002, to: 2002, name: 'CONCACAF Champions Cup', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, FOX_CONCACAF, CONCACAF_HISTORY] },
+  { id: 'concacaf-champions-cup-2003-2007', cup: 'concacaf', confederation: 'CONCACAF', from: 2003, to: 2007, name: 'CONCACAF Champions Cup', finalLegs: 2, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, FOX_CONCACAF, CONCACAF_HISTORY] },
+  { id: 'concacaf-champions-league', cup: 'concacaf', confederation: 'CONCACAF', from: 2008, to: 2018, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, CONCACAF_CCL_FINALS, FOX_CONCACAF] },
+  { id: 'concacaf-champions-league-2019-2020', cup: 'concacaf', confederation: 'CONCACAF', from: 2019, to: 2020, name: 'CONCACAF Champions League', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_EVOLUTION, FOX_CONCACAF] },
+  { id: 'concacaf-champions-league-2021-2022', cup: 'concacaf', confederation: 'CONCACAF', from: 2021, to: 2022, name: 'CONCACAF Champions League', finalLegs: 2, sources: [RSSSF_CONCACAF, CONCACAF_HISTORY, CONCACAF_2024, FOX_CONCACAF] },
+  { id: 'concacaf-champions-cup', cup: 'concacaf', confederation: 'CONCACAF', from: 2023, to: null, name: 'CONCACAF Champions Cup', finalLegs: 1, sources: [RSSSF_CONCACAF, CONCACAF_SITE, CONCACAF_2024, FOX_CONCACAF] },
+  { id: 'asian-club-championship', cup: 'afc', confederation: 'AFC', from: 1900, to: 2001, name: 'Asian Club Championship', finalLegs: 1, sources: [RSSSF_ASIA, AFC_2003] },
+  { id: 'afc-champions-league-2002-2008', cup: 'afc', confederation: 'AFC', from: 2002, to: 2008, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA, AFC_2003, NATIONAL_2024] },
+  { id: 'afc-champions-league-2009-2012', cup: 'afc', confederation: 'AFC', from: 2009, to: 2012, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA, AFC_2003, NATIONAL_2024] },
+  { id: 'afc-champions-league-2013-2019', cup: 'afc', confederation: 'AFC', from: 2013, to: 2019, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA, AFC_2003, NATIONAL_2024] },
+  { id: 'afc-champions-league-2020-2021', cup: 'afc', confederation: 'AFC', from: 2020, to: 2021, name: 'AFC Champions League', finalLegs: 1, sources: [RSSSF_ASIA, AFC_2003, NATIONAL_2024] },
+  { id: 'afc-champions-league-2022-2023', cup: 'afc', confederation: 'AFC', from: 2022, to: 2023, name: 'AFC Champions League', finalLegs: 2, sources: [RSSSF_ASIA, AFC_2003, NATIONAL_2024, ESPN_ELITE] },
+  { id: 'afc-champions-league-elite', cup: 'afc', confederation: 'AFC', from: 2024, to: null, name: 'AFC Champions League Elite', finalLegs: 1, sources: [RSSSF_ASIA, AFC_SITE, AFC_ELITE_FIRST, ESPN_ELITE] },
+  { id: 'african-cup-of-champions', cup: 'caf', confederation: 'CAF', from: 1900, to: 1996, name: 'African Cup of Champions Clubs', finalLegs: 2, sources: [RSSSF_AFRICA, CAF_HISTORY, SUPERSPORT_CAF, SUPERSPORT_CAF_AZ] },
+  { id: 'caf-champions-league', cup: 'caf', confederation: 'CAF', from: 1997, to: 2018, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA, CAF_HISTORY, SUPERSPORT_CAF, SUPERSPORT_CAF_AZ] },
+  { id: 'caf-champions-league-2019-2021', cup: 'caf', confederation: 'CAF', from: 2019, to: 2021, name: 'CAF Champions League', finalLegs: 1, sources: [RSSSF_AFRICA, CAF_HISTORY, SUPERSPORT_CAF] },
+  { id: 'caf-champions-league-from-2022', cup: 'caf', confederation: 'CAF', from: 2022, to: null, name: 'CAF Champions League', finalLegs: 2, sources: [RSSSF_AFRICA, CAF_HISTORY, SUPERSPORT_CAF, SUPERSPORT_CAF_AZ] },
 ];
 
 /** Seasons a confederation had no cup at all. clubCupFor returns null for
@@ -156,16 +174,46 @@ export const CONTINENTAL_GAPS: { confederation: Confederation; year: number; why
 ];
 
 /** Rows where a fact (the name, its first season, or the final's legs) rests
- *  on ONE publisher outside Wikipedia. That is every row tonight: the history
- *  pages of CONMEBOL, CONCACAF, the AFC and CAF render only in a browser, so
- *  the official sites confirmed the current names of two cups and nothing
- *  older (not the season either name began), and RSSSF names the CONCACAF cup
- *  generically and does not name the AFC Champions League Elite. Wikipedia
- *  agreed with every name and first season as a spot check (its pages on the
- *  CONCACAF Champions Cup and the AFC Champions League Elite, read
- *  2026-10-03), and is never counted as one of the two. A row leaves this
- *  list only with a second publisher written into its sources. */
-export const SC_CONTINENTAL_PARTIAL: string[] = CONTINENTAL_PERIODS.map(p => p.id);
+ *  on ONE publisher outside Wikipedia. Wikipedia was read as a spot check
+ *  and is never counted as one of the two.
+ *
+ *  THE NAMES AND THE SEASONS THEY BEGAN are two source on every row since
+ *  2026-10-05 (each row's sources): the Copa Libertadores (RSSSF, Sky
+ *  Sports); the CONCACAF Champions Cup from 1962, the Champions League from
+ *  2008-09 and the Champions Cup again from the 2024 edition (CONCACAF twice,
+ *  FOX Sports, and RSSSF for the seasons); the Asian Club Championship and
+ *  the AFC Champions League from 2002-03 (RSSSF, the AFC, The National); the
+ *  AFC Champions League Elite from 2024-25 (the AFC, ESPN); the African Cup
+ *  of Champions Clubs and the CAF Champions League from 1997 (CAF,
+ *  SuperSport, and RSSSF for the season). CONCACAF and FOX both write the
+ *  old name Champions Cup, with no apostrophe, so that is how it is written.
+ *
+ *  WHAT IS STILL THIN is the final's legs, season by season, and only that.
+ *  Each row below rests on RSSSF alone for some of its finals: CONCACAF's
+ *  finals of 1990 and 1991, 1992 to 1999, 2002, 2006 and 2007, 2014 to 2019
+ *  (CONCACAF's pages confirm 2000, 2003 to 2005, 2008 to 2013, 2022 and
+ *  2023), and its one match finals of 2020 and 2021; the Asian one match
+ *  finals to 2002 and every Asian final from 2004 to 2023 (the AFC confirms
+ *  2003, The National 2024, ESPN 2025); CAF's two leg finals from 1997 to
+ *  2019 season by season and its one match finals of 2020 to 2022. A row leaves this list only with
+ *  a second publisher for every fact in its seasons. The earliest season a
+ *  career reaches is 1990-91, so the open ended first rows cover 1990 on. */
+export const SC_CONTINENTAL_PARTIAL: string[] = [
+  'concacaf-champions-cup-to-1991',
+  'concacaf-champions-cup-1992-2000',
+  'concacaf-champions-cup-2002',
+  'concacaf-champions-cup-2003-2007',
+  'concacaf-champions-league',
+  'concacaf-champions-league-2019-2020',
+  'asian-club-championship',
+  'afc-champions-league-2002-2008',
+  'afc-champions-league-2009-2012',
+  'afc-champions-league-2013-2019',
+  'afc-champions-league-2020-2021',
+  'afc-champions-league-2022-2023',
+  'caf-champions-league',
+  'caf-champions-league-2019-2021',
+];
 
 /** The continental cup a club plays in a season, or null when there is none
  *  this game models (UEFA plays the Champions League, which the engine reads

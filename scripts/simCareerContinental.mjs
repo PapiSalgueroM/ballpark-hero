@@ -217,10 +217,11 @@ section(2, 'Every opponent shares the club\'s confederation, and each cup carrie
   if (unknown > 0) fail(`${unknown} games against a club that is not in the club list at all`);
   if (games < 1000) fail(`only ${games} games outside UEFA were played, too few to say anything`);
   /* The season's name, typed here from the sources the module cites (RSSSF,
-     the CONCACAF and AFC sites, Wikipedia as a spot check), not read from it. */
+     CONMEBOL, CONCACAF, the AFC, CAF, and the press pieces it lists, read
+     2026-10-05), not read from it. */
   const NAMES = [
     ['Argentina', 1995, 'Copa Libertadores'], ['Brazil', 2026, 'Copa Libertadores'],
-    ['Mexico', 2007, "CONCACAF Champions' Cup"], ['USA', 2008, 'CONCACAF Champions League'],
+    ['Mexico', 2007, 'CONCACAF Champions Cup'], ['USA', 2008, 'CONCACAF Champions League'],
     ['USA', 2022, 'CONCACAF Champions League'], ['Mexico', 2023, 'CONCACAF Champions Cup'],
     ['Saudi Arabia', 2001, 'Asian Club Championship'], ['Saudi Arabia', 2002, 'AFC Champions League'],
     ['Saudi Arabia', 2023, 'AFC Champions League'], ['Saudi Arabia', 2024, 'AFC Champions League Elite'],

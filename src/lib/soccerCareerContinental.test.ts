@@ -35,7 +35,7 @@ describe('which cup a club plays', () => {
     expect(clubCupFor('Brazil', 1995)?.period?.name).toBe('Copa Libertadores');
     expect(clubCupFor('Brazil', 2018)?.period?.finalLegs).toBe(2);
     expect(clubCupFor('Brazil', 2019)?.period?.finalLegs).toBe(1);
-    expect(clubCupFor('USA', 2007)?.period?.name).toBe("CONCACAF Champions' Cup");
+    expect(clubCupFor('USA', 2007)?.period?.name).toBe('CONCACAF Champions Cup');
     expect(clubCupFor('USA', 2008)?.period?.name).toBe('CONCACAF Champions League');
     expect(clubCupFor('Mexico', 2023)?.period?.name).toBe('CONCACAF Champions Cup');
     expect(clubCupFor('Saudi Arabia', 2023)?.period?.name).toBe('AFC Champions League');
@@ -53,7 +53,20 @@ describe('which cup a club plays', () => {
         expect(CONTINENTAL_PERIODS.filter(p => p.confederation === conf && y >= p.from && (p.to === null || y <= p.to))).toHaveLength(gap ? 0 : 1);
       }
     }
-    for (const p of CONTINENTAL_PERIODS) expect(SC_CONTINENTAL_PARTIAL).toContain(p.id);
+    // Every row's name and first season rest on two publishers outside
+    // Wikipedia, each with an address and a read date; the partial list
+    // names only rows whose finals are still on one.
+    const ids = CONTINENTAL_PERIODS.map(p => p.id);
+    for (const id of SC_CONTINENTAL_PARTIAL) expect(ids).toContain(id);
+    for (const p of CONTINENTAL_PERIODS) {
+      for (const s of p.sources) {
+        expect(s).toMatch(/https:\/\//);
+        expect(s).toMatch(/read 20\d\d-\d\d-\d\d/);
+        expect(s.toLowerCase()).not.toContain('wikipedia');
+      }
+      const publishers = new Set(p.sources.map(s => s.slice(0, s.indexOf(','))));
+      expect(publishers.size, p.id).toBeGreaterThanOrEqual(2);
+    }
   });
 
   it('draws opponents from the same confederation, that existed that season', () => {
