@@ -25,21 +25,163 @@
     "soccerbase": "soccerbase.com player match logs per season (season_id 157 is 2024/2025, 158 is 2025/2026), club games counted (national team games excluded), read 2026-10-05",
     "liverpoolfc": "liverpoolfc.com, the club's own news pages"
   },
-  "preBake": null,
-  "postBake": null,
-  "coverage": null,
-  "careerQuiz": null,
+  "preBake": {
+    "commit": "d8fe6dedb566ce6a95898899e7a6da6063d2b402",
+    "file": "src/data/careerPlayers.ts",
+    "of": "JSON.stringify of the careerPlayers export as bundled from that commit, the bake before Round 1010b",
+    "sha256": "bab8b48f9e349080acf2c927a908b83ae7beec25362eb9d197cf20cf8c561f2c",
+    "players": 253,
+    "seasons": 3640
+  },
+  "postBake": {
+    "sha256": "70265ba7c7cfa5b5df80cf7ed99b2a9520a6183983ba8e3c3c0b4641c1d6f373",
+    "players": 252,
+    "seasons": 3634,
+    "stamp": "2026-10-05"
+  },
+  "coverage": {
+    "baseline": 80,
+    "rule": "men whose last row is 2024-2025 and who are neither added, ended nor held; simCareerSeasonAdditions fails when the count rises above this baseline, and each wave lowers it in the same commit",
+    "stopAtOlderSeason": 23,
+    "unaccounted": ["Achraf Hakimi", "Alejandro Garnacho", "Alphonso Davies", "André Onana", "Angel Di María", "Antoine Griezmann", "Arda Güler", "Bernardo Silva", "Bradley Barcola", "Bruno Fernandes", "Bukayo Saka", "Casemiro", "Ciro Immobile", "Cole Palmer", "Cristian Pulisic", "Cristiano Ronaldo", "Darwin Núñez", "Declan Rice", "Dusan Vlahović", "Ederson", "Endrick", "Enzo Fernández", "Erling Haaland", "Estêvão", "Federico Valverde", "Gavi", "Gianluigi Donnarumma", "Hakim Ziyech", "Harry Kane", "Jadon Sancho", "Jamal Musiala", "Jan Oblak", "João Cancelo", "João Félix", "Jonathan David", "Joshua Kimmich", "Jude Bellingham", "Karim Benzema", "Kevin De Bruyne", "Khvicha Kvaratskhelia", "Kobbie Mainoo", "Kyle Walker", "Kylian Mbappé", "Lamine Yamal", "Leroy Sané", "Luka Modrić", "Marcus Rashford", "Marquinhos", "Martin Ødegaard", "Mats Hummels", "Mikel Oyarzabal", "Moisés Caicedo", "Moussa Diaby", "N'Golo Kanté", "Nico Williams", "Ousmane Dembélé", "Pau Cubarsí", "Paulo Dybala", "Pedri", "Phil Foden", "Pierre-Emerick Aubameyang", "Rafael Leão", "Raheem Sterling", "Rasmus Højlund", "Riyad Mahrez", "Robert Lewandowski", "Rodri", "Rodrygo", "Romelu Lukaku", "Rúben Dias", "Sandro Tonali", "Son Heung-min", "Thibaut Courtois", "Trent Alexander-Arnold", "Victor Osimhen", "Viktor Gyökeres", "Vinícius Júnior", "Warren Zaïre-Emery", "Xavi Simons", "Yassine Bounou"]
+  },
+  "careerQuiz": {
+    "variant": "plain delete of the twin; no swap-in, because no candidate has a fully two-sourced career",
+    "plannedApply": "2026-10-15",
+    "changedDaysOfNext60": 60,
+    "firstDay": {
+      "before": "Andrew Robertson",
+      "after": "Rúben Dias"
+    },
+    "answersAlsoDealtInTheLast90Days": 42,
+    "answersAlsoDealtInTheLast90DaysWithoutTheChange": 0,
+    "daysRepeatingAManFromTheirOwnLast90Days": 0,
+    "daysRepeatingWithoutTheChange": 0
+  },
   "removed": [
     {
+      "wave": 1,
       "player": "Alisson Becker",
       "playerId": "a0000001-0000-0000-0000-000000000066",
       "keptAs": "Alisson",
       "keptId": "a0000001-0000-0000-0000-000000000040",
-      "reason": "The same man twice: both entries carry the same 13 season and club keys (Round 667 and Round 784 recorded it). The entry people type and the verified active identity is Alisson, so Alisson Becker goes and his 13 puzzles are renamed to Alisson."
+      "reason": "The same man twice: both entries carry the same 13 season and club keys (Round 667 and Round 784 recorded it). The entry people type and the verified active identity is Alisson, so Alisson Becker goes and his 13 puzzles are renamed to Alisson.",
+      "copy": {
+        "name": "Alisson Becker",
+        "nationality": "Brazil",
+        "position": "GK",
+        "career": [
+          {
+            "season": "2013",
+            "club": "Internacional",
+            "goals": 0,
+            "assists": null,
+            "appearances": 9,
+            "marketValue": 0
+          },
+          {
+            "season": "2014",
+            "club": "Internacional",
+            "goals": 0,
+            "assists": null,
+            "appearances": 14,
+            "marketValue": 0
+          },
+          {
+            "season": "2015",
+            "club": "Internacional",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 57,
+            "marketValue": 5
+          },
+          {
+            "season": "2016",
+            "club": "Internacional",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 20,
+            "marketValue": 8
+          },
+          {
+            "season": "2016-2017",
+            "club": "Roma",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 37,
+            "marketValue": 15
+          },
+          {
+            "season": "2017-2018",
+            "club": "Roma",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 49,
+            "marketValue": 40
+          },
+          {
+            "season": "2018-2019",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 1,
+            "appearances": 51,
+            "marketValue": 60
+          },
+          {
+            "season": "2019-2020",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 29,
+            "marketValue": 65
+          },
+          {
+            "season": "2020-2021",
+            "club": "Liverpool",
+            "goals": 1,
+            "assists": 0,
+            "appearances": 44,
+            "marketValue": 60
+          },
+          {
+            "season": "2021-2022",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 46,
+            "marketValue": 55
+          },
+          {
+            "season": "2022-2023",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 37,
+            "marketValue": 50
+          },
+          {
+            "season": "2023-2024",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 41,
+            "marketValue": 45
+          },
+          {
+            "season": "2024-2025",
+            "club": "Liverpool",
+            "goals": 0,
+            "assists": 0,
+            "appearances": 28,
+            "marketValue": 40
+          }
+        ]
+      }
     }
   ],
   "added": [
     {
+      "wave": 1,
       "player": "Alisson",
       "playerId": "a0000001-0000-0000-0000-000000000040",
       "season": "2025-2026",
@@ -56,6 +198,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Andrew Robertson",
       "playerId": "a0000001-0000-0000-0000-000000000131",
       "season": "2025-2026",
@@ -72,6 +215,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Federico Chiesa",
       "playerId": "a0000001-0000-0000-0000-000000000103",
       "season": "2025-2026",
@@ -88,6 +232,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Mohamed Salah",
       "playerId": "a0000001-0000-0000-0000-000000000007",
       "season": "2025-2026",
@@ -104,6 +249,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Virgil van Dijk",
       "playerId": "a0000001-0000-0000-0000-000000000026",
       "season": "2025-2026",
@@ -120,6 +266,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Alexander Isak",
       "playerId": "a0000001-0000-0000-0000-000000000060",
       "season": "2025-2026",
@@ -137,6 +284,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Florian Wirtz",
       "playerId": "a0000001-0000-0000-0000-000000000056",
       "season": "2025-2026",
@@ -156,6 +304,7 @@
   ],
   "changed": [
     {
+      "wave": 1,
       "player": "Alisson",
       "playerId": "a0000001-0000-0000-0000-000000000040",
       "season": "2024-2025",
@@ -169,6 +318,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Andrew Robertson",
       "playerId": "a0000001-0000-0000-0000-000000000131",
       "season": "2024-2025",
@@ -182,6 +332,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Andrew Robertson",
       "playerId": "a0000001-0000-0000-0000-000000000131",
       "season": "2024-2025",
@@ -195,6 +346,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Federico Chiesa",
       "playerId": "a0000001-0000-0000-0000-000000000103",
       "season": "2024-2025",
@@ -208,6 +360,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Federico Chiesa",
       "playerId": "a0000001-0000-0000-0000-000000000103",
       "season": "2024-2025",
@@ -221,6 +374,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Federico Chiesa",
       "playerId": "a0000001-0000-0000-0000-000000000103",
       "season": "2024-2025",
@@ -234,6 +388,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Mohamed Salah",
       "playerId": "a0000001-0000-0000-0000-000000000007",
       "season": "2024-2025",
@@ -247,6 +402,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Mohamed Salah",
       "playerId": "a0000001-0000-0000-0000-000000000007",
       "season": "2024-2025",
@@ -260,6 +416,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Mohamed Salah",
       "playerId": "a0000001-0000-0000-0000-000000000007",
       "season": "2024-2025",
@@ -273,6 +430,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Virgil van Dijk",
       "playerId": "a0000001-0000-0000-0000-000000000026",
       "season": "2024-2025",
@@ -286,6 +444,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Virgil van Dijk",
       "playerId": "a0000001-0000-0000-0000-000000000026",
       "season": "2024-2025",
@@ -299,6 +458,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Diogo Jota",
       "playerId": "a0000001-0000-0000-0000-000000000100",
       "season": "2024-2025",
@@ -312,6 +472,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Diogo Jota",
       "playerId": "a0000001-0000-0000-0000-000000000100",
       "season": "2024-2025",
@@ -325,6 +486,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Alexander Isak",
       "playerId": "a0000001-0000-0000-0000-000000000060",
       "season": "2024-2025",
@@ -338,6 +500,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Alexander Isak",
       "playerId": "a0000001-0000-0000-0000-000000000060",
       "season": "2024-2025",
@@ -351,6 +514,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Alexander Isak",
       "playerId": "a0000001-0000-0000-0000-000000000060",
       "season": "2024-2025",
@@ -363,6 +527,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Florian Wirtz",
       "playerId": "a0000001-0000-0000-0000-000000000056",
       "season": "2024-2025",
@@ -376,6 +541,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Florian Wirtz",
       "playerId": "a0000001-0000-0000-0000-000000000056",
       "season": "2024-2025",
@@ -389,6 +555,7 @@
       ]
     },
     {
+      "wave": 1,
       "player": "Florian Wirtz",
       "playerId": "a0000001-0000-0000-0000-000000000056",
       "season": "2024-2025",
@@ -403,6 +570,7 @@
   ],
   "ended": [
     {
+      "wave": 1,
       "player": "Diogo Jota",
       "playerId": "a0000001-0000-0000-0000-000000000100",
       "reason": "Died on 2025-07-03. No 2025-2026 row; internal record only, no site copy.",
@@ -414,31 +582,37 @@
   ],
   "held": [
     {
+      "wave": 1,
       "player": "Lionel Messi",
       "playerId": "a0000001-0000-0000-0000-000000000002",
       "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean."
     },
     {
+      "wave": 1,
       "player": "Luis Suárez",
       "playerId": "a0000001-0000-0000-0000-000000000047",
       "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean."
     },
     {
+      "wave": 1,
       "player": "Sergio Busquets",
       "playerId": "a0000001-0000-0000-0000-000000000063",
       "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean. Reported retired after the 2025 MLS season, unverified here."
     },
     {
+      "wave": 1,
       "player": "Neymar",
       "playerId": "a0000001-0000-0000-0000-000000000003",
       "reason": "Calendar league club written split style (2024-2025 Santos); the new row waits for the relabel round that decides what those rows mean."
     },
     {
+      "wave": 1,
       "player": "Memphis Depay",
       "playerId": "a0000001-0000-0000-0000-000000000094",
       "reason": "Calendar league club written split style (2024-2025 Corinthians); the new row waits for the relabel round that decides what those rows mean."
     },
     {
+      "wave": 1,
       "player": "Fernandinho",
       "playerId": "48fadce8-511c-469c-8b8a-b12662a0e22c",
       "reason": "Calendar league club written split style (2022-2023 to 2024-2025 Athletico Paranaense); the new row waits for the relabel round that decides what those rows mean. Whether he retired is unverified here."
@@ -470,5 +644,13 @@
       "agrees": true
     }
   ],
-  "seenNotFixed": []
+  "seenNotFixed": [],
+  "transferPath": {
+    "renamed": ["tpa-112", "tpa-392", "tpa-428", "tpa-429", "tpa-637", "tpa-639", "tpa-668", "tpa-680", "tpa-716", "tpa-740", "tpa-762", "tpa-779", "tpa-963"],
+    "rewritten": {
+      "classic": 18,
+      "europe": 19,
+      "active": 16
+    }
+  }
 }
