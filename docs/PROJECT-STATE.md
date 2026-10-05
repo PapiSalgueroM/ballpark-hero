@@ -1,3 +1,17 @@
+## Codex1004 verified, 1005 building, 2026-10-05
+
+Both remote Connections workflows passed seven native profiles per sport.
+The short720px clipping did not reproduce with true mouse clicks; no product
+layout fix is claimed. Keep the stronger tests and the effective22px control.
+Receipt: docs/audits/ROUND1004-VERIFICATION.md. No publication is needed for
+this verification-only round. Published1003 remains the product baseline.
+
+Codex1005 now owns the Your picks shelf and Home/Search pin controls in the
+managed game-picks-1005 worktree. No game saves, scoring or facts change.
+Claude's Transfer Path1010, Career1011to1013, Aussie Rules1014 and Front Office
+lanes stay separate.1006to1009 are unstarted. No open publication claim.
+The six-hour session continues until23:31UTC. Remote runtime checks only.
+
 ## Codex claims1004, six-hour session2026-10-05
 
 Anthony authorized continuous improvements until2026-10-05 23:31 UTC
