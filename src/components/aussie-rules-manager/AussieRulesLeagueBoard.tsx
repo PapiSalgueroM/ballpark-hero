@@ -8,7 +8,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import { PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
-  CLUBS, clubLabel, clubOf, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, ordinal, pickRefusal, picksLeft, placeOf, retirees,
+  CLUBS, clubLabel, clubOf, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, placeOf, retirees,
   ROUNDS, scoutedPotential, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
@@ -52,6 +52,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const match = state.match;
   const other = match ? (match.homeId === state.myClub ? match.awayId : match.homeId) : '';
   const read = other ? TACTICS.find(value => value.id === clubOf(state, other)!.style)!.label : '';
+  const lastPlayed = other && match && match.quarter > 0 && match.quarter <= 4 ? TACTICS.find(value => value.id === opponentPlays(state.seed, state.season, { ...match, quarter: match.quarter - 1 }, clubOf(state, other)!.style))!.label : '';
   const selectedOut = state.starters.includes(outId) ? outId : state.starters[0] ?? '';
   const outgoing = leaguePlayer(state, selectedOut);
   const eligible = state.bench.map(id => leaguePlayer(state, id)!).filter(player => player.role === outgoing?.role);
@@ -64,7 +65,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
     {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation.</p>
       <div className={styles.choices}>{PREPARATIONS.map(choice => <button key={choice.id} className={styles.tile} data-arl-prepare={choice.id} onClick={() => act({ type: 'prepare', choice: choice.id })}><strong>{choice.label}</strong><span>{choice.description}</span></button>)}</div></>}
     {(state.phase === 'quarter' || state.phase === 'break') && match && <>
-      <p className={styles.muted}>Opponent read: {read}. {state.phase === 'quarter' ? `Quarter ${match.quarter + 1} of 4 is next.` : `Quarter ${match.quarter} break.`}</p>
+      <p className={styles.muted}>Opponent read: {read}, their usual style, though they switch it up some quarters.{lastPlayed ? ` Last quarter they played ${lastPlayed}.` : ''} {state.phase === 'quarter' ? `Quarter ${match.quarter + 1} of 4 is next.` : `Quarter ${match.quarter} break.`}</p>
       <div className={styles.tabs} role="group" aria-label="Tactic">{TACTICS.map(value => <button key={value.id} aria-pressed={tactic === value.id} className={tactic === value.id ? styles.action : styles.secondary} data-arl-tactic={value.id} onClick={() => setTactic(value.id)}>{value.label}</button>)}</div>
       <p className={styles.muted}>{TACTICS.find(value => value.id === tactic)!.description}</p>
       {state.phase === 'break' && <><div className={styles.swap}>

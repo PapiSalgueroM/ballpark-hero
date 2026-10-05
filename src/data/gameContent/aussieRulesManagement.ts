@@ -39,7 +39,7 @@ export const AUSSIE_RULES_MANAGEMENT_CONTENT: GameContentMap = {
     ],
     tips: [
       'Read fatigue alongside skill. Twenty three rounds is long, and a team that trains every week runs out of legs by the back half. Rest when the matchday group is tired.',
-      'Read the tactic matchup before each quarter. In this simulation, Control counters Direct, Direct counters Pressure, and Pressure counters Control. The opponent read tells you what they will play.',
+      'Read the tactic matchup before each quarter. In this simulation, Control counters Direct, Direct counters Pressure, and Pressure counters Control. The opponent read shows their usual style. They stick with it about half the quarters and switch the rest, so countering it helps but never locks in a win.',
       'Percentage matters. Two clubs on the same points are split by it, so a big win in round three can decide who plays a home final in September.',
       'Think about the draft before it comes. If a ruck or two are near the end, the list must keep two rucks, and a pick that would leave you short is refused. Ceilings on draft night are your scouts\' range, not a promise.',
       'Young players with room to grow are the long game. A nineteen year old with a high ceiling can be your best player in three seasons.',

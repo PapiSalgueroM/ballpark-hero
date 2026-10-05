@@ -3,7 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
-import { clubOf, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { clubOf, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { TACTICS } from '@/lib/aussieRulesManager';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
@@ -56,6 +57,23 @@ describe('AussieRulesLeagueBoard', () => {
     expect(saved().phase).toBe('prepare');
   });
 
+  it('shows the read before a quarter and what the opponent really played after it', () => {
+    const opponent = (s: LeagueState) => clubOf(s, s.match!.homeId === s.myClub ? s.match!.awayId : s.match!.homeId)!;
+    const switched = (s: LeagueState) => opponentPlays(s.seed, s.season, s.match!, opponent(s).style) !== opponent(s).style;
+    let start = createLeague(12, 'club-05')!;
+    for (let seed = 13; !switched(start) && seed < 80; seed += 1) start = createLeague(seed, 'club-05')!;
+    expect(switched(start)).toBe(true);
+    store(start);
+    const view = draw();
+    tile(view, 'Next match');
+    click(view, '[data-arl-prepare="train"]');
+    const label = (id: string) => TACTICS.find(value => value.id === id)!.label;
+    expect(view.getByText(/Opponent read:/).textContent).toContain(`Opponent read: ${label(opponent(start).style)}, their usual style`);
+    click(view, '[data-arl-play]');
+    expect(saved().phase).toBe('break');
+    expect(view.getByText(/Opponent read:/).textContent).toContain(`Last quarter they played ${label(opponentPlays(start.seed, start.season, start.match!, opponent(start).style))}.`);
+  });
+
   it('shows the finals tile and the bracket once the finals start', () => {
     const state = until(createLeague(3, 'club-01')!, s => s.stage === 'finals');
     store(state);
@@ -66,7 +84,7 @@ describe('AussieRulesLeagueBoard', () => {
   });
 
   it('lifts the cup with the Grand Final score when you win the flag', () => {
-    const state = until(createLeague(1, 'club-00')!, s => s.phase === 'seasonOver');
+    const state = until(createLeague(3, 'club-00')!, s => s.phase === 'seasonOver');
     expect(state.history[0].premier).toBe('club-00');
     store(state);
     const view = draw();
@@ -77,7 +95,7 @@ describe('AussieRulesLeagueBoard', () => {
   });
 
   it('shows the premiership on the hub when you wrap up the season from the match panel', () => {
-    const state = until(createLeague(1, 'club-00')!, s => s.stage === 'finals' && s.phase === 'report' && s.week === lastWeek(s.format));
+    const state = until(createLeague(3, 'club-00')!, s => s.stage === 'finals' && s.phase === 'report' && s.week === lastWeek(s.format));
     store(state);
     const view = draw();
     tile(view, 'Next match');

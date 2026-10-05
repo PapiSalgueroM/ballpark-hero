@@ -41,10 +41,31 @@
  *   the same day over 5 seeds x 40 seasons): rounds 1 to 6 46.80, rounds 18
  *   to 23 57.37 (seeds 56.34 to 58.35; baseline 56.48). With no between round
  *   recovery (the fatigue control) it reads 78.94, so the band is [50, 63].
- *   Printed, not asserted: the bot's club won 155 of 200 flags (it counters
- *   every read, worth 18 strength points a quarter); AI ladder leaders won
- *   16 to 17.5 of 23 and AI bottom clubs 5.5 to 6.8 in tier probes from +-6
- *   to +-12, against a two sourced real shape of 17 to 19 and 1 to 3.
+ *   Printed, not asserted: AI ladder leaders won 16 to 17.5 of 23 and AI
+ *   bottom clubs 5.5 to 6.8 in tier probes from +-6 to +-12, against a two
+ *   sourced real shape of 17 to 19 and 1 to 3.
+ *
+ * THE SWITCHING READ, 2026-10-05 (closing check finding 1). With the read never
+ * wrong, countering it was worth 18 strength points a quarter and the bot's
+ * club won 155 of 200 flags from any tier. Now an opponent keeps its usual
+ * style with READ_HOLDS 0.5 a quarter and otherwise switches. Probe of the
+ * bot's first season (10 seeds from 700) by READ_HOLDS, win share top / middle
+ * / bottom tier: 1 gave 0.941 / 0.887 / 0.809 (the bottom tier club finished
+ * 1.1st on average), 0.6 gave 0.722 / 0.613 / 0.550, 0.5 gave 0.676 / 0.552 /
+ * 0.474 (places 2.7, 7.5, 10.3), 0.4 gave 0.607 / 0.491 / 0.424. Section 6 now
+ * checks it on paired first seasons, measured LONG (24 pairs, 599.7 s with
+ * section 5): top tier 0.696 (sd 0.077, place 2.3, 7 flags), bottom tier
+ * 0.469 (sd 0.109, place 10.8, 1 flag), paired gap 0.226 (sd 0.127); baseline
+ * (10 pairs) 0.676 (sd 0.082), 0.474 (sd 0.060), gap 0.202 (sd 0.124). Floors
+ * and the ceiling sit 4 standard errors of the 10 pair baseline away, with
+ * the LONG sd: top above 0.57, bottom under 0.61 (READ_HOLDS 1, the readalways
+ * control, gives 0.809), gap above 0.04. LONG section 5 after the change:
+ * team score 79.98, accuracy 0.5405, draws 0.72%, margin 37.44 (seeds 37.30
+ * to 37.65, inside [36, 42]), late over
+ * early 0.9661 (seeds 0.9609 to 0.9702), late fatigue 57.33 (seeds 56.59 to
+ * 58.09), +10 skill lift 0.147 (sd 0.066). The bot's club won 20 of 200 flags
+ * (printed); AI flags by tier 1 to 5: 44, 35, 50, 45, 6, so tiers fade over
+ * 40 seasons as the draft evens lists out.
  *
  * ADDED 2026-10-05 by the review fixes, measured on the 3 seed x 8 season
  * baseline (163.4 s): section 3 checks each season's goal tally against that
@@ -57,9 +78,13 @@
  * whose opponent matchday 23 cannot field a lineup; section 9 checks that
  * every finals week has its own dice label above every home and away round
  * (23 to 27), and which side a tactic lands on: 40 paired matches (seeds 600
- * to 639, deterministic) played countering the read beat the same matches
- * played into it by 89.4 points (sd 22.2, 35 wins against 2), floor 40, about
- * 14 standard errors under; section 10 now samples the break phase too. A
+ * to 639, deterministic) played countering what the opponent actually plays
+ * each quarter beat the same matches played into it by 89.3 points (sd 23.2,
+ * 36 wins against 2; 89.4 before the switching read, when the read was the
+ * whole story), floor 40, about 13 standard errors under; and the read alone,
+ * 120 whole matches countering the usual style against playing into it, is
+ * worth 27.1 points (sd 39.5), floor 12, 4 standard errors under (a read worth
+ * nothing would sit at 0); section 10 now samples the break phase too. A
  * career that gets stuck (the reducer refuses the bot) fails like a crash.
  */
 import fs from 'node:fs';
@@ -104,8 +129,9 @@ const CONTROLS = {
   goaltally: [LEAGUE, 'goals: {}, finals: null, draft: null }, 0);', 'goals: state.goals, finals: null, draft: null }, 0);', 3, 2],
   retireage: [LEAGUE, 'age >= 35 ? 1', 'age > 35 ? 1', 7, 2],
   opponentsquad: [LEAGUE, 'if (!fieldsMatchday(clubOf(s, otherSide(match, s.myClub))!, match.homeId === s.myClub ? match.awaySquad : match.homeSquad)) return false;', '', 8, 2],
-  tacticside: [LEAGUE, 'ownHome ? tactic : other.style, ownHome ? other.style : tactic);', 'ownHome ? other.style : tactic, ownHome ? tactic : other.style);', 9, 2],
+  tacticside: [LEAGUE, 'ownHome ? tactic : theirs, ownHome ? theirs : tactic);', 'ownHome ? theirs : tactic, ownHome ? tactic : theirs);', 9, 2],
   finalsdice: [LEAGUE, 'finalsRound = (week: number) => ROUNDS + week;', 'finalsRound = (week: number) => ROUNDS - 1 + week;', 9, 2],
+  readalways: [LEAGUE, 'export const READ_HOLDS = 0.5;', 'export const READ_HOLDS = 1;', 6, 2],
   breaktile: [LEAGUE, "sub: `v ${opponent}`, accent: wants || state.phase === 'report' });", "sub: state.phase === 'break' ? '' : `v ${opponent}`, accent: wants || state.phase === 'report' });", 10, 2],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
@@ -460,6 +486,7 @@ if (RUN.has(4)) {
 const BANDS = {
   teamScore: [76, 84], goals: [11.0, 12.4], behinds: [9.3, 10.6], accuracy: [0.52, 0.56], drawRate: [0.0025, 0.0135], margin: [36, 42], lateOverEarly: [0.94, 0.99],
   strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25, lateFatigue: [50, 63], tacticSwing: 40,
+  tierGap: 0.04, topTierShare: 0.57, bottomTierShare: 0.61, readSwing: 12,
 };
 const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
 
@@ -484,7 +511,8 @@ if (RUN.has(5)) {
     const sc = run.seasons.flatMap(x => x.closed.results.flatMap(m => [total(m.homeScore), total(m.awayScore)]));
     const e = run.seasons.flatMap(x => x.closed.results.filter(m => m.round <= 5).flatMap(m => [total(m.homeScore), total(m.awayScore)]));
     const l = run.seasons.flatMap(x => x.closed.results.filter(m => m.round >= 17).flatMap(m => [total(m.homeScore), total(m.awayScore)]));
-    console.log(`  seed ${run.seed}: team score ${mean(sc).toFixed(2)}, late over early ${(mean(l) / mean(e)).toFixed(4)}, late fatigue ${mean(run.seasons.flatMap(x => x.fatigue.slice(17))).toFixed(2)}`);
+    const mg = run.seasons.flatMap(x => x.closed.results.map(m => Math.abs(total(m.homeScore) - total(m.awayScore))));
+    console.log(`  seed ${run.seed}: team score ${mean(sc).toFixed(2)}, margin ${mean(mg).toFixed(2)}, late over early ${(mean(l) / mean(e)).toFixed(4)}, late fatigue ${mean(run.seasons.flatMap(x => x.fatigue.slice(17))).toFixed(2)}`);
   }
   check(games > 0, `${games} games measured`);
   const earlyFatigue = mean(mainSeasons.flatMap(x => x.fatigue.slice(0, 6))), lateFatigue = mean(mainSeasons.flatMap(x => x.fatigue.slice(17)));
@@ -507,6 +535,22 @@ if (RUN.has(6)) {
   }
   console.log(`  ${pairs} paired seeds: win share lift mean ${mean(lifts).toFixed(3)}, sd ${sd(lifts).toFixed(3)}, floor ${BANDS.strengthLift}`);
   check(mean(lifts) > BANDS.strengthLift, 'a +10 skill club wins clearly more often on the same seeds');
+  /* Your tier matters even when you counter every read (the guide's "an easy start or a long rebuild"):
+     the bot coaches a top tier club and a bottom tier club through season one on the same seeds. */
+  const TIER_CLUBS = { 1: ['club-00', 'club-07', 'club-14'], 5: ['club-05', 'club-10', 'club-17'] };
+  const firstSeason = (seed, clubId) => { const st = runCareer(seed, clubId, 1).seasons[0]?.closed; if (!st) return null; const ladder = L.leagueLadder(st); const row = ladder.find(r => r.clubId === clubId); return { share: (row.wins + row.draws / 2) / row.played, place: ladder.indexOf(row) + 1, flag: st.history.at(-1).premier === clubId }; };
+  const tierPairs = LONG ? 24 : 10, top = [], bottom = [];
+  for (let k = 0; k < tierPairs; k += 1) {
+    const a = firstSeason(700 + k, TIER_CLUBS[1][k % 3]), b = firstSeason(700 + k, TIER_CLUBS[5][k % 3]);
+    if (a && b) { top.push(a); bottom.push(b); }
+  }
+  const gaps = top.map((x, k) => x.share - bottom[k].share);
+  const shareOf = xs => xs.map(x => x.share);
+  console.log(`  ${top.length} paired first seasons, the bot countering every read: top tier win share ${mean(shareOf(top)).toFixed(3)} (sd ${sd(shareOf(top)).toFixed(3)}, mean place ${mean(top.map(x => x.place)).toFixed(1)}, flags ${top.filter(x => x.flag).length}), bottom tier ${mean(shareOf(bottom)).toFixed(3)} (sd ${sd(shareOf(bottom)).toFixed(3)}, mean place ${mean(bottom.map(x => x.place)).toFixed(1)}, flags ${bottom.filter(x => x.flag).length}), paired gap ${mean(gaps).toFixed(3)} (sd ${sd(gaps).toFixed(3)})`);
+  check(top.length === tierPairs, `${top.length} of ${tierPairs} paired first seasons finished`);
+  check(mean(gaps) > BANDS.tierGap, `a top tier club wins more of its first season than a bottom tier club coached the same way (gap above ${BANDS.tierGap})`);
+  check(mean(shareOf(top)) > BANDS.topTierShare, `a top tier club coached well is a contender: first season win share above ${BANDS.topTierShare}`);
+  check(mean(shareOf(bottom)) < BANDS.bottomTierShare, `countering the read is no sure thing: a bottom tier club coached the same way wins under ${BANDS.bottomTierShare} of its first season`);
   if (mainSeasons.length) {
     const tops = mainSeasons.map(x => L.leagueLadder(x.closed)[0].wins), bottoms = mainSeasons.map(x => L.leagueLadder(x.closed)[17].wins);
     const tierWins = new Map();
@@ -715,17 +759,33 @@ if (RUN.has(9)) {
   check(weeks.every(r => r >= L.ROUNDS) && new Set(weeks).size === weeks.length && mine.length > 0 && labelFaults === 0, 'every finals week rolls its own dice label, above every home and away round');
   /* Which side a tactic lands on: the same match played countering the opponent's read and played into it. */
   const LOSES_TO = { direct: 'pressure', pressure: 'control', control: 'direct' };
+  const marginOf = (st, m) => (m.homeId === st.myClub ? 1 : -1) * (m.homeScore.total - m.awayScore.total);
+  /* (a) Knowing what they actually play each quarter (opponentPlays), countering it against playing into it. */
   const swing = [];
   let counterWins = 0, counteredWins = 0;
   for (let k = 0; k < 40; k += 1) {
     const st = L.reduceLeague(L.createLeague(600 + k, CLUB_IDS[k % 18]), { type: 'prepare', choice: 'train' });
     const style = L.clubOf(st, st.match.homeId === st.myClub ? st.match.awayId : st.match.homeId).style;
-    const margin = t => { const m = L.reduceLeague(st, { type: 'playMatch', tactic: t }).match; return (m.homeId === st.myClub ? 1 : -1) * (m.homeScore.total - m.awayScore.total); };
-    const up = margin(COUNTER[style]), down = margin(LOSES_TO[style]);
+    const margin = pick => {
+      let s = st;
+      for (let n = 0; n < 12 && (s.phase === 'quarter' || s.phase === 'break'); n += 1) s = L.reduceLeague(s, s.phase === 'break' ? { type: 'next' } : { type: 'play', tactic: pick[L.opponentPlays(s.seed, s.season, s.match, style)] });
+      return s.phase === 'report' ? marginOf(st, s.match) : NaN;
+    };
+    const up = margin(COUNTER), down = margin(LOSES_TO);
     swing.push(up - down); if (up > 0) counterWins += 1; if (down > 0) counteredWins += 1;
   }
-  console.log(`  40 paired matches: countering the read beats playing into it by ${mean(swing).toFixed(1)} points (sd ${sd(swing).toFixed(1)}); won ${counterWins} countering, ${counteredWins} played into it; floor ${BANDS.tacticSwing}`);
-  check(mean(swing) > BANDS.tacticSwing, 'your tactic is applied to your side: countering the read wins the same match by more');
+  console.log(`  40 paired matches, each quarter countering what the opponent actually plays against playing into it: ${mean(swing).toFixed(1)} points (sd ${sd(swing).toFixed(1)}); won ${counterWins} countering, ${counteredWins} played into it; floor ${BANDS.tacticSwing}`);
+  check(mean(swing) > BANDS.tacticSwing, 'your tactic is applied to your side: countering what they play wins the same match by more');
+  /* (b) The read is worth something but is no lock: the whole match countering their usual style against playing into it. */
+  const readSwing = [];
+  for (let k = 0; k < 120; k += 1) {
+    const st = L.reduceLeague(L.createLeague(600 + k, CLUB_IDS[k % 18]), { type: 'prepare', choice: 'train' });
+    const style = L.clubOf(st, st.match.homeId === st.myClub ? st.match.awayId : st.match.homeId).style;
+    const margin = t => marginOf(st, L.reduceLeague(st, { type: 'playMatch', tactic: t }).match);
+    readSwing.push(margin(COUNTER[style]) - margin(LOSES_TO[style]));
+  }
+  console.log(`  120 paired matches, the whole match countering the read against playing into it: ${mean(readSwing).toFixed(1)} points (sd ${sd(readSwing).toFixed(1)}); floor ${BANDS.readSwing}`);
+  check(mean(readSwing) > BANDS.readSwing, 'countering the read still pays on average');
   let outside = 0, events = 0;
   for (const match of a.myMatches) {
     for (const e of match.events) {

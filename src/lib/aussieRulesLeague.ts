@@ -49,6 +49,12 @@ export const RECOVERY = 20;
 /** Tier skill offsets, a game rule tuned in simAussieRulesSeason section 6. */
 export const TIER_OFFSETS: Record<number, number> = { 1: 6, 2: 3, 3: 0, 4: -3, 5: -6 };
 export const DRAFT_AGE = 18;
+/**
+ * How often an opponent sticks to its usual style (the read you see) in a quarter; otherwise
+ * it switches to one of the other two. Game rule, tuned in simAussieRulesSeason section 6: with
+ * a read that was never wrong, countering it won 155 of 200 flags from any tier.
+ */
+export const READ_HOLDS = 0.5;
 
 export interface LeaguePlayer extends Player { age: number; potential: number }
 export interface LeagueClub extends Club { players: LeaguePlayer[]; tier: number }
@@ -105,6 +111,13 @@ const clamp = (value: number, low: number, high: number) => Math.max(low, Math.m
 const validSeed = (seed: unknown): seed is number => Number.isInteger(seed) && (seed as number) >= 0 && (seed as number) <= 0xffffffff;
 export const isClubId = (id: unknown): id is string => typeof id === 'string' && CLUBS.some(club => club.id === id);
 export const seasonSeed = (seed: number, season: number) => hashLabel(`${seed}|${season}`);
+/** What your opponent plays in a quarter: its usual style, or now and then a switch. Its own dice, so the match dice stay the same whatever you pick. */
+export function opponentPlays(seed: number, season: number, match: Pick<Match, 'round' | 'homeId' | 'awayId' | 'quarter'>, style: Tactic): Tactic {
+  const rng = rngFrom(hashLabel(`${seasonSeed(seed, season)}|${match.round}|${match.homeId}|${match.awayId}|${match.quarter}|read`));
+  if (rng() < READ_HOLDS) return style;
+  const others = (['control', 'direct', 'pressure'] as Tactic[]).filter(id => id !== style);
+  return others[rng() < 0.5 ? 0 : 1];
+}
 
 /** A free invented name, probing the bank from a random start like v1 does. */
 function freshName(rng: () => number, used: Set<string>): string {
@@ -266,7 +279,7 @@ function finishMine(state: LeagueState, played: { clubs: LeagueClub[]; match: Ma
     const ownHome = match.homeId === state.myClub;
     const other = matchdayStarters(list.find(club => club.id === otherSide(match, state.myClub))!, ownHome ? match.awaySquad : match.homeSquad);
     return ownHome ? [state.starters, other] : [other, state.starters];
-  }, [played.match.homeId === state.myClub ? tactic : clubOf(state, played.match.homeId)!.style, played.match.awayId === state.myClub ? tactic : clubOf(state, played.match.awayId)!.style]);
+  }, [played.match.homeId === state.myClub ? tactic : opponentPlays(state.seed, state.season, played.match, clubOf(state, played.match.homeId)!.style), played.match.awayId === state.myClub ? tactic : opponentPlays(state.seed, state.season, played.match, clubOf(state, played.match.awayId)!.style)]);
   return playRestOfWeek({ ...state, clubs: settled.clubs, match: settled.match }, settled.match, settled.extraTime);
 }
 /** Record your tie (if you played) and play every other tie of the week. */
@@ -287,7 +300,8 @@ function playQuarter(state: LeagueState, tactic: Tactic): LeagueState {
   const other = clubOf(state, otherSide(match, state.myClub))!;
   const otherIds = matchdayStarters(other, match.homeId === other.id ? match.homeSquad : match.awaySquad);
   const ownHome = match.homeId === state.myClub;
-  const result = quarter(state.clubs, match, seasonSeed(state.seed, state.season), ownHome ? state.starters : otherIds, ownHome ? otherIds : state.starters, ownHome ? tactic : other.style, ownHome ? other.style : tactic);
+  const theirs = opponentPlays(state.seed, state.season, match, other.style);
+  const result = quarter(state.clubs, match, seasonSeed(state.seed, state.season), ownHome ? state.starters : otherIds, ownHome ? otherIds : state.starters, ownHome ? tactic : theirs, ownHome ? theirs : tactic);
   if (result.match.quarter < 4) return { ...state, ...result, phase: 'break', swapsThisBreak: 0 };
   return finishMine(state, result, tactic);
 }

@@ -43,7 +43,7 @@ describe('Aussie Rules Manager full season engine', () => {
     forged.clubs[0].players[0].skill = forged.clubs[0].players[0].potential + 1;
     expect(readLeagueSave(JSON.stringify(forged))).toBeNull();
     expect(readLeagueSave(JSON.stringify({ ...state, version: 1 }))).toBeNull();
-  });
+  }, 60000); // a whole season of save round trips took 8.2 s on a loaded machine, past the 5 s default
 });
 
 describe('useAussieRulesLeague', () => {
