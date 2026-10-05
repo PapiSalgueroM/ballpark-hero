@@ -22,6 +22,11 @@ import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
  * because the crash that led to a fresh start may have been a code bug that
  * a later deploy fixes, and the career must still be there when it does.
  *
+ * Backups do not pile up for ever: each game keeps its newest BACKUPS_KEPT,
+ * which the boundary tells the player before the click, and the card lets the
+ * player delete one on purpose (deleteBackup) or wave it off for good
+ * (dismissBackup), so it does not come back on every visit.
+ *
  * Kept out of the boundary on purpose: the boundary is the last thing standing
  * when something has already failed, and scripts/simErrorBoundary.mjs holds its
  * class body free of storage and clock reads. Everything that touches either
@@ -95,12 +100,41 @@ export type SetAsideResult =
   | { ok: false };
 
 /**
- * Moves a save aside: copy, read the copy back, then remove the original.
- * backupKey is null when there was no save left to move (another tab cleared
- * it), which is still a fresh start. Never throws and never removes the
- * original unless an identical copy is already stored.
+ * How many backups of one game's save this browser keeps. Without a cap they
+ * pile up with every fresh start, and a full storage is the one thing that
+ * stops a fresh start working at all (setAsideSave then moves nothing, so the
+ * player is trapped again). The boundary's line says so before the click.
+ */
+export const BACKUPS_KEPT = 3;
+
+/**
+ * Moves a save aside: copy, read the copy back, then remove the original, and
+ * then drop backups of this game past the newest BACKUPS_KEPT (never the one
+ * just written). backupKey is null when there was no save left to move
+ * (another tab cleared it), which is still a fresh start. Never throws and
+ * never removes the original unless an identical copy is already stored.
  */
 export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
+  const moved = moveAside(entry, storage, now);
+  if (moved.ok && moved.backupKey) pruneBackups(entry, storage, moved.backupKey);
+  return moved;
+}
+
+/**
+ * Removes this game's backups past the newest BACKUPS_KEPT, keeping `keep`
+ * whatever its stamp says (a clock set back must not prune the save that was
+ * just moved). Skipped where the storage cannot list its keys. Never throws.
+ */
+function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
+  if (!storage || typeof (storage as ListableStorage).key !== 'function') return;
+  const others = backupKeysOf(entry, storage as ListableStorage).filter(k => k !== keep);
+  for (const k of others.slice(BACKUPS_KEPT - 1)) {
+    try { storage.removeItem(k); } catch { /* left in place, harmless */ }
+  }
+}
+
+/** setAsideSave without the pruning, for restoreBackup's swap. */
+function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -186,7 +220,11 @@ export function restoreBackup(entry: ContinueSave, backupKey: string, storage: S
     return { ok: false };
   }
   if (raw === null) return { ok: false };
-  if (!setAsideSave(entry, storage, now).ok) return { ok: false };
+  /* Moved without pruning: mid swap this game holds one backup more than it
+     will at the end, and pruning here would drop an old backup the swap never
+     needed to touch. The cap is applied once the restored backup is gone. */
+  const moved = moveAside(entry, storage, now);
+  if (!moved.ok) return { ok: false };
   try {
     storage.setItem(entry.saveKey, raw);
     if (storage.getItem(entry.saveKey) !== raw) throw new Error('restore did not read back');
@@ -197,5 +235,68 @@ export function restoreBackup(entry: ContinueSave, backupKey: string, storage: S
     return { ok: false };
   }
   try { storage.removeItem(backupKey); } catch { /* a duplicate copy is harmless */ }
+  if (moved.backupKey) pruneBackups(entry, storage, moved.backupKey);
   return { ok: true };
+}
+
+/**
+ * The player's own "Delete it" on the restore card, after they confirm. This
+ * is the only removal of a backup that is not the cap or a finished restore,
+ * and it only ever takes a key of this game's own backups. Never throws.
+ */
+export function deleteBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null): { ok: boolean } {
+  if (!storage || !backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return { ok: false };
+  try {
+    storage.removeItem(backupKey);
+    return { ok: storage.getItem(backupKey) === null };
+  } catch {
+    return { ok: false };
+  }
+}
+
+/**
+ * Where "Leave it aside" is remembered: one key for the whole site holding, per
+ * game's save key, the backup the player last waved off. Its name does not
+ * start with any game's key, so no backup listing ever picks it up.
+ */
+export const SET_ASIDE_SEEN_KEY = 'dukb-set-aside-seen';
+
+function seenMap(storage: SaveStorage): Record<string, string> {
+  try {
+    const parsed: unknown = JSON.parse(storage.getItem(SET_ASIDE_SEEN_KEY) ?? '{}');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * The backup the restore card should offer on this game: the newest one,
+ * unless the player already said "Leave it aside" to that very backup. A newer one
+ * (the next fresh start, or the save set aside by a swap) is offered again.
+ */
+export function offeredBackup(entry: ContinueSave, storage: ListableStorage | null): string | null {
+  const newest = backupKeysOf(entry, storage)[0];
+  if (!newest || !storage) return null;
+  return seenMap(storage)[entry.saveKey] === newest ? null : newest;
+}
+
+/** Remembers "Leave it aside" for this backup. Never throws; false if not stored. */
+export function dismissBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null): boolean {
+  if (!storage) return false;
+  try {
+    storage.setItem(SET_ASIDE_SEEN_KEY, JSON.stringify({ ...seenMap(storage), [entry.saveKey]: backupKey }));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/** When a backup was made, from its key's UTC stamp, or null. */
+export function backupDate(backupKey: string): Date | null {
+  const i = backupKey.indexOf(BROKEN_SAVE_MARK);
+  const m = i < 0 ? null : /^(\d{4})-(\d{2})-(\d{2})T(\d{2})-(\d{2})-(\d{2})/.exec(backupKey.slice(i + BROKEN_SAVE_MARK.length));
+  if (!m) return null;
+  const [y, mo, d, h, mi, s] = m.slice(1).map(Number);
+  return new Date(Date.UTC(y, mo - 1, d, h, mi, s));
 }

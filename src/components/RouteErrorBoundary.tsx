@@ -144,7 +144,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
             <p className="mt-4 text-xs text-muted-foreground">
               If trying again keeps breaking, you can start a fresh game. Your old save gets moved
               aside to a backup in this browser, not deleted, and the game offers to put it back
-              next time you open it.
+              next time you open it. Each game keeps its three newest backups.
             </p>
           )}
           {this.state.recoverFailed && (

@@ -36,7 +36,10 @@ vi.mock('@/lib/brokenSaveRecovery', async (importOriginal) => ({
 import RouteErrorBoundary from '@/components/RouteErrorBoundary';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import BrokenSaveRestore from '@/components/BrokenSaveRestore';
-import { BROKEN_SAVE_MARK, backupKeysOf, heldSaveEntry, openGame, restoreBackup, setAsideSave, type SaveStorage } from '@/lib/brokenSaveRecovery';
+import {
+  BACKUPS_KEPT, BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupDate, backupKeysOf, deleteBackup, dismissBackup, heldSaveEntry,
+  offeredBackup, openGame, restoreBackup, setAsideSave, type SaveStorage,
+} from '@/lib/brokenSaveRecovery';
 
 const Boom = () => { throw new Error('deliberate test throw'); };
 /* What a lazy route throws when its chunk cannot load: the network or a
@@ -288,8 +291,8 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     crashed.unmount();
     vi.mocked(openGame).mockClear();
     render(<BrokenSaveRestore pathname="/fight-gym" />);
-    expect(screen.getByRole('region', { name: 'Your old save' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Put my old save back' }));
+    expect(screen.getByRole('region', { name: 'Your kept aside save' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
     expect(localStorage.getItem('fight-gym-save-v1')).toBe(OLD);
     expect(backupsOf('fight-gym-save-v1')).toHaveLength(0);
     expect(openGame).toHaveBeenCalledWith('/fight-gym');
@@ -300,7 +303,7 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     localStorage.setItem('fight-gym-save-v1', 'new gym');
     render(<BrokenSaveRestore pathname="/fight-gym/" />);
     expect(screen.getByText(/nothing is deleted/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Put my old save back' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
     expect(localStorage.getItem('fight-gym-save-v1')).toBe(OLD);
     const kept = backupsOf('fight-gym-save-v1');
     expect(kept).toHaveLength(1);
@@ -317,10 +320,10 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     expect(second.container).toBeEmptyDOMElement();
   });
 
-  it('"Not now" hides it and touches nothing', () => {
+  it('"Leave it aside" hides it and touches nothing', () => {
     localStorage.setItem(backup, OLD);
     const { container } = render(<BrokenSaveRestore pathname="/fight-gym" />);
-    fireEvent.click(screen.getByRole('button', { name: 'Not now' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Leave it aside' }));
     expect(container).toBeEmptyDOMElement();
     expect(localStorage.getItem(backup)).toBe(OLD);
     expect(openGame).not.toHaveBeenCalled();
@@ -332,11 +335,126 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new DOMException('full', 'QuotaExceededError');
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Put my old save back' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
     vi.mocked(Storage.prototype.setItem).mockRestore();
     expect(localStorage.getItem(backup)).toBe(OLD);
     expect(localStorage.getItem('fight-gym-save-v1')).toBeNull();
     expect(openGame).not.toHaveBeenCalled();
     expect(screen.getByRole('alert')).toHaveTextContent(/nothing changed/);
+  });
+});
+
+describe('backups are capped, and one can be waved off or deleted (Round 958 closing check)', () => {
+  const entry = CONTINUE_SAVES.find(e => e.path === '/fight-gym')!;
+  const other = CONTINUE_SAVES.find(e => e.path === '/cfb-dynasty')!;
+  const key = (stamp: string) => `${entry.saveKey}${BROKEN_SAVE_MARK}${stamp}`;
+  const day = (d: number) => new Date(Date.UTC(2026, 9, d, 8, 0, 0));
+  const stamp = (d: number) => `2026-10-${String(d).padStart(2, '0')}T08-00-00`;
+
+  it('the boundary tells the player the cap it applies', () => {
+    expect(BACKUPS_KEPT).toBe(3);
+    localStorage.setItem(entry.saveKey, BROKEN);
+    crash('/fight-gym');
+    expect(screen.getByText(/keeps its three newest backups/)).toBeInTheDocument();
+  });
+
+  it('every fresh start keeps the newest three of that game, step by step, and never touches another game', () => {
+    const { m, s } = fakeStorage();
+    m.set(`${other.saveKey}${BROKEN_SAVE_MARK}${stamp(1)}`, 'other game');
+    for (let n = 1; n <= 6; n += 1) {
+      m.set(entry.saveKey, `save ${n}`);
+      expect(setAsideSave(entry, s, day(n))).toEqual({ ok: true, backupKey: key(stamp(n)) });
+      const kept = backupKeysOf(entry, s);
+      expect(kept).toEqual([n, n - 1, n - 2].filter(d => d >= 1).map(d => key(stamp(d))));
+      for (const k of kept) expect(m.get(k)).toBe(`save ${Number(k.slice(-11, -9))}`);
+    }
+    expect(m.get(`${other.saveKey}${BROKEN_SAVE_MARK}${stamp(1)}`)).toBe('other game');
+  });
+
+  it('a clock set back never prunes the save it just moved', () => {
+    const { m, s } = fakeStorage();
+    for (const d of [10, 11, 12]) m.set(key(stamp(d)), `kept ${d}`);
+    m.set(entry.saveKey, 'just broke');
+    expect(setAsideSave(entry, s, day(1))).toEqual({ ok: true, backupKey: key(stamp(1)) });
+    expect(m.get(key(stamp(1)))).toBe('just broke');
+    expect(backupKeysOf(entry, s)).toEqual([key(stamp(12)), key(stamp(11)), key(stamp(1))]);
+  });
+
+  it('a swap at the cap drops nothing', () => {
+    const { m, s } = fakeStorage();
+    for (const d of [1, 2, 3]) m.set(key(stamp(d)), `kept ${d}`);
+    m.set(entry.saveKey, 'playing now');
+    expect(restoreBackup(entry, key(stamp(3)), s, day(5))).toEqual({ ok: true });
+    expect(m.get(entry.saveKey)).toBe('kept 3');
+    expect(backupKeysOf(entry, s)).toEqual([key(stamp(5)), key(stamp(2)), key(stamp(1))]);
+    expect(m.get(key(stamp(5)))).toBe('playing now');
+  });
+
+  it('offers the newest backup until it is waved off, then the next newer one only', () => {
+    const { m, s } = fakeStorage();
+    m.set(key(stamp(1)), 'one');
+    expect(offeredBackup(entry, s)).toBe(key(stamp(1)));
+    expect(dismissBackup(entry, key(stamp(1)), s)).toBe(true);
+    expect(offeredBackup(entry, s)).toBeNull();
+    m.set(entry.saveKey, 'two');
+    setAsideSave(entry, s, day(2));
+    expect(offeredBackup(entry, s)).toBe(key(stamp(2)));
+    expect(m.get(key(stamp(1)))).toBe('one');
+    expect(backupKeysOf(entry, s)).not.toContain(SET_ASIDE_SEEN_KEY);
+  });
+
+  it('a damaged waved-off record means nothing was waved off', () => {
+    const { m, s } = fakeStorage();
+    m.set(key(stamp(1)), 'one');
+    for (const bad of ['not json', '[]', 'null', '7']) {
+      m.set(SET_ASIDE_SEEN_KEY, bad);
+      expect(offeredBackup(entry, s)).toBe(key(stamp(1)));
+    }
+  });
+
+  it('deleteBackup takes only a backup of this game', () => {
+    const { m, s } = fakeStorage();
+    m.set(entry.saveKey, 'playing now');
+    m.set(`${other.saveKey}${BROKEN_SAVE_MARK}${stamp(1)}`, 'other game');
+    m.set(key(stamp(1)), 'one');
+    expect(deleteBackup(entry, entry.saveKey, s)).toEqual({ ok: false });
+    expect(deleteBackup(entry, `${other.saveKey}${BROKEN_SAVE_MARK}${stamp(1)}`, s)).toEqual({ ok: false });
+    expect(deleteBackup(entry, key(stamp(1)), s)).toEqual({ ok: true });
+    expect([...m.keys()].sort()).toEqual([`${other.saveKey}${BROKEN_SAVE_MARK}${stamp(1)}`, entry.saveKey].sort());
+  });
+
+  it('reads the date a backup was made from its key', () => {
+    expect(backupDate(key('2026-10-04T09-30-15-2'))?.toISOString()).toBe('2026-10-04T09:30:15.000Z');
+    expect(backupDate(entry.saveKey)).toBeNull();
+  });
+
+  it('"Leave it aside" is remembered on the next visit, and a newer backup is offered again', () => {
+    localStorage.setItem(key(stamp(1)), 'one');
+    const first = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Leave it aside' }));
+    first.unmount();
+    const second = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(second.container).toBeEmptyDOMElement();
+    second.unmount();
+    localStorage.setItem(key(stamp(2)), 'two');
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByRole('region', { name: 'Your kept aside save' })).toBeInTheDocument();
+    expect(localStorage.getItem(key(stamp(1)))).toBe('one');
+  });
+
+  it('"Delete it" asks first, "Keep it" keeps it, and yes deletes only that backup', () => {
+    localStorage.setItem(key(stamp(1)), 'one');
+    localStorage.setItem(entry.saveKey, 'playing now');
+    const { container } = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    fireEvent.click(screen.getByRole('button', { name: 'Delete it' }));
+    expect(screen.getByText(/for good/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Keep it' }));
+    expect(localStorage.getItem(key(stamp(1)))).toBe('one');
+    fireEvent.click(screen.getByRole('button', { name: 'Delete it' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Yes, delete it' }));
+    expect(container).toBeEmptyDOMElement();
+    expect(localStorage.getItem(key(stamp(1)))).toBeNull();
+    expect(localStorage.getItem(entry.saveKey)).toBe('playing now');
+    expect(openGame).not.toHaveBeenCalled();
   });
 });

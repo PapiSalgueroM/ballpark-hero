@@ -101,7 +101,7 @@ const MARK = 'data-dukb-fresh-start';
 const FRESH_LABEL = 'Start a fresh game';
 /* The card on the game's page that offers the set-aside save back. */
 const RESTORE_MARK = 'data-dukb-set-aside';
-const RESTORE_LABEL = 'Put my old save back';
+const RESTORE_LABEL = 'Put that save back';
 const BROKE = 'This page broke';
 const NAME = 'Broken Save Test';
 /* Routes that load their game data from the database before they read the
