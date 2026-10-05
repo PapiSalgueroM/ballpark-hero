@@ -39,11 +39,13 @@ const ready = new Promise((resolve, reject) => {
   server.stderr.on('data', data => { serverLog += data; });
 });
 const settle = async page => { await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))); await page.waitForTimeout(450); };
-async function activate(locator, touch) {
-  await locator.scrollIntoViewIfNeeded();
+async function activate(locator, input, scroll = true) {
+  if (scroll) await locator.scrollIntoViewIfNeeded();
   const box = await locator.boundingBox();
   assert(box && box.width >= 43 && box.height >= 43, 'Native action has a 44px target: ' + await locator.innerText());
-  if (touch) await locator.tap(); else { await locator.focus(); await locator.press('Enter'); }
+  if (input === 'touch') await locator.tap();
+  else if (input === 'mouse') await locator.page().mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  else { await locator.focus(); await locator.press('Enter'); }
 }
 async function visible(locator, page, label) {
   const box = await locator.boundingBox(), height = await page.evaluate(() => innerHeight);
@@ -61,23 +63,32 @@ async function layout(page, label) {
   return { label, ...value };
 }
 
+const profiles = [
+  { width: 320, height: 780, input: 'touch', reduced: true, light: false },
+  { width: 390, height: 844, input: 'touch', reduced: false, light: false },
+  { width: 430, height: 932, input: 'touch', reduced: false, light: true },
+  { width: 1440, height: 1000, input: 'keyboard', reduced: false, light: false },
+  { width: 1280, height: 720, input: 'mouse', reduced: false, light: false },
+  { width: 1280, height: 720, input: 'mouse', reduced: true, light: false },
+  { width: 1280, height: 720, input: 'mouse', reduced: false, light: false, restored: true },
+];
 try {
   await ready; browser = await chromium.launch({ headless: true });
-  for (const profile of [
-    { width: 320, height: 780, touch: true, reduced: true, light: false },
-    { width: 390, height: 844, touch: true, reduced: false, light: false },
-    { width: 430, height: 932, touch: true, reduced: false, light: true },
-    { width: 1440, height: 1000, touch: false, reduced: false, light: false },
-  ]) {
-    const { width, height, touch, reduced, light } = profile;
-    const id = `${width}-${light ? 'light' : 'dark'}-${touch ? 'touch' : 'keyboard'}${reduced ? '-reduced' : ''}`;
+  for (const profile of profiles) {
+    const { width, height, input, reduced, light, restored = false } = profile;
+    const touch = input === 'touch';
+    const id = `${width}-${light ? 'light' : 'dark'}-${input}${reduced ? '-reduced' : ''}${restored ? '-restored-one-group' : ''}`;
     const pool = width === 390 ? fixtures : fixtures.slice(0, 1), dailyPuzzle = pool[dailyIndex(DATE, pool.length)];
+    const initialGroups = restored ? [dailyPuzzle.groups[3]] : [];
+    const initialDaily = restored ? JSON.stringify({ v: 1, date: DATE, puzzleIndex: 0, puzzleId: dailyPuzzle.id,
+      guesses: initialGroups.map(group => ({ t: 'ok', theme: group.theme, players: group.players, diff: group.difficulty })), gameStatus: 'playing' }) : null;
     const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], controls: [], shareCards: [], pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
     report.cases.push(result);
     const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch, deviceScaleFactor: 1,
       reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: light ? 'light' : 'dark' },
         { name: 'rules-gate-seen:/nba-connections', value: '1' }, { name: 'dukb-guest-handle', value: 'FixtureGoal-42' },
+        ...(restored ? [{ name: DAILY, value: initialDaily }] : []),
         { name: 'nhl-connections-notes-v1:daily', value: 'Held NHL Daily fixture bytes' },
         { name: 'nhl-connections-notes-v1:unlimited', value: 'Held NHL Unlimited fixture bytes' },
       ] }] } });
@@ -117,10 +128,10 @@ try {
     const notes = async mode => JSON.parse(await stored(noteKey(mode)));
     const protectedState = () => page.evaluate(keys => keys.map(key => [key, localStorage.getItem(key)]), protectedKeys);
     const readyBench = async () => { await button('Draft A').waitFor(); await settle(page); };
-    const choose = async label => activate(button('Draft ' + label), touch);
-    const pick = async names => { for (const name of names) await activate(button(name), touch); };
+    const choose = async (label, scroll = true) => activate(button('Draft ' + label), input, scroll);
+    const pick = async names => { for (const name of names) await activate(button(name), input); };
     const shoot = async stage => { await settle(page); const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file); result.layouts.push(await layout(page, stage)); };
-    const changeMode = async mode => { await activate(modeButton(mode), touch); await readyBench(); assert.equal(await modeButton(mode).getAttribute('aria-pressed'), 'true'); };
+    const changeMode = async mode => { await activate(modeButton(mode), input); await readyBench(); assert.equal(await modeButton(mode).getAttribute('aria-pressed'), 'true'); };
     const planningContext = async stage => {
       const tabs = await visible(bench.locator('[aria-label="Draft groups"]'), page, stage + '-tabs');
       const grid = page.getByRole('group', { name: 'Available players', exact: true });
@@ -135,12 +146,12 @@ try {
       assert(readable.length >= 2, stage + ': at least two complete editable names remain beside the feedback');
       return { tabs, names, readable };
     };
-    const receipt = async stage => {
+    const receipt = async (stage, ownsFocus = true) => {
       await settle(page);
       result.visibility.push(await visible(page.locator('[data-nba-receipt]'), page, stage + '-receipt'));
       result.visibility.push(await visible(button('Submit five'), page, stage + '-action'));
       result.visibility.push({ stage, context: await planningContext(stage) });
-      assert(await page.locator('[data-nba-receipt]').evaluate(el => document.activeElement?.contains(el)), stage + ': actual receipt owns focus');
+      if (ownsFocus) assert(await page.locator('[data-nba-receipt]').evaluate(el => document.activeElement?.contains(el)), stage + ': actual receipt owns focus');
     };
     const shareCard = page.locator('[data-nba-final] [aria-hidden="true"]').filter({ has: page.getByText('Result', { exact: true }) });
     const shareMode = async (mode, stage) => {
@@ -163,8 +174,14 @@ try {
       assert.match(await dialog.innerText(), /Planning is free/);
       await dialog.getByText('Try this example', { exact: true }).scrollIntoViewIfNeeded();
       await shoot('rules-example');
-      await activate(dialog.getByRole('button', { name: 'Close', exact: true }), touch); await readyBench();
+      await activate(dialog.getByRole('button', { name: 'Close', exact: true }), input); await readyBench();
       const before = await protectedState();
+      assert.equal(await page.getByRole('group', { name: 'Available players', exact: true }).getByRole('button').count(), restored ? 15 : 20, 'Loaded board has the expected editable roster');
+      if (restored) {
+        assert.equal(await stored(DAILY), initialDaily, 'The one-group Daily fixture restores without changing its bytes');
+        assert.equal(await page.locator('[aria-label="Revealed groups"] details').count(), 1, 'The restored group remains available below the bench');
+        for (const name of initialGroups[0].players) assert.equal(await button(name).count(), 0, 'Restored solved names stay locked');
+      }
       const group = dailyPuzzle.groups, wrong = [...group[0].players.slice(0, 4), group[1].players[0]];
       await choose('B'); await pick(group[2].players); await choose('A'); await pick(wrong);
       assert.deepEqual((await notes('daily')).groups, [wrong, group[2].players, [], []]);
@@ -174,9 +191,9 @@ try {
       const dailyNotes = await stored(noteKey('daily'));
       await shoot('planned');
       const help = page.locator('header').getByRole('button', { name: 'How to play', exact: true });
-      await activate(help, touch); await dialog.waitFor();
+      await activate(help, input); await dialog.waitFor();
       assert.match(await dialog.innerText(), /Try this example[\s\S]*Keep another idea in B/);
-      await activate(dialog.getByRole('button', { name: 'Close', exact: true }), touch); await settle(page);
+      await activate(dialog.getByRole('button', { name: 'Close', exact: true }), input); await settle(page);
       assert.equal(await stored(noteKey('daily')), dailyNotes, 'Reopened rules preserve the complete draft');
       assert.deepEqual(await protectedState(), before);
       assert.deepEqual(await page.evaluate(keys => window.__nbaWrites.filter(write => keys.includes(write.key)), protectedKeys), [], 'Free planning never transiently writes protected state');
@@ -208,11 +225,17 @@ try {
       await changeMode('daily'); assert.equal(await stored(noteKey('daily')), dailyNotes);
       assert.deepEqual(await protectedState(), before, 'Mode changes and reload preserve original Daily bytes');
       assert.deepEqual(result.scoreWrites, []);
-      await activate(button('Submit five'), touch); await receipt('wrong');
-      assert.equal(await stored(DAILY).then(JSON.parse).then(save => save.guesses.length), 1);
+      await activate(button('Submit five'), input); await receipt('wrong');
+      assert.equal(await stored(DAILY).then(JSON.parse).then(save => save.guesses.length), initialGroups.length + 1);
       assert.equal(await button('Submit five').isDisabled(), true, 'Unchanged wrong group cannot be booked twice');
       const rejectedBytes = await stored(DAILY);
-      for (const draft of ['A', 'B', 'A']) await choose(draft);
+      for (const [step, draft] of ['A', 'B', 'A'].entries()) {
+        // Tabs were measured in view above. Do not repair their scroll position before this click.
+        await choose(draft, false);
+        assert.equal(await button('Draft ' + draft).getAttribute('aria-pressed'), 'true', 'Native draft navigation activates ' + draft);
+        await receipt('wrong-draft-' + step + '-' + draft, false);
+        if (input !== 'touch') assert(await button('Draft ' + draft).evaluate(el => document.activeElement === el), 'Draft navigation keeps focus on the selected tab');
+      }
       assert.equal(await button('Submit five').isDisabled(), true, 'Draft navigation preserves the rejection guard');
       assert.equal(await stored(DAILY), rejectedBytes, 'Draft navigation preserves the exact Daily payload');
       assert(await page.getByLabel('3 lives remaining', { exact: true }).count());
@@ -220,6 +243,21 @@ try {
       assert.deepEqual((await notes('daily')).groups, [wrong, group[2].players, [], []]);
       if (reduced) assert.equal(await page.getByRole('group', { name: 'Available players' }).evaluate(el => getComputedStyle(el).animationName), 'none');
       await shoot('wrong-retained');
+      if (restored) {
+        const action = button('Submit five'), style = await action.getAttribute('style');
+        const original = await action.boundingBox(), saved = await protectedState();
+        try {
+          await action.evaluate(el => {
+            const box = el.getBoundingClientRect();
+            el.style.transform = `translateY(${innerHeight + 22 - box.bottom}px)`;
+          });
+          const clipped = await action.boundingBox();
+          assert(clipped.y > original.y + 1 && Math.abs(clipped.y + clipped.height - height - 22) < 1, 'Clipping control moves the actual Submit target exactly 22px below the viewport');
+          await assert.rejects(() => visible(action, page, 'clipped-submit-control-action'), error => error.name === 'AssertionError' && error.code === 'ERR_ASSERTION' && error.message === 'clipped-submit-control-action: visible without driver scrolling');
+        } finally { await action.evaluate((el, value) => value === null ? el.removeAttribute('style') : el.setAttribute('style', value), style); }
+        await receipt('restored-submit-control', false); assert.deepEqual(await protectedState(), saved);
+        result.controls.push({ kind: 'native short desktop action clipping guard', changed: true, rejected: true, restored: true });
+      }
       if (width === 320) {
         const target = page.locator('[data-nba-receipt]'), save = await stored(DAILY);
         const style = await target.getAttribute('style');
@@ -241,22 +279,22 @@ try {
         assert.equal(await stored(DAILY), save);
         result.controls.push({ kind: 'native revision context guard', changed: true, rejected: true, restored: true });
       }
-      await pick([wrong[4], group[0].players[4]]); await activate(button('Submit five'), touch); await receipt('correct');
+      await pick([wrong[4], group[0].players[4]]); await activate(button('Submit five'), input); await receipt('correct');
       assert((await page.locator('[data-nba-receipt]').innerText()).includes('Locked: ' + group[0].theme), 'Correct receipt names the exact connection');
       for (const name of group[0].players) assert.equal(await button(name).count(), 0, 'Solved names are no longer editable');
       assert.deepEqual((await notes('daily')).groups[1], group[2].players, 'Other draft survives the solve');
       await shoot('correct-locked');
-      await choose('B'); await activate(button('Submit five'), touch); await receipt('parked-correct');
-      for (const index of [1, 3]) {
-        await choose('A'); await pick(group[index].players); await activate(button('Submit five'), touch);
-        if (index === 1) await receipt('third-correct');
+      await choose('B'); await activate(button('Submit five'), input); await receipt('parked-correct');
+      for (const index of (restored ? [1] : [1, 3])) {
+        await choose('A'); await pick(group[index].players); await activate(button('Submit five'), input);
+        if (index === 1 && !restored) await receipt('third-correct');
       }
       await page.getByText('All Groups Found!', { exact: true }).waitFor(); await settle(page);
       result.visibility.push(await visible(page.getByText('All Groups Found!', { exact: true }), page, 'final-headline'));
       const finalBytes = await stored(DAILY), final = JSON.parse(finalBytes);
       assert.equal(final.gameStatus, 'won'); assert.equal(final.puzzleId, dailyPuzzle.id);
-      assert.deepEqual(final.guesses.map(action => action.t), ['x', 'ok', 'ok', 'ok', 'ok']);
-      assert.deepEqual(final.guesses.filter(action => action.t === 'ok').map(action => action.players), [group[0], group[2], group[1], group[3]].map(value => value.players));
+      assert.deepEqual(final.guesses.map(action => action.t), restored ? ['ok', 'x', 'ok', 'ok', 'ok'] : ['x', 'ok', 'ok', 'ok', 'ok']);
+      assert.deepEqual(final.guesses.filter(action => action.t === 'ok').map(action => action.players), (restored ? [group[3], group[0], group[2], group[1]] : [group[0], group[2], group[1], group[3]]).map(value => value.players));
       assert.deepEqual((await notes('daily')).groups.flat(), []);
       assert.equal(result.scoreWrites.length, 1, 'Exactly one original Daily completion request');
       assert.equal(result.scoreWrites[0].path, '/rest/v1/game_completions');
@@ -270,8 +308,8 @@ try {
         await changeMode('unlimited'); await choose('A');
         const wrongUnlimited = [...pool[0].groups[0].players.slice(0, 4), pool[0].groups[1].players[0]];
         for (let attempt = 0; attempt < 4; attempt++) {
-          if (!(await button('Clear draft').isDisabled())) await activate(button('Clear draft'), touch);
-          await pick(wrongUnlimited); await activate(button('Submit five'), touch);
+          if (!(await button('Clear draft').isDisabled())) await activate(button('Clear draft'), input);
+          await pick(wrongUnlimited); await activate(button('Submit five'), input);
           if (attempt < 3) await receipt('unlimited-miss-' + attempt);
         }
         await page.getByText('Out of Lives!', { exact: true }).waitFor(); await settle(page);
@@ -290,7 +328,7 @@ try {
         await shareMode('unlimited', 'restored-mode'); assert.equal(await stored(DAILY), finalBytes);
         result.controls.push({ kind: 'native result mode copy guard', changed: true, rejected: true, restored: true });
         await shoot('unlimited-complete');
-        await activate(page.getByRole('button', { name: 'Play Again', exact: true }), touch); await readyBench();
+        await activate(page.getByRole('button', { name: 'Play Again', exact: true }), input); await readyBench();
         const resetNotes = await notes('unlimited');
         assert.deepEqual(JSON.parse(resetNotes.scope), ['unlimited', pool[1].id, null]);
         assert.deepEqual(resetNotes.groups, [[], [], [], []]);
@@ -311,9 +349,12 @@ try {
       await page.screenshot({ path: path.join(OUT, id + '-failure.png'), animations: 'disabled' }).catch(() => {});
     } finally { saveReport(); await context.close(); }
   }
-  assert.equal(report.cases.length, 4); assert(report.cases.every(value => value.passed), 'Every native planning profile passes; see report.json');
-  assert.equal(report.cases.flatMap(value => value.controls).length, 4);
-  console.log('NBA planning native: four complete 750-point Daily solves, independent notes/reloads, Unlimited reset, actual result modes, native touch/keyboard, three effective geometry controls and one mode-copy control passed.');
+  assert.equal(report.cases.length, profiles.length); assert(report.cases.every(value => value.passed), 'Every native planning profile passes; see report.json');
+  assert.equal(report.cases.flatMap(value => value.controls).length, 5);
+  assert.equal(report.cases.filter(value => value.input === 'mouse' && value.width === 1280 && value.height === 720).length, 3);
+  assert.equal(report.cases.filter(value => value.input === 'mouse' && value.reduced).length, 1);
+  assert.equal(report.cases.filter(value => value.restored && value.score === 750).length, 1);
+  console.log('NBA planning native: seven 750-point Daily finishes including a restored 1/4 game, independent notes/reloads, Unlimited reset, actual result modes, native touch/keyboard/mouse, short desktop and reduced-motion feedback and draft navigation, four effective geometry controls and one mode-copy control passed.');
 } finally {
   saveReport(); if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
 }
