@@ -21,7 +21,17 @@ const reports = [], failures = [];
 let browser, server;
 try {
   const bundle = path.join(temp, 'reference.mjs');
-  await build({ stdin: { contents: "export { compareGuess } from './src/lib/gameLogic'; export { getDailyTier } from './src/lib/dateUtils'; export { normalizeName } from './src/lib/playerSearch'; export { createPracticeRun } from './src/lib/footlePracticeRun';", resolveDir: root, loader: 'ts' }, outfile: bundle, bundle: true, platform: 'node', format: 'esm', logLevel: 'error' });
+  await build({ stdin: { contents: "export { compareGuess } from './src/lib/gameLogic'; export { getDailyTier } from './src/lib/dateUtils'; export { normalizeName } from './src/lib/playerSearch'; export { createPracticeRun } from './src/lib/footlePracticeRun';", resolveDir: root, loader: 'ts' }, outfile: bundle, bundle: true, platform: 'node', format: 'esm', logLevel: 'error',
+    plugins: [{ name: 'offline-reference-client', setup(builder) {
+      builder.onResolve({ filter: /integrations\/supabase\/client$/ }, () => ({ path: 'supabase-client', namespace: 'offline-reference' }));
+      builder.onLoad({ filter: /.*/, namespace: 'offline-reference' }, () => ({ loader: 'js', contents: [
+        "const offline = () => { throw new Error('Footle native reference must stay offline'); };",
+        'export const supabase = new Proxy({}, { get: offline });',
+        "export const SUPABASE_URL = 'http://offline.invalid';",
+        "export const SUPABASE_PUBLISHABLE_KEY = 'offline';",
+      ].join('\n') }));
+    } }],
+  });
   const { compareGuess, getDailyTier, normalizeName, createPracticeRun } = await import(pathToFileURL(bundle).href);
   server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4106'], { stdio: 'pipe', windowsHide: true });
   let ready = false;

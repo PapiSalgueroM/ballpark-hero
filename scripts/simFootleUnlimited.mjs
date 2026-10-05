@@ -37,7 +37,7 @@ const controls = {
   limit: { file: helper, from: "guesses.length >= MAX_GUESSES ? 'lost'", to: "guesses.length > MAX_GUESSES ? 'lost'", test: titles.rapid, message: /expected 'won' to be 'lost'/ },
   tiers: { file: helper, from: 'if (session.decks[tier]) return session.tier === tier ? session : { ...session, tier };', to: 'if (session.decks[tier] && session.tier === tier) return session;', test: titles.tiers, message: /to deeply equal/ },
   giveup: { file: helper, from: "return replaceDeck(session, { ...deck, current: { ...deck.current, status: 'lost' } });", to: 'return session;', test: titles.giveUp, message: /expected null not to be null/ },
-  pause: { file: hook, from: "const unlimitedPaused = !!savedUnlimitedTarget && effectiveDailyStatus === 'playing'\n    && !!dailyTarget && normalizeName(savedUnlimitedTarget.name) === normalizeName(dailyTarget.name);", to: 'const unlimitedPaused = false;', test: titles.pause, message: /The saved Daily answer stays behind the pause screen/ },
+  pause: { file: hook, from: 'normalizeName(savedUnlimitedTarget.name) === normalizeName(dailyTarget.name)', to: 'false', test: titles.pause, message: /The saved Daily answer stays behind the pause screen/ },
   invalid_seen: { file: helper, from: '|| new Set(deck.seen).size !== deck.seen.length', to: '|| false', test: titles.invalid, message: /to be null/ },
   invalid_guess: { file: helper, from: "round.guesses.some(name => typeof name !== 'string' || !pool.has(name))", to: "round.guesses.some(name => typeof name !== 'string')", test: titles.invalid, message: /to be null/ },
   invalid_status: { file: helper, from: "(round.status === 'won') !== (correctAt >= 0) || ", to: '', test: titles.invalid, message: /to be null/ },

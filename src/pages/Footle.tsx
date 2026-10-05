@@ -115,7 +115,7 @@ const Index = () => {
         subtitle="Guess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues."
         headerExtra={
           <>
-            <HowToPlayPopover title="How to Play Footle" open={showRules} onOpenChange={setShowRules}>
+            <HowToPlayPopover title="How to Play Footle" className="min-h-[44px] min-w-[44px]" open={showRules} onOpenChange={setShowRules}>
               <p className="text-muted-foreground text-center">
                 Guess the mystery soccer player in 8 tries!
               </p>
