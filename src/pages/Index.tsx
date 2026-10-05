@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
@@ -85,8 +85,24 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [bestScores, setBestScores] = useState<Record<string, number>>({});
   const isSearching = searchQuery.trim().length > 0;
-  const { paths: gamePicks, toggle: toggleGamePick, storageFailed: picksStorageFailed } = useGamePicks();
+  const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
   const dailyGamesRef = useRef<HTMLDivElement>(null);
+  const pickAnchor = useRef<{ node: HTMLElement; top: number } | null>(null);
+  const toggleGamePick = (path: string, node?: HTMLElement) => {
+    const changesShelf = gamePicks.length === 0 || (gamePicks.length === 1 && gamePicks[0] === path);
+    const box = node?.getBoundingClientRect();
+    pickAnchor.current = changesShelf && node && box && box.bottom > 0 && box.top < window.innerHeight
+      ? { node, top: box.top }
+      : null;
+    changeGamePick(path);
+  };
+  useLayoutEffect(() => {
+    const anchor = pickAnchor.current;
+    pickAnchor.current = null;
+    if (!anchor?.node.isConnected) return;
+    const movement = anchor.node.getBoundingClientRect().top - anchor.top;
+    if (Math.abs(movement) > 1) window.scrollBy({ top: movement, behavior: 'instant' });
+  }, [gamePicks]);
 
   /* Round 717: the favourite sport. Read on the first render, so the sport
      sections are in this visitor's order from the first frame and nothing
@@ -700,16 +716,17 @@ function GameCard({ game, bestScore, revealIndex, pinned, onTogglePick }: {
   bestScore?: number;
   revealIndex?: number;
   pinned: boolean;
-  onTogglePick: (path: string) => void;
+  onTogglePick: (path: string, node?: HTMLElement) => void;
 }) {
   /* Round 447: the NEW badge is derived from the day the game shipped, not
      read from a flag ("u call like everything new": 111 of 131 tiles wore
      it). The day is pinned once at mount, the same rule every daily game
      follows, so the tiles cannot disagree with each other across midnight. */
   const todayStr = useRef(getTodayET()).current;
+  const cardRef = useRef<HTMLDivElement>(null);
   const sport = sportOf(game.path);
   return (
-    <div data-home-game-card="" className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
+    <div ref={cardRef} data-home-game-card="" className="relative h-full" style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}>
     <Link
       to={game.path}
       data-sport={sport}
@@ -751,7 +768,7 @@ function GameCard({ game, bestScore, revealIndex, pinned, onTogglePick }: {
         )}
       </div>
     </Link>
-    <GamePickButton game={game} pinned={pinned} onToggle={onTogglePick} className="absolute right-1.5 top-1.5" />
+    <GamePickButton game={game} pinned={pinned} onToggle={path => onTogglePick(path, cardRef.current ?? undefined)} className="absolute right-1.5 top-1.5" />
     </div>
   );
 }

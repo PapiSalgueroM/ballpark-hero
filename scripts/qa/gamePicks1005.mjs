@@ -41,7 +41,38 @@ const ready = new Promise((resolve, reject) => {
   server.stdout.on('data', data => { serverLog += data; if (String(data).includes('host-like server:')) { clearTimeout(timer); resolve(); } });
   server.stderr.on('data', data => { serverLog += data; });
 });
-const settle = async page => { await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))); await page.waitForTimeout(650); };
+const settle = async page => {
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  await page.waitForTimeout(650);
+  await page.evaluate(() => Promise.all(document.getAnimations()
+    .filter(animation => animation.animationName === 'homeTileIn' && animation.playState !== 'finished')
+    .map(animation => animation.finished.catch(() => {}))));
+};
+const settleHome = async page => {
+  // Home deliberately holds its saved scroll for 1200ms after returning.
+  await page.waitForTimeout(1250);
+  await settle(page);
+};
+async function geometry(locator) {
+  return locator.evaluate(el => {
+    const rect = node => {
+      if (!node) return null;
+      const box = node.getBoundingClientRect();
+      return { x: box.x, y: box.y, width: box.width, height: box.height, top: box.top, bottom: box.bottom, left: box.left, right: box.right };
+    };
+    const button = rect(el), card = el.closest('[data-home-game-card], li');
+    const point = { x: button.x + button.width / 2, y: button.y + button.height / 2 };
+    const hit = document.elementFromPoint(point.x, point.y), style = getComputedStyle(el);
+    return {
+      button, card: rect(card), shelf: rect(document.querySelector('[data-home-picks]')),
+      viewport: { width: innerWidth, height: innerHeight }, scroll: { x: scrollX, y: scrollY },
+      transform: style.transform, animation: style.animationName, opacity: style.opacity,
+      running: card?.getAnimations({ subtree: true }).filter(animation => animation.playState === 'running').length ?? 0,
+      point, ownsHit: el.contains(hit),
+      hit: hit ? { tag: hit.tagName, pick: hit.closest('[data-game-pick]')?.getAttribute('data-game-pick') ?? null, text: hit.textContent?.trim().slice(0, 80) } : null,
+    };
+  });
+}
 async function targetSize(locator, label) {
   const box = await locator.boundingBox();
   assert(box && box.width >= 43 && box.height >= 43, label + ': separate control has a 44px target');
@@ -59,8 +90,10 @@ async function links(shelf, expected, label) {
   assert.deepEqual(actual, expected, label + ': picks launch the exact selected games');
   return actual;
 }
-async function noJump(locator, before, label) {
+async function noJump(locator, before, label, evidence) {
   const after = await locator.boundingBox();
+  const details = await geometry(locator);
+  evidence?.push({ label, before, after, ...details });
   assert(after && Math.abs(after.y - before.y) <= 3, label + ': the clicked card stays in place');
   return { before, after };
 }
@@ -108,15 +141,30 @@ try {
       await homePin.waitFor(); await homePin.scrollIntoViewIfNeeded(); await settle(page);
       assert((await page.evaluate(() => scrollY)) > height, 'First Home pin is exercised deep in the catalog');
       const before = await held(), beforeUrl = page.url(), box = await homePin.boundingBox();
+      const firstGeometry = await geometry(homePin);
+      result.geometry.push({ label: 'first-deep-pin-before', ...firstGeometry });
       assert.equal(await homePin.getAttribute('aria-label'), 'Pin Footle');
       assert.equal(await homePin.evaluate(el => el.closest('a') !== null), false, 'Home pin is outside the launch link');
       await activate(homePin, input, false); await settle(page);
       assert.equal(page.url(), beforeUrl, 'Pinning does not navigate');
       assert.equal(await homePin.getAttribute('aria-pressed'), 'true');
       assert.deepEqual(JSON.parse(await stored()), ['/footle']);
-      result.geometry.push(await noJump(homePin, box, 'first-deep-pin'));
+      await noJump(homePin, box, 'first-deep-pin', result.geometry);
+      assert(Math.abs((await geometry(homePin)).card.top - firstGeometry.card.top) <= 3, 'First pin keeps the catalog card itself in place');
       assert.deepEqual(await held(), before, 'First pin preserves game saves and score bytes');
       await shoot('first-deep-pin');
+
+      const beforeRemoval = await homePin.boundingBox();
+      result.geometry.push({ label: 'last-deep-unpin-before', ...await geometry(homePin) });
+      await activate(homePin, input, false); await settle(page);
+      await noJump(homePin, beforeRemoval, 'last-deep-unpin', result.geometry);
+      assert.deepEqual(JSON.parse(await stored()), []);
+      assert.equal(await shelf.count(), 0, 'Removing the last catalog pick removes its shelf');
+      const beforeRepin = await homePin.boundingBox();
+      await activate(homePin, input, false); await settle(page);
+      await noJump(homePin, beforeRepin, 'deep-repin', result.geometry);
+      assert.deepEqual(JSON.parse(await stored()), ['/footle']);
+      assert.equal(page.url(), beforeUrl); assert.deepEqual(await held(), before);
 
       if (input === 'mouse') {
         const position = await page.evaluate(() => ({ x: scrollX, y: scrollY })), original = await homePin.boundingBox();
@@ -139,7 +187,7 @@ try {
       assert.deepEqual(await held(), before, 'Search pin preserves game saves and score bytes');
       await shoot('search-pinned');
       await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' }); await shelf.waitFor();
-      await page.reload({ waitUntil: 'domcontentloaded' }); await shelf.waitFor(); await settle(page);
+      await page.reload({ waitUntil: 'domcontentloaded' }); await shelf.waitFor(); await settleHome(page);
       assert.equal(await shelf.getAttribute('data-no-prerender'), '');
       await links(shelf, ['/footle', '/nhl-connections'], 'reloaded');
       if (width === 320) {
@@ -155,14 +203,19 @@ try {
       }
       for (const [gamePath, name] of [['/footle', 'Footle'], ['/nhl-connections', 'NHL Connections']]) {
         const link = shelf.locator(`a[data-game-pick-link="${gamePath}"]`), control = shelf.locator(`button[data-game-pick="${gamePath}"]`);
-        await link.scrollIntoViewIfNeeded(); await settle(page);
+        await control.evaluate(el => el.closest('li').scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' }));
+        await settle(page);
+        const controlGeometry = await geometry(control);
+        result.geometry.push({ name, label: 'shelf-target', ...controlGeometry });
         await targetSize(link, name + ' launch'); await targetSize(control, name + ' pin');
         assert.equal(await control.evaluate(el => el.closest('a') !== null), false);
         const text = link.getByText(name, { exact: true });
-        const bounds = await text.evaluate(el => { const box = el.getBoundingClientRect(); return { left: box.left, right: box.right, width: box.width, height: box.height, client: el.clientWidth, scroll: el.scrollWidth }; });
-        assert(bounds.width > 0 && bounds.height > 0 && bounds.left >= -1 && bounds.right <= width + 1 && bounds.scroll <= bounds.client + 1, name + ': full shelf name fits when brought into view');
-        assert(await control.evaluate(el => { const box = el.getBoundingClientRect(); return el.contains(document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2)); }), name + ': pin button owns its hit target');
-        result.geometry.push({ name, ...bounds }); await shoot('shelf-' + name.replaceAll(' ', '-'));
+        const bounds = await text.evaluate(el => { const box = el.getBoundingClientRect(); return { top: box.top, bottom: box.bottom, left: box.left, right: box.right, width: box.width, height: box.height, client: el.clientWidth, scroll: el.scrollWidth }; });
+        result.geometry.push({ name, label: 'shelf-name', ...bounds });
+        assert(bounds.width > 0 && bounds.height > 0 && bounds.top >= -1 && bounds.bottom <= height + 1 && bounds.left >= -1 && bounds.right <= width + 1 && bounds.scroll <= bounds.client + 1, name + ': full shelf name fits when brought into view');
+        assert(controlGeometry.button.top >= 0 && controlGeometry.button.bottom <= height && controlGeometry.button.left >= 0 && controlGeometry.button.right <= width, name + ': pin button is fully in view');
+        assert(controlGeometry.ownsHit, name + ': pin button owns its hit target');
+        await shoot('shelf-' + name.replaceAll(' ', '-'));
       }
       if (width === 390) {
         const control = shelf.locator('button[data-game-pick="/nhl-connections"]'), style = await control.getAttribute('style');
@@ -187,12 +240,14 @@ try {
       try {
         await peer.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
         const peerUnpin = peer.locator('[data-home-picks] button[data-game-pick="/footle"]'); await peerUnpin.waitFor();
+        await settleHome(peer);
         await activate(peerUnpin, input);
         await page.waitForFunction(() => !document.querySelector('[data-home-picks] a[data-game-pick-link="/footle"]'));
         await links(shelf, ['/nhl-connections'], 'other-tab-removal');
         assert.equal(await page.locator('button[data-game-pick="/footle"]').last().getAttribute('aria-label'), 'Pin Footle');
       } finally { await peer.close(); }
       await page.reload({ waitUntil: 'domcontentloaded' }); await shelf.waitFor();
+      await settleHome(page);
       await links(shelf, ['/nhl-connections'], 'removal-reload');
       await activate(shelf.locator('button[data-game-pick="/nhl-connections"]'), input); await settle(page);
       assert.deepEqual(JSON.parse(await stored()), []); assert.equal(await shelf.count(), 0);
@@ -202,6 +257,7 @@ try {
       const hostile = JSON.stringify(['/footle', '/footle', '/not-a-game', 'javascript:alert(1)', 'https://fixture.invalid', '/grade-transfer', null]);
       await page.evaluate(({ key, value }) => localStorage.setItem(key, value), { key: KEY, value: hostile });
       await page.reload({ waitUntil: 'domcontentloaded' }); await shelf.waitFor();
+      await settleHome(page);
       await links(shelf, ['/footle'], 'hostile-paths'); assert.equal(await stored(), hostile, 'Loading sanitizes the display without rewriting hostile bytes');
       await page.evaluate(key => {
         const original = Storage.prototype.setItem;
@@ -217,6 +273,7 @@ try {
       result.passed = true;
     } catch (error) {
       result.passed = false; result.error = String(error?.stack || error);
+      result.failureViewport = await page.evaluate(() => ({ scrollX, scrollY, innerWidth, innerHeight, rememberedHomeY: sessionStorage.getItem('home-scroll-y') })).catch(() => null);
       await page.screenshot({ path: path.join(OUT, id + '-failure.png'), animations: 'disabled' }).catch(() => {});
     } finally { saveReport(); await context.close(); }
   }

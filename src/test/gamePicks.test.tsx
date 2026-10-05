@@ -134,6 +134,7 @@ describe('browser-local game picks', () => {
     });
     fireEvent.click(pin(home, 'Footle'));
     expect(shelfLinks(home).map(link => link.path)).toEqual(['/footle']);
+    expect(home.queryByText(warning) !== null, 'Failed writes show the visit-only warning').toBe(true);
     expect(home.queryByText(warning)).toBeVisible(); expect(localStorage.getItem(KEY)).toBeNull();
     home.unmount(); const search = await mount('/search?q=NHL%20Connections');
     fireEvent.click(pin(search, 'NHL Connections'));
@@ -154,6 +155,7 @@ describe('browser-local game picks', () => {
       if (key === KEY) throw new Error('Fixture blocked read'); return realGet.call(this, key);
     });
     const view = await mount();
+    expect(view.queryByText(warning) !== null, 'Failed reads show the visit-only warning').toBe(true);
     expect(view.queryByText(warning)).toBeVisible();
     expect(shelfLinks(view)).toEqual([]); expect(pin(view, 'Footle')).toBeEnabled();
   });
