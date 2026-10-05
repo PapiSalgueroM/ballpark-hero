@@ -19,6 +19,7 @@ const titles = {
   legacy: 'keeps missing legacy fields honest and records real zero values',
   suspended: 'shows suspended seasons without inventing regular or postseason performances',
   live: 'opens each live Career Log and returns without saves draws or completion calls',
+  event: 'opens Career Log during a pending choice and restores that exact choice',
   retired: 'reviews retired careers and restores the retirement opener without paying again',
   baseline: 'restores existing retirement legacy and exact save bytes without another completion',
 };
@@ -50,6 +51,7 @@ const controls = {
     { from: 'lastSelected.current = index;', to: 'lastSelected.current = index; recordCompletion(sport.gameSlug, 1);' },
   ], test: titles.live },
   returnFocus: { file: board, from: 'target?.focus({ preventScroll: true });', to: 'target?.blur();', test: titles.live },
+  pendingEvent: { file: board, from: "phase !== 'coach' && phase !== 'freeagency' && panel === 'log'", to: "phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log'", test: titles.event, message: /Career Log opens while the ordinary choice stays pending/ },
   retiredBack: { file: board, from: "if (phase === 'retired') setRetiredReview(false);", to: "if (phase === 'retired') setRetiredReview(true);", test: titles.retired },
 };
 const control = process.env.CAREER_SEASON_REVIEW_CONTROL || '';
@@ -114,6 +116,7 @@ try {
     assert.equal(rows.filter(row => ['pending', 'skipped'].includes(row.status)).length, count - 2);
     const failure = failed.flatMap(row => row.failureMessages).join('\n');
     assert.match(failure, /AssertionError/); assert.doesNotMatch(failure, /TypeError|ReferenceError|TestingLibraryElementError|Timed out/);
+    if (controls[control].message) assert.match(failure, controls[control].message);
   } else {
     assert.equal(run.status, 0); assert.equal(failed.length, 0); assert.equal(passed.length, count);
     assert.deepEqual(new Set(passed.map(row => row.title)), new Set(Object.values(titles)));
