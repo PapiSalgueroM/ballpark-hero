@@ -201,6 +201,8 @@ describe('saved career season review', () => {
     const bytes = localStorage.getItem(sport.saveKey)!;
     expect(JSON.parse(bytes).phase).toBe('event');
     expect(JSON.parse(bytes).c.seasons).toHaveLength(4);
+    // React initializes its async act task queue with one random draw before the measured review.
+    await act(async () => {});
     const writes = vi.spyOn(Storage.prototype, 'setItem');
     vi.mocked(Math.random).mockClear();
     await act(async () => { click(/Career Log/); });
@@ -217,10 +219,20 @@ describe('saved career season review', () => {
     expect(writes).not.toHaveBeenCalled();
     expect(Math.random).not.toHaveBeenCalled();
     expect(recordCompletion).not.toHaveBeenCalled();
+    const saved = JSON.parse(bytes);
+    const expectedEvent = sport.drawEvent(JSON.parse(bytes).c, () => .37);
+    expect(expectedEvent.id).toBe(eventId);
+    const expectedCareer = JSON.parse(bytes).c;
+    const expectedChoiceRng = vi.fn(() => .37);
+    expectedEvent.options[0].apply(expectedCareer, expectedChoiceRng);
+    const expectedQuality = sport.rollTeamQuality(saved.teamQuality, expectedChoiceRng);
     fireEvent.click(restored!.querySelector('button')!);
     expect(document.querySelector('[data-career-event]')).toBeNull();
-    expect(JSON.parse(localStorage.getItem(sport.saveKey)!).phase).toBe('season');
-    expect(JSON.parse(localStorage.getItem(sport.saveKey)!).c.seasons).toHaveLength(4);
+    expect(JSON.parse(localStorage.getItem(sport.saveKey)!)).toEqual({
+      ...saved, c: expectedCareer, phase: 'season', teamQuality: expectedQuality,
+    });
+    expect(expectedCareer.seasons).toHaveLength(4);
+    expect(Math.random).toHaveBeenCalledTimes(expectedChoiceRng.mock.calls.length);
     expect(writes).toHaveBeenCalledTimes(1);
   });
   it('reviews retired careers and restores the retirement opener without paying again', async () => {

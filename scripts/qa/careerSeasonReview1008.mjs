@@ -10,6 +10,12 @@ import { build } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
+assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
+const isFontRead = request => {
+  const url = new URL(request.url());
+  return request.method() === 'GET' && (fontLinks.includes(url.href) || (request.resourceType() === 'font' && url.protocol === 'https:' && url.hostname === 'fonts.gstatic.com' && url.pathname.endsWith('.woff2')));
+};
 const OUT = path.resolve(process.env.CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS || path.join(ROOT, 'career-season-review-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before the native review walk');
@@ -55,6 +61,19 @@ async function settle(page) {
     requestAnimationFrame(next);
   }));
 }
+async function loadedFonts(page) {
+  const loaded = await page.evaluate(async () => {
+    await document.fonts.ready;
+    const faces = [];
+    for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
+      const matches = await document.fonts.load(`${weight} 16px "${family}"`, 'Career season');
+      faces.push({ family, weight, faces: matches.length, loaded: matches.length > 0 && matches.every(face => face.status === 'loaded') });
+    }
+    return faces;
+  });
+  assert(loaded.every(font => font.loaded), 'Actual Inter and Space Grotesk faces load before native geometry');
+  return loaded;
+}
 async function activate(locator, input, minimum = 44) {
   await locator.waitFor({ state: 'visible' });
   const box = await locator.boundingBox();
@@ -97,7 +116,7 @@ try {
     const fixture = reviewFixtures.find(f => f.slug === slug && f.pos === profile.positions[sportIndex]);
     const sport = reviewSports[slug], career = makeReviewCareer(fixture), bytes = reviewSave(career);
     const id = `${slug}-${fixture.pos}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
+    const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], fontRequests: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
     let playingEventSeason = false;
     report.cases.push(result);
     const context = await browser.newContext({ viewport: result.viewport, isMobile: profile.input === 'touch', hasTouch: profile.input === 'touch', deviceScaleFactor: 1,
@@ -124,17 +143,25 @@ try {
         if (playingEventSeason) result.eventSetupWrites.push({ ...write, body: request.postDataJSON() });
         else result.scoreWrites.push(write);
       }
+      if (isFontRead(request)) { result.fontRequests.push(request.url()); return route.continue(); }
       const type = request.resourceType();
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : 'application/json', body: type === 'stylesheet' ? '' : '[]' });
     });
     const page = await context.newPage(); page.setDefaultTimeout(15000);
     page.on('pageerror', error => result.pageErrors.push(String(error)));
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
-    page.on('requestfailed', request => { if (request.url().startsWith(BASE)) result.localFailures.push(`${request.url()}: ${request.failure()?.errorText}`); });
-    page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) result.localFailures.push(`${response.status()} ${response.url()}`); });
+    page.on('requestfailed', request => {
+      if (request.url().startsWith(BASE)) result.localFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (isFontRead(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+    });
+    page.on('response', response => {
+      if (response.url().startsWith(BASE) && response.status() >= 400) result.localFailures.push(`${response.status()} ${response.url()}`);
+      if (isFontRead(response.request()) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+    });
     const inspect = async stage => {
+      const fonts = await loadedFonts(page);
       await settle(page);
-      const m = await measure(page); result.steps.push({ stage, ...m });
+      const m = await measure(page); result.steps.push({ stage, ...m, fonts });
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file);
       fs.writeFileSync(path.join(OUT, `${id}-${stage}-layout.json`), JSON.stringify(m, null, 2));
       checkGeometry(m, result.viewport, stage);
@@ -150,7 +177,8 @@ try {
     try {
       await page.goto(`${BASE}${result.route}`, { waitUntil: 'domcontentloaded' });
       const opener = page.getByRole('button', { name: /Career Log/ }); await opener.waitFor();
-      await page.evaluate(() => document.fonts.ready); await settle(page);
+      result.fonts = await loadedFonts(page); await settle(page);
+      assert.deepEqual(result.fontFailures, []);
       assert(await page.evaluate(() => Array.isArray(window.__reviewWrites) && Number.isInteger(window.__reviewDraws)), 'Storage and RNG instrumentation installed before app boot');
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light', 'The saved theme is active');
       const before = await protectedState(page);
@@ -269,7 +297,7 @@ try {
         result.pendingEvent = { id: pendingId, retained: true, resolved: true, originalSeasons: 4 };
       }
       assert.deepEqual(result.scoreWrites, []);
-      assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.localFailures, []);
+      assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.localFailures, []); assert.deepEqual(result.fontFailures, []);
       result.passed = true;
     } catch (error) { result.error = String(error?.stack || error); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`), animations: 'disabled' }).catch(() => {}); }
     finally { await context.close(); saveReport(); }
