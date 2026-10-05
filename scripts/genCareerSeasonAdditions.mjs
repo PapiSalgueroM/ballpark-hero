@@ -28,6 +28,15 @@
  *
  * --check writes nothing and exits 1 when any output on disk differs from
  * what the ledger produces now. It reads no network and no database.
+ *
+ * WAVE 1 ONLY, AS WRITTEN (the 2026-10-05 review). The migration path
+ * (MIGRATION_OUT), its opening comment, ledger.preBake.commit and the live
+ * baseline (liveAfter784) are wave 1's. Before a second wave is appended,
+ * this script must learn to write each wave to its own migration from the
+ * pool after the waves before it (preBake at the commit that carries wave 1's
+ * applied bake) and to take the live values after the previous wave as its
+ * baseline, and simTransferPathHints section 8 must follow; regenerating
+ * with two waves in the ledger as it is would rewrite wave 1's migration.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
