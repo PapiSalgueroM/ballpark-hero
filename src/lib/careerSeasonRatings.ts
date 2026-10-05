@@ -62,10 +62,11 @@ const OUT_CLUBS: Record<string, string> = { BANNED: "Banned", "BANNED (PED)": "B
 /** Clean sheets for the back line were only drawn from Round 667
     (2026-09-28). Every row the engine has stamped with ovr is newer than
     that, so its number is always real, a 0 included. An unstamped back line
-    row with 0 may be a 0 that was never drawn, so it reads null. An unstamped
-    row with more than 0 is real. The keeper's were always drawn. */
+    row with games and 0 may be a 0 that was never drawn, so it reads null. An
+    unstamped row with more than 0 is real, and so is 0 in a season with no
+    games. The keeper's were always drawn. */
 function backLineSheets(row: Row): number | null {
-  if (readOvr(row.ovr) === null && (row.cleanSheets ?? 0) === 0) return null;
+  if ((row.apps ?? 0) > 0 && readOvr(row.ovr) === null && (row.cleanSheets ?? 0) === 0) return null;
   return row.cleanSheets ?? 0;
 }
 

@@ -427,7 +427,7 @@ for (const { position, s } of careers) {
     if (SHEETS.has(position)) {
       const cs = val('Clean sheets');
       const stamped = R.readOvr(raw.ovr) !== null;
-      const blankOk = BACK.has(position) && !stamped && raw.cleanSheets === 0;
+      const blankOk = BACK.has(position) && !stamped && raw.apps > 0 && raw.cleanSheets === 0;
       if (cs === null) { blankSheets += 1; if (!blankOk) fail(`${position} ${row.year}: Clean sheets blank on a row that recorded ${raw.cleanSheets}`); }
       else if (cs !== raw.cleanSheets || blankOk) fail(`${position} ${row.year}: Clean sheets ${cs}, row ${raw.cleanSheets}${blankOk ? ' (never drawn, must be blank)' : ''}`);
       if (stamped && raw.cleanSheets === 0 && cs === 0) stampedZero += 1;
@@ -439,8 +439,11 @@ for (const { position, s } of careers) {
 /* a back line career saved before Round 667: unstamped rows with 0 read blank,
    never 0; the same rows stamped read a real 0 */
 const cbCareer = careers.find(c => c.position === 'CB').s;
-const pre667 = cbCareer.seasons.map(r => r.type === 'playing' ? { ...r, ovr: undefined, cleanSheets: 0 } : r);
-const stamped0 = cbCareer.seasons.map(r => r.type === 'playing' ? { ...r, ovr: 70, cleanSheets: 0 } : r);
+const cbPlayed = cbCareer.seasons.filter(r => r.type === 'playing' && r.apps > 0);
+const pre667 = cbPlayed.map(r => ({ ...r, ovr: undefined, cleanSheets: 0 }));
+const stamped0 = cbPlayed.map(r => ({ ...r, ovr: 70, cleanSheets: 0 }));
+/* and a season with no games: 0 clean sheets there is simply true */
+if (R.soccerRatingRows([yearOut('BANNED')], 'CB')[0]?.stats.find(x => x.label === 'Clean sheets')?.value !== 0) fail('a CB season with no games does not print its true 0 clean sheets');
 const preRows = R.soccerRatingRows(pre667, 'CB');
 const stRows = R.soccerRatingRows(stamped0, 'CB');
 const cell = row => row.stats.find(x => x.label === 'Clean sheets');
