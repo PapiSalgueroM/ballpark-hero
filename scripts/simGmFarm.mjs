@@ -52,6 +52,9 @@
      draftactive   MLB and NHL draftees put on the roster       -> 5
      noprune       the summer keeps ledger rows of men who left -> 6
      labelswap     an exposed man's button says Option him      -> 7
+     cutroom       a full NFL squad makes no room for a man who
+                   clears, so he joins it anyway                 -> 1
+     nocap         call ups, claims and elevations skip the cap  -> 1
 
    The invent control also reddens 1 and 3 by design: an invented man
    overfills the 40 man and changes who is left to expose to the wire. The
@@ -79,7 +82,19 @@
                          100911, NHL 52626 to 69172 (the leagues themselves
                          about 330K, 75K, 140K and 86K). Budgets 1800, 16000,
                          128000, 88000.
-     runtime             about 90 s for the default three seeds. */
+     runtime             about 90 s for the default three seeds.
+
+   REMEASURED, 2026-10-05, after the review fixes (the wire reads each
+   league's measure and last season, a full NFL squad cuts its lowest man
+   for a man who clears, the cap binds), ten seasons, seeds 1 to 5:
+     covers a league     NFL 4738 to 4859, NBA 2874 to 3080, MLB 4187 to 4234,
+                         NHL 1400 to 1492. Floors unchanged.
+     claims a league     NFL 9 to 11 (the stash now runs on a full squad),
+                         MLB 346 to 397, NHL 153 to 170. Floors unchanged.
+     growth, NFL         gap 0.97 to 1.02 per league.
+     save bytes          NFL 1720 to 1939, NBA 12722 to 12927, MLB 81547 to
+                         97784, NHL 52287 to 67480. NFL budget now 2400.
+     runtime             170 s for five seeds. */
 
 import fs from 'node:fs';
 import os from 'node:os';
@@ -90,7 +105,7 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_GMFARM_CONTROL || '';
-const KNOWN = ['noclaim', 'returnguard', 'elevcap', 'invent', 'nobonus', 'draftactive', 'noprune', 'labelswap'];
+const KNOWN = ['noclaim', 'returnguard', 'elevcap', 'invent', 'nobonus', 'draftactive', 'noprune', 'labelswap', 'cutroom', 'nocap'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${KNOWN.join(', ')})`);
   process.exit(1);
@@ -134,6 +149,12 @@ if (CONTROL === 'nobonus') farmSrc = rewrite(farmSrc, 'export const TIER_GROWTH_
 if (CONTROL === 'draftactive') farmSrc = rewrite(farmSrc, "  if (r.drafteeTo === 'active') {", '  if (true) {', 'control draftactive');
 if (CONTROL === 'noprune') farmSrc = rewrite(farmSrc, '      if (!here.has(id)) { delete seat.club.ledger[id]; continue; }', '      if (!here.has(id)) continue;', 'control noprune');
 if (CONTROL === 'labelswap') farmSrc = rewrite(farmSrc, "  if (route === 'option') {\n    const l = seat.club.ledger[p.id];", "  if (route === 'waivers') {\n    const l = seat.club.ledger[p.id];", 'control labelswap');
+if (CONTROL === 'cutroom') farmSrc = rewrite(farmSrc, '  for (const p of tierRoomCuts(r, from)) {', '  for (const p of [] as P[]) {', 'control cutroom');
+if (CONTROL === 'nocap') {
+  farmSrc = rewrite(farmSrc, '  return capShort(ctx, seat, p);\n}', '  return null;\n}', 'control nocap');
+  farmSrc = rewrite(farmSrc, '  if (capShort(ctx, seat, man)) return false;\n', '', 'control nocap');
+  farmSrc = rewrite(farmSrc, ' && !capShort(ctx, seat, x)) : undefined;', ') : undefined;', 'control nocap');
+}
 if (CONTROL) console.log(`   [control ${CONTROL} applied to an in memory copy of the module]`);
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'gmfarm-'));
@@ -228,9 +249,18 @@ function seatsOf(sport, lg, state) {
   return Object.values(lg.teams).map(t => ({
     abbr: t.abbr, players: t.players,
     reserve: sport === 'nfl' ? (t.practice ??= []) : state.clubs[t.abbr].reserve,
-    club: state.clubs[t.abbr], wins: t.wins, losses: t.losses + (t.otLosses ?? 0),
+    /* The NHL engine keeps overtime losses apart (a point each); the wire reads them as the league does. */
+    club: state.clubs[t.abbr], wins: t.wins, losses: t.losses, otLosses: t.otLosses,
   }));
 }
+/* Each engine's own cap room, as a board binds it: a call up or a claim adds his salary to the club's payroll.
+   The NFL and NHL caps are hard. The NBA's is soft: a man on the engine's minimum fits through the minimum
+   exception (the claim source in FARM_RULES.nba says so). MLB's engine line is a luxury tax, so none. */
+const CAP_ROOM = {
+  nfl: (lg, t) => () => E.nfl.capRoom(t, lg.cap),
+  nba: (lg, t) => man => (man.salary <= E.nba.nbaMinContract(lg.cap) ? Infinity : E.nba.nbaCapRoom(t, lg.cap)),
+  nhl: (lg, t) => () => E.nhl.nhlCapRoom(t, lg.cap),
+};
 /* In the summer there is no active roster limit (MLB's 26 runs Opening Day
    to August 31), so `summer` lifts it; the tier's own caps still hold. */
 function ctxOf(sport, lg, state, round, summer = false) {
@@ -239,6 +269,7 @@ function ctxOf(sport, lg, state, round, summer = false) {
   return {
     rules, seats: seatsOf(sport, lg, state), pool: lg.freeAgents, season: lg.season, events: [],
     activeMax: s => (summer && sport === 'mlb' ? Infinity : farm.activeMaxFor(rules, A[sport].engineMax(lg.teams[s.abbr]), sept)),
+    capRoom: CAP_ROOM[sport] && ((s, man) => CAP_ROOM[sport](lg, lg.teams[s.abbr])(man)),
   };
 }
 const stockOpts = (sport, lg, state, rng) => ({ rng, taken: farm.farmNames(state, lg), genName: A[sport].genName, minSalary: A[sport].minSalary(lg) });
@@ -261,8 +292,8 @@ const lostPresent = (lg, state, sport) => {
 /* ---------- one league, ten seasons ---------- */
 const S = {};
 const statsOf = sport => (S[sport] ??= {
-  periods: 0, breaches: [], covers: 0, coverBad: [], claims: 0, farmReturns: [], engineReturns: 0,
-  gainsPS: [], gainsActive: [], gapBy: {}, coversBy: {}, claimsBy: {}, tierSize: [], poolSize: [], leagueBytes: [], buttons: 0, buttonBad: [], draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
+  periods: 0, breaches: [], capBad: [], covers: 0, coverBad: [], claims: 0, farmReturns: [], engineReturns: 0,
+  gainsPS: [], gainsActive: [], gapBy: {}, coversBy: {}, claimsBy: {}, tierSize: [], poolSize: [], leagueBytes: [], buttons: 0, buttonBad: [], kinds: new Set(), draftTier: 0, draftPool: 0, draftBad: [], bytes: [], stale: [], probes: [],
 });
 
 function runLeague(sport, seed) {
@@ -275,8 +306,13 @@ function runLeague(sport, seed) {
 
   let present = lostPresent(lg, state, sport);
   /* A farm step may never put a lost man back; an engine step is counted. */
+  /* Section 1 also: no farm step takes a club from under a hard cap (NFL, NHL) to over it. */
+  const hard = sport === 'nfl' || sport === 'nhl';
+  const rooms = () => new Map(Object.values(lg.teams).map(t => [t.abbr, CAP_ROOM[sport](lg, t)()]));
   const farmStep = (label, fn) => {
+    const roomBefore = hard ? rooms() : null;
     const r = fn();
+    if (roomBefore) for (const [abbr, now] of rooms()) if (roomBefore.get(abbr) >= 0 && now < 0) st.capBad.push(`${label} ${abbr} ${roomBefore.get(abbr)} to ${now}`);
     const now = lostPresent(lg, state, sport);
     for (const k of now) if (!present.has(k)) st.farmReturns.push(`${label} ${k}`);
     present = now;
@@ -327,11 +363,13 @@ function runLeague(sport, seed) {
       farmStep('after', () => { farm.afterRound(c2, ad.games); farm.rivalSignings(c2, rng); });
       /* The GM's send down, the one path that exposes an NFL man: every
          fourth week the first club tries to stash its best young prospect on
-         the practice squad, through waivers, and keeps him only if he clears. */
+         the practice squad, through waivers, and keeps him only if he clears,
+         a full squad cutting its lowest rated man to make room (section 1
+         holds the squad to its cap after it). */
       if (sport === 'nfl' && r % 4 === 0) {
         const me = c2.seats[0];
         const low = me.players.filter(p => p.out <= 0 && p.age <= 25 && !me.club.up.includes(p.id)).sort((a, b) => b.pot - a.pot || a.id.localeCompare(b.id))[0];
-        if (low && me.reserve.length < c2.rules.tierCap) farmStep('gm', () => farm.sendDown(c2, me, low.id));
+        if (low) farmStep('gm', () => farm.sendDown(c2, me, low.id));
       }
       tally(c2);
       caps(c2, `s${season} r${r} after`);
@@ -430,39 +468,57 @@ function probe(sport, lg, state, st) {
 /* ---------- section 7: every button says what its move does ---------- */
 function buttons(sport, lg, state, st) {
   const base = ctxOf(sport, lg, state, 1);
-  for (const seat of base.seats.slice(0, 6)) {
-    for (const p of seat.players.filter(x => x.out <= 0).slice(0, 4)) {
-      const L = structuredClone(lg);
-      const F = structuredClone(state);
-      const c = ctxOf(sport, L, F, 1);
-      const me = c.seats.find(s => s.abbr === seat.abbr);
-      const man = me.players.find(x => x.id === p.id);
-      const b = farm.farmSendDownButton(c, me, man);
-      const before = me.club.ledger[p.id]?.optUsed;
-      const res = farm.sendDown(c, me, p.id);
-      const after = me.club.ledger[p.id]?.optUsed;
-      let good;
-      if (b.refusal) good = res === null;
-      else if (b.label.startsWith('Option him (option year')) good = res === 'option' && after === Number(b.label.match(/year (\d+) of/)[1]);
-      else if (b.label.startsWith('Option him (already')) good = res === 'option' && after === before;
-      else if (b.label.startsWith('Send to the farm club')) good = res === 'exempt';
-      else if (b.label === 'Expose to waivers') good = res === 'claimed' || res === 'cleared';
+  const kind = (b, live) => { if (live) st.kinds.add(b); };
+  /* One Send down button pressed on a copy: the move must be the one its words name. */
+  const sendDownCheck = (L, c, me, id, tag) => {
+    const man = me.players.find(x => x.id === id);
+    const b = farm.farmSendDownButton(c, me, man);
+    const poolBefore = L.freeAgents.length;
+    const before = me.club.ledger[id]?.optUsed;
+    const res = farm.sendDown(c, me, id);
+    const after = me.club.ledger[id]?.optUsed;
+    let good;
+    if (b.refusal) good = res === null;
+    else if (b.label.startsWith('Option him (option year')) good = res === 'option' && after === Number(b.label.match(/year (\d+) of/)[1]);
+    else if (b.label.startsWith('Option him (already')) good = res === 'option' && after === before;
+    else if (b.label.startsWith('Send to the farm club')) good = res === 'exempt';
+    else if (b.label === 'Expose to waivers') {
+      /* Claimed he is gone for good; cleared he is where the warning said, and anybody it named was cut. */
+      const inTier = me.reserve.some(x => x.id === id);
+      const inPool = L.freeAgents.some(x => x.id === id);
+      const cut = b.warn.includes('released to make room');
+      if (res === 'claimed') good = !inTier && !me.players.some(x => x.id === id) && me.club.lost.includes(id);
+      else if (res === 'cleared') good = b.warn.includes('becomes a free agent') ? inPool && !inTier : inTier && !inPool;
       else good = false;
-      st.buttons += 1;
-      if (!good) st.buttonBad.push(`${seat.abbr} ${p.id} "${b.label}" did ${res}`);
-    }
-    for (const p of seat.reserve.slice(0, 4)) {
+      if (good && res === 'cleared' && cut) good = farm.tierLoad(me) <= c.rules.tierCap && L.freeAgents.length > poolBefore;
+      if (cut) kind('waivers, a squad man cut', true);
+    } else good = false;
+    if (tag && b.refusal) kind('refused after a call up', true);
+    kind(b.label.replace(/\(.*$/, '').trim(), !b.refusal);
+    st.buttons += 1;
+    if (!good) st.buttonBad.push(`${me.abbr} ${id}${tag} "${b.label}" did ${res}`);
+  };
+  for (const seat of base.seats.slice(0, 6)) {
+    for (const p of seat.players.filter(x => x.out <= 0)) {
       const L = structuredClone(lg);
-      const F = structuredClone(state);
-      const c = ctxOf(sport, L, F, 1);
+      const c = ctxOf(sport, L, structuredClone(state), 1);
+      sendDownCheck(L, c, c.seats.find(s => s.abbr === seat.abbr), p.id, '');
+    }
+    for (const p of seat.reserve) {
+      const L = structuredClone(lg);
+      const c = ctxOf(sport, L, structuredClone(state), 1);
       const me = c.seats.find(s => s.abbr === seat.abbr);
       const man = me.reserve.find(x => x.id === p.id);
       const b = farm.farmCallUpButton(c, me, man);
       const wasOff = !!me.club.ledger[p.id]?.off40;
       const res = farm.callUp(c, me, p.id);
       const good = b.refusal ? !res : res && me.players.some(x => x.id === p.id) && (b.label.startsWith('Add to the 40') === wasOff) && !me.club.ledger[p.id]?.off40;
+      kind(b.label, !b.refusal);
       st.buttons += 1;
       if (!good) st.buttonBad.push(`${seat.abbr} ${p.id} "${b.label}" did ${res}`);
+      /* Up, then straight back down on the same copy: the man the GM just called up (an exempt NHL kid, an
+         optioned MLB man, an NBA man now on a standard deal, who must be refused). */
+      if (good && res) sendDownCheck(L, c, me, p.id, ' (just called up)');
     }
   }
 }
@@ -475,10 +531,19 @@ const TEN = SEASONS / 10;
 const COVER_FLOOR = { nfl: 2400 * TEN, nba: 1400 * TEN, mlb: 2000 * TEN, nhl: 650 * TEN };
 const CLAIM_FLOOR = SEASONS >= 10 ? { nfl: 2, nba: 0, mlb: 200, nhl: 85 } : { nfl: 0, nba: 0, mlb: 0, nhl: 0 };
 const GROWTH_GAP = 0.5;
+/* Section 7: every kind of move each sport offers must be exercised live (not greyed) at least once a batch. */
+const KINDS = {
+  nfl: ['Expose to waivers', 'waivers, a squad man cut', 'Call up'],
+  nba: ['Sign to a standard contract', 'refused after a call up'],
+  mlb: ['Option him', 'Expose to waivers', 'Call up', 'Add to the 40 man and call up'],
+  nhl: ['Send to the farm club', 'Expose to waivers', 'Call up'],
+};
 /* The farm block's own bytes, about a quarter over the most measured. MLB's
    is the big one: thirty clubs keep a 40 man side and a dozen minor leaguers
-   each, about two thirds of the size of the MLB league save itself. */
-const BYTES_BUDGET = { nfl: 1800, nba: 16000, mlb: 128000, nhl: 88000 };
+   each, about two thirds of the size of the MLB league save itself. The
+   NFL's grew with the review fixes: each club keeps last season's final
+   standing (prev) for the offseason claim order. */
+const BYTES_BUDGET = { nfl: 2400, nba: 16000, mlb: 128000, nhl: 88000 };
 
 const t0 = Date.now();
 for (const sport of SPORTS) {
@@ -495,14 +560,22 @@ for (const sport of SPORTS) {
   console.log(`   tier size by summer: ${st.tierSize.map(x => mean(x).toFixed(1)).join(' ')}; pool: ${st.poolSize.map(x => mean(x).toFixed(0)).join(' ')}`);
   check(1, st.periods > SEASONS * SEEDS.length * 10, `${sport}: ${st.periods} periods checked`);
   check(1, st.breaches.length === 0, `${sport}: no cap broken (${st.breaches.length})${st.breaches.length ? ' first: ' + st.breaches.slice(0, 3).join(' | ') : ''}`);
+  if (sport === 'nfl' || sport === 'nhl') check(1, st.capBad.length === 0, `${sport}: no farm step took a club over the cap (${st.capBad.length})${st.capBad.length ? ' first: ' + st.capBad.slice(0, 3).join(' | ') : ''}`);
   check(2, st.coverBad.length === 0, `${sport}: every cover came from the club's own tier (${st.coverBad.length} bad)${st.coverBad.length ? ' first: ' + st.coverBad.slice(0, 3).join(' | ') : ''}`);
   const bySeed = o => SEEDS.map(s => o[s] ?? 0);
   check(2, bySeed(st.coversBy).every(n => n >= COVER_FLOOR[sport]), `${sport}: covers by league ${bySeed(st.coversBy).join(' ')}, floor ${COVER_FLOOR[sport]} each`);
-  check(3, bySeed(st.claimsBy).every(n => n >= CLAIM_FLOOR[sport]), `${sport}: claims by league ${bySeed(st.claimsBy).join(' ')}, floor ${CLAIM_FLOOR[sport]} each`);
-  check(3, st.farmReturns.length === 0, `${sport}: no claimed man came back by a farm or waiver path (${st.farmReturns.length})${st.farmReturns.length ? ' first: ' + st.farmReturns.slice(0, 3).join(' | ') : ''}`);
-  const live = st.probes.filter(p => p.live);
-  if (CLAIM_FLOOR[sport] > 0) check(3, live.length > 0, `${sport}: the return probe was live in ${live.length} of ${st.probes.length} leagues`);
-  check(3, st.probes.every(p => !p.back), `${sport}: the loser never got him back in the probe (${st.probes.filter(p => p.back).length} back)`);
+  if (sport === 'nba') {
+    /* No farm move exposes an NBA man: a two way man is never waived here and a standard contract never goes
+       down, so the wire has nothing to grade on an NBA league. A check that cannot fail is not run; the NBA
+       claim order is pinned in gmFarm.test.ts. Claims are still counted, and any would show here. */
+    console.log(`   --   [3] nba: no farm move exposes an NBA man, section 3 not graded (claims seen ${st.claims})`);
+  } else {
+    check(3, bySeed(st.claimsBy).every(n => n >= CLAIM_FLOOR[sport]), `${sport}: claims by league ${bySeed(st.claimsBy).join(' ')}, floor ${CLAIM_FLOOR[sport]} each`);
+    check(3, st.farmReturns.length === 0, `${sport}: no claimed man came back by a farm or waiver path (${st.farmReturns.length})${st.farmReturns.length ? ' first: ' + st.farmReturns.slice(0, 3).join(' | ') : ''}`);
+    const live = st.probes.filter(p => p.live);
+    if (CLAIM_FLOOR[sport] > 0) check(3, live.length > 0, `${sport}: the return probe was live in ${live.length} of ${st.probes.length} leagues`);
+    check(3, st.probes.every(p => !p.back), `${sport}: the loser never got him back in the probe (${st.probes.filter(p => p.back).length} back)`);
+  }
   if (sport === 'nfl') {
     const gaps = SEEDS.map(s => st.gapBy[s]);
     check(4, gaps.every(g => g >= GROWTH_GAP), `${sport}: young squad men gain ${mean(st.gainsPS).toFixed(2)} a summer, young active men ${mean(st.gainsActive).toFixed(2)} (n ${st.gainsPS.length} and ${st.gainsActive.length}); gap by league ${gaps.map(g => g.toFixed(2)).join(' ')}, floor ${GROWTH_GAP} each`);
@@ -513,6 +586,8 @@ for (const sport of SPORTS) {
   const big = Math.max(...st.bytes);
   check(6, st.bytes.every(b => b <= BYTES_BUDGET[sport]), `${sport}: farm block ${Math.min(...st.bytes)} to ${big} bytes over ${st.bytes.length} summers (the league itself ${Math.min(...st.leagueBytes)} to ${Math.max(...st.leagueBytes)}), budget ${BYTES_BUDGET[sport]}`);
   check(6, st.stale.length === 0, `${sport}: no ledger row for a man who left (${st.stale.length})`);
+  const missing = KINDS[sport].filter(k => !st.kinds.has(k));
+  check(7, missing.length === 0, `${sport}: every kind of move ran live (${[...st.kinds].join('; ')})${missing.length ? ' missing: ' + missing.join('; ') : ''}`);
   check(7, st.buttons > 0 && st.buttonBad.length === 0, `${sport}: ${st.buttons} buttons did what they say (${st.buttonBad.length} did not)${st.buttonBad.length ? ' first: ' + st.buttonBad.slice(0, 2).join(' | ') : ''}`);
 }
 const red = [...failedSections].sort().join(', ');

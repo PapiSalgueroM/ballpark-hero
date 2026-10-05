@@ -516,15 +516,16 @@ export interface FarmCtx<P extends FarmMan = FarmMan> {
   pool: P[];
   season: number;
   events: FarmEvent[];
-  /** The engine's own cap room for this club, $M (capRoom, nbaCapRoom, mlbCapRoom, nhlCapRoom). A call up and a
-      claim add his salary to the club's payroll, so neither may take a club past it. Absent, no cap is applied. */
-  capRoom?: (seat: FarmSeat<P>) => number;
+  /** The room, $M, this club has under its engine's cap for this man (the board binds capRoom, nhlCapRoom, or the
+      NBA's room with its minimum exception). A call up and a claim add his salary to the club's payroll, so neither
+      may take a club past it. Absent, no cap is applied (MLB's line is a luxury tax, not a cap on a call up). */
+  capRoom?: (seat: FarmSeat<P>, man: FarmMan) => number;
 }
 
 /** Why this club cannot fit his salary under its cap, or null. */
 export function capShort<P extends FarmMan>(ctx: FarmCtx<P>, seat: FarmSeat<P>, man: FarmMan): string | null {
   if (!ctx.capRoom) return null;
-  const room = ctx.capRoom(seat);
+  const room = ctx.capRoom(seat, man);
   if (man.salary <= room) return null;
   return `Need $${Math.round((man.salary - room) * 10) / 10}M more cap room to call him up.`;
 }
@@ -704,7 +705,7 @@ export function coverInjuries<P extends FarmMan>(ctx: FarmCtx<P>, gamesThisRound
       let done = false;
       if (r.cover === 'elevate') {
         const p = seat.club.up.length < r.elevationsPerGame!
-          ? coverCandidate(r.sport, seat.reserve, h, x => (seat.club.ledger[x.id]?.elev ?? 0) < r.elevationsPerSeason!) : undefined;
+          ? coverCandidate(r.sport, seat.reserve, h, x => (seat.club.ledger[x.id]?.elev ?? 0) < r.elevationsPerSeason! && !capShort(ctx, seat, x)) : undefined;
         if (p) {
           seat.reserve.splice(seat.reserve.indexOf(p), 1);
           seat.players.push(p);

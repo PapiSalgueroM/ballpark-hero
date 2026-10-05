@@ -51,23 +51,21 @@ export const pointsPct = (c: Pick<WaiverClub, 'wins' | 'losses' | 'otLosses'>): 
 /** The record the wire reads this season. */
 export const standing = (c: WaiverClub, basis: ClaimBasis): number => (basis === 'pointsPct' ? pointsPct(c) : winPct(c));
 
-const played = (c: WaiverClub): number => c.wins + c.losses + (c.otLosses ?? 0);
-
 /**
  * The claim order: every club but the one exposing him, worst record first.
- * A club that has not played yet is placed by last season's final standing
- * (prev); ties then go to last season's standing (MLB's own tie break),
- * then the lower winning share (the NHL's first tie break after points),
- * then fewer wins, then the abbreviation, so the order never depends on
- * object key order. A new league has no last season, so before its first
- * game the abbreviation decides: the game's own fallback.
+ * Ties go to the lower winning share (the NHL's first tie break after
+ * points; the same thing elsewhere), then to last season's final standing
+ * (MLB's own tie break), then fewer wins, then the abbreviation, so the
+ * order never depends on object key order. Before anybody has played every
+ * club stands at .500, so last season's standing decides the whole order,
+ * which is the leagues' offseason and opening day rule. A new league has no
+ * last season, so there the abbreviation decides: the game's own fallback.
  */
 export function claimOrder<C extends WaiverClub>(clubs: C[], fromAbbr: string, basis: ClaimBasis = 'winPct'): C[] {
-  const now = (c: C) => (played(c) > 0 || c.prev === undefined ? standing(c, basis) : c.prev);
   const last = (c: C) => c.prev ?? 0.5;
   return clubs
     .filter(c => c.abbr !== fromAbbr)
-    .sort((a, b) => now(a) - now(b) || last(a) - last(b) || winPct(a) - winPct(b) || a.wins - b.wins || a.abbr.localeCompare(b.abbr));
+    .sort((a, b) => standing(a, basis) - standing(b, basis) || winPct(a) - winPct(b) || last(a) - last(b) || a.wins - b.wins || a.abbr.localeCompare(b.abbr));
 }
 
 export interface WaiverResult<C> {
