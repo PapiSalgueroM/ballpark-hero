@@ -1,0 +1,579 @@
+/*
+ * Round 979 harness: the decisions desk (red card appeals and a situation
+ * deck). Before this round a straight red was a ban written at the whistle
+ * and nothing else, and nothing between matches asked the manager to choose.
+ *
+ * Sections:
+ *  1. Appeals follow straight reds and only straight reds. Every match of
+ *     several seeded seasons is read for who was sent off and how (a straight
+ *     red adds a red and no booking to his season line, a second yellow adds
+ *     both), and the desk must hold an appeal for every straight red that left
+ *     a ban and for nothing else, a second yellow included.
+ *  2. The odds are the odds. The verdict for each tier is read over a large
+ *     set of card ids shaped exactly like the engine's, and the observed win
+ *     rate must sit inside a band around the stated percentage. The appeals
+ *     lodged in the seasons of section 3 are reported beside it.
+ *  3. The ban moves exactly as the card says. Every appeal met in the seasons
+ *     is lodged: won must leave him at zero, lost must leave him at the number
+ *     the button printed, which must be the ban plus one, and nothing else in
+ *     the save may move but his suspendedMatches and the desk. Accepting is
+ *     walked too and must move nothing at all. The odds on every card must be
+ *     the ladder's (the harness's own copy) for HIS red count this season,
+ *     read off the save, not off the card.
+ * 3b. An appeal nobody answers closes at the next match. In the ignore
+ *     seasons every card written at an earlier match must be closed after
+ *     the next one, and an appeal is also planted on every kept state and
+ *     left alone over the next match: it must close as expired.
+ *  4. Each answer moves only the number it names. Every answer of every deck
+ *     card is applied to real mid season states; the button's words must end
+ *     in the effect's own words, the named number must move by exactly the
+ *     stated amount, and the rest of the save must be untouched. The hidden
+ *     gate figure (books.fanMood) is read too and no answer may move it or
+ *     claim to: it is not the Fans meter and the code says it is never
+ *     labelled (the review of this round caught three fans answers that
+ *     moved it while the Fans meter stood still).
+ *  5. Declining everything is main. Seasons are replayed on one seed with the
+ *     shipped engine and with a copy that has the desk's two hook lines taken
+ *     out (the season settle and the answer route), which is main for this
+ *     round's purposes. Ignoring every card, and answering every card with
+ *     its no change answer, must both leave a save byte identical to that
+ *     copy's once the desk block itself is set aside.
+ *  6. Words. Every desk card speaks through a role, carries no quotation
+ *     marks, and no em or en dash. Invented speech or conduct next to a real
+ *     name is simNoInventedQuotes's job, which reads the desk since the
+ *     review (QUOTES_CONTROL=desk is its control).
+ *  7. The desk does not cross the summer. A ban is wiped over the summer,
+ *     so after every rollover the desk must be empty.
+ *
+ * Negative controls (each rewrites a copy in memory, asserts the text it
+ * rewrites exists first, and must turn its section red):
+ *   CM_DECISIONS_CONTROL=freeloss     a lost appeal costs nothing (section 3)
+ *   CM_DECISIONS_CONTROL=liar         the verdict uses half the stated odds (2)
+ *   CM_DECISIONS_CONTROL=leaky        board patience answers also add money (4)
+ *   CM_DECISIONS_CONTROL=dice         the settle draws one Math.random (5)
+ *   CM_DECISIONS_CONTROL=yellowappeal a second yellow is offered an appeal (1)
+ *   CM_DECISIONS_CONTROL=quote        the appeal card quotes the secretary (6)
+ *   CM_DECISIONS_CONTROL=firstred     a first red is quoted as a second (3)
+ *   CM_DECISIONS_CONTROL=noexpiry     an unanswered appeal never closes (3b)
+ *   CM_DECISIONS_CONTROL=carry        the desk crosses the summer (7)
+ *   CM_DECISIONS_CONTROL=gate         board answers also nudge the gate (4)
+ *
+ * Each was run on 2026-10-03 and went red in its own section and nowhere
+ * else: freeloss 12 findings in section 3 (a lost appeal left the ban where
+ * the button said it would grow), liar 3 in section 2 (every tier about half
+ * its stated rate), leaky 94 in section 4, dice 4 in section 5 (all four
+ * declined seasons parted from main), yellowappeal 5 in section 1, quote 35
+ * in section 6. The four added after the review were run the same day:
+ * firstred 26 findings in section 3, noexpiry 142 in section 3b, carry 2 in
+ * section 7 (6 of 6 cards crossed the summer at two clubs), gate 148 in
+ * section 4 (gate moved 2 on every board patience answer).
+ * MEASURED AFTER THE REVIEW, 2026-10-03, seeds 979, 1, 2, 3 and 4:
+ *   3b: 38, 40, 23, 38 and 30 unanswered cards closed at the next match in
+ *     the ignore seasons (3, 6, 1, 3 and 5 of them appeals, too few to
+ *     floor, so appeals are planted too). Floor 10 on the cards. Planted
+ *     appeals: 21, 23, 24, 21 and 26, every one closed as expired. Floor 10.
+ *   7: 2, 2, 3, 2 and 3 summers crossed with a desk on the save, 0 cards
+ *     carried. Floor 1 (the carry control proves the check bites).
+ *   3: the odds matched his own red count on every appeal lodged (13, 15,
+ *     11, 16 and 16), a second red among them on three of the five seeds.
+ *   After merging main with Round 978's international duty (same day), seed
+ *     979 read 11 straight reds, 19 of 19 planted appeals expired, 36 cards
+ *     closed in 3b and 381 answers in 4, every floor still clear.
+ * MEASURED BANDS, 2026-10-03, default seed 979 and SIM_SEED 1, 2, 3 and 4
+ * (three clubs, two seasons each, plus four declined seasons against main):
+ *   section 5: 4 of 4 seasons byte identical on every seed, with 114, 120,
+ *     73, 114 and 92 desk cards met and declined. Floor 40.
+ *   section 1: 13, 15, 11, 16 and 16 straight reds (5, 9, 1, 3 and 7 second
+ *     yellows, never an appeal for one), an appeal for every straight red.
+ *     Floor 6.
+ *   section 3: lost appeals 10, 9, 7, 8 and 6, so the lost branch is walked
+ *     on every seed; the pooled end to end win rate was 31 of 71 (43.7%),
+ *     against a stated 40% on almost every card. Reported, never asserted.
+ *   section 4: 418 to 521 answers applied, all 18 answers of the 7 cards
+ *     walked on every seed, 3 to 14 of them meeting a bound (6 to 20 after
+ *     the review moved the fans answers onto press and board). Floor 200.
+ *   section 2: the verdict reads a hash, not Math.random, so it does not move
+ *     with the seed: over 20000 ids a tier, 40.39%, 25.37% and 15.04%
+ *     observed against 40, 25 and 15 stated (one standard error is 0.35,
+ *     0.31 and 0.25 points). Band 1.5 points, over four standard errors, and
+ *     the liar control lands about 20 points out.
+ *   reported only: the desk block on a save is a mean 1987 bytes, 90th
+ *     percentile 2427, on the default seed (3276 and 3785 before closed
+ *     cards dropped their buttons). simClubManagerSaveSize stayed green.
+ */
+import './lib/seedRandom.mjs';
+import { execSync } from 'node:child_process';
+import os from 'node:os';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT_URL = ROOT.replaceAll('\\', '/');
+const TMP = path.join(os.tmpdir(), `cmDecisions-${process.pid}`).replaceAll('\\', '/');
+fs.mkdirSync(TMP, { recursive: true });
+
+const CONTROL = process.env.CM_DECISIONS_CONTROL || '';
+const KNOWN = ['freeloss', 'liar', 'leaky', 'dice', 'yellowappeal', 'quote', 'firstred', 'noexpiry', 'carry', 'gate'];
+if (CONTROL && !KNOWN.includes(CONTROL)) {
+  console.error(`CM_DECISIONS_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
+  process.exit(1);
+}
+
+/* esbuild by walk-up, so the harness runs from a worktree with no
+   node_modules of its own as well as from the main checkout. */
+function findBin(name) {
+  let dir = ROOT;
+  for (;;) {
+    const p = path.join(dir, 'node_modules', '.bin', name);
+    if (fs.existsSync(p)) return p;
+    const up = path.dirname(dir);
+    if (up === dir) throw new Error(`no node_modules/.bin/${name} above ${ROOT}`);
+    dir = up;
+  }
+}
+
+const swap = (src, from, to, where) => {
+  if (!src.includes(from)) {
+    console.error(`control cannot run: ${where} is not in the shape this rewrite expects`);
+    console.error(`  looked for: ${from}`);
+    process.exit(1);
+  }
+  return src.replace(from, to);
+};
+const read = p => fs.readFileSync(p, 'utf8').replaceAll('\r\n', '\n');
+
+let desk = read(`${ROOT}/src/lib/clubManagerDecisions.ts`);
+let engine = read(`${ROOT}/src/lib/clubManager.ts`);
+if (CONTROL === 'freeloss') {
+  desk = swap(desk, '    const next = won ? 0 : p.suspendedMatches + APPEAL_LOSS_EXTRA;', '    const next = won ? 0 : p.suspendedMatches;', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'liar') {
+  desk = swap(desk, '|verdict`) < (item.odds ?? 0) / 100;', '|verdict`) < (item.odds ?? 0) / 200;', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'leaky') {
+  desk = swap(desk, 'undefined, { boardConfidence });', 'undefined, { boardConfidence, budget: career.budget + 0.1 });', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'dice') {
+  desk = swap(desk, '  const before = deskOf(state);', '  Math.random();\n  const before = deskOf(state);', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'yellowappeal') {
+  engine = swap(engine, '      events.push(`🟥 ${sq.name} picked up a second yellow and walked.`);', '      events.push(`🟥 ${sq.name} picked up a second yellow and walked.`);\n      straightReds.push(sq.id);', 'clubManager.ts');
+} else if (CONTROL === 'quote') {
+  desk = swap(desk, 'The club secretary rates an appeal at', 'The club secretary says "we fancy this one" and rates an appeal at', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'firstred') {
+  desk = swap(desk, '  const odds = appealOddsFor(p.seasonReds ?? 1);', '  const odds = appealOddsFor((p.seasonReds ?? 0) + 1);', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'noexpiry') {
+  desk = swap(desk, '    if (d.resolved) return d;\n    return d.kind === \'appeal\'', '    if (d.resolved || d.kind === \'appeal\') return d;\n    return d.kind === \'appeal\'', 'clubManagerDecisions.ts');
+} else if (CONTROL === 'carry') {
+  engine = swap(engine, '    decisions: undefined,\n', '', 'clubManager.ts (the summer reset)');
+} else if (CONTROL === 'gate') {
+  desk = swap(desk, 'undefined, { boardConfidence });', 'undefined, { boardConfidence, books: career.books ? { ...career.books, fanMood: career.books.fanMood + 2 } : career.books });', 'clubManagerDecisions.ts');
+}
+const deskCopy = `${TMP}/clubManagerDecisions.ts`;
+fs.writeFileSync(deskCopy, desk);
+const DESK_IMPORT = "import { answerDecision, settleDecisionDesk } from '@/lib/clubManagerDecisions';";
+engine = swap(engine, DESK_IMPORT, `import { answerDecision, settleDecisionDesk } from '${deskCopy}';`, 'clubManager.ts (the desk import)');
+/* Main, for this round: the shipped engine with the desk's two hook lines out. */
+const SETTLE = '  settleDecisionDesk(state, straightReds, fx.opponent);\n';
+const ROUTE = "  if (messageId.startsWith('desk-')) return answerDecision(career, messageId, optionIdx);\n";
+let mainEngine = swap(engine, SETTLE, '', 'clubManager.ts (the settle call)');
+mainEngine = swap(mainEngine, ROUTE, '', 'clubManager.ts (the answer route)');
+fs.writeFileSync(`${TMP}/engineA.ts`, engine);
+fs.writeFileSync(`${TMP}/engineMain.ts`, mainEngine);
+
+const ENTRY = `${TMP}/entry.mjs`;
+const BUNDLE = `${TMP}/bundle.mjs`;
+fs.writeFileSync(ENTRY, `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+/* Production is off limits: any network call from the bundled engine throws
+   and is counted rather than reaching the live database. */
+globalThis.__netCalls = 0;
+globalThis.fetch = async () => { globalThis.__netCalls += 1; throw new Error('network blocked in simClubManagerDecisions'); };
+export const A = await import('${TMP}/engineA.ts');
+export const M = await import('${TMP}/engineMain.ts');
+export const D = await import('${deskCopy}');
+`);
+execSync(
+  `"${findBin('esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
+  { stdio: 'inherit' },
+);
+const { A, M, D } = await import(pathToFileURL(BUNDLE).href);
+
+/* One stream per run, reset on purpose, so the shipped engine and main can be
+   handed the identical sequence of draws. seedRandom above stays the first
+   import (the house rule); this only replaces it with a stream that can be
+   restarted. */
+function reseed(seed) {
+  let a = seed >>> 0;
+  /* The engine stamps three kinds of id with Date.now (youth, scouts,
+     prospects), so the clock is restarted with the stream: two runs a few
+     seconds apart would otherwise differ on the stamp and nothing else. */
+  let clock = 1790000000000;
+  Date.now = () => (clock += 1000);
+  Math.random = () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const BASE_SEED = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 979;
+
+/* ---------- sizes and bands (measured, see the header) ---------- */
+const S5_CLUBS = 2;            // clubs replayed against main, per mode
+const S5_SEASONS = 1;          // seasons per replay
+const S5_MIN_CARDS = 40;       // desk cards that must be met while declining (measured 73 to 120)
+const PLAY_SEASONS = 2;        // seasons per club in sections 1, 3 and 4
+const MIN_STRAIGHT_REDS = 6;   // straight reds the play seasons must contain (measured 11 to 16)
+const MIN_SITUATIONS = 200;    // answers applied, seasons plus kept states (measured 418 to 521)
+const ODDS_SAMPLE = 20000;     // synthetic verdicts per tier in section 2
+const ODDS_BAND = 1.5;         // points either side of the stated odds
+const MIN_CLOSED_CARDS = 10;   // unanswered cards closed at the next match in the ignore seasons (measured 23 to 40)
+const MIN_EXPIRED_APPEALS = 10; // planted appeals closed as expired (measured 21 to 26)
+const MIN_ROLLOVERS = 1;       // summers crossed with a desk on the save (measured 2 to 3)
+
+const fails = [];
+const fail = (section, msg) => { fails.push(`[${section}] ${msg}`); };
+const clone = x => JSON.parse(JSON.stringify(x));
+const withoutDesk = s => { const c = { ...s }; delete c.decisions; return c; };
+const pendingOf = s => D.deskOf(s).filter(d => !d.resolved);
+
+/** Plays one season. onEntry(state, before, result) may hand back a new state. */
+function playSeason(E, s, onEntry) {
+  for (let guard = 0; guard < 220; guard++) {
+    const before = s;
+    const r = E.playNextEntry(s, { skipHalftime: true });
+    s = r.state;
+    if (onEntry) s = onEntry(s, before, r) ?? s;
+    if (s.sacked || r.kind === 'seasonOver') break;
+  }
+  return s;
+}
+/* 7. The desk does not cross the summer. A ban is wiped over the summer, so
+   an appeal carried across would close on a ban that no longer exists, and
+   an old club's card could move a new club's numbers. */
+const s7 = { rollovers: 0, carried: 0 };
+function careerOf(E, club, seed, seasons, onEntry) {
+  reseed(seed);
+  let s = E.startCareer(club);
+  for (let season = 1; season <= seasons; season++) {
+    s = playSeason(E, s, onEntry);
+    if (s.sacked || season === seasons) break;
+    const old = D.deskOf(s).length;
+    s = E.startNextSeason(E.finishSeason(s).state);
+    if (E === A && old > 0) {
+      s7.rollovers += 1;
+      const left = D.deskOf(s).length;
+      if (left > 0) { s7.carried += left; fail(7, `${club}: ${left} of ${old} desk cards crossed the summer into season ${s.season}`); }
+    }
+  }
+  return s;
+}
+
+const CLUBS = ['Arsenal', 'Everton', 'Brighton'];
+const deskSeen = [];
+/* What the desk adds to a save, in bytes of JSON, for the save size budget. */
+const deskBytes = [];
+const noteDesk = s => {
+  deskBytes.push(JSON.stringify(s.decisions ?? []).length);
+  for (const d of D.deskOf(s)) if (!deskSeen.some(x => x.id === d.id && x.resolved === d.resolved)) deskSeen.push(d);
+};
+
+/* ---------- 5. declining everything is main ---------- */
+/* Run first and in pairs, so each engine copy's own module counters (the
+   message sequence, for one) have walked the same history when compared. */
+const noChangeIndex = d => d.options.findIndex(o => o.effect.kind === 'acceptBan' || o.effect.kind === 'none');
+const declineAll = s => {
+  for (const d of pendingOf(s)) s = A.answerMessage(s, d.id, noChangeIndex(d));
+  noteDesk(s);
+  return s;
+};
+const s5 = { pairs: 0, identical: 0, cards: 0, appeals: 0 };
+/* 3b. Nobody answers in the ignore seasons, so after every match each card
+   written at an earlier match must be closed, an appeal as expired with its
+   ban as written (the byte identity with main holds the ban itself). */
+const s3b = { closed: 0, appealsExpired: 0, planted: 0, plantedExpired: 0 };
+const ignoreAll = (s, before, r) => {
+  noteDesk(s);
+  if (r?.kind !== 'match') return s;
+  const fresh = new Set(D.deskOf(s).map(d => d.id));
+  for (const d of D.deskOf(before)) fresh.delete(d.id);
+  for (const d of D.deskOf(s)) {
+    if (fresh.has(d.id)) continue;
+    const was = D.deskOf(before).find(x => x.id === d.id);
+    if (was?.resolved) continue;
+    if (!d.resolved) { fail('3b', `${s.clubName} week ${s.week}: ${d.id} was still open after the next match`); continue; }
+    s3b.closed += 1;
+    if (d.kind === 'appeal') {
+      s3b.appealsExpired += 1;
+      if (d.outcome !== 'expired') fail('3b', `${d.id}: an unanswered appeal closed as ${d.outcome}, not expired`);
+      if (!d.resolved.includes(`${d.ban} match`)) fail('3b', `${d.id}: the closing line does not name the ${d.ban} match ban: ${d.resolved}`);
+    }
+  }
+  return s;
+};
+for (const mode of ['ignore', 'decline']) {
+  for (let i = 0; i < S5_CLUBS; i++) {
+    const club = CLUBS[i];
+    const seed = BASE_SEED + 100 * i;
+    const a = careerOf(A, club, seed, S5_SEASONS, mode === 'decline' ? declineAll : ignoreAll);
+    const m = careerOf(M, club, seed, S5_SEASONS);
+    s5.pairs += 1;
+    const ja = JSON.stringify(withoutDesk(a));
+    const jm = JSON.stringify(withoutDesk(m));
+    if (ja === jm) s5.identical += 1;
+    else {
+      let k = 0;
+      while (k < ja.length && ja[k] === jm[k]) k++;
+      fail(5, `${club} ${mode}: the save differs from main from character ${k}: ...${ja.slice(Math.max(0, k - 80), k + 80)}`);
+    }
+  }
+}
+if (deskSeen.length < S5_MIN_CARDS) fail(5, `only ${deskSeen.length} desk cards met in the declined seasons, under the floor of ${S5_MIN_CARDS}, so identity proves little`);
+console.log(`5. declining is main: ${s5.identical} of ${s5.pairs} seasons byte identical, ${deskSeen.length} desk cards met and declined`);
+if (s3b.closed < MIN_CLOSED_CARDS) fail('3b', `only ${s3b.closed} unanswered cards closed at the next match, under the floor of ${MIN_CLOSED_CARDS}`);
+console.log(`3b. left open: ${s3b.closed} unanswered cards closed at the next match, ${s3b.appealsExpired} of them appeals`);
+
+/* ---------- the play seasons: sections 1, 3 and 4 ---------- */
+/* gate is books.fanMood, the hidden gate figure. It is not the Fans meter the
+   player reads and must never be labelled, so no answer may name it, and it
+   is read here only so that an answer which moves it goes red. */
+const meters = (s, pid) => ({
+  board: s.boardConfidence,
+  gate: s.books?.fanMood,
+  press: s.press?.mood,
+  morale: s.squad.find(p => p.id === pid)?.morale,
+  budget: s.budget,
+});
+const BOUNDS = { board: [1, 100], press: [0, 100], morale: [5, 99], budget: [-Infinity, Infinity] };
+/* The words a button may use for each number, so a label cannot name one
+   number and move another, and nothing may claim to move the fans. */
+const LABEL_WORDS = { board: 'board patience', press: 'press mood', morale: 'his morale', budget: 'transfer budget' };
+const r1 = n => Math.round(n * 10) / 10;
+/** The save with the desk set aside and the named numbers put back to before. */
+function restOf(s, before, pid, keep = []) {
+  const c = clone(withoutDesk(s));
+  if (keep.includes('board')) c.boardConfidence = before.boardConfidence;
+  if (keep.includes('budget')) c.budget = before.budget;
+  if (keep.includes('press') && c.press) c.press.mood = before.press?.mood;
+  for (const p of c.squad) {
+    const b = before.squad.find(x => x.id === p.id);
+    if (!b || p.id !== pid) continue;
+    if (keep.includes('morale')) p.morale = b.morale;
+    if (keep.includes('ban')) p.suspendedMatches = b.suspendedMatches;
+  }
+  return JSON.stringify(c);
+}
+
+const s1 = { matches: 0, straight: 0, secondYellow: 0, appeals: 0 };
+const s3 = { lodged: 0, won: 0, lost: 0, accepted: 0, wonByTier: {}, lodgedByTier: {}, oddsChecked: 0 };
+/* The harness's own copy of the ladder, so a card cannot agree with itself. */
+const ODDS_LADDER = [40, 25, 15];
+const s4 = { answered: 0, clamped: 0, pairs: new Set() };
+const kept = [];
+
+/** Section 4's check of one answer, from the state before to the state after. */
+function checkAnswer(tag, before, after, item, idx) {
+  const opt = item.options[idx];
+  const eff = opt.effect;
+  if (!opt.label.endsWith(`(${D.effectWords(eff, before)})`)) fail(4, `${tag}: "${opt.label}" does not end in its effect's words "${D.effectWords(eff, before)}"`);
+  const b = meters(before, item.playerId);
+  const a = meters(after, item.playerId);
+  const named = eff.kind === 'move' ? eff.meter : null;
+  if (named && !(named in LABEL_WORDS)) fail(4, `${tag}: an answer moves "${named}", which is not a number the desk may move`);
+  if (named && !opt.label.includes(LABEL_WORDS[named])) fail(4, `${tag}: "${opt.label}" moves ${named} but does not say "${LABEL_WORDS[named]}"`);
+  const closed = D.deskOf(after).find(d => d.id === item.id)?.resolved ?? '';
+  for (const t of [opt.label, closed]) if (/fan mood|crowd|\bgate\b/i.test(t)) fail(4, `${tag}: "${t}" claims to move the fans, and no desk answer can`);
+  for (const k of Object.keys(b)) {
+    const moved = r1((a[k] ?? 0) - (b[k] ?? 0));
+    if (k !== named) {
+      if (moved !== 0) fail(4, `${tag}: ${k} moved ${moved} on an answer that names ${named ?? 'nothing'}`);
+      continue;
+    }
+    const want = r1(Math.min(BOUNDS[k][1], Math.max(BOUNDS[k][0], b[k] + eff.delta)) - b[k]);
+    if (want !== eff.delta) s4.clamped += 1;
+    if (moved !== want) fail(4, `${tag}: ${k} moved ${moved}, the button said ${eff.delta}`);
+  }
+  if (restOf(after, before, item.playerId, named ? [named] : []) !== restOf(before, before, item.playerId, named ? [named] : [])) {
+    fail(4, `${tag}: something beyond ${named ?? 'the desk'} moved`);
+  }
+  s4.answered += 1;
+  s4.pairs.add(`${item.deckId}#${idx}`);
+}
+
+/** Section 3's check of one appeal, lodged (idx 0) or accepted (idx 1). */
+function checkAppeal(tag, before, after, item, idx) {
+  const p0 = before.squad.find(p => p.id === item.playerId);
+  const p1 = after.squad.find(p => p.id === item.playerId);
+  const tier = item.odds;
+  if (idx === 1) {
+    s3.accepted += 1;
+    if (JSON.stringify(withoutDesk(after)) !== JSON.stringify(withoutDesk(before))) fail(3, `${tag}: accepting the ban moved something`);
+    return;
+  }
+  /* The odds on the card are the ladder's for HIS count of reds this season,
+     this one included, read off the save rather than off the card. */
+  const reds = p0.seasonReds ?? 0;
+  const ladder = ODDS_LADDER[Math.min(Math.max(1, reds), ODDS_LADDER.length) - 1];
+  s3.oddsChecked += 1;
+  if (reds < 1) fail(3, `${tag}: an appeal for a man whose season line shows ${reds} reds`);
+  if (item.odds !== ladder) fail(3, `${tag}: his red number ${reds} is quoted ${item.odds}%, the ladder says ${ladder}%`);
+  if (!item.text.includes(`${ladder} percent`) || !item.options[0].label.includes(`${ladder}%`)) fail(3, `${tag}: the card's words do not state the ladder's ${ladder}%`);
+  const m = /or it becomes (\d+) match/.exec(item.options[0].label);
+  const stated = m ? Number(m[1]) : NaN;
+  if (stated !== item.ban + 1) fail(3, `${tag}: the button says ${stated} on a lost appeal against a ${item.ban} match ban`);
+  const won = D.appealWins(item, before);
+  s3.lodged += 1;
+  s3.lodgedByTier[tier] = (s3.lodgedByTier[tier] ?? 0) + 1;
+  if (won) {
+    s3.won += 1;
+    s3.wonByTier[tier] = (s3.wonByTier[tier] ?? 0) + 1;
+    if (p1.suspendedMatches !== 0) fail(3, `${tag}: appeal won but the ban reads ${p1.suspendedMatches}`);
+  } else {
+    s3.lost += 1;
+    if (p1.suspendedMatches !== stated) fail(3, `${tag}: appeal lost, the button said ${stated}, the ban reads ${p1.suspendedMatches} (was ${p0.suspendedMatches})`);
+  }
+  if (restOf(after, before, item.playerId, ['ban']) !== restOf(before, before, item.playerId, ['ban'])) fail(3, `${tag}: an appeal moved more than his ban`);
+}
+
+/** Each entry of a play season: read the cards, lodge every appeal (and walk
+ *  the accept on a copy), answer every situation with a rotating answer. */
+function playEntry(club) {
+  let rot = 0;
+  return (s, before, r) => {
+    const oldIds = new Set(D.deskOf(before).map(d => d.id));
+    const fresh = D.deskOf(s).filter(d => !oldIds.has(d.id));
+    noteDesk(s);
+    if (r.kind === 'match') {
+      s1.matches += 1;
+      if (s1.matches % 9 === 0 && !s.sacked) kept.push(clone(s));
+      const straight = new Set();
+      for (const p of s.squad) {
+        const b = before.squad.find(x => x.id === p.id);
+        if (!b) continue;
+        const dr = (p.seasonReds ?? 0) - (b.seasonReds ?? 0);
+        const dy = (p.seasonYellows ?? 0) - (b.seasonYellows ?? 0);
+        if (dr === 1 && dy === 0) straight.add(p.id);
+        else if (dr === 1) s1.secondYellow += 1;
+      }
+      s1.straight += straight.size;
+      const appeals = fresh.filter(d => d.kind === 'appeal');
+      s1.appeals += appeals.length;
+      for (const d of appeals) if (!straight.has(d.playerId)) fail(1, `${club} week ${s.week}: an appeal for ${d.playerName}, who was not shown a straight red`);
+      for (const id of straight) {
+        const banned = (s.squad.find(p => p.id === id)?.suspendedMatches ?? 0) > 0;
+        if (banned && !appeals.some(d => d.playerId === id)) fail(1, `${club} week ${s.week}: a straight red for ${id} with no appeal on the desk`);
+      }
+    }
+    for (const d of pendingOf(s)) {
+      const tag = `${club} s${s.season} w${s.week} ${d.deckId ?? 'appeal'}`;
+      if (d.kind === 'appeal') {
+        checkAppeal(`${tag} accept`, s, A.answerMessage(s, d.id, 1), d, 1);
+        const after = A.answerMessage(s, d.id, 0);
+        checkAppeal(tag, s, after, d, 0);
+        s = after;
+      } else {
+        const idx = rot++ % d.options.length;
+        const after = A.answerMessage(s, d.id, idx);
+        checkAnswer(tag, s, after, d, idx);
+        s = after;
+      }
+      noteDesk(s);
+    }
+    return s;
+  };
+}
+for (let i = 0; i < CLUBS.length; i++) careerOf(A, CLUBS[i], BASE_SEED + 7 + 31 * i, PLAY_SEASONS, playEntry(CLUBS[i]));
+
+if (s1.straight < MIN_STRAIGHT_REDS) fail(1, `only ${s1.straight} straight reds in the play seasons, under the floor of ${MIN_STRAIGHT_REDS}`);
+console.log(`1. appeals: ${s1.matches} matches, ${s1.straight} straight reds, ${s1.secondYellow} second yellows, ${s1.appeals} appeals offered`);
+console.log(`3. bans: ${s3.lodged} appeals lodged (${s3.won} won, ${s3.lost} lost), ${s3.accepted} accepts walked; by tier ${JSON.stringify(s3.lodgedByTier)} lodged, ${JSON.stringify(s3.wonByTier)} won`);
+if (s3.lodged < 1 || s3.lost < 1) fail(3, `the seasons lodged ${s3.lodged} appeals with ${s3.lost} lost, so the lost branch was never walked`);
+console.log(`   odds read against his own red count on ${s3.oddsChecked} appeals`);
+if (s7.rollovers < MIN_ROLLOVERS) fail(7, `only ${s7.rollovers} summers crossed with a desk on the save, under the floor of ${MIN_ROLLOVERS}`);
+console.log(`7. summers: ${s7.rollovers} crossed with a desk on the save, ${s7.carried} cards carried across`);
+
+/* ---------- 4b. every answer of every card, from real mid season states ---------- */
+for (const [k, base] of kept.entries()) {
+  for (const card of D.DECK) {
+    if (!card.fits(base) || (card.who && !card.who(base))) continue;
+    const item = D.buildSituation(base, card);
+    const s = { ...base, decisions: [item] };
+    item.options.forEach((_, idx) => checkAnswer(`kept ${k} ${card.id}`, s, A.answerMessage(s, item.id, idx), item, idx));
+  }
+}
+/* ---------- 3b, planted: an unanswered appeal on every kept state ---------- */
+/* The ignore seasons above meet only a handful of reds, so an appeal is also
+   planted on every kept state (a fit man given a two match straight red) and
+   left alone over the next match: it must close as expired. Runs after every
+   section that reads the seasons' random stream, so it moves none of them. */
+for (const [k, base] of kept.entries()) {
+  let s = clone(base);
+  const p = s.squad.find(x => !x.isYouth && !x.injuryWeeks && !x.suspendedMatches);
+  if (!p) continue;
+  p.suspendedMatches = 2;
+  p.seasonReds = (p.seasonReds ?? 0) + 1;
+  const card = D.appealCard(s, p.id, 'Planted Town');
+  if (!card) { fail('3b', `kept ${k}: no appeal card for a man with a 2 match ban`); continue; }
+  s.decisions = [card, ...D.deskOf(s)];
+  let played = false;
+  for (let g = 0; g < 12 && !played; g++) {
+    const r = A.playNextEntry(s, { skipHalftime: true });
+    s = r.state;
+    if (r.kind === 'match') played = true;
+    if (r.kind === 'seasonOver' || s.sacked) break;
+  }
+  if (!played) continue;
+  s3b.planted += 1;
+  const after = D.deskOf(s).find(d => d.id === card.id);
+  if (after?.resolved && after.outcome === 'expired') s3b.plantedExpired += 1;
+  else fail('3b', `kept ${k}: a planted appeal left unanswered reads ${after ? (after.outcome ?? 'open') : 'gone'} after the next match`);
+}
+if (s3b.plantedExpired < MIN_EXPIRED_APPEALS) fail('3b', `only ${s3b.plantedExpired} planted appeals closed as expired, under the floor of ${MIN_EXPIRED_APPEALS}`);
+console.log(`3b. planted: ${s3b.plantedExpired} of ${s3b.planted} planted appeals closed as expired at the next match`);
+
+const allPairs = D.DECK.reduce((n, c) => n + c.options.length, 0);
+if (s4.pairs.size !== allPairs) fail(4, `only ${s4.pairs.size} of ${allPairs} card answers were walked`);
+if (s4.answered < MIN_SITUATIONS) fail(4, `only ${s4.answered} situation answers applied`);
+console.log(`4. answers: ${s4.answered} applied, ${s4.pairs.size} of ${allPairs} card answers walked, ${s4.clamped} met a bound, from ${kept.length} kept states`);
+
+/* ---------- 2. the odds are the odds ---------- */
+/* Every tier of the ladder, each over ids shaped exactly like the engine's
+   (season, week, player) and spread over the three clubs. */
+const tierLines = [];
+for (const odds of D.APPEAL_ODDS) {
+  let wins = 0;
+  for (let i = 0; i < ODDS_SAMPLE; i++) {
+    const item = { id: `desk-${1 + (i % 5)}-${i % 61}-appeal-p${i}`, odds };
+    if (D.appealWins(item, { clubName: CLUBS[i % CLUBS.length] })) wins += 1;
+  }
+  const pct = (100 * wins) / ODDS_SAMPLE;
+  tierLines.push(`${odds}% stated, ${pct.toFixed(2)}% observed`);
+  if (Math.abs(pct - odds) > ODDS_BAND) fail(2, `stated ${odds}%, observed ${pct.toFixed(2)}% over ${ODDS_SAMPLE}, outside the band of ${ODDS_BAND} points`);
+}
+for (const [reds, odds] of [[1, ODDS_LADDER[0]], [2, ODDS_LADDER[1]], [3, ODDS_LADDER[2]], [5, ODDS_LADDER[2]]]) {
+  if (D.appealOddsFor(reds) !== odds) fail(2, `a man on his red number ${reds} is quoted ${D.appealOddsFor(reds)}%, the ladder says ${odds}%`);
+}
+const e2e = s3.lodged ? `${((100 * s3.won) / s3.lodged).toFixed(1)}% of ${s3.lodged} lodged in the seasons` : 'none lodged in the seasons';
+console.log(`2. odds: ${tierLines.join('; ')}; end to end ${e2e}`);
+
+/* ---------- 6. words ---------- */
+const ROLES = new Set(['The club secretary', 'The commercial team', 'The board', 'The head coach', 'The community department', 'The press officer', 'The supporters trust']);
+for (const d of deskSeen) {
+  if (!ROLES.has(d.from)) fail(6, `${d.id} speaks through "${d.from}", which is not a role on the list`);
+  for (const t of [d.text, d.resolved ?? '', ...d.options.map(o => o.label)]) {
+    if (/["“”]/.test(t)) fail(6, `${d.id} carries a quotation mark: ${t}`);
+    if (/[–—]/.test(t)) fail(6, `${d.id} carries an em or en dash: ${t}`);
+  }
+}
+console.log(`6. words: ${deskSeen.length} desk cards read`);
+const sortedBytes = [...deskBytes].sort((x, y) => x - y);
+const p90Bytes = sortedBytes[Math.floor(sortedBytes.length * 0.9)] ?? 0;
+const meanBytes = Math.round(deskBytes.reduce((n, b) => n + b, 0) / Math.max(1, deskBytes.length));
+/* Reported for the save size budget (simClubManagerSaveSize), never asserted. */
+console.log(`   the desk block on the save: mean ${meanBytes} bytes, 90th percentile ${p90Bytes}, over ${deskBytes.length} readings`);
+
+if (globalThis.__netCalls) fail(0, `the engine tried the network ${globalThis.__netCalls} times`);
+fs.rmSync(TMP, { recursive: true, force: true });
+for (const f of fails.slice(0, 40)) console.log(`FAIL ${f}`);
+if (fails.length > 40) console.log(`... and ${fails.length - 40} more`);
+console.log(`simClubManagerDecisions${CONTROL ? ` (control ${CONTROL})` : ''}: ${fails.length} findings`);
+process.exit(fails.length ? 1 : 0);

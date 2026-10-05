@@ -18,25 +18,32 @@ import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Cele
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useIdleArena } from '@/hooks/useIdleArena';
 import {
-  GENERATORS, UPGRADES, ACHIEVEMENTS, TROPHY_BONUS, TROPHY_FLOOR, ACHIEVEMENT_BONUS, OFFLINE_RATE, GROWTH,
+  GENERATORS, UPGRADES, ACHIEVEMENTS, TROPHY_BONUS, TROPHY_FLOOR, ACHIEVEMENT_BONUS, OFFLINE_RATE, OFFLINE_CAP_MS, GROWTH,
+  NIGHT_SHIFT_RATE, ROOM_EXAMPLE,
   genCost, genCostN, affordable, genRate, totalRate, tapValue, upgradeAvailable, trophiesFor, canLift,
-  fmt, fmtDuration, type ArenaState,
+  PERKS, PERK_MAX, perkCost, perkEffect, perkLevel, trophiesSpent, growthOf, awayCapMs, awayRate,
+  fmt, fmtDuration, type ArenaState, type Perk,
 } from '@/lib/idleArena';
 
-type Panel = 'upgrades' | 'trophy' | 'badges' | 'record' | null;
+type Panel = 'upgrades' | 'trophy' | 'room' | 'badges' | 'record' | null;
 type BuyMode = 1 | 10 | 'max';
 
+const roomPerk = PERKS.find(p => p.id === ROOM_EXAMPLE.perk) ?? PERKS[0];
 const BALLS = ['⚽', '🏀', '⚾', '🏒', '🏈', '🎾', '🏐', '🏉'];
 
 const IdleArena = () => {
-  const { state: s, fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift } = useIdleArena();
+  const { state: s, fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift, doPerk } = useIdleArena();
   const [panel, setPanel] = useState<Panel>(null);
   const [mode, setMode] = useState<BuyMode>(1);
   const [showHelp, setShowHelp] = useState(fresh);
   const [confirmLift, setConfirmLift] = useState(false);
+  /* Round 957: spending trophies cannot be undone, so a perk takes two taps
+     the way the lift does */
+  const [confirmPerk, setConfirmPerk] = useState<Perk['id'] | null>(null);
   const arenaRef = useRef<HTMLDivElement>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(panel);
   useEffect(() => { if (panel !== 'trophy') setConfirmLift(false); }, [panel]);
+  useEffect(() => { if (panel !== 'room') setConfirmPerk(null); }, [panel]);
 
   /* Round 530: the lift card stands in the tile slot for four seconds, or
      until Continue. Same slot the drawers use, so the page never grows for it. */
@@ -72,6 +79,11 @@ const IdleArena = () => {
   const highest = GENERATORS.reduce((h, g, i) => ((s.owned[g.id] ?? 0) > 0 ? i : h), 0);
   const shown = GENERATORS.slice(0, Math.min(GENERATORS.length, highest + 3));
   const ball = BALLS[Math.floor(s.taps / 25) % BALLS.length];
+  const perkLevels = PERKS.reduce((n, p) => n + perkLevel(s, p.id), 0);
+  const perkPrices = PERKS.map(p => perkCost(s, p.id)).filter((c): c is number => c !== null);
+  const cheapestPerk = perkPrices.length > 0 ? Math.min(...perkPrices) : null;
+  const capHours = awayCapMs(s) / 3600000;
+  const awayPct = Math.round(awayRate(s) * 100);
 
   const onTap = (e: PointerEvent<HTMLButtonElement>) => {
     const box = arenaRef.current?.getBoundingClientRect();
@@ -96,8 +108,14 @@ const IdleArena = () => {
     {
       key: 'trophy', icon: '🏆', title: 'Trophy',
       value: lifts > 0 ? `${lifts} to lift` : `${s.trophies} held`,
-      sub: lifts > 0 ? `+${Math.round(lifts * TROPHY_BONUS * 100)}% forever` : `${fmt(s.earned)} of ${fmt(TROPHY_FLOOR)} earned`,
+      sub: lifts > 0 ? `+${Math.round(lifts * TROPHY_BONUS * 100)}% on everything` : `${fmt(s.earned)} of ${fmt(TROPHY_FLOOR)} earned`,
       accent: lifts > 0,
+    },
+    {
+      key: 'room', icon: '🗝️', title: 'Trophy room',
+      value: `${perkLevels} of ${PERKS.length * PERK_MAX} levels`,
+      sub: cheapestPerk === null ? 'every perk at the top' : `next for ${cheapestPerk} troph${cheapestPerk === 1 ? 'y' : 'ies'}`,
+      accent: cheapestPerk !== null && cheapestPerk <= s.trophies,
     },
     {
       key: 'badges', icon: '🎖️', title: 'Badges',
@@ -288,9 +306,10 @@ const IdleArena = () => {
                 <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
                   <p className="text-xs text-muted-foreground leading-snug">
                     Lift the trophy and the run starts again: the points, the squad and the upgrades all go.
-                    What stays is permanent. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, two trophies
+                    The trophies stay. One trophy for the first {fmt(TROPHY_FLOOR)} points earned in a run, two trophies
                     at {fmt(4 * TROPHY_FLOOR)}, three at {fmt(9 * TROPHY_FLOOR)}, and every trophy is
-                    +{Math.round(TROPHY_BONUS * 100)}% on everything, taps and squad alike, in every run after it.
+                    +{Math.round(TROPHY_BONUS * 100)}% on everything, taps and squad alike, in every run after it,
+                    unless you spend it on a perk in the trophy room.
                   </p>
                   <div className="rounded-xl border border-border bg-background/40 p-3 text-sm">
                     <div className="flex justify-between"><span className="text-muted-foreground">earned this run</span><span className="font-bold text-foreground tabular-nums">{fmt(s.earned)}</span></div>
@@ -321,6 +340,58 @@ const IdleArena = () => {
                     </div>
                   )}
                 </div>
+              </>
+            )}
+
+            {panel === 'room' && (
+              <>
+                <HubPanelHeader title="Trophy room" onBack={() => setPanel(null)} />
+                <p className="text-[11px] text-muted-foreground px-1 leading-snug">
+                  Spend trophies on perks that never go away. A spent trophy takes its +{Math.round(TROPHY_BONUS * 100)}% with it,
+                  so a perk only pays if it suits the way you play. You hold {s.trophies} (+{Math.round(s.trophies * TROPHY_BONUS * 100)}%) and have spent {trophiesSpent(s)}.
+                </p>
+                <ul className="space-y-1.5">
+                  {PERKS.map(p => {
+                    const level = perkLevel(s, p.id);
+                    const price = perkCost(s, p.id);
+                    const ok = price !== null && price <= s.trophies;
+                    const asking = confirmPerk === p.id && ok;
+                    return (
+                      <li key={p.id} className={cn('rounded-2xl border p-3', ok ? 'border-gold/50 bg-card' : 'border-border bg-card/70')}>
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-sm font-bold text-foreground">{p.emoji} {p.label}</span>
+                          <span className="text-[11px] text-muted-foreground tabular-nums">level {level} of {PERK_MAX}, {p.pitch}</span>
+                        </div>
+                        {level > 0 && <p className="text-[11px] text-gold mt-0.5">Now: {perkEffect(p.id, level)}</p>}
+                        {price !== null && <p className="text-[11px] text-muted-foreground mt-0.5">Next: {perkEffect(p.id, level + 1)}</p>}
+                        {price === null ? (
+                          <p className="mt-2 text-[11px] font-bold text-gold">Top of the ladder</p>
+                        ) : asking ? (
+                          <div className="mt-2 flex gap-2">
+                            <button onClick={() => setConfirmPerk(null)} className="flex-1 rounded-xl py-2 text-xs font-bold bg-secondary text-foreground">Keep them</button>
+                            <button
+                              onClick={() => { doPerk(p.id); setConfirmPerk(null); }}
+                              className="flex-1 rounded-xl py-2 text-xs font-bold bg-gold text-black hover:opacity-90"
+                            >
+                              Spend {price}, give up +{Math.round(price * TROPHY_BONUS * 100)}%
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setConfirmPerk(p.id)}
+                            disabled={!ok}
+                            className={cn(
+                              'mt-2 w-full rounded-xl py-2 text-xs font-bold transition-opacity',
+                              ok ? 'bg-gold text-black hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed',
+                            )}
+                          >
+                            {ok ? `Spend ${price} troph${price === 1 ? 'y' : 'ies'}` : `Needs ${price} trophies, you hold ${s.trophies}`}
+                          </button>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
               </>
             )}
 
@@ -373,18 +444,20 @@ const IdleArena = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Idle Arena | DoUKnowBall"
-          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a permanent bonus, and earn at half speed for up to eight hours while you are away."
+          description="A sports idle clicker with no real names in it and nothing to get wrong. Tap to score, sign eight archetypes from Ball Boy to Champion, buy fourteen upgrades, lift trophies for a bonus you keep or spend in the trophy room, and earn at half speed for up to eight hours while you are away."
           howToPlay={[
             'Tap the ball to score a point',
             'Sign Ball Boys, Sunday Strikers and the rest, and they score every second for you',
             'Buy upgrades to double a line or boost everything',
-            'Lift the trophy once a run has earned a million: it resets the run and pays a permanent bonus',
+            'Lift the trophy once a run has earned a million: it resets the run and pays a bonus that lasts for as long as you hold the trophies',
             'The squad keeps scoring while you are away, at half speed, for up to eight hours, tab open or shut',
+            "Spend trophies in the trophy room on perks that last forever, each one giving up that trophy's 5%",
           ]}
           examples={[
             'A Ball Boy costs 15 and scores 0.4 a second; the tenth one costs 53',
-            'A run that earns four million lifts two trophies, worth 10% on everything forever',
+            'A run that earns four million lifts two trophies, worth 10% on everything for as long as you hold them',
             'Own five Sunday Strikers and New Boots appears, doubling every one of them',
+            'With 30 trophies, 3 spent on Night Shift drops the bonus from 150% to 135% but makes a night away pay 70% speed instead of 50%',
           ]}
         />
       </main>
@@ -413,10 +486,12 @@ const IdleArena = () => {
                 <li>Own five of an archetype and its own upgrade appears. It doubles that whole line.</li>
                 <li>Earn {fmt(TROPHY_FLOOR)} in one run and you can lift the trophy. The run resets, the trophy stays, and every trophy is +{Math.round(TROPHY_BONUS * 100)}% on everything in every run after it.</li>
                 <li>Badges are +{Math.round(ACHIEVEMENT_BONUS * 100)}% each and never go away either.</li>
-                <li>Walk away and the squad keeps scoring at {Math.round(OFFLINE_RATE * 100)}% speed for up to eight hours. Closing the tab and leaving it sitting open pay the same.</li>
+                <li>Walk away and the squad keeps scoring at {Math.round(OFFLINE_RATE * 100)}% speed for up to {OFFLINE_CAP_MS / 3600000} hours. Closing the tab and leaving it sitting open pay the same.{(capHours !== OFFLINE_CAP_MS / 3600000 || awayPct !== Math.round(OFFLINE_RATE * 100)) && ` Your trophy room makes it ${awayPct}% for up to ${capHours} hours.`}</li>
+                <li>The trophy room sells perks for trophies: Long Night (longer away time), Night Shift (faster away time), Head Start (a squad waiting after every lift) and Scouting Network (cheaper top archetypes). Each has {PERK_MAX} levels. A spent trophy is gone, and so is its +{Math.round(TROPHY_BONUS * 100)}%.</li>
               </ul>
               <p className="font-semibold text-foreground">Worked example:</p>
               <p>Your first Ball Boy is free. You tap eighteen times and sign a second one. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them start saving toward a Sunday Striker at 100. A few minutes in, the squad is scoring more in a second than your thumb did in the first minute.</p>
+              <p>Later, with {ROOM_EXAMPLE.held} trophies held, everything scores +{Math.round(ROOM_EXAMPLE.held * TROPHY_BONUS * 100)}%. Spend {roomPerk.cost[0]} on {roomPerk.label} and you hold {ROOM_EXAMPLE.held - roomPerk.cost[0]}, so everything scores +{Math.round((ROOM_EXAMPLE.held - roomPerk.cost[0]) * TROPHY_BONUS * 100)}% instead, but a night away now pays {Math.round(NIGHT_SHIFT_RATE[1] * 100)}% speed rather than {Math.round(OFFLINE_RATE * 100)}%. If you leave it running overnight, that is the better deal. If you sit and tap every run, keep the trophies.</p>
               <p className="text-xs">Nobody in this arena is real. The squad is a cast of archetypes, so there are no stats to check and nothing to argue about, just the number.</p>
             </div>
             <button
@@ -444,8 +519,11 @@ function Row({ k, v }: { k: string; v: string }) {
 /** one archetype: how many are signed, what they score, what the next costs */
 function GenRow({ gen, state, mode, onBuy }: { gen: (typeof GENERATORS)[number]; state: ArenaState; mode: BuyMode; onBuy: () => void }) {
   const n = state.owned[gen.id] ?? 0;
-  const count = mode === 'max' ? Math.max(1, affordable(gen, n, state.points)) : mode;
-  const cost = mode === 'max' && affordable(gen, n, state.points) === 0 ? genCost(gen, n) : genCostN(gen, n, count);
+  /* Round 957: the price a button shows is the price buyGen charges, Scouting
+     Network included */
+  const growth = growthOf(state, gen.id);
+  const count = mode === 'max' ? Math.max(1, affordable(gen, n, state.points, growth)) : mode;
+  const cost = mode === 'max' && affordable(gen, n, state.points, growth) === 0 ? genCost(gen, n, growth) : genCostN(gen, n, count, growth);
   const ok = cost <= state.points;
   const rate = genRate(state, gen);
   return (
