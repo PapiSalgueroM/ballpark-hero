@@ -53,8 +53,10 @@
      noprune       the summer keeps ledger rows of men who left -> 6
      labelswap     an exposed man's button says Option him      -> 7
      cutroom       a full NFL squad makes no room for a man who
-                   clears, so he joins it anyway                 -> 1
+                   clears, so he joins it anyway                 -> 7
      nocap         call ups, claims and elevations skip the cap  -> 1
+                   (measured seed 1: NHL covers take TBL from 0.4
+                   to -0.4; the NFL engine's room never binds)
 
    The invent control also reddens 1 and 3 by design: an invented man
    overfills the 40 man and changes who is left to expose to the wire. The
