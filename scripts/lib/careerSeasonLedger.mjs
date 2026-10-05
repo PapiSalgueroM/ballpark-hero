@@ -240,9 +240,69 @@ export async function loadSiteModules(root, { bakeText = null } = {}) {
     `export { careerPlayers, CAREER_FALLBACK_META } from '${bake}';`,
     `export { playersUnderRule, seasonSpan, isEuropeanClub } from '${src}/lib/transferPathModes.ts';`,
     `export { flagForClub } from '${src}/lib/careerLadder.ts';`,
+    `export { flagEmojiToIso } from '${src}/lib/flagUtils.ts';`,
   ].join('\n'));
   globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', alias: { '@': path.join(root, 'src') } });
   try { return await import(pathToFileURL(out).href); }
   finally { fs.rmSync(dir, { recursive: true, force: true }); }
+}
+
+/* ------------------------------------------------------------------ */
+/* Reading a season migration's Transfer Path rows back                */
+/* ------------------------------------------------------------------ */
+
+const RENAME_ROW = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)'\),?$/gm;
+const REWRITE_ROW = /^\s*\('((?:[^']|'')*)', '((?:[^']|'')*)', '((?:[^']|'')*)', '(classic|europe|active)', (\d+|null::smallint), ('(?:[^']|'')*'|null::text), (\d+|null::smallint), ('(?:[^']|'')*'|null::text)\),?$/gm;
+
+/**
+ * The renames and rule entry rewrites a season migration carries, read from
+ * its own VALUES lists: { renames: [{ id, oldA, oldB, a, b }], rewrites:
+ * [{ id, a, b, rule, old, next }] } with old and next { minSteps, hint } or
+ * null. CRLF is folded and comments are dropped first.
+ */
+export function parseSeasonMigrationPuzzles(sql) {
+  const code = String(sql).replaceAll('\r\n', '\n').replace(/^\s*--.*$/gm, '');
+  const un = s => s.replace(/''/g, "'");
+  const block = (marker) => {
+    const end = code.indexOf(marker);
+    if (end < 0) return '';
+    const start = code.lastIndexOf('for desired in', end);
+    return start < 0 ? '' : code.slice(start, end);
+  };
+  const renames = [...block(') as rows(puzzle_id, old_player_a, old_player_b, player_a, player_b)').matchAll(RENAME_ROW)]
+    .map(m => ({ id: un(m[1]), oldA: un(m[2]), oldB: un(m[3]), a: un(m[4]), b: un(m[5]) }));
+  const entry = (min, hint) => (min === 'null::smallint' ? null : { minSteps: Number(min), hint: un(hint.slice(1, -1)) });
+  const rewrites = [...block(') as rows(puzzle_id, player_a, player_b, rule, old_min_steps, old_hint, min_steps, hint)').matchAll(REWRITE_ROW)]
+    .map(m => ({ id: un(m[1]), a: un(m[2]), b: un(m[3]), rule: m[4], old: entry(m[5], m[6]), next: entry(m[7], m[8]) }));
+  return { renames, rewrites };
+}
+
+const sameEntry = (x, y) => (x === null && y === null) || (!!x && !!y && x.minSteps === y.minSteps && x.hint === y.hint);
+
+/**
+ * Which side of a season migration's Transfer Path writes a table is on.
+ * liveById: puzzle id -> { playerA, playerB, classic, europe, active } with
+ * each rule { minSteps, hint } or null. 'before' when every renamed puzzle
+ * still has its old names and every rewritten entry its old value, 'after'
+ * when every one has the new, 'mixed' otherwise.
+ */
+export function seasonMigrationState(parsed, liveById) {
+  let before = 0, after = 0, total = 0;
+  for (const r of parsed.renames) {
+    total += 1;
+    const p = liveById.get(r.id);
+    if (p && p.playerA === r.oldA && p.playerB === r.oldB) before += 1;
+    else if (p && p.playerA === r.a && p.playerB === r.b) after += 1;
+  }
+  for (const r of parsed.rewrites) {
+    total += 1;
+    const live = liveById.get(r.id)?.[r.rule] ?? null;
+    if (!liveById.has(r.id)) continue;
+    if (sameEntry(live, r.old)) before += 1;
+    else if (sameEntry(live, r.next)) after += 1;
+  }
+  if (total && before === total) return 'before';
+  if (total && after === total) return 'after';
+  return 'mixed';
 }
