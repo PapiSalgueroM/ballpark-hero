@@ -94,6 +94,22 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
     }
   }, [active, phase, index, retryIndex]);
 
+  useEffect(() => {
+    if (!active || helpOpen || !['review', 'retry-question', 'retry-reveal'].includes(phase)) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => {
+        const area = actionArea.current;
+        if (!area) return;
+        const box = area.getBoundingClientRect();
+        if (box.top >= 0 && box.height <= window.innerHeight - 24 && box.bottom > window.innerHeight - 12) {
+          area.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        }
+      });
+    });
+    return () => { cancelAnimationFrame(first); cancelAnimationFrame(second); };
+  }, [active, phase, reviewIndex, retryIndex]);
+
   const choose = (pick: boolean) => {
     if (!active || helpOpen || phaseRef.current !== 'question' || !current) return;
     moveTo('reveal');
@@ -234,26 +250,26 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
         <p className="mt-2 text-xs text-muted-foreground">Unranked run. Your Daily score is separate.</p>
       </div>}
 
-      {phase === 'review' && reviewed && <div ref={actionArea} data-rugby-review="" data-rugby-review-index={reviewIndex + 1}>
-        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-lg font-bold">Review your ten calls</h3><p className="text-sm text-muted-foreground" data-rugby-original-score="">Original: {score} / {RUGBY_ROUNDS}</p></div>
-        <div role="group" aria-label="Choose a completed claim" className="mb-3 grid grid-cols-5 gap-2">
+      {phase === 'review' && reviewed && <div ref={actionArea} data-rugby-review="" data-rugby-review-index={reviewIndex + 1} className="scroll-mt-3">
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-base font-bold">Review ten calls</h3><p className="text-sm text-muted-foreground" data-rugby-original-score="">Original: {score} / {RUGBY_ROUNDS}</p></div>
+        <div role="group" aria-label="Choose a completed claim" className="mb-2 grid grid-cols-5 gap-1.5">
           {rounds.map((_, at) => <button key={at} ref={at === reviewIndex ? actionButton : null} aria-label={`Review claim ${at + 1}: ${answers[at] ? 'correct' : 'incorrect'}`} aria-pressed={at === reviewIndex}
             onClick={() => { if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(at); }}
             className={cn('min-h-[44px] rounded-lg border px-1 py-2 text-sm font-semibold', at === reviewIndex ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-secondary text-foreground')}>
             {at + 1}<span aria-hidden="true" className="ml-1">{answers[at] ? '✓' : '×'}</span>
           </button>)}
         </div>
-        <div className="rounded-2xl border border-border bg-card p-4" role="region" aria-label={`Original claim ${reviewIndex + 1}`}>
+        <div className="rounded-2xl border border-border bg-card p-3" role="region" aria-label={`Original claim ${reviewIndex + 1}`}>
           <p className="text-sm font-semibold text-primary">{reviewed.compKey === 'nrl' ? 'Premiers' : 'Dally M Medal'} · {reviewed.year}</p>
-          <p data-rugby-review-statement="" className="mt-2 text-lg font-semibold leading-snug">{reviewed.statement}</p>
-          <p data-rugby-review-pick="" className="mt-3 text-sm">Your original call: <strong>{reviewedPick ? 'CHAMP' : 'NOT'}</strong>. {answers[reviewIndex] ? 'Right call.' : 'Not this time.'}</p>
-          <p data-rugby-review-truth="" className="mt-2 text-sm text-muted-foreground">The claim is {reviewed.isTrue ? 'true' : 'false'}.</p>
-          <p data-rugby-review-winners="" className="mt-2 text-sm"><strong>{reviewed.year} {reviewed.compKey === 'nrl' ? 'premiers' : 'Dally M'}: </strong>{reviewed.realTeams.join(' and ')}.</p>
-          <button onClick={backToResults} className={cn(primary, 'mt-4')}>Back to original results</button>
+          <p data-rugby-review-statement="" className="mt-2 text-base font-semibold leading-snug">{reviewed.statement}</p>
+          <p data-rugby-review-pick="" className="mt-2 text-sm">Your original call: <strong>{reviewedPick ? 'CHAMP' : 'NOT'}</strong>. {answers[reviewIndex] ? 'Right call.' : 'Not this time.'}</p>
+          <p data-rugby-review-truth="" className="mt-1 text-sm text-muted-foreground">The claim is {reviewed.isTrue ? 'true' : 'false'}.</p>
+          <p data-rugby-review-winners="" className="mt-1 text-sm"><strong>{reviewed.year} {reviewed.compKey === 'nrl' ? 'premiers' : 'Dally M'}: </strong>{reviewed.realTeams.join(' and ')}.</p>
+          <button onClick={backToResults} className={cn(primary, 'mt-3 py-2')}>Back to original results</button>
         </div>
       </div>}
 
-      {(phase === 'retry-question' || phase === 'retry-reveal') && retryCurrent && <div ref={actionArea} data-rugby-retry="" data-rugby-retry-phase={phase === 'retry-question' ? 'question' : 'reveal'} data-rugby-retry-original={missed[retryIndex] + 1}>
+      {(phase === 'retry-question' || phase === 'retry-reveal') && retryCurrent && <div ref={actionArea} data-rugby-retry="" data-rugby-retry-phase={phase === 'retry-question' ? 'question' : 'reveal'} data-rugby-retry-original={missed[retryIndex] + 1} className="scroll-mt-3">
         <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-lg font-bold">Retry {retryIndex + 1} / {missed.length}</h3><p className="text-sm text-muted-foreground" data-rugby-original-score="">Original: {score} / {RUGBY_ROUNDS}</p></div>
         <div className={cn('rounded-2xl border bg-card p-4', phase === 'retry-reveal' ? retryCorrect ? 'border-correct' : 'border-destructive' : 'border-primary/40')}>
           <p className="text-sm font-semibold text-primary">Original claim {missed[retryIndex] + 1} · {retryCurrent.compKey === 'nrl' ? 'Premiers' : 'Dally M Medal'} · {retryCurrent.year}</p>

@@ -67,6 +67,7 @@ async function page(start = true) {
 }
 const button = (panel: HTMLElement, name: string) => within(panel).getByRole('button', { name });
 const click = (panel: HTMLElement, name: string) => fireEvent.click(button(panel, name));
+const text = (panel: HTMLElement, selector: string) => panel.querySelector(selector)?.textContent?.replace(/\s+/g, ' ').trim();
 function finish(panel: HTMLElement, correct = mixed) {
   correct.forEach((earned, index) => {
     const round = fixture.rounds[index];
@@ -77,19 +78,19 @@ function finish(panel: HTMLElement, correct = mixed) {
   expect(panel).toHaveAttribute('data-rugby-phase', 'done');
 }
 function originalScore(panel: HTMLElement, total = 7) {
-  expect(panel.querySelector('[data-rugby-score="total"]'), 'Original total stays fixed').toHaveTextContent(`${total} / 10`);
+  expect(text(panel, '[data-rugby-score="total"]'), 'Original total stays fixed').toBe(`${total} / 10`);
   expect(panel.querySelector('[data-rugby-score="nrl"]')).toHaveTextContent(total === 10 ? '5 / 5' : '4 / 5');
   expect(panel.querySelector('[data-rugby-score="dallym"]')).toHaveTextContent(total === 10 ? '5 / 5' : '3 / 5');
 }
 function retry(panel: HTMLElement, index: number, correct = true) {
   const round = fixture.rounds[misses[index]];
-  expect(panel.querySelector('[data-rugby-retry]'), 'Retry contains only original misses in their original order').toHaveAttribute('data-rugby-retry-original', String(misses[index] + 1));
+  expect(panel.querySelector('[data-rugby-retry]')?.getAttribute('data-rugby-retry-original'), 'Retry contains only original misses in their original order').toBe(String(misses[index] + 1));
   expect(panel.querySelector('[data-rugby-retry-statement]')).toHaveTextContent(round.statement);
   expect(panel.querySelector('[data-rugby-retry-feedback]')).toBeNull();
   click(panel, (correct ? round.isTrue : !round.isTrue) ? 'CHAMP' : 'NOT');
-  expect(panel.querySelector('[data-rugby-retry-feedback]')).toHaveTextContent(correct ? 'Corrected!' : 'Still one to learn.');
+  expect(text(panel, '[data-rugby-retry-feedback]'), 'Retry feedback matches the accepted first choice').toContain(correct ? 'Corrected!' : 'Still one to learn.');
   expect(panel.querySelector('[data-rugby-retry-winners]')).toHaveTextContent(round.realTeams.join(' and '));
-  expect(panel.querySelector('[data-rugby-original-score]'), 'Practice corrections never increase the original total').toHaveTextContent('Original: 7 / 10');
+  expect(text(panel, '[data-rugby-original-score]'), 'Practice corrections never increase the original total').toBe('Original: 7 / 10');
   click(panel, index === misses.length - 1 ? 'View retry result' : 'Next missed call');
 }
 
@@ -97,13 +98,13 @@ describe('Rugby League completed-call review', () => {
   it('reviews all ten original choices truths and shared winners in one card', async () => {
     const { panel } = await page(); finish(panel); originalScore(panel);
     click(panel, 'Review ten calls');
-    expect(button(panel, 'Review claim 1: correct'), 'Review opens on its selected claim tile').toHaveFocus();
+    expect(document.activeElement === button(panel, 'Review claim 1: correct'), 'Review opens on its selected claim tile').toBe(true);
     expect(within(panel).getAllByRole('button', { name: /^Review claim / })).toHaveLength(10);
     fixture.rounds.forEach((round, index) => {
       const tile = button(panel, `Review claim ${index + 1}: ${mixed[index] ? 'correct' : 'incorrect'}`);
       tile.focus(); fireEvent.click(tile);
-      expect(tile, 'Review selection keeps focus on the chosen tile').toHaveFocus();
-      expect(tile).toHaveAttribute('aria-pressed', 'true');
+      expect(document.activeElement === tile, 'Review selection keeps focus on the chosen tile').toBe(true);
+      expect(tile.getAttribute('aria-pressed'), 'Review marks the selected claim').toBe('true');
       expect(panel.querySelector('[data-rugby-review]')).toHaveAttribute('data-rugby-review-index', String(index + 1));
       expect(panel.querySelectorAll('[data-rugby-review-statement]')).toHaveLength(1);
       expect(panel.querySelector('[data-rugby-review-statement]')).toHaveTextContent(round.statement);
@@ -114,16 +115,16 @@ describe('Rugby League completed-call review', () => {
       expect(panel.querySelector('[data-rugby-original-score]')).toHaveTextContent('Original: 7 / 10');
     });
     click(panel, 'Back to original results'); originalScore(panel);
-    expect(button(panel, 'Review ten calls'), 'Review returns focus to its original opener').toHaveFocus();
+    expect(document.activeElement === button(panel, 'Review ten calls'), 'Review returns focus to its original opener').toBe(true);
   });
 
   it('retries only the original misses and reports a separate corrected total', async () => {
     const { panel } = await page(); finish(panel);
-    expect(panel.querySelector('[data-rugby-open-retry]'), 'Retry queue size equals the original misses').toHaveTextContent('Retry 3 missed calls');
+    expect(text(panel, '[data-rugby-open-retry]'), 'Retry queue size equals the original misses').toBe('Retry 3 missed calls');
     click(panel, 'Retry 3 missed calls');
     [true, false, true].forEach((correct, index) => retry(panel, index, correct));
     expect(panel).toHaveAttribute('data-rugby-phase', 'retry-done');
-    expect(panel.querySelector('[data-rugby-retry-score]'), 'Only correct retry choices enter the corrected tally').toHaveTextContent('2 / 3 corrected');
+    expect(text(panel, '[data-rugby-retry-score]'), 'Only correct retry choices enter the corrected tally').toBe('2 / 3 corrected');
     expect(panel.querySelector('[data-rugby-original-score]')).toHaveTextContent('Original: 7 / 10, unchanged.');
     click(panel, 'Back to original results'); originalScore(panel);
     expect(button(panel, 'View retry result')).toHaveFocus(); click(panel, 'View retry result');
@@ -139,7 +140,7 @@ describe('Rugby League completed-call review', () => {
     const reveal = panel.querySelector('[data-rugby-retry-feedback]')!.textContent;
     click(panel, 'Back to original results'); originalScore(panel);
     expect(button(panel, 'Resume missed calls')).toHaveFocus(); click(panel, 'Resume missed calls');
-    expect(panel, 'Resume retains an already revealed retry').toHaveAttribute('data-rugby-phase', 'retry-reveal');
+    expect(panel.getAttribute('data-rugby-phase'), 'Resume retains an already revealed retry').toBe('retry-reveal');
     expect(panel.querySelector('[data-rugby-retry-feedback]')).toHaveTextContent(reveal!);
     fireEvent.click(view.getByRole('button', { name: 'Daily' })); expect(panel).not.toBeVisible();
     fireEvent.click(view.getByRole('button', { name: 'Rugby League' })); expect(panel).toBeVisible();
@@ -155,11 +156,11 @@ describe('Rugby League completed-call review', () => {
     const truth = fixture.rounds[misses[0]].isTrue;
     const yes = button(panel, truth ? 'CHAMP' : 'NOT'), no = button(panel, truth ? 'NOT' : 'CHAMP');
     act(() => { yes.click(); no.click(); });
-    expect(panel.querySelector('[data-rugby-retry-feedback]')).toHaveTextContent('Corrected!');
+    expect(text(panel, '[data-rugby-retry-feedback]'), 'First retry answer owns the feedback').toContain('Corrected!');
     const next = button(panel, 'Next missed call'); act(() => { next.click(); next.click(); });
-    expect(panel.querySelector('[data-rugby-retry]'), 'Repeated advance moves to exactly the next original miss').toHaveAttribute('data-rugby-retry-original', '5');
+    expect(panel.querySelector('[data-rugby-retry]')?.getAttribute('data-rugby-retry-original'), 'Repeated advance moves to exactly the next original miss').toBe('5');
     retry(panel, 1); retry(panel, 2);
-    expect(panel.querySelector('[data-rugby-retry-score]'), 'Repeated answers cannot inflate or shift the retry tally').toHaveTextContent('3 / 3 corrected');
+    expect(text(panel, '[data-rugby-retry-score]'), 'Repeated answers cannot inflate or shift the retry tally').toBe('3 / 3 corrected');
   });
 
   it('offers review without an empty retry after a perfect original run', async () => {
@@ -177,7 +178,7 @@ describe('Rugby League completed-call review', () => {
     click(panel, 'Try missed calls again');
     expect(panel).toHaveAttribute('data-rugby-phase', 'retry-question');
     misses.forEach((_, index) => retry(panel, index, false));
-    expect(panel.querySelector('[data-rugby-retry-score]'), 'An explicit new retry clears its prior answers').toHaveTextContent('0 / 3 corrected');
+    expect(text(panel, '[data-rugby-retry-score]'), 'An explicit new retry clears its prior answers').toBe('0 / 3 corrected');
     click(panel, 'Back to original results'); click(panel, 'Review ten calls');
     click(panel, 'Review claim 8: incorrect'); click(panel, 'Back to original results');
     const builds = fixture.builds; click(panel, 'Play another ten');
@@ -185,7 +186,7 @@ describe('Rugby League completed-call review', () => {
     expect(panel).toHaveAttribute('data-rugby-phase', 'question');
     expect(panel.querySelector('[data-rugby-review]')).toBeNull(); expect(panel.querySelector('[data-rugby-retry]')).toBeNull();
     finish(panel); originalScore(panel);
-    expect(panel.querySelector('[data-rugby-open-retry]'), 'A new original run clears the old retry session').toHaveTextContent('Retry 3 missed calls');
+    expect(text(panel, '[data-rugby-open-retry]'), 'A new original run clears the old retry session').toBe('Retry 3 missed calls');
     click(panel, 'Review ten calls'); expect(panel.querySelector('[data-rugby-review]')).toHaveAttribute('data-rugby-review-index', '1');
     click(panel, 'Back to original results'); click(panel, 'Retry 3 missed calls'); retry(panel, 0);
   });
@@ -194,18 +195,18 @@ describe('Rugby League completed-call review', () => {
     const { view, panel } = await page(false);
     click(panel, 'Rugby League rules');
     let dialog = view.getByRole('dialog');
-    expect(dialog, 'Rules explain the separate original and corrected scores').toHaveTextContent('7/10 original run stays 7/10');
+    expect(dialog.textContent, 'Rules explain the separate original and corrected scores').toContain('7/10 original run stays 7/10');
     click(dialog, "Let's Play!"); act(() => vi.advanceTimersByTime(0));
     click(panel, 'Start ten questions'); finish(panel); click(panel, 'Retry 3 missed calls');
     const answer = button(panel, 'CHAMP'); click(panel, 'Rugby League rules'); dialog = view.getByRole('dialog');
     fireEvent.click(answer);
-    expect(panel, 'Open rules block the background retry choice').toHaveAttribute('data-rugby-phase', 'retry-question');
+    expect(panel.getAttribute('data-rugby-phase'), 'Open rules block the background retry choice').toBe('retry-question');
     click(dialog, "Let's Play!"); act(() => vi.advanceTimersByTime(0));
     expect(button(panel, 'Rugby League rules')).toHaveFocus();
     click(panel, fixture.rounds[misses[0]].isTrue ? 'CHAMP' : 'NOT');
     const next = button(panel, 'Next missed call'); click(panel, 'Rugby League rules'); dialog = view.getByRole('dialog');
     fireEvent.click(next);
-    expect(panel, 'Open rules block the background retry advance').toHaveAttribute('data-rugby-phase', 'retry-reveal');
+    expect(panel.getAttribute('data-rugby-phase'), 'Open rules block the background retry advance').toBe('retry-reveal');
     click(dialog, "Let's Play!"); act(() => vi.advanceTimersByTime(0));
     expect(panel.querySelector('[data-rugby-retry]')).toHaveAttribute('data-rugby-retry-original', '2');
   });

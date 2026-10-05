@@ -23,7 +23,7 @@ const titles = {
   baseline: 'preserves the original Daily score save and one completion across reload',
 };
 const controls = {
-  selection: { from: "if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(at);", to: "if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(0);", test: titles.review, message: /aria-pressed/ },
+  selection: { from: "if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(at);", to: "if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(0);", test: titles.review, message: /Review marks the selected claim/ },
   pick: { from: 'const reviewedPick = reviewed ? answers[reviewIndex] ? reviewed.isTrue : !reviewed.isTrue : null;', to: 'const reviewedPick = reviewed ? reviewed.isTrue : null;', test: titles.review, message: /Review shows the original choice/ },
   truth: { from: "The claim is {reviewed.isTrue ? 'true' : 'false'}.", to: "The claim is {reviewed.isTrue ? 'false' : 'true'}.", test: titles.review, message: /Review keeps the original truth/ },
   winners: { from: "reviewed.realTeams.join(' and ')", to: "reviewed.realTeams.slice(0, 1).join(' and ')", test: titles.review, message: /Review retains every shared winner/ },
@@ -31,10 +31,10 @@ const controls = {
   queue: { from: 'answers.flatMap((correct, at) => correct ? [] : [at])', to: 'answers.flatMap((correct, at) => correct ? [at] : [])', test: titles.score, message: /Retry queue size equals the original misses/ },
   tally: { from: 'const corrected = retryAnswers.filter(Boolean).length;', to: 'const corrected = retryAnswers.length;', test: titles.score, message: /Only correct retry choices enter the corrected tally/ },
   resume: { from: "retryAnswers.length > retryIndex ? 'retry-reveal' : 'retry-question'", to: "'retry-question'", test: titles.resume, message: /Resume retains an already revealed retry/ },
-  answer: { from: "phaseRef.current !== 'retry-question' || !retryCurrent", to: "phase !== 'retry-question' || !retryCurrent", test: titles.rapid, message: /Expected element to have text content:[\s\S]*Corrected|Repeated answers cannot inflate/ },
+  answer: { from: "phaseRef.current !== 'retry-question' || !retryCurrent", to: "phase !== 'retry-question' || !retryCurrent", test: titles.rapid, message: /Retry feedback matches the accepted first choice/ },
   advance: { from: "if (!active || helpOpen || phaseRef.current !== 'retry-reveal') return;", to: "if (!active || helpOpen || phase !== 'retry-reveal') return;", test: titles.rapid, message: /Repeated advance moves to exactly the next original miss/ },
   perfect: { from: '{missed.length > 0 && <button data-rugby-open-retry=""', to: '{missed.length >= 0 && <button data-rugby-open-retry=""', test: titles.perfect, message: /A perfect original run has no empty retry/ },
-  restart: { from: '          setRetryAnswers([]);', to: '', test: titles.reset, message: /Expected element to have text content:[\s\S]*Still one to learn|An explicit new retry clears/ },
+  restart: { from: '          setRetryAnswers([]);', to: '', test: titles.reset, message: /Retry feedback matches the accepted first choice/ },
   replay: { from: '    setRetryStarted(false);', to: '    if (runNumber.current === 1) setRetryStarted(false);', test: titles.reset, message: /A new original run clears the old retry session/ },
   help_answer: { from: "if (!active || helpOpen || phaseRef.current !== 'retry-question' || !retryCurrent) return;", to: "if (!active || phaseRef.current !== 'retry-question' || !retryCurrent) return;", test: titles.help, message: /Open rules block the background retry choice/ },
   help_advance: { from: "if (!active || helpOpen || phaseRef.current !== 'retry-reveal') return;", to: "if (!active || phaseRef.current !== 'retry-reveal') return;", test: titles.help, message: /Open rules block the background retry advance/ },
@@ -43,7 +43,7 @@ const controls = {
   completion: { mutations: [
     { from: "import { useRevealScroll } from '@/hooks/useRevealScroll';", to: "import { useRevealScroll } from '@/hooks/useRevealScroll';\nimport { useGameCompletion } from '@/hooks/useGameCompletion';" },
     { from: 'const corrected = retryAnswers.filter(Boolean).length;', to: "const corrected = retryAnswers.filter(Boolean).length;\n  useGameCompletion('champ-or-not', phase === 'retry-done', corrected, 1);" },
-  ], test: titles.isolation, message: /Review and retry never (?:alter|transiently save|book)/ },
+  ], test: titles.isolation, message: /Review and retry never book a completion/ },
   entry_focus: { from: 'ref={at === reviewIndex ? actionButton : null}', to: '', test: titles.review, message: /Review opens on its selected claim tile/ },
   return_focus: { from: "returnFocus.current = phaseRef.current === 'review' ? 'review' : 'retry';", to: 'returnFocus.current = null;', test: titles.review, message: /Review returns focus to its original opener/ },
 };
@@ -100,7 +100,7 @@ if (control === 'all') {
     if (spec) {
       assert.equal(child.status, 1); assert.deepEqual(failed.map(row => row.title), [spec.test]); assert.deepEqual(passed.map(row => row.title), [titles.baseline]); assert.equal(skipped.length, 8);
       const failure = failed[0].failureMessages.join('\n').replace(/\u001b\[[0-9;]*m/g, '');
-      assert.match(failure, /AssertionError|Error: expect\(/); assert.match(failure, spec.message);
+      assert.match(failure, /AssertionError/); assert.match(failure, spec.message);
       assert.doesNotMatch(failure, /TypeError|ReferenceError|SyntaxError|TestingLibraryElementError|[Tt]imed out|Unable to find|Found multiple/, 'Only the intended assertion earns control credit');
     } else { assert.equal(child.status, 0); assert.equal(failed.length, 0); assert.equal(passed.length, 10); assert.equal(skipped.length, 0); }
     await verify();
