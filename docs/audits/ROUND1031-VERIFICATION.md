@@ -40,6 +40,14 @@ Only the four career routes change in the sitemap and ledger. Temporary
 generation is removed from the workflow. Final remote checks must therefore
 validate the committed snapshots and search metadata.
 
+The subsequent integration includes parent 1009 at
+`13c14f37f286b78b678175158c430e08d762a16f` and final Rugby candidate
+`75806a7fc3b24457ee6f9a0ef762f34aef2a8274`. It retains Rugby's separately verified
+What's New snapshot and ledger entry. Among the seven files above, only the
+ledger gains that independent What's New hash; the four career entries, sitemap,
+search index and career HTML remain unchanged. The table records the original
+downloaded artifact hashes, before this documented ledger integration.
+
 ## Scope and release status
 
 No historical fixture was recorded or rewritten. Original guide and board
