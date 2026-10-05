@@ -1,0 +1,95 @@
+name: Game picks verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/game-picks.yml
+      - src/pages/Index.tsx
+      - src/pages/Search.tsx
+      - src/hooks/useGamePicks.ts
+      - src/components/home/GamePicksRow*
+      - src/components/game/GamePickButton.tsx
+      - src/test/gamePicks.test.tsx
+      - scripts/simGamePicks.mjs
+      - scripts/qa/gamePicks1005.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: game-picks-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p game-picks-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee game-picks-artifacts/types.log
+          npm run build 2>&1 | tee game-picks-artifacts/build.log
+      - name: Generate candidate update snapshot
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee game-picks-artifacts/snapshot.log
+          node scripts/genSitemap.mjs 2>&1 | tee game-picks-artifacts/sitemap-generation.log
+          mkdir -p game-picks-artifacts/generated/public/whats-new game-picks-artifacts/generated/scripts/data
+          cp public/whats-new/index.html game-picks-artifacts/generated/public/whats-new/
+          cp public/sitemap.xml game-picks-artifacts/generated/public/
+          cp scripts/data/lastmod.json game-picks-artifacts/generated/scripts/data/
+          npm run build 2>&1 | tee game-picks-artifacts/rebuild.log
+      - name: Pick outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: GAME_PICKS_CONTROL=all ONLY=simGamePicks node scripts/runAllSims.mjs 2>&1 | tee game-picks-artifacts/picks.log
+      - name: Existing homepage and search promises
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simHomeFront simHomePersonalReads simHomeCopy simSiteSearch playHomeFold; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "game-picks-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built readers and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simGuideHeadings; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "game-picks-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Phone and desktop pinning, return and save preservation
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/gamePicks1005.mjs 2>&1 | tee game-picks-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-picks-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: game-picks-artifacts/
