@@ -50,31 +50,31 @@ export const CBB_CALLS: CoachCallsPack = {
   },
   moments: [
     {
-      id: 'foul-up-three', title: 'Foul up three?', setup: 'Up three, seven seconds left, their ball. Foul before the shot or defend it straight up?', lead: [3, 3], weight: 6,
+      id: 'foul-up-three', title: 'Foul up three?', setup: 'Up three, seven seconds left, their ball. Foul before the shot or defend it straight up?', lead: [3, 3], weight: 6, closing: true,
       options: [
-        { id: 'defend', label: 'Defend it straight up', blurb: 'Get a stop and you finish at the line. Give up a three and it is overtime.', mine: 'perimeter', theirs: 'perimeter', base: 0.7, slope: 0.02, win: 2, lose: 3 },
-        { id: 'foul', label: 'Foul before the shot', blurb: 'Free throws can only get them within one, then it is your ball.', mine: 'paint', theirs: 'paint', base: 0.8, slope: 0.01, win: 1, lose: 2 },
+        { id: 'defend', label: 'Defend it straight up', blurb: 'Your guards against their shooters. Get a stop and you finish at the line. Give up a three and it is overtime.', mine: 'perimeter', theirs: 'perimeter', base: 0.7, slope: 0.02, win: 2, lose: 3 },
+        { id: 'foul', label: 'Foul before the shot', blurb: 'Your bigs on the boards. They shoot two instead of a three and the lead holds, unless they grab a missed free throw and tie it.', mine: 'paint', theirs: 'paint', base: 0.8, slope: 0.01, win: 0, lose: 3 },
       ],
     },
     {
-      id: 'press', title: 'Press when trailing?', setup: 'Down late and the clock is against you. Press the inbound or play it safe?', lead: [-99, -1], weight: 4,
+      id: 'press', title: 'Press when trailing?', setup: 'Down late and the clock is against you. Press the inbound or play it safe?', lead: [-99, -1], weight: 4, closing: true,
       options: [
-        { id: 'half', label: 'Play the half court', blurb: 'Get a stop the normal way.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0, win: 0, lose: 0 },
+        { id: 'half', label: 'Play the half court', blurb: 'Get a stop the normal way.', mine: 'perimeter', theirs: 'perimeter', base: 1, slope: 0, win: 0, lose: 0 },
         { id: 'press', label: 'Full court press', blurb: 'Your guards against theirs. A steal is a quick basket, a broken press is a layup the other way.', mine: 'perimeter', theirs: 'perimeter', base: 0.4, slope: 0.025, win: 2, lose: 2 },
       ],
     },
     {
       id: 'zone-or-man', title: 'Zone or man?', setup: 'They are scoring every trip. Switch to a zone or stay in man?', lead: [-99, 99], weight: 3,
       options: [
-        { id: 'man', label: 'Stay in man', blurb: 'Trust the matchups.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'zone', label: 'Go to a zone', blurb: 'Your bigs against their shooters. Works if they cannot hit from outside.', mine: 'paint', theirs: 'perimeter', base: 0.5, slope: 0.03, win: 2, lose: 2 },
+        { id: 'man', label: 'Stay in man', blurb: 'Trust the matchups.', mine: 'perimeter', theirs: 'perimeter', base: 1, slope: 0, win: 0, lose: 0 },
+        { id: 'zone', label: 'Go to a zone', blurb: 'Your bigs against their shooters. Works if they cannot hit from outside and takes a basket off them, but a hot shooter makes you pay.', mine: 'paint', theirs: 'perimeter', base: 0.5, slope: 0.03, win: 2, lose: 2, winBy: 'stop' },
       ],
     },
     {
-      id: 'ice', title: 'Ice the shooter?', setup: 'Their best free throw shooter steps up late. Burn a timeout to ice him?', lead: [-99, 99], weight: 2,
+      id: 'ice', title: 'Ice the shooter?', setup: 'Their best free throw shooter steps to the line in a tight game. Burn a timeout to ice him?', lead: [-99, 99], weight: 2,
       options: [
-        { id: 'shoot', label: 'Let him shoot', blurb: 'Keep the timeout.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0, win: 0, lose: 0 },
-        { id: 'ice', label: 'Call timeout', blurb: 'Might rattle him, might not. It is close to a coin flip.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0.005, win: 1, lose: 1 },
+        { id: 'shoot', label: 'Let him shoot', blurb: 'Keep the timeout.', mine: 'perimeter', theirs: 'perimeter', base: 1, slope: 0, win: 0, lose: 0 },
+        { id: 'ice', label: 'Call timeout', blurb: 'Close to a coin flip. Rattle him and he misses one. If not, you have burned the timeout you wanted for your own last trip and it costs you a point.', mine: 'perimeter', theirs: 'perimeter', base: 0.5, slope: 0.005, win: 1, lose: 1, winBy: 'stop', loseBy: 'miss' },
       ],
     },
   ],

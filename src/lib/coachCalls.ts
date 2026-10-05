@@ -16,8 +16,12 @@
  * game's own margin, and a blowout draws none. Every die a game will use is
  * drawn up front from its seed, so a different call never reshuffles a later
  * moment's dice. Each option's odds come from a unit of yours against a unit
- * of his. No single call, and no game's calls added together, can move the
- * margin more than one score.
+ * of his. A moment comes up only at a margin its own words allow, never twice
+ * in one game, and a closing moment (the last seconds, a kneel) only in the
+ * last slot, so nothing follows it. No single call, and no game's calls added
+ * together, can move the margin more than one score: a moment comes up only
+ * when every outcome it offers fits inside what is left of that score, so a
+ * call always moves the margin by exactly what its card says.
  *
  * A coach makes these calls. A GM does not, so this is for the coaching
  * seats only and is never offered to the front offices.
@@ -43,16 +47,24 @@ export interface CallOption {
   id: string; label: string; blurb: string;
   /** Your unit and his that set the odds. */
   mine: string; theirs: string;
-  /** Odds at level units, and how far each rating point moves them. */
+  /** Odds at level units, and how far each rating point moves them. An option
+   *  with nothing at stake (win and lose both 0) always goes as described. */
   base: number; slope: number;
   /** Points the call is worth when it comes off, and costs when it does not. */
   win: number; lose: number;
+  /** Where the points land. A win is points you score unless it is a stop
+   *  (points taken off his score); a loss is points he scores unless it is a
+   *  miss (points you leave on the board, taken off yours). */
+  winBy?: 'score' | 'stop';
+  loseBy?: 'score' | 'miss';
 }
 export interface MomentDef {
   id: string; title: string; setup: string;
   /** The running margin (yours minus his) this moment can come up at. */
   lead: [number, number];
   weight: number;
+  /** A closing moment only fills a game's last slot, so no call follows it. */
+  closing?: boolean;
   /** The first option is the book call. */
   options: CallOption[];
 }
@@ -88,11 +100,18 @@ export const MAX_CALLS = 3;
 /** Dice a game draws up front: the count, a kind and an outcome per slot, overtime. */
 const DICE = 2 + MAX_CALLS * 2;
 
-export const CALL_SPORTS: readonly CallSport[] = ['cfb', 'cbb', 'afl'];
-/** A sport's pack. A function rather than a table built at module scope, the
- *  house rule for anything computed from an import. */
+/** Each sport's pack. The table holds functions, so no imported value is read
+ *  at module scope (the house rule); a new sport is one line here plus its data file. */
+const PACK_OF: Record<CallSport, () => CoachCallsPack> = {
+  cfb: () => CFB_CALLS,
+  cbb: () => CBB_CALLS,
+  afl: () => AFL_CALLS,
+};
+export const CALL_SPORTS: readonly CallSport[] = Object.keys(PACK_OF) as CallSport[];
+/** A sport's pack. A sport with no pack is an error, never another sport's pack. */
 export function callPack(sport: CallSport): CoachCallsPack {
-  return sport === 'cfb' ? CFB_CALLS : sport === 'cbb' ? CBB_CALLS : AFL_CALLS;
+  if (!Object.prototype.hasOwnProperty.call(PACK_OF, sport)) throw new Error(`coach's calls: no pack for ${String(sport)}`);
+  return PACK_OF[sport]();
 }
 
 const clampTo = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -177,7 +196,13 @@ export interface CallsInput {
   mine: Units; his: Units;
   plan?: Plan | null;
 }
-export interface CallRecord { moment: string; option: string; odds: number; cameOff: boolean; swing: number }
+export interface CallRecord {
+  moment: string; option: string; odds: number; cameOff: boolean;
+  /** What the call moved the margin by: exactly the card's win, or minus its lose. */
+  swing: number;
+  /** The same points on the scoreboard: added to (or, for a stop or a miss, taken off) each side. */
+  forYou: number; forThem: number;
+}
 export interface CallsState {
   input: CallsInput;
   plan: PlanEdge;
@@ -215,15 +240,41 @@ export function startCalls(pack: CoachCallsPack, input: CallsInput): CallsState 
 
 /** The odds an option comes off, your unit against his. */
 export function optionOdds(opt: CallOption, mine: Units, his: Units): number {
+  if (opt.win === 0 && opt.lose === 0) return 1;
   const gap = (mine[opt.mine] ?? 60) - (his[opt.theirs] ?? 60);
   return clampTo(opt.base + opt.slope * gap, ODDS_FLOOR, ODDS_CEIL);
 }
 
-/** The next moment, or null once the game's calls are made. */
+/** What a game's calls have moved the margin by so far. */
+export const callsNet = (st: CallsState) => st.calls.reduce((s, c) => s + c.swing, 0);
+
+/** A moment's words say when it happens: only inside its own lead range. */
+function inLead(m: MomentDef, margin: number): boolean {
+  return margin >= m.lead[0] && margin <= m.lead[1];
+}
+
+/** Both outcomes of an option fit inside what is left of the game's one score. */
+function fitsCap(pack: CoachCallsPack, sofar: number, o: CallOption): boolean {
+  return Math.abs(sofar + o.win) <= pack.oneScore && Math.abs(sofar - o.lose) <= pack.oneScore;
+}
+
+/** The moments that can come up next: inside their lead range at this margin,
+ *  not called already this game, a closing moment only in the last slot, and
+ *  only when every option fits the cap, so no card's promise is ever cut short. */
+export function eligibleMoments(pack: CoachCallsPack, st: CallsState): MomentDef[] {
+  const last = st.calls.length === st.count - 1;
+  const sofar = callsNet(st);
+  return pack.moments.filter(m => inLead(m, st.margin)
+    && !st.calls.some(c => c.moment === m.id)
+    && (last || !m.closing)
+    && m.options.every(o => fitsCap(pack, sofar, o)));
+}
+
+/** The next moment, or null once the game's calls are made (or none can come up). */
 export function nextMoment(pack: CoachCallsPack, st: CallsState): Moment | null {
   const slot = st.calls.length;
   if (slot >= st.count) return null;
-  const eligible = pack.moments.filter(m => st.margin >= m.lead[0] && st.margin <= m.lead[1]);
+  const eligible = eligibleMoments(pack, st);
   if (!eligible.length) return null;
   const total = eligible.reduce((s, m) => s + m.weight, 0);
   let roll = st.dice[1 + slot * 2] * total;
@@ -232,11 +283,11 @@ export function nextMoment(pack: CoachCallsPack, st: CallsState): Moment | null 
   return { def, slot, odds: def.options.map(o => optionOdds(o, st.input.mine, st.input.his)) };
 }
 
-/** What a call moves the margin by, inside both caps: one score for the call, one for the game. */
-function cappedSwing(pack: CoachCallsPack, st: CallsState, raw: number): number {
-  const one = clampTo(raw, -pack.oneScore, pack.oneScore);
-  const sofar = st.calls.reduce((s, c) => s + c.swing, 0);
-  return clampTo(sofar + one, -pack.oneScore, pack.oneScore) - sofar;
+/** Where a swing lands on the scoreboard: [your points, his points]. */
+function splitSwing(opt: CallOption, swing: number): [number, number] {
+  if (swing > 0) return opt.winBy === 'stop' ? [0, -swing] : [swing, 0];
+  if (swing < 0) return opt.loseBy === 'miss' ? [swing, 0] : [0, -swing];
+  return [0, 0];
 }
 
 /** Make the call on the moment the game is at. An unknown option is the book
@@ -250,22 +301,26 @@ export function answerMoment(pack: CoachCallsPack, st: CallsState, optionId: str
   const opt = moment.def.options[idx];
   const odds = moment.odds[idx];
   const cameOff = st.dice[2 + moment.slot * 2] < odds;
-  const swing = cappedSwing(pack, st, cameOff ? opt.win : -opt.lose);
-  return { ...st, margin: st.margin + swing, calls: [...st.calls, { moment: moment.def.id, option: opt.id, odds, cameOff, swing }] };
+  const swing = cameOff ? opt.win : -opt.lose;
+  const [forYou, forThem] = splitSwing(opt, swing);
+  return { ...st, margin: st.margin + swing, calls: [...st.calls, { moment: moment.def.id, option: opt.id, odds, cameOff, swing, forYou, forThem }] };
 }
 
-/** The final score. A level game goes to overtime (a seeded coin) or stays a draw, as the sport does. */
+/** The final score, each side moved by the points the plan and the calls put
+ *  there, so the box score agrees with the call log. A level game goes to
+ *  overtime (a seeded coin) or stays a draw, as the sport does. */
 export function finishCalls(pack: CoachCallsPack, st: CallsState): CallsResult {
-  const { myScore, oppScore } = st.input;
-  let margin = st.margin;
+  const p = st.plan.points;
+  let my = st.input.myScore + Math.max(0, p) + st.calls.reduce((s, c) => s + c.forYou, 0);
+  let opp = st.input.oppScore + Math.max(0, -p) + st.calls.reduce((s, c) => s + c.forThem, 0);
   let overtime = false;
-  if (margin === 0 && pack.ties.kind === 'overtime') {
+  if (my === opp && pack.ties.kind === 'overtime') {
     overtime = true;
-    margin = st.dice[DICE - 1] < 0.5 ? pack.ties.points : -pack.ties.points;
+    if (st.dice[DICE - 1] < 0.5) my += pack.ties.points; else opp += pack.ties.points;
   }
-  const delta = margin - (myScore - oppScore);
-  const my = Math.max(0, myScore + Math.max(0, delta));
-  const opp = Math.max(0, oppScore + Math.max(0, -delta));
+  /* A stop or a miss can never take a side below zero: the rest goes to the other side, the margin unchanged. */
+  if (my < 0) { opp -= my; my = 0; }
+  if (opp < 0) { my -= opp; opp = 0; }
   return {
     myScore: my, oppScore: opp, margin: my - opp,
     result: my > opp ? 'win' : my < opp ? 'loss' : 'draw',
@@ -290,7 +345,7 @@ export function chooseOption(pack: CoachCallsPack, st: CallsState, moment: Momen
   if (policy === 'random') return opts[Math.min(opts.length - 1, Math.floor(pick() * opts.length))].id;
   const score = (i: number) => {
     const o = opts[i], p = moment.odds[i];
-    const up = cappedSwing(pack, st, o.win), down = cappedSwing(pack, st, -o.lose);
+    const up = o.win, down = -o.lose;
     return [p * winShare(st.margin + up) + (1 - p) * winShare(st.margin + down), p * up + (1 - p) * down];
   };
   let at = 0;

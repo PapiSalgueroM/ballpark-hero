@@ -56,12 +56,12 @@ export const AFL_CALLS: CoachCallsPack = {
     {
       id: 'tag', title: 'Tag their best midfielder?', setup: 'Their best midfielder is winning it at every stoppage. Send a tagger to him?', lead: [-99, 99], weight: 3,
       options: [
-        { id: 'own', label: 'Play your own game', blurb: 'Let your midfield run.', mine: 'mid', theirs: 'mid', base: 0.5, slope: 0, win: 0, lose: 0 },
+        { id: 'own', label: 'Play your own game', blurb: 'Let your midfield run.', mine: 'mid', theirs: 'mid', base: 1, slope: 0, win: 0, lose: 0 },
         { id: 'tag', label: 'Send a tagger', blurb: 'Your midfield against theirs. Shut him down and the ball comes your way, lose the battle and you are a runner short.', mine: 'mid', theirs: 'mid', base: 0.55, slope: 0.02, win: 4, lose: 3 },
       ],
     },
     {
-      id: 'flood', title: 'Flood the back half?', setup: 'You lead late and they are coming. Flood the back half or keep your shape?', lead: [1, 99], weight: 4,
+      id: 'flood', title: 'Flood the back half?', setup: 'You lead late and they are coming. Flood the back half or keep your shape?', lead: [1, 99], weight: 4, closing: true,
       options: [
         { id: 'shape', label: 'Keep your shape', blurb: 'An even fight: win it and you goal on the rebound, lose it and they goal.', mine: 'back', theirs: 'fwd', base: 0.5, slope: 0.02, win: 6, lose: 6 },
         { id: 'flood', label: 'Flood the back half', blurb: 'Everybody back. They rarely get through, but you will not score either.', mine: 'back', theirs: 'fwd', base: 0.8, slope: 0.02, win: 0, lose: 6 },
@@ -70,14 +70,14 @@ export const AFL_CALLS: CoachCallsPack = {
     {
       id: 'extra-stoppage', title: 'An extra at the stoppage?', setup: 'The ball is locked up in their half. Throw an extra number to the stoppage?', lead: [-99, 99], weight: 3,
       options: [
-        { id: 'hold', label: 'Hold your numbers', blurb: 'Keep everyone in position.', mine: 'ruck', theirs: 'ruck', base: 0.5, slope: 0, win: 0, lose: 0 },
+        { id: 'hold', label: 'Hold your numbers', blurb: 'Keep everyone in position.', mine: 'ruck', theirs: 'ruck', base: 1, slope: 0, win: 0, lose: 0 },
         { id: 'extra', label: 'Throw an extra in', blurb: 'Your ruck against theirs. Win the clearance and you goal, lose it and they run away with a spare.', mine: 'ruck', theirs: 'ruck', base: 0.5, slope: 0.025, win: 6, lose: 6 },
       ],
     },
     {
-      id: 'swing-tall', title: 'Swing a tall forward?', setup: 'Down late and you need a goal. Swing your tall defender forward?', lead: [-99, -1], weight: 4,
+      id: 'swing-tall', title: 'Swing a tall defender forward?', setup: 'Down late and you need a goal. Swing your tall defender forward?', lead: [-99, -1], weight: 4, closing: true,
       options: [
-        { id: 'stay', label: 'Leave him back', blurb: 'Keep the defense whole.', mine: 'fwd', theirs: 'back', base: 0.5, slope: 0, win: 0, lose: 0 },
+        { id: 'stay', label: 'Leave him back', blurb: 'Keep the defense whole.', mine: 'fwd', theirs: 'back', base: 1, slope: 0, win: 0, lose: 0 },
         { id: 'swing', label: 'Swing him forward', blurb: 'Your forwards against their backs. A goal if he clunks it, a goal the other way if they clear it past him.', mine: 'fwd', theirs: 'back', base: 0.4, slope: 0.02, win: 6, lose: 6 },
       ],
     },
