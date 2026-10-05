@@ -12,9 +12,13 @@
  * scripts/data/missingElevenVerified2026-10.json with both hosts' own text.
  *
  * 1) Every sheet's source note names at least two different hosts, and a
- *    wiki is not counted as one. Sixteen of the 18 older sheets named only
- *    pfr shorthand and Wikipedia (or one host); Round 950 reread all 16 from
- *    the same two hosts, every one agreed 11/11, and their notes now say so.
+ *    wiki is not counted as one (nor is reference.org, a Wikipedia mirror).
+ *    Sixteen of the 18 older sheets named only pfr shorthand and Wikipedia
+ *    (or one host); Round 950 reread all 16 from the same two hosts, every
+ *    one agreed 11/11, and their notes now say so. The SB XXXV Ravens
+ *    defense passed this check only on reference.org, a video site and a
+ *    blog repost; it was reread from the game book and profootballarchives.com
+ *    (pfr answered with a bot check), and now sits in the reread too.
  * 2) Every record sheet is in the file with the same eleven men in the same
  *    order and positions, the same match facts and the same blanks, and each
  *    record row agrees with itself across both hosts (the game book's initial
@@ -25,9 +29,11 @@
  *    espn.com for the city). Every blank's Nationality hint (USA) rests on
  *    two birthplace reads in a US state, pfr's player page and espn.com's
  *    athlete record; a man with no second read is held out of the blanks.
- *    The 16 reread older sheets (legacyRecheck) are held to the same rows,
+ *    The 17 reread older sheets (legacyRecheck) are held to the same rows,
  *    names in order, with pfr's spelling recorded where it differs (Ben
- *    Watson, Steve Neal, Michael Person).
+ *    Watson, Steve Neal, Michael Person). Where the hosts disagree on a
+ *    label (SB XXXV's safeties) the record says so and the file's labels
+ *    must be the game book's (labelsAsBook).
  * 3) Every reveal line on a record sheet is word for word the line the
  *    record holds for that man (candidates[].reveal), and the record has
  *    evidence for him, so no line is written from memory and a later edit
@@ -56,7 +62,8 @@
  *
  * Every check here is exact, there is no sampled statistic and so no band
  * to set. Measured 2026-10-03: 40 sheets all naming two hosts, 22 record
- * sheets with 242 starter rows plus 16 reread sheets with 176, 22 venue
+ * sheets with 242 starter rows plus 16 reread sheets with 176 (17 with 187
+ * since SB XXXV joined on 2026-10-05), 22 venue
  * lines and 62 birthplaces on two hosts (4 blanks held out for want of a
  * second read), 39 reveal lines equal to the record's, 119 blanks, 3 of
  * them accepting another printed name, 9 of 9 frozen main deals and 20
@@ -69,8 +76,11 @@
  * went red:
  *   onehost   drops pro-football-reference.com from one new source note (1)
  *   wikihost  swaps that host for en.wikipedia.org (1, a wiki is no host)
+ *   mirrorhost swaps SB XXXV's profootballarchives.com for reference.org (1)
  *   legacyrow replaces a starter on a reread older sheet (2)
  *   swap      replaces one starter in the file with a man not in the record (2)
+ *   xxxvlabel gives SB XXXV's Kim Herring pfa's FS label (2)
+ *   noreread  takes the SB XXXV reread out of the record (2)
  *   recordpfr blanks one pfr cell in the record (2)
  *   onebirth  drops Noah Gray's espn.com birthplace from the record (2)
  *   onevenue  gives SB XLII's second venue read ESPN's current stadium name (2)
@@ -99,7 +109,7 @@ const RECORD = `${ROOT}/scripts/data/missingElevenVerified2026-10.json`;
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simME-')).replace(/\\/g, '/');
 
 const CONTROL = process.env.SIM_ME_CONTROL || '';
-const CONTROLS = { onehost: 1, wikihost: 1, swap: 2, legacyrow: 2, recordpfr: 2, onebirth: 2, onevenue: 2, fact: 3, factnum: 3, slot: 4, noalias: 4, olddeal: 5, reorder: 6, grow: 6, lte: 6, wnstale: 6, rerun: 7 };
+const CONTROLS = { onehost: 1, wikihost: 1, mirrorhost: 1, swap: 2, xxxvlabel: 2, noreread: 2, legacyrow: 2, recordpfr: 2, onebirth: 2, onevenue: 2, fact: 3, factnum: 3, slot: 4, noalias: 4, olddeal: 5, reorder: 6, grow: 6, lte: 6, wnstale: 6, rerun: 7 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 
 const red = new Set();
@@ -116,6 +126,13 @@ const mustReplace = (text, from, to, what) => {
 };
 if (CONTROL === 'onehost') src = mustReplace(src, 'pro-football-reference.com box score 202402110kan #vis_starters', 'box score 202402110kan #vis_starters', 'the SB LVIII 49ers pfr host');
 if (CONTROL === 'wikihost') src = mustReplace(src, 'pro-football-reference.com box score 202402110kan #vis_starters', 'en.wikipedia.org box score 202402110kan #vis_starters', 'the SB LVIII 49ers pfr host');
+if (CONTROL === 'mirrorhost') src = mustReplace(src, 'profootballarchives.com box score 2000nfl259', 'reference.org SB XXXV lineups', 'the SB XXXV pfa host');
+if (CONTROL === 'xxxvlabel') src = mustReplace(src, "S('SS', 'Kim Herring'),", "S('FS', 'Kim Herring'),", 'the SB XXXV strong safety');
+if (CONTROL === 'noreread') {
+  const i = (rec.legacyRecheck?.sheets ?? []).findIndex((s) => s.id === 'sb-xxxv-bal-d');
+  if (i < 0) { console.error('control noreread: the SB XXXV reread is not in the record'); process.exit(2); }
+  rec.legacyRecheck.sheets.splice(i, 1);
+}
 if (CONTROL === 'legacyrow') src = mustReplace(src, "S('FB', 'Patrick DiMarco'),", "S('FB', 'Mike Tolbert'),", 'the SB LI Falcons fullback');
 if (CONTROL === 'swap') src = mustReplace(src, "S('C', 'Jake Brendel'),", "S('C', 'Alex Mack'),", 'the SB LVIII 49ers center');
 if (CONTROL === 'fact') src = mustReplace(src, "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA' }", "{ name: 'Jake Brendel', slotIndex: 8, nationality: 'USA', fact: 'Snapped every down.' }", 'the Brendel blank');
@@ -170,7 +187,8 @@ if (CONTROL === 'grow') LINEUPS.push({ ...LINEUPS[0], id: 'sb-control-41' });
 /* Hosts named in a note: dotted names ending in a web suffix, reduced to the
    registrable pair (static.www.nfl.com is nfl.com). */
 const HOST_RE = /\b(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:com|org|net|edu|gov|us)\b/gi;
-const WIKI = /wiki|fandom/i;
+/* reference.org republishes Wikipedia under license, so it is a wiki too. */
+const WIKI = /wiki|fandom|^reference\.org$/i;
 const registrable = (h) => h.toLowerCase().split('.').slice(-2).join('.');
 const hostsOf = (note) => [...new Set((String(note).match(HOST_RE) ?? []).map(registrable))];
 const realHosts = (note) => hostsOf(note).filter((h) => !WIKI.test(h));
@@ -271,17 +289,26 @@ const byId = new Map(LINEUPS.map((l) => [l.id, l]));
     if (s.agree !== '11/11') fail(2, `${s.id}: the reread says ${s.agree}`);
     const fileNames = l.slots.map((x) => x.name).join(', ');
     if (fileNames !== s.starters.map((r) => r[1]).join(', ')) fail(2, `${s.id}: the file's eleven differ from the reread`);
+    /* A reread whose hosts disagree on a label keeps the league's: the file's
+       labels must then be the game book's, one for one. */
+    if (s.labelsAsBook) {
+      const fileLabels = l.slots.map((x) => x.position).join(' ');
+      const bookLabels = s.starters.map((r) => String(r[2]).split(/\s+/)[0]).join(' ');
+      if (fileLabels !== bookLabels) fail(2, `${s.id}: the file's labels (${fileLabels}) are not the game book's (${bookLabels})`);
+    }
     for (const [, name, book, pfr, note] of s.starters) {
       olderRows += 1;
       const tail = String(book).replace(/^\S+\s+\d+\s*/, '');
       if (fold(bookSurname(book)) !== fold(name.split(/\s+/).slice(1).join(' ').replace(/\s+(Jr\.?|III|II)$/i, '')) || fold(tail)[0] !== fold(name)[0]) fail(2, `${s.id} ${name}: the game book prints ${book}`);
       const alias = /^pfr prints (.+)$/.exec(String(note ?? ''))?.[1];
-      if (!String(pfr).startsWith(name + '/') && !(alias && String(pfr).startsWith(alias + '/'))) fail(2, `${s.id} ${name}: pfr prints ${pfr}`);
+      if (!String(pfr).startsWith(name + '/') && !(alias && String(pfr).startsWith(alias + '/'))) fail(2, `${s.id} ${name}: ${s.secondHostColumn ? 'the second host' : 'pfr'} prints ${pfr}`);
     }
   }
-  /* The two older defenses whose notes already name two publishers of their
-     own (check 1 holds them to that); Round 950 did not reread them. */
-  const OWN_TWO_HOSTS = ['sb-xx-chi-d', 'sb-xxxv-bal-d'];
+  /* The one older defense whose note already names two publishers of its
+     own, the club and profootballarchives.com (check 1 holds it to that);
+     Round 950 did not reread it. SB XXXV sat here until its note turned out
+     to lean on a Wikipedia mirror; it is in the reread now. */
+  const OWN_TWO_HOSTS = ['sb-xx-chi-d'];
   const covered = new Set([...rec.sheets, ...older].map((s) => s.id).concat(OWN_TWO_HOSTS));
   for (const l of LINEUPS) if (!covered.has(l.id)) fail(2, `${l.id} is in neither the record nor the reread, so nothing holds it to its sources`);
   console.log(`   ${rec.sheets.length} record sheets, ${rows} starter rows, and ${older.length} reread older sheets, ${olderRows} rows, each read the same on both hosts`);

@@ -3620,7 +3620,7 @@
   }
  ],
  "legacyRecheck": {
-  "note": "The 16 sheets written before Round 950 whose notes named fewer than two hosts, reread on 2026-10-03 from the same two hosts as the new sheets. The file keeps its own position labels for these (pfr style in places), so the third column is matched on the surname only. Every one agreed 11/11; nothing on them changed.",
+  "note": "The 16 sheets written before Round 950 whose notes named fewer than two hosts, reread on 2026-10-03 from the same two hosts as the new sheets. The file keeps its own position labels for these (pfr style in places), so the third column is matched on the surname only. Every one agreed 11/11; nothing on them changed. Added 2026-10-05: the SB XXXV Ravens defense, whose note had leaned on a Wikipedia mirror (reference.org), a video site and a blog repost. It was reread from the league game book and the profootballarchives.com box score; its fourth column is the pfa row (secondHostColumn) because pro-football-reference.com answered with a bot check. Names agree 11/11; the safety labels disagree and the sheet keeps the game book's (disagreements).",
   "sheets": [
    {
     "id": "sb-li-ne",
@@ -5030,6 +5030,108 @@
       "Earl Thomas",
       "FS 29 E.Thomas",
       "Earl Thomas/FS"
+     ]
+    ]
+   },
+   {
+    "id": "sb-xxxv-bal-d",
+    "team": "Baltimore Ravens",
+    "agree": "11/11",
+    "secondHostColumn": "profootballarchives.com starters row (name/position), in the place of the pfr row: pro-football-reference.com answered with a bot check and was not read",
+    "labelsAsBook": true,
+    "sources": [
+     {
+      "host": "nfl.com",
+      "what": "Official game book PDF, page 1 Lineups, Baltimore Ravens Defense",
+      "url": "https://static.www.nfl.com/image/upload/v1770924146/gamecenter/10012001-0128-0097-0b9c-6603d3de527d.pdf",
+      "via": "https://www.nfl.com/games/ravens-at-giants-2000-post-4",
+      "read": "2026-10-05"
+     },
+     {
+      "host": "profootballarchives.com",
+      "what": "Box score Starters, Baltimore Ravens Defense",
+      "url": "https://www.profootballarchives.com/nflboxscores2/2000nfl259.html",
+      "read": "2026-10-05"
+     }
+    ],
+    "disagreements": [
+     "Safety labels: the game book prints SS 20 K.Herring and FS 26 R.Woodson, profootballarchives.com prints 26 SS Rod Woodson and 20 FS Kim Herring. Same two men, same numbers. The sheet keeps the league game book labels (SS Herring, FS Woodson), as it always had."
+    ],
+    "facts": [
+     "Venue: the game book prints \"at Raymond James Stadium, Tampa, Florida\"; profootballarchives.com prints Location Tampa, FL, Venue Raymond James Stadium.",
+     "Score: both scoring tables end Ravens 34, Giants 7.",
+     "Kim Herring interception: game book play by play, 2-18-NYG 27 (9:03), \"K.Collins pass intended for I.Hilliard INTERCEPTED by K.Herring at NYG 43\".",
+     "Duane Starks: both scoring tables list D.Starks 49 yd. interception return in the third quarter.",
+     "Corey Harris: a substitution in the game book (S 45 C.Harris), not a starter."
+    ],
+    "starters": [
+     [
+      "LDE",
+      "Rob Burnett",
+      "LDE 90 R.Burnett",
+      "Rob Burnett/LDE"
+     ],
+     [
+      "LDT",
+      "Sam Adams",
+      "LDT 95 S.Adams",
+      "Sam Adams/LDT"
+     ],
+     [
+      "RDT",
+      "Tony Siragusa",
+      "RDT 98 T.Siragusa",
+      "Tony Siragusa/RDT"
+     ],
+     [
+      "RDE",
+      "Michael McCrary",
+      "RDE 99 M.McCrary",
+      "Michael McCrary/RDE"
+     ],
+     [
+      "LLB",
+      "Peter Boulware",
+      "LLB 58 P.Boulware",
+      "Peter Boulware/LLB"
+     ],
+     [
+      "MLB",
+      "Ray Lewis",
+      "MLB 52 R.Lewis",
+      "Ray Lewis/MLB"
+     ],
+     [
+      "RLB",
+      "Jamie Sharper",
+      "RLB 55 J.Sharper",
+      "Jamie Sharper/RLB"
+     ],
+     [
+      "LCB",
+      "Duane Starks",
+      "LCB 22 D.Starks",
+      "Duane Starks/LCB"
+     ],
+     [
+      "RCB",
+      "Chris McAlister",
+      "RCB 21 C.McAlister",
+      "Chris McAlister/RCB"
+     ],
+     [
+      "SS",
+      "Kim Herring",
+      "SS 20 K.Herring",
+      "Kim Herring/FS",
+      "pfa labels him FS 20; the game book prints SS 20 K.Herring and the sheet keeps the league label"
+     ],
+     [
+      "FS",
+      "Rod Woodson",
+      "FS 26 R.Woodson",
+      "Rod Woodson/SS",
+      "pfa labels him SS 26; the game book prints FS 26 R.Woodson and the sheet keeps the league label"
      ]
     ]
    }

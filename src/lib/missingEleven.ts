@@ -615,7 +615,7 @@ export const ELEVEN_LINEUPS: ElevenLineup[] = [
       { name: 'Jamie Sharper', slotIndex: 6, nationality: 'USA', fact: 'The third man in the linebacker trio with Ray Lewis and Peter Boulware.' },
       { name: 'Rob Burnett', slotIndex: 0, nationality: 'USA', fact: 'The left end had 10.5 sacks that season, a career year at age 33.' },
     ],
-    source: 'pfr 2000 Ravens roster Starters table (fetched, matches 11/11 incl. CB sides) + reference.org/nfl-video.com SB XXXV lineups; Herring SS (not Corey Harris) per Baltimore Sun via neilcornrich.com and Russell Street Report; Starks pick-six per CBS News recap.',
+    source: 'nfl.com game book (static.www.nfl.com/image/upload/v1770924146/gamecenter/10012001-0128-0097-0b9c-6603d3de527d.pdf) + profootballarchives.com box score 2000nfl259, read 2026-10-05, 11/11 names match; pfa swaps the safety labels (SS Woodson, FS Herring) and the sheet keeps the game book\'s (SS 20 K.Herring, FS 26 R.Woodson). Corey Harris is a game book substitution. Herring\'s interception and Starks\'s 49-yard pick-six are in the game book; full rows in scripts/data/missingElevenVerified2026-10.json (legacyRecheck).',
   },
 
   // 17. Super Bowl XLVIII, Seattle Seahawks defense (the Legion of Boom)
