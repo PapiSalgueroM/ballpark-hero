@@ -109,6 +109,58 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
       { label: "Then pay me like it", reply: "Then the second contract better reflect it", karma: -5, morale: 1, popularity: 1 },
     ],
   },
+  /* Round 917: six more for draft night, the thinnest one-off on the
+     calendar (five texts for a night every career has). */
+  {
+    id: "draft_position_coach", from: "Position coach", emoji: "📒", phase: "any", beat: "draft",
+    text: "Got your number from the scouts. The playbook is on its way to your hotel. First meeting is the morning after you land. Read the first section before you sleep?",
+    choices: [
+      { label: "Reading it tonight", reply: "It'll be read before I sleep coach. See you in the morning", karma: 5, morale: 1 },
+      { label: "Tonight is for family", reply: "Tonight is for my family coach. I'm all yours tomorrow", karma: 1, morale: 3 },
+    ],
+  },
+  {
+    id: "draft_equipment", from: "Equipment manager", emoji: "🧺", phase: "any", beat: "draft",
+    text: "Welcome. I need three jersey numbers from you, in order. Heads up, your college number belongs to a vet here and he likes it.",
+    choices: [
+      { label: "New league, new number", reply: "Give me whatever's open. I'll make it mine", karma: 4, morale: 1 },
+      { label: "Offer to buy the number", reply: "Ask him what it costs. I'll pay it", karma: -1, popularity: 2, cash: -0.1 },
+    ],
+  },
+  {
+    id: "draft_grandma", from: "Grandma", emoji: "🫖", phase: "any", beat: "draft",
+    text: "They said your name on the television and I dropped my tea. Wear a coat up there. Are you eating?",
+    choices: [
+      { label: "Call her right now", reply: "Calling you right now. Yes I'm eating", karma: 7, morale: 4 },
+      { label: "Send a heart", reply: "❤️", karma: 1 },
+    ],
+  },
+  {
+    id: "draft_old_team", from: "High school teammate", emoji: "🏫", phase: "any", beat: "draft",
+    text: "Bro. We watched it at the old field house, the whole senior year team. You owe every one of us a jersey.",
+    choices: [
+      { label: "Jerseys for all of them", reply: "Send me the sizes. Everybody gets one", karma: 6, popularity: 2, cash: -0.05 },
+      { label: "One signed for the field house", reply: "One signed, framed, for the wall. Tell coach", karma: 3 },
+      { label: "Leave him on read", reply: "...", karma: -4 },
+    ],
+  },
+  {
+    id: "draft_beat_writer", from: "Beat reporter", emoji: "📰", phase: "any", beat: "draft",
+    text: "Welcome to town. Five minutes on the phone tonight for the morning paper? Easy questions, I promise.",
+    choices: [
+      { label: "Call him now", reply: "Call me. I've got five minutes", karma: 2, popularity: 3 },
+      { label: "Go through the media office", reply: "Set it up with the team's media office and I'm in", karma: 3, morale: 1 },
+      { label: "Not tonight", reply: "Not tonight. Tonight's for my people", karma: -1 },
+    ],
+  },
+  {
+    id: "draft_vet_at_your_spot", from: "Veteran at your position", emoji: "🪑", phase: "any", beat: "draft",
+    text: "So you're the kid they drafted to take my job. Meeting room is upstairs. I sit front left. Sit next to me.",
+    choices: [
+      { label: "I'll be there early", reply: "Front left. I'll be there before you are", karma: 6, morale: 2 },
+      { label: "May the best man win", reply: "May the best man win then", karma: -2, morale: 2, popularity: 1 },
+    ],
+  },
 
   /* ── training camp ── */
   {
@@ -161,6 +213,56 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Speak up for the room", reply: "Coach, half pads today. We'll get the work in smarter", karma: 6, morale: 2 },
       { label: "Strap up and shut up", reply: "Pads on. Let's go", karma: -1, morale: -2 },
+    ],
+  },
+  /* Round 917: six more for camp, a beat every season has. */
+  {
+    id: "camp_roommate", from: "Camp roommate", emoji: "😴", phase: "any", beat: "camp",
+    text: "You snore like a lawn mower. Either I'm buying earplugs or you're buying me a hotel room. Your call.",
+    choices: [
+      { label: "Earplugs and breakfast on me", reply: "Earplugs are on me. Breakfast too. Sorry man", karma: 4, morale: 2 },
+      { label: "Tell him to deal with it", reply: "It's camp. Nobody sleeps. Deal with it", karma: -3 },
+    ],
+  },
+  {
+    id: "camp_conditioning", from: "Head coach", emoji: "⏱️", phase: "any", beat: "camp",
+    text: "Conditioning test is the first morning. Anybody who fails it runs after practice all week. No exceptions, and that includes you.",
+    choices: [
+      { label: "I'll pass it", reply: "I'll pass it coach. Been running all summer", karma: 3, morale: 2 },
+      { label: "Ask for a pass", reply: "Coach, any chance I can skip it this year?", karma: -4, morale: -1 },
+    ],
+  },
+  {
+    id: "camp_cousin", from: "Kid cousin", emoji: "🧒", phase: "any", beat: "camp",
+    text: "Mom says there's a day fans can watch practice. Can I come? Can I get on the field? Can I meet the head coach?",
+    choices: [
+      { label: "Get him a pass and a jersey", reply: "You're on the list. Wear the jersey I'm sending you", karma: 7, morale: 3, cash: -0.05 },
+      { label: "Watch from the fence, buddy", reply: "You can watch from the fence like everybody else buddy", karma: 0 },
+    ],
+  },
+  {
+    id: "camp_called_upstairs", from: "Teammate", emoji: "📦", phase: "any", beat: "camp",
+    text: "They just called me up to the office and told me to bring my playbook. Guess that's it for me here. Thanks for everything man.",
+    choices: [
+      { label: "Call him right now", reply: "Pick up. I'm calling you right now", karma: 7, morale: -1 },
+      { label: "Tell him he'll land somewhere", reply: "You'll land somewhere by the weekend. You can play", karma: 3 },
+      { label: "Say nothing", reply: "...", karma: -4 },
+    ],
+  },
+  {
+    id: "camp_nutritionist", from: "Team nutritionist", emoji: "🥤", phase: "any", beat: "camp",
+    text: "You've dropped weight three days running. Too much. I'm adding a shake after every practice. Drink them or I tell the coach.",
+    choices: [
+      { label: "Drink the shakes", reply: "I'll drink them. All of them", karma: 3, morale: 1 },
+      { label: "They taste like chalk", reply: "They taste like chalk. I'll eat more at dinner", karma: -2, morale: 1 },
+    ],
+  },
+  {
+    id: "camp_joint_practice", from: "Coordinator", emoji: "🤼", phase: "any", beat: "camp",
+    text: "Joint practice with another team tomorrow. Compete, but no fights. First guy to throw a punch watches the rest of it from the bus.",
+    choices: [
+      { label: "No fights, coach", reply: "No fights. I'll let the reps talk", karma: 4, morale: 1 },
+      { label: "Can't promise if they start it", reply: "Can't promise anything if they start it", karma: -3, morale: 1, popularity: 2 },
     ],
   },
 
@@ -471,6 +573,56 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Make a plan", reply: "Let's sit down this week. Real plan", karma: 3, morale: 2, cash: -0.05 },
       { label: "Later", reply: "After the season. One thing at a time", karma: 0 },
+    ],
+  },
+  /* Round 917: six more for the contract summer, which had four. */
+  {
+    id: "contract_mom", from: "Mom", emoji: "❤️", phase: "any", beat: "contract",
+    text: "Your aunt says you're about to sign a big contract. Is that true? Don't sign anything without reading it. And call your mother.",
+    choices: [
+      { label: "Call her and explain it", reply: "Calling you tonight. I'll walk you through all of it", karma: 6, morale: 3 },
+      { label: "The agent has it", reply: "The agent's handling it mama. Don't worry", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_whisper", from: "Teammate", emoji: "🤫", phase: "any", beat: "contract",
+    text: "You know what they're paying the new guy at your spot? I do. You're not going to like it. Want the number?",
+    choices: [
+      { label: "Tell me", reply: "Go ahead. I'd rather know", karma: -1, morale: -2 },
+      { label: "Keep it to yourself", reply: "Keep it. I don't want that in my head all year", karma: 3, morale: 2 },
+    ],
+  },
+  {
+    id: "contract_policy", from: "Agent", emoji: "🧾", phase: "any", beat: "contract",
+    text: "One more thing for the contract year. There's an insurance policy that pays you if you get hurt before the new deal. It costs money up front. Want it?",
+    choices: [
+      { label: "Buy the policy", reply: "Buy it. I'll sleep better", karma: 2, morale: 2, cash: -0.1 },
+      { label: "Bet on my health", reply: "No policy. I'm betting on me", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_reporter", from: "Reporter", emoji: "🎙️", phase: "any", beat: "contract",
+    text: "Hearing you and the team are far apart on an extension. Care to comment? I'm running it either way.",
+    choices: [
+      { label: "No comment", reply: "No comment. Have a good one", karma: 2 },
+      { label: "Nobody is far apart", reply: "Nobody is far apart. Write that", karma: 1, popularity: 1 },
+      { label: "Say the team is lowballing you", reply: "Write that they're lowballing me", karma: -5, morale: -1, popularity: 3 },
+    ],
+  },
+  {
+    id: "contract_position_coach", from: "Position coach", emoji: "📒", phase: "any", beat: "contract",
+    text: "Contract year. I've seen it make guys press. Same routine as last year, same you. I'll tell you if you start chasing numbers.",
+    choices: [
+      { label: "Hold me to it", reply: "Hold me to that coach. Say it to my face if you see it", karma: 4, morale: 3 },
+      { label: "Numbers are what get paid", reply: "Respect coach, but numbers are what get paid", karma: -2, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_realtor", from: "Realtor", emoji: "🏠", phase: "any", beat: "contract",
+    text: "Saw the news about your contract coming up. If you might be moving next year I can quietly get your place valued. No obligation.",
+    choices: [
+      { label: "Not selling, I'm staying", reply: "Not selling. I plan on being here a while", karma: 2, morale: 2 },
+      { label: "Value it, quietly", reply: "Get it valued. Nobody hears about it", karma: 0 },
     ],
   },
 ];

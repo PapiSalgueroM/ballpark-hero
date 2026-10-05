@@ -90,6 +90,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && c.age >= 23 && flag(c, 'b_newborn') < 2) {
     deck.push({
       id: 'mlbB_newbornRoadTrip',
+      category: 'family', cooldown: 2,
       title: 'The due date lands in the middle of a ten game trip',
       body: 'Your first kid is due somewhere between Seattle and Anaheim. The doctor keeps repeating that babies do not read the schedule.',
       options: [
@@ -124,6 +125,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && c.age >= 25 && flag(c, 'b_partnerCity') === 0) {
     deck.push({
       id: 'mlbB_partnerCity',
+      category: 'family', cooldown: 99,
       title: 'They got the job',
       body: 'Your partner just landed the role they have been chasing since college. It is in a city with a different ballpark in it.',
       options: [
@@ -156,6 +158,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && c.age >= 24 && flag(c, 'b_sibAgent') === 0) {
     deck.push({
       id: 'mlbB_siblingAgent',
+      category: 'family', cooldown: 99,
       title: 'Your brother printed business cards',
       body: 'They say AGENT in a font he chose himself. He has already told a bat company and a cleat company that he speaks for you.',
       options: [
@@ -189,6 +192,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 3 && flag(c, 'b_parentHome') === 0) {
     deck.push({
       id: 'mlbB_parentCloser',
+      category: 'family', cooldown: 99,
       title: 'She keeps using the word closer',
       body: 'Your mom has never asked you for a car, a house or a dollar. She has asked, on every phone call for three months, if you could play closer to home.',
       options: [
@@ -221,6 +225,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && c.fanbase >= 35 && flag(c, 'b_leak') === 0) {
     deck.push({
       id: 'mlbB_groupChatLeak',
+      category: 'family', cooldown: 99,
       title: 'The family group chat leaked',
       body: 'A cousin screenshotted it. Your review of the hitting coach, that he has never met a baseball and has only read about one, is now a trending audio.',
       options: [
@@ -252,6 +257,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if ((nw >= 3 || c.earnings >= 12) && flag(c, 'b_house') === 0) {
     deck.push({
       id: 'mlbB_houseForSomeone',
+      category: 'family', cooldown: 99, story: 'familyHouse',
       title: 'Somebody stops paying rent forever',
       body: 'The money is finally there to buy a person a house outright. The list of candidates turned out to be much longer than you expected.',
       options: [
@@ -289,6 +295,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
       : `The ${mlbTeamLabelOf(c.team)} home run record is two swings away and the seed is already locked. The last series means nothing to anybody in the building except you.`;
     deck.push({
       id: 'mlbB_franchiseRecord',
+      category: 'legacy', cooldown: 99,
       title: recTitle,
       body: recBody,
       options: [
@@ -321,6 +328,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 9 && (c.rings >= 1 || c.allStars >= 3 || c.fanbase >= 78) && flag(c, 'b_number') === 0) {
     deck.push({
       id: 'mlbB_numberRetired',
+      category: 'legacy', cooldown: 99,
       title: 'They want your number on the wall',
       body: `The ${mlbTeamLabelOf(c.team)} have three ceremony dates and one very specific request about how long the speech can be.`,
       options: [
@@ -352,6 +360,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 10 && c.age >= 32 && flag(c, 'b_hof') === 0) {
     deck.push({
       id: 'mlbB_hofPush',
+      category: 'legacy', cooldown: 99,
       title: 'A firm that specializes in Cooperstown',
       body: 'They say your case needs narrative support. They brought a slide deck about you with a custom title font and a section called The Peak.',
       options: [
@@ -383,6 +392,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 5 && c.age >= 28 && flag(c, 'b_heir') === 0) {
     deck.push({
       id: 'mlbB_mentorProspect',
+      category: 'legacy', cooldown: 99,
       title: 'They drafted your replacement',
       body: `The ${mlbTeamLabelOf(c.team)} took your position in the first round. The kid has your rookie card framed in his locker, which somehow makes it worse.`,
       options: [
@@ -414,6 +424,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 10 && (c.rings >= 1 || c.mvpCys >= 1) && flag(c, 'b_statue') === 0) {
     deck.push({
       id: 'mlbB_statueDebate',
+      category: 'legacy', cooldown: 99,
       title: 'The statue committee has notes',
       body: 'The club wants bronze outside the center field gate. The sculptor sent eleven poses and one of them is you screaming at a home plate umpire.',
       options: [
@@ -445,6 +456,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 12 && c.age >= 35 && flag(c, 'b_tour') === 0) {
     deck.push({
       id: 'mlbB_farewellTour',
+      category: 'legacy', cooldown: 99,
       title: 'Announce it, or just go quietly',
       body: 'Say this is the last one and all 29 road parks hand you a framed something. Say nothing and you get to play baseball without a receiving line at second base.',
       options: [
@@ -476,6 +488,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 3 && c.fanbase >= 45 && flag(c, 'b_bobble') === 0) {
     deck.push({
       id: 'mlbB_bobbleheadNight',
+      category: 'legacy', cooldown: 99, story: 'bobblehead',
       title: 'The bobblehead does not look like you',
       body: 'Twenty thousand of them ship in March. The face belongs to a stranger and the mold is already paid for.',
       options: [
@@ -509,6 +522,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 2 && flag(c, 'b_nemesisArm') === 0) {
     deck.push({
       id: 'mlbB_pitcherOwnsYou',
+      category: 'rivalry', cooldown: 99,
       title: 'He owns you and everybody knows it',
       body: 'You are 2 for 34 against a division lefty whose slider starts at your ribs. The graphic runs on the video board every time you step in.',
       options: [
@@ -540,6 +554,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (isSp && yrs >= 2 && flag(c, 'b_nemesisBat') === 0) {
     deck.push({
       id: 'mlbB_hitterOwnsYou',
+      category: 'rivalry', cooldown: 99,
       title: 'Nine homers, one hitter',
       body: 'One right handed bat in your division has taken you deep nine times. He never watches the ball leave. He watches you.',
       options: [
@@ -571,6 +586,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && flag(c, 'b_brawl') < 2 && rng() < 0.7) {
     deck.push({
       id: 'mlbB_benchesClearing',
+      category: 'rivalry', cooldown: 2, story: 'benchesClear',
       title: 'The rivalry has a body count now',
       body: 'Their catcher put a forearm in your rookie and both dugouts emptied in four seconds. The league is handing out suspensions by fax.',
       options: [
@@ -602,6 +618,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 4 && prevTeam && flag(c, 'b_exMate') === 0) {
     deck.push({
       id: 'mlbB_formerTeammate',
+      category: 'rivalry', cooldown: 99,
       title: 'Your locker neighbor signed with the rivals',
       body: 'The guy who drove you to the park for four straight years just signed across the rivalry. He knows every sign, every tell and every one of your bad habits.',
       options: [
@@ -633,6 +650,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 3 && flag(c, 'b_oldSkip') === 0) {
     deck.push({
       id: 'mlbB_managerWhoBuriedYou',
+      category: 'rivalry', cooldown: 99,
       title: 'The manager who buried you got a new job',
       body: isSp
         ? 'He pulled you in the fifth for two straight summers and told reporters you could not go a third time through. He now manages a club you see nineteen times a year.'
@@ -666,6 +684,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 3 && prevTeam && flag(c, 'b_revenge') === 0) {
     deck.push({
       id: 'mlbB_revengeSeries',
+      category: 'rivalry', cooldown: 99,
       title: 'Three games back where they traded you',
       body: `You return to ${mlbTeamLabelOf(prevTeam)} in June. They have already produced a tribute video you never asked for and a fan poll about whether to boo.`,
       options: [
@@ -699,6 +718,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && flag(c, 'b_code') === 0 && rng() < 0.75) {
     deck.push({
       id: 'mlbB_unwrittenRules',
+      category: 'rivalry', cooldown: 99,
       title: 'The unwritten rules are on the table',
       body: isSp
         ? 'Their starter put one in your shortstop ribs. Your catcher already knows what the first pitch of the next inning is supposed to be.'
@@ -734,6 +754,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (nw >= 2 && flag(c, 'b_restaurant') === 0) {
     deck.push({
       id: 'mlbB_steakhouse',
+      category: 'business', cooldown: 99,
       title: 'Your name on a steakhouse',
       body: 'A restaurant group wants your face on the door and a booth with a plaque. You have eaten there twice and liked it once.',
       options: [
@@ -767,6 +788,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (nw >= 4 && yrs >= 3 && flag(c, 'b_tech') === 0) {
     deck.push({
       id: 'mlbB_techPitch',
+      category: 'business', cooldown: 99,
       title: 'Two guys with a bat knob sensor',
       body: 'It measures everything about a swing and syncs to a phone. They want 1.5M and they have said the word ecosystem nine times.',
       options: [
@@ -800,6 +822,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (nw >= 2 && yrs >= 4 && flag(c, 'b_academy') === 0) {
     deck.push({
       id: 'mlbB_youthAcademy',
+      category: 'business', cooldown: 99,
       title: 'An academy with your name on the gate',
       body: 'Travel ball costs more than college now and the fields at home are still all dirt and no lights. You can change one zip code with one check.',
       options: [
@@ -831,6 +854,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (nw >= 1.5 && yrs >= 3 && flag(c, 'b_bats') === 0) {
     deck.push({
       id: 'mlbB_batCompany',
+      category: 'business', cooldown: 99,
       title: 'A guy in a barn makes unreal bats',
       body: isSp
         ? 'You have not taken a real swing since college and you still know this wood is different. He wants a partner and a name on the barrel.'
@@ -866,6 +890,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (c.age >= 28 && nw >= 2 && flag(c, 'b_bourbon') === 0) {
     deck.push({
       id: 'mlbB_bourbonLabel',
+      category: 'business', cooldown: 99,
       title: 'A bourbon with your number on the bottle',
       body: 'A distillery in Kentucky wants a signature barrel with your number on the label. The barrel is already aging, which feels like a negotiating tactic.',
       options: [
@@ -899,6 +924,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (nw >= 5 && yrs >= 6 && flag(c, 'b_milb') === 0) {
     deck.push({
       id: 'mlbB_minorLeagueClub',
+      category: 'business', cooldown: 99,
       title: 'A Double A club is for sale',
       body: 'Fourteen million for a ballpark, 4,000 seats in a town of 60,000, and a mascot with a documented history of assault on umpires. The current owner cried during the tour.',
       options: [
@@ -932,6 +958,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (flag(c, 'b_fish') === 0 && rng() < 0.85) {
     deck.push({
       id: 'mlbB_fishingVideo',
+      category: 'offseason', cooldown: 99,
       title: 'The fishing video got away from you',
       body: 'You caught something enormous, screamed a word you cannot un scream, and your buddy posted all four minutes of it. Forty million views by Thursday.',
       options: [
@@ -963,6 +990,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && flag(c, 'b_golf') === 0) {
     deck.push({
       id: 'mlbB_celebrityGolf',
+      category: 'offseason', cooldown: 99,
       title: 'The celebrity golf tournament',
       body: 'Three days in February, a pro am pairing and a live television window. Your hitting coach has begged you not to touch a golf club until March.',
       options: [
@@ -995,6 +1023,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if ((c.ovr >= 85 || c.allStars >= 2) && flag(c, 'b_cover') === 0) {
     deck.push({
       id: 'mlbB_gameCover',
+      category: 'offseason', cooldown: 99,
       title: 'The video game wants your face',
       body: 'Cover athlete, a full day in a motion capture suit with ninety cameras on you. Every single person in your clubhouse has already mentioned the curse.',
       options: [
@@ -1027,6 +1056,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if ((c.ovr < 82 || c.morale < 60) && c.age <= 31 && yrs >= 1 && flag(c, 'b_winterBall') === 0) {
     deck.push({
       id: 'mlbB_winterBall',
+      category: 'offseason', cooldown: 99, story: 'winterBall',
       title: 'Winter ball in the Dominican',
       body: 'Sixty games in December in front of crowds that boo like it is Game 7 of the World Series. Your agent says rest. Your bat says reps.',
       options: [
@@ -1058,6 +1088,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (c.age >= 25 && flag(c, 'b_cook') === 0) {
     deck.push({
       id: 'mlbB_learningToCook',
+      category: 'offseason', cooldown: 99,
       title: 'You cannot cook a single thing',
       body: `${c.age} years old and your entire menu is a protein shake and whatever the clubhouse chef made at 3pm. That has started to genuinely embarrass you.`,
       options: [
@@ -1089,6 +1120,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if ((nw >= 3 || c.earnings >= 15) && yrs >= 3 && flag(c, 'b_foundation') === 0) {
     deck.push({
       id: 'mlbB_foundationLaunch',
+      category: 'offseason', cooldown: 99,
       title: 'The foundation needs a purpose',
       body: 'The paperwork is filed and the checkbook is real. Your lawyer needs one sentence describing what the thing actually does.',
       options: [
@@ -1120,6 +1152,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (c.fanbase >= 50 && flag(c, 'b_video') === 0 && rng() < 0.8) {
     deck.push({
       id: 'mlbB_countryMusicVideo',
+      category: 'offseason', cooldown: 99,
       title: 'A country singer wants you in the video',
       body: 'You play a guy who loses a fight outside a bar and then drives a truck through a field for no stated reason. Two days of shooting in Tennessee.',
       options: [
@@ -1153,6 +1186,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (c.fanbase >= 60 && flag(c, 'b_namefan') === 0) {
     deck.push({
       id: 'mlbB_nameChangeFan',
+      category: 'weird', cooldown: 99,
       title: 'A man in Ohio legally changed his name to yours',
       body: 'Forty one years old, three kids, full legal name change at a county courthouse. His wife found out from a piece of mail.',
       options: [
@@ -1184,6 +1218,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && flag(c, 'b_psychic') === 0 && rng() < 0.8) {
     deck.push({
       id: 'mlbB_ownerPsychic',
+      category: 'weird', cooldown: 99,
       title: 'The owner hired a psychic',
       body: 'She sits behind home plate with a notebook and has firm opinions about the bullpen. The pitching coach stopped arguing with her in May.',
       options: [
@@ -1217,6 +1252,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && flag(c, 'b_ghost') === 0 && rng() < 0.8) {
     deck.push({
       id: 'mlbB_clubhouseGhost',
+      category: 'weird', cooldown: 99,
       title: 'The clubhouse is haunted',
       body: 'Three rookies swear it is a utility infielder from 1968. The clubhouse manager refuses to deny it, which is somehow much worse.',
       options: [
@@ -1248,6 +1284,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && flag(c, 'b_mascot') === 0 && rng() < 0.85) {
     deck.push({
       id: 'mlbB_mascotFeud',
+      category: 'weird', cooldown: 99,
       title: 'The mascot is coming for you',
       body: 'He mocked your batting stance on the dugout roof in front of 38,000 people. You have been informed there is a man in there and his name is Doug.',
       options: [
@@ -1279,6 +1316,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && flag(c, 'b_race') === 0 && rng() < 0.85) {
     deck.push({
       id: 'mlbB_hotDogRace',
+      category: 'weird', cooldown: 99,
       title: 'You entered the hot dog race',
       body: 'Between innings, in full uniform, against three grown adults dressed as condiments. The manager found out from the video board like everybody else.',
       options: [
@@ -1312,6 +1350,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && flag(c, 'b_raccoon') === 0 && rng() < 0.85) {
     deck.push({
       id: 'mlbB_bullpenRaccoon',
+      category: 'weird', cooldown: 99,
       title: 'There is a raccoon living in the bullpen',
       body: 'Nine days now. He has a name. It is Rico and he is 3 for 3 against the strength staff.',
       options: [
@@ -1360,6 +1399,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     const mkt = money(marketOf(c));
     deck.push({
       id: 'mlbB_qualifyingOffer',
+      category: 'contract', cooldown: 99,
       title: `The qualifying offer is ${qo}M`,
       body: `The ${mlbTeamLabelOf(c.team)} tagged you with it. Take it and you are here one more year. Turn it down and every club that signs you gives up a draft pick, which your agent calls leverage and you call a problem.`,
       options: [
@@ -1397,6 +1437,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     const guaranteed = money(c.salary * c.contractYears);
     deck.push({
       id: 'mlbB_optOutClause',
+      category: 'contract', cooldown: 99,
       title: 'The opt out is sitting right there',
       body: `Sit still and ${guaranteed}M is already guaranteed to you. Opt out and you hit the market at the exact peak of your career, which is either genius or the worst decision you will ever make.`,
       options: [
@@ -1433,6 +1474,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 3 && c.rings === 0 && c.contractYears >= 1 && last && last.teamResult === 'Missed October' && flag(c, 'b_deadline') === 0) {
     deck.push({
       id: 'mlbB_deadlineContender',
+      category: 'contract', cooldown: 99,
       title: 'Your agent needs an answer before July',
       body: `The ${mlbTeamLabelOf(c.team)} are going to be sellers again and everybody knows it. He wants to know now whether you would go to a contender at the deadline.`,
       options: [
@@ -1473,6 +1515,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     const away = money(Math.max(atEra(c, 2), mkt2 * 1.2));
     deck.push({
       id: 'mlbB_hometownDiscount',
+      category: 'contract', cooldown: 99,
       title: 'Less money to stay put',
       body: `The ${mlbTeamLabelOf(c.team)} offered ${home}M a year. A club two time zones away offered ${away}M and a private jet clause.`,
       options: [
@@ -1505,6 +1548,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 8 && c.age >= 30 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0) {
     deck.push({
       id: 'mlbB_retireHealthy',
+      category: 'contract', cooldown: 99,
       title: 'You could stop right now',
       body: 'Elbow, shoulder, knees and money all intact at the same time. Almost nobody in this sport ever gets handed that combination.',
       options: [
@@ -1537,6 +1581,7 @@ export function getMlbLifeEventsB(c: MlbCareerState, rng: () => number): MlbCare
     const jpn = money(Math.max(atEra(c, 4), c.salary * 1.5));
     deck.push({
       id: 'mlbB_japanOffer',
+      category: 'contract', cooldown: 99,
       title: `Japan is offering ${jpn}M a year`,
       body: `A club in Japan has two years at ${jpn}M on the table, plus an apartment, a translator and a level of respect that stopped existing for you here around March.`,
       options: [
