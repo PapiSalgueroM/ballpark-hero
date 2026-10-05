@@ -25,6 +25,7 @@ export const AFL_FORMAT_SOURCES: AflFormatSource[] = [
   { id: 'abcwildcard', publisher: 'ABC News', title: 'AFL gives teams finishing 10th chance to win premiership through wildcard round in finals', url: 'https://www.abc.net.au/news/2025-11-10/afl-introduces-wildcard-round-to-finals/105990434' },
   { id: 'abc2026', publisher: 'ABC News', title: "From rule changes to new wildcard round, here's what's new in AFL for 2026", url: 'https://www.abc.net.au/news/2026-03-03/whats-new-in-the-afl-for-2026-rule-change-wildcard-round-sub/106376360' },
   { id: 'abcpercentage', publisher: 'ABC News', title: 'The maths that will decide the AFL finals', url: 'https://www.abc.net.au/news/2017-06-19/the-maths-that-will-decide-the-afl-finals/8630874' },
+  { id: 'espnrules', publisher: 'ESPN', title: 'Centre bounce, sub gone in AFL rules shake-up (2025-10-01)', url: 'https://www.espn.com.au/afl/story/_/id/46442874/afl-centre-bounce-scrapped-substitute-rule-removed-changes' },
   { id: 'espnextratime', publisher: 'ESPN', title: 'AFL dumps golden score for tied finals', url: 'https://www.espn.com.au/afl/story/_/id/28323336/afl-dumps-golden-score-tied-finals' },
   { id: 'senfinaleight', publisher: 'SEN', title: '31 years of the final eight', url: 'https://www.sen.com.au/news/2025/11/12/afl-final-eight-when-did-it-start' },
   { id: 'senprelims', publisher: 'SEN', title: 'AFL Preliminary Finals by the numbers (2026-09-13)', url: 'https://www.sen.com.au/news/2026/09/13/afl-news-preliminary-finals-sydney-v-fremantle-hawthorn-v-brisbane-results-times-and-dates' },
@@ -60,6 +61,8 @@ export const AFL_FORMAT_FACTS: Record<string, FormatFact> = {
   draftRepeat: gameRule('The order repeats until every list is back to 36. Priority, father son, academy and compensation picks are not modelled.'),
   draftAge: gameRule('Draftees are 18. The real rule: 18 by 31 December of the draft year.'),
   listSize: gameRule('Thirty six players on every list.'),
+  // The copy's matchday line (Round 792) bound to its receipts. The interchange cap of 75 has AFL sources only, so the copy never states it.
+  matchday: verified('Twenty three named for a match: eighteen on the field and five interchange players, with no substitute from 2026.', 'reg26', 'espnrules', 'abc2026'),
 };
 
 /** The finals systems this game can play. The tie list is data for finalsBracket.ts. */
