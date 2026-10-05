@@ -4,7 +4,7 @@
 // La Liga, Serie A, Bundesliga and Ligue 1, baked through the shared extend
 // step (scripts/lib/eraBakeExtend.mjs) from an empty era and an offline pull
 // of the base table. Memberships and sources are in the script header. The
-// summer 2020 window corrections with a dated record are applied (237 rows
+// summer 2020 window corrections with a dated record are applied (256 rows
 // moved, arrived or removed). Values in £m at the year-2020 snapshot,
 // ratings 48-94 on the same curve as the 2026 bake.
 // Regenerate per the header of scripts/bakeEra2020.mjs.
@@ -13,9 +13,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const ERA2020_META = {
   year: 2020,
-  players: 1789,
+  players: 1774,
   clubs: 98,
-  moves: 237,
+  moves: 256,
 };
 
 /** 2020 clubs where the year-2020 table runs thin (under 8 real players);
@@ -186,7 +186,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Saúl Ñíguez', p: 'CM', a: 25, v: 58.5, r: 88 },
     { n: 'José María Giménez', p: 'CB', a: 24, v: 57, r: 88 },
     { n: 'Koke', p: 'CM', a: 27, v: 48.8, r: 87 },
-    { n: 'Álvaro Morata', p: 'ST', a: 27, v: 40.5, r: 86 },
     { n: 'Renan Lodi', p: 'LB', a: 21, v: 40.5, r: 86 },
     { n: 'Marcos Llorente', p: 'RB', a: 24, v: 36.8, r: 86 },
     { n: 'Ángel Correa', p: 'CF', a: 24, v: 32.3, r: 85 },
@@ -384,8 +383,8 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Christophe Hérelle', p: 'CB', a: 27, v: 4.5, r: 74 },
     { n: 'Romain Perraud', p: 'LB', a: 22, v: 3.8, r: 73 },
     { n: 'Franck Honorat', p: 'RW', a: 23, v: 3, r: 72 },
+    { n: 'Ronaël Pierre-Gabriel', p: 'RB', a: 21, v: 3, r: 72 },
     { n: 'Romain Faivre', p: 'CAM', a: 21, v: 2.3, r: 70 },
-    { n: 'Mathias Autret', p: 'CAM', a: 28, v: 1.5, r: 68 },
     { n: 'Yoann Court', p: 'LW', a: 29, v: 1.5, r: 68 },
     { n: 'Julien Faussurier', p: 'RB', a: 32, v: 0.8, r: 64 },
   ],
@@ -537,7 +536,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Mounir Chouiar', p: 'LW', a: 20, v: 7.5, r: 77 },
     { n: 'Roger Assalé', p: 'ST', a: 26, v: 6, r: 76 },
     { n: 'Arthur Zagré', p: 'LB', a: 18, v: 5.3, r: 75 },
-    { n: 'Stephy Mavididi', p: 'LW', a: 21, v: 3.8, r: 73 },
     { n: 'Didier Ndong', p: 'CDM', a: 25, v: 3, r: 72 },
     { n: 'Jonathan Panzo', p: 'CB', a: 19, v: 3, r: 72 },
     { n: 'Mama Baldé', p: 'ST', a: 24, v: 3, r: 72 },
@@ -624,6 +622,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marco Benassi', p: 'CM', a: 25, v: 9, r: 78 },
     { n: 'Pol Lirola', p: 'RB', a: 22, v: 8.3, r: 77 },
     { n: 'Riccardo Sottil', p: 'LW', a: 20, v: 6, r: 76 },
+    { n: 'Antonio Barreca', p: 'LB', a: 24, v: 2.3, r: 70 },
     { n: 'Franck Ribéry', p: 'LW', a: 36, v: 2.3, r: 70 },
     { n: 'Milan Badelj', p: 'CDM', a: 30, v: 2.3, r: 70 },
     { n: 'Lorenzo Venuti', p: 'RB', a: 24, v: 1.5, r: 68 },
@@ -686,7 +685,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Lukas Lerager', p: 'CDM', a: 26, v: 3, r: 72 },
     { n: 'Nicolò Rovella', p: 'CDM', a: 18, v: 3, r: 72 },
     { n: 'Paolo Ghiglione', p: 'RB', a: 22, v: 3, r: 72 },
-    { n: 'Antonio Barreca', p: 'LB', a: 24, v: 2.3, r: 70 },
     { n: 'Domenico Criscito', p: 'LB', a: 33, v: 2.3, r: 70 },
     { n: 'Francesco Cassata', p: 'CM', a: 22, v: 2.3, r: 70 },
     { n: 'Filip Jagiełło', p: 'CAM', a: 22, v: 1.5, r: 68 },
@@ -844,6 +842,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Matthijs de Ligt', p: 'CB', a: 20, v: 60.8, r: 89 },
     { n: 'Arthur Melo', p: 'CM', a: 23, v: 48.8, r: 87 },
     { n: 'Cristiano Ronaldo', p: 'ST', a: 34, v: 48.8, r: 87 },
+    { n: 'Álvaro Morata', p: 'ST', a: 27, v: 40.5, r: 86 },
     { n: 'Rodrigo Bentancur', p: 'CDM', a: 22, v: 40.5, r: 86 },
     { n: 'Federico Chiesa', p: 'RW', a: 22, v: 39, r: 86 },
     { n: 'Dejan Kulusevski', p: 'CAM', a: 19, v: 36.8, r: 86 },
@@ -957,10 +956,8 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Issiaga Sylla', p: 'LB', a: 26, v: 2.3, r: 70 },
     { n: 'Loïc Badé', p: 'CB', a: 19, v: 2.3, r: 70 },
     { n: 'Tony Mauricio', p: 'RW', a: 25, v: 2.3, r: 70 },
-    { n: 'Gaëtan Robail', p: 'LW', a: 25, v: 1.5, r: 68 },
     { n: 'Ismaël Boura', p: 'LB', a: 19, v: 1.5, r: 68 },
     { n: 'Jonathan Clauss', p: 'RB', a: 27, v: 1.5, r: 68 },
-    { n: 'Jules Keita', p: 'LW', a: 21, v: 1.5, r: 68 },
     { n: 'Cheick Traoré', p: 'RB', a: 24, v: 0.8, r: 64 },
     { n: 'Jean-Louis Leca', p: 'GK', a: 34, v: 0.8, r: 64 },
   ],
@@ -1041,7 +1038,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Laurent Abergel', p: 'CDM', a: 26, v: 1.5, r: 68 },
     { n: 'Thomas Monconduit', p: 'CDM', a: 28, v: 1.5, r: 68 },
     { n: 'Houboulang Mendes', p: 'RB', a: 21, v: 0.8, r: 64 },
-    { n: 'Quentin Lecoeuche', p: 'LM', a: 25, v: 0.8, r: 64 },
   ],
   'Lyon': [
     { n: 'Houssem Aouar', p: 'CAM', a: 21, v: 44.3, r: 87 },
@@ -1062,7 +1058,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Jean Lucas', p: 'CM', a: 21, v: 3.8, r: 73 },
     { n: 'Melvin Bard', p: 'LB', a: 19, v: 3, r: 72 },
     { n: 'Marçal', p: 'LB', a: 30, v: 2.3, r: 70 },
-    { n: 'Ciprian Tătărușanu', p: 'GK', a: 33, v: 0.8, r: 64 },
   ],
   'Mainz': [
     { n: 'Jean-Philippe Mateta', p: 'ST', a: 22, v: 14.3, r: 80 },
@@ -1076,7 +1071,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Karim Onisiwo', p: 'ST', a: 27, v: 3, r: 72 },
     { n: 'Leandro Barreiro', p: 'CM', a: 19, v: 3, r: 72 },
     { n: 'Robin Zentner', p: 'GK', a: 25, v: 3, r: 72 },
-    { n: 'Ronaël Pierre-Gabriel', p: 'RB', a: 21, v: 3, r: 72 },
     { n: 'Danny Latza', p: 'CDM', a: 30, v: 2.3, r: 70 },
     { n: 'Jeffrey Bruma', p: 'CB', a: 28, v: 2.3, r: 70 },
     { n: 'Levin Öztunali', p: 'LW', a: 23, v: 2.3, r: 70 },
@@ -1194,7 +1188,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Sofiane Diop', p: 'LW', a: 19, v: 4.5, r: 74 },
     { n: 'Caio Henrique', p: 'LB', a: 22, v: 3.8, r: 73 },
     { n: 'Jemerson', p: 'CB', a: 27, v: 3.8, r: 73 },
-    { n: 'Kamil Glik', p: 'CB', a: 31, v: 3.8, r: 73 },
     { n: 'Radoslaw Majecki', p: 'GK', a: 20, v: 3.8, r: 73 },
     { n: 'Gil Dias', p: 'RW', a: 23, v: 2.3, r: 70 },
   ],
@@ -1230,7 +1223,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Marcus Coco', p: 'RB', a: 23, v: 2.3, r: 70 },
     { n: 'Mehdi Abeid', p: 'CM', a: 27, v: 2.3, r: 70 },
     { n: 'Pedro Chirivella', p: 'CDM', a: 22, v: 2.3, r: 70 },
-    { n: 'Samuel Moutoussamy', p: 'CM', a: 23, v: 2.3, r: 70 },
     { n: 'Abdoul Kader Bamba', p: 'LW', a: 25, v: 1.5, r: 68 },
     { n: 'Dennis Appiah', p: 'RB', a: 27, v: 1.5, r: 68 },
     { n: 'Sébastien Corchia', p: 'RB', a: 29, v: 1.5, r: 68 },
@@ -1307,9 +1299,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Robson Bambu', p: 'CB', a: 22, v: 4.5, r: 74 },
     { n: 'Andy Pelmard', p: 'CB', a: 19, v: 3.8, r: 73 },
     { n: 'Hicham Boudaoui', p: 'CM', a: 20, v: 3, r: 72 },
-    { n: 'Arnaud Lusamba', p: 'CM', a: 22, v: 2.3, r: 70 },
     { n: 'Dan Ndoye', p: 'RW', a: 19, v: 1.5, r: 68 },
-    { n: 'Riza Durmisi', p: 'LB', a: 25, v: 1.5, r: 68 },
   ],
   'Nîmes': [
     { n: 'Zinedine Ferhat', p: 'RW', a: 26, v: 4.5, r: 74 },
@@ -1324,7 +1314,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Florian Miguel', p: 'LB', a: 23, v: 1.5, r: 68 },
     { n: 'Lucas Deaux', p: 'CDM', a: 31, v: 1.5, r: 68 },
     { n: 'Sidy Sarr', p: 'CDM', a: 23, v: 1.5, r: 68 },
-    { n: 'Romain Philippoteaux', p: 'LM', a: 31, v: 0.8, r: 64 },
   ],
   'Osasuna': [
     { n: 'Chimy Ávila', p: 'ST', a: 25, v: 9.8, r: 78 },
@@ -1423,6 +1412,7 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Cristian Tello', p: 'LW', a: 28, v: 6, r: 76 },
     { n: 'Joel Robles', p: 'GK', a: 29, v: 4.5, r: 74 },
     { n: 'Dani Martín', p: 'GK', a: 21, v: 3, r: 72 },
+    { n: 'Juan Miranda', p: 'LB', a: 19, v: 3, r: 72 },
     { n: 'Juanmi', p: 'LW', a: 26, v: 3, r: 72 },
     { n: 'Zouhair Feddal', p: 'CB', a: 30, v: 3, r: 72 },
     { n: 'Andrés Guardado', p: 'CM', a: 33, v: 2.3, r: 70 },
@@ -1514,7 +1504,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'James Léa Siliki', p: 'CM', a: 23, v: 4.5, r: 74 },
     { n: 'Romain Del Castillo', p: 'RW', a: 23, v: 4.5, r: 74 },
     { n: 'Brandon Soppy', p: 'RM', a: 17, v: 3.8, r: 73 },
-    { n: 'Joris Gnagnon', p: 'CB', a: 22, v: 3.8, r: 73 },
     { n: 'Damien Da Silva', p: 'CB', a: 31, v: 3, r: 72 },
     { n: 'Jordan', p: 'ST', a: 23, v: 3, r: 72 },
     { n: 'Jonas Martin', p: 'CDM', a: 29, v: 2.3, r: 70 },
@@ -1555,11 +1544,9 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Wahbi Khazri', p: 'LW', a: 28, v: 7.5, r: 77 },
     { n: 'Zaydou Youssouf', p: 'CM', a: 20, v: 6.8, r: 76 },
     { n: 'Arnaud Nordin', p: 'RW', a: 21, v: 3.8, r: 73 },
-    { n: 'Jean-Eudes Aholou', p: 'CDM', a: 25, v: 3.8, r: 73 },
     { n: 'Timothée Kolodziejczak', p: 'CB', a: 28, v: 3.8, r: 73 },
     { n: 'Harold Moukoudi', p: 'CB', a: 22, v: 3, r: 72 },
     { n: 'Mahdi Camara', p: 'CM', a: 21, v: 3, r: 72 },
-    { n: 'Assane Dioussé', p: 'CDM', a: 22, v: 2.3, r: 70 },
     { n: 'Charles Abi', p: 'ST', a: 19, v: 2.3, r: 70 },
     { n: 'Romain Hamouma', p: 'RW', a: 32, v: 2.3, r: 70 },
     { n: 'Stéphane Ruffier', p: 'GK', a: 33, v: 2.3, r: 70 },
@@ -1636,7 +1623,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Michael Gregoritsch', p: 'ST', a: 25, v: 4.5, r: 74 },
     { n: 'Alessandro Schöpf', p: 'CM', a: 25, v: 3, r: 72 },
     { n: 'Daniel Caligiuri', p: 'RW', a: 31, v: 3, r: 72 },
-    { n: 'Juan Miranda', p: 'LB', a: 19, v: 3, r: 72 },
     { n: 'Bastian Oczipka', p: 'LB', a: 30, v: 2.3, r: 70 },
     { n: 'Can Bozdogan', p: 'CM', a: 18, v: 2.3, r: 70 },
     { n: 'Hamza Mendyl', p: 'LB', a: 22, v: 2.3, r: 70 },
@@ -1899,7 +1885,6 @@ export const ERA2020_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Ramiro Funes Mori', p: 'CB', a: 28, v: 3.8, r: 73 },
     { n: 'Xavi Quintillà', p: 'LB', a: 23, v: 3, r: 72 },
     { n: 'Raúl Albiol', p: 'CB', a: 34, v: 2.3, r: 70 },
-    { n: 'Santi Cazorla', p: 'CM', a: 35, v: 2.3, r: 70 },
     { n: 'Yéremy Pino', p: 'RW', a: 17, v: 2.3, r: 70 },
     { n: 'Álex Baena', p: 'LW', a: 18, v: 1.5, r: 68 },
   ],

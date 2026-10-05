@@ -31,8 +31,12 @@
  *
  * WHAT A YEAR-2020 ROW IS. Its ages put it in the spring of 2020 (Messi 32,
  * born June 1987; Havertz 20, born June 1999), so it predates the summer
- * 2020 window, which COVID pushed to 5 October 2020 abroad and 16 October
- * between English clubs. Some rows are older still: Bruno Fernandes sits at
+ * 2020 window, which COVID pushed to 5 October 2020 (in England a domestic
+ * window then ran to 16 October for deals between Premier League and EFL
+ * clubs only, never between two Premier League clubs: premierleague.com
+ * news 1725887, "Dates for summer 2020 transfer window agreed", and Sky
+ * Sports, "Deadline Day 2: What deals can be done in the domestic transfer
+ * window", read 2026-10-05). Some rows are older still: Bruno Fernandes sits at
  * Sporting although he joined Manchester United on 29 January 2020.
  *
  * THE SPELLINGS. Each league's map below names every table spelling it
@@ -153,12 +157,17 @@ export const DB_TO_ERA_L1 = {
  * year-2021 row names another club, and every year-2020 row outside the
  * pools whose year-2021 row names a club of this world, was crossed against
  * those tables by name: 638 candidates. A line below exists for each one a
- * dated record places (135 moves, 67 arrivals, 35 removals). The tables
- * list the principal transfers, not every one, so a mover with no line in
- * them stays where the year-2020 row has him, whatever his value, and the
- * harness (scripts/simEra2020.mjs) prints the biggest of them by name every
- * run (Morata at Atletico, Lazaro at Newcastle, Bas Dost at Frankfurt and
- * Biraghi at Inter among them), so the gap is measured, not hidden. A move
+ * dated record places. The round's review then crossed every shipped man
+ * against those tables the other way round, by the club a summer 2020 line
+ * takes him FROM, which found the leavers with no year-2021 row at all
+ * (Cazorla, Glik, Tatarusanu and twelve more, each read beside a second
+ * publisher) and four movers the first pass had missed (Morata, Barreca,
+ * Juan Miranda, Pierre-Gabriel): 139 moves, 67 arrivals, 50 removals in all.
+ * The tables list the principal transfers, not every one, so a mover with
+ * no line in them stays where the year-2020 row has him, whatever his value,
+ * and the harness (scripts/simEra2020.mjs) prints the biggest of them by
+ * name every run (Lazaro at Newcastle, Bas Dost at Frankfurt and Biraghi at
+ * Inter among them), so the gap is measured, not hidden. A move
  * the records place but the year-2021 row cannot prove is not made either:
  * Kubo (on loan at Villarreal, his year-2021 row at Getafe), Pellistri
  * (Manchester United, the row at Alaves) and Ivo Grbic (Atletico, the row at
@@ -301,6 +310,14 @@ export const ERA2020_MOVES = [
   { n: 'Sacha Boey', to: 'Dijon', why: 'Rennes to Dijon, loan, 5 Oct 2020 (MF-FR)' },
   { n: 'Claudio Bravo', to: 'Real Betis', why: 'Manchester City to Betis Séville, free, 31 Aug 2020 (MF-EN)' },
   { n: 'Jimmy Cabot', to: 'Angers', why: 'Lorient to Angers, free, 25 Sep 2020 (MF-FR)' },
+  /* Round 971 review fix: two leavers the first bake missed (its name match
+     read Mainz's French spelling "Mayence" as no club of this world). */
+  { n: 'Ronaël Pierre-Gabriel', to: 'Brest', why: 'Mayence to Brest, loan, 7 Jul 2020 (MF-DE, MF-FR)' },
+  /* The loans to Fiorentina and Betis are not in the Maxifoot tables, so two
+     other publishers date each (read 2026-10-05). */
+  { n: 'Álvaro Morata', to: 'Juventus', why: 'Atletico Madrid to Juventus, loan, 22 Sep 2020 (juventus.com, "Welcome home, Alvaro!"; Sky Sports, "Alvaro Morata returns to Juventus on loan from Atletico Madrid")' },
+  { n: 'Antonio Barreca', to: 'Fiorentina', why: 'Genoa to Monaco, loan return, 3 Aug 2020 (MF-IT, MF-FR), then Monaco to Fiorentina, loan, 5 Oct 2020 (Corriere dello Sport, 5 Oct 2020, "Fiorentina, preso Barreca"; asmonaco.com, "Antonio Barreca loaned to Fiorentina"), back 31 May 2021 (MF-IT-S21)' },
+  { n: 'Juan Miranda', to: 'Real Betis', why: 'Schalke 04 to FC Barcelone, loan return, 30 Jun 2020 (MF-ES, MF-DE), then Barcelona to Real Betis, loan, 5 Oct 2020 (Football Espana, 5 Oct 2020, "Barcelona defender Miranda joining Betis on loan deal"; fcbarcelona.com, "Miranda to stay at Betis": on loan there in 2020/21)' },
 ];
 
 /* Arrivals from outside the five leagues (or from a club that went down in 2020):
@@ -413,6 +430,30 @@ export const ERA2020_REMOVALS = [
   { n: 'Théo Valls', why: 'Nimes to Libre, free, 31 May 2020 (MF-FR)' },
   { n: 'Raoul Bellanova', why: 'Bordeaux to Atalanta, loan, 30 Jan 2020 (MF-IT-W20); his loan return from Pescara to Bordeaux on 31 May 2021 (MF-IT-S21) puts his 2020-21 at Pescara' },
   { n: 'Marcin Bulka', why: 'Paris SG to FC Carthagène, loan, 28 Sep 2020 (MF-FR)' },
+  /* Round 971 review fix: the summer 2020 leavers with NO year-2021 row at
+     all, which the first bake never looked at (its candidates were men whose
+     2021 row names another club). Each is a dated Maxifoot line that takes
+     him away from the club the snapshot has him at, read beside a second
+     publisher (read 2026-10-05, named on the line), so the step's `single`
+     flag records only that the table has no row to add. Those who went to a
+     club of this world (Glik, Tatarusanu, Mavididi, Philippoteaux, Durmisi,
+     Aholou) leave it rather than arrive: an arrival needs a 2021 row, and
+     none of them has one. */
+  { n: 'Santi Cazorla', single: true, why: 'Villarreal to Al Sadd, free, 20 Jul 2020 (MF-ES); Sky Sports, "Santi Cazorla joins Al Sadd after Villarreal send-off"' },
+  { n: 'Kamil Glik', single: true, why: 'Monaco to Benevento, transfer, 11 Aug 2020 (MF-IT, MF-FR); asmonaco.com and OneFootball, "Benevento confirm signing of Kamil Glik from Monaco"' },
+  { n: 'Ciprian Tătărușanu', single: true, why: 'Lyon to AC Milan, transfer, 11 Sep 2020 (MF-IT, MF-FR); acmilan.com, "Official statement: Ciprian Tataruşanu", 12 Sep 2020' },
+  { n: 'Stephy Mavididi', single: true, why: 'Dijon to Juventus, loan return, 31 May 2020, then Juventus to Montpellier, transfer, 2 Jul 2020 (MF-IT, MF-FR); France 24, 2 Jul 2020, "Juventus\' top quality Mavididi joins Montpellier"' },
+  { n: 'Romain Philippoteaux', single: true, why: 'Nimes to Brest, transfer, 22 Sep 2020 (MF-FR); France Bleu, 22 Sep 2020, "Romain Philippoteaux a Brest, c\'est officiel"' },
+  { n: 'Mathias Autret', single: true, why: 'Brest to Auxerre, free, 30 Jun 2020 (MF-FR); MaLigue2, 29 Jun 2020, "Officiel: Mathias Autret rejoint l\'AJ Auxerre"' },
+  { n: 'Arnaud Lusamba', single: true, why: 'Nice to no club, end of contract, 30 Jun 2020 (MF-FR); MaLigue2, 20 Oct 2020, "Officiel: Arnaud Lusamba de retour en Ligue 2" (Amiens, a free agent since June)' },
+  { n: 'Samuel Moutoussamy', single: true, why: 'Nantes to Fortuna Sittard, loan, 7 Oct 2020 (MF-FR); Foot Mercato, "Nantes: Samuel Moutoussamy prete au Fortuna Sittard"' },
+  { n: 'Assane Dioussé', single: true, why: 'St Etienne to MKE Ankaragucu, loan, 18 Sep 2020 (MF-FR), back 31 May 2021 (MF-FR-S21); foot-sur7, "ASSE Mercato: Assane Diousse file en Turquie (Officiel)"' },
+  { n: 'Gaëtan Robail', single: true, why: 'Lens to Guingamp, loan, 5 Oct 2020 (MF-FR); Made in Lens, "Officiel: Gaetan Robail prete un an a Guingamp"' },
+  { n: 'Jules Keita', single: true, why: 'Lens to CSKA Sofia, loan, dated 20 Aug 2020 by MF-FR; Foot Mercato, "Le RC Lens prete Jules Keita", and Lensois.com\'s review of his 2020-21 on loan at CSKA Sofia' },
+  { n: 'Quentin Lecoeuche', single: true, why: 'Lorient to AC Ajaccio, loan, 16 Jul 2020 (MF-FR); fclorient.bzh, "Quentin Lecoeuche prete a l\'AC Ajaccio"' },
+  { n: 'Riza Durmisi', single: true, why: 'Nice to Lazio, loan return, 31 May 2020 (MF-IT, MF-FR); Football Italia, "Nice send back Ounas and Durmisi", and The Laziali, 5 May 2020, Nice turning down the option to buy' },
+  { n: 'Jean-Eudes Aholou', single: true, why: 'St Etienne to Monaco, loan return, 31 Jul 2020, then Monaco to Strasbourg, loan, 29 Sep 2020 (MF-FR); asmonaco.com, "Jean-Eudes Aholou prete au RC Strasbourg"' },
+  { n: 'Joris Gnagnon', single: true, why: 'Rennes to Sevilla, loan return, 31 May 2020 (MF-ES, MF-FR); Foot Mercato\'s Rennes 2020-21 transfer table, "Retour de pret, Rennes, FC Seville"' },
 ];
 
 /* A 2020-21 world without its own headlines is not that season, and the

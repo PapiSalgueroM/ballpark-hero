@@ -53,7 +53,13 @@
  *   20.00, 20.00, 19.67) keeps its 14 floor. The bigger 2010-11 world shares
  *   165 names with 2020 now, five of them listed pairs of two men.
  *
- * Four negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield,
+ * RE-MEASURED 2026-10-05 after the review's bake fix (fifteen leavers out,
+ *   Morata, Barreca, Juan Miranda and Pierre-Gabriel moved: 1,774 players),
+ *   family 0: Bayern 2,1,3,1,1,1 (1.50), PSG 3,1,2,1,1,1 (1.50), Manchester
+ *   City 6,7,2,3,1,2 (3.50), Crotone 20 every seed (20.00). Every mean sits
+ *   inside the family spread above, so the bands stand.
+ *
+ * Five negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -112,13 +118,17 @@ const BAND_THIN = 14;
    when it is not, so a control that changed nothing can never read as one
    that fired. A control run plays no seasons (section 4).
      dupe         Havertz at Chelsea AND back at Leverkusen: one man, one
-                  club and the window sample must both fail.
+                  club and the META count fail (the window sample only asks
+                  whether he is at Chelsea, which he still is, so it cannot).
      stale        Havertz sent back to Leverkusen: the window sample fails.
      fourleagues  the era cut to its first four leagues for section 3: the
                   league count, the sizes and the 98 demands fail.
-     nofield      the era's Champions League field emptied for section 7. */
+     nofield      the era's Champions League field emptied for section 7.
+     swapfinish   Porto (quarter final) and Ferencvaros (groups) trade
+                  finishes for section 7: the shape still reads
+                  1,1,2,4,8,16, so only the per club pin can fail. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -410,19 +420,23 @@ console.log('5) The bake file tells the truth about itself');
     ['Atlético Madrid', 'Luis Suárez'], ['Barcelona', 'Miralem Pjanić'], ['Juventus', 'Arthur Melo'], ['Juventus', 'Federico Chiesa'],
     ['Juventus', 'Dejan Kulusevski'], ['Inter Milan', 'Achraf Hakimi'], ['Inter Milan', 'Arturo Vidal'], ['Inter Milan', 'Christian Eriksen'],
     ['Napoli', 'Victor Osimhen'], ['Bayern Munich', 'Leroy Sané'], ['Borussia Dortmund', 'Jude Bellingham'], ['Lille', 'Jonathan David'],
-    ['Real Sociedad', 'David Silva'], ['Sevilla', 'Ivan Rakitic'], ['PSG', 'Danilo Pereira']];
+    ['Real Sociedad', 'David Silva'], ['Sevilla', 'Ivan Rakitic'], ['PSG', 'Danilo Pereira'],
+    // Round 971 review fix: movers the first bake missed.
+    ['Juventus', 'Álvaro Morata'], ['Real Betis', 'Juan Miranda'], ['Fiorentina', 'Antonio Barreca'], ['Brest', 'Ronaël Pierre-Gabriel']];
   let landed = 0;
   for (const [club, name] of MOVED) { if (at(club, name)) landed += 1; else fail(`${name} is not at ${club}, where the summer 2020 records put him`); }
   // ...and the leavers gone from the world (left it, or reached their next
   // club of the world only in a later window).
-  const GONE = ['Gonzalo Higuaín', 'Blaise Matuidi', 'Dejan Lovren', 'Martin Ødegaard', 'William Saliba', 'Mario Götze', 'Santiago Arias'];
+  const GONE = ['Gonzalo Higuaín', 'Blaise Matuidi', 'Dejan Lovren', 'Martin Ødegaard', 'William Saliba', 'Mario Götze', 'Santiago Arias',
+    // Round 971 review fix: leavers with no year-2021 row, which the first bake never looked at.
+    'Santi Cazorla', 'Kamil Glik', 'Ciprian Tătărușanu', 'Stephy Mavididi', 'Riza Durmisi'];
   let gone = 0;
   for (const name of GONE) { if (!seen.has(name)) gone += 1; else fail(`${name} is at ${seen.get(name)}, but left the world that summer`); }
   console.log(`   one man one club: ${dupes} duplicates; window sample: ${landed} of ${MOVED.length} movers landed, ${gone} of ${GONE.length} leavers gone`);
   /* THE GAP, measured every run: the biggest year-2020 men whose year-2021
      row names another club of this world and whom no dated record placed,
      so they sit at their 2019-20 club. Printed, never asserted away. */
-  const STALE = [['Atlético Madrid', 'Álvaro Morata', 'Juventus'], ['Newcastle', 'Valentino Lazaro', 'Gladbach'], ['Inter Milan', 'Cristiano Biraghi', 'Fiorentina'], ['Eintracht Frankfurt', 'Bas Dost', 'Club Brugge']];
+  const STALE = [['Newcastle', 'Valentino Lazaro', 'Gladbach'], ['Inter Milan', 'Cristiano Biraghi', 'Fiorentina'], ['Eintracht Frankfurt', 'Bas Dost', 'Club Brugge']];
   const still = STALE.filter(([club, name]) => at(club, name)).map(([club, name, to]) => `${name} at ${club} (${to} by 2021)`);
   console.log(`   no record placed, so left where the year-2020 row has them: ${still.join(', ') || 'none of the named'}`);
 }
@@ -447,11 +461,33 @@ console.log('6) The uplift is small, keeps the order, and leaves the rank and fi
 /* ---------- 7. The 2020-21 Champions League field ---------- */
 console.log('7) The real 2020-21 Champions League field, eight groups into a round of 16');
 {
-  const field = CONTROL === 'nofield' ? [] : (ERA_UCL_FIELDS.era2020 ?? []);
+  let field = CONTROL === 'nofield' ? [] : (ERA_UCL_FIELDS.era2020 ?? []);
   if (CONTROL === 'nofield') {
     if (!(ERA_UCL_FIELDS.era2020 ?? []).length) controlRefuse('there is no 2020 field to empty');
     console.log('   CONTROL nofield applied: section 7 sees an empty field');
   }
+  if (CONTROL === 'swapfinish') {
+    const a = field.find(e => e.name === 'Porto'), b = field.find(e => e.name === 'Ferencváros');
+    if (!a || !b || a.finish === b.finish) controlRefuse('Porto and Ferencváros are not both in the field with different finishes');
+    field = field.map(e => (e === a ? { ...e, finish: b.finish } : e === b ? { ...e, finish: a.finish } : e));
+    console.log('   CONTROL swapfinish applied: Porto and Ferencváros trade finishes, the shape unchanged');
+  }
+  /* Round 971 review fix: each club's own finish, not just the shape, so two
+     swapped finishes cannot pass. The knockout clubs as the sources in
+     clubManager.ts give them (RSSSF ec202021 and uefa.com's results page);
+     every other club of the 32 went out in the groups. */
+  const KO = {
+    Chelsea: 'winner', 'Manchester City': 'runner_up', 'Real Madrid': 'semi_final', PSG: 'semi_final',
+    Liverpool: 'quarter_final', 'Bayern Munich': 'quarter_final', 'Borussia Dortmund': 'quarter_final', Porto: 'quarter_final',
+    Barcelona: 'round_of_16', 'RB Leipzig': 'round_of_16', 'Atlético Madrid': 'round_of_16', Lazio: 'round_of_16',
+    Atalanta: 'round_of_16', Gladbach: 'round_of_16', Juventus: 'round_of_16', Sevilla: 'round_of_16',
+  };
+  for (const [name, finish] of Object.entries(KO)) {
+    const e = field.find(x => x.name === name);
+    if (!e) fail(`${name} is not in the 2020-21 field, where it reached the ${finish}`);
+    else if (e.finish !== finish) fail(`${name} reads ${e.finish} in the 2020-21 field, its real finish was ${finish}`);
+  }
+  for (const e of field) if (!KO[e.name] && e.finish !== 'group_stage') fail(`${e.name} reads ${e.finish}, but went out in the 2020-21 groups`);
   const baked = field.filter(e => ERA2020_ROSTERS[e.name]);
   const count = k => field.filter(e => e.finish === k).length;
   console.log(`   ${field.length} clubs, ${baked.length} with baked 2020-21 squads; winner ${field.find(e => e.finish === 'winner')?.name}`);

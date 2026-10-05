@@ -861,14 +861,26 @@ export const CM_ERAS: CMEra[] = [
   /* Round 971: the fourth past season, the newest, so it sits first. The
      blurb names only squads the bake carries (its anchors in
      scripts/bakeEra2020.mjs), and the honesty line owns up to the summer
-     movers no dated record placed. */
+     movers no dated record placed.
+     Review fix: the honesty line says what the bake does. A move is made
+     where a dated record shows it AND the next season's row names the club;
+     a leaver whose new club no row confirms is left out (Glik, Tatarusanu);
+     a mover no record covered stays put (Lazaro, Biraghi). The empty
+     stadiums are that season's, read 2026-10-05: premierleague.com ("How has
+     the COVID-19 pandemic affected Premier League matches?": behind closed
+     doors "largely ... throughout the season", fans back in limited numbers
+     in December in some areas and in May) and Sky Sports ("How 2020 changed
+     football: Fans stay at home"). The brief also asked for five
+     substitutes, but the Premier League voted to stay at three for 2020-21
+     (Sky Sports, "Premier League clubs vote against allowing five
+     substitutes in 2020/21 season"; ESPN), so the card does not claim it. */
   {
     id: 'era2020',
     label: seasonLabel(2020),
     startYear: 2020,
     emoji: '\u{1F3DF}\u{FE0F}',
     blurb: 'Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG, Bruno at United, Lewandowski at Bayern. All of the big five, 2020-21.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Summer 2020 signings are at their new clubs where a dated record shows the move, and the ones no record covered still sit at their old club. Thin squads are padded with made up youth players and say so.`; },
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1, a season played mostly without fans. Summer 2020 moves are made where a dated record shows them and the next season's data agrees. A man who left for a club the data can't confirm is left out rather than guessed, and a mover no record covered still sits at his old club. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2015',
