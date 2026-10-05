@@ -59,13 +59,13 @@ async function page(start = true) {
   localStorage.setItem(dailyKey(), JSON.stringify({ answers: [true, false, true] }));
   const view = render(<HelmetProvider><MemoryRouter><ChampOrNot /></MemoryRouter></HelmetProvider>);
   await flush();
-  fireEvent.click(view.getByRole('button', { name: 'Rugby League', exact: true })); await flush();
+  fireEvent.click(view.getByRole('button', { name: 'Rugby League' })); await flush();
   const panel = view.container.querySelector<HTMLElement>('[data-rugby-challenge]')!;
   expect(panel).toHaveAttribute('data-rugby-phase', 'intro');
   if (start) click(panel, 'Start ten questions');
   return { view, panel };
 }
-const button = (panel: HTMLElement, name: string) => within(panel).getByRole('button', { name, exact: true });
+const button = (panel: HTMLElement, name: string) => within(panel).getByRole('button', { name });
 const click = (panel: HTMLElement, name: string) => fireEvent.click(button(panel, name));
 function finish(panel: HTMLElement, correct = mixed) {
   correct.forEach((earned, index) => {
@@ -141,8 +141,8 @@ describe('Rugby League completed-call review', () => {
     expect(button(panel, 'Resume missed calls')).toHaveFocus(); click(panel, 'Resume missed calls');
     expect(panel, 'Resume retains an already revealed retry').toHaveAttribute('data-rugby-phase', 'retry-reveal');
     expect(panel.querySelector('[data-rugby-retry-feedback]')).toHaveTextContent(reveal!);
-    fireEvent.click(view.getByRole('button', { name: 'Daily', exact: true })); expect(panel).not.toBeVisible();
-    fireEvent.click(view.getByRole('button', { name: 'Rugby League', exact: true })); expect(panel).toBeVisible();
+    fireEvent.click(view.getByRole('button', { name: 'Daily' })); expect(panel).not.toBeVisible();
+    fireEvent.click(view.getByRole('button', { name: 'Rugby League' })); expect(panel).toBeVisible();
     expect(panel.querySelector('[data-rugby-retry-feedback]')).toHaveTextContent(reveal!);
     click(panel, 'Next missed call'); retry(panel, 1); retry(panel, 2);
     expect(panel.querySelector('[data-rugby-retry-score]')).toHaveTextContent('3 / 3 corrected');
@@ -230,7 +230,7 @@ describe('Rugby League completed-call review', () => {
     finish(panel); click(panel, 'Review ten calls'); click(panel, 'Review claim 4: correct'); click(panel, 'Back to original results');
     click(panel, 'Retry 3 missed calls'); misses.forEach((_, index) => retry(panel, index));
     click(panel, 'Back to original results'); click(panel, 'Play another ten');
-    fireEvent.click(view.getByRole('button', { name: 'Daily', exact: true }));
+    fireEvent.click(view.getByRole('button', { name: 'Daily' }));
     expect(stored(), 'Review and retry never alter saved records').toEqual(held);
     expect(set, 'Review and retry never transiently save records').not.toHaveBeenCalled();
     expect(remove, 'Review and retry never remove saved records').not.toHaveBeenCalled();
