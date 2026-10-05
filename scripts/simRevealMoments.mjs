@@ -94,7 +94,7 @@ const scratch = name => path.join(SCRATCH, name).replaceAll('\\', '/');
 process.on('exit', () => fs.rmSync(SCRATCH, { recursive: true, force: true }));
 
 const CONTROL = process.env.REVEAL_CONTROL || '';
-const KNOWN = { countup: 1, motion: 1, nostagger: 2, rollup: 1, inlinepace: 1 };
+const KNOWN = { countup: 1, motion: 1, nostagger: 2, rollup: 1, inlinepace: 1, inlinepacestep: 1 };
 if (CONTROL && !(CONTROL in KNOWN)) {
   console.error(`REVEAL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(KNOWN).join(', ')})`);
   process.exit(1);
@@ -185,6 +185,19 @@ if (CONTROL === 'inlinepace') {
   fs.writeFileSync(copy, rewritten);
   extra.push(copy);
   console.log('   NEGATIVE CONTROL ON: a copy of the Rebuild board works its stagger out inline again, section 1 must go red');
+}
+/* Round 985 review: the same inline pace written step first. The check below
+   used to see only a count times a step, so `0.08 * i` sailed past it. */
+if (CONTROL === 'inlinepacestep') {
+  const src = read(path.join(ROOT, REBUILD));
+  const anchor = 'animationDelay: revealDelay(i, 0.5, 0.08)';
+  if (!src.includes(anchor)) abort(`control cannot run: ${REBUILD} does not carry ${anchor}, so there is nothing to flatten into an inline pace`);
+  const rewritten = src.split(anchor).join('animationDelay: `${(0.5 + 0.08 * i).toFixed(2)}s`');
+  if (rewritten === src) abort(`control cannot run: the rewrite of ${REBUILD} changed nothing`);
+  const copy = scratch('RebuildBoard.control.tsx');
+  fs.writeFileSync(copy, rewritten);
+  extra.push(copy);
+  console.log('   NEGATIVE CONTROL ON: a copy of the Rebuild board works its stagger out inline, step first, section 1 must go red');
 }
 if (CONTROL === 'motion') {
   const src = read(path.join(ROOT, DRAFT_NIGHT));
@@ -328,10 +341,11 @@ const ROUND_530_KEYFRAME_FILES = [KIT, 'src/components/club-manager/CelebrationS
        two numbers: a stagger worked out by multiplying a count by a step,
        inside an animationDelay, is the pace living outside the kit whatever
        the numbers are. Passing a custom step INTO revealDelay stays fine,
-       there is no multiplication in the call. */
+       there is no multiplication in the call. Round 985 review: either order,
+       a count times a step or a step times a count. */
     for (const m of code.matchAll(/animationDelay\s*:/g)) {
       const expr = code.slice(m.index, m.index + 200);
-      if (/[\w.\])]\s*\*\s*0?\.\d+/.test(expr)) { inlinePace.push(`${r}: ${expr.split('\n')[0].trim().slice(0, 90)}`); break; }
+      if (/[\w.\])]\s*\*\s*0?\.\d+|0?\.\d+\s*\*\s*[\w.([]/.test(expr)) { inlinePace.push(`${r}: ${expr.split('\n')[0].trim().slice(0, 90)}`); break; }
     }
   }
   console.log(`   revealDelay defined in ${defs.join(', ') || 'no file'}; ${callers} callers, ${wrongImport.length} import it from somewhere else, ${inlinePace.length} keep the pace inline`);

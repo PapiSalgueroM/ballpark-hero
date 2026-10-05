@@ -25,9 +25,19 @@
  *     the page's settle is what does the stopping;
  *  6. the debut card no longer promises a morale boost the engine never
  *     applies on that path.
+ *  7. (fix round) through the REAL page, the state flipping in this visit
+ *     plays the moment: Continue off a season summary onto the debut, and
+ *     Retire and Enjoy Life off the ceremony onto the legacy card; a re-render
+ *     of the page keeps it playing, and a reload after it draws it still;
+ *  8. a moment waits to be seen: until the card is in view its beats hold on
+ *     their first frame, the confetti waits and nothing is settled;
+ *  9. the confetti is the card's last child (as the first it takes the
+ *     space-y gap and pushes the header down), every slam sits on a content
+ *     wide child inside a row that clips across, and a restart with the same
+ *     name, nation, position, academy and start year still gets its own debut.
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, render } from '@testing-library/react';
+import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -165,11 +175,33 @@ function expectButtonsStill(root: HTMLElement) {
   }
 }
 
+/* An IntersectionObserver the test drives: nothing is in view until show()
+   says so. jsdom has none, and without one the cards start at once. */
+type Watch = { cb: IntersectionObserverCallback; els: Element[] };
+let watches: Watch[] = [];
+class DrivenObserver {
+  private w: Watch;
+  constructor(cb: IntersectionObserverCallback) { this.w = { cb, els: [] }; watches.push(this.w); }
+  observe(el: Element) { this.w.els.push(el); }
+  unobserve() { /* not used */ }
+  disconnect() { this.w.els = []; }
+  takeRecords() { return []; }
+}
+function show() {
+  act(() => {
+    for (const w of watches) {
+      if (!w.els.length) continue;
+      w.cb(w.els.map(target => ({ isIntersecting: true, target }) as unknown as IntersectionObserverEntry), {} as IntersectionObserver);
+    }
+  });
+}
+
 beforeEach(() => {
   resetCareerMomentsForTest();
   localStorage.clear();
+  watches = [];
 });
-afterEach(() => cleanup());
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 
 describe('Round 985: the international debut is a moment', () => {
@@ -222,6 +254,30 @@ describe('Round 985: the international debut is a moment', () => {
     const other = debutCareer('Other Debut');
     const next = render(wrap(<InternationalDebutCard career={other} onDismiss={() => undefined} />));
     expect(animatedIn(next.container).length).toBe(5);
+  });
+
+  it('a restart with the same name, nation, position, academy and start year still gets its own debut', () => {
+    /* The era fixes the start year and the academy is drawn from a small home
+       pool, so two runs in one visit can share all of that. What they cannot
+       share is the football they played on the way to the call-up. */
+    const base = debutCareer('Same Name');
+    const played = (goals: number): CareerState => ({
+      ...base,
+      seasons: [...base.seasons, { ...base.seasons[0], year: base.seasons[0].year + 1, age: base.seasons[0].age + 1, apps: 30, goals }],
+    });
+    const first = played(12);
+    const again = played(5);
+    expect([first.playerName, first.nationality, first.position, first.seasons[0].year, first.seasons[0].club])
+      .toEqual([again.playerName, again.nationality, again.position, again.seasons[0].year, again.seasons[0].club]);
+    const a = render(wrap(<InternationalDebutCard career={first} onDismiss={() => undefined} />));
+    expect(animatedIn(a.container).length).toBe(5);
+    a.unmount();
+    const b = render(wrap(<InternationalDebutCard career={again} onDismiss={() => undefined} />));
+    expect(animatedIn(b.container).length).toBe(5);
+    b.unmount();
+    /* And the same run is still the same run: its second mount is still. */
+    const c = render(wrap(<InternationalDebutCard career={first} onDismiss={() => undefined} />));
+    expect(animatedIn(c.container).length).toBe(0);
   });
 });
 
@@ -305,6 +361,55 @@ describe('Round 985: the rivalry verdict rises', () => {
   });
 });
 
+describe('Round 985: a moment waits until its card is seen', () => {
+  const held = (root: HTMLElement) => beats(root).filter(e => e.style.animationPlayState === 'paused').length;
+
+  it('the legacy card holds its beats and its confetti below the fold, settles nothing, and plays once in view', () => {
+    vi.stubGlobal('IntersectionObserver', DrivenObserver);
+    const c = retiredCareer('GOAT');
+    const draw = () => render(wrap(<LegacyCard career={c} totals={fixtureTotals(c)} onShare={() => undefined} />));
+    const below = draw();
+    const n = beats(below.container).length;
+    expect(n).toBeGreaterThan(10);
+    expect(animatedIn(below.container).length).toBe(n);
+    expect(held(below.container)).toBe(n);
+    expect(below.container.querySelectorAll('.animate-confetti-fall').length).toBe(0);
+    below.unmount();
+
+    /* Never seen, so never settled: the card mounted again still has its moment. */
+    const seen = draw();
+    expect(animatedIn(seen.container).length).toBe(n);
+    expect(held(seen.container)).toBe(n);
+    show();
+    expect(held(seen.container)).toBe(0);
+    expect(animatedIn(seen.container).length).toBe(n);
+    expectIncreasing(beats(seen.container));
+    expect(seen.container.querySelectorAll('.animate-confetti-fall').length).toBe(60);
+    seen.unmount();
+
+    /* Seen, so settled: the next mount is still. */
+    const after = draw();
+    expect(animatedIn(after.container).length).toBe(0);
+    expect(after.container.querySelectorAll('.animate-confetti-fall').length).toBe(0);
+  });
+
+  it('the rivalry verdict waits the same way', () => {
+    vi.stubGlobal('IntersectionObserver', DrivenObserver);
+    const c = retiredCareer('GREAT');
+    const draw = () => render(wrap(<RivalrySummaryCard summary={c.rivalrySummary!} career={c} />));
+    const below = draw();
+    expect(held(below.container)).toBe(1);
+    below.unmount();
+    const seen = draw();
+    expect(held(seen.container)).toBe(1);
+    show();
+    expect(held(seen.container)).toBe(0);
+    expect(animatedIn(seen.container).length).toBe(1);
+    seen.unmount();
+    expect(animatedIn(draw().container).length).toBe(0);
+  });
+});
+
 describe('Round 985: through the real page, a reload never replays the moment', () => {
   const tick = (ms = 5) => act(async () => { await new Promise(r => setTimeout(r, ms)); });
 
@@ -324,6 +429,60 @@ describe('Round 985: through the real page, a reload never replays the moment', 
     resetCareerMomentsForTest();
     const fresh = render(wrap(<InternationalDebutCard career={c} onDismiss={() => undefined} />));
     expect(animatedIn(fresh.container).length).toBe(5);
+  });
+});
+
+/* The other half of the rule: when the state flips in this visit, the page
+   plays the moment, keeps playing it through a re-render, and a reload after
+   it is still. Each starts from a save one button short of the moment. */
+describe('Round 985: through the real page, the moment plays when the state flips', () => {
+  const tick = (ms = 5) => act(async () => { await new Promise(r => setTimeout(r, ms)); });
+  const settle = async () => { for (let i = 0; i < 6; i++) await tick(); };
+  const press = async (root: HTMLElement, text: string) => {
+    const b = Array.from(root.querySelectorAll('button')).find(x => (x.textContent ?? '').includes(text));
+    expect(b, `a "${text}" button`).toBeTruthy();
+    await act(async () => { fireEvent.click(b!); });
+    await settle();
+  };
+  const beat = (root: HTMLElement, name: string) => root.querySelector<HTMLElement>(`[data-beat="${name}"]`);
+
+  async function flipAndCheck(save: CareerState, button: string, name: string, cls: string) {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(save));
+    const page = render(wrap(<SoccerCareer />));
+    await settle();
+    expect(beat(page.container, name)).toBeNull();
+    await press(page.container, button);
+    expect(beat(page.container, name), `the ${name} beat after "${button}"`).toBeTruthy();
+    expect(beat(page.container, name)!.classList.contains(cls)).toBe(true);
+    /* A re-render of the page must not cut the moment short. */
+    page.rerender(wrap(<SoccerCareer />));
+    await settle();
+    expect(beat(page.container, name)!.classList.contains(cls)).toBe(true);
+    page.unmount();
+    /* A reload after the flip finds the moment in the save: still. */
+    const again = render(wrap(<SoccerCareer />));
+    await settle();
+    const still = beat(again.container, name);
+    expect(still, `the ${name} beat after a reload`).toBeTruthy();
+    expect(animatedIn(still!.closest<HTMLElement>('.rounded-xl')!).length).toBe(0);
+    again.unmount();
+  }
+
+  it('Continue off the season summary onto the call-up plays the debut card', async () => {
+    const c = baseCareer('Flip Debut');
+    const last = c.seasons[c.seasons.length - 1];
+    const save: CareerState = {
+      ...c, phase: 'season_summary', pendingSummary: last, pendingBallonDor: null,
+      intStats: { ...c.intStats, debutYear: last.year, debutAge: c.age },
+    };
+    await flipAndCheck(save, 'Continue', 'heading', 'cm-slam');
+  });
+
+  it('Retire and Enjoy Life off the ceremony plays the legacy card, even from a save reloaded on the ceremony', async () => {
+    const atCeremony = E.manualRetire({ ...baseCareer('Flip Legacy'), phase: 'playing' } as CareerState);
+    expect(atCeremony.phase).toBe('retirement_ceremony');
+    expect(atCeremony.legacy).toBeTruthy();
+    await flipAndCheck(atCeremony, 'Retire and Enjoy Life', 'tier-emoji', 'cm-slam');
   });
 });
 
@@ -366,5 +525,29 @@ describe('Round 985: nothing the moments use can move the page', () => {
     expect(layer.classList.contains('absolute')).toBe(true);
     expect(layer.classList.contains('pointer-events-none')).toBe(true);
     expect(layer.parentElement).toBe(card);
+    /* The card is space-y: a layer ahead of the header would hand the header
+       the gap and push it down the moment the confetti appears. Last, the gap
+       lands on the absolute layer, which takes no space. */
+    expect(card.lastElementChild).toBe(layer);
+  });
+
+  it('every slam is a content wide child inside a row that clips across', () => {
+    /* cm-slam starts at 1.6 times the size. On a full width block that reaches
+       past a phone's edge and widens the page for a moment. */
+    const d = debutCareer();
+    const l = retiredCareer('LEGEND');
+    for (const el of [
+      <InternationalDebutCard key="d" career={d} onDismiss={() => undefined} />,
+      <LegacyCard key="l" career={l} totals={fixtureTotals(l)} onShare={() => undefined} />,
+    ]) {
+      const { container, unmount } = render(wrap(el));
+      const slams = Array.from(container.querySelectorAll<HTMLElement>('.cm-slam'));
+      expect(slams.length).toBe(2);
+      for (const s of slams) {
+        expect(s.classList.contains('inline-block') || s.classList.contains('inline-flex')).toBe(true);
+        expect(s.parentElement!.classList.contains('overflow-x-clip')).toBe(true);
+      }
+      unmount();
+    }
   });
 });
