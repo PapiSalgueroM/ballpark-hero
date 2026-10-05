@@ -68,6 +68,8 @@ import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import CareerStory from "@/components/soccer-career/CareerStory";
+import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRatings";
+import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
@@ -430,13 +432,20 @@ const cupResultLabel = (result: string): string =>
   result === "Play-off" ? "Out in the knockout play-off" : result;
 
 /* ─── Timeline Entry ─── */
-function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
+function TimelineEntry({ season, position, isCurrent, isLast }: { season: SeasonRecord; position: string; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
   const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
   const finish = season.type === "playing" ? readLeagueFinish(season) : null;
+  /* Round 1011: the season's match rating and the overall it was played at,
+     read through the same rules as the Ratings screen. A season nobody played
+     has no rating here (never a 0.0), and a row saved before the overall was
+     kept simply shows none. The stats are the ones this position keeps. */
+  const rated = season.type === "playing" ? readMatchRating(season) : null;
+  const playedAt = rated !== null ? readOvr(season.ovr) : null;
+  const statLine = season.type === "playing" ? soccerRatingRows([season], position)[0]?.stats ?? [] : [];
 
   return (
-    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
+    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`} data-timeline-season={season.year}>
       {!isLast && <div className="absolute left-[1.65rem] top-9 w-0.5 h-[calc(100%-0.5rem)] bg-border" />}
       <div className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black z-10 ${
         label === "A" ? "bg-amber-500/80 text-amber-950" :
@@ -452,7 +461,24 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
         </div>
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-            <span className="text-[10px] text-muted-foreground">{season.apps}A · {season.goals}G · {season.assists}As</span>
+            {rated !== null && (
+              <span className={`text-[10px] font-black px-1 rounded bg-muted/40 tabular-nums ${BAND_CLASS[ratingBand(rated)]}`} data-season-rating={rated.toFixed(1)} title={`Average match rating ${rated.toFixed(1)}`}>
+                {rated.toFixed(1)}
+              </span>
+            )}
+            {playedAt !== null && (
+              <span className="text-[10px] text-muted-foreground tabular-nums" data-season-ovr={playedAt} title={`Played this season at OVR ${playedAt}`}>OVR {playedAt}</span>
+            )}
+            <span className="text-[10px] text-muted-foreground">
+              {statLine.map((st, i) => (
+                <Fragment key={st.label}>
+                  {i > 0 && " · "}
+                  {st.value === null
+                    ? <span title={`${st.label} may not have been counted this season`} aria-label={`${st.label} may not have been counted`}>-{st.short}</span>
+                    : `${st.value}${st.short}`}
+                </Fragment>
+              ))}
+            </span>
             {/* Round 929: where the club finished. Absent on old saves and in
                 leagues whose size is not verified, so it prints nothing there. */}
             {finish && (
@@ -598,6 +624,8 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, league, w
     ? (world.leagues?.[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
     : null;
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
+  const summaryRating = readMatchRating(season);
+  const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
 
   return (
     <div className="relative bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -634,7 +662,15 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, league, w
       </div>
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>Avg Rating: <strong className="text-foreground">{season.rating.toFixed(1)}</strong></span>
+        {/* Round 1011: a ban, prison or doping year was never played, so it
+            has no rating to show (it used to print 0.0). The overall the
+            season was played at sits beside it when the row has one. */}
+        <span data-summary-rating>
+          Avg Rating: {summaryRating === null
+            ? <strong className="text-muted-foreground" aria-label="no rating, no games played" title="No games played this season">-</strong>
+            : <strong className="text-foreground">{summaryRating.toFixed(1)}</strong>}
+          {summaryOvr !== null && <span data-summary-ovr> · Played at OVR <strong className="text-foreground">{summaryOvr}</strong></span>}
+        </span>
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
 
@@ -3606,6 +3642,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   // Round 974: the career story, every season kept, opened from Latest Events
   const [storyOpen, setStoryOpen] = useState(false);
+  // Round 1011: every season's rating and the overall it was played at
+  const [ratingsOpen, setRatingsOpen] = useState(false);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -3794,7 +3832,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {career.seasons.map((s, i) => (
-              <TimelineEntry key={s.year + s.club} season={s} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
+              <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
             ))}
           </div>
         </div>
@@ -4342,8 +4380,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
-            <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
-              className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+            <div className="flex items-center gap-1">
+              <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
+                className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
+              <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
+                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+            </div>
           </div>
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
@@ -4355,6 +4397,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
+      {ratingsOpen && <SeasonRatings career={career} onClose={() => setRatingsOpen(false)} />}
 
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.
