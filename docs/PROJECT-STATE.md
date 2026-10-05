@@ -15,6 +15,43 @@ model returning visitors; both original fixtures remain unchanged. Runtime stays
 remote. Parent 1009 and final branch checks still require acceptance.
 No 1031 publication is claimed. See docs/audits/ROUND1031-VERIFICATION.md.
 
+## Codex 1007 and 1009: combined snapshot recorded, final CI pending, 2026-10-05
+
+Combined 7cb9dd1f passed all review steps including four native profiles.
+Artifact 11379512684 was hash verified, its reports checked and its three
+generated files copied verbatim. Both update entries now ship together.
+Temporary generation is removed. The next CI run assesses the committed
+snapshot; parent owns main integration and publishing after 1009 acceptance.
+
+## Codex 1007 and 1009: combined snapshot pending, 2026-10-05
+
+1007 now incorporates frozen 1009 candidate 2583ec3c at parent's request.
+Both update entries are retained in source. Remote generation must produce
+their combined snapshot before final committed-artifact checks. The paired
+1009 snapshot and ledger are retained provisionally. No product repair or
+main merge is included; parent still owns release acceptance and publishing.
+
+## Codex 1007: review baseline accepted, final snapshot checks pending, 2026-10-05
+
+Candidate 79aa95b6 passed the resumed review workflow: ten mounted outcomes,
+twenty effective source controls and four native profiles with real fonts.
+Downloaded artifact 11370694685 is SHA256 verified and its reports inspected.
+Original challenge compatibility passed except the expected missing update
+snapshot. The three remotely generated files are copied back, and temporary
+generation is removed before final CI. No product repair was needed.
+Full evidence is in docs/audits/ROUND1007-VERIFICATION.md. No publication claim.
+Parent coordinates main integration and publishing. Runtime remains remote.
+
+## Codex claims 1007: Rugby League review, 2026-10-05
+
+Review all ten completed claims, then retry only the missed calls with a
+separate tally. Preserve the original score and existing shared winners.
+Product owner works only on RugbyLeagueChallenge.tsx; a second agent owns
+focused mounted and native verification. Generator, records, Daily and shared
+completion hooks stay unchanged. Remote runtime verification only.
+1005 Your picks and 1006 Footle Unlimited continue independently. Claude owns
+1010 to 1014 and Front Office. No publication claim. Work continues to 23:31 UTC.
+
 ## Codex1030 accepted,1009 final font checks pending, 2026-10-05
 
 Round1030 merged as82d1d7f7 after7 normal outcomes,11 effective controls
