@@ -37,7 +37,7 @@ Only the What's New content hash changed. Its existing October 5 date and all
 other ledger entries stayed unchanged. Final CI reads committed snapshots;
 the temporary generation step has been removed.
 
-## Acceptance pending
+## Final acceptance
 
 Candidate 7c0b8481 passed all four triggered workflows. The picks run
 37355325829 passed ten mounted cases, fourteen controls and all four native
@@ -55,3 +55,27 @@ Footle workflows. Recheck the published site and capture the visible shelf
 after merge and publication. No live or completed claim yet.
 
 All runtime verification is remote. No production database probes were run.
+
+## Accepted and published
+
+Final candidate 1ee37af4f19488b90cb85e2e5ce233056d93de57 passed all four
+triggered workflows: picks 37356222554, Home 37356222573, Footle five-run
+37356222768 and clue desk 37356222639. Picks passed ten mounted cases,
+fifteen effective source controls and four native profiles. All layout
+controls changed their target and were rejected. Built readers passed.
+
+Artifact 11364723395 was downloaded and SHA256 verified:
+be1128f0c4a86b455ea47cbead882e5689912815fc18846ecdff522c0a25d1fa.
+Independent review inspected the light phone shelf and all profile results.
+No protected game or score writes and no page errors were recorded.
+
+PR130 merged as 9fe088e6d91314e1635093c56e459d1c19e41fc8. Lovable history
+showed that exact Round 1005 title; Publish changes completed with Your
+website was updated. The public site loaded index-BOlwr09V.js. Through
+normal public UI, Footle was pinned on Home and NHL Connections on Search;
+both survived reload. Unpin/re-pin worked, the shelf opened NHL Connections
+and its existing 4/4 board remained. No direct database probes were used.
+
+Live screenshot: home1005-live.png in this task's visualization directory.
+Publication slot released on the shared WORKBOARD. This receipt changes
+only documentation and does not require another product publication.
