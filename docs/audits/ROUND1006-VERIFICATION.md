@@ -61,3 +61,24 @@ snapshot/ledger files from artifact 11365947510 after verifying SHA256:
 fd3145963315a95ec74229671da7fd439cf671d3fac7bda35a60798cec44b037.
 The temporary generation step is removed so final CI reads committed files.
 Acceptance and publication remain pending that final run.
+## Final acceptance and live verification, 2026-10-05
+
+Final21e883952a0f2d1673dbab973e8cbd01736d7c67 passed all three workflows:
+37360145673 (Unlimited),37360145527 (five-puzzle),37360145512 (clue desk).
+These include committed snapshot readers. No final failures remain.
+PR131 merged as749f3a837459ad3049d4c97a255fd869c6c6e728.
+Lovable history showed that exact release and confirmed Your website was
+updated. Public entry /assets/index-BfklmcWG.js was observed at19:27 UTC.
+
+Normal public UI verification retained all eight Lionel Messi guess clues
+through reload and Hard/Easy switching. Give up disclosed Florian Wirtz;
+Next puzzle opened Puzzle2 with zero guesses and84 fresh answers left,
+then disclosed a different answer, Erling Haaland. Daily remained0/8 and
+the existing five-puzzle run remained1/5 solved with three total guesses.
+No hidden state or browser storage was manipulated. Public screenshot:
+footle1006-live.png in the task's visual artifacts. Publication slot released.
+
+A separate read-only audit noted literal zero goals/assists in the baked
+Messi fallback. Their provenance is not established by this session and
+this release did not change them. Track a source audit separately rather
+than treating this play check as proof of those existing numbers.
