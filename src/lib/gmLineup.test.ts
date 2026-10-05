@@ -114,6 +114,10 @@ describe('gmLineup core', () => {
     /* the GM benches a better man the hole would bring back: no hold, the field is his */
     t.players.find(p => p.id === 'a5')!.out = 2;
     expect(gmLineupSwap(healing, t, {}, 'top', { id: 'a2' }, { id: 'a4' })!.slots?.top).toEqual(['a1', 'a4', 'a3']);
+    /* and a saved hold the same bench tap would undo goes, so the tap does what it says */
+    const benched = gmLineupSwap(healing, t, once, 'top', { id: 'a2' }, { id: 'a4' })!;
+    expect(benched.slots?.top).toEqual(['a4', 'a1', 'a3']);
+    expect(gmLineupHeld(healing, t, benched, 'top').every(p => p === null)).toBe(true);
     /* a sport with no full strength pick saves the field as before */
     expect(gmLineupSwap(toy, t, {}, 'top', { id: 'a1' }, { id: 'a2' })!.slots?.top).toEqual(['a2', 'a1', 'a3']);
   });

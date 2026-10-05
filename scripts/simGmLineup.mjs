@@ -27,6 +27,10 @@
         back in it once fit.
      7. A last rotation slot empty for want of a fit starter is not a skip: a
         reorder does not keep it empty once the men are fit.
+     8. A first tap on a group nobody saved, made while a man of the sim's
+        pick is hurt, keeps a stand-in's slot for him: he is back in the
+        lineup once fit. Every tap puts out exactly the field it says, a hold
+        included, and a swap back still hands the group to the sim.
 
    Controls, through GM_LINEUP_CONTROL. Each edits a bundled copy, refuses to
    run if the text it edits is missing, and must turn its section red:
@@ -39,6 +43,9 @@
      accepts      a saved man may fill a slot not his position -> 5
      held         a tap hands a hurt man's slot to his fill-in -> 6
      vacancy      an empty last rotation slot reads as a skip  -> 7
+     standin      a first tap holds no slot for the sim's hurt -> 8
+     unchecked    a hold is kept even when it moves the field  -> 8
+     settle       a swap back keeps a save that only holds     -> 8
 
    MEASURED 2026-10-03, five seeds (11 29 47 83 131), 13 s a run:
      1. 600 MLB, 800 NHL and 640 NFL clubs x 3 ways, 0 off; fixture 25 of 25.
@@ -57,6 +64,16 @@
      6. MLB 300 of 300 and NHL 480 of 480 back in their slot; control held
         takes it to 0 of 300 and 0 of 480.
      7. 150 of 150 fifth slots filled again; control vacancy, 0 of 150.
+   Added 2026-10-05 (the closing check's residual), same seeds, 20 s a run:
+     8. MLB 450 reorder taps, 450 held, 450 back once fit with the stand-in
+        the one gone, 450 swaps back handed over; 450 bench taps, 0 held.
+        NHL 640 reorder, all four 640; 640 bench, 160 held: the power play,
+        where the man benched cannot take the stand-in's spot, so the hole
+        does not bring him back (160 is one group on every club and seed).
+        The field right after the tap exact in 900 of 900 and 1280 of 1280.
+        Controls: standin, 0 of 450 and 0 of 640 back; unchecked, 450 of
+        900 and 800 of 1280 exact (and section 2 red); settle, 248 of 450
+        and 290 of 640 handed over. Sections 2, 6 and 7 read as before.
    The fixture is written with stable ids since the review fixes: two
    --write-fixture runs gave the same file byte for byte, and its 25 rows
    equal the first recording in every number and, ids masked, every field. */
@@ -72,7 +89,7 @@ const SPORTS = path.join(ROOT, 'src', 'lib', 'gmLineupSports.ts');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'gmLineupFixture.json');
 const CONTROL = process.env.GM_LINEUP_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-fixture');
-const EXPECT = { ignore: [2], share: [1], contributors: [1], rest: [3], inflate: [4], hurt: [5], accepts: [5], held: [6], vacancy: [7] };
+const EXPECT = { ignore: [2], share: [1], contributors: [1], rest: [3], inflate: [4], hurt: [5], accepts: [5], held: [6], vacancy: [7], standin: [8], unchecked: [8], settle: [8] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`GM_LINEUP_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -92,7 +109,10 @@ const CORE_SWAPS = {
   ignore: [['const m = choice ? gmGroupRich(g, gmGroupSlots(sport, g, choice), mine[g.key]) : a;', 'const m = a;']],
   inflate: [['const delta = g.share * (m - a);', 'const delta = 40 * g.share * (m - a);']],
   accepts: [['if (p && !used.has(p.id) && accepts(g, slots[i], p)) { keep.push(p);', 'if (p && !used.has(p.id)) { keep.push(p);']],
-  held: [['return placed.map((p, i) => held[i]?.id ?? p?.id ?? null);', 'return placed.map((p, i) => p?.id ?? null);']],
+  held: [['for (const i of heavier(held.flatMap((p, i) => (p && !touched.includes(i) ? [i] : [])))) tries.push({ man: held[i]!, at: [i] });', 'void held;']],
+  standin: [['tries.push({ man: men.find(p => p.id === full[i])!, at: standIns });', 'void standIns;']],
+  unchecked: [['return field(next).every((id, n) => id === target[n]);', 'return true;']],
+  settle: [['if (same(auto) || same(withHolds(sport, team, { schemes: choice.schemes }, key, auto, []))) {', 'if (same(auto)) {']],
   vacancy: [['const skip = gmSkippedSlots(sport, g, choice);\n    const used = new Set<string>();', 'const skip = new Set(saved.flatMap((id, i) => (id === null && g.rotation && i >= slots.length - g.rotation.optional ? [i] : [])));\n    const used = new Set<string>();']],
 };
 const SPORT_SWAPS = {
@@ -642,6 +662,95 @@ console.log('7) a last slot empty for want of a fit man is not a skip');
   }
   console.log(`   ${filled} of ${walks} reordered four man rotations filled their fifth slot again once the men were fit`);
   ok(7, 'enough walks', walks >= 100, `${walks}`);
+}
+
+/* ---- 8. a first tap on a group nobody saved keeps a slot for the sim's hurt man
+   Every group a GM picks men for, on every club, spare men added below the
+   club's worst as in section 6. The man in the sim's first slot gets hurt,
+   so the sim shuffles everyone up and a stand-in comes in. Then one tap on
+   the group, which has no save:
+     reorder  two men on the field trade slots. The field right after has to
+              be that trade exactly; once fit, the hurt man has to be back in
+              the lineup with the stand-in the one gone; and a swap back has
+              to hand the group back to the sim.
+     bench    the worst spare takes the slot of a man of the full strength
+              pick. A hold would leave a hole that brings that better man
+              back, so the field right after has to be the GM's exactly.
+   Both: the panel's "kept for" (gmLineupHeld) names him exactly when he
+   does get his place back. */
+console.log('8) a first tap on a group nobody saved keeps a slot for the sim\'s hurt man');
+for (const sport of ['mlb', 'nhl']) {
+  const sp = SPORT[sport];
+  const n = { reorder: 0, bench: 0, exact: 0, back: 0, right: 0, handed: 0, reorderHeld: 0, benchHeld: 0 };
+  for (const seed of SEEDS) {
+    const rng = lcg(seed * 53 + 5);
+    for (const team of Object.values(opening(sport, seed).teams)) for (const g of sp.groups) for (const kind of ['reorder', 'bench']) {
+      const t = clone(team);
+      const slots = L.gmGroupSlots(sp, g);
+      const pool0 = L.gmGroupPool(g, t.players);
+      if (!pool0.length) continue;
+      const low = Math.min(...pool0.map(p => p.ovr));
+      const kinds = [...new Map(pool0.map(p => [p.pos, p])).values()];
+      for (let k = 0; k < kinds.length * 2 || L.gmGroupPool(g, t.players).length < slots.length + 2; k++) t.players.push({ ...clone(kinds[k % kinds.length]), id: `spare-${g.key}-${k}`, ovr: low - 1 - k, out: 0 });
+      const takes = (slot, p) => (slot.accepts ? slot.accepts.includes(p.pos) : L.gmInGroup(g, p.pos));
+      const full = L.gmResolveLineup(sp, t)[g.key];
+      const star = full[0];
+      if (!star) continue;
+      const inFull = new Set(full.filter(Boolean).map(p => p.id));
+      t.players.find(p => p.id === star.id).out = 2;
+      const shown = L.gmResolveLineup(sp, t)[g.key];
+      const ids = shown.map(p => p?.id ?? null);
+      const name = `${sport} seed ${seed} ${t.abbr} ${g.key} ${kind}`;
+      let tapped, want, pair = null;
+      if (kind === 'reorder') {
+        const pairs = [];
+        for (let i = 0; i < slots.length; i++) for (let j = i + 1; j < slots.length; j++) if (shown[i] && shown[j] && takes(slots[i], shown[j]) && takes(slots[j], shown[i])) pairs.push([i, j]);
+        if (!pairs.length) continue;
+        pair = pick(rng, pairs);
+        const [i, j] = pair;
+        tapped = L.gmLineupSwap(sp, t, {}, g.key, { id: ids[i] }, { id: ids[j] });
+        want = [...ids];
+        [want[i], want[j]] = [ids[j], ids[i]];
+      } else {
+        const on = new Set(ids.filter(Boolean));
+        const spare = L.gmGroupPool(g, t.players).filter(p => !on.has(p.id)).sort((a, b) => a.ovr - b.ovr)[0];
+        const js = spare ? shown.flatMap((p, j) => (p && inFull.has(p.id) && takes(slots[j], spare) ? [j] : [])) : [];
+        if (!js.length) continue;
+        const j = pick(rng, js);
+        tapped = L.gmLineupSwap(sp, t, {}, g.key, { id: spare.id }, { id: ids[j] });
+        want = [...ids];
+        want[j] = spare.id;
+      }
+      ok(8, `${name}: the tap is taken`, !!tapped);
+      if (!tapped) continue;
+      n[kind] += 1;
+      const after = L.gmResolveLineup(sp, t, tapped)[g.key].map(p => p?.id ?? null);
+      const exact = after.every((id, k) => id === want[k]);
+      if (exact) n.exact += 1;
+      ok(8, `${name}: the field right after is the GM's tap exactly`, exact, `${JSON.stringify(after)} against ${JSON.stringify(want)}`);
+      const promised = L.gmLineupHeld(sp, t, tapped, g.key).some(p => p?.id === star.id);
+      if (promised) n[`${kind}Held`] += 1;
+      if (pair) {
+        const undo = L.gmLineupSwap(sp, t, tapped, g.key, { id: after[pair[0]] }, { id: after[pair[1]] });
+        const handed = !!undo && !undo.slots?.[g.key];
+        if (handed) n.handed += 1;
+        ok(8, `${name}: a swap back hands the group back to the sim`, handed, JSON.stringify(undo));
+      }
+      t.players.find(p => p.id === star.id).out = 0;
+      const healed = L.gmResolveLineup(sp, t, tapped)[g.key].map(p => p?.id ?? null);
+      const isBack = healed.includes(star.id);
+      ok(8, `${name}: "kept for" is shown exactly when he gets his place back`, promised === isBack, `promised ${promised}, back ${isBack}`);
+      if (kind !== 'reorder') continue;
+      const right = healed.filter(Boolean).length === inFull.size && healed.every(id => !id || inFull.has(id));
+      if (isBack) n.back += 1;
+      if (right) n.right += 1;
+      ok(8, `${name}: ${star.id} is back in the lineup once fit`, isBack, JSON.stringify(healed));
+      ok(8, `${name}: and the man gone is the stand-in`, right, JSON.stringify(healed));
+    }
+  }
+  console.log(`   ${sport}: reorder taps ${n.reorder}: held ${n.reorderHeld}, back once fit ${n.back}, stand-in the one gone ${n.right}, swap back handed over ${n.handed}; bench taps ${n.bench}: held ${n.benchHeld}; field exact after the tap ${n.exact} of ${n.reorder + n.bench}`);
+  ok(8, `${sport}: enough reorder taps`, n.reorder >= 100, `${n.reorder}`);
+  ok(8, `${sport}: enough bench taps`, n.bench >= 100, `${n.bench}`);
 }
 
 /* ---- summary -------------------------------------------------------------- */

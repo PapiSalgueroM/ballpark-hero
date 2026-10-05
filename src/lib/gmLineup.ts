@@ -342,7 +342,7 @@ function settle<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice, key
   if (ids && !choice.open?.[key]?.length) {
     const auto = gmResolveLineup(sport, team, { schemes: choice.schemes })[key].map(p => p?.id ?? null);
     const same = (xs: (string | null)[]) => ids.length === xs.length && ids.every((id, i) => id === xs[i]);
-    if (same(auto) || same(standInHolds(sport, team, { schemes: choice.schemes }, key, auto))) {
+    if (same(auto) || same(withHolds(sport, team, { schemes: choice.schemes }, key, auto, []))) {
       const slots = { ...choice.slots };
       delete slots[key];
       choice = { ...choice, slots };
@@ -361,46 +361,55 @@ const withGroup = (choice: GmLineupChoice | undefined, key: string, ids: (string
   return next;
 };
 
-/* What a tap edits: the lineup on the field, except that a saved man who is
-   hurt keeps his slot (his fill-in plays there until he is back, Round 723's
-   swapDepth keeps hurt men in place the same way). Building the save from
-   the field alone handed the slot to the fill-in for good on any tap. */
-function heldIds<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice | undefined, key: string, placed: readonly (GmLineupMan | null)[]): (string | null)[] {
-  const held = gmLineupHeld(sport, team, choice, key);
-  return placed.map((p, i) => held[i]?.id ?? p?.id ?? null);
-}
-
-/* A first tap on a group nobody has saved. The sim's pick there shuffles
-   everyone up past a hurt man, so the save the tap writes has nobody to hold
-   a slot for him, and he would come back on the bench. So each hurt man of
-   the sim's full strength pick (sport.healed), heavier slot first, takes the
-   slot of a stand-in, a man on the field only because somebody is hurt, and
-   the stand-in plays it until he is fit. Only where that changes nothing on
-   the field now, which is checked by resolving it: if the GM has benched a
-   better man the hole would bring back, that hurt man gets no hold. */
-function standInHolds<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice | undefined, key: string, ids: (string | null)[], skip?: Set<number>): (string | null)[] {
+/* What a tap saves. `want` is the field the tap makes, man by man, and the
+   save puts exactly that field out. A hurt man also holds a slot, his
+   fill-in playing it until he is fit, but only where the hold changes
+   nothing on that field now, which is checked by resolving it: a hole is
+   filled by the best spare, so if the GM has just benched a better man the
+   hole would bring him straight back, and that hold goes. Who holds what:
+     a saved man who is hurt, the slot he is saved in, unless the tap moved
+       a man into it, which hands it over (Round 723's swapDepth keeps hurt
+       men in place the same way; building the save from the field alone
+       handed the slot to the fill-in for good on any tap);
+     on a first tap on a group nobody saved, where the sim's pick shuffles
+       everyone up past a hurt man, each hurt man of the sim's full strength
+       pick (sport.healed), heavier slot first, the slot of a stand-in, a man
+       on the field only because somebody is hurt. Without this he came back
+       on the bench. */
+function withHolds<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice | undefined, key: string, want: (string | null)[], touched: number[], skip?: Set<number>): (string | null)[] {
   const g = sport.groups.find(x => x.key === key);
-  if (!g || !sport.healed) return ids;
+  if (!g) return want;
   const slots = gmGroupSlots(sport, g, choice);
   const field = (save: (string | null)[]) => gmResolveLineup(sport, team, withGroup(choice, key, save, skip))[key].map(p => p?.id ?? null);
-  const target = field(ids);
-  const full = sport.auto(sport.healed(team), g, slots).map(p => p?.id ?? null);
-  const men = sport.men(team);
-  const order = (xs: number[]) => xs.sort((a, b) => slots[b].weight - slots[a].weight || a - b);
-  const hurt = order(full.flatMap((id, i) => (id && !ids.includes(id) && (men.find(p => p.id === id)?.out ?? 0) > 0 ? [i] : [])))
-    .map(i => men.find(p => p.id === full[i])!);
-  const open = order(ids.flatMap((id, i) => (id && !full.includes(id) && !skip?.has(i) ? [i] : [])));
-  let out = ids;
-  for (const man of hurt) {
-    const at = open.findIndex(i => accepts(g, slots[i], man) && (() => {
+  const heavier = (xs: number[]) => xs.sort((a, b) => slots[b].weight - slots[a].weight || a - b);
+  const tries: { man: GmLineupMan; at: number[] }[] = [];
+  if (savedSlots(sport, g, slots, choice)) {
+    const held = gmLineupHeld(sport, team, choice, key);
+    for (const i of heavier(held.flatMap((p, i) => (p && !touched.includes(i) ? [i] : [])))) tries.push({ man: held[i]!, at: [i] });
+  } else if (sport.healed) {
+    const full = sport.auto(sport.healed(team), g, slots).map(p => p?.id ?? null);
+    const men = sport.men(team);
+    const standIns = heavier(want.flatMap((id, i) => (id && !full.includes(id) && !skip?.has(i) ? [i] : [])));
+    for (const i of heavier(full.flatMap((id, i) => (id && (men.find(p => p.id === id)?.out ?? 0) > 0 ? [i] : [])))) {
+      tries.push({ man: men.find(p => p.id === full[i])!, at: standIns });
+    }
+  }
+  if (!tries.length) return want;
+  const target = field(want);
+  let out = want;
+  const taken = new Set<number>();
+  for (const { man, at } of tries) {
+    if (out.includes(man.id)) continue;
+    const i = at.find(k => {
+      if (taken.has(k) || !accepts(g, slots[k], man)) return false;
       const next = [...out];
-      next[i] = man.id;
-      return field(next).every((id, k) => id === target[k]);
-    })());
-    if (at < 0) continue;
+      next[k] = man.id;
+      return field(next).every((id, n) => id === target[n]);
+    });
+    if (i === undefined) continue;
     out = [...out];
-    out[open[at]] = man.id;
-    open.splice(at, 1);
+    out[i] = man.id;
+    taken.add(i);
   }
   return out;
 }
@@ -414,7 +423,7 @@ export function gmLineupSwap<T>(sport: GmLineupSport<T>, team: T, choice: GmLine
   const slots = gmGroupSlots(sport, g, choice);
   const placed = gmResolveLineup(sport, team, choice)[key];
   const shown = placed.map(p => p?.id ?? null);
-  const ids = heldIds(sport, team, choice, key, placed);
+  const ids = [...shown];
   const pool = gmGroupPool(g, sport.men(team));
   const where = (x: GmPick): number => ('slot' in x ? (Number.isInteger(x.slot) && x.slot >= 0 && x.slot < slots.length ? x.slot : -2) : shown.indexOf(x.id));
   const ia = where(a), ib = where(b);
@@ -423,19 +432,21 @@ export function gmLineupSwap<T>(sport: GmLineupSport<T>, team: T, choice: GmLine
      swap. Moving a man into a slot a hurt man is holding hands it over. */
   const skip = gmSkippedSlots(sport, g, choice);
   if ((ia >= 0 && skip.has(ia)) || (ib >= 0 && skip.has(ib))) return null;
+  let touched: number[];
   if (ia >= 0 && ib >= 0) {
     const pa = placed[ia], pb = placed[ib];
     if ((pa && !accepts(g, slots[ib], pa)) || (pb && !accepts(g, slots[ia], pb))) return null;
     [ids[ia], ids[ib]] = [shown[ib], shown[ia]];
+    touched = [ia, ib];
   } else {
     const at = ia >= 0 ? ia : ib;
     const incoming = (ia >= 0 ? b : a) as { id: string };
     const man = pool.find(p => p.id === incoming.id);
     if (!man || !accepts(g, slots[at], man)) return null;
     ids[at] = man.id;
+    touched = [at];
   }
-  const save = savedSlots(sport, g, slots, choice) ? ids : standInHolds(sport, team, choice, key, ids);
-  return settle(sport, team, withGroup(choice, key, save), key);
+  return settle(sport, team, withGroup(choice, key, withHolds(sport, team, choice, key, ids, touched)), key);
 }
 
 /** Leave a rotation's optional trailing slot empty on purpose, or take the
@@ -446,7 +457,7 @@ export function gmLineupSetOpen<T>(sport: GmLineupSport<T>, team: T, choice: GmL
   const g = sport.groups.find(x => x.key === key);
   if (!g?.rotation || sport.chartOnly || slot < g.slots.length - g.rotation.optional || slot >= g.slots.length) return null;
   const placed = gmResolveLineup(sport, team, choice)[key];
-  const ids = heldIds(sport, team, choice, key, placed);
+  const ids = placed.map(p => p?.id ?? null);
   const skip = new Set(gmSkippedSlots(sport, g, choice));
   if (open === skip.has(slot) || (open && placed[slot] === null)) return null;
   if (open) { ids[slot] = null; skip.add(slot); }
@@ -457,8 +468,7 @@ export function gmLineupSetOpen<T>(sport: GmLineupSport<T>, team: T, choice: GmL
     const man = gmGroupPool(g, sport.men(team)).filter(p => !ids.includes(p.id) && accepts(g, slots[slot], p)).sort((x, y) => y.ovr - x.ovr)[0];
     ids[slot] = man ? man.id : null;
   }
-  const save = savedSlots(sport, g, gmGroupSlots(sport, g, choice), choice) ? ids : standInHolds(sport, team, choice, key, ids, skip);
-  return settle(sport, team, withGroup(choice, key, save, skip), key);
+  return settle(sport, team, withGroup(choice, key, withHolds(sport, team, choice, key, ids, [slot], skip), skip), key);
 }
 
 /** Switch a group to one of its schemes. The default scheme is not saved.
