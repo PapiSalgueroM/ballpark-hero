@@ -68,9 +68,11 @@ if (CONTROL === 'stale' && LOCAL_ONLY) { console.error('the stale control is cau
 
 /* the counts on 2026-09-11, seasons moved to Round 784's bake (3,612 plus the
    28 first club rows); a shrink is lost coverage, a short read, or a bake from
-   a table that does not carry the 784 migration yet */
-const PLAYER_FLOOR = 253;
-const SEASON_FLOOR = 3640;
+   a table that does not carry the 784 migration yet. Round 1010b moved them
+   on purpose to 252 and 3,634: the Alisson Becker twin (13 rows) goes and
+   seven 2025-2026 rows arrive (scripts/data/careerSeason2025.json). */
+const PLAYER_FLOOR = 252;
+const SEASON_FLOOR = 3634;
 const SAMPLE = 30;
 
 let failures = 0;
@@ -250,20 +252,28 @@ console.log('5) the shape: no repeated season and club, no stat line under two c
 }
 
 console.log('6) every correction a ledger records is in the file, and the bake refuses a table without them');
+/* Round 1010b: a ledger can remove a duplicate man. Every ledger's rows for him
+   are satisfied by his absence, so they are left out of the count below. */
+const allLedgers = CORRECTION_LEDGERS.map(({ file }) => JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8')));
+const removed = new Set(allLedgers.flatMap(l => (l.removed ?? []).map(r => r.player)));
 for (const { file, migration } of CORRECTION_LEDGERS) {
   const ledger = JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8'));
-  for (const p of correctionProblems(players, ledger)) fail(`${file}: ${p}`);
+  for (const p of correctionProblems(players, ledger, removed)) fail(`${file}: ${p}`);
   /* the table as it stood before the migration: every added row gone, every
-     changed row back at its old figure. The bake's guard must name them all,
-     or a re-bake run before the migration would quietly undo the correction. */
+     changed row back at its old figure, every removed man back. The bake's
+     guard must name them all, or a re-bake run before the migration would
+     quietly undo the correction. */
   const isAdded = (name, s) => ledger.added.some(r => r.player === name && r.season === s.season && r.club === s.club);
-  const changedFor = (name, s) => ledger.changed.find(c => c.player === name && c.season === s.season && c.club === s.club);
+  /* every field a ledger changes on the row, not just the first (Round 1010b changes up to three per row) */
+  const changedFor = (name, s) => (ledger.changed ?? []).filter(c => c.player === name && c.season === s.season && c.club === s.club);
   const before = players.map(p => ({
     ...p,
-    career: p.career.filter(s => !isAdded(p.name, s)).map(s => { const c = changedFor(p.name, s); return c ? { ...s, [c.field]: c.from } : s; }),
+    career: p.career.filter(s => !isAdded(p.name, s)).map(s => changedFor(p.name, s).reduce((row, c) => ({ ...row, [c.field]: c.from }), s)),
   }));
-  const want = ledger.added.length + ledger.changed.length;
-  const caught = correctionProblems(before, ledger).length;
+  for (const r of ledger.removed ?? []) if (r.copy) before.push(JSON.parse(JSON.stringify(r.copy)));
+  const kept = r => !removed.has(r.player);
+  const want = ledger.added.filter(kept).length + (ledger.changed ?? []).filter(kept).length + (ledger.removed ?? []).length;
+  const caught = correctionProblems(before, ledger, removed).length;
   if (want === 0) fail(`${file} records no corrections, so this section checks nothing`);
   if (caught !== want) fail(`${file}: a pool without its ${want} recorded corrections drew ${caught} complaints; a bake before ${migration} would get through`);
   console.log(`   ${file}: ${ledger.added.length} added and ${ledger.changed.length} changed rows in the file; without them the bake's guard names ${caught} of ${want}`);

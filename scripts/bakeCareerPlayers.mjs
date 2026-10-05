@@ -46,8 +46,12 @@ const PAGE_SIZE = 1000;
    rows its migration adds. Until that migration is applied the table reads
    3,612 and a bake would put Alisson back at Roma, so it fails closed here
    (and on CORRECTION_LEDGERS below) instead of writing. */
-const PLAYER_FLOOR = 253;
-const SEASON_FLOOR = 3640;
+/* Round 1010b moved them on purpose: its migration removes the Alisson Becker
+   twin (13 rows) and adds 7 rows of 2025-2026, so the tables read 252 and
+   3,634 after it. Until it is applied the table reads 253 and 3,640, and a
+   bake fails closed on CORRECTION_LEDGERS below rather than undoing it. */
+const PLAYER_FLOOR = 252;
+const SEASON_FLOOR = 3634;
 
 /* Corrections recorded in a ledger, each with a migration that writes it to
    the tables. The file is baked from the tables, so a correction lives in the
@@ -56,18 +60,34 @@ const SEASON_FLOOR = 3640;
    recorded correction, because the bake would silently undo it. */
 export const CORRECTION_LEDGERS = [
   { file: 'scripts/data/careerFirstClubs.json', migration: 'supabase/migrations/20261001120000_career_first_clubs.sql' },
+  { file: 'scripts/data/careerSeason2025.json', migration: 'supabase/migrations/20261015120000_round_1010_career_season_2025_26.sql' },
 ];
 
-/** Every recorded correction the pool does not carry. Empty when it carries them all. */
-export function correctionProblems(players, ledger) {
+/** Every player some ledger removes (Round 1010b: a duplicate entry). */
+export function removedNames(ledgers) {
+  return new Set(ledgers.flatMap(l => (l.removed ?? []).map(r => r.player)));
+}
+
+/**
+ * Every recorded correction the pool does not carry. Empty when it carries
+ * them all. Since Round 1010b a ledger can remove a man: his presence is the
+ * problem then, and the rows any ledger recorded for him are satisfied by his
+ * absence (`removed`, the names every ledger removes).
+ */
+export function correctionProblems(players, ledger, removed = removedNames([ledger])) {
   const problems = [];
   const byName = new Map(players.map(p => [p.name, p]));
+  for (const r of ledger.removed ?? []) {
+    if (byName.has(r.player)) problems.push(`${r.player} is recorded as removed (kept as ${r.keptAs}) and is still in the read`);
+  }
   for (const r of ledger.added ?? []) {
+    if (removed.has(r.player)) continue;
     const p = byName.get(r.player);
     const has = p?.career.some(s => s.season === r.season && s.club === r.club && s.goals === r.goals && s.appearances === r.appearances);
     if (!has) problems.push(`${r.player} ${r.season} ${r.club} (${r.appearances} apps, ${r.goals} goals) is recorded as added and is not in the read`);
   }
   for (const c of ledger.changed ?? []) {
+    if (removed.has(c.player)) continue;
     const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === c.club);
     if (!row || row[c.field] !== c.to) problems.push(`${c.player} ${c.season} ${c.club}: ${c.field} reads ${row ? row[c.field] : '(no row)'}, recorded as corrected to ${c.to}`);
   }
@@ -228,9 +248,10 @@ if (invokedDirectly) {
   const errors = poolProblems(players);
   if (players.length < PLAYER_FLOOR) errors.push(`only ${players.length} players read (floor ${PLAYER_FLOOR}); a short read, or move the floor on purpose`);
   if (seasonRows.length < SEASON_FLOOR) errors.push(`only ${seasonRows.length} seasons read (floor ${SEASON_FLOOR}); a short read, or move the floor on purpose`);
-  for (const { file, migration } of CORRECTION_LEDGERS) {
-    const ledger = JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8'));
-    for (const p of correctionProblems(players, ledger)) errors.push(`${p}; apply ${migration} before baking (ledger ${file})`);
+  const ledgers = CORRECTION_LEDGERS.map(({ file, migration }) => ({ file, migration, ledger: JSON.parse(fs.readFileSync(path.join(ROOT, file), 'utf8')) }));
+  const removed = removedNames(ledgers.map(l => l.ledger));
+  for (const { file, migration, ledger } of ledgers) {
+    for (const p of correctionProblems(players, ledger, removed)) errors.push(`${p}; apply ${migration} before baking (ledger ${file})`);
   }
   if (errors.length) {
     console.error('FAILED CLOSED, nothing written. Problems:');

@@ -43,8 +43,17 @@ function parseStop(stop: string) {
 /** The clubs in order with repeats folded: the path the quiz shows. */
 const clubPath = (p: CareerPlayer) => p.career.map(s => s.club).filter((c, i, all) => i === 0 || all[i - 1] !== c);
 
+/* Round 1010b: 'Alisson Becker' was 'Alisson' twice and is removed
+   (scripts/data/careerSeason2025.json, removed). His rows in this ledger are
+   satisfied by his absence; the man himself must be gone. */
+const removedNames = new Set<string>((JSON.parse(fs.readFileSync(path.resolve(process.cwd(), 'scripts/data/careerSeason2025.json'), 'utf8')) as { removed: { player: string }[] }).removed.map(r => r.player));
+
 describe('Alisson starts at Internacional in 2013', () => {
-  for (const name of ['Alisson', 'Alisson Becker']) {
+  it('the twin entry Alisson Becker is gone from the pool', () => {
+    expect(removedNames.has('Alisson Becker')).toBe(true);
+    expect(pool.has('Alisson Becker')).toBe(false);
+  });
+  for (const name of ['Alisson']) {
     it(`${name}: Internacional 2013 to 2016, Roma 2016 to 2018, Liverpool from 2018`, () => {
       const p = player(name);
       expect(p.career.slice(0, 6).map(s => `${s.season} ${s.club}`)).toEqual([
@@ -105,7 +114,7 @@ function expectRowFromSources(label: string, row: { apps: number; goals?: number
 }
 
 describe('every added row is in the pool exactly as both sources agree', () => {
-  const players = [...new Set(ledger.added.map(r => r.player))];
+  const players = [...new Set(ledger.added.map(r => r.player))].filter(name => !removedNames.has(name));
   for (const name of players) {
     it(`${name}: the prepended seasons`, () => {
       const rows = ledger.added.filter(r => r.player === name);
@@ -140,6 +149,7 @@ describe('every added row is in the pool exactly as both sources agree', () => {
 
   it('the changed rows carry the corrected figure', () => {
     for (const c of ledger.changed) {
+      if (removedNames.has(c.player)) { expect(pool.has(c.player)).toBe(false); continue; }
       const row = player(c.player).career.find(s => s.season === c.season && s.club === c.club);
       expect(row?.[c.field], `${c.player} ${c.season} ${c.club}`).toBe(c.to);
       expect(c.from, `${c.player} ${c.season}: a change that changes nothing`).not.toBe(c.to);
