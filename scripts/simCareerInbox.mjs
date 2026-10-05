@@ -75,7 +75,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.INBOX_CONTROL || '';
-const CONTROLS = ['deaf', 'nocap'];
+const CONTROLS = ['deaf', 'nocap', 'privatecap'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`INBOX_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -177,16 +177,25 @@ for (const p of walk(path.join(ROOT, 'src'))) {
   const rel = path.relative(ROOT, p).split(path.sep).join('/');
   code.set(rel, stripComments(norm(fs.readFileSync(p, 'utf8'))));
 }
+if (CONTROL === 'privatecap') {
+  const duplicate = 'src/lib/inboxCapNegativeControl.ts';
+  const cap = 'inbox.findIndex(m => m.answered !== undefined)';
+  if (code.has(duplicate) || !(code.get('src/lib/careerInbox.ts') ?? '').includes(cap)) throw new Error('Private cap control has no unique executable source');
+  const before = code.size;
+  code.set(duplicate, `const copiedCap = inbox => ${cap};`);
+  if (code.size !== before + 1 || !code.get(duplicate).includes(cap)) throw new Error('Private cap control did not change the source map');
+}
 const RULES = [
   { home: 'src/lib/careerInbox.ts', what: 'the mood drift', re: /mood > 50 \? mood - 2/ },
-  { home: 'src/lib/careerInbox.ts', what: 'the drop-oldest-answered cap', re: /findIndex\(m => m\.answered !== undefined\)/ },
+  // The GM week loop has a distinct eight-message cap and three-open limit.
+  { home: 'src/lib/careerInbox.ts', allowed: ['src/lib/gmInbox.ts'], what: 'the drop-oldest-answered cap', re: /findIndex\(m => m\.answered !== undefined\)/ },
   { home: 'src/lib/careerInbox.ts', what: 'the want-per-season formula', re: /sport\.wantPerSeason - unanswered/ },
   { home: 'src/lib/careerInbox.ts', what: 'the answer flow', re: /export function answerInboxMessage\b/ },
 ];
 for (const rule of RULES) {
   if (!rule.re.test(code.get(rule.home) ?? '')) fail(`${rule.what} is not in ${rule.home}, so the fingerprint is stale and this check proves nothing`);
   for (const [rel, text] of code) {
-    if (rel === rule.home) continue;
+    if (rel === rule.home || rule.allowed?.includes(rel)) continue;
     if (rule.re.test(text)) fail(`${rel} carries a private copy of ${rule.what} (${rule.re})`);
   }
 }

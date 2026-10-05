@@ -50,6 +50,18 @@ import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHu
 import contributorsStyles from './NhlContributors.module.css';
 import { NhlWaiverReceipt, type NhlWaiverReceiptEvent } from './NhlWaiverReceipt';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
+/* Round 987: the GM desk (staff, the re-sign desk, the pick ledger, packages
+   and the deadline). One optional `gm` field on the save; absent, the board
+   plays exactly as before. */
+import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
+import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
+import { gmStaffLevel } from '@/lib/gmStaff';
+import {
+  deskCopy, nhlDeadlineRefusal, nhlDeskAfterRound, nhlDeskEdges, nhlDeskOffseason, nhlDeskRoundOptions, nhlMirrorPickMove,
+  nhlNoteArrivals, nhlPicksOf, nhlScoutRead, nhlSignDraftee, nhlStaffOf, nhlTradeWindow, openNhlDesk, syncNhlPicks, NHL_DESK_KEYS,
+} from '@/lib/nhlGmDesk';
+/* By its full path, not './': the waiver, roster limit and draft capital harnesses bundle a copy of this board from a temp folder. */
+import { NHL_DESK_PANELS, NHL_RECAP_PANELS, type NhlDeskFacts } from '@/components/nhl-front-office/NhlGmDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -98,6 +110,10 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 987: the GM desk (src/lib/gmDesk.ts). Absent on every save written
+     before it, and on those the board plays exactly as it did until the GM
+     opens a desk box. Each block inside is validated alone. */
+  gm?: unknown;
 }
 
 function ContributorPicker({ team, onApply, onAuto, onBack }: {
@@ -253,6 +269,13 @@ export default function NhlFrontOfficeBoard() {
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
+  /* Round 987: the GM desk. null is a save the desk has never been opened on. */
+  const [gm, setGmState] = useState<GmDesk | null>(null);
+  /* Every save reads the desk from here, so a handler that has just changed
+     it saves the new one without touching any of the board's persist calls. */
+  const gmLive = useRef<GmDesk | null>(null);
+  const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
+  const [gmOpen, setGmOpen] = useState<string | null>(null);
 
   useGameCompletion('nhl-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
 
@@ -293,6 +316,8 @@ export default function NhlFrontOfficeBoard() {
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
       setSeasonTradeLine(s.seasonTradeLine ?? null);
+      /* Round 987: no `gm` on the save means the desk stays off until it is opened. */
+      setGm(s.gm === undefined ? null : readGmDesk(s.gm));
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          round and no postseason, this effect mapped it back to 'hub', the
@@ -319,7 +344,8 @@ export default function NhlFrontOfficeBoard() {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
+        postseason: champion ? { series, champion, gradeLine } : null,
+        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
@@ -352,6 +378,10 @@ export default function NhlFrontOfficeBoard() {
       gradeResult: null, tradeLine: null, seasonsPlayed: 0,
     }));
     setPressTilt(0); setSeasonTradeLine(null);
+    /* Round 987: a new front office opens with the desk on. Only a save from
+       before it waits for the GM to open a desk box. */
+    const desk = openNhlDesk(lg, abbr);
+    setGm(desk); setGmOpen(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
     } catch {
       if (alive.current) setStartError('We could not load the opening ratings. Try your team again. Your existing save is unchanged.');
@@ -397,6 +427,13 @@ export default function NhlFrontOfficeBoard() {
   };
 
   const my = league?.teams[myTeam];
+  /* Round 987: with the desk on, the grade the draft board shows is your
+     scouting director's read (his level sets the miss); the CPU clubs keep
+     the engine's own. */
+  const scoutLevel = gm && league ? gmStaffLevel(nhlStaffOf(gm, league, myTeam).block, 'scouting') : null;
+  const gradeOf = (pr: NhlProspect): number => scoutLevel !== null && league
+    ? nhlScoutRead(pr, myTeam, league.season, scoutLevel)
+    : pr.grade;
 
   const playRound = () => {
     if (!league || !my || my.players.length > NHL_ROSTER_MAX) return;
@@ -410,14 +447,25 @@ export default function NhlFrontOfficeBoard() {
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
-    const report = simNhlRound(lg, myTeam, Math.random);
+    /* Round 987: with the desk on, the staff's edge and the trainer ride on
+       the round; with it off the round is called exactly as before. */
+    const report = simNhlRound(lg, myTeam, Math.random, gm ? nhlDeskRoundOptions(gm, lg, myTeam) : undefined);
     nhlAiMoves(lg, myTeam, Math.random);
+    let nextGm = gm;
+    const deskLines: string[] = [];
+    if (gm) {
+      const tick = nhlDeskAfterRound(gm, lg, myTeam);
+      nextGm = tick.desk;
+      if (tick.line) deskLines.push(tick.line);
+    }
     const newFeed = [
       `Round ${lg.round}: you went ${report.myWins}-${report.myLosses}-${report.myOtLosses}.`,
+      ...deskLines,
       ...report.notes,
     ];
+    if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NHL_FO_ROUNDS) {
-      const { series: sr, champion: champ } = runNhlFoPlayoffs(lg, Math.random);
+      const { series: sr, champion: champ } = runNhlFoPlayoffs(lg, Math.random, nextGm ? nhlDeskEdges(nextGm, lg, myTeam) : undefined);
       lg.champions.push({ season: lg.season, team: champ });
       setSeries(sr);
       setChampion(champ);
@@ -453,6 +501,8 @@ export default function NhlFrontOfficeBoard() {
       return;
     }
     lg.round += 1;
+    /* Round 987: the round the deadline shuts says so in the feed. */
+    if (nextGm && nhlTradeWindow(league).open && !nhlTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
     setLeague(lg);
     setFeed(newFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -488,9 +538,17 @@ export default function NhlFrontOfficeBoard() {
     if (!pr) return;
     const mine = lg.teams[myTeam];
     if (draftBatchesLeft === null && mine.picks.length > picksLeft) mine.picks = mine.picks.slice(-picksLeft);
+    const pickRound = mine.picks[0];
     if (!nhlConsumeDraftPick(mine)) return;
     draftAction.current = true;
-    mine.players.push(nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion));
+    const drafted = nhlProspectToPlayer(pr, Math.random, lg.ratingModelVersion);
+    /* Round 987: with the desk on he signs the rules' entry level deal. */
+    if (gm) nhlSignDraftee(drafted);
+    mine.players.push(drafted);
+    /* Round 987: the re-sign desk learns he is a draft pick on an entry level
+       deal, so he comes up restricted when it runs out. */
+    const deskNow = gm ? nhlNoteArrivals(gm, lg, myTeam, [drafted.id], 'draft', pickRound) : null;
+    if (deskNow) setGm(deskNow);
     const remaining = draftClass.filter(p => p.id !== id);
     /* Round 515: the rival picks were applied and thrown away, so real
        decisions the engine made happened where nobody could see them.
@@ -505,7 +563,7 @@ export default function NhlFrontOfficeBoard() {
       const aiDraft = nhlAiDraftPicks(lg, aiRemaining, order, Math.random);
       aiRemaining = aiDraft.remaining;
       for (const { team, prospect } of aiDraft.picks) {
-        rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade });
+        rivalPicks.push({ team, playerName: prospect.name, pos: String(prospect.pos), grade: gradeOf(prospect) });
       }
     }
     const nextClass = aiRemaining;
@@ -516,21 +574,31 @@ export default function NhlFrontOfficeBoard() {
        when the player presses Continue under the card. The offseason still
        runs right here, in the same order, drawing the same randomness. */
     setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) },
       rivalPicks,
     ));
     setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftBatchesLeft(beforeBatches - batchCount);
-    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
+    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      finishDraft(lg);
+      finishDraft(lg, deskNow);
       return;
     }
     setLeague(lg);
     persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount }, lg, myTeam);
   };
 
-  const finishDraft = (lg: NhlLeague) => {
-      const notes = nhlOffseason(lg, Math.random, myTeam);
+  const finishDraft = (lg: NhlLeague, deskNow: GmDesk | null = gm) => {
+      /* Round 987: with the desk on, the summer runs through the re-sign
+         desk: nobody of yours leaves on the engine's coin flip. */
+      let notes: string[];
+      let deskAfter = deskNow;
+      if (deskNow) {
+        const summer = nhlDeskOffseason(lg, deskNow, myTeam, Math.random);
+        if (!summer.ok) { setFeed(f => [...summer.lines, ...f].slice(0, 6)); return; }
+        deskAfter = summer.desk;
+        notes = [...summer.lines, ...summer.notes];
+        setGm(deskAfter);
+      } else notes = nhlOffseason(lg, Math.random, myTeam);
       setWaiverReceipt(null);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
@@ -572,7 +640,7 @@ export default function NhlFrontOfficeBoard() {
       const order = nhlFoStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
       const resolved = nhlAiDraftPicks(lg, remaining, order, Math.random);
       remaining = resolved.remaining;
-      rivalPicks.push(...resolved.picks.map(({ team, prospect }) => ({ team, playerName: prospect.name, pos: String(prospect.pos), grade: prospect.grade })));
+      rivalPicks.push(...resolved.picks.map(({ team, prospect }) => ({ team, playerName: prospect.name, pos: String(prospect.pos), grade: gradeOf(prospect) })));
     }
     setDraftClass(remaining); setDraftNight(buildDraftNight(null, rivalPicks));
     finishDraft(lg);
@@ -632,6 +700,8 @@ export default function NhlFrontOfficeBoard() {
          say what the engine did. */
       const signed = lg.teams[myTeam].players.find(p => p.id === pid);
       if (signed) slamFeed(`✍️ ${signed.name} (${signed.pos}) signs, $${signed.salary}M a year.`);
+      const deskNow = gm ? nhlNoteArrivals(gm, lg, myTeam, [pid], 'signing') : null;
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({}, lg, myTeam);
     }
   };
@@ -652,8 +722,31 @@ export default function NhlFrontOfficeBoard() {
       openPremium: 1.07,
     };
   };
+  /* Round 987: with the desk on, every trade path asks the deadline first. */
+  const deadlineBlock = (): boolean => {
+    const why = gm && league ? nhlDeadlineRefusal(league) : null;
+    if (why) setFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
+    return !!why;
+  };
+  /* Round 987: an old trade path with the desk on. The pick it moved (the
+     last on the list) moves in the ledger too, and the man who came in is
+     written down as a trade. */
+  const deskAfterTrade = (lg: NhlLeague, partner: string, arrivedId: string, pickRound: number | null): GmDesk | null => {
+    if (!gm) return null;
+    let d = gm;
+    if (pickRound !== null) {
+      const ledger = nhlMirrorPickMove(nhlPicksOf(d, lg), myTeam, partner, pickRound, lg.season);
+      d = withGmBlock(d, NHL_DESK_KEYS.picks, ledger);
+      syncNhlPicks(lg, ledger);
+    }
+    return nhlNoteArrivals(d, lg, myTeam, [arrivedId], 'trade');
+  };
+  const lastPickRound = (lg: NhlLeague, moving: boolean): number | null => {
+    const list = lg.teams[myTeam].picks;
+    return moving && list.length ? list[list.length - 1] : null;
+  };
   const openTradeTalks = (theirPid: string) => {
-    if (!tradePartner || !myTradePiece) return;
+    if (!tradePartner || !myTradePiece || deadlineBlock()) return;
     const args = talksArgsFor(tradePartner, myTradePiece, theirPid);
     if (!args) return;
     setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
@@ -666,8 +759,10 @@ export default function NhlFrontOfficeBoard() {
   };
   const acceptTalks = () => {
     if (!league || !talks || !talks.state.pkg) return;
+    if (deadlineBlock()) { setTalks(null); return; }
     const pkg = talks.state.pkg;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    const pickRound = lastPickRound(lg, pkg.addPick);
     const res = nhlExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
     if (res === 'done') {
       slamFeed(`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`);
@@ -675,6 +770,8 @@ export default function NhlFrontOfficeBoard() {
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${pkg.theirPlayerName} in`;
       setSeasonTradeLine(line);
+      const deskNow = deskAfterTrade(lg, talks.partner, pkg.theirPlayerId, pickRound);
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ The agreed deal no longer fits (cap or roster rules).', ...f].slice(0, 6));
@@ -684,13 +781,14 @@ export default function NhlFrontOfficeBoard() {
 
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
-    if (!league || !myTradePiece) return;
+    if (!league || !myTradePiece || deadlineBlock()) return;
     const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, nhlTrade, nhlTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
-    if (!league || !myTradePiece) return;
+    if (!league || !myTradePiece || deadlineBlock()) return;
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    const pickRound = lastPickRound(lg, o.sweeten);
     const res = nhlTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
     if (res === 'accepted') {
       slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
@@ -698,6 +796,8 @@ export default function NhlFrontOfficeBoard() {
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${o.playerName} in`;
       setSeasonTradeLine(line);
+      const deskNow = deskAfterTrade(lg, o.teamId, o.playerId, pickRound);
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ That offer went stale, shop him again.', ...f].slice(0, 6));
@@ -711,7 +811,35 @@ export default function NhlFrontOfficeBoard() {
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
+    setGm(null); setGmOpen(null);
   };
+
+  /* Round 987: the desk boxes. The first tap on one, on a save from before
+     the desk, switches it on: the ledgers are opened from the league as it
+     stands (every pick on the old lists kept) and saved with it. */
+  const openDesk = (key: string | null) => {
+    if (key !== null && !gm && league) {
+      const desk = openNhlDesk(league, myTeam);
+      const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+      syncNhlPicks(lg, nhlPicksOf(desk, lg));
+      setGm(desk); setLeague(lg);
+      persist({}, lg, myTeam);
+    }
+    setGmOpen(key);
+  };
+  const changeDesk = (next: GmDesk) => {
+    setGm(next);
+    persist({}, league, myTeam);
+  };
+  const deskFacts = (hub: NhlDeskFacts['hub']): NhlDeskFacts | null => league ? {
+    teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
+    seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
+    say: line => setFeed(f => [line, ...f].slice(0, 6)),
+    commit: (lg, desk, line) => {
+      setGm(desk); setLeague(lg); slamFeed(line);
+      persist({}, lg, myTeam);
+    },
+  } : null;
 
   if (phase === 'pick' || !league || !my) {
     return (
@@ -748,6 +876,37 @@ export default function NhlFrontOfficeBoard() {
   const room = nhlCapRoom(my, league.cap);
   const strength = Math.round(nhlStrength(my));
 
+  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
+     the wording is harnessed rather than eyeballed. Eight of each
+     conference make the playoffs, which is the real format and the cut the
+     table box warns about. Round 987: built here, above the recap, because
+     the recap mounts the re-sign desk too. */
+  const myConfName = EASTERN.includes(myTeam) ? 'East' : 'West';
+  const confTable = nhlFoStandings(league, EASTERN.includes(myTeam) ? EASTERN : WESTERN);
+  const hubFacts: NhlDeskFacts['hub'] = {
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    rosterMax: NHL_ROSTER_MAX,
+    wins: my.wins,
+    losses: my.losses,
+    period: league.round,
+    periods: NHL_FO_ROUNDS,
+    playWord: 'Play',
+    periodWord: 'round',
+    /* A round here is a stretch of the whole league, not one fixture. */
+    hasFixtures: false,
+    nextOpponent: null,
+    lastResult: null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 8,
+    tableName: myConfName,
+    tradeLine: seasonTradeLine,
+    titles,
+  };
+
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
     return (
@@ -775,6 +934,17 @@ export default function NhlFrontOfficeBoard() {
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone. */
     const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 987: the season is over and the summer runs after the draft, so
+       the re-sign desk is a box here, under the verdict. Open, it takes the
+       screen, with a back button to the recap. */
+    const recapDesk = gm && !fired ? deskFacts(hubFacts) : null;
+    if (gm && recapDesk && gmPanelFor(NHL_RECAP_PANELS, gmOpen)) {
+      return (
+        <div className="space-y-4">
+          <GmDeskMount sport="nhl" desk={gm} facts={recapDesk} panels={NHL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        </div>
+      );
+    }
     return (
       <div className="space-y-4">
         <div
@@ -845,6 +1015,9 @@ export default function NhlFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {gm && recapDesk && (
+          <GmDeskMount sport="nhl" desk={gm} facts={recapDesk} panels={NHL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        )}
       </div>
     );
   }
@@ -868,7 +1041,7 @@ export default function NhlFrontOfficeBoard() {
             </p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. Scout grades carry error.
+              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. {gm ? "Grades are your scouting director's read, and a better one misses by less." : 'Scout grades carry error.'}
             </p>
           )}
         </div>
@@ -877,13 +1050,14 @@ export default function NhlFrontOfficeBoard() {
         {!draftDone && noCapital && <button onClick={draftWithoutPicks} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Finish the draft and offseason</button>}
         {!draftDone && !noCapital && draftClass.length === 0 && <div className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground"><p>No prospects remain on this saved board. Generate another board to use your remaining picks.</p><button onClick={replaceDraftBoard} className="mt-2 min-h-11 w-full rounded-full bg-primary px-4 py-2.5 font-bold text-primary-foreground">Generate remaining prospects</button></div>}
         {!draftDone && !noCapital && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
-          {draftClass.slice(0, 14).map(pr => (
+          {/* Round 987: with the desk on, the board is your scout's, in his order. */}
+          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
                 <span className="block text-sm font-bold text-foreground">{pr.name}</span>
                 <span className="block text-[10px] text-muted-foreground">{pr.pos} · age {pr.age}</span>
               </span>
-              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{pr.grade}</span>
+              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{gradeOf(pr)}</span>
             </button>
           ))}
         </div>}
@@ -900,36 +1074,11 @@ export default function NhlFrontOfficeBoard() {
 
   const t = NHL_TEAM_MAP.get(myTeam)!;
 
-  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
-     the wording is harnessed rather than eyeballed. Eight of each
-     conference make the playoffs, which is the real format and the cut the
-     table box warns about. */
-  const myConfName = EASTERN.includes(myTeam) ? 'East' : 'West';
-  const confTable = nhlFoStandings(league, EASTERN.includes(myTeam) ? EASTERN : WESTERN);
-  const tiles = foHubTiles({
-    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    capRoom: room,
-    /* Round 631: the box offers only men the sign path would take. */
-    ledger: my,
-    rosterMax: NHL_ROSTER_MAX,
-    wins: my.wins,
-    losses: my.losses,
-    period: league.round,
-    periods: NHL_FO_ROUNDS,
-    playWord: 'Play',
-    periodWord: 'round',
-    /* A round here is a stretch of the whole league, not one fixture. */
-    hasFixtures: false,
-    nextOpponent: null,
-    lastResult: null,
-    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
-    cut: 8,
-    tableName: myConfName,
-    tradeLine: seasonTradeLine,
-    titles,
-  });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setContributorsOpen(false); setTab(key === 'play' ? 'round' : key); };
+  const tiles = foHubTiles(hubFacts);
+  /* Round 987: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
+  const hubDesk = deskFacts(hubFacts);
+  const deskPanelOpen = gmPanelFor(NHL_DESK_PANELS, gmOpen) !== null;
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setContributorsOpen(false); setGmOpen(null); setTab(key === 'play' ? 'round' : key); };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
@@ -975,8 +1124,12 @@ export default function NhlFrontOfficeBoard() {
       {/* Round 204: boxes, not pills. Each one already tells you the thing
           you used to have to tap to find out. */}
       {tab === null
-        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
+      {tab === null && hubDesk && (
+        <GmDeskMount sport="nhl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NHL_DESK_PANELS}
+          open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+      )}
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -1087,6 +1240,9 @@ export default function NhlFrontOfficeBoard() {
 
       {tab === 'trade' && (
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
+          {/* Round 987: with the desk on, the deadline shuts this screen too. */}
+          {gm && nhlDeadlineRefusal(league) && <p data-nhl-deadline className="rounded-lg border border-destructive/40 bg-destructive/5 p-2 text-center text-xs font-semibold">🔒 {nhlDeadlineRefusal(league)}</p>}
+          {gm && !nhlDeadlineRefusal(league) && <p data-nhl-deadline className="text-center text-[11px] text-muted-foreground">Trade deadline: the break after round {nhlTradeWindow(league).deadlineAfter} is the last chance, and deals shut once round {nhlTradeWindow(league).deadlineAfter + 1} is played. Packages with picks and retained salary are on the Trade desk box.</p>}
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
