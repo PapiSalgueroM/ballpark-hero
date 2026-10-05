@@ -209,8 +209,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://www.blessyouboys.com/2020/6/29/21306077/roster-rules-for-the-2020-major-league-baseball-season', 'Three years in which a man can be optioned; out of options he must clear waivers to go down.'),
       ],
       claimOrder: [
-        /* One source: a second host was not found in the session that added it. Owed. */
         src('https://www.mlb.com/glossary/transactions/outright-waivers', 'Claiming priority is reverse winning percentage, ties to the lower percentage last season; a man who clears may be assigned outright.'),
+        { url: 'https://www.si.com/mlb/diamondbacks/onsi/news/a-crash-course-on-the-waiver-process-in-mlb', read: '2026-10-05', says: 'Priority runs in reverse order of the standings; teams tied on winning percentage go by the lower winning percentage the year before (2023).' },
       ],
     },
   },
@@ -228,8 +228,8 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
         src('https://web.archive.org/web/2023id_/https://www.capfriendly.com/waivers-faq', 'The same table: a skater signed at 18 needs waivers after 160 NHL games or 5 seasons.'),
       ],
       claimOrder: [
-        /* One source, the league's own agreement: a second host was not found in the session that added it. Owed. */
         src('https://web.archive.org/web/2016id_/http://www.nhl.com/nhl/en/v3/ext/CBA2012/NHL_NHLPA_2013_CBA.pdf', "Section 13.19: the lowest percentage of possible points; outside the regular season or before November 1, last season's final standing; ties to the lower winning percentage."),
+        { url: 'https://thehockeywriters.com/nhl-waiver-wire-primer/', read: '2026-10-05', says: 'Priority goes to the club with the lowest points percentage when the man is placed on waivers (2014).' },
       ],
     },
   },
