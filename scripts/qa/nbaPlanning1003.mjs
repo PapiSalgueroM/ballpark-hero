@@ -1,4 +1,4 @@
-/* Actual built NHL page, native planning and original scoring. All external requests stay local. */
+/* Actual built NBA page, native planning and original scoring. All external requests stay local. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,16 +9,16 @@ import { build } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const OUT = path.join(ROOT, 'nhl-planning-artifacts/native');
-const DATE = '2026-10-03', DAILY = 'nhl-connections-daily-' + DATE;
-const noteKey = mode => 'nhl-connections-notes-v1:' + mode;
-const protectedKeys = [DAILY, 'dukb-local-completions', 'dukb-streaks-v1', 'dukb-play-diary-v1'];
+const OUT = path.join(ROOT, 'nba-planning-artifacts/native');
+const DATE = '2026-10-05', DAILY = 'nba-connections-daily-' + DATE;
+const noteKey = mode => 'nba-connections-notes-v1:' + mode;
+const protectedKeys = [DAILY, 'nhl-connections-notes-v1:daily', 'nhl-connections-notes-v1:unlimited', 'dukb-local-completions', 'dukb-streaks-v1', 'dukb-play-diary-v1'];
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build before native verification');
 // Fixture setup imports only accepted records and the original date selector, never the notes or scoring implementation.
-const fixtureBuild = await build({ stdin: { contents: "export { nhlConnectionsPuzzles } from './src/data/nhlConnectionsPuzzles'; export { dailyIndex } from './src/lib/dateUtils';", resolveDir: ROOT }, bundle: true, platform: 'node', format: 'esm', write: false });
-const { nhlConnectionsPuzzles, dailyIndex } = await import('data:text/javascript;base64,' + Buffer.from(fixtureBuild.outputFiles[0].text).toString('base64'));
-const fixtures = nhlConnectionsPuzzles.slice(0, 2);
+const fixtureBuild = await build({ stdin: { contents: "export { nbaConnectionsPuzzles } from './src/data/nbaConnectionsPuzzles'; export { dailyIndex } from './src/lib/dateUtils';", resolveDir: ROOT }, bundle: true, platform: 'node', format: 'esm', write: false });
+const { nbaConnectionsPuzzles, dailyIndex } = await import('data:text/javascript;base64,' + Buffer.from(fixtureBuild.outputFiles[0].text).toString('base64'));
+const fixtures = nbaConnectionsPuzzles.slice(0, 2);
 assert.equal(fixtures.length, 2);
 for (const puzzle of fixtures) assert.equal(new Set(puzzle.groups.flatMap(group => group.players)).size, 20);
 fs.writeFileSync(path.join(OUT, 'accepted-fixtures.json'), JSON.stringify(fixtures, null, 2));
@@ -53,7 +53,7 @@ async function visible(locator, page, label) {
 async function layout(page, label) {
   const viewport = page.viewportSize().width;
   const value = await page.evaluate(viewport => ({ viewport, windowWidth: innerWidth, document: document.documentElement.scrollWidth,
-    rows: [...document.querySelectorAll('[data-nhl-planning] button, [data-nhl-planning] p, [data-nhl-final], [role="dialog"]')].map(el => {
+    rows: [...document.querySelectorAll('[data-nba-planning] button, [data-nba-planning] p, [data-nba-final], [role="dialog"]')].map(el => {
       const box = el.getBoundingClientRect(); return { text: el.textContent?.slice(0, 70), left: box.left, right: box.right, width: box.width, client: el.clientWidth, scroll: el.scrollWidth };
     }).filter(row => row.width) }), viewport);
   assert(value.document <= value.viewport + 2, label + ': document fits viewport');
@@ -72,12 +72,14 @@ try {
     const { width, height, touch, reduced, light } = profile;
     const id = `${width}-${light ? 'light' : 'dark'}-${touch ? 'touch' : 'keyboard'}${reduced ? '-reduced' : ''}`;
     const pool = width === 390 ? fixtures : fixtures.slice(0, 1), dailyPuzzle = pool[dailyIndex(DATE, pool.length)];
-    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], controls: [], pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
+    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], controls: [], shareCards: [], pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
     report.cases.push(result);
     const context = await browser.newContext({ viewport: { width, height }, isMobile: touch, hasTouch: touch, deviceScaleFactor: 1,
       reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block', storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: light ? 'light' : 'dark' },
-        { name: 'rules-gate-seen:/nhl-connections', value: '1' }, { name: 'dukb-guest-handle', value: 'FixtureGoal-42' },
+        { name: 'rules-gate-seen:/nba-connections', value: '1' }, { name: 'dukb-guest-handle', value: 'FixtureGoal-42' },
+        { name: 'nhl-connections-notes-v1:daily', value: 'Held NHL Daily fixture bytes' },
+        { name: 'nhl-connections-notes-v1:unlimited', value: 'Held NHL Unlimited fixture bytes' },
       ] }] } });
     await context.route('**/*', route => {
       const request = route.request(), url = new URL(request.url());
@@ -86,7 +88,7 @@ try {
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) {
         result.scoreWrites.push({ method: request.method(), path: url.pathname, body: request.postDataJSON() });
       }
-      if (url.pathname === '/rest/v1/nhl_connections_puzzles') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(pool.map(puzzle => ({ puzzle_id: puzzle.id, groups_json: puzzle.groups }))) });
+      if (url.pathname === '/rest/v1/nba_connections_puzzles') return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(pool.map(puzzle => ({ puzzle_id: puzzle.id, groups_json: puzzle.groups }))) });
       const type = request.resourceType();
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : type === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(type) ? '' : '[]' });
     });
@@ -94,12 +96,12 @@ try {
     await page.addInitScript(({ date, keys }) => {
       const OriginalDate = Date, now = new OriginalDate(date + 'T16:00:00Z').getTime();
       window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
-      Math.random = () => Number(localStorage.getItem('qa-nhl-random') || 0);
-      window.__nhlWrites = [];
+      Math.random = () => Number(localStorage.getItem('qa-nba-random') || 0);
+      window.__nbaWrites = [];
       for (const method of ['setItem', 'removeItem']) {
         const original = Storage.prototype[method];
         Storage.prototype[method] = function(key, ...args) {
-          if (this === localStorage && (keys.includes(key) || key.startsWith('nhl-connections-notes-v1:'))) window.__nhlWrites.push({ method, key, value: args[0] ?? null });
+          if (this === localStorage && (keys.includes(key) || key.startsWith('nba-connections-notes-v1:'))) window.__nbaWrites.push({ method, key, value: args[0] ?? null });
           return original.call(this, key, ...args);
         };
       }
@@ -108,7 +110,7 @@ try {
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
     page.on('requestfailed', request => { if (request.url().startsWith(BASE)) result.assetFailures.push(request.url() + ': ' + request.failure()?.errorText); });
     page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) result.assetFailures.push(response.url() + ': ' + response.status()); });
-    const bench = page.locator('[data-nhl-planning]');
+    const bench = page.locator('[data-nba-planning]');
     const button = name => bench.getByRole('button', { name, exact: true });
     const modeButton = mode => page.getByRole('button', { name: mode === 'daily' ? '📅 Daily' : '∞ Unlimited', exact: true });
     const stored = key => page.evaluate(value => localStorage.getItem(value), key);
@@ -135,13 +137,27 @@ try {
     };
     const receipt = async stage => {
       await settle(page);
-      result.visibility.push(await visible(page.locator('[data-nhl-receipt]'), page, stage + '-receipt'));
+      result.visibility.push(await visible(page.locator('[data-nba-receipt]'), page, stage + '-receipt'));
       result.visibility.push(await visible(button('Submit five'), page, stage + '-action'));
       result.visibility.push({ stage, context: await planningContext(stage) });
-      assert(await page.locator('[data-nhl-receipt]').evaluate(el => document.activeElement?.contains(el)), stage + ': actual receipt owns focus');
+      assert(await page.locator('[data-nba-receipt]').evaluate(el => document.activeElement?.contains(el)), stage + ': actual receipt owns focus');
+    };
+    const shareCard = page.locator('[data-nba-final] [aria-hidden="true"]').filter({ has: page.getByText('Result', { exact: true }) });
+    const shareMode = async (mode, stage) => {
+      assert.equal(await shareCard.count(), 1, stage + ': one actual result image card');
+      const text = await shareCard.textContent();
+      if (mode === 'unlimited') {
+        assert(!/today['’]s/i.test(text), stage + ': Unlimited card is not labeled as today');
+        assert(text.includes('NBA Connections Unlimited'), stage + ': Unlimited card names its mode');
+        assert(text.includes('0/4 groups on NBA Connections Unlimited'), stage + ': actual loss count and mode reach the card');
+      } else {
+        assert(text.includes("all 4 groups with 3 lives left on today's NBA Connections"), stage + ': Daily card retains the completed daily score');
+        assert(!text.includes('Unlimited'), stage + ': Daily card does not claim Unlimited');
+      }
+      return { mode, text };
     };
     try {
-      await page.goto(BASE + '/nhl-connections', { waitUntil: 'domcontentloaded' });
+      await page.goto(BASE + '/nba-connections', { waitUntil: 'domcontentloaded' });
       const dialog = page.getByRole('dialog'); await dialog.waitFor();
       assert.match(await dialog.innerText(), /Try this example[\s\S]*Keep another idea in B/);
       assert.match(await dialog.innerText(), /Planning is free/);
@@ -163,7 +179,7 @@ try {
       await activate(dialog.getByRole('button', { name: 'Close', exact: true }), touch); await settle(page);
       assert.equal(await stored(noteKey('daily')), dailyNotes, 'Reopened rules preserve the complete draft');
       assert.deepEqual(await protectedState(), before);
-      assert.deepEqual(await page.evaluate(keys => window.__nhlWrites.filter(write => keys.includes(write.key)), protectedKeys), [], 'Free planning never transiently writes protected state');
+      assert.deepEqual(await page.evaluate(keys => window.__nbaWrites.filter(write => keys.includes(write.key)), protectedKeys), [], 'Free planning never transiently writes protected state');
       if (width === 320) {
         const style = await bench.getAttribute('style');
         const originalWidth = await page.evaluate(() => document.documentElement.scrollWidth);
@@ -179,7 +195,7 @@ try {
       }
       await changeMode('unlimited'); await choose('D'); await pick([pool[0].groups[0].players[0]]);
       const unlimitedNotes = await stored(noteKey('unlimited'));
-      await page.evaluate(() => localStorage.setItem('qa-nhl-random', '0.9'));
+      await page.evaluate(() => localStorage.setItem('qa-nba-random', '0.9'));
       await page.reload({ waitUntil: 'domcontentloaded' }); await readyBench();
       assert.equal(await stored(noteKey('daily')), dailyNotes);
       assert.equal(await button('Draft A').getAttribute('aria-pressed'), 'true');
@@ -200,12 +216,12 @@ try {
       assert.equal(await button('Submit five').isDisabled(), true, 'Draft navigation preserves the rejection guard');
       assert.equal(await stored(DAILY), rejectedBytes, 'Draft navigation preserves the exact Daily payload');
       assert(await page.getByLabel('3 lives remaining', { exact: true }).count());
-      assert.match(await page.locator('[data-nhl-receipt]').innerText(), /One life used/);
+      assert.match(await page.locator('[data-nba-receipt]').innerText(), /One life used/);
       assert.deepEqual((await notes('daily')).groups, [wrong, group[2].players, [], []]);
       if (reduced) assert.equal(await page.getByRole('group', { name: 'Available players' }).evaluate(el => getComputedStyle(el).animationName), 'none');
       await shoot('wrong-retained');
       if (width === 320) {
-        const target = page.locator('[data-nhl-receipt]'), save = await stored(DAILY);
+        const target = page.locator('[data-nba-receipt]'), save = await stored(DAILY);
         const style = await target.getAttribute('style');
         try {
           await target.evaluate(el => { el.style.display = 'none'; });
@@ -226,7 +242,7 @@ try {
         result.controls.push({ kind: 'native revision context guard', changed: true, rejected: true, restored: true });
       }
       await pick([wrong[4], group[0].players[4]]); await activate(button('Submit five'), touch); await receipt('correct');
-      assert.match(await page.locator('[data-nhl-receipt]').innerText(), new RegExp('Locked: ' + group[0].theme));
+      assert((await page.locator('[data-nba-receipt]').innerText()).includes('Locked: ' + group[0].theme), 'Correct receipt names the exact connection');
       for (const name of group[0].players) assert.equal(await button(name).count(), 0, 'Solved names are no longer editable');
       assert.deepEqual((await notes('daily')).groups[1], group[2].players, 'Other draft survives the solve');
       await shoot('correct-locked');
@@ -244,7 +260,8 @@ try {
       assert.deepEqual((await notes('daily')).groups.flat(), []);
       assert.equal(result.scoreWrites.length, 1, 'Exactly one original Daily completion request');
       assert.equal(result.scoreWrites[0].path, '/rest/v1/game_completions');
-      assert.equal(result.scoreWrites[0].body.game, 'nhl-connections'); assert.equal(result.scoreWrites[0].body.score, 750);
+      assert.equal(result.scoreWrites[0].body.game, 'nba-connections'); assert.equal(result.scoreWrites[0].body.score, 750);
+      result.shareCards.push(await shareMode('daily', 'daily-share'));
       result.score = 750; result.dailyPayload = final; await shoot('daily-complete');
       await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByText('All Groups Found!', { exact: true }).waitFor(); await settle(page);
       assert.equal(await stored(DAILY), finalBytes, 'Completed Daily reload preserves the exact original payload');
@@ -258,13 +275,26 @@ try {
           if (attempt < 3) await receipt('unlimited-miss-' + attempt);
         }
         await page.getByText('Out of Lives!', { exact: true }).waitFor(); await settle(page);
-        assert.match(await page.locator('[data-nhl-final]').innerText(), /Found 0\/4 groups/);
+        assert.match(await page.locator('[data-nba-final]').innerText(), /Found 0\/4 groups/);
         assert.equal(result.scoreWrites.length, 1, 'Unlimited retains the original unranked contract');
+        result.shareCards.push(await shareMode('unlimited', 'unlimited-share'));
+        const cardScore = shareCard.getByText('0/4 groups on NBA Connections Unlimited', { exact: true });
+        const correctScore = await cardScore.textContent();
+        try {
+          await cardScore.evaluate(el => { el.textContent = "0/4 groups on today's NBA Connections"; });
+          assert((await shareCard.textContent()).includes("0/4 groups on today's NBA Connections"), 'Mode control changes the actual result card text');
+          await assert.rejects(() => shareMode('unlimited', 'dated-mode-control'), error => error.name === 'AssertionError' && error.code === 'ERR_ASSERTION' && error.message === 'dated-mode-control: Unlimited card is not labeled as today');
+        } finally {
+          await shareCard.getByText("0/4 groups on today's NBA Connections", { exact: true }).evaluate((el, text) => { el.textContent = text; }, correctScore);
+        }
+        await shareMode('unlimited', 'restored-mode'); assert.equal(await stored(DAILY), finalBytes);
+        result.controls.push({ kind: 'native result mode copy guard', changed: true, rejected: true, restored: true });
+        await shoot('unlimited-complete');
         await activate(page.getByRole('button', { name: 'Play Again', exact: true }), touch); await readyBench();
         const resetNotes = await notes('unlimited');
         assert.deepEqual(JSON.parse(resetNotes.scope), ['unlimited', pool[1].id, null]);
         assert.deepEqual(resetNotes.groups, [[], [], [], []]);
-        await page.evaluate(() => localStorage.setItem('qa-nhl-random', '0'));
+        await page.evaluate(() => localStorage.setItem('qa-nba-random', '0'));
         await page.reload({ waitUntil: 'domcontentloaded' }); await page.getByText('All Groups Found!', { exact: true }).waitFor();
         await changeMode('unlimited');
         assert.deepEqual(await notes('unlimited'), resetNotes, 'Immediate reset reload opens the new puzzle with empty notes');
@@ -273,7 +303,7 @@ try {
         assert.equal(await stored(DAILY), finalBytes); assert.equal(result.scoreWrites.length, 1);
         result.unlimitedReset = { oldPuzzle: pool[0].id, newPuzzle: pool[1].id, reloadHeld: true }; await shoot('unlimited-new-puzzle');
       }
-      result.storageWrites = await page.evaluate(() => window.__nhlWrites);
+      result.storageWrites = await page.evaluate(() => window.__nbaWrites);
       assert.deepEqual(result.pageErrors, [], 'No native page errors'); assert.deepEqual(result.consoleErrors, [], 'No native console errors'); assert.deepEqual(result.assetFailures, [], 'Built local assets load');
       result.passed = true;
     } catch (error) {
@@ -282,8 +312,8 @@ try {
     } finally { saveReport(); await context.close(); }
   }
   assert.equal(report.cases.length, 4); assert(report.cases.every(value => value.passed), 'Every native planning profile passes; see report.json');
-  assert.equal(report.cases.flatMap(value => value.controls).length, 3);
-  console.log('NHL planning native: four complete 750-point Daily solves, independent notes/reloads, Unlimited reset, native touch/keyboard and three effective geometry controls passed.');
+  assert.equal(report.cases.flatMap(value => value.controls).length, 4);
+  console.log('NBA planning native: four complete 750-point Daily solves, independent notes/reloads, Unlimited reset, actual result modes, native touch/keyboard, three effective geometry controls and one mode-copy control passed.');
 } finally {
   saveReport(); if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog);
 }
