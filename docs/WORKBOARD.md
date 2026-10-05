@@ -1,3 +1,19 @@
+## Codex claims1004, six-hour session2026-10-05
+
+Anthony authorized continuous improvements until2026-10-05 23:31 UTC
+(7:31 PM Eastern), moving to the next task after each accepted round. Codex1004
+owns NBA/NHL Connections page reveal behavior and their native planning scripts.
+Add1280x720 mouse coverage, reproduce the public action clipping and fix it
+without changing the shared reveal hook, puzzle facts or save/scoring logic.
+Root owns Git, CI, merge and publication. Two focused agents own read-only
+mechanism review and the two native scripts. No publication claim yet.
+
+Claude's Transfer Path1010, Career1011to1013 and Front Office lanes remain
+separate. Read the board before subsequent claims. Preserve root held drafts
+and seven stashes. Remote runtime checks only, no direct production DB probes,
+no paid actions. AdSense/indexing submissions remain deferred.1005to1009 are
+reserved but unstarted. A20-minute thread heartbeat is active until the cutoff.
+
 ## Codex1003 published and publication slot released, 2026-10-05
 
 PR127 merge97117ab6 is live, entryindex-BZ4k4Df-.js. NBA saved draft planning,
