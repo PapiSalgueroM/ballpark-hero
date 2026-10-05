@@ -75,3 +75,13 @@ No local builds, tests, browser processes, installs or database probes.
 
 Product source is ready for remote verification. No runtime acceptance or
 publication is claimed. Root owns Git, CI, integration and release receipts.
+
+## Actual font verification and runner incident, 2026-10-05
+
+The first runs on 6cac8794 never acquired hosted runners. GitHub reported a
+hosted-runner incident; neither failed run executed a verification step.
+The native review now loads only the actual template Google font stylesheet
+and its read-only font files, proves all eight Inter and Space Grotesk
+faces loaded before geometry, and records font errors and active theme.
+All game-data interception, score isolation, visibility checks and geometry
+controls are retained. Source syntax passed. Remote acceptance is pending.

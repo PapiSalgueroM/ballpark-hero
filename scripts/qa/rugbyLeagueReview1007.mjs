@@ -1,4 +1,4 @@
-/* Native review and retry on the built app. External transport is fulfilled from accepted fixtures. */
+/* Native review and retry on the built app. Accepted fixtures isolate game data; exact read-only font requests may load. */
 import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -9,6 +9,12 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
+assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
+const isFontRead = request => {
+  const url = new URL(request.url());
+  return request.method() === 'GET' && (fontLinks.includes(url.href) || (request.resourceType() === 'font' && url.protocol === 'https:' && url.hostname === 'fonts.gstatic.com' && url.pathname.endsWith('.woff2')));
+};
 const OUT = path.join(ROOT, 'rugby-league-review-artifacts/native');
 const records = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/test/fixtures/rugbyLeagueRecords.json'), 'utf8'));
 const DATE = '2026-10-03', DAILY = `champ-or-not-daily-${DATE}`;
@@ -45,6 +51,19 @@ const ready = new Promise((resolve, reject) => {
 async function settle(page) {
   await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   await page.waitForTimeout(400);
+}
+async function loadedFonts(page) {
+  const loaded = await page.evaluate(async () => {
+    await document.fonts.ready;
+    const faces = [];
+    for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
+      const matches = await document.fonts.load(`${weight} 16px "${family}"`, 'Career season');
+      faces.push({ family, weight, faces: matches.length, loaded: matches.length > 0 && matches.every(face => face.status === 'loaded') });
+    }
+    return faces;
+  });
+  assert(loaded.every(font => font.loaded), 'Actual Inter and Space Grotesk faces load before native geometry');
+  return loaded;
 }
 async function activate(locator, input) {
   const box = await locator.boundingBox();
@@ -93,10 +112,10 @@ try {
   for (const profile of profiles) {
     const { width, height, input, theme, reduced } = profile;
     const id = `${width}-${input}-${theme}${reduced ? '-reduced' : ''}`;
-    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [], retries: [], pageErrors: [], consoleErrors: [], assetFailures: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
+    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [], retries: [], pageErrors: [], consoleErrors: [], assetFailures: [], fontFailures: [], fontRequests: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
     report.cases.push(result);
     const context = await browser.newContext({ viewport: { width, height }, isMobile: input === 'touch', hasTouch: input === 'touch', deviceScaleFactor: 1,
-      reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
+      reducedMotion: reduced ? 'reduce' : 'no-preference', colorScheme: theme, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         { name: 'cookie-consent', value: 'essential' }, { name: DAILY, value: dailyBytes },
         { name: 'rules-gate-seen:/champ-or-not', value: '1' }, { name: 'dukb-theme', value: theme },
@@ -107,6 +126,7 @@ try {
       if (url.origin === BASE) return route.continue();
       result.interceptedRequests.push({ method: request.method(), path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) result.scoreWrites.push(`${request.method()} ${url.pathname}`);
+      if (isFontRead(request)) { result.fontRequests.push(request.url()); return route.continue(); }
       const table = url.pathname.match(/^\/rest\/v1\/([^/]+)$/)?.[1];
       if (table && Object.hasOwn(tables, table)) return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(tables[table]) });
       const type = request.resourceType();
@@ -127,14 +147,20 @@ try {
     }, { keys: protectedKeys, date: DATE });
     page.on('pageerror', error => result.pageErrors.push(String(error)));
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
-    page.on('requestfailed', request => { if (request.url().startsWith(BASE)) result.assetFailures.push(`${request.url()}: ${request.failure()?.errorText}`); });
-    page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) result.assetFailures.push(`${response.url()}: ${response.status()}`); });
+    page.on('requestfailed', request => {
+      if (request.url().startsWith(BASE)) result.assetFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (isFontRead(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+    });
+    page.on('response', response => {
+      if (response.url().startsWith(BASE) && response.status() >= 400) result.assetFailures.push(`${response.url()}: ${response.status()}`);
+      if (isFontRead(response.request()) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+    });
     const panel = page.locator('[data-rugby-challenge]');
     const button = name => panel.getByRole('button', { name, exact: true });
     const click = name => activate(button(name), input);
     const phase = value => page.waitForFunction(expected => document.querySelector('[data-rugby-challenge]')?.getAttribute('data-rugby-phase') === expected, value);
     const shot = async stage => { await settle(page); const name = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, name), animations: 'disabled' }); result.screenshots.push(name); };
-    const visible = async (selectors, action, stage) => { result.visibility.push(await coVisible(page, selectors.map(selector => panel.locator(selector)), button(action), stage)); result.layouts.push(await layout(page, panel, stage)); };
+    const visible = async (selectors, action, stage) => { const fonts = await loadedFonts(page); result.visibility.push(await coVisible(page, selectors.map(selector => panel.locator(selector)), button(action), stage)); result.layouts.push({ ...await layout(page, panel, stage), fonts }); };
     const originalScore = async () => {
       assert.equal(await panel.locator('[data-rugby-score="total"]').innerText(), '7 / 10');
       assert.equal(await panel.locator('[data-rugby-score="nrl"]').innerText(), '4 / 5');
@@ -187,7 +213,9 @@ try {
     };
     try {
       await page.goto(`${BASE}/champ-or-not`, { waitUntil: 'domcontentloaded' });
-      await page.getByText(/Claim:/).first().waitFor(); await page.evaluate(() => document.fonts.ready);
+      await page.getByText(/Claim:/).first().waitFor(); result.fonts = await loadedFonts(page); await settle(page);
+      assert.deepEqual(result.fontFailures, []);
+      assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), theme === 'light', 'The saved theme is active');
       assert.equal(await page.evaluate(key => localStorage.getItem(key), DAILY), dailyBytes);
       const held = await protectedState(page); await page.evaluate(() => { window.__rugbyReviewWrites = []; });
       await activate(page.getByRole('button', { name: 'Rugby League', exact: true }), input); await phase('intro');
@@ -264,7 +292,7 @@ try {
       assert.equal(await panel.locator('[data-rugby-question]').getAttribute('data-rugby-question'), '1');
       assert.equal(await panel.locator('[data-rugby-review], [data-rugby-retry], [data-rugby-result]').count(), 0);
       await isolate(held);
-      assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.assetFailures, []);
+      assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.assetFailures, []); assert.deepEqual(result.fontFailures, []);
       result.passed = true; console.log(`${id}: original score, all ten reviews, exact missed queue, retained retry and native geometry passed.`);
     } catch (error) { result.passed = false; result.error = String(error.stack || error); await shot('failure').catch(() => {}); console.error(`${id}: ${result.error}`); }
     finally { await context.close(); save(); }
