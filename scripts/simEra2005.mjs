@@ -296,14 +296,19 @@ console.log('2) Four worlds, and none of them leak');
      2010 one); Koke as above, Atletico's at 22; Schalke's right-back Rafinha
      (b. 1985) and Barcelona's Rafinha (b. 1993, the pair simEra2015 already
      names). Against 2010: Rafael as above; Bordeaux's centre-back Henrique
-     (b. 1983) and Racing Santander's (23 in the 2010 world). */
+     (b. 1983) and Racing Santander's (23 in the 2010 world); and, since
+     Round 901 brought the 2010-11 Ligue 1 (met at the merge), Ajaccio's
+     Andre Luiz Moreira as above (30 in the year 2005 row, 31 in the 2006
+     one) and Nancy's centre-back Andre Luiz (b. 1980: FBref has him at
+     Nancy in 2005-06 too, the table's year 2006 row has him there at 25,
+     and the 2010 world at 29). */
   const pairs = [
     { label: '2005 vs 2026', other: null, lo: 19, hi: 23, minShared: 2, namesakes: new Set(['Pablo Ibáñez', 'Manu Sánchez', 'Pablo García',
       'André Luiz', 'Serginho', 'Diego León', 'Juan', 'Gilberto', 'Emerson', 'Fred', 'Koke', 'Ederson', 'Lincoln']) },
     { label: '2005 vs 2015', other: ERA2015_ROSTERS, lo: 8, hi: 12, minShared: 25, namesakes: new Set(['Fernando', 'Víctor Sánchez', 'Dani García',
       'Rafael', 'Koke', 'Rafinha']) },
     { label: '2005 vs 2010', other: ERA2010_ROSTERS, lo: 3, hi: 7, minShared: 60, namesakes: new Set(['Luis García', 'Andy Johnson',
-      'Rafael', 'Henrique']) },
+      'Rafael', 'Henrique', 'André Luiz']) },
   ];
   const e05ByName = new Map();
   for (const roster of Object.values(ERA2005_ROSTERS)) for (const p of roster) e05ByName.set(p.n, p);

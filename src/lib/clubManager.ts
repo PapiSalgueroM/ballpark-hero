@@ -3620,10 +3620,12 @@ const CLUB_COLORS: Record<string, string> = {
   // above, the same derivation: the club's plain home kit colour from this
   // file's own palette, no crest art (amaranth Livorno and Reggina, black and
   // white Ascoli and Siena, Treviso's sky blue, Duisburg's zebra blue,
-  // Sochaux's yellow, and the reds of Messina, Nancy and AC Ajaccio).
+  // and the reds of Messina and AC Ajaccio). Nancy and Sochaux, also new to
+  // this era, already carry Round 901's colours just above (one map for all
+  // eras), so they are not repeated here.
   'Livorno': '#7d1c2a', 'Reggina': '#7d1c2a', 'Ascoli': '#c9c9c9', 'Siena': '#d5d5d5',
   'Treviso': '#95bfe5', 'Messina': '#d02128', 'Duisburg': '#0060ae',
-  'Nancy': '#d02128', 'Sochaux': '#f6c800', 'AC Ajaccio': '#d02128',
+  'AC Ajaccio': '#d02128',
   // Round 177: Austrian Bundesliga
   'RB Salzburg': '#d02128', 'Sturm Graz': '#2b2b2b', 'Rapid Wien': '#0a7040',
   'LASK': '#2b2b2b', 'Wolfsberger AC': '#d9d9d9', 'Austria Wien': '#5c2d91',
