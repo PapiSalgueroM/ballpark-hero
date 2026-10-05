@@ -66,11 +66,12 @@ export function useGamePicks() {
 
   const toggle = useCallback((path: string) => {
     if (!isGamePath(path)) return;
+    const wantsPinned = !current.current.paths.includes(path);
     let held = current.current.paths;
     try {
       held = storedPicks(window.localStorage.getItem(GAME_PICKS_KEY)).paths;
     } catch { /* keep the current visit's picks when reading is blocked */ }
-    const paths = held.includes(path) ? held.filter(item => item !== path) : [...held, path];
+    const paths = wantsPinned ? held.includes(path) ? held : [...held, path] : held.filter(item => item !== path);
     let storageFailed = false;
     try {
       window.localStorage.setItem(GAME_PICKS_KEY, JSON.stringify(paths));

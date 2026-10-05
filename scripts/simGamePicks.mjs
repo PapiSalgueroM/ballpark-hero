@@ -34,6 +34,7 @@ const controls = {
   event: { file: hook, from: "window.addEventListener('storage', changed);", to: 'void changed;', test: titles.events },
   queued: { file: hook, from: 'update(storedPicks(window.localStorage.getItem(GAME_PICKS_KEY)));', to: 'update(storedPicks(event.newValue));', test: titles.events },
   stale: { file: hook, from: 'held = storedPicks(window.localStorage.getItem(GAME_PICKS_KEY)).paths;', to: 'held = current.current.paths;', test: titles.stale },
+  intent: { file: hook, from: 'const paths = wantsPinned ? held.includes(path) ? held : [...held, path] : held.filter(item => item !== path);', to: 'const paths = held.includes(path) ? held.filter(item => item !== path) : [...held, path];', test: titles.stale, message: 'A stale Pin keeps the same game pinned after another tab pins it' },
   focus: { file: row, from: 'if (at >= 0 && document.activeElement === buttons[at])', to: 'if (false)', test: titles.focus },
   link: { file: row, from: 'to={game.path}', to: 'to="/footle"', test: titles.remove },
 };
@@ -94,6 +95,7 @@ try {
     assert.equal(rows.filter(result => ['pending', 'skipped'].includes(result.status)).length, Object.keys(titles).length - 2);
     const failure = failed.flatMap(result => result.failureMessages).join('\n');
     assert.match(failure, /AssertionError/); assert.doesNotMatch(failure, /TypeError|ReferenceError|TestingLibraryElementError|Timed out/);
+    if (controls[control].message) assert(failure.includes(controls[control].message), 'Intent control fails the exact stale same-target assertion');
   } else {
     assert.equal(run.status, 0); assert.equal(failed.length, 0);
     assert.deepEqual(new Set(passed.map(result => result.title)), new Set(Object.values(titles)));

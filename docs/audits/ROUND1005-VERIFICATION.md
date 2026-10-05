@@ -39,7 +39,17 @@ the temporary generation step has been removed.
 
 ## Acceptance pending
 
-Require ten mounted outcomes, all fourteen effective controls, four native
+Candidate 7c0b8481 passed all four triggered workflows. The picks run
+37355325829 passed ten mounted cases, fourteen controls and all four native
+profiles, including pin/unpin/re-pin stability. Home launch, Footle five-run
+and Footle clue desk compatibility also passed.
+
+Independent source review then found that a delayed cross-tab event could
+reverse the action shown on a stale button. The follow-up captures the visible
+Pin or Unpin intent and applies it to the newest saved list. Both same-target
+cases are now exercised, with a fifteenth effective control.
+
+Require ten mounted outcomes, all fifteen effective controls, four native
 profiles, existing Home/Search behavior, built readers and both triggered
 Footle workflows. Recheck the published site and capture the visible shelf
 after merge and publication. No live or completed claim yet.

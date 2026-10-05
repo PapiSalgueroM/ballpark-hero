@@ -192,6 +192,22 @@ describe('browser-local game picks', () => {
     fireEvent.click(pin(view, 'Footle'));
     expect(saved(), 'A local pin must retain a pick saved before its storage event arrives').toEqual(['/nhl-connections', '/footle']);
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/nhl-connections', '/footle']);
+    view.unmount();
+
+    localStorage.setItem(KEY, JSON.stringify(['/nhl-connections']));
+    const sameTarget = await mount();
+    const stalePin = pin(sameTarget, 'Footle');
+    localStorage.setItem(KEY, JSON.stringify(['/nhl-connections', '/footle']));
+    fireEvent.click(stalePin);
+    expect(saved(), 'A stale Pin keeps the same game pinned after another tab pins it').toEqual(['/nhl-connections', '/footle']);
+    expect(shelfLinks(sameTarget).map(link => link.path)).toEqual(['/nhl-connections', '/footle']);
+
+    const staleUnpin = within(shelf(sameTarget)).getByRole('button', { name: 'Unpin Footle' });
+    localStorage.setItem(KEY, JSON.stringify(['/nhl-connections']));
+    fireEvent.click(staleUnpin);
+    expect(saved(), 'A stale Unpin keeps the same game removed after another tab removes it').toEqual(['/nhl-connections']);
+    expect(shelfLinks(sameTarget).map(link => link.path)).toEqual(['/nhl-connections']);
+    expect(pin(sameTarget, 'Footle')).toHaveAttribute('aria-pressed', 'false');
     expect(protectedBytes()).toEqual(before);
   });
 
