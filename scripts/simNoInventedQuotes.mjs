@@ -49,6 +49,9 @@
  * no violations has not tested anything, so pass 1 fails below a floor.
  *
  * Run: node scripts/simNoInventedQuotes.mjs
+ * Control (Round 979): QUOTES_CONTROL=desk plants one decisions desk card
+ * naming a real player next to invented conduct, so pass 1 must go red,
+ * which proves the desk (s.decisions) is harvested and not just the inbox.
  */
 import { execSync } from 'node:child_process';
 import os from 'node:os';
@@ -57,6 +60,11 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const QUOTES_CONTROL = process.env.QUOTES_CONTROL || '';
+if (QUOTES_CONTROL && QUOTES_CONTROL !== 'desk') {
+  console.error(`QUOTES_CONTROL=${QUOTES_CONTROL} is not a control this guard knows (desk)`);
+  process.exit(1);
+}
 const ENTRY = path.join(os.tmpdir(), 'quotesEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'quotes.bundle.mjs');
 
@@ -285,14 +293,32 @@ console.log('1) Runtime: every line real seasons can put on screen');
         s = r.state;
         for (const e of r.result?.events ?? []) keep(e);
         for (const h of s.aiHeadlines ?? []) keep(h);
+        /* Round 979: the decisions desk (s.decisions) sits on the inbox screen
+           and names squad players, so it is read the same way, buttons too.
+           QUOTES_CONTROL=desk plants one desk card that names a real player
+           next to invented conduct, and this pass must go red on it. */
+        if (QUOTES_CONTROL === 'desk' && guard === 3 && s.squad[0]) {
+          s = { ...s, decisions: [{ id: 'desk-control', kind: 'situation', season: s.season, week: s.week, from: 'The head coach',
+            text: `The head coach flags ${s.squad[0].name}: he missed training twice this week and turned up hungover.`, options: [] }] };
+        }
+        const harvestDesk = () => {
+          for (const d of Array.isArray(s.decisions) ? s.decisions : []) {
+            keep(d.text); keep(d.resolved);
+            for (const o of d.options ?? []) keep(o.label);
+          }
+        };
         for (const m of s.inbox ?? []) { keep(m.text); keep(m.resolved); }
+        harvestDesk();
         /* Answer things, because half the copy in this system only exists
-           after a decision and an unanswered inbox never renders it. */
-        const open = (s.inbox ?? []).filter(m => !m.resolved && m.options.length > 0);
+           after a decision and an unanswered inbox never renders it. The
+           desk shares the inbox's answer path ('desk-' ids). */
+        const open = [...(s.inbox ?? []), ...(Array.isArray(s.decisions) ? s.decisions : [])]
+          .filter(m => !m.resolved && m.options.length > 0);
         for (const m of open) {
           s = answerMessage(s, m.id, guard % m.options.length);
         }
         for (const m of s.inbox ?? []) { keep(m.text); keep(m.resolved); }
+        harvestDesk();
         if (r.kind === 'seasonOver') break;
       }
     }

@@ -35,6 +35,70 @@
  *   8) the managers are three generated people with different profiles and
  *      fees, and no hire covers the target on its own
  *   9) one seed, one run: a replay is byte identical
+ *  10) the five Round 980 power ups (second spin, veto, part exchange, loan,
+ *      sneak peek), each slipped into the pocket of a deck 1 run (the three
+ *      perk engine every older save was played on) at 66 clubs x 12 seeds:
+ *      held and never played, the run is the run without it to the byte;
+ *      played, it does what its card says on the move that plays it (the
+ *      wheel comes back to the shirt, the vetoed card is shuffled back and
+ *      one of its pool comes out, the exchange sells and signs at 25 percent
+ *      off, the loan costs 40 percent and nobody can sell him, the peek shows
+ *      exactly the envelope that lands), a second copy is played and checked
+ *      the same way, and the thinking policy (the CPU seat) plays each one on
+ *      the new deck. Bands, measured 2026-10-03 over those 792 seeds:
+ *        rating lift against the same run without it: respin +0.162, veto
+ *        +0.385, swap +0.155, loan +0.270, peek +0.015; floors at about a
+ *        third (0.05, 0.13, 0.05, 0.09). Peek is information: it changed the
+ *        run 29 times (floor 10). Probes over two other seed sets of 396 put
+ *        the same lifts at 0.10 to 0.22, 0.35 to 0.52, 0.09 to 0.21, 0.21 to
+ *        0.33. No single one may be worth half of all five together: veto,
+ *        the biggest, measured 39 percent (35 to 46 on the probes) once it
+ *        stopped being a clean tear up (a pure tear up measured 0.72 to 0.82,
+ *        more than the other four together).
+ *        second copies: played in respin 33, swap 65, loan 31, peek 66 of 66
+ *        (floors 15, 30, 15, 30) and adding +0.212, +0.169, +0.613 (floors
+ *        0.05, 0.05, 0.15). The second spin changed the shirt's man in 498 of
+ *        its 613 plays, first and second copies (floor 60 percent): in the
+ *        rest the policy's pick off the new list was the same man or the 40.
+ *        the new deck against the old over the same seeds: thinking +1.577 on
+ *        deck 1 (main's number) and +1.874 on deck 2, a lift of +0.297
+ *        (probes +0.33 to +0.35). Band +0.1 to +0.6: the perks have to lift
+ *        a good player, and by less than half the 1.2 points thinking was
+ *        measured to hold over sell everything on main.
+ *        the CPU plays each at least 20 times (measured 67 to 187; 67 to 176
+ *        once the late peek was refused, counted off the moves it played).
+ *      Added by the Round 980 review fixes, each a rule a reviewer broke with
+ *      every gate green:
+ *        the peek turns over the NEXT envelope: floor(actions / 2) + 1 when it
+ *        is played, and the first envelope to land after it is the one it
+ *        showed (the old judge only matched what landed when it cleared).
+ *        the veto pool is the harness's own rule (the vetoed card plus the
+ *        undealt ones), never loop.vetoPool read back, and the vetoed card
+ *        came straight back in 52 of 243 vetoes (floor 17).
+ *        a refusal sweep over every between spins state of the CPU's deck 2
+ *        runs: a second spin is refused on a bought (20649 probes) or
+ *        borrowed (871) shirt and allowed on a kept or promoted one (33843);
+ *        a peek is allowed at the first spin (792) and refused once every
+ *        shirt is settled with no second spin left (950), because nothing
+ *        can bring its envelope in; a veto envelope landed on a pocket that
+ *        held one 28 times and two vetoes were never held at once. Floors at
+ *        about a third. A played peek was still face up at the whistle once
+ *        in 923 checks here (the panel says the whistle can come first); a
+ *        probe of 396 CPU runs on deck 2 put it at 11 of 95 peeks, down from
+ *        21 of 102 before the late peek was refused.
+ *        The peek has no rating floor, on purpose: over three seed sets of
+ *        792 its gain over the runs it changed was +0.414, +0.727 and 0.000,
+ *        so a floor would be a coin toss. Its floor is the divergence count.
+ *
+ * Round 980 review controls, each patching one line of a copy of
+ * rebuildLoop.ts with the policy bundled against it. Section 10 must FAIL:
+ *   peeknext    the next envelope index is one too far (the reviewers' M-A)
+ *   peekafter   the peek turns over the envelope after next while the check
+ *               on whether one can land still reads the next
+ *   vetoself    the vetoed card is no longer in its own pool (M-D)
+ *   respinloan  the second spin may reopen a borrowed man's shirt (M-F)
+ *   latepeek    a peek is allowed when nothing left can bring it in
+ *   twoveto     a second veto goes in the pocket
  *
  * NEGATIVE CONTROL, and it reproduces the shipped defect this round fixed:
  *   SIM_REBUILD_LOOP_CONTROL=top900   caps the market at the 900 most valuable
@@ -47,7 +111,13 @@
  *                                     modest club could not reach any of the
  *                                     three prices without the overdraft.
  *                                     Section 3 must FAIL on the cheap seat.
- * The control patches a copy of the file, normalises CRLF first, asserts the
+ *   SIM_REBUILD_LOOP_CONTROL=noveto   makes the veto a no op inside a copy of
+ *                                     rebuildLoop.ts (spent, and the card
+ *                                     stays) with the policy bundled against
+ *                                     that copy. Section 10 must FAIL on the
+ *                                     veto doing what its card says and on
+ *                                     its lift.
+ * Each control patches a copy of a file, normalises CRLF first, asserts the
  * text it rewrites is present exactly once, and refuses to run otherwise.
  *
  * Run: node scripts/simRebuildLoop.mjs
@@ -64,7 +134,47 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SIM_REBUILD_LOOP_CONTROL || '';
-if (CONTROL && CONTROL !== 'top900') {
+/* Round 980 review: each rule the reviewers broke with every gate green has a
+   control that breaks it the same way inside a copy of rebuildLoop.ts, with
+   the policy bundled against that copy. Section 10 must FAIL under each. */
+const LOOP_CONTROLS = {
+  noveto: {
+    from: 'settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, k, redrawFor(s, k));',
+    to: 'settleWindow({ ...s, verdict: false, perks: { ...s.perks, veto: s.perks.veto - 1 } }, null);',
+    says: 'the veto is a no op, the card it was played on stays',
+  },
+  peeknext: {
+    from: 'return Math.floor(s.actions / 2) + 1;',
+    to: 'return Math.floor(s.actions / 2) + 2;',
+    says: 'the sneak peek shows the envelope after next',
+  },
+  peekafter: {
+    from: 'peeked: nextEnvelopeIndex(s) };',
+    to: 'peeked: nextEnvelopeIndex(s) + 1 };',
+    says: 'the sneak peek turns over the envelope after next, while the check on whether one can land still reads the next',
+  },
+  vetoself: {
+    from: 'return PUNISH_DECK.filter(c => c.id === card.id || !cards.some(d => d.id === c.id));',
+    to: 'return PUNISH_DECK.filter(c => !cards.some(d => d.id === c.id));',
+    says: 'a vetoed card is no longer shuffled back in with itself',
+  },
+  respinloan: {
+    from: 'return !man || (!s.signed.some(p => p.name === man.name) && !isOnLoan(s, man.name));',
+    to: 'return !man || !s.signed.some(p => p.name === man.name);',
+    says: 'the second spin can reopen a borrowed man\'s shirt',
+  },
+  latepeek: {
+    from: 'return movesLeftAtMost(s) >= movesUntilEnvelope(s, nextEnvelopeIndex(s));',
+    to: 'return movesLeftAtMost(s) >= 0 && movesUntilEnvelope(s, nextEnvelopeIndex(s)) >= 0;',
+    says: 'a sneak peek is allowed when no transfer move left can bring the envelope in',
+  },
+  twoveto: {
+    from: "if (kind === 'veto' && perks.veto > 0) return perks;",
+    to: '',
+    says: 'a second veto goes in the pocket though the whistle only takes one',
+  },
+};
+if (CONTROL && CONTROL !== 'top900' && !(CONTROL in LOOP_CONTROLS)) {
   console.error(`SIM_REBUILD_LOOP_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -73,7 +183,8 @@ if (CONTROL && CONTROL !== 'top900') {
 
 const DECK_SRC = `${ROOT}/src/lib/rebuildDeck.ts`;
 const LOOP_SRC = `${ROOT}/src/lib/rebuildLoop.ts`;
-const CONTROL_DIR = `${ROOT}/.sim-control`;
+/* One folder per run, so two controls can run at once and neither deletes the other's copy. */
+const CONTROL_DIR = `${ROOT}/.sim-control/simRebuildLoop-${process.pid}`;
 fs.rmSync(CONTROL_DIR, { recursive: true, force: true });
 
 function patchedCopy(file, oldText, newText, outName) {
@@ -100,6 +211,21 @@ if (CONTROL === 'top900') {
   );
   console.log('NEGATIVE CONTROL ON: the market is the 900 most valuable rows, the shape fetchRebuild shipped until Round 456');
 }
+let loopPath = LOOP_SRC;
+let policyPath = `${ROOT}/src/lib/rebuildPolicy.ts`;
+if (CONTROL in LOOP_CONTROLS) {
+  /* The rule is broken inside a copy of the engine, and the policy is bundled
+     against the same patched engine. */
+  const c = LOOP_CONTROLS[CONTROL];
+  loopPath = patchedCopy(LOOP_SRC, c.from, c.to, 'simRebuildLoop.control.rebuildLoop.ts');
+  policyPath = patchedCopy(
+    policyPath,
+    "import * as loop from '@/lib/rebuildLoop';",
+    `import * as loop from '${loopPath}';`,
+    'simRebuildLoop.control.rebuildPolicy.ts',
+  );
+  console.log(`NEGATIVE CONTROL ON: ${c.says}`);
+}
 
 /* ---------- bundle the real modules ---------- */
 
@@ -107,8 +233,8 @@ const ENTRY = `${TMP}/rebuildLoop.entry.mjs`;
 const BUNDLE = `${TMP}/rebuildLoop.bundle.mjs`;
 fs.writeFileSync(ENTRY, `
 export * as deck from '${deckPath}';
-export * as loop from '${LOOP_SRC}';
-export * as policy from '${ROOT}/src/lib/rebuildPolicy.ts';
+export * as loop from '${loopPath}';
+export * as policy from '${policyPath}';
 export { FORMATIONS, playerRating, normalizePosition } from '${ROOT}/src/lib/squadDeal.ts';
 export { getEnrichment } from '${ROOT}/src/data/footleEnrichment.ts';
 `);
@@ -173,16 +299,16 @@ const { KEEP_ALL, SELL_ALL, THINKING } = policy;
 
 /* ---------- the driver ---------- */
 
-function setupFor(clubName, seed) {
+function setupFor(clubName, seed, deckVersion) {
   const club = CLUBS.find(c => c.club === clubName);
-  return { club, clubs: CLUBS, squad: SQUADS.get(clubName), market: marketFor(clubName), preset: 'none', seed };
+  return { club, clubs: CLUBS, squad: SQUADS.get(clubName), market: marketFor(clubName), preset: 'none', seed, deck: deckVersion };
 }
 
 /** Plays one run to the whistle. Every refused move is a finding: the policy
  *  asked for something legal, so the engine handing the same object back
  *  means the rules and the policy disagree about what is legal. */
 function playRun(setup, pol, watch = {}) {
-  let s = loop.createRun(setup);
+  let s = watch.start ? watch.start(loop.createRun(setup)) : loop.createRun(setup);
   const deals = [];
   let steps = 0;
   while (s.phase !== 'done') {
@@ -196,6 +322,7 @@ function playRun(setup, pol, watch = {}) {
     const { what, next } = policy.policyMove(s, pol);
     if (next === s) throw new Error(`${pol.name} at ${setup.club.club}: "${what}" was refused with the same state back (phase ${s.phase}, spun ${s.spun}, deal ${!!s.deal}, war ${!!s.war})`);
     if (what === 'sell' && watch.onSell) watch.onSell(next);
+    if (watch.onMove) watch.onMove(s, what, next);
     s = next;
   }
   return { state: s, deals, steps };
@@ -584,6 +711,241 @@ console.log('\n9. ONE SEED, ONE RUN');
   if (strip(a) !== strip(b)) fail('the same seed and policy produced two different runs');
   if (strip(a) === strip(c)) fail('two different seeds produced the same run');
   console.log(`  seed 4242 replays byte for byte (${a.sold.length} sold, ${a.signed.length} signed, €${a.reckoning.funds}M left) and seed 4243 differs`);
+}
+
+/** Each new perk, checked on the very move that plays it: does it do what its
+ *  card says? Returns how many plays were checked, how many held, and a line
+ *  for each failure. Function declarations, so section 10 can call them. */
+function namedOutcome(p, events, run) {
+  const out = { checked: 0, ok: 0, lines: [], changed: 0, neverLanded: 0, sameBack: 0 };
+  const name = x => x?.name ?? '40';
+  const judge = (good, line) => { out.checked += 1; if (good) out.ok += 1; else out.lines.push(`${p}: ${line}`); };
+  events.forEach(({ a, what, b }, i) => {
+    if (p === 'respin' && what.startsWith('secondSpin')) {
+      const slot = Number(what.split(' ')[1]);
+      const man = a.decided[slot];
+      const kept = !!man && a.baseXi[slot]?.name === man.name;
+      const reopened = b.spun === slot && !!b.deal && !(slot in b.decided) && (!kept || b.sold.some(x => x.name === man.name));
+      judge(reopened, `shirt ${slot} held ${name(man)} and the second spin did not bring the wheel back to it`);
+      /* whether the shirt changes hands is the policy's choice on the new list, so it is a rate, not a rule */
+      if (name(run.decided[slot]) !== name(man)) out.changed += 1;
+    }
+    if (p === 'veto' && what.startsWith('veto ')) {
+      const k = Number(what.split(' ')[1]);
+      /* The pool is the harness's own rule, never read back off loop.vetoPool
+         (Round 980 review: dropping the vetoed card from the pool, which is
+         the balance rule, passed a judge that asked the engine): the vetoed
+         card itself plus every card of the deck the board has not dealt. */
+      const cards = loop.whistleDraw(a).cards;
+      const pool = deck.PUNISH_DECK.filter(c => c.id === cards[k].id || !cards.some(d => d.id === c.id)).map(c => c.id);
+      const r = b.reckoning;
+      judge(r && r.vetoed === k && !!r.redrawn && pool.includes(r.redrawn.id) && r.notes.some(n => n.startsWith('✋ Vetoed'))
+        && JSON.stringify(loop.vetoPool(a, k).map(c => c.id)) === JSON.stringify(pool),
+        `card ${k} was played on but the reckoning says vetoed ${r?.vetoed} redrawn ${r?.redrawn?.id}, pool ${loop.vetoPool(a, k).map(c => c.id)} against ${pool}`);
+      if (r?.redrawn?.id === cards[k].id) out.sameBack += 1;
+    }
+    if (p === 'swap' && a.swapOpen && b.spun === null) {
+      const inc = a.baseXi[a.spun];
+      if (what.startsWith('takeOffer ')) {
+        const man = a.deal.offers.find(o => o.name === what.slice(10));
+        const price = Math.max(1, Math.round(man.marketValue * (1 - deck.SWAP_DISCOUNT)));
+        judge(b.sold.some(x => x.name === inc.name) && b.signed.some(x => x.name === man.name) && b.discounts - a.discounts === man.marketValue - price,
+          `the exchange of ${inc.name} for ${man.name} did not sell, sign and take ${man.marketValue - price} off`);
+      } else {
+        judge(what === 'keep' && name(b.decided[a.spun]) === inc.name && !b.sold.some(x => x.name === inc.name), `backing out of the exchange lost ${inc.name}`);
+      }
+    }
+    if (p === 'loan' && what.startsWith('loan ')) {
+      const man = what.slice(5);
+      const l = b.loans.find(x => x.player.name === man);
+      judge(!!l && l.fee === Math.max(1, Math.round(l.player.marketValue * deck.LOAN_FEE)) && !b.signed.some(x => x.name === man) && run.reckoning.xi.some(x => x?.name === man),
+        `the loan of ${man} was not a ${deck.LOAN_FEE * 100} percent fee, not a signing and in the XI at the end`);
+    }
+    if (p === 'peek' && what === 'peek') {
+      const shown = loop.peekedEnvelope(b);
+      /* The card says the NEXT envelope (Round 980 review: an index two ahead
+         passed the old judge, which only matched what landed when the peek
+         cleared). The harness holds the rule itself: one envelope lands every
+         second transfer move, so the next is floor(actions / 2) + 1, and the
+         first envelope to land after the peek must be the one it showed. */
+      const next = Math.floor(a.actions / 2) + 1;
+      judge(b.peeked === next, `the peek showed envelope ${b.peeked} with ${a.actions} transfer moves made, but the next to land is envelope ${next}`);
+      const first = events.slice(i + 1).find(e => e.b.post.length > e.a.post.length);
+      if (first) {
+        const got = first.b.post[first.b.post.length - 1];
+        judge(!!shown && got.text === shown.text && got.delta === shown.delta && first.b.peeked === null && first.b.actions / 2 === b.peeked,
+          `the peek showed "${shown?.text}" and the first envelope to land after it was "${got.text}"`);
+      } else {
+        out.neverLanded += 1;
+      }
+    }
+  });
+  return out;
+}
+
+/** Round 980 review: the refusals the cards promise, probed on every state of
+ *  a deck 2 CPU run (where signings, loans and every power up meet) against
+ *  the harness's own reading of each rule, never the engine's. The thinking
+ *  policy never asks for a refused move, so only a probe exercises them. */
+function ruleSweep(events, t) {
+  for (const { a, b } of events) {
+    if (a.perks.veto > 1) t.vetoTwo += 1;
+    const landed = b.post.length > a.post.length ? b.post[b.post.length - 1] : null;
+    if (landed?.perk === 'veto' && a.perks.veto > 0) t.vetoDealtHeld += 1;
+    if (!(a.phase === 'spin' && a.spun === null && !a.deal && !a.war && !a.verdict)) continue;
+    /* second spin: any settled shirt except a man you bought or borrowed */
+    const probe = { ...a, perks: { ...a.perks, respin: 1 } };
+    for (const slot of Object.keys(a.decided).map(Number)) {
+      const man = a.decided[slot];
+      const kind = !man ? 'forty' : a.signed.some(p => p.name === man.name) ? 'bought'
+        : a.loans.some(l => l.player.name === man.name) ? 'borrowed' : 'own';
+      const refused = loop.secondSpin(probe, slot) === probe;
+      t.respin[kind] += 1;
+      if (refused !== (kind === 'bought' || kind === 'borrowed')) t.lines.push(`second spin on ${kind} shirt ${slot} (${man?.name ?? '40'}) was ${refused ? 'refused' : 'allowed'}`);
+    }
+    /* sneak peek: offered at the start of the wheel, refused once every shirt
+       is settled with no second spin left, because nothing can bring it in */
+    if (a.peeked !== null) continue;
+    const settled = a.settledCount >= a.formation.slots.length;
+    if (!settled && a.settledCount > 0) continue;
+    const peek = { ...a, perks: { ...a.perks, peek: 1, respin: settled ? 0 : a.perks.respin } };
+    const refused = loop.usePeek(peek) === peek;
+    t[settled ? 'peekLate' : 'peekEarly'] += 1;
+    if (refused !== settled) t.lines.push(`a sneak peek with ${a.settledCount} shirts settled was ${refused ? 'refused' : 'allowed'}`);
+  }
+}
+
+function report10({ per, d1, d2, cpuUses, NEW, sweep }) {
+  const pct = x => `${(x * 100).toFixed(0)}%`;
+  const gains = Object.fromEntries(NEW.map(p => [p, mean(per[p].gain)]));
+  const total = NEW.reduce((t, p) => t + Math.max(0, gains[p]), 0);
+  for (const p of NEW) {
+    const g = per[p];
+    const l2 = g.level2.length ? `, a second copy played in ${g.level2Used} of ${g.level2Runs} and adds ${mean(g.level2) >= 0 ? '+' : ''}${mean(g.level2).toFixed(3)}` : '';
+    console.log(`  ${p.padEnd(7)} played in ${g.used} of ${g.runs} runs, rating ${gains[p] >= 0 ? '+' : ''}${gains[p].toFixed(3)} against the same run without it (${pct(gains[p] / total)} of the five), changes the run ${g.diverged} times, does what it says ${g.namedOk} of ${g.named}${p === 'respin' ? ` (the shirt changed hands ${g.changed} times)` : ''}, unused and not the identity ${g.identityBroken}${l2}`);
+  }
+  const lift = mean(d2) - mean(d1);
+  console.log(`  thinking on the old deck ${mean(d1).toFixed(3)}, on the new deck ${mean(d2).toFixed(3)} over the same ${d1.length} seeds: ${lift >= 0 ? '+' : ''}${lift.toFixed(3)}`);
+  console.log(`  the thinking policy (the CPU seat) plays each one on the new deck: ${NEW.map(p => `${p} ${cpuUses[p]}`).join(', ')}`);
+  for (const p of NEW) {
+    const g = per[p];
+    if (g.identityBroken > 0) fail(`${p}: ${g.identityBroken} runs held it, never played it, and still ended differently`);
+    if (g.named === 0) fail(`${p}: never played, so what it does was never checked`);
+    if (g.namedOk < g.named) fail(`${p}: did what its card says ${g.namedOk} of ${g.named} times`);
+    if (cpuUses[p] < 20) fail(`${p}: the CPU policy played it ${cpuUses[p]} times over the seeded runs`);
+  }
+  for (const [p, floor] of Object.entries(GAIN_FLOOR_10)) {
+    if (!(gains[p] >= floor)) fail(`${p}: lifts the rating ${gains[p].toFixed(3)} on average, under its floor ${floor}`);
+  }
+  if (per.respin.changed < per.respin.named * 0.6) fail(`respin: the shirt changed hands after only ${per.respin.changed} of ${per.respin.named} second spins`);
+  for (const [p, floor] of Object.entries(LEVEL2_GAIN_10)) {
+    if (!(mean(per[p].level2) >= floor)) fail(`${p}: a second copy adds ${mean(per[p].level2).toFixed(3)} on average, under its floor ${floor}`);
+  }
+  for (const p of NEW) if (gains[p] / total >= 0.5) fail(`${p} is worth ${pct(gains[p] / total)} of all five together: it dominates`);
+  for (const p of ['respin', 'swap', 'loan', 'peek']) {
+    if (per[p].level2Used < LEVEL2_FLOOR_10[p]) fail(`${p}: a second copy was played in only ${per[p].level2Used} of ${per[p].level2Runs} runs`);
+  }
+  if (per.peek.diverged < PEEK_DIVERGE_FLOOR_10) fail(`peek: the policy played differently after a peek in only ${per.peek.diverged} runs`);
+  if (!(lift >= 0.1 && lift <= 0.6)) fail(`the new deck moves the thinking policy ${lift.toFixed(3)}, outside the band +0.1 to +0.6`);
+  /* Round 980 review: the rules the old judges could not see */
+  const r = sweep.respin;
+  console.log(`  peek: over the ${per.peek.divGain.length} runs it changed, rating ${mean(per.peek.divGain) >= 0 ? '+' : ''}${mean(per.peek.divGain).toFixed(3)}`);
+  console.log(`  the vetoed card came straight back in ${per.veto.sameBack} of ${per.veto.named} vetoes; a played peek was still face up at the whistle ${per.peek.neverLanded} times`);
+  console.log(`  probed on the CPU's deck 2 runs: a second spin on ${r.own} kept or promoted, ${r.forty} 40 overall, ${r.bought} bought and ${r.borrowed} borrowed shirts; a peek at the first spin ${sweep.peekEarly} and after the last ${sweep.peekLate} times; a veto envelope landed with one already held ${sweep.vetoDealtHeld} times, two vetoes held at once ${sweep.vetoTwo}`);
+  for (const line of sweep.lines.slice(0, 5)) fail(line);
+  if (sweep.lines.length > 5) fail(`and ${sweep.lines.length - 5} more refusals that disagree with the card`);
+  if (sweep.vetoTwo > 0) fail(`two vetoes sat in the pocket at once in ${sweep.vetoTwo} states, and the whistle only takes one`);
+  for (const [k, floor] of Object.entries(SWEEP_FLOOR_10)) {
+    const got = k in r ? r[k] : sweep[k];
+    if (!(got >= floor)) fail(`the refusal sweep met ${k} only ${got} times (floor ${floor}), so that rule was barely probed`);
+  }
+  if (!(per.veto.sameBack >= VETO_SAME_FLOOR_10)) fail(`the vetoed card came straight back only ${per.veto.sameBack} times: it is no longer shuffled in with itself`);
+}
+const GAIN_FLOOR_10 = { respin: 0.05, veto: 0.13, swap: 0.05, loan: 0.09 };
+const LEVEL2_FLOOR_10 = { respin: 15, swap: 30, loan: 15, peek: 30 };
+const LEVEL2_GAIN_10 = { respin: 0.05, swap: 0.05, loan: 0.15 };
+const PEEK_DIVERGE_FLOOR_10 = 10;
+/* Measured 2026-10-03 on the fixed seeds (header): own 33843, bought 20649,
+   borrowed 871, peek after the last spin 950, a veto dealt with one held 28,
+   the vetoed card back 52 of 243. Floors at about a third, so each rule is
+   provably probed; the counts move only when the policy or the deck does. */
+const SWEEP_FLOOR_10 = { own: 11000, bought: 6800, borrowed: 290, peekLate: 310, vetoDealtHeld: 9 };
+const VETO_SAME_FLOOR_10 = 17;
+
+/* ================= 10. the power ups (Round 980) ================= */
+console.log('\n10. THE FIVE NEW POWER UPS');
+{
+  const NEW = ['respin', 'veto', 'swap', 'loan', 'peek'];
+  const HOOK = { respin: 'respin', veto: 'veto', swap: 'swap', loan: 'loan', peek: 'peek' };
+  const MOVE_OF = { respin: 'secondSpin ', veto: 'veto ', swap: 'partExchange', loan: 'loan ', peek: 'peek' };
+  /* Deck 1 is the three perk engine every save before this round was played
+     on (simRebuildSave replays 144 of them byte for byte), so a deck 1 run
+     with one new perk slipped into the pocket isolates that perk. */
+  const strip = s => JSON.stringify({
+    decided: Object.keys(s.decided).sort().map(i => `${i}:${s.decided[i]?.name ?? '40'}`),
+    sold: s.sold.map(p => p.name), signed: s.signed.map(p => p.name), loans: s.loans.map(l => l.player.name),
+    xi: s.reckoning.xi.map(p => p?.name ?? '40'), funds: s.reckoning.funds, pen: s.reckoning.ratingPen,
+    notes: s.reckoning.notes, rating: loop.ratingOf(s),
+  });
+  const delta = s => loop.ratingOf(s) - s.startRating;
+  const usedOf = (s, p, start) => start + s.post.filter(e => e.perk === p).length - s.perks[p];
+  const idlePolicy = p => (p === 'veto' ? { ...THINKING, veto: () => null } : { ...THINKING, [HOOK[p]]: undefined });
+  const SEEDS_10 = 12;
+  const seeds10 = c => Array.from({ length: SEEDS_10 }, (_, k) => (deck.hashSeed(c) ^ (k * 0x9e3779b1)) >>> 0);
+  const per = Object.fromEntries(NEW.map(p => [p, {
+    runs: 0, used: 0, gain: [], identityBroken: 0, diverged: 0, changed: 0, named: 0, namedOk: 0, level2: [], level2Used: 0, level2Runs: 0, neverLanded: 0, sameBack: 0, divGain: [],
+  }]));
+  const d1 = [];
+  const d2 = [];
+  const cpuUses = Object.fromEntries(NEW.map(p => [p, 0]));
+  const sweep = { respin: { own: 0, forty: 0, bought: 0, borrowed: 0 }, peekEarly: 0, peekLate: 0, vetoTwo: 0, vetoDealtHeld: 0, lines: [] };
+  const sample = [];
+  for (const c of CLUBS) {
+    for (const seed of seeds10(c.club)) {
+      const base = playRun(setupFor(c.club, seed, 1), THINKING).state;
+      d1.push(delta(base));
+      const twoEvents = [];
+      const two = playRun(setupFor(c.club, seed, 2), THINKING, { onMove: (a, what, b) => twoEvents.push({ a, what, b }) }).state;
+      ruleSweep(twoEvents, sweep);
+      d2.push(delta(two));
+      /* counted off the moves played: the pocket stops at one veto, so dealt minus held overcounts it */
+      for (const p of NEW) cpuUses[p] += twoEvents.some(e => e.what.startsWith(MOVE_OF[p])) ? 1 : 0;
+      for (const p of NEW) {
+        const g = per[p];
+        const grant = n => r => ({ ...r, perks: { ...r.perks, [p]: n } });
+        g.runs += 1;
+        /* unused: the perk sits in the pocket and the run is the base run to the byte */
+        const idle = playRun(setupFor(c.club, seed, 1), idlePolicy(p), { start: grant(1) }).state;
+        if (strip(idle) !== strip(base)) g.identityBroken += 1;
+        /* used: the outcome it names, checked on the move that plays it */
+        const events = [];
+        const run = playRun(setupFor(c.club, seed, 1), THINKING, { start: grant(1), onMove: (a, what, b) => events.push({ a, what, b }) }).state;
+        g.gain.push(delta(run) - delta(base));
+        if (strip(run) !== strip(base)) { g.diverged += 1; g.divGain.push(delta(run) - delta(base)); }
+        if (usedOf(run, p, 1) > 0) g.used += 1;
+        const verdicts = namedOutcome(p, events, run);
+        g.named += verdicts.checked;
+        g.namedOk += verdicts.ok;
+        g.changed += verdicts.changed;
+        g.neverLanded += verdicts.neverLanded;
+        g.sameBack += verdicts.sameBack;
+        if (sample.length < 400 && verdicts.checked) sample.push(...verdicts.lines.slice(0, 1));
+        /* the second copy: the four that can be played twice, on one seed a club */
+        if (p !== 'veto' && seed === seeds10(c.club)[0]) {
+          const ev2 = [];
+          const twice = playRun(setupFor(c.club, seed, 1), THINKING, { start: grant(2), onMove: (a, what, b) => ev2.push({ a, what, b }) }).state;
+          const v2 = namedOutcome(p, ev2, twice);
+          g.named += v2.checked;
+          g.namedOk += v2.ok;
+          g.changed += v2.changed;
+          g.neverLanded += v2.neverLanded;
+          g.level2Runs += 1;
+          if (usedOf(twice, p, 2) >= 2) { g.level2Used += 1; g.level2.push(delta(twice) - delta(run)); }
+        }
+      }
+    }
+  }
+  report10({ per, d1, d2, cpuUses, NEW, sweep });
 }
 
 /* ================= verdict ================= */
