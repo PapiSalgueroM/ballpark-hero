@@ -55,3 +55,14 @@ lastRejected null. No accompanying failure description was supplied. This shows
 the reported starting state; it does not establish a rejected link or prove
 the puzzle is unwinnable. Investigation remains read-only and must use saved
 source data before considering a coordinated production read.
+
+There is a relevant historical correction. The older static puzzle pull still
+lists a minimum of two. The migration
+supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql
+sets this puzzle to three links and a two-middle-player hint through Liverpool
+and Real Sociedad. A manual reading of the local careers supports a route via
+James Milner and David Silva. No solver, current production read or new external
+fact audit was run, so this is not proof of the current served hint or the
+minimum route. The puzzle is absent from the client fallback. Before the first
+move, Classic displays the database's stored hint, so a stale one-middle-player
+hint is the specific symptom to inspect if the report is reproduced.
