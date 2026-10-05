@@ -45,6 +45,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
+/* Round 1012: the real rivals table moved to a shared leaf module so Soccer
+   Career reads the same data. Imported back under its old name, unchanged. */
+import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
 // Round 132: the world clock. Everything about ageing, retirement, eras and
 // the projected future world lives in clubManagerEras, which imports nothing
 // from this file, so there is no cycle.
@@ -3599,69 +3602,6 @@ const CLUB_COLORS: Record<string, string> = {
   'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
   'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
   'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
-};
-
-/**
- * Real rivalries for the "finish above them" board objective. One direction
- * per club; clubs without a famous league rival get the nearest-strength
- * club instead (see buildBoardObjectives).
- */
-const RIVALS: Record<string, string> = {
-  // England
-  'Arsenal': 'Tottenham', 'Tottenham': 'Arsenal', 'Manchester United': 'Liverpool',
-  'Liverpool': 'Everton', 'Everton': 'Liverpool', 'Manchester City': 'Manchester United',
-  'Chelsea': 'Arsenal', 'Newcastle': 'Sunderland', 'Sunderland': 'Newcastle',
-  'Crystal Palace': 'Brighton',
-  'Brighton': 'Crystal Palace', 'Fulham': 'Chelsea',
-  'Brentford': 'Fulham', 'Leeds United': 'Manchester United', 'Nottingham Forest': 'Leeds United',
-  // Spain
-  'Real Madrid': 'Barcelona', 'Barcelona': 'Real Madrid', 'Atlético Madrid': 'Real Madrid',
-  'Sevilla': 'Real Betis', 'Real Betis': 'Sevilla', 'Athletic Club': 'Real Sociedad',
-  'Real Sociedad': 'Athletic Club', 'Espanyol': 'Barcelona', 'Girona': 'Barcelona',
-  'Valencia': 'Levante', 'Levante': 'Valencia', 'Villarreal': 'Valencia',
-  'Alavés': 'Athletic Club', 'Getafe': 'Rayo Vallecano', 'Rayo Vallecano': 'Atlético Madrid',
-  // Italy
-  'Inter Milan': 'AC Milan', 'AC Milan': 'Inter Milan', 'Juventus': 'Inter Milan',
-  'Torino': 'Juventus', 'Roma': 'Lazio', 'Lazio': 'Roma', 'Napoli': 'Juventus',
-  'Fiorentina': 'Juventus', 'Pisa': 'Fiorentina', 'Bologna': 'Fiorentina',
-  // Germany
-  'Bayern Munich': 'Borussia Dortmund', 'Borussia Dortmund': 'Bayern Munich',
-  'Gladbach': 'Köln', 'Köln': 'Gladbach', 'Hamburg': 'Werder Bremen', 'Werder Bremen': 'Hamburg',
-  'St. Pauli': 'Hamburg', 'Eintracht Frankfurt': 'Mainz', 'Mainz': 'Eintracht Frankfurt',
-  'Bayer Leverkusen': 'Köln', 'Freiburg': 'Stuttgart', 'Stuttgart': 'Freiburg',
-  'Union Berlin': 'RB Leipzig',
-  // France
-  'PSG': 'Marseille', 'Marseille': 'PSG', 'Lyon': 'Marseille', 'Nice': 'Monaco',
-  'Monaco': 'Nice', 'Lens': 'Lille', 'Lille': 'Lens', 'Rennes': 'Nantes', 'Nantes': 'Rennes',
-  'Brest': 'Lorient', 'Lorient': 'Brest', 'Strasbourg': 'Metz', 'Metz': 'Strasbourg',
-  'Paris FC': 'PSG',
-  // Round 72: new-league rivalries
-  'Hull City': 'Leeds United',
-  'Wolves': 'West Brom', 'West Brom': 'Wolves', 'Cardiff City': 'Swansea City',
-  'Swansea City': 'Cardiff City', 'Portsmouth': 'Southampton', 'Southampton': 'Portsmouth',
-  'West Ham': 'Millwall', 'Millwall': 'West Ham', 'Blackburn Rovers': 'Burnley',
-  'Burnley': 'Blackburn Rovers', 'Preston North End': 'Blackburn Rovers',
-  'Bristol City': 'Cardiff City',
-  'Al-Hilal': 'Al-Nassr', 'Al-Nassr': 'Al-Hilal', 'Al-Ittihad': 'Al-Ahli', 'Al-Ahli': 'Al-Ittihad',
-  'Al-Shabab': 'Al-Hilal',
-  'LA Galaxy': 'LAFC', 'LAFC': 'LA Galaxy', 'Inter Miami': 'Orlando City',
-  'Orlando City': 'Inter Miami', 'New York City FC': 'New York Red Bulls',
-  'New York Red Bulls': 'New York City FC', 'Seattle Sounders': 'Portland Timbers',
-  'Portland Timbers': 'Seattle Sounders', 'Vancouver Whitecaps': 'Seattle Sounders',
-  'FC Dallas': 'Houston Dynamo', 'Houston Dynamo': 'FC Dallas',
-  'Columbus Crew': 'FC Cincinnati', 'FC Cincinnati': 'Columbus Crew',
-  'D.C. United': 'New York Red Bulls', 'Toronto FC': 'CF Montréal', 'CF Montréal': 'Toronto FC',
-  'Ajax': 'Feyenoord', 'Feyenoord': 'Ajax', 'PSV': 'Ajax', 'Sparta Rotterdam': 'Feyenoord',
-  'Groningen': 'Heerenveen', 'Heerenveen': 'Groningen', 'ADO Den Haag': 'Ajax',
-  // Round 883: Liga MX, only the five clasicos two sources both name
-  // (Mediotiempo, "Que antiguedad tiene cada clasico del futbol mexicano",
-  // and Goal, "En Mexico, cuantos clasicos de futbol existen"): Nacional
-  // (America and Guadalajara), Joven (America and Cruz Azul), Capitalino
-  // (Pumas and America), Tapatio (Guadalajara and Atlas), Regio (Monterrey
-  // and Tigres). One direction per club, so America point at Guadalajara.
-  'América': 'Guadalajara', 'Guadalajara': 'América', 'Cruz Azul': 'América',
-  'Pumas UNAM': 'América', 'Atlas': 'Guadalajara',
-  'Monterrey': 'Tigres UANL', 'Tigres UANL': 'Monterrey',
 };
 
 /**
