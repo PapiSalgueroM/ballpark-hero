@@ -50,3 +50,23 @@ combined entries. Temporary generation is restored for that integration
 run only; its three outputs must be copied back and the step removed before
 final acceptance. The 1007 review product and verification source are unchanged.
 No main merge or publication is authorized by this receipt.
+
+## Combined candidate accepted, committed-snapshot run pending
+
+Combined candidate 7cb9dd1f68915c4c848ad5683d11b2bc73fd9b60 includes 1009
+and its current-main documentation merge 5e2bf510. Review run 37386956862,
+job 112022450462, passed every step including actual native verification.
+Artifact 11379512684 was downloaded and SHA256 verified:
+4900282ccdee17b1f874e5b53c09da7d4aba56c8fbce0be41e7fbb98ed6dd5de.
+
+All 21 individual mounted reports again match their summaries: 30 passes,
+20 expected control failures and 160 skips. All four native profiles passed
+with eight loaded font faces, no page/console/font errors and no score or
+storage writes. The combined generated snapshot, sitemap and ledger are
+copied verbatim. Both update entries are present. Temporary generation is
+removed again, so the next head is assessed against committed files.
+
+Challenge run 37386956897 passed its product and native checks. Its only
+built-reader failure was the expected missing Rugby entry before the combined
+snapshot was copied. Final committed-snapshot workflows are pending; parent
+owns main integration and publication after 1009 acceptance.

@@ -1,3 +1,11 @@
+## Codex 1007 and 1009: combined snapshot recorded, final CI pending, 2026-10-05
+
+Combined 7cb9dd1f passed all review steps including four native profiles.
+Artifact 11379512684 was hash verified, its reports checked and its three
+generated files copied verbatim. Both update entries now ship together.
+Temporary generation is removed. The next CI run assesses the committed
+snapshot; parent owns main integration and publishing after 1009 acceptance.
+
 ## Codex 1007 and 1009: combined snapshot pending, 2026-10-05
 
 1007 now incorporates frozen 1009 candidate 2583ec3c at parent's request.
