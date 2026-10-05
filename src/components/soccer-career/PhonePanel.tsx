@@ -43,6 +43,7 @@ import {
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { moneyWealth } from "@/lib/soccerMoney";
 import { fanComments as fanCommentsFor } from "@/lib/careerSocial";
+import { latestDerbyFacts } from "@/lib/soccerCareerDerby";
 /* Round 473: the badge case. The table and the evaluator are the shared ones
    the NFL career already reads (careerBadges.ts); only the drawing is local,
    because the handset is a dark screen and the shared BadgeGrid is drawn in
@@ -201,6 +202,8 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     pos: career.position,
     standing: karma,
     followers: fmtFollowers(career.socialMediaFollowers),
+    /* Round 1012: the latest season's derby, anonymous fans only. */
+    derby: latestDerbyFacts(career.seasons),
   });
 
   /* Legacy Round 80 texts that are still sitting unanswered but whose thread

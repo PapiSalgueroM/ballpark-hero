@@ -15,6 +15,8 @@ import {
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
+/* Round 1012: real club rivalries, played as league derbies each season. */
+import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -188,6 +190,11 @@ export interface SeasonRecord {
   leagueFinish?: number;
   /** Round 929: clubs in that league that season, only where verified. */
   leagueSize?: number;
+  /** Round 1012: the season's league derbies against real rivals. Present
+      only on a playing season where one was on (soccerCareerDerby.ts), so a
+      season without one, and every season from before that round, has no
+      key at all. Read it through readSeasonDerbies. */
+  derbies?: SeasonDerby[];
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
@@ -1427,7 +1434,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "tunnel_brawl",
     emoji: "🥊",
     title: "TUNNEL INCIDENT",
-    description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
+    description: "After a brutal loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
     choices: [
       { label: "Swing back", emoji: "👊", consequence: "Fined two weeks' wages, popularity -10 (your ultras loved it, nobody else did)" },
       { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
@@ -1582,7 +1589,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "ultras_tattoo",
     emoji: "🐉",
     title: "THE ULTRAS' DEMAND",
-    description: "After your derby winner, the ultras unfurl a banner: TATTOO THE CREST OR YOU NEVER LOVED US. They are outside training with a tattoo artist. He seems extremely available.",
+    description: "After your late winner, the ultras unfurl a banner: TATTOO THE CREST OR YOU NEVER LOVED US. They are outside training with a tattoo artist. He seems extremely available.",
     choices: [
       { label: "Get the crest tattooed", emoji: "🐉", consequence: "Popularity +15 here forever. Awkward if you ever transfer" },
       { label: "Henna prank first", emoji: "🖌️", consequence: "Popularity +8 for the joke", risk: "30% chance they find out it washed off: -10" },
@@ -3824,7 +3831,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
 }
 
 /* ─── Season simulation ─── */
-function generateSeasonStats(state: CareerState): SeasonRecord {
+function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecord {
   const { position, age, overall, currentClubTier } = state;
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
@@ -3877,6 +3884,15 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
     seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
   });
+  /* Round 1012: the season's derbies against real rivals in the same league,
+     drawn from a generator keyed off this season and each rival, so the main
+     Math.random stream does not move. The key is spread only when there is a
+     derby, so every other season serialises exactly as before. */
+  const derbies = resolveSeasonDerbies({
+    club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
+    position, apps, leagueApps, goals, leagueTitle: winLeague,
+    seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}|derby`,
+  });
 
   return {
     year: lastYear + 1, age,
@@ -3884,7 +3900,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
-    leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
+    leagueTitle: winLeague, ...finish, ...(derbies.length > 0 ? { derbies } : {}), domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -4974,10 +4990,14 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    finished six years behind its own calendar (audit QA847-14). */
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   
-  const season = generateSeasonStats(s);
+  const season = generateSeasonStats(s, clubs);
   // Injury report, named injuries that actually cost matches
+  if (season.injury) s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
+  /* Round 1012: the derbies' bounded swing and log lines, after the injury
+     line so the season's own news leads the story, and before the severe
+     injury branch so an injured season keeps the derbies he did play. */
+  applySeasonDerbies(s, season);
   if (season.injury) {
-    s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
     if (season.injurySevere) {
       /* Round 253: a serious injury is a chapter, not a stat line. The
          season pauses here and the player chooses how to come back, and
@@ -5723,12 +5743,12 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
-    { id: 1, emoji: "⚽", title: "Derby Hero!", description: "You score a last-minute winner in the derby. The crowd goes wild.",
+    { id: 1, emoji: "⚽", title: "Late Winner!", description: "You score a last-minute winner. The crowd goes wild.",
       category: "positive", choices: [
         { label: "Celebrate wildly", emoji: "🎉", color: "bg-emerald-600", consequence: "Popularity +10, Social media +50k",
-          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner! Popularity soared"]; return s; } },
+          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a last-minute winner! Popularity soared"]; return s; } },
         { label: "Stay humble", emoji: "🤝", color: "bg-blue-600", consequence: "Morale +10, Team chemistry boost",
-          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner, stayed humble"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a last-minute winner, stayed humble"]; return s; } },
       ] },
     { id: 2, emoji: "🎙️", title: "Manager Praise", description: "A top manager says in an interview you are one of the best players in your position in the world.",
       category: "positive", choices: [
