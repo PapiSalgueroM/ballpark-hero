@@ -94,8 +94,8 @@ try {
           return { text: node.textContent, left: box.left, right: box.right, fits: rects.every(rect => rect.left >= box.left - 1 && rect.right <= box.right + 1 && rect.top >= box.top - 1 && rect.bottom <= box.bottom + 1) };
         }) };
       });
-      geometry.push({ label, ...result });
-      assert.ok(result.scrollWidth <= result.width + 1, `${label}: no horizontal page overflow`);
+      geometry.push({ label, configuredWidth: width, ...result });
+      assert.ok(result.scrollWidth <= width + 1, `${label}: no horizontal page overflow`);
       assert.ok(result.names.every(name => name.left >= -1 && name.right <= width + 1 && name.fits), `${label}: full names fit their painted boxes`);
     };
     const guess = async name => {
@@ -163,9 +163,28 @@ try {
           await page.screenshot({ path: path.join(output, `${profile}-result.png`), animations: 'disabled' });
           if (width === 320) {
             const panel = page.locator('[data-footle-unlimited]'), before = await panel.boundingBox(), style = await panel.getAttribute('style');
+            const viewportBefore = await page.evaluate(() => ({ innerWidth, documentWidth: document.documentElement.scrollWidth }));
+            const scrollBefore = await page.evaluate(() => ({ x: scrollX, y: scrollY }));
             let rejection;
-            try { await panel.evaluate(node => { node.style.width = '760px'; node.style.maxWidth = 'none'; }); const changed = await panel.boundingBox(); assert.ok(changed.width > before.width); try { await layout('oversized panel control'); } catch (error) { rejection = error.message; } assert.match(rejection ?? '', /oversized panel control: no horizontal page overflow/); controls.push({ label: 'width', before, changed, rejection }); }
-            finally { await panel.evaluate((node, value) => value === null ? node.removeAttribute('style') : node.setAttribute('style', value), style); }
+            try {
+              await panel.evaluate(node => { node.style.width = '760px'; node.style.maxWidth = 'none'; });
+              const changed = await panel.boundingBox();
+              const viewportChanged = await page.evaluate(() => ({ innerWidth, documentWidth: document.documentElement.scrollWidth }));
+              geometry.push({ label: 'width control mutation', configuredWidth: width, before, changed, viewportBefore, viewportChanged });
+              assert.ok(changed.width >= 760 && changed.width > before.width, 'Width control expands the actual panel');
+              assert.ok(viewportChanged.documentWidth > width + 1 && viewportChanged.documentWidth > viewportBefore.documentWidth, 'Width control expands the document beyond the configured viewport');
+              await assert.rejects(() => layout('oversized panel control'), error => {
+                rejection = error.message;
+                return error.name === 'AssertionError' && error.message === 'oversized panel control: no horizontal page overflow';
+              });
+              controls.push({ label: 'width', configuredWidth: width, before, changed, viewportBefore, viewportChanged, rejection });
+            } finally {
+              await panel.evaluate((node, value) => value === null ? node.removeAttribute('style') : node.setAttribute('style', value), style);
+              await page.evaluate(position => scrollTo({ left: position.x, top: position.y, behavior: 'instant' }), scrollBefore);
+            }
+            await settle();
+            assert.equal(await panel.getAttribute('style'), style, 'Width control restores the original panel style');
+            assert.deepEqual(await page.evaluate(() => ({ innerWidth, documentWidth: document.documentElement.scrollWidth })), viewportBefore, 'Width control restores the original document and viewport widths');
             await layout('restored width control');
             const action = page.locator('[data-unlimited-next]'), prior = await action.boundingBox(), original = await action.getAttribute('style'); rejection = undefined;
             try { await action.evaluate(node => { node.style.transform = `translateY(${innerHeight}px)`; }); const changed = await action.boundingBox(); assert.ok(changed.y > prior.y + height - 1); try { await visible(action, 'shifted action control'); } catch (error) { rejection = error.message; } assert.match(rejection ?? '', /shifted action control: visible without driver scroll after action/); controls.push({ label: 'vertical action', prior, changed, rejection }); }
