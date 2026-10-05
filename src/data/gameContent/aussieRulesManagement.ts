@@ -16,7 +16,7 @@ export const AUSSIE_RULES_MANAGEMENT_CONTENT: GameContentMap = {
     },
     howToPlay: [
       'Choose a club from the menu. The clubs are grouped from contenders down to battlers, so you can pick an easy start or a long rebuild. Every club has thirty-six generated players with a skill, a ceiling, an age and a fitness level.',
-      'Before each match your list manager picks the freshest eighteen starters and five interchange players. You can change any spot in Squad, then choose to train or rest. Training adds eight preparation and eight fatigue to every player; rest takes thirty fatigue off.',
+      'Before each match your list manager picks the best eighteen starters and five interchange players on current form: skill, less what fatigue takes off. You can change any spot in Squad, then choose to train or rest. Training adds eight preparation and eight fatigue to every player; rest takes thirty fatigue off.',
       'Pick a tactic and play one quarter at a time, or play the whole match in one tap with the same tactic. At each quarter break you can make up to five same-role changes from the bench.',
       'After the match you see the round\'s other results. The hub boxes show your next match, your ladder spot with points and percentage, your squad, your honour board, and the finals bracket once September comes round.',
       'Finish in the top ten to play the finals. Win the Grand Final for the flag. Then the summer ages everyone a year, some veterans retire, and on draft night you pick young players to fill your list back to thirty-six before the next season starts.',

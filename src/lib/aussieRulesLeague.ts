@@ -162,7 +162,8 @@ export function fixturesFor(seed: number, season: number, round: number): { home
   return calendar().slice(round * games, round * games + games).map(([home, away]) => ({ homeId: order[home], awayId: order[away] }));
 }
 const otherSide = (match: Pick<Match, 'homeId' | 'awayId'>, clubId: string) => match.homeId === clubId ? match.awayId : match.homeId;
-const finalsRound = (week: number) => ROUNDS + week;
+/** Finals dice labels sit above every home and away round, one per week, so no final reuses a round's dice. */
+export const finalsRound = (week: number) => ROUNDS + week;
 export const clubOf = (state: Pick<LeagueState, 'clubs'>, id: string) => state.clubs.find(club => club.id === id);
 export const leaguePlayer = (state: Pick<LeagueState, 'clubs'>, id: string): LeaguePlayer | undefined => {
   for (const club of state.clubs) { const found = club.players.find(player => player.id === id); if (found) return found; }
@@ -179,7 +180,7 @@ function tally(goals: Record<string, number>, match: Match): Record<string, numb
 export const leagueLadder = (state: Pick<LeagueState, 'clubs' | 'results'>): LadderRow[] => ladderFor(state);
 export const seedsOf = (state: Pick<LeagueState, 'clubs' | 'results'>) => leagueLadder(state).map(row => row.clubId);
 
-/** The new round's own fixture with your list manager's freshest 23. */
+/** The new round's own fixture with your list manager's best 23 on current form. */
 function openRound(state: LeagueState, round: number): LeagueState {
   const fixture = fixturesFor(state.seed, state.season, round).find(value => value.homeId === state.myClub || value.awayId === state.myClub)!;
   const lineup = automaticLineup(clubOf(state, state.myClub)!);
@@ -627,6 +628,12 @@ function validFinals(s: LeagueState, upto: number, currentDone: boolean): boolea
   }
   return at === ties.length;
 }
+/** A saved opponent matchday 23 the club can field: 23 of its own players with the role floors its lineup needs. */
+function fieldsMatchday(club: LeagueClub, squad: string[]): boolean {
+  const players = squad.map(id => club.players.find(player => player.id === id));
+  return squad.length === 23 && new Set(squad).size === 23 && players.every(Boolean)
+    && ROLES.every(role => players.filter(player => player?.role === role).length >= ROLE_FLOORS[role]);
+}
 /** Every check a loaded save must pass. Anything else is refused whole, never half trusted. */
 export function validLeagueState(value: unknown): value is LeagueState {
   if (!exactKeys(value, TOP_KEYS) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubLabel(value.myClub as string)) return false;
@@ -667,6 +674,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   const squad = match.homeId === s.myClub ? match.homeSquad : match.awaySquad;
   if (s.phase === 'prepare') return match.quarter === 0 && match.events.length === 0 && squad.length === 0 && s.preparation === null;
   if (s.preparation === null || squad.length !== 23 || !sameIds([...squad].sort(), [...s.starters, ...s.bench].sort())) return false;
+  if (!fieldsMatchday(clubOf(s, otherSide(match, s.myClub))!, match.homeId === s.myClub ? match.awaySquad : match.homeSquad)) return false;
   if (s.phase === 'quarter') return match.quarter < 4;
   if (s.phase === 'break') return match.quarter >= 1 && match.quarter < 4;
   return match.quarter >= 4;

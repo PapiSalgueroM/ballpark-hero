@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
-import { clubOf, createLeague, draftPool, LEGACY_SAVE_KEY, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { clubOf, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
@@ -76,6 +76,17 @@ describe('AussieRulesLeagueBoard', () => {
     expect(within(moment as HTMLElement).getByText(/Premiers!/).closest('p')!.textContent).toContain(`${gf.homeScore.goals}.${gf.homeScore.behinds} (${gf.homeScore.total})`);
   });
 
+  it('shows the premiership on the hub when you wrap up the season from the match panel', () => {
+    const state = until(createLeague(1, 'club-00')!, s => s.stage === 'finals' && s.phase === 'report' && s.week === lastWeek(s.format));
+    store(state);
+    const view = draw();
+    tile(view, 'Next match');
+    click(view, '[data-arl-next]');
+    expect(saved().phase).toBe('seasonOver');
+    expect(view.container.querySelector('[data-victory-moment]')).not.toBeNull();
+    expect(view.queryByText(/starts after the summer and the draft/)).toBeNull();
+  });
+
   it('refuses a draft pick that would leave your list short of rucks, and says why', () => {
     let state = until(createLeague(9, 'club-11')!, s => s.phase === 'summer');
     state = { ...state, clubs: state.clubs.map(club => club.id !== 'club-11' ? club : { ...club, players: club.players.map((p, i) => p.role === 'ruck' && i % 4 !== 0 ? { ...p, age: 40 } : p) }) };
@@ -99,6 +110,8 @@ describe('AussieRulesLeagueBoard', () => {
     click(view, '[data-arl-next]');
     expect(saved().season).toBe(2);
     expect(view.container.querySelector('[data-arl-season="2"]')).not.toBeNull();
+    expect(view.queryByText(/The draft runs in the summer/)).toBeNull();
+    expect(view.getByText('Next match', { selector: 'div' })).toBeTruthy();
   });
 
   it('opens an unfinished ten round season on the old board, and its new season goes to the full season menu', () => {

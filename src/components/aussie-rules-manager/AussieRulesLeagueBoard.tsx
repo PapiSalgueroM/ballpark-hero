@@ -61,7 +61,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
     {match && <div className={styles.score} data-arl-score><div><strong>{clubLabel(match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubLabel(match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
       <button className={styles.action} data-arl-simweek onClick={() => act({ type: 'simWeek' })}>Play the week</button></>}
-    {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the freshest 23. Change it in Squad, then choose this week's preparation.</p>
+    {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation.</p>
       <div className={styles.choices}>{PREPARATIONS.map(choice => <button key={choice.id} className={styles.tile} data-arl-prepare={choice.id} onClick={() => act({ type: 'prepare', choice: choice.id })}><strong>{choice.label}</strong><span>{choice.description}</span></button>)}</div></>}
     {(state.phase === 'quarter' || state.phase === 'break') && match && <>
       <p className={styles.muted}>Opponent read: {read}. {state.phase === 'quarter' ? `Quarter ${match.quarter + 1} of 4 is next.` : `Quarter ${match.quarter} break.`}</p>
@@ -209,7 +209,11 @@ function headline(state: LeagueState): string {
 export default function AussieRulesLeagueBoard({ onStarted }: { onStarted?: () => void } = {}) {
   const game = useAussieRulesLeague();
   const state = game.state;
-  const [panel, setPanel] = useState<Panel | null>(null);
+  /* A panel belongs to its moment: when the season ends, or the next one starts after the draft, the board is back on the hub, where the result and the next step are. */
+  const moment = state ? `${state.season}:${state.phase === 'seasonOver'}` : '';
+  const [view, setView] = useState<{ panel: Panel | null; moment: string }>({ panel: null, moment: '' });
+  const panel = view.moment === moment ? view.panel : null;
+  const setPanel = (next: Panel | null) => setView({ panel: next, moment });
   const [confirmReset, setConfirmReset] = useState(false);
   const reveal = useRevealScroll<HTMLDivElement>(`${state?.season}:${state?.round}:${state?.week}:${state?.phase}:${panel}`);
   if (!state) return <Menu notice={game.storageNotice} onPick={clubId => { if (game.start(newSeed(), clubId)) { setPanel(null); onStarted?.(); } }} />;

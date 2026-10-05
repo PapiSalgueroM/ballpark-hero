@@ -45,6 +45,22 @@
  *   every read, worth 18 strength points a quarter); AI ladder leaders won
  *   16 to 17.5 of 23 and AI bottom clubs 5.5 to 6.8 in tier probes from +-6
  *   to +-12, against a two sourced real shape of 17 to 19 and 1 to 3.
+ *
+ * ADDED 2026-10-05 by the review fixes, measured on the 3 seed x 8 season
+ * baseline (163.4 s): section 3 checks each season's goal tally against that
+ * season's own home and away goals (24 seasons, 21 after the first) and the
+ * history row's leading goalkicker against the tally; section 7 checks its own
+ * retirement rule, nobody under 31 retires and everyone 35 and over does (81
+ * players reached 35), and bands league skill and spread on five season
+ * averages at each end (seed 61: skill 63.84 and 65.73, spread 14.77 and
+ * 8.97) instead of every single season; section 8 refuses a mid match save
+ * whose opponent matchday 23 cannot field a lineup; section 9 checks that
+ * every finals week has its own dice label above every home and away round
+ * (23 to 27), and which side a tactic lands on: 40 paired matches (seeds 600
+ * to 639, deterministic) played countering the read beat the same matches
+ * played into it by 89.4 points (sd 22.2, 35 wins against 2), floor 40, about
+ * 14 standard errors under; section 10 now samples the break phase too. A
+ * career that gets stuck (the reducer refuses the bot) fails like a crash.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -84,6 +100,13 @@ const CONTROLS = {
   v2matchday: [LEAGUE, 'automaticLineup({ ...club, players: club.players.filter(player => squad.includes(player.id)) }).starters', 'automaticLineup(club).starters', 9, 2],
   tileround: [LEAGUE, 'value: `Round ${state.round + 1} of ${ROUNDS}`', 'value: `Round ${state.round} of ${ROUNDS}`', 10, 2],
   legacylost: [LEAGUE, "return legacy && legacy.state.phase !== 'complete' ? 'legacy' : 'menu';", "return 'menu';", 10, 2],
+  /* Added by the review fixes of 2026-10-05. */
+  goaltally: [LEAGUE, 'goals: {}, finals: null, draft: null }, 0);', 'goals: state.goals, finals: null, draft: null }, 0);', 3, 2],
+  retireage: [LEAGUE, 'age >= 35 ? 1', 'age > 35 ? 1', 7, 2],
+  opponentsquad: [LEAGUE, 'if (!fieldsMatchday(clubOf(s, otherSide(match, s.myClub))!, match.homeId === s.myClub ? match.awaySquad : match.homeSquad)) return false;', '', 8, 2],
+  tacticside: [LEAGUE, 'ownHome ? tactic : other.style, ownHome ? other.style : tactic);', 'ownHome ? other.style : tactic, ownHome ? tactic : other.style);', 9, 2],
+  finalsdice: [LEAGUE, 'finalsRound = (week: number) => ROUNDS + week;', 'finalsRound = (week: number) => ROUNDS - 1 + week;', 9, 2],
+  breaktile: [LEAGUE, "sub: `v ${opponent}`, accent: wants || state.phase === 'report' });", "sub: state.phase === 'break' ? '' : `v ${opponent}`, accent: wants || state.phase === 'report' });", 10, 2],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const ONLY = process.env.AUSSIE_SEASON_ONLY || ''; // e.g. "7,8" while iterating; a gate run never sets it
@@ -134,7 +157,7 @@ const head = (n, title) => { section = n; console.log(`\n${n}. ${title}`); };
 /* ---------- the bot and the runs ---------- */
 /* An engine throw ends that career and is recorded here; every section that plays careers fails on one. */
 const crashes = [];
-const noCrash = () => check(crashes.length === 0, `no career crashed (${crashes.length}${crashes.length ? `, first: ${crashes[0]}` : ""})`);
+const noCrash = () => check(crashes.length === 0, `no career crashed or got stuck (${crashes.length}${crashes.length ? `, first: ${crashes[0]}` : ""})`);
 const COUNTER = { direct: 'control', pressure: 'direct', control: 'pressure' };
 function botAction(s) {
   if (s.phase === 'prepare') {
@@ -151,21 +174,34 @@ function botAction(s) {
   if (s.phase === 'draft' && s.draft.at < s.draft.order.length) return { type: 'draftAuto' };
   return { type: 'next' };
 }
+/* Plays every third match quarter by quarter, with a swap at some breaks, so every phase is reached (sections 8 and 10). */
+function bot8(s) {
+  if (!s.match || (s.phase !== 'quarter' && s.phase !== 'break') || s.match.round % 3 !== 0) return botAction(s);
+  if (s.phase === 'quarter') return { type: 'play', tactic: COUNTER[L.clubOf(s, s.match.homeId === s.myClub ? s.match.awayId : s.match.homeId).style] };
+  if (s.swapsThisBreak === 0 && s.match.round % 6 === 0) {
+    const inP = L.leaguePlayer(s, s.bench[0]);
+    const outId = s.starters.find(id => L.leaguePlayer(s, id).role === inP.role);
+    if (outId) return { type: 'swap', outId, inId: inP.id };
+  }
+  return { type: 'next' };
+}
 /* Plays a career for `seasons` seasons and records what every section needs. */
 function runCareer(seed, clubId, seasons, opts = {}) {
   let s = L.createLeague(seed, clubId);
   if (opts.tweak) s = opts.tweak(s);
-  const out = { seed, clubId, seasons: [], steps: 0, sizes: [], tiles: [], states: opts.keepStates ? [] : null, myMatches: [] };
+  const out = { seed, clubId, seasons: [], steps: 0, sizes: [], tiles: [], states: opts.keepStates ? [] : null, myMatches: [], myFinals: [] };
   let current = { start: s, rounds: [], fatigue: [], lastHomeAway: null, closed: null, preSummer: null, postSummer: null, draftDone: null };
   while (s.season <= seasons && out.steps < 200000) {
     out.steps += 1;
     if (opts.onStep) opts.onStep(s);
-    const action = botAction(s);
+    const action = (opts.bot || botAction)(s);
     let next;
     try { next = L.reduceLeague(s, action); } catch (e) { out.crash = `${s.phase}/${s.stage} season ${s.season} round ${s.round + 1}: ${String(e).slice(0, 90)}`; crashes.push(`seed ${seed} ${clubId}: ${out.crash}`); break; }
-    if (next === s) { out.stuck = `${s.phase}/${s.stage}/${action.type}`; break; }
+    /* A refused bot action means a phase with no legal move: it fails like a crash, never as a smaller sample. */
+    if (next === s) { out.stuck = `${s.phase}/${s.stage}/${action.type}`; crashes.push(`seed ${seed} ${clubId}: stuck at ${out.stuck}`); break; }
     if (s.phase === 'report' && s.stage === 'homeAway') current.rounds.push(s.results.length);
     if (next.phase === 'report' && next.match) out.myMatches.push(next.match);
+    if (next.phase === 'report' && next.match && next.stage === 'finals') out.myFinals.push({ week: next.week, round: next.match.round });
     if (next.phase === 'report' && next.stage === 'homeAway' && next.round === L.ROUNDS - 1) current.lastHomeAway = next;
     if (next.phase === 'seasonOver') current.closed = next;
     if (next.phase === 'summer') { current.preSummer = s; current.postSummer = next; }
@@ -307,6 +343,21 @@ if (RUN.has(3)) {
   check(compared > 0 && mismatched === 0, 'played, W/D/L, points (4 and 2), PF, PA and percentage match the own ladder, in the same order, after every round');
   check(sums === 0, 'sum of PF equals sum of PA, wins equal losses, draws come in pairs');
   check(draws > 0, `drawn games occur (${draws})`);
+  /* The season's goal tally against the season's own results, and the leading goalkicker the history row names. */
+  let tallyFaults = 0, kickerFaults = 0, laterSeasons = 0;
+  for (const season of mainSeasons) {
+    const st = season.closed, row = st.history.at(-1).leadingGoalkicker;
+    if (st.season > 1) laterSeasons += 1;
+    const tallied = Object.values(st.goals).reduce((a, b) => a + b, 0);
+    const scored = st.results.reduce((a, m) => a + m.homeScore.goals + m.awayScore.goals, 0);
+    if (tallied !== scored) tallyFaults += 1;
+    const most = Math.max(0, ...Object.values(st.goals));
+    const club = st.clubs.find(c => c.id === row.club), player = club?.players.find(p => p.name === row.name);
+    if (row.goals !== most || !player || st.goals[player.id] !== most) kickerFaults += 1;
+  }
+  console.log(`  goal tally: ${mainSeasons.length} seasons (${laterSeasons} after the first), ${tallyFaults} whose tally is not that season's home and away goals, ${kickerFaults} leading goalkicker rows off the tally`);
+  check(laterSeasons > 0 && tallyFaults === 0, "every season's goal tally is exactly that season's home and away goals, so it resets each summer");
+  check(kickerFaults === 0, 'the history row names the top of the tally: his club, his name and his goals');
   /* A constructed exact tie: club 2 and club 10 level on points and percentage. */
   const c = i => CLUB_IDS[i];
   const sc = (g, b) => ({ goals: g, behinds: b, total: g * 6 + b });
@@ -380,7 +431,7 @@ if (RUN.has(4)) {
   }
   console.log(`  300 constructed level finals: extra time blocks mean ${mean(blocks).toFixed(2)}, most ${Math.max(...blocks)} (printed, not asserted), bound ${L.FMT.EXTRA_TIME.blockBound}, still level ${bound}`);
   check(settledLevel === 0 && bound === 0, 'a final level after four quarters goes to extra time and ends with a winner');
-  check(LONG || extraTimes >= 1 || seasons < 20, `extra time happened in the run (${extraTimes})`);
+  check(extraTimes >= 1 || seasons < 20, `extra time happened in the run (${extraTimes} in ${seasons} finals series)`);
   /* The resolver alone over 2000 random outcome sets. */
   let rngState = 99;
   const rnd = () => { rngState = (Math.imul(rngState, 1103515245) + 12345) >>> 0; return rngState / 4294967296; };
@@ -408,7 +459,7 @@ if (RUN.has(4)) {
 /* Measured bands (see the header). Each is [low, high]. */
 const BANDS = {
   teamScore: [76, 84], goals: [11.0, 12.4], behinds: [9.3, 10.6], accuracy: [0.52, 0.56], drawRate: [0.0025, 0.0135], margin: [36, 42], lateOverEarly: [0.94, 0.99],
-  strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25, lateFatigue: [50, 63],
+  strengthLift: 0.05, leagueSkill: [58, 74], leagueSpread: [5, 18], skillSlope: 0.25, lateFatigue: [50, 63], tacticSwing: 40,
 };
 const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
 
@@ -463,6 +514,7 @@ if (RUN.has(6)) {
     const mine = mainSeasons.filter(x => x.closed.history.at(-1).premier === x.closed.myClub).length;
     console.log(`  ladder leader wins mean ${mean(tops).toFixed(1)}, bottom club wins mean ${mean(bottoms).toFixed(1)}; AI premierships by tier ${JSON.stringify([...tierWins].sort((a, b) => a[0] - b[0]))}, the bot club won ${mine} of ${mainSeasons.length} (printed)`);
   }
+  noCrash();
 }
 
 const FLOORS = { defender: 7, midfielder: 6, ruck: 2, forward: 7 };
@@ -489,7 +541,7 @@ if (RUN.has(7)) {
   const seasons = [...mainSeasons, ...extra.flatMap(r => r.seasons)];
   let starts = 0, startFaults = 0, floorFaults = 0, aboveCap = 0, ceilingGain = 0, ageFaults = 0, retireFaults = 0, draftAgeFaults = 0, nameFaults = 0, orderFaults = 0, pickFaults = 0;
   const youngGain = [];
-  let maxNames = 0;
+  let maxNames = 0, reached35 = 0, ownRetireFaults = 0;
   for (const x of seasons) {
     for (const st of [x.start]) {
       starts += 1;
@@ -512,6 +564,11 @@ if (RUN.has(7)) {
     const listed = new Set(done.clubs.flatMap(c => c.players.map(p => p.id)));
     for (const id of retired) if (listed.has(id)) retireFaults += 1;
     for (const c of x.postSummer.clubs) for (const p of c.players) if (!retired.has(p.id) && !listed.has(p.id)) retireFaults += 1;
+    /* The harness's own retirement rule (the guide's words), not the engine's retirees(): nobody under 31 retires, everyone 35 and over does. */
+    for (const c of x.postSummer.clubs) for (const p of c.players) {
+      if (p.age >= 35) { reached35 += 1; if (listed.has(p.id)) ownRetireFaults += 1; }
+      if (p.age < 31 && !listed.has(p.id)) ownRetireFaults += 1;
+    }
     const drafted = new Set(done.draft.made.map(m => m.prospectId));
     for (const c of done.clubs) for (const p of c.players) if (drafted.has(p.id) && p.age !== 18) draftAgeFaults += 1;
     if (done.clubs.some(c => c.players.length !== 36 || !floorsOk(c))) floorFaults += 1;
@@ -528,6 +585,8 @@ if (RUN.has(7)) {
   check(aboveCap === 0 && ceilingGain === 0, 'nobody grows above potential, and players at their ceiling never gain');
   check(youngGain.length > 0 && mean(youngGain) > 1, 'young players with headroom gain on average');
   check(ageFaults === 0 && retireFaults === 0 && draftAgeFaults === 0, 'everyone ages a year, retirees leave, draftees are 18');
+  console.log(`  own retirement rule: ${reached35} players reached 35 after a summer birthday, ${ownRetireFaults} faults`);
+  check(reached35 > 0 && ownRetireFaults === 0, 'nobody under 31 retires and nobody plays on past 35 (the guide\'s rule, checked without the engine)');
   check(nameFaults === 0, 'names are unique and non-empty across every list');
   check(orderFaults === 0 && pickFaults === 0, "the draft order follows the declared rule and each club's picks equal its vacancies");
   /* Constructed need: three rival clubs lose all four rucks to retirement this summer. */
@@ -568,7 +627,10 @@ if (RUN.has(7)) {
     const spreads = run.seasons.map(x => sd(x.start.clubs.flatMap(c => c.players.map(p => p.skill))));
     const b = slope(means);
     console.log(`  seed ${run.seed}: league mean skill ${means[0].toFixed(2)} to ${means.at(-1).toFixed(2)} (range ${Math.min(...means).toFixed(2)} to ${Math.max(...means).toFixed(2)}, slope ${b.toFixed(3)} a season), player spread ${Math.min(...spreads).toFixed(2)} to ${Math.max(...spreads).toFixed(2)}`);
-    check(means.every(m => inBand(m, BANDS.leagueSkill)) && spreads.every(v => inBand(v, BANDS.leagueSpread)), `seed ${run.seed}: league mean skill and spread stay inside their bands`);
+    /* Averages over five seasons at each end, never a single season's extreme. */
+    const ends = [means.slice(0, 5), means.slice(-5), spreads.slice(0, 5), spreads.slice(-5)].map(mean);
+    console.log(`  seed ${run.seed}: five season means, first and last: skill ${ends[0].toFixed(2)} and ${ends[1].toFixed(2)}, spread ${ends[2].toFixed(2)} and ${ends[3].toFixed(2)}`);
+    check(inBand(ends[0], BANDS.leagueSkill) && inBand(ends[1], BANDS.leagueSkill) && inBand(ends[2], BANDS.leagueSpread) && inBand(ends[3], BANDS.leagueSpread), `seed ${run.seed}: league mean skill and spread, averaged over the first and the last five seasons, stay inside their bands`);
     check(Math.abs(b) < BANDS.skillSlope, `seed ${run.seed}: no drift in league skill across ${means.length} seasons`);
   }
 }
@@ -577,17 +639,6 @@ if (RUN.has(8)) {
   head(8, 'Save: round trips in every phase, size over many seasons, refusals');
   noCrash();
   /* Round trip at every step for three seasons; the result must equal an uninterrupted run. */
-  /* This bot plays every third match quarter by quarter, with a swap at some breaks, so every phase is saved. */
-  const bot8 = s => {
-    if (!s.match || (s.phase !== 'quarter' && s.phase !== 'break') || s.match.round % 3 !== 0) return botAction(s);
-    if (s.phase === 'quarter') return { type: 'play', tactic: COUNTER[L.clubOf(s, s.match.homeId === s.myClub ? s.match.awayId : s.match.homeId).style] };
-    if (s.swapsThisBreak === 0 && s.match.round % 6 === 0) {
-      const inP = L.leaguePlayer(s, s.bench[0]);
-      const outId = s.starters.find(id => L.leaguePlayer(s, id).role === inP.role);
-      if (outId) return { type: 'swap', outId, inId: inP.id };
-    }
-    return { type: 'next' };
-  };
   let straight = L.createLeague(31, 'club-11');
   for (let n = 0; straight.season <= 3 && n < 20000; n += 1) straight = L.reduceLeague(straight, bot8(straight));
   let s = L.createLeague(31, 'club-11'), trips = 0, refusedTrips = 0;
@@ -623,6 +674,19 @@ if (RUN.has(8)) {
   bad('a floor broken outside the draft', v => { for (const p of v.clubs[5].players) if (p.role === 'ruck') p.role = 'forward'; });
   bad('a foreign club id', v => { v.myClub = 'club-18'; });
   bad('a raw input over the cap', v => { v.history = [...v.history, ...Array.from({ length: 4000 }, () => v.history[0])]; });
+  /* Mid match: the opponent's saved matchday 23 left one ruck short (its full list still meets the floors), so it could never field a lineup. */
+  const live = L.reduceLeague(L.reduceLeague(L.createLeague(33, 'club-03'), { type: 'prepare', choice: 'train' }), { type: 'play', tactic: 'control' });
+  const liveOk = live.phase === 'break' && L.readLeagueSave(JSON.stringify(live)) !== null;
+  const ownHome = live.match.homeId === live.myClub;
+  const oppKey = ownHome ? 'awaySquad' : 'homeSquad', opp = L.clubOf(live, ownHome ? live.match.awayId : live.match.homeId);
+  const squadRucks = live.match[oppKey].filter(id => opp.players.find(p => p.id === id).role === 'ruck');
+  const spare = opp.players.filter(p => p.role !== 'ruck' && !live.match[oppKey].includes(p.id));
+  const short = live.match[oppKey].map(id => (squadRucks.indexOf(id) >= 1 ? spare[squadRucks.indexOf(id) - 1].id : id));
+  const tampered = { ...live, match: { ...live.match, [oppKey]: short } };
+  let crashedOnPlay = false;
+  try { L.reduceLeague({ ...tampered, phase: 'quarter' }, { type: 'play', tactic: 'control' }); } catch { crashedOnPlay = true; }
+  console.log(`  mid match save: opponent squad ${squadRucks.length} rucks cut to 1, engine ${crashedOnPlay ? 'throws' : 'does not throw'} on play`);
+  check(liveOk && crashedOnPlay && L.readLeagueSave(JSON.stringify(tampered)) === null, 'refuses a mid match save whose opponent matchday 23 cannot field a lineup');
   check(L.readLeagueSave('{"version":2') === null && L.readLeagueSave(null) === null && L.readLeagueSave('x'.repeat(L.MAX_SAVE_CHARS + 1)) === null, 'refuses broken JSON, nothing, and raw input over the cap');
 }
 
@@ -642,6 +706,26 @@ if (RUN.has(9)) {
   const one = L.V1.quarter(s.clubs, m, L.seasonSeed(42, 1), lu('club-03'), lu('club-04'), 'control', 'control');
   const two = L.V1.quarter(s.clubs, m, L.seasonSeed(42, 2), lu('club-03'), lu('club-04'), 'control', 'control');
   check(JSON.stringify(one.match.events) !== JSON.stringify(two.match.events), 'the same pairing in seasons 1 and 2 rolls different dice');
+  /* Finals dice labels: every week above every home and away round, one label per week, and your finals use them. */
+  const weeks = Array.from({ length: L.lastWeek('wildcard') + 1 }, (_, w) => L.finalsRound(w));
+  const finalsRuns = [a, runCareer(43, 'club-12', 1), runCareer(44, 'club-16', 1)];
+  const mine = finalsRuns.flatMap(r => r.myFinals);
+  const labelFaults = mine.filter(f => f.round !== L.finalsRound(f.week)).length;
+  console.log(`  finals dice labels ${weeks.join(', ')} (home and away rounds 0 to ${L.ROUNDS - 1}); ${mine.length} of your finals checked, ${labelFaults} off their week's label`);
+  check(weeks.every(r => r >= L.ROUNDS) && new Set(weeks).size === weeks.length && mine.length > 0 && labelFaults === 0, 'every finals week rolls its own dice label, above every home and away round');
+  /* Which side a tactic lands on: the same match played countering the opponent's read and played into it. */
+  const LOSES_TO = { direct: 'pressure', pressure: 'control', control: 'direct' };
+  const swing = [];
+  let counterWins = 0, counteredWins = 0;
+  for (let k = 0; k < 40; k += 1) {
+    const st = L.reduceLeague(L.createLeague(600 + k, CLUB_IDS[k % 18]), { type: 'prepare', choice: 'train' });
+    const style = L.clubOf(st, st.match.homeId === st.myClub ? st.match.awayId : st.match.homeId).style;
+    const margin = t => { const m = L.reduceLeague(st, { type: 'playMatch', tactic: t }).match; return (m.homeId === st.myClub ? 1 : -1) * (m.homeScore.total - m.awayScore.total); };
+    const up = margin(COUNTER[style]), down = margin(LOSES_TO[style]);
+    swing.push(up - down); if (up > 0) counterWins += 1; if (down > 0) counteredWins += 1;
+  }
+  console.log(`  40 paired matches: countering the read beats playing into it by ${mean(swing).toFixed(1)} points (sd ${sd(swing).toFixed(1)}); won ${counterWins} countering, ${counteredWins} played into it; floor ${BANDS.tacticSwing}`);
+  check(mean(swing) > BANDS.tacticSwing, 'your tactic is applied to your side: countering the read wins the same match by more');
   let outside = 0, events = 0;
   for (const match of a.myMatches) {
     for (const e of match.events) {
@@ -660,7 +744,11 @@ if (RUN.has(10)) {
   const seen = new Set();
   let checked = 0, empty = 0, roundFaults = 0, ladderFaults = 0;
   const extraStates = [];
-  runCareer(51, 'club-14', 1, { onStep: st => { if (!seen.has(st.phase + st.stage)) { seen.add(st.phase + st.stage); extraStates.push(st); } } });
+  /* bot8 plays some matches quarter by quarter, so the break phase is in the sample too. */
+  runCareer(51, 'club-14', 1, { bot: bot8, onStep: st => { if (!seen.has(st.phase + st.stage)) { seen.add(st.phase + st.stage); extraStates.push(st); } } });
+  const phasesSeen = new Set([...tileStates, ...extraStates].map(st => st.phase));
+  const PHASES = ['prepare', 'quarter', 'break', 'report', 'seasonOver', 'summer', 'draft'];
+  check(PHASES.every(p => phasesSeen.has(p)), `tile states cover every phase (${PHASES.filter(p => phasesSeen.has(p)).length} of ${PHASES.length}${PHASES.some(p => !phasesSeen.has(p)) ? `, missing ${PHASES.filter(p => !phasesSeen.has(p)).join(', ')}` : ''})`);
   for (const st of [...tileStates, ...extraStates]) {
     const tiles = L.hubTiles(st);
     checked += 1;
