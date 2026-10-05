@@ -10,9 +10,10 @@ import { chromium } from '../lib/playwrightLoader.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
 assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
-const isFontRead = request => {
+const isFontStylesheet = request => request.method() === 'GET' && fontLinks.includes(new URL(request.url()).href);
+const isFontRead = (request, assets) => {
   const url = new URL(request.url());
-  return request.method() === 'GET' && (fontLinks.includes(url.href) || (request.resourceType() === 'font' && url.protocol === 'https:' && url.hostname === 'fonts.gstatic.com' && url.pathname.endsWith('.woff2')));
+  return isFontStylesheet(request) || (request.method() === 'GET' && request.resourceType() === 'font' && assets.has(url.href));
 };
 const OUT = path.join(ROOT, 'rugby-league-review-artifacts/native');
 const records = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/test/fixtures/rugbyLeagueRecords.json'), 'utf8'));
@@ -111,7 +112,8 @@ try {
   for (const profile of profiles) {
     const { width, height, input, theme, reduced } = profile;
     const id = `${width}-${input}-${theme}${reduced ? '-reduced' : ''}`;
-    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [], retries: [], pageErrors: [], consoleErrors: [], assetFailures: [], fontFailures: [], fontRequests: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
+    const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [], retries: [], pageErrors: [], consoleErrors: [], assetFailures: [], fontFailures: [], fontRequests: [], fontAssets: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
+    const fontAssets = new Set();
     report.cases.push(result);
     const context = await browser.newContext({ viewport: { width, height }, isMobile: input === 'touch', hasTouch: input === 'touch', deviceScaleFactor: 1,
       reducedMotion: reduced ? 'reduce' : 'no-preference', colorScheme: theme, serviceWorkers: 'block',
@@ -126,15 +128,35 @@ try {
       if (url.origin === BASE) return route.continue();
       result.interceptedRequests.push({ method: request.method(), path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) result.scoreWrites.push(`${request.method()} ${url.pathname}`);
-      if (isFontRead(request)) {
+      if (isFontRead(request, fontAssets)) {
         result.fontRequests.push(request.url());
-        const response = await route.fetch({ maxRedirects: 0 });
-        assert(response.status() < 300 || response.status() >= 400, 'Font requests cannot redirect beyond the exact allowlist');
-        return route.fulfill({ response });
+        try {
+          const response = await route.fetch({ maxRedirects: 0 });
+          assert(response.status() >= 200 && response.status() < 300, 'Actual font requests must succeed without redirects');
+          if (isFontStylesheet(request)) {
+            const css = await response.text();
+            const declared = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(match => new URL(match[2]));
+            assert(declared.length > 0, 'The actual template stylesheet declares font assets');
+            for (const asset of declared) {
+              assert.equal(asset.origin, 'https://fonts.gstatic.com', 'Only the actual stylesheet font host is allowed');
+              fontAssets.add(asset.href);
+            }
+            result.fontAssets = [...fontAssets];
+            return route.fulfill({ response, body: css });
+          }
+          return route.fulfill({ response });
+        } catch (error) {
+          result.fontFailures.push(`${request.url()}: ${error.message}`);
+          return route.abort('blockedbyclient');
+        }
       }
       const table = url.pathname.match(/^\/rest\/v1\/([^/]+)$/)?.[1];
       if (table && Object.hasOwn(tables, table)) return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(tables[table]) });
       const type = request.resourceType();
+      if (type === 'font') {
+        result.fontFailures.push(`Font URL is not declared by the actual template stylesheet: ${request.url()}`);
+        return route.abort('blockedbyclient');
+      }
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : type === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(type) ? '' : '[]' });
     });
     const page = await context.newPage(); page.setDefaultTimeout(12000);
@@ -154,11 +176,11 @@ try {
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
     page.on('requestfailed', request => {
       if (request.url().startsWith(BASE)) result.assetFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
-      if (isFontRead(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (request.resourceType() === 'font' || isFontStylesheet(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
     });
     page.on('response', response => {
       if (response.url().startsWith(BASE) && response.status() >= 400) result.assetFailures.push(`${response.url()}: ${response.status()}`);
-      if (isFontRead(response.request()) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+      if ((response.request().resourceType() === 'font' || isFontStylesheet(response.request())) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
     });
     const panel = page.locator('[data-rugby-challenge]');
     const button = name => panel.getByRole('button', { name, exact: true });
