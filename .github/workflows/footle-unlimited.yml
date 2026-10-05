@@ -48,16 +48,6 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee footle-unlimited-artifacts/types.log
           npm run build 2>&1 | tee footle-unlimited-artifacts/build.log
-      - name: Generate candidate update snapshot
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee footle-unlimited-artifacts/snapshot.log
-          node scripts/genSitemap.mjs 2>&1 | tee footle-unlimited-artifacts/sitemap-generation.log
-          mkdir -p footle-unlimited-artifacts/generated/public/whats-new footle-unlimited-artifacts/generated/scripts/data
-          cp public/whats-new/index.html footle-unlimited-artifacts/generated/public/whats-new/
-          cp public/sitemap.xml footle-unlimited-artifacts/generated/public/
-          cp scripts/data/lastmod.json footle-unlimited-artifacts/generated/scripts/data/
-          npm run build 2>&1 | tee footle-unlimited-artifacts/rebuild.log
       - name: Unlimited outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: FOOTLE_UNLIMITED_CONTROL=all ONLY=simFootleUnlimited node scripts/runAllSims.mjs 2>&1 | tee footle-unlimited-artifacts/unlimited.log

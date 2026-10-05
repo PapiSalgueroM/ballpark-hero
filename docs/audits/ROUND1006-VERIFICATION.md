@@ -44,3 +44,20 @@ No current live or complete claim is made.
 
 All runtime checks run remotely with fictional player fixtures and intercepted
 transport. No new real player facts or production database probes are included.
+
+## Integrated candidate accepted for final snapshot verification
+
+Candidate ed0afccd integrated the accepted Your picks release. Run 37358403042
+passed the real type check, build, ten mounted cases, twenty effective source
+controls, shared scoring, harness anchors and all four native profiles.
+The 320px overflow control now compares with the configured viewport, proves
+its injected wide panel expands the page, requires the exact rejection and
+proves restoration. Full-name checks remain independent.
+
+Clue desk run 37358403355 passed. Five-run 37358403559 passed all gameplay,
+Daily, pool, search and native checks; its sole failure was the missing
+committed What's New entry. This commit copies all three remotely generated
+snapshot/ledger files from artifact 11365947510 after verifying SHA256:
+fd3145963315a95ec74229671da7fd439cf671d3fac7bda35a60798cec44b037.
+The temporary generation step is removed so final CI reads committed files.
+Acceptance and publication remain pending that final run.
