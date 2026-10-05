@@ -55,9 +55,10 @@ async function settle(page) {
     requestAnimationFrame(next);
   }));
 }
-async function activate(locator, input) {
+async function activate(locator, input, minimum = 44) {
+  await locator.waitFor({ state: 'visible' });
   const box = await locator.boundingBox();
-  assert(box && box.width >= 44 && box.height >= 44, `Small review control: ${JSON.stringify(box)}`);
+  assert(box && box.width >= minimum && box.height >= minimum, `Small review control: ${JSON.stringify(box)}`);
   if (input === 'touch') await locator.tap();
   else if (input === 'mouse') await locator.click();
   else { await locator.focus(); await locator.press('Enter'); }
@@ -96,30 +97,33 @@ try {
     const fixture = reviewFixtures.find(f => f.slug === slug && f.pos === profile.positions[sportIndex]);
     const sport = reviewSports[slug], career = makeReviewCareer(fixture), bytes = reviewSave(career);
     const id = `${slug}-${fixture.pos}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], scoreWrites: [], outbound: [] };
+    const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
+    let playingEventSeason = false;
     report.cases.push(result);
     const context = await browser.newContext({ viewport: result.viewport, isMobile: profile.input === 'touch', hasTouch: profile.input === 'touch', deviceScaleFactor: 1,
       reducedMotion: profile.reduced ? 'reduce' : 'no-preference', colorScheme: profile.theme, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
-        { name: sport.saveKey, value: bytes }, { name: 'cookie-consent', value: 'essential' }, { name: 'theme', value: profile.theme },
+        { name: sport.saveKey, value: bytes }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: profile.theme },
         { name: 'review-unrelated-save', value: '{"keep":"exact bytes"}' },
       ] }] },
     });
-    await context.addInitScript(theme => {
-      const apply = () => { document.documentElement.classList.toggle('dark', theme === 'dark'); document.documentElement.classList.toggle('light', theme === 'light'); };
-      apply(); document.addEventListener('DOMContentLoaded', apply, { once: true });
+    await context.addInitScript(() => {
       window.__reviewDraws = 0; window.__reviewWrites = [];
       const random = Math.random; Math.random = () => { window.__reviewDraws++; return random(); };
       for (const method of ['setItem', 'removeItem', 'clear']) {
         const original = Storage.prototype[method];
         Storage.prototype[method] = function (...args) { if (this === localStorage) window.__reviewWrites.push({ method, args }); return original.apply(this, args); };
       }
-    }, profile.theme);
+    });
     await context.route('**/*', route => {
       const request = route.request(), url = new URL(request.url());
       if (url.origin === BASE) return route.continue();
       result.outbound.push({ method: request.method(), path: url.pathname });
-      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /completions|user_game_scores|user_best_scores|record_auth_completion/.test(url.pathname)) result.scoreWrites.push({ method: request.method(), path: url.pathname });
+      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /completions|user_game_scores|user_best_scores|record_auth_completion/.test(url.pathname)) {
+        const write = { method: request.method(), path: url.pathname };
+        if (playingEventSeason) result.eventSetupWrites.push({ ...write, body: request.postDataJSON() });
+        else result.scoreWrites.push(write);
+      }
       const type = request.resourceType();
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : 'application/json', body: type === 'stylesheet' ? '' : '[]' });
     });
@@ -147,6 +151,8 @@ try {
       await page.goto(`${BASE}${result.route}`, { waitUntil: 'domcontentloaded' });
       const opener = page.getByRole('button', { name: /Career Log/ }); await opener.waitFor();
       await page.evaluate(() => document.fonts.ready); await settle(page);
+      assert(await page.evaluate(() => Array.isArray(window.__reviewWrites) && Number.isInteger(window.__reviewDraws)), 'Storage and RNG instrumentation installed before app boot');
+      assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), profile.theme === 'light', 'The saved theme is active');
       const before = await protectedState(page);
       await activate(opener, profile.input);
       await page.locator('[data-season-tile="2"]').waitFor();
@@ -227,6 +233,41 @@ try {
       await activate(button('Back to retirement'), profile.input); await settle(page);
       assert.equal(await button('Review seasons').evaluate(el => el === document.activeElement), true);
       assert.deepEqual(await protectedState(page), retiredBefore, 'Retired review preserves all storage bytes, draws, and writes');
+      if (slug === 'nba') {
+        const eventCareer = JSON.parse(JSON.stringify(career));
+        eventCareer.age = 27;
+        delete eventCareer.rival;
+        await page.evaluate(({ key, value }) => localStorage.setItem(key, value), { key: sport.saveKey, value: reviewSave(eventCareer) });
+        await page.reload({ waitUntil: 'domcontentloaded' }); await opener.waitFor(); await settle(page);
+        const activity = page.waitForRequest(request => new URL(request.url()).pathname === '/rest/v1/game_completions' && request.method() === 'POST');
+        playingEventSeason = true;
+        await activate(page.getByRole('button', { name: /Play the 2034 season/ }), profile.input, 30);
+        await activate(page.locator('[data-season-reveal]').getByRole('button', { name: 'Continue', exact: true }), profile.input, 30);
+        const pending = page.locator('[data-career-event]'); await pending.waitFor(); await activity; await settle(page);
+        playingEventSeason = false;
+        assert.equal(result.eventSetupWrites.length, 1, 'Playing one real season records one existing activity');
+        const activityBody = result.eventSetupWrites[0].body;
+        const activityRow = Array.isArray(activityBody) ? activityBody[0] : activityBody;
+        assert.equal(activityRow.game, sport.gameSlug); assert.equal(activityRow.score, undefined, 'The existing season activity is unscored');
+        const eventBefore = await protectedState(page);
+        const pendingId = await pending.getAttribute('data-career-event'), pendingText = await pending.innerText();
+        const savedEvent = JSON.parse(eventBefore.storage[sport.saveKey]);
+        assert.equal(savedEvent.phase, 'event'); assert.equal(savedEvent.c.seasons.length, 4);
+        await activate(opener, profile.input); await page.locator('[data-season-tile="1"]').waitFor(); await inspect('pending-event-picker');
+        await activate(page.locator('[data-season-tile="1"]'), profile.input); await inspect('pending-event-overview');
+        assert.equal(await page.locator('[data-season-ovr]').textContent(), '84');
+        await activate(button('Back to seasons'), profile.input);
+        await activate(button('Back to career'), profile.input); await pending.waitFor(); await settle(page);
+        assert.equal(await pending.getAttribute('data-career-event'), pendingId);
+        assert.equal(await pending.innerText(), pendingText);
+        assert.equal(await opener.evaluate(el => el === document.activeElement), true);
+        assert.deepEqual(await protectedState(page), eventBefore, 'Review preserves the exact pending choice, all save bytes, draws, and writes');
+        const file = `${id}-pending-event-return.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file);
+        await activate(pending.getByRole('button').first(), profile.input, 30); await pending.waitFor({ state: 'hidden' });
+        const resolved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), sport.saveKey));
+        assert.equal(resolved.phase, 'season'); assert.equal(resolved.c.seasons.length, 4, 'The retained choice resolves without playing another season');
+        result.pendingEvent = { id: pendingId, retained: true, resolved: true, originalSeasons: 4 };
+      }
       assert.deepEqual(result.scoreWrites, []);
       assert.deepEqual(result.pageErrors, []); assert.deepEqual(result.consoleErrors, []); assert.deepEqual(result.localFailures, []);
       result.passed = true;

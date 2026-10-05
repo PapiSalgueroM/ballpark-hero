@@ -764,7 +764,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     );
   }
 
-  if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log')) {
+  if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'freeagency' && panel === 'log')) {
     return <Suspense fallback={<p role="status">Loading season review...</p>}>
       <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
         reviewReturn.current = phase === 'retired' ? 'retired' : 'log';
@@ -1077,7 +1077,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} />
         </div>
       ) : phase === 'event' && pendingEvent ? (
-        <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
+        <div ref={revealRef} data-career-event={pendingEvent.id} className="rounded-2xl border border-gold/40 bg-card p-4">
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>
           <div className="mt-3 grid gap-1.5">

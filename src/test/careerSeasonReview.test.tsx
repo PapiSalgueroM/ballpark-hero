@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ComponentType } from 'react';
 
@@ -186,6 +186,43 @@ describe('saved career season review', () => {
       view.unmount(); writes.mockRestore(); removes.mockRestore();
     }
   }, 60000);
+  it('opens Career Log during a pending choice and restores that exact choice', async () => {
+    const fixture = reviewFixtures[0], sport = reviewSports.nba, career = makeReviewCareer(fixture);
+    career.age = 27;
+    delete career.rival;
+    localStorage.setItem(sport.saveKey, reviewSave(career));
+    render(<MemoryRouter><NbaMyCareerBoard /></MemoryRouter>);
+    await screen.findByRole('button', { name: /Play the 2034 season/ });
+    click(/Play the 2034 season/);
+    click('Continue');
+    const event = document.querySelector('[data-career-event]');
+    expect(event, 'An ordinary pending choice is available after the played season').not.toBeNull();
+    const eventId = event!.getAttribute('data-career-event'), eventText = event!.textContent;
+    const bytes = localStorage.getItem(sport.saveKey)!;
+    expect(JSON.parse(bytes).phase).toBe('event');
+    expect(JSON.parse(bytes).c.seasons).toHaveLength(4);
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    vi.mocked(Math.random).mockClear();
+    await act(async () => { click(/Career Log/); });
+    expect(document.querySelector('[data-career-season-review]'), 'Career Log opens while the ordinary choice stays pending').not.toBeNull();
+    choose(1);
+    expect(field('ovr')).toBe('84');
+    click('Back to seasons');
+    click('Back to career');
+    const restored = document.querySelector('[data-career-event]');
+    expect(restored?.getAttribute('data-career-event')).toBe(eventId);
+    expect(restored?.textContent).toBe(eventText);
+    expect(document.activeElement).toBe(screen.queryByRole('button', { name: /Career Log/ }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    expect(writes).not.toHaveBeenCalled();
+    expect(Math.random).not.toHaveBeenCalled();
+    expect(recordCompletion).not.toHaveBeenCalled();
+    fireEvent.click(restored!.querySelector('button')!);
+    expect(document.querySelector('[data-career-event]')).toBeNull();
+    expect(JSON.parse(localStorage.getItem(sport.saveKey)!).phase).toBe('season');
+    expect(JSON.parse(localStorage.getItem(sport.saveKey)!).c.seasons).toHaveLength(4);
+    expect(writes).toHaveBeenCalledTimes(1);
+  });
   it('reviews retired careers and restores the retirement opener without paying again', async () => {
     for (const slug of Object.keys(boards)) {
       const fixture = reviewFixtures.find(f => f.slug === slug)!, Board = boards[slug], sport = reviewSports[slug];
