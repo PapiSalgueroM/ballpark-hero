@@ -62,6 +62,7 @@ export function mlbLineupSport(): GmLineupSport<MlbGmTeam> {
       return { bats: u.bats, rotation: u.rot, pen: u.pen };
     },
     auto: (t, g, s) => gmFillByRating(g, s, gmGroupPool(g, t.players)),
+    healed: t => ({ ...t, players: t.players.map(p => (p.out ? { ...p, out: 0 } : p)) }),
   };
   return mlb;
 }
@@ -110,6 +111,7 @@ export function nhlLineupSport(): GmLineupSport<NhlGmTeam> {
       const counted = (read(t)[g.key] ?? []).slice().sort((a, b) => b.ovr - a.ovr);
       return gmFillByRating(g, s, pool, counted);
     },
+    healed: t => ({ ...t, players: t.players.map(p => (p.out ? { ...p, out: 0 } : p)) }),
   };
   return nhl;
 }

@@ -103,6 +103,9 @@ export interface GmLineupSport<T> {
   base: (team: T) => Record<string, GmLineupMan[]>;
   /** The sim's own pick for a group under a slot shape. */
   auto: (team: T, group: GmSlotGroup, slots: readonly GmSlot[]) => (GmLineupMan | null)[];
+  /** The same club with every man fit, so `auto` on it is the sim's full
+      strength pick: the hurt men a first tap on a group keeps a slot for. */
+  healed?: (team: T) => T;
 }
 
 export type GmResolvedLineup = Record<string, (GmLineupMan | null)[]>;
@@ -331,12 +334,15 @@ const clean = (choice: GmLineupChoice): GmLineupChoice => {
 
 /* A group whose saved order reads exactly like the sim's own pick, with no
    slot skipped on purpose, is dropped, so it goes back to following the
-   ratings (the Round 723 settleDepth rule). */
+   ratings (the Round 723 settleDepth rule). The sim's own pick with its hurt
+   men holding their stand-ins' slots counts too: that is what a first tap
+   saves, so a swap and a swap back still hand the group back. */
 function settle<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice, key: string): GmLineupChoice {
   const ids = choice.slots?.[key];
   if (ids && !choice.open?.[key]?.length) {
     const auto = gmResolveLineup(sport, team, { schemes: choice.schemes })[key].map(p => p?.id ?? null);
-    if (ids.length === auto.length && ids.every((id, i) => id === auto[i])) {
+    const same = (xs: (string | null)[]) => ids.length === xs.length && ids.every((id, i) => id === xs[i]);
+    if (same(auto) || same(standInHolds(sport, team, { schemes: choice.schemes }, key, auto))) {
       const slots = { ...choice.slots };
       delete slots[key];
       choice = { ...choice, slots };
@@ -362,6 +368,41 @@ const withGroup = (choice: GmLineupChoice | undefined, key: string, ids: (string
 function heldIds<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice | undefined, key: string, placed: readonly (GmLineupMan | null)[]): (string | null)[] {
   const held = gmLineupHeld(sport, team, choice, key);
   return placed.map((p, i) => held[i]?.id ?? p?.id ?? null);
+}
+
+/* A first tap on a group nobody has saved. The sim's pick there shuffles
+   everyone up past a hurt man, so the save the tap writes has nobody to hold
+   a slot for him, and he would come back on the bench. So each hurt man of
+   the sim's full strength pick (sport.healed), heavier slot first, takes the
+   slot of a stand-in, a man on the field only because somebody is hurt, and
+   the stand-in plays it until he is fit. Only where that changes nothing on
+   the field now, which is checked by resolving it: if the GM has benched a
+   better man the hole would bring back, that hurt man gets no hold. */
+function standInHolds<T>(sport: GmLineupSport<T>, team: T, choice: GmLineupChoice | undefined, key: string, ids: (string | null)[], skip?: Set<number>): (string | null)[] {
+  const g = sport.groups.find(x => x.key === key);
+  if (!g || !sport.healed) return ids;
+  const slots = gmGroupSlots(sport, g, choice);
+  const field = (save: (string | null)[]) => gmResolveLineup(sport, team, withGroup(choice, key, save, skip))[key].map(p => p?.id ?? null);
+  const target = field(ids);
+  const full = sport.auto(sport.healed(team), g, slots).map(p => p?.id ?? null);
+  const men = sport.men(team);
+  const order = (xs: number[]) => xs.sort((a, b) => slots[b].weight - slots[a].weight || a - b);
+  const hurt = order(full.flatMap((id, i) => (id && !ids.includes(id) && (men.find(p => p.id === id)?.out ?? 0) > 0 ? [i] : [])))
+    .map(i => men.find(p => p.id === full[i])!);
+  const open = order(ids.flatMap((id, i) => (id && !full.includes(id) && !skip?.has(i) ? [i] : [])));
+  let out = ids;
+  for (const man of hurt) {
+    const at = open.findIndex(i => accepts(g, slots[i], man) && (() => {
+      const next = [...out];
+      next[i] = man.id;
+      return field(next).every((id, k) => id === target[k]);
+    })());
+    if (at < 0) continue;
+    out = [...out];
+    out[open[at]] = man.id;
+    open.splice(at, 1);
+  }
+  return out;
 }
 
 /** Tap two to swap. Two men in the group trade slots; a spare takes a man's
@@ -393,7 +434,8 @@ export function gmLineupSwap<T>(sport: GmLineupSport<T>, team: T, choice: GmLine
     if (!man || !accepts(g, slots[at], man)) return null;
     ids[at] = man.id;
   }
-  return settle(sport, team, withGroup(choice, key, ids), key);
+  const save = savedSlots(sport, g, slots, choice) ? ids : standInHolds(sport, team, choice, key, ids);
+  return settle(sport, team, withGroup(choice, key, save), key);
 }
 
 /** Leave a rotation's optional trailing slot empty on purpose, or take the
@@ -415,7 +457,8 @@ export function gmLineupSetOpen<T>(sport: GmLineupSport<T>, team: T, choice: GmL
     const man = gmGroupPool(g, sport.men(team)).filter(p => !ids.includes(p.id) && accepts(g, slots[slot], p)).sort((x, y) => y.ovr - x.ovr)[0];
     ids[slot] = man ? man.id : null;
   }
-  return settle(sport, team, withGroup(choice, key, ids, skip), key);
+  const save = savedSlots(sport, g, gmGroupSlots(sport, g, choice), choice) ? ids : standInHolds(sport, team, choice, key, ids, skip);
+  return settle(sport, team, withGroup(choice, key, save, skip), key);
 }
 
 /** Switch a group to one of its schemes. The default scheme is not saved.

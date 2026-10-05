@@ -98,6 +98,26 @@ describe('gmLineup core', () => {
     expect(gmLineupHeld(toy, t, over, 'top').every(p => p === null)).toBe(true);
   });
 
+  it('a first tap on a group nobody saved keeps a slot for the sim\'s hurt man, his stand-in\'s', () => {
+    const healing: GmLineupSport<Toy> = { ...toy, healed: t => ({ players: t.players.map(p => ({ ...p, out: 0 })) }) };
+    const t = toyTeam();
+    /* a5 (90) is hurt: the sim bats a1 a2 a3, and a3 is in only for him */
+    const once = gmLineupSwap(healing, t, {}, 'top', { id: 'a1' }, { id: 'a2' })!;
+    expect(once.slots?.top).toEqual(['a2', 'a1', 'a5']);
+    expect(gmResolveLineup(healing, t, once).top.map(p => p?.id)).toEqual(['a2', 'a1', 'a3']);
+    expect(gmLineupHeld(healing, t, once, 'top').map(p => p?.id ?? null)).toEqual([null, null, 'a5']);
+    /* a swap back is the sim's own pick again */
+    expect(gmLineupSwap(healing, t, once, 'top', { id: 'a1' }, { id: 'a2' })).toEqual({});
+    /* fit again, he is back in the stand-in's slot, not on the bench */
+    t.players.find(p => p.id === 'a5')!.out = 0;
+    expect(gmResolveLineup(healing, t, once).top.map(p => p?.id)).toEqual(['a2', 'a1', 'a5']);
+    /* the GM benches a better man the hole would bring back: no hold, the field is his */
+    t.players.find(p => p.id === 'a5')!.out = 2;
+    expect(gmLineupSwap(healing, t, {}, 'top', { id: 'a2' }, { id: 'a4' })!.slots?.top).toEqual(['a1', 'a4', 'a3']);
+    /* a sport with no full strength pick saves the field as before */
+    expect(gmLineupSwap(toy, t, {}, 'top', { id: 'a1' }, { id: 'a2' })!.slots?.top).toEqual(['a2', 'a1', 'a3']);
+  });
+
   it('a saved man only fills a slot that takes his position', () => {
     const picky: GmLineupSport<Toy> = {
       ...toy,
