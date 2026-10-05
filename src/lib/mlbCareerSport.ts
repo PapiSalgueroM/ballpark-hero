@@ -23,6 +23,7 @@ import { MLB_BADGES } from '@/lib/careerBadges';
 import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -68,6 +69,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = {
   legacyOf: mlbLegacyOf,
   teamLabelOf: mlbTeamLabelOf,
   statLine: (s, pos) => mlbStatLine(s, pos as MlbCareerPos),
+  reviewStats: (s, pos) => mlbSeasonReview(s, pos as MlbCareerPos),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,
