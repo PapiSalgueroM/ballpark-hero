@@ -1,3 +1,12 @@
+## Codex claims 1007: Rugby League review, 2026-10-05
+
+Review all ten completed claims, then retry only the missed calls with a
+separate tally. Preserve the original score and existing shared winners.
+Product owner works only on RugbyLeagueChallenge.tsx; a second agent owns
+focused mounted and native verification. Generator, records, Daily and shared
+completion hooks stay unchanged. Remote runtime verification only.
+1005 Your picks and 1006 Footle Unlimited continue independently. Claude owns
+1010 to 1014 and Front Office. No publication claim. Work continues to 23:31 UTC.
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.

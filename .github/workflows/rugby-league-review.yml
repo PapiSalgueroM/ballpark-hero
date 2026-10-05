@@ -1,0 +1,79 @@
+name: Rugby League review verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/rugby-league-review.yml
+      - src/components/champ-or-not/RugbyLeagueChallenge.tsx
+      - src/test/rugbyLeagueReview.test.tsx
+      - scripts/simRugbyLeagueReview.mjs
+      - scripts/qa/rugbyLeagueReview1007.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: rugby-league-review-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install verification dependencies
+        run: |
+          mkdir -p rugby-league-review-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee rugby-league-review-artifacts/types.log
+          npm run build 2>&1 | tee rugby-league-review-artifacts/build.log
+      - name: Generate candidate update snapshot
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee rugby-league-review-artifacts/snapshot.log
+          node scripts/genSitemap.mjs 2>&1 | tee rugby-league-review-artifacts/sitemap-generation.log
+          mkdir -p rugby-league-review-artifacts/generated/public/whats-new rugby-league-review-artifacts/generated/scripts/data
+          cp public/whats-new/index.html rugby-league-review-artifacts/generated/public/whats-new/
+          cp public/sitemap.xml rugby-league-review-artifacts/generated/public/
+          cp scripts/data/lastmod.json rugby-league-review-artifacts/generated/scripts/data/
+          npm run build 2>&1 | tee rugby-league-review-artifacts/rebuild.log
+      - name: Review and retry outcomes with effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: RUGBY_LEAGUE_REVIEW_CONTROL=all ONLY=simRugbyLeagueReview node scripts/runAllSims.mjs 2>&1 | tee rugby-league-review-artifacts/review.log
+      - name: Shared scoring and harness anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simNoDoubleRecord simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "rugby-league-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native results review and missed-call retries
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/rugbyLeagueReview1007.mjs 2>&1 | tee rugby-league-review-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rugby-league-review-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: rugby-league-review-artifacts/
