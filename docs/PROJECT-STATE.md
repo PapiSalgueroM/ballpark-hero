@@ -1,3 +1,14 @@
+## Codex 1007: review baseline accepted, final snapshot checks pending, 2026-10-05
+
+Candidate 79aa95b6 passed the resumed review workflow: ten mounted outcomes,
+twenty effective source controls and four native profiles with real fonts.
+Downloaded artifact 11370694685 is SHA256 verified and its reports inspected.
+Original challenge compatibility passed except the expected missing update
+snapshot. The three remotely generated files are copied back, and temporary
+generation is removed before final CI. No product repair was needed.
+Full evidence is in docs/audits/ROUND1007-VERIFICATION.md. No publication claim.
+Parent coordinates main integration and publishing. Runtime remains remote.
+
 ## Codex claims 1007: Rugby League review, 2026-10-05
 
 Review all ten completed claims, then retry only the missed calls with a
