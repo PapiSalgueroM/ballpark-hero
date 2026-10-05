@@ -254,14 +254,15 @@ export function PlayerAutocomplete({
           // longer the latest one fired (covers out-of-order network
           // resolution, not just cancellation).
           if (thisRequestId !== requestIdRef.current) return;
-          const merged = mergeLocal(results);
-          setSuggestions(merged);
+          setSuggestions(mergeLocal(results));
           setSearchFailed(Boolean(error));
           setLoading(false);
           setHighlightedIndex(-1);
           // searchPlayers settles an aborted search as empty with no error, so
-          // the signal is checked too: an abort is never a "no results".
-          if (merged.length === 0 && !error && !controller.signal.aborted) onNoResultsRef.current?.(value);
+          // the signal is checked too: an abort is never a "no results". The
+          // merge is only redone for a caller that listens.
+          const notify = onNoResultsRef.current;
+          if (notify && !error && !controller.signal.aborted && mergeLocal(results).length === 0) notify(value);
         })
         .catch(error => {
           if (thisRequestId !== requestIdRef.current) return;

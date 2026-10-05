@@ -113,6 +113,59 @@ describe('useTransferPath guidance follows the chain', () => {
     expect(rendered.result.current.hint).not.toBe(STORED_HINT);
   });
 
+  /* Round 1010a, the More help tier. It counts doors and never names a man,
+     so every line is checked for every pool name on word boundaries, the two
+     ends excepted. */
+  const POOL = ['Alpha', 'Quick', 'Target', 'Wall', 'Wander', 'Far', 'Mid', 'Link'];
+  const namesIn = (line: string, head: string) => POOL
+    .filter(n => n !== head && n !== 'Target')
+    .filter(n => new RegExp(`(?<![\\p{L}\\p{N}])${n}(?![\\p{L}\\p{N}])`, 'u').test(line));
+
+  it('more help names nobody but the head and the target, and counts the doors from the start', async () => {
+    const rendered = await startedUnlimited();
+    const help = rendered.result.current.moreHelp;
+    say('MORE_HELP_START', help?.lines ?? null);
+    expect(help).not.toBeNull();
+    // Alpha meets Quick at Club A, Wander at Club B, Wall at Club C; only
+    // Quick is one step from Target. Into Target: Quick and Link, both Club E.
+    expect(help!.doors).toEqual({
+      total: 3,
+      onRoute: 1,
+      byClub: [
+        { club: 'Club A', players: 1, onRoute: 1 },
+        { club: 'Club B', players: 1, onRoute: 0 },
+        { club: 'Club C', players: 1, onRoute: 0 },
+      ],
+      intoTotal: 2,
+      into: [{ club: 'Club E', players: 2 }],
+    });
+    expect(help!.lines).toHaveLength(2);
+    help!.lines.forEach(line => expect(namesIn(line, 'Alpha')).toEqual([]));
+    expect(help!.lines[0]).toBe('🔎 From Alpha, 3 pool players shared a season with him: Club A 1, Club B 1, Club C 1. Just 1 of them is on a shortest route.');
+    expect(help!.lines[1]).toBe('🎯 Into Target: 2 pool players, all through Club E.');
+  });
+
+  it('more help skips the played names once the chain moves, and is gone on a stranded head', async () => {
+    const rendered = await startedUnlimited();
+    act(() => { rendered.result.current.addPlayer('Wander'); });
+    const help = rendered.result.current.moreHelp;
+    say('MORE_HELP_WANDERED', help?.lines ?? null);
+    // From Wander the only door left is Far at Club F; Alpha is played, so
+    // Club B is no door at all, and the route out is the long one.
+    expect(help).not.toBeNull();
+    expect(help!.doors.total).toBe(1);
+    expect(help!.doors.onRoute).toBe(1);
+    expect(help!.doors.byClub).toEqual([{ club: 'Club F', players: 1, onRoute: 1 }]);
+    help!.lines.forEach(line => expect(namesIn(line, 'Wander')).toEqual([]));
+    expect(help!.lines[0]).toBe('🔎 From Wander, 1 pool player shared a season with him: Club F 1. He is on a shortest route.');
+
+    const walled = await startedUnlimited();
+    act(() => { walled.result.current.addPlayer('Wall'); });
+    say('MORE_HELP_STRANDED', walled.result.current.moreHelp);
+    expect(walled.result.current.stranded).toBe(true);
+    expect(walled.result.current.moreHelp).toBeNull();
+  });
+
   it('still wins on the spot when the added name is a teammate of the target', async () => {
     // The stranded reasoning leans on this: the chain can never swallow the
     // target's last neighbour, because reaching one ends the game.
