@@ -70,3 +70,8 @@ Challenge run 37386956897 passed its product and native checks. Its only
 built-reader failure was the expected missing Rugby entry before the combined
 snapshot was copied. Final committed-snapshot workflows are pending; parent
 owns main integration and publication after 1009 acceptance.
+
+The final integration also retains parent 13c14f37: accepted import-only
+Round 1030 from main 82d1d7f7 and the narrow career-season-review font-driver
+repair. The Rugby product, both update entries and all three verified combined
+snapshot files remain unchanged. Remote checks restart on this integrated head.

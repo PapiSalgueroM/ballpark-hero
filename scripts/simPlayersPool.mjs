@@ -11,7 +11,7 @@
  *   1. THE HEADER names the bake script and carries its date, so a reader
  *      knows where the rows came from and how old they are.
  *   2. THE SMELL LIST, over every row: age inside the bake's window, value
- *      above zero, whole non negative goals and assists, no duplicate name
+ *      above zero, goals and assists null or whole non negative counts, no duplicate name
  *      (exact or accent folded), a position and a league the Player type
  *      knows (never 'Other'), a nationality, a club, a kit number that is null
  *      or a real squad number. Plus a floor on the pool and on every tier, so
@@ -40,7 +40,7 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
   AGE_MAX, AGE_MIN, OUT_PATH, ROOT, ROW_SELECT,
-  applyOverlay, bake, buildLeagueResolver, leagueUnion, loadApp, rest,
+  applyOverlay, bake, buildLeagueResolver, invalidPlayerCounts, leagueUnion, loadApp, rest,
 } from './bakePlayers.mjs';
 
 const CONTROL = process.env.PLAYERS_CONTROL || '';
@@ -122,8 +122,7 @@ console.log(`2) The smell list over every row (${players.length} rows)`);
     folded.add(k);
     if (!Number.isInteger(p.age) || p.age < AGE_MIN || p.age > AGE_MAX) fail(`${who}: age ${p.age} is outside ${AGE_MIN}..${AGE_MAX}`);
     if (!Number.isInteger(p.marketValue) || p.marketValue <= 0) fail(`${who}: market value ${p.marketValue} is not above zero`);
-    if (!Number.isInteger(p.goals) || p.goals < 0) fail(`${who}: goals ${p.goals}`);
-    if (!Number.isInteger(p.assists) || p.assists < 0) fail(`${who}: assists ${p.assists}`);
+    for (const field of invalidPlayerCounts(p)) fail(`${who}: ${field} ${p[field]}`);
     if (!positions.has(p.position)) fail(`${who}: position "${p.position}" is not in the Position union`);
     if (!leagues.has(p.league) || p.league === 'Other') fail(`${who}: league "${p.league}" is not a real league in the union`);
     if (!p.nationality || !String(p.nationality).trim()) fail(`${who}: no nationality`);
