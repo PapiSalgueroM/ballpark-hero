@@ -66,6 +66,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
+const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
    game. Now it hands you to a job board and the save keeps going.
@@ -96,6 +97,26 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox'>('none');
+  const [retiredReview, setRetiredReview] = useState(false);
+  const reviewReturn = useRef<'log' | 'retired' | null>(null);
+  const reviewHubIndex = useRef(0);
+  const hubButtons = useRef<HTMLDivElement>(null);
+  const retiredReviewButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!reviewReturn.current) return;
+    const target = reviewReturn.current === 'retired' ? retiredReviewButton.current
+      : hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current];
+    target?.focus({ preventScroll: true });
+    reviewReturn.current = null;
+    if (!target) return;
+    const frame = requestAnimationFrame(() => {
+      const box = target.getBoundingClientRect();
+      if (box.top < 0 || box.bottom > window.innerHeight) target.scrollIntoView({
+        block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [panel, retiredReview]);
   /* Round 469: the News box opens on three screens, the paper, the gram and
      the rival, so the hub keeps its five boxes (simCareerHub holds that). */
   const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
@@ -545,6 +566,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setDraftDay(null);
     setRivalryOutcome(null);
     setPanel('none');
+    setRetiredReview(false);
+    reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
     setCoachFeed([]);
@@ -741,6 +764,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     );
   }
 
+  if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log')) {
+    return <Suspense fallback={<p role="status">Loading season review...</p>}>
+      <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
+        reviewReturn.current = phase === 'retired' ? 'retired' : 'log';
+        if (phase === 'retired') setRetiredReview(false);
+        else setPanel('none');
+      }} />
+    </Suspense>;
+  }
+
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {
     return (
@@ -806,6 +839,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         </div>
         {/* Round 126: the save does not end here any more. */}
         <CoachStartCard sport={sport.slug} existing={coach} onStart={startCoaching} onResume={openCoaching} />
+        <button ref={retiredReviewButton} data-career-review-opener="" onClick={() => setRetiredReview(true)} className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">Review seasons</button>
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Season by season</p>
           <div className="max-h-72 space-y-0.5 overflow-y-auto">
@@ -869,22 +903,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{career.seasons.length}</p><p className="text-muted-foreground">seasons</p></div>
               <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{sport.ringsOf(career)}</p><p className="text-muted-foreground">{sport.ringsLabel}</p></div>
             </div>
-          </div>
-        )}
-        {panel === 'log' && (
-          <div className="rounded-2xl border border-border bg-card p-3">
-            {career.seasons.length === 0 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">No seasons on the books yet. Go play one.</p>
-            ) : (
-              <div className="max-h-96 space-y-0.5 overflow-y-auto">
-                {[...career.seasons].reverse().map((s, i) => (
-                  <div key={i} className="flex items-center justify-between rounded px-2 py-1 text-[11px] odd:bg-background">
-                    <span className="text-muted-foreground">{s.year} · {s.team}</span>
-                    <span className="text-foreground">{statLine(s, career.pos)}{s.awards.length ? ' 🏆' : ''}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         )}
         {panel === 'trophies' && (
@@ -1133,7 +1151,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
       {/* Round 208: the same boxes the rest of the site opens on, and every
           one of them now carries the fact you used to have to tap for. */}
-      <HubTiles tiles={hubTilesWithInbox} onOpen={k => setPanel(k as typeof panel)} />
+      <div ref={hubButtons} data-career-hub-buttons=""><HubTiles tiles={hubTilesWithInbox} onOpen={k => {
+        if (k === 'log') reviewHubIndex.current = hubTilesWithInbox.findIndex(tile => tile.key === 'log');
+        setPanel(k as typeof panel);
+      }} /></div>
 
     </div>
   );

@@ -1,3 +1,15 @@
+## Codex 1008: saved season review ready for remote checks, 2026-10-05
+
+Career Log in NBA, NFL, MLB and NHL now opens a compact saved-year picker.
+Overview, Regular season and Postseason use fields already in the save.
+Missing older numbers say Not recorded; existing zero values stay zero.
+MLB postseason schedule counts are explicitly Team postseason games.
+No simulation, save schema, score, Front Office or Soccer Career changes.
+Product and test source are independently reviewed; runtime acceptance is
+pending. Native checks will assess the initial picker reveal and return focus.
+Codex owns this lane. Claude retains 1010 to 1014 and Front Office work.
+1005 is published.1006 and 1007 remain in separate release verification.
+All runtime runs remotely. Six-hour session continues until 23:31 UTC.
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.
