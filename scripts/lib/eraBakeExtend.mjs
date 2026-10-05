@@ -19,13 +19,16 @@
  * file that is: filter the year and the league's club spellings, keep one
  * row per player_name with the highest value, and break a tie on the LOWEST
  * id so the bake is deterministic (Postgres leaves that tie unspecified).
+ * Where that one name has rows at two different clubs, the caller decides
+ * which row stays (poolNamesakes below), never the value or the id.
  *
  * WHAT IT FAILS CLOSED ON: a club spelling with no rows in the pull, an
  * unmapped position, a correction naming nobody or an unknown club, a move
  * whose second proof (the table's own following-year row) does not name the
  * destination, a removal whose following-year row still sits inside the
  * world, an arrival already in the world, a name shared between a new
- * league and the shipped world that the caller did not declare, an
+ * league and the shipped world that the caller did not declare, a name with
+ * rows at two clubs of the new leagues that the caller did not settle, an
  * undeclared thin club, a missing anchor, and ANY shipped line that changed
  * or moved without a correction naming that player.
  *
@@ -44,6 +47,9 @@
  *                                       the same position, age and value or it is not a fold
  *   namesakes { n, why }                two real men, one string: the higher value stays (the
  *                                       standing one name, one player rule), logged out loud
+ *   poolNamesakes { n, keep, why }      one string with year-Y rows at two clubs of the NEW
+ *                                       leagues (two men, or one man's two rows): the row at
+ *                                       engine club `keep` stays; an undeclared one is fatal
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -147,7 +153,7 @@ function bakeRow(name, rec) {
  *   newLeagues: [{ label, dbToEra }],
  *   worldDbToEra,                  EVERY league of the grown world, table spelling -> engine
  *                                  name (the following-year proof reads destinations by it)
- *   moves, removals, arrivals, folds, namesakes   (see the file header)
+ *   moves, removals, arrivals, folds, namesakes, poolNamesakes   (see the file header)
  *   anchors: [[club, name]], expectedThin: [club], thinUnder (default 8),
  *   header: stats => string[]      the comment lines above the import
  * }
@@ -182,6 +188,38 @@ export function extendEra(cfg) {
       if (!prev || rec.usd > prev.usd || (rec.usd === prev.usd && rec.id < prev.id)) pool.set(name, rec);
     }
   }
+  /* Round 901 review fix: one string with year-Y rows at two clubs of the new
+     leagues (two real men, or one man's two rows) is never settled by value
+     or id in silence. The 2010-11 Marco Rossi tie kept Sampdoria's, a man who
+     spent that season at Bari, and dropped Genoa's captain. The caller names
+     the club whose row stays. */
+  const newDbToEra = Object.assign({}, ...newLeagues.map(lg => lg.dbToEra));
+  const rowsByClub = new Map();
+  for (const r of rows) {
+    const engine = r.year === year ? newDbToEra[r.club] : null;
+    if (!engine) continue;
+    if (!rowsByClub.has(r.player_name)) rowsByClub.set(r.player_name, new Map());
+    const byClub = rowsByClub.get(r.player_name);
+    const usd = r.market_value_usd ?? 0;
+    const prev = byClub.get(engine);
+    if (!prev || usd > prev.usd || (usd === prev.usd && r.id < prev.id)) {
+      byClub.set(engine, { engine, dbClub: r.club, position: r.position, age: r.age, usd, id: r.id, nat: r.nationality });
+    }
+  }
+  const splitDeclared = new Map((cfg.poolNamesakes ?? []).map(x => [x.n, x]));
+  const splits = [...rowsByClub].filter(([, byClub]) => byClub.size > 1);
+  const undeclaredSplit = splits.filter(([name]) => !splitDeclared.has(name))
+    .map(([name, byClub]) => `"${name}" (${[...byClub.values()].map(x => `${x.engine} ${x.position}, age ${x.age}, ${gbpM(x.usd)}m`).join('; ')})`);
+  if (undeclaredSplit.length) die(`${undeclaredSplit.length} names have year-${year} rows at two clubs of the new leagues; declare each in poolNamesakes with the club whose row stays:\n  ${undeclaredSplit.join('\n  ')}`);
+  for (const [name, byClub] of splits) {
+    const d = splitDeclared.get(name);
+    const kept = byClub.get(d.keep);
+    if (!kept) die(`pool namesake "${name}" keeps ${d.keep}, but the rows sit at ${[...byClub.keys()].join(', ')}`);
+    pool.set(name, kept);
+    splitDeclared.delete(name);
+    log.push(`  pool namesake: '${name}' kept at ${d.keep}, the row at ${[...byClub.keys()].filter(c => c !== d.keep).join(', ')} dropped (${d.why})`);
+  }
+  if (splitDeclared.size) die(`declared pool namesakes that never split: ${[...splitDeclared.keys()].join(', ')}`);
   const worldClubOf = db => worldDbToEra[db] ?? null;
   const nextOf = name => nextRows.filter(r => r.year === year + 1 && r.player_name === name);
   const proveAt = (name, to, kind) => {

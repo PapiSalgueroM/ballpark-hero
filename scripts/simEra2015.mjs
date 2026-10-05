@@ -321,7 +321,15 @@ console.log('2) Three worlds (2026, 2015, 2010), and none of them leak');
      against Nice's 2015 Carlos Eduardo), but its review found that Carlos
      Eduardo had gone back to Porto on 1 Jun 2015, so the bake takes him out
      of the 2015 world and the entry is gone with him. */
-  const NAMESAKES_2010 = new Set(['Simão', 'Fernando', 'David López']); // Round 191: Athletic's 2010 winger (b. 1982) vs Napoli's 2015 defender (b. 1989)
+  /* Round 901: the 2010-11 era grew a Serie A, Bundesliga and Ligue 1, and
+     two more strings turned up worn by two men, verified 2026-10-03 from
+     kicker's player profiles against the two tables' ages and positions:
+     Genoa's 2010 Rafinha, a defender born 7 Sep 1985 (the Bayern Rafinha of
+     2015, whom the 2015 world drops for Barcelona's), and Barcelona's 2015
+     Rafinha, a midfielder born 12 Feb 1993; Mamadou Samassa the striker,
+     born 1 May 1986, in the 2010 world, and Mamadou Samassa the goalkeeper,
+     born 16 Feb 1990, in the 2015 one. */
+  const NAMESAKES_2010 = new Set(['Simão', 'Fernando', 'David López', 'Rafinha', 'Mamadou Samassa']); // Round 191: Athletic's 2010 winger (b. 1982) vs Napoli's 2015 defender (b. 1989)
   const oldByName = new Map();
   for (const roster of Object.values(ERA2010_ROSTERS)) for (const p of roster) oldByName.set(p.n, p);
   let shared10 = 0, weird10 = 0, namesakes10 = 0;
