@@ -24,7 +24,9 @@
  *      records put them, the leavers gone), and the biggest movers NO
  *      record placed printed by name, so the gap is measured, not hidden.
  *   6. THE UPLIFT: 2020 money is close to 2026 money, so the gain is small
- *      (0.06): raw 93 lands at 94, order is kept, 88 and below untouched.
+ *      (0.06): the uplifted top 50 sits within half a point of the modern
+ *      top 50 on average (never read off the single best man), raw 93
+ *      lands at 94, order is kept, 88 and below untouched.
  *   7. THE CHAMPIONS LEAGUE FIELD: the real 32 clubs of 2020-21, nineteen of
  *      them baked squads, eight groups into a round of 16, away goals on.
  *
@@ -59,7 +61,7 @@
  *   City 6,7,2,3,1,2 (3.50), Crotone 20 every seed (20.00). Every mean sits
  *   inside the family spread above, so the bands stand.
  *
- * Five negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish,
+ * Six negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -126,9 +128,12 @@ const BAND_THIN = 14;
      nofield      the era's Champions League field emptied for section 7.
      swapfinish   Porto (quarter final) and Ferencvaros (groups) trade
                   finishes for section 7: the shape still reads
-                  1,1,2,4,8,16, so only the per club pin can fail. */
+                  1,1,2,4,8,16, so only the per club pin can fail.
+     nolift       section 6 reads the raw bake with no uplift: the top 50
+                  gap reads -0.68 and leaves its +-0.5 band (Mbappe and
+                  Messi drop off their pins too). */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -445,11 +450,29 @@ console.log('5) The bake file tells the truth about itself');
 console.log('6) The uplift is small, keeps the order, and leaves the rank and file alone');
 {
   const all = Object.values(ERA2020_ROSTERS).flat();
-  const top = all.reduce((m, p) => Math.max(m, p.r), 0);
-  const modernTop = Object.values(CM_ROSTERS).flat().reduce((m, p) => Math.max(m, p.r), 0);
-  const up = r => eraUpliftRating('era2020', r);
-  console.log(`   raw top ${top} -> ${up(top)}; the modern bake's best is ${modernTop}`);
-  if (up(top) !== modernTop) fail(`the 2020 era's best rates ${up(top)}, the calibration lands it on the modern best ${modernTop}`);
+  let up = r => eraUpliftRating('era2020', r);
+  if (CONTROL === 'nolift') {
+    if (up(93) === 93) controlRefuse('the 2020 uplift moves nothing at 93, so there is nothing to remove');
+    up = r => r;
+    console.log('   CONTROL nolift applied: section 6 reads the raw bake');
+  }
+  /* The calibration's promise is about the top END, not one man: the k-th
+     best uplifted 2020 rating against the k-th best modern rating, k = 1 to
+     50, averaged. Fifty gaps, so no single player (and never the maximum)
+     decides it. MEASURED 2026-10-05 on the 1,774 player bake: no uplift
+     reads -0.68, the shipped gain 0.06 reads +0.12, a gain of 0.10 +0.32,
+     0.15 +0.72 and 2015's 0.6 +4.90. The band, within half a point either
+     side, passes the shipped gain with 0.38 to spare and fails both no
+     uplift and an uplift over twice the size. */
+  const TOP_K = 50, TOP_BAND = 0.5;
+  const lifted = all.map(p => up(p.r)).sort((a, b) => b - a);
+  const modernTop = Object.values(CM_ROSTERS).flat().map(p => p.r).sort((a, b) => b - a);
+  if (lifted.length < TOP_K || modernTop.length < TOP_K) fail(`fewer than ${TOP_K} players to compare (2020 ${lifted.length}, modern ${modernTop.length})`);
+  let gapSum = 0;
+  for (let k = 0; k < TOP_K; k++) gapSum += lifted[k] - modernTop[k];
+  const topGap = gapSum / TOP_K;
+  console.log(`   top ${TOP_K}, uplifted 2020 against modern, mean gap ${topGap.toFixed(2)} (band +-${TOP_BAND})`);
+  if (Math.abs(topGap) > TOP_BAND) fail(`the uplifted 2020 top ${TOP_K} sits ${topGap.toFixed(2)} from the modern top ${TOP_K} on average, outside +-${TOP_BAND}: 2020 money is 2026 money give or take`);
   for (let r = 48; r <= 88; r++) if (up(r) !== r) fail(`the 2020 uplift moved a raw ${r} to ${up(r)}; 88 and below stay as baked`);
   for (let r = 48; r < 99; r++) if (up(r + 1) < up(r)) fail(`the 2020 uplift swaps ${r} and ${r + 1}`);
   const mbappe = all.find(p => p.n === 'Kylian Mbappé');
