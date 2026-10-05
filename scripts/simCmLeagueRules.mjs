@@ -36,7 +36,25 @@
       pure 32/0 for the second review's, which also move two 2005 digests in
       "whole"; the 2015-16 data file and its nationality block were the only
       difference between the two trees, so the data moved them, by a path
-      this harness does not isolate).
+      this harness does not isolate). Round 901 rewrote them once more after
+      the same attribution: the round's base tree (06dc0741, the change taken
+      back out) reproduced the baseline exactly (eras 9/0, pure 32/0); on the
+      round's tree the two 2010-11 leagues moved, its three new ones were
+      added, the views gained them, and the 2015-16 and 2005-06 saves moved
+      in "whole" only (laliga2005 in "start" too), the path Round 899 met.
+      Its review fix rewrote them again: the pre-fix head e8515be9 matched
+      the entries (the review ran eras and pure green on it), and the fix
+      changed only the 2010-11 data file and its nationality block in src;
+      on the fixed tree the five 2010-11 leagues moved, the 2015-16 and
+      2005-06 saves in "whole" only, and pure in the day one objectives of
+      laliga2010, bundesliga2010 and ligue12010. Release AB then re-took the
+      whole baseline on main for Round 978 (main had no Round 901), so the
+      merge took main's file and re-took the eras and pure entries on the
+      merged tree: modern, drop4, cupless and shapes matched main's baseline
+      there untouched, and eras and pure differed exactly by this round's
+      footprint (the five 2010-11 leagues, three of them new, "whole" in the
+      2015-16 and 2005-06 saves with laliga2005 "start", the 2010-11
+      objectives and the views' leagueNations and euroSlots).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -345,10 +363,11 @@ async function partEras() {
     for (const l of leagues) saves.push({ key: `${eraId}|${l.id}`, club: l.clubs[0], eraId, second: false });
   }
   /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
-     regenerates the baseline on purpose, like a modern one). */
-  /* Round 971: fourteen, the 2020-21 era arrived with its five leagues. Its five digests are new baseline
-     rows; the nine older ones were measured unchanged on this tree before the baseline was rewritten. */
-  if (saves.length !== 14) fail(`the eras hold ${saves.length} leagues where Round 971 left 14`);
+     regenerates the baseline on purpose, like a modern one). Round 901: twelve, the 2010-11 era
+     gained its Serie A, Bundesliga and Ligue 1. */
+  /* Round 971: seventeen, the 2020-21 era arrived with its five leagues. Its five digests are new baseline
+     rows; the twelve older ones were measured unchanged on this tree before the baseline was rewritten. */
+  if (saves.length !== 17) fail(`the eras hold ${saves.length} leagues where Round 971 left 17`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }

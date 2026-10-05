@@ -16,8 +16,9 @@
  * string carrying both halves. A string reason and an unverified refusal are
  * covered too, so the flattening cannot eat a plain message.
  */
-import { act, cleanup, renderHook } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { Connect4Finish, Connect4FinishStatus, connect4ShareScore } from '@/components/connect4/Connect4Finish';
 import { useNbaConnect4 } from '@/hooks/useNbaConnect4';
 import { useNflConnect4 } from '@/hooks/useNflConnect4';
 import { useNhlConnect4 } from '@/hooks/useNhlConnect4';
@@ -79,6 +80,107 @@ describe('a connect 4 refusal reason is always a string by the time it is state'
       expect(result.current.validationError).toBe('Never played for that team.');
     });
   }
+});
+
+/* ---------- Round 952: a two player game played to its end, in every sport ----------
+   Every answer is accepted (fetch stubbed to valid, the name echoed back), so
+   what is measured is the game's own end: four in a row flips the phase to
+   won for that colour, and a full board with no four flips it to draw. The
+   validators are not touched; this only drives the real submit path. */
+type FullHook = ReturnType<Hook> & {
+  grid: Array<Array<{ team: 'red' | 'blue' } | null>>;
+  currentTeam: 'red' | 'blue';
+  phase: 'playing' | 'won' | 'draw';
+  winInfo: { winner: 'red' | 'blue' } | null;
+  getTargetRow: (col: number) => number | null;
+  skipTurn: () => void;
+};
+
+function acceptEverything() {
+  vi.stubGlobal('fetch', vi.fn(async (_url: string, init: { body: string }) => ({
+    ok: true,
+    status: 200,
+    json: async () => ({ valid: true, fullName: JSON.parse(init.body).playerName }),
+  })));
+}
+
+/* A full 6 by 7 board with no four in a row for either colour, checked by
+   the "a draw has no winner" expectation below as much as by hand. */
+const DRAW_ROWS = ['RRBBRRB', 'RRBBRRB', 'RRBBRRB', 'BBRRBBR', 'RRBBRRB', 'RRBBRRB'];
+
+async function drop(result: { current: FullHook }, col: number, team: 'red' | 'blue', name: string) {
+  if (result.current.currentTeam !== team) act(() => result.current.skipTurn());
+  act(() => result.current.selectColumn(col));
+  await act(async () => { await result.current.submitPlayer(name); });
+}
+
+describe('Round 952: a game played to its end flips the phase the finish reads', () => {
+  for (const [sport, useHook] of HOOKS) {
+    it(`${sport}: four in a column wins it for the colour that connected`, async () => {
+      acceptEverything();
+      const { result } = renderHook(() => (useHook as unknown as () => FullHook)());
+      for (let i = 0; i < 3; i++) {
+        await drop(result, 0, 'red', `Red Player ${i}`);
+        await drop(result, 1, 'blue', `Blue Player ${i}`);
+        expect(result.current.phase).toBe('playing');
+      }
+      await drop(result, 0, 'red', 'Red Player 3');
+      expect(result.current.phase).toBe('won');
+      expect(result.current.winInfo?.winner).toBe('red');
+    });
+
+    it(`${sport}: a full board with no four in a row is a draw`, async () => {
+      acceptEverything();
+      const { result } = renderHook(() => (useHook as unknown as () => FullHook)());
+      let n = 0;
+      for (let col = 0; col < 7; col++) {
+        for (let row = result.current.getTargetRow(col); row !== null; row = result.current.getTargetRow(col)) {
+          expect(result.current.phase).toBe('playing');
+          await drop(result, col, DRAW_ROWS[row][col] === 'R' ? 'red' : 'blue', `Player ${n++}`);
+        }
+      }
+      expect(n).toBe(42);
+      expect(result.current.grid.every(r => r.every(c => c !== null))).toBe(true);
+      expect(result.current.phase).toBe('draw');
+      expect(result.current.winInfo).toBeNull();
+    }, 20000);
+  }
+});
+
+describe('Round 952: Connect4Finish is the shared result moment', () => {
+  it('renders nothing while the game is being played', () => {
+    const { container } = render(<><Connect4FinishStatus phase="playing" /><Connect4Finish phase="playing" gameName="NBA Connect 4" gamePath="/nba-connect-4" onNewGame={() => {}} /></>);
+    expect(container.innerHTML).toBe('');
+  });
+
+  for (const winner of ['red', 'blue'] as const) {
+    it(`a ${winner} win is the win state, headlined by that colour, with its disc in the pill`, () => {
+      const onNewGame = vi.fn();
+      const { container } = render(<Connect4Finish phase="won" winner={winner} gameName="NHL Connect 4" gamePath="/nhl-connect-4" onNewGame={onNewGame} />);
+      const moment = container.querySelector('[data-result-moment]');
+      expect(moment?.getAttribute('data-result-moment')).toBe('win');
+      expect(moment?.getAttribute('data-sport')).toBe('hockey');
+      const name = winner === 'red' ? 'Red' : 'Blue';
+      expect(container.querySelector('h2')?.textContent).toBe(`${name} wins!`);
+      expect(container.querySelector(`[data-connect4-disc="${winner}"]`)).not.toBeNull();
+      expect(container.querySelector('[data-result-score]')).toBeNull();
+      expect(connect4ShareScore('won', winner)).toBe(`${name} wins`);
+      /* a plain query, not getByRole: the role walk is slow enough in jsdom
+         to time out a cold first render on a busy machine */
+      const newGame = [...container.querySelectorAll('button')].find(b => b.textContent?.trim() === 'New Game');
+      expect(newGame).toBeDefined();
+      fireEvent.click(newGame!);
+      expect(onNewGame).toHaveBeenCalledTimes(1);
+    }, 20000);
+  }
+
+  it('a draw is the close state, says so, and keeps the old share line', () => {
+    const { container } = render(<><Connect4FinishStatus phase="draw" /><Connect4Finish phase="draw" gameName="MLB Connect 4" gamePath="/mlb-connect-4" onNewGame={() => {}} /></>);
+    expect(container.querySelector('[data-result-moment]')?.getAttribute('data-result-moment')).toBe('close');
+    expect(container.querySelector('h2')?.textContent).toBe("It's a draw!");
+    expect(container.querySelector('[data-connect4-status]')?.textContent).toBe('Board full, no four in a row');
+    expect(connect4ShareScore('draw', null)).toBe('Draw');
+  }, 20000);
 });
 
 describe('normalizeValidationReason', () => {
