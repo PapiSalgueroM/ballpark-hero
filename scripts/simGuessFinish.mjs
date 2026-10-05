@@ -43,8 +43,11 @@
  *   cbbscore       CBB program hands the moment the points still available
  *   boardlive      tennis player hands the moment live={true}
  *
- * MEASURED (2026-10-05, worktree r953, a shared busy machine): see the numbers
- * under MEASURED RUN below, filled in from the run that committed this header.
+ * MEASURED (2026-10-05, worktree r953 at 21f50321, a shared busy machine):
+ * baseline 30 of 30 green; unkeyed turned 1 test red, noclear 1, alwayslive 8
+ * (the F1 reload and menu tests, both hook tests, the four boards' reloads),
+ * bands 1, chainoffbyone 3 (all three NASCAR Chain tests), cbbscore 1 (the CBB
+ * loss), boardlive 1 (the tennis player reload), each exactly its named set.
  * Nothing here is random, so one run is the whole distribution; the timeouts
  * are wide because the gate machine is often busy.
  *
