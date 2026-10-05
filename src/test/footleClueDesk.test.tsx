@@ -5,7 +5,9 @@ import Footle from '@/pages/Footle';
 import { useGame } from '@/hooks/useGame';
 import { compareGuess } from '@/lib/gameLogic';
 import { createPracticeRun, FOOTLE_PRACTICE_KEY, type FootlePracticeRun } from '@/lib/footlePracticeRun';
-import { getTodayET } from '@/lib/dateUtils';
+import { FOOTLE_UNLIMITED_KEY, parseUnlimitedSession, type FootleUnlimitedSession } from '@/lib/footleUnlimitedSession';
+import { dailyIndex, getDailyTier, getTodayET } from '@/lib/dateUtils';
+import { normalizeName } from '@/lib/playerSearch';
 import { practicePlayers } from '@/test/fixtures/footlePracticePlayers';
 import type { GuessResult, Player } from '@/types/game';
 
@@ -119,6 +121,18 @@ describe('Footle clue desk outcomes', () => {
 
   it('resets selected history when mode and puzzle change with equal guess counts', async () => {
     const initial = run(); vi.spyOn(Math, 'random').mockReturnValue(0);
+    const today = getTodayET();
+    const dailyPool = fixture.pool.filter(player => player.difficulty === getDailyTier(today));
+    const daily = dailyPool[dailyIndex(today, dailyPool.length)];
+    const easy = fixture.pool.filter(player => player.difficulty === 'easy' && player.name !== daily.name);
+    const answer = easy[0];
+    const session: FootleUnlimitedSession = { v: 1, active: false, tier: 'easy', decks: { easy: {
+      pool: fixture.pool.map(player => ({ ...player })),
+      seen: [...easy.slice(1), answer].map(player => normalizeName(player.name)),
+      current: { target: answer.name, guesses: [], status: 'playing' },
+    } } };
+    localStorage.setItem(FOOTLE_UNLIMITED_KEY, JSON.stringify(session));
+    expect(parseUnlimitedSession(localStorage.getItem(FOOTLE_UNLIMITED_KEY))).toEqual(session);
     const view = await page(); await view.findByRole('combobox');
     submit(view, initial.pool[0].name); submit(view, initial.pool[1].name);
     fireEvent.click(view.getByRole('button', { name: `View guess 1: ${initial.pool[0].name}` }));
@@ -130,15 +144,21 @@ describe('Footle clue desk outcomes', () => {
     expect(within(desk(view)).getByRole('heading', { level: 2 })).toHaveTextContent(initial.pool[1].name);
     expect(view.container.querySelector('[data-footle-review]')).toBeNull();
     fireEvent.click(view.getByRole('button', { name: /Unlimited/ }));
-    submit(view, initial.pool[0].name);
+    submit(view, answer.name);
     expect(view.getByRole('status')).toHaveTextContent('Correct!');
+    expect(view.getByRole('status')).toHaveTextContent('Deck complete.');
+    expect(view.queryByRole('button', { name: 'Next puzzle' })).toBeNull();
     fireEvent.click(view.getByRole('button', { name: `View guess 1: ${initial.pool[20].name}` }));
     expect(desk(view).getAttribute('data-clue-guess')).toBe('1');
-    fireEvent.click(view.getByRole('button', { name: 'Play Again' }));
+    fireEvent.click(view.getByRole('button', { name: 'Reshuffle deck' }));
+    const replay = parseUnlimitedSession(localStorage.getItem(FOOTLE_UNLIMITED_KEY))!.decks.easy!;
+    expect(replay.current.target, 'Explicit reshuffle retains the same answer identity for this replay check').toBe(answer.name);
+    expect(replay.current.guesses).toEqual([]);
+    expect(replay.seen).toEqual([normalizeName(answer.name)]);
     for (const index of [20, 21, 22]) submit(view, initial.pool[index].name);
     expect(desk(view).getAttribute('data-clue-guess'), 'Same-answer replay selects the latest new guess').toBe('3');
     expect(within(desk(view)).getByRole('heading', { level: 2 })).toHaveTextContent(initial.pool[22].name);
-    submit(view, initial.pool[0].name);
+    submit(view, answer.name);
     expect(view.getByRole('status')).toHaveTextContent('Correct!');
   });
 

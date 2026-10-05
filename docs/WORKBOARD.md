@@ -1,3 +1,18 @@
+## Codex claims1006: Footle Unlimited sessions, 2026-10-05
+
+Codex owns Footle's Unlimited branch in useGame.ts, Footle.tsx, a new scoped
+footleUnlimitedSession helper, reopened rules and focused tests. Keep an
+unfinished Unlimited puzzle and avoid repeating answers until its tier pool
+is exhausted. Exclude today's Daily answer. Use only the existing verified
+player pool and normalized identities. Daily, five-puzzle-run saves and
+completion scoring stay separate. No shared daily/completion hook edits.
+Worktree: managed footle-unlimited-1006. Remote runtime verification only.
+
+1005 Your picks is still building independently.1004 verification-only PR129
+merged47197830 after both seven-profile baselines passed. Claude retains1010
+to1014 and Front Office work. No publication claim;1007to1009 are unstarted.
+Six-hour authorization continues until2026-10-05 23:31UTC.
+
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.
