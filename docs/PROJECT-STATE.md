@@ -1,3 +1,44 @@
+## Codex claims1005: Your picks, 2026-10-05
+
+Codex is building a guest-capable shelf of explicitly pinned games on Home,
+with pin controls on Home and Search. Browser-local picks use existing registry
+routes, names and sport styles. No game saves, facts, scores or account writes.
+Files: Index.tsx, Search.tsx, new useGamePicks, GamePickButton, GamePicksRow,
+focused tests and remote workflow. Isolated managed worktree game-picks-1005.
+Claude's 1010 to1014 and Front Office lanes remain separate.1004's seven-profile
+Connections baseline is in remote CI; no product fix is claimed before evidence.
+No publication claim yet.1006to1009 remain unstarted. Remote runtime checks only.
+
+## Codex1004 verified, 1005 building, 2026-10-05
+
+Both remote Connections workflows passed seven native profiles per sport.
+The short720px clipping did not reproduce with true mouse clicks; no product
+layout fix is claimed. Keep the stronger tests and the effective22px control.
+Receipt: docs/audits/ROUND1004-VERIFICATION.md. No publication is needed for
+this verification-only round. Published1003 remains the product baseline.
+
+Codex1005 now owns the Your picks shelf and Home/Search pin controls in the
+managed game-picks-1005 worktree. No game saves, scoring or facts change.
+Claude's Transfer Path1010, Career1011to1013, Aussie Rules1014 and Front Office
+lanes stay separate.1006to1009 are unstarted. No open publication claim.
+The six-hour session continues until23:31UTC. Remote runtime checks only.
+
+## Codex claims1004, six-hour session2026-10-05
+
+Anthony authorized continuous improvements until2026-10-05 23:31 UTC
+(7:31 PM Eastern), moving to the next task after each accepted round. Codex1004
+owns NBA/NHL Connections page reveal behavior and their native planning scripts.
+Add1280x720 mouse coverage, reproduce the public action clipping and fix it
+without changing the shared reveal hook, puzzle facts or save/scoring logic.
+Root owns Git, CI, merge and publication. Two focused agents own read-only
+mechanism review and the two native scripts. No publication claim yet.
+
+Claude's Transfer Path1010, Career1011to1013 and Front Office lanes remain
+separate. Read the board before subsequent claims. Preserve root held drafts
+and seven stashes. Remote runtime checks only, no direct production DB probes,
+no paid actions. AdSense/indexing submissions remain deferred.1005to1009 are
+reserved but unstarted. A20-minute thread heartbeat is active until the cutoff.
+
 ## Codex1003 published, 2026-10-05
 
 NBA Connections' four saved planning drafts are live, along with the NBA/NHL
