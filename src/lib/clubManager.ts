@@ -71,6 +71,9 @@ import {
   rolloverBooks, setTicketPolicy, tickBooks,
 } from '@/lib/clubManagerFinances';
 import type { ClubBooks } from '@/lib/clubManagerFinances';
+/* Round 979: the decisions desk, same cycle, same rule: pure exports, nothing
+   read at module scope on either side. */
+import { answerDecision, settleDecisionDesk } from '@/lib/clubManagerDecisions';
 /* Round 471: the four staff posts, same cycle, same rule. */
 import {
   coachGrowthMult, ensureStaff, rolloverStaff, scoutQualityBonus, tickStaff,
@@ -92,6 +95,10 @@ import { PATIENCE_FLOOR, askPremiumScale, currencySymbol, ensureStartOptions, na
 /* Round 474: the five specific board asks, built and graded there for the
    same reason the facilities and the books live in their own files. */
 import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
+/* Round 978: international duty. Called only inside functions, never at module
+   scope, so the cycle back into this file stays evaluation safe. */
+import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
+import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -721,7 +728,9 @@ export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support'
   /* Round 783: the two answers to a club that said yes to your application.
      joinSummer is settled in answerMessage; joinNow is the mid season takeover
      in clubManagerCalendar.ts, so the hook routes it there. */
-  | 'joinNow' | 'joinSummer';
+  | 'joinNow' | 'joinSummer'
+  /* Round 978: rest the men back from international duty for one match, or start them. */
+  | 'restIntl' | 'startIntl';
 
 /** Round 73: players slide into your DMs. Round 474: so does everyone else. */
 export interface PlayerMessage {
@@ -731,7 +740,9 @@ export interface PlayerMessage {
   kind: 'startMe' | 'wantMove' | 'drama' | 'praise' | 'roleTalk'
     | 'boardChase' | 'agent' | 'coachTip' | 'fanGroup' | 'reporter'
     /* Round 783: the job hunt's post, from a club's board or your own. */
-    | 'jobApplication';
+    | 'jobApplication'
+    /* Round 978: your assistant on who went away on international duty. */
+    | 'intlDuty';
   text: string;
   options: { label: string; effect: MessageEffect }[];
   week: number;
@@ -2130,6 +2141,15 @@ export interface CareerState {
   resultLog?: ResultLogEntry[];
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
+  /** Round 979: the decisions desk (red card appeals and situations), newest
+   *  first. Absent on every save from before the round; read it through
+   *  deskOf in clubManagerDecisions.ts, which reads a damaged block as empty.
+   *  Inline type import so the line is erased at build time. */
+  decisions?: import('@/lib/clubManagerDecisions').DeskItem[];
+  /** Round 978: international duty this season (src/lib/clubManagerInternationals.ts).
+      Absent on every older save, and absent means no windows until the next
+      season, which startNextSeason writes one for. */
+  intl?: IntlDuty;
   /** Round 73: player ids you promised a start; break it and they notice. */
   promisedStarts?: string[];
   /** Round 116: the youth setup, the scouts on the road and the kids on the books. */
@@ -2239,8 +2259,11 @@ export interface CareerState {
   /** Round 310: this save's league memberships once its own promotions and
    *  relegations have moved clubs, keyed by league id, each value the FULL
    *  membership list. Absent until the first summer a PYRAMIDS pair swaps
-   *  clubs; leagues outside the pyramids never get an entry. Registered
-   *  into the engine on load exactly like customClub. */
+   *  clubs; promotion never writes an entry for a league outside the
+   *  pyramids. Round 964: a world editor edit (clubManagerWorldEdit.ts) is
+   *  written here from kickoff, and it CAN hold any league the player swapped
+   *  clubs into or out of. Registered into the engine on load exactly like
+   *  customClub. */
   leagueOverrides?: Record<string, string[]>;
   /** Round 467: the four club facilities, level 1 to 10. Absent on a save
    *  from before the desk existed and repaired by ensureFacilities to the
@@ -2722,9 +2745,99 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      competition the UEFA Cup. */
   premier2010: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2010: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 901: the 2010-11 Serie A, Bundesliga and Ligue 1, each fact from
+     two sources read 2026-10-03.
+     - Europe. ESPN's final standings carry the legend (Serie A: first to
+       third Champions League, fourth its qualifying, fifth, sixth and eighth
+       Europa League; Bundesliga: first and second Champions League, third its
+       qualifying, fourth, fifth and fourteenth Europa League; Ligue 1: first
+       and second Champions League, third its qualifying, fourth to sixth
+       Europa League), https://www.espn.com/soccer/standings/_/league/ITA.1/season/2010
+       and .../GER.1/season/2010 and .../FRA.1/season/2010, and RSSSF's
+       2011-12 European cups record shows who entered where (Udinese in the
+       Champions League qualifying, lost to Arsenal; Bayern and Lyon through
+       qualifying; Lazio, Roma and Palermo, Hannover, Mainz and Schalke, PSG,
+       Sochaux and Rennes in the Europa League),
+       https://www.rsssf.org/ec/ec201112.html. Italy still had four Champions
+       League places that season (three from the next). A qualifying route
+       counts as in, as everywhere in this table. The places a CUP handed down
+       are not counted, the way premier2015 counts fifth only: Palermo went in
+       eighth as the Coppa Italia runners up because Inter, who beat them in
+       the final (RSSSF), were already in the Champions League; Schalke went in
+       fourteenth as DFB-Pokal winners (5-0 against Duisburg, RSSSF); and
+       France's fifth and sixth took the two cup places because Lille won the
+       Coupe de France and Marseille the Coupe de la Ligue (RSSSF), both in the
+       Champions League.
+     - Relegation. Italy: three down (Sampdoria, Brescia, Bari), RSSSF
+       https://www.rsssf.org/tablesi/ital2011.html and ESPN's legend. Germany:
+       seventeenth and eighteenth down, sixteenth into a playoff against the
+       second tier's third (Gladbach beat Bochum), RSSSF
+       https://www.rsssf.org/tablesd/duit2011.html; the playoff is not played,
+       exactly as on the modern bundesliga row. France: three down (Monaco,
+       Lens, Arles-Avignon), RSSSF https://www.rsssf.org/tablesf/fran2011.html
+       and ESPN's legend.
+     - The cups, one per nation: the Coppa Italia, the DFB-Pokal and the Coupe
+       de France. The Coupe de la Ligue is not modelled.
+     - Level on points. Serie A split level clubs on head to head first in
+       2010-11, the order it brought back in 2005-06 and still used in
+       2011-12 (90min, "I criteri per stabilire la classifica in caso di parita
+       nella storia della Serie A"), the same h2h rule the seriea2015 and
+       modern rows carry; that season's own table cannot tell the two orders
+       apart (Udinese above Lazio on 66, and Chievo, Parma and Catania on 46,
+       fall the same way on goal difference). The Bundesliga and Ligue 1
+       tables split level clubs on goal difference (Freiburg above Koln on 44;
+       Auxerre, Saint-Etienne and Lorient on 49); no later step was found in
+       two sources FOR THAT SEASON, so neither row claims one: no tiebreak
+       field, which reads goal difference then goals scored. */
+  seriea2010: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  bundesliga2010: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
+  },
+  ligue12010: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   premier2015: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2015: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
   seriea2015: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 3, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 899: the 2015-16 Bundesliga and Ligue 1, each fact from two
+     sources read 2026-10-02.
+     - Europe. ESPN's final standings carry the legend (Bundesliga: first to
+       third Champions League, fourth its qualifying, fifth and sixth Europa
+       League, seventh its qualifying; Ligue 1: first and second Champions
+       League, third its qualifying, fourth Europa League, fifth and sixth
+       its qualifying), https://www.espn.com/soccer/standings/_/league/GER.1/season/2015
+       and .../league/FRA.1/season/2015, and RSSSF's 2016-17 European cups
+       record shows who entered where (four German clubs in the Champions
+       League group stage, Gladbach through the play-off; Hertha in the
+       Europa League third qualifying round; Monaco through qualifying),
+       https://www.rsssf.org/ec/ec201617.html. A qualifying route counts as
+       in, as everywhere in this table. The places a CUP handed down are not
+       league places and are not counted, the way premier2015 counts fifth
+       only: Germany's seventh got in because the cup winners Bayern were
+       already in the Champions League, and France's fifth and sixth took
+       the two cup places because PSG won both cups.
+     - Relegation. Germany: seventeenth and eighteenth down, sixteenth into
+       a playoff against the second tier's third (Frankfurt won it); RSSSF,
+       https://www.rsssf.org/tablesd/duit2016.html, and ESPN's legend. The
+       playoff is not played, exactly as on the modern bundesliga row. France:
+       THREE down in 2015-16 (Reims, GFC Ajaccio, Troyes), RSSSF,
+       https://www.rsssf.org/tablesf/fran2016.html, and ESPN's legend
+       (positions 18, 19, 20); the league's vote to cut it to two that
+       season did not stand.
+     - The cups, one per nation: the DFB-Pokal (Bayern beat Dortmund on
+       penalties, RSSSF and ESPN's match report) and the Coupe de France (PSG
+       4-2 Marseille, RSSSF and Sky Sports). The Coupe de la Ligue, which
+       France also played that year, is not modelled.
+     - Level on points. Both final tables split level clubs on goal
+       difference and then goals scored (Bremen above Darmstadt, both minus
+       fifteen; Lyon above Monaco). The step after that was not found in two
+       sources FOR THAT SEASON (the DFL's rule book and the league's own
+       article are later editions), so neither row claims a third step: no
+       tiebreak field, which reads goal difference then goals scored. */
+  bundesliga2015: {
+    nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 6, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    simplified: 'The real relegation playoff (sixteenth against the 2. Bundesliga\'s third) is not played: two go straight down.',
+  },
+  ligue12015: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
 };
@@ -3076,6 +3189,30 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       id: 'laliga2010', name: 'La Liga',
       clubs: ['Almería', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Hércules', 'Levante', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Sporting Gijón', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
+    /* Round 901: the era becomes a full big five. Membership of all three
+       leagues from two publishers that agree on every club, read 2026-10-03:
+       RSSSF's season records (https://www.rsssf.org/tablesi/ital2011.html,
+       https://www.rsssf.org/tablesd/duit2011.html and
+       https://www.rsssf.org/tablesf/fran2011.html) and ESPN's final standings
+       (https://www.espn.com/soccer/standings/_/league/ITA.1/season/2010 and
+       .../GER.1/season/2010 and .../FRA.1/season/2010), AND against the market
+       values table itself. In final table order. Names reuse the 2026 and
+       2015 spellings wherever the club exists there, so colours and
+       rivalries carry over, and the era's Champions League field already
+       used them. Cesena is the one thin squad of the three leagues and the
+       picker says so. */
+    {
+      id: 'seriea2010', name: 'Serie A',
+      clubs: ['AC Milan', 'Inter Milan', 'Napoli', 'Udinese', 'Lazio', 'Roma', 'Juventus', 'Palermo', 'Fiorentina', 'Genoa', 'Chievo Verona', 'Parma', 'Catania', 'Cagliari', 'Cesena', 'Bologna', 'Lecce', 'Sampdoria', 'Brescia', 'Bari'],
+    },
+    {
+      id: 'bundesliga2010', name: 'Bundesliga',
+      clubs: ['Borussia Dortmund', 'Bayer Leverkusen', 'Bayern Munich', 'Hannover 96', 'Mainz', 'Nürnberg', 'Kaiserslautern', 'Hamburg', 'Freiburg', 'Köln', 'Hoffenheim', 'Stuttgart', 'Werder Bremen', 'Schalke 04', 'Wolfsburg', 'Gladbach', 'Eintracht Frankfurt', 'St. Pauli'],
+    },
+    {
+      id: 'ligue12010', name: 'Ligue 1',
+      clubs: ['Lille', 'Marseille', 'Lyon', 'PSG', 'Sochaux', 'Rennes', 'Bordeaux', 'Toulouse', 'Auxerre', 'Saint-Étienne', 'Lorient', 'Valenciennes', 'Nancy', 'Montpellier', 'Caen', 'Brest', 'Nice', 'Monaco', 'Lens', 'Arles-Avignon'],
+    },
   ].map(leagueFromRow),
   /* Round 175: the 2015-16 season, memberships verified against the season
      records (Wikipedia and worldfootball final tables, checked 2026-08-18)
@@ -3101,6 +3238,26 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
     {
       id: 'seriea2015', name: 'Serie A',
       clubs: ['Juventus', 'Napoli', 'Roma', 'Inter Milan', 'AC Milan', 'Fiorentina', 'Lazio', 'Torino', 'Genoa', 'Sampdoria', 'Sassuolo', 'Udinese', 'Empoli', 'Chievo Verona', 'Palermo', 'Atalanta', 'Bologna', 'Hellas Verona', 'Carpi', 'Frosinone'],
+    },
+    /* Round 899: the era becomes a full big five. Membership of both
+       leagues from two publishers that agree on every club, read
+       2026-10-02: RSSSF's season records
+       (https://www.rsssf.org/tablesd/duit2016.html and
+       https://www.rsssf.org/tablesf/fran2016.html) and ESPN's final
+       standings (https://www.espn.com/soccer/standings/_/league/GER.1/season/2015
+       and .../league/FRA.1/season/2015), AND against the market values
+       table itself. In final table order. Names reuse the 2026 spelling
+       wherever the club exists there (Gladbach, Köln, Hamburg, Hertha BSC,
+       Hannover 96, PSG), so colours and rivalries carry over. Ingolstadt
+       and Darmstadt, Angers and GFC Ajaccio, all four promoted that summer,
+       are the thin squads and the picker says so. */
+    {
+      id: 'bundesliga2015', name: 'Bundesliga',
+      clubs: ['Bayern Munich', 'Borussia Dortmund', 'Bayer Leverkusen', 'Gladbach', 'Schalke 04', 'Mainz', 'Hertha BSC', 'Wolfsburg', 'Köln', 'Hamburg', 'Ingolstadt', 'Augsburg', 'Werder Bremen', 'Darmstadt', 'Hoffenheim', 'Eintracht Frankfurt', 'Stuttgart', 'Hannover 96'],
+    },
+    {
+      id: 'ligue12015', name: 'Ligue 1',
+      clubs: ['PSG', 'Lyon', 'Monaco', 'Nice', 'Lille', 'Saint-Étienne', 'Caen', 'Rennes', 'Angers', 'Bastia', 'Bordeaux', 'Montpellier', 'Marseille', 'Nantes', 'Lorient', 'Guingamp', 'Toulouse', 'Reims', 'GFC Ajaccio', 'Troyes'],
     },
   ].map(leagueFromRow),
   /* Round 176: the 2005-06 season, memberships verified against the season
@@ -3393,6 +3550,16 @@ const CLUB_COLORS: Record<string, string> = {
   // Round 191: 2015-16 Serie A clubs not covered above.
   'Sampdoria': '#1b5497', 'Empoli': '#1a5dad', 'Chievo Verona': '#f7d417',
   'Palermo': '#e75ba5', 'Hellas Verona': '#002d72', 'Carpi': '#d02128',
+  // Round 899: 2015-16 Bundesliga and Ligue 1 clubs not covered above, the
+  // same derivation: the club's plain home kit colour from this file's own
+  // palette, no crest art.
+  'Ingolstadt': '#d02128', 'Saint-Étienne': '#0a7040', 'Caen': '#1b458f',
+  'Bastia': '#005ca9', 'Bordeaux': '#002d72', 'Montpellier': '#1b458f',
+  'Guingamp': '#d02128', 'Reims': '#d02128', 'GFC Ajaccio': '#d02128',
+  // Round 901: 2010-11 Serie A and Ligue 1 clubs not covered above, the same
+  // derivation: the club's plain home kit colour from this file's own palette.
+  'Cesena': '#d5d5d5', 'Brescia': '#005ca9', 'Bari': '#d02128', 'Catania': '#d02128',
+  'Sochaux': '#f7d417', 'Valenciennes': '#d02128', 'Nancy': '#d02128', 'Arles-Avignon': '#1b458f',
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
@@ -3603,7 +3770,7 @@ export const UCL_LABELS: Record<UclKoRound, string> = {
   R16: 'Round of 16', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final',
 };
 
-const SAVE_KEY = 'dukb-club-manager-save';
+export const SAVE_KEY = 'dukb-club-manager-save';
 // v2 (2026-08-05): real leagues replaced the fictional World Super League;
 // old saves carry a 20-club fictional table and must start fresh.
 // v3 (2026-08-13, Round 70): every club in the big five leagues is playable
@@ -8228,6 +8395,20 @@ function pushMessage(state: CareerState, msg: Omit<PlayerMessage, 'id' | 'week'>
   state.inbox = inbox.slice(0, 8);
 }
 
+/** Round 978: play every international window the save has reached and post
+ *  your assistant's note on who went. Draws nothing from the seeded stream. */
+function runIntlBreaks(state: CareerState): void {
+  /* The last break's rest ends after its match, before any new break fires. */
+  endRest(state);
+  /* A note nobody answered before its match (a fast forward plays straight
+     through) is settled, so it never sits in the inbox counting toward the
+     three unresolved messages that hold every other sender back. */
+  if (!backFromDuty(state).length && (state.inbox ?? []).some(m => m.kind === 'intlDuty' && !m.resolved)) {
+    state.inbox = (state.inbox ?? []).map(m => (m.kind === 'intlDuty' && !m.resolved ? { ...m, resolved: 'That game has been and gone.' } : m));
+  }
+  for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
+}
+
 /** Rolled after each match: someone in the squad has something to say. */
 function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean, margin: number): void {
   const unresolved = (state.inbox ?? []).filter(m => !m.resolved).length;
@@ -8551,6 +8732,8 @@ function generateClubMessage(state: CareerState): void {
 
 /** Answer a message. Pure: returns the new state. */
 export function answerMessage(career: CareerState, messageId: string, optionIdx: number): CareerState {
+  /* Round 979: the decisions desk shares the inbox's answer path. */
+  if (messageId.startsWith('desk-')) return answerDecision(career, messageId, optionIdx);
   const inbox = career.inbox ?? [];
   const msg = inbox.find(m => m.id === messageId);
   if (!msg || msg.resolved) return career;
@@ -8714,6 +8897,19 @@ export function answerMessage(career: CareerState, messageId: string, optionIdx:
       /* The takeover lives in clubManagerCalendar.ts and the hook routes this
          answer there before it ever reaches this switch. Unchanged here. */
       return career;
+
+    /* ---- Round 978: back from international duty ---- */
+    case 'restIntl':
+    case 'startIntl': {
+      const answer = answerBreak(career, opt.effect === 'restIntl');
+      return {
+        ...career,
+        ...(answer ? { intl: answer.intl, xiIds: answer.xiIds } : {}),
+        inbox: inbox.map(m => (m.id === messageId
+          ? { ...m, resolved: answer ? answer.resolved : 'That game has been and gone.' }
+          : m)),
+      };
+    }
   }
 
   return {
@@ -9868,6 +10064,9 @@ function strengthOf(state: CareerState, club: string): number {
   const eraPrior = state.eraId && isHistoricEra(state.eraId) ? eraEuroPrior(state.eraId, club) : null;
   return state.clubStrengths[club] ?? eraPrior ?? STRENGTH_PRIORS[club] ?? Math.max(clubPreviewRating(club), 64);
 }
+/* Round 899: simEra2015 reads the rating every match uses, and the
+   association the round of 16 draw uses, for a save from before the round. */
+export { strengthOf, uclClubCountry };
 
 /** Ghost club that gives one side a bye in odd-sized leagues (MLS's 15). */
 const BYE = '__BYE__';
@@ -10251,7 +10450,7 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Manchester City', country: 'England', finish: 'semi_final' },
     { name: 'Bayern Munich', country: 'Germany', finish: 'semi_final' },
     { name: 'Barcelona', country: 'Spain', finish: 'quarter_final' },
-    { name: 'Paris Saint-Germain', country: 'France', finish: 'quarter_final' },
+    { name: 'PSG', country: 'France', finish: 'quarter_final' },
     { name: 'Wolfsburg', country: 'Germany', finish: 'quarter_final' },
     { name: 'Benfica', country: 'Portugal', finish: 'quarter_final' },
     { name: 'Chelsea', country: 'England', finish: 'round_of_16' },
@@ -10269,7 +10468,7 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Galatasaray', country: 'Turkey', finish: 'group_stage' },
     { name: 'Astana', country: 'Kazakhstan', finish: 'group_stage' },
     { name: 'Sevilla', country: 'Spain', finish: 'group_stage' },
-    { name: 'Borussia Mönchengladbach', country: 'Germany', finish: 'group_stage' },
+    { name: 'Gladbach', country: 'Germany', finish: 'group_stage' },
     { name: 'Bayer Leverkusen', country: 'Germany', finish: 'group_stage' },
     { name: 'BATE Borisov', country: 'Belarus', finish: 'group_stage' },
     { name: 'Olympiacos', country: 'Greece', finish: 'group_stage' },
@@ -10280,6 +10479,27 @@ export const ERA_UCL_FIELDS: Record<string, { name: string; country: string; fin
     { name: 'Lyon', country: 'France', finish: 'group_stage' },
   ],
 };
+
+/* Round 899: the 2015-16 era grew a Bundesliga and a Ligue 1, so six clubs of
+   its Champions League field stopped being foreign and play with their real
+   squads. Two of them were listed under their long names while they were
+   foreign and now carry the engine's own names (PSG, Gladbach), the names
+   their rosters, colours and league rows are keyed by. A save made before
+   this round can still hold the long name in a group it is half way through,
+   so every lookup by field row (the finish derived prior that strengthOf and
+   the board read, and the association the round of 16 draw reads) takes the
+   long name as the club it always was. Keyed by era, so another era's field
+   is never touched. Only read, never written: the next draw uses the names
+   above. */
+const ERA_EURO_OLD_NAMES: Record<string, Record<string, string>> = {
+  era2015: {
+    'Paris Saint-Germain': 'PSG',
+    'Borussia Mönchengladbach': 'Gladbach',
+  },
+};
+function eraEuroName(eraId: string, club: string): string {
+  return ERA_EURO_OLD_NAMES[eraId]?.[club] ?? club;
+}
 
 const ERA_TOP_XI_CACHE = new Map<string, number>();
 function eraTopXI(eraId: string): number {
@@ -10295,7 +10515,8 @@ function eraTopXI(eraId: string): number {
 /** A foreign era club's strength, derived from its real finish that season.
  *  Null for clubs not in the era's verified field. */
 function eraEuroPrior(eraId: string, club: string): number | null {
-  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === club);
+  const name = eraEuroName(eraId, club);
+  const row = (ERA_UCL_FIELDS[eraId] ?? []).find(e => e.name === name);
   if (!row) return null;
   return Math.round((eraTopXI(eraId) - ERA_FINISH_GAP[row.finish]) * 10) / 10;
 }
@@ -10304,7 +10525,8 @@ function eraEuroPrior(eraId: string, club: string): number | null {
  *  the era bake when the club has a real roster, the finish derived prior
  *  when it is a verified foreign participant, 60 as the honest floor. */
 function eraEuroStrength(eraId: string, club: string): number {
-  return eraXIAvg(eraId, club) ?? eraEuroPrior(eraId, club) ?? 60;
+  const name = eraEuroName(eraId, club);
+  return eraXIAvg(eraId, name) ?? eraEuroPrior(eraId, name) ?? 60;
 }
 
 function eraEuroPool(eraId: string): string[] {
@@ -10691,7 +10913,7 @@ function noteUclPair(state: CareerState, home: string, away: string, hg: number,
  * the draw treats as blocking nobody.
  */
 function uclClubCountry(state: CareerState, club: string): string | null {
-  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === club) : undefined;
+  const row = state.eraId ? ERA_UCL_FIELDS[state.eraId]?.find(e => e.name === eraEuroName(state.eraId!, club)) : undefined;
   if (row) return row.country;
   const lg = state.eraId && isHistoricEra(state.eraId)
     ? eraLeagueOf(club, state.eraId)
@@ -11718,8 +11940,18 @@ const TITLE_STATURE = new Set([
   'Club Brugge', 'Genk', 'Union Saint-Gilloise',
 ]);
 
+/* Round 964: and only in the club's real league. Celtic's board demands the
+   Scottish title; moved into the Premier League by the world editor, Celtic
+   are measured against their new league like anyone else, so the stature of
+   the old one is never carried across. */
+function playsInRealLeague(clubName: string): boolean {
+  if (!ACTIVE_LEAGUE_OVERRIDES) return true;
+  const real = REAL_LEAGUES.find(l => l.clubs.includes(clubName));
+  return !real || effectiveClubsOf(real.id, real.clubs).includes(clubName);
+}
+
 function demandsTitle(rank: number, tier: number, titleGap: number, clubName?: string, eraId?: string): boolean {
-  const stature = !!clubName && !(eraId && isHistoricEra(eraId)) && TITLE_STATURE.has(clubName);
+  const stature = !!clubName && !(eraId && isHistoricEra(eraId)) && TITLE_STATURE.has(clubName) && playsInRealLeague(clubName);
   return rank <= 2 || (rank <= 4 && tier <= 2) || titleGap <= TITLE_GAP || stature;
 }
 
@@ -12136,6 +12368,12 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
   const formation = FORMATIONS[state.formationIndex] ?? FORMATIONS[0];
   const used = new Set<string>();
   const out: XiSlot[] = [];
+  /* Round 978: the men you rested for the match after an international
+     break. The rest itself is written into xiIds (applyRest in
+     clubManagerInternationals.ts), so a man you put back in the eleven
+     yourself plays; here they are only passed over when a slot needs
+     filling. Empty on every other match, so this is the old rule there. */
+  const resting = restingIds(state);
   formation.slots.forEach((slot, i) => {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
@@ -12144,9 +12382,11 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
          read him, his rating less the price he pays there (a natural fit
          pays nothing, so he still comes first at equal rating), and a
          position he has retrained into counts as natural. */
-      p = state.squad
-        .filter(x => isAvailable(x) && !used.has(x.id))
-        .sort((a, b) => (b.rating - fitPenalty(b, slot)) - (a.rating - fitPenalty(a, slot)) || b.rating - a.rating)[0];
+      const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
+      const best = (pool: CMPlayer[]) => pool
+        .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
+      const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
+      p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
     }
     if (p) {
       used.add(p.id);
@@ -12227,14 +12467,27 @@ function dutyLookup(xi: XiSlot[]): (p: CMPlayer) => Duty | null {
  * a bill rather than a refusal. Deterministic, so the Poisson split
  * simHalftime measures is untouched.
  */
+/** Round 978: the strength a point of the eleven's average fitness is worth,
+ *  named so the international rest (applyRest in clubManagerInternationals.ts)
+ *  prices a stand-in's legs the same way. */
+export const CONDITION_PER_FITNESS = 0.14;
+
 function myMatchStrength(state: CareerState, xi: XiSlot[]): number {
   if (!xi.length) return 40;
   const avg = xi.reduce((s, x) => s + x.p.rating - fitPenalty(x.p, x.slot), 0) / xi.length;
   const fit = xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length;
   const mor = xi.reduce((s, x) => s + x.p.morale, 0) / xi.length;
-  const condition = clamp((fit - 78) * 0.14 + (mor - 68) * 0.06, -7, 4);
+  const condition = clamp((fit - 78) * CONDITION_PER_FITNESS + (mor - 68) * 0.06, -7, 4);
   const formBonus = state.form.reduce((s, f) => s + (f === 'W' ? 0.7 : f === 'L' ? -0.7 : 0), 0);
   return avg + condition + formBonus;
+}
+
+/** Round 978: the strength the eleven that would take the field right now
+ *  plays at, by the engine's own rule. The international rest plan (restPlan,
+ *  behind your assistant's inbox answer) prices a rest with it, and
+ *  scripts/simCmInternationals.mjs prices a break with it. */
+export function matchStrengthNow(state: CareerState): number {
+  return myMatchStrength(state, effectiveXIWithSlots(state));
 }
 
 function scorerWeight(p: CMPlayer): number {
@@ -14097,6 +14350,12 @@ export function liveStatsAt(
  * back near 100 within a week, and rotation is a real edge instead of the
  * only way to avoid collapse.
  */
+/** Round 978: what a match takes out of a man's legs, the floor and the
+ *  spread of the draw, named so the international rest plan can price the
+ *  match after next by the same numbers (unchanged from Round 95). */
+export const MATCH_FITNESS_COST = 20;
+export const MATCH_FITNESS_SPREAD = 8;
+
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
@@ -14126,7 +14385,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
     const recovery = Math.round((100 - p.fitness) * 0.71 * recoveryMod) + flat;
-    const cost = played ? 20 + ri(0, 8) : 0;
+    const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
     const fitness = clamp(p.fitness + recovery - cost, 20, 100);
     let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
     if (knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
@@ -15060,6 +15319,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const cardLines: CardLine[] = [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]
     .map(c => ({ ...c }))
     .sort((a, b) => a.minute - b.minute);
+  /* Round 979: who walked for a straight red, for the decisions desk. */
+  const straightReds: string[] = [];
   for (const c of cardLines) {
     const sq = c.id ? state.squad.find(p => p.id === c.id) : state.squad.find(p => p.name === c.name);
     if (!sq) continue;
@@ -15079,6 +15340,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     } else {
       sq.suspendedMatches = ri(1, 2);
       sq.seasonReds = (sq.seasonReds ?? 0) + 1;
+      straightReds.push(sq.id);
       bumpComp(sq, l => { l.reds += 1; });
       events.push(`🟥 ${sq.name} was sent off, suspended for ${sq.suspendedMatches} match${sq.suspendedMatches > 1 ? 'es' : ''}.`);
     }
@@ -15321,6 +15583,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   generatePlayerMessage(state, xi, won, margin);
   // Round 474: and the five people who are not in your squad.
   generateClubMessage(state);
+  // Round 979: the decisions desk. Draws nothing from Math.random.
+  settleDecisionDesk(state, straightReds, fx.opponent);
 
   /* ----- board confidence ----- */
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
@@ -15997,6 +16261,12 @@ export const FOCUS_INFO: Record<TrainingFocus, { label: string; desc: string; em
   youth: { label: 'Youth', desc: 'The whole week is about the teenagers. Your senior players stagnate.', emoji: '\u{1F476}' },
 };
 
+/** Round 963: the fastest anybody grows, the top of developmentRate's clamp. */
+export const DEVELOPMENT_RATE_MAX = 2.6;
+
+/** Round 963: a regular's season, the appearances that earn developmentRate's top game time step. */
+export const REGULAR_APPS = 30;
+
 /**
  * The multiplier on a player's positive growth for the season.
  *
@@ -16013,7 +16283,7 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
   const headroom = gap <= 0 ? 0.1 : gap <= 3 ? 0.55 : gap <= 8 ? 1 : gap <= 15 ? 1.5 : 1.9;
   // Game time. Nobody has ever developed sitting on a bench.
   const apps = p.apps ?? 0;
-  const minutes = apps >= 30 ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
+  const minutes = apps >= REGULAR_APPS ? 1.3 : apps >= 18 ? 1.12 : apps >= 8 ? 0.85 : apps >= 1 ? 0.6 : 0.4;
   const plan = career.training ?? DEFAULT_TRAINING;
   const intensity = plan.intensity === 'double' ? 1.28 : plan.intensity === 'light' ? 0.78 : 1;
   const focus =
@@ -16030,7 +16300,30 @@ export function developmentRate(p: CMPlayer, career: CareerState): number {
      Round 471: and his own coach, exactly 1 at level 1 and on an empty post,
      in the same place for the same reason. The training ground lifts the
      whole squad, the coach lifts his half of the pitch. */
-  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, 2.6);
+  return clamp(headroom * minutes * intensity * focus * staff * trainingGroundGrowthMult(career) * coachGrowthMult(career, p.position), 0.1, DEVELOPMENT_RATE_MAX);
+}
+
+/**
+ * Round 963: the players a growth lift would be cut short for, because
+ * developmentRate would sit at its ceiling for them. Every lift sits inside
+ * that clamp on purpose (Rounds 116, 467 and 471), so a kid near the ceiling
+ * gets only part of a better coach or a better training ground, and a kid on
+ * it gets none. The cards that sell those lifts print this count instead of
+ * promising every man the full percentage.
+ *
+ * Read as a regular's season, not the season so far: agePlayer applies the
+ * rate at the summer on the whole season's appearances and then wipes them,
+ * so a count on today's apps read zero all pre-season, exactly when a manager
+ * hires. The cards say "as regulars" for that reason.
+ *
+ * Not developingPlayers' filter: no age 24 cut, because the lifts reach every
+ * age that can still grow, but nobody whose next birthday's drift band tops
+ * out at zero (thirty and up), since his growth never reads the rate at all.
+ */
+export function growingAtCeiling(career: CareerState, applies: (p: CMPlayer) => boolean): CMPlayer[] {
+  return career.squad.filter(p => !p.onLoan && (p.potential ?? p.rating) > p.rating
+    && ageDriftBand(p.age + 1)[1] > 0 && applies(p)
+    && developmentRate({ ...p, apps: Math.max(p.apps ?? 0, REGULAR_APPS) }, career) >= DEVELOPMENT_RATE_MAX);
 }
 
 /** Everyone under 24 with room left, worst prepared first, for the UI. */
@@ -16055,7 +16348,14 @@ export interface SeasonWorld {
   keepLeagueOverrides: boolean;
 }
 
-export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld): CareerState {
+/* Round 964: `edit` is a world editor edit (src/lib/clubManagerWorldEdit.ts),
+   the memberships a NEW career starts on. It is its own argument rather than
+   a SeasonWorld because a SeasonWorld reopens a running save (its aged
+   squads, its derived Europe field, a club qualifying through that field),
+   where an edited world is a fresh start in every other way. It applies to a
+   real club in today's world only: a historic era never reads the overrides,
+   and a custom club is placed against the real lineups. */
+export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null): CareerState {
   /* Round 132: the era decides what year season one is, and the year decides
      everything else: the squad you are handed, how good every other club is,
      and who is on the market. The default era is the current one and its
@@ -16089,7 +16389,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 310: and it starts on the static memberships for the same reason,
      custom or not: a NEW career has no promotions behind it, so a previous
      save's registered pyramid must never leak into its world. */
-  if (!world?.keepLeagueOverrides) registerLeagueOverrides(null);
+  const worldEdit = edit && !custom && !historic && !world ? edit : null;
+  if (!world?.keepLeagueOverrides) registerLeagueOverrides(worldEdit);
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -16115,11 +16416,18 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      its last rollover, and the club is in Europe exactly when that field
      names it. */
   const seasonOneField = custom ? null : world ? world.uclField : seasonOneUclField(era.id);
+  /* Round 964: on an edited world season one's Europe is still who really
+     qualified, wherever they play now. seasonOneUclField already hands the
+     AI field the real qualifiers whatever league the edit put them in, so my
+     club is judged by its REAL league too, not the one it was moved into.
+     Arsenal moved into the Championship stay in the Champions League, the
+     same as a computer run Arsenal would. With no edit this is `league`. */
+  const qualLeague = worldEdit ? (REAL_LEAGUES.find(l => l.clubs.includes(club.name)) ?? league) : league;
   const qualifiedSeasonOne = world
     ? (seasonOneField ? seasonOneField.includes(club.name) : club.tier <= 2 && league.euro)
-    : seasonOneField && seasonOneTableOf(league.id)
+    : seasonOneField && seasonOneTableOf(qualLeague.id)
       ? uclDirectQualifiersFromTables(seasonOneTables(), CM_FINAL_TABLES_2025_26.holders).includes(club.name)
-      : club.tier <= 2 && league.euro;
+      : club.tier <= 2 && qualLeague.euro;
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
     clubName: club.name,
@@ -16179,6 +16487,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     promisedStarts: [],
     pairResults: {},
   };
+  /* Round 964: the edited world rides on the save the way a promoted one
+     does, so the first summer resolves on it and a reload registers it. */
+  if (worldEdit) state.leagueOverrides = worldEdit;
   if (custom) {
     state.customClub = custom;
     /* Round 640: its founders were priced by the market rule above, so a load
@@ -16240,6 +16551,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex]);
   /* Round 505: day one armband and takers, so the tactics screen has them before a ball is kicked. */
   ensureSetPieces(state);
+  /* Round 978: this season's international windows. */
+  state.intl = freshIntl(state);
   generateHeadlines(state);
   return state;
 }
@@ -16289,11 +16602,18 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   ensureBoardAsks(state);
   // Round 505: and the armband and the set piece takers.
   ensureSetPieces(state);
+  // Round 978: and a damaged international block goes, that block alone.
+  ensureIntl(state);
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
        same loop, so a tap on a quiet Tuesday never plays the match after it. */
     if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
+    /* Round 978: an international window my next match has reached is
+       played before the next entry. The hook after my match below fires
+       every break straight after the last match of mine before its window,
+       so this only catches a save that reaches one some other way. */
+    if (!state.live) runIntlBreaks(state);
     /* Round 504: a match already kicked off and paused (the save closed mid
        match) is picked back up, never kicked off a second time over the top
        of itself. The quick sim finishes it without you, which is what a
@@ -16383,6 +16703,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     }
     const report = playMyMatch(state, entry, live);
     state.week = live.week + 1;
+    /* Round 978: the break, if it falls before my next match, happens now,
+       so the note on who went is waiting before the match they come back
+       for and you can rest them. */
+    runIntlBreaks(state);
     return { state, kind: 'match', report };
   }
   return { state, kind: 'seasonOver' };
@@ -16726,6 +17050,8 @@ export function resumeMatch(career: CareerState): PlayResult {
   state.live = null;
   const report = playMyMatch(state, entry, live);
   state.week = live.week + 1;
+  /* Round 978: same hook as the quick sim's, see playNextEntry. */
+  runIntlBreaks(state);
   return { state, kind: 'match', report };
 }
 
@@ -17910,6 +18236,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 543: uclPlacesIn returns 0 for a non-European league, so this one
      value carries both halves of what Round 310 added here. */
   const playedLeagueUclPlaces = uclPlacesIn(careerLeagueOf(career));
+  /* Round 547: read the Champions League field off the season that has just
+     finished, while its tables are still on `career`. Round 964: and before
+     next season's memberships register, because uclQualifiersFrom finds MY
+     table's league through careerLeagueOf. Read after the swap, a club just
+     promoted into the Premier League handed the Championship's top four the
+     Premier League's places, and one just relegated out of it left the
+     Premier League sending nobody. */
+  const nextUclField = uclQualifiersFrom(career);
   registerLeagueOverrides(pr.overrides);
   /* Round 146: inside a historic save, a "playable club" is an era club, so
      the move guard consults the era world before the modern one. */
@@ -18169,10 +18503,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const leagueClubs = shuffle(nextCustom
     ? league.clubs.map(c => (c === nextCustom.replacedClub ? nextCustom.name : c))
     : [...league.clubs]);
-  /* Round 547: read the Champions League field off the season that has just
-     finished, while its tables are still on `career`. The new state's own
-     world is blank, so this has to happen here and not later. */
-  const nextUclField = uclQualifiersFrom(career);
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
@@ -18214,6 +18544,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     loanedOut: [],
     resultLog: [],
     inbox: [],
+    /* Round 979: the desk goes with the inbox. A ban is wiped over the summer
+       (agePlayer), so an appeal carried across would close on a ban that no
+       longer exists, and a card from the old club could move the new one. */
+    decisions: undefined,
     promisedStarts: [],
     // Round 462: the pair ledger is one season's results, so it starts empty.
     pairResults: {},
@@ -18513,6 +18847,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
+  /* Round 978: the new season's international windows. An older save gets its
+     first block here, so its first season with windows is a whole one. */
+  state.intl = freshIntl(state);
   generateHeadlines(state);
   /* Round 161: the add-ons that came due lead the summer's news. This sits
      after generateHeadlines on purpose: that call rebuilds the feed. */
@@ -18718,6 +19055,9 @@ export function loadCareer(): CareerState | null {
        all read the world year now, so it has to be right before any of them
        renders rather than at the first kick off. */
     ensureClock(parsed);
+    /* Round 978: a damaged international block goes on the way in, so the
+       squad screen never reads half of one. */
+    ensureIntl(parsed);
     /* Round 462: the pair ledger, empty and honest on a save from before it
        existed, and the round of 16 week an era save's old calendar lacks,
        both before any screen reads the table or the calendar. */

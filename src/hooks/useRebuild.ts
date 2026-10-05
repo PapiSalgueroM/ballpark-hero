@@ -8,6 +8,7 @@ import {
 import {
   simulateRival, simulateSeason, KEEP_MANAGER,
   type ManagerOption, type RivalResult, type SeasonResult, type RebuildPreset, type SharedSeasonResult,
+  type FinEvent, type PunishCard, type BoardObjective,
 } from '@/lib/rebuildDeck';
 import * as loop from '@/lib/rebuildLoop';
 import type { RunState, ObjectiveView } from '@/lib/rebuildLoop';
@@ -95,6 +96,22 @@ export interface RebuildState {
   managerReading: (m: ManagerOption) => number;
   offerPrice: (p: Player) => number;
   canRedeal: boolean;
+  // Round 980: the five new power ups
+  canSecondSpin: (slot: number) => boolean;
+  /** What an open part exchange can reach, the man going the other way counted. */
+  swapCeiling: number;
+  /** A season loan of this man: 40 percent of his value. */
+  loanFee: (p: Player) => number;
+  /** The next envelope, while a sneak peek has it face up. */
+  peeked: FinEvent | null;
+  /** The board's cards face up while a veto waits on a choice. */
+  verdictCards: { cards: PunishCard[]; left: PunishCard[]; missed: BoardObjective[] } | null;
+  secondSpin: (slot: number) => void;
+  partExchange: () => void;
+  loanReplacement: (p: Player) => void;
+  sneakPeek: () => void;
+  vetoCard: (i: number) => void;
+  acceptVerdict: () => void;
   // the envelopes and the manager
   pickFinance: (i: number) => void;
   toManager: () => void;
@@ -373,6 +390,14 @@ export function useRebuild(): RebuildState {
 
   const finish = useCallback(() => act({ k: 'whistle' }, loop.blowWhistle), [act]);
 
+  /* Round 980: the five new power ups, each one a move the save records. */
+  const secondSpin = useCallback((slot: number) => act({ k: 'respin', slot }, r => loop.secondSpin(r, slot)), [act]);
+  const partExchange = useCallback(() => { if (!spinning) act({ k: 'swap' }, loop.partExchange); }, [act, spinning]);
+  const loanReplacement = useCallback((p: Player) => act({ k: 'loan', name: p.name }, r => loop.loanOffer(r, p.name)), [act]);
+  const sneakPeek = useCallback(() => act({ k: 'peek' }, loop.usePeek), [act]);
+  const vetoCard = useCallback((i: number) => act({ k: 'veto', i }, r => loop.vetoCard(r, i)), [act]);
+  const acceptVerdict = useCallback(() => act({ k: 'accept' }, loop.acceptVerdict), [act]);
+
   /* Rivals post their windows after yours closes, then the season kicks off.
      Runs once per reckoning, off the post reckoning XI, manager lift included.
      One seat tables only: at a fuller table the other seats are the rivals
@@ -441,6 +466,11 @@ export function useRebuild(): RebuildState {
   const managerReading = useCallback((m: ManagerOption) => (run ? loop.ratingOf(run, m) : 0), [run]);
   const offerPrice = useCallback((p: Player) => (run ? loop.offerPrice(run, p) : p.marketValue), [run]);
   const canRedeal = run ? loop.canRedeal(run) : false;
+  const canSecondSpin = useCallback((slot: number) => (run ? loop.canSecondSpin(run, slot) : false), [run]);
+  const swapCeiling = run ? loop.swapCeilingOf(run) : 0;
+  const loanFee = useCallback((p: Player) => loop.loanFeeOf(p), []);
+  const peeked = run ? loop.peekedEnvelope(run) : null;
+  const verdictCards = useMemo(() => (run && run.verdict ? loop.whistleDraw(run) : null), [run]);
 
   /* Shut windows as numbers: the hand over screen shows these and nothing
      else, so the next player never sees the last player's board. */
@@ -492,6 +522,7 @@ export function useRebuild(): RebuildState {
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
     managerReading, offerPrice, canRedeal,
+    canSecondSpin, swapCeiling, loanFee, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
     thinking, raiseWar, walkAway,

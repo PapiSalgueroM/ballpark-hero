@@ -700,6 +700,9 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     managerXp: career.managerXp,
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
+    /* Round 978: and so was the assistant's note on the last international
+       break, so the break and any rest stay behind with it. */
+    ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
     midSeasonStart: entry,
     /* Round 633: what he had already banked, frozen here so the season score
        can subtract it. It is stamped rather than estimated later because an
@@ -819,6 +822,12 @@ export function joinClubNow(career: CareerState): CareerState | null {
     /* A new appointment's mandate, the same opening the rollover gives a move. */
     boardConfidence: 62,
     season: career.season,
+    /* Round 978: the new club's international block, played through the
+       run-in in the fresh save's season one, carried onto this season's
+       number so the breaks still to come are not lost with the move. The
+       last break and any rest stay behind: their note was in the inbox
+       this replaces, so nothing may ask a question nobody can answer. */
+    ...(s.intl ? { intl: { season: career.season, fired: [...s.intl.fired] } } : {}),
     startYear: career.startYear,
     eraId: career.eraId,
     trophies: career.trophies,

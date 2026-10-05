@@ -161,12 +161,17 @@ export { players as POOL } from '${ROOT_URL}/src/data/players.ts';
   /* The specific alias is matched ahead of the blanket '@' one, so the engine
      reads a rewritten XP module when one is handed in. */
   const xpAlias = xpFile ? ` "--alias:@/lib/clubManagerXp=${xpFile.replaceAll('\\', '/')}"` : '';
-  execSync(`"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node --outfile="${out}" --log-level=error${xpAlias} --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
+  execSync(`"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node --outfile="${out}" --log-level=error${xpAlias}${gmAlias()} --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
   return out;
 };
+/* Since Round 942 the XP ladder (addXp among it) lives in gmXp.ts; a control
+   that rewrites it reaches every bundle, so section 12's two sides move alike. */
+const gmAlias = () => (gmPath ? ` "--alias:@/lib/gmXp=${gmPath.replaceAll('\\', '/')}"` : '');
 
 let cmPath = CM_SRC;
 let xpPath = null;
+let gmPath = null;
+const GM_SRC = `${ROOT}/src/lib/gmXp.ts`;
 if (MODE === 'unguard') {
   cmPath = rewrite(CM_SRC, [['if (realPersonNamesFolded().has(foldClubName(trimmed))) {', 'if (false) {']], 'clubManager.control.ts');
 } else if (MODE === 'noappearance') {
@@ -189,8 +194,8 @@ if (MODE === 'unguard') {
 } else if (MODE === 'dropgift') {
   /* Round 965 review: the rollover's addXp rebuilds the XP block field by
      field and loses the gift record, so the grant runs again every summer.
-     Section 7 must go red. */
-  xpPath = rewrite(XP_SRC, [['  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };']], 'clubManagerXp.dropgift.ts');
+     Section 7 must go red. addXp is the shared ladder's since Round 942. */
+  gmPath = rewrite(GM_SRC, [['  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };']], 'gmXp.dropgift.ts');
 } else if (MODE === 'runinleak') {
   /* Round 965 review: the weeks before a mid season handover run with our
      manager and his background point, as the first draft had it. Section 14

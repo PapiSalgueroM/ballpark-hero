@@ -244,10 +244,11 @@ export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
 };
 
 /*
- * OWED BY THE NHL BIND: src/lib/nhlFrontOffice.ts has no special teams model
- * today (no power play, no penalty kill), so specialTeamsEdge has nothing to
- * move. The bind round adds one or re-keys this post; until then nothing
- * reads it, and no screen may show this pack.
+ * Round 987 bound this pack (src/lib/nhlGmDesk.ts). src/lib/nhlFrontOffice.ts
+ * has no special teams model (no power play, no penalty kill: one strength
+ * number decides a game), so specialTeamsEdge counts toward that one number
+ * at a fifth of its weight (NHL_SPECIAL_TEAMS_WEIGHT there), and the key's
+ * words below say exactly that on the screen.
  */
 export type NhlStaffPost = 'hc' | 'specialTeams' | 'goalie' | 'scouting' | 'medical';
 
@@ -284,13 +285,15 @@ export const NHL_STAFF_PACK: GmStaffPack<NhlStaffPost> = {
   keys: {
     offEdge: edgeKey('rating points on the attack at even strength'),
     defEdge: edgeKey('rating points on the defense at even strength'),
-    specialTeamsEdge: edgeKey('rating points on the power play and the penalty kill'),
+    specialTeamsEdge: edgeKey('rating points on special teams. This game has no power play of its own, so a fifth of them reach team strength'),
     goalieEdge: edgeKey('rating points on the goalies'),
     scoutSpread: SCOUT_KEY,
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 8,
+    /* Round 987: the board ticks the desk once a round over its 20 rounds
+       (NHL_FO_ROUNDS), so the clock and the wages count rounds. */
+    wageUnit: 'k a round', purseUnit: 'm', ticksPerSeason: 20, tickWord: 'round', seasonPurse: 8,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the hard cap.',
   },
 };

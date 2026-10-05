@@ -81,7 +81,10 @@ const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
 const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate', 'nomap', 'dropgift'];
-/* The first four rewrite clubManagerXp.ts and are read by sections 1 to 6.
+/* The first four rewrite clubManagerXp.ts (freepoints, nocap and flatlevels
+   reach gmXp.ts through it since Round 942) and are read by sections 1 to 6.
+   nomap and dropgift (Round 965) are read by section 9; dropgift also reaches
+   gmXp.ts, where addXp has lived since Round 942.
    'deadgate' patches the ENGINE bundle instead, because section 7 runs the
    real engine and the engine imports the real module whatever we do to a copy
    of the source. */
@@ -112,23 +115,47 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
       "  return 1 + treePoints(state, 'tactics') * 0.1;",
       "  return 1.1 + treePoints(state, 'tactics') * 0.1;",
     );
-  } else if (CONTROL === 'freepoints') {
-    swap(
-      '  return Math.max(0, Math.min(pointsEarned(block.xp) - pointsBought(block), room));',
-      '  return Math.max(0, pointsEarned(block.xp));',
-    );
   } else if (CONTROL === 'nomap') {
     /* Round 965: one background mapped to no tree, which is the badge the
        round exists to end. Section 9 must go red. */
     swap("  pundit: 'media',", "  pundit: 'nowhere' as SkillTree,");
-  } else if (CONTROL === 'dropgift') {
-    /* Round 965 review: addXp rebuilds the block field by field and loses the
-       gift record. Section 9 must go red. */
-    swap('  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };');
-  } else if (CONTROL === 'nocap') {
-    swap('  if (now >= MAX_TREE_POINTS) return null;', '');
-  } else if (CONTROL === 'flatlevels') {
-    swap('    step = Math.round(step * XP_LEVEL_STEP);', '');
+  } else if (['freepoints', 'nocap', 'flatlevels', 'dropgift'].includes(CONTROL)) {
+    /* Round 942 lifted the curve and the spending into gmXp.ts, which
+       clubManagerXp.ts delegates to. These four now rewrite a copy of THAT
+       file and point the clubManagerXp copy at it, so they still reach the
+       code sections 2, 3 and 9 read. */
+    const GM_PATH = `${ROOT}/src/lib/gmXp.ts`;
+    let gm = fs.readFileSync(GM_PATH, 'utf8').replaceAll('\r\n', '\n');
+    const swapGm = (from, to) => {
+      if (!gm.includes(from)) {
+        console.error(`control cannot run: gmXp.ts is not in the shape XP_CONTROL=${CONTROL} rewrites`);
+        console.error(`  looked for: ${from}`);
+        process.exit(1);
+      }
+      gm = gm.replace(from, to);
+    };
+    if (CONTROL === 'freepoints') {
+      /* Round 965 made the shared pointsFree gift aware, so this is its line now. */
+      swapGm(
+        '  return Math.max(0, Math.min(pointsEarned(block.xp, maxLevelOf(set)) - pointsBought(set, block), room));',
+        '  return Math.max(0, pointsEarned(block.xp, maxLevelOf(set)));',
+      );
+    } else if (CONTROL === 'nocap') {
+      swapGm('  if (now >= set.maxPoints) return null;', '');
+    } else if (CONTROL === 'dropgift') {
+      /* Round 965 review: addXp rebuilds the block field by field and loses the
+         gift record. Section 9 must go red. */
+      swapGm('  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };');
+    } else {
+      swapGm('    step = Math.round(step * XP_LEVEL_STEP);', '');
+    }
+    const gmCopy = `${TMP}/mgrXp.control.gmXp.ts`;
+    fs.writeFileSync(gmCopy, gm);
+    if (!src.includes("from '@/lib/gmXp'")) {
+      console.error('control cannot run: clubManagerXp.ts no longer imports @/lib/gmXp');
+      process.exit(1);
+    }
+    src = src.replaceAll("from '@/lib/gmXp'", `from '${gmCopy}'`);
   } else if (CONTROL === 'saturate') {
     /* The REAL Round 513 defect, restored: a cushion in whole points against a
        cost of 1.2, so Math.max(0, 1.2 - n) saturates at two and points 3, 4

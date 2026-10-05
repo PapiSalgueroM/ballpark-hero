@@ -387,7 +387,9 @@ console.log('5) Every multiplier reaches exactly 1 at level 1, and match strengt
   /* The one growth path: the factor sits inside the clamp, and agePlayer still caps at potential. */
   const dev = src.match(/export function developmentRate\([\s\S]*?\n}\n/);
   if (!dev) fail('could not find developmentRate');
-  else if (!/return clamp\([^;]*trainingGroundGrowthMult\(career\)[^;]*, 0\.1, 2\.6\);/.test(dev[0])) fail('the training ground factor is not inside developmentRate\'s clamp');
+  else if (!/return clamp\([^;]*trainingGroundGrowthMult\(career\)[^;]*, 0\.1, DEVELOPMENT_RATE_MAX\);/.test(dev[0])) fail('the training ground factor is not inside developmentRate\'s clamp');
+  /* Round 963: the ceiling became one named number the facilities card also reads. */
+  if (!/export const DEVELOPMENT_RATE_MAX = 2\.6;/.test(src)) fail('DEVELOPMENT_RATE_MAX is not the 2.6 the clamp was measured at');
   console.log('   growth x1, medical identity, dressing room +0, stadium x1 at level 1; myMatchStrength and the clamp read on the comment stripped source');
 }
 
