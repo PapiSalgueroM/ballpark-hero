@@ -266,3 +266,281 @@ const forestBase = GENERATED.find(c => c.name === 'Nottingham Forest')?.tier;
 for (const y of [1990, 1998, 2022, 2026]) ok(forestTier(y) === forestBase, `Forest in ${y}: tier ${forestTier(y)}, the generated tier ${forestBase}`);
 for (let y = 1999; y <= 2021; y++) ok(forestTier(y) === 4, `Forest in ${y} (outside the top flight 1999-00 to 2021-22): tier ${forestTier(y)}, 4 expected`);
 console.log(`  HAND_CLUBS ${HAND.length} rows, fingerprint ${handPrint}; Forest t${forestBase}, t4 from 1999 to 2021`);
+
+/* ─── 5. WEIGHTS ─── */
+head('5', 'WEIGHTS: exact odds from leagueDrawGroups, as rationals');
+const CAP = 5; // the harness's own copy of the rule, so a changed engine cap cannot move the yardstick
+const fourOdds = cands => {
+  const groups = new Map();
+  for (const c of cands) { const k = `${c.league}|${c.tier}`; groups.set(k, (groups.get(k) || 0) + 1); }
+  let w = 0; let four = 0;
+  for (const [k, n] of groups) { const wt = Math.min(n, CAP); w += wt; if (FOUR.has(k.split('|')[0])) four += wt; }
+  return { four, w };
+};
+const handSets = [[1], [2], [3], [4], [1, 2], [2, 3], [3, 4]];
+for (const tiers of handSets) {
+  const cands = HAND.filter(c => tiers.includes(c.tier));
+  const groups = engine.leagueDrawGroups(cands);
+  const W = groups.reduce((s, g) => s + g.weight, 0);
+  const n = cands.length;
+  /* P(club) = weight/W * 1/size, which is 1/n exactly when weight * n === W * size */
+  const off = groups.filter(g => g.weight * n !== W * g.clubs.length);
+  ok(groups.reduce((s, g) => s + g.clubs.length, 0) === n, `tiers ${tiers}: the groups partition the candidates`);
+  ok(!off.length, `HAND_CLUBS tiers ${tiers}: ${off.map(g => g.key).join(', ')} are off 1/${n}`);
+  if (!off.length) console.log(`  HAND_CLUBS tier ${tiers.join('+')}: ${n} clubs, ${groups.length} league groups (largest ${Math.max(...groups.map(g => g.clubs.length))}), every club exactly 1/${n}`);
+}
+const t4 = POOL.filter(c => c.tier === 4);
+const g4 = engine.leagueDrawGroups(t4);
+const W4 = g4.reduce((s, g) => s + g.weight, 0);
+const F4 = g4.filter(g => FOUR.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
+const rawFour = t4.filter(c => FOUR.has(c.league)).length;
+ok(F4 === 20 && W4 === 100, `the four leagues hold ${F4}/${W4} of the tier 4 draw weight, 20/100 expected`);
+/* The sampler itself, without sampling: drive the first Math.random call
+   over a midpoint grid of W4 * M points (the second call fixed), and every
+   group must be chosen on exactly weight * M of them. */
+{
+  const realRandom = Math.random;
+  const M = 4;
+  const K = W4 * M;
+  const hits = new Map(g4.map(g => [g.key, 0]));
+  let k = 0;
+  for (; k < K; k++) {
+    let call = 0;
+    Math.random = () => (call++ === 0 ? (k + 0.5) / K : 0.5);
+    const p = engine.pickAcrossLeagues(t4);
+    const key = `${p.league}|${p.tier}`;
+    hits.set(key, (hits.get(key) || 0) + 1);
+  }
+  Math.random = realRandom;
+  const offGrid = g4.filter(g => hits.get(g.key) !== g.weight * M);
+  ok(!offGrid.length, `pickAcrossLeagues chose ${offGrid.map(g => `${g.key} ${hits.get(g.key)}/${g.weight * M}`).join(', ')} off its weights`);
+  if (!offGrid.length) console.log(`  pickAcrossLeagues over tier 4: on a ${K} point grid every league group is chosen exactly weight x ${M} times`);
+}
+console.log(`  full pool tier 4: four leagues ${F4}/${W4} capped; a plain pick would give them ${rawFour}/${t4.length}`);
+
+/* ─── 6. OFFERS ─── */
+head('6', `OFFERS: ${SEEDS} seeds x ${CAREERS} careers from 2020 through the real loop`);
+function seedRandom(n) {
+  let seed = n | 0;
+  Math.random = () => {
+    seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const stats = ovr => ({ pace: ovr, shooting: ovr, passing: ovr, dribbling: ovr, defending: ovr, physical: ovr, reflexes: ovr });
+const NATS = ['England', 'Spain', 'Brazil', 'Wales', 'Japan', 'Nigeria', 'USA', 'Argentina'];
+const POSITIONS = ['ST', 'CM', 'CB', 'GK'];
+/* One engine step, the same dispatch as simClubSquads' fleet. */
+function step(s, clubs) {
+  if (s.phase === 'rehab_choice') return engine.applyRehabChoice(s, 1);
+  switch (s.phase) {
+    case 'youth': return engine.advanceYouthYear(s, clubs);
+    case 'contract_offer': {
+      const offers = s.pendingOffers || [];
+      if (!offers.length) return { ...s, phase: 'playing' };
+      return engine.acceptOffer(s, offers[0]);
+    }
+    case 'playing': return engine.advanceProSeason(s, clubs);
+    case 'newspaper': return engine.dismissNewspaper(s);
+    case 'season_summary': return engine.dismissSummary(s, clubs);
+    case 'random_events':
+      if (!s.pendingEvents || !s.pendingEvents[0]) return { ...s, pendingEvents: [], phase: 'playing' };
+      return engine.applyEventChoice(s, 0, clubs);
+    case 'moral_dilemma': return engine.dismissMoralDilemma(s, clubs);
+    case 'social_media_action': return engine.dismissSocialMediaPhase(s, clubs);
+    case 'red_card_appeal_result': return engine.dismissAppealResult(s, clubs);
+    case 'international_debut': return engine.dismissDebut(s, clubs);
+    case 'world_cup': return engine.dismissWorldCup(s, clubs);
+    case 'rivalry_event': return engine.dismissRivalryEvent(s, clubs);
+    case 'ballon_dor': return engine.dismissBallonDor(s, clubs);
+    case 'transfer_window': {
+      const sit = s.transferSituation;
+      if (sit && sit.type === 'one_offer') return engine.acceptOffer(s, sit.offer);
+      if (sit && sit.type === 'bidding_war') return engine.acceptOffer(s, sit.offerA);
+      if (sit && sit.type === 'dream_club') return engine.acceptOffer(s, sit.offer);
+      if (sit && sit.type === 'frozen_out' && sit.offers.length) {
+        const o = sit.offers[0];
+        return o.isLoan ? engine.acceptLoan(s, o) : engine.acceptOffer(s, o);
+      }
+      return engine.stayAtClub(s, clubs);
+    }
+    default: return { ...s, retired: true };
+  }
+}
+const offersOf = s => {
+  const out = [...(s.pendingOffers || []), ...(s.pendingLoanOffers || [])];
+  const sit = s.transferSituation;
+  if (sit) {
+    if (sit.offer) out.push(sit.offer);
+    if (sit.offerA) out.push(sit.offerA);
+    if (sit.offerB) out.push(sit.offerB);
+    if (Array.isArray(sit.offers)) out.push(...sit.offers);
+  }
+  return out;
+};
+/* Plays one seed. Every pickAcrossLeagues draw is priced on its own list;
+   every market offer (not the homegrown ones, which name the academy) must
+   carry a club that a pickAcrossLeagues call returned in that same step. */
+function playSeed(seed, startYear, careers, era) {
+  seedRandom(seed);
+  const r = { draws: 0, measured: 0, expected: 0, variance: 0, offers: 0, uncovered: [], byLeague: new Map(), marketFour: 0, marketAll: 0, rivals: [] };
+  let stepPicks = new Set();
+  globalThis.__poolDrawLog = (cands, p) => {
+    const { four, w } = fourOdds(cands);
+    const q = four / w;
+    r.draws += 1; r.expected += q; r.variance += q * (1 - q);
+    if (FOUR.has(p.league)) r.measured += 1;
+    stepPicks.add(p);
+  };
+  const seen = new WeakSet();
+  for (let c = 0; c < careers; c++) {
+    const ovr = 45 + (c % 28);
+    let s = engine.initCareer(`Pool ${seed} ${c}`, NATS[c % NATS.length], POSITIONS[c % POSITIONS.length], era, stats(ovr), ovr, startYear, POOL, null);
+    let guard = 0;
+    while (!s.retired && guard++ < 140) {
+      stepPicks = new Set();
+      s = step(s, POOL);
+      for (const o of offersOf(s)) {
+        if (!o || !o.club || seen.has(o)) continue;
+        seen.add(o);
+        r.offers += 1;
+        if (o.club.id.startsWith('cm-')) {
+          if (!r.byLeague.has(o.club.league)) r.byLeague.set(o.club.league, new Set());
+          r.byLeague.get(o.club.league).add(o.club.name);
+        }
+        if (o.isHomegrown) continue;
+        r.marketAll += 1;
+        if (FOUR.has(o.club.league)) r.marketFour += 1;
+        if (!stepPicks.has(o.club)) r.uncovered.push(`${o.club.name} (${s.phase})`);
+      }
+    }
+    if (s.rival && s.rival.club) r.rivals.push(s.rival.club);
+  }
+  globalThis.__poolDrawLog = undefined;
+  return r;
+}
+
+/* Bands, set from measured headroom (see the numbers below). */
+/* Measured 2026-10-05 over 12 seeds x 48 careers (seeds 0x1013a + i * 7919):
+   distinct generated clubs offered per seed, minimum (range): Premier League
+   3 (3 to 7), Championship 6 (6 to 13), La Liga 4 (4 to 8), Brasileirao 4
+   (4 to 11). Each floor is half the minimum, rounded down, at least 1; the
+   nopool control gives 0. */
+const F_MIN_DISTINCT = { 'Premier League': 1, Championship: 3, 'La Liga': 2, Brasileirao: 2 };
+/* Four leagues' wins over their expected wins, per seed: 0.911 to 1.080
+   over the same 12 seeds (z -1.90 to 1.70, about 1150 to 1230 draws each,
+   one seed's ratio sd about 0.05). The band 0.2 is about four sd and twice
+   the worst seed; the uncapped control lands far outside it. */
+const D_RATIO = 0.2;
+const SEED_LIST = Array.from({ length: SEEDS }, (_, i) => 0x1013a + i * 7919);
+const results = [];
+const t0 = Date.now();
+for (const seed of SEED_LIST) {
+  const r = playSeed(seed, 2020, CAREERS, '2020s');
+  results.push(r);
+  const ratio = r.measured / r.expected;
+  const z = (r.measured - r.expected) / Math.sqrt(r.variance || 1);
+  const leagues = [...FOUR].map(l => `${l} ${r.byLeague.get(l)?.size ?? 0}`).join(', ');
+  console.log(`  seed ${seed}: ${r.draws} draws, four leagues ${r.measured} vs ${r.expected.toFixed(1)} expected (ratio ${ratio.toFixed(3)}, z ${z.toFixed(2)}); ${r.offers} offers; distinct generated clubs offered: ${leagues}; uncovered ${r.uncovered.length}`);
+  for (const l of FOUR) ok((r.byLeague.get(l)?.size ?? 0) >= F_MIN_DISTINCT[l], `seed ${seed}: ${l} offered ${r.byLeague.get(l)?.size ?? 0} distinct generated clubs, at least ${F_MIN_DISTINCT[l]} expected`);
+  ok(r.draws >= 200, `seed ${seed}: only ${r.draws} pickAcrossLeagues draws, the comparison needs at least 200`);
+  ok(Math.abs(ratio - 1) <= D_RATIO, `seed ${seed}: the four leagues won ${r.measured} draws against ${r.expected.toFixed(1)} on the draws' own odds (ratio ${ratio.toFixed(3)}, band 1 +/- ${D_RATIO})`);
+  ok(!r.uncovered.length, `seed ${seed}: market offers that no pickAcrossLeagues call produced: ${r.uncovered.slice(0, 5).join(', ')}`);
+}
+const ratios = results.map(r => r.measured / r.expected);
+const mins = [...FOUR].map(l => `${l} ${Math.min(...results.map(r => r.byLeague.get(l)?.size ?? 0))}`).join(', ');
+console.log(`  ratio range ${Math.min(...ratios).toFixed(3)} to ${Math.max(...ratios).toFixed(3)}; per league minimum distinct generated clubs: ${mins}; ${((Date.now() - t0) / 1000).toFixed(0)} s`);
+const mk = results.reduce((a, r) => [a[0] + r.marketFour, a[1] + r.marketAll], [0, 0]);
+const rv = results.flatMap(r => r.rivals);
+const rvFour = rv.filter(n => FOUR.has(POOL.find(c => c.name === n)?.league)).length;
+console.log(`  (printed, not gated) market offers from the four leagues ${mk[0]}/${mk[1]}; rivals ${rvFour}/${rv.length}`);
+const t3up = POOL.filter(c => c.tier >= 3);
+console.log(`  (printed, not gated) manager and owner clubs are a plain pick over tier 3 and 4: four leagues ${t3up.filter(c => FOUR.has(c.league)).length}/${t3up.length} (before this round ${HAND.filter(c => c.tier >= 3 && FOUR.has(c.league)).length}/${HAND.filter(c => c.tier >= 3).length})`);
+const r95 = playSeed(0x1995, 1995, Math.max(8, Math.round(CAREERS / 3)), '1990s');
+console.log(`  (printed, not gated) a 1995 start: four leagues won ${r95.measured} of ${r95.draws} draws (${r95.expected.toFixed(1)} expected); market offers ${r95.marketFour}/${r95.marketAll}; uncovered ${r95.uncovered.length}`);
+
+/* 6d. Home academies for youths rated 40 to 54 are a plain pick over the
+   home clubs at tier 3 or 4, so the bigger pool moves the mix: the tier 3
+   share falls for English, Spanish and Brazilian youths. Measured against
+   the analytic share of each home list, before (HAND_CLUBS, which is
+   origin/main's pool row for row) and after. Wales is printed only: every
+   Welsh tier 3 or 4 club is generated, so its share is 100% by construction. */
+/* Largest deviation measured over the 12 seeds, 3000 draws each: 0.0230
+   (England), 0.0185 (Spain), 0.0160 (Brazil); one share's sd is about
+   0.008. The band 0.04 is about five sd. */
+const D_ACAD = 0.04;
+const ACAD_N = 3000;
+console.log('  academies, youths rated 40 to 54, 2020 pool:');
+for (const [label, pool] of [['before', HAND], ['after ', POOL]]) {
+  const p2020 = eras.adjustClubsForYear(pool, 2020);
+  for (const nat of ['England', 'Spain', 'Brazil', 'Wales']) {
+    const home = p2020.filter(c => c.country === nat && c.tier >= 3);
+    if (!home.length) { console.log(`    ${label} ${nat}: no home club at tier 3 or 4`); continue; }
+    const aGen = home.filter(c => c.id.startsWith('cm-')).length / home.length;
+    const nT3 = home.filter(c => c.tier === 3).length;
+    const aT3 = nT3 / home.length;
+    const devs = [];
+    for (const seed of SEED_LIST) {
+      seedRandom(seed ^ 0x5a5a);
+      let gen = 0; let t3 = 0;
+      for (let i = 0; i < ACAD_N; i++) {
+        const club = engine.getYouthAcademyClub(p2020, nat, 40 + (i % 15));
+        if (club.id.startsWith('cm-')) gen += 1;
+        if (club.tier === 3) t3 += 1;
+      }
+      const dGen = gen / ACAD_N - aGen;
+      const dT3 = t3 / ACAD_N - aT3;
+      devs.push(Math.max(Math.abs(dGen), Math.abs(dT3)));
+      if (label === 'after ' && nat !== 'Wales') ok(Math.abs(dGen) <= D_ACAD && Math.abs(dT3) <= D_ACAD, `${nat} seed ${seed}: academy shares off the home list (generated ${dGen.toFixed(4)}, tier 3 ${dT3.toFixed(4)}, band ${D_ACAD})`);
+    }
+    console.log(`    ${label} ${nat}: home list ${home.length}, tier 3 ${nT3}/${home.length} (${(aT3 * 100).toFixed(1)}%), generated ${(aGen * 100).toFixed(1)}%; largest seed deviation ${Math.max(...devs).toFixed(4)}`);
+  }
+}
+
+/* ─── 7. OLD SAVES ─── */
+head('7', 'OLD SAVES: careers signed on the pre-round pool load and play on');
+/* Each save is built directly, not hoped for: a career started on the
+   pre-round pool (HAND_CLUBS, identical to origin/main's list), signed with
+   that club's own row, written to JSON, read back through the page's guard
+   and repairCareer, then played three seasons on the new pool. It never
+   moves on its own: windows are declined and a renewal is taken from the
+   same club. A dilemma that moves the player ends the identity check. */
+const OLD = ['West Ham', 'Wolves', 'Girona', 'Norwich City', 'Flamengo', 'Real Madrid'];
+seedRandom(0x7007);
+for (const name of OLD) {
+  const row = HAND.find(c => c.name === name);
+  if (!ok(row, `${name} has a hand row to sign with`)) continue;
+  try {
+    let s = engine.initCareer(`Old ${name}`, row.country, 'CM', '2020s', stats(70), 70, 2020, HAND, null);
+    let g = 0;
+    while (s.phase === 'youth' && g++ < 12) s = engine.advanceYouthYear(s, HAND);
+    s = engine.acceptOffer(s, { club: { ...row }, contractYears: 5, wage: 20000, transferFee: 0 });
+    const blob = JSON.parse(JSON.stringify(s));
+    ok(mod.save.isSoccerCareerSave(blob), `${name}: the saved blob passes isSoccerCareerSave`);
+    let t = engine.repairCareer(blob);
+    const want7 = `${row.name}|${row.league}|${row.tier}`;
+    const snap = x => `${x.currentClub}|${x.currentLeague}|${x.currentClubTier}`;
+    ok(snap(t) === want7, `${name}: after the round trip the save reads ${snap(t)}, ${want7} expected`);
+    ok(POOL.some(c => c.name === t.currentClub), `${name}: the save's club still resolves by name in FALLBACK_CLUBS`);
+    ok(!t.academyClubName || POOL.some(c => c.name === t.academyClubName), `${name}: the academy club ${t.academyClubName} still resolves by name`);
+    const start = t.seasons.length;
+    let moved = false; let drift = ''; let guard = 0;
+    while (!t.retired && t.seasons.length < start + 3 && guard++ < 120) {
+      const before = t.currentClub;
+      if (t.phase === 'transfer_window') t = engine.stayAtClub(t);
+      else if (t.phase === 'contract_offer') {
+        const same = (t.pendingOffers || []).find(o => o.club.name === t.currentClub);
+        if (same) t = engine.acceptOffer(t, same); else { moved = true; t = step(t, POOL); }
+      } else t = step(t, POOL);
+      if (t.phase === 'moral_dilemma' || before !== t.currentClub) { if (before !== t.currentClub) moved = true; }
+      if (!moved && !drift && snap(t) !== want7) drift = `${snap(t)} in phase ${t.phase}`;
+    }
+    ok(!drift, `${name}: the save changed club, league or tier without a move: ${drift}`);
+    ok(t.retired || t.seasons.length >= start + 3, `${name}: only ${t.seasons.length - start} seasons played`);
+    console.log(`  ${name}: ${t.seasons.length - start} seasons on the new pool, ${moved ? 'moved later' : `still ${snap(t)}`}`);
+  } catch (e) { fail(`${name}: threw ${e && e.message}`); }
+}
+
+finish();
