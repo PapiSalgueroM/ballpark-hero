@@ -504,6 +504,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   };
   /* A save key in src that is deliberately NOT a card, and why. */
   const EXCUSED = {
+    'rank-em-legends-circuit-v1': 'Rank Em opens on Daily; its saved three-puzzle side mode is reopened with Legends circuit, not the long-form Continue row',
     'dukb-face-off-v1': 'Face Off is a daily quiz; its save is a match record, not a run to go back to',
     'dukb-contract-chaos-v1': 'Contract Chaos plays its five seasons in one sitting; its save is a play record (played, best, total, the daily), not a run to go back to',
     'aussie-rules-manager-save-v1': 'the legacy ten round Aussie Rules season still resumes on its own page; the one card points at the full season (save v2) that replaced it',

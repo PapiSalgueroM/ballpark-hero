@@ -11,7 +11,7 @@ import { FIXED_TIME, FIXED_DAY, RUN_KEY, marketResponse } from './footle995-fixt
 const root = process.cwd(), output = path.join(root, 'footle-clue-desk-artifacts/native');
 const parent = path.join(root, '.sim-control'); await mkdir(parent, { recursive: true });
 const temp = await mkdtemp(path.join(parent, 'footle-clue-desk-native-')); await mkdir(output, { recursive: true });
-const base = 'http://127.0.0.1:4101', dailyKey = `footle-daily-${FIXED_DAY}`;
+const base = 'http://127.0.0.1:4101', dailyKey = `footle-daily-${FIXED_DAY}`, unlimitedKey = 'footle-unlimited-session-v1';
 const recordKeys = [RUN_KEY, dailyKey, 'dukb-local-completions', 'dukb-streaks-v1', 'dukb-play-diary-v1'];
 const heldFiles = ['src/pages/Footle.tsx', 'src/components/footle/FootleClueDesk.tsx', 'src/components/footle/FootleClueDesk.module.css', 'src/hooks/useGame.ts', 'src/lib/gameLogic.ts', 'src/lib/footlePracticeRun.ts'];
 const held = new Map(); for (const file of heldFiles) held.set(file, await readFile(path.join(root, file)));
@@ -153,6 +153,7 @@ try {
       const dailyRecords = await records(); delete dailyRecords[RUN_KEY];
       await activate(page.locator('[data-footle-mode="unlimited"]'), 'open Unlimited');
       await guess('Practice Fixture Obscure 002'); const unlimited = await readDesk(); await layout('unlimited'); await screenshot('unlimited');
+      const unlimitedBytes = await page.evaluate(key => localStorage.getItem(key), unlimitedKey);
       await activate(page.getByRole('button', { name: 'Five-puzzle run', exact: true }), 'open five-puzzle run');
       await activate(page.getByRole('button', { name: 'hard', exact: true }), 'choose hard answers with the long easy fixture available to guess');
       await activate(page.getByRole('button', { name: 'Start run', exact: true }), 'start run');
@@ -233,8 +234,10 @@ try {
       await activate(page.locator('[data-footle-mode="daily"]'), 'return to held daily');
       await compare(daily.guesses[0], 'daily after finished review');
       const afterDaily = await records(); delete afterDaily[RUN_KEY]; assert.deepEqual(afterDaily, dailyRecords);
-      await activate(page.locator('[data-footle-mode="unlimited"]'), 'fresh Unlimited after reload');
-      assert.equal(await page.locator('[data-footle-review]').count(), 0); assert.equal(await page.locator('[data-clue]').count(), 0, 'Unlimited remount starts without review cards');
+      await activate(page.locator('[data-footle-mode="unlimited"]'), 'restore held Unlimited after reload');
+      assert.equal(await page.locator('[data-footle-review]').count(), 0, 'Unlimited return closes practice review');
+      assert.deepEqual(await readDesk(), unlimited, 'Unlimited restores its exact prior guessed player and eight frozen clues');
+      assert.equal(await page.evaluate(key => localStorage.getItem(key), unlimitedKey), unlimitedBytes, 'Returning to Unlimited retains its exact active session bytes');
       await activate(page.locator('[data-footle-mode="practice"]'), 'return to completed run');
       assert.equal(await page.locator('[data-footle-review]').count(), 0, 'Mode return closes old local review');
       await activate(page.getByRole('button', { name: 'Play another five', exact: true }), 'start another run');
