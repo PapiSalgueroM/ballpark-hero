@@ -1,3 +1,12 @@
+## Codex1030 accepted,1009 final font checks pending, 2026-10-05
+
+Round1030 merged as82d1d7f7 after7 normal outcomes,11 effective controls
+and all17 reader checks passed. Its import-only change preserves unknown
+counts and measured zeroes; no factual player rows were rewritten.
+Round1009 now includes a QA-only repair that loads the exact font assets
+declared by the template stylesheet. Final remote checks are pending.
+Career product source is unchanged. No new career publication is claimed.
+
 ## Round1009 integrated release candidate, 2026-10-05 23:10 UTC
 
 Decision results passed ten mounted cases,23 effective controls,20 native
