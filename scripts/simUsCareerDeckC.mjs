@@ -32,8 +32,12 @@
    Measured 2026-10-03 (deterministic: the grid and every roll are fixed,
    so these are exact run to run), plays / at a gamble's edge / era money
    pairs / trades or claims:
-     nfl  8,460 / 1,294 / 182 / 0      nba 11,268 / 1,464 / 370 / 320
-     mlb 11,892 / 2,394 / 384 / 80     nhl 11,882 / 2,222 / 252 / 556
+     nfl  8,460 / 1,294 / 3,840 / 0    nba 11,268 / 1,464 / 1,812 / 320
+     mlb 11,892 / 2,394 / 4,128 / 80   nhl 11,882 / 2,222 / 1,572 / 556
+   (era money remeasured 2026-10-05: it now pairs EVERY save of today's game
+   with the older era instead of the forty save sample the other checks
+   play, which had left the NFL at 182 pairs against the 768 its own check
+   compared before it moved here; it was 182 / 370 / 384 / 252 then.)
    The floors in FLOORS sit about ten percent under. Since 2026-10-05 the
    buttons are checked on every save, the ceilings included (the counts did
    not move), and every non ceiling home is played a second time with its
@@ -51,7 +55,10 @@
                                                               962 [button] (nfl)
                                                               478 [button] (nhl)
      loaded     every gamble wins ten points more often     3,488 [odds] (nhl)
-     flatmoney  deck C pays today's money in every era        132 [era money] (mlb)
+     flatmoney  deck C pays today's money in every era      3,456 [era money] (nfl)
+                (remeasured 2026-10-05 on the every save      1,500 [era money] (nba)
+                pass; it was 132 on mlb's sample)             1,056 [era money] (mlb)
+                                                                180 [era money] (nhl)
      eraless    a trade forgets the career's era               16 [trade] (nba)
      paycut     a morale lift over 3 cuts the salary         3,780 [held] (nfl)
      potedge    a rating at its potential reads as stuck     2,450 [button] (nba)
@@ -241,7 +248,8 @@ function replay(eng, sp) {
      odds       a roll just under the gamble's chance lands its first outcome
                 and just over lands its second ("Coin flip" is 0.5);
      era money  the same card on the same save in the older era moves the
-                bank by today's amount at the era's scale;
+                bank by today's amount at the era's scale (on every save of
+                today's game, not the sample: see eraMoney);
      trade      a trade or a claim lands on another team of the career's era. */
 const HOMES_PER_CARD = 40;
 const r2 = x => Math.round(x * 100) / 100;
@@ -258,10 +266,10 @@ const rolled = (roll, seed, gamble) => {
  *  silently stops running goes red. Plays, plays at a gamble's edge, era
  *  money pairs, trades or claims. */
 const FLOORS = {
-  nfl: [8000, 1200, 170, 0],
-  nba: [10500, 1350, 340, 280],
-  mlb: [11000, 2200, 350, 60],
-  nhl: [11000, 2000, 230, 480],
+  nfl: [8000, 1200, 3450, 0],
+  nba: [10500, 1350, 1630, 280],
+  mlb: [11000, 2200, 3700, 60],
+  nhl: [11000, 2000, 1400, 480],
 };
 /** The same for the second pass, every non ceiling home replayed with its
  *  rating at its potential. Measured 2026-10-05 (exact, as above): nfl 6,738,
@@ -296,6 +304,49 @@ function dirsOf(m, traded) {
   if (cash) out.push(cash > 0 ? 'money in' : 'money out');
   if (traded) out.push('new team');
   return out.sort().join('|');
+}
+
+/** Section 2's era money, on EVERY save of today's game rather than the
+ *  HOMES_PER_CARD sample the other checks play: each card dealt there, each
+ *  option at a low and a high roll (both sides of a gamble), is played again
+ *  on the same save in the older era, and the bank must move by today's
+ *  amount at the era's scale. The NFL's own version of this check walked
+ *  every home the same way before Round 988 moved it here (768 pairs, floor
+ *  700); the sample alone left it 182. Returns the pairs it compared. */
+function eraMoney(eng, sp, r, oldEra, scaleOld, fail) {
+  if (!oldEra) return 0;
+  const catalog = sp.catalog ? eng[sp.catalog] : null;
+  let pairs = 0;
+  r.grid.forEach((g, gi) => {
+    if (g.eraId) return;
+    const frozen = fixture(eng, sp, g);
+    const twin = fixture(eng, sp, { ...g, eraId: oldEra });
+    const theirs = new Map(eng[sp.getC](structuredClone(twin), mulberry(1)).map(e => [e.id, e]));
+    for (const card of eng[sp.getC](structuredClone(frozen), mulberry(1))) {
+      const tc = theirs.get(card.id);
+      if (!tc) continue; /* an era gate can close the card in the older era */
+      card.options.forEach((o, k) => {
+        const def = catalog ? catalog.find(d => d.id === card.id)?.options[k] : null;
+        const gamble = /^(Coin flip|Could go either way): /.test(o.effect) || Boolean(def && 'p' in def);
+        [0.01, 0.99].forEach((roll, ri) => {
+          const seed = 7000 + gi * 64 + k * 8 + ri;
+          const s = structuredClone(frozen), t = structuredClone(twin);
+          o.apply(s, rolled(roll, seed, gamble));
+          tc.options[k].apply(t, rolled(roll, seed, gamble));
+          const moved = movedOf(frozen, s), tm = movedOf(twin, t);
+          for (const f of ['netWorth', 'earned']) {
+            if (!moved[f]) continue;
+            pairs++;
+            const want = Math.abs(moved[f]) * scaleOld;
+            if (Math.sign(tm[f]) !== Math.sign(moved[f]) || Math.abs(tm[f]) < want - 0.051 || Math.abs(tm[f]) > want + 0.1) {
+              fail('era money', `${card.id} option ${k + 1} at ${roll} on save ${gi}: ${f} moves ${moved[f]}M today and ${tm[f]}M in ${oldEra}, where the era's scale says about ${(Math.sign(moved[f]) * want).toFixed(2)}M`);
+            }
+          }
+        });
+      });
+    }
+  });
+  return pairs;
 }
 
 /** Section 2 for one sport. Returns how many plays it checked. */
@@ -368,28 +419,11 @@ function words(eng, sp, key, r, fails) {
             if (!atPot) trades++;
             if (!sp.teams || !eng[sp.teams](s.eraId).includes(s.team)) fail('trade', `${id} option ${k + 1}: traded to ${s.team}, which is not a team of the career's era (${s.eraId ?? 'today'})`);
           }
-          /* era money: the same save in the older era */
-          if (!atPot && !g.eraId && oldEra && (moved.netWorth || moved.earned)) {
-            const twin = fixture(eng, sp, { ...g, eraId: oldEra });
-            const tc = eng[sp.getC](structuredClone(twin), mulberry(1)).find(e => e.id === id);
-            if (tc) {
-              const t = structuredClone(twin);
-              tc.options[k].apply(t, rolled(roll, seed, p !== null));
-              const tm = movedOf(twin, t);
-              for (const f of ['netWorth', 'earned']) {
-                if (!moved[f]) continue;
-                eraPairs++;
-                const want = Math.abs(moved[f]) * scaleOld;
-                if (Math.sign(tm[f]) !== Math.sign(moved[f]) || Math.abs(tm[f]) < want - 0.051 || Math.abs(tm[f]) > want + 0.1) {
-                  fail('era money', `${id} option ${k + 1}: ${f} moves ${moved[f]}M today and ${tm[f]}M in ${oldEra}, where the era's scale says about ${(Math.sign(moved[f]) * want).toFixed(2)}M`);
-                }
-              }
-            }
-          }
         }
       });
     }
   }
+  eraPairs = eraMoney(eng, sp, r, oldEra, scaleOld, fail);
   console.log(`   words against effects: ${plays} plays, ${oddsPlays} at a gamble's edge, ${eraPairs} era money pairs, ${trades} trades or claims`);
   if (!plays) fail('words', 'no card was played');
   console.log(`   and ${potPlays} plays again with the rating at its potential`);
