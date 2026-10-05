@@ -12,8 +12,11 @@
  *      replay identically on this tree.
  *   2) Every league year keeps its rules (validateLeagueYear): every phase is
  *      one date range, two sourced or carrying a thin note and listed in
- *      GM_CALENDAR_PARTIAL; the deadline inside the regular season; every
- *      engine period one range, back to back, first day to last.
+ *      GM_CALENDAR_PARTIAL, a phase with no source marked estimate; the
+ *      deadline inside the regular season; every engine period one range,
+ *      back to back, first day to last; and every sport stops for the six
+ *      things the brief names (re-sign, draft, free agency, cut down day, the
+ *      deadline, the season's end), a literal here, not read from the module.
  *   3) The engine periods are the engines' own counts, read from the code of
  *      frontOffice.ts, nbaFrontOffice.ts, mlbFrontOffice.ts, nhlFrontOffice.ts.
  *   4) A sim to a day never runs past a stop. Every pair of days in each year
@@ -21,22 +24,36 @@
  *      the first stop after the start, or reach the target; then a chained
  *      walk to the year's end with seeded host stops (a deal running out, a
  *      starter hurt, an inbox ask) must halt on every stop in turn and play
- *      every period exactly once.
+ *      every period exactly once. Every plan must also say which stop it
+ *      halted for, one on the target day included. Then stops that come up
+ *      mid run: runSimPlan with an engine that raises a stop in three seeded
+ *      periods a year must end each run on the raising period, the next plan
+ *      must hold until the stop is dropped, and every period is still played
+ *      once and every calendar stop still seen. Last, deadlinePeriod is the
+ *      count the walk has played at the deadline stop, and the measured one.
  *   5) Each league's real order, as facts that do not come from
  *      GM_PHASE_ORDER: the NFL opens its market before its draft, the NBA and
  *      NHL draft before theirs, baseball drafts mid season after opening day,
  *      the lottery comes before the draft, the deadline before the playoffs.
  *   6) The grid: every month of every year drawn, every regular season day in
  *      exactly one period, every period with its games, every phase marked on
- *      its first day once, every stop on exactly one day.
+ *      its first day once, every stop on exactly one day, and every host stop
+ *      handed to the grid outlined on its own day.
  *   7) The offseason as steps: in date order, every phase before opening day,
- *      and baseball's draft an in season step.
+ *      and baseball's draft an in season step; nextStep checked on every day
+ *      of every year (the second day of the draft is still the draft).
  *
- * Measured on this tree (2026-10-03): 35 phases, 25 of them thin; section 4
- * plans 305,383 pairs of days over the four years; the chained walk with four
- * host stops a year, seeds 1 to 5, halts 9 to 10 times a year (a host stop
- * landing on a calendar stop's day counts once) and plays 17, 20, 27 and 20
- * periods; section 5 holds 29 order facts; section 6 draws 1,612 days.
+ * Measured on this tree (2026-10-05, after the fixer pass sourced seven
+ * guessed dates and cut the MLB postseason to 31 October): 35 phases, 18 of
+ * them thin and 4 estimates; section 4 plans 301,302 pairs of days over the
+ * four years; the chained walk with four host stops a year, seeds 1 to 5,
+ * halts 10 times a year (a host stop on a calendar stop's day is a stop of
+ * its own) and plays 17, 20, 27 and 20 periods; the mid run walk raises 15
+ * stops per sport over the five seeds; deadlinePeriod is nfl 8, nba 13,
+ * mlb 19, nhl 15; section 5 holds 29 order facts; section 6 draws 1,582 days.
+ * The fixture's date rule section was proved by hand on 2026-10-05: a scratch
+ * tap rule (target >= week) recorded through scripts/recordCalDateFixture946.mjs
+ * changes all three careers' dateRule hashes.
  * Every check here is exact (a date, a count, an order), so there is no
  * band to set: a single wrong day fails.
  *
@@ -48,6 +65,18 @@
  *   engine    the NBA year claims 21 rounds (3)
  *   halt      the sim plan ignores its stops and runs to the target (4)
  *   order     baseball's draft moved to February, before opening day (5)
+ *   nohalt    the NBA deadline marked halts: false (2)
+ *   estimate  the NBA re-sign window, no source, loses its estimate mark (2)
+ *   haltday   a stop on the target day goes unreported, k < t (4)
+ *   midrun    runSimPlan ignores a stop the engine raises (4)
+ *   openstop  an open host stop no longer holds the run (4)
+ *   dlperiod  deadlinePeriod counts the period the deadline falls in (4)
+ *   grid      the month grid drops the host stops (6)
+ *   steps     opening day counts as an offseason step (7)
+ *   nextstep  nextStep skips a phase already running (7)
+ * Measured 2026-10-05, failures per control: fixture 16, deadline 2, thin 2,
+ * periods 174, engine 2, halt 68, order 4, nohalt 3, estimate 2, haltday 24,
+ * midrun 49, openstop 20, dlperiod 6, grid 16, steps 4, nextstep 4.
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
