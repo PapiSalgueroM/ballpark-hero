@@ -177,7 +177,7 @@ const OWN_SURFACE = {
   '/nascar-chain': 'its own game over block in NascarChainBoard, the chain and the reason it ended',
   '/ufc-chain': 'its own game over block in CombatChainBoard, the chain and the reason it ended',
   '/minefield': 'its own done panel in the page, the banked score and rounds won',
-  '/aussie-rules-manager': 'its own season complete panel in AussieRulesManagerBoard, the league winner and the final ladder',
+  '/aussie-rules-manager': 'its own season over panel in AussieRulesLeagueBoard, with VictoryMoment for a premiership and the Grand Final score',
 };
 
 /* ---------- 1. wiring, from the AST ---------- */

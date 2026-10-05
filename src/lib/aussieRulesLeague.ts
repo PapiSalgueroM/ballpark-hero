@@ -338,15 +338,19 @@ function advance(state: LeagueState): LeagueState {
   return state;
 }
 
-/** The week a club went out of the finals, from the last tie it lost; null for the premier or a non-finalist. */
-function eliminatedWeek(state: Pick<LeagueState, 'finals'>, clubId: string): number | null {
-  const lost = (state.finals?.ties ?? []).filter(tie => outcomeOf(tie)?.loser === clubId);
-  return lost.length ? Math.max(...lost.map(tie => tie.week)) : null;
+/** The tie that ended a club's finals: a loss whose loser gets no second chance (a qualifying final loss is not one). */
+function knockout(state: Pick<LeagueState, 'finals' | 'format'>, clubId: string): FinalsTieRecord | undefined {
+  const secondChance = new Set(FINALS_PRESETS[state.format].ties.flatMap(tie => [tie.home, tie.away]).flatMap(slot => 'loserOf' in slot ? [slot.loserOf] : []));
+  return (state.finals?.ties ?? []).find(tie => !secondChance.has(tie.id) && outcomeOf(tie)?.loser === clubId);
+}
+/** The week a club went out of the finals; null for the premier or a non-finalist. */
+function eliminatedWeek(state: Pick<LeagueState, 'finals' | 'format'>, clubId: string): number | null {
+  return knockout(state, clubId)?.week ?? null;
 }
 export function finalsExit(state: Pick<LeagueState, 'clubs' | 'results' | 'finals' | 'format'>, clubId: string): FinalsExit {
   if (seedsOf(state).indexOf(clubId) >= FINALS_PRESETS[state.format].qualifiers) return 'missed';
-  const lost = (state.finals?.ties ?? []).filter(tie => outcomeOf(tie)?.loser === clubId).sort((a, b) => b.week - a.week);
-  return lost.length ? exitForTie(lost[0].id) : 'premiers';
+  const lost = knockout(state, clubId);
+  return lost ? exitForTie(lost.id) : 'premiers';
 }
 export function leadingGoalkicker(state: Pick<LeagueState, 'clubs' | 'goals'>): { name: string; club: string; goals: number } {
   const [id, goals] = Object.entries(state.goals).sort((a, b) => b[1] - a[1] || Number(a[0].slice(2)) - Number(b[0].slice(2)))[0] ?? ['', 0];
