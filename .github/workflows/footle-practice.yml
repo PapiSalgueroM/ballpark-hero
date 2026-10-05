@@ -9,6 +9,7 @@ on:
       - scripts/simFootlePractice995.mjs
       - scripts/qa/footle995*
       - src/pages/Footle.tsx
+      - src/components/footle/**
       - src/hooks/useGame*
       - src/lib/footlePracticeRun*
       - src/lib/gameLogic.ts

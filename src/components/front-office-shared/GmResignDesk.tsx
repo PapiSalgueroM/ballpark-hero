@@ -59,8 +59,11 @@ export interface GmResignDeskProps {
   onQualify: (c: DeskCase) => void;
   onMatch: (c: DeskCase) => void;
   onTakePicks: (c: DeskCase) => void;
-  /** Run the offseason. Only offered once every man has a decision. */
-  onDone: () => void;
+  /** Run the offseason. Only offered once every man has a decision. Round 987: absent on a board
+      whose offseason runs elsewhere (the NHL runs it after the draft), and then no button is drawn. */
+  onDone?: () => void;
+  /** Round 987: one line under the tiles, for what the board does with a man left open. */
+  footnote?: string;
 }
 
 export function GmResignDesk(props: GmResignDeskProps) {
@@ -128,14 +131,15 @@ export function GmResignDesk(props: GmResignDeskProps) {
           );
         })}
       </div>
-      <button
+      {onDone && <button
         type="button"
         disabled={waiting > 0}
         onClick={onDone}
         className="min-h-[44px] w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40"
       >
         {waiting > 0 ? 'Decide every player to start the offseason' : 'Start the offseason'}
-      </button>
+      </button>}
+      {props.footnote && <p data-resign-footnote className="text-center text-[11px] text-muted-foreground">{props.footnote}</p>}
       <p className="text-center text-[10px] text-muted-foreground">{contractRulesNote()}</p>
     </div>
   );

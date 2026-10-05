@@ -14,8 +14,8 @@ import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { recordCompletion } from '@/lib/completions';
 import {
   SAVE_KEY, TICK_MS, type ArenaState,
-  newState, loadSave, serialize, tick, applyOffline, tap, buyGen, buyUpgrade, lift, affordable,
-  GENERATORS,
+  newState, loadSave, serialize, tick, applyOffline, tap, buyGen, buyUpgrade, buyPerk, lift, affordable, growthOf,
+  GENERATORS, type Perk,
 } from '@/lib/idleArena';
 
 export interface Floater { id: number; text: string; x: number; y: number }
@@ -99,7 +99,7 @@ export function useIdleArena() {
     setState(s => {
       const g = GENERATORS.find(x => x.id === genId);
       if (!g) return s;
-      const n = mode === 'max' ? affordable(g, s.owned[g.id] ?? 0, s.points) : mode;
+      const n = mode === 'max' ? affordable(g, s.owned[g.id] ?? 0, s.points, growthOf(s, g.id)) : mode;
       return n > 0 ? buyGen(s, genId, n) : s;
     });
   }, [markSessionPlay]);
@@ -117,6 +117,9 @@ export function useIdleArena() {
   }), []);
   const dismissLift = useCallback(() => setLastLift(null), []);
   const dismissOffline = useCallback(() => setOffline(null), []);
+  /* Round 957: the trophy room. The engine refuses a level the cabinet cannot
+     cover and hands the same state back, so a double tap cannot overspend. */
+  const doPerk = useCallback((id: Perk['id']) => setState(s => buyPerk(s, id)), []);
 
-  return { state, fresh: boot.fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift };
+  return { state, fresh: boot.fresh, offline, dismissOffline, floaters, doTap, doBuy, doUpgrade, doLift, lastLift, dismissLift, doPerk };
 }
