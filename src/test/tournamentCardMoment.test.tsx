@@ -175,6 +175,11 @@ function winnerOtherRun(year = 2030): IntlTournament {
   };
 }
 
+/* A reload re-imports the card's modules, which costs a few seconds on a busy
+   machine (2.5 s measured for three reloads, and past the 5 s default under
+   load), so the tests that reload get room. */
+const RELOAD_TIMEOUT = 20_000;
+
 beforeEach(() => { window.sessionStorage.clear(); window.localStorage.clear(); resetCareerMomentsForTest(); });
 afterEach(() => { cleanup(); });
 
@@ -297,7 +302,7 @@ describe('Round 926: the moment plays once', () => {
     vi.resetModules();
     const control = mount(winner(2036), await reload(null));
     expect(card(control.container).dataset.intlMoment).toBe('won');
-  });
+  }, RELOAD_TIMEOUT);
 
   it('a different career winning the same edition with the same nation still gets its moment, even after a reload', async () => {
     mount(winner(2041));
@@ -313,7 +318,7 @@ describe('Round 926: the moment plays once', () => {
     expect(card(mount(winner(2041), reloaded).container).dataset.intlMoment).toBe('none');
     cleanup();
     expect(card(mount(winnerOtherRun(2041), reloaded).container).dataset.intlMoment).toBe('won');
-  });
+  }, RELOAD_TIMEOUT);
 
   it('needs no storage: a storage that throws on every call changes nothing, and nothing is written', () => {
     const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => { throw new Error('blocked'); });
@@ -391,5 +396,5 @@ describe('Round 926: the quiet card also plays once', () => {
     const later = mount(groupExit(2042), newTab);
     expect(card(later.container).dataset.intlMoment).toBe('none');
     expect(card(later.container).className).not.toContain('cm-rise');
-  });
+  }, RELOAD_TIMEOUT);
 });
