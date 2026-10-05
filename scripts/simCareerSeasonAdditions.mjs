@@ -299,7 +299,23 @@ async function rehearse(PGlite) {
   const by = new Map();
   for (const s of seasons) (by.get(s.player_id) ?? by.set(s.player_id, []).get(s.player_id)).push({ season: s.season, club: s.club, goals: s.goals, assists: s.assists, appearances: s.appearances, marketValue: s.market_value });
   const after = players.map(p => ({ name: p.player_name, nationality: p.nationality, position: p.position, career: by.get(p.id) ?? [] }));
-  if (bakeHash(after) !== ledger.postBake.sha256) fail('the rehearsed tables do not read back as the bake (postBake hash differs)');
+  /* PGlite's collation may order names differently from production's, so the
+     players are compared by name, each career in its own order */
+  const want = new Map(post.map(p => [p.name, JSON.stringify(p)]));
+  if (after.length !== post.length) fail(`the rehearsed tables hold ${after.length} players, the pool after the ledger ${post.length}`);
+  const differ = after.filter(p => want.get(p.name) !== JSON.stringify(p)).map(p => p.name);
+  if (differ.length) fail(`the rehearsed tables differ from the pool after the ledger for ${differ.length} players: ${differ.slice(0, 5).join(', ')}`);
+  const expected = new Map([...live].map(([id, p]) => [id, { a: p.a, b: p.b, classic: p.classic, europe: p.europe, active: p.active }]));
+  for (const r of gen.renames) Object.assign(expected.get(r.id), { a: r.a, b: r.b });
+  for (const r of gen.rewrites) expected.get(r.id)[r.rule] = r.next;
+  const entry = (min, hint) => (min === null ? null : { minSteps: Number(min), hint });
+  let puzzleDiffs = 0;
+  for (const row of (await db.query('select * from public.transfer_path_puzzles')).rows) {
+    const e = expected.get(row.puzzle_id);
+    const got = { a: row.player_a, b: row.player_b, classic: entry(row.min_steps, row.hint), europe: entry(row.europe_min_steps, row.europe_hint), active: entry(row.active_min_steps, row.active_hint) };
+    if (!e || JSON.stringify(got) !== JSON.stringify(e)) puzzleDiffs += 1;
+  }
+  if (puzzleDiffs) fail(`${puzzleDiffs} rehearsed Transfer Path rows differ from the companion with the renames and rewrites applied`);
   try { await db.exec(sql); fail('the migration ran a second time instead of failing closed'); } catch { /* fails closed, as it must */ }
   console.log(`   rehearsed: ${after.length} players read back equal to the bake; a second run fails closed`);
 }
