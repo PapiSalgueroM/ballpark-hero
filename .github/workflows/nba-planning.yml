@@ -53,18 +53,6 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee nba-planning-artifacts/types.log
           npm run build 2>&1 | tee nba-planning-artifacts/build.log
-      - name: Refresh the release snapshot on the remote runner
-        # Remove this one-time refresh once the generated files are committed.
-        # The final verification run must check the committed snapshots unchanged.
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee nba-planning-artifacts/snapshot.log
-          node scripts/genSitemap.mjs 2>&1 | tee nba-planning-artifacts/sitemap-refresh.log
-          cp public/sitemap.xml dist/sitemap.xml
-          mkdir -p nba-planning-artifacts/generated/public/whats-new nba-planning-artifacts/generated/scripts/data
-          cp public/whats-new/index.html nba-planning-artifacts/generated/public/whats-new/index.html
-          cp public/sitemap.xml nba-planning-artifacts/generated/public/sitemap.xml
-          cp scripts/data/lastmod.json nba-planning-artifacts/generated/scripts/data/lastmod.json
       - name: Planning outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: NBA_PLANNING_CONTROL=all ONLY=simNbaPlanningBench node scripts/runAllSims.mjs 2>&1 | tee nba-planning-artifacts/planning.log
