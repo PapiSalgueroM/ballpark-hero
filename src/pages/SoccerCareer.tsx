@@ -99,6 +99,7 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
+import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 
 /* ─── Constants ─── */
@@ -768,7 +769,11 @@ export default function SoccerCareer() {
          taking a single step. repairCareer fills every optional field this
          game has grown, including the primeType migration that used to live
          here, and it runs again at the top of both step functions. */
-      return { career: repairCareer(parsed as CareerState), invalid: false };
+      const loaded = repairCareer(parsed as CareerState);
+      /* Round 985: a moment this save already holds was seen; it never replays.
+         Its own try, so an odd save can only cost a moment, never the save. */
+      try { settleLoadedMoments(loaded); } catch { /* the card plays; nothing else changes */ }
+      return { career: loaded, invalid: false };
     } catch { return { career: null, invalid: true }; }
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
@@ -2369,15 +2374,29 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
 }
 
 /* ─── International Debut Screen ─── */
-function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
+/* Round 985: the call-up lands as a moment. The flag and the heading slam,
+   the call-up line and the nation, age and OVR row rise, the last line ticks
+   in, each on the kit's stagger. Only the first time the career steps onto
+   this card (careerMoments.ts); a reload or a second mount draws it still.
+   Every value is the save's own, final from its first frame. The last line
+   used to promise a morale boost the call-up never applied (the engine's
+   debut path sets the debut year and nothing else), so it says only what is
+   true. The Continue button is never animated, so it can always be pressed. */
+export function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
+  const m = useCareerMoment(debutMomentKey(career));
+  const fx = (cls: string) => (m.fresh ? ` ${cls}` : "");
+  const at = (i: number) => beatStyle(m, revealDelay(i, 0.1, 0.2));
+  /* A slam starts at 1.6 times its size, so it goes on a content wide child and
+     its row clips across: a full width block scaled up would push past a
+     phone's edge and widen the page for a moment. */
   return (
-    <div className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
-      <div className="flex justify-center"><FlagImg name={career.nationality} size={48} /></div>
-      <h3 className="text-2xl font-black tracking-tight">INTERNATIONAL DEBUT</h3>
-      <p className="text-sm text-muted-foreground">
+    <div ref={m.ref} className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
+      <div className="flex justify-center overflow-x-clip"><span className={`inline-flex${fx("cm-slam")}`} style={at(0)} data-beat="flag"><FlagImg name={career.nationality} size={48} /></span></div>
+      <h3 className="text-2xl font-black tracking-tight overflow-x-clip"><span className={`inline-block${fx("cm-slam")}`} style={at(1)} data-beat="heading">INTERNATIONAL DEBUT</span></h3>
+      <p className={`text-sm text-muted-foreground${fx("cm-rise")}`} style={at(2)} data-beat="callup">
         {career.playerName} has been called up to the <strong><FlagImg name={career.nationality} size={14} showLabel /></strong> national team!
       </p>
-      <div className="flex items-center justify-center gap-3 text-sm">
+      <div className={`flex items-center justify-center gap-3 text-sm${fx("cm-rise")}`} style={at(3)} data-beat="row">
         <span><FlagImg name={career.nationality} size={24} /></span>
         <span className="font-bold">{career.nationality}</span>
         <span className="text-muted-foreground">·</span>
@@ -2385,8 +2404,8 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
         <span className="text-muted-foreground">·</span>
         <span className="text-muted-foreground">OVR {career.overall}</span>
       </div>
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
-        <p className="text-xs text-amber-300">🎉 Massive morale boost! Your international journey begins.</p>
+      <div className={`bg-amber-500/10 border border-amber-500/20 rounded-lg p-3${fx("cm-tick-in")}`} style={at(4)} data-beat="journey">
+        <p className="text-xs text-amber-300">🎉 Your international journey begins.</p>
       </div>
       <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-black">
         Continue →
@@ -2608,16 +2627,21 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
 }
 
 /* ─── Rivalry Summary Card (End of Career) ─── */
-function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; career: CareerState }) {
+/* Round 985: the verdict line rises the first time the career lands on it
+   (careerMoments.ts), the same rise the debut card's row uses. The hook sits
+   above the early return on purpose (React error #310). The card sits low in
+   the right column, so the rise waits until the card is in view. */
+export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; career: CareerState }) {
+  const m = useCareerMoment(rivalryMomentKey(career));
   const rival = career.rival;
   if (!rival) return null;
   const winnerColor = summary.overallWinner === "player" ? "border-emerald-500/50 from-emerald-500/10" : summary.overallWinner === "rival" ? "border-orange-500/50 from-orange-500/10" : "border-amber-500/50 from-amber-500/10";
-  
+
   return (
-    <div className={`rounded-xl border-2 ${winnerColor} bg-gradient-to-b to-transparent p-5 space-y-4`}>
+    <div ref={m.ref} className={`rounded-xl border-2 ${winnerColor} bg-gradient-to-b to-transparent p-5 space-y-4`}>
       <div className="text-center space-y-2">
         <div className="text-4xl">{summary.overallWinner === "player" ? "👑" : summary.overallWinner === "rival" ? "😔" : "🤝"}</div>
-        <h3 className="text-xl font-black">
+        <h3 className={`text-xl font-black${m.fresh ? " cm-rise" : ""}`} style={beatStyle(m, revealDelay(0, 0.1))} data-beat="verdict">
           {summary.overallWinner === "player" ? "RIVALRY WON!" : summary.overallWinner === "rival" ? "RIVALRY LOST" : "RIVALRY TIED"}
         </h3>
         <p className="text-sm text-muted-foreground">{career.playerName} vs {rival.name}: Career Rivalry</p>
@@ -3145,28 +3169,54 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
 }
 
 /* ─── Legacy Card (shown on final retirement screen) ─── */
-function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onShare: () => void }) {
+/* Round 985: the end of a career is a moment. The first time the career
+   lands here (careerMoments.ts) the tier emoji and the tier slam, the score
+   and the name rise, then the breakdown rows and the four stat tiles tick in
+   on the kit's stagger. The score is its final value from its first frame
+   (Round 147: no number ever rolls). Gold confetti only for GOAT and LEGEND,
+   the rule the retirement ceremony already keeps. A reload or a second mount
+   draws the card still. The hook sits above the early return (error #310).
+   The card mounts at the foot of the retired screen, below the fold, so the
+   beats wait until it is in view (careerMoments.ts) rather than play to
+   nobody. The slams sit on content wide children inside rows that clip
+   across, so the 1.6 times start never widens a phone's page; the confetti is
+   the LAST child, because as the first it would take the space-y gap and push
+   the header down the moment it appears (Round 926 found the same). */
+export function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onShare: () => void }) {
+  const m = useCareerMoment(legacyMomentKey(career));
   if (!career.legacy) return null;
   const legacy = career.legacy;
+  const fx = (cls: string) => (m.fresh ? ` ${cls}` : "");
+  const at = (i: number) => beatStyle(m, revealDelay(i, 0.1, 0.16));
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
   const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const rows = legacy.breakdown.filter(b => b.points > 0);
+  const tiles: { value: number; label: string }[] = [
+    { value: totals.goals, label: "Goals" },
+    { value: totalTrophies, label: "Trophies" },
+    { value: totals.ballonDors, label: "Ballon d'Or" },
+    { value: career.intStats.caps, label: "Caps" },
+  ];
+  /* The header takes beats 0 to 3, the rows follow it, the tiles follow the rows. */
+  const rowBeat = 4;
+  const tileBeat = rowBeat + rows.length;
 
   return (
-    <div className={`rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
+    <div ref={m.ref} className={`relative rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
       <div className="text-center space-y-1">
-        <div className="text-4xl">{tierEmoji[legacy.tier]}</div>
-        <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
-        <div className="text-4xl font-black">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
-        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} size={16} />{career.playerName} · {career.position}</p>
+        <div className="text-4xl overflow-x-clip"><span className={`inline-block${fx("cm-slam")}`} style={at(0)} data-beat="tier-emoji">{tierEmoji[legacy.tier]}</span></div>
+        <div className={`text-2xl font-black ${tierColors[legacy.tier]} overflow-x-clip`}><span className={`inline-block${fx("cm-slam")}`} style={at(1)} data-beat="tier">{legacy.tier}</span></div>
+        <div className={`text-4xl font-black${fx("cm-rise")}`} style={at(2)} data-beat="score">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
+        <p className={`text-xs text-muted-foreground flex items-center justify-center gap-1${fx("cm-rise")}`} style={at(3)} data-beat="name"><FlagImg name={career.nationality} size={16} />{career.playerName} · {career.position}</p>
       </div>
 
       {/* Breakdown */}
       <div className="space-y-1">
-        {legacy.breakdown.filter(b => b.points > 0).map(b => (
-          <div key={b.label} className="flex items-center justify-between text-xs">
+        {rows.map((b, i) => (
+          <div key={b.label} className={`flex items-center justify-between text-xs${fx("cm-tick-in")}`} style={at(rowBeat + i)} data-beat="row">
             <span className="text-muted-foreground">{b.label}</span>
             <span className="font-bold text-foreground">+{b.points}</span>
           </div>
@@ -3175,22 +3225,12 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
 
       {/* Key stats */}
       <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totals.goals}</div>
-          <div className="text-muted-foreground">Goals</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totalTrophies}</div>
-          <div className="text-muted-foreground">Trophies</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totals.ballonDors}</div>
-          <div className="text-muted-foreground">Ballon d'Or</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{career.intStats.caps}</div>
-          <div className="text-muted-foreground">Caps</div>
-        </div>
+        {tiles.map((t, j) => (
+          <div key={t.label} className={`bg-muted/20 rounded-lg p-1.5${fx("cm-tick-in")}`} style={at(tileBeat + j)} data-beat="tile">
+            <div className="font-black text-sm">{t.value}</div>
+            <div className="text-muted-foreground">{t.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* Rival result */}
@@ -3230,6 +3270,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
         gamePath="/soccer-career"
         customText={generateShareText(career)}
       />
+      {m.fresh && m.live && (legacy.tier === "GOAT" || legacy.tier === "LEGEND") && <Confetti pieces={60} gold />}
     </div>
   );
 }
