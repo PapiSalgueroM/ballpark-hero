@@ -121,6 +121,13 @@ describe('NHL planning bench', () => {
     act(() => { view.result.current.submitSelection(); view.result.current.submitSelection(); });
     expect(view.result.current.lives, 'Same-frame Submit costs one life').toBe(3);
     expect(JSON.parse(localStorage.getItem(dailyKey)!).guesses).toEqual([{ t: 'x' }]);
+    for (const active of [0, 1, 0]) {
+      act(() => view.result.current.selectDraft(active));
+      expect(view.result.current.canSubmit, 'Draft navigation does not unlock an unchanged rejection').toBe(false);
+      act(() => view.result.current.submitSelection());
+    }
+    expect(view.result.current.lives, 'Draft navigation never costs another life').toBe(3);
+    expect(JSON.parse(localStorage.getItem(dailyKey)!).guesses).toEqual([{ t: 'x' }]);
     selectHook(view, puzzle.groups[0].players);
     act(() => { view.result.current.submitSelection(); view.result.current.submitSelection(); });
     expect(view.result.current.foundGroups).toBe(1);

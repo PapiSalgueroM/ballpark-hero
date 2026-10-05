@@ -209,7 +209,8 @@ export function useNbaConnections() {
   }, [loadingGame, scope, rosterSignature, remainingSignature]);
 
   const writeDrafts = useCallback((next: NbaConnectionDrafts) => {
-    draftsRef.current = next; setDrafts(next); submittedRef.current = '';
+    if (JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups)) submittedRef.current = '';
+    draftsRef.current = next; setDrafts(next);
     try { localStorage.setItem(nbaDraftKey(mode), JSON.stringify(next)); setNotesWarning(false); }
     catch { setNotesWarning(true); }
   }, [mode]);
@@ -297,6 +298,7 @@ export function useNbaConnections() {
   }, [notesReady, gameStatus, writeDrafts]);
 
   const resetGame = useCallback(() => {
+    submittedRef.current = '';
     if (mode === 'daily') {
       resetDailyHook();
       if (puzzle) writeDrafts(emptyNbaDrafts(scope, roster));

@@ -195,6 +195,11 @@ try {
       await activate(button('Submit five'), touch); await receipt('wrong');
       assert.equal(await stored(DAILY).then(JSON.parse).then(save => save.guesses.length), 1);
       assert.equal(await button('Submit five').isDisabled(), true, 'Unchanged wrong group cannot be booked twice');
+      const rejectedBytes = await stored(DAILY);
+      for (const draft of ['A', 'B', 'A']) await choose(draft);
+      assert.equal(await button('Submit five').isDisabled(), true, 'Draft navigation preserves the rejection guard');
+      assert.equal(await stored(DAILY), rejectedBytes, 'Draft navigation preserves the exact Daily payload');
+      assert(await page.getByLabel('3 lives remaining', { exact: true }).count());
       assert.match(await page.locator('[data-nhl-receipt]').innerText(), /One life used/);
       assert.deepEqual((await notes('daily')).groups, [wrong, group[2].players, [], []]);
       if (reduced) assert.equal(await page.getByRole('group', { name: 'Available players' }).evaluate(el => getComputedStyle(el).animationName), 'none');

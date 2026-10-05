@@ -23,6 +23,7 @@ const titles = {
   baseline: 'restores the original completed Daily payload quietly and keeps its exact bytes',
 };
 const controls = {
+  navigation: { file: hook, from: 'if (JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups))', to: 'if (true)', test: titles.rapid },
   scope: { file: helper, from: 'value.scope !== scope', to: 'false', test: titles.model },
   roster: { file: helper, from: 'JSON.stringify([...value.roster].sort()) !== JSON.stringify([...roster].sort())', to: 'false', test: titles.model },
   duplicate: { file: helper, from: '|| seen.has(name)', to: '|| false', test: titles.model },

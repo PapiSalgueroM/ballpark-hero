@@ -2,6 +2,14 @@
 
 2026-10-05. Design contract, not a release claim.
 
+Review also found a rejection guard gap in both planning hooks: selecting the
+active tab or switching away and back cleared the last submission guard.
+Notes writes now clear it only when the groups actually change. Tab navigation
+keeps an unchanged rejected group disabled; editing a group remains possible.
+Reset explicitly clears the guard, including a same-puzzle replay. Existing
+rapid-submission cases and native play cover navigation, with an effective
+copied-source control that restores the defective clear-on-tab behavior.
+
 ## Experience
 
 Work out four groups of five NBA players without losing one idea while testing
