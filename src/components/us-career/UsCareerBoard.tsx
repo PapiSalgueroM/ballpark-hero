@@ -59,9 +59,14 @@ import { RivalryEventCard } from '@/components/us-career/RivalryEventCard';
 import { RivalryChoiceCard } from '@/components/us-career/RivalryChoiceCard';
 import type { RivalryChoiceCard as RivalryChoice } from '@/lib/careerRivalryChoices';
 import { cn } from '@/lib/utils';
+import ProspectJourney, { ProspectRecord } from '@/components/us-career/ProspectJourney';
+import { createUsCareerProspect, loadUsCareerProspect, type UsCareerProspect } from '@/lib/usCareerProspect';
+import { loadPreDraft, type PreDraftState } from '@/lib/careerPreDraft';
+import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
+const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
 
 /* Round 126: 'coach' is new. Retirement used to be the last screen in the
    game. Now it hands you to a job board and the save keeps going.
@@ -70,7 +75,7 @@ const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPract
    deck might never draw. */
 /* Round 207: 'extension' is new. The final year of a deal now opens a
    real fork: sign on, or play it out and reach free agency. */
-type Phase = 'create' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';
+type Phase = 'create' | 'prospect' | 'season' | 'event' | 'extension' | 'freeagency' | 'retired' | 'coach';
 
 /* The board holds a career as the part every sport keeps. Each sport's own
    fields (its stats, its awards) ride along untouched and are read only by
@@ -79,18 +84,50 @@ type CareerState = UsCareerCore;
 type SeasonLine = UsCareerSeason;
 type CareerEvent = UsCareerEvent<UsCareerCore>;
 
-interface SaveShape { c: CareerState; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null }
+interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect }
 
 export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [phase, setPhase] = useState<Phase>('create');
+  const [prospect, setProspect] = useState<UsCareerProspect | null>(null);
+  const prospectRef = useRef<UsCareerProspect | null>(null);
+  const [prospectNotice, setProspectNotice] = useState('');
+  const focusCareerEntry = useRef(false);
+  const careerEntryButton = useRef<HTMLButtonElement>(null);
   // Round 56: build your player's face before the draft
   const [appearance, setAppearance] = useState<PlayerAppearance>(() => defaultAppearance());
   // Round 85: the tile rule. The season hub is boxes; each opens its own screen.
   const [panel, setPanel] = useState<'none' | 'bank' | 'stats' | 'log' | 'trophies' | 'news' | 'inbox'>('none');
+  const [retiredReview, setRetiredReview] = useState(false);
+  const reviewReturn = useRef<'log' | 'retired' | null>(null);
+  const reviewHubIndex = useRef(0);
+  const hubButtons = useRef<HTMLDivElement>(null);
+  const retiredReviewButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!reviewReturn.current) return;
+    const target = reviewReturn.current === 'retired' ? retiredReviewButton.current
+      : hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current];
+    target?.focus({ preventScroll: true });
+    reviewReturn.current = null;
+    if (!target) return;
+    const frame = requestAnimationFrame(() => {
+      const box = target.getBoundingClientRect();
+      if (box.top < 0 || box.bottom > window.innerHeight) target.scrollIntoView({
+        block: 'nearest', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [panel, retiredReview]);
   /* Round 469: the News box opens on three screens, the paper, the gram and
      the rival, so the hub keeps its five boxes (simCareerHub holds that). */
   const [newsTab, setNewsTab] = useState<'headlines' | 'fans' | 'rival'>('headlines');
   const [career, setCareer] = useState<CareerState | null>(null);
+  const careerEntryScreen = useRevealScroll<HTMLDivElement>(career?.prospect?.seed, { enabled: phase === 'season' && !!career?.prospect && career.seasons.length === 0 });
+  useEffect(() => {
+    if (phase === 'season' && focusCareerEntry.current) {
+      focusCareerEntry.current = false;
+      careerEntryButton.current?.focus({ preventScroll: true });
+    }
+  }, [phase]);
   const [practiceOpen, setPracticeOpen] = useState(false);
   const practiceBankedRef = useRef(false);
   const practiceButtonRef = useRef<HTMLButtonElement>(null);
@@ -164,9 +201,20 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       const raw = localStorage.getItem(sport.saveKey);
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
-      if (!s.c) return;
+      if (!s.c) {
+        if (s.phase === 'prospect') {
+          const pending = loadUsCareerProspect(sport, s.prospect);
+          if (pending) {
+            prospectRef.current = pending;
+            setProspect(pending);
+            setPhase('prospect');
+          } else setProspectNotice('This prospect save is incomplete. Create a new prospect to play again.');
+        }
+        return;
+      }
       /* Round 182, repair-on-load: a pre-182 career was a de facto starter. */
       if (!s.c.role) s.c.role = 'starter';
+      if (s.c.prospect && (!loadPreDraft(s.c.prospect) || s.c.prospect.sport !== sport.slug)) delete s.c.prospect;
       /* Round 422: rebuild a balance the pre 422 bug drove below zero. Costs
          were charged every year against income that was never banked, so a
          negative number here is the defect and never a debt the player chose.
@@ -214,6 +262,51 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setCareer(c);
     setFeed(f => [`Practice: ${trainingBankNote(bank)}`, ...f].slice(0, 8));
     persist(c, 'season', teamQuality);
+  };
+
+  const saveProspect = (next: UsCareerProspect) => {
+    prospectRef.current = next;
+    setProspect(next);
+    setPhase('prospect');
+    try { localStorage.setItem(sport.saveKey, JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: next } satisfies SaveShape)); } catch { /* full */ }
+  };
+  const beginProspect = () => {
+    if (prospectRef.current) return;
+    saveProspect(createUsCareerProspect(sport, {
+      name: nameInput.trim() || sport.create.defaultName, pos, archetypeId, eraId, appearance,
+      seed: `${sport.slug}:${Math.floor(Math.random() * 0x100000000).toString(36)}`,
+    }));
+  };
+  const advanceProspect = (next: PreDraftState) => {
+    // The render that offered the choice can consume it only once.
+    if (!prospect || prospectRef.current !== prospect || next === prospect.state) return;
+    saveProspect({ ...prospect, state: next });
+  };
+  const joinCareer = () => {
+    const pending = prospectRef.current;
+    if (!pending || pending !== prospect || pending.state?.phase !== 'done' || !pending.state.draft) return;
+    const state = pending.state;
+    const outcome = pending.state.draft;
+    const arch = sport.create.archetypes[pending.pos].find(a => a.id === pending.archetypeId)!;
+    const rng = keyedRng(`${pending.seed}|career`);
+    const c: CareerState = sport.startCareer(pending.name, pending.pos, arch, rng, pending.appearance, pending.eraId,
+      { ...outcome, pot: state.pot, health: outcome.devSeasons.length ? 100 : state.health, prospect: state });
+    const tq = sport.rollTeamQuality(null, rng);
+    const roleNote = sport.assignRole(c, tq, rng);
+    if (c.draftPick > 0 && outcome.devSeasons.length === 0) sport.draftNightInbox(c);
+    const team = sport.teamLabelOf(c.team, c.eraId);
+    setFeed([
+      c.draftPick > 0 ? `With pick ${c.draftPick}, the ${team} select ${c.name}.` : `${c.name} joins ${team} as an undrafted signing.`,
+      draftPressureLine(c.draftPick, sport.preDraft(pending.eraId).teamIds().length), roleNote,
+    ]);
+    prospectRef.current = null;
+    setProspect(null);
+    setCareer(c);
+    setTeamQuality(tq);
+    setDraftDay(null);
+    focusCareerEntry.current = true;
+    setPhase('season');
+    persist(c, 'season', tq);
   };
 
   const create = () => {
@@ -461,6 +554,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const reset = () => {
     localStorage.removeItem(sport.saveKey);
     setCareer(null);
+    prospectRef.current = null;
+    setProspect(null);
+    setProspectNotice('');
     setPhase('create');
     setFeed([]);
     setLastLine(null);
@@ -470,6 +566,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     setDraftDay(null);
     setRivalryOutcome(null);
     setPanel('none');
+    setRetiredReview(false);
+    reviewReturn.current = null;
     coachRef.current = null;
     setCoach(null);
     setCoachFeed([]);
@@ -514,6 +612,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
      TD" in all four places this prints. The line lives in usCareerStatLine.ts
      now, one branch per position the career deals. */
   const statLine: (s: SeasonLine, p: string) => string = sport.statLine;
+
+  if (phase === 'prospect' && prospect) {
+    return <ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
+      if (prospect.state) return;
+      setNameInput(prospect.name); setPos(prospect.pos); setArchetypeId(prospect.archetypeId);
+      setEraId(prospect.eraId); setAppearance(prospect.appearance);
+      prospectRef.current = null; setProspect(null); setPhase('create');
+      localStorage.removeItem(sport.saveKey);
+    }} />;
+  }
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -565,7 +673,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               </button>
             ))}
           </div>
-          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor={sport.create.clubColor} />
+          <AppearanceBuilder appearance={appearance} onChange={setAppearance} clubColor={sport.create.clubColor} sport={sport.slug} />
 
           <div className="grid gap-1.5">
             {sport.create.archetypes[pos].map(a => (
@@ -582,6 +690,13 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               </button>
             ))}
           </div>
+          <section data-career-prospect-entry className="rounded-2xl border border-blue-300/50 bg-blue-950 p-4 text-white">
+            <p className="font-display text-xl font-black">Road to the Draft</p>
+            <p className="mt-1 text-xs leading-relaxed text-blue-100">Start before the spotlight. Choose your route, earn your stock, and make draft day yours.</p>
+            {prospectNotice && <p className="mt-2 text-xs" role="status">{prospectNotice}</p>}
+            <button onClick={beginProspect} className="mt-3 min-h-11 w-full rounded-xl bg-white px-4 py-3 text-sm font-bold text-blue-950">Play your road to the draft</button>
+            <p className="mt-3 text-center text-xs text-blue-100">Or quick start below with an instant draft result.</p>
+          </section>
           <button
             onClick={create}
             className="w-full rounded-full bg-primary px-8 py-3 text-sm font-bold text-primary-foreground hover:opacity-90"
@@ -649,6 +764,16 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     );
   }
 
+  if ((phase === 'retired' && retiredReview) || (phase !== 'retired' && phase !== 'coach' && phase !== 'freeagency' && panel === 'log')) {
+    return <Suspense fallback={<p role="status">Loading season review...</p>}>
+      <CareerSeasonReview career={career} sport={sport} backLabel={phase === 'retired' ? 'Back to retirement' : 'Back to career'} onBack={() => {
+        reviewReturn.current = phase === 'retired' ? 'retired' : 'log';
+        if (phase === 'retired') setRetiredReview(false);
+        else setPanel('none');
+      }} />
+    </Suspense>;
+  }
+
   /* ------------------- Round 126: the coaching career ------------------- */
   if (phase === 'coach' && coach) {
     return (
@@ -714,6 +839,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         </div>
         {/* Round 126: the save does not end here any more. */}
         <CoachStartCard sport={sport.slug} existing={coach} onStart={startCoaching} onResume={openCoaching} />
+        <button ref={retiredReviewButton} data-career-review-opener="" onClick={() => setRetiredReview(true)} className="min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 text-sm font-semibold text-foreground">Review seasons</button>
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Season by season</p>
           <div className="max-h-72 space-y-0.5 overflow-y-auto">
@@ -757,6 +883,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
         )}
         {panel === 'stats' && (
           <div className="space-y-3">
+            {career.prospect && <ProspectRecord sport={sport} state={career.prospect} />}
             <div className="rounded-2xl border border-border bg-card p-4 text-center">
               <p className="text-4xl font-black text-primary">{career.ovr}</p>
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">overall</p>
@@ -776,22 +903,6 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
               <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{career.seasons.length}</p><p className="text-muted-foreground">seasons</p></div>
               <div className="rounded-xl border border-border bg-card px-2 py-2"><p className="text-lg font-black text-foreground">{sport.ringsOf(career)}</p><p className="text-muted-foreground">{sport.ringsLabel}</p></div>
             </div>
-          </div>
-        )}
-        {panel === 'log' && (
-          <div className="rounded-2xl border border-border bg-card p-3">
-            {career.seasons.length === 0 ? (
-              <p className="py-6 text-center text-xs text-muted-foreground">No seasons on the books yet. Go play one.</p>
-            ) : (
-              <div className="max-h-96 space-y-0.5 overflow-y-auto">
-                {[...career.seasons].reverse().map((s, i) => (
-                  <div key={i} className="flex items-center justify-between rounded px-2 py-1 text-[11px] odd:bg-background">
-                    <span className="text-muted-foreground">{s.year} · {s.team}</span>
-                    <span className="text-foreground">{statLine(s, career.pos)}{s.awards.length ? ' 🏆' : ''}</span>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
         )}
         {panel === 'trophies' && (
@@ -966,7 +1077,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} />
         </div>
       ) : phase === 'event' && pendingEvent ? (
-        <div ref={revealRef} className="rounded-2xl border border-gold/40 bg-card p-4">
+        <div ref={revealRef} data-career-event={pendingEvent.id} className="rounded-2xl border border-gold/40 bg-card p-4">
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>
           <div className="mt-3 grid gap-1.5">
@@ -983,7 +1094,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           </div>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+        <div ref={careerEntryScreen} className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           {/* Round 530: draft day sits inside the Play card until the first
               season is played, so the hub does not grow a new box and the
               page does not jump. The feed keeps its copy of the lines. */}
@@ -998,8 +1109,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
             </p>
           )}
           <button
+            ref={careerEntryButton}
             onClick={playSeason}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+            className={cn('inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90', career.prospect && 'min-h-11')}
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
@@ -1039,7 +1151,10 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
       {/* Round 208: the same boxes the rest of the site opens on, and every
           one of them now carries the fact you used to have to tap for. */}
-      <HubTiles tiles={hubTilesWithInbox} onOpen={k => setPanel(k as typeof panel)} />
+      <div ref={hubButtons} data-career-hub-buttons=""><HubTiles tiles={hubTilesWithInbox} onOpen={k => {
+        if (k === 'log') reviewHubIndex.current = hubTilesWithInbox.findIndex(tile => tile.key === 'log');
+        setPanel(k as typeof panel);
+      }} /></div>
 
     </div>
   );

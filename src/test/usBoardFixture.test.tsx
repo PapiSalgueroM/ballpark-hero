@@ -22,6 +22,10 @@
  * retains that recording and excludes only its new practice entry from the
  * old screen projection and click candidates. Save bytes and all existing
  * screens remain exact; the new practice interactions have their own tests.
+ * Round 996 keeps the real appearance editor on its recorded soccer copy in
+ * this historical projection. Its callbacks, saved IDs and random draws stay
+ * live; sport-specific presentation is covered by appearanceSportCopy and
+ * native career creation checks instead of changing the recorded fixture.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -33,7 +37,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import type { ComponentType } from 'react';
+import type { ComponentProps, ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { MemoryRouter } from 'react-router-dom';
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -51,6 +55,27 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }),
 }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
+vi.mock('@/components/soccer-career/AppearanceBuilder', async importOriginal => {
+  const original = await importOriginal<typeof import('@/components/soccer-career/AppearanceBuilder')>();
+  const Builder = original.default;
+  return { ...original, default: (props: ComponentProps<typeof Builder>) => <Builder {...props} sport="soccer" /> };
+});
+/* Keep the old read-only log in this historical screen projection. The real
+   season picker and event roundtrips have their own mounted/native checks.
+   The Board's open/back callbacks and every saved outcome remain live. */
+vi.mock('@/components/us-career/CareerSeasonReview', async () => {
+  const { HubPanelHeader } = await import('@/components/hub/HubTiles');
+  return { default: ({ career, sport, onBack }: ComponentProps<typeof import('@/components/us-career/CareerSeasonReview').default>) => <div className="space-y-3">
+    <HubPanelHeader title="📜 Career Log" onBack={onBack} />
+    <div className="rounded-2xl border border-border bg-card p-3">
+      {career.seasons.length === 0 ? <p className="py-6 text-center text-xs text-muted-foreground">No seasons on the books yet. Go play one.</p>
+        : <div className="max-h-96 space-y-0.5 overflow-y-auto">{[...career.seasons].reverse().map((s, i) => <div key={i} className="flex items-center justify-between rounded px-2 py-1 text-[11px] odd:bg-background">
+          <span className="text-muted-foreground">{s.year} · {s.team}</span>
+          <span className="text-foreground">{sport.statLine(s, career.pos)}{s.awards.length ? ' 🏆' : ''}</span>
+        </div>)}</div>}
+    </div>
+  </div> };
+});
 
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
@@ -90,11 +115,13 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    one counter for the whole process, so the id a dialog trigger carries says
    how many dialogs every earlier test mounted and nothing about this screen:
    left in, one sport's path could turn another sport red. The number is
-   taken out. Only Round 992's additive practice entry is excluded; removing
-   its parent or changing the existing season button still changes the hash. */
+   taken out. Only the additive practice and prospect entries are excluded;
+   removing a parent or changing the existing season button still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
-  copy.querySelectorAll('section[data-career-practice]').forEach(el => el.remove());
+  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]').forEach(el => el.remove());
+  copy.querySelectorAll('[data-career-hub-buttons]').forEach(el => el.replaceWith(...el.childNodes));
+  copy.querySelectorAll('[data-career-event]').forEach(el => el.removeAttribute('data-career-event'));
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
@@ -143,7 +170,7 @@ function fieldHashes(save: Save | null): Record<string, string> {
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 
@@ -481,7 +508,8 @@ async function buildSport(Board: ComponentType, key: string, seed: number, fixed
   /* The router's layout effect warning is about the server render itself and
      says nothing about the board, so it is kept out of the log. */
   const quiet = vi.spyOn(console, 'error').mockImplementation(() => undefined);
-  const html = renderToStaticMarkup(<MemoryRouter><Board /></MemoryRouter>);
+  const html = renderToStaticMarkup(<MemoryRouter><Board /></MemoryRouter>)
+    .replace(/<section data-career-prospect-entry="[^"]*"[^>]*>[\s\S]*?<\/section>/g, '');
   quiet.mockRestore();
   const ordered: Record<string, string> = {};
   for (const name of SAVE_NAMES) if (use[name]) ordered[name] = use[name];

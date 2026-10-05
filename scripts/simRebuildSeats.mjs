@@ -37,6 +37,9 @@
  *      over block (comments stripped) reads none of the open window's
  *      readings
  *   7) one salt, one table: a replay is byte identical, another salt differs
+ *   8) the CPU seat plays every one of Round 980's five new power ups it
+ *      is dealt at least once across the tables (simRebuildLoop section 10
+ *      holds what each one does and how much it is worth)
  *
  * NEGATIVE CONTROLS, each patching a copy of a file after normalising CRLF,
  * asserting the text it rewrites is present exactly once, and refusing to
@@ -49,7 +52,8 @@
  *                                      player market, with the other seats'
  *                                      men still in it: section 2 must FAIL
  *   SIM_REBUILD_SEATS_CONTROL=dumbcpu  makes the CPU seat play keep
- *                                      everything: sections 3 and 4 must FAIL
+ *                                      everything: sections 3, 4 and 8 must
+ *                                      FAIL
  *   SIM_REBUILD_SEATS_CONTROL=leak     leaves the shut seat in the chair and
  *                                      makes activeRun blind to the phase, so
  *                                      the shut board is what the hook would
@@ -604,6 +608,37 @@ console.log('\n7. ONE SALT, ONE TABLE');
     console.log(`  salt 4242 replays byte for byte across three seats and a season, salt 4243 differs`);
   } catch (e) {
     fail(e.message);
+  }
+}
+
+/* ================= 8. the CPU seat plays every power up ================= */
+console.log('\n8. THE CPU SEAT PLAYS EVERY POWER UP');
+{
+  /* Round 980: a seat dealt a perk it never plays is a seat playing with one
+     hand. Played = dealt (every envelope that carried it) minus still held. */
+  const NEW = ['respin', 'veto', 'swap', 'loan', 'peek'];
+  const played = Object.fromEntries(NEW.map(p => [p, 0]));
+  const dealt = Object.fromEntries(NEW.map(p => [p, 0]));
+  let cpuWindows = 0;
+  for (const f of finished) {
+    for (const s of f.t.seats) {
+      if (s.kind !== 'cpu') continue;
+      cpuWindows += 1;
+      for (const p of NEW) {
+        const got = s.run.post.filter(e => e.perk === p).length;
+        dealt[p] += got;
+        /* the pocket stops at one veto (Round 980 review), so dealt minus held
+           would count a second, never playable copy as played: the reckoning says */
+        if (p === 'veto' ? s.run.reckoning?.vetoed !== undefined : got - s.run.perks[p] > 0) played[p] += 1;
+      }
+    }
+  }
+  console.log(`  ${cpuWindows} CPU windows across the tables of section 1`);
+  console.log(`  dealt: ${NEW.map(p => `${p} ${dealt[p]}`).join(', ')}`);
+  console.log(`  windows that played it: ${NEW.map(p => `${p} ${played[p]}`).join(', ')}`);
+  for (const p of NEW) {
+    if (dealt[p] === 0) fail(`no CPU window was ever dealt ${p}, so whether the CPU plays it was never asked`);
+    else if (played[p] < 1) fail(`the CPU was dealt ${p} ${dealt[p]} times and never played it`);
   }
 }
 

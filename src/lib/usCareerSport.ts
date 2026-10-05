@@ -18,6 +18,7 @@
  * they were, and scripts/simUsBoardParity.mjs replays a fixture recorded from
  * the four old boards to hold that.
  */
+import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
 import type { CareerRival } from '@/lib/careerRival';
 import type { InboxBeat, InboxMessage } from '@/lib/careerInbox';
@@ -29,6 +30,7 @@ import type { FaPushArgs, FaWindow } from '@/lib/usCareerFreeAgency';
 import type { ExtPushArgs, ExtensionTalk } from '@/lib/usCareerExtension';
 import type { UsSport } from '@/lib/usCareerToCoach';
 import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
+import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -68,6 +70,7 @@ export interface UsCareerCore {
   seasons: UsCareerSeason[];
   retired: boolean;
   draftPick: number;
+  prospect?: PreDraftState;
   earnings: number;
   netWorth?: number;
   dirtyMoney?: number;
@@ -160,8 +163,11 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   practiceLabel: string;
   loadTraining(pos: string): Promise<TrainingSport>;
 
+  preDraft(eraId: string): PreDraftDescriptor;
+  prospectRatings(arch: UsCareerArchetype, rng: () => number): { rating: number; pot: number };
+
   /* The engine. */
-  startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string): C;
+  startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string, entry?: CareerDraftEntry): C;
   rollTeamQuality(prev: number | null, rng: () => number): number;
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
@@ -172,6 +178,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   legacyOf(c: C): UsCareerLegacy;
   teamLabelOf(abbr: string, eraId?: string): string;
   statLine(s: L, pos: string): string;
+  reviewStats(s: L, pos: string): CareerReviewStats;
   /** The season line a banned year writes. Its keys and their order are on
    *  the save, so each sport builds its own. */
   suspendedLine(c: C): L;

@@ -406,6 +406,8 @@
       "howToPlay": [
         "Pick your era (today, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
         "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
+        "In today's world, the World editor tile on the nation step lets you rebuild the map before you pick: tap a club, then tap the club in another league it swaps with. Every move is a swap, so every league keeps its real size, its fixtures and its places, and you can make as many as you like, from one club to a whole super league.",
+        "Example: swap Celtic with Brentford and take Celtic. You play a full Premier League season and the FA Cup, Brentford play in Scotland, and both boards judge their club against its new league, so Brentford are asked to win the Scottish Premiership and Celtic are asked to stay up. Your first season's Europe goes to the clubs who really qualified last season, wherever they play now; after that your edited tables decide it, and the edited leagues promote and relegate like any other. Reset puts the real world back.",
         "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
         "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim plays the same match without you and goes straight to the report. Then read the report, answer the press, and manage the dressing room between games.",
         "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
@@ -907,7 +909,10 @@
     "/fight-career": {
       "howToPlay": [
         "Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles.",
+        "Pick a trainer and a manager. The trainer decides which camp weeks count for more and which for less, the manager decides how big your purses are and what he takes out of them. Each tile says its numbers.",
+        "After every fight, deal with what comes in before the next offers open: two cards, and sometimes a move by your rival. Every option says exactly what it does, and one on every card changes nothing that can reach a fight.",
         "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
+        "Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.",
         "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
         "Watch it round by round, or turn that off and take the decision straight away.",
@@ -922,11 +927,17 @@
         "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
         "Reach number one and every offer on the table is for a world title, whichever road got you there.",
         "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
-        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers."
+        "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+        "Your trainer takes 10% of every purse and your manager takes his own share, 5% to 25% depending on who you hired. The rest goes in the bank. A card can put you on the tab, and the next purse pays it off first.",
+        "The camp shop sells five upgrades with three levels each, at 0.05m, 0.25m and 1.00m: sparring partners, a strength coach, a conditioning coach, a pad man and a cut man. Coach bonuses are banked a fraction at a time and paid as whole points, and a camp still never takes you past your ceiling.",
+        "Some cards make you sharper or flatter for the next fight only: each point is added to your power, speed, stamina and defence that night and gone the morning after. Sparring partners add a point a level, and every 10 morale above or below 50 is a point either way. Morale settles 2 back toward 50 after every fight, so a good mood has to be kept up, and karma kept at 70 or more hands 2 back each fight.",
+        "Your rival is an invented fighter in your division who fights on while you do, wins belts, loses, and retires. When he calls you out and you take it, he replaces the middle offer as a grudge match paying 30% more, and a card that would move you a division or bring a rematch is dropped rather than throw that fight away.",
+        "Moving up a division makes knockouts more likely, moving down makes them rarer, and either way you start the new division unranked and any belt stays behind. Your rival and the man who last beat you stay in the division you left. For 4 fights after a loss, a rematch clause can turn the middle offer into the man who beat you, and a win is worth up to 4 places, one more with the matchmaker."
       ],
       "example": [
         "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
         "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
+        "After your ninth fight your rival goes first: he calls you out, you take it, and the middle offer becomes him at 30% more. Then two cards land. Four pounds over: hiring the nutritionist takes 0.02m from the bank, sweating it out leaves you 3 points flatter on the night, and coming in heavy cuts every purse on the table by 15% but leaves you 1 point sharper. You pay the nutritionist. The second card is the hometown hall, 5 more fans for 15% less money, and you stay on the road. With 0.31m in the bank you buy the cut man for 0.05m, and from now on you carry 4% less damage out of every fight.",
         "At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off.",
         "Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great."
       ],
@@ -1534,26 +1545,33 @@
         "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
         "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
         "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
+        "Open the trophy room and spend trophies on perks that never go away. A spent trophy stops paying its 5%, so each perk is a trade, not a free gift.",
         "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back."
       ],
       "rules": [
         "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
         "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
         "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, two at four million, three at nine million: the square root of the millions, rounded down.",
-        "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
+        "Lifting the trophy clears the points, the squad and the upgrades. Trophies, trophy room perks, badges and the all time total are the only things that carry over, and they carry over forever.",
+        "Four perks, each with three levels that cost 3, 5 and 8 trophies. Long Night stretches time away from 8 hours to 16, 20 and then 24 hours. Night Shift makes time away run at 70%, 80% and then 95% speed instead of 50%.",
+        "Head Start puts a squad on the payroll the moment you lift: 25 Ball Boys and 10 Sunday Strikers at the first level, up to 25 Ball Boys, 25 Sunday Strikers, 25 Point Guards and 10 Sluggers at the third. Scouting Network makes each Sniper, Quarterback, Ace and Champion cost 11%, 8% and then 5% more than the last instead of 15%.",
         "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
-        "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open."
+        "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
+        "Long Night and Night Shift from the trophy room change those two numbers, and nothing else about the rule: one cap for the whole absence, and never full speed."
       ],
       "example": [
         "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
-        "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still."
+        "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+        "Say you hold 30 trophies, which is +150% on everything. Spend 3 of them on Night Shift and you hold 27, so everything scores +135% instead, but every night away now pays at 70% speed rather than 50%. For somebody who leaves it running overnight that is the better deal: the next trophy comes about 15% sooner. For somebody who sits there tapping and never leaves, it is the worse one, because the squad just scores less. Head Start is the reverse: it suits the quick tapping runs and does little for the long nights."
       ],
       "tips": [
         "Read the rate against the price, not the price alone. A new archetype pays back slower than the tier below it at first, but the tier below has been getting 15% dearer with every signing, so the moment always comes when the bigger name is the better buy.",
         "Five of anything is the magic number. That archetype's upgrade doubles the whole line, so buy to five before you spread out.",
         "Muscle Memory turns taps into a share of the squad's rate. Once the squad is scoring thousands a second, it is the best tap upgrade on the board.",
         "Do not lift at exactly one trophy. Four million pays two, nine million pays three, and the run you are in already has the squad built.",
-        "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for."
+        "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
+        "Buy the perk that matches how you actually play. Back once a day: Long Night. Back every morning: Night Shift. Quick tapping runs: Head Start. Long runs where you sign dozens of the top archetypes: Scouting Network. If you tap through every run and never leave, the two away perks do nothing for you, so leave them on the shelf.",
+        "The second and third levels cost more than the first, so they pay best once you hold a big cabinet."
       ]
     },
     "/list-quiz": {
@@ -2495,6 +2513,10 @@
         "Pick any of the 32 clubs from the roster snapshot. Read each opening estimate note: the e marker means limited evidence, and an unmeasured game prior means the model lacks a usable observation. These estimates do not measure every skill. Existing saves keep their grades and development.",
         "Read the ownership mandate: a contender is told to win the Cup, a bubble club to make the bracket, a rebuild to hit an honest win number. It resets every offseason from where the roster really stands.",
         "Shape it: waive players, sign free agents, and work the phone on trades, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
+        "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of them.",
+        "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
+        "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
+        "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
         "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
         "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
         "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
@@ -2505,13 +2527,20 @@
         "The cap starts at 104M and rises about 9 percent a season in this simulation. Free-agent offers must fit your room, including dead money. The existing salary-matching trade rules can allow a club above the cap; this is a limit of the game's model. New-model future offers use one fixed rating curve; unexpired signed contracts keep their price.",
         "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
         "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
-        "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
+        "Phone trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes. Bigger packages live on the Trade desk box.",
         "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
-        "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
+        "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
+        "The trade deadline falls after round 15 of 20. The break after round 15 is deadline day, your last chance to deal, and once round 16 is played every deal is shut, phone calls and packages alike, until the summer. The real one falls in early March. At the deadline clubs in a playoff place, or close to one, are buyers who pay up for veterans; clubs well out of it are sellers who want picks and young players.",
+        "A draft pick signs an entry level deal, three seasons from 18 to 21. When it runs out, a player under 27 with fewer than seven seasons is a restricted free agent: a qualifying offer keeps his rights, and a rival with a roster spot may table an offer sheet you either match or let go for the picks it carries. Everyone else is unrestricted. The money is this game's own figures, not real contracts.",
+        "Your club's picks now run three drafts deep, two rounds each in this game's short draft, and any of them can be traded. A club can keep paying up to half of a traded player's salary, carry three retained deals at a time, and one contract can be retained on twice.",
+        "Staff effects are small and capped. The head coach adds rating points on attack and defense, the goalie coach on the goalies, and the special teams assistant counts at a fifth because this game has no power play of its own. A better scouting director misses by less on a prospect's grade, and the therapist shortens injuries. Ownership gives the staff 8M each summer for fees and pay offs; wages sit outside the cap."
       ],
       "example": [
         "For a fictional rating example, keep your forwards and defensemen unchanged and replace a healthy 80 rated goalie with a healthy 85 rated goalie. The goalie group has a 20 percent weight, so your simulation strength rises by one point. Apply commits that choice; it changes your odds, not a promised result.",
+        "Open Staff and hire a level 7 goalie coach off the shortlist. Level 7 is two rating points on the goalie, and the goalie carries a fifth of your strength, so the club gets 0.4 stronger on every night. That is a nudge to your odds, not a promised result.",
+        "Your 21 year old winger's entry deal runs out this summer, so he is a restricted free agent on the Re-sign desk. Tender him the qualifying offer and he stays a season at the money he earns now. If a rival has tabled an offer sheet, the tile says so: match it and he stays on the sheet's terms, or let him go and the picks on the sheet come to you.",
+        "At round 14 you sit in a wild card place, which makes you a buyer. On the Trade desk you send a depth winger and a second rounder two drafts out to a club well out of it for its veteran center, keeping half the winger's salary so the cap works. Wait until round 16 is played and the box just reads Deadline passed.",
         "Say you take Buffalo. You waive a fading winger, sign a 79 rated defenseman, then package your third line center plus a pick for a younger blueliner. The AI takes the deal because the value clears its price.",
         "The season becomes a wild card sweat decided by overtime loser points. You sneak in, stun a division winner, then die in the division final. At the draft an 88 grade center turns out to be an 84."
       ],
@@ -2950,26 +2979,38 @@
       "howToPlay": [
         "Say who is playing: just you, or two to four seats on one phone. Seat one is you; tap any other seat to make it a friend (pass and play) or the CPU. The seats lock once the first club is picked.",
         "Pick a market restriction first: the open market, the top five leagues only, under 25s only, wonderkids only (21 and under) or the bargain bin (nobody over 30 million). It locks the moment you pick a club.",
-        "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of fifteen finance envelopes blind and live with it.",
+        "Pick a real club, tiered from elite down to modest (only clubs with a complete 2026 squad are offered, so the list moves with the data). At a fuller table each human picks in seat order, no club can be taken twice, and the CPU seats draw clubs from the same tier as the first pick. The board's envelope is open on the desk: its mood, its money and its demands. Then pick one of twenty finance envelopes blind and live with it.",
         "Hire a manager or keep the man you have for free. Each of the three candidates gets more out of one kind of player (the under 25s, the over 30s, the defence or the attack), and the number beside each name is what your XI reads with him in charge.",
-        "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up exactly once.",
+        "SPIN. The wheel draws one of your eleven shirts in a hidden order, and every shirt comes up once (only the second spin power up brings the wheel back to a shirt you already settled).",
         "Keep the man it landed on, or sell him at market value. Selling is final: the scouts bring three prices (a marquee, a solid buy and a cheap seat), promoting a fit from your own squad costs nothing, and a 40 overall is always there for the shirt if you cannot or will not pay.",
         "When all eleven shirts are settled, the final whistle brings the reckoning: on your own, the rivals' windows and the season sim follow at once. At a fuller table your window shuts, a hand over screen asks for the next player (or the CPU plays its whole window on the spot), and the season kicks off when the last window is shut."
       ],
       "rules": [
-        "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
+        "At a table of two to four, the windows run one at a time and every seat gets the same eleven spins, plus any second spin its envelopes hand it. No two seats can hold the same club or end up with the same player: everyone at the table's own squad is off your market, and a man an earlier seat signed is gone by the time your list is dealt. The hand over screen shows the shut windows as numbers only, never a board, so nobody sees another seat's XI mid window.",
         "The shared season is every finished XI plus neutral clubs from the first pick's tier to make six, home and away on a real calendar, with the same goal model as the solo season. It hands out the title, the Golden Boot, the best defence and Rebuild of the year, and records each squad's biggest win, longest unbeaten run and top scorer. Every line is a simulated result or tally and nothing more.",
         "Pots scale with the club: 200 million at elite clubs, 140 at strong, 100 at mid, 65 at modest. The board's envelope then adds or takes up to 35 million depending on its mood (scaled to the club), sales add to it, and the manager's fee, war premiums and bad envelopes eat it.",
         "The board's mood runs from horrible to great. A great board drops one demand and tops the pot up. A horrible board cuts the pot and adds a fourth demand. Where a club's own money story is documented (Barcelona's sponsorship deal) the envelope says so; everywhere else the board speaks in general terms.",
         "The wallet can run 60 million past zero. Finish in debt and settled shirts are force sold at random, each swapped for the cheapest fit going, until the books balance.",
         "Demands are things like three under 25s, two marquee buys, a clearout or money in the bank. They are judged on the window as you closed it, before the board's own clawback. Every miss draws a punishment card from a five card deck, without replacement: a forced sale of your best, a random exit, a 25 million clawback, a dressing room turn worth two rating points, and exactly one card that lets it go.",
-        "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a perk (a fresh scouts' list, 20 percent off your next signing, no bidding war on your next buy).",
+        "Every second deal, another envelope arrives: from a 40 million TV windfall to a 25 million sponsor scandal, or a power up instead of money (the eight are below).",
+        "A power up sits in your pocket until you play it, and each one is used up when you do. The finance envelope can hold one, and so can any envelope that lands as you go.",
+        "Fresh list: ask the scouts for a new three, once, whenever their list is open (not during a part exchange). 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.",
+        "Second spin: between spins, bring the wheel back to a shirt you already settled (not one you bought or borrowed). A man you kept is sold, a squad man you promoted goes back to the bench, and the scouts deal a new list for the shirt.",
+        "Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell instead. You hold one veto at a time, because the whistle only takes one.",
+        "Part exchange: when the wheel lands on a man, see the scouts' three before you decide. Take one and your man goes the other way, with the new man 25 percent under his value. Call it off and he stays, but the exchange is gone.",
+        "Loan: when the scouts' list is open (not during a part exchange), borrow one of the three for the season at 40 percent of his value. He plays, nobody can sell him, he goes back after the season, and he does not count as a signing for the board's demands.",
+        "Sneak peek: see the next envelope before it lands, money or power up, so you know how hard to spend. It lands after your next transfer move or two (a sale, a signing, a loan or a promotion), so the peek is only offered while one can still come, and if the whistle goes first it never arrives.",
         "Signing a star rated 72 or higher can spark a bidding war. The rival's hidden ceiling is 112 to 157 percent of value: outbid it or walk away, and a man you walk away from is gone from your market for good.",
         "The target is your starting rating plus 2 for elite clubs, 3 for strong, 5 for mid and 7 for modest. A manager's lift only lands on the players who fit him, so no hire covers the target on its own.",
         "The run is written to this phone after every move, not at the end, so a refresh or a locked screen comes back to the same window, and at a table to the same seats and the same seat's turn. One run at a time, on that phone only. Starting again clears it, and a save that cannot be read back exactly opens a fresh run rather than a half restored one."
       ],
       "example": [
         "A modest club with a 74 rated XI makes the target 81 on a 65 million pot. The board is in a plain mood, the finance envelope is a sell on clause worth 20 million, and you hire the youth coach for 5 million. The first spin lands on the 68 rated left back: an easy sale at 4 million, and the scouts' solid option is a 74 for 18 million.",
+        "Part exchange: the wheel lands on your 71 rated right back, worth 20 million. You play the exchange and the scouts show a 76 rated right back worth 40 million. Take him and he costs 30 million, your man's 20 goes the other way, so the swap costs you 10 million net for five points in the shirt.",
+        "Loan: the scouts' three for a hole at centre back include an 80 rated man worth 50 million you could never buy. A loan puts him in the XI for 20 million. If the board wants three signings, though, he is not one of them.",
+        "Second spin: you promoted a 66 rated squad man at left wing early, then an envelope brought 30 million. Play the second spin on that shirt, he goes back to the bench, and the new list has a 74 you can now afford.",
+        "Veto: you missed two demands and drew The big sale and The clawback. Send The big sale back and it is shuffled in with itself and the three cards the board has not dealt (Somebody goes, The dressing room turns, The board lets it go). It is about a one in four chance it comes straight back and about one in four it is the safe card, while The dressing room turns costs two points of rating, so it is a real call.",
+        "Sneak peek: you are about to go 40 million into the overdraft on a striker. Peek first: the next envelope is a 25 million sponsor scandal, so you take the cheaper option and finish out of debt.",
         "Three spins later the wheel finds your 84 rated striker. Keep him and the rating holds, sell him and 70 million funds two upgrades elsewhere. You keep him, finish 12 million in debt, and one forced sale later the XI still lands on 82. Job Done."
       ],
       "tips": [
@@ -3333,7 +3374,7 @@
     "/teammates": {
       "howToPlay": [
         "Look at the two players and the sport badge above them.",
-        "Decide whether they were ever on the same team at any point in their careers.",
+        "Decide whether they were ever on the same club or league team at any point in their careers. For the NFL, NBA, MLB and NHL pairs that means the same team in that league, and for soccer the same club. National teams, the Olympics, All-Star games, the Pro Bowl and college teams don't count.",
         "Tap YES or NO to lock in your answer.",
         "Read the fun fact that explains the real story behind the pair.",
         "Hit Next Question and keep going until all 10 are done, then see your score."
@@ -3345,8 +3386,8 @@
         "Play again reshuffles a brand new set of pairs, as many rounds as you like."
       ],
       "example": [
-        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
-        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most."
+        "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never played for the same NFL team, so that's a no.",
+        "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Get 9 or 10 and you really know your rosters."
       ],
       "tips": [
         "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",

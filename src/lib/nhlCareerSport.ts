@@ -1,3 +1,4 @@
+import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
 /**
  * Round 900: the NHL's binding for the one US career board.
  *
@@ -22,6 +23,7 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -50,8 +52,14 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
     archetypes: NHL_ARCHETYPES,
   },
 
-  startCareer: (name, pos, arch, rng, appearance, eraId) =>
-    startNhlCareer(name, pos as NhlCareerPos, arch as NhlCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2006'),
+  preDraft: nhlPreDraftDescriptor,
+  prospectRatings: (arch, rng) => {
+    const a = arch as NhlCareerState['archetype'];
+    const rating = 66 + Math.floor(rng() * 8) + a.ovrBoost;
+    return { rating, pot: Math.min(99, rating + 11 + Math.floor(rng() * 13) + a.potBoost) };
+  },
+  startCareer: (name, pos, arch, rng, appearance, eraId, entry) =>
+    startNhlCareer(name, pos as NhlCareerPos, arch as NhlCareerState['archetype'], rng, appearance, eraId as 'now' | 'y2006', entry),
   rollTeamQuality: nhlRollTeamQuality,
   assignRole: nhlAssignRole,
   campBattle: nhlCampBattle,
@@ -62,6 +70,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   legacyOf: nhlLegacyOf,
   teamLabelOf: nhlTeamLabelOf,
   statLine: (s, pos) => nhlStatLine(s, pos as NhlCareerPos),
+  reviewStats: (s, pos) => nhlSeasonReview(s, pos as NhlCareerPos),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,

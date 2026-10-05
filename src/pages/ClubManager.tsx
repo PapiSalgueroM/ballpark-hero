@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -21,6 +21,7 @@ import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
+import { deskOf } from '@/lib/clubManagerDecisions';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
@@ -33,6 +34,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
 import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
+import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
+import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -41,8 +44,10 @@ const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubM
 const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
 const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
+const ManagerSlotsScreen = lazy(() => import('@/components/club-manager/ManagerSlotsScreen'));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
+const WorldEditorScreen = lazy(() => import('@/components/club-manager/WorldEditorScreen'));
 const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
 const CrestBadge = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CrestBadge })));
 const FacilitiesScreen = lazy(() => import('@/components/club-manager/FacilitiesScreen').then(m => ({ default: m.FacilitiesScreen })));
@@ -83,7 +88,7 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
-function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () => void; onBack?: () => void }) {
+function EraLoadFailed({ label, onRetry, onBack, backLabel = 'Pick another season' }: { label: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
   return (
     <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
       <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
@@ -101,7 +106,7 @@ function EraLoadFailed({ label, onRetry, onBack }: { label: string; onRetry: () 
           onClick={onBack}
           className="mt-4 ml-2 px-5 py-2.5 rounded-xl font-bold bg-secondary text-foreground hover:bg-secondary/70 transition-colors"
         >
-          Pick another season
+          {backLabel}
         </button>
       )}
     </div>
@@ -150,13 +155,31 @@ const ClubManager = () => {
      is looking at: which squads, which players, how good each club is. Same
      idea as the era choice on the My Career create screen, laid out as tiles
      because this game is tiles. */
-  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'league' | 'team' | 'custom' | 'manager'>('era');
+  const [pickStep, setPickStep] = useState<'era' | 'nation' | 'world' | 'league' | 'team' | 'custom' | 'manager'>('era');
   const [pickEra, setPickEra] = useState<string>(DEFAULT_ERA_ID);
   const [pickNation, setPickNation] = useState<NationDef | null>(null);
   const [pickLeagueId, setPickLeagueId] = useState<string | null>(null);
   /* Round 303: a founded club waits here while the dugout step runs, so the
      manager spec and the club spec land in startCareer together. */
   const [pendingCustomSpec, setPendingCustomSpec] = useState<CustomClubSpec | null>(null);
+  /* Round 964: the world editor's edit, held here until the career starts on
+     it. Null is the real world. It applies to today's era and real clubs only. */
+  const [worldEdit, setWorldEdit] = useState<WorldEdit | null>(null);
+  /* Round 964 review: the edited world's club lists and board asks, worked
+     out once per edit inside ONE registration. Each registration rebuilds the
+     club def map, and wrapping every list and every league tile on every
+     render rebuilt it a couple of dozen times a render. Skipped on the editor
+     screen itself, where the edit changes with every tap and none of this is
+     drawn. */
+  const onWorldStep = pickStep === 'world';
+  const editedPicker = useMemo(() => {
+    if (!worldEdit || onWorldStep) return null;
+    return withWorldEdit(worldEdit, () => {
+      const teamsBy = new Map(REAL_LEAGUES.map(l => [l.id, playableClubs(l.id)] as const));
+      const wants = new Map([...teamsBy.values()].flat().map(c => [c.name, boardWantLabel(c.name)] as const));
+      return { teamsBy, wants };
+    });
+  }, [worldEdit, onWorldStep]);
   /* Round 832: a past era's squads are fetched when its tile is picked, while
      the nation step (which needs none of them) is on screen. This records a
      fetch still running or one that failed, so the league and team steps can
@@ -196,6 +219,16 @@ const ClubManager = () => {
      tactics tab to open that tile on arrival; the tab hands the request back. */
   const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
+  /* Round 928 review: the managers screen is where one career is swapped for
+     another, so the hub's open panel, rival view, live viewer switch and
+     tactics request belong to the career being left, not the one coming in. */
+  useEffect(() => {
+    if (g.phase !== 'resume') return;
+    setHubPanel(null);
+    setClubView(null);
+    setWatchMode(false);
+    setTacticsTile(null);
+  }, [g.phase]);
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
      entry in any static table and resolves through the save's registered
@@ -270,7 +303,7 @@ const ClubManager = () => {
           title="Club Manager: Football Management Sim"
           description="A full club-management sim in your browser: 368 clubs across 22 real leagues, from the Premier League, the 2. Bundesliga and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season."
           howToPlay={[
-            'Pick your era: 2026-27 with real players, or the real 2015-16, 2010-11 or 2005-06 Premier League and La Liga.',
+            'Pick your era: 2026-27 with real players, the real 2015-16 or 2010-11 big five, or the real 2005-06 Premier League and La Liga.',
             'Pick your nation, league and club (368 clubs across 22 real leagues), or create your own club with its own crest, stadium and budget.',
             'Read the board\'s objectives: league finish, cup run, Europe where it applies, beating your rival, and a goals quota.',
             'Go and meet the two asks the board makes in the market: a country quota, an experience count, the thinnest line in your squad, a signing 21 or under at a rating floor, or one fee over a threshold, every number worked out from your club and your era.',
@@ -285,6 +318,7 @@ const ClubManager = () => {
             'Win enough and manage your country as well: real tournaments between seasons, real qualifying groups, and a place in the cabinet if you lift one.',
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
+            'Run up to three managers on one device, each with a career of his own in its own slot: tap Managers on the hub to switch between them or start another.',
           ]}
         >
           {/* Round 655: every league and club as readable text, below the guide. */}
@@ -301,47 +335,39 @@ const ClubManager = () => {
        says so with a way to try again, never a blank page and never a fresh
        start offered over the career. */
     if (g.bootError) {
-      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} />);
+      /* Round 928 review: opening an era slot moves the index first, so a
+         failed fetch used to leave the player stuck here, away from managers
+         that would open fine. The way back to them is right beside the retry. */
+      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
     }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 
-  /* ================= RESUME PROMPT ================= */
-  if (g.phase === 'resume' && g.career) {
+  /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
+  if (g.phase === 'resume') {
     const c = g.career;
     return shell(
-      <div className="max-w-md mx-auto">
-        <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
-          <p className="text-muted-foreground text-sm">A saved career was found on this device.</p>
-        </header>
-        <div className="bg-card border border-border rounded-2xl p-5 text-center">
-          <div className="text-3xl mb-2">💼</div>
-          <div className="text-xl font-bold font-display text-foreground">{c.clubName}</div>
-          <div className="text-sm text-muted-foreground mt-1">
-            {worldSeasonLabel(c)} · Season {c.season} · Week {Math.min(c.week + 1, c.calendar.length)} of {c.calendar.length} · Board {Math.round(c.boardConfidence)}/100
-          </div>
-          <div className="text-xs text-muted-foreground mt-0.5">🏆 {c.trophies.length} trophies won so far</div>
-          <div className="flex gap-3 mt-5">
-            <button onClick={g.resume} className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold hover:opacity-90 transition-opacity">
-              Resume Career
-            </button>
-            <button onClick={g.startNew} className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold hover:bg-secondary/70 transition-colors">
-              Start Fresh
-            </button>
-          </div>
-        </div>
-      </div>
+      <ScreenLoading>
+        <ManagerSlotsScreen
+          slots={g.slots}
+          activeDetail={c ? `Week ${Math.min(c.week + 1, c.calendar.length)} of ${c.calendar.length} · Board ${Math.round(c.boardConfidence)}/100` : null}
+          note={g.slotNote}
+          onContinue={g.openSlot}
+          onNew={g.newInSlot}
+          onDelete={g.removeSlot}
+        />
+      </ScreenLoading>
     );
   }
 
   /* ================= CLUB SELECT (Round 70: nation -> league -> team) ================= */
-  if (g.phase === 'clubSelect' || (g.phase === 'resume' && !g.career)) {
+  if (g.phase === 'clubSelect') {
     /* Round 303: the dugout step hands in null (skip) or a manager spec, and
        either way the picker resets for the next career. */
     const confirmAndReset = (manager: ManagerSpec | null, entry?: MidSeasonEntry) => {
       if (pendingCustomSpec) g.confirmCustomClub(pickEra, pendingCustomSpec, manager ?? undefined, entry);
-      else g.confirmClub(pickEra, manager ?? undefined, entry);
+      else g.confirmClub(pickEra, manager ?? undefined, entry, isHistoricEra(pickEra) ? null : worldEdit);
+      setWorldEdit(null);
       setPickStep('era');
       setPickEra(DEFAULT_ERA_ID);
       setPickNation(null);
@@ -359,9 +385,23 @@ const ClubManager = () => {
     const league = pickLeagueId
       ? (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === pickLeagueId)
       : null;
+    /* Round 964: today's picker lists and board asks read the edited world
+       for the length of one synchronous call, and nothing stays registered. */
+    const editing = !historicPick && worldEdit !== null;
+    const edited = editing ? editedPicker : null;
+    const inWorld = <T,>(fn: () => T): T => (editing ? withWorldEdit(worldEdit, fn) : fn());
+    const todaysTeams = (id: string) => edited?.teamsBy.get(id) ?? inWorld(() => playableClubs(id));
     const teams = league && !waitingForEra
-      ? (historicPick ? eraPlayableClubs(pickEra, league.id) : playableClubs(league.id))
+      ? (historicPick ? eraPlayableClubs(pickEra, league.id) : todaysTeams(league.id))
       : [];
+    const teamWants = edited
+      ? new Map(teams.map(c => [c.name, edited.wants.get(c.name) ?? ''] as const))
+      : new Map(inWorld(() => teams.map(c => [c.name, boardWantLabel(c.name, historicPick ? pickEra : undefined)] as const)));
+    const movedCount = editing ? worldEditMoves(worldEdit).length : 0;
+    const homeNationOf = (club: string) => {
+      const home = editing ? realLeagueIdOf(club) : null;
+      return home ? NATIONS.find(n => n.leagueIds.includes(home))?.name ?? null : null;
+    };
 
     return shell(
       <div ref={pickRef}>
@@ -439,6 +479,14 @@ const ClubManager = () => {
             <p className="text-[10px] text-center mt-1">
               <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] px-2 text-primary hover:underline">How the real Champions League format changed, and what each era here plays</Link>
             </p>
+            {/* Round 928: a way back to the other managers from a new one's picker. */}
+            {g.slots.some(v => v.summary && !v.active) && (
+              <p className="text-[11px] text-center mt-1">
+                <button onClick={g.showSlots} className="inline-flex items-center min-h-[32px] px-2 text-muted-foreground hover:text-primary hover:underline">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back to your managers
+                </button>
+              </p>
+            )}
           </div>
         )}
 
@@ -452,6 +500,39 @@ const ClubManager = () => {
               <ChevronLeft className="w-3.5 h-3.5" /> {era.emoji} Starting {era.label}
             </button>
           </div>
+        )}
+        {/* Round 964: the world editor, today's world only. One tile, and the
+            edit it holds rides into every later step and into the career. */}
+        {pickStep === 'nation' && !historicPick && (
+          <div className="max-w-2xl mx-auto mb-2.5">
+            <button
+              onClick={() => setPickStep('world')}
+              data-testid="cm-world-editor-tile"
+              className={cn(
+                'w-full rounded-xl border p-3 text-left transition-all hover:border-primary',
+                movedCount ? 'bg-primary/10 border-primary' : 'bg-card border-dashed border-primary/50',
+              )}
+            >
+              <div className="flex items-center gap-2.5">
+                <span className="text-xl leading-none">🌍</span>
+                <div className="min-w-0">
+                  <div className="text-sm font-bold text-foreground">World editor{movedCount ? `: ${movedCount} clubs moved` : ''}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {movedCount ? 'Your world is edited. Tap to change it or put it back.' : 'Optional. Move any club to any league first: Celtic in the Premier League, your own super league.'}
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
+              </div>
+            </button>
+          </div>
+        )}
+        {pickStep === 'world' && !historicPick && (
+          <ScreenLoading><WorldEditorScreen
+            edit={worldEdit}
+            onChange={setWorldEdit}
+            onBack={() => setPickStep('nation')}
+            onDone={() => setPickStep('nation')}
+          /></ScreenLoading>
         )}
         {pickStep === 'nation' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-w-2xl mx-auto">
@@ -514,7 +595,7 @@ const ClubManager = () => {
             ).map(id => {
               const lg = (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === id);
               if (!lg) return null;
-              const lgTeams = historicPick ? eraPlayableClubs(pickEra, lg.id) : playableClubs(lg.id);
+              const lgTeams = historicPick ? eraPlayableClubs(pickEra, lg.id) : todaysTeams(lg.id);
               return (
                 <button
                   key={lg.id}
@@ -565,7 +646,7 @@ const ClubManager = () => {
                     <div className="flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: c.color }} />
                       {/* Round 106: flags run all the way through the picker now. */}
-                      <FlagImg name={pickNation.name} size={12} />
+                      <FlagImg name={homeNationOf(c.name) ?? pickNation.name} size={12} />
                       <span className={cn('text-xs font-bold truncate', sel ? 'text-primary' : 'text-foreground')}>{c.name}</span>
                     </div>
                     <div className="text-[9px] text-muted-foreground mt-0.5">
@@ -592,13 +673,20 @@ const ClubManager = () => {
                         It now quotes the board's actual named demand. */}
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-[10px] text-muted-foreground shrink-0">Board wants</span>
-                      <span className="text-[10px] font-bold text-foreground truncate" title={boardWantLabel(c.name, historicPick ? pickEra : undefined)}>
-                        {boardWantLabel(c.name, historicPick ? pickEra : undefined)}
+                      <span className="text-[10px] font-bold text-foreground truncate" title={teamWants.get(c.name) ?? ''}>
+                        {teamWants.get(c.name) ?? ''}
                       </span>
                     </div>
                   </button>
                 );
               })}
+              {/* Round 964: a founded club is placed against the real lineups, so
+                  the edited world and a custom club do not mix. */}
+              {editing ? (
+                <div className="rounded-xl border border-dashed border-border p-3 text-[10px] text-muted-foreground">
+                  Creating your own club starts in the real world. Reset the world editor to found one.
+                </div>
+              ) : (
               <button
                 onClick={() => { g.chooseClub(''); setPickStep('custom'); }}
                 className="rounded-xl border border-dashed border-primary/50 p-3 text-left transition-all bg-card hover:border-primary hover:bg-primary/5"
@@ -612,6 +700,7 @@ const ClubManager = () => {
                 </div>
                 <div className="text-[10px] font-bold text-foreground mt-1.5">Full customization →</div>
               </button>
+              )}
             </div>
             <p className="text-[9px] text-muted-foreground text-center mt-3">
               {historicPick ? (
@@ -762,6 +851,10 @@ const ClubManager = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
+        <button onClick={g.showSlots} data-testid="cm-show-slots-end" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }
@@ -776,6 +869,9 @@ const ClubManager = () => {
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
         <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
+        <button onClick={g.showSlots} data-testid="cm-show-slots-sacked" className="mt-4 text-xs text-muted-foreground underline underline-offset-2 hover:text-primary transition-colors">
+          Your managers
+        </button>
       </div>
     );
   }
@@ -793,7 +889,8 @@ const ClubManager = () => {
   // Round 74: tile summaries.
   const objBehind = objStatuses.filter(s => s.status === 'behind' || s.status === 'failed').length;
   const objDone = objStatuses.filter(s => s.status === 'done').length;
-  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length;
+  /* Round 979: an open appeal or decision counts as unread on the tile. */
+  const unreadCount = (c.inbox ?? []).filter(m => !m.resolved).length + deskOf(c).filter(d => !d.resolved).length;
   const latestMsg = (c.inbox ?? [])[0];
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
@@ -859,6 +956,10 @@ const ClubManager = () => {
             ))}
           </span>
           {c.trophies.length > 0 && <span>🏆×{c.trophies.length}</span>}
+          {/* Round 928: back to the three manager slots, this career saved first. */}
+          <button onClick={g.showSlots} data-testid="cm-show-slots" className="underline underline-offset-2 hover:text-primary transition-colors">
+            Managers
+          </button>
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}
@@ -1025,7 +1126,7 @@ const ClubManager = () => {
               <HubTile
                 icon="📩" title="Inbox" accent={unreadCount > 0}
                 value={unreadCount > 0 ? `${unreadCount} new` : 'All quiet'}
-                sub={latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
+                sub={deskOf(c).find(d => !d.resolved)?.kind === 'appeal' ? 'Red card appeal' : latestMsg ? (latestMsg.from ?? latestMsg.playerName) : 'No messages yet'}
                 onClick={() => setHubPanel('inbox')}
               />
               <HubTile
@@ -1229,7 +1330,7 @@ const ClubManager = () => {
                 </div>
               )}
               {hubPanel === 'inbox' && <ScreenLoading><InboxCard career={c} onAnswer={g.answer} /></ScreenLoading>}
-              {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && (
+              {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && deskOf(c).length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
               )}
 
