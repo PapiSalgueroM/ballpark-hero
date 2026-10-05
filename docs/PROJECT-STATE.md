@@ -1,3 +1,48 @@
+## Round 1006: final release checks, 2026-10-05
+
+Footle Unlimited integrated candidate ed0afccd passed all ten mounted cases,
+twenty effective source controls and four native profiles. The clue desk
+compatibility workflow passed. The five-run workflow passed gameplay and
+native tests; its sole failure was the uncommitted update snapshot, now
+copied from the verified remote artifact. Final CI reads committed files.
+Your picks 1005 remains live.1007 Rugby and 1008 career reviews are separate.
+Claude retains Soccer Career, Transfer Path and Front Office. No publication
+claim yet. Runtime stays remote; the session continues until 23:31 UTC.
+## Codex claims1006: Footle Unlimited sessions, 2026-10-05
+
+Codex owns Footle's Unlimited branch in useGame.ts, Footle.tsx, a new scoped
+footleUnlimitedSession helper, reopened rules and focused tests. Keep an
+unfinished Unlimited puzzle and avoid repeating answers until its tier pool
+is exhausted. Exclude today's Daily answer. Use only the existing verified
+player pool and normalized identities. Daily, five-puzzle-run saves and
+completion scoring stay separate. No shared daily/completion hook edits.
+Worktree: managed footle-unlimited-1006. Remote runtime verification only.
+
+1005 Your picks is still building independently.1004 verification-only PR129
+merged47197830 after both seven-profile baselines passed. Claude retains1010
+to1014 and Front Office work. No publication claim;1007to1009 are unstarted.
+Six-hour authorization continues until2026-10-05 23:31UTC.
+## Round 1005 is live, 2026-10-05
+
+PR130 merged as 9fe088e6 after final candidate 1ee37af4 passed all four remote
+workflows. Lovable confirmed publication and douknowball.com now loads
+index-BOlwr09V.js. Normal public UI verified Home and Search pins, reloads,
+unpin/re-pin and launch to the existing NHL Connections 4/4 result.
+Receipt: docs/audits/ROUND1005-VERIFICATION.md. Publication slot released.
+1006 Footle, 1007 Rugby League and 1008 four-sport season review remain in
+separate verification. Claude owns 1010 to 1014 and Front Office. No overlap.
+Runtime checks remain remote. The authorized session runs until 23:31 UTC.
+## Codex claims1005: Your picks, 2026-10-05
+
+Codex is building a guest-capable shelf of explicitly pinned games on Home,
+with pin controls on Home and Search. Browser-local picks use existing registry
+routes, names and sport styles. No game saves, facts, scores or account writes.
+Files: Index.tsx, Search.tsx, new useGamePicks, GamePickButton, GamePicksRow,
+focused tests and remote workflow. Isolated managed worktree game-picks-1005.
+Claude's 1010 to1014 and Front Office lanes remain separate.1004's seven-profile
+Connections baseline is in remote CI; no product fix is claimed before evidence.
+No publication claim yet.1006to1009 remain unstarted. Remote runtime checks only.
+
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.
