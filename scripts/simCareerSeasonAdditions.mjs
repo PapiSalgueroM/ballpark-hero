@@ -11,14 +11,19 @@
  *      appearances on two distinct non-wiki hosts; assists non-null and market
  *      value non-zero only on two hosts; a changed field's new value on two
  *      hosts unless it is null (n/a); every ended man on two hosts; no held
- *      man gets a row; no long dash anywhere in the file.
+ *      man gets a row; no long dash anywhere in the file; every goals,
+ *      appearances and assists number (added or changed) is the total its
+ *      sources' recorded readings state (readingOf), so a typo regenerated
+ *      into the migration and the bake still goes red here.
  *   2. COVERAGE, the outcome that would have caught the tpa-762 report: the
  *      men whose last row is still the season before, neither ended nor held,
- *      may not rise above the committed baseline (a ratchet, like
- *      RAW_RANDOM_BASELINE in simPrerender section 16), and every man the
- *      ledger adds must now end at its season. Measured 2026-10-05: 95 before
- *      wave 1 (94 men and the twin), 80 after it; 23 men stop a season
- *      earlier (printed, a later round's).
+ *      are exactly COVERAGE_BASELINE, a list frozen in this file by name (a
+ *      ratchet, like RAW_RANDOM_BASELINE in simPrerender section 16): nobody
+ *      joins it, and a wave that accounts for a man removes him from it in
+ *      the same commit. The generator refuses to write a count above the
+ *      committed one. Every man the ledger adds must now end at its season.
+ *      Measured 2026-10-05: 95 before wave 1 (94 men and the twin), 80 after
+ *      it; 23 men stop a season earlier (printed, a later round's).
  *   3. THE MIGRATION AND THE BAKE ARE THE LEDGER: the committed migration,
  *      bake and ledger equal what scripts/genCareerSeasonAdditions.mjs
  *      generates from the ledger now, and the migration's inserts and updates,
@@ -40,6 +45,7 @@
  *   calendar   an MLS spell written split style               (section 1)
  *   unflagged  a row at a club with no flag                   (section 1)
  *   uncovered  one added row removed in memory, must be named (section 2)
+ *   reads      Salah's 2025-2026 goals typed 21, read 12      (section 1)
  *   twin       Alisson cloned as Alisson Becker               (section 5)
  *
  * Reads no network and no database. Run: node scripts/simCareerSeasonAdditions.mjs
@@ -48,13 +54,39 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CORRECTION_LEDGERS, correctionProblems, removedNames } from './bakeCareerPlayers.mjs';
-import { BAKE_OUT, MIGRATION_OUT, PLANNED_APPLY, generate, identicalKeySets } from './genCareerSeasonAdditions.mjs';
-import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, careerQuizShift, clone, coverage, formatLedger, hostsFor, loadSiteModules } from './lib/careerSeasonLedger.mjs';
+import { BAKE_OUT, MIGRATION_OUT, PLANNED_APPLY, bakeStampOf, expectedBake, generate, identicalKeySets } from './genCareerSeasonAdditions.mjs';
+import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, careerQuizShift, clone, coverage, formatLedger, hostsFor, loadSiteModules, readingProblems } from './lib/careerSeasonLedger.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_ADD_CONTROL || '';
-const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, uncovered: 2, twin: 5 };
+const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, uncovered: 2, twin: 5 };
 if (CONTROL && !OWN[CONTROL]) { console.error(`SIM_SEASON_ADD_CONTROL=${CONTROL} is not a control this harness knows: ${Object.keys(OWN).join(', ')}`); process.exit(1); }
+/*
+ * THE COVERAGE RATCHET (section 2). The men of the pool who still stop at the
+ * ledger's previous season, neither added, ended nor held, frozen HERE, where
+ * scripts/genCareerSeasonAdditions.mjs cannot rewrite it (the ledger's own
+ * coverage block is regenerated on every run, so it can only record, never
+ * guard). Like RAW_RANDOM_BASELINE in simPrerender section 16: nobody may join
+ * the list, and a man a wave accounts for leaves it in the same commit.
+ * Wave 1 (2026-10-05): 80 men, from 95 before the ledger (94 and the twin).
+ */
+const COVERAGE_BASELINE = new Set([
+  "Achraf Hakimi", "Alejandro Garnacho", "Alphonso Davies", "André Onana", "Angel Di María",
+  "Antoine Griezmann", "Arda Güler", "Bernardo Silva", "Bradley Barcola", "Bruno Fernandes",
+  "Bukayo Saka", "Casemiro", "Ciro Immobile", "Cole Palmer", "Cristian Pulisic",
+  "Cristiano Ronaldo", "Darwin Núñez", "Declan Rice", "Dusan Vlahović", "Ederson", "Endrick",
+  "Enzo Fernández", "Erling Haaland", "Estêvão", "Federico Valverde", "Gavi",
+  "Gianluigi Donnarumma", "Hakim Ziyech", "Harry Kane", "Jadon Sancho", "Jamal Musiala",
+  "Jan Oblak", "João Cancelo", "João Félix", "Jonathan David", "Joshua Kimmich", "Jude Bellingham",
+  "Karim Benzema", "Kevin De Bruyne", "Khvicha Kvaratskhelia", "Kobbie Mainoo", "Kyle Walker",
+  "Kylian Mbappé", "Lamine Yamal", "Leroy Sané", "Luka Modrić", "Marcus Rashford", "Marquinhos",
+  "Martin Ødegaard", "Mats Hummels", "Mikel Oyarzabal", "Moisés Caicedo", "Moussa Diaby",
+  "N'Golo Kanté", "Nico Williams", "Ousmane Dembélé", "Pau Cubarsí", "Paulo Dybala", "Pedri",
+  "Phil Foden", "Pierre-Emerick Aubameyang", "Rafael Leão", "Raheem Sterling", "Rasmus Højlund",
+  "Riyad Mahrez", "Robert Lewandowski", "Rodri", "Rodrygo", "Romelu Lukaku", "Rúben Dias",
+  "Sandro Tonali", "Son Heung-min", "Thibaut Courtois", "Trent Alexander-Arnold", "Victor Osimhen",
+  "Viktor Gyökeres", "Vinícius Júnior", "Warren Zaïre-Emery", "Xavi Simons", "Yassine Bounou"
+]);
 /* the flags of the calendar year leagues the pool writes as one year */
 const CALENDAR_COUNTRIES = new Set(['us', 'ca', 'br', 'ar', 'jp']);
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
@@ -89,6 +121,12 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     if (first.season === before) abort('dash control changed nothing');
     console.log(`   NEGATIVE CONTROL ON: ${first.player}'s season is joined by U+2013`);
   }
+  if (CONTROL === 'reads') {
+    const salah = L.added.find(r => r.player === 'Mohamed Salah');
+    if (!salah || salah.goals !== 12) abort('reads control cannot run: Salah 2025-2026 does not carry 12 goals');
+    salah.goals = 21;
+    console.log('   NEGATIVE CONTROL ON: Salah\'s 2025-2026 goals are typed 21 while his sources read 12');
+  }
   if (CONTROL === 'calendar' || CONTROL === 'unflagged') {
     const before = L.added.length;
     L.added.push({ ...clone(first), club: CONTROL === 'calendar' ? 'LAFC' : 'Atlantis FC', season: ledger.season });
@@ -116,6 +154,8 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     }
     if (r.assists !== null && hostsFor(r.sources, 'assists').size < 2) fail(`${who}: assists ${r.assists} without two hosts (write null)`);
     if (r.marketValue !== 0 && hostsFor(r.sources, 'marketValue').size < 2) fail(`${who}: market value ${r.marketValue} without two hosts (write 0)`);
+    /* each number is the one its sources were read as, not only a sourced field */
+    for (const f of ['goals', 'appearances', ...(r.assists === null ? [] : ['assists'])]) for (const pr of readingProblems(r.sources, f, r[f])) fail(`${who}: ${pr}`);
     if (!Number.isInteger(r.goals) || !Number.isInteger(r.appearances) || r.goals < 0 || r.appearances < 1) fail(`${who}: goals and appearances must be real counts`);
   }
   for (const c of L.changed ?? []) {
@@ -123,6 +163,7 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     if (c.to !== null && hostsFor(c.sources, c.field).size < 2) fail(`${who}: the new value ${c.to} is carried by fewer than two hosts`);
     if (c.to === null && c.field !== 'assists') fail(`${who}: only assists may be written n/a`);
     if (c.from === c.to) fail(`${who}: a change that changes nothing`);
+    if (c.to !== null) for (const pr of readingProblems(c.sources, c.field, c.to)) fail(`${who}: ${pr}`);
   }
   for (const e of L.ended ?? []) if (hostsFor(e.sources, 'ended').size < 2) fail(`${e.player}: ended on fewer than two hosts`);
   for (const h of L.held ?? []) if (!h.reason || !pre.some(p => p.name === h.player)) fail(`${h.player}: held without a reason or not in the pool`);
@@ -151,17 +192,18 @@ console.log(`2) coverage: men still stopping at ${ledger.previousSeason}`);
     console.log(`   NEGATIVE CONTROL ON: ${gone.player}'s ${gone.season} row is removed in memory`);
   }
   const cover = coverage(pool, L);
-  const baseline = ledger.coverage?.baseline;
-  if (!Number.isInteger(baseline)) fail('the ledger records no coverage baseline');
-  const committed = new Set(ledger.coverage?.unaccounted ?? []);
-  if (cover.unaccounted.length > baseline) {
-    const fresh = cover.unaccounted.filter(n => !committed.has(n));
-    fail(`${cover.unaccounted.length} men stop at ${ledger.previousSeason} unaccounted, the baseline is ${baseline}; not in the committed list: ${fresh.join(', ') || '(none)'}`);
-  }
+  /* the ratchet is COVERAGE_BASELINE above, by name, so a man who falls out
+     while another is accounted for cannot hide behind an equal count */
+  const joined = cover.unaccounted.filter(n => !COVERAGE_BASELINE.has(n));
+  if (joined.length) fail(`${joined.length} man (men) stop at ${ledger.previousSeason} unaccounted and are not on COVERAGE_BASELINE, which only shrinks: ${joined.join(', ')}`);
+  const now = new Set(cover.unaccounted);
+  const left = [...COVERAGE_BASELINE].filter(n => !now.has(n));
+  if (left.length) fail(`${left.join(', ')} no longer stop(s) at ${ledger.previousSeason} unaccounted, so remove them from COVERAGE_BASELINE in this file in the same commit; the list must only shrink`);
+  if (ledger.coverage?.baseline !== cover.unaccounted.length) fail(`the ledger records a coverage count of ${ledger.coverage?.baseline}, measured ${cover.unaccounted.length}`);
   for (const m of cover.notCovered) fail(m);
   const before = coverage(pre, { ...L, added: [], ended: [], held: [] }).unaccounted.length;
-  if (!(baseline < before)) fail(`the baseline ${baseline} is not below the ${before} the pool had before the ledger; each wave must lower it`);
-  console.log(`   ${cover.unaccounted.length} unaccounted (baseline ${baseline}, ${before} before the ledger); accounted: ${cover.accounted.added} added, ${cover.accounted.ended} ended, ${cover.accounted.held} held`);
+  if (!(COVERAGE_BASELINE.size < before)) fail(`COVERAGE_BASELINE holds ${COVERAGE_BASELINE.size} men, not below the ${before} the pool had before the ledger; each wave must lower it`);
+  console.log(`   ${cover.unaccounted.length} unaccounted (COVERAGE_BASELINE ${COVERAGE_BASELINE.size}, ${before} before the ledger); accounted: ${cover.accounted.added} added, ${cover.accounted.ended} ended, ${cover.accounted.held} held`);
   console.log(`   held for the relabel round: ${(L.held ?? []).map(h => h.player).join(', ') || 'none'}`);
   console.log(`   ${cover.olderStops} men stop at the season before that (counted, not failed: a later round's)`);
 }
@@ -169,11 +211,16 @@ console.log(`2) coverage: men still stopping at ${ledger.previousSeason}`);
 section = 3;
 console.log('3) the committed migration, bake and ledger are what the ledger generates, and the SQL reads back as the ledger');
 {
-  for (const [rel, want] of [[MIGRATION_OUT, gen.migration], [BAKE_OUT, gen.bake], [LEDGER_FILE, formatLedger(gen.ledger)]]) {
+  /* the bake is rendered with its own date stamp: the lead's re-bake after
+     the apply rewrites only that, and every row must still be the ledger's */
+  const bakeAbs = path.join(ROOT, BAKE_OUT);
+  const bakeText = fs.existsSync(bakeAbs) ? fs.readFileSync(bakeAbs, 'utf8') : '';
+  for (const [rel, want] of [[MIGRATION_OUT, gen.migration], [BAKE_OUT, expectedBake(gen.post, bakeText, gen.ledger.postBake.stamp)], [LEDGER_FILE, formatLedger(gen.ledger)]]) {
     const abs = path.join(ROOT, rel);
     if (!fs.existsSync(abs)) { fail(`${rel} is missing`); continue; }
     if (norm(fs.readFileSync(abs, 'utf8')) !== norm(want)) fail(`${rel} differs from what node scripts/genCareerSeasonAdditions.mjs generates now; rerun it`);
   }
+  if (bakeText && !bakeStampOf(bakeText)) fail(`${BAKE_OUT} carries no generated marker with a date`);
   const sql = norm(read(MIGRATION_OUT));
   const code = sql.replace(/^\s*--.*$/gm, '');
   const un = s => s.replace(/''/g, "'");

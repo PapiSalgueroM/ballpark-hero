@@ -63,6 +63,48 @@ export function hostsFor(sources, field) {
   return hosts;
 }
 
+const NUMERIC_FIELDS = ['goals', 'appearances', 'assists'];
+const LABELLED = { goals: /(\d+) goals?\b/g, assists: /(\d+) assists?\b/g, appearances: /(\d+) (?:apps|games?|appearances)\b/g };
+const NONE = { goals: /\bno goals?\b/, assists: /\bno assists?\b/, appearances: /\bno (?:apps|games?|appearances)\b/ };
+
+/**
+ * The total a source's own recorded reading (`reads`) gives for a numeric
+ * field, or null when the reading states no total for it. A labelled total
+ * outside brackets wins ("42 games 27 goals", the last one when the reading
+ * lists competitions first: per competition splits sit before the colon or in
+ * brackets); "no goal" reads 0; an appearances page reads "Name: 35 (...)";
+ * a source carrying one numeric field may read as a bare leading number, or
+ * "absent from the list" (0). Anything else is not a reading of that field.
+ */
+export function readingOf(source, field) {
+  if (!NUMERIC_FIELDS.includes(field)) return null;
+  const text = String(source?.reads ?? '').trim();
+  const flat = text.replace(/\([^()]*\)/g, ' ');
+  const labelled = [...flat.matchAll(LABELLED[field])];
+  if (labelled.length) return Number(labelled[labelled.length - 1][1]);
+  if (NONE[field].test(flat)) return 0;
+  if (field === 'appearances') { const m = /^[^:\d]+:\s*(\d+)\b/.exec(text); if (m) return Number(m[1]); }
+  const numeric = (source?.fields ?? []).filter(f => NUMERIC_FIELDS.includes(f));
+  if (numeric.length === 1 && numeric[0] === field) {
+    const m = /^(\d+)\b/.exec(text);
+    if (m) return Number(m[1]);
+    if (/^absent from\b/.test(text)) return 0;
+  }
+  return null;
+}
+
+/**
+ * What the sources' own readings say about one value: every source that
+ * carries the field and states a total must state this one, and at least one
+ * must state it. Returns the problems, empty when the value is what was read.
+ */
+export function readingProblems(sources, field, value) {
+  const read = (sources ?? []).filter(s => Array.isArray(s.fields) && s.fields.includes(field))
+    .map(s => ({ url: s.url, n: readingOf(s, field) })).filter(r => r.n !== null);
+  if (!read.length) return [`no source's recorded reading states the ${field} total`];
+  return read.filter(r => r.n !== value).map(r => `${field} ${value}, but ${r.url} reads ${r.n}`);
+}
+
 /** The season a club's existing rows are written in: 'split', 'calendar', 'mixed' or 'none'. */
 export function clubStyle(players, club) {
   let split = 0, calendar = 0;

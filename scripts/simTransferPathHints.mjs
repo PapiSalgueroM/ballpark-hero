@@ -75,7 +75,9 @@
  * too high, r1010drop drops its Europe rewrite, r1010rename leaves it
  * unrenamed (section 8 must report tpa-762 in each), and r1010append rebuilds
  * the pre-1010 pool with Alisson Becker appended instead of at his sorted place
- * (the preBake hash must refuse it).
+ * (the preBake hash must refuse it). r1010floor puts back the one-state live
+ * player floor (253 after the migration too), and section 8 must report that
+ * it would refuse the pool the migration leaves.
  *
  * Run: node scripts/simTransferPathHints.mjs
  */
@@ -86,12 +88,16 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
 import { LEDGER_FILE as SEASON_LEDGER_FILE, bakeHash, parseSeasonMigrationPuzzles, seasonMigrationState, undoLedger } from './lib/careerSeasonLedger.mjs';
-import { MIGRATION_OUT as SEASON_MIGRATION, RULES as SEASON_RULES, liveAfter784, ruleGraphs } from './genCareerSeasonAdditions.mjs';
+import { MIGRATION_OUT as SEASON_MIGRATION, liveAfter784, ruleGraphs } from './genCareerSeasonAdditions.mjs';
+/* the rules sections 3 and 8 hold the 1010 rewrite to: this harness's own
+   list, never the generator's, so a rule the generator stops deriving is
+   still checked here */
+const SEASON_RULES = ['classic', ...MODE_RULES];
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
 const LOCAL_ONLY = process.env.TRANSFER_PATH_LOCAL_ONLY === '1';
-if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop', 'r1010min', 'r1010drop', 'r1010rename', 'r1010append'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop', 'r1010min', 'r1010drop', 'r1010rename', 'r1010append', 'r1010floor'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 /* Round 1010b: the season ledger, and its migration's Transfer Path rows read back */
 const seasonLedger = JSON.parse(fs.readFileSync(path.join(ROOT, SEASON_LEDGER_FILE), 'utf8'));
 const season1010 = parseSeasonMigrationPuzzles(fs.readFileSync(path.join(ROOT, SEASON_MIGRATION), 'utf8'));
@@ -103,6 +109,12 @@ const fail = m => { failures += 1; if (failures <= 25) console.error('  FAIL: ' 
 /* the puzzle counts measured on 2026-08-26; a shrink is lost coverage */
 const PUZZLE_FLOOR = 885;
 const PLAYER_FLOOR = 253;
+/* the live player floor once the Round 1010b migration is applied: it
+   deletes the Alisson Becker twin (253 to 252), measured on the post bake */
+const PLAYER_FLOOR_AFTER_1010 = 252;
+/* the floor section 3 applies once the migration is in; the r1010floor
+   control puts back the single floor this harness had before */
+const liveFloorAfter1010 = () => (CONTROL === 'r1010floor' ? PLAYER_FLOOR : PLAYER_FLOOR_AFTER_1010);
 const COMPANION = path.join(ROOT, 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql');
 const APPLIED_RESTORE = path.join(ROOT, 'supabase/migrations/20260907190000_restore_verified_active_transfer_path_hints.sql');
 const ACTIVE_RESTORE = path.join(ROOT, 'supabase/migrations/20260911190000_refresh_verified_active_transfer_path_hints.sql');
@@ -214,7 +226,6 @@ console.log('3) the live tables, through the site\'s own fetchers');
     const graph = buildGraph(players);
     const rows = puzzles.map(p => ({ id: p.id, a: p.playerA, b: p.playerB, minSteps: p.minSteps, hint: p.hint }));
     if (rows.length < PUZZLE_FLOOR) fail(`${rows.length} live puzzles, the floor is ${PUZZLE_FLOOR}`);
-    if (graph.names.length < PLAYER_FLOOR) fail(`${graph.names.length} live players, the floor is ${PLAYER_FLOOR}`);
     const { unreachable, checked } = checkRows(graph, rows, 'live');
     if (unreachable) fail(`${unreachable} live puzzles cannot be solved`);
     const alisson = players.find(p => p.name === 'Alisson');
@@ -243,6 +254,9 @@ console.log('3) the live tables, through the site\'s own fetchers');
       : s1010 === 'before'
         ? `   PENDING: ${path.basename(SEASON_MIGRATION)} is not applied; every puzzle and entry it moves still carries the value it replaces`
         : `   the Round 1010b rewrite is MIXED on the live table`);
+    /* two states, two floors: the migration deletes one player */
+    const liveFloor = s1010 === 'before' ? PLAYER_FLOOR : liveFloorAfter1010();
+    if (graph.names.length < liveFloor) fail(`${graph.names.length} live players, the floor ${s1010 === 'before' ? 'before' : 'after'} the Round 1010b migration is ${liveFloor}`);
     const undo1010 = s1010 === 'after';
     const rename1010 = new Map(season1010.renames.map(r => [r.id, r]));
     const rewrite1010 = new Map(season1010.rewrites.map(r => [`${r.id}|${r.rule}`, r]));
@@ -575,7 +589,7 @@ let r784Caught = false;
 console.log('8) the Round 1010b season rows and the Transfer Path entries they rename and rewrite');
 let r1010Caught = false;
 {
-  const PLANTED = { r1010min: 'tpa-762|classic', r1010drop: 'tpa-762|europe', r1010rename: 'tpa-762|rename' };
+  const PLANTED = { r1010min: 'tpa-762|classic', r1010drop: 'tpa-762|europe', r1010rename: 'tpa-762|rename', r1010floor: 'floor' };
   const fail8 = (m, key) => { fail(m); if (PLANTED[CONTROL] === key) r1010Caught = true; };
   const parsed = JSON.parse(JSON.stringify(season1010));
   if (CONTROL === 'r1010min') {
@@ -598,6 +612,10 @@ let r1010Caught = false;
   }
   /* the committed bake is the tables after the 1010 migration */
   if (bakeHash(site.fallbackPlayers) !== seasonLedger.postBake.sha256) fail8(`the committed bake is not the ledger's postBake, so the 1010 rows cannot be checked against it`, 'bake');
+  /* section 3's two live floors accept the two pools the migration moves between */
+  if (CONTROL === 'r1010floor') console.log('   NEGATIVE CONTROL ON: the live floor after the migration is put back to ' + PLAYER_FLOOR + ', this section must report it');
+  if (site.fallbackPlayers.length < liveFloorAfter1010()) fail8(`section 3's live floor after the 1010 migration (${liveFloorAfter1010()}) refuses the ${site.fallbackPlayers.length} players the migration leaves`, 'floor');
+  if (seasonLedger.preBake.players < PLAYER_FLOOR) fail8(`section 3's live floor before the 1010 migration (${PLAYER_FLOOR}) refuses the ${seasonLedger.preBake.players} players it starts from`, 'floor');
   const live = liveAfter784(ROOT);
   const graphs = ruleGraphs(site.fallbackPlayers, site.playersUnderRule);
   const keptAs = new Map((seasonLedger.removed ?? []).map(r => [r.player, r.keptAs]));
@@ -649,7 +667,7 @@ let r1010Caught = false;
 console.log('');
 if (CONTROL) {
   if (CONTROL === 'r1010append') { console.error(`simTransferPathHints control (${CONTROL}): RED. The misplaced removed man still hashed to preBake.`); process.exit(1); }
-  if (CONTROL === 'r1010min' || CONTROL === 'r1010drop' || CONTROL === 'r1010rename') {
+  if (CONTROL === 'r1010min' || CONTROL === 'r1010drop' || CONTROL === 'r1010rename' || CONTROL === 'r1010floor') {
     if (r1010Caught) { console.log(`simTransferPathHints control (${CONTROL}): green. Section 8 reported the planted row (${failures} findings).`); process.exit(0); }
     console.error(`simTransferPathHints control (${CONTROL}): RED. ${failures ? 'Findings came, but not the planted row.' : 'The planted row went unreported.'}`); process.exit(1);
   }

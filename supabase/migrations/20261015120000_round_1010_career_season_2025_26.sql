@@ -10,7 +10,7 @@
 -- node scripts/genCareerLadderRoster.mjs (expect an x line for the removed id).
 --
 --   added: 7 rows for 2025-2026, assists only where two sources agree, market value 0 (n/a)
---   changed: 8 rows of 2024-2025 that were mid-season snapshots, each guarded by its old values
+--   changed: 8 rows of 2024-2025 set to their final all competitions totals, each guarded by its old values
 --   removed: Alisson Becker (a0000001-0000-0000-0000-000000000066), kept as Alisson; his 13 season rows go with him (ON DELETE CASCADE)
 --   Transfer Path: 13 puzzles renamed, 53 entries rewritten (18 classic, 19 Europe, 16 active),
 --   each guarded by the value it replaces and each the search's own on the pool after this migration
@@ -82,7 +82,7 @@ begin
   get diagnostics n = row_count;
   if n <> 1 then raise exception 'Andrew Robertson 2024-2025 Liverpool: expected one row carrying the old values, updated %', n; end if;
 
-  -- Federico Chiesa 2024-2025 Liverpool: 15 apps 3 goals to 14 apps 2 goals (a mid-season snapshot)
+  -- Federico Chiesa 2024-2025 Liverpool: 15 apps 3 goals to 14 apps 2 goals (wrong, corrected to the final totals)
   select count(*) into n from public.career_players where id = 'a0000001-0000-0000-0000-000000000103' and player_name = 'Federico Chiesa';
   if n <> 1 then raise exception 'Federico Chiesa: expected one career_players row at a0000001-0000-0000-0000-000000000103, found %', n; end if;
   update public.career_seasons set goals = 2, assists = 1, appearances = 14
