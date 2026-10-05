@@ -1,5 +1,4 @@
 /* Native review and retry on the built app. Accepted fixtures isolate game data; exact read-only font requests may load. */
-import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -121,12 +120,18 @@ try {
         { name: 'rules-gate-seen:/champ-or-not', value: '1' }, { name: 'dukb-theme', value: theme },
       ] }] },
     });
-    await context.route('**/*', route => {
+    await context.routeWebSocket('**/*', socket => socket.close());
+    await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
       if (url.origin === BASE) return route.continue();
       result.interceptedRequests.push({ method: request.method(), path: url.pathname });
       if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) result.scoreWrites.push(`${request.method()} ${url.pathname}`);
-      if (isFontRead(request)) { result.fontRequests.push(request.url()); return route.continue(); }
+      if (isFontRead(request)) {
+        result.fontRequests.push(request.url());
+        const response = await route.fetch({ maxRedirects: 0 });
+        assert(response.status() < 300 || response.status() >= 400, 'Font requests cannot redirect beyond the exact allowlist');
+        return route.fulfill({ response });
+      }
       const table = url.pathname.match(/^\/rest\/v1\/([^/]+)$/)?.[1];
       if (table && Object.hasOwn(tables, table)) return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(tables[table]) });
       const type = request.resourceType();

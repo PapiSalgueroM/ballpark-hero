@@ -85,3 +85,10 @@ and its read-only font files, proves all eight Inter and Space Grotesk
 faces loaded before geometry, and records font errors and active theme.
 All game-data interception, score isolation, visibility checks and geometry
 controls are retained. Source syntax passed. Remote acceptance is pending.
+
+The95b643d4run passed mounted outcomes and all20effective controls, but
+native font checks failed because the offline harness hook blocked the
+explicit font allowance. The native driver now matches the existing career
+drivers with fixture interception, explicit WebSocket closure, and font-only
+fetches with redirects disabled. Shared offlineTransport remains unchanged.
+No database request is allowed through. Native acceptance remains pending.
