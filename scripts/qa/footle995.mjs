@@ -127,7 +127,7 @@ try {
       await activate(page.locator('[data-footle-mode="unlimited"]'), 'open Easy Unlimited');
       await guess(fixtureRows.obscure[0].player_name);
       await page.getByText(/^Guesses:\s*1\s*\/\s*8$/).waitFor();
-      const unlimitedClues = await page.locator('.animate-cell-reveal').allTextContents();
+      const unlimitedClues = await page.locator('[data-footle-clue-desk] h2, [data-clue]').allTextContents();
       assert.equal(unlimitedClues.length, 9, 'One wrong Unlimited guess has all eight clues');
       await activate(page.getByRole('button', { name: 'Five-puzzle run', exact: true }), 'open practice');
       await activate(page.getByRole('button', { name: new RegExp(`^${tier}$`, 'i') }), `choose ${tier}`);
@@ -135,7 +135,7 @@ try {
       await activate(page.locator('[data-footle-mode="unlimited"]'), 'return to preserved Unlimited');
       await page.getByText(/^Guesses:\s*1\s*\/\s*8$/).waitFor();
       assert.equal(await page.getByRole('button', { name: 'easy', exact: true }).getAttribute('aria-pressed'), 'true', 'Practice tier selection preserves the in-progress Unlimited tier');
-      assert.deepEqual(await page.locator('.animate-cell-reveal').allTextContents(), unlimitedClues, 'Returning to Unlimited preserves the original guess clues');
+      assert.deepEqual(await page.locator('[data-footle-clue-desk] h2, [data-clue]').allTextContents(), unlimitedClues, 'Returning to Unlimited preserves the original guess clues');
       await activate(page.locator('[data-footle-mode="practice"]'), 'return to chosen practice tier');
       await page.waitForFunction(tier => [...document.querySelectorAll('button')].some(button => button.textContent?.trim() === tier && button.getAttribute('aria-pressed') === 'true'), tier);
       await layout('setup'); await page.screenshot({ path: path.join(output, `${width}-setup.png`), animations: 'disabled' });
@@ -149,12 +149,12 @@ try {
       assert.equal(await page.getByRole('button', { name: 'Next puzzle', exact: true }).count(), 0, 'Unfinished puzzle cannot advance');
       const wrong = initial.pool.find(player => player.goals === null && player.name !== initial.targets[0]).name;
       await guess(wrong); await waitRound(0, 1, 'playing');
-      const unknownGoal = page.locator('.animate-cell-reveal').nth(3);
+      const unknownGoal = page.locator('[data-clue="goals"]');
       assert.match(await unknownGoal.textContent(), /\?/);
-      assert.match(await unknownGoal.textContent(), /not on file/);
+      assert.match(await unknownGoal.textContent(), /Not on file/i);
       assert.doesNotMatch(await unknownGoal.textContent(), /▲|▼|higher|lower/);
       if (motion === 'reduce') {
-        const durations = await page.locator('.animate-cell-reveal').evaluateAll(cells => cells.map(cell => getComputedStyle(cell).animationDuration));
+        const durations = await page.locator('[data-clue-cards]').evaluateAll(cells => cells.map(cell => getComputedStyle(cell).animationDuration));
         assert.ok(durations.length > 0 && durations.every(value => value.split(',').every(duration => parseFloat(duration) <= 0.000001)), 'Reduced motion removes perceptible clue animation');
       }
       const beforeModeSwitch = await run();

@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { hockeyCareerPuzzles } from '@/data/hockeyCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
+import { isHockeyGuessRight } from '@/lib/hockeyCareerGuess';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
@@ -102,9 +103,7 @@ export function useHockeyCareer() {
 
   const submitGuess = useCallback((guess: string) => {
     if (activeStatus !== 'playing' || !player) return;
-    const normalized = guess.trim().toLowerCase();
-    const target = player.name.toLowerCase();
-    if (normalized === target || normalized === target.split(' ').pop()) {
+    if (isHockeyGuessRight(guess, player.name)) {
       if (mode === 'daily') {
         addDailyAction({ t: 'won' });
       } else {

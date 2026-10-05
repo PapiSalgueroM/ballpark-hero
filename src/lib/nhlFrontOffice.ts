@@ -332,8 +332,11 @@ export function nhlStrength(t: NhlGmTeam): number {
   return avg(fwd, 62) * 0.5 + avg(d, 62) * 0.3 + avg(g, 62) * 0.2;
 }
 
-export function nhlWinProb(a: NhlGmTeam, b: NhlGmTeam): number {
-  const gap = nhlStrength(a) - nhlStrength(b);
+/* Round 987: the two edges are strength points a GM desk adds (a staff's
+   bounded edge, src/lib/nhlGmDesk.ts). Both default to nothing, so every
+   caller that passes none plays exactly as before. */
+export function nhlWinProb(a: NhlGmTeam, b: NhlGmTeam, edgeA = 0, edgeB = 0): number {
+  const gap = (nhlStrength(a) + edgeA) - (nhlStrength(b) + edgeB);
   return 1 / (1 + Math.pow(10, -gap / 14));
 }
 
@@ -344,7 +347,15 @@ export interface NhlRoundReport {
   notes: string[];
 }
 
-export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number): NhlRoundReport {
+/** Round 987: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
+export interface NhlRoundOptions {
+  /** Strength points added to a club, by abbreviation. */
+  edges?: Record<string, number>;
+  /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
+  injuryRounds?: (abbr: string, p: NhlGmPlayer, rounds: number) => number;
+}
+
+export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number, opts?: NhlRoundOptions): NhlRoundReport {
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
   let myW = 0, myL = 0, myOtl = 0;
@@ -353,6 +364,7 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
       if (p.out > 0) p.out -= 1;
       else if (rng() < 0.022) {
         p.out = 1 + Math.floor(rng() * 3);
+        if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
@@ -367,7 +379,7 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
   foPlayRound(league, abbrs, NHL_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const p = nhlWinProb(me, them);
+    const p = opts?.edges ? nhlWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : nhlWinProb(me, them);
     if (rng() < p) {
       me.wins += 1; if (abbr === myTeam) myW += 1;
       loseGame(them, opp === myTeam);
@@ -387,8 +399,8 @@ export function nhlFoStandings(league: NhlLeague, group?: string[]): NhlGmTeam[]
 
 export interface NhlSeriesResult { name: string; home: string; away: string; homeWins: number; awayWins: number; winner: string }
 
-function playNhlSeries(name: string, home: NhlGmTeam, away: NhlGmTeam, rng: () => number): NhlSeriesResult {
-  const p = nhlWinProb(home, away);
+function playNhlSeries(name: string, home: NhlGmTeam, away: NhlGmTeam, rng: () => number, edges?: Record<string, number>): NhlSeriesResult {
+  const p = edges ? nhlWinProb(home, away, edges[home.abbr] ?? 0, edges[away.abbr] ?? 0) : nhlWinProb(home, away);
   let hw = 0, aw = 0;
   while (hw < 4 && aw < 4) {
     if (rng() < p) hw += 1; else aw += 1;
@@ -401,7 +413,7 @@ function playNhlSeries(name: string, home: NhlGmTeam, away: NhlGmTeam, rng: () =
  * cards; the better division winner draws WC2. Division semifinals and
  * finals, conference final, Stanley Cup Final. All best-of-7.
  */
-export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series: NhlSeriesResult[]; champion: string } {
+export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number, edges?: Record<string, number>): { series: NhlSeriesResult[]; champion: string } {
   const series: NhlSeriesResult[] = [];
   const confChamps: string[] = [];
   for (const conf of [
@@ -421,17 +433,17 @@ export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series
     for (const [di, d] of conf.divs.entries()) {
       const table = divTables[di];
       const one = table[0];
-      const semi1 = playNhlSeries(`${d.name} Semi`, one, wcFor.get(one.abbr)!, rng);
-      const semi2 = playNhlSeries(`${d.name} Semi`, table[1], table[2], rng);
-      const dFinal = playNhlSeries(`${d.name} Final`, league.teams[semi1.winner], league.teams[semi2.winner], rng);
+      const semi1 = playNhlSeries(`${d.name} Semi`, one, wcFor.get(one.abbr)!, rng, edges);
+      const semi2 = playNhlSeries(`${d.name} Semi`, table[1], table[2], rng, edges);
+      const dFinal = playNhlSeries(`${d.name} Final`, league.teams[semi1.winner], league.teams[semi2.winner], rng, edges);
       series.push(semi1, semi2, dFinal);
       divWinners.push(dFinal.winner);
     }
-    const cf = playNhlSeries(`${conf.name} Final`, league.teams[divWinners[0]], league.teams[divWinners[1]], rng);
+    const cf = playNhlSeries(`${conf.name} Final`, league.teams[divWinners[0]], league.teams[divWinners[1]], rng, edges);
     series.push(cf);
     confChamps.push(cf.winner);
   }
-  const cup = playNhlSeries('Stanley Cup Final', league.teams[confChamps[0]], league.teams[confChamps[1]], rng);
+  const cup = playNhlSeries('Stanley Cup Final', league.teams[confChamps[0]], league.teams[confChamps[1]], rng, edges);
   series.push(cup);
   return { series, champion: cup.winner };
 }
