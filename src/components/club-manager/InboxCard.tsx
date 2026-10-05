@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { MessageSquare } from 'lucide-react';
 import type { CareerState } from '@/lib/clubManager';
+import { deskOf } from '@/lib/clubManagerDecisions';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './InboxCard.module.css';
 
@@ -20,6 +21,19 @@ interface InboxCardProps {
 /** Round 73: player DMs. Start-me demands, exit threats, and pure chaos. */
 export function InboxCard({ career, onAnswer }: InboxCardProps) {
   const inbox = career.inbox ?? [];
+  /* Round 979: the decisions desk, appeals and situations, answered through
+     the same onAnswer the messages use (answerMessage routes 'desk-' ids). */
+  const desk = deskOf(career);
+  const deskPending = desk.filter(d => !d.resolved).length;
+  /* Closed cards stay out of the way: the open ones, the one you just
+     answered (so its outcome shows), and when nothing is open the newest
+     closed one. The rest sit behind a toggle. */
+  const [showClosed, setShowClosed] = useState(false);
+  const [lastAnswered, setLastAnswered] = useState<string | null>(null);
+  const deskClosed = desk.filter(d => d.resolved);
+  const deskShown = desk.filter(d => !d.resolved || showClosed || d.id === lastAnswered
+    || (deskPending === 0 && d.id === deskClosed[0]?.id));
+  const deskHidden = desk.length - deskShown.length;
   const [view, setView] = useState<'all' | 'pending' | 'resolved'>('all');
   const [search, setSearch] = useState('');
   const [visibleLimit, setVisibleLimit] = useState(4);
@@ -40,12 +54,12 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
 
   useLayoutEffect(() => {
     if (!answerRequest) return;
-    if (inbox.find(m => m.id === answerRequest)?.resolved) {
+    if ((inbox.find(m => m.id === answerRequest) ?? desk.find(d => d.id === answerRequest))?.resolved) {
       setCueId(answerRequest);
       (answeredCard.current ?? viewControl.current)?.focus({ preventScroll: true });
     }
     setAnswerRequest(null);
-  }, [answerRequest, inbox]);
+  }, [answerRequest, inbox, desk]);
 
   useEffect(() => {
     if (!cueId) return;
@@ -59,10 +73,80 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
     setLoadRequest(null);
   }, [loadRequest]);
 
-  if (inbox.length === 0) return null;
+  if (inbox.length === 0 && desk.length === 0) return null;
 
   return (
     <div className="bg-card border border-border rounded-xl p-3">
+      {desk.length > 0 && (
+        <section aria-label="Decisions desk" className={cn(inbox.length > 0 && 'mb-3 pb-3 border-b border-border/60')}>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
+            <span aria-hidden>⚖️</span> Decisions desk
+            {deskPending > 0 && (
+              <span className="text-[9px] bg-gold text-background rounded-full px-1.5 py-0.5 font-bold">{deskPending}</span>
+            )}
+          </div>
+          <p className="text-[10px] text-muted-foreground mb-2">Answer before your next match. Anything left open closes with nothing changed.</p>
+          <div className="space-y-2">
+            {deskShown.map(d => (
+              <div
+                key={d.id}
+                ref={d.id === answerRequest ? answeredCard : null}
+                tabIndex={-1}
+                data-desk-card={d.id}
+                data-desk-kind={d.kind}
+                data-inbox-state={d.resolved ? 'resolved' : 'pending'}
+                data-inbox-feedback={cueId === d.id ? 'committed' : undefined}
+                className={cn(
+                  'rounded-lg border p-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold',
+                  styles.card,
+                  cueId === d.id && styles.committed,
+                  d.resolved ? 'border-border/40 bg-secondary/30' : 'border-gold/40 bg-gold/5',
+                )}
+              >
+                <div className="text-[9px] uppercase tracking-wider text-muted-foreground mb-0.5">Week {d.week} · {d.from}</div>
+                <p className={cn('text-[11px] leading-relaxed', d.resolved ? 'text-muted-foreground' : 'text-foreground')}>
+                  <span className="mr-1">{d.kind === 'appeal' ? '🟥' : '🗂️'}</span>
+                  {d.text}
+                </p>
+                {d.kind === 'appeal' && !d.resolved && (
+                  <div className="mt-1.5 flex items-center gap-2" aria-hidden>
+                    <div className="h-1.5 flex-1 rounded-full bg-secondary overflow-hidden">
+                      <div className="h-full bg-gold" style={{ width: `${d.odds ?? 0}%` }} />
+                    </div>
+                    <span className="text-[10px] font-bold text-gold">{d.odds ?? 0}%</span>
+                  </div>
+                )}
+                {!d.resolved && d.options.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {d.options.map((o, i) => (
+                      <button
+                        key={i}
+                        onClick={() => { setAnswerRequest(d.id); setLastAnswered(d.id); onAnswer(d.id, i); }}
+                        className="min-h-[44px] min-w-[44px] max-w-full px-2.5 py-1 rounded-lg text-left text-[10px] font-bold bg-card border border-border text-foreground hover:border-primary transition-all"
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {d.resolved && (
+                  <p className={cn('text-[10px] italic mt-1', d.outcome === 'won' ? 'text-emerald-400' : d.outcome === 'lost' ? 'text-red-400' : 'text-muted-foreground')}>{d.resolved}</p>
+                )}
+              </div>
+            ))}
+          </div>
+          {(deskHidden > 0 || showClosed) && deskClosed.length > 0 && (
+            <button
+              aria-expanded={showClosed}
+              onClick={() => setShowClosed(v => !v)}
+              className="mt-2 min-h-[44px] min-w-[44px] px-2.5 rounded-lg text-[11px] font-bold border bg-card border-border text-muted-foreground"
+            >
+              {showClosed ? 'Hide closed cards' : `Show closed cards (${deskHidden})`}
+            </button>
+          )}
+        </section>
+      )}
+      {inbox.length > 0 && (<>
       <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
         <MessageSquare className="w-3 h-3" /> Your messages
         {unresolved > 0 && (
@@ -159,6 +243,7 @@ export function InboxCard({ career, onAnswer }: InboxCardProps) {
           className="min-h-[44px] min-w-[44px] w-full mt-2 rounded-lg border border-border text-[11px] font-bold"
         >Load more messages</button>
       )}
+      </>)}
     </div>
   );
 }
