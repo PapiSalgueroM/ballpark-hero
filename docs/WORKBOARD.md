@@ -1,3 +1,93 @@
+## Round1008 live: four-sport saved season review, 2026-10-05
+
+PR134 merged as3e6c28ad8de4c0d59bc970a420ba4ba0bdb043a5 after all five
+workflows passed on19813667a161a5b735d91d05d79379c0042d3c2b. Eleven mounted
+cases,26 effective source controls,16 real-font native walks and two geometry
+controls passed, plus original replay, practice, prospect, appearance, NHL,
+save/RNG/scoring and all built-site readers. Final review artifact11369360876
+has SHA2563cd6aaa57e02ad36ef6a59ec938bffd7fa196d67a8406982f7607436dd219305.
+
+Lovable confirmed Your website was updated. Public index-sVWg-jaG.js serves
+Career Log. Normal public UI verified Riley Stone's actual2026 saved season:
+OVR75,53games,age21,$2.5M salary,9points/2.4rebounds/5.1assists pergame.
+Missing postseason fields say Not recorded. Back restores the same2027 hub:
+OVR77,1season,477careerpoints,$1.4M cash,$2.5Mx3. No extra season was played.
+Screenshot: career1008-live.png in the task visualization folder.
+
+Publication slot released.1007 Rugby review and1009 decision receipts need
+repaired remote acceptance.1030 nullable stat import and1031 first-visit
+career guides are not shipped. Claude's Soccer Career, Transfer Path and
+Front Office lanes remain separate. No production database probes were run.
+Six-hour session continues to2026-10-05 23:31UTC.
+## Codex 1008: saved season review ready for remote checks, 2026-10-05
+
+Career Log in NBA, NFL, MLB and NHL now opens a compact saved-year picker.
+Overview, Regular season and Postseason use fields already in the save.
+Missing older numbers say Not recorded; existing zero values stay zero.
+MLB postseason schedule counts are explicitly Team postseason games.
+No simulation, save schema, score, Front Office or Soccer Career changes.
+Product and test source are independently reviewed; runtime acceptance is
+pending. Native checks will assess the initial picker reveal and return focus.
+Codex owns this lane. Claude retains 1010 to 1014 and Front Office work.
+1005 is published.1006 and 1007 remain in separate release verification.
+All runtime runs remotely. Six-hour session continues until 23:31 UTC.
+## Codex 1006 published, publication slot released, 2026-10-05
+
+PR131 merged as 749f3a83 after final21e88395 passed all three remote
+workflows. Lovable confirmed Your website was updated. Public entry
+index-BfklmcWG.js serves the saved Unlimited deck. A real guess retained
+all eight clues through reload and tier switching. Next puzzle changed the
+answer from Florian Wirtz to Erling Haaland. Daily stayed at zero guesses,
+and the prior five-puzzle result stayed 1 of 5 with three total guesses.
+Live screenshot is saved. The narrow publication slot is released.
+1007 Rugby and 1008 career review are back in checks.1009 is in source QA.
+Claude retains Soccer Career, Transfer Path and all Front Office work.
+No DB probes. Session continues until 23:31 UTC.
+## Round 1006: final release checks, 2026-10-05
+
+Footle Unlimited integrated candidate ed0afccd passed all ten mounted cases,
+twenty effective source controls and four native profiles. The clue desk
+compatibility workflow passed. The five-run workflow passed gameplay and
+native tests; its sole failure was the uncommitted update snapshot, now
+copied from the verified remote artifact. Final CI reads committed files.
+Your picks 1005 remains live.1007 Rugby and 1008 career reviews are separate.
+Claude retains Soccer Career, Transfer Path and Front Office. No publication
+claim yet. Runtime stays remote; the session continues until 23:31 UTC.
+## Codex claims1006: Footle Unlimited sessions, 2026-10-05
+
+Codex owns Footle's Unlimited branch in useGame.ts, Footle.tsx, a new scoped
+footleUnlimitedSession helper, reopened rules and focused tests. Keep an
+unfinished Unlimited puzzle and avoid repeating answers until its tier pool
+is exhausted. Exclude today's Daily answer. Use only the existing verified
+player pool and normalized identities. Daily, five-puzzle-run saves and
+completion scoring stay separate. No shared daily/completion hook edits.
+Worktree: managed footle-unlimited-1006. Remote runtime verification only.
+
+1005 Your picks is still building independently.1004 verification-only PR129
+merged47197830 after both seven-profile baselines passed. Claude retains1010
+to1014 and Front Office work. No publication claim;1007to1009 are unstarted.
+Six-hour authorization continues until2026-10-05 23:31UTC.
+## Round 1005 is live, 2026-10-05
+
+PR130 merged as 9fe088e6 after final candidate 1ee37af4 passed all four remote
+workflows. Lovable confirmed publication and douknowball.com now loads
+index-BOlwr09V.js. Normal public UI verified Home and Search pins, reloads,
+unpin/re-pin and launch to the existing NHL Connections 4/4 result.
+Receipt: docs/audits/ROUND1005-VERIFICATION.md. Publication slot released.
+1006 Footle, 1007 Rugby League and 1008 four-sport season review remain in
+separate verification. Claude owns 1010 to 1014 and Front Office. No overlap.
+Runtime checks remain remote. The authorized session runs until 23:31 UTC.
+## Codex claims1005: Your picks, 2026-10-05
+
+Codex is building a guest-capable shelf of explicitly pinned games on Home,
+with pin controls on Home and Search. Browser-local picks use existing registry
+routes, names and sport styles. No game saves, facts, scores or account writes.
+Files: Index.tsx, Search.tsx, new useGamePicks, GamePickButton, GamePicksRow,
+focused tests and remote workflow. Isolated managed worktree game-picks-1005.
+Claude's 1010 to1014 and Front Office lanes remain separate.1004's seven-profile
+Connections baseline is in remote CI; no product fix is claimed before evidence.
+No publication claim yet.1006to1009 remain unstarted. Remote runtime checks only.
+
 ## Codex1004 verified, 1005 building, 2026-10-05
 
 Both remote Connections workflows passed seven native profiles per sport.

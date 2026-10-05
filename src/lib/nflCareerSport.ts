@@ -23,6 +23,7 @@ import { NFL_BADGES } from '@/lib/careerBadges';
 import { nflUnreadInboxCount, answerNflInboxMessage, nflDraftNightInbox, NFL_CALENDAR } from '@/lib/nflCareerInbox';
 import { dismissNflRivalryEvent, resolveNflRivalryChoice } from '@/lib/nflCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { nflSeasonReview } from '@/lib/usCareerSeasonReview';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -70,6 +71,7 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   legacyOf,
   teamLabelOf,
   statLine: (s, pos) => nflStatLine(s, pos as CareerPos),
+  reviewStats: (s, pos) => nflSeasonReview(s, pos as CareerPos),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,
