@@ -2,7 +2,7 @@ import { Player } from '@/types/game';
 import type { RebuildClub } from '@/lib/fetchRebuild';
 import {
   hashSeed, RIVAL_PERSONAS, simulateSharedSeason,
-  type RebuildPreset, type SharedSeasonResult, type SharedSeasonTeam,
+  type RebuildPreset, type SharedSeasonResult, type SharedSeasonTeam, type DeckVersion,
 } from '@/lib/rebuildDeck';
 import * as loop from '@/lib/rebuildLoop';
 import type { RunState } from '@/lib/rebuildLoop';
@@ -66,6 +66,8 @@ export interface TableData {
   /** Each seat's market as the single player game builds it (everyone outside that club), by club name. */
   markets: Map<string, Player[]>;
   preset: RebuildPreset;
+  /** The deck a window opens on (Round 980). Absent means the deck of the table's first opened seat, or today's at a fresh table; a restore passes the one its save was played on. */
+  deck?: DeckVersion;
 }
 
 const HUMAN_EMOJI = ['\u{1F535}', '\u{1F534}', '\u{1F7E2}', '\u{1F7E1}'];
@@ -204,8 +206,12 @@ export function openWindow(t: TableState, data: TableData, clubs: RebuildClub[])
      otherwise a man is announced as joining The Shark's club when The
      Shark's own seat never gets him. */
   const avoidPersonas = t.seats.filter(s => s.kind === 'cpu').map(s => s.name);
+  /* One table, one deck: a seat opens on the deck the table's first opened
+     seat dealt from. A version 1 save restored mid table would otherwise put
+     its later seats on today's deck beside earlier seats on the old one. */
+  const deck = data.deck ?? t.seats.find(s => s.run)?.run?.deck;
   let run = loop.createRun({
-    club: seat.club, clubs: rivalPool, squad, market, preset: data.preset, seed: seatSeed(seat.club, t.salt), avoidPersonas,
+    club: seat.club, clubs: rivalPool, squad, market, preset: data.preset, seed: seatSeed(seat.club, t.salt), avoidPersonas, deck,
   });
   if (seat.kind === 'cpu') run = playCpuWindow(run);
   const seats = t.seats.map(s => (s.index === seat.index ? { ...s, run } : s));

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cleanup, render, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import Footle from '@/pages/Footle';
 import { compareGuess } from '@/lib/gameLogic';
@@ -54,7 +54,13 @@ describe('Footle result currency follows the stored USD value', () => {
     expect(result).toHaveTextContent(outcome === 'won' ? 'Correct!' : 'Game Over');
     expect(result).toHaveTextContent(`valued at ${amount}.`);
     expect(result).not.toHaveTextContent('€');
-    expect(view.getAllByText(amount)).toHaveLength(8);
+    const history = within(view.getByRole('group', { name: 'Guess history' })).getAllByRole('button');
+    expect(history).toHaveLength(8);
+    for (const button of history) {
+      fireEvent.click(button);
+      expect(view.container.querySelector('[data-clue="marketValue"] dd')).toHaveTextContent(amount);
+      expect(view.getAllByText(amount)).toHaveLength(1);
+    }
     expect(JSON.stringify(fixture.game.targetPlayer)).toBe(original);
     if (mode === 'daily') expect(within(result).queryByRole('button', { name: 'Play Again' })).toBeNull();
     else expect(within(result).getByRole('button', { name: 'Play Again' })).toBeEnabled();

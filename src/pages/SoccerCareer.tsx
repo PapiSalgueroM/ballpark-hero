@@ -89,6 +89,9 @@ import { availableSpeeches } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
+import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
+import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
+import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
@@ -711,6 +714,12 @@ export default function SoccerCareer() {
      game produces a new career object, so the next action of any kind
      dismisses it without anybody having to clear it. */
   const [signedNote, setSignedNote] = useState<SignedNote | null>(null);
+  /* Round 973: the academy year's report card. Built from the save before
+     the year and the save after it at the moment of the press, and held here
+     rather than in the save: a career's save is hashed step by step by the
+     awards night fixture, and a career that never picks a focus has to come
+     out of the academy byte for byte the save it always was. */
+  const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
@@ -807,7 +816,9 @@ export default function SoccerCareer() {
   const handleNextSeason = () => {
     if (!career) return;
     if (career.phase === "youth") {
-      setCareer(advanceYouthYear(career, clubs));
+      const next = advanceYouthYear(career, clubs);
+      setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
+      setCareer(next);
     } else if (career.phase === "playing") {
       setCareer(advanceProSeason(career, clubs));
     }
@@ -820,6 +831,13 @@ export default function SoccerCareer() {
        longer writes a ranked row and a streak record (Round 301's shape). */
     recordActivity('/soccer-career');
     recordStreakDay('/soccer-career');
+  };
+
+  /* Round 973: pick or drop the academy focus. Only while the academy year
+     is still to be played; dropping it removes the field from the save. */
+  const handleAcademyFocus = (focus: AcademyFocus | null) => {
+    if (!career || career.phase !== "youth") return;
+    setCareer(withAcademyFocus(career, focus));
   };
 
   const handleAcceptOffer = (offer: ContractOffer) => {
@@ -1154,6 +1172,8 @@ export default function SoccerCareer() {
               career={career}
               clubs={clubs}
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
+              academyReport={academyReport}
+              onAcademyFocus={handleAcademyFocus}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
               onNextSeason={handleNextSeason}
               onAcceptOffer={handleAcceptOffer}
@@ -3406,11 +3426,14 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
   signedNote?: SignedNote | null;
+  /* Round 973: the academy report and the focus picker. */
+  academyReport?: AcademyReport | null;
+  onAcademyFocus?: (focus: AcademyFocus | null) => void;
   onNextSeason: () => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onDismissSummary: () => void;
@@ -3683,6 +3706,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Contract Offers (youth → pro) */}
           {career.phase === "contract_offer" && career.pendingOffers.length > 0 && (
             <div className="space-y-3">
+              {/* Round 973: the academy year that just ended, above the offers
+                  it earned. Only for the year it was built for; after a reload
+                  the page has no before picture, so the card simply is not there. */}
+              {academyReport && academyReport.year === currentSeason.year && academyReport.club === career.currentClub && (
+                <AcademyReportCard report={academyReport} />
+              )}
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
                 <h3 className="text-lg font-black">📩 Contract Offers</h3>
                 <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>
@@ -3962,6 +3991,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="text-[10px] text-muted-foreground">{currentSeason.year}/{(currentSeason.year + 1).toString().slice(-2)}</div>
               </div>
             </div>
+          )}
+
+          {/* Round 973: one optional focus for the academy year about to be played. */}
+          {career.phase === "youth" && onAcademyFocus && (
+            <AcademyFocusPicker position={career.position} focus={academyFocusOf(career)} onPick={onAcademyFocus} />
           )}
 
           {/* Round 262: your place in the squad, above the money because on a

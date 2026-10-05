@@ -1071,6 +1071,15 @@ export const HOCKEY_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Hire a staff, settle contracts and build packages",
+        items: [
+          "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them switched on. An older save plays on exactly as it did until you open one of them.",
+          "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
+          "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
+          "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
+        ],
+      },
+      {
         heading: "Choose who contributes to your simulation rating",
         items: [
           "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
@@ -1108,7 +1117,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Trades and the draft carry real risk",
         items: [
-          "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
+          "Phone trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes. Bigger packages live on the Trade desk box.",
           "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. Rivals get two batches of up to five eligible selections in this abbreviated draft. Scouting grades carry error; the true rating appears only after you commit. In new-model franchises, rival clubs follow the scouting order and choose an affordable contract against the next cap, keeping unavailable choices in the pool. A contract price depends on the underlying simulated ability, so it is not a scout-only knowledge model.",
         ],
       },
@@ -1124,12 +1133,29 @@ export const HOCKEY_CONTENT: GameContentMap = {
           "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
         ],
       },
+      {
+        heading: "Deadline day, restricted free agents and retained salary",
+        items: [
+          "The trade deadline falls after round 15 of 20. The break after round 15 is deadline day, your last chance to deal, and once round 16 is played every deal is shut, phone calls and packages alike, until the summer. The real one falls in early March. At the deadline clubs in a playoff place, or close to one, are buyers who pay up for veterans; clubs well out of it are sellers who want picks and young players.",
+          "A draft pick signs an entry level deal, three seasons from 18 to 21. When it runs out, a player under 27 with fewer than seven seasons is a restricted free agent: a qualifying offer keeps his rights, and a rival with a roster spot may table an offer sheet you either match or let go for the picks it carries. Everyone else is unrestricted. The money is this game's own figures, not real contracts.",
+          "Your club's picks now run three drafts deep, two rounds each in this game's short draft, and any of them can be traded. A club can keep paying up to half of a traded player's salary, carry three retained deals at a time, and one contract can be retained on twice.",
+          "Staff effects are small and capped. The head coach adds rating points on attack and defense, the goalie coach on the goalies, and the special teams assistant counts at a fifth because this game has no power play of its own. A better scouting director misses by less on a prospect's grade, and the therapist shortens injuries. Ownership gives the staff 8M each summer for fees and pay offs; wages sit outside the cap.",
+        ],
+      },
     ],
     exampleSections: [
       {
         heading: "What a goalie change does in the model",
         paragraphs: [
           "For a fictional rating example, keep your forwards and defensemen unchanged and replace a healthy 80 rated goalie with a healthy 85 rated goalie. The goalie group has a 20 percent weight, so your simulation strength rises by one point. Apply commits that choice; it changes your odds, not a promised result.",
+        ],
+      },
+      {
+        heading: "A goalie coach, an RFA tender and a deadline buy",
+        paragraphs: [
+          "Open Staff and hire a level 7 goalie coach off the shortlist. Level 7 is two rating points on the goalie, and the goalie carries a fifth of your strength, so the club gets 0.4 stronger on every night. That is a nudge to your odds, not a promised result.",
+          "Your 21 year old winger's entry deal runs out this summer, so he is a restricted free agent on the Re-sign desk. Tender him the qualifying offer and he stays a season at the money he earns now. If a rival has tabled an offer sheet, the tile says so: match it and he stays on the sheet's terms, or let him go and the picks on the sheet come to you.",
+          "At round 14 you sit in a wild card place, which makes you a buyer. On the Trade desk you send a depth winger and a second rounder two drafts out to a club well out of it for its veteran center, keeping half the winger's salary so the cap works. Wait until round 16 is played and the box just reads Deadline passed.",
         ],
       },
       {
