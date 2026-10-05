@@ -16,6 +16,13 @@
  *  4. When the copy cannot be written, nothing is removed, the game is not
  *     reopened, and the screen says so.
  *  5. Two fresh starts in the same second keep both backups.
+ *  6. A chunk that failed to load (the network or a deploy, never the save)
+ *     gets only the reload, even with a save held.
+ *  7. The copy is read back before the original goes, a copy whose original
+ *     will not go is taken back out, and no helper throws on blocked storage.
+ *  8. The way back: BrokenSaveRestore offers the newest backup on the game's
+ *     page, restoreBackup sets any newer save aside first, and a fresh start
+ *     followed by "Put my old save back" returns the original bytes.
  */
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -29,7 +36,7 @@ vi.mock('@/lib/brokenSaveRecovery', async (importOriginal) => ({
 import RouteErrorBoundary from '@/components/RouteErrorBoundary';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import BrokenSaveRestore from '@/components/BrokenSaveRestore';
-import { BROKEN_SAVE_MARK, backupKeysOf, openGame, restoreBackup, setAsideSave, type SaveStorage } from '@/lib/brokenSaveRecovery';
+import { BROKEN_SAVE_MARK, backupKeysOf, heldSaveEntry, openGame, restoreBackup, setAsideSave, type SaveStorage } from '@/lib/brokenSaveRecovery';
 
 const Boom = () => { throw new Error('deliberate test throw'); };
 /* What a lazy route throws when its chunk cannot load: the network or a
@@ -206,6 +213,7 @@ describe('setAsideSave (Round 958)', () => {
     expect(setAsideSave(entry, s, when)).toEqual({ ok: false });
     expect(restoreBackup(entry, `${entry.saveKey}${BROKEN_SAVE_MARK}2026-10-03T12-34-56`, s, when)).toEqual({ ok: false });
     expect(backupKeysOf(entry, s)).toEqual([]);
+    expect(heldSaveEntry(entry.path, s)).toBeNull();
   });
 });
 
