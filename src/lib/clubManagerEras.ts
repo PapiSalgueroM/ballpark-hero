@@ -851,8 +851,14 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(2010),
     startYear: 2010,
     emoji: '\u{1F570}\u{FE0F}',
-    blurb: 'Prime Messi. Mourinho\'s Madrid. Rooney\'s United. Premier League and La Liga, 2010-11.',
-    get honesty() { return `Real data. ${eraPlayersPhrase('era2010')} with their real 2010 ages and values, all 40 clubs of the 2010-11 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`; },
+    /* Round 901, read 2026-10-03: Klopp's young Dortmund won the 2010-11
+       Bundesliga (bundesliga.com, "Jurgen Klopp: how Borussia Dortmund won
+       the 2010/11 German top flight"; ESPN, story 37503225), and Lille won
+       Ligue 1 and the Coupe de France, their first double since 1946
+       (UEFA.com, "Lille celebrating breakthrough double"; Al Jazeera, 21 May
+       2011, "Lille win first French title in 57 years"; RSSSF's season). */
+    blurb: 'Prime Messi. Mourinho\'s Madrid. Klopp\'s young Dortmund. Lille\'s double. All of the big five, 2010-11.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2010')} with their real 2010 ages and values, all 98 clubs of the 2010-11 Premier League, La Liga, Serie A, Bundesliga and Ligue 1. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2005',
