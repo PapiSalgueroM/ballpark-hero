@@ -107,6 +107,11 @@ vi.mock('@/hooks/useGameCompletion', () => ({
   useGameCompletion: (slug: string, done: boolean, score: unknown) => { H.recorded.push({ slug, done, score }); },
 }));
 
+/* The first mount pays the cold import of the page and its guide: measured at
+   7.4 s on a busy shared machine (2026-10-05), past the 5 s default, and the
+   act it left open then failed the next test too. Nothing here asserts a time. */
+vi.setConfig({ testTimeout: 30_000 });
+
 const noop = () => undefined;
 /* Mounted inside act, with one tick for the guide panel's own effects, so a
    page's settled screen is what gets read. */
