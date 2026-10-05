@@ -25,7 +25,7 @@ const controls = {
   arrows: { file: component, from: "cell.arrow === 'up' ? 'Answer is higher' : 'Answer is lower'", to: "cell.arrow === 'up' ? 'Answer is lower' : 'Answer is higher'", title: titles.values, message: /assists gives the actual direction/ },
   unknown: { file: component, from: '>{cell.value}</dd>', to: ">{key === 'goals' && cell.status === 'unknown' ? '?' : cell.value}</dd>", title: titles.values, message: /goals keeps the actual guessed value/ },
   history: { file: component, from: 'setSelection({ index, count: guesses.length })', to: 'setSelection({ index: guesses.length - 1, count: guesses.length })', title: titles.history, message: /expected '2' to be '1'/ },
-  focus: { file: page, from: "searchArea.current?.querySelector<HTMLInputElement>('input[role=\"combobox\"]')?.focus({ preventScroll: true });", to: 'void searchArea.current;', title: titles.history, message: /toHaveFocus/ },
+  focus: { file: page, from: 'const returnToSearch = () => {', to: 'const returnToSearch = () => { return;', title: titles.history, message: /toHaveFocus/ },
   identity: { file: page, from: "key={`${mode}:${targetPlayer?.name ?? ''}`}", to: '', title: titles.identity, message: /expected '1' to be '2'/ },
   replay: { file: component, from: 'if (guesses.length < previousCount.current) setSelection(null);', to: 'void previousCount.current;', title: titles.identity, message: /Same-answer replay selects the latest new guess/ },
   round: { file: page, from: 'const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[reviewRound])!;', to: 'const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[0])!;', title: titles.review, message: /keeps the actual comparison|gives the actual direction/ },
