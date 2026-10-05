@@ -45,7 +45,19 @@
  *      the pool beats must be rewritten and no other, and the pending active
  *      refresh must still hold. Measured 2026-10-01: 8 entries on 6 puzzles
  *      (6 classic, 2 Europe), no active entry moves. Section 3 accepts the live
- *      table on either side of that rewrite, never between.
+ *      table on either side of that rewrite, never between. Since Round 1010b
+ *      the committed bake is a later pool, so this section runs on the pool
+ *      before 1010, rebuilt by undoing scripts/data/careerSeason2025.json and
+ *      proved by its preBake hash (aborts otherwise).
+ *   8. THE ROUND 1010B REWRITE (supabase/migrations/20261015120000_round_1010_
+ *      career_season_2025_26.sql): every puzzle naming the removed Alisson
+ *      Becker is renamed to Alisson, every entry the bake beats (classic,
+ *      Europe, active) is rewritten and no other, each new value is the
+ *      search's on the bake and each old value the one live after Round 784
+ *      and the Round 531 refresh. Measured 2026-10-05: 13 renames, 53
+ *      rewrites (18 classic, 19 Europe, 16 active); tpa-762 goes from 3 to 2.
+ *      Section 3 accepts the live table before or after it, never between,
+ *      and the reader it uses is proved here on both tables and a half one.
  *
  * NEGATIVE CONTROLS: TPH_CONTROL=stale plants the old tp-19 hint on the
  * parsed migration (section 1 must go red); TPH_CONTROL=club plants a hint
@@ -59,6 +71,11 @@
  * TPH_CONTROL=r784min writes tpa-285's classic minimum one step too high in
  * the parsed Round 784 rows, and TPH_CONTROL=r784drop drops tpa-640's Europe
  * row from them (section 7 must report that exact row in both).
+ * Round 1010b: TPH_CONTROL=r1010min writes tpa-762's classic minimum one step
+ * too high, r1010drop drops its Europe rewrite, r1010rename leaves it
+ * unrenamed (section 8 must report tpa-762 in each), and r1010append rebuilds
+ * the pre-1010 pool with Alisson Becker appended instead of at his sorted place
+ * (the preBake hash must refuse it).
  *
  * Run: node scripts/simTransferPathHints.mjs
  */
@@ -68,11 +85,17 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { MODE_RULES, ROUND_784_MIGRATION, buildGraph, deriveHint, distances, expandCompactCareers, hintProblems, parseActiveRefreshMigration, parseActiveRestoreMigration, parseHint, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub } from './lib/transferPathHints.mjs';
+import { LEDGER_FILE as SEASON_LEDGER_FILE, bakeHash, parseSeasonMigrationPuzzles, seasonMigrationState, undoLedger } from './lib/careerSeasonLedger.mjs';
+import { MIGRATION_OUT as SEASON_MIGRATION, RULES as SEASON_RULES, liveAfter784, ruleGraphs } from './genCareerSeasonAdditions.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.TPH_CONTROL || '';
 const LOCAL_ONLY = process.env.TRANSFER_PATH_LOCAL_ONLY === '1';
-if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !['stale', 'club', 'min', 'direct', 'mode', 'companion', 'livepuzzleid', 'r784min', 'r784drop', 'r1010min', 'r1010drop', 'r1010rename', 'r1010append'].includes(CONTROL)) { console.error(`TPH_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+/* Round 1010b: the season ledger, and its migration's Transfer Path rows read back */
+const seasonLedger = JSON.parse(fs.readFileSync(path.join(ROOT, SEASON_LEDGER_FILE), 'utf8'));
+const season1010 = parseSeasonMigrationPuzzles(fs.readFileSync(path.join(ROOT, SEASON_MIGRATION), 'utf8'));
+const sameValue = (x, y) => (x === null && y === null) || (!!x && !!y && x.minSteps === y.minSteps && x.hint === y.hint);
 let failures = 0;
 let liveIdControlCaught = false;
 const fail = m => { failures += 1; if (failures <= 25) console.error('  FAIL: ' + m); };
@@ -205,10 +228,43 @@ console.log('3) the live tables, through the site\'s own fetchers');
     if (restoreRows.size !== ACTIVE_RESTORE_ROWS) fail(`the exact verified active restore carries ${restoreRows.size} rows, expected ${ACTIVE_RESTORE_ROWS}`);
     if (appliedRows.size !== APPLIED_ACTIVE_ROWS) fail(`the applied active restore parses to ${appliedRows.size} rows, expected ${APPLIED_ACTIVE_ROWS}`);
     if (rawPuzzles.length !== puzzles.length) fail(`the raw live read has ${rawPuzzles.length} rows, the site fetcher has ${puzzles.length}`);
+    /* Round 1010b: its migration renames the puzzles naming Alisson Becker and
+       rewrites the entries its season rows beat, in one transaction, so the
+       table is all before it or all after it. After it, the checks below that
+       hold the table to the applied companion, the Round 784 rewrite and the
+       Round 531 refresh read the table as it stood before 1010 (the old names
+       and old values the migration records), and the live values themselves
+       are held to the search on the live graph. */
+    const liveTable = new Map(puzzles.map(p => [p.id, { playerA: p.playerA, playerB: p.playerB, classic: { minSteps: p.minSteps, hint: p.hint }, europe: p.europe ?? null, active: p.active ?? null }]));
+    const s1010 = seasonMigrationState(season1010, liveTable);
+    if (s1010 === 'mixed') fail(`live Transfer Path rows are in a mixed state against the ${season1010.renames.length} renames and ${season1010.rewrites.length} rewrites of ${path.basename(SEASON_MIGRATION)}: only all before or all after is valid`);
+    console.log(s1010 === 'after'
+      ? `   the Round 1010b season rows, ${season1010.renames.length} renames and ${season1010.rewrites.length} Transfer Path rewrites are applied`
+      : s1010 === 'before'
+        ? `   PENDING: ${path.basename(SEASON_MIGRATION)} is not applied; every puzzle and entry it moves still carries the value it replaces`
+        : `   the Round 1010b rewrite is MIXED on the live table`);
+    const undo1010 = s1010 === 'after';
+    const rename1010 = new Map(season1010.renames.map(r => [r.id, r]));
+    const rewrite1010 = new Map(season1010.rewrites.map(r => [`${r.id}|${r.rule}`, r]));
+    const before1010 = p => {
+      if (!undo1010) return p;
+      const v = { ...p };
+      const rn = rename1010.get(p.id);
+      if (rn) { v.playerA = rn.oldA; v.playerB = rn.oldB; }
+      for (const rule of SEASON_RULES) {
+        const w = rewrite1010.get(`${p.id}|${rule}`);
+        if (!w) continue;
+        if (rule === 'classic') { v.minSteps = w.old.minSteps; v.hint = w.old.hint; } else v[rule] = w.old;
+      }
+      return v;
+    };
+    const puzzlesBefore1010 = puzzles.map(before1010);
     const partialActive = rawPuzzles.filter(row => (row.active_min_steps === null) !== (row.active_hint === null));
     for (const row of partialActive.slice(0, 10)) fail(`live ${row.puzzle_id} has only half of its active hint pair`);
     if (partialActive.length > 10) fail(`${partialActive.length} live rows have only half of their active hint pair`);
-    const liveActiveCount = rawPuzzles.filter(row => row.active_min_steps !== null && row.active_hint !== null).length;
+    const liveActiveCount = undo1010
+      ? puzzlesBefore1010.filter(p => p.active).length
+      : rawPuzzles.filter(row => row.active_min_steps !== null && row.active_hint !== null).length;
     const activeLiveState = partialActive.length === 0 && liveActiveCount === appliedRows.size
       ? 'applied'
       : partialActive.length === 0 && liveActiveCount === restoreRows.size
@@ -226,7 +282,7 @@ console.log('3) the live tables, through the site\'s own fetchers');
        the other. The search on the live graph (above and below) is what proves
        the careers and the hints moved together. */
     const r784 = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
-    const liveById = new Map(puzzles.map(p => [p.id, p]));
+    const liveById = new Map(puzzlesBefore1010.map(p => [p.id, p]));
     const r784State = ruleEntryRefreshState(r784, (id, rule) => {
       const p = liveById.get(id);
       if (!p) return null;
@@ -246,11 +302,15 @@ console.log('3) the live tables, through the site\'s own fetchers');
       const rg = buildGraph(site.playersUnderRule(players, rule));
       let withPath = 0, same = 0, staleApplied = 0;
       if (rule === 'active') {
-        for (const p of puzzles) {
+        /* after 1010 the live values are the search's on the live graph; the
+           refresh is necessarily applied (1010 refuses to run otherwise), so
+           its preflight is not repeated on a pool it was never derived on */
+        if (undo1010) for (const p of puzzles) for (const pr of ruleProblems(rg, p.playerA, p.playerB, p.active ?? null)) fail(`live ${p.id} under active: ${pr}`);
+        for (const p of puzzlesBefore1010) {
           const restore = restoreRows.get(p.id) ?? null;
           const proposed = restore ? { minSteps: restore.minSteps, hint: restore.hint } : null;
           if (restore && (restore.a !== p.playerA || restore.b !== p.playerB)) fail(`proposed active restore ${p.id} names ${restore.a} to ${restore.b}, live has ${p.playerA} to ${p.playerB}`);
-          for (const pr of ruleProblems(rg, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
+          if (!undo1010) for (const pr of ruleProblems(rg, p.playerA, p.playerB, proposed)) fail(`proposed active restore ${p.id}: ${pr}`);
           if (proposed) withPath += 1;
           const entry = p.active ?? null;
           if (activeLiveState === 'applied') {
@@ -267,7 +327,11 @@ console.log('3) the live tables, through the site\'s own fetchers');
         if (activeLiveState === 'applied') console.log(`   PENDING: the Round 531 refresh (${path.basename(ACTIVE_RESTORE)}) is not applied; ${staleApplied} applied rows are already beaten on the current identity set and ${restoreRows.size - appliedRows.size} pairs have no live hint. Apply it once the Round 531 frontend is live.`);
         continue;
       }
-      for (const p of puzzles) {
+      for (const live of puzzles) {
+        /* the live value holds on the live graph; the comparison with the
+           companion reads the table as it stood before 1010 */
+        for (const pr of ruleProblems(rg, live.playerA, live.playerB, live[rule] ? { minSteps: live[rule].minSteps, hint: live[rule].hint } : null)) fail(`live ${live.id} under ${rule}: ${pr}`);
+        const p = before1010(live);
         const entry = p[rule] ?? null;
         if (entry) withPath += 1;
         const companion = companionRows.get(p.id);
@@ -281,7 +345,6 @@ console.log('3) the live tables, through the site\'s own fetchers');
         else if (companion.playerA !== p.playerA || companion.playerB !== p.playerB) fail(`applied companion ${p.id} names ${companion.playerA} to ${companion.playerB}, live has ${p.playerA} to ${p.playerB}`);
         else if ((entry === null) !== (expected === null) || (entry && (entry.minSteps !== expected.minSteps || entry.hint !== expected.hint))) fail(`live ${p.id} under Europe differs from the applied companion${rewrite ? ' as the Round 784 migration rewrites it' : ''}`);
         else same += 1;
-        for (const pr of ruleProblems(rg, p.playerA, p.playerB, entry ? { minSteps: entry.minSteps, hint: entry.hint } : null)) fail(`live ${p.id} under ${rule}: ${pr}`);
       }
       console.log(`   ${same} of ${puzzles.length} live rows match the applied companion${r784Europe.size ? ` with the ${r784Europe.size} Round 784 rewrites` : ''} under ${rule}, ${withPath} with a path, on ${rg.names.length} players`);
     }
@@ -435,6 +498,19 @@ console.log('4) the wording');
   console.log(`   ${hints.length + site.fallbackPuzzles.length} hints read, longest ${longest} characters`);
 }
 
+/** The pool as it stood before Round 1010b, proved by the ledger's preBake hash; aborts otherwise. */
+function pre1010Pool() {
+  const bake = site.fallbackPlayers;
+  if (bakeHash(bake) === seasonLedger.preBake.sha256) return bake;
+  const pool = undoLedger(bake, seasonLedger, { appendRemoved: CONTROL === 'r1010append' });
+  if (bakeHash(pool) !== seasonLedger.preBake.sha256) {
+    if (CONTROL === 'r1010append') { console.log(`simTransferPathHints control (${CONTROL}): green. With ${seasonLedger.removed.map(r => r.player).join(', ')} appended instead of at his sorted place the pool does not hash to preBake, and the harness stops before section 7.`); process.exit(0); }
+    console.error(`ABORT: undoing ${SEASON_LEDGER_FILE} on the bake does not give the pool before Round 1010b (preBake ${seasonLedger.preBake.sha256.slice(0, 12)}); sections 7 and 8 cannot be trusted`);
+    process.exit(1);
+  }
+  return pool;
+}
+
 console.log('7) the Round 784 career rows and the Transfer Path entries they rewrite');
 let r784Caught = false;
 {
@@ -460,8 +536,12 @@ let r784Caught = false;
   const applied = (c, rule) => rule === 'classic'
     ? { minSteps: c.minSteps, hint: c.hint }
     : c.europeMinSteps === null ? null : { minSteps: c.europeMinSteps, hint: c.europeHint };
-  /* the baked pool is the tables as they stand after the Round 784 migration */
-  const graphs = { classic: buildGraph(site.fallbackPlayers), europe: buildGraph(site.playersUnderRule(site.fallbackPlayers, 'europe')) };
+  /* the pool the Round 784 migration left: since Round 1010b the committed bake
+     is a later one, so the pool is rebuilt by undoing the season ledger (its
+     added rows dropped, its changed fields put back, the removed man restored
+     at his sorted place) and must hash to the ledger's preBake */
+  const pre1010 = pre1010Pool();
+  const graphs = { classic: buildGraph(pre1010), europe: buildGraph(site.playersUnderRule(pre1010, 'europe')) };
   const byKey = new Map();
   for (const r of rows) {
     const key = `${r.id}|${r.rule}`;
@@ -485,15 +565,94 @@ let r784Caught = false;
     if (!stale && byKey.has(key)) fail7(`${c.id} under ${rule}: the Round 784 migration rewrites an entry the baked pool does not beat`, key);
   }
   const refresh = parseActiveRefreshMigration(fs.readFileSync(ACTIVE_RESTORE, 'utf8'));
-  const activeGraph = buildGraph(site.playersUnderRule(site.fallbackPlayers, 'active'));
+  const activeGraph = buildGraph(site.playersUnderRule(pre1010, 'active'));
   for (const [id, r] of refresh) if (ruleProblems(activeGraph, r.a, r.b, { minSteps: r.minSteps, hint: r.hint }).length) fail7(`pending active refresh ${id} is beaten on the baked pool; a career change that moves an active minimum must rewrite it too`, `${id}|active`);
   if (rows.length !== ROUND_784_REWRITES) fail7(`the Round 784 migration rewrites ${rows.length} entries, ${ROUND_784_REWRITES} were derived on 2026-10-01; move this only with the pool change that explains it`, 'count');
   const classic = rows.filter(r => r.rule === 'classic').length;
   console.log(`   ${rows.length} entries rewritten (${classic} classic, ${rows.length - classic} Europe), each the search's on the baked pool over the applied value it replaces; ${beaten} applied entries beaten on the baked pool; the pending active refresh holds on all ${refresh.size}`);
 }
 
+console.log('8) the Round 1010b season rows and the Transfer Path entries they rename and rewrite');
+let r1010Caught = false;
+{
+  const PLANTED = { r1010min: 'tpa-762|classic', r1010drop: 'tpa-762|europe', r1010rename: 'tpa-762|rename' };
+  const fail8 = (m, key) => { fail(m); if (PLANTED[CONTROL] === key) r1010Caught = true; };
+  const parsed = JSON.parse(JSON.stringify(season1010));
+  if (CONTROL === 'r1010min') {
+    const r = parsed.rewrites.find(x => x.id === 'tpa-762' && x.rule === 'classic');
+    if (!r?.next) { console.error('control cannot run: tpa-762 classic is not in the parsed 1010 rows'); process.exit(1); }
+    r.next.minSteps += 1;
+    console.log('   NEGATIVE CONTROL ON: tpa-762 is rewritten one step too high, this section must report it');
+  }
+  if (CONTROL === 'r1010drop') {
+    const i = parsed.rewrites.findIndex(x => x.id === 'tpa-762' && x.rule === 'europe');
+    if (i < 0) { console.error('control cannot run: tpa-762 Europe is not in the parsed 1010 rows'); process.exit(1); }
+    parsed.rewrites.splice(i, 1);
+    console.log('   NEGATIVE CONTROL ON: tpa-762 Europe is dropped from the rewrite, this section must report it');
+  }
+  if (CONTROL === 'r1010rename') {
+    const i = parsed.renames.findIndex(x => x.id === 'tpa-762');
+    if (i < 0) { console.error('control cannot run: tpa-762 is not renamed in the parsed 1010 rows'); process.exit(1); }
+    parsed.renames.splice(i, 1);
+    console.log('   NEGATIVE CONTROL ON: tpa-762 is left unrenamed, this section must report it');
+  }
+  /* the committed bake is the tables after the 1010 migration */
+  if (bakeHash(site.fallbackPlayers) !== seasonLedger.postBake.sha256) fail8(`the committed bake is not the ledger's postBake, so the 1010 rows cannot be checked against it`, 'bake');
+  const live = liveAfter784(ROOT);
+  const graphs = ruleGraphs(site.fallbackPlayers, site.playersUnderRule);
+  const keptAs = new Map((seasonLedger.removed ?? []).map(r => [r.player, r.keptAs]));
+  const renamed = new Map(parsed.renames.map(r => [r.id, r]));
+  for (const [id, p] of live) {
+    const r = renamed.get(id);
+    const names = keptAs.has(p.a) || keptAs.has(p.b);
+    if (names && !r) fail8(`${id} (${p.a} to ${p.b}) names a removed man and the 1010 migration does not rename it`, `${id}|rename`);
+    if (!names && r) fail8(`${id} is renamed and names no removed man`, `${id}|rename`);
+    if (r && (r.oldA !== p.a || r.oldB !== p.b || r.a !== (keptAs.get(p.a) ?? p.a) || r.b !== (keptAs.get(p.b) ?? p.b))) fail8(`${id} is renamed from ${r.oldA} to ${r.oldB} into ${r.a} to ${r.b}, expected ${p.a} to ${p.b} into the kept names`, `${id}|rename`);
+  }
+  const byKey = new Map();
+  for (const r of parsed.rewrites) {
+    const key = `${r.id}|${r.rule}`;
+    if (byKey.has(key)) fail8(`the 1010 migration rewrites ${r.id} under ${r.rule} twice`, key);
+    byKey.set(key, r);
+    const p = live.get(r.id);
+    if (!p) { fail8(`the 1010 migration rewrites ${r.id}, which the applied companion does not carry`, key); continue; }
+    const a = keptAs.get(p.a) ?? p.a, b = keptAs.get(p.b) ?? p.b;
+    if (r.a !== a || r.b !== b) fail8(`the 1010 migration names ${r.id} as ${r.a} to ${r.b}, expected ${a} to ${b}`, key);
+    if (!sameValue(r.old, p[r.rule])) fail8(`${r.id} under ${r.rule}: the value the 1010 migration replaces is not the one live after Round 784 and the Round 531 refresh`, key);
+    const d = deriveHint(graphs[r.rule], a, b);
+    const want = d ? { minSteps: d.minSteps, hint: d.hint } : null;
+    if (!sameValue(r.next, want)) fail8(`${r.id} under ${r.rule}: the 1010 migration writes ${r.next ? `${r.next.minSteps} "${r.next.hint}"` : 'no path'}, the search on the bake says ${want ? `${want.minSteps} "${want.hint}"` : 'no path'}`, key);
+    if (r.next && (/[–—]/.test(r.next.hint) || r.next.hint.length > 200)) fail8(`${r.id} under ${r.rule}: the rewritten hint has a long dash or runs past 200 characters`, key);
+  }
+  let beaten = 0;
+  for (const [id, p] of live) for (const rule of SEASON_RULES) {
+    const key = `${id}|${rule}`;
+    const a = keptAs.get(p.a) ?? p.a, b = keptAs.get(p.b) ?? p.b;
+    const stale = ruleProblems(graphs[rule], a, b, p[rule]).length > 0;
+    if (stale) beaten += 1;
+    if (stale && !byKey.has(key)) fail8(`${id} under ${rule}: the bake beats the live value (or it names a removed man) and the 1010 migration does not rewrite it`, key);
+    if (!stale && byKey.has(key)) fail8(`${id} under ${rule}: the 1010 migration rewrites an entry the bake does not beat`, key);
+  }
+  /* section 3 reads the live table through seasonMigrationState: prove it on
+     the two tables this migration moves between, and on one half way */
+  const table = () => new Map([...live].map(([id, p]) => [id, { playerA: p.a, playerB: p.b, classic: p.classic, europe: p.europe, active: p.active }]));
+  const before = table(), after = table(), half = table();
+  for (const r of season1010.renames) { Object.assign(after.get(r.id), { playerA: r.a, playerB: r.b }); Object.assign(half.get(r.id), { playerA: r.a, playerB: r.b }); }
+  for (const r of season1010.rewrites) after.get(r.id)[r.rule] = r.next;
+  if (seasonMigrationState(season1010, before) !== 'before') fail8('the live state reader does not call the table before the 1010 migration "before"', 'state');
+  if (seasonMigrationState(season1010, after) !== 'after') fail8('the live state reader does not call the table after the 1010 migration "after"', 'state');
+  if (seasonMigrationState(season1010, half) !== 'mixed') fail8('the live state reader does not call a half applied table "mixed"', 'state');
+  const count = rule => parsed.rewrites.filter(r => r.rule === rule).length;
+  console.log(`   ${parsed.renames.length} puzzles renamed; ${parsed.rewrites.length} entries rewritten (${count('classic')} classic, ${count('europe')} Europe, ${count('active')} active), each the search's on the bake over the value live after Round 784; ${beaten} live entries beaten on the bake; the live state reader tells before, after and mixed apart`);
+}
+
 console.log('');
 if (CONTROL) {
+  if (CONTROL === 'r1010append') { console.error(`simTransferPathHints control (${CONTROL}): RED. The misplaced removed man still hashed to preBake.`); process.exit(1); }
+  if (CONTROL === 'r1010min' || CONTROL === 'r1010drop' || CONTROL === 'r1010rename') {
+    if (r1010Caught) { console.log(`simTransferPathHints control (${CONTROL}): green. Section 8 reported the planted row (${failures} findings).`); process.exit(0); }
+    console.error(`simTransferPathHints control (${CONTROL}): RED. ${failures ? 'Findings came, but not the planted row.' : 'The planted row went unreported.'}`); process.exit(1);
+  }
   if (CONTROL === 'r784min' || CONTROL === 'r784drop') {
     if (r784Caught) { console.log(`simTransferPathHints control (${CONTROL}): green. Section 7 reported the planted row (${failures} findings).`); process.exit(0); }
     console.error(`simTransferPathHints control (${CONTROL}): RED. ${failures ? 'Findings came, but not the planted row.' : 'The planted row went unreported.'}`); process.exit(1);
