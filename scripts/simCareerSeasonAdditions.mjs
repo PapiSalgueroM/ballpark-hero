@@ -35,8 +35,14 @@
  *   6. CAREER QUIZ: the shift the ledger records for the removal is the shift
  *      measured now (each of the next 60 days from the planned apply changes;
  *      42 of those answers were dealt in the 90 days before; 0 without it).
- *   7. REHEARSAL in PGlite when it is installed, never on production: SKIPS
- *      LOUDLY otherwise (a builder lane never runs npm install).
+ *   7. REHEARSAL in PGlite, never on production: the pool before the ledger
+ *      and the puzzles live after Round 784 are loaded, the migration runs,
+ *      the tables read back equal to the pool after the ledger, and a second
+ *      run fails closed. Where PGlite is not installed (it is in no manifest,
+ *      and a builder lane never runs npm install) the section is RED unless
+ *      the ledger's `rehearsal` record carries the sha256 of this exact
+ *      migration text, written by a passing run with --record-rehearsal. The
+ *      controls set that one finding aside and say so.
  *
  * NEGATIVE CONTROLS (SIM_SEASON_ADD_CONTROL), each asserting its rewrite
  * changed something before it runs, each turning only its own section red:
@@ -50,6 +56,7 @@
  *
  * Reads no network and no database. Run: node scripts/simCareerSeasonAdditions.mjs
  */
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -91,6 +98,7 @@ const COVERAGE_BASELINE = new Set([
 const CALENDAR_COUNTRIES = new Set(['us', 'ca', 'br', 'ar', 'jp']);
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
 let section = 0;
+let notRehearsed = false;
 const fail = m => { failures[section] += 1; if (failures[section] <= 20) console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -306,13 +314,31 @@ console.log('6) the Career Quiz shift the ledger records is the one measured now
 section = 7;
 console.log('7) rehearsal of the migration in PGlite (never on production)');
 {
+  /* an unrehearsed migration is red, never a quiet skip: either PGlite runs it
+     here, or the ledger records a rehearsal of this exact migration text */
+  const migrationSha = createHash('sha256').update(norm(read(MIGRATION_OUT))).digest('hex');
+  const rec = ledger.rehearsal;
   let PGlite = null;
   try { ({ PGlite } = await import('@electric-sql/pglite')); } catch { PGlite = null; }
   if (!PGlite) {
-    console.log('   SKIPPED LOUDLY: @electric-sql/pglite is not installed here (a builder lane never runs npm install). NOT REHEARSED.');
-    console.log('   The lead rehearses with it installed outside the repo manifest, then this section loads the pool before the ledger, runs the migration, and holds the result to the bake.');
+    if (rec?.migrationSha256 === migrationSha) {
+      console.log(`   PGlite is not installed here; the ledger records a rehearsal of this exact migration (sha256 ${migrationSha.slice(0, 12)}, ${rec.with}, ${rec.on})`);
+    } else {
+      notRehearsed = true;
+      fail(`NOT REHEARSED: ${MIGRATION_OUT} (sha256 ${migrationSha.slice(0, 12)}) has no recorded PGlite rehearsal${rec?.migrationSha256 ? `; the ledger's record is of ${rec.migrationSha256.slice(0, 12)}, an older text` : ''}. With @electric-sql/pglite resolvable (installed outside the repo manifest, never on production), run node scripts/simCareerSeasonAdditions.mjs --record-rehearsal and commit the ledger`);
+    }
   } else {
+    const before = failures[7];
     await rehearse(PGlite);
+    const passed = failures[7] === before;
+    if (passed && process.argv.includes('--record-rehearsal') && !CONTROL) {
+      const onDisk = JSON.parse(read(LEDGER_FILE));
+      onDisk.rehearsal = { migrationSha256: migrationSha, with: '@electric-sql/pglite', on: new Date().toISOString().slice(0, 10) };
+      fs.writeFileSync(path.join(ROOT, LEDGER_FILE), formatLedger(onDisk));
+      console.log(`   recorded the rehearsal of ${migrationSha.slice(0, 12)} in ${LEDGER_FILE}; commit it`);
+    } else if (passed && rec?.migrationSha256 !== migrationSha) {
+      console.log('   rehearsed green here, but the ledger records no rehearsal of this text: rerun with --record-rehearsal so a run without PGlite stays green');
+    }
   }
 }
 
@@ -371,8 +397,10 @@ console.log('');
 const total = Object.values(failures).reduce((a, b) => a + b, 0);
 if (CONTROL) {
   const own = OWN[CONTROL];
-  const others = Object.entries(failures).filter(([s]) => Number(s) !== own).reduce((a, [, n]) => a + n, 0);
-  if (failures[own] > 0 && others === 0) { console.log(`simCareerSeasonAdditions control (${CONTROL}): green. Section ${own} went red and every other section stayed green.`); process.exit(0); }
+  /* the one finding of an unrehearsed migration is not what a control tests, so it is set aside, and said */
+  const setAside = notRehearsed && failures[7] === 1 ? 7 : 0;
+  const others = Object.entries(failures).filter(([s]) => Number(s) !== own && Number(s) !== setAside).reduce((a, [, n]) => a + n, 0);
+  if (failures[own] > 0 && others === 0) { console.log(`simCareerSeasonAdditions control (${CONTROL}): green. Section ${own} went red and every other section stayed green${setAside ? ' (section 7 set aside: the migration is not rehearsed here)' : ''}.`); process.exit(0); }
   console.error(`simCareerSeasonAdditions control (${CONTROL}): RED. Expected only section ${own} to fail, got ${JSON.stringify(failures)}.`);
   process.exit(1);
 }
