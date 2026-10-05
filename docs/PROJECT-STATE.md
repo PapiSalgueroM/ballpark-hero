@@ -1,3 +1,11 @@
+## Codex 1007 and 1009: combined snapshot pending, 2026-10-05
+
+1007 now incorporates frozen 1009 candidate 2583ec3c at parent's request.
+Both update entries are retained in source. Remote generation must produce
+their combined snapshot before final committed-artifact checks. The paired
+1009 snapshot and ledger are retained provisionally. No product repair or
+main merge is included; parent still owns release acceptance and publishing.
+
 ## Codex 1007: review baseline accepted, final snapshot checks pending, 2026-10-05
 
 Candidate 79aa95b6 passed the resumed review workflow: ten mounted outcomes,
@@ -18,6 +26,16 @@ focused mounted and native verification. Generator, records, Daily and shared
 completion hooks stay unchanged. Remote runtime verification only.
 1005 Your picks and 1006 Footle Unlimited continue independently. Claude owns
 1010 to 1014 and Front Office. No publication claim. Work continues to 23:31 UTC.
+## Codex 1009: visible decision outcomes, 2026-10-05
+
+Ordinary choices in the four US careers show actual saved before/after
+changes before Continue. A consumed-event guard holds repeat input to one
+application. No balance, engine, saved schema or score changes. Details use
+real rounded money and bounded gains, with a compact expandable card.
+Independent product review found no remaining issue. Tests cover real RNG
+order and expanded layouts; remote acceptance is pending.1008 must pass and
+ship before this stacked round. Claude retains all his current lanes.
+1005 and1006 are live.1007 and1008 are in checks. Work continues to23:31UTC.
 ## Codex 1008: saved season review ready for remote checks, 2026-10-05
 
 Career Log in NBA, NFL, MLB and NHL now opens a compact saved-year picker.

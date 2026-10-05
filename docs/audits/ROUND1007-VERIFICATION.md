@@ -39,3 +39,14 @@ removed so the final workflows assess committed artifacts directly.
 The first review attempt was cancelled without any steps or artifacts; it
 provides no product verdict. Final candidate CI and publication remain pending.
 No local build, test, browser, install or database probe was run.
+
+## Combined 1009 integration pending
+
+After recording the verified 1007 artifact in b1479f23, parent requested
+stacking the frozen 1009 candidate 2583ec3c into this branch. Both update
+entries are retained in WhatsNew.tsx. The already generated 1009 snapshot
+and ledger remain paired until remote generation replaces them with the
+combined entries. Temporary generation is restored for that integration
+run only; its three outputs must be copied back and the step removed before
+final acceptance. The 1007 review product and verification source are unchanged.
+No main merge or publication is authorized by this receipt.
