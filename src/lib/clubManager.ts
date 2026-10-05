@@ -11,6 +11,9 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
+/* Round 965: the manager's face reads Soccer Career's look tables, never a
+   copy of them. That module imports nothing from here. */
+import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
 /* Round 783: the job hunt's pure half. It imports nothing from here but
    types, so there is no cycle; see its header. */
@@ -1531,7 +1534,9 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
      the manager had a name, the club's own country was the only honest
      answer, and it stays the answer whenever the spec is absent or the
      homeland is somewhere the engine cannot simulate. */
-  const own = career.manager?.nationality;
+  /* Round 965: a homeland is stored in the league spelling, so United States
+     is looked up as the engine's USA. */
+  const own = career.manager?.nationality ? homelandEngineName(career.manager.nationality) : undefined;
   const league = leagueOf(career.clubName);
   const nationDef = league ? NATIONS.find(n => n.leagueIds.includes(league.id)) : null;
   const nation = (own && NATION_CONFED[own]) ? own : (nationDef?.name ?? null);
@@ -4338,7 +4343,10 @@ export interface CustomClubSpec {
   capacity?: number;
 }
 
-export type ClubIdentity = 'gegenpress' | 'tikitaka' | 'lowblock' | 'counter' | 'balanced';
+export type ClubIdentity = 'gegenpress' | 'tikitaka' | 'lowblock' | 'counter' | 'balanced'
+  /* Round 965: six more ways to play, each its own formation and mentality
+     pair, so no two rows hand the match engine the same afternoon. */
+  | 'wingplay' | 'direct' | 'wingbacks' | 'totalfootball' | 'catenaccio' | 'shield';
 
 /** Round 160: what each identity means on day one. formationIndex points
  *  into FORMATIONS; the mentality is the standing instruction. No hidden
@@ -4352,7 +4360,28 @@ export const CLUB_IDENTITIES: Record<ClubIdentity, {
   lowblock: { label: 'Park the bus', emoji: '🚌', blurb: 'Two banks, no gaps, break their hearts.', formationIndex: 7, mentality: 'defensive' },
   counter: { label: 'Counter attack', emoji: '🗡️', blurb: 'Soak it up, then three passes and in.', formationIndex: 1, mentality: 'defensive' },
   balanced: { label: 'Balanced', emoji: '⚖️', blurb: 'Play what the afternoon asks for.', formationIndex: 1, mentality: 'balanced' },
+  /* Round 965. Same rule as the five above: a formation and a mentality the
+     engine already reads, nothing hidden. The index is the shape's place in
+     FORMATIONS (0 is 4-3-3, 15 the 3-5-2 with high wing backs, 6 is
+     3-4-3, 13 is 5-4-1, 12 is 4-1-4-1), and simManagerSpec checks every row
+     lands on a real shape and that no two rows field the same eleven in the
+     same mentality, which is what the engine actually reads. */
+  wingplay: { label: 'Wing play', emoji: '🪽', blurb: 'Get it wide, get it in the box.', formationIndex: 0, mentality: 'attacking' },
+  direct: { label: 'Direct', emoji: '🎯', blurb: 'Skip the midfield. Two up top and in behind.', formationIndex: 1, mentality: 'attacking' },
+  wingbacks: { label: 'Wing backs', emoji: '🏃', blurb: 'Three at the back and two who never stop running.', formationIndex: 15, mentality: 'attacking' },
+  totalfootball: { label: 'Total football', emoji: '🌀', blurb: 'Everybody attacks, everybody defends.', formationIndex: 6, mentality: 'attacking' },
+  catenaccio: { label: 'Catenaccio', emoji: '🔒', blurb: 'Five at the back, one up top, one nil.', formationIndex: 13, mentality: 'defensive' },
+  shield: { label: 'Midfield shield', emoji: '🛡️', blurb: 'A holder in front of the back four. Nothing through the middle.', formationIndex: 12, mentality: 'defensive' },
 };
+
+/** Round 965: the style a manager plays, read safely. An id this build does
+ *  not know (a mangled save, a style from a newer build) reads as Balanced
+ *  rather than crashing the day one tactics. */
+export function styleOf(style: unknown): ClubIdentity {
+  return typeof style === 'string' && Object.prototype.hasOwnProperty.call(CLUB_IDENTITIES, style)
+    ? (style as ClubIdentity)
+    : 'balanced';
+}
 
 /* ─── Round 303: the manager in your dugout, off the owner's tweaks list
    ("customizable created manager"). A name, a homeland, a background and a
@@ -4361,18 +4390,71 @@ export const CLUB_IDENTITIES: Record<ClubIdentity, {
    exactly that. The one CLUB_IDENTITIES rule holds here too: nothing in this
    spec touches the match engine. Style sets the day one tactics like a
    founding identity does, nationality feeds the national team call and the
-   job market's familiarity, and background is a badge. ─── */
-export type ManagerBackground = 'exPlayer' | 'coachingBadges' | 'analyst' | 'youthCoach';
+   job market's familiarity.
+   Round 965 ended "background is a badge": each background now starts the
+   manager with one point in its own skill tree (BACKGROUND_TREE in
+   clubManagerXp.ts), the same point a level buys and read by the same effect,
+   so it is still nothing the match engine does not already read. ─── */
+export type ManagerBackground = 'exPlayer' | 'coachingBadges' | 'analyst' | 'youthCoach'
+  | 'agent' | 'boardroom' | 'pundit';
+
+/* Round 965: the manager's look, drawn by Soccer Career's own SVG bust
+   (PlayerAvatar) from generic shapes and colours, so it is always a made up
+   person and never anybody's likeness. The four face fields are ids off the
+   same tables Soccer Career's look screen uses; the touchline outfit, the
+   accent colour and the age band are the manager's own. */
+export type ManagerOutfit = 'tracksuit' | 'suit' | 'coat' | 'quarterzip';
+export type ManagerAgeBand = 'thirties' | 'forties' | 'fifties' | 'sixties';
+
+export interface ManagerLook {
+  skinTone: string;
+  hairstyle: string;
+  hairColor: string;
+  facialHair: string;
+  outfit: ManagerOutfit;
+  /** One of MANAGER_ACCENTS' hex values. */
+  accent: string;
+  ageBand: ManagerAgeBand;
+}
+
+export const MANAGER_OUTFITS: Record<ManagerOutfit, { label: string }> = {
+  tracksuit: { label: 'Tracksuit' },
+  suit: { label: 'Suit and tie' },
+  coat: { label: 'Long coat' },
+  quarterzip: { label: 'Quarter zip' },
+};
+
+export const MANAGER_AGE_BANDS: Record<ManagerAgeBand, { label: string }> = {
+  thirties: { label: '30s' },
+  forties: { label: '40s' },
+  fifties: { label: '50s' },
+  sixties: { label: '60s' },
+};
+
+export const MANAGER_ACCENTS: { id: string; label: string; hex: string }[] = [
+  { id: 'navy', label: 'Navy', hex: '#1E3A8A' },
+  { id: 'red', label: 'Red', hex: '#B91C1C' },
+  { id: 'sky', label: 'Sky', hex: '#38BDF8' },
+  { id: 'green', label: 'Green', hex: '#15803D' },
+  { id: 'claret', label: 'Claret', hex: '#7F1D1D' },
+  { id: 'gold', label: 'Gold', hex: '#CA8A04' },
+  { id: 'black', label: 'Black', hex: '#18181B' },
+  { id: 'white', label: 'White', hex: '#E5E7EB' },
+];
 
 export interface ManagerSpec {
   name: string;
-  /** A country off the NATIONS picker. The federation that calls with the
-   *  national team job, and the homeland the job market weighs. */
+  /** Round 303 picked off NATIONS; since Round 965 any nation the
+   *  international engine runs (NATION_CONFED). The federation that calls
+   *  with the national team job, and the homeland the job market weighs. */
   nationality: string;
   background: ManagerBackground;
   /** Preferred football, reusing the club identity table: sets the day one
    *  formation and mentality, never a hidden strength modifier. */
   style: ClubIdentity;
+  /** Round 965: the face. OPTIONAL, so a Round 303 manager loads unchanged
+   *  and simply has no bust until one is built in the Edit manager sheet. */
+  appearance?: ManagerLook;
 }
 
 export const MANAGER_BACKGROUNDS: Record<ManagerBackground, { label: string; emoji: string; blurb: string }> = {
@@ -4380,7 +4462,142 @@ export const MANAGER_BACKGROUNDS: Record<ManagerBackground, { label: string; emo
   coachingBadges: { label: 'Career coach', emoji: '📋', blurb: 'Twenty years of badges and touchline rain.' },
   analyst: { label: 'Analyst', emoji: '📊', blurb: 'Came up through the data department with a laptop and a plan.' },
   youthCoach: { label: 'Youth coach', emoji: '🌱', blurb: 'Raised half an academy before the first team called.' },
+  agent: { label: 'Ex agent', emoji: '💼', blurb: 'Ten years on the other side of the table. Knows every trick.' },
+  boardroom: { label: 'Boardroom', emoji: '💰', blurb: 'Ran the money at a club before running the team.' },
+  pundit: { label: 'TV pundit', emoji: '🎙️', blurb: 'Talked about it on telly for years. Now he has to do it.' },
 };
+
+/** Round 965: a look read safely. Every field must be one this build can draw;
+ *  anything else and the whole look reads as absent (no bust), the way a
+ *  corrupt block resets that block alone. */
+export function managerLookOf(u: unknown): ManagerLook | null {
+  if (!u || typeof u !== 'object' || Array.isArray(u)) return null;
+  const o = u as Record<string, unknown>;
+  const str = (k: string) => (typeof o[k] === 'string' ? (o[k] as string) : null);
+  const skinTone = str('skinTone'), hairstyle = str('hairstyle'), hairColor = str('hairColor'), facialHair = str('facialHair');
+  const outfit = str('outfit'), accent = str('accent'), ageBand = str('ageBand');
+  if (!skinTone || !hairstyle || !hairColor || !facialHair || !outfit || !accent || !ageBand) return null;
+  if (!SKIN_TONES.some(x => x.id === skinTone)) return null;
+  if (!HAIRSTYLES.some(x => x.id === hairstyle)) return null;
+  if (!HAIR_COLORS.some(x => x.id === hairColor)) return null;
+  if (!FACIAL_HAIR.some(x => x.id === facialHair)) return null;
+  if (!Object.prototype.hasOwnProperty.call(MANAGER_OUTFITS, outfit)) return null;
+  if (!MANAGER_ACCENTS.some(x => x.hex === accent)) return null;
+  if (!Object.prototype.hasOwnProperty.call(MANAGER_AGE_BANDS, ageBand)) return null;
+  return { skinTone, hairstyle, hairColor, facialHair, outfit: outfit as ManagerOutfit, accent, ageBand: ageBand as ManagerAgeBand };
+}
+
+/** Round 965: the look a new manager starts on before anybody touches it. */
+export function defaultManagerLook(): ManagerLook {
+  return { skinTone: 'olive', hairstyle: 'sidepart', hairColor: 'darkbrown', facialHair: 'stubble', outfit: 'tracksuit', accent: MANAGER_ACCENTS[0].hex, ageBand: 'forties' };
+}
+
+/* Round 965: the one league nation the international engine spells
+   differently. The league table and the job market say United States (NATIONS),
+   NATION_CONFED says USA. A homeland is STORED in the league spelling, the one
+   Round 303 saved and the one the job market compares against its clubs'
+   country, and only turned into the engine's spelling to look the nation up. */
+const HOMELAND_ENGINE_NAME: Record<string, string> = { 'United States': 'USA' };
+const HOMELAND_STORED_NAME: Record<string, string> = Object.fromEntries(
+  Object.entries(HOMELAND_ENGINE_NAME).map(([stored, engine]) => [engine, stored]),
+);
+
+/** Round 965: the international engine's spelling of a stored homeland. */
+export function homelandEngineName(nation: string): string {
+  return HOMELAND_ENGINE_NAME[nation] ?? nation;
+}
+
+/** Round 965: a homeland the international engine runs, in either spelling. */
+export function isManagerHomeland(nation: string): boolean {
+  return Object.prototype.hasOwnProperty.call(NATION_CONFED, homelandEngineName(nation));
+}
+
+/** Round 965: every homeland the picker offers, the international engine's
+ *  own table, so whichever one is picked the federation call can run, in the
+ *  spelling a homeland is stored in. */
+export function managerHomelands(): string[] {
+  return Object.keys(NATION_CONFED).map(n => HOMELAND_STORED_NAME[n] ?? n).sort((a, b) => a.localeCompare(b));
+}
+
+/** Round 965: the homeland a picker opens on for this nation: its stored
+ *  spelling when the engine runs it, England otherwise. */
+export function managerHomelandFor(nation: string): string {
+  const all = managerHomelands();
+  const stored = HOMELAND_STORED_NAME[nation] ?? nation;
+  if (all.includes(stored)) return stored;
+  return all.includes('England') ? 'England' : all[0];
+}
+
+/** Round 965: the spec as it is stored. The style is read safely and a look
+ *  that does not validate is left off rather than stored half broken. */
+function cleanManagerSpec(m: ManagerSpec): ManagerSpec {
+  const out: ManagerSpec = { name: m.name.trim(), nationality: HOMELAND_STORED_NAME[m.nationality] ?? m.nationality, background: m.background, style: styleOf(m.style) };
+  const look = managerLookOf(m.appearance);
+  if (look) out.appearance = look;
+  return out;
+}
+
+export interface ManagerEdit {
+  name?: string;
+  nationality?: string;
+  appearance?: ManagerLook;
+  /** Only for a career that has no manager yet. Fixed once chosen. */
+  background?: ManagerBackground;
+}
+
+/**
+ * Round 965: the Edit manager sheet. Returns the new career, or null when the
+ * edit is refused, the shape every engine action has, so the hook's `?? prev`
+ * leaves the save alone.
+ *
+ * What can change after kick off: the name (through the same validateManagerName
+ * gate the form uses, so a real footballer's name is refused here too), the
+ * homeland (any nation the international engine runs) and the look. What
+ * cannot: the background, which was the manager's past and has already paid its
+ * point, and the preferred football, which only ever set the day one shape.
+ *
+ * A Skip career has no manager, and this is how it gets one: name, homeland and
+ * background are all required then. His preferred football is read off the
+ * shape the team is already playing (Balanced when it matches no style), because
+ * the season is under way and the style never moves the tactics after day one.
+ * His background point arrives through ensureXp, once, like everybody else's.
+ */
+export function editManager(career: CareerState, edit: ManagerEdit): CareerState | null {
+  const cur = career.manager;
+  const name = edit.name !== undefined ? edit.name.trim() : cur?.name;
+  if (name === undefined || validateManagerName(name) !== null) return null;
+  const nationality = edit.nationality ?? cur?.nationality;
+  if (nationality === undefined || !isManagerHomeland(nationality)) {
+    /* Every Round 303 homeland passes isManagerHomeland (United States through
+       its engine spelling), but a mangled one should not lock the sheet: only
+       a NEW value is held to the table. */
+    if (edit.nationality !== undefined || nationality === undefined) return null;
+  }
+  let appearance = cur?.appearance;
+  if (edit.appearance !== undefined) {
+    const look = managerLookOf(edit.appearance);
+    if (!look) return null;
+    appearance = look;
+  }
+  let background: ManagerBackground;
+  let style: ClubIdentity;
+  if (cur) {
+    if (edit.background !== undefined && edit.background !== cur.background) return null;
+    background = cur.background;
+    style = cur.style;
+  } else {
+    if (edit.background === undefined || !Object.prototype.hasOwnProperty.call(MANAGER_BACKGROUNDS, edit.background)) return null;
+    background = edit.background;
+    const match = (Object.keys(CLUB_IDENTITIES) as ClubIdentity[])
+      .find(k => CLUB_IDENTITIES[k].formationIndex === career.formationIndex && CLUB_IDENTITIES[k].mentality === career.mentality);
+    style = match ?? 'balanced';
+  }
+  const manager: ManagerSpec = { name, nationality: HOMELAND_STORED_NAME[nationality as string] ?? (nationality as string), background, style };
+  if (appearance) manager.appearance = appearance;
+  const next: CareerState = { ...career, manager };
+  ensureXp(next);
+  return next;
+}
 
 /** Round 160: the three grounds on offer at the founding. */
 export const CUSTOM_STADIUMS: { capacity: number; label: string; blurb: string }[] = [
@@ -16362,9 +16579,13 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
        one shape at a real club; at a custom club the founding identity
        already did, and the same person picked both, so the club's badge
        wins that tie. A starting point, not a lock, the Round 160 rule. */
-    state.manager = { ...manager, name: manager.name.trim() };
+    state.manager = cleanManagerSpec(manager);
+    /* Round 965: his background point is on the board from the first screen,
+       not from the first ball kicked. Only here, inside the manager branch,
+       so a Skip career's day one is exactly what it was. */
+    ensureXp(state);
     if (!custom?.identity) {
-      const st = CLUB_IDENTITIES[manager.style];
+      const st = CLUB_IDENTITIES[styleOf(manager.style)];
       state.formationIndex = clamp(st.formationIndex, 0, FORMATIONS.length - 1);
       state.mentality = st.mentality;
     }
@@ -18925,6 +19146,12 @@ export function loadCareer(): CareerState | null {
     /* Round 513: the manager's own progression. Registered in BOTH loadCareer
        and playNextEntry, because a screen can be opened before a ball is
        kicked and engine only repair is not enough. */
+    /* Round 965: a face this build cannot draw is dropped, that block alone;
+       the manager, his name and his point stay. A save with no face (every
+       Round 303 manager) is not touched. */
+    if (parsed.manager && parsed.manager.appearance !== undefined && !managerLookOf(parsed.manager.appearance)) {
+      delete parsed.manager.appearance;
+    }
     ensureXp(parsed);
     /* Round 514: same reasoning, and the currency in particular is read by
        the very first screen drawn, before a ball is kicked. */
