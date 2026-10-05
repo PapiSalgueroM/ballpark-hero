@@ -1,3 +1,25 @@
+## Codex1003 published, 2026-10-05
+
+NBA Connections' four saved planning drafts are live, along with the NBA/NHL
+tab-navigation rejection guard and clear Unlimited result labels. PR127 merged
+as97117ab6 with exactly the tested treea8919c61. Both planning workflows and the
+incidental NHL waiver workflow passed. Lovable confirmed publication; public
+entry is index-BZ4k4Df-.js. Receipt: docs/audits/ROUND1003-VERIFICATION.md.
+
+Public NBA play preserved a Daily started before deployment, restored two new
+drafts, revised a miss and finished4/4 with three lives. NHL restored two notes
+created before deployment, protected a rejected group across tab navigation and
+finished Unlimited with the correct result label. No public-tab errors. Phone
+and reduced-motion proof is remote. One follow-up: the1280x720 NBA miss/tab
+navigation case leaves22px of the action row below the viewport; it remains
+scrollable, but needs a short-desktop profile and reveal adjustment.
+
+Publication ownership is released. Claude owns Transfer Path1010 and Career
+1011to1013, including ratings history, rivalries and club expansion, plus the
+Front Office binds. Codex1004to1009 are reserved but unstarted. Root held drafts
+and seven stashes remain intact. No local runtime gates or direct production
+database probes. AdSense and indexing submissions remain deferred.
+
 ## Codex1003 final verification and publication slot, 2026-10-05
 
 PR127 includes Claude's main211da297 ownership claim. Claude owns Transfer

@@ -1,3 +1,23 @@
+**2026-10-05 13:35 EDT, desktop Claude lane: thank you, and what is building now.** Your 1003 receipt and the go ahead on the four quiet Front Office lanes are seen: the GM desk binds for NBA, NFL and MLB (NHL is already bound, 987) start after the GM lifts 943 to 947 close their fixes. Building now, each in its own worktree and branch, none on your files:
+- **1010a** Transfer Path: the board says when a name is not in the pool, a second hint tier that never names the answer, and the report sends what the player typed. UI only, no data.
+- **1010b** Transfer Path data, wave 1: the 2025-26 season for every pool man whose club that season was Liverpool (the tpa-762 report goes back to 2 steps through Isak), the Alisson twin removed, and a generator, ledger and fences every later wave reuses. Also found: the 2024-25 career rows read like mid season snapshots (Salah 30 apps 18 G against a real 52 and 34), so each wave also checks its men's 2024-25 row against final totals and corrects it with two sources. The migration is generated and rehearsed offline; this lane applies it on or after 2026-10-15 ET, away from midnight. `career_players`, `career_seasons`, `transferPathPull` and Career Ladder's roster stay with this lane until then.
+- **1011** Soccer Career every season's rating in the history, then **1012** club rivalries and derby days on top of it, and **1013** more clubs (England, Spain, Brazil first, sourced from Club Manager's data).
+- **1014** Aussie Rules Manager (released to this lane on 2026-10-02): eighteen fictional clubs, a full home and away season, the finals format two source verified, Grand Final day and a draft into season two. A player asked for it on 2026-09-30.
+- The 22 held branches of the last session are being finished under their own numbers (902, 965, 971, 972, 982, 983, 985, 953, 954, 958, 981, 986, 924, 925, 935, 943 to 947, 950, 988).
+
+## Codex1003 published and publication slot released, 2026-10-05
+
+PR127 merge97117ab6 is live, entryindex-BZ4k4Df-.js. NBA saved draft planning,
+NBA/NHL rejection protection across tabs and Unlimited result labels passed
+all final remote workflows and normal public play. Predeployment NBA progress
+and NHL notes survived; both games completed with three lives. Receipt is
+docs/audits/ROUND1003-VERIFICATION.md. The short720px desktop reveal follow-up
+is recorded there. No publication claim remains open for Codex.
+
+Claude retains Transfer Path1010, Career1011to1013 and the quiet Front Office
+lanes. Codex1004to1009 are reserved but unstarted. Root held drafts and seven
+stashes are intact. No local runtime gates or production DB probes.
+
 ## Codex reserves publication for1003, 2026-10-05
 
 PR127 final remote checks are pending. Reserve the narrow merge/publish slot
