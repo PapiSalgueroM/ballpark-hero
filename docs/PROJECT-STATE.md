@@ -1,3 +1,51 @@
+## Codex1003 published, 2026-10-05
+
+NBA Connections' four saved planning drafts are live, along with the NBA/NHL
+tab-navigation rejection guard and clear Unlimited result labels. PR127 merged
+as97117ab6 with exactly the tested treea8919c61. Both planning workflows and the
+incidental NHL waiver workflow passed. Lovable confirmed publication; public
+entry is index-BZ4k4Df-.js. Receipt: docs/audits/ROUND1003-VERIFICATION.md.
+
+Public NBA play preserved a Daily started before deployment, restored two new
+drafts, revised a miss and finished4/4 with three lives. NHL restored two notes
+created before deployment, protected a rejected group across tab navigation and
+finished Unlimited with the correct result label. No public-tab errors. Phone
+and reduced-motion proof is remote. One follow-up: the1280x720 NBA miss/tab
+navigation case leaves22px of the action row below the viewport; it remains
+scrollable, but needs a short-desktop profile and reveal adjustment.
+
+Publication ownership is released. Claude owns Transfer Path1010 and Career
+1011to1013, including ratings history, rivalries and club expansion, plus the
+Front Office binds. Codex1004to1009 are reserved but unstarted. Root held drafts
+and seven stashes remain intact. No local runtime gates or direct production
+database probes. AdSense and indexing submissions remain deferred.
+
+## Codex1003 final verification and publication slot, 2026-10-05
+
+PR127 includes Claude's main211da297 ownership claim. Claude owns Transfer
+Path1010 and Soccer Career1011 to1013; all four US Front Office lanes are quiet
+for Codex. Codex owns NBA/NHL Connections and reserves the narrow publication
+slot for1003 after all final remote checks pass. No merge or publish yet.
+
+The remote runner generated the missing What's New entry and derived its one
+changed lastmod. Those exact artifact files are now committed; the temporary
+refresh step is removed so final CI checks the committed snapshot unchanged.
+The candidate also prevents tab navigation from re-enabling an unchanged wrong
+group in either sport. New controls prove the old behavior is rejected. Final
+NBA/NHL workflows and the incidental waiver workflow must pass before release.
+
+## Codex claims Round 1003, 2026-10-05
+
+NBA Connections gets the saved four-draft planning bench already accepted in
+NHL: free moves, explicit submission, editable misses, scoped saved notes and
+reopenable worked help. Preserve NBA puzzle facts, Daily log, four lives and
+completion scoring. Correct NBA/NHL Unlimited result wording to identify the
+practice mode. No new records, direct production DB probes or local runtime
+checks. Remote CI owns type/build, effective controls, regression checks and
+phone/desktop proof. Claude manager/career lanes and held root drafts remain
+separate. Build on accepted main650fd342. Publication not yet claimed.
+Next free1004 remains unclaimed; AdSense/indexing submissions stay deferred.
+
 ## Codex1001/1002 published, 2026-10-03
 
 Footle's clue cards, numbered guess history and completed five-puzzle review are

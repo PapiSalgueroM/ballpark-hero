@@ -223,8 +223,8 @@ const NhlConnections = () => {
               }
               emojiGrid={lives > 0 ? `🏆 NHL Connections: all 4 groups, ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `🏒 NHL Connections: ${foundGroups}/4 groups`}
               share={{
-                score: lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left on today's NHL Connections` : `${foundGroups}/4 groups on today's NHL Connections`,
-                gameName: 'NHL Connections',
+                score: `${lives > 0 ? `all 4 groups with ${lives} ${lives === 1 ? 'life' : 'lives'} left` : `${foundGroups}/4 groups`} on ${mode === 'daily' ? "today's NHL Connections" : 'NHL Connections Unlimited'}`,
+                gameName: mode === 'daily' ? 'NHL Connections' : 'NHL Connections Unlimited',
                 gamePath: '/nhl-connections',
               }}
               onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
