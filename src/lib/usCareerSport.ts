@@ -30,6 +30,7 @@ import type { FaPushArgs, FaWindow } from '@/lib/usCareerFreeAgency';
 import type { ExtPushArgs, ExtensionTalk } from '@/lib/usCareerExtension';
 import type { UsSport } from '@/lib/usCareerToCoach';
 import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
+import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -177,6 +178,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   legacyOf(c: C): UsCareerLegacy;
   teamLabelOf(abbr: string, eraId?: string): string;
   statLine(s: L, pos: string): string;
+  reviewStats(s: L, pos: string): CareerReviewStats;
   /** The season line a banned year writes. Its keys and their order are on
    *  the save, so each sport builds its own. */
   suspendedLine(c: C): L;
