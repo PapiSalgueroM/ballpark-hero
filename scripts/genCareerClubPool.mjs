@@ -16,7 +16,8 @@
      and premierleague.com (news 4673099, Coventry, Ipswich and Hull up;
      Wolves, Burnley and West Ham down).
    Championship 2026-27, ESPN (league/eng.2) and Sky Sports (skysports.com/championship-table).
-   La Liga 2026-27, ESPN (league/esp.1) and laliga.com (laliga-easports/standing).
+   La Liga 2026-27, ESPN (league/esp.1) and laliga.com's own first division
+     standings page (2026/27).
    Brasileirao Serie A 2026, ESPN (league/bra.1) and the CBF
      (cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a/2026).
    All four match Club Manager's REAL_LEAGUES club for club. */
