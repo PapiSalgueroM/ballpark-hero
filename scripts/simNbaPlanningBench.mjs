@@ -1,5 +1,5 @@
-/* Actual NHL page/hook outcomes with isolated copied-source controls.
-   Run NHL_PLANNING_CONTROL=all for every report, even after a failure. */
+/* Actual NBA page/hook outcomes with isolated copied-source controls.
+   Run NBA_PLANNING_CONTROL=all for every report, even after a failure. */
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm, rmdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -8,8 +8,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url);
-const hook = 'src/hooks/useNhlConnections.ts', page = 'src/pages/NhlConnections.tsx';
-const helper = 'src/lib/nhlConnectionDrafts.ts', testFile = 'src/test/nhlPlanningBench.test.tsx';
+const hook = 'src/hooks/useNbaConnections.ts', page = 'src/pages/NbaConnections.tsx';
+const helper = 'src/lib/nbaConnectionDrafts.ts', testFile = 'src/test/nbaPlanningBench.test.tsx';
 const titles = {
   model: 'moves canonical notes without duplication and rejects malformed or stale documents',
   free: 'plans four drafts freely and never submits the fifth selection',
@@ -33,34 +33,35 @@ const controls = {
   rapid: { file: hook, from: 'if (submittedRef.current === submission) return;', to: 'if (false) return;', test: titles.rapid },
   score: { file: hook, from: '(dailyLives * 250)', to: '(dailyLives * 200)', test: titles.score },
   ready: { file: hook, from: "const loadingGame = isLoadingPool || (mode === 'daily' && isLoading);", to: "const loadingGame = (mode === 'daily' && isLoading);", test: titles.ready },
-  mode: { file: helper, from: '`nhl-connections-notes-v1:${mode}`', to: "'nhl-connections-notes-v1:daily'", test: titles.ready },
+  mode: { file: helper, from: '`nba-connections-notes-v1:${mode}`', to: "'nba-connections-notes-v1:daily'", test: titles.ready },
+  sport: { file: helper, from: '`nba-connections-notes-v1:${mode}`', to: '`nhl-connections-notes-v1:${mode}`', test: titles.free },
   restore: { file: hook, from: 'if (savedIndex >= 0) setUnlimitedIndex(savedIndex);', to: 'if (false) setUnlimitedIndex(savedIndex);', test: titles.reset },
-  reset: { file: hook, from: "emptyNhlDrafts(nhlDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players))", to: 'emptyNhlDrafts(scope, roster)', test: titles.reset },
+  reset: { file: hook, from: "emptyNbaDrafts(nbaDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players))", to: 'emptyNbaDrafts(scope, roster)', test: titles.reset },
   help: { file: page, from: 'onClick={() => { if (!showRules) submitSelection(); }}', to: 'onClick={() => { submitSelection(); }}', test: titles.help },
   warning: { file: hook, from: 'catch { setNotesWarning(true); }\n  }, [mode]);', to: 'catch { setNotesWarning(false); }\n  }, [mode]);', test: titles.warning },
 };
-const control = process.env.NHL_PLANNING_CONTROL || '';
+const control = process.env.NBA_PLANNING_CONTROL || '';
 assert(!control || control === 'all' || control in controls, 'Known planning control');
-const evidence = path.resolve(process.env.NHL_PLANNING_ARTIFACTS || path.join(root, 'nhl-planning-artifacts/mounted'));
+const evidence = path.resolve(process.env.NBA_PLANNING_ARTIFACTS || path.join(root, 'nba-planning-artifacts/mounted'));
 await mkdir(evidence, { recursive: true });
 if (control === 'all') {
   const outcomes = [];
   for (const mode of ['', ...Object.keys(controls)]) {
-    const run = spawnSync(process.execPath, [self], { cwd: root, env: { ...process.env, NHL_PLANNING_CONTROL: mode, NHL_PLANNING_ARTIFACTS: evidence }, encoding: 'utf8', timeout: 180000, maxBuffer: 32 * 1024 * 1024 });
+    const run = spawnSync(process.execPath, [self], { cwd: root, env: { ...process.env, NBA_PLANNING_CONTROL: mode, NBA_PLANNING_ARTIFACTS: evidence }, encoding: 'utf8', timeout: 180000, maxBuffer: 32 * 1024 * 1024 });
     const output = (run.stdout || '') + '\n' + (run.stderr || '');
     await writeFile(path.join(evidence, `${mode || 'normal'}-runner.log`), output);
     const passed = run.status === 0 && !run.error && !run.signal;
     outcomes.push({ control: mode || 'normal', passed, exit: run.status, error: String(run.error || '') });
-    console.log(`${passed ? 'PASS' : 'FAIL'} NHL planning ${mode || 'normal'}`);
-    process.stdout.write(passed ? output.split('\n').filter(line => line.startsWith('simNhlPlanningBench')).join('\n') + '\n' : output.slice(-16000));
+    console.log(`${passed ? 'PASS' : 'FAIL'} NBA planning ${mode || 'normal'}`);
+    process.stdout.write(passed ? output.split('\n').filter(line => line.startsWith('simNbaPlanningBench')).join('\n') + '\n' : output.slice(-16000));
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(outcomes, null, 2));
   assert(outcomes.every(row => row.passed), 'All normal and control outcomes must pass; every mode was attempted');
-  console.log(`simNhlPlanningBench: 10 actual model/mounted cases and ${Object.keys(controls).length} effective controls passed.`);
+  console.log(`simNbaPlanningBench: 10 actual model/mounted cases and ${Object.keys(controls).length} effective controls passed.`);
   process.exit(0);
 }
 const held = [];
-for (const relative of [hook, page, helper, testFile, 'src/components/nhl-connections/NhlConnectionsHowToPlay.tsx', 'src/data/nhlConnectionsPuzzles.ts', 'src/hooks/useDailyPuzzle.ts', 'src/hooks/useGameCompletion.ts']) {
+for (const relative of [hook, page, helper, testFile, 'src/components/nba-connections/NbaConnectionsHowToPlay.tsx', 'src/data/nbaConnectionsPuzzles.ts', 'src/hooks/useDailyPuzzle.ts', 'src/hooks/useGameCompletion.ts']) {
   const file = path.join(root, relative);
   const bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, relative + ' raw bytes held')));
@@ -74,7 +75,7 @@ try {
     assert.equal(source.split(spec.from).length - 1, 1, control + ' binds exactly one executable anchor');
     const changed = source.replace(spec.from, spec.to); assert.notEqual(changed, source);
     await mkdir(path.join(root, '.sim-control'), { recursive: true });
-    folder = await mkdtemp(path.join(root, '.sim-control/nhl-planning-'));
+    folder = await mkdtemp(path.join(root, '.sim-control/nba-planning-'));
     const copy = path.join(folder, path.basename(spec.file)); await writeFile(copy, changed);
     await writeFile(path.join(evidence, `${control}-${path.basename(spec.file)}.txt`), changed);
     env.NO_DOUBLE_SWAP = JSON.stringify({ ['@/' + spec.file.slice(4).replace(/\.tsx?$/, '')]: copy });
@@ -101,7 +102,7 @@ try {
     assert.equal(run.status, 0); assert.equal(failed.length, 0); assert.equal(passed.length, 10);
     assert.deepEqual(new Set(passed.map(row => row.title)), new Set(Object.values(titles)));
   }
-  console.log(`simNhlPlanningBench ${control || 'normal'}: exact expected assertions and independent Daily restore passed.`);
+  console.log(`simNbaPlanningBench ${control || 'normal'}: exact expected assertions and independent Daily restore passed.`);
 } finally {
   if (folder) { await rm(folder, { recursive: true, force: true }); await rmdir(path.join(root, '.sim-control')).catch(() => {}); }
   for (const verify of held) await verify();

@@ -207,7 +207,8 @@ export function useNhlConnections() {
   }, [loadingGame, scope, rosterSignature, remainingSignature]);
 
   const writeDrafts = useCallback((next: NhlConnectionDrafts) => {
-    draftsRef.current = next; setDrafts(next); submittedRef.current = '';
+    if (JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups)) submittedRef.current = '';
+    draftsRef.current = next; setDrafts(next);
     try { localStorage.setItem(nhlDraftKey(mode), JSON.stringify(next)); setNotesWarning(false); }
     catch { setNotesWarning(true); }
   }, [mode]);
@@ -295,6 +296,7 @@ export function useNhlConnections() {
   }, [notesReady, gameStatus, writeDrafts]);
 
   const resetGame = useCallback(() => {
+    submittedRef.current = '';
     if (mode === 'daily') {
       resetDailyHook();
       if (puzzle) writeDrafts(emptyNhlDrafts(scope, roster));
