@@ -34,6 +34,13 @@ vi.mock('@/lib/playerSearch', async importOriginal => {
   };
 });
 
+/* simTransferPathEmptyState's controls swap in a rewritten copy of the
+   empty list rules; without the variable this is the real module. */
+vi.mock('@/lib/transferPathEmptyList', async () => {
+  const swapped = process.env.TRANSFER_PATH_EMPTY_LIST;
+  return swapped ? await import(/* @vite-ignore */ swapped) : await vi.importActual('@/lib/transferPathEmptyList');
+});
+
 /* The board is drawn for real with its hook and frame stubbed, so what is
    tested is the board's own wiring: the exclude set it builds, the text it
    picks and the context it hands a report. */
@@ -47,7 +54,13 @@ const board = {
   moreHelp: null as null | { doors: unknown; lines: string[] },
   addPlayer: () => ({ ok: false, club: null }), giveUp: () => {}, revealPath: null,
   switchToUnlimited: () => {}, nextPuzzle: () => {},
-  getAllPlayerNames: () => ['Alisson Becker', 'Martin Ødegaard', 'Mikel Oyarzabal'],
+  /* Round 1010a review: the punctuated and short form names a player types
+     without the hyphen, the apostrophe or the full name. */
+  getAllPlayerNames: () => [
+    'Alisson Becker', 'Martin Ødegaard', 'Mikel Oyarzabal',
+    'Trent Alexander-Arnold', "N'Golo Kanté", "Samuel Eto'o", 'Son Heung-min', 'Vinícius Júnior',
+    'Neymar', 'Lionel Messi', 'Warren Zaïre-Emery', 'Mohamed Salah',
+  ],
   getPlayerNationality: () => '', getPlayerClubs: () => new Set<string>(),
   isLoading: false, isLoadingPool: false,
 };
@@ -61,7 +74,12 @@ vi.mock('@/components/game/ReportQuestion', () => ({
 }));
 
 const { PlayerAutocomplete } = await import('@/components/game/PlayerAutocomplete');
-const { TransferPathBoard } = await import('@/components/transfer-path/TransferPathBoard');
+/* simTransferPathEmptyState swaps in a rewritten copy of the board for its
+   negative controls, the same way simTransferPathGuidance swaps the hook. */
+const boardPath = process.env.TRANSFER_PATH_BOARD;
+const { TransferPathBoard } = boardPath
+  ? await import(/* @vite-ignore */ boardPath)
+  : await import('@/components/transfer-path/TransferPathBoard');
 const { searchPlayers } = await import('@/lib/playerSearch');
 
 const entity = (name: string): PlayerEntity =>
@@ -143,8 +161,9 @@ describe('PlayerAutocomplete emptyText and onNoResults', () => {
 });
 
 describe('Transfer Path board: the empty list says why', () => {
-  const POOL_TEXT = 'Not in the Transfer Path pool yet. Only the 3 players in it can link.';
+  const POOL_TEXT = 'No player by that name in the Transfer Path pool yet. The pool holds 12 players.';
   const CHAIN_TEXT = "Already in your chain, or it's the target. Name one of his teammates.";
+  const SPELLING_TEXT = 'Nothing matches that exact spelling. Try just the start of his surname.';
 
   async function typeIntoBoard(text: string) {
     render(<TransferPathBoard />);
@@ -162,12 +181,31 @@ describe('Transfer Path board: the empty list says why', () => {
     expect([...exclude].sort()).toEqual(['alisson becker', 'martin odegaard', 'mikel oyarzabal']);
   });
 
+  it('the target typed without his punctuation still gets the chain or target text', async () => {
+    board.puzzle.playerB = 'Warren Zaïre-Emery';
+    try {
+      expect((await typeIntoBoard('zaire emery')).textContent).toBe(CHAIN_TEXT);
+    } finally {
+      board.puzzle.playerB = 'Mikel Oyarzabal';
+    }
+  });
+
+  /* Round 1010a review: the search matches the text as typed, so every one of
+     these comes back empty although the man is in the pool. None may be told
+     he is not in it. */
+  it.each([
+    'alexander arnold', 'ngolo kante', 'etoo', 'heung-min son', 'son heung min',
+    'vinicius jr', 'neymar jr', 'zaire emery', 'mo salah', 'leo messi',
+  ])('a pool man typed as %s gets the spelling text, never "not in the pool"', async typedName => {
+    expect((await typeIntoBoard(typedName)).textContent).toBe(SPELLING_TEXT);
+  });
+
   it('a name nobody in the pool carries gets the pool text, and the next report carries it', async () => {
     expect((await typeIntoBoard('zzzz')).textContent).toBe(POOL_TEXT);
     await waitFor(() => {
       const report = JSON.parse(screen.getByTestId('report').textContent!);
       expect(report.lastNoMatch).toBe('zzzz');
-      expect(report.poolSize).toBe(3);
+      expect(report.poolSize).toBe(12);
     });
   });
 

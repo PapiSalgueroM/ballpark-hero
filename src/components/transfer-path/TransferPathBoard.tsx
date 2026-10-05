@@ -10,12 +10,12 @@ import { RotateCcw, ArrowRight, Lightbulb, Search } from 'lucide-react';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { ACTIVE_YEAR, RULE_BLURB, RULE_LABEL, TRANSFER_PATH_RULES } from '@/lib/transferPathModes';
+import { emptyListReason, foldName } from '@/lib/transferPathEmptyList';
 import { cn } from '@/lib/utils';
 
 
 // Uses the shared, comprehensive flag helper (~120 nations, handles dual
 // nationalities) instead of a local map that fell back to a blank white flag.
-
 
 export function TransferPathBoard() {
   const {
@@ -47,13 +47,17 @@ export function TransferPathBoard() {
     () => new Set([...chain, puzzle.playerB].map(normalizeName)),
     [chain, puzzle.playerB],
   );
-  /* The search matches inside names, so "oyarzabal" can only be coming up
-     empty because the target (or a chain name) is left out of the list. Say
-     that, not "not in the pool", which would be false. */
-  const typed = normalizeName(input);
-  const emptyText = typed && [...excludeNames].some(n => n.includes(typed))
-    ? "Already in your chain, or it's the target. Name one of his teammates."
-    : `Not in the Transfer Path pool yet. Only the ${allNames.length} players in it can link.`;
+  /* Why the list came back empty (src/lib/transferPathEmptyList.ts). "Not in
+     the pool" only when no pool name is anywhere near the typed text: the
+     search matches it exactly as typed, so "alexander arnold" or "neymar jr"
+     come back empty for men who ARE in the pool, and they get the spelling
+     text, which claims nothing about the pool. */
+  const foldedPool = useMemo(() => allNames.map(foldName), [allNames]);
+  const emptyText = {
+    chain: "Already in your chain, or it's the target. Name one of his teammates.",
+    spelling: 'Nothing matches that exact spelling. Try just the start of his surname.',
+    pool: `No player by that name in the Transfer Path pool yet. The pool holds ${allNames.length} players.`,
+  }[emptyListReason(input, [...chain, puzzle.playerB], foldedPool)];
 
   /* Round 460: the refusal says which rule refused, not just that the link failed. */
   const refusalText = (name: string, reason: TransferPathRefusal | undefined) => {
@@ -122,8 +126,8 @@ export function TransferPathBoard() {
                 <p>🔗 Each name you add must have been at the same club as the LAST player in your chain, in the same season. Same shirt years apart does not count.</p>
                 <p>🏁 Reach the target player to win. 1000 points for the shortest possible path, minus 100 for every extra step.</p>
                 <p>💡 Stuck? The hint follows your chain, so it always speaks from the last name you played, and giving up shows a full working path.</p>
-                <p>🔎 Still stuck? More help counts your options without naming anyone: how many pool players shared a season with your last name, at which clubs, and how many of them are on a shortest route.</p>
-                <p>🗂️ Only players in our Transfer Path pool can be named. If a name doesn't come up as you type, he's not in the pool yet.</p>
+                <p>🔎 Still stuck? More help counts your options and never names who to play: how many pool players shared a season with the last name you played, at which clubs, and how many of them are on a shortest route.</p>
+                <p>🗂️ Only players in our Transfer Path pool can be named. If a name doesn't come up as you type, try the start of his surname or the name he plays under. If that finds nobody either, he's not in the pool yet.</p>
                 <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
                 <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, is in our verified {ACTIVE_YEAR} active-player records. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
                 <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
@@ -164,7 +168,7 @@ export function TransferPathBoard() {
               <p>Today's pair has no route under {RULE_LABEL[rule]}, so the daily plays the everyday rule.</p>
               <button
                 type="button"
-                onClick={() => { switchToUnlimited(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); }}
+                onClick={() => { switchToUnlimited(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); }}
                 className="w-full rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted/50 transition-colors"
               >
                 Play unlimited under {RULE_LABEL[rule]}
@@ -254,7 +258,7 @@ export function TransferPathBoard() {
             )}
             {mode === 'unlimited' && (
               <button
-                onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); }}
+                onClick={() => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); }}
                 className="w-full py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Next Puzzle
@@ -336,7 +340,7 @@ export function TransferPathBoard() {
               gameName: 'Transfer Path',
               gamePath: '/transfer-path',
             }}
-            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); } : undefined}
+            onPlayAgain={mode === 'unlimited' ? () => { nextPuzzle(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); } : undefined}
             playAgainLabel="Next Puzzle"
             playNext={mode === 'daily' ? (
               <button
