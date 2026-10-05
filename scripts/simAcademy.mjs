@@ -15,6 +15,17 @@
  * headline number that comes from one lucky run is worse than no number.
  *
  * Run: node scripts/simAcademy.mjs
+ *
+ * Round 982: section 3 reads the training plan and the academy staff on a
+ * bare club (academy 8 and 8, training ground level 1, coaching posts empty)
+ * and a regular with six points of room, so every arm is under
+ * developmentRate's ceiling and the reading is exact on every seed; see the
+ * note in section 3 for why the old reading had gone red. Negative controls,
+ * each must turn its own check red:
+ *   SIM_ACADEMY_CONTROL=flatplan    the plan never reaches developmentRate
+ *   SIM_ACADEMY_CONTROL=flatstaff   academy coaching and facilities never do
+ *   SIM_ACADEMY_CONTROL=lowceiling  the ceiling drops to 1.5, under the
+ *                                   exact readings, so the guard must name it
  */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
@@ -25,23 +36,50 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT_URL = ROOT.replaceAll('\\', '/');
 const ENTRY = path.join(os.tmpdir(), 'acaEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'aca.bundle.mjs');
 
+/* Round 982: negative controls for section 3's exact readings. Each rewrites
+   one line of a copy of the engine, refuses to run if the line is not there,
+   and must turn its own check red. */
+const CONTROL = process.env.SIM_ACADEMY_CONTROL || '';
+const CONTROLS = {
+  flatplan: ['headroom * minutes * intensity * focus * staff *', 'headroom * minutes * staff *', 'the training plan no longer reaches developmentRate'],
+  flatstaff: ['const staff = 0.72 + coaching * 0.022 + facilities * 0.011;', 'const staff = 1;', 'the academy coaching and facilities no longer reach developmentRate'],
+  lowceiling: ['export const DEVELOPMENT_RATE_MAX = 2.6;', 'export const DEVELOPMENT_RATE_MAX = 1.5;', 'the ceiling drops under the exact readings'],
+};
+let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
+if (CONTROL) {
+  const c = CONTROLS[CONTROL];
+  if (!c) { console.error(`unknown SIM_ACADEMY_CONTROL=${CONTROL}`); process.exit(1); }
+  const src = fs.readFileSync(enginePath, 'utf8').replace(/\r\n/g, '\n');
+  if (src.split(c[0]).length !== 2) { console.error(`control cannot run: clubManager.ts is not in the shape SIM_ACADEMY_CONTROL=${CONTROL} rewrites`); process.exit(1); }
+  enginePath = path.join(os.tmpdir(), `aca.${CONTROL}.ts`).replaceAll('\\', '/');
+  fs.writeFileSync(enginePath, src.replace(c[0], c[1]));
+  console.log(`NEGATIVE CONTROL ON: ${c[2]}`);
+}
+
+/* The facilities and staff modules come in beside the engine so section 3 can
+   set the training ground and the coaches to the level that does nothing.
+   Every module is aliased in by its import path, so the engine the cycle
+   reaches is the control copy when one is on. */
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const mod = await import('${enginePath}');
 export const cm = mod;
+export const fac = await import('${ROOT_URL}/src/lib/clubManagerFacilities.ts');
+export const staffDesk = await import('${ROOT_URL}/src/lib/clubManagerStaff.ts');
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@/lib/clubManager=${enginePath} --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
 
-const { cm } = await import(pathToFileURL(BUNDLE).href);
+const { cm, fac, staffDesk } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   FORMATIONS, autoPickXI, objectiveStatuses, sellValue,
   ensureAcademy, upgradeAcademy, academyUpgradeCost, hireScout, recallScout,
   promoteProspect, releaseProspect, setTrainingPlan, developmentRate, developingPlayers,
-  rollPotential, SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
+  rollPotential, SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS, DEVELOPMENT_RATE_MAX,
 } = cm;
 
 let failures = 0;
@@ -165,20 +203,54 @@ console.log('3) Development reads minutes, ceiling and the plan');
   if (playRate <= benchRate * 1.5) fail('playing every week barely beats never playing');
   if (cappedRate >= benchRate * 0.5) fail('a player at his ceiling develops like one with room left');
 
-  const youthPlan = setTrainingPlan(s, { intensity: 'double', focus: 'youth' });
-  const seniorPlan = setTrainingPlan(s, { intensity: 'light', focus: 'firstTeam' });
-  const a = developmentRate(played, youthPlan);
-  const b = developmentRate(played, seniorPlan);
-  console.log(`   double sessions built round the kids: ${a.toFixed(2)} vs light sessions built round the seniors: ${b.toFixed(2)}`);
+  /* Round 982: the plan and the academy staff are read on a club and a kid
+     the clamp cannot touch. Round 116 measured both on the gap 24 regular
+     above, who sat under developmentRate's 2.6 ceiling then. Rounds 467 and
+     471 put the training ground and the coaches inside the same clamp
+     (Everton opens on a level 6 ground, x1.065, and a level 7 defence coach,
+     x1.066), and the academy rolls with the seeded stream (11 to 13 here), so
+     that kid reads about 3.0 bare and sits on the ceiling in both arms that
+     ought to be high. The two checks below were reading the clamp over the
+     low arm: red on main (2.60 vs 1.77, and 2.11 vs 2.60) for reasons that
+     had nothing to do with the plan or the staff, and a coin toss for every
+     round that moved the stream. The clamp is meant (Round 963) and
+     simClubManagerStaff reads it on its own. Here the academy is pinned at 8
+     and 8, the ground at level 1 and the three coaching posts are empty, each
+     of which does exactly nothing by its own rule, and the kid has six points
+     of room, so every arm is an exact reading of the formula, the same on
+     every seed, and fails by name if a later formula pushes it into the clamp.
+     The thresholds are still Round 116's. */
+  const bare = JSON.parse(JSON.stringify(s));
+  bare.academy.coaching = 8; bare.academy.facilities = 8;
+  fac.ensureFacilities(bare).trainingGround = 1;
+  const desk = staffDesk.ensureStaff(bare);
+  desk.attack = null; desk.defence = null; desk.goalkeeping = null;
+  const roomy = { ...played, potential: played.rating + 6 };
+  if (fac.trainingGroundGrowthMult(bare) !== 1 || staffDesk.coachGrowthMult(bare, roomy.position) !== 1) {
+    fail('a level 1 training ground or an empty coaching post still lifts growth');
+  }
+  const exact = (name, career) => {
+    const r = developmentRate(roomy, career);
+    if (!(r < DEVELOPMENT_RATE_MAX - 0.05)) fail(`${name} reads ${r.toFixed(4)}, on developmentRate's ${DEVELOPMENT_RATE_MAX} ceiling, so the check would read the clamp`);
+    return r;
+  };
+  const youthPlan = setTrainingPlan(bare, { intensity: 'double', focus: 'youth' });
+  const seniorPlan = setTrainingPlan(bare, { intensity: 'light', focus: 'firstTeam' });
+  const a = exact('double sessions round the kids', youthPlan);
+  const b = exact('light sessions round the seniors', seniorPlan);
+  console.log(`   a regular with six points of room, bare club: double sessions built round the kids ${a.toFixed(2)} vs light sessions built round the seniors ${b.toFixed(2)}`);
+  const ya = developmentRate(played, setTrainingPlan(s, { intensity: 'double', focus: 'youth' }));
+  const yb = developmentRate(played, setTrainingPlan(s, { intensity: 'light', focus: 'firstTeam' }));
+  console.log(`   (the gap 24 regular at Everton as it opens: ${ya.toFixed(2)} vs ${yb.toFixed(2)}, ceiling ${DEVELOPMENT_RATE_MAX})`);
   if (a <= b * 1.6) fail('the training plan barely moves a teenager');
 
   // coaching level has to matter on its own
-  const poorCoach = JSON.parse(JSON.stringify(s));
+  const poorCoach = JSON.parse(JSON.stringify(bare));
   poorCoach.academy.coaching = 1; poorCoach.academy.facilities = 1;
-  const goodCoach = JSON.parse(JSON.stringify(s));
+  const goodCoach = JSON.parse(JSON.stringify(bare));
   goodCoach.academy.coaching = 20; goodCoach.academy.facilities = 20;
-  const lo = developmentRate(played, poorCoach);
-  const hi = developmentRate(played, goodCoach);
+  const lo = exact('the worst academy staff', poorCoach);
+  const hi = exact('the best academy staff', goodCoach);
   console.log(`   worst staff in the game ${lo.toFixed(2)} vs the best ${hi.toFixed(2)}`);
   if (hi <= lo * 1.25) fail('coaching and facilities barely change how fast anyone improves');
 
