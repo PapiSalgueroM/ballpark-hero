@@ -786,6 +786,9 @@ export type DeskRun<R = unknown> =
     applied: GmDecision[];
     /** Picks added to the club for the next draft, by round. */
     picksAdded: number[];
+    /** Round 987: each offer sheet that was paid, with the club that tabled it,
+        so a bind with a pick ledger can take those picks off that club. */
+    sheets?: { id: string; club: string; picks: number[] }[];
   };
 
 /**
@@ -832,6 +835,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
 
   const applied: GmDecision[] = [];
   const owed: number[] = [];
+  const sheets: { id: string; club: string; picks: number[] }[] = [];
   /* MLB: a pick waiting on a man who turned down the qualifying offer is paid
      once he has turned up at another club, and dropped if he came back here. */
   if (ledger.qoOwed?.length) {
@@ -865,7 +869,7 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
         /* He signed the rival's sheet, so he goes to that club on its terms. */
         league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
         /* The ladder pays only when he has really gone to the club that tabled it. */
-        if (d.picks) owed.push(...d.picks);
+        if (d.picks) { owed.push(...d.picks); sheets.push({ id: man.id, club: sheetClub, picks: [...d.picks] }); }
       } else {
         league.freeAgents.push({ ...man, years: 1, salary: host.marketSalary(league, man) });
       }
@@ -890,5 +894,5 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
   noteRoster(ledger, league);
   for (const rec of Object.values(ledger.men)) delete rec.mid;
   ledger.decisions = ledger.decisions.filter(d => d.season > league.season - LEDGER_SEASONS_KEPT);
-  return { ok: true, engine, applied, picksAdded: owed };
+  return { ok: true, engine, applied, picksAdded: owed, sheets };
 }

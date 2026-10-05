@@ -2,11 +2,13 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { useGame, footleScore, FOOTLE_SCORE_BUCKETS } from '@/hooks/useGame';
 import type { GuessResult, Player } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
-import { GameBoard } from '@/components/game/GameBoard';
+import FootleClueDesk from '@/components/footle/FootleClueDesk';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import ShareButtons from '@/components/game/ShareButtons';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { StatTile } from '@/components/game/StatTile';
+import { compareGuess } from '@/lib/gameLogic';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
@@ -41,16 +43,55 @@ const Index = () => {
     practiceReady,
     startPractice,
     advancePractice,
+    unlimitedSession,
+    unlimitedSaveFailed,
+    unlimitedRemaining,
+    unlimitedPaused,
+    reshuffleUnlimited,
     examplePlayer,
   } = useGame();
 
   const [showRules, setShowRules] = useState(false);
-  const practicePanel = useRef<HTMLElement>(null);
+  const [reviewRound, setReviewRound] = useState<number | null>(null);
+  const [returnSerial, setReturnSerial] = useState(0);
+  const reviewOpener = useRef<HTMLButtonElement | null>(null);
   const inPractice = mode === 'practice';
+  const inUnlimited = mode === 'unlimited';
+  const unlimitedDeck = unlimitedSession.decks[difficulty];
+  const unlimitedState = isLoadingPool ? 'loading' : unlimitedPaused ? 'paused' : !unlimitedDeck ? 'unavailable'
+    : gameStatus === 'playing' ? 'playing' : unlimitedRemaining === 0 ? 'exhausted' : 'result';
+  const unlimitedPanel = useRevealScroll<HTMLElement>(`${mode}:${difficulty}:${unlimitedDeck?.seen.length}:${gameStatus}:${unlimitedPaused}`, {
+    enabled: inUnlimited && !isLoadingPool && (gameStatus !== 'playing' || guesses.length === 0), skipFirst: false,
+  });
   const practicePlaying = inPractice && !!practiceRun && !practiceComplete;
+  const searchArea = useRevealScroll<HTMLDivElement>(returnSerial);
+  const practicePanel = useRevealScroll<HTMLElement>(`${inPractice}:${practiceRun?.index}:${gameStatus}`, { enabled: inPractice && !showRules, skipFirst: false });
+  const reviewGuesses = useMemo(() => {
+    if (!practiceComplete || !practiceRun || reviewRound === null) return [];
+    const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[reviewRound])!;
+    return practiceRun.rounds[reviewRound].guesses.map(name => compareGuess(practiceRun.pool.find(player => player.name === name)!, answer));
+  }, [practiceComplete, practiceRun, reviewRound]);
+  useEffect(() => { setReviewRound(null); }, [mode, practiceRun?.targets]);
+  const returnToSearch = () => {
+    searchArea.current?.querySelector<HTMLInputElement>('input[role="combobox"]')?.focus({ preventScroll: true });
+    setReturnSerial(value => value + 1);
+  };
   useEffect(() => {
     if (inPractice) practicePanel.current?.focus({ preventScroll: true });
   }, [inPractice, practiceRun?.index, gameStatus]);
+  useEffect(() => {
+    if (!inUnlimited || isLoadingPool || showRules || (gameStatus === 'playing' && guesses.length > 0)) return;
+    if (targetPlayer && gameStatus === 'playing') searchArea.current?.querySelector<HTMLInputElement>('input[role="combobox"]')?.focus({ preventScroll: true });
+    else unlimitedPanel.current?.focus({ preventScroll: true });
+    const frame = requestAnimationFrame(() => {
+      const panel = unlimitedPanel.current;
+      const action = panel?.querySelector<HTMLButtonElement>('[data-unlimited-next]');
+      if (panel && action && panel.getBoundingClientRect().top >= 0 && action.getBoundingClientRect().bottom > window.innerHeight) {
+        panel.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [inUnlimited, isLoadingPool, difficulty, unlimitedDeck?.seen.length, gameStatus, unlimitedPaused]);
 
   // Show rules on first visit
   useEffect(() => {
@@ -60,52 +101,6 @@ const Index = () => {
       localStorage.setItem('footle-rules-seen', '1');
     }
   }, []);
-
-  // ---- Attribute-tile supplementary layer (R6 Wave 14 / Part 1 item 4) -----
-  // Footle's GameBoard already renders a full per-guess attribute-tile row
-  // (nationality/club/goals/assists/position/kitNumber/age/marketValue), so
-  // that row already is the "attribute-tile hybrid guesser" pattern the R6
-  // spec describes. This block adds a genuinely separate, non-duplicative
-  // supplementary signal on top of it: a compact "Best Guess So Far" strip
-  // that surfaces the single closest prior guess (by count of correct/close
-  // cells) so players get an at-a-glance read without rescanning the whole
-  // board. Purely derived from existing guesses state; does not touch
-  // useGame.ts, compareGuess, GameBoard, scoring, or the share grid.
-  const bestGuess = useMemo(() => {
-    if (guesses.length === 0) return null;
-    let best = guesses[0];
-    let bestScore = -1;
-    for (const g of guesses) {
-      const cellScore = FOOTLE_CELL_ORDER.reduce((sum, key) => {
-        const status = g.cells[key].status;
-        return sum + (status === 'correct' ? 2 : status === 'close' ? 1 : 0);
-      }, 0);
-      if (cellScore > bestScore) {
-        bestScore = cellScore;
-        best = g;
-      }
-    }
-    return best;
-  }, [guesses]);
-
-  // ---- Unlimited tier purity (owner: "I put unlimited mode on insane and I
-  // just got Messi") -----------------------------------------------------------
-  // useGame's buildPool() is cumulative for target selection (hard = easy+hard,
-  // insane = the whole pool), so the hook can roll a superstar as the insane
-  // answer. The GUESSABLE list should stay cumulative (probing with stars is
-  // legitimate), but the TARGET must come from the selected tier only. useGame
-  // is out of scope for this fix, so a fresh unlimited round (no guesses yet)
-  // re-rolls until the target's own tier matches the selected difficulty. With
-  // the new pool (~80 easy / ~220 hard / ~1,000 insane) this converges in 1-2
-  // rolls; the some() guard prevents a re-roll loop if a tier is absent (e.g.
-  // the obscure batch failed and the pool has no insane players).
-  useEffect(() => {
-    if (mode !== 'unlimited' || gameStatus !== 'playing' || isLoadingPool) return;
-    if (guesses.length > 0 || !targetPlayer) return;
-    if (targetPlayer.difficulty === difficulty) return;
-    if (!availablePlayers.some(p => p.difficulty === difficulty)) return;
-    resetGame();
-  }, [mode, gameStatus, isLoadingPool, guesses.length, targetPlayer, difficulty, availablePlayers, resetGame]);
 
   return (
     <>
@@ -120,7 +115,7 @@ const Index = () => {
         subtitle="Guess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues."
         headerExtra={
           <>
-            <HowToPlayPopover title="How to Play Footle" open={showRules} onOpenChange={setShowRules}>
+            <HowToPlayPopover title="How to Play Footle" className="min-h-[44px] min-w-[44px]" open={showRules} onOpenChange={setShowRules}>
               <p className="text-muted-foreground text-center">
                 Guess the mystery soccer player in 8 tries!
               </p>
@@ -171,6 +166,19 @@ const Index = () => {
                 <p className="text-muted-foreground">
                   ▲ means the answer is <span className="text-foreground font-semibold">higher</span>, ▼ means it's <span className="text-foreground font-semibold">lower</span>.
                 </p>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Your clue desk</h3>
+                <p className="text-muted-foreground">Each guess opens eight cards. Read the value, comparison and higher or lower direction. The numbered history buttons revisit your earlier guesses. Back to search returns you to your next pick.</p>
+                <p className="text-muted-foreground mt-2">When a five-puzzle run ends, choose a puzzle to review the guesses you actually made. Reviews use that run's saved clues and never change your score.</p>
+              </section>
+
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Your Unlimited session</h3>
+                <p className="text-muted-foreground">Each difficulty keeps its own puzzle and eight guesses. Switch tiers without losing a puzzle, then return here to carry on. Your clues stay tied to that deck's saved player snapshot.</p>
+                <p className="text-muted-foreground mt-2">Finish a puzzle, then choose Next puzzle for a fresh answer. Answers do not repeat within the deck. When no fresh answer is left, choose Reshuffle deck to start again. New puzzles leave today's Daily answer out. An older saved puzzle may be paused today; changing tiers keeps it safe.</p>
+                <p className="text-muted-foreground mt-2">For example, after finishing puzzle 1, Next puzzle gives you a different answer with eight new guesses. Finished puzzles count toward this session only, never Daily points. Progress saves on this browser when storage is available.</p>
               </section>
 
               <section>
@@ -259,7 +267,7 @@ const Index = () => {
             )}
 
             {/* Guess Counter */}
-            {(!inPractice || practicePlaying) && <p className="text-sm text-muted-foreground mt-4">
+            {(!inPractice || practicePlaying) && (!inUnlimited || !!targetPlayer) && <p className="text-sm text-muted-foreground mt-4">
               Guesses:{' '}
               <span className="text-foreground font-semibold">
                 {guesses.length}
@@ -269,6 +277,39 @@ const Index = () => {
           </>
         }
       >
+        {inUnlimited && <section ref={showRules ? null : unlimitedPanel} tabIndex={-1} aria-label="Unlimited session"
+          data-footle-unlimited="" data-unlimited-state={unlimitedState} data-no-prerender=""
+          className="mb-5 rounded-2xl border border-primary/30 bg-card p-4 outline-none focus-visible:ring-2 focus-visible:ring-primary">
+          {unlimitedState === 'loading' ? <p className="text-sm text-muted-foreground">Loading your player pool...</p>
+            : unlimitedPaused ? <><h2 className="font-display text-xl">Saved puzzle paused today</h2><p className="mt-2 text-sm text-muted-foreground">Your progress is safe. Try another difficulty, or return after finishing Daily.</p></>
+            : !unlimitedDeck ? <><h2 className="font-display text-xl">No fresh puzzle in this tier</h2><p className="mt-2 text-sm text-muted-foreground">There are no eligible answers in the loaded pool. Try another difficulty.</p></>
+            : <>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 data-unlimited-progress="" className="font-display text-2xl">Puzzle {unlimitedDeck.seen.length}</h2>
+                <span className="text-sm capitalize text-muted-foreground">{difficulty} · {unlimitedDeck.seen.length - (gameStatus === 'playing' ? 1 : 0)} finished</span>
+              </div>
+              {gameStatus === 'playing' ? <p className="mt-2 text-sm text-muted-foreground">Eight guesses. Every player in this saved pool is available. Each tier keeps your place.</p>
+                : targetPlayer && <>
+                  <div role="status" className="mt-3" data-unlimited-result="">
+                    <p className="font-semibold">{gameStatus === 'won' ? 'Correct!' : 'Game Over'} <span className="break-words text-primary">{targetPlayer.name}</span></p>
+                    <p className="mt-1 text-sm text-muted-foreground">Puzzle snapshot: {targetPlayer.name} is listed as a {targetPlayer.position} and valued at {fmtCompactUsd(targetPlayer.marketValue * 1_000_000)}.</p>
+                    {unlimitedRemaining === 0 && <p className="mt-3 font-semibold">Deck complete. No fresh answers remain in this saved deck.</p>}
+                    <button data-unlimited-next="" onClick={unlimitedRemaining === 0 ? reshuffleUnlimited : resetGame}
+                      className="mt-3 min-h-[44px] w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">
+                      {unlimitedRemaining === 0 ? 'Reshuffle deck' : 'Next puzzle'}
+                    </button>
+                  </div>
+                  <details className="mt-2"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">Player details and sharing</summary>
+                    <PracticeAnswer player={targetPlayer} />
+                    <div className="mt-3"><ShareButtons gameName="Footle Unlimited" gamePath="/footle" score={gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : `0/${maxGuesses}`}
+                      customText={`Footle Unlimited: ${gameStatus === 'won' ? `${guesses.length}/${maxGuesses} guesses` : 'missed'}. ${footleEmojiGrid(guesses, maxGuesses)}\nhttps://douknowball.com/footle`}
+                      emojiGrid={footleEmojiGrid(guesses, maxGuesses)} /></div>
+                  </details>
+                </>}
+              <p className="mt-2 text-xs text-muted-foreground">{unlimitedRemaining} fresh {unlimitedRemaining === 1 ? 'answer' : 'answers'} left in this saved deck. No Daily points.</p>
+            </>}
+          {unlimitedSaveFailed && <p role="alert" className="mt-3 text-sm text-destructive">This browser could not save your Unlimited session. You can keep playing, but reloading may lose your progress.</p>}
+        </section>}
         {inPractice && (
           <section ref={practicePanel} tabIndex={-1} aria-label="Five-puzzle run" data-footle-practice="" data-testid="footle-practice" data-practice-index={practiceRun?.index ?? -1} className="mb-6 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-card to-card p-4 sm:p-6 outline-none focus-visible:ring-2 focus-visible:ring-primary">
             {!practiceRun ? (
@@ -288,6 +329,18 @@ const Index = () => {
                 <p className="mt-2 text-lg font-semibold text-primary">{practiceRun.rounds.filter(round => round.status === 'won').length} of 5 solved</p>
                 <p className="text-sm text-muted-foreground">{practiceRun.rounds.reduce((total, round) => total + round.guesses.length, 0)} total guesses · {practiceRun.tier} · no daily points used</p>
                 <button data-testid="practice-start" onClick={startPractice} disabled={!practiceReady} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground disabled:opacity-50">Play another five</button>
+                <div className="mt-4 grid grid-cols-5 gap-1" role="group" aria-label="Review completed puzzles">
+                  {practiceRun.rounds.map((round, index) => <button key={index} aria-label={`Review puzzle ${index + 1}`} aria-pressed={reviewRound === index}
+                    onClick={event => { reviewOpener.current = event.currentTarget; setReviewRound(index); }} className={cn('min-h-[44px] rounded-lg border px-1 py-2 text-xs font-semibold', reviewRound === index ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-background text-foreground')}>
+                    <span className="block">{index + 1}</span><span className="block text-[10px]">{round.status === 'won' ? 'Solved' : 'Missed'}</span>
+                  </button>)}
+                </div>
+                {reviewRound !== null && <div className="mt-4" data-footle-review={reviewRound + 1}>
+                  <p className="mb-3 min-w-0 break-words text-sm font-semibold">Puzzle {reviewRound + 1} · {practiceRun.targets[reviewRound]}</p>
+                  <FootleClueDesk key={reviewRound} guesses={reviewGuesses} playing={false} reviewing helpOpen={showRules}
+                    onReturn={() => { setReviewRound(null); reviewOpener.current?.focus({ preventScroll: true }); reviewOpener.current?.scrollIntoView({ block: 'nearest' }); }} />
+                </div>}
+                <details className="mt-3"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">All five player details</summary>
                 <ol className="mt-4 grid gap-2 sm:grid-cols-2">
                   {practiceRun.rounds.map((round, index) => {
                     const answer = practiceRun.pool.find(player => player.name === practiceRun.targets[index])!;
@@ -299,6 +352,7 @@ const Index = () => {
                     </li>;
                   })}
                 </ol>
+                </details>
                 <p className="mt-3 text-xs text-muted-foreground">Player details are from this run's saved puzzle snapshot.</p>
               </div>
             ) : (
@@ -324,55 +378,28 @@ const Index = () => {
           </section>
         )}
         {/* Search */}
-        {(!inPractice && (isLoadingPool || isLoading)) ? (
+        {(!inPractice && !inUnlimited && (isLoadingPool || isLoading)) ? (
           <div className="mb-8 flex justify-center">
             <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
-        ) : gameStatus === 'playing' && (!inPractice || practicePlaying) ? (
-          <div className="mb-8 space-y-3">
+        ) : gameStatus === 'playing' && (!inPractice || practicePlaying) && (!inUnlimited || !!targetPlayer) ? (
+          <div ref={searchArea} className="mb-5 space-y-3">
             <PlayerSearch
               players={availablePlayers}
               guessedNames={guessedPlayerNames}
               onSelect={makeGuess}
             />
-            <div className={cn('flex justify-center', inPractice && '[&_button]:min-h-[44px]')}>
-              <GiveUpButton onGiveUp={giveUp} className={inPractice ? 'min-h-[44px]' : undefined} />
+            <div className={cn('flex justify-center', (inPractice || inUnlimited) && '[&_button]:min-h-[44px]')}>
+              <GiveUpButton key={inUnlimited ? `${difficulty}:${unlimitedDeck?.seen.length}` : mode} onGiveUp={giveUp} className={inPractice || inUnlimited ? 'min-h-[44px]' : undefined} />
             </div>
           </div>
         ) : null}
 
-        {/* Best Guess So Far: supplementary attribute-tile summary, additive
-            only, shown once there are at least 2 guesses to compare. */}
-        {gameStatus === 'playing' && bestGuess && guesses.length > 1 && (
-          <div className="mb-8">
-            <p className="text-xs text-center text-muted-foreground uppercase tracking-wider mb-2">
-              🔥 Best Guess So Far: <span className="text-foreground font-semibold">{bestGuess.playerName}</span>
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {FOOTLE_CELL_ORDER.map((key) => (
-                <StatTile
-                  key={key}
-                  label={FOOTLE_CELL_LABELS[key]}
-                  value={bestGuess.cells[key].value}
-                  /* Round 443: StatTile has no spoken verdict, only a colour,
-                     and its 'incorrect' is the same neutral grey the board
-                     paints an unknown. So the new status maps onto it here
-                     rather than widening a tile six other games share. The
-                     value already reads "?", which is the honest part. */
-                  state={bestGuess.cells[key].status === 'unknown' ? 'incorrect' : bestGuess.cells[key].status}
-                  direction={bestGuess.cells[key].arrow ?? null}
-                  className="min-w-[80px]"
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Game Board */}
-        {(!inPractice || practicePlaying) && <GameBoard guesses={guesses} maxGuesses={maxGuesses} />}
+        {(!inPractice || practicePlaying) && (!inUnlimited || !!targetPlayer) && <FootleClueDesk key={`${mode}:${targetPlayer?.name ?? ''}`}
+          guesses={guesses} playing={gameStatus === 'playing'} helpOpen={showRules} onReturn={returnToSearch} />}
 
         {/* Game Over */}
-        {!inPractice && gameStatus !== 'playing' && (
+        {mode === 'daily' && gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
             <ResultScreen
               won={gameStatus === 'won'}
@@ -406,11 +433,8 @@ const Index = () => {
                 gameName: 'Footle',
                 gamePath: '/footle',
               }}
-              onPlayAgain={mode === 'unlimited' ? () => resetGame() : undefined}
               playNext={
-                mode === 'daily'
-                  ? <button onClick={() => switchMode('practice')} className="min-h-[44px] w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">{practiceRun && !practiceComplete ? 'Resume five-puzzle run' : 'Play five more'}</button>
-                  : undefined
+                <button onClick={() => switchMode('practice')} className="min-h-[44px] w-full rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">{practiceRun && !practiceComplete ? 'Resume five-puzzle run' : 'Play five more'}</button>
               }
             >
               <PostGameStats
@@ -500,16 +524,5 @@ function footleEmojiGrid(guesses: GuessResult[], maxGuesses: number): string {
 const FOOTLE_CELL_ORDER = [
   'nationality', 'club', 'goals', 'assists', 'position', 'kitNumber', 'age', 'marketValue',
 ] as const;
-
-const FOOTLE_CELL_LABELS: Record<typeof FOOTLE_CELL_ORDER[number], string> = {
-  nationality: 'Nation',
-  club: 'Club',
-  goals: 'Goals',
-  assists: 'Assists',
-  position: 'Position',
-  kitNumber: 'Kit #',
-  age: 'Age',
-  marketValue: 'Value',
-};
 
 export default Index;
