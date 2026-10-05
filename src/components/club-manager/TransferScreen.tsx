@@ -7,7 +7,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf, loanOutRefusal } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -207,11 +207,14 @@ export function TransferScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wantKey]);
 
+  /* Round 971 closing check: a past season files a man under the league his
+     club played in THAT season (Hertha in the 2020-21 Bundesliga, not
+     today's second tier), the same lookup the engine's suitors use. */
   const marketLeagues = useMemo(() => {
     const names = new Set<string>();
-    for (const m of market) names.add(leagueOf(m.club).name);
+    for (const m of market) names.add(careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name);
     return [...names].sort();
-  }, [market]);
+  }, [market, career.eraId]);
 
   /* Round 194: every nationality actually present in THIS world's market,
      busiest first, so the dropdown never offers a nation with no players.
@@ -234,7 +237,7 @@ export function TransferScreen({
       .filter(m => posExact === 'any' || m.position === posExact)
       .filter(m => m.age >= age.lo && m.age <= age.hi)
       .filter(m => m.price <= price.max)
-      .filter(m => leaguePick === 'any' || leagueOf(m.club).name === leaguePick)
+      .filter(m => leaguePick === 'any' || careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name === leaguePick)
       .filter(m => natPick === 'any' || nationalityOf(career.eraId, m.name) === natPick)
       .filter(m => !q || m.name.toLowerCase().includes(q) || m.club.toLowerCase().includes(q));
     const sorted = [...list];

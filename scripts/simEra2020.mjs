@@ -29,6 +29,12 @@
  *      lands at 94, order is kept, 88 and below untouched.
  *   7. THE CHAMPIONS LEAGUE FIELD: the real 32 clubs of 2020-21, nineteen of
  *      them baked squads, eight groups into a round of 16, away goals on.
+ *   8. THE MARKET AND THE CARD: every past season's transfer market files a
+ *      man under the league his club plays in that season (the screen asks
+ *      the save's era, never today's table), and the card's "every match
+ *      here allows three" changes is the engine's MAX_SUBS. And leagueOf's
+ *      fallback for a club only the past knows reads the eras in a fixed
+ *      order, so reversing ERA_LEAGUES moves no club.
  *
  * MEASURED 2026-10-03 on this tree, six seeds each (the streams in section 4):
  *   Bayern 4,1,1,2,1,1 (mean 1.67), PSG 1,2,1,1,1,1 (mean 1.17), Manchester
@@ -61,7 +67,7 @@
  *   City 6,7,2,3,1,2 (3.50), Crotone 20 every seed (20.00). Every mean sits
  *   inside the family spread above, so the bands stand.
  *
- * Six negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift,
+ * Eight negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder,
  * each of which must end the run red (see the block where they are defined).
  *
  * Run: node scripts/simEra2020.mjs
@@ -90,7 +96,22 @@ export { engine, eras, e20, e15, e10, e05, modern };
 /* esbuild through its JS API, resolved by walk-up, so the harness runs from
    the repo and from a worktree whose node_modules is the repo's. */
 const { build } = await import('esbuild');
-await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error' });
+/* Control eraorder (section 8) is the one control that edits the engine as
+   it is bundled: leagueOf's fallback loses its fixed era order and reads
+   ERA_LEAGUES in insertion order again, as it did before the closing check.
+   The anchor must be in the source or the control refuses (exit 2). */
+const ERA_ORDER_ANCHOR = 'for (const eraId of ERA_FALLBACK_ORDER) {';
+const plugins = process.env.SIM_ERA2020_CONTROL === 'eraorder' ? [{
+  name: 'eraorder',
+  setup(b) {
+    b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, a => {
+      const src = fs.readFileSync(a.path, 'utf8');
+      if (!src.includes(ERA_ORDER_ANCHOR)) { console.error('CONTROL eraorder did not apply: leagueOf has no fixed era order to remove'); process.exit(2); }
+      return { contents: src.replace(ERA_ORDER_ANCHOR, 'for (const eraId of [] as string[]) {'), loader: 'ts' };
+    });
+  },
+}] : [];
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', plugins });
 const { engine: cm, eras: ER, e20: E20, e15: E15, e10: E10, e05: E05, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
 fs.rmSync(ENTRY, { force: true });
 fs.rmSync(BUNDLE, { force: true });
@@ -99,7 +120,7 @@ const { eraUpliftRating, CM_ERAS, eraById } = ER;
 const {
   startCareer, playNextEntry, startNextSeason, sortedTable, buildMarket,
   buildBoardObjectives, ERA_LEAGUES, ERA_UCL_FIELDS, eraPlayableClubs, worldSeasonLabel,
-  eraUclHasR16, uclFirstKoRound,
+  eraUclHasR16, uclFirstKoRound, careerLeagueOf, leagueOf, eraLeagueOf,
 } = cm;
 const { ERA2020_ROSTERS, ERA2020_META, ERA2020_PARTIAL } = E20;
 const { CM_ROSTERS } = MOD;
@@ -131,9 +152,15 @@ const BAND_THIN = 14;
                   1,1,2,4,8,16, so only the per club pin can fail.
      nolift       section 6 reads the raw bake with no uplift: the top 50
                   gap reads -0.68 and leaves its +-0.5 band (Mbappe and
-                  Messi drop off their pins too). */
+                  Messi drop off their pins too).
+     modernmarket section 8 labels every past season's market with today's
+                  leagues (the old transfer screen lookup): 2020-21 alone
+                  files about 150 men under the wrong league.
+     eraorder     leagueOf's fixed era order is taken out as the engine is
+                  bundled (see the plugin above the build), so section 8's
+                  reversal of ERA_LEAGUES moves the multi-era clubs. */
 const CONTROL = process.env.SIM_ERA2020_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'fourleagues', 'nofield', 'swapfinish', 'nolift', 'modernmarket', 'eraorder'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlHavertz(rosters, keepAtChelsea) {
   const row = (rosters['Chelsea'] ?? []).find(p => p.n === 'Kai Havertz');
@@ -528,6 +555,82 @@ console.log('7) The real 2020-21 Champions League field, eight groups into a rou
   if (!eraUclHasR16('era2020') || uclFirstKoRound({ eraId: 'era2020' }) !== 'R16') fail('a 2020 save does not play a round of 16');
   if (eraById('era2020').id !== 'era2020') fail('the era menu has no 2020-21 card');
   if (CM_ERAS[1]?.id !== 'era2020') fail(`the newest past era should sit first after today, the menu reads ${CM_ERAS.map(e => e.id).join(',')}`);
+}
+
+/* ---------- 8. The market and the card say what the save does ---------- */
+console.log('8) Every past season\'s market files a man under the league his club plays in that season');
+{
+  /* The closing check's F4: the transfer screen's league filter used to ask
+     leagueOf(club), today's league, so a 2020-21 market filed Declan Rice (West
+     Ham) under the Championship and Guendouzi (Hertha) under the 2. Bundesliga. The
+     screen now asks careerLeagueOf with the save's era, the lookup the
+     engine's own suitors use. This reads the screen's code (comments
+     stripped) for that call, then counts, era by era, the market players
+     whose club is in an era league and whose label is not that league.
+     MEASURED 2026-10-05 with the old lookup: 150 or 151 in 2020-21,
+     205 in 2015-16, 210 in 2010-11 and 157 in 2005-06, and the new one
+     must read 0 in every era. Control modernmarket labels with the old
+     lookup and must fail. */
+  const screen = fs.readFileSync(path.join(ROOT, 'src/components/club-manager/TransferScreen.tsx'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const CALL = 'careerLeagueOf({ clubName: m.club, eraId: career.eraId }).name';
+  const calls = screen.split(CALL).length - 1;
+  if (calls < 2) fail(`the transfer screen asks careerLeagueOf with the save's era ${calls} time(s); the league list and the filter both must`);
+  if (/(^|[^A-Za-z])leagueOf\(/.test(screen)) fail('the transfer screen still calls the era blind leagueOf');
+  let label = (club, eraId) => careerLeagueOf({ clubName: club, eraId }).name;
+  if (CONTROL === 'modernmarket') {
+    const differs = ERA_LEAGUES.era2020.flatMap(l => l.clubs).filter(c => label(c, 'era2020') !== leagueOf(c).name);
+    if (!differs.length) controlRefuse('every 2020-21 club reads the same league either way, so the old lookup would change nothing');
+    console.log(`   ${differs.length} 2020-21 clubs read another league through today's lookup, e.g. ${differs.slice(0, 4).map(c => `${c} (${leagueOf(c).name})`).join(', ')}`);
+    label = club => leagueOf(club).name;
+    console.log('   CONTROL modernmarket applied: the market is labelled with today\'s leagues');
+  }
+  for (const eraId of Object.keys(ERA_LEAGUES)) {
+    const opener = ERA_LEAGUES[eraId][0].clubs[0];
+    const market = buildMarket(startCareer(opener, eraId));
+    let inEra = 0, wrong = 0, old = 0;
+    const eg = [];
+    for (const m of market) {
+      const real = eraLeagueOf(m.club, eraId);
+      if (!real) continue;
+      inEra += 1;
+      if (leagueOf(m.club).name !== real.name) old += 1;
+      if (label(m.club, eraId) !== real.name) { wrong += 1; if (eg.length < 3) eg.push(`${m.name} (${m.club}) under ${label(m.club, eraId)}`); }
+    }
+    console.log(`   ${eraId}: ${inEra} market players at era league clubs, ${wrong} filed under the wrong league (today's lookup would file ${old})`);
+    if (inEra < 100) fail(`${eraId}: only ${inEra} market players at era league clubs, the market did not build`);
+    if (wrong) fail(`${eraId}: ${wrong} market players filed under the wrong league, e.g. ${eg.join('; ')}`);
+  }
+  /* The era card says every match here allows three changes (Spain, Italy,
+     Germany and France allowed five that season, England three): the engine
+     must still apply three, or the card must change with it. */
+  if (/every match here allows three/.test(eraById('era2020').honesty) && cm.MAX_SUBS !== 3) fail(`the 2020-21 card says every match allows three changes, the engine allows ${cm.MAX_SUBS}`);
+  if (!/every match here allows three/.test(eraById('era2020').honesty)) fail('the 2020-21 card no longer says how many changes a match here allows');
+
+  /* The closing check's F16: leagueOf's fallback for a club only the past
+     seasons know used to read ERA_LEAGUES in the order it was typed. Every
+     era must sit in ERA_FALLBACK_ORDER, and reversing the object in memory
+     must move no club. MEASURED 2026-10-05: 17 era-only clubs sit in two or
+     three eras; with the old insertion order fallback (control eraorder)
+     the reversal moves all 17, Cadiz from laliga2005 to laliga2020. */
+  const order = cm.ERA_FALLBACK_ORDER ?? [];
+  const keys = Object.keys(ERA_LEAGUES);
+  const missing = keys.filter(k => !order.includes(k));
+  if (missing.length) fail(`leagueOf's fixed era order leaves out ${missing.join(', ')}; a new era goes at the end of ERA_FALLBACK_ORDER`);
+  const real = new Set(cm.REAL_LEAGUES.flatMap(l => l.clubs));
+  const eraOnly = [...new Set(keys.flatMap(k => ERA_LEAGUES[k].flatMap(l => l.clubs)))].filter(c => !real.has(c));
+  const multi = eraOnly.filter(c => keys.filter(k => ERA_LEAGUES[k].some(l => l.clubs.includes(c))).length > 1);
+  const before = new Map(eraOnly.map(c => [c, leagueOf(c).id]));
+  const saved = keys.map(k => [k, ERA_LEAGUES[k]]);
+  for (const k of keys) delete ERA_LEAGUES[k];
+  for (const [k, v] of [...saved].reverse()) ERA_LEAGUES[k] = v;
+  const moved = eraOnly.filter(c => leagueOf(c).id !== before.get(c)).map(c => `${c} ${before.get(c)} -> ${leagueOf(c).id}`);
+  for (const k of keys) delete ERA_LEAGUES[k];
+  for (const [k, v] of saved) ERA_LEAGUES[k] = v;
+  console.log(`   ${eraOnly.length} era-only clubs, ${multi.length} of them in more than one era; reversing ERA_LEAGUES moves ${moved.length}`);
+  if (multi.length < 10) fail(`only ${multi.length} era-only clubs sit in two eras; the order check has nothing to bite on`);
+  if (moved.length) fail(`leagueOf's era fallback hangs on the order of ERA_LEAGUES: ${moved.slice(0, 4).join('; ')}${moved.length > 4 ? ` and ${moved.length - 4} more` : ''}`);
+  if (leagueOf('Cádiz').id !== 'laliga2005') fail(`an unscoped leagueOf('Cádiz') reads ${leagueOf('Cádiz').id}; it has always read laliga2005`);
 }
 
 console.log('');

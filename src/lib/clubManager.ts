@@ -1623,7 +1623,9 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
      stored per season, so twenty is the honest divisor here. Round 883: a
      league that relegates nobody (Liga MX has eighteen clubs, so its last
      place is 18th) never reads as a relegation. */
-  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots(leagueOf(h.club).id) > 0;
+  /* Round 971 closing check: a past season's finish reads that season's
+     league (eraLeagueOf), not whichever era leagueOf's fallback finds first. */
+  const wentDown = (h: SeasonRecord) => h.position >= 18 && relegationSpots((eraLeagueOf(h.club, career.eraId) ?? leagueOf(h.club)).id) > 0;
   const promotions = career.history.filter(h => h.position === 1).length;
   const relegations = career.history.filter(wentDown).length;
   const def = clubDefFor(career.clubName);
@@ -3226,9 +3228,25 @@ export function leagueOf(clubName: string): LeagueDef {
   // both worlds; a historic save reads its own league through eraLeagueOf
   // and its own club list through career.leagueClubs, so this fallback only
   // ever serves the era-exclusive names.
+  // Round 971 closing check: seventeen era-only clubs sit in two or three
+  // eras (Cadiz in 2005 and 2020, Sampdoria in 2010, 2015 and 2020), so the
+  // answer used to hang on the order the eras were typed into ERA_LEAGUES,
+  // and putting 2020 above 2005 once moved Cadiz. The eras are read in the
+  // order they shipped instead, so an era added later never takes a club an
+  // unscoped caller already reads, and a reorder of the object changes nothing.
+  for (const eraId of ERA_FALLBACK_ORDER) {
+    const hit = (ERA_LEAGUES[eraId] ?? []).find(l => l.clubs.includes(clubName));
+    if (hit) return hit;
+  }
   return Object.values(ERA_LEAGUES).flat().find(l => l.clubs.includes(clubName))
     ?? effectiveLeague(REAL_LEAGUES[0]);
 }
+
+/** The order leagueOf's era fallback reads the eras in: the order they
+ *  shipped (2010-11 in Round 146, 2015-16 in Round 175, 2005-06 in Round 176,
+ *  2020-21 in Round 971). A new era goes at the END; simEra2020 section 8
+ *  fails while an era is missing from this list. */
+export const ERA_FALLBACK_ORDER: readonly string[] = ['era2010', 'era2015', 'era2005', 'era2020'];
 
 /* ================================================================== */
 /* Round 146: historic era leagues (docs/PAST-ERAS-DESIGN.md phase 1) */
