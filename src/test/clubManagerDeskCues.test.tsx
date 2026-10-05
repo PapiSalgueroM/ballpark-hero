@@ -21,17 +21,9 @@ import type { FacilityId } from '@/lib/clubManagerFacilities';
    some other change must both say nothing, and a desk reopened on a save that
    already changed must not replay the line.
 
-   Negative controls, each a one line mutation run by hand against this file
-   (2026-10-03, 11 cases; each fired, and the source was restored byte for byte):
-   - read the line off the save from BEFORE the press
-     (deskCue.tsx: `request.read(request.before)`): 8 fail, every positive case;
-   - show the line whatever the save says (`setCue({ ..., text: text ?? 'Done.' })`
-     in place of `if (text) setCue(...)`): 3 fail, exactly the refused and moved cases;
-   - seed the cue state with an old line (as if it outlived the desk): 5 fail,
-     the cases that open on an empty line or reopen a desk;
-   - a timer that never clears: 1 fails, the timer case;
-   - pulse pip `level` instead of `level - 1` (FacilitiesScreen.tsx): 2 fail;
-   - drop cm-tick-in from the Now line: 1 fails. */
+   scripts/simClubManagerDeskCues.mjs runs this file in the sim suite and owns
+   its negative controls: each one swaps a one line broken copy of a desk in
+   through NO_DOUBLE_SWAP and names the exact cases that must fail. */
 
 const fx = { players: 'Existing real career players from the shipped data; only contract years and the kitty are set here.' };
 
@@ -60,10 +52,28 @@ function Desk({ initial, observe, show }: {
 }
 
 const cueOf = (id: string) => screen.getByTestId(id);
-/** The line on show, or '' when the desk carries no status element at all. */
+/** The line on show, or '' when nothing is on show. */
 const said = (id: string) => (screen.queryByTestId(id)?.textContent ?? '').trim();
-/** Nothing said means no status element anywhere, the shape the preview tests hold. */
-const silent = () => expect(screen.queryAllByRole('status')).toHaveLength(0);
+/** A desk's live region: in the page from the first render, so only its words change. */
+const live = (id: string) => document.querySelector<HTMLElement>(`[data-desk-cue-live="${id}"]`);
+/** What a screen reader is told, read off the live region. */
+const heard = (id: string) => (live(id)?.textContent ?? '').trim();
+/** Before any press the region already exists, empty, and is no role=status. */
+function listening(id: string) {
+  const region = live(id);
+  expect(region, `${id} needs its live region before anything is said`).not.toBeNull();
+  expect(region).toHaveAttribute('aria-live', 'polite');
+  expect(region).not.toHaveAttribute('role');
+  expect(heard(id)).toBe('');
+  return region!;
+}
+/** Nothing said: no pill on show, every desk region empty, and no role=status
+    from a desk (the shape the contract and facility preview tests hold). */
+function silent() {
+  expect(document.querySelectorAll('[data-desk-cue]')).toHaveLength(0);
+  document.querySelectorAll('[data-desk-cue-live]').forEach(r => expect(r.textContent).toBe(''));
+  expect(document.querySelectorAll('[data-desk-cue-live][role], [data-desk-cue-anchor] [role="status"]')).toHaveLength(0);
+}
 
 beforeEach(() => localStorage.clear());
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); });
@@ -97,17 +107,25 @@ describe('Club Manager desk cues: contracts', () => {
     const { career, id } = expiringFixture();
     const { view, after } = mountContracts(career, realContracts);
     expect(said('cm-contracts-cue')).toBe('');
+    const region = listening('cm-contracts-cue');
     fireEvent.click(within(view.container).getByRole('button', { name: /^Renew ·/ }));
     const saved = after();
     const p = saved.squad.find(x => x.id === id)!;
     expect(saved).not.toBe(career);
     const fee = Math.round((career.budget - saved.budget) * 10) / 10;
-    expect(said('cm-contracts-cue')).toBe(`Renewed: ${p.name}. ${p.contractYears} years at ${p.wage}k a week, no release clause, ${moneyIn(saved)(fee)} to sign.`);
+    const line = `Renewed: ${p.name}. ${p.contractYears} years at ${p.wage}k a week, no release clause, ${moneyIn(saved)(fee)} to sign.`;
+    expect(said('cm-contracts-cue')).toBe(line);
+    /* The same region took the words (it was not swapped for a new one), and
+       the pill is for the eye only, so nothing is read twice. */
+    expect(live('cm-contracts-cue')).toBe(region);
+    expect(heard('cm-contracts-cue')).toBe(line);
+    expect(cueOf('cm-contracts-cue')).toHaveAttribute('aria-hidden', 'true');
     expect(cueOf('cm-contracts-cue').querySelector('p')).toHaveClass('cm-slam');
     /* Reopened on the save that already changed: nothing replays. */
     cleanup();
     render(<ContractsCard career={saved} onRenew={vi.fn()} onRenewWithClause={vi.fn()} />);
     expect(said('cm-contracts-cue')).toBe('');
+    listening('cm-contracts-cue');
   });
 
   it('a clause renewal names the exit clause the save wrote', () => {
@@ -130,7 +148,31 @@ describe('Club Manager desk cues: contracts', () => {
     const row = rows[rows.length - 1];
     expect(row.name).toBe(victim.name);
     expect(after().squad.some(x => x.id === victim.id)).toBe(false);
-    expect(said('cm-contracts-cue')).toBe(`Released: ${row.name}. You pay him ${row.weekly}k a week for ${row.weeksLeft} more week${row.weeksLeft === 1 ? '' : 's'}.`);
+    expect(row.weeksLeft).toBeGreaterThan(1);
+    expect(said('cm-contracts-cue')).toBe(`Released: ${row.name}. You pay him ${row.weekly}k a week for ${row.weeksLeft} more weeks.`);
+    expect(heard('cm-contracts-cue')).toBe(said('cm-contracts-cue'));
+  });
+
+  it('a release with one week left to pay says one week, not one weeks', () => {
+    const c = base();
+    const victim = c.squad.find(p => !p.onLoan && !p.isYouth && p.age >= 20 && !releaseBlock(c, p))!;
+    expect(victim).toBeDefined();
+    /* One year left on his deal and one week left in the season: severanceFor
+       owes exactly one more week. */
+    const career: CareerState = {
+      ...c,
+      week: Math.max(1, c.calendar.length - 1),
+      squad: c.squad.map(p => (p.id === victim.id ? { ...p, contractYears: 1 } : p)),
+    };
+    expect(releaseBlock(career, career.squad.find(p => p.id === victim.id)!)).toBeNull();
+    const { view, after } = mountContracts(career, realContracts);
+    fireEvent.click(view.container.querySelector(`[data-release-id="${victim.id}"]`)!);
+    fireEvent.click(within(view.container).getByRole('button', { name: 'Release him' }));
+    const rows = after().severance ?? [];
+    const row = rows[rows.length - 1];
+    expect(row.name).toBe(victim.name);
+    expect(row.weeksLeft).toBe(1);
+    expect(said('cm-contracts-cue')).toBe(`Released: ${row.name}. You pay him ${row.weekly}k a week for 1 more week.`);
   });
 
   it('a free agent signing states the deal the save gave him', () => {
@@ -171,6 +213,40 @@ describe('Club Manager desk cues: contracts', () => {
     expect(said('cm-contracts-cue')).toMatch(/^Renewed: /);
     act(() => { vi.advanceTimersByTime(DESK_CUE_MS + 10); });
     expect(said('cm-contracts-cue')).toBe('');
+    expect(heard('cm-contracts-cue')).toBe('');
+  });
+
+  it('while the cookie banner is unanswered the line sits above it, and drops back once it is answered', () => {
+    /* The banner's own shape (CookieConsent: role=region, "Cookie choices",
+       fixed to the foot, body flagged while consent is pending). jsdom has no
+       layout, so its top edge is stubbed where the 390 by 740 walk measured it. */
+    const banner = document.createElement('div');
+    banner.setAttribute('role', 'region');
+    banner.setAttribute('aria-label', 'Cookie choices');
+    banner.style.position = 'fixed';
+    const top = window.innerHeight - 143;
+    vi.spyOn(banner, 'getBoundingClientRect').mockReturnValue({ top, bottom: window.innerHeight, left: 0, right: 390, width: 390, height: 143, x: 0, y: top, toJSON: () => ({}) } as DOMRect);
+    document.body.appendChild(banner);
+    document.body.dataset.consentPending = '1';
+    try {
+      const { career } = expiringFixture();
+      const { view } = mountContracts(career, realContracts);
+      const anchor = view.container.querySelector<HTMLElement>('[data-desk-cue-anchor]')!;
+      expect(anchor.style.bottom).toBe('');
+      fireEvent.click(within(view.container).getByRole('button', { name: /^Renew ·/ }));
+      expect(said('cm-contracts-cue')).toMatch(/^Renewed: /);
+      expect(anchor.style.bottom).toBe(`${143 + 12}px`);
+      cleanup();
+      /* Answered: the banner is gone, the next line sits at the foot again. */
+      delete document.body.dataset.consentPending;
+      const again = mountContracts(expiringFixture().career, realContracts);
+      fireEvent.click(within(again.view.container).getByRole('button', { name: /^Renew ·/ }));
+      expect(said('cm-contracts-cue')).toMatch(/^Renewed: /);
+      expect(again.view.container.querySelector<HTMLElement>('[data-desk-cue-anchor]')!.style.bottom).toBe('');
+    } finally {
+      delete document.body.dataset.consentPending;
+      banner.remove();
+    }
   });
 });
 
@@ -200,13 +276,18 @@ describe('Club Manager desk cues: academy', () => {
     expect(career.squad.length).toBeLessThan(30);
     const { after } = mountAcademy(career, id => c => promoteProspect(c, id));
     expect(said('cm-academy-cue')).toBe('');
+    listening('cm-academy-cue');
     fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
     const saved = after();
     const had = new Set(career.squad.map(x => x.id));
     const p = saved.squad.find(x => !had.has(x.id))!;
     expect(p.name).toBe('Fixture Academy Kid');
     expect(saved.academy?.prospects ?? []).toHaveLength(0);
-    expect(said('cm-academy-cue')).toBe(`Fixture Academy Kid has joined the first team. ${p.contractYears} years at ${p.wage}k a week.`);
+    /* What he cost is read off the kitty the save holds, not off his row. */
+    const fee = Math.round((career.budget - saved.budget) * 10) / 10;
+    expect(fee).toBe(0.5);
+    expect(said('cm-academy-cue')).toBe(`Fixture Academy Kid has joined the first team. ${p.contractYears} years at ${p.wage}k a week, ${moneyIn(saved)(fee)} to sign.`);
+    expect(heard('cm-academy-cue')).toBe(said('cm-academy-cue'));
     expect(cueOf('cm-academy-cue').querySelector('p')).toHaveClass('cm-slam');
     cleanup();
     render(<AcademyScreen career={saved} onUpgrade={vi.fn()} onHire={vi.fn()} onRecall={vi.fn()} onRelease={vi.fn()} onPromote={vi.fn()} />);
@@ -225,6 +306,32 @@ describe('Club Manager desk cues: academy', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
     expect(moved.after()).not.toBe(career);
     expect(said('cm-academy-cue')).toBe('');
+    silent();
+  });
+
+  it('a desk opened before the academy exists survives it opening, and a free kid is free to sign', () => {
+    /* The screen's hooks run above its "academy opens later" return, so the
+       render that finds an academy calls the same hooks as the one that did
+       not (React error 310 otherwise). */
+    const closed: CareerState = { ...base(), academy: undefined };
+    let open: (c: CareerState) => void = () => undefined;
+    let latest = closed;
+    function Host() {
+      const [career, setCareer] = useState(closed);
+      open = setCareer;
+      latest = career;
+      return <AcademyScreen career={career} onUpgrade={vi.fn()} onHire={vi.fn()} onRecall={vi.fn()} onRelease={vi.fn()} onPromote={id => setCareer(prev => promoteProspect(prev, id) ?? prev)} />;
+    }
+    render(<Host />);
+    expect(screen.getByText(/academy opens the first time/i)).toBeInTheDocument();
+    const opened = academyFixture(0);
+    act(() => open(opened));
+    listening('cm-academy-cue');
+    fireEvent.click(screen.getByRole('button', { name: 'Sign him' }));
+    const p = latest.squad.find(x => x.name === 'Fixture Academy Kid')!;
+    expect(p).toBeDefined();
+    expect(latest.budget).toBe(opened.budget);
+    expect(said('cm-academy-cue')).toBe(`Fixture Academy Kid has joined the first team. ${p.contractYears} years at ${p.wage}k a week, free to sign.`);
   });
 });
 
@@ -250,7 +357,9 @@ describe('Club Manager desk cues: facilities', () => {
     const from = facilitiesOf(career)[id];
     const { view, after } = mountFacilities(career, f => c => upgradeFacility(c, f));
     expect(view.container.querySelector('[data-facility-pip-fresh]')).toBeNull();
+    const region = listening('cm-facilities-cue');
     fireEvent.click(upgradeButton(view.container, id));
+    expect(live('cm-facilities-cue')).toBe(region);
     const saved = after();
     const level = facilitiesOf(saved)[id];
     expect(level).toBe(from + 1);

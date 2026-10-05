@@ -40,8 +40,8 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
   /* Round 982: an upgrade used to move one digit. Now the pip it lit pulses
      once and the Now line ticks in with what the level does, both only once
      the save really holds the new level, and a screen reader hears it said. */
-  const { cue, press } = useDeskCue<FacilityId>(career);
-  const upgradeRead = (id: FacilityId): DeskCueRead | null => {
+  const { cue, press } = useDeskCue<FacilityId, CareerState>(career);
+  const upgradeRead = (id: FacilityId): DeskCueRead<CareerState> | null => {
     const next = upgradeFacility(career, id);
     if (!next) return null;
     const want = facilitiesOf(next)[id];
@@ -120,9 +120,11 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
         </p>
       </div>
       {/* Round 982: the pip and the Now line are the moment for the eye; this
-          says it for a screen reader, out of the flow, and only while there
-          is something to say. */}
-      {cue && <p key={cue.id} role="status" data-testid="cm-facilities-cue" className="sr-only !mt-0">{cue.text}</p>}
+          says it for a screen reader, out of the flow. The region is in the
+          page from the start and only its words change, the shape a screen
+          reader announces (see DeskCueLine), and it is no role=status, so a
+          desk where nothing happened has no status element at all. */}
+      <p aria-live="polite" aria-atomic="true" data-desk-cue-live="cm-facilities-cue" data-testid="cm-facilities-cue" className="sr-only !mt-0">{cue?.text ?? ''}</p>
       <CelebrationStyles />
     </div>
   );

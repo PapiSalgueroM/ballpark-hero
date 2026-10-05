@@ -69,7 +69,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
   /* Round 619 review: the man whose release is waiting on a second tap. */
   const [confirmId, setConfirmId] = useState<string | null>(null);
   /* Round 982: the line that says what a press just did. */
-  const { cue, press } = useDeskCue<string>(career);
+  const { cue, press } = useDeskCue<string, CareerState>(career);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -80,7 +80,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
      the line is read off the save the screen is handed afterwards. Anything
      that does not match (a refusal, a save that moved some other way) gives
      null, and null says nothing. */
-  const renewRead = (id: string, next: CareerState | null): DeskCueRead | null => {
+  const renewRead = (id: string, next: CareerState | null): DeskCueRead<CareerState> | null => {
     const before = career.squad.find(x => x.id === id);
     const want = next?.squad.find(x => x.id === id);
     if (!next || !before || !want) return null;
@@ -95,7 +95,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
   };
   /* The engine fills an old save's missing free agent pool in place, so it is
      handed a copy: asking what a press would do must never change the save. */
-  const releaseRead = (id: string): DeskCueRead | null => {
+  const releaseRead = (id: string): DeskCueRead<CareerState> | null => {
     const next = releasePlayer({ ...career }, id);
     const rows = next?.severance ?? [];
     const want = rows[rows.length - 1];
@@ -108,7 +108,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
       return `Released: ${got.name}. You pay him ${got.weekly}k a week for ${got.weeksLeft} more week${got.weeksLeft === 1 ? '' : 's'}.`;
     };
   };
-  const signRead = (name: string): DeskCueRead | null => {
+  const signRead = (name: string): DeskCueRead<CareerState> | null => {
     const next = signFreeAgent({ ...career }, name);
     const had = new Set(career.squad.map(x => x.id));
     const want = next?.squad.find(x => !had.has(x.id) && x.name === name);

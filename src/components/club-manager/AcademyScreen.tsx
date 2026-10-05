@@ -122,12 +122,12 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
   /* Round 982: signing a kid used to make his row vanish and nothing else.
      The line names him and the deal he signed, read off the save, and only
      once the save really holds him in the first team squad. */
-  const { cue, press } = useDeskCue<string>(career);
+  const { cue, press } = useDeskCue<string, CareerState>(career);
   /* The promotion's whole footprint, checked on the save itself rather than
      on a second run of the engine (which deep copies the career): he is off
      the books, an academy graduate of his name is new in the squad, and the
      kitty is down by exactly his fee. */
-  const promoteRead = (prospectId: string): DeskCueRead | null => {
+  const promoteRead = (prospectId: string): DeskCueRead<CareerState> | null => {
     const kid = a?.prospects.find(x => x.id === prospectId);
     if (!kid) return null;
     const had = new Set(career.squad.map(x => x.id));
@@ -135,7 +135,9 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
     return after => {
       const got = after.squad.find(x => !had.has(x.id) && x.name === kid.name && x.academyGrad);
       if (!got || (after.academy?.prospects ?? []).some(x => x.id === prospectId) || after.budget !== budgetAfter) return null;
-      return `${got.name} has joined the first team. ${got.contractYears ?? 0} years at ${got.wage ?? 0}k a week.`;
+      /* What he cost, off the two saves, worded the way his row prices him. */
+      const fee = Math.round((career.budget - after.budget) * 10) / 10;
+      return `${got.name} has joined the first team. ${got.contractYears ?? 0} years at ${got.wage ?? 0}k a week, ${fee > 0 ? `${money(fee)} to sign` : 'free to sign'}.`;
     };
   };
   const promote = (prospectId: string) => press(prospectId, promoteRead(prospectId), () => onPromote(prospectId));
