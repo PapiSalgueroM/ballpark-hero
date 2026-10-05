@@ -212,20 +212,21 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
         </ol>
       </div>}
 
-      {phase === 'done' && <div ref={actionArea} data-rugby-result="" className="rounded-2xl border border-primary/30 bg-card p-5 text-center">
-        <p className="text-3xl" aria-hidden="true">🏉</p>
-        <h3 className="mt-2 text-xl font-bold">Ten calls complete</h3>
-        <p data-rugby-score="total" className="my-3 font-display text-5xl tabular-nums text-primary">{score} / {RUGBY_ROUNDS}</p>
-        <p className="text-sm text-muted-foreground">{score === RUGBY_ROUNDS ? 'Every year, every winner. Perfect run.' : 'The real winners are in. Ready for another set?'}</p>
-        <div className="my-4 grid grid-cols-2 gap-3 text-sm">
-          <p className="rounded-xl border border-border p-3">Premiers <strong data-rugby-score="nrl" className="block text-xl">{categoryScore('nrl')} / 5</strong></p>
-          <p className="rounded-xl border border-border p-3">Dally M <strong data-rugby-score="dallym" className="block text-xl">{categoryScore('dallym')} / 5</strong></p>
+      {phase === 'done' && <div ref={actionArea} data-rugby-result="" className="rounded-2xl border border-primary/30 bg-card p-4 text-center">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-left text-lg font-bold">Ten calls complete</h3>
+          <p data-rugby-score="total" className="shrink-0 font-display text-4xl tabular-nums text-primary">{score} / {RUGBY_ROUNDS}</p>
         </div>
-        <button data-rugby-open-review="" onClick={openReview} className={primary}>Review ten calls</button>
-        {missed.length > 0 && <button data-rugby-open-retry="" onClick={openRetry} className="mt-2 min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-3 font-semibold text-primary">
+        <p className="mt-2 text-xs text-muted-foreground">{score === RUGBY_ROUNDS ? 'Every year, every winner. Perfect run.' : 'The real winners are in. Ready for another set?'}</p>
+        <div className="my-2 grid grid-cols-2 gap-2 text-sm">
+          <p className="rounded-xl border border-border p-2">Premiers <strong data-rugby-score="nrl" className="block text-xl">{categoryScore('nrl')} / 5</strong></p>
+          <p className="rounded-xl border border-border p-2">Dally M <strong data-rugby-score="dallym" className="block text-xl">{categoryScore('dallym')} / 5</strong></p>
+        </div>
+        <button data-rugby-open-review="" onClick={openReview} className={cn(primary, 'py-2')}>Review ten calls</button>
+        {missed.length > 0 && <button data-rugby-open-retry="" onClick={openRetry} className="mt-2 min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 font-semibold text-primary">
           {!retryStarted ? `Retry ${missed.length} missed ${missed.length === 1 ? 'call' : 'calls'}` : retryIndex >= missed.length ? 'View retry result' : 'Resume missed calls'}
         </button>}
-        <button ref={actionButton} className={cn(primary, 'mt-3')} onClick={() => {
+        <button ref={actionButton} className={cn(primary, 'mt-2 py-2')} onClick={() => {
           if (!active || helpOpen || phaseRef.current !== 'done' || !rows) return;
           if (prepareRun(rows)) moveTo('question');
           else moveTo('error');

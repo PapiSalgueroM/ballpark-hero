@@ -108,9 +108,9 @@ describe('Rugby League completed-call review', () => {
       expect(panel.querySelectorAll('[data-rugby-review-statement]')).toHaveLength(1);
       expect(panel.querySelector('[data-rugby-review-statement]')).toHaveTextContent(round.statement);
       const pick = mixed[index] ? round.isTrue : !round.isTrue;
-      expect(panel.querySelector('[data-rugby-review-pick]'), 'Review shows the original choice, including wrong choices').toHaveTextContent(`Your original call: ${pick ? 'CHAMP' : 'NOT'}`);
-      expect(panel.querySelector('[data-rugby-review-truth]'), 'Review keeps the original truth').toHaveTextContent(`The claim is ${round.isTrue ? 'true' : 'false'}.`);
-      expect(panel.querySelector('[data-rugby-review-winners]'), 'Review retains every shared winner').toHaveTextContent(round.realTeams.join(' and '));
+      expect(panel.querySelector('[data-rugby-review-pick]')?.textContent?.replace(/\s+/g, ' ').trim(), 'Review shows the original choice, including wrong choices').toContain(`Your original call: ${pick ? 'CHAMP' : 'NOT'}`);
+      expect(panel.querySelector('[data-rugby-review-truth]')?.textContent?.trim(), 'Review keeps the original truth').toBe(`The claim is ${round.isTrue ? 'true' : 'false'}.`);
+      expect(panel.querySelector('[data-rugby-review-winners]')?.textContent?.replace(/\s+/g, ' ').trim(), 'Review retains every shared winner').toContain(round.realTeams.join(' and '));
       expect(panel.querySelector('[data-rugby-original-score]')).toHaveTextContent('Original: 7 / 10');
     });
     click(panel, 'Back to original results'); originalScore(panel);

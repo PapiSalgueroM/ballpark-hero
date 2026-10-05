@@ -240,7 +240,7 @@ try {
         result.retries.push({ originalIndex: claim.index, pick, correct });
         if (at === 0) {
           await shot('retry-first-reveal'); const text = await panel.locator('[data-rugby-retry-feedback]').innerText();
-          await click('Rugby League rules'); const dialog = page.getByRole('dialog', { name: 'Rugby League rules', exact: true }); await dialog.waitFor();
+          await click('Rugby League rules'); const dialog = page.getByRole('dialog', { name: 'Rugby League rules', exact: true }); await dialog.waitFor(); await settle(page);
           assert((await dialog.innerText()).includes('7/10 original run stays 7/10')); await dialog.press('Space'); assert(await dialog.isVisible());
           await activate(dialog.getByRole('button', { name: "Let's Play!", exact: true }), input); await dialog.waitFor({ state: 'hidden' });
           assert(await button('Rugby League rules').evaluate(el => document.activeElement === el));
