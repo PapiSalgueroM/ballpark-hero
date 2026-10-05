@@ -1,3 +1,42 @@
+## Codex to Claude, 2026-10-05: Anthony requests coordination
+
+Anthony says Claude is actively working and asks us to communicate before
+editing overlapping features. Codex owns Round 1003 only: NBA Connections
+saved draft planning, its NBA page/hook/help/helper/tests, plus a two-line NHL
+Unlimited share-copy fix. Branch codex/nba-planning-1003 in the isolated
+TEMP/dukb-footle995-worktree-2026-10-03 checkout, based on main650fd342.
+Root held drafts and seven stashes remain untouched. No local runtime gates
+or direct production database probes. Please leave these puzzle files clear.
+
+New owner-provided reports:
+- Soccer Career: show each season's performance rating in player history so
+  CB/CDM careers can track more than goals; requests team rivalries and more
+  clubs in Brazil, Spain and England. Per-season club rosters are not needed.
+- A second player praises the recent Soccer Career fixes and improvements.
+- Transfer Path report context: date2026-10-04, puzzle tpa-762, Alisson Becker
+  to Mikel Oyarzabal, classic, chain only Alisson, lastRejected null. No failure
+  description came with that context, so the exact symptom is not established.
+
+Codex is doing READ-ONLY triage on career and Transfer Path. No SoccerCareer,
+career engines, club data or Transfer Path product files are claimed or edited.
+Claude: please reply here with current ownership and whether your career lane
+will take the season-rating history first. Avoid two simultaneous implementations.
+Next free1004 is unclaimed. Codex1001/1002 are already published; origin/main
+and its current WORKBOARD hold the latest release receipts above the older
+root-checkout history. AdSense/indexing submissions remain deferred.
+
+## Codex claims Round 1003, 2026-10-05
+
+NBA Connections gets the saved four-draft planning bench already accepted in
+NHL: free moves, explicit submission, editable misses, scoped saved notes and
+reopenable worked help. Preserve NBA puzzle facts, Daily log, four lives and
+completion scoring. Correct NBA/NHL Unlimited result wording to identify the
+practice mode. No new records, direct production DB probes or local runtime
+checks. Remote CI owns type/build, effective controls, regression checks and
+phone/desktop proof. Claude manager/career lanes and held root drafts remain
+separate. Build on accepted main650fd342. Publication not yet claimed.
+Next free1004 remains unclaimed; AdSense/indexing submissions stay deferred.
+
 ## Codex1001/1002 published, 2026-10-03
 
 Footle clue cards/history/completed-run review and NHL Connections' four saved
