@@ -278,9 +278,15 @@ const DB_TO_ERA_L1 = {
  * reserve side row that moved club is one (Rau, Bayern II to Bielefeld;
  * Kuffour, Bayern II to Roma).
  *
- * ONE NAME, TWO NEW LEAGUES. 'Rafael' is two Brazilians born 1980 (FB): the
- * Lille centre-back Rafael Schmitz and the Messina full-back Rafael da
- * Silva. The step keeps the higher value, Lille's.
+ * ONE NAME, TWO NEW LEAGUES. Two names have year 2005 rows at two clubs of
+ * the new leagues, each one two real men (FB has both at their clubs). Since
+ * Round 901's review fix the step refuses to settle that in silence, so
+ * B5_POOL_NAMESAKES names the row that stays, the same rows the value rule
+ * kept before: 'Rafael' is two Brazilians born 1980, the Lille centre-back
+ * Rafael Schmitz (kept) and the Messina full-back Rafael da Silva; 'Adailton'
+ * is the Rennes centre-back born 1983 (kept) and the Nancy full-back born
+ * 1979. The engine keys players by name, so Messina and Nancy each lose one
+ * real man to the one name, one player rule.
  *
  * UNRESOLVED, THEN RESOLVED. The first pass left twenty-two men of the new
  * leagues where the year 2005 snapshot has them, because they showed signs
@@ -335,6 +341,10 @@ const B5_FOLDS = [
  * loan at Bordeaux, so the rule costs Bordeaux one real man. */
 const B5_NAMESAKES = [
   { n: 'Fernando', why: 'the Real Betis forward born 1979 (Spain) and the Siena midfielder Fernando Menegazzo born 1981 (Brazil)' },
+];
+const B5_POOL_NAMESAKES = [
+  { n: 'Rafael', keep: 'Lille', why: 'two Brazilians born 1980: the Lille centre-back Rafael Schmitz (FB: 26 Ligue 1 games for Lille; his year 2006 row is Lille too) and the Messina full-back Rafael da Silva (FB: 17 Serie A games for Messina), dropped by the one name, one player rule' },
+  { n: 'Adailton', keep: 'Rennes', why: 'two Brazilian defenders: the Rennes centre-back born 1983 (FB: 19 Ligue 1 games for Rennes; his year 2006 row is Rennes too) and the Nancy full-back born 1979 (FB: 16 Ligue 1 games for Nancy), dropped by the one name, one player rule' },
 ];
 const B5_MOVES = [
   { n: 'Abdelnasser Ouadah', to: 'Metz', why: 'AC Ajaccio to Metz (FB: 28 Ligue 1 games for Metz, none for AC Ajaccio)' },
@@ -718,6 +728,7 @@ if (bigFiveArg) {
     ],
     worldDbToEra: { ...DB_TO_ERA_PL, ...DB_TO_ERA_LL, ...DB_TO_ERA_SA, ...DB_TO_ERA_BL, ...DB_TO_ERA_L1 },
     folds: B5_FOLDS, moves: B5_MOVES, removals: B5_REMOVALS, arrivals: B5_ARRIVALS, namesakes: B5_NAMESAKES,
+    poolNamesakes: B5_POOL_NAMESAKES,
     /* A 2005-06 Serie A, Bundesliga and Ligue 1 without their own headlines
        are not those leagues, and the re-audit has to have landed. */
     anchors: [
