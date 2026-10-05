@@ -35,6 +35,25 @@
  * drawn with deck C in the deck (NFL step 12, NBA 51, MLB 11, NHL 14) and
  * differ from there; the fixed saves are cut from the path after that. Now
  * 451, 523, 449 and 415 clicks; the fixture is 1,864,777 bytes.
+ * That isolates deck C only. Against main's fixture the packs move the paths
+ * earlier (measured by the review, main's fixture against the same tree
+ * recorded without deck C): the first save difference is step 9 in all four
+ * sports (the new draft night texts land in the phone inbox); before the
+ * clicks part, MLB and NHL also differ in the rivalry fields the new beats
+ * move (pendingRivalryEvent, rivalryIntensity, lastRivalryEventId, morale,
+ * fanbase) and the NHL in three seasons' results and headlines; the clicks
+ * part at NFL 19, NBA 15, MLB 20 and NHL 37. So from step 9 on this fixture
+ * proves the board replays the content packs' own recording, not the four
+ * old boards. That parity was proven on main's fixture, and Round 988
+ * touches no board or binding file.
+ * Re-recorded again on 2026-10-05, after the review fix made the NFL and NHL
+ * deck C buttons read the save. Against the fixture before it, the save
+ * after every press is byte identical in all four sports, NBA and MLB are
+ * identical throughout, and the only changes are deck C buttons that lost a
+ * stat already at its limit: the NFL in 4 screens and 1 button label
+ * ("Health +5, morale +3" became "Morale +3"), the NHL in 3 screens and 1
+ * label ("Morale up" became "No change"). Recorded twice on the merged
+ * tree (origin/main 211da297), byte for byte the same; 1,864,921 bytes.
  * Recorded twice from the same tree, the fixture came out byte for byte the
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either
