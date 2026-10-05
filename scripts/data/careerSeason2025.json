@@ -1,0 +1,474 @@
+{
+  "checked": "2026-10-05",
+  "round": "1010b",
+  "season": "2025-2026",
+  "previousSeason": "2024-2025",
+  "waves": [
+    {
+      "wave": 1,
+      "checked": "2026-10-05",
+      "scope": "every pool man whose 2025-2026 club is Liverpool, his 2024-2025 row, the Liverpool men whose careers ended, the calendar club men held for a relabel round, and the Alisson twin"
+    }
+  ],
+  "policy": "A tuple quarantined on 2026-09-07 never returns as it was. A new row for the same player, season and club is written only from new research recorded here, with club, goals and appearances each carried by two independent non-wiki hosts. Assists are null (shown n/a) unless two sources agree on them, and market value is 0 (shown n/a) unless two sources agree on it (the Round 784 convention). A 2024-2025 row found to be a mid-season snapshot is corrected through changed, field by field, each new value two-sourced and each old value guarded in the migration.",
+  "convention": {
+    "split": "A new spell at a European or Saudi club is written 2025-2026.",
+    "calendar": "A new spell at a calendar league club (MLS, Brazil, Argentina, Japan) is written as the calendar year 2025, after the precedent of Giroud 2025 LAFC.",
+    "never": "Nothing is written 2026. Only a plain hyphen joins the years.",
+    "held": "A man whose legacy rows at a calendar league club are split style gets no new row until a relabel round decides what those rows mean; he is listed under held.",
+    "stats": "Appearances and goals are all competitions club totals for the season (league, domestic cups, Europe and the super cup), the convention the bake's completed seasons follow. National team games are never counted.",
+    "midSeason": "A mid-season move is two rows with the same season string, appended in date order."
+  },
+  "sources": {
+    "lfchistory": "lfchistory.net season archive pages: appearances, goalscorers and assists per season with League, FA Cup, League Cup, Europe and Other columns (season 134 is 2024-2025, 135 is 2025-2026), read 2026-10-05",
+    "footballdatabase": "footballdatabase.eu player details pages, the per season competition rows for the club summed (national team rows excluded), read 2026-10-05",
+    "soccerbase": "soccerbase.com player match logs per season (season_id 157 is 2024/2025, 158 is 2025/2026), club games counted (national team games excluded), read 2026-10-05",
+    "liverpoolfc": "liverpoolfc.com, the club's own news pages"
+  },
+  "preBake": null,
+  "postBake": null,
+  "coverage": null,
+  "careerQuiz": null,
+  "removed": [
+    {
+      "player": "Alisson Becker",
+      "playerId": "a0000001-0000-0000-0000-000000000066",
+      "keptAs": "Alisson",
+      "keptId": "a0000001-0000-0000-0000-000000000040",
+      "reason": "The same man twice: both entries carry the same 13 season and club keys (Round 667 and Round 784 recorded it). The entry people type and the verified active identity is Alisson, so Alisson Becker goes and his 13 puzzles are renamed to Alisson."
+    }
+  ],
+  "added": [
+    {
+      "player": "Alisson",
+      "playerId": "a0000001-0000-0000-0000-000000000040",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 0,
+      "appearances": 35,
+      "assists": 0,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Alisson: 35 (26 league, 2 FA Cup, 0 League Cup, 6 Europe, 1 Community Shield)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "0" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "absent from the assists list (0)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool: Community Shield 1, Premier League 26, Champions League 6, FA Cup 2; 0 goals, 0 assists" }
+      ]
+    },
+    {
+      "player": "Andrew Robertson",
+      "playerId": "a0000001-0000-0000-0000-000000000131",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 3,
+      "appearances": 36,
+      "assists": 2,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Andy Robertson: 36 (24 league, 2 FA Cup, 2 League Cup, 7 Europe, 1 Community Shield)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "3" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "2 (FA Cup 1, Europe 1)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/200227-andrew-robertson", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool total 36 apps 3 goals 2 assists" }
+      ]
+    },
+    {
+      "player": "Federico Chiesa",
+      "playerId": "a0000001-0000-0000-0000-000000000103",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 3,
+      "appearances": 36,
+      "assists": 3,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Federico Chiesa: 36 (26 league, 3 FA Cup, 2 League Cup, 5 Europe)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "3" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "3 (league 1, League Cup 2)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/262615-federico-chiesa", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool total 36 apps 3 goals 3 assists" }
+      ]
+    },
+    {
+      "player": "Mohamed Salah",
+      "playerId": "a0000001-0000-0000-0000-000000000007",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 12,
+      "appearances": 41,
+      "assists": 10,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Mohamed Salah: 41 (27 league, 3 FA Cup, 0 League Cup, 10 Europe, 1 Community Shield)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "12" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "10 (league 7, FA Cup 1, Europe 2)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/69529-mohamed-salah", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool: Community Shield 1, Premier League 27 (7 goals, 7 assists), Champions League 10 (3, 2), FA Cup 3 (2, 1)" }
+      ]
+    },
+    {
+      "player": "Virgil van Dijk",
+      "playerId": "a0000001-0000-0000-0000-000000000026",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 8,
+      "appearances": 55,
+      "assists": 3,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Virgil Van Dijk: 55 (38 league, 4 FA Cup, 0 League Cup, 12 Europe, 1 Community Shield)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "8" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "3 (Europe 3)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/137796-virgil-van_dijk", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool total 55 apps 8 goals 3 assists" }
+      ]
+    },
+    {
+      "player": "Alexander Isak",
+      "playerId": "a0000001-0000-0000-0000-000000000060",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 4,
+      "appearances": 22,
+      "assists": 1,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Alexander Isak: 22 (14 league, 0 FA Cup, 1 League Cup, 7 Europe)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "4" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "1 (league 1)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/288114-alexander-isak", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool total 22 apps 4 goals 1 assist; no Newcastle game in 2025-2026" },
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=88879&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "Premier League 14 games 3 goals, European Cup 7 games 0 goals, League Cup 1 game 1 goal: 22 games 4 goals (Sweden games excluded)" }
+      ]
+    },
+    {
+      "player": "Florian Wirtz",
+      "playerId": "a0000001-0000-0000-0000-000000000056",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "goals": 7,
+      "appearances": 49,
+      "assists": 8,
+      "marketValue": 0,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/135", "fields": [ "club", "appearances" ], "reads": "Florian Wirtz: 49 (33 league, 4 FA Cup, 0 League Cup, 11 Europe, 1 Community Shield)" },
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/135", "fields": [ "goals" ], "reads": "7" },
+        { "url": "https://www.lfchistory.net/season-archive/assists/135", "fields": [ "assists" ], "reads": "8 (league 3, FA Cup 1, Europe 3, Community Shield 1)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/414824-florian-wirtz", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Liverpool total 49 apps 7 goals 8 assists" },
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=129900&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "Community Shield 1, Premier League 33 (5 goals), European Cup 11 (1), FA Cup 4 (1): 49 games 7 goals (Germany games excluded)" }
+      ]
+    }
+  ],
+  "changed": [
+    {
+      "player": "Alisson",
+      "playerId": "a0000001-0000-0000-0000-000000000040",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 22,
+      "to": 35,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Alisson Becker: 35 (28 league, 0 FA Cup, 1 League Cup, 6 Europe); not in the goals or assists lists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/194820--alisson_becker", "fields": [ "club", "appearances" ], "reads": "Liverpool total 35 apps 0 goals 0 assists" }
+      ]
+    },
+    {
+      "player": "Andrew Robertson",
+      "playerId": "a0000001-0000-0000-0000-000000000131",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 22,
+      "to": 45,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Andy Robertson: 45 (33 league, 0 FA Cup, 4 League Cup, 8 Europe); no goal; 2 assists (league 1, Europe 1)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/200227-andrew-robertson", "fields": [ "club", "appearances" ], "reads": "Liverpool total 45 apps 0 goals 2 assists" }
+      ]
+    },
+    {
+      "player": "Andrew Robertson",
+      "playerId": "a0000001-0000-0000-0000-000000000131",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 5,
+      "to": 2,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/assists/134", "fields": [ "club", "assists" ], "reads": "Andy Robertson: 45 (33 league, 0 FA Cup, 4 League Cup, 8 Europe); no goal; 2 assists (league 1, Europe 1)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/200227-andrew-robertson", "fields": [ "club", "assists" ], "reads": "Liverpool total 45 apps 0 goals 2 assists" }
+      ]
+    },
+    {
+      "player": "Federico Chiesa",
+      "playerId": "a0000001-0000-0000-0000-000000000103",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 15,
+      "to": 14,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Federico Chiesa: 14 (6 league, 2 FA Cup, 3 League Cup, 3 Europe); 2 goals (FA Cup 1, League Cup 1); 1 assist (League Cup)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/262615-federico-chiesa", "fields": [ "club", "appearances" ], "reads": "Liverpool total 14 apps 2 goals 1 assist" }
+      ]
+    },
+    {
+      "player": "Federico Chiesa",
+      "playerId": "a0000001-0000-0000-0000-000000000103",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "goals",
+      "from": 3,
+      "to": 2,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/134", "fields": [ "club", "goals" ], "reads": "Federico Chiesa: 14 (6 league, 2 FA Cup, 3 League Cup, 3 Europe); 2 goals (FA Cup 1, League Cup 1); 1 assist (League Cup)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/262615-federico-chiesa", "fields": [ "club", "goals" ], "reads": "Liverpool total 14 apps 2 goals 1 assist" }
+      ]
+    },
+    {
+      "player": "Federico Chiesa",
+      "playerId": "a0000001-0000-0000-0000-000000000103",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 2,
+      "to": 1,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/assists/134", "fields": [ "club", "assists" ], "reads": "Federico Chiesa: 14 (6 league, 2 FA Cup, 3 League Cup, 3 Europe); 2 goals (FA Cup 1, League Cup 1); 1 assist (League Cup)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/262615-federico-chiesa", "fields": [ "club", "assists" ], "reads": "Liverpool total 14 apps 2 goals 1 assist" }
+      ]
+    },
+    {
+      "player": "Mohamed Salah",
+      "playerId": "a0000001-0000-0000-0000-000000000007",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 30,
+      "to": 52,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Mohamed Salah: 52 (38 league, 0 FA Cup, 5 League Cup, 9 Europe); 34 goals (29, 0, 2, 3); 23 assists (18, 0, 1, 4)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/69529-mohamed-salah", "fields": [ "club", "appearances" ], "reads": "Liverpool: Premier League 38 (29 goals, 18 assists), Champions League 9 (3, 4), Carabao Cup 5 (2, 1): 52 apps 34 goals 23 assists" }
+      ]
+    },
+    {
+      "player": "Mohamed Salah",
+      "playerId": "a0000001-0000-0000-0000-000000000007",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "goals",
+      "from": 18,
+      "to": 34,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/134", "fields": [ "club", "goals" ], "reads": "Mohamed Salah: 52 (38 league, 0 FA Cup, 5 League Cup, 9 Europe); 34 goals (29, 0, 2, 3); 23 assists (18, 0, 1, 4)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/69529-mohamed-salah", "fields": [ "club", "goals" ], "reads": "Liverpool: Premier League 38 (29 goals, 18 assists), Champions League 9 (3, 4), Carabao Cup 5 (2, 1): 52 apps 34 goals 23 assists" }
+      ]
+    },
+    {
+      "player": "Mohamed Salah",
+      "playerId": "a0000001-0000-0000-0000-000000000007",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 13,
+      "to": 23,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/assists/134", "fields": [ "club", "assists" ], "reads": "Mohamed Salah: 52 (38 league, 0 FA Cup, 5 League Cup, 9 Europe); 34 goals (29, 0, 2, 3); 23 assists (18, 0, 1, 4)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/69529-mohamed-salah", "fields": [ "club", "assists" ], "reads": "Liverpool: Premier League 38 (29 goals, 18 assists), Champions League 9 (3, 4), Carabao Cup 5 (2, 1): 52 apps 34 goals 23 assists" }
+      ]
+    },
+    {
+      "player": "Virgil van Dijk",
+      "playerId": "a0000001-0000-0000-0000-000000000026",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 28,
+      "to": 49,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Virgil Van Dijk: 49 (37 league, 0 FA Cup, 3 League Cup, 9 Europe); 5 goals (3, 0, 1, 1); 1 assist (league)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/137796-virgil-van_dijk", "fields": [ "club", "appearances" ], "reads": "Liverpool total 49 apps 5 goals 1 assist" }
+      ]
+    },
+    {
+      "player": "Virgil van Dijk",
+      "playerId": "a0000001-0000-0000-0000-000000000026",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "goals",
+      "from": 2,
+      "to": 5,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/134", "fields": [ "club", "goals" ], "reads": "Virgil Van Dijk: 49 (37 league, 0 FA Cup, 3 League Cup, 9 Europe); 5 goals (3, 0, 1, 1); 1 assist (league)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/137796-virgil-van_dijk", "fields": [ "club", "goals" ], "reads": "Liverpool total 49 apps 5 goals 1 assist" }
+      ]
+    },
+    {
+      "player": "Diogo Jota",
+      "playerId": "a0000001-0000-0000-0000-000000000100",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 20,
+      "to": 37,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/appearances/134", "fields": [ "club", "appearances" ], "reads": "Diogo Jota: 37 (26 league, 2 FA Cup, 5 League Cup, 4 Europe); 9 goals (6, 1, 2, 0); 3 assists (league 3)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/246079-diogo-jota", "fields": [ "club", "appearances" ], "reads": "Liverpool: Premier League 26 (6 goals, 3 assists), Champions League 4, Carabao Cup 5 (2), FA Cup 2 (1): 37 apps 9 goals 3 assists" }
+      ]
+    },
+    {
+      "player": "Diogo Jota",
+      "playerId": "a0000001-0000-0000-0000-000000000100",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "goals",
+      "from": 6,
+      "to": 9,
+      "sources": [
+        { "url": "https://www.lfchistory.net/season-archive/goalscorers/134", "fields": [ "club", "goals" ], "reads": "Diogo Jota: 37 (26 league, 2 FA Cup, 5 League Cup, 4 Europe); 9 goals (6, 1, 2, 0); 3 assists (league 3)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/246079-diogo-jota", "fields": [ "club", "goals" ], "reads": "Liverpool: Premier League 26 (6 goals, 3 assists), Champions League 4, Carabao Cup 5 (2), FA Cup 2 (1): 37 apps 9 goals 3 assists" }
+      ]
+    },
+    {
+      "player": "Alexander Isak",
+      "playerId": "a0000001-0000-0000-0000-000000000060",
+      "season": "2024-2025",
+      "club": "Newcastle",
+      "field": "appearances",
+      "from": 25,
+      "to": 42,
+      "sources": [
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=88879&season_id=157", "fields": [ "club", "appearances" ], "reads": "Premier League 34 games 23 goals, League Cup 6 games 3 goals, FA Cup 2 games 1 goal: 42 games 27 goals (Sweden games excluded)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/288114-alexander-isak", "fields": [ "club", "appearances" ], "reads": "Newcastle: Premier League 34 (23 goals), League Cup 6 (3), FA Cup 2 (1): 42 apps 27 goals, 6 assists" }
+      ]
+    },
+    {
+      "player": "Alexander Isak",
+      "playerId": "a0000001-0000-0000-0000-000000000060",
+      "season": "2024-2025",
+      "club": "Newcastle",
+      "field": "goals",
+      "from": 18,
+      "to": 27,
+      "sources": [
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=88879&season_id=157", "fields": [ "club", "goals" ], "reads": "Premier League 34 games 23 goals, League Cup 6 games 3 goals, FA Cup 2 games 1 goal: 42 games 27 goals (Sweden games excluded)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/288114-alexander-isak", "fields": [ "club", "goals" ], "reads": "Newcastle: Premier League 34 (23 goals), League Cup 6 (3), FA Cup 2 (1): 42 apps 27 goals, 6 assists" }
+      ]
+    },
+    {
+      "player": "Alexander Isak",
+      "playerId": "a0000001-0000-0000-0000-000000000060",
+      "season": "2024-2025",
+      "club": "Newcastle",
+      "field": "assists",
+      "from": 3,
+      "to": null,
+      "sources": [
+        { "url": "https://www.footballdatabase.eu/en/player/details/288114-alexander-isak", "fields": [ "assists" ], "reads": "Newcastle: Premier League 34 (23 goals), League Cup 6 (3), FA Cup 2 (1): 42 apps 27 goals, 6 assists", "note": "one source only, so the field is written null (n/a); the old value was a mid-season snapshot" }
+      ]
+    },
+    {
+      "player": "Florian Wirtz",
+      "playerId": "a0000001-0000-0000-0000-000000000056",
+      "season": "2024-2025",
+      "club": "Bayer Leverkusen",
+      "field": "appearances",
+      "from": 28,
+      "to": 45,
+      "sources": [
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=129900&season_id=157", "fields": [ "club", "appearances" ], "reads": "German Super Cup 1, Bundesliga 31 games 10 goals, German Cup 4, Champions League 9 games 6 goals: 45 games 16 goals (Germany games excluded)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/414824-florian-wirtz", "fields": [ "club", "appearances" ], "reads": "Bayer Leverkusen: Super Cup 1, Bundesliga 31 (10 goals), German Cup 4, Champions League 9 (6): 45 apps 16 goals, 14 assists" }
+      ]
+    },
+    {
+      "player": "Florian Wirtz",
+      "playerId": "a0000001-0000-0000-0000-000000000056",
+      "season": "2024-2025",
+      "club": "Bayer Leverkusen",
+      "field": "goals",
+      "from": 12,
+      "to": 16,
+      "sources": [
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=129900&season_id=157", "fields": [ "club", "goals" ], "reads": "German Super Cup 1, Bundesliga 31 games 10 goals, German Cup 4, Champions League 9 games 6 goals: 45 games 16 goals (Germany games excluded)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/414824-florian-wirtz", "fields": [ "club", "goals" ], "reads": "Bayer Leverkusen: Super Cup 1, Bundesliga 31 (10 goals), German Cup 4, Champions League 9 (6): 45 apps 16 goals, 14 assists" }
+      ]
+    },
+    {
+      "player": "Florian Wirtz",
+      "playerId": "a0000001-0000-0000-0000-000000000056",
+      "season": "2024-2025",
+      "club": "Bayer Leverkusen",
+      "field": "assists",
+      "from": 9,
+      "to": null,
+      "sources": [
+        { "url": "https://www.footballdatabase.eu/en/player/details/414824-florian-wirtz", "fields": [ "assists" ], "reads": "Bayer Leverkusen: Super Cup 1, Bundesliga 31 (10 goals), German Cup 4, Champions League 9 (6): 45 apps 16 goals, 14 assists", "note": "one source only, so the field is written null (n/a); the old value was a mid-season snapshot" }
+      ]
+    }
+  ],
+  "ended": [
+    {
+      "player": "Diogo Jota",
+      "playerId": "a0000001-0000-0000-0000-000000000100",
+      "reason": "Died on 2025-07-03. No 2025-2026 row; internal record only, no site copy.",
+      "sources": [
+        { "url": "https://www.liverpoolfc.com/news/diogo-jota-1996-2025", "fields": [ "ended" ] },
+        { "url": "https://www.espn.com/soccer/story/_/id/45654499/liverpool-forward-diogo-jota-brother-die-car-crash-civil-guard", "fields": [ "ended" ] }
+      ]
+    }
+  ],
+  "held": [
+    {
+      "player": "Lionel Messi",
+      "playerId": "a0000001-0000-0000-0000-000000000002",
+      "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean."
+    },
+    {
+      "player": "Luis Suárez",
+      "playerId": "a0000001-0000-0000-0000-000000000047",
+      "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean."
+    },
+    {
+      "player": "Sergio Busquets",
+      "playerId": "a0000001-0000-0000-0000-000000000063",
+      "reason": "Calendar league club written split style (2023-2024 and 2024-2025 Inter Miami); the new row waits for the relabel round that decides what those rows mean. Reported retired after the 2025 MLS season, unverified here."
+    },
+    {
+      "player": "Neymar",
+      "playerId": "a0000001-0000-0000-0000-000000000003",
+      "reason": "Calendar league club written split style (2024-2025 Santos); the new row waits for the relabel round that decides what those rows mean."
+    },
+    {
+      "player": "Memphis Depay",
+      "playerId": "a0000001-0000-0000-0000-000000000094",
+      "reason": "Calendar league club written split style (2024-2025 Corinthians); the new row waits for the relabel round that decides what those rows mean."
+    },
+    {
+      "player": "Fernandinho",
+      "playerId": "48fadce8-511c-469c-8b8a-b12662a0e22c",
+      "reason": "Calendar league club written split style (2022-2023 to 2024-2025 Athletico Paranaense); the new row waits for the relabel round that decides what those rows mean. Whether he retired is unverified here."
+    }
+  ],
+  "preservedChecked": [
+    {
+      "player": "Alexis Mac Allister",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "reads": "55 apps, 5 goals, 7 assists",
+      "url": "https://www.lfchistory.net/season-archive/appearances/135",
+      "agrees": true
+    },
+    {
+      "player": "Cody Gakpo",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "reads": "52 apps, 9 goals, 6 assists",
+      "url": "https://www.lfchistory.net/season-archive/appearances/135",
+      "agrees": true
+    },
+    {
+      "player": "Dominik Szoboszlai",
+      "season": "2025-2026",
+      "club": "Liverpool",
+      "reads": "53 apps, 13 goals, 12 assists",
+      "url": "https://www.lfchistory.net/season-archive/appearances/135",
+      "agrees": true
+    }
+  ],
+  "seenNotFixed": []
+}
