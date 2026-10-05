@@ -53,25 +53,24 @@ Its fixture JSON, save comparisons, random-draw checks and rejection controls st
 unchanged. The fixture SHA256 remains
 377535A181DA7F03B301F04F039E34E1E863E1F8B9E851F9599B640966A9E5F6.
 
-The dedicated remote workflow uses Ubuntu, Node 24 and Python 3.12, runs the real
-app type gate and build, generates only the four career snapshots, regenerates
-the sitemap and ledger, preserves those candidate files, then rebuilds. It runs
-the focused controls, all established built readers, guide and harness-anchor
-checks, and native verification. Evidence uploads on every outcome for one day
-under career-entry-guide-artifacts. Candidate generation is temporary CI work;
-accepted generated files still require release integration.
+The dedicated remote workflow uses Ubuntu, Node 24 and Python 3.12 and runs the
+real app type gate and build. It checks the focused controls, all established
+built readers, guide and harness-anchor checks, and native verification. Evidence
+uploads on every outcome for one day under career-entry-guide-artifacts.
+Temporary generation produced four career snapshots, sitemap, ledger and search
+keywords in a verified remote artifact. These files are now copied into the
+candidate, and final checks read them without generation.
 
 ## Status
 
-Head 1dace697 passed eight mounted outcomes, eighteen effective controls and all
-sixteen native walks with three changed-and-restored DOM controls in remote run
-37372556475. The remaining failures were stale generated search metadata and
-twelve explicitly added guide sentences absent from the preserved original
-fixture. The repair requires those exact additions once in their intended parts
-and adds a deletion control while preserving the frozen fixture bytes. Search
-metadata is generated remotely for later artifact integration.
+Run 37386913695 passed on 7fbd7a6f429be46fafd61a93c3d44c5872fcd4da.
+Its eight mounted outcomes, eighteen effective controls, eighteen readers, six
+guide controls and sixteen native walks plus three restored DOM controls all
+passed. The guide fence requires the twelve exact reviewed additions once in
+their intended parts while preserving the original fixture. A deletion control
+proves those additions are required. See ROUND1031-VERIFICATION.md for the
+artifact digest and generated-file provenance.
 
 No local build, test, browser, installation or database probe was run for this
-implementation. Round 1009 is awaiting acceptance; no 1031 acceptance, integration
-or publication is claimed. The repaired candidate still requires remote checks.
-Root owns Git, remote acceptance, generated-file integration and publication.
+implementation. Round 1009 and the final candidate still require acceptance;
+no 1031 merge or publication is claimed. Root coordinates release ordering.

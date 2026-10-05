@@ -1,4 +1,4 @@
-## Codex 1031: career entry guides, source pending, 2026-10-05
+## Codex 1031: verified generated files, final checks pending, 2026-10-05
 
 The four US Career pages opt into their existing guide once its content loads.
 A route-specific seen flag is stored only after dismissal; returning visitors
@@ -6,12 +6,14 @@ can reopen help. Prerender never opens or records the guide, and blocked storage
 still permits dismissal. Help, main Play and season Continue have 44px minimum
 targets. Existing guides explain saved-season review and actual capped changes.
 
-Head 1dace697 passed remote type/build, all nineteen mounted modes and sixteen
-native walks plus three DOM controls. Exact guide additions and stale generated
-search metadata need a narrow verification repair. Historical drivers model returning visitors,
-and the recorded fixture JSON is unchanged. Runtime stays remote. Round 1009
-is awaiting its repair run and must be accepted before integration and release.
-No 1031 publication is claimed. See docs/audits/ROUND1031-DESIGN.md.
+Remote run 37386913695 passed on 7fbd7a6f: eight mounted outcomes, eighteen
+effective controls, all eighteen readers, six guide controls and sixteen native
+walks plus three DOM controls. Its SHA256-verified artifact supplies the four
+career snapshots, sitemap, ledger and search keywords. Temporary generation is
+removed, so final checks will assess these committed files. Historical drivers
+model returning visitors; both original fixtures remain unchanged. Runtime stays
+remote. Parent 1009 and final branch checks still require acceptance.
+No 1031 publication is claimed. See docs/audits/ROUND1031-VERIFICATION.md.
 
 ## Round1009 integrated release candidate, 2026-10-05 23:10 UTC
 

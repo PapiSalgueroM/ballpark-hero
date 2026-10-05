@@ -68,35 +68,16 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-      - name: Generate candidate search keywords
-        run: |
-          node scripts/genSearchKeywords.mjs 2>&1 | tee career-entry-guide-artifacts/search-keywords-generation.log
-          mkdir -p career-entry-guide-artifacts/generated/src/data
-          cp src/data/searchKeywords.json career-entry-guide-artifacts/generated/src/data/
       - name: Type check and build
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-entry-guide-artifacts/types.log
           npm run build 2>&1 | tee career-entry-guide-artifacts/build.log
-      - name: Generate candidate career guide snapshots
-        id: candidate
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          PRERENDER_ONLY=/nba-my-career,/nfl-my-career,/mlb-my-career,/nhl-my-career node scripts/prerender.mjs 2>&1 | tee career-entry-guide-artifacts/snapshot.log
-          node scripts/genSitemap.mjs 2>&1 | tee career-entry-guide-artifacts/sitemap-generation.log
-          mkdir -p career-entry-guide-artifacts/generated/public career-entry-guide-artifacts/generated/scripts/data
-          for route in nba-my-career nfl-my-career mlb-my-career nhl-my-career; do
-            mkdir -p "career-entry-guide-artifacts/generated/public/$route"
-            cp "public/$route/index.html" "career-entry-guide-artifacts/generated/public/$route/"
-          done
-          cp public/sitemap.xml career-entry-guide-artifacts/generated/public/
-          cp scripts/data/lastmod.json career-entry-guide-artifacts/generated/scripts/data/
-          npm run build 2>&1 | tee career-entry-guide-artifacts/rebuild.log
       - name: First-visit outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAREER_ENTRY_GUIDE_CONTROL=all ONLY=simCareerEntryGuide node scripts/runAllSims.mjs 2>&1 | tee career-entry-guide-artifacts/mounted.log
       - name: All built readers, guides and harness anchors
-        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
           for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simHarnessAnchors; do
@@ -104,7 +85,7 @@ jobs:
           done
           exit "$failed"
       - name: Frozen and reviewed guide sentences retain effective controls
-        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           for control in skiplevel nokeyword lostline careerline unconvert snapdrift; do
             set +e
@@ -115,7 +96,7 @@ jobs:
             grep -E "simGuideHeadings control $control: section [1-4] red and every other section green" "career-entry-guide-artifacts/guide-$control.log"
           done
       - name: Native guides and career controls across four sports
-        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: node scripts/qa/careerEntryGuide1031.mjs 2>&1 | tee career-entry-guide-artifacts/native.log
       - name: Preserve verification evidence
         if: always()
