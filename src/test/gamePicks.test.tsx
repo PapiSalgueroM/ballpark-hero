@@ -41,7 +41,7 @@ async function mount(path = '/') {
   await flush(); return view;
 }
 type View = Awaited<ReturnType<typeof mount>>;
-const pin = (view: View, name: string) => view.getByRole('button', { name: 'Pin ' + name, exact: true });
+const pin = (view: View, name: string) => view.getByRole('button', { name: 'Pin ' + name });
 const shelf = (view: View) => view.container.querySelector<HTMLElement>('[data-home-picks]')!;
 const shelfLinks = (view: View) => Array.from(shelf(view)?.querySelectorAll<HTMLAnchorElement>('a[data-game-pick-link]') ?? []).map(link => ({ path: link.getAttribute('href'), name: link.textContent?.trim() }));
 const saved = () => JSON.parse(localStorage.getItem(KEY) || '[]') as string[];
@@ -75,7 +75,7 @@ describe('browser-local game picks', () => {
     expect(within(shelf(view)).getByRole('heading', { name: 'Your picks' })).toBeInTheDocument();
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/footle']);
     expect(shelfLinks(view)[0].name).toContain('Footle');
-    for (const button of view.getAllByRole('button', { name: 'Unpin Footle', exact: true })) expect(button).toHaveAttribute('aria-pressed', 'true');
+    for (const button of view.getAllByRole('button', { name: 'Unpin Footle' })) expect(button).toHaveAttribute('aria-pressed', 'true');
     expect(protectedBytes()).toEqual(before);
   });
 
@@ -86,7 +86,7 @@ describe('browser-local game picks', () => {
     expect(control.closest('a')).toBeNull(); fireEvent.click(control);
     expect(search.getByTestId('address')).toHaveTextContent('/search?q=NHL%20Connections');
     expect(saved()).toEqual(['/footle', '/nhl-connections']);
-    expect(search.getByRole('button', { name: 'Unpin NHL Connections', exact: true })).toHaveAttribute('aria-pressed', 'true');
+    expect(search.getByRole('button', { name: 'Unpin NHL Connections' })).toHaveAttribute('aria-pressed', 'true');
     search.unmount(); const home = await mount();
     expect(shelfLinks(home).map(link => link.path)).toEqual(['/footle', '/nhl-connections']);
     expect(shelfLinks(home).map(link => link.name).join(' ')).toContain('NHL Connections');
@@ -96,7 +96,7 @@ describe('browser-local game picks', () => {
   it('removes only the chosen pick and launches the retained game through its real link', async () => {
     localStorage.setItem(KEY, JSON.stringify(['/footle', '/nhl-connections']));
     const view = await mount(), before = protectedBytes();
-    fireEvent.click(within(shelf(view)).getByRole('button', { name: 'Unpin Footle', exact: true }));
+    fireEvent.click(within(shelf(view)).getByRole('button', { name: 'Unpin Footle' }));
     expect(saved()).toEqual(['/nhl-connections']);
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/nhl-connections']);
     expect(pin(view, 'Footle')).toHaveAttribute('aria-pressed', 'false');
@@ -196,9 +196,9 @@ describe('browser-local game picks', () => {
   it('keeps keyboard focus on a useful control when shelf picks are removed', async () => {
     localStorage.setItem(KEY, JSON.stringify(['/footle', '/nhl-connections']));
     const view = await mount(), row = shelf(view);
-    const first = within(row).getByRole('button', { name: 'Unpin Footle', exact: true });
+    const first = within(row).getByRole('button', { name: 'Unpin Footle' });
     first.focus(); fireEvent.click(first);
-    const last = within(shelf(view)).getByRole('button', { name: 'Unpin NHL Connections', exact: true });
+    const last = within(shelf(view)).getByRole('button', { name: 'Unpin NHL Connections' });
     expect(document.activeElement, 'Removing a focused pick keeps the next pick reachable').toBe(last);
     fireEvent.click(last);
     expect(shelf(view)).toBeNull();
