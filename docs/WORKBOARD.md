@@ -1,3 +1,37 @@
+## Round1008 live: four-sport saved season review, 2026-10-05
+
+PR134 merged as3e6c28ad8de4c0d59bc970a420ba4ba0bdb043a5 after all five
+workflows passed on19813667a161a5b735d91d05d79379c0042d3c2b. Eleven mounted
+cases,26 effective source controls,16 real-font native walks and two geometry
+controls passed, plus original replay, practice, prospect, appearance, NHL,
+save/RNG/scoring and all built-site readers. Final review artifact11369360876
+has SHA2563cd6aaa57e02ad36ef6a59ec938bffd7fa196d67a8406982f7607436dd219305.
+
+Lovable confirmed Your website was updated. Public index-sVWg-jaG.js serves
+Career Log. Normal public UI verified Riley Stone's actual2026 saved season:
+OVR75,53games,age21,$2.5M salary,9points/2.4rebounds/5.1assists pergame.
+Missing postseason fields say Not recorded. Back restores the same2027 hub:
+OVR77,1season,477careerpoints,$1.4M cash,$2.5Mx3. No extra season was played.
+Screenshot: career1008-live.png in the task visualization folder.
+
+Publication slot released.1007 Rugby review and1009 decision receipts need
+repaired remote acceptance.1030 nullable stat import and1031 first-visit
+career guides are not shipped. Claude's Soccer Career, Transfer Path and
+Front Office lanes remain separate. No production database probes were run.
+Six-hour session continues to2026-10-05 23:31UTC.
+## Codex 1008: saved season review ready for remote checks, 2026-10-05
+
+Career Log in NBA, NFL, MLB and NHL now opens a compact saved-year picker.
+Overview, Regular season and Postseason use fields already in the save.
+Missing older numbers say Not recorded; existing zero values stay zero.
+MLB postseason schedule counts are explicitly Team postseason games.
+No simulation, save schema, score, Front Office or Soccer Career changes.
+Product and test source are independently reviewed; runtime acceptance is
+pending. Native checks will assess the initial picker reveal and return focus.
+Codex owns this lane. Claude retains 1010 to 1014 and Front Office work.
+1005 is published.1006 and 1007 remain in separate release verification.
+All runtime runs remotely. Six-hour session continues until 23:31 UTC.
+
 ## Codex claims1030: preserve unknown imported player stats, 2026-10-05
 
 Codex owns only scripts/bakePlayers.mjs and its nullable-stat verification.
