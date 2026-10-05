@@ -34,13 +34,25 @@
  *       award count equals both; a year shown equals the basketball-reference
  *       season and the ESPN season.
  *    3. The shipped file (src/data/nbaCareerPlayers.ts) equals the record word
- *       for word, row by row in the record's order, both ways, and the flag is
- *       built from the record's ISO code, so a wrong flag cannot pass by being
- *       wrong in both files.
+ *       for word, row by row in the record's order, both ways. The flag is
+ *       built from the record's ISO code, and that code must be the one the
+ *       site's FlagImg map (src/components/FlagImg.tsx) gives the country name,
+ *       so a copy pasted code cannot pass by being wrong in both files, and a
+ *       country with no flag in the map fails. The result screen's "runs
+ *       through N franchises" (nbaPathFranchises in the data file, read by
+ *       src/pages/NbaCareer.tsx) equals the count the basketball-reference
+ *       codes give through the record's franchise grouping, the file's
+ *       lineage map equals the record's, each lineage has an nba.com and a
+ *       basketball-reference source, and the page counts with the helper,
+ *       never with teams.length (which counted return stints, renames and the
+ *       current team as extra franchises on 13 of 50 rows).
  *    4. No repeats: ids and names unique (names compared without case or
  *       accents), and no guess the game accepts (the full name, or the last
  *       word of it; the rule is read from src/hooks/useNbaCareer.ts and the
  *       check refuses to pass if that rule changes) belongs to two players.
+ *       Names are plain letters, spaces, apostrophes, hyphens and periods: the
+ *       hook lowercases with no accent folding, so an accented name would
+ *       refuse the spelling people type.
  *    5. No line the record removed ships on that player's row (a line false
  *       for one man can be true for another), and no held out player is in
  *       the file.
@@ -49,17 +61,23 @@
  *       player once. Against the old 20 player pool as the baseline, repeats
  *       inside 14 days fall to at most half. For a release on any day from
  *       2026-10-04 to the record's releaseBy, the first 7 deals are all new
- *       players and at least 14 days separate an old player's last old deal
- *       from his first new one; a release the day after releaseBy breaks the
- *       14, so the date in the record is the real deadline.
+ *       players, at least 14 days separate an old player's last old deal from
+ *       his first new one, and the old and new daily index differ (a save from
+ *       the release morning carries the old index and no puzzle id, and
+ *       src/hooks/useDailyPuzzle.ts loads it when the index is equal, so it
+ *       would land on another player). A release the day after releaseBy
+ *       breaks one of those, so the date in the record is the real deadline.
+ *       The later days to avoid are printed for the lead.
  *
- * MEASURED (2026-10-03; the walk is deterministic, so one run is every run).
- * Release window 2026-10-04 to 2026-10-31: the shortest old to new gap is 17
- * days (Larry Bird, releases 2026-10-28 to 2026-10-31; 45 days for a release
- * on 2026-10-04) and the shortest run of new players is 10 days (a release on
- * 2026-10-31; 37 on 2026-10-04). A release on 2026-11-01 gives Allen Iverson a
- * 12 day gap. Bands: gap at least 14 (3 days of headroom), new run at least 7
- * (3 days of headroom). A player back inside 14 days, per calendar year 2026,
+ * MEASURED (2026-10-03, window rerun 2026-10-05; the walk is deterministic,
+ * so one run is every run). Release window 2026-10-04 to 2026-10-30: the
+ * shortest old to new gap is 17 days (Larry Bird, release 2026-10-28; 45 days
+ * for a release on 2026-10-04) and the shortest run of new players is 11 days
+ * (a release on 2026-10-30; 37 on 2026-10-04). On 2026-10-31 the old and new
+ * index are both 11 (Allen Iverson's save would load on Magic Johnson), which
+ * is why releaseBy is 2026-10-30; 2026-12-09 and 2026-12-11 collide too. A
+ * release on 2026-11-01 gives Allen Iverson a 12 day gap. Bands: gap at least
+ * 14 (3 days of headroom), new run at least 7 (4 days of headroom). A player back inside 14 days, per calendar year 2026,
  * 2027, 2028: old 20 row pool 81, 87, 78 times, new pool 12, 18, 11 (worst
  * ratio 0.21 against a band of 0.5). All 21 whole 50 day cycles from 2026 to
  * 2028 deal every player once. 501 facts on 50 players.
@@ -80,7 +98,14 @@
  *   flag       Tim Duncan's flag becomes the US flag in the file           3
  *   order      the 2026-10-04 deal swaps places with LeBron James's row     3, 6
  *   releaseby  the record's releaseBy moves to 2026-11-01                   6
+ *   collide    the record's releaseBy moves to 2026-10-31 (gap and run      6
+ *              still hold; only the morning save collides)
  *   guessrule  the hook's guess rule stops taking the last name             4
+ *   iso        Tim Duncan's ISO code and flag both become the US one, in     3
+ *              the record and the file
+ *   franchise  the file's lineage map loses SuperSonics to Thunder          3
+ *   pageline   the page counts the result line with teams.length again      3
+ *   accent     Nikola Jokic gets the nba.com accent in both files           4
  *
  * Run: node scripts/simNbaCareerPathFacts.mjs
  *      NBA_CP_CONTROL=<name> node scripts/simNbaCareerPathFacts.mjs
@@ -96,10 +121,13 @@ const RECORD_PATH = path.join(ROOT, 'scripts/data/nbaCareerPathVerified2026-10.j
 const DATA = 'src/data/nbaCareerPlayers.ts';
 const DATES = 'src/lib/dateUtils.ts';
 const HOOK = 'src/hooks/useNbaCareer.ts';
+const PAGE = 'src/pages/NbaCareer.tsx';
+const FLAGS = 'src/components/FlagImg.tsx';
 const CONTROL = process.env.NBA_CP_CONTROL || '';
 const EXPECT = {
   onesource: [1, 2], floor: [2, 3], year: [2], falseline: [3, 5], staleteams: [3, 5],
   dup: [3, 4, 6], flag: [3], order: [3, 6], releaseby: [6], guessrule: [4],
+  iso: [3], franchise: [3], pageline: [3], accent: [4], collide: [6],
 };
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`NBA_CP_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -150,6 +178,7 @@ const fold = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCa
 const record = JSON.parse(fs.readFileSync(RECORD_PATH, 'utf8'));
 let dataText = src(DATA);
 let hookText = src(HOOK);
+let pageText = src(PAGE);
 const recPlayer = (name) => {
   const hits = record.players.filter((p) => p.name === name);
   if (hits.length !== 1) cannot(`record player ${name} occurs ${hits.length} times, not once.`);
@@ -206,8 +235,32 @@ if (CONTROL === 'order') {
   dataText = rewrite(dataText, '@@A@@', b, 'the placeholder');
 }
 if (CONTROL === 'releaseby') {
-  if (record.releaseBy !== '2026-10-31') cannot(`releaseBy is ${record.releaseBy}, not 2026-10-31.`);
+  if (record.releaseBy !== '2026-10-30') cannot(`releaseBy is ${record.releaseBy}, not 2026-10-30.`);
   record.releaseBy = '2026-11-01';
+}
+if (CONTROL === 'collide') {
+  // one day later only: 2026-10-31 keeps the 14 day gap but its old and new daily index are equal
+  if (record.releaseBy !== '2026-10-30') cannot(`releaseBy is ${record.releaseBy}, not 2026-10-30.`);
+  record.releaseBy = '2026-10-31';
+}
+if (CONTROL === 'iso') {
+  // a copy pasted row: the ISO code and the flag both say us, in both files
+  const p = recPlayer('Tim Duncan');
+  if (p.countryIso !== 'vi') cannot(`Tim Duncan's countryIso is ${p.countryIso}, not vi.`);
+  p.countryIso = 'us';
+  dataText = rewrite(dataText, "country: 'US Virgin Islands',\n      countryFlag: '\u{1F1FB}\u{1F1EE}',", "country: 'US Virgin Islands',\n      countryFlag: '\u{1F1FA}\u{1F1F8}',", "Tim Duncan's flag");
+}
+if (CONTROL === 'franchise') {
+  dataText = rewrite(dataText, "  'Seattle SuperSonics': 'Oklahoma City Thunder',\n", '', 'the SuperSonics to Thunder lineage');
+}
+if (CONTROL === 'pageline') {
+  pageText = rewrite(pageText, 'runs through {nbaPathFranchises(player!)} {nbaPathFranchises(player!) === 1', 'runs through {player!.teams.length} {player!.teams.length === 1', 'the result line count');
+}
+if (CONTROL === 'accent') {
+  // the nba.com spelling copied into both files
+  const p = recPlayer('Nikola Jokic');
+  p.name = 'Nikola Jokić';
+  dataText = rewrite(dataText, "name: 'Nikola Jokic',", "name: 'Nikola Jokić',", "Nikola Jokic's name");
 }
 if (CONTROL === 'guessrule') {
   hookText = rewrite(hookText, "normalized === target || normalized === target.split(' ').pop()", 'normalized === target', 'the guess rule');
@@ -347,8 +400,9 @@ head(2, 'every line follows from its source values by the record\'s rules');
 }
 
 // ---------------------------------------------------------------------------
-const { nbaCareerPuzzles } = await loadModule(DATA, dataText);
+const { nbaCareerPuzzles, NBA_SAME_FRANCHISE, nbaPathFranchises } = await loadModule(DATA, dataText);
 const { dailyIndex, dayNumber } = await loadModule(DATES);
+const { FLAG_CODES } = await loadModule(FLAGS);
 head(3, 'the shipped file equals the record, row by row, both ways');
 {
   if (nbaCareerPuzzles.length !== players.length) fail(`the file has ${nbaCareerPuzzles.length} rows, the record ${players.length}`);
@@ -367,9 +421,44 @@ head(3, 'the shipped file equals the record, row by row, both ways');
     for (const k of Object.keys(want)) if (JSON.stringify(got[k]) !== JSON.stringify(want[k])) diffs.push(`${k} ${JSON.stringify(got[k])} vs ${JSON.stringify(want[k])}`);
     const extra = Object.keys(got).filter((k) => !(k in want));
     if (extra.length) diffs.push(`fields the record does not hold: ${extra.join(', ')}`);
+    // the ISO code is tied to the country name by the site's own flag map, so a
+    // copy pasted code cannot pass by being wrong in the record and the file alike
+    if (FLAG_CODES[rec.country] !== rec.countryIso) diffs.push(`countryIso ${rec.countryIso} but FlagImg gives ${rec.country} the code ${FLAG_CODES[rec.country] ?? 'none (the result screen would show no flag)'}`);
     if (diffs.length) fail(`row ${i} (${rec.name}): ${diffs.join('; ')}`); else same += 1;
   }
-  console.log(`  ${same} of ${players.length} rows equal the record`);
+  console.log(`  ${same} of ${players.length} rows equal the record, every ISO code equal to FlagImg's code for the country`);
+
+  // The result screen says how many franchises the path runs through. Counted
+  // here from the basketball-reference codes and the record's franchise grouping,
+  // independently of the file's name map.
+  const F = record.franchises || {};
+  if (JSON.stringify(NBA_SAME_FRANCHISE) !== JSON.stringify(F.same)) fail(`the file's NBA_SAME_FRANCHISE ${JSON.stringify(NBA_SAME_FRANCHISE)} is not the record's ${JSON.stringify(F.same)}`);
+  for (const old of Object.keys(F.same || {})) {
+    const s = (F.sources || []).find((x) => x.old === old && x.now === F.same[old]);
+    if (!s || hostOf(s.official?.url) !== 'www.nba.com' || hostOf(s.second?.url) !== 'www.basketball-reference.com' || !has(s.official?.says) || !has(s.second?.says)) fail(`the lineage ${old} to ${F.same[old]} lacks an nba.com and a basketball-reference source`);
+  }
+  const nameFr = {};
+  for (const [code, t] of Object.entries(record.teamCodes)) {
+    const home = record.teamCodes[t.franchise];
+    if (!home) { fail(`team code ${code} belongs to franchise ${t.franchise}, which the record cannot name`); continue; }
+    if ((F.same?.[t.name] ?? t.name) !== home.name) fail(`${t.name} (${code}) is franchise ${t.franchise} (${home.name}) by code but ${F.same?.[t.name] ?? t.name} by the lineage names`);
+    if (nameFr[t.name] && nameFr[t.name] !== t.franchise) fail(`${t.name} sits in two franchises`);
+    nameFr[t.name] = t.franchise;
+  }
+  let counted = 0;
+  for (let i = 0; i < Math.min(nbaCareerPuzzles.length, players.length); i++) {
+    const rec = players[i]; const f = rec.facts.find((x) => x.field === 'teams');
+    if (!f) continue;
+    const fr = new Set(String(f.second).split(' ').map((c) => record.teamCodes[c]?.franchise ?? `?${c}`));
+    if (f.current) fr.add(nameFr[f.current.second] ?? `?${f.current.second}`);
+    const got = nbaPathFranchises(nbaCareerPuzzles[i].player);
+    if (got !== fr.size) fail(`${rec.name}: the result screen would say ${got} franchises, the codes give ${fr.size} (${[...fr].join(' ')})`); else counted += 1;
+  }
+  // the page has to use that count, not the length of the path
+  const code = pageText.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  if (!code.includes('runs through {nbaPathFranchises(player!)}')) fail(`${PAGE} no longer counts the result line with nbaPathFranchises`);
+  if (/teams\.length/.test(code)) fail(`${PAGE} reads teams.length again, which counts return stints and renames as extra franchises`);
+  console.log(`  ${counted} of ${players.length} result lines count the franchises the codes give`);
 }
 
 // ---------------------------------------------------------------------------
@@ -384,6 +473,9 @@ head(4, 'no repeats: ids, names, and the guesses the game accepts');
   const names = nbaCareerPuzzles.map((r) => fold(r.player.name));
   const dupNames = names.filter((x, i) => names.indexOf(x) !== i);
   if (dupNames.length) fail(`repeated players: ${dupNames.join(', ')}`);
+  // the hook lowercases and compares with no accent folding, so an accented
+  // name (the nba.com spelling) would refuse the plain spelling people type
+  for (const r of nbaCareerPuzzles) if (!/^[A-Za-z][A-Za-z .'-]*$/.test(r.player.name)) fail(`${r.player.name}: only plain letters, spaces, apostrophes, hyphens and periods, or a typed guess stops matching`);
   // the hook takes the full name or its last word, lowercased
   const owner = new Map();
   for (const r of nbaCareerPuzzles) {
@@ -451,7 +543,15 @@ head(6, 'the daily walk: full cycles, fewer quick repeats, and a safe release wi
     console.log(`  ${y}: a player back inside 14 days, old pool ${o} times, new pool ${w}`);
     if (!(w * 2 <= o)) fail(`${y}: the new pool repeats inside 14 days ${w} times, not at most half the old pool's ${o}`);
   }
-  // (c) a release on any day of the window: new players first, and a gap for the old ones
+  // (c) a release on any day of the window: new players first, a gap for the old
+  // ones, and no morning save that loads on another player. A save carries the
+  // old index and no puzzle id (useNbaCareer passes none, and saves from before
+  // the release could not carry one), and useDailyPuzzle loads it when the new
+  // index is equal.
+  const collideAt = (R) => {
+    const oi = dailyIndex(iso(R), 20), ni = dailyIndex(iso(R), SIZE);
+    return oi === ni && pool[ni].player.name !== oldNames[oi] ? `${oldNames[oi]}'s morning save would load on ${pool[ni].player.name} (index ${ni})` : '';
+  };
   const gapAt = (R) => {
     let min = Infinity, who = '';
     for (const name of oldNames) {
@@ -460,7 +560,7 @@ head(6, 'the daily walk: full cycles, fewer quick repeats, and a safe release wi
       if (lastOld !== null && firstNew !== null && firstNew - lastOld < min) { min = firstNew - lastOld; who = name; }
     }
     let run = 0; while (run < 400 && !oldSet.has(newAt(R + run))) run += 1;
-    return { min, who, run };
+    return { min, who, run, collide: collideAt(R) };
   };
   const from = dayNumber('2026-10-04'), to = dayNumber(record.releaseBy);
   if (!(to >= from)) fail(`releaseBy ${record.releaseBy} is before the window opens`);
@@ -469,14 +569,19 @@ head(6, 'the daily walk: full cycles, fewer quick repeats, and a safe release wi
     const g = gapAt(R);
     if (g.min < 14) fail(`a release on ${iso(R)} deals ${g.who} ${g.min} days after the old pool did`);
     if (g.run < 7) fail(`a release on ${iso(R)} deals an old player within ${g.run} days`);
+    if (g.collide) fail(`a release on ${iso(R)}: ${g.collide}`);
     if (g.min < worstGap.min) worstGap = { ...g, R };
     if (g.run < worstRun.run) worstRun = { ...g, R };
   }
   if (Number.isFinite(worstGap.min)) console.log(`  window 2026-10-04 to ${record.releaseBy}: shortest old to new gap ${worstGap.min} days (${worstGap.who}, release ${iso(worstGap.R)}), shortest run of new players ${worstRun.run} days (release ${iso(worstRun.R)})`);
-  // (d) the day after releaseBy breaks the 14 days, so releaseBy is the real deadline
+  // (d) the day after releaseBy breaks a rule of the window, so releaseBy is the real deadline
   const after = gapAt(to + 1);
-  console.log(`  a release on ${iso(to + 1)}: ${after.who} comes back after ${after.min} days`);
-  if (!(after.min < 14)) fail(`a release on ${iso(to + 1)} still keeps 14 days (${after.min}), so releaseBy ${record.releaseBy} is not the deadline; move it later`);
+  console.log(`  a release on ${iso(to + 1)}: ${after.who} comes back after ${after.min} days, new run ${after.run}${after.collide ? `, ${after.collide}` : ''}`);
+  if (!(after.min < 14 || after.run < 7 || after.collide)) fail(`a release on ${iso(to + 1)} still keeps every rule of the window, so releaseBy ${record.releaseBy} is not the deadline; move it later`);
+  // the days a release must avoid even later, listed so the lead can see them
+  const avoid = [];
+  for (let R = to + 1; R <= dayNumber('2026-12-31'); R++) if (collideAt(R)) avoid.push(iso(R));
+  console.log(`  release days to 2026-12-31 where a morning save loads on another player: ${avoid.join(', ') || 'none'}`);
 }
 
 // ---------------------------------------------------------------------------
