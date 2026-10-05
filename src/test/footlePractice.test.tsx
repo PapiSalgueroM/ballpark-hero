@@ -140,7 +140,7 @@ describe('Footle practice mounted outcomes', () => {
     fixture.fetch.mockImplementation(() => new Promise<Player[]>(done => { resolve = done; }));
     const hook = renderHook(() => useGame());
     act(() => hook.result.current.switchMode('unlimited'));
-    expect(hook.result.current.targetPlayer).toBeNull();
+    expect(hook.result.current.targetPlayer, 'Unlimited must wait for the resolved player pool').toBeNull();
     expect(hook.result.current.isLoadingPool).toBe(true);
     await act(async () => { resolve(fixture.pool); });
     await waitFor(() => expect(hook.result.current.targetPlayer).not.toBeNull());
@@ -213,7 +213,8 @@ describe('Footle practice mounted outcomes', () => {
     act(() => hook.result.current.switchMode('unlimited'));
     expect(hook.result.current.difficulty).toBe('easy');
     expect(hook.result.current.targetPlayer!.difficulty).toBe('easy');
-    expect(hook.result.current.guesses).toHaveLength(0);
+    expect(hook.result.current.guesses).toHaveLength(1);
+    expect(unlimited()).toBe(before);
   });
 
   it('offers practice from the daily result without resetting that result', async () => {

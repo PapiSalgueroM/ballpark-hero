@@ -62,9 +62,12 @@ const controls = {
   focus: { group: 'mounted', file: page, anchor: 'practicePanel.current?.focus({ preventScroll: true });', replacement: 'void 0;', failed: [mounted.complete, mounted.entry] },
   rules: { group: 'mounted', file: page, anchor: 'These example numbers are hypothetical.', replacement: 'These example numbers.', failed: [mounted.rules] },
   example: { group: 'mounted', file: hook, anchor: 'const examplePlayer = playerPool.find(player => player.name !== dailyTarget?.name', replacement: 'const examplePlayer = playerPool.find(player => player.name === dailyTarget?.name', failed: [mounted.rules] },
-  loading: { group: 'mounted', file: hook, anchor: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(null);', replacement: 'const [unlimitedTarget, setUnlimitedTarget] = useState<Player | null>(() => selectRandomPlayer(difficulty, playerPool));', failed: [mounted.unlimited] },
+  loading: { group: 'mounted', file: hook, mutations: [
+    { anchor: "if (mode !== 'unlimited' || isLoadingPool || !dailyTarget) return;", replacement: "if (mode !== 'unlimited' || !dailyTarget) return;" },
+    { anchor: 'const unlimitedTarget = isLoadingPool || unlimitedPaused ? null : savedUnlimitedTarget;', replacement: 'const unlimitedTarget = unlimitedPaused ? null : savedUnlimitedTarget;' },
+  ], failed: [mounted.unlimited], failurePattern: /Unlimited must wait for the resolved player pool/ },
   ready: { group: 'mounted', file: hook, anchor: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 5', replacement: 'practiceCandidates(playerPool, practiceDifficulty, dailyTarget.name).length >= 1', failed: [mounted.short], failurePattern: /expect\(element\)\.toBeDisabled\(\)[\s\S]*Received element is not disabled:[\s\S]*data-testid="practice-start"/ },
-  isolation: { group: 'mounted', file: hook, anchor: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);', replacement: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) { setPracticeDifficulty(newDiff); setDifficultyState(newDiff); }', failed: [mounted.isolation] },
+  isolation: { group: 'mounted', file: hook, anchor: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) setPracticeDifficulty(newDiff);', replacement: 'if (!practiceRef.current || practiceFinished(practiceRef.current)) { setPracticeDifficulty(newDiff); saveUnlimited({ ...unlimitedRef.current, tier: newDiff }); }', failed: [mounted.isolation] },
 };
 const mode = process.env.FOOTLE_PRACTICE_CONTROL || '';
 assert.ok(!mode || mode === 'all' || Object.hasOwn(controls, mode), 'Known practice control');
@@ -83,8 +86,13 @@ try {
     delete env.NO_DOUBLE_SWAP;
     if (control) {
       const source = sources.get(control.file).toString('utf8').replaceAll('\r\n', '\n');
-      assert.equal(source.split(control.anchor).length - 1, control.count ?? 1, `${name}: exact executable mutation anchors exist`);
-      const changed = source.replaceAll(control.anchor, control.replacement);
+      let changed = source;
+      for (const mutation of control.mutations ?? [control]) {
+        assert.equal(changed.split(mutation.anchor).length - 1, mutation.count ?? 1, `${name}: exact executable mutation anchors exist`);
+        const next = changed.replaceAll(mutation.anchor, mutation.replacement);
+        assert.notEqual(next, changed, `${name}: each mutation changed executable code`);
+        changed = next;
+      }
       assert.notEqual(changed, source, `${name}: control changed executable code`);
       const copy = path.join(folder, path.basename(control.file)); await writeFile(copy, changed);
       env.NO_DOUBLE_SWAP = JSON.stringify({ ['@/' + control.file.slice(4).replace(/\.tsx?$/, '')]: copy });
