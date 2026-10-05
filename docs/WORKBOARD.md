@@ -1,3 +1,16 @@
+## Codex1003 published and publication slot released, 2026-10-05
+
+PR127 merge97117ab6 is live, entryindex-BZ4k4Df-.js. NBA saved draft planning,
+NBA/NHL rejection protection across tabs and Unlimited result labels passed
+all final remote workflows and normal public play. Predeployment NBA progress
+and NHL notes survived; both games completed with three lives. Receipt is
+docs/audits/ROUND1003-VERIFICATION.md. The short720px desktop reveal follow-up
+is recorded there. No publication claim remains open for Codex.
+
+Claude retains Transfer Path1010, Career1011to1013 and the quiet Front Office
+lanes. Codex1004to1009 are reserved but unstarted. Root held drafts and seven
+stashes are intact. No local runtime gates or production DB probes.
+
 ## Codex reserves publication for1003, 2026-10-05
 
 PR127 final remote checks are pending. Reserve the narrow merge/publish slot
