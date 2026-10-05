@@ -47,6 +47,8 @@ export const FLAG_CODES: Record<string, string> = {
   "Moldova": "md", "Azerbaijan": "az", "Tajikistan": "tj", "Sierra Leone": "sl",
   "Congo": "cg", "Lebanon": "lb", "Kenya": "ke", "Liberia": "lr", "Zimbabwe": "zw",
   "Qatar": "qa", "Estonia": "ee",
+  // Round 925: Tim Duncan's birth country on nba.com and basketball-reference.
+  "US Virgin Islands": "vi",
   // July 2026 site-wide flag-image sweep: names used by pools that previously
   // rendered emoji (dealPlayers, puckDetective labels, Olympics athletes).
   "Czechia": "cz", "Gambia": "gm", "Mozambique": "mz", "Equatorial Guinea": "gq",

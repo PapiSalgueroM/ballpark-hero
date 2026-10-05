@@ -15,6 +15,25 @@ export interface NbaCareerPuzzle {
 }
 
 /**
+ * A team that moved or changed its name is one franchise: old name to current
+ * name, from the record's franchises block (nba.com and basketball-reference).
+ */
+export const NBA_SAME_FRANCHISE: Record<string, string> = {
+  'Seattle SuperSonics': 'Oklahoma City Thunder',
+  'New Jersey Nets': 'Brooklyn Nets',
+  'New Orleans Hornets': 'New Orleans Pelicans',
+};
+
+/**
+ * How many franchises a player's path runs through: a return stint counts
+ * once, and so does a renamed or moved franchise. The path is `teams`, so it
+ * includes a current team he may not have played for yet.
+ */
+export function nbaPathFranchises(player: NbaCareerPlayer): number {
+  return new Set(player.teams.map((t) => NBA_SAME_FRANCHISE[t] ?? t)).size;
+}
+
+/**
  * NBA Career Path puzzles (task #25, the one missing Career Path sport).
  * Direct analog of hockeyCareerPlayers.ts.
  *

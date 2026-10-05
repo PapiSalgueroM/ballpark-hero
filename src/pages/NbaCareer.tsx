@@ -2,6 +2,7 @@ import { TextWithFlags } from '@/components/FlagImg';
 import { useState, useEffect } from 'react';
 import { FlagImg } from '@/components/FlagImg';
 import { useNbaCareer } from '@/hooks/useNbaCareer';
+import { nbaPathFranchises } from '@/data/nbaCareerPlayers';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
@@ -176,7 +177,7 @@ const NbaCareer = () => {
               statLine={<span className="inline-flex items-center gap-1"><FlagImg name={player!.country} size={16} /> {player!.position}</span>}
               funFact={
                 <>
-                  💡 Did you know? {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) played for {player!.teams.length} {player!.teams.length === 1 ? 'franchise' : 'franchises'}{player!.awards.length ? ` and earned ${player!.awards.length} career ${player!.awards.length === 1 ? 'honor' : 'honors'}` : ''}.
+                  💡 Did you know? The career path of {player!.name} (<FlagImg name={player!.country} size={14} showLabel />) runs through {nbaPathFranchises(player!)} {nbaPathFranchises(player!) === 1 ? 'franchise' : 'franchises'}{player!.awards.length ? `, and his honors include ${player!.awards[0]}` : ''}.
                 </>
               }
               statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}
@@ -206,7 +207,7 @@ const NbaCareer = () => {
             "LeBron James: Cavaliers → Heat → Cavaliers → Lakers, 4× MVP",
             "Michael Jordan: Bulls → Wizards, 6× champion",
             "Hakeem Olajuwon: Nigeria, #1 pick 1984, 2× champion",
-            "Vince Carter: 8 franchises across a record 22 seasons",
+            "Vince Carter: 8 franchises across 22 seasons",
             "John Stockton: one team, all-time assists and steals records",
           ]}
         />

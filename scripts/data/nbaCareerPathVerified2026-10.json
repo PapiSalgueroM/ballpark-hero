@@ -14,7 +14,7 @@
   "position": "nba.com POSITION word for word when basketball-reference lists a position in every family it names (Guard, Forward, Center). When it does not, only the words both support are shown, in nba.com order: four rows, listed under disagreements.",
   "country": "nba.com COUNTRY, which is the country of birth on every row here, matched against the country of the basketball-reference birthplace. The flag is built from the ISO code. One candidate (Dominique Wilkins: nba.com USA, born in Paris, France) failed this and is held out.",
   "draftInfo": "'Nth Round, Nth Pick (YYYY)' with the overall pick, equal on nba.com (round, number, year) and on basketball-reference ('1st round (1st pick, 1st overall), 2003 NBA Draft'). The drafting team is not shown.",
-  "teams": "NBA regular season teams in order, a new entry each time the team or its name changes (Seattle SuperSonics then Oklahoma City Thunder for Durant; New Orleans Hornets then New Orleans Pelicans for Davis), consecutive seasons under one name collapsed. basketball-reference team codes and ESPN team slugs must give the same sequence; the 2005 to 2007 New Orleans/Oklahoma City Hornets seasons (NOK on basketball-reference, nooklahoma-city-hornets on ESPN) show as New Orleans Hornets, the franchise name. Where ESPN does not hold the career, the nba.com Legends profile is the second host. An active player whose current team on nba.com and on basketball-reference is not the last team he played for gets that team appended, so the row is right when the season starts.",
+  "teams": "NBA regular season teams in order, a new entry each time the team or its name changes (Seattle SuperSonics then Oklahoma City Thunder for Durant; New Orleans Hornets then New Orleans Pelicans for Davis), consecutive seasons under one name collapsed. basketball-reference team codes and ESPN team slugs must give the same sequence; the 2005 to 2007 New Orleans/Oklahoma City Hornets seasons (NOK on basketball-reference, nooklahoma-city-hornets on ESPN) show as New Orleans Hornets, the franchise name. Where ESPN does not hold the career, the nba.com Legends profile is the second host. An active player whose current team on nba.com and on basketball-reference is not the last team he played for gets that team appended, so the row is right when the season starts. The current team is the 2026-27 roster team on both hosts; the regular season opens on 2026-10-20 (nba.com key dates). The result screen says how many franchises the shown path runs through, counted by the franchises block.",
   "stats": "Career NBA regular season totals from basketball-reference and ESPN (or the Legends profile). Exact ('26,496 Pts') when the player's last season is before 2025-26 and both agree. A player who played in 2025-26 may still play, so his totals are a floor: the lower of the two values rounded down to a hundred with '+'. Larry Bird shows career per game averages, equal on nba.com and basketball-reference.",
   "awards": "Up to four lines. An award line shows a count equal on nba.com and basketball-reference; a single MVP, Finals MVP, Rookie of the Year or Defensive Player of the Year also shows its year when the basketball-reference season and the ESPN awards season agree. The awards an old row named come first when both hosts hold them, then MVP, NBA Champion, Finals MVP, Defensive Player of the Year, All-Star, Rookie of the Year, All-NBA, All-Defensive, Hall of Famer. No scoring or assists titles, Olympic medals, nicknames or 'record' claims: nba.com's player page carries none of them. Counts on active players are as of the read date.",
   "names": "The pool spells names without accents so a typed guess matches (Nikola Jokic, Luka Doncic); officialName keeps the nba.com spelling."
@@ -24,207 +24,288 @@
    "name": "Atlanta Hawks",
    "espn": [
     "atlanta-hawks"
-   ]
+   ],
+   "franchise": "ATL"
   },
   "BOS": {
    "name": "Boston Celtics",
    "espn": [
     "boston-celtics"
-   ]
+   ],
+   "franchise": "BOS"
   },
   "BRK": {
    "name": "Brooklyn Nets",
    "espn": [
     "brooklyn-nets"
-   ]
+   ],
+   "franchise": "BRK"
   },
   "CHI": {
    "name": "Chicago Bulls",
    "espn": [
     "chicago-bulls"
-   ]
+   ],
+   "franchise": "CHI"
   },
   "CHO": {
    "name": "Charlotte Hornets",
    "espn": [
     "charlotte-hornets"
-   ]
+   ],
+   "franchise": "CHO"
   },
   "CLE": {
    "name": "Cleveland Cavaliers",
    "espn": [
     "cleveland-cavaliers"
-   ]
+   ],
+   "franchise": "CLE"
   },
   "DAL": {
    "name": "Dallas Mavericks",
    "espn": [
     "dallas-mavericks"
-   ]
+   ],
+   "franchise": "DAL"
   },
   "DEN": {
    "name": "Denver Nuggets",
    "espn": [
     "denver-nuggets"
-   ]
+   ],
+   "franchise": "DEN"
   },
   "DET": {
    "name": "Detroit Pistons",
    "espn": [
     "detroit-pistons"
-   ]
+   ],
+   "franchise": "DET"
   },
   "GSW": {
    "name": "Golden State Warriors",
    "espn": [
     "golden-state-warriors"
-   ]
+   ],
+   "franchise": "GSW"
   },
   "HOU": {
    "name": "Houston Rockets",
    "espn": [
     "houston-rockets"
-   ]
+   ],
+   "franchise": "HOU"
   },
   "IND": {
    "name": "Indiana Pacers",
    "espn": [
     "indiana-pacers"
-   ]
+   ],
+   "franchise": "IND"
   },
   "LAC": {
    "name": "Los Angeles Clippers",
    "espn": [
     "la-clippers",
     "los-angeles-clippers"
-   ]
+   ],
+   "franchise": "LAC"
   },
   "LAL": {
    "name": "Los Angeles Lakers",
    "espn": [
     "los-angeles-lakers"
-   ]
+   ],
+   "franchise": "LAL"
   },
   "MEM": {
    "name": "Memphis Grizzlies",
    "espn": [
     "memphis-grizzlies"
-   ]
+   ],
+   "franchise": "MEM"
   },
   "MIA": {
    "name": "Miami Heat",
    "espn": [
     "miami-heat"
-   ]
+   ],
+   "franchise": "MIA"
   },
   "MIL": {
    "name": "Milwaukee Bucks",
    "espn": [
     "milwaukee-bucks"
-   ]
+   ],
+   "franchise": "MIL"
   },
   "MIN": {
    "name": "Minnesota Timberwolves",
    "espn": [
     "minnesota-timberwolves"
-   ]
+   ],
+   "franchise": "MIN"
   },
   "NJN": {
    "name": "New Jersey Nets",
    "espn": [
     "new-jersey-nets"
-   ]
+   ],
+   "franchise": "BRK"
   },
   "NOH": {
    "name": "New Orleans Hornets",
    "espn": [
     "new-orleans-hornets"
-   ]
+   ],
+   "franchise": "NOP"
   },
   "NOK": {
    "name": "New Orleans Hornets",
    "espn": [
     "nooklahoma-city-hornets"
-   ]
+   ],
+   "franchise": "NOP"
   },
   "NOP": {
    "name": "New Orleans Pelicans",
    "espn": [
     "new-orleans-pelicans"
-   ]
+   ],
+   "franchise": "NOP"
   },
   "NYK": {
    "name": "New York Knicks",
    "espn": [
     "new-york-knicks"
-   ]
+   ],
+   "franchise": "NYK"
   },
   "OKC": {
    "name": "Oklahoma City Thunder",
    "espn": [
     "oklahoma-city-thunder"
-   ]
+   ],
+   "franchise": "OKC"
   },
   "ORL": {
    "name": "Orlando Magic",
    "espn": [
     "orlando-magic"
-   ]
+   ],
+   "franchise": "ORL"
   },
   "PHI": {
    "name": "Philadelphia 76ers",
    "espn": [
     "philadelphia-76ers"
-   ]
+   ],
+   "franchise": "PHI"
   },
   "PHO": {
    "name": "Phoenix Suns",
    "espn": [
     "phoenix-suns"
-   ]
+   ],
+   "franchise": "PHO"
   },
   "POR": {
    "name": "Portland Trail Blazers",
    "espn": [
     "portland-trail-blazers"
-   ]
+   ],
+   "franchise": "POR"
   },
   "SAC": {
    "name": "Sacramento Kings",
    "espn": [
     "sacramento-kings"
-   ]
+   ],
+   "franchise": "SAC"
   },
   "SAS": {
    "name": "San Antonio Spurs",
    "espn": [
     "san-antonio-spurs"
-   ]
+   ],
+   "franchise": "SAS"
   },
   "SEA": {
    "name": "Seattle SuperSonics",
    "espn": [
     "seattle-supersonics"
-   ]
+   ],
+   "franchise": "OKC"
   },
   "TOR": {
    "name": "Toronto Raptors",
    "espn": [
     "toronto-raptors"
-   ]
+   ],
+   "franchise": "TOR"
   },
   "UTA": {
    "name": "Utah Jazz",
    "espn": [
     "utah-jazz"
-   ]
+   ],
+   "franchise": "UTA"
   },
   "WAS": {
    "name": "Washington Wizards",
    "espn": [
     "washington-wizards"
-   ]
+   ],
+   "franchise": "WAS"
   }
+ },
+ "franchises": {
+  "about": "A team that moved or changed its name is one franchise. The result screen counts the distinct franchises on a player's shown path: a return stint counts once and a renamed or moved franchise counts once. teamCodes[code].franchise groups the basketball-reference codes the same way, and simNbaCareerPathFacts checks the two agree on every row.",
+  "read": "2026-10-05",
+  "same": {
+   "Seattle SuperSonics": "Oklahoma City Thunder",
+   "New Jersey Nets": "Brooklyn Nets",
+   "New Orleans Hornets": "New Orleans Pelicans"
+  },
+  "sources": [
+   {
+    "old": "Seattle SuperSonics",
+    "now": "Oklahoma City Thunder",
+    "official": {
+     "url": "https://www.nba.com/news/history-this-date-in-nba-july",
+     "says": "July 2, 2008: a settlement finalizing the move of the Seattle SuperSonics to the Oklahoma City Thunder"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/OKC/",
+     "says": "franchise index, Team Names: Oklahoma City Thunder, Seattle SuperSonics (Seattle seasons 1967-68 to 2007-08)"
+    }
+   },
+   {
+    "old": "New Jersey Nets",
+    "now": "Brooklyn Nets",
+    "official": {
+     "url": "https://www.nba.com/news/30-teams-in-30-days-brooklyn-nets",
+     "says": "the Nets preview describes the move from New Jersey to Brooklyn"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/NJN/",
+     "says": "franchise index, Team Names: Brooklyn Nets, New Jersey Nets, New York Nets, New Jersey Americans"
+    }
+   },
+   {
+    "old": "New Orleans Hornets",
+    "now": "New Orleans Pelicans",
+    "official": {
+     "url": "https://www.nba.com/news/all-time-nba-draft-lottery-picks-new-orleans-pelicans",
+     "says": "the New Orleans Pelicans, previously named the New Orleans Hornets"
+    },
+    "second": {
+     "url": "https://www.basketball-reference.com/teams/NOH/",
+     "says": "franchise index: New Orleans Hornets 2002-03 to 2012-13 (New Orleans/Oklahoma City Hornets 2005-06 and 2006-07), New Orleans Pelicans from 2013-14"
+    }
+   }
+  ]
  },
  "countries": {
   "USA": {
@@ -284,8 +365,8 @@
    "birthCountry": "Canada"
   }
  },
- "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 50) in src/lib/dateUtils.ts, a fresh shuffle of the pool every 50 days; cycle 414 runs 2026-09-04 to 2026-10-23 and cycle 415 runs 2026-10-24 to 2026-12-12. The 30 new players sit on the 20 indices dealt 2026-10-04 to 2026-10-23 and on the first ten other indices cycle 415 deals, so a release from 2026-10-04 to releaseBy deals only new players for at least its first ten days and leaves at least 14 days between an old player's last old deal and his first new one. The old 20 keep their ids. The day the pool changes, a daily save from that morning keeps only if its saved index happens to equal the new one (useDailyPuzzle matches on date and index; this hook passes no puzzle id).",
- "releaseBy": "2026-10-31",
+ "order": "The array order is deliberate. The daily pick is dailyIndex(dateET, 50) in src/lib/dateUtils.ts, a fresh shuffle of the pool every 50 days; cycle 414 runs 2026-09-04 to 2026-10-23 and cycle 415 runs 2026-10-24 to 2026-12-12. The 30 new players sit on the 20 indices dealt 2026-10-04 to 2026-10-23 and on the first ten other indices cycle 415 deals, so a release from 2026-10-04 to releaseBy deals only new players for at least its first ten days and leaves at least 14 days between an old player's last old deal and his first new one. The old 20 keep their ids. The day the pool changes, a daily save from that morning loads only if its saved index equals the new one (useDailyPuzzle matches on date and index; this hook passes no puzzle id, and saves written before the release carry none). On 2026-10-31, 2026-12-09 and 2026-12-11 the old and new index are equal while the player differs, so a morning save would load on another player: releaseBy is 2026-10-30 and the release must not land on any of those days.",
+ "releaseBy": "2026-10-30",
  "disagreements": [
   "Luka Doncic: position nba Forward-Guard vs bbref Point Guard and Shooting Guard -> Guard",
   "Scottie Pippen: position nba Forward-Guard vs bbref Small Forward -> Forward",
@@ -6412,7 +6493,7 @@
   {
    "id": "nbac-015",
    "name": "Chris Paul",
-   "status": "active or unconfirmed",
+   "status": "retired 2026-02-13 (nba.com player page, read 2026-10-05; ROSTERSTATUS Inactive); his last season is 2025-26, so the floor rule still applies",
    "lastSeason": "2025-26",
    "sources": {
     "official": "https://www.nba.com/player/101108",
