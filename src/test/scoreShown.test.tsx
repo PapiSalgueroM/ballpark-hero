@@ -613,13 +613,12 @@ async function answerTile(root: HTMLElement, value: number, answer: string) {
 }
 const boardReady = (root: HTMLElement) =>
   Array.from(root.querySelectorAll('button')).some(b => (b.textContent ?? '').trim() === '$200');
-const bankedOnCard = (root: HTMLElement) => {
-  const label = Array.from(root.querySelectorAll('p')).find(p => (p.textContent ?? '').trim() === 'Board cleared');
-  return label?.nextElementSibling?.textContent ?? null;
-};
+/* Round 951: the cleared board ends on the shared result card, so the bank is
+   the moment's score pill and the share is the text the card hands the
+   (stubbed) share row. */
+const bankedOnCard = (root: HTMLElement) => root.querySelector('[data-result-score]')?.textContent ?? null;
 async function sharedBank(root: HTMLElement) {
-  await click(root, 'Share score');
-  const m = H.clipboard.match(/\n\$(-?\d+)\n/);
+  const m = (root.querySelector('[data-testid="share"]')?.getAttribute('data-custom') ?? '').match(/\n\$(-?\d+)\n/);
   return m ? Number(m[1]) : NaN;
 }
 

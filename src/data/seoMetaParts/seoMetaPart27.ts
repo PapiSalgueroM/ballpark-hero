@@ -19,8 +19,8 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
     description: "Build an NBA starting five where three slots demand a player from a random franchise or decade, then simulate the game and share it. Free basketball puzzle.",
   },
   "/teammates": {
-    title: "Teammates or Not? NFL, NBA and Soccer Quiz",
-    description: "Two athletes from the NFL, NBA or soccer. Did they ever wear the same shirt? Call it yes or no and learn which careers crossed. Free sports trivia game.",
+    title: "Teammates or Not? NFL, NBA, MLB, NHL and Soccer Quiz",
+    description: "Two athletes from the NFL, NBA, MLB, NHL or soccer. Were they ever on the same club or league team? Call it yes or no in this free sports quiz.",
   },
   "/face-off": {
     title: "Face Off: Sports Stats Duel Against a Rival",
