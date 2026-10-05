@@ -1,3 +1,12 @@
+## Codex claims1030: preserve unknown imported player stats, 2026-10-05
+
+Codex owns only scripts/bakePlayers.mjs and its nullable-stat verification.
+Accept nonnegative integer or null goals/assists, preserving unknowns and true
+zeroes. No table, baked factual row, player save, Daily identity or frontend
+change. Existing stat provenance is unresolved, so do not guess replacements.
+Reuse the clean merged Footle worktree on codex/footle-unknown-stat-import-1030.
+Claude retains1010to1029, Soccer Career, Transfer Path and Front Office.
+1007to1009 continue separately. Remote runtime only. No publication claim.
 ## Codex 1006 published, publication slot released, 2026-10-05
 
 PR131 merged as 749f3a83 after final21e88395 passed all three remote
