@@ -109,14 +109,68 @@ const CONTROLS = {
     broken: "{ id: 'draft', label: 'The draft', start: '2026-02-11', end: '2026-02-12', halts: true,",
     say: 'CONTROL order: baseball drafts in February, before opening day, section 5 must go red',
   },
+  nohalt: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: "{ id: 'deadline', label: 'Trade deadline', start: '2027-02-11', end: '2027-02-11', halts: true,",
+    broken: "{ id: 'deadline', label: 'Trade deadline', start: '2027-02-11', end: '2027-02-11', halts: false,",
+    say: 'CONTROL nohalt: the NBA deadline no longer stops the sim, section 2 must go red',
+  },
+  estimate: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: "{ id: 'resign', label: 'Re-sign window', start: '2026-06-25', end: '2026-06-29', halts: true, estimate: true,",
+    broken: "{ id: 'resign', label: 'Re-sign window', start: '2026-06-25', end: '2026-06-29', halts: true,",
+    say: 'CONTROL estimate: the NBA re-sign window has no source and loses its estimate mark, section 2 must go red',
+  },
+  haltday: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'if (k > f && k <= t && (!halt || k < dateKey(halt.date))) halt = h;',
+    broken: 'if (k > f && k < t && (!halt || k < dateKey(halt.date))) halt = h;',
+    say: 'CONTROL haltday: a stop on the target day goes unreported, section 4 must go red',
+  },
+  midrun: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: '    if (res.halt) {\n',
+    broken: '    if (res.halt && false) {\n',
+    say: 'CONTROL midrun: runSimPlan plays on past a stop that came up, section 4 must go red',
+  },
+  openstop: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'if (open) return { stopAt: from, halt: open, periods: [] };',
+    broken: 'if (open && false) return { stopAt: from, halt: open, periods: [] };',
+    say: 'CONTROL openstop: an open host stop no longer holds the run, section 4 must go red',
+  },
+  dlperiod: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'return year.periods.filter(p => dateKey(p.end) <= k).length;',
+    broken: 'return year.periods.filter(p => dateKey(p.start) <= k).length;',
+    say: 'CONTROL dlperiod: deadlinePeriod counts the period the deadline falls in, section 4 must go red',
+  },
+  grid: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'const halts = [...calendarHalts(year), ...hostHalts];',
+    broken: 'const halts = calendarHalts(year);',
+    say: 'CONTROL grid: the month grid drops the host stops, section 6 must go red',
+  },
+  steps: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'offseason: dateKey(phase.start) < open',
+    broken: 'offseason: dateKey(phase.start) <= open',
+    say: 'CONTROL steps: opening day counts as an offseason step, section 7 must go red',
+  },
+  nextstep: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'find(s => dateKey(s.phase.end) >= k)',
+    broken: 'find(s => dateKey(s.phase.start) >= k)',
+    say: 'CONTROL nextstep: the next step skips a phase already running, section 7 must go red',
+  },
 };
 const swaps = new Map();
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown GM_CALENDAR_CONTROL=${CONTROL}`); process.exit(1); }
   const src = fs.readFileSync(path.join(ROOT, c.file), 'utf8').replaceAll('\r\n', '\n');
-  if (!src.includes(c.fixed)) {
-    console.error(`control cannot run: ${c.file} does not contain the text GM_CALENDAR_CONTROL=${CONTROL} rewrites`);
+  if (src.split(c.fixed).length !== 2) {
+    console.error(`control cannot run: ${c.file} does not contain the text GM_CALENDAR_CONTROL=${CONTROL} rewrites exactly once`);
     process.exit(1);
   }
   const scratch = path.join(tmpDir, path.basename(c.file));
@@ -176,6 +230,9 @@ const SPORTS = ['nfl', 'nba', 'mlb', 'nhl'];
 const K = d => d.y * 10000 + d.m * 100 + d.d;
 const iso = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(2, '0')}`;
 const years = Object.fromEntries(SPORTS.map(s => [s, G.gmLeagueYear(s)]));
+const WANT_HALTS = ['cutDown', 'deadline', 'draft', 'freeAgency', 'resign', 'seasonOver'].join(',');
+/* Measured 2026-10-05: the periods played when the walk stops for the deadline. */
+const WANT_DEADLINE_PERIOD = { nfl: 8, nba: 13, mlb: 19, nhl: 15 };
 
 /* ---------- 2. Every league year keeps its rules ---------- */
 console.log('2) Every phase one range, two sourced or marked thin; the deadline inside the season; periods back to back');
@@ -188,9 +245,14 @@ console.log('2) Every phase one range, two sourced or marked thin; the deadline 
       phases += 1;
       if (p.thin) thin += 1;
       if (p.sources.length < 2 && !G.GM_CALENDAR_PARTIAL.includes(`${s}.${p.id}`)) fail(`${s}.${p.id} has ${p.sources.length} source(s) and is not in GM_CALENDAR_PARTIAL`);
+      if (p.sources.length === 0 && !G.GM_CALENDAR_ESTIMATE.includes(`${s}.${p.id}`)) fail(`${s}.${p.id} has no source and is not in GM_CALENDAR_ESTIMATE`);
     }
+    /* The stops the brief names, written here and not read from the module: a
+       data edit that turns one off (halts: false) must go red. */
+    const kinds = G.calendarHalts(years[s]).map(h => h.kind).sort().join(',');
+    if (kinds !== WANT_HALTS) fail(`${s}: the calendar stops for ${kinds}, it must stop for ${WANT_HALTS}`);
   }
-  console.log(`   ${phases} phases over four years, ${thin} thin (listed partial), ${G.GM_CALENDAR_PARTIAL.length} in GM_CALENDAR_PARTIAL`);
+  console.log(`   ${phases} phases over four years, ${thin} thin (listed partial), ${G.GM_CALENDAR_PARTIAL.length} in GM_CALENDAR_PARTIAL, ${G.GM_CALENDAR_ESTIMATE.length} estimates (no source); every sport stops for ${WANT_HALTS}`);
 }
 
 /* ---------- 3. The engine periods are the engines' own ---------- */
@@ -224,7 +286,8 @@ console.log('4) Every pair of days: the plan stops at the first stop after the s
   let pairs = 0;
   for (const s of SPORTS) {
     const y = years[s];
-    const halts = G.calendarHalts(y).map(h => K(h.date));
+    const haltList = G.calendarHalts(y);
+    const halts = haltList.map(h => K(h.date));
     const days = [];
     for (let d = B.cal.addDays(y.first, -1); K(d) <= K(y.last); d = B.cal.addDays(d, 1)) days.push(d);
     for (let i = 0; i < days.length; i++) {
@@ -237,6 +300,10 @@ console.log('4) Every pair of days: the plan stops at the first stop after the s
         const first = halts.find(h => h > f && h <= t);
         const want = first ?? t;
         if (!plan || K(plan.stopAt) !== want) { fail(`${s}: from ${iso(days[i])} to ${iso(days[j])} stops at ${plan ? iso(plan.stopAt) : 'nothing'}, the first stop is ${want}`); break; }
+        /* The plan says why it stopped, a stop on the target day included: a
+           silent stop is one the next plan from that day skips. */
+        const wantKind = first === undefined ? null : haltList[halts.indexOf(first)].kind;
+        if ((plan.halt ? plan.halt.kind : null) !== wantKind) { fail(`${s}: from ${iso(days[i])} to ${iso(days[j])} reports halt ${plan.halt ? plan.halt.kind : 'none'}, the stop is ${wantKind ?? 'none'}`); break; }
         const wantPeriods = y.periods.filter(p => K(p.end) > f && K(p.end) <= want).map(p => p.index).join(',');
         if (plan.periods.join(',') !== wantPeriods) { fail(`${s}: from ${iso(days[i])} to ${iso(days[j])} plays ${plan.periods.join(',')} not ${wantPeriods}`); break; }
       }
@@ -256,14 +323,19 @@ console.log('4) Every pair of days: the plan stops at the first stop after the s
     for (let seed = 1; seed <= 5; seed++) {
       const rnd = mulberry(seed * 946);
       const host = Array.from({ length: 4 }, (_, i) => ({ kind: kinds[i % 3], date: B.cal.addDays(y.first, 1 + Math.floor(rnd() * total)), label: 'host stop' }));
-      const expected = [...new Set([...G.calendarHalts(y).map(h => K(h.date)), ...host.map(h => K(h.date))])].sort((a, b) => a - b);
+      /* Every stop is seen, a host stop on a calendar stop's day as well (it
+         holds the next run until the host drops it, as a host does once the
+         GM has dealt with it). */
+      const expected = [...G.calendarHalts(y).map(h => K(h.date)), ...host.map(h => K(h.date))].sort((a, b) => a - b);
+      let open = [...host];
       let at = B.cal.addDays(y.first, -1);
       const stops = [], played = [];
       for (let guard = 0; guard < 100; guard++) {
-        const plan = G.planSimToDay(y, at, y.last, host);
+        const plan = G.planSimToDay(y, at, y.last, open);
         if (!plan) break;
         played.push(...plan.periods);
         if (plan.halt) stops.push(K(plan.halt.date));
+        if (plan.halt && open.includes(plan.halt)) open = open.filter(h => h !== plan.halt);
         at = plan.stopAt;
       }
       if (stops.join(',') !== expected.join(',')) fail(`${s} seed ${seed}: the walk halted on ${stops.join(',')}, the stops are ${expected.join(',')}`);
@@ -273,6 +345,77 @@ console.log('4) Every pair of days: the plan stops at the first stop after the s
     summary.push(`${s} ${Math.min(...stopsPerSeed)} to ${Math.max(...stopsPerSeed)} stops, ${y.periods.length} periods`);
   }
   console.log(`   chained walks, seeds 1 to 5: ${summary.join('; ')}`);
+
+  /* Stops that come up mid run: the host's engine raises one while it plays
+     a period (seeded, three a year). runSimPlan must end the run on that
+     period, the next plan must hold until the host drops the stop, and the
+     walk must still play every period once and see every calendar stop. */
+  const midSummary = [];
+  for (const s of SPORTS) {
+    const y = years[s];
+    let raisedTotal = 0;
+    for (let seed = 1; seed <= 5; seed++) {
+      const rnd = mulberry(seed * 9461);
+      const raising = new Set();
+      while (raising.size < 3) raising.add(1 + Math.floor(rnd() * y.periods.length));
+      let open = [];
+      let at = B.cal.addDays(y.first, -1);
+      const played = [], calStops = [], raisedSeen = [];
+      let held = 0;
+      for (let guard = 0; guard < 200; guard++) {
+        const plan = G.planSimToDay(y, at, y.last, open);
+        if (!plan) break;
+        if (plan.halt && open.includes(plan.halt)) {
+          if (plan.periods.length) fail(`${s} seed ${seed}: an open stop did not hold the run (it plays ${plan.periods.join(',')})`);
+          held += 1;
+          open = open.filter(h => h !== plan.halt);
+          at = plan.stopAt;
+          continue;
+        }
+        const raisedHere = [];
+        const run = G.runSimPlan(y, plan, 0, (n, p) => {
+          if (!raising.has(p.index)) return { state: n + 1, halt: null };
+          const h = { kind: 'injury', date: p.start, label: `hurt in ${p.index}` };
+          raisedHere.push(p.index);
+          open.push(h);
+          return { state: n + 1, halt: h };
+        });
+        played.push(...run.played);
+        if (run.state !== run.played.length) fail(`${s} seed ${seed}: the run's state counts ${run.state} periods for ${run.played.length} played`);
+        if (raisedHere.length > 1) fail(`${s} seed ${seed}: one run played past a stop that came up (periods ${raisedHere.join(',')} all raised one)`);
+        if (raisedHere.length && run.played[run.played.length - 1] !== raisedHere[0]) fail(`${s} seed ${seed}: the run raised a stop in period ${raisedHere[0]} and kept playing to ${run.played[run.played.length - 1]}`);
+        raisedSeen.push(...raisedHere);
+        if (run.halt && !run.halt.label.startsWith('hurt')) calStops.push(K(run.halt.date));
+        at = run.stopAt;
+      }
+      if (played.join(',') !== y.periods.map(p => p.index).join(',')) fail(`${s} seed ${seed}: the mid run walk played ${played.join(',')}`);
+      if ([...raisedSeen].sort((a, b) => a - b).join(',') !== [...raising].sort((a, b) => a - b).join(',')) fail(`${s} seed ${seed}: stops came up in ${raisedSeen.join(',')}, the engine raised ${[...raising].join(',')}`);
+      if (held !== raising.size) fail(`${s} seed ${seed}: ${held} runs held for an open stop, ${raising.size} stops came up`);
+      const wantCal = G.calendarHalts(y).map(h => K(h.date)).join(',');
+      if (calStops.join(',') !== wantCal) fail(`${s} seed ${seed}: the mid run walk stopped for the calendar on ${calStops.join(',')}, the stops are ${wantCal}`);
+      raisedTotal += raisedSeen.length;
+    }
+    midSummary.push(`${s} ${raisedTotal} raised`);
+  }
+  console.log(`   mid run stops, seeds 1 to 5, three a year: ${midSummary.join(', ')}, every one ended its run and held the next`);
+
+  /* The deadline period is what the walk has played when it stops for the deadline. */
+  for (const s of SPORTS) {
+    const y = years[s];
+    let at = B.cal.addDays(y.first, -1);
+    const played = [];
+    for (let guard = 0; guard < 50; guard++) {
+      const plan = G.planSimToDay(y, at, y.last);
+      if (!plan) break;
+      played.push(...plan.periods);
+      at = plan.stopAt;
+      if (plan.halt && plan.halt.kind === 'deadline') break;
+    }
+    const got = G.deadlinePeriod(y);
+    if (got !== Math.max(0, ...played)) fail(`${s}: deadlinePeriod says ${got}, the walk has played ${Math.max(0, ...played)} periods at the deadline stop`);
+    if (got !== WANT_DEADLINE_PERIOD[s]) fail(`${s}: deadlinePeriod ${got}, measured ${WANT_DEADLINE_PERIOD[s]}`);
+  }
+  console.log(`   deadline periods: ${SPORTS.map(s => `${s} ${G.deadlinePeriod(years[s])}`).join(', ')}`);
 }
 
 /* ---------- 5. Each league's real order ---------- */
@@ -306,9 +449,13 @@ console.log('6) Every month drawn: each season day in one period, each period it
     const y = years[s];
     const def = G.GM_LEAGUE_YEARS[s];
     const today = y.first;
-    const perPeriodDays = new Map(), perPeriodGames = new Map(), marks = new Map(), haltDays = new Map();
+    const perPeriodDays = new Map(), perPeriodGames = new Map(), marks = new Map(), haltDays = new Map(), hostSeen = new Map();
+    /* Host stops the board hands the grid, each on a day with no calendar stop: the grid must outline each one on its day. */
+    const calDays = new Set(G.calendarHalts(y).map(h => K(h.date)));
+    const host = [20, 75, 140, 210].map(n => B.cal.addDays(y.first, n)).filter(d => !calDays.has(K(d)))
+      .map((date, i) => ({ kind: ['expiringDeal', 'injury', 'inboxAsk'][i % 3], date, label: `host ${i}` }));
     for (const { y: yy, m } of G.monthsOf(y)) {
-      const grid = G.gmMonthGrid(y, yy, m, today);
+      const grid = G.gmMonthGrid(y, yy, m, today, host);
       const lead = B.cal.dayOfWeek(yy, m, 1);
       if (grid.length !== lead + B.cal.daysInMonth(yy, m)) fail(`${s} ${yy}-${m}: ${grid.length} cells`);
       for (const c of grid) {
@@ -320,6 +467,7 @@ console.log('6) Every month drawn: each season day in one period, each period it
         if (c.game) perPeriodGames.set(c.period, (perPeriodGames.get(c.period) ?? 0) + 1);
         for (const id of c.starts) marks.set(id, (marks.get(id) ?? 0) + 1);
         if (c.halt) haltDays.set(c.halt.kind, (haltDays.get(c.halt.kind) ?? 0) + 1);
+        if (c.halt && c.halt.label.startsWith('host ')) hostSeen.set(c.halt.label, K(c.date));
       }
     }
     const seasonDays = B.cal.daysBetween(y.regularStart, y.regularEnd) + 1;
@@ -332,6 +480,8 @@ console.log('6) Every month drawn: each season day in one period, each period it
     }
     for (const p of y.phases) if (marks.get(p.id) !== 1) fail(`${s}: ${p.id} is marked ${marks.get(p.id) ?? 0} times`);
     for (const h of G.calendarHalts(y)) if (haltDays.get(h.kind) !== 1) fail(`${s}: the ${h.kind} stop sits on ${haltDays.get(h.kind) ?? 0} days`);
+    if (host.length < 3) fail(`${s}: only ${host.length} host stops placed`);
+    for (const h of host) if (hostSeen.get(h.label) !== K(h.date)) fail(`${s}: the host stop ${h.label} (${iso(h.date)}) is outlined on ${hostSeen.get(h.label) ?? 'no day'}`);
   }
   console.log(`   ${cells} days drawn across the four years`);
 }
@@ -349,6 +499,13 @@ console.log('7) The offseason is dated steps in order, and baseball drafts in se
     if (off.length < 4) fail(`${s}: only ${off.length} offseason steps`);
     const nxt = G.nextStep(y, y.regularStart);
     if (!nxt || nxt.phase.id !== 'opening') fail(`${s}: the step on opening day is ${nxt ? nxt.phase.id : 'none'}`);
+    /* Every day of the year: the next step is the phase running that day, or the next one to start. */
+    const byStart = [...y.phases].sort((a, b) => K(a.start) - K(b.start));
+    for (let d = B.cal.addDays(y.first, -1); K(d) <= K(y.last) + 1; d = B.cal.addDays(d, 1)) {
+      const want = byStart.find(p => K(p.end) >= K(d)) ?? null;
+      const got = G.nextStep(y, d);
+      if ((got ? got.phase.id : null) !== (want ? want.id : null)) { fail(`${s} ${iso(d)}: the next step is ${got ? got.phase.id : 'none'}, the phase is ${want ? want.id : 'none'}`); break; }
+    }
   }
   const mlbDraft = G.yearSteps(years.mlb).find(st => st.phase.id === 'draft');
   if (!mlbDraft || mlbDraft.offseason) fail('mlb: the draft is not an in season step');

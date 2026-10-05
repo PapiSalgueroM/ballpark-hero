@@ -10,7 +10,8 @@
 import { describe, it, expect } from 'vitest';
 import {
   GM_LEAGUE_YEARS, GM_PHASE_ORDER, GM_CALENDAR_PARTIAL, gmLeagueYear, validateLeagueYear, planSimToDay,
-  calendarHalts, offseasonSteps, gmMonthGrid, monthsOf, deadlinePeriod, periodOn, type GmSport, type GmLeagueYearDef,
+  calendarHalts, offseasonSteps, gmMonthGrid, monthsOf, deadlinePeriod, periodOn, nextStep, phaseById, runSimPlan,
+  type GmSport, type GmLeagueYearDef, type GmHostHalt,
 } from './gmCalendar';
 import { addDays, dateKey, daysBetween } from './calDate';
 import * as cmCal from './clubManagerCalendar';
@@ -51,6 +52,14 @@ describe('the rules can fail', () => {
   it('a phase with one source and no note fails', () => {
     const bad = withPhase(GM_LEAGUE_YEARS.nfl, 'draft', { thin: undefined });
     expect(validateLeagueYear(bad).some(p => p.includes('no thin note'))).toBe(true);
+  });
+  it('a decision phase that does not stop the sim fails', () => {
+    const bad = withPhase(GM_LEAGUE_YEARS.nba, 'deadline', { halts: false });
+    expect(validateLeagueYear(bad).some(p => p.includes('deadline needs a decision'))).toBe(true);
+  });
+  it('a phase with no source that is not marked estimate fails', () => {
+    const bad = withPhase(GM_LEAGUE_YEARS.nba, 'resign', { estimate: undefined });
+    expect(validateLeagueYear(bad).some(p => p.includes('not marked estimate'))).toBe(true);
   });
   it('a date that is not a day fails', () => {
     const bad = withPhase(GM_LEAGUE_YEARS.mlb, 'draft', { start: '2026-02-30' });
@@ -99,6 +108,46 @@ describe('sim to a day', () => {
     expect(plan.halt?.kind).toBe('injury');
     expect(dateKey(plan.stopAt)).toBe(20261114);
   });
+
+  it.each(SPORTS)('%s stops for the re-sign window, the draft, free agency, cut down day, the deadline and the season end', sport => {
+    const kinds = calendarHalts(gmLeagueYear(sport)).map(h => h.kind).sort();
+    expect(kinds).toEqual(['cutDown', 'deadline', 'draft', 'freeAgency', 'resign', 'seasonOver']);
+  });
+
+  it('a tap on the deadline day itself says it stopped for the deadline', () => {
+    const year = gmLeagueYear('nba');
+    const plan = planSimToDay(year, { y: 2027, m: 2, d: 1 }, { y: 2027, m: 2, d: 11 })!;
+    expect(dateKey(plan.stopAt)).toBe(20270211);
+    expect(plan.halt?.kind).toBe('deadline');
+  });
+
+  it('a stop that comes up mid run ends the run on that period, and holds the next run until it is dealt with', () => {
+    const year = gmLeagueYear('nba');
+    const plan = planSimToDay(year, { y: 2026, m: 10, d: 19 }, { y: 2027, m: 1, d: 31 })!;
+    expect(plan.periods.length).toBeGreaterThan(6);
+    const hurt: GmHostHalt = { kind: 'injury', date: year.periods[5].start, label: 'Your starter is hurt' };
+    const run = runSimPlan(year, plan, 0, (n, p) => ({ state: n + 1, halt: p.index === 6 ? hurt : null }));
+    expect(run.played).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(run.state).toBe(6);
+    expect(run.halt?.kind).toBe('injury');
+    expect(dateKey(run.stopAt)).toBe(dateKey(year.periods[5].end));
+    const held = planSimToDay(year, run.stopAt, { y: 2027, m: 1, d: 31 }, [hurt])!;
+    expect(held.periods).toEqual([]);
+    expect(held.halt?.kind).toBe('injury');
+    const next = planSimToDay(year, run.stopAt, { y: 2027, m: 1, d: 31 }, [])!;
+    expect(next.periods[0]).toBe(7);
+  });
+
+  it('a stop raised on the plan\'s own stop day reports the plan\'s stop, so the deadline is not skipped', () => {
+    const year = gmLeagueYear('mlb');
+    const plan = planSimToDay(year, { y: 2026, m: 7, d: 28 }, { y: 2026, m: 8, d: 10 })!;
+    expect(plan.halt?.kind).toBe('deadline');
+    const last = plan.periods[plan.periods.length - 1];
+    expect(dateKey(year.periods[last - 1].end)).toBe(20260803);
+    const hurt: GmHostHalt = { kind: 'injury', date: { y: 2026, m: 8, d: 2 }, label: 'Your starter is hurt' };
+    const run = runSimPlan(year, plan, 0, (n, p) => ({ state: n + 1, halt: p.index === last ? hurt : null }));
+    expect(run.halt?.kind).toBe('deadline');
+  });
 });
 
 describe('the grid and the steps', () => {
@@ -111,6 +160,35 @@ describe('the grid and the steps', () => {
       expect(k).toBeGreaterThan(0);
       expect(k).toBeLessThan(year.periods.length);
     }
+  });
+  it('the deadline period is the last period played when the walk stops for the deadline', () => {
+    const measured: Record<GmSport, number> = { nfl: 8, nba: 13, mlb: 19, nhl: 15 };
+    for (const sport of SPORTS) {
+      const year = gmLeagueYear(sport);
+      let at = addDays(year.first, -1);
+      const played: number[] = [];
+      for (let guard = 0; guard < 50; guard++) {
+        const plan = planSimToDay(year, at, year.last)!;
+        played.push(...plan.periods);
+        at = plan.stopAt;
+        if (plan.halt?.kind === 'deadline') break;
+      }
+      expect(Math.max(0, ...played)).toBe(deadlinePeriod(year));
+      expect(deadlinePeriod(year)).toBe(measured[sport]);
+    }
+  });
+  it('the grid outlines a host stop on its day', () => {
+    const year = gmLeagueYear('nba');
+    const hurt: GmHostHalt = { kind: 'injury', date: { y: 2026, m: 11, d: 14 }, label: 'Your starter is hurt' };
+    const nov = gmMonthGrid(year, 2026, 11, { y: 2026, m: 11, d: 1 }, [hurt]);
+    expect(nov.find(c => c && c.date.d === 14)?.halt?.kind).toBe('injury');
+    expect(nov.find(c => c && c.date.d === 15)?.halt).toBeNull();
+  });
+  it('the next step on the second day of a phase is that phase', () => {
+    const year = gmLeagueYear('nfl');
+    expect(nextStep(year, { y: 2026, m: 4, d: 24 })?.phase.id).toBe('draft');
+    expect(nextStep(year, { y: 2026, m: 8, d: 20 })?.phase.id).toBe('camp');
+    expect(phaseById(year, 'lottery')).toBeNull();
   });
   it('the offseason is steps, not one call, and the month grid marks them', () => {
     const year = gmLeagueYear('nba');

@@ -10,11 +10,13 @@
  * A tap on a day plans a sim to it with planSimToDay and shows what that
  * plan does (the rounds it plays, the stop it halts at) before anything
  * happens. The Sim button appears only when the board passes onSim, and it
- * hands the board exactly the plan it showed; with no onSim the grid is a
- * read only view of the year. No board mounts it yet (Round 946 binds no
+ * hands the board exactly the plan it showed, which the board plays through
+ * runSimPlan so a stop that comes up on the way (a starter hurt mid run)
+ * still ends the run; with no onSim the grid is a read only view of the year. No board mounts it yet (Round 946 binds no
  * engine), so nothing here touches a save.
  *
- * A phase that is not two sourced (GM_CALENDAR_PARTIAL) says "expected".
+ * A phase that is not two sourced (GM_CALENDAR_PARTIAL) says "expected", and
+ * one no source dates at all (GM_CALENDAR_ESTIMATE) says "estimate".
  */
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -24,6 +26,9 @@ import {
   gmLeagueYear, gmMonthGrid, monthsOf, planSimToDay, yearSteps,
   type GmHostHalt, type GmPhaseId, type GmSimPlan, type GmSport,
 } from '@/lib/gmCalendar';
+
+/** One empty list for every render, so the month grid is not rebuilt each time. */
+const NO_HOST_HALTS: GmHostHalt[] = [];
 
 const PHASE_EMOJI: Record<GmPhaseId, string> = {
   resign: '✍️', lottery: '🎱', draft: '📋', freeAgency: '🛒', camp: '🏕️',
@@ -42,7 +47,7 @@ interface GmCalendarPanelProps {
   onSim?: (plan: GmSimPlan) => void;
 }
 
-export function GmCalendarPanel({ sport, today, hostHalts = [], onSim }: GmCalendarPanelProps) {
+export function GmCalendarPanel({ sport, today, hostHalts = NO_HOST_HALTS, onSim }: GmCalendarPanelProps) {
   const year = useMemo(() => gmLeagueYear(sport), [sport]);
   const months = useMemo(() => monthsOf(year), [year]);
   const [monthIdx, setMonthIdx] = useState(() => {
@@ -54,6 +59,7 @@ export function GmCalendarPanel({ sport, today, hostHalts = [], onSim }: GmCalen
   const cells = useMemo(() => gmMonthGrid(year, month.y, month.m, today, hostHalts), [year, month, today, hostHalts]);
   const plan = picked ? planSimToDay(year, today, picked, hostHalts) : null;
   const periodWord = year.def.periodName.toLowerCase();
+  const phaseLabel = (id: GmPhaseId) => year.phases.find(p => p.id === id)?.label ?? id;
 
   return (
     <div className="rounded-2xl border border-border bg-card p-3 text-left">
@@ -88,7 +94,7 @@ export function GmCalendarPanel({ sport, today, hostHalts = [], onSim }: GmCalen
             key={c.key}
             type="button"
             onClick={() => setPicked(c.date)}
-            aria-label={`${shortDate(c.date)}${c.starts.length ? `, ${c.starts.join(', ')}` : ''}${c.halt ? `, stop: ${c.halt.label}` : ''}`}
+            aria-label={`${shortDate(c.date)}${c.starts.length ? `, ${c.starts.map(phaseLabel).join(', ')}${c.estimate ? ' (estimate)' : c.thin ? ' (expected)' : ''}` : ''}${c.halt ? `, stop: ${c.halt.label}` : ''}`}
             className={cn(
               'flex h-10 flex-col items-center justify-start rounded-md border text-[10px] leading-tight',
               c.halt ? 'border-amber-500' : 'border-border/40',
@@ -109,6 +115,8 @@ export function GmCalendarPanel({ sport, today, hostHalts = [], onSim }: GmCalen
         <div className="mt-2 rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-[11px]">
           {plan === null ? (
             <p className="text-muted-foreground">{shortDate(picked)} is not ahead of today, so there is nothing to sim.</p>
+          ) : plan.halt && dateKey(plan.stopAt) === dateKey(today) ? (
+            <p className="text-muted-foreground">Sort out {plan.halt.label} first. Nothing sims until it's dealt with.</p>
           ) : (
             <>
               <p className="font-bold text-foreground">
@@ -142,13 +150,14 @@ export function GmCalendarPanel({ sport, today, hostHalts = [], onSim }: GmCalen
             <span className="text-foreground">{PHASE_EMOJI[phase.id]} {phase.label}</span>
             <span className="text-muted-foreground">
               {shortDate(phase.start)} {phase.start.y}{dateKey(phase.end) !== dateKey(phase.start) ? ` to ${shortDate(phase.end)}` : ''}
-              {phase.thin ? ' (expected)' : ''}
+              {phase.estimate ? ' (estimate)' : phase.thin ? ' (expected)' : ''}
             </span>
           </li>
         ))}
       </ul>
       <p className="mt-1 text-center text-[9px] text-muted-foreground">
-        Real {year.def.label} dates. An amber box is a stop that needs you. Expected means fewer than two sources agree yet.
+        The {year.def.label} dates as the league and the press report them. An amber box is a stop that needs you.
+        Expected means fewer than two sources agree yet. Estimate means no source gives the day yet, so it's placed from the dates around it.
       </p>
     </div>
   );

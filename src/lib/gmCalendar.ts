@@ -17,7 +17,15 @@
  * fewer than two independent sources carries a `thin` note saying what is
  * missing and is listed in GM_CALENDAR_PARTIAL, the same honesty rule as
  * Club Manager's CM_PARTIAL; the panel draws it as "expected", never as fact.
- * Sources were read on 2026-10-03:
+ * A phase no source dates at all (a window derived from two other dates, a
+ * playoff start the league has not announced) also carries `estimate`, and
+ * the panel says "estimate" for it. Nothing is dated by a guess dressed as a
+ * fact: the fixer pass of 2026-10-05 replaced seven such guesses with the dates
+ * the press reports (three of them had been wrong by days).
+ * Sources were read on 2026-10-03, and on 2026-10-05 the named press pages
+ * (NFL.com, ESPN, Yahoo Sports, raiders.com, FOX Sports, NBC Sports, NBC Los
+ * Angeles, Daily Faceoff, Sports Illustrated, The Hockey News, PuckPedia,
+ * The Sportscast) each quoted in the phase it dates:
  *   ESPN    ESPN's public scoreboard feed (site.api.espn.com), the season
  *           calendar and the games on a date. The feed the site already reads.
  *   WIKI    the English Wikipedia season, draft and lottery articles, read as
@@ -52,6 +60,12 @@ export interface GmPhaseDef {
   sources: string[];
   /** Present when the phase is not two sourced: what is missing and how the date was set. */
   thin?: string;
+  /**
+   * True when no source gives this phase's first day: the day is placed by the
+   * rule its thin note states, and the panel says "estimate", never "expected".
+   * Every phase with no source must carry it (validateLeagueYear).
+   */
+  estimate?: boolean;
   /** The sim stops on the first day of this phase, because it needs a decision. */
   halts: boolean;
 }
@@ -71,6 +85,8 @@ export interface GmLeagueYearDef {
   periodName: 'Week' | 'Round';
   /** Games each club plays in one period (the grid spreads them over its range). */
   gamesPerPeriod: number;
+  /** A one game a week sport draws that game on this weekday when the range has one (football: Sunday). */
+  gameDay?: 'sunday';
   /** The phases in the league's real order. */
   phases: GmPhaseDef[];
 }
@@ -88,28 +104,27 @@ const NFL_2026: GmLeagueYearDef = {
   sport: 'nfl', label: '2026-27', season: 2026,
   regularStart: '2026-09-09', regularEnd: '2027-01-10',
   regularSources: [`${WIKI}: 2026 NFL season, began September 9 and ends January 10, 2027`, `${ESPN}: New England at Seattle on 9 September (00:20 UTC on the 10th), 16 Week 18 games on 10 January 2027`],
-  periods: 17, periodName: 'Week', gamesPerPeriod: 1,
+  periods: 17, periodName: 'Week', gamesPerPeriod: 1, gameDay: 'sunday',
   phases: [
-    { id: 'resign', label: 'Re-sign window', start: '2026-03-09', end: '2026-03-10', halts: true,
+    { id: 'resign', label: 'Options and tenders', start: '2026-03-09', end: '2026-03-10', halts: true,
       sources: [`${WIKI}: 2026 NFL season, from March 9 clubs exercise options and tender their restricted and exclusive rights free agents`],
-      thin: 'One source (Wikipedia, citing the league calendar). The window is the two days of options and tenders before the new league year.' },
+      thin: 'One source (Wikipedia, citing the league calendar). The two days of options and tenders before the new league year.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2026-03-11', end: '2026-03-11', halts: true,
       sources: [`${WIKI}: 2026 NFL season, the league year and free agency began March 11`],
       thin: 'One source (Wikipedia, citing the league calendar).' },
     { id: 'draft', label: 'The draft', start: '2026-04-23', end: '2026-04-25', halts: true,
       sources: [`${WIKI}: 2026 NFL season, the draft was April 23 to 25 in Pittsburgh`],
       thin: 'One source (Wikipedia).' },
-    { id: 'camp', label: 'Camp and preseason', start: '2026-08-06', end: '2026-08-31', halts: false,
+    { id: 'camp', label: 'Camp and preseason', start: '2026-08-06', end: '2026-08-29', halts: false,
       sources: [`${WIKI}: 2026 NFL season, Hall of Fame Game on August 6`, `${ESPN}: the preseason calendar opens with Hall of Fame weekend on 6 August`],
-      thin: 'The start is the first preseason game (two sources); clubs open camp earlier in July on dates of their own. The end is the eve of cut down day, which is itself expected.' },
-    { id: 'cutDown', label: 'Cut down day', start: '2026-09-01', end: '2026-09-01', halts: true,
-      sources: [],
-      thin: 'No source read. Placed on the Tuesday after the last preseason weekend as an estimate (ESPN closes the preseason on 6 September).' },
+      thin: 'The start is the first preseason game (two sources); clubs open camp earlier in July on dates of their own. The end is the eve of cut down day.' },
+    { id: 'cutDown', label: 'Cut down day', start: '2026-08-30', end: '2026-08-30', halts: true,
+      sources: ['Yahoo Sports, NFL sets 2026 trade deadline, roster cutdown and 2027 free agency dates: rosters down to 53 by 6 p.m. New York time on Aug. 30', 'raiders.com, NFL sets 53-man roster cutdown deadline: active rosters to 53 by 3 p.m. PT on Sunday, Aug. 30'] },
     { id: 'opening', label: 'Opening day', start: '2026-09-09', end: '2026-09-09', halts: false,
       sources: [`${WIKI}: 2026 NFL season, the Kickoff Game on September 9`, `${ESPN}: New England at Seattle, 9 September`] },
     { id: 'deadline', label: 'Trade deadline', start: '2026-11-10', end: '2026-11-10', halts: true,
-      sources: [],
-      thin: 'No source read. Placed on the Tuesday after Week 9 as an estimate.' },
+      sources: ['NFL.com, trade grades ahead of the 2026 deadline: the deadline set for Nov. 10', 'ESPN, 2026 trade deadline updates: Nov. 10 at 4 p.m. ET', 'Yahoo Sports, NFL sets 2026 trade deadline: Nov. 10 at 4 p.m. New York time'],
+      thin: 'Three sources say 10 November, but the Raiders\' own cut down article (raiders.com) lists the deadline as 3 November, so it stays expected until it passes.' },
     { id: 'playoffs', label: 'Playoffs', start: '2027-01-16', end: '2027-02-14', halts: false,
       sources: [`${WIKI}: 2026 NFL season, playoffs begin January 16, Super Bowl LXI on February 14 at SoFi Stadium`, `${ESPN}: Wild Card games on 16 January 2027, the Super Bowl on 14 February 2027`] },
   ],
@@ -125,7 +140,7 @@ const NBA_2026: GmLeagueYearDef = {
       sources: [`${NBACOM}: 2026 Draft Lottery May 10`, `${WIKI}: 2026 NBA draft, the lottery was held on May 10`] },
     { id: 'draft', label: 'The draft', start: '2026-06-23', end: '2026-06-24', halts: true,
       sources: [`${NBACOM}: 2026 NBA Draft June 23 to 24`, `${WIKI}: 2026 NBA draft, first round June 23, second round June 24, Barclays Center`] },
-    { id: 'resign', label: 'Re-sign window', start: '2026-06-25', end: '2026-06-29', halts: true,
+    { id: 'resign', label: 'Re-sign window', start: '2026-06-25', end: '2026-06-29', halts: true, estimate: true,
       sources: [],
       thin: 'Derived, not a dated league event: the days between the draft and the market opening, when a club can still only deal with its own free agents.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2026-06-30', end: '2026-06-30', halts: true,
@@ -157,24 +172,21 @@ const NHL_2026: GmLeagueYearDef = {
       sources: [`${WIKI}: 2026 NHL entry draft, the two lotteries were held on May 5, 2026`, `${NHLCOM}: Toronto won the Draft Lottery on Tuesday (article of 6 May 2026)`] },
     { id: 'draft', label: 'The draft', start: '2026-06-26', end: '2026-06-27', halts: true,
       sources: [`${WIKI}: 2026 NHL entry draft, June 26 to 27 at KeyBank Center, Buffalo`, `${NHLCOM}: first round June 26, rounds 2 to 7 June 27, Buffalo`] },
-    { id: 'resign', label: 'Re-sign window', start: '2026-06-28', end: '2026-06-30', halts: true,
+    { id: 'resign', label: 'Re-sign window', start: '2026-06-28', end: '2026-06-30', halts: true, estimate: true,
       sources: [],
       thin: 'Derived, not a dated league event: the days between the draft and the market opening.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2026-07-01', end: '2026-07-01', halts: true,
-      sources: [],
-      thin: 'No source read for 2026. Placed on 1 July as an estimate.' },
+      sources: ['Yahoo Sports, ranking the top NHL unrestricted free agents: free agency opens at noon ET on Wednesday, July 1', 'The Sportscast, when does 2026 NHL free agency start: Wednesday, July 1, 2026 at 12:00 p.m. ET'] },
     { id: 'camp', label: 'Camp and preseason', start: '2026-09-19', end: '2026-09-27', halts: false,
       sources: [`${ESPN}: the season calendar's first preseason game day is 19 September`],
       thin: 'One source (ESPN) for the first preseason game; camps open a few days earlier on dates of their own.' },
     { id: 'cutDown', label: 'Rosters set', start: '2026-09-28', end: '2026-09-28', halts: true,
-      sources: [],
-      thin: 'No source read. Placed on the eve of opening night as an estimate.' },
+      sources: ['The Hockey News, Anaheim Ducks submit their 2026-27 season opening roster: cap compliant rosters were due on Sept. 28 at 2 p.m. PT', 'PuckPedia, every club\'s 2026-27 opening night roster: rosters due by 5 p.m. ET on Sept. 28'] },
     { id: 'opening', label: 'Opening night', start: '2026-09-29', end: '2026-09-29', halts: false,
       sources: [`${NHLCOM}: Sept. 29, Carolina hosts Florida`, `${WIKI}: 2026-27 NHL season, began September 29`, `${ESPN}: Florida at Carolina, 29 September`] },
-    { id: 'deadline', label: 'Trade deadline', start: '2027-03-05', end: '2027-03-05', halts: true,
-      sources: [],
-      thin: 'No source read. Placed on the first Friday of March as an estimate.' },
-    { id: 'playoffs', label: 'Stanley Cup playoffs', start: '2027-04-12', end: '2027-06-30', halts: false,
+    { id: 'deadline', label: 'Trade deadline', start: '2027-03-01', end: '2027-03-01', halts: true,
+      sources: ['Daily Faceoff, 2026-27 NHL trade deadline set: Monday, March 1, 2027', 'Sports Illustrated (Predators On SI), the 2027 NHL trade deadline date is set: March 1'] },
+    { id: 'playoffs', label: 'Stanley Cup playoffs', start: '2027-04-12', end: '2027-06-30', halts: false, estimate: true,
       sources: [`${ESPN}: the 2026-27 season window closes 1 July 2027 UTC`],
       thin: 'No source for the first playoff day: placed two days after the regular season as an estimate. The last day is ESPN\'s season window.' },
   ],
@@ -183,35 +195,32 @@ const NHL_2026: GmLeagueYearDef = {
 const MLB_2026: GmLeagueYearDef = {
   sport: 'mlb', label: '2026', season: 2026,
   regularStart: '2026-03-25', regularEnd: '2026-09-27',
-  regularSources: [`${WIKI}: 2026 MLB season, started March 25 with the Giants hosting the Yankees, the full Opening Day slate on March 26; Baltimore at New York on September 27`, `${ESPN}: New York at San Francisco on 25 March (00:05 UTC on the 26th), 15 regular season games on 27 September and none on the 28th`],
+  regularSources: [`${WIKI}: 2026 MLB season, started March 25 with the Giants hosting the Yankees, the full Opening Day slate on March 26, the regular season ending September 27`, `${ESPN}: New York at San Francisco on 25 March (00:05 UTC on the 26th), the last regular season games on 27 September and none on the 28th`],
   periods: 27, periodName: 'Round', gamesPerPeriod: 6,
   phases: [
     { id: 'resign', label: 'Re-sign window', start: '2025-11-02', end: '2025-11-05', halts: true,
       sources: [`${WIKI}: 2025 MLB season, the World Series concluded on November 1`, `${ESPN}: World Series Game 7, Los Angeles at Toronto, 1 November 2025 (00:00 UTC on the 2nd)`],
-      thin: 'The World Series end is two sourced; the window is derived from it (the days a club keeps its own free agents to itself) and its length is not sourced here.' },
+      thin: 'The World Series end is two sourced; the window is derived from it (the five days a club keeps its own free agents to itself, NBC Sports\' 2025 free agency guide) rather than read as a dated league event.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2025-11-06', end: '2025-11-06', halts: true,
-      sources: [],
-      thin: 'Derived from the World Series end, not read from a source.' },
+      sources: ['FOX Sports, when does 2025 MLB free agency start: players cannot sign with a new team until 5 p.m. ET five days after the World Series, Thursday, November 6', 'NBC Sports, 2025 MLB free agency guide: players may not sign with a new team until five days after the World Series concludes (it ended November 1)'] },
     { id: 'lottery', label: 'Draft lottery', start: '2025-12-09', end: '2025-12-09', halts: false,
       sources: [`${WIKI}: 2026 MLB draft, the lottery was held on December 9, 2025 in Orlando at the Winter Meetings`],
       thin: 'One source (Wikipedia).' },
     { id: 'camp', label: 'Spring training', start: '2026-02-20', end: '2026-03-23', halts: false,
       sources: [`${ESPN}: the first spring games on 20 February 2026 (none on the 19th)`],
       thin: 'One source (ESPN) for the first spring game; pitchers and catchers report earlier on dates of their own.' },
-    { id: 'cutDown', label: 'Opening day rosters', start: '2026-03-24', end: '2026-03-24', halts: true,
+    { id: 'cutDown', label: 'Opening day rosters', start: '2026-03-24', end: '2026-03-24', halts: true, estimate: true,
       sources: [],
-      thin: 'No source read. Placed on the eve of opening night as an estimate.' },
+      thin: 'No league wide date read. One club release (Texas) says rosters were due at 10:30 a.m. CT on 25 March, opening day itself, so the stop is placed on the eve to come before the first pitch.' },
     { id: 'opening', label: 'Opening day', start: '2026-03-25', end: '2026-03-25', halts: false,
       sources: [`${WIKI}: 2026 MLB season, the regular season started March 25`, `${ESPN}: New York at San Francisco, 25 March`] },
     { id: 'draft', label: 'The draft', start: '2026-07-11', end: '2026-07-12', halts: true,
       sources: [`${WIKI}: 2026 MLB draft, July 11 to 12 in Philadelphia`],
       thin: 'One source (Wikipedia).' },
-    { id: 'deadline', label: 'Trade deadline', start: '2026-07-31', end: '2026-07-31', halts: true,
-      sources: [],
-      thin: 'No source read. Placed on 31 July as an estimate.' },
-    { id: 'playoffs', label: 'Postseason', start: '2026-09-29', end: '2026-11-11', halts: false,
-      sources: [`${WIKI}: 2026 MLB season, the postseason begins on September 29`, `${ESPN}: Philadelphia at Atlanta and Chicago at Houston on 29 September, postseason`],
-      thin: 'The start is two sourced. The last day is ESPN\'s season window (it closes 12 November UTC): the World Series end is not known yet.' },
+    { id: 'deadline', label: 'Trade deadline', start: '2026-08-03', end: '2026-08-03', halts: true,
+      sources: ['FOX Sports, 2026 MLB trade deadline: Monday, Aug. 3, at 6 p.m. ET', 'NBC Los Angeles, MLB trade deadline preview 2026: Monday, Aug. 3, at 6 p.m. ET'] },
+    { id: 'playoffs', label: 'Postseason', start: '2026-09-29', end: '2026-10-31', halts: false,
+      sources: [`${WIKI}: 2026 MLB season, the postseason began on September 29, the World Series begins October 23 and ends with Game 7 (if necessary) on October 31`, `${ESPN}: Philadelphia at Atlanta and Chicago at Houston on 29 September; the schedule lists World Series Game 7, if necessary, on 31 October and nothing after it`] },
   ],
 };
 
@@ -235,6 +244,10 @@ export const GM_PHASE_ORDER: Record<GmSport, GmPhaseId[]> = {
 /** "nfl.deadline": every phase that is not two sourced, the shape of Club Manager's CM_PARTIAL. */
 export const GM_CALENDAR_PARTIAL: string[] = (Object.keys(GM_LEAGUE_YEARS) as GmSport[])
   .flatMap(sport => GM_LEAGUE_YEARS[sport].phases.filter(p => p.thin).map(p => `${sport}.${p.id}`));
+
+/** "nhl.playoffs": every phase whose first day no source gives, so the panel says "estimate". */
+export const GM_CALENDAR_ESTIMATE: string[] = (Object.keys(GM_LEAGUE_YEARS) as GmSport[])
+  .flatMap(sport => GM_LEAGUE_YEARS[sport].phases.filter(p => p.estimate).map(p => `${sport}.${p.id}`));
 
 /* ================================================================== */
 /* The year, resolved to days                                         */
@@ -297,7 +310,7 @@ export function resolveLeagueYear(def: GmLeagueYearDef): GmLeagueYear {
   const phases = def.phases.map(p => ({ ...p, start: parseIsoDate(p.start), end: parseIsoDate(p.end) }));
   const regularStart = parseIsoDate(def.regularStart);
   const regularEnd = parseIsoDate(def.regularEnd);
-  const periods = periodRanges(regularStart, regularEnd, def.periods, def.gamesPerPeriod, def.sport === 'nfl');
+  const periods = periodRanges(regularStart, regularEnd, def.periods, def.gamesPerPeriod, def.gameDay === 'sunday');
   const keys = phases.flatMap(p => [p.start, p.end]).concat([regularStart, regularEnd]);
   const first = keys.reduce((a, b) => (dateKey(b) < dateKey(a) ? b : a));
   const last = keys.reduce((a, b) => (dateKey(b) > dateKey(a) ? b : a));
@@ -332,15 +345,19 @@ export function dateOfPeriod(year: GmLeagueYear, index: number): GmPeriod | null
 }
 
 /**
- * How many periods are fully played before trading closes: the periods whose
- * last day falls before deadline day. A front office that honours the
- * deadline allows a trade while its round counter has not passed this.
+ * How many periods are fully played when the sim stops for the deadline: the
+ * periods whose last day falls on or before deadline day, exactly the ones
+ * planSimToDay plays before that stop (a period ending on deadline day is
+ * played first, and trading is still open that day). A front office that
+ * honours the deadline allows a trade while its round counter has not passed
+ * this. Measured 2026-10-05: nfl 8, nba 13, mlb 19, nhl 15 (baseball's round 19
+ * ends on deadline day itself, 3 August, the case this rule exists for).
  */
 export function deadlinePeriod(year: GmLeagueYear): number {
   const deadline = phaseById(year, 'deadline');
   if (!deadline) return year.periods.length;
   const k = dateKey(deadline.start);
-  return year.periods.filter(p => dateKey(p.end) < k).length;
+  return year.periods.filter(p => dateKey(p.end) <= k).length;
 }
 
 /* ================================================================== */
@@ -392,15 +409,30 @@ export interface GmSimPlan {
 }
 
 /**
- * The sim to a day rule. A halt dated on `from` itself is the one the save
- * is already sitting on (the GM has it in front of him), so the run starts
- * past it; the first halt after `from`, on or before the target, is where
- * it stops. Null when the target is not ahead of `from`.
+ * The sim to a day rule. A calendar halt dated on `from` itself is the one
+ * the save is already sitting on (the GM has it in front of him), so the run
+ * starts past it; the first halt after `from`, on or before the target, is
+ * where it stops. A host stop is different: the host lists only the stops
+ * still open and drops one once the GM has dealt with it, so a host stop
+ * dated on or before `from` is still waiting and the run does not start
+ * (it stops where it is, on the earliest of them). Null when the target is
+ * not ahead of `from`.
+ *
+ * The plan only knows the stops dated before the run. A stop that comes up
+ * while the run plays (a starter hurt in round 6 of a sim from round 3 to
+ * 12) is the host's to report: runSimPlan plays the plan one period at a
+ * time and ends the run on the period that raised it.
  */
 export function planSimToDay(year: GmLeagueYear, from: CalDate, target: CalDate, hostHalts: GmHostHalt[] = []): GmSimPlan | null {
   const f = dateKey(from);
   const t = dateKey(target);
   if (t <= f) return null;
+  let open: GmHostHalt | null = null;
+  for (const h of hostHalts) {
+    const k = dateKey(h.date);
+    if (k <= f && (!open || k < dateKey(open.date))) open = h;
+  }
+  if (open) return { stopAt: from, halt: open, periods: [] };
   let halt: GmHalt | null = null;
   for (const h of [...calendarHalts(year), ...hostHalts]) {
     const k = dateKey(h.date);
@@ -410,6 +442,49 @@ export function planSimToDay(year: GmLeagueYear, from: CalDate, target: CalDate,
   const s = dateKey(stopAt);
   const periods = year.periods.filter(p => dateKey(p.end) > f && dateKey(p.end) <= s).map(p => p.index);
   return { stopAt, halt, periods };
+}
+
+/** What the host's engine reports after playing one period: the new state, and a stop that came up while it played. */
+export interface GmPeriodResult<S> {
+  state: S;
+  halt: GmHostHalt | null;
+}
+
+export interface GmSimRun<S> {
+  state: S;
+  /** The day the save sits on: the plan's stop, or the last day of the period that raised a stop. */
+  stopAt: CalDate;
+  halt: GmHalt | null;
+  /** The periods actually played, in order. */
+  played: number[];
+}
+
+/**
+ * The one loop, Club Manager's simToWeek for a GM: plays the plan one engine
+ * period at a time through the host's own playPeriod, and ends the run the
+ * moment a period reports a stop (an injury, an inbox ask, a deal running
+ * out), so a sim never plays past something that came up on the way. With no
+ * stop raised it ends where the plan does, on the plan's own halt.
+ *
+ * When the period that raised a stop ends on the plan's own stop day, the
+ * run reports the plan's stop: a calendar stop passed over now would be
+ * skipped by the next plan (it would sit on `from`), while the host's stop
+ * stays in the host's open list and holds the next run where it is.
+ */
+export function runSimPlan<S>(year: GmLeagueYear, plan: GmSimPlan, state: S, playPeriod: (state: S, period: GmPeriod) => GmPeriodResult<S>): GmSimRun<S> {
+  let current = state;
+  const played: number[] = [];
+  for (const index of plan.periods) {
+    const period = year.periods[index - 1];
+    const res = playPeriod(current, period);
+    current = res.state;
+    played.push(index);
+    if (res.halt) {
+      const planStopToday = plan.halt && dateKey(plan.halt.date) === dateKey(period.end);
+      return { state: current, stopAt: period.end, halt: planStopToday ? plan.halt : res.halt, played };
+    }
+  }
+  return { state: current, stopAt: plan.stopAt, halt: plan.halt, played };
 }
 
 /* ================================================================== */
@@ -458,6 +533,8 @@ export interface GmDay {
   halt: GmHalt | null;
   /** A phase starting today is not two sourced: the grid says "expected". */
   thin: boolean;
+  /** A phase starting today has no source for its day at all: the grid says "estimate". */
+  estimate: boolean;
   isToday: boolean;
   past: boolean;
 }
@@ -494,6 +571,7 @@ export function gmMonthGrid(year: GmLeagueYear, y: number, m: number, today: Cal
       game: !!period && period.gameDays.some(g => dateKey(g) === key),
       halt: halts.find(h => dateKey(h.date) === key) ?? null,
       thin: starting.some(p => !!p.thin),
+      estimate: starting.some(p => !!p.estimate),
       isToday: key === todayKey,
       past: key < todayKey,
     });
@@ -516,10 +594,20 @@ export function validateLeagueYear(def: GmLeagueYearDef): string[] {
   let year: GmLeagueYear;
   try { year = resolveLeagueYear(def); } catch (e) { return [tag(String((e as Error).message))]; }
 
-  /* Every phase is one range, sourced twice or marked thin. */
+  /* Every phase is one range, sourced twice or marked thin; a phase no source dates is an estimate, and says how it was placed. */
   for (const p of year.phases) {
     if (dateKey(p.end) < dateKey(p.start)) problems.push(tag(`${p.id} ends before it starts`));
     if (p.sources.length < 2 && !(p.thin && p.thin.trim())) problems.push(tag(`${p.id} has ${p.sources.length} source(s) and no thin note`));
+    if (p.sources.length === 0 && !p.estimate) problems.push(tag(`${p.id} has no source and is not marked estimate`));
+    if (p.estimate && !(p.thin && p.thin.trim())) problems.push(tag(`${p.id} is an estimate with no thin note saying how it was placed`));
+  }
+  /* The phases that need a decision stop the sim, every one of them, and nothing else does (a halts flag on any other phase is dropped by calendarHalts). */
+  for (const p of year.phases) {
+    if (HALT_KIND[p.id] && !p.halts) problems.push(tag(`${p.id} needs a decision but does not stop the sim`));
+    if (!HALT_KIND[p.id] && p.halts) problems.push(tag(`${p.id} is marked to stop the sim but is not a decision`));
+  }
+  for (const id of ['resign', 'draft', 'freeAgency', 'cutDown', 'deadline'] as GmPhaseId[]) {
+    if (!phaseById(year, id)) problems.push(tag(`no ${id} phase, so the sim has no ${id} stop`));
   }
   /* The league's real order, and no two phases on top of each other. */
   const ids = year.phases.map(p => p.id).join(',');
