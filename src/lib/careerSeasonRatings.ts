@@ -41,7 +41,7 @@ export function ratingBand(r: number): RatingBand {
 export interface SeasonStat {
   label: string;
   short: string;
-  /** null when the number was never recorded for that season */
+  /** null when the number may not have been counted for that season (see backLineSheets) */
   value: number | null;
 }
 
@@ -62,7 +62,9 @@ const OUT_CLUBS: Record<string, string> = { BANNED: "Banned", "BANNED (PED)": "B
 /** Clean sheets for the back line were only drawn from Round 667
     (2026-09-28). Every row the engine has stamped with ovr is newer than
     that, so its number is always real, a 0 included. An unstamped back line
-    row with games and 0 may be a 0 that was never drawn, so it reads null. An
+    row with games and 0 may be a 0 that was never drawn (before Round 667) or
+    a real 0 (Round 667 to Round 1010), and nothing on the row tells which, so
+    it reads null and the screens say it may not have been counted. An
     unstamped row with more than 0 is real, and so is 0 in a season with no
     games. The keeper's were always drawn. */
 function backLineSheets(row: Row): number | null {

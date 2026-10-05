@@ -25,9 +25,14 @@ export const BAND_CLASS: Record<RatingBand, string> = {
   poor: "text-red-400",
 };
 
-/** The dash every unknown number prints, with words a screen reader can say. */
-export function NotRecorded() {
-  return <span className="text-muted-foreground" aria-label="not recorded" title="Not recorded for this season">-</span>;
+/** The dash every unknown number prints, with words a screen reader can say.
+    A back line row saved before its season was stamped may hold a clean
+    sheet count that was never drawn (before Round 667) or a real 0 (after it),
+    so that one says it may not have been counted rather than claiming either. */
+export function NotRecorded({ maybe = false }: { maybe?: boolean }) {
+  return maybe
+    ? <span className="text-muted-foreground" aria-label="may not have been counted" title="May not have been counted this season">-</span>
+    : <span className="text-muted-foreground" aria-label="not recorded" title="Not recorded for this season">-</span>;
 }
 
 function trendLabel(what: string, points: { year: number | "now"; v: number }[], digits: number): string {
@@ -78,11 +83,21 @@ function RatingsBody({ career }: { career: RatingsSource }) {
           Career average <strong className={`tabular-nums ${BAND_CLASS[ratingBand(avg.rating)]}`}>{avg.rating.toFixed(1)}</strong> over {avg.games} games
         </p>
       )}
-      {(trackedFrom !== null || notYet) && (
-        <p className="text-[10px] text-muted-foreground" data-ovr-tracked-from={trackedFrom ?? "next"}>
-          Overall is kept from {trackedFrom ?? "your next season"} on. Seasons before that were played before it was recorded.
+      {/* A retired career has no next season, so it is told the overall was
+          not kept for these seasons rather than promised one it can not get. */}
+      {trackedFrom !== null ? (
+        <p className="text-[10px] text-muted-foreground" data-ovr-tracked-from={trackedFrom}>
+          Overall is kept from {trackedFrom} on. Seasons before that were played before it was recorded.
         </p>
-      )}
+      ) : notYet && career.retired ? (
+        <p className="text-[10px] text-muted-foreground" data-ovr-tracked-from="never">
+          Overall was not recorded for these seasons. They were played before the game kept it.
+        </p>
+      ) : notYet ? (
+        <p className="text-[10px] text-muted-foreground" data-ovr-tracked-from="next">
+          Overall is kept from your next season on. Seasons before that were played before it was recorded.
+        </p>
+      ) : null}
       {/* Sized for a phone: the age column only shows from sm up, the club
           truncates, and the table scrolls inside its own box rather than
           pushing the page sideways. */}
@@ -116,7 +131,7 @@ function RatingsBody({ career }: { career: RatingsSource }) {
                   {row.rating === null ? <NotRecorded /> : <span className={BAND_CLASS[ratingBand(row.rating)]}>{row.rating.toFixed(1)}</span>}
                 </td>
                 {row.stats.map(st => (
-                  <td key={st.label} className="px-1 py-1 text-right" data-ratings-stat={st.label}>{st.value === null ? <NotRecorded /> : st.value}</td>
+                  <td key={st.label} className="px-1 py-1 text-right" data-ratings-stat={st.label}>{st.value === null ? <NotRecorded maybe /> : st.value}</td>
                 ))}
               </tr>
             ))}

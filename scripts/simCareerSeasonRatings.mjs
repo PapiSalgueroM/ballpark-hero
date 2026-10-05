@@ -30,7 +30,9 @@
       isSoccerCareerSave, come out of repairCareer with their rows unchanged,
       read ovr null and a real rating on every played row, then play 3 more
       seasons: the old rows stay null, the new ones carry ovr, ovrTrackedFrom
-      names the first new year, and the series has nulls exactly there;
+      names the first new year, and the series has nulls exactly there; and
+      a fresh career, stamped from its first season, gets no "kept from"
+      caption (ovrTrackedFrom null, ovrNotYetTracked false);
    5. honest per position stats: only Apps, Goals, Assists and Clean sheets,
       each equal to the row's own field; Clean sheets for GK, CB, LB and RB
       only; a back line row from before Round 667 (unstamped, 0) reads null,
@@ -56,6 +58,7 @@
    aftergrowth  the row is restamped with the grown overall      expected red {1}
    stream       the stamp draws one Math.random                  expected red {3}
    guess        readOvr's caller falls back to 75                expected red {4}
+   trackedfrom  ovrTrackedFrom's `first > 0` becomes `>= 0`      expected red {4}
    zerorating   readMatchRating keeps any finite rating          expected red {2}
    tackles      the back line emits a made up Tackles column     expected red {5}
    Exit 1 only when the red set equals the expected set; exit 2 when the anchor
@@ -86,6 +89,7 @@ const CONTROLS = {
   aftergrowth: { file: 'engine', from: APPEND, to: '  season.ovr = s.overall;\n' + APPEND, red: [1] },
   stream: { file: 'engine', from: STAMP, to: '    ovr: overall + 0 * Math.random(),\n', red: [3] },
   guess: { file: 'ratings', from: 'ovr: readOvr(row.ovr),', to: 'ovr: readOvr(row.ovr) ?? 75,', red: [4] },
+  trackedfrom: { file: 'ratings', from: 'return first > 0 ? played[first].year : null;', to: 'return first >= 0 ? played[first].year : null;', red: [4] },
   zerorating: {
     file: 'ratings',
     from: 'return row.type === "playing" && (row.apps ?? 0) > 0 && Number.isFinite(row.rating) && row.rating >= 3 && row.rating <= 10 ? row.rating : null;',
@@ -154,7 +158,7 @@ fs.rmSync(TMP, { recursive: true, force: true });
 const R = CUR.R;
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'declineRetirementSuggestion', 'acceptRetirementSuggestion', 'repairCareer', 'isSoccerCareerSave'];
 for (const k of NEED) if (typeof CUR[k] !== 'function') { console.error(`engine export missing: ${k}, so nothing below measures anything`); process.exit(1); }
-for (const k of ['readOvr', 'readMatchRating', 'ratingBand', 'soccerRatingRows', 'careerAverageRating', 'ovrTrackedFrom']) if (typeof R[k] !== 'function') { console.error(`careerSeasonRatings export missing: ${k}`); process.exit(1); }
+for (const k of ['readOvr', 'readMatchRating', 'ratingBand', 'soccerRatingRows', 'careerAverageRating', 'ovrTrackedFrom', 'ovrNotYetTracked', 'ratingSeries']) if (typeof R[k] !== 'function') { console.error(`careerSeasonRatings export missing: ${k}`); process.exit(1); }
 const clubs = CUR.FALLBACK_CLUBS;
 
 /* A seeded generator that also counts its calls, and a frozen clock, so the
@@ -362,13 +366,19 @@ console.log('4) a save from before this round: real ratings, no invented overall
 const playedCount = s => (s.seasons || []).filter(r => r.type === 'playing').length;
 const stripOvr = s => JSON.parse(JSON.stringify(s, function (k, v) { return k === 'ovr' && isSeasonRow(this) ? undefined : v; }));
 const hasOvr = s => JSON.stringify(s.seasons).includes('"ovr"');
-let oldSaves = 0, oldRows = 0, newRows = 0, newStamped = 0;
+let oldSaves = 0, oldRows = 0, newRows = 0, newStamped = 0, freshCareers = 0;
 for (let i = 0; i < 12; i++) {
   const position = POSITIONS[i % POSITIONS.length];
   const [startYear, era] = ERAS[i % 2];
   const seed = SEED0 + 70001 + i * 7919;
   const live = runCareer(CUR, seed, { era, startYear, position, ovr: 64, until: s => s.phase === 'playing' && playedCount(s) >= 5 });
   if (live.retired || playedCount(live) < 5) { fail(`old save ${i} never reached 5 played seasons`); continue; }
+  /* a career played on this engine has every season stamped, so the Ratings
+     screen must carry no "kept from" caption for it */
+  const fresh = R.soccerRatingRows(live.seasons, position);
+  freshCareers += 1;
+  if (R.ovrTrackedFrom(fresh) !== null) fail(`fresh career ${i} (${position}): ovrTrackedFrom says ${R.ovrTrackedFrom(fresh)} on a career stamped from its first season`);
+  if (R.ovrNotYetTracked(fresh)) fail(`fresh career ${i} (${position}): ovrNotYetTracked is true on a stamped career`);
   const old = stripOvr(live);
   if (hasOvr(old)) { fail('stripping ovr left one behind'); continue; }
   if (!CUR.isSoccerCareerSave(old)) { fail(`old save ${i} (${position}) fails isSoccerCareerSave`); continue; }
@@ -377,6 +387,7 @@ for (let i = 0; i < 12; i++) {
   if (hasOvr(repaired)) fail(`repairCareer invented an ovr on old save ${i}`);
   const before = R.soccerRatingRows(old.seasons, position);
   oldSaves += 1; oldRows += before.length;
+  if (!R.ovrNotYetTracked(before)) fail(`old save ${i}: ovrNotYetTracked is false on a save with no ovr at all`);
   for (const [k, row] of before.entries()) {
     if (row.ovr !== null) fail(`old save ${i}, ${row.year}: ovr reads ${row.ovr} on a row saved without one`);
     const raw = old.seasons.filter(r => r.type === 'playing')[k];
@@ -399,7 +410,8 @@ for (let i = 0; i < 12; i++) {
   }
   if (firstNew !== null && R.ovrTrackedFrom(rows) !== firstNew) fail(`old save ${i}: ovrTrackedFrom says ${R.ovrTrackedFrom(rows)}, the first new played year is ${firstNew}`);
 }
-console.log(`   ${oldSaves} old saves, ${oldRows} old played type rows read ovr null with their real rating; ${newRows} seasons played on them after the update, ${newStamped} with ovr`);
+console.log(`   ${freshCareers} fresh careers carry no "kept from" caption; ${oldSaves} old saves, ${oldRows} old played type rows read ovr null with their real rating; ${newRows} seasons played on them after the update, ${newStamped} with ovr`);
+floorCheck(freshCareers, 12, 'fresh careers checked for the caption');
 floorCheck(oldSaves, 12, 'old saves');
 floorCheck(newRows, 24, 'seasons played on old saves');
 

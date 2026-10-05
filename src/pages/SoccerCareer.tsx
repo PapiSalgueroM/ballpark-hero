@@ -369,7 +369,7 @@ function TimelineEntry({ season, position, isCurrent, isLast }: { season: Season
   const statLine = season.type === "playing" ? soccerRatingRows([season], position)[0]?.stats ?? [] : [];
 
   return (
-    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
+    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`} data-timeline-season={season.year}>
       {!isLast && <div className="absolute left-[1.65rem] top-9 w-0.5 h-[calc(100%-0.5rem)] bg-border" />}
       <div className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black z-10 ${
         label === "A" ? "bg-amber-500/80 text-amber-950" :
@@ -398,7 +398,7 @@ function TimelineEntry({ season, position, isCurrent, isLast }: { season: Season
                 <Fragment key={st.label}>
                   {i > 0 && " · "}
                   {st.value === null
-                    ? <span title={`${st.label} not recorded for this season`} aria-label={`${st.label} not recorded`}>-{st.short}</span>
+                    ? <span title={`${st.label} may not have been counted this season`} aria-label={`${st.label} may not have been counted`}>-{st.short}</span>
                     : `${st.value}${st.short}`}
                 </Fragment>
               ))}
