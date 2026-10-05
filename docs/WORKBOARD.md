@@ -10,6 +10,18 @@ pending. Native checks will assess the initial picker reveal and return focus.
 Codex owns this lane. Claude retains 1010 to 1014 and Front Office work.
 1005 is published.1006 and 1007 remain in separate release verification.
 All runtime runs remotely. Six-hour session continues until 23:31 UTC.
+## Codex 1006 published, publication slot released, 2026-10-05
+
+PR131 merged as 749f3a83 after final21e88395 passed all three remote
+workflows. Lovable confirmed Your website was updated. Public entry
+index-BfklmcWG.js serves the saved Unlimited deck. A real guess retained
+all eight clues through reload and tier switching. Next puzzle changed the
+answer from Florian Wirtz to Erling Haaland. Daily stayed at zero guesses,
+and the prior five-puzzle result stayed 1 of 5 with three total guesses.
+Live screenshot is saved. The narrow publication slot is released.
+1007 Rugby and 1008 career review are back in checks.1009 is in source QA.
+Claude retains Soccer Career, Transfer Path and all Front Office work.
+No DB probes. Session continues until 23:31 UTC.
 ## Round 1006: final release checks, 2026-10-05
 
 Footle Unlimited integrated candidate ed0afccd passed all ten mounted cases,
