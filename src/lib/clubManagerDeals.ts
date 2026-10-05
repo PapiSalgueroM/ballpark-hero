@@ -25,6 +25,21 @@ import type { CareerState, CMPlayer, MarketPlayer, SquadRole } from '@/lib/clubM
 import { money } from '@/lib/clubManager';
 import { staffLevel } from '@/lib/clubManagerStaff';
 import { valuationTighten } from '@/lib/clubManagerXp';
+import { VALUATION_EXACT_AT, bandRead, type OfferVerdict, type ValuationRead } from '@/lib/gmDealTable';
+
+/*
+ * Round 908: the fee table (what an offer reads as, the closeness meter, what
+ * an answer costs in patience) and the band read were already pure numbers, so
+ * they moved to src/lib/gmDealTable.ts where the four front offices can reach
+ * them too. Every name is re-exported here, so nothing that imported it from
+ * this file had to change. scripts/simGmDealTableFixture.mjs replays a
+ * recording of the old behaviour against the moved code line for line.
+ */
+export {
+  AGREE_RATIO, INSULT_RATIO, WALKOUT_RATIO, OPENING_PATIENCE_MIN, OPENING_PATIENCE_SPREAD,
+  VALUATION_EXACT_AT, dealCloseness, offerVerdict, patienceCost,
+} from '@/lib/gmDealTable';
+export type { OfferVerdict, ValuationRead } from '@/lib/gmDealTable';
 
 /* ================================================================== */
 /* 1. The valuation desk                                              */
@@ -52,8 +67,6 @@ import { valuationTighten } from '@/lib/clubManagerXp';
 
 /** Widest band, at level 1 and on an empty post: plus or minus 30 percent. */
 export const VALUATION_SPREAD_MAX = 0.3;
-/** At or under this the desk is quoting a number, not a range. */
-export const VALUATION_EXACT_AT = 0.02;
 
 /**
  * How loose your read of a fee is: 0.30 at level 1, and tight enough at level
@@ -77,27 +90,6 @@ export function valuationSpread(state: CareerState): number {
   return Math.max(VALUATION_EXACT_AT, VALUATION_SPREAD_MAX - 0.035 * (level - 1) - fromTrees);
 }
 
-/** FNV-1a, the hash clubManagerStaff already uses, so no draw is spent here. */
-function hash32(s: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 16777619) >>> 0;
-  }
-  return h >>> 0;
-}
-
-export interface ValuationRead {
-  /** The bottom of what your people think he is worth, in millions. */
-  low: number;
-  /** The top of it. */
-  high: number;
-  /** The half width actually used, so a screen can say how good the read is. */
-  spread: number;
-  /** True when the desk is tight enough to quote one number. */
-  exact: boolean;
-}
-
 /**
  * What your recruitment desk says a market player is worth. Deterministic in
  * the player's name and the season, so it is the same number every render and
@@ -109,18 +101,9 @@ export interface ValuationRead {
  * player reading the midpoint as the answer.
  */
 export function valuationBand(state: CareerState, mp: MarketPlayer): ValuationRead {
-  const truth = mp.value ?? mp.price;
-  const spread = valuationSpread(state);
-  if (spread <= VALUATION_EXACT_AT) {
-    return { low: truth, high: truth, spread, exact: true };
-  }
-  const h = hash32(`${mp.name}:${state.season}`);
-  /* Two independent draws in [0, spread], one each side. */
-  const below = ((h % 1000) / 1000) * spread;
-  const above = (((h >>> 10) % 1000) / 1000) * spread;
-  const low = Math.max(0.1, Math.round(truth * (1 - below) * 10) / 10);
-  const high = Math.max(low, Math.round(truth * (1 + above) * 10) / 10);
-  return { low, high, spread, exact: false };
+  /* Round 908: the arithmetic is gmDealTable's bandRead. What stays here is
+     what is Club Manager's own: whose desk it is and what the key is. */
+  return bandRead(mp.value ?? mp.price, valuationSpread(state), `${mp.name}:${state.season}`);
 }
 
 /**
@@ -144,70 +127,13 @@ export function valuationLine(state: CareerState, mp: MarketPlayer): string {
 /* ================================================================== */
 
 /*
- * The agree line at 0.97 of the ask is Round 161's and is not moved here. What
- * is new is the floor underneath it. Before this round an insulting offer was
- * anything under 0.75 of the ask and it only ever cost one patience, so there
- * was no number low enough to end a conversation on the spot: his "extreme
- * lowballs can end talks entirely" had no code behind it.
+ * Round 908: the agree, insult and walkout lines, offerVerdict, dealCloseness,
+ * the opening patience and patienceCost are in src/lib/gmDealTable.ts and are
+ * re-exported at the top of this file. The numbers are the ones Round 161 and
+ * Round 506 measured and they did not change in the move. What is left in
+ * this section is the one constant that is about how Club Manager's own seller
+ * counters, which clubManager.ts reads and no other game does.
  */
-
-/** Meet this share of the ask and the deal is done. Round 161's line. */
-export const AGREE_RATIO = 0.97;
-/** Under this and it reads as an insult. Round 161's line. */
-export const INSULT_RATIO = 0.75;
-/** Under this and they end the conversation on the spot. New in Round 506. */
-export const WALKOUT_RATIO = 0.55;
-
-export type OfferVerdict = 'agreed' | 'counter' | 'insulted' | 'walkout';
-
-/** What a package reads as to the selling club. One function, four answers. */
-export function offerVerdict(packageValue: number, theirAsk: number): OfferVerdict {
-  if (theirAsk <= 0) return 'agreed';
-  const ratio = packageValue / theirAsk;
-  if (ratio >= AGREE_RATIO) return 'agreed';
-  if (ratio >= INSULT_RATIO) return 'counter';
-  if (ratio >= WALKOUT_RATIO) return 'insulted';
-  return 'walkout';
-}
-
-/**
- * The closeness meter, 0 to 100. 100 is the agree line, 0 is the number that
- * ends the conversation, and it is linear between them so the bar moving is
- * always the same amount of progress. It reads the PACKAGE, not the cash, so
- * adding a sell-on visibly moves it and the screen cannot disagree with the
- * engine about whether a structure helped.
- */
-export function dealCloseness(packageValue: number, theirAsk: number): number {
-  if (theirAsk <= 0) return 100;
-  const ratio = packageValue / theirAsk;
-  if (ratio >= AGREE_RATIO) return 100;
-  if (ratio <= WALKOUT_RATIO) return 0;
-  const span = AGREE_RATIO - WALKOUT_RATIO;
-  return Math.round(((ratio - WALKOUT_RATIO) / span) * 100);
-}
-
-/*
- * Patience, and this is the defect half of his "limited patience per
- * negotiation" clause rather than a missing feature. Measured on the shipped
- * engine before this round: patience was spent ONLY on the lowball branch,
- * while the counter branch floored the ask at 1.02 of your package against an
- * agreement line of 0.97. Repeating one unchanged offer therefore closed any
- * non-lowball deal in at most three rounds and cost nothing at all, so the
- * only real risk in haggling was a rival turning up. Every offer costs
- * something now, and an insult costs double.
- */
-
-/** Rounds at the table before they stop taking your calls. */
-export const OPENING_PATIENCE_MIN = 4;
-/** The spread on top of it, so a seller is 4 or 5 rounds patient. */
-export const OPENING_PATIENCE_SPREAD = 1;
-
-/** What one answer costs the seller's goodwill. */
-export function patienceCost(verdict: OfferVerdict): number {
-  if (verdict === 'insulted') return 2;
-  if (verdict === 'counter') return 1;
-  return 0;
-}
 
 /**
  * How much of the gap the seller gives away each round.

@@ -1,5 +1,5 @@
 import type { RebuildClub } from '@/lib/fetchRebuild';
-import type { RebuildPreset } from '@/lib/rebuildDeck';
+import { CURRENT_DECK, type DeckVersion, type RebuildPreset } from '@/lib/rebuildDeck';
 import * as loop from '@/lib/rebuildLoop';
 import type { RunState } from '@/lib/rebuildLoop';
 import * as table from '@/lib/rebuildTable';
@@ -53,7 +53,11 @@ import type { SeatKind, TableData, TablePhase, TableState } from '@/lib/rebuildT
  * scripts/simRebuildSave.mjs drives all of this with no page.
  */
 
-export const REBUILD_SAVE_VERSION = 1;
+/* Version 2 (Round 980): every opened seat records the deck its run deals
+   from, because the five new perks changed the envelope decks. A version 1
+   save steps up with deck 1 on every seat and replays onto exactly the cards
+   it was played on (scripts/data/rebuildSavesV1.json holds 144 of them). */
+export const REBUILD_SAVE_VERSION = 2;
 export const REBUILD_SAVE_KEY = 'rebuild-table';
 
 /** A hostile save cannot make the page chew through a million replays. A full
@@ -79,7 +83,14 @@ export type RebuildMove =
   | { k: 'reply' }
   | { k: 'walk' }
   | { k: 'clearWar' }
-  | { k: 'whistle' };
+  | { k: 'whistle' }
+  /* Round 980: the five new perks */
+  | { k: 'respin'; slot: number }
+  | { k: 'swap' }
+  | { k: 'loan'; name: string }
+  | { k: 'peek' }
+  | { k: 'veto'; i: number }
+  | { k: 'accept' };
 
 /** The table plus the moves that built it: what the hook holds and what the
  *  save is written from. Always one move list per seat. */
@@ -95,6 +106,8 @@ export interface SavedSeat {
   moves: RebuildMove[];
   /** runFingerprint of this seat's run, or null for a seat never opened. */
   fp: string | null;
+  /** The deck the seat's run deals from (Round 980). Absent on a seat never opened. */
+  deck?: DeckVersion;
 }
 
 export interface RebuildSave {
@@ -129,6 +142,12 @@ export function applyMove(r: RunState, m: RebuildMove): RunState {
     case 'walk': return loop.walk(r);
     case 'clearWar': return loop.clearWar(r);
     case 'whistle': return loop.blowWhistle(r);
+    case 'respin': return loop.secondSpin(r, m.slot);
+    case 'swap': return loop.partExchange(r);
+    case 'loan': return loop.loanOffer(r, m.name);
+    case 'peek': return loop.usePeek(r);
+    case 'veto': return loop.vetoCard(r, m.i);
+    case 'accept': return loop.acceptVerdict(r);
   }
 }
 
@@ -145,7 +164,7 @@ export function runFingerprint(r: RunState): string {
     .sort((a, b) => a - b)
     .map(i => `${i}:${r.decided[i]?.name ?? '40'}`)
     .join(',');
-  return [
+  const base = [
     r.phase,
     r.formation.name,
     r.startRating,
@@ -165,6 +184,21 @@ export function runFingerprint(r: RunState): string {
     r.war ? `${r.war.player.name}/${r.war.price}/${r.war.leader}/${r.war.outcome}` : '-',
     r.deal ? `${names(r.deal.offers)}#${names(r.deal.bench)}` : '-',
     r.reckoning ? `${r.reckoning.funds}/${r.reckoning.ratingPen}/${r.reckoning.notes.length}` : '-',
+  ].join('|');
+  /* A deck 1 run prints exactly what a version 1 save recorded, byte for
+     byte, or every save written before Round 980 would open fresh. */
+  if (r.deck === 1) return base;
+  const p = r.perks;
+  return [
+    base,
+    `d${r.deck}`,
+    `${p.rescout}${p.discount}${p.noWar}${p.respin}${p.veto}${p.swap}${p.loan}${p.peek}`,
+    r.loans.map(l => `${l.player.name}/${l.fee}`).join(','),
+    r.swapOpen ? 'x' : '-',
+    r.peeked ?? '-',
+    r.verdict ? 'v' : '-',
+    r.reopened.join(','),
+    r.reckoning?.vetoed ?? '-',
   ].join('|');
 }
 
@@ -202,6 +236,7 @@ export function toSave(session: RebuildSession, preset: RebuildPreset): RebuildS
       club: s.club?.club ?? null,
       moves: session.moves[i] ?? [],
       fp: s.run ? runFingerprint(s.run) : null,
+      ...(s.run ? { deck: s.run.deck } : {}),
     })),
   };
 }
@@ -234,6 +269,12 @@ function isMove(m: unknown): m is RebuildMove {
     case 'formation': return str(o.name);
     case 'offer': return str(o.name);
     case 'promote': return str(o.name);
+    case 'loan': return str(o.name);
+    case 'respin': return Number.isInteger(o.slot) && (o.slot as number) >= 0 && (o.slot as number) < 11;
+    case 'veto': return Number.isInteger(o.i) && (o.i as number) >= 0 && (o.i as number) < 8;
+    case 'swap':
+    case 'peek':
+    case 'accept':
     case 'toManager':
     case 'spin':
     case 'keep':
@@ -256,6 +297,9 @@ function isSeat(s: unknown): s is SavedSeat {
   if (o.kind !== 'human' && o.kind !== 'cpu') return false;
   if (o.club !== null && !(typeof o.club === 'string' && o.club.length > 0 && o.club.length <= 120)) return false;
   if (o.fp !== null && !(typeof o.fp === 'string' && o.fp.length > 0 && o.fp.length <= 4000)) return false;
+  if (o.deck !== undefined && o.deck !== 1 && o.deck !== 2) return false;
+  /* An opened seat has to say which deck it dealt from; a seat never opened has none. */
+  if ((o.fp !== null) !== (o.deck !== undefined)) return false;
   if (!Array.isArray(o.moves) || o.moves.length > MAX_MOVES_PER_SEAT) return false;
   return o.moves.every(isMove);
 }
@@ -263,12 +307,22 @@ function isSeat(s: unknown): s is SavedSeat {
 type Migration = (o: Record<string, unknown>) => Record<string, unknown> | null;
 
 /**
- * One step per old version, keyed by the version it reads. Version 1 is the
- * first shape Rebuild has ever had, so there is nothing to step up from yet
- * and any other version opens fresh. A shape change adds its step here and
- * bumps REBUILD_SAVE_VERSION; nothing else has to move.
+ * One step per old version, keyed by the version it reads. A shape change
+ * adds its step here and bumps REBUILD_SAVE_VERSION; nothing else has to move.
+ * 1 to 2 (Round 980): every opened seat was played on the three perk deck, so
+ * it gets deck 1; a seat never opened gets nothing and, when it opens, takes
+ * the deck of the table's first opened seat (table.openWindow), so a table
+ * saved mid way plays every seat on deck 1.
  */
-const MIGRATIONS: Record<number, Migration> = {};
+const MIGRATIONS: Record<number, Migration> = {
+  1: o => {
+    if (!Array.isArray(o.seats)) return null;
+    const seats = o.seats.map(s => (s && typeof s === 'object' && !Array.isArray(s) && (s as Record<string, unknown>).fp !== null && (s as Record<string, unknown>).fp !== undefined
+      ? { ...(s as Record<string, unknown>), deck: 1 }
+      : s));
+    return { ...o, v: 2, seats };
+  },
+};
 
 function migrate(o: Record<string, unknown>): Record<string, unknown> | null {
   let cur = o;
@@ -378,7 +432,7 @@ export function restoreTable(save: RebuildSave, clubs: RebuildClub[], data: Tabl
   for (let i = 0; i < save.seats.length; i += 1) {
     if (i > save.turn) break;
     if (i === save.turn && save.phase === 'handover') break;
-    const opened = table.openWindow(t, data, clubs);
+    const opened = table.openWindow(t, { ...data, deck: save.seats[i].deck ?? CURRENT_DECK }, clubs);
     if (opened === t) return null;
     t = opened;
     for (const m of save.seats[i].moves) {

@@ -57,6 +57,7 @@
 import type { BoardObjective, CareerState, CMPlayer, MarketPlayer, ObjectiveStatus, PosGroup } from '@/lib/clubManager';
 import {
   LEAGUE_NATIONS, SQUAD_LIMIT, buildMarket, careerLeagueOf, groupOf, money,
+  REAL_LEAGUES, isHistoricEra,
 } from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
 
@@ -120,9 +121,17 @@ function niceFloor(m: number): number {
   return Math.max(0.5, Math.floor(m * 2) / 2);
 }
 
-/** The club's own country, or null where the league has none on file. */
+/** The club's own country, or null where the league has none on file.
+ *  Round 964: a real club in today's world takes it from the league it REALLY
+ *  plays in, so one the world editor moved keeps its own country: Celtic in
+ *  the Premier League are still a Scottish club and their board asks for
+ *  Scottish players. Promotion never crosses a border, so on every save
+ *  without an edit this is the league's country exactly as before. */
 function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClub'>): string | null {
-  const raw = LEAGUE_NATIONS[careerLeagueOf(career).id];
+  const historic = !!career.eraId && isHistoricEra(career.eraId);
+  const custom = !!career.customClub && career.customClub.name === career.clubName;
+  const home = historic || custom ? undefined : REAL_LEAGUES.find(l => l.clubs.includes(career.clubName));
+  const raw = LEAGUE_NATIONS[(home ?? careerLeagueOf(career)).id];
   if (!raw) return null;
   return LEAGUE_NATION_ALIAS[raw] ?? raw;
 }

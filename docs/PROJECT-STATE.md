@@ -1,3 +1,63 @@
+## Codex1001/1002 published, 2026-10-03
+
+Footle's clue cards, numbered guess history and completed five-puzzle review are
+live, alongside NHL Connections' four saved draft groups and free rearrangement.
+PR121 merged as e6356de4, then PR122 as 52281311. That combined release preserves
+Claude Release AC and has exactly the same tree as the final passing CI merge
+c35a75a6. All four applicable workflows passed. Lovable reports Published and
+"Your website is up to date"; the public entry is index-DxOcAtGp.js.
+
+Public Footle play preserved a run started before deployment, all eight clues,
+guess history, completion and review. Public NHL play restored two five-name
+drafts after reload, retained an editable wrong group and finished all four
+groups with three lives. No public-tab errors. Phone and reduced-motion evidence
+comes from remote native profiles; public smoke checks used desktop layout.
+Receipts: docs/audits/ROUND1001-VERIFICATION.md and ROUND1002-VERIFICATION.md.
+
+The narrow publication claim is closed. Next free1003 remains unclaimed.
+One existing copy issue is recorded for follow-up: the NHL Unlimited result's
+share card calls the result today's puzzle. No share was sent. Gameplay and
+the planning release are verified; this is not a new production facts audit.
+No local runtime gates or direct production DB probes. Held root drafts and
+seven stashes are intact. AdSense and indexing submissions remain deferred.
+
+**2026-10-03 19:52 EDT, desktop Claude lane: Release AC IS LIVE**, main `14b31895`, deployment `267ad0cb`, entry `index-f_c3HvFm.js`. Six rounds of this lane, each built, reviewed twice, fixed and closed: **NHL Front Office takes the GM desk (987)**, the first sport bound to the shared GM modules 907 to 910: a staff with a goalie coach and a scouting director, a re-sign desk with the NHL's entry level, restricted and unrestricted rules, a pick ledger, trade packages with retained salary and a trade deadline; **Club Manager's world editor (964)**, move any club to any league before kickoff; **red card appeals and a decisions desk (979)**; **the 2010-11 era as a full big five (901)**: Serie A, the Bundesliga and Ligue 1 join; **Rebuild power ups (980)**; **Idle Arena's trophy room (957)**. Gate on a quiet machine (this lane's agents were stopped at 97 percent of the weekly allowance): type gate 0, build 0, 44 fences, one browser sweep (182 routes, 364 checks, 0 findings), Club Manager, NHL Front Office, Rebuild and Idle Arena played clean, 6 test files 52 of 52, then a final pass with 11 of 11 checks green. Fixed in the release: `simCmLeagueRules` baseline rewritten for 964, 979 and 901 (each passed alone, main passed in the AB gate); two Idle Arena guide headings reworded (a phrase repeated across headings) and the frozen guide record refreshed for /rebuild and /idle-arena; /club-manager budget 641 (640K measured; loading the world editor on demand is owed). Held out, each for a merge conflict to resolve properly: **965** (managers you can build and edit; conflicts with the XP lift in `scripts/simManagerXp.mjs`) and **902** (2005-06 big five; conflicts with 901 in seven files). Proof: deployment id, entry chunk, the What's New lines, and the live NHL Front Office chunk carrying the goalie coach, the qualifying offer and the trade deadline. Codex: the NHL lane you released is bound; nothing of yours was edited outside the desk mount and the user's offseason and trade paths.
+
+## Codex1000 published, 2026-10-03
+
+The animated Buzzer Beater court is live at douknowball.com. Lovable confirmed
+publication of accepted PR118 merge1ce881ac; public entry is index-CK7eZyyX.js.
+The final refreshed court and Shot Lab workflows passed against the same tree
+as the actual merge. Public play confirmed the new artwork, paused flight,
+resume, retry and changed-power comparison. No public-tab errors were recorded.
+Receipt: docs/audits/ROUND1000-VERIFICATION.md. Phone and reduced-motion proof
+comes from remote native profiles; the public smoke check used desktop layout.
+
+Codex retains narrow publication ownership while isolated1001/1002 finish their
+final remote checks. PR121 head75027bb2 and PR122 head433d0c23 include1000/main.
+Neither puzzle update is merged or live yet. Both will be integrated with the
+now-published Release AB main665898cf before acceptance. Claude lanes remain
+separate. No local runtime gates or production DB probes. Held drafts/seven
+stashes are intact. Next free1003; AdSense/indexing submissions stay deferred.
+**2026-10-03 14:31 EDT, desktop Claude lane: Release AB IS LIVE**, main `cfde9165`, deployment `bd86d8e8`, entry `index-DjQ0XSyL.js`. Seven rounds of this lane, each built, reviewed twice, fixed and closed: Club Manager international duty (978), Soccer Career academy years with a report and a choice (973), Manager Hot Seat becomes keeping the job (956), NFL Career Path and NHL Career Path re-sourced on two hosts with repeats removed (922, 923), Missing Five grown (949), the four Connect 4 boards on the shared result moment (952). Gate: type gate 0, build 0, 39 fences, one browser sweep (364 checks, 1 finding: the home page timed out loading once at desktop size under load; `playHomeFold` green on the same build), five games played clean, 6 test files 80 of 80. `simCmLeagueRules` re-baselined for 978 with attribution (main without 978 passed it in the Release AA gate). `simNationalities` is red on main, not this release (bakeNationalities owed). Budgets: /club-manager 625 (978), /soccer-career 718 (973). Proof: deployment id, entry chunk and the new What's New lines live.
+
+## Release AA is LIVE, 2026-10-03 13:04 EDT: main `1a67d69c`, deployment `0d97a1d6`, entry `index-CC1YKSFq.js`
+
+Sixteen rounds of the desktop Claude lane, each built, reviewed twice, fixed and closed, plus Codex 998 to 1000 as they stood on main.
+
+What a player sees:
+- **Club Manager, 2015-16 becomes a full big five (899):** the Bundesliga and Ligue 1 join the Premier League, La Liga and Serie A; window corrections re-audited for the bigger world. Live proof: picking 2015-16 now offers Germany and France.
+- **Club Manager, manager slots (928):** three careers side by side; starting a new one no longer deletes the old one. **The coach development fix (963):** a level 10 coach now moves development by what the staff screen says.
+- **Soccer Career:** your club's league finish every season (929), and the career story kept and readable (974).
+- **Teammates or Not (921):** wrong answers fixed (Doncic and Davis, Super Bowl LIX and others), every row on two hosts, the bank grown from 50 to 141 pairs with MLB and NHL. **Missing Nine (948):** more lineups, every one two sourced.
+- **Fight Gym and Fight Promoter (955):** a deliberate exit with its own verdict, and training as a weekly decision.
+- **Quiz Board, Ball IQ, Emoji Guess and Mystery Box (951)** end on the shared result moment.
+- Groundwork, nothing visible yet: the GM re-sign desk (908), inbox (940), seat (941), XP (942); the college recruiting trail (911) and one college dynasty board (912); the retirement and Hall of Fame module (915).
+
+**Gate.** Pass AA on the sixteen: type gate 0, build 0, 73 fences, ONE browser sweep (182 routes, 364 checks, 0 findings), nine games played clean, 23 test files 299 of 299. Three cross round interactions found and fixed on `release-aa-fix` by an integration agent (929 and 974 both add saved state, so 929's digest check now leaves out 974's `story` by name; the awards fixture re-recorded after proving every difference is an intended change of 899, 929 or 974; Ball IQ's feedback test limit raised, behaviour byte identical to 951). Pass AA2 after merging main (Codex 998 to 1000): type gate 0, build 0, every fence green including `simHarnessAnchors` (Codex fixed its shot lab harness for Windows), sweepWeight green, the awards card test 3 of 3. `playEra2015` updated for the new truth (Germany and France offered) and green.
+**Reds that are not this release's:** `simNationalities` red ON MAIN (30 current players brought in by the 2026 window re-bake have no nationality: `bakeNationalities` is owed and needs one production read by the lead); `simSeoMetaSplit` section 4 red by design until 921's new Teammates title is on main; several child test runs timed out under load and passed alone. **Budgets:** /club-manager 622 (928, 899, 942, 963), /soccer-career 716 (929, 974).
+**Proof.** `x-deployment-id` carries `0d97a1d6`, the home page serves `index-CC1YKSFq.js`, `/whats-new` carries the 2015-16, league finish, career story and Teammates lines, and the live Club Manager offers Germany and France in 2015-16.
+
 ## Codex998/999 published, 2026-10-03
 
 The recovered publisher confirmed "Your website was updated". Public build
