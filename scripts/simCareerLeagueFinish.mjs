@@ -210,8 +210,12 @@ const DIGEST_SEEDS = 16;
    green on origin/main 47197830 with the old digests: the round appends 51
    clubs to FALLBACK_CLUBS and the market draws a league before a club (two
    Math.random calls where pick made one), so every seeded career signs
-   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch. */
-const BASELINE = ['a792f71cce86f4d9', 'db43ec1b04769114', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'a4728affe6a4f65a', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch.
+   Re-recorded at Release AD (2026-10-05, twice, identical): careers 1, 2 and 8 move
+   because Round 972 draws continental opponents from FALLBACK_CLUBS and Round
+   1013 appends 51 clubs to it. Proven on a tree of 1013 plus 972 alone (13 of
+   16 matched, the same three moved); each round alone was green on its branch. */
+const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
