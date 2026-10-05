@@ -164,7 +164,10 @@ function run(name = '') {
     env.NO_DOUBLE_SWAP = JSON.stringify({ [alias]: copy });
   }
   fs.rmSync(report, { force: true });
-  const result = spawnSync(process.execPath, [vitest, 'run', test, '--reporter=json', '--outputFile', report], { cwd: root, env, encoding: 'utf8', timeout: 240000 });
+  /* The house's long limit (simArcadePause, simBudgetSigning and others): on a
+     loaded machine the first case, which builds the first career, ran past
+     vitest's default 5 s and read as a control that failed one case too many. */
+  const result = spawnSync(process.execPath, [vitest, 'run', test, '--reporter=json', '--outputFile', report, '--testTimeout=60000'], { cwd: root, env, encoding: 'utf8', timeout: 240000 });
   assert.ok(!result.error, `${String(result.error)}\n${result.stderr || ''}`);
   assert.ok(fs.existsSync(report), `vitest wrote no report.\n${(result.stderr || '').slice(-2000)}`);
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
