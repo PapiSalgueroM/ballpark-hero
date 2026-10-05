@@ -12,7 +12,9 @@
  *     unlimited game, show settled with the same facts and no confetti;
  *   - useLiveFinish on its own: the menu forgets the game, so a live finish
  *     reopened under the same key stays settled, and a different game that
- *     arrives already finished stays settled;
+ *     arrives already finished stays settled; and with no key the same hook
+ *     keeps the Round 951 dailies on their rule (no play while loading, a
+ *     restored finish never plays);
  *   - the chain states at every length 0 to 25 (a run of none a loss, any run
  *     that added a link close, badge or not, since every chain ends on a
  *     break), and ChainFinishMoment drawing the facts it is given.
@@ -28,7 +30,7 @@
  *     breaks is close under that badge with the board's reason below it, and
  *     no chain rains confetti; the pill is checked against the links the test added
  *     and the timeline the board drew, the Final Score against the score filed.
- * The baseline must be exactly 30 passing tests, so a test deleted or skipped
+ * The baseline must be exactly 31 passing tests, so a test deleted or skipped
  * cannot leave the run green.
  *
  * CONTROLS. Each writes a broken copy of one source into a temp folder
@@ -39,6 +41,8 @@
  * written.
  *   unkeyed        the live flag forgets which game it watched (any play counts)
  *   noclear        the menu never forgets the game it watched
+ *   nullkey        a board with no key is treated as sitting on the menu, so
+ *                  a Round 951 daily never plays its finish
  *   alwayslive     every finish plays, restored or not
  *   bands          a one link chain is called a loss
  *   badgewin       a chain that earned a badge is called a win again (the
@@ -47,11 +51,13 @@
  *   cbbscore       CBB program hands the moment the points still available
  *   boardlive      tennis player hands the moment live={true}
  *
- * MEASURED (2026-10-05, worktree r953 at 21f50321, a shared busy machine):
- * baseline 30 of 30 green; unkeyed turned 1 test red, noclear 1, alwayslive 8
- * (the F1 reload and menu tests, both hook tests, the four boards' reloads),
- * bands 1, chainoffbyone 3 (all three NASCAR Chain tests), cbbscore 1 (the CBB
- * loss), boardlive 1 (the tennis player reload), each exactly its named set.
+ * MEASURED (2026-10-05, worktree r953 after 9b37a7bd, a shared busy machine):
+ * baseline 31 of 31 green; unkeyed turned 1 test red, noclear 1, nullkey 1
+ * (the no key hook test), alwayslive 9 (the F1 reload and menu tests, all
+ * three hook tests, the four boards' reloads), bands 1, badgewin 4 (the chain
+ * finish render and the three boards' badge runs), chainoffbyone 3 (all three
+ * NASCAR Chain tests), cbbscore 1 (the CBB loss), boardlive 1 (the tennis
+ * player reload), each exactly its named set.
  * Nothing here is random, so one run is the whole distribution; the timeouts
  * are wide because the gate machine is often busy.
  *
@@ -66,7 +72,10 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TESTS = ['src/test/guessFinishMoment.test.tsx', 'src/test/guessFinishClueBoards.test.tsx', 'src/test/guessFinishChainBoards.test.tsx'];
 const MOMENT = 'src/components/guess-finish/GuessFinish.tsx';
-const EXPECTED_TESTS = 30;
+/* useLiveFinish is Round 951's useFreshFinish with a key, so the live flag's
+   controls break that one copy. */
+const FRESH = 'src/components/game/RestoredResult.tsx';
+const EXPECTED_TESTS = 31;
 const ONLY_CONTROL = process.env.GUESS_FINISH_CONTROL || '';
 
 const CLUE = ['CBB Program', 'F1 Constructor', 'Tennis Player', 'NASCAR Driver'];
@@ -79,6 +88,7 @@ const T = {
   menu: 'keeps an old daily settled when it is reopened from the menu',
   hookMenu: 'forgets the game at the menu',
   hookKeyed: 'keeps a different game that arrives already finished settled',
+  hookFresh: 'keeps Round 951 dailies on their rule when no key is given',
   bands: 'calls every chain that added a link close',
   chainShow: 'shows the chain length, the badge the game earned',
   ...Object.fromEntries(CLUE.flatMap(b => [
@@ -92,9 +102,10 @@ const T = {
    it by. A board copy lives in a temp folder, so its ./ imports are rewritten
    to the @/ path of the folder it came from. */
 const CONTROLS = {
-  unkeyed: { file: MOMENT, from: 'return finished && gameKey !== null && playedKey === gameKey;', to: 'return finished && gameKey !== null && playedKey !== null;', red: [T.hookKeyed] },
-  noclear: { file: MOMENT, from: 'if (playedKey !== null) setPlayedKey(null);', to: '/* control: the menu never forgets */', red: [T.hookMenu] },
-  alwayslive: { file: MOMENT, from: 'return finished && gameKey !== null && playedKey === gameKey;', to: 'return finished;', red: [T.reload, T.menu, T.hookMenu, T.hookKeyed, ...CLUE.map(b => T[`${b}/reload`])] },
+  unkeyed: { file: FRESH, from: 'return finished && gameKey !== null && playedKey === gameKey;', to: 'return finished && gameKey !== null && playedKey !== null;', red: [T.hookKeyed] },
+  noclear: { file: FRESH, from: 'if (playedKey !== null) setPlayedKey(null);', to: '/* control: the menu never forgets */', red: [T.hookMenu] },
+  nullkey: { file: FRESH, from: "gameKey: string | null = '')", to: 'gameKey: string | null = null)', red: [T.hookFresh] },
+  alwayslive: { file: FRESH, from: 'return finished && gameKey !== null && playedKey === gameKey;', to: 'return finished;', red: [T.reload, T.menu, T.hookMenu, T.hookKeyed, T.hookFresh, ...CLUE.map(b => T[`${b}/reload`])] },
   bands: { file: MOMENT, from: "return chainLength > 0 ? 'close' : 'loss';", to: "return chainLength > 1 ? 'close' : 'loss';", red: [T.bands] },
   badgewin: { file: MOMENT, from: 'const outcome = chainOutcome(chainLength);', to: "const outcome = badge ? 'win' : chainOutcome(chainLength);", red: [T.chainShow, ...CHAIN.map(b => T[`${b}/badge`])] },
   chainoffbyone: { file: 'src/components/nascar-chain/NascarChainBoard.tsx', from: 'chainLength={chainLength}', to: 'chainLength={gameState.chain.length}', red: [T['NASCAR Chain/giveup'], T['NASCAR Chain/close'], T['NASCAR Chain/badge']] },
@@ -177,4 +188,4 @@ if (failures) {
   console.error(`\nsimGuessFinish: ${failures} failure(s).`);
   process.exit(1);
 }
-console.log(`\nsimGuessFinish: green. ${ONLY_CONTROL ? `Control ${ONLY_CONTROL} turned exactly its own test red.` : 'The clue guessers and chains end on the shared moment with the board\'s own score, a finish plays once and a restored one stays settled, the chain bands hold at every length, and every control turned exactly its own test red.'}`);
+console.log(`\nsimGuessFinish: green. ${ONLY_CONTROL ? `Control ${ONLY_CONTROL} turned exactly its own test red.` : 'The clue guessers and chains end on the shared moment with the board\'s own score, a finish plays once and a restored one stays settled, a chain is close or a loss at every length, never a win over its own break, and every control turned exactly its own test red.'}`);

@@ -1,7 +1,7 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { ResultMoment, type ResultOutcome } from '@/components/game/ResultMoment';
-import { RestoredResult } from '@/components/game/RestoredResult';
-import { ConfettiBurst } from '@/components/club-manager/Celebration';
+import { RestoredResult, useFreshFinish } from '@/components/game/RestoredResult';
+import { ConfettiBurst, confettiSeedOf } from '@/components/club-manager/Celebration';
 
 /**
  * Round 953: the five clue guessers (CBB program, F1 driver, F1 constructor,
@@ -27,16 +27,12 @@ import { ConfettiBurst } from '@/components/club-manager/Celebration';
  * result, and a flag that only remembered "saw some play" would replay it.
  * gameKey is null while there is no game (the mode menu, a load), and the
  * menu forgets the game: a finish watched live and then reopened from the
- * menu, same key and all, is an old result and stays settled.
+ * menu, same key and all, is an old result and stays settled. It is Round
+ * 951's useFreshFinish with a key, so the dailies and these boards share one
+ * rule.
  */
 export function useLiveFinish(gameKey: string | null, finished: boolean): boolean {
-  const [playedKey, setPlayedKey] = useState<string | null>(null);
-  useEffect(() => {
-    if (gameKey === null) {
-      if (playedKey !== null) setPlayedKey(null);
-    } else if (!finished && playedKey !== gameKey) setPlayedKey(gameKey);
-  }, [gameKey, finished, playedKey]);
-  return finished && gameKey !== null && playedKey === gameKey;
+  return useFreshFinish(gameKey !== null, finished, gameKey);
 }
 
 /**
@@ -52,19 +48,11 @@ export function chainOutcome(chainLength: number): ResultOutcome {
   return chainLength > 0 ? 'close' : 'loss';
 }
 
-/* The confetti's fall pattern is fixed per game, the same way ResultScreen
-   seeds it, so it never reshuffles between renders. */
-function seedOf(gamePath: string): number {
-  let seed = 1;
-  for (let i = 0; i < gamePath.length; i++) seed = (seed * 31 + gamePath.charCodeAt(i)) >>> 0;
-  return seed % 997;
-}
-
 function FinishFrame({ live, win, gamePath, children }: { live: boolean; win: boolean; gamePath: string; children: ReactNode }) {
   return (
     <RestoredResult restored={!live}>
       <div data-guess-finish={live ? 'live' : 'restored'} className="relative">
-        {live && win && <ConfettiBurst seed={seedOf(gamePath)} count={28} />}
+        {live && win && <ConfettiBurst seed={confettiSeedOf(gamePath)} count={28} />}
         {children}
       </div>
     </RestoredResult>

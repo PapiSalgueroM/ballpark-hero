@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { F1DriverBoard } from '@/components/f1-driver/F1DriverBoard';
 import { ChainFinishMoment, chainOutcome, useLiveFinish } from '@/components/guess-finish/GuessFinish';
+import { useFreshFinish } from '@/components/game/RestoredResult';
 import { getTennisEarnedBadge } from '@/types/tennisChain';
 import { getNascarEarnedBadge } from '@/types/nascarChain';
 import { getEarnedBadge } from '@/types/ufcChain';
@@ -114,6 +115,20 @@ describe('useLiveFinish plays only a finish it watched', () => {
     view.rerender({ gameKey: null, done: false });
     view.rerender({ gameKey: 'daily:fixture', done: true });
     expect(view.result.current).toBe(false);
+  });
+
+  /* The four Round 951 dailies call the same hook with no key: one game per
+     mount, a loading render never counts as play, a restored finish never plays. */
+  it('keeps Round 951 dailies on their rule when no key is given', () => {
+    const fresh = renderHook(({ ready, done }: { ready: boolean; done: boolean }) => useFreshFinish(ready, done), { initialProps: { ready: false, done: false } });
+    fresh.rerender({ ready: false, done: true });
+    expect(fresh.result.current).toBe(false);
+    fresh.rerender({ ready: true, done: false });
+    fresh.rerender({ ready: true, done: true });
+    expect(fresh.result.current).toBe(true);
+    const restored = renderHook(({ ready, done }: { ready: boolean; done: boolean }) => useFreshFinish(ready, done), { initialProps: { ready: false, done: false } });
+    restored.rerender({ ready: true, done: true });
+    expect(restored.result.current).toBe(false);
   });
 
   it('keeps a different game that arrives already finished settled', () => {
