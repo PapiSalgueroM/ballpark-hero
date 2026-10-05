@@ -34,7 +34,10 @@
         screen instead of dying in the hook.
      4) MORE HELP, Round 1010a's second tier: counts of the doors out of the
         head and into the target, never a name. Through the real hook on the
-        same small graph (the two "more help" cases in the test), and on the
+        same small graph (the "more help" cases in the test: from the start,
+        after a wander, under Active only, where the count must come from the
+        RULE graph so a man the rule refuses is never counted, and the "and N
+        more clubs" overflow at 4, 5 and 6 clubs), and on the
         pull: at every puzzle start and after section 2's one step wander, the
         page's doorsFrom (bundled from src/lib/transferPathGraph.ts) must equal
         an independent count built from this repo's other graph,
@@ -57,7 +60,18 @@
        "skips the played names" case must go red with them.
      TPG_CONTROL=leak runs the test against a copy whose More help line gets
        the first middle man's name appended. Section 4's "names nobody" case
-       must go red.
+       must go red, and on the leak assertion's own message, not only on the
+       exact line strings in the same case.
+     TPG_CONTROL=everyday runs the test against a copy whose More help counts
+       on the everyday graph instead of the rule graph. The Active only case
+       must go red (Wall counted, 3 doors instead of 2).
+     TPG_CONTROL=overflow runs the test against a copy of transferPathGraph.ts
+       whose "and N more clubs" count is one short. The overflow case must go
+       red.
+     TPG_CONTROL=pullleak plants the head's first unplayed door at the end of
+       every pull line in section 4. The word boundary check must name the
+       planted man on every line it was planted on (measured 2026-10-05: 1750
+       of 1750).
      TPG_CONTROL=firstclub runs section 4's pull check against a copy of
        transferPathGraph.ts that credits a man to the first club he links
        through only, the wrong attribution rule. The pull equality must go red.
@@ -78,8 +92,10 @@ const HOOK = path.join(ROOT, 'src', 'hooks', 'useTransferPath.ts');
 const BOARD = path.join(ROOT, 'src', 'components', 'transfer-path', 'TransferPathBoard.tsx');
 const GRAPH_TS = path.join(ROOT, 'src', 'lib', 'transferPathGraph.ts');
 const CONTROL = process.env.TPG_CONTROL || '';
-const HOOK_CONTROLS = ['frozen', 'noskip', 'leak'];
-if (CONTROL && ![...HOOK_CONTROLS, 'firstclub'].includes(CONTROL)) {
+const HOOK_CONTROLS = ['frozen', 'noskip', 'leak', 'everyday'];
+const GRAPH_CONTROLS = ['overflow'];
+const PULL_CONTROLS = ['firstclub', 'pullleak'];
+if (CONTROL && ![...HOOK_CONTROLS, ...GRAPH_CONTROLS, ...PULL_CONTROLS].includes(CONTROL)) {
   console.error(`TPG_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -137,15 +153,20 @@ let markers = [];
 const MUST_GO_RED = {
   frozen: { moved: /×.*speaks from the head/, stranded: /×.*no route left/ },
   noskip: { moved: /×.*speaks from the head/, stranded: /×.*no route left/, 'section 4 skip': /×.*more help skips the played names/ },
-  leak: { 'section 4 names': /×.*more help names nobody/ },
+  /* the assertion's own message, so the red is the leak check's and not the
+     exact line strings that follow it in the same case */
+  leak: { 'section 4 names': /×.*more help names nobody/, 'the leak check itself': /AssertionError: more help leaked a pool name/ },
+  everyday: { 'section 4 rule graph': /×.*more help counts on the rule graph/ },
+  overflow: { 'section 4 overflow': /×.*more help says how many clubs it left out/ },
 };
-if (CONTROL !== 'firstclub') try {
+const onGraph = GRAPH_CONTROLS.includes(CONTROL);
+if (!PULL_CONTROLS.includes(CONTROL)) try {
   if (CONTROL) {
     /* CRLF is folded first: the checkout carries Windows endings and an
        anchor written with plain newlines would silently match nothing, which
        is a control that cannot fire dressed as a control that did. Every
        anchor must be present, so a half applied control refuses to run. */
-    const source = fs.readFileSync(HOOK, 'utf8').replaceAll('\r\n', '\n');
+    const source = fs.readFileSync(onGraph ? GRAPH_TS : HOOK, 'utf8').replaceAll('\r\n', '\n');
     const swaps = {
       frozen: [['  const hint = useMemo(() => {\n    if (fromHere === null) return inForce.hint;', '  const hint = useMemo(() => {\n    return inForce.hint;\n    if (fromHere === null) return inForce.hint;']],
       noskip: [
@@ -156,24 +177,31 @@ if (CONTROL !== 'firstclub') try {
         'return { doors, lines: moreHelpLines(doors, head, puzzle.playerB) };',
         'const lines = moreHelpLines(doors, head, puzzle.playerB);\n    const middle = findPath(head, puzzle.playerB, chain.slice(0, -1))?.[1]?.player ?? \'\';\n    return { doors, lines: [`${lines[0]} ${middle}`, ...lines.slice(1)] };',
       ]],
+      everyday: [[
+        'doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain)',
+        'doorsFrom(buildSeasonIndex(everydayClubSeasons), everydayClubSeasons, head, puzzle.playerB, chain)',
+      ]],
+      overflow: [['const more = rows.length - TOP_CLUBS;', 'const more = rows.length - TOP_CLUBS - 1;']],
     }[CONTROL];
     let rewritten = source;
     for (const [anchor, swap] of swaps) {
       if (!rewritten.includes(anchor)) {
-        console.error(`control cannot run: useTransferPath.ts is not in the shape TPG_CONTROL=${CONTROL} rewrites (missing: ${anchor.split('\n')[0]})`);
+        console.error(`control cannot run: ${onGraph ? 'transferPathGraph.ts' : 'useTransferPath.ts'} is not in the shape TPG_CONTROL=${CONTROL} rewrites (missing: ${anchor.split('\n')[0]})`);
         process.exit(1);
       }
       rewritten = rewritten.replace(anchor, swap);
     }
     const dir = path.join(ROOT, 'dist', '.transfer-path-guidance-control');
     fs.mkdirSync(dir, { recursive: true });
-    copy = path.join(dir, 'useTransferPath.control.ts');
+    copy = path.join(dir, onGraph ? 'transferPathGraph.control.ts' : 'useTransferPath.control.ts');
     fs.writeFileSync(copy, rewritten);
-    env = { TRANSFER_PATH_HOOK: copy.replaceAll('\\', '/') };
+    env = onGraph ? { TRANSFER_PATH_GRAPH: copy.replaceAll('\\', '/') } : { TRANSFER_PATH_HOOK: copy.replaceAll('\\', '/') };
     console.log({
       frozen: '   NEGATIVE CONTROL ON: the test runs against a copy whose hint never leaves player A',
       noskip: '   NEGATIVE CONTROL ON: the test runs against a copy whose head search and More help forget the played names',
       leak: "   NEGATIVE CONTROL ON: the test runs against a copy whose More help line names the first middle man",
+      everyday: '   NEGATIVE CONTROL ON: the test runs against a copy whose More help counts on the everyday graph, not the rule graph',
+      overflow: "   NEGATIVE CONTROL ON: the test runs against a copy of transferPathGraph.ts whose 'and N more clubs' is one short",
     }[CONTROL]);
   }
 
@@ -312,9 +340,11 @@ const NO_DATABASE = {
 };
 const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 let pullMismatches = 0;
+let pullNamed = 0;
+let leakPlanted = 0;
 {
-  if (CONTROL !== 'firstclub') {
-    for (const m of ['MORE_HELP_START', 'MORE_HELP_WANDERED', 'MORE_HELP_STRANDED']) {
+  if (!PULL_CONTROLS.includes(CONTROL)) {
+    for (const m of ['MORE_HELP_START', 'MORE_HELP_WANDERED', 'MORE_HELP_STRANDED', 'MORE_HELP_RULE', 'MORE_HELP_OVERFLOW']) {
       if (!markers.some(l => l.startsWith(`TRANSFER_PATH_GUIDANCE_${m} `))) fail(`the hook case behind ${m} did not run, so More help was not checked through the hook`);
     }
   }
@@ -426,6 +456,7 @@ function checkPull(page) {
   const tally = { start: 0, wander: 0 };
   const agreed = { start: 0, wander: 0 };
   let open = 0, withRoute = 0, named = 0;
+  leakPlanted = 0;
   const examples = [];
   for (const pz of puzzles) {
     const states = [[pz.a, [pz.a], 'start']];
@@ -447,6 +478,12 @@ function checkPull(page) {
       open += 1;
       if (got.onRoute >= 1) withRoute += 1;
       const lines = page.moreHelpLines(got, head, pz.b);
+      /* TPG_CONTROL=pullleak: the line gets the head's first unplayed door
+         appended, so the word boundary check below has to name him */
+      if (CONTROL === 'pullleak') {
+        const door = neighbours(graph, head).find(n => !played.includes(n) && n !== pz.b);
+        if (door) { lines[0] = `${lines[0]} ${door}`; leakPlanted += 1; }
+      }
       const leaked = namesIn(lines, head, pz.b);
       if (leaked.length > 0) {
         named += 1;
@@ -474,7 +511,19 @@ function checkPull(page) {
   if (tally.start < 850) fail(`only ${tally.start} puzzle starts were checked, so this is not reading the pull`);
   if (tally.wander < 500) fail(`only ${tally.wander} wanders were checked, so this is not reading the pull`);
   if (open < 0.9 * (tally.start + tally.wander)) fail(`only ${open} heads had More help open, so the equality ran on almost nothing`);
+  pullNamed = named;
   return mismatches;
+}
+
+if (CONTROL === 'pullleak') {
+  /* every planted name must be caught: the check is exact, so the control is
+     too (a miss means the word boundary match lets a real name through) */
+  if (leakPlanted === 0 || pullNamed !== leakPlanted) {
+    console.error(`control pullleak planted a name on ${leakPlanted} lines but the leak check named ${pullNamed}`);
+    process.exit(1);
+  }
+  console.log(`simTransferPathGuidance control pullleak: green. A middle man planted on ${leakPlanted} pull lines is named on all ${pullNamed}, as expected.`);
+  process.exit(0);
 }
 
 if (CONTROL === 'firstclub') {
