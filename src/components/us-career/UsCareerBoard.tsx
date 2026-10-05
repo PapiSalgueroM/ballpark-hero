@@ -1156,7 +1156,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <button
             ref={careerEntryButton}
             onClick={playSeason}
-            className={cn('inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90', career.prospect && 'min-h-11')}
+            className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>

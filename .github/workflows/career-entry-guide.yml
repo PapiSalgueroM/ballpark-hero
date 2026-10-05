@@ -1,0 +1,108 @@
+name: Career entry guide verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-entry-guide.yml
+      - src/components/game/GameHelp.tsx
+      - src/components/game/HowToPlayPopover.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/us-career/SeasonRevealCard.tsx
+      - src/data/gameContent/basketball.ts
+      - src/data/gameContent/football.ts
+      - src/data/gameContent/baseball.ts
+      - src/data/gameContent/hockey.ts
+      - src/data/gameContent/loader.ts
+      - src/data/gameContent/guideShape.ts
+      - src/test/careerEntryGuide.test.tsx
+      - src/test/fixtures/careerDecisionOutcome1009.ts
+      - scripts/simCareerEntryGuide.mjs
+      - scripts/qa/careerEntryGuide1031.mjs
+      - public/nba-my-career/index.html
+      - public/nfl-my-career/index.html
+      - public/mlb-my-career/index.html
+      - public/nhl-my-career/index.html
+      - public/sitemap.xml
+      - scripts/data/lastmod.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-entry-guide-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p career-entry-guide-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-entry-guide-artifacts/types.log
+          npm run build 2>&1 | tee career-entry-guide-artifacts/build.log
+      - name: Generate candidate career guide snapshots
+        id: candidate
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          PRERENDER_ONLY=/nba-my-career,/nfl-my-career,/mlb-my-career,/nhl-my-career node scripts/prerender.mjs 2>&1 | tee career-entry-guide-artifacts/snapshot.log
+          node scripts/genSitemap.mjs 2>&1 | tee career-entry-guide-artifacts/sitemap-generation.log
+          mkdir -p career-entry-guide-artifacts/generated/public career-entry-guide-artifacts/generated/scripts/data
+          for route in nba-my-career nfl-my-career mlb-my-career nhl-my-career; do
+            mkdir -p "career-entry-guide-artifacts/generated/public/$route"
+            cp "public/$route/index.html" "career-entry-guide-artifacts/generated/public/$route/"
+          done
+          cp public/sitemap.xml career-entry-guide-artifacts/generated/public/
+          cp scripts/data/lastmod.json career-entry-guide-artifacts/generated/scripts/data/
+          npm run build 2>&1 | tee career-entry-guide-artifacts/rebuild.log
+      - name: First-visit outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_ENTRY_GUIDE_CONTROL=all ONLY=simCareerEntryGuide node scripts/runAllSims.mjs 2>&1 | tee career-entry-guide-artifacts/mounted.log
+      - name: All built readers, guides and harness anchors
+        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-entry-guide-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native guides and career controls across four sports
+        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
+        run: node scripts/qa/careerEntryGuide1031.mjs 2>&1 | tee career-entry-guide-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-entry-guide-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: career-entry-guide-artifacts/

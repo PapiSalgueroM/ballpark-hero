@@ -128,8 +128,9 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    one counter for the whole process, so the id a dialog trigger carries says
    how many dialogs every earlier test mounted and nothing about this screen:
    left in, one sport's path could turn another sport red. The number is
-   taken out. Only the additive practice and prospect entries are excluded;
-   removing a parent or changing the existing season button still changes the hash. */
+   taken out. Round 1031 also excludes only the two deliberate minimum-height
+   additions from this established presentation adapter; the rest of each
+   season button and every existing parent still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
   copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]').forEach(el => el.remove());
@@ -137,6 +138,12 @@ const legacyScreen = () => {
   for (const attribute of ['data-career-event', 'data-career-decision-event', 'data-career-decision-option']) {
     copy.querySelectorAll(`[${attribute}]`).forEach(el => el.removeAttribute(attribute));
   }
+  copy.querySelectorAll('button').forEach(button => {
+    if (/^Play the \d+ season$/.test(squash(button.textContent ?? ''))
+      || (button.closest('[data-season-reveal]') && squash(button.textContent ?? '') === 'Continue')) {
+      button.classList.remove('min-h-11');
+    }
+  });
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');

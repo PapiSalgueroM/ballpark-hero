@@ -130,6 +130,7 @@ try {
       reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         ...fixtures.map(f => ({ name: f.key, value: JSON.stringify(f.save) })),
+        { name: `rules-gate-seen:${result.route}`, value: '1' },
         { name: 'cookie-consent', value: 'essential' },
       ] }] },
     });

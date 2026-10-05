@@ -42,6 +42,7 @@ const browser = await chromium.launch();
 
 /** Create a career, put it in its final contract year, press Play. */
 async function reachFinalYear(page, game) {
+  await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), game.path);
   await page.goto(`${BASE}${game.path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   const consent = page.locator('button:has-text("Essential only")');

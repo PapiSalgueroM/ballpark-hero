@@ -4,6 +4,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/career-season-review.yml
+      - src/components/game/GameHelp.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
       - src/components/us-career/UsCareerBoard.tsx
       - src/components/us-career/CareerSeasonReview.tsx
       - src/lib/usCareerSeasonReview.ts

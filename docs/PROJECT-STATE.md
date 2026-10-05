@@ -1,3 +1,17 @@
+## Codex 1031: career entry guides, source pending, 2026-10-05
+
+The four US Career pages opt into their existing guide once its content loads.
+A route-specific seen flag is stored only after dismissal; returning visitors
+can reopen help. Prerender never opens or records the guide, and blocked storage
+still permits dismissal. Help, main Play and season Continue have 44px minimum
+targets. Existing guides explain saved-season review and actual capped changes.
+
+Source checks are complete; remote type, build, mounted controls and native
+acceptance are pending. Historical drivers explicitly model returning visitors,
+and the recorded fixture JSON is unchanged. Runtime stays remote. Round 1009
+is awaiting its repair run and must be accepted before integration and release.
+No 1031 publication is claimed. See docs/audits/ROUND1031-DESIGN.md.
+
 ## Codex 1009: visible decision outcomes, 2026-10-05
 
 Ordinary choices in the four US careers show actual saved before/after

@@ -123,6 +123,7 @@ try {
       reducedMotion: profile.reduced ? 'reduce' : 'no-preference', colorScheme: profile.theme, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         { name: sport.saveKey, value: bytes }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: profile.theme },
+        { name: `rules-gate-seen:${result.route}`, value: '1' },
         { name: 'review-unrelated-save', value: '{"keep":"exact bytes"}' },
       ] }] },
     });
