@@ -308,13 +308,16 @@ export default function Profile() {
     // Round 301, audit finding 10: reset to the all-locked seed, never [],
     // so any consumer of badges.length keeps a real denominator.
     if (authLoading || !isOwnProfile) { setBadges(BADGE_DEFS.map(def => ({ ...def, earned: false }))); return; }
+    // Round 981: wait for the account's half, so one load reads the
+    // completion rows once and never shows this browser's badges first.
+    if (loading) return;
     let cancelled = false;
     // Round 981: the server half goes in too, the same numbers the tiles show.
     getBadgeState(profile, serverTotals).then(result => {
       if (!cancelled) setBadges(result);
     });
     return () => { cancelled = true; };
-  }, [authLoading, isOwnProfile, profile, serverTotals]);
+  }, [authLoading, isOwnProfile, profile, serverTotals, loading]);
 
   /* ── Time tracking (increment every minute while this page is visible) ── */
   /* Round 301, audit finding 11: one interval, created once on mount and
@@ -768,7 +771,8 @@ export default function Profile() {
 
           {/* ═══════════════ 4. BADGES ═══════════════ */}
           {/* Round 301, audit finding 10: own profile only. Badges are computed
-              from this browser's localStorage and its own completion history,
+              from this browser's localStorage, its own completion history and
+              (Round 981) the account's own totals merged with it,
               which says nothing about the player being viewed, so on someone
               else's profile this card could only ever render an all-locked
               grid that read as "this player earned nothing". */}

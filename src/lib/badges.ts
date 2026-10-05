@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { getStreakState, readDiary } from '@/lib/streaks';
 import { getCurrentPlayerName } from '@/lib/completions';
 import { CATEGORIES } from '@/data/gameRegistry';
+import { COMPLETION_SLUG_TO_PATH } from '@/data/completionSlugs';
 
 /**
  * Local-first badges (#103). See docs/INCENTIVES_SPEC.md section 3 for the
@@ -166,6 +167,15 @@ export function fullCalendarWeeks(days: readonly unknown[]): number {
   return full;
 }
 
+/** Pure: the Monday to Sunday weeks any run of `n` days in a row is sure to
+ *  hold, wherever it starts. The worst start is a Tuesday (the first Monday
+ *  is six days in), so 13 days in a row always hold one full week and 12 may
+ *  hold none. A streak counts days on one clock, so this needs no merging. */
+export function weeksInRun(n: number): number {
+  const days = cleanCount(n);
+  return days >= 7 ? Math.floor((days - 6) / 7) : 0;
+}
+
 /** What this browser knows, from src/lib/streaks.ts. */
 export interface LocalTotals {
   plays: number;
@@ -202,7 +212,9 @@ export function serverStreakAlive(lastPlayedAt: string | null | undefined, now: 
   if (!Number.isFinite(t)) return false;
   const day = (ms: number) => Math.floor(ms / DAY_MS);
   const gap = day(now.getTime()) - day(t);
-  return gap >= 0 && gap <= 1;
+  // -1: the server stamped the play on the next UTC day while this device's
+  // clock is a little behind (a play just after 8pm ET). Still a live run.
+  return gap >= -1 && gap <= 1;
 }
 
 function averageOf(points: number, games: number): number {
@@ -240,10 +252,14 @@ export function registryCategoryCount(): number {
   return CATEGORIES.filter(c => c.games.length > 0).length;
 }
 
-/** Maps a game slug (bare, no leading slash) back to its registry category title, or null if not found. */
+/** Maps a recorded completion slug (bare, no leading slash) back to its
+ *  registry category title, or null if not found. Six games record under a
+ *  name that is not their path (Round 376), so the slug goes through the same
+ *  map every other registry lookup uses. */
 export function categoryForSlug(slug: string): string | null {
+  const path = COMPLETION_SLUG_TO_PATH[slug] ?? `/${slug}`;
   for (const cat of CATEGORIES) {
-    if (cat.games.some(g => g.path.replace(/^\//, '') === slug)) return cat.title;
+    if (cat.games.some(g => g.path === path)) return cat.title;
   }
   return null;
 }
@@ -296,8 +312,15 @@ export interface LocalBadgeInputs {
  * game_completions rows and the account's server totals. Counts that both
  * halves keep go through ownTotals, the same merge the profile prints, so
  * Point Hunter and the Total Points tile can never disagree. Categories are
- * a union of real plays (a slug is a slug on any clock). Days are never
- * merged across sources: a full week has to stand in one source alone.
+ * a union of real plays (a slug is a slug on any clock).
+ *
+ * The completion rows are matched by display name, which is not unique (two
+ * accounts called the same pool their rows; Round 539 measured 6,440 rows
+ * for 49 real game days in achievements.ts). So the rows never decide a
+ * count the page prints: games played is the printed total alone, and a full
+ * week comes from this browser's play diary (one clock) or from a best run
+ * long enough to hold one (weeksInRun), never from the rows. The rows still
+ * feed the two facts nothing else records: categories and one-day variety.
  */
 export function buildBadgeFacts(
   local: LocalBadgeInputs,
@@ -328,14 +351,17 @@ export function buildBadgeFacts(
   let bestDayVariety = 0;
   perDay.forEach(set => { bestDayVariety = Math.max(bestDayVariety, set.size); });
 
+  const diaryWeeks = fullCalendarWeeks(local.diaryDays);
+  const runWeeks = weeksInRun(totals.longestStreak);
+
   return {
     longestStreak: totals.longestStreak,
-    gamesPlayed: Math.max(totals.gamesPlayed, goodRows.length),
+    gamesPlayed: totals.gamesPlayed,
     totalPoints: totals.totalPoints,
     categoriesLeft: totalCategories > 0 ? Math.max(0, totalCategories - played.size) : 1,
     visitDays: cleanCount(local.visitDays),
     bestDayVariety,
-    fullWeeks: Math.max(fullCalendarWeeks(local.diaryDays), fullCalendarWeeks(goodRows.map(r => r.completed_on))),
+    fullWeeks: Math.max(diaryWeeks, runWeeks),
   };
 }
 

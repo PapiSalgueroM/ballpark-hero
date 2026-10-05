@@ -80,7 +80,7 @@ vi.mock('@/components/profile/StreakHistory', () => ({ default: () => null }));
 import Profile from '@/pages/Profile';
 import {
   BADGE_DEFS, BADGE_RULES, buildBadgeFacts, computeBadges, fullCalendarWeeks, ownTotals,
-  serverStreakAlive, viewedTotals, type LocalBadgeInputs,
+  serverStreakAlive, viewedTotals, weeksInRun, type LocalBadgeInputs,
 } from '@/lib/badges';
 
 const EMPTY_LOCAL: LocalBadgeInputs = {
@@ -109,6 +109,9 @@ describe('the merge under the profile (pure)', () => {
     expect(serverStreakAlive('2026-10-01T23:59:00Z', now)).toBe(false);
     expect(serverStreakAlive(null, now)).toBe(false);
     expect(serverStreakAlive('not a date', now)).toBe(false);
+    // the server stamped the next UTC day while this clock is a minute behind
+    expect(serverStreakAlive('2026-10-04T00:01:00Z', new Date('2026-10-03T23:59:00Z'))).toBe(true);
+    expect(serverStreakAlive('2026-10-05T00:01:00Z', new Date('2026-10-03T23:59:00Z'))).toBe(false);
     const stale = viewedTotals({ gamesPlayed: 5, totalPoints: 50, currentStreak: 6, longestStreak: 6, lastPlayedAt: '2026-09-20T12:00:00Z' }, now);
     expect(stale.currentStreak).toBe(0);
     expect(stale.longestStreak).toBe(6);
@@ -139,6 +142,28 @@ describe('the merge under the profile (pure)', () => {
     expect(fullCalendarWeeks([...week, '2026-02-30', 'junk', 7])).toBe(1);
   });
 
+  it('a best run of 13 days holds a full week, 12 from a Tuesday does not', () => {
+    const run = (start: number, n: number) =>
+      Array.from({ length: n }, (_, i) => new Date(Date.UTC(2026, 8, start + i)).toISOString().slice(0, 10));
+    // 2026-09-01 is a Tuesday: twelve days from it never reach a Sunday after a Monday
+    expect(fullCalendarWeeks(run(1, 12))).toBe(0);
+    // thirteen days from any start day always hold one
+    for (let s = 1; s <= 7; s++) expect(fullCalendarWeeks(run(s, 13)), `start ${s}`).toBeGreaterThanOrEqual(1);
+    expect([weeksInRun(12), weeksInRun(13), weeksInRun(19), weeksInRun(20)]).toEqual([0, 1, 1, 2]);
+    // so Perfect Week can never sit locked beside a best streak that proves it
+    expect(earned(EMPTY_LOCAL, { longestStreak: 13 })).toContain('perfect-week');
+    expect(earned({ ...EMPTY_LOCAL, longestStreak: 13 }, null)).toContain('perfect-week');
+    expect(earned(EMPTY_LOCAL, { longestStreak: 12 })).not.toContain('perfect-week');
+  });
+
+  it('completion rows, matched by a name others can share, never decide games or Perfect Week', () => {
+    const week = ['2026-09-07', '2026-09-08', '2026-09-09', '2026-09-10', '2026-09-11', '2026-09-12', '2026-09-13'];
+    const rows = Array.from({ length: 12 }, (_, i) => ({ game: 'footle', completed_on: week[i % 7] }));
+    const facts = buildBadgeFacts(EMPTY_LOCAL, rows, null);
+    expect(facts.gamesPlayed).toBe(0);
+    expect(facts.fullWeeks).toBe(0);
+  });
+
   it('every badge has exactly one rule', () => {
     expect(Object.keys(BADGE_RULES).sort()).toEqual(BADGE_DEFS.map(d => d.id).sort());
   });
@@ -151,6 +176,10 @@ function tile(label: string): string {
   const el = screen.getByText(label, { selector: 'p' });
   return (el.previousElementSibling?.textContent ?? '').trim();
 }
+/** A busy machine can take over a second to settle the page (measured: 1 in 3
+ *  runs failed at the default 1000 ms), so every render wait gets five. */
+const WAIT = { timeout: 5000 };
+vi.setConfig({ testTimeout: 20000 });
 const badgeEarned = (name: string) =>
   (screen.getByText(name, { selector: 'p' }).parentElement?.className ?? '').includes('border-primary/50');
 
@@ -162,7 +191,7 @@ describe('Profile on a second device (server only player)', () => {
 
   it('shows the account numbers, never a zero beside the points total', async () => {
     mount();
-    await waitFor(() => expect(tile('Total Points')).toBe('4,200'));
+    await waitFor(() => expect(tile('Total Points')).toBe('4,200'), WAIT);
     expect(tile('Streak 🔥')).toBe('9');
     expect(tile('Best Streak')).toBe('12');
     expect(tile('Avg Score')).toBe('70');
@@ -177,7 +206,7 @@ describe('Profile on a second device (server only player)', () => {
 
   it('unlocks the badges the account has earned', async () => {
     mount();
-    await waitFor(() => expect(badgeEarned('Point Hunter')).toBe(true));
+    await waitFor(() => expect(badgeEarned('Point Hunter')).toBe(true), WAIT);
     for (const name of ['Rookie', 'Getting Serious', 'Veteran', 'Streak Starter', 'On Fire']) {
       expect(badgeEarned(name), name).toBe(true);
     }
@@ -189,7 +218,7 @@ describe('Profile on a second device (server only player)', () => {
   it('a player with nothing anywhere sees zeros and every badge locked', async () => {
     serverOn = false;
     mount();
-    await waitFor(() => expect(tile('Total Points')).toBe('0'));
+    await waitFor(() => expect(tile('Total Points')).toBe('0'), WAIT);
     expect(tile('Streak 🔥')).toBe('0');
     expect(tile('Avg Score')).toBe('0');
     expect(BADGE_DEFS.some(d => badgeEarned(d.name))).toBe(false);
@@ -204,7 +233,7 @@ describe('Your careers on the profile', () => {
     localStorage.setItem('soccerCareerSave', JSON.stringify({ currentClub: 'Test Town FC', age: 21 }));
     localStorage.setItem('dukb-club-manager-save', JSON.stringify({ clubName: 'Sample United', season: 3 }));
     render(<MemoryRouter initialEntries={['/profile']}><Profile /></MemoryRouter>);
-    await waitFor(() => expect(screen.getByText('Test Town FC, age 21')).toBeTruthy());
+    await waitFor(() => expect(screen.getByText('Test Town FC, age 21')).toBeTruthy(), WAIT);
     expect(screen.getByText('Sample United, season 3')).toBeTruthy();
     expect(screen.getByText('2 saved')).toBeTruthy();
     const links = [...document.querySelectorAll('[data-profile-career]')].map(a => a.getAttribute('href'));
@@ -213,7 +242,7 @@ describe('Your careers on the profile', () => {
 
   it('says plainly when this browser has none', async () => {
     render(<MemoryRouter initialEntries={['/profile']}><Profile /></MemoryRouter>);
-    await waitFor(() => expect(document.querySelector('[data-profile-careers-empty]')).toBeTruthy());
+    await waitFor(() => expect(document.querySelector('[data-profile-careers-empty]')).toBeTruthy(), WAIT);
     expect(screen.getByText(/Careers live in the browser you play them in/)).toBeTruthy();
   });
 });
