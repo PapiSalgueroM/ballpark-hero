@@ -82,7 +82,7 @@ const CONTROLS = {
   notimer: [DESK, [['const timer = window.setTimeout(() => setCue(null), holdMs);', 'const timer = window.setTimeout(() => undefined, holdMs);']],
     [T.timer]],
   // the live region is inserted already holding its words
-  filledregion: [DESK, [["<p aria-live=\"polite\" aria-atomic=\"true\" data-desk-cue-live={testId} className=\"sr-only\">{cue?.text ?? ''}</p>", '{cue && <p key={cue.id} aria-live="polite" aria-atomic="true" data-desk-cue-live={testId} className="sr-only">{cue.text}</p>}']],
+  filledregion: [DESK, [["<p aria-live=\"polite\" aria-atomic=\"true\" data-desk-cue-live={testId} className=\"sr-only\">{cue?.text ?? ''}</p>", '{cue && <p key={`live-${cue.id}`} aria-live="polite" aria-atomic="true" data-desk-cue-live={testId} className="sr-only">{cue.text}</p>}']],
     [T.renew, T.promote, T.acadOpens]],
   // the line stays at the foot, under the unanswered cookie banner
   nobanner: [DESK, [["anchor.current.style.bottom = cueId === null ? '' : bannerClearance();", "anchor.current.style.bottom = '';"]],
@@ -184,7 +184,8 @@ function run(name = '') {
   }
   const want = CONTROLS[name][2];
   assert.equal(result.status, 1, `Control ${name} must make the suite fail.`);
-  assert.deepEqual(failed.map(r => r.fullName).sort(), [...want].sort(), `Control ${name} must fail exactly its own cases.`);
+  assert.deepEqual(failed.map(r => r.fullName).sort(), [...want].sort(),
+    `Control ${name} must fail exactly its own cases.\n${failed.map(r => `${r.fullName}: ${String(r.failureMessages[0] ?? '').split('\n').slice(0, 4).join(' | ')}`).join('\n')}`);
   console.log(`Desk cues control ${name}: ${want.length} of ${TOTAL} cases failed, exactly the ones it targets; ${TOTAL - want.length} stayed green.`);
 }
 
