@@ -508,7 +508,12 @@ const ERA_TIER_RULES: TierRule[] = [
      2022 Championship play-off final, so 1999-00 to 2021-22 were spent
      outside the top flight (ESPN's 29 May 2022 match report and Sports
      Illustrated the same day, "the first time since 1999"). Their tier 2 is
-     Club Manager's 2026 XI and would otherwise apply in every era. */
+     Club Manager's 2026 XI and would otherwise apply in every era. The two
+     earlier second tier seasons, 1993-94 (Division One runners up) and
+     1997-98 (Division One champions), get one season rules of their own
+     (rsssf's Football League tables for both seasons and Wikipedia's list
+     of the club's seasons, read 2026-10-05). */
+  { name: "Nottingham Forest", from: 1993, until: 1993, tier: 4 }, { name: "Nottingham Forest", from: 1997, until: 1997, tier: 4 },
   { name: "Nottingham Forest", from: 1999, until: 2021, tier: 4 },
 ];
 export function adjustClubsForYear(clubs: ClubData[], year: number): ClubData[] {

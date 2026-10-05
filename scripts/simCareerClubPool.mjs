@@ -16,13 +16,19 @@
                  labels, and Red Bull Bragantino absent before 2020.
    4 TIERS       the tier rule re-derived independently, HAND_CLUBS frozen,
                  the Forest era rule, and the per league XI table.
-   5 WEIGHTS     exact rationals: on HAND_CLUBS every club keeps 1/n; on the
-                 full pool the four leagues hold 20/100 of tier 4.
+   5 WEIGHTS     exact rationals: on the raw HAND_CLUBS every club keeps 1/n,
+                 by season only Premier League tier 3 goes over the cap
+                 (pinned); on the full pool the four leagues hold 20/100 of
+                 tier 4 and the hand clubs' new shares are stated; the
+                 sampler is driven over an exact grid on both of its
+                 Math.random calls, so every club's count is exact.
    6 OFFERS      real careers over several seeds: (a) each league offers its
                  generated clubs, (b) the draws match their own analytic odds,
-                 (c) every market offer came through pickAcrossLeagues, and
-                 (d) home academies for youths rated 40 to 54 match the
-                 analytic shares of the home list.
+                 (c) every market offer and every worldwide academy fallback
+                 came through pickAcrossLeagues, (d) home academies for
+                 youths rated 40 to 54 match the analytic shares of the home
+                 list, and (e) each reachable worldwide academy fallback
+                 site, driven over the exact grid.
    7 OLD SAVES   saves at West Ham, Wolves, Girona, Norwich City, Flamengo and
                  Real Madrid built on the pre-round pool load and play on.
 
@@ -43,10 +49,28 @@
      uncapped     LEAGUE_DRAW_CAP = Infinity                           -> 6
      nopool       FALLBACK_CLUBS without the generated rows            -> 2
      picksite     makeOffer back on the plain pick                     -> 6
-     dropclub     remove West Ham's hand row                           -> 7
+     dropclub     drop West Ham from FALLBACK_CLUBS (its hand row and so
+                  the old save stay): the save's club no longer resolves -> 7
+     reread       relabel Wolves "Championship" t4 in FALLBACK_CLUBS only
+                  and make repairCareer re-read league and tier from the
+                  list, the regression a league by year override could
+                  bring: the round trip and drift checks fire          -> 7
+     (section 7's setup precondition, a hand row to sign with, reports as
+     7s, so neither control can pass on the setup alone)
      nocolor      delete Coventry City's Club Manager colour           -> 3
      noforest     delete the Forest era rule                           -> 4
+     forest90s    delete Forest's 1993-94 and 1997-98 rules            -> 4
      nobragantino delete Red Bull Bragantino's founded year            -> 3
+     ingroup      the club inside a group drawn off the group's weight,
+                  not its size: past the cap only 5 clubs reachable    -> 5
+     academypick  the nine worldwide academy fallbacks back on pick    -> 6
+
+   Open items, queued and not checked here: three generated names read as
+   they do today in every era. Espanyol was spelled Espanol before 1995,
+   Malaga CF dates from 1994 (CD Malaga, dissolved in 1992, came before it)
+   and Athletico Paranaense was Atletico before 2019. CLUB_FOUNDED_AFTER
+   would delete clubs that existed under the older name, so these need a
+   name by year rule of their own.
 
    Run: node scripts/simCareerClubPool.mjs   (SEEDS=n, CAREERS=n to scale 6)
    No network and no database: everything is bundled from this tree. */
@@ -84,10 +108,24 @@ const CONTROLS = {
   uncapped: ['6', 'lib/soccerCareerEngine.ts', swap('export const LEAGUE_DRAW_CAP = 5;', 'export const LEAGUE_DRAW_CAP = Infinity;')],
   nopool: ['2', 'lib/soccerCareerEngine.ts', swap('[...HAND_CLUBS, ...CAREER_CLUB_POOL]', '[...HAND_CLUBS]')],
   picksite: ['6', 'lib/soccerCareerEngine.ts', swap('if (candidates.length === 0) return null;\n  const club = pickAcrossLeagues(candidates);', 'if (candidates.length === 0) return null;\n  const club = pick(candidates);')],
-  dropclub: ['7', 'lib/soccerCareerEngine.ts', swap(`  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },\n`, '')],
+  dropclub: ['7', 'lib/soccerCareerEngine.ts', swap('[...HAND_CLUBS, ...CAREER_CLUB_POOL]', '[...HAND_CLUBS.filter(c => c.name !== "West Ham"), ...CAREER_CLUB_POOL]')],
+  reread: ['7', 'lib/soccerCareerEngine.ts', s => swap(
+    'export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n  const s = state as CareerState;\n',
+    'export function repairCareer<T extends CareerState>(state: T): T {\n  if (!state || typeof state !== "object") return state;\n  const s = state as CareerState;\n  { const row = FALLBACK_CLUBS.find(c => c.name === s.currentClub); if (row) { s.currentLeague = row.league; s.currentClubTier = row.tier; } }\n',
+  )(swap('[...HAND_CLUBS, ...CAREER_CLUB_POOL]', '[...HAND_CLUBS.map(c => (c.name === "Wolves" ? { ...c, league: "Championship", tier: 4 } : c)), ...CAREER_CLUB_POOL]')(s))],
   nocolor: ['3', 'lib/clubManager.ts', swap(`'Coventry City': '#66b2e8', `, '')],
   noforest: ['4', 'lib/careerEras.ts', swap('{ name: "Nottingham Forest", from: 1999, until: 2021, tier: 4 },', '')],
+  forest90s: ['4', 'lib/careerEras.ts', swap('{ name: "Nottingham Forest", from: 1993, until: 1993, tier: 4 }, { name: "Nottingham Forest", from: 1997, until: 1997, tier: 4 },', '')],
   nobragantino: ['3', 'lib/careerEras.ts', swap('"Red Bull Bragantino": 2020,', '')],
+  ingroup: ['5', 'lib/soccerCareerEngine.ts', swap('return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];', 'return chosen.clubs[Math.floor(Math.random() * chosen.weight)];')],
+  academypick: ['6', 'lib/soccerCareerEngine.ts', s => {
+    const a = s.indexOf('export function getYouthAcademyClub(');
+    const b = s.indexOf('export function calcOverall(', a);
+    const body = a < 0 || b < 0 ? '' : s.slice(a, b);
+    const n = body.split('return pickAcrossLeagues(').length - 1;
+    if (n !== 9) { console.error(`control academypick: ${n} pickAcrossLeagues returns in getYouthAcademyClub, 9 expected`); process.exit(2); }
+    return s.slice(0, a) + body.replaceAll('return pickAcrossLeagues(', 'return pick(') + s.slice(b);
+  }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 
@@ -263,9 +301,18 @@ ok(handPrint === HAND_FINGERPRINT, `HAND_CLUBS fingerprint ${handPrint}, frozen 
 ok(POOL.slice(0, HAND.length).every((c, i) => c === HAND[i]), 'FALLBACK_CLUBS starts with HAND_CLUBS in order, so every hand index survives');
 const forestTier = y => eras.adjustClubsForYear(POOL, y).find(c => c.name === 'Nottingham Forest')?.tier;
 const forestBase = GENERATED.find(c => c.name === 'Nottingham Forest')?.tier;
-for (const y of [1990, 1998, 2022, 2026]) ok(forestTier(y) === forestBase, `Forest in ${y}: tier ${forestTier(y)}, the generated tier ${forestBase}`);
-for (let y = 1999; y <= 2021; y++) ok(forestTier(y) === 4, `Forest in ${y} (outside the top flight 1999-00 to 2021-22): tier ${forestTier(y)}, 4 expected`);
-console.log(`  HAND_CLUBS ${HAND.length} rows, fingerprint ${handPrint}; Forest t${forestBase}, t4 from 1999 to 2021`);
+/* Every season a career can reach, against the seasons Forest really spent
+   outside the top flight (start years; rsssf's tables and Wikipedia's list
+   of the club's seasons): 1993-94 and 1997-98 in Division One, then 1999-00
+   to 2021-22 in the second and third tiers. Every other season from 1988-89
+   on was top flight. */
+const FOREST_OUT = new Set([1993, 1997, ...Array.from({ length: 23 }, (_, i) => 1999 + i)]);
+let forestBad = 0;
+for (let y = 1988; y <= 2060; y++) {
+  const want = FOREST_OUT.has(y) ? 4 : forestBase;
+  if (forestTier(y) !== want) { forestBad += 1; fail(`Forest in ${y}-${String((y + 1) % 100).padStart(2, '0')}: tier ${forestTier(y)}, ${want} expected (${FOREST_OUT.has(y) ? 'outside the top flight' : 'top flight, the generated tier'})`); }
+}
+console.log(`  HAND_CLUBS ${HAND.length} rows, fingerprint ${handPrint}; Forest t${forestBase}, t4 in 1993, 1997 and 1999 to 2021, checked every season 1988 to 2060${forestBad ? ` (${forestBad} wrong)` : ''}`);
 
 /* ─── 5. WEIGHTS ─── */
 head('5', 'WEIGHTS: exact odds from leagueDrawGroups, as rationals');
@@ -277,6 +324,51 @@ const fourOdds = cands => {
   for (const [k, n] of groups) { const wt = Math.min(n, CAP); w += wt; if (n > CAP) bites = true; if (FOUR.has(k.split('|')[0])) four += wt; }
   return { four, w, bites };
 };
+/* gridOdds runs a sampler that must make exactly two Math.random calls (a
+   league group, then a club inside it) over an exact grid instead of
+   sampling: the first call over W * M midpoints, and for each of them the
+   second call over n * M2 midpoints, n being the size of the group that
+   first value chose. Under the capped rule every club of group g is then
+   drawn exactly min(n_g, CAP) * M * M2 times, which is P = weight/W * 1/n.
+   A sampler that skips the second call, draws a club off the wrong count or
+   returns a club outside the list misses those counts. */
+function gridOdds(sampler, cands, M = 2, M2 = 2) {
+  const groups = new Map();
+  for (const c of cands) { const k = `${c.league}|${c.tier}`; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(c); }
+  const W = [...groups.values()].reduce((s, g) => s + Math.min(g.length, CAP), 0);
+  const K = W * M;
+  const hits = new Map();
+  let draws = 0; let badCalls = 0; let strays = 0;
+  const realRandom = Math.random;
+  try {
+    for (let k = 0; k < K; k++) {
+      const u = (k + 0.5) / K;
+      let calls = 0;
+      Math.random = () => (calls++ === 0 ? u : 0.5);
+      const probe = sampler();
+      const g = probe && groups.get(`${probe.league}|${probe.tier}`);
+      if (!g) { strays += 1; continue; }
+      const L = g.length * M2;
+      for (let j = 0; j < L; j++) {
+        calls = 0;
+        Math.random = () => (calls++ === 0 ? u : (j + 0.5) / L);
+        const p = sampler();
+        draws += 1;
+        if (calls !== 2) badCalls += 1;
+        hits.set(p, (hits.get(p) || 0) + 1);
+      }
+    }
+  } finally { Math.random = realRandom; }
+  const off = [];
+  for (const [key, g] of groups) {
+    const want = Math.min(g.length, CAP) * M * M2;
+    for (const c of g) if ((hits.get(c) || 0) !== want) off.push(`${c.name} (${key}) ${hits.get(c) || 0}/${want}`);
+  }
+  for (const c of hits.keys()) if (!cands.includes(c)) off.push(`${c ? c.name : 'nothing'} drawn, not a candidate`);
+  return { off, draws, badCalls, strays, K, W, groups: groups.size };
+}
+const gridOk = (res, what) => ok(!res.off.length && !res.badCalls && !res.strays,
+  `${what}: ${res.off.length} clubs off their exact count (${res.off.slice(0, 4).join(', ')}), ${res.badCalls} draws without exactly two Math.random calls, ${res.strays} first values that drew no candidate`);
 const handSets = [[1], [2], [3], [4], [1, 2], [2, 3], [3, 4]];
 for (const tiers of handSets) {
   const cands = HAND.filter(c => tiers.includes(c.tier));
@@ -287,36 +379,76 @@ for (const tiers of handSets) {
   const off = groups.filter(g => g.weight * n !== W * g.clubs.length);
   ok(groups.reduce((s, g) => s + g.clubs.length, 0) === n, `tiers ${tiers}: the groups partition the candidates`);
   ok(!off.length, `HAND_CLUBS tiers ${tiers}: ${off.map(g => g.key).join(', ')} are off 1/${n}`);
-  if (!off.length) console.log(`  HAND_CLUBS tier ${tiers.join('+')}: ${n} clubs, ${groups.length} league groups (largest ${Math.max(...groups.map(g => g.clubs.length))}), every club exactly 1/${n}`);
+  const gr = gridOdds(() => engine.pickAcrossLeagues(cands), cands);
+  gridOk(gr, `pickAcrossLeagues over HAND_CLUBS tiers ${tiers}`);
+  if (!off.length) console.log(`  HAND_CLUBS tier ${tiers.join('+')}: ${n} clubs, ${groups.length} league groups (largest ${Math.max(...groups.map(g => g.clubs.length))}), every club exactly 1/${n}; the sampler matched it on a ${gr.draws} draw grid`);
 }
+/* The raw list is not what a career draws from: adjustClubsForYear moves
+   clubs between tiers by season, and that can push a hand group past CAP.
+   Every season from 1980 to 2060 is checked. The only group that goes over
+   is Premier League tier 3, which holds 6 hand clubs in every season to
+   1996, in 2007 to 2009 and in 2017, and 7 in 2018 to 2021 (Brighton and
+   Wolves come up through their era rules). In those seasons each of those
+   clubs keeps 5/6 or 5/7 of its share of the draws for that group, and
+   every other club gains a little. Pinned exactly, so a new era rule that
+   pushes another group over the cap goes red here and has to be stated. */
+const HAND_OVER_CAP = { 'Premier League|3': Object.fromEntries([
+  ...Array.from({ length: 17 }, (_, i) => [1980 + i, 6]),
+  [2007, 6], [2008, 6], [2009, 6], [2017, 6], [2018, 7], [2019, 7], [2020, 7], [2021, 7],
+]) };
+const overCap = {};
+let yearsNeutral = 0;
+for (let y = 1980; y <= 2060; y++) {
+  const view = eras.adjustClubsForYear(HAND, y);
+  let neutral = true;
+  for (const tiers of handSets) {
+    const cands = view.filter(c => tiers.includes(c.tier));
+    const groups = engine.leagueDrawGroups(cands);
+    const W = groups.reduce((s, g) => s + g.weight, 0);
+    /* every club is exactly 1/n iff no group is cut by the cap; a cut group
+       moves every club's odds, so the cut groups are what gets pinned */
+    if (groups.every(g => g.weight * cands.length === W * g.clubs.length)) continue;
+    neutral = false;
+    const cut = groups.filter(g => g.weight < g.clubs.length);
+    ok(cut.length, `${y} tiers ${tiers}: odds off 1/n with no group over the cap`);
+    for (const g of cut) (overCap[g.key] ||= {})[y] = g.clubs.length;
+  }
+  if (neutral) yearsNeutral += 1;
+}
+const pinKeys = new Set([...Object.keys(HAND_OVER_CAP), ...Object.keys(overCap)]);
+for (const key of pinKeys) {
+  const got = JSON.stringify(overCap[key] || {});
+  const want = JSON.stringify(HAND_OVER_CAP[key] || {});
+  ok(got === want, `hand group ${key} off 1/n in seasons ${got}, pinned ${want}: restate the cap's effect on the old pool`);
+}
+console.log(`  HAND_CLUBS by season 1980 to 2060: ${yearsNeutral} seasons every club exactly 1/n; Premier League tier 3 over the cap in ${Object.keys(overCap['Premier League|3'] || {}).length} seasons, as pinned`);
 const t4 = POOL.filter(c => c.tier === 4);
 const g4 = engine.leagueDrawGroups(t4);
 const W4 = g4.reduce((s, g) => s + g.weight, 0);
 const F4 = g4.filter(g => FOUR.has(g.clubs[0].league)).reduce((s, g) => s + g.weight, 0);
 const rawFour = t4.filter(c => FOUR.has(c.league)).length;
 ok(F4 === 20 && W4 === 100, `the four leagues hold ${F4}/${W4} of the tier 4 draw weight, 20/100 expected`);
-/* The sampler itself, without sampling: drive the first Math.random call
-   over a midpoint grid of W4 * M points (the second call fixed), and every
-   group must be chosen on exactly weight * M of them. */
-{
-  const realRandom = Math.random;
-  const M = 4;
-  const K = W4 * M;
-  const hits = new Map(g4.map(g => [g.key, 0]));
-  let k = 0;
-  for (; k < K; k++) {
-    let call = 0;
-    Math.random = () => (call++ === 0 ? (k + 0.5) / K : 0.5);
-    const p = engine.pickAcrossLeagues(t4);
-    const key = `${p.league}|${p.tier}`;
-    hits.set(key, (hits.get(key) || 0) + 1);
-  }
-  Math.random = realRandom;
-  const offGrid = g4.filter(g => hits.get(g.key) !== g.weight * M);
-  ok(!offGrid.length, `pickAcrossLeagues chose ${offGrid.map(g => `${g.key} ${hits.get(g.key)}/${g.weight * M}`).join(', ')} off its weights`);
-  if (!offGrid.length) console.log(`  pickAcrossLeagues over tier 4: on a ${K} point grid every league group is chosen exactly weight x ${M} times`);
-}
+/* The sampler itself on the full tier 4, both calls on the grid: every club
+   in every group, capped ones included, drawn exactly weight * M * M2 times. */
+const gr4 = gridOdds(() => engine.pickAcrossLeagues(t4), t4);
+if (gridOk(gr4, 'pickAcrossLeagues over the full tier 4')) console.log(`  pickAcrossLeagues over tier 4: ${gr4.groups} league groups, both Math.random calls on a ${gr4.draws} draw grid, every club drawn exactly weight/${W4} x 1/size`);
 console.log(`  full pool tier 4: four leagues ${F4}/${W4} capped; a plain pick would give them ${rawFour}/${t4.length}`);
+/* What the cap costs the hand clubs, stated rather than hidden: on the full
+   pool a tier 4 hand club outside the four leagues goes from 1/87 of tier 4
+   draws to 1/100, and one inside them shares its league's 5 with the new
+   clubs (Norwich 1/440 in the Championship's 22, Brentford and Palace 1/160
+   in the Premier League's 8, Betis and Celta 1/260, Cruzeiro and Santos
+   1/280). Checked exactly against the groups, raw list. */
+{
+  const handT4 = HAND.filter(c => c.tier === 4).length;
+  const share = name => { const g = g4.find(x => x.clubs.some(c => c.name === name)); return g ? `${g.weight}/${W4 * g.clubs.length}` : 'none'; };
+  const WANT_SHARE = { 'Norwich City': [1, 440], Brentford: [1, 160], 'Crystal Palace': [1, 160], 'Real Betis': [1, 260], 'Celta Vigo': [1, 260], Cruzeiro: [1, 280], Santos: [1, 280], Enyimba: [1, 100] };
+  for (const [name, [a, b]] of Object.entries(WANT_SHARE)) {
+    const g = g4.find(x => x.clubs.some(c => c.name === name));
+    ok(g && g.weight * b === a * W4 * g.clubs.length, `${name}: tier 4 share ${share(name)}, ${a}/${b} stated`);
+  }
+  console.log(`  hand tier 4 clubs before: each 1/${handT4}; now 1/${W4} outside the four leagues, Norwich ${share('Norwich City')}, Brentford ${share('Brentford')}, Betis ${share('Real Betis')}, Cruzeiro ${share('Cruzeiro')}`);
+}
 
 /* ─── 6. OFFERS ─── */
 head('6', `OFFERS: ${SEEDS} seeds x ${CAREERS} careers from 2020 through the real loop`);
@@ -383,9 +515,22 @@ const offersOf = s => {
 /* Plays one seed. Every pickAcrossLeagues draw is priced on its own list;
    every market offer (not the homegrown ones, which name the academy) must
    carry a club that a pickAcrossLeagues call returned in that same step. */
+/* The home list getYouthAcademyClub tries first at each band; empty means
+   the academy comes from a worldwide fallback, which must be a
+   pickAcrossLeagues draw. 75 and up tries home tier 1 and then the elite
+   list with a plain pick, so it never counts as a fallback here. */
+function homeOf(pool, nat, ovr) {
+  const home = pool.filter(c => c.country === nat);
+  if (ovr >= 75) return [null];
+  if (ovr >= 66) return home.filter(c => c.tier === 1 || c.tier === 2);
+  if (ovr >= 55) return home.filter(c => c.tier === 2 || c.tier === 3);
+  if (ovr >= 40) return home.filter(c => c.tier >= 3);
+  return home.filter(c => c.tier === 4);
+}
 function playSeed(seed, startYear, careers, era) {
   seedRandom(seed);
-  const r = { draws: 0, measured: 0, expected: 0, variance: 0, bDraws: 0, bMeasured: 0, bExpected: 0, bVariance: 0, offers: 0, uncovered: [], byLeague: new Map(), marketFour: 0, marketAll: 0, rivals: [] };
+  const r = { draws: 0, measured: 0, expected: 0, variance: 0, bDraws: 0, bMeasured: 0, bExpected: 0, bVariance: 0, offers: 0, uncovered: [], byLeague: new Map(), marketFour: 0, marketAll: 0, rivals: [], academyFallbacks: 0, uncoveredAcademy: [] };
+  const startView = eras.adjustClubsForYear(POOL, startYear);
   let stepPicks = new Set();
   globalThis.__poolDrawLog = (cands, p) => {
     const { four, w, bites } = fourOdds(cands);
@@ -400,7 +545,13 @@ function playSeed(seed, startYear, careers, era) {
   const seen = new WeakSet();
   for (let c = 0; c < careers; c++) {
     const ovr = 45 + (c % 28);
-    let s = engine.initCareer(`Pool ${seed} ${c}`, NATS[c % NATS.length], POSITIONS[c % POSITIONS.length], era, stats(ovr), ovr, startYear, POOL, null);
+    const nat = NATS[c % NATS.length];
+    stepPicks = new Set();
+    let s = engine.initCareer(`Pool ${seed} ${c}`, nat, POSITIONS[c % POSITIONS.length], era, stats(ovr), ovr, startYear, POOL, null);
+    if (!homeOf(startView, nat, ovr).length) {
+      r.academyFallbacks += 1;
+      if (![...stepPicks].some(p => p.name === s.academyClubName)) r.uncoveredAcademy.push(`${nat} ${ovr}: ${s.academyClubName}`);
+    }
     let guard = 0;
     while (!s.retired && guard++ < 140) {
       stepPicks = new Set();
@@ -459,6 +610,9 @@ for (const seed of SEED_LIST) {
   for (const l of FOUR) ok((r.byLeague.get(l)?.size ?? 0) >= F_MIN_DISTINCT[l], `seed ${seed}: ${l} offered ${r.byLeague.get(l)?.size ?? 0} distinct generated clubs, at least ${F_MIN_DISTINCT[l]} expected`);
   ok(r.bDraws >= B_MIN_DRAWS, `seed ${seed}: only ${r.bDraws} draws where the cap bites, the comparison needs at least ${B_MIN_DRAWS}`);
   ok(!r.uncovered.length, `seed ${seed}: market offers that no pickAcrossLeagues call produced: ${r.uncovered.slice(0, 5).join(', ')}`);
+  ok(r.academyFallbacks > 0, `seed ${seed}: no career reached a worldwide academy fallback, the coverage check below saw nothing`);
+  ok(!r.uncoveredAcademy.length, `seed ${seed}: worldwide academy fallbacks that no pickAcrossLeagues call produced: ${r.uncoveredAcademy.slice(0, 5).join(', ')}`);
+  console.log(`    ${r.academyFallbacks} careers started at a worldwide academy fallback, uncovered ${r.uncoveredAcademy.length}`);
 }
 const ratios = results.map(r => r.bMeasured / r.bExpected);
 const agg = results.reduce((a, r) => ({ m: a.m + r.bMeasured, e: a.e + r.bExpected, v: a.v + r.bVariance }), { m: 0, e: 0, v: 0 });
@@ -514,6 +668,39 @@ for (const [label, pool] of [['before', HAND], ['after ', POOL]]) {
   }
 }
 
+/* 6e. The worldwide academy fallbacks, site by site. A youth with no home
+   club in his band (most of the page's 134 nationalities at most ratings)
+   gets an academy drawn from the whole world through pickAcrossLeagues.
+   Each reachable site is driven over the exact grid with a nationality that
+   has no home club there: Nigeria (one tier 4 club) at 70 and 60,
+   Montenegro (no club) at 47 and 30, plus two pools built to reach the last
+   fallbacks: no elite club at 80, no tier 4 club at 30. The other three
+   sites in getYouthAcademyClub only run on an empty list and draw nothing. */
+{
+  const ELITE = ['Bayern Munich', 'PSG', 'Man City', 'Real Madrid', 'Barcelona', 'Liverpool'];
+  const p2020 = eras.adjustClubsForYear(POOL, 2020);
+  const noElite = p2020.filter(c => !ELITE.includes(c.name));
+  const noT4 = p2020.filter(c => c.tier !== 4);
+  const SITES = [
+    ['Nigeria', 70, 'the 2020 pool', p2020, c => c.tier === 1 || c.tier === 2],
+    ['Nigeria', 60, 'the 2020 pool', p2020, c => c.tier === 2 || c.tier === 3],
+    ['Montenegro', 47, 'the 2020 pool', p2020, c => c.tier >= 3],
+    ['Montenegro', 30, 'the 2020 pool', p2020, c => c.tier === 4],
+    ['Montenegro', 80, 'a pool with no elite club', noElite, c => c.tier === 1],
+    ['Montenegro', 30, 'a pool with no tier 4 club', noT4, c => c.tier === 3],
+  ];
+  console.log('  worldwide academy fallbacks (exact grid):');
+  for (const [nat, ovr, what, pool, pred] of SITES) {
+    const home = pool.filter(c => c.country === nat);
+    ok(ovr >= 75 ? !home.some(c => c.tier === 1) : !homeOf(pool, nat, ovr).length, `${nat} ${ovr}: has a home club in its band, the site is not reached`);
+    const cands = pool.filter(pred);
+    const res = gridOdds(() => engine.getYouthAcademyClub(pool, nat, ovr), cands);
+    gridOk(res, `academy fallback ${nat} ${ovr} on ${what}`);
+    const { four, w } = fourOdds(cands);
+    console.log(`    ${nat} ${ovr} on ${what}: ${cands.length} candidates, ${res.draws} grid draws; four leagues ${four}/${w} capped, ${cands.filter(c => FOUR.has(c.league)).length}/${cands.length} by a plain pick`);
+  }
+}
+
 /* ─── 7. OLD SAVES ─── */
 head('7', 'OLD SAVES: careers signed on the pre-round pool load and play on');
 /* Each save is built directly, not hoped for: a career started on the
@@ -521,12 +708,18 @@ head('7', 'OLD SAVES: careers signed on the pre-round pool load and play on');
    that club's own row, written to JSON, read back through the page's guard
    and repairCareer, then played three seasons on the new pool. It never
    moves on its own: windows are declined and a renewal is taken from the
-   same club. A dilemma that moves the player ends the identity check. */
+   same club. A dilemma that moves the player ends the identity check.
+   Under option (a) the pre-round rows and the shipped rows are the same, so
+   this section cannot tell old from new rows by itself; what it guards is
+   that nothing re-reads a running save's league or tier from the list
+   (the reread control is that regression). The cross engine proof (saves
+   written by origin/main's engine, loaded by this one) was run once by hand
+   in review, not here. */
 const OLD = ['West Ham', 'Wolves', 'Girona', 'Norwich City', 'Flamengo', 'Real Madrid'];
 seedRandom(0x7007);
 for (const name of OLD) {
   const row = HAND.find(c => c.name === name);
-  if (!ok(row, `${name} has a hand row to sign with`)) continue;
+  if (!row) { section = '7s'; fail(`${name} has a hand row to sign with`); section = '7'; continue; }
   try {
     let s = engine.initCareer(`Old ${name}`, row.country, 'CM', '2020s', stats(70), 70, 2020, HAND, null);
     let g = 0;
