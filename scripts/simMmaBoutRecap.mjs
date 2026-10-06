@@ -23,6 +23,7 @@ const cases = {
   baseline: 'retains actual engine replay economics and original boxing save independently',
 };
 const controls = {
+  headers: { file: recap, from: '<th scope="col" className="break-words p-2">{aName}</th><th scope="col" className="break-words p-2">{bName}</th>', to: '<th scope="col" className="break-words p-2">{bName}</th><th scope="col" className="break-words p-2">{aName}</th>', test: cases.totals },
   strikes: { file: recap, from: "['strikes', 'Landed strikes', 'strikesA', 'strikesB']", to: "['strikes', 'Landed strikes', 'strikesB', 'strikesA']", test: cases.totals },
   takedowns: { file: recap, from: "['takedowns', 'Takedowns', 'takedownsA', 'takedownsB']", to: "['takedowns', 'Takedowns', 'controlA', 'controlB']", test: cases.totals },
   control: { file: recap, from: "['control', 'Ground control', 'controlA', 'controlB']", to: "['control', 'Ground control', 'takedownsA', 'takedownsB']", test: cases.totals },

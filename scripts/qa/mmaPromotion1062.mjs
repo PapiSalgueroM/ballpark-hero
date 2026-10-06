@@ -93,6 +93,7 @@ async function recapReading(page) {
     const rect = node => { const box = node.getBoundingClientRect(); return { top: box.top, bottom: box.bottom, left: box.left, right: box.right, width: box.width, height: box.height }; };
     return { bout: el.getAttribute('data-mma-recap-bout'), round: el.getAttribute('data-mma-recap-round'), text: el.textContent,
       winner: el.querySelector('[data-mma-recap-winner]')?.getAttribute('data-mma-recap-winner'),
+      headers: [...el.querySelectorAll('thead th')].map(cell => cell.textContent.trim()),
       box: rect(el), cells: [...el.querySelectorAll('[data-mma-stat][data-mma-side]')].map(cell => ({ stat: cell.dataset.mmaStat, side: cell.dataset.mmaSide, value: cell.getAttribute('data-value'), text: cell.textContent })),
       layout: [...el.querySelectorAll('th,td')].map(cell => ({ ...rect(cell), font: parseFloat(getComputedStyle(cell).fontSize), client: cell.clientWidth, scroll: cell.scrollWidth, text: cell.textContent })),
     };
@@ -194,6 +195,7 @@ try {
       await activate(opener, profile); await inspect(stage + '-total');
       let reading = await recapReading(page); recapOutcome(reading, event, bout, 'total'); recapGeometry(reading, profile);
       const names = [bout.aId, bout.bId, bout.winnerId].map(fighterId => state.fighters.find(fighter => fighter.id === fighterId)?.name);
+      assert.deepEqual(reading.headers, ['Recorded stat', names[0], names[1]], 'Visible fighter columns retain the actual blue/red corner order');
       assert(names.every(name => name && reading.text.includes(name)), 'Recap shows actual fighters and winner');
       assert.equal(reading.winner, bout.winnerId, 'Recap winner is the actual saved winner');
       assert(reading.text.includes(bout.method), 'Recap shows actual finish method');

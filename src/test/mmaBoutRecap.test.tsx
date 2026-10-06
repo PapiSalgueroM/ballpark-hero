@@ -79,6 +79,7 @@ function mount() { return render(<MemoryRouter><MmaPromotionBoard /></MemoryRout
 describe('MMA bout recap actual outcomes', () => {
   it('shows literal asymmetric totals for each saved side without invented counts or seconds', () => {
     const bout = literalBout(); const before = JSON.stringify(bout); const view = draw(bout);
+    expect(screen.queryAllByRole('columnheader').map(header => header.textContent)).toEqual(['Recorded stat', 'Blue fixture', 'Red fixture']);
     expectCells(view, TOTAL); expect(root(view)?.getAttribute('data-mma-recap-round')).toBe('total');
     expect(root(view)!.textContent).toContain('Ground control uses recorded units');
     expect(root(view)!.textContent).not.toMatch(/seconds|\bsecs?\b|strikes thrown|attempted strikes/i);
