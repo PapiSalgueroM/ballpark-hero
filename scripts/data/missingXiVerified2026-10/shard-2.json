@@ -929,6 +929,13 @@
      "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/summary?event=216728",
      "xi": true,
      "says": "Milan XI Dida, Maldini, Nesta, Jankulovski, Oddo, Pirlo, Ambrosini, Gattuso, Inzaghi, Seedorf, Kaka; formation 4-3-2-1; Gilardino, Favalli, Kaladze on. 2-1, Athens Olympic Stadium."
+    },
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/newsfiles/UCL/2006/300099_LU.pdf",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "UEFA Media Information line-up sheet for the final (issued 19:51 CET, 23 May 2007), with a pitch graphic. Milan, drawn attacking down the page: Dida; Oddo, Nesta, Maldini, Jankulovski; Gattuso, Pirlo, Ambrosini, Seedorf; Kaka; Inzaghi, from Milan's right to left (Oddo on the right, Jankulovski on the left). A four across midfield with Kaka alone behind Inzaghi, so a 4-4-1-1 by the drawing. Same eleven as the match page."
     }
    ],
    "diffs": [
@@ -966,6 +973,14 @@
      "evidence": "Gilardino did not start, so he cannot be a correct answer",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "slots[5] and slots[6] sides (Ambrosini, Gattuso)",
+     "entry": "Ambrosini right, Gattuso left",
+     "evidence": "ESPN: Gattuso CM-R, Ambrosini CM-L. UEFA's line-up sheet: Gattuso right of Pirlo, Ambrosini left of him.",
+     "severity": "minor",
+     "decision": "applied",
+     "reason": "two hosts agree on the side (convention 4)"
     }
    ],
    "applied": [
@@ -973,7 +988,7 @@
      "path": "formationLabel",
      "from": "4-3-1-2",
      "to": "",
-     "why": "ESPN alone states a shape (4-3-2-1, Kaka CF-R and Seedorf CF-L behind Inzaghi); UEFA states none and its position listing (Kaka and Inzaghi FORWARD) does not refute the old 4-3-1-2 either. The old label was never sourced and its eleven changed under it (Pirlo for Gilardino), so no label is shown. Rule 1 lets a field change only when two hosts agree on the new value, and keeping a label both hosts refute would show something known to be false, so the page shows none until two hosts agree"
+     "why": "Both hosts refute the old 4-3-1-2 and state different shapes. ESPN's feed says 4-3-2-1 (Kaka CF-R and Seedorf CF-L behind Inzaghi); UEFA's own line-up sheet for the final draws a four across midfield (Gattuso, Pirlo, Ambrosini, Seedorf) with Kaka alone behind Inzaghi, a 4-4-1-1. Neither has two strikers. Keeping 4-3-1-2 would show a shape both hosts contradict and choosing one would pick a side, so under convention 3 the page shows no label. The old label was never sourced and its eleven changed under it (Pirlo for Gilardino)."
     },
     {
      "path": "slots[1].name",
@@ -1025,13 +1040,13 @@
      "path": "slots[7].side",
      "from": "centre",
      "to": "right",
-     "why": "Kaka and Seedorf side by side behind Inzaghi once Pirlo replaced the second striker; ESPN states the sides (Kaka CF-R, Seedorf CF-L) and no host contradicts. Forced by the corrected eleven, one host on the order"
+     "why": "Kaka and Seedorf side by side behind Inzaghi once Pirlo replaced the second striker. Two hosts agree on the sides: ESPN (Kaka CF-R, Seedorf CF-L) and UEFA's line-up sheet (Kaka right of centre behind Inzaghi, Seedorf at the left end of the midfield four). Their heights split (UEFA has Seedorf in the midfield line), so the tiles keep the height they had"
     },
     {
      "path": "slots[8].side",
      "from": "centre",
      "to": "left",
-     "why": "Kaka and Seedorf side by side behind Inzaghi once Pirlo replaced the second striker; ESPN states the sides (Kaka CF-R, Seedorf CF-L) and no host contradicts. Forced by the corrected eleven, one host on the order"
+     "why": "Kaka and Seedorf side by side behind Inzaghi once Pirlo replaced the second striker. Two hosts agree on the sides: ESPN (Kaka CF-R, Seedorf CF-L) and UEFA's line-up sheet (Kaka right of centre behind Inzaghi, Seedorf at the left end of the midfield four). Their heights split (UEFA has Seedorf in the midfield line), so the tiles keep the height they had"
     },
     {
      "path": "slots[9].side",
@@ -1044,12 +1059,24 @@
      "from": "left",
      "to": "centre",
      "why": "UEFA, ESPN and RSSSF: Pirlo started; Gilardino came on 88' for Inzaghi. ESPN puts Pirlo in the midfield three"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "right",
+     "to": "left",
+     "why": "ESPN (Ambrosini CM-L) and UEFA's line-up sheet (Ambrosini left of Pirlo)"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "left",
+     "to": "right",
+     "why": "ESPN (Gattuso CM-R) and UEFA's line-up sheet (Gattuso right of Pirlo)"
     }
    ],
    "notes": [
     "The entry's source note ('Gilardino starting over Pippo alone up top') is contradicted by both hosts: Inzaghi started alone and scored both Milan goals (45', 82' per UEFA).",
     "Round 1026 (superseded by the review fix below): formation set to ESPN 4-3-2-1 because the two host eleven has one striker; UEFA states no shape. Kaka and Seedorf sides not stated.",
-    "Round 1026 (review fix): the 4-3-2-1 rested on ESPN alone, against rule 1. The label is now empty and the page shows no shape; the tiles keep ESPN's placement (Kaka right and Seedorf left behind Inzaghi, ESPN CF-R and CF-L), which no host contradicts. Open for a second host stating a shape."
+    "Round 1026 (review fix): the 4-3-2-1 rested on ESPN alone, against rule 1, so the label was emptied. Round 1026 (closing check fix): that emptying first rested on ESPN's refutation alone, because UEFA's match page states no shape. UEFA's own line-up sheet for the final (newsfiles 300099_LU.pdf) does: a four across midfield with Kaka alone behind Inzaghi. So both hosts now refute 4-3-1-2 and they split on the new shape (4-3-2-1 against 4-4-1-1): the empty label is convention 3's split case on two hosts. The sheet also agrees with ESPN on every side: Oddo and Jankulovski, Nesta right of Maldini, Gattuso right and Ambrosini left of Pirlo (the tiles had those two the wrong way round and now swap), Kaka right and Seedorf left. Seedorf's height and label split (UEFA left midfield, ESPN CF-L), so his CAM tile stays as it was."
    ]
   },
   {
