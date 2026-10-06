@@ -44,6 +44,9 @@
      equal      the award at the record instead of past it (>=)      -> 2
      unwired    the season stops calling awardAllTimeTopScorer       -> 3
      label      Hertha Berlin back to "Bundesliga"                   -> 4
+     onesource  the file keeps one source for Spain's record         -> 1
+     unverify   the file moves Hertha Berlin to the unverified list  -> 4
+   (the last two rewrite the loaded file in memory, never on disk)
 
    Run: node scripts/simCareerFacts.mjs
    No network and no database: the engine is bundled from this tree. */
@@ -55,7 +58,10 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_FACTS_CONTROL || '';
-const UNVERIFIED_MAX = Number.NaN; // set below once the file is final
+/* The unverified labels ratchet: 56 of 190 on 2026-10-06 (134 read from two
+   sources). It may only fall; a row that gets verified moves to clubLeagues
+   and this number comes down with it. */
+const UNVERIFIED_MAX = 56;
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const tmpDir = fs.mkdtempSync(path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), 'simfacts-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
@@ -77,6 +83,18 @@ const CONTROLS = {
   equal: ['2', swap('if (intGoals <= record ||', 'if (intGoals < record ||')],
   unwired: ['3', swap('  awardAllTimeTopScorer(s, thisYear);\n', '\n')],
   label: ['4', swap('name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga"', 'name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga"')],
+  onesource: ['1', s => s, f => {
+    if (!(f.intRecords.Spain && f.intRecords.Spain.sources.length === 2)) { console.error('control onesource: Spain has no two sources to cut'); process.exit(2); }
+    f.intRecords.Spain.sources = f.intRecords.Spain.sources.slice(0, 1);
+  }],
+  unverify: ['4', s => s, f => {
+    const row = f.clubLeagues['fb-66'];
+    if (!(row && row.name === 'Hertha Berlin')) { console.error('control unverify: fb-66 Hertha Berlin is not a verified row'); process.exit(2); }
+    delete f.clubLeagues['fb-66'];
+    f.clubLeaguesUnverified['fb-66'] = { name: row.name, league: row.league, reason: 'control: moved back to unverified' };
+    f.leagueEvidence[row.evidence].clubs = f.leagueEvidence[row.evidence].clubs.filter(c => c !== row.name);
+    if (!f.leagueEvidence[row.evidence].clubs.length) delete f.leagueEvidence[row.evidence];
+  }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 
@@ -123,6 +141,7 @@ async function bundleEngine() {
 }
 
 const facts = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/soccerCareerFacts.json'), 'utf8'));
+if (CONTROL && CONTROLS[CONTROL][2]) CONTROLS[CONTROL][2](facts);
 let mod;
 try { mod = await bundleEngine(); } catch (e) { section = 'bundle'; fail(`bundling the engine failed: ${String(e.message).split('\n')[0]}`); finish(); }
 const E = mod.engine;

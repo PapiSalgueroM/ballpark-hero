@@ -3461,7 +3461,15 @@ export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "
    Round 1013: these 190 hand rows are HAND_CLUBS and are never renamed,
    removed or reordered (saves and the academy lookups read clubs by name).
    FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
-   every hand row keeps its index. */
+   every hand row keeps its index.
+   Round 1022: a row's league is the league it plays in for 2026-27 (2026 for
+   calendar year leagues), read from two sources in
+   scripts/data/soccerCareerFacts.json; the labels nobody has read twice yet
+   are listed there as unverified, and scripts/simCareerFacts.mjs holds both
+   lists to this table. Seven moved: West Ham and Wolves (Championship),
+   Girona (Segunda Division), Hertha Berlin (2. Bundesliga), Nantes (Ligue 2),
+   River Plate Asuncion (Primera B Paraguay) and Persija Jakarta (the top
+   flight's new name). Tiers are balance, not fact, and did not move. */
 export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
@@ -3508,7 +3516,7 @@ export const HAND_CLUBS: ClubData[] = [
   // Tier 3, solid domestic clubs
   { id: "fb-41", name: "Real Sociedad", country: "Spain", tier: 3, color: "#0067B1", league: "La Liga" },
   { id: "fb-42", name: "Villarreal", country: "Spain", tier: 3, color: "#FFE667", league: "La Liga" },
-  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },
+  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Championship" },
   { id: "fb-44", name: "Aston Villa", country: "England", tier: 3, color: "#670E36", league: "Premier League" },
   { id: "fb-45", name: "Everton", country: "England", tier: 3, color: "#003399", league: "Premier League" },
   { id: "fb-46", name: "Leverkusen", country: "Germany", tier: 3, color: "#E32221", league: "Bundesliga" },
@@ -3532,11 +3540,11 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-63", name: "Crystal Palace", country: "England", tier: 4, color: "#1B458F", league: "Premier League" },
   { id: "fb-64", name: "Brentford", country: "England", tier: 4, color: "#D20000", league: "Premier League" },
   { id: "fb-65", name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship" },
-  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga" },
+  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga" },
   { id: "fb-67", name: "Werder Bremen", country: "Germany", tier: 4, color: "#1D9053", league: "Bundesliga" },
   { id: "fb-68", name: "Torino", country: "Italy", tier: 4, color: "#881B1E", league: "Serie A" },
   { id: "fb-69", name: "Bologna", country: "Italy", tier: 4, color: "#A61C2E", league: "Serie A" },
-  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 1" },
+  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 2" },
   { id: "fb-71", name: "Strasbourg", country: "France", tier: 4, color: "#0072BB", league: "Ligue 1" },
   { id: "fb-72", name: "Utrecht", country: "Netherlands", tier: 4, color: "#D2122E", league: "Eredivisie" },
   { id: "fb-73", name: "Braga", country: "Portugal", tier: 4, color: "#DA020E", league: "Primeira Liga" },
@@ -3562,10 +3570,10 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-90", name: "Brighton", country: "England", tier: 2, color: "#0057B8", league: "Premier League" },
   { id: "fb-91", name: "Stuttgart", country: "Germany", tier: 2, color: "#E32219", league: "Bundesliga" },
   { id: "fb-92", name: "LAFC", country: "USA", tier: 2, color: "#C39E6D", league: "MLS" },
-  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera Division Paraguay" },
+  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera B Paraguay" },
   { id: "fb-94", name: "Racing Club", country: "Argentina", tier: 2, color: "#75AADB", league: "Liga Profesional" },
   { id: "fb-95", name: "Zenit", country: "Russia", tier: 2, color: "#009FDF", league: "Russian Premier League" },
-  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "La Liga" },
+  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "Segunda Division" },
   // Tier 3, strong clubs across Europe, Asia, Africa and the Americas.
   { id: "fb-97", name: "PAOK", country: "Greece", tier: 3, color: "#2B2B2B", league: "Super League Greece" },
   { id: "fb-98", name: "Panathinaikos", country: "Greece", tier: 3, color: "#00743F", league: "Super League Greece" },
@@ -3576,7 +3584,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-103", name: "Besiktas", country: "Turkey", tier: 3, color: "#2B2B2B", league: "Super Lig" },
   { id: "fb-104", name: "Trabzonspor", country: "Turkey", tier: 3, color: "#5C1F33", league: "Super Lig" },
   { id: "fb-105", name: "Nice", country: "France", tier: 3, color: "#CC0000", league: "Ligue 1" },
-  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Premier League" },
+  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Championship" },
   { id: "fb-107", name: "Fulham", country: "England", tier: 3, color: "#111111", league: "Premier League" },
   { id: "fb-108", name: "Gremio", country: "Brazil", tier: 3, color: "#0D80BF", league: "Brasileirao" },
   { id: "fb-109", name: "Atletico Nacional", country: "Colombia", tier: 3, color: "#00A650", league: "Liga BetPlay" },
@@ -3608,7 +3616,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-134", name: "Pakhtakor", country: "Uzbekistan", tier: 4, color: "#0056A3", league: "Uzbekistan Super League" },
   { id: "fb-135", name: "Mumbai City", country: "India", tier: 4, color: "#57A8E2", league: "Indian Super League" },
   { id: "fb-136", name: "Buriram United", country: "Thailand", tier: 4, color: "#0C2E5C", league: "Thai League 1" },
-  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Liga 1 Indonesia" },
+  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Super League Indonesia" },
   { id: "fb-138", name: "Hanoi FC", country: "Vietnam", tier: 4, color: "#5C2D91", league: "V.League 1" },
   { id: "fb-139", name: "Johor Darul Tazim", country: "Malaysia", tier: 4, color: "#0C2E5C", league: "Malaysia Super League" },
   { id: "fb-140", name: "Melbourne Victory", country: "Australia", tier: 4, color: "#0C2E5C", league: "A-League" },
