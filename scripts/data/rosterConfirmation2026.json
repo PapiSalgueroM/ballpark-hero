@@ -11086,28 +11086,36 @@
    "club": "Arouca",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2000-02-06, German goalkeeper. Arouca loaned him to Blau-Weiss Linz from 2026-01-28 to 2026-06-30 (Soccerway, FotMob). A preseason Flashscore piece lists him in Arouca's provisional 2026-27 squad (https://www.flashscore.pt/noticias/arouca-com-menos-mexidas-procura-melhorar-a-oitava-posicao-da-epoca-passada/0dMDWOCM/), but ESPN's Arouca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/15784) lists only Vinarcik, De Arruabarrena and Martim Duarte in goal, FotMob shows no match since 2026-05-16 for Linz, and no official Arouca or Liga Portugal page could be read (both render their squads in script). Re-check against Liga Portugal's player page.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "a preseason report lists him but ESPN's Arouca 2026-27 squad does not"
   },
   {
    "name": "Renato Sanches",
    "club": "Benfica",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending, but he is certainly not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's (https://www.espn.com/soccer/team/squad/_/id/1929) both leave him out. Born 1997-08-18. Benfica was only a 2024-25 loan from PSG; he spent 2025-26 on loan at Panathinaikos (announced by the club on 2025-08-24, https://www.pao.gr/en/transfer/renato-sanches-is-green/) and Soccerway (https://us.soccerway.com/player/sanches-renato/Kbo7UsAS/transfers) records his return to PSG on 2026-06-30. But PSG's own 2026-27 squad page (https://www.psg.fr/en/mens-football/players) and ESPN's PSG page (https://www.espn.com/soccer/team/squad/_/id/160) both leave him out too, FotMob (https://www.fotmob.com/players/589344/renato-sanches) shows nothing after the loan, and no source found names a 2026-27 club or says he is unattached. The safe in-game effect is removal from Benfica; which list he belongs in needs a source for where he is.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "Benfica's own 2026-27 squad page and ESPN's both leave him out"
   },
   {
    "name": "Tiago Gouveia",
    "club": "Benfica",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending for want of an official page on the destination. Born 2001-06-18. Not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's 2025-26 and 2026-27 Benfica pages leave him out. ESPN listed him at Nice in 2025-26 (shirt 47) and its player page (https://www.espn.com/soccer/player/_/id/290081/tiago-gouveia) now has him at Gençlerbirliği, shirt 7, with five Süper Lig matches from 2026-08-23 to 2026-09-19. Gençlerbirliği is modelled, so this would be a move, but the club's site answered HTTP 522 and no Süper Lig or TFF page was read. Re-check with a TFF or club page.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "Benfica's own 2026-27 squad page and ESPN's leave him out; ESPN has him at Gençlerbirliği"
   },
   {
    "name": "Brian Oliván",
    "club": "Espanyol",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending, though he is not at Espanyol: ESPN's Espanyol pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/88) leave him out, and he was their number 14 in 2024-25. Born 1994-04-01. ESPN's player page (https://www.espn.com/soccer/player/_/id/213067/brian-olivan) shows his last games for Sporting Gijón in LaLiga 2 up to 2026-05-30 and a header naming AEK Larnaca, yet ESPN's AEK Larnaca page (2025-26, https://www.espn.com/soccer/team/squad/_/id/4039) does not list him. No official page was found and both candidate clubs are unmodelled, so the in-game effect of either answer is removal; the row waits for a second source on where he is.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Espanyol squads for 2025-26 or 2026-27"
   },
   {
    "name": "Adam Boayar",
@@ -11121,21 +11129,27 @@
    "club": "Elche",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2001-05-19, the Uruguayan forward. ESPN's Elche 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3751) leaves him out and his ESPN player page (https://www.espn.com/soccer/player/_/id/307473/agustin-alvarez-martinez) has him at Talleres (Córdoba), shirt 9, in five Argentine league games from 2026-08-24 to 2026-09-19. But Talleres' own men's squad page (https://www.clubtalleres.com.ar/plantel-profesional/) does not list him. Argentina is not modelled, so if ESPN is right the in-game effect is removal.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Elche 2026-27 squad; ESPN has him playing for Talleres"
   },
   {
    "name": "Clément Michelin",
    "club": "Racing Santander",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 1997-05-11, the French right back. Not at Racing: ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out. LaLiga's player page (https://www.laliga.com/en-GB/player/clement-michelin) puts him at Real Valladolid for 2026-27 with no shirt number and no minutes, but ESPN's Valladolid 2026-27 page (https://www.espn.com/soccer/team/squad/_/id/95) does not list him. Valladolid is in the second tier and not modelled, so if LaLiga is right the in-game effect is removal.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Racing squads for 2025-26 or 2026-27; LaLiga's own page puts him at Real Valladolid"
   },
   {
    "name": "Ekain Zenitagoia",
    "club": "Racing Santander",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: no source places him. ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out, LaLiga's page under his name (https://www.laliga.com/en-GB/player/ekain-zenitagoia) says it has no data on him, and neither ESPN's Real Valladolid nor Sporting Gijón 2026-27 page lists him. No birth date was read, so a namesake cannot be ruled out either. Needs a source that names his current club.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Racing squads for 2025-26 or 2026-27, and no source places him"
   },
   {
    "name": "Cláudio Ramos",
@@ -11163,21 +11177,27 @@
    "club": "Braga",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the sources disagree on where he is, though not on Braga. André Filipe Luz Horta, born 1996-11-07. ESPN has no André Horta in Braga's squads from 2023-24 to 2026-27 (raw page read for each season), and Liga Portugal's record for him was last touched 2025-01-27. ESPN's player page (https://www.espn.com/soccer/player/_/id/214565/andre-horta) shows him at Almería in LaLiga 2 to 2026-05-24 and then at Al Ula, shirt 7, in the Saudi King's Cup on 2026-08-19. LaLiga's player page (https://www.laliga.com/en-GB/player/andre-horta) still lists Almería for 2026-27, with no shirt number and no minutes. Neither Almería (Spanish second tier) nor Al Ula is modelled, so either answer means removal; the row waits for a second source on the club.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "on no ESPN Braga squad from 2023-24 to 2026-27; LaLiga's own page lists Almería"
   },
   {
    "name": "Vasconcelos",
    "club": "Braga",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the man could not be identified. The game row carries only the single name Vasconcelos (attacking midfielder, aged 20). ESPN's Braga squads from 2022-23 to 2026-27 (raw pages read) never list a Vasconcelos, and Liga Portugal's player records hold only two Vasconcelos, both defenders born in 1989 and 1997. He may be a Braga B or youth player; the full name and birth date from the 2025 source row are needed before anyone can check him.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "on no ESPN Braga squad from 2022-23 to 2026-27, and the man could not be identified"
   },
   {
    "name": "Rafa Soares",
    "club": "Famalicão",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending on one family. Luís Rafael Soares Alves, born 1995-05-09, left back. Not at Famalicão on ESPN: their 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/12698) leaves him out, and he was in their 2024-25 one. ESPN's player page (https://www.espn.com/soccer/player/_/id/219663/rafa-soares) has him at Estrela (Estrela Amadora, modelled), shirt 55, in five league games from 2026-08-30 to 2026-09-20, and Liga Portugal's player record (id 8743, refreshed 2026-10-03) gives shirt 55 but no club. Estrela's site did not resolve. Settle with an official Estrela or league page: if it agrees, this is a move to Estrela Amadora.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Famalicão 2026-27 squad; ESPN has him playing for Estrela"
   },
   {
    "name": "Gustavo Silva",
@@ -11198,126 +11218,162 @@
    "club": "Vitória Guimarães",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending on one family. Kaio César Andrade Lima, born 2004-02-15, the Brazilian winger. Not at Vitória: ESPN's Vitória pages for 2024-25, 2025-26 and 2026-27 leave him out, and Liga Portugal's record for him was last touched 2024-11-12. ESPN's player page (https://www.espn.com/soccer/player/_/id/347456/kaio) has him at Corinthians, shirt 37, in Série A and Libertadores games from 2026-09-06 to 2026-09-20. Corinthians is modelled, so if an official page agrees this is a move to Corinthians; Corinthians' own squad page refused the request.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Vitória squads for 2024-25 to 2026-27; ESPN has him playing for Corinthians"
   },
   {
    "name": "Tiago Silva",
    "club": "Vitória Guimarães",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending on one family. Tiago Rafael Maia da Silva, born 1993-06-02, midfielder (Liga Portugal's record, id 8633, last touched 2026-08-04, nine league records share the name). ESPN's Vitória 2026-27 squad page leaves him out, and his ESPN player page (https://www.espn.com/soccer/player/_/id/189474/tiago-silva) has him at Al Shamal of Qatar, shirt 70, playing an AFC Champions League Elite game on 09-14, after three Vitória league games on 08-16, 08-23 and 08-30 (ESPN prints no year on those). ESPN is the only source for the departure and the destination. Qatar is not modelled, so if an official page agrees this is removal.",
-   "shard": "spain-portugal"
+   "shard": "spain-portugal",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Vitória 2026-27 squad; ESPN has him playing for Al Shamal"
   },
   {
    "name": "Riccardo Sottil",
    "club": "Fiorentina",
    "checkedOn": "2026-10-03",
    "note": "The two families disagree. Family A leaves him out: Fiorentina's own first team page and the Lega Serie A Fiorentina squad do not list him, and neither does ESPN's 2026-27 squad page. Family B keeps him at Fiorentina: Soccerway says his loan at Lecce ended on 2026-06-30, he is back at Fiorentina under contract to June 2027 and out with a back injury, and ESPN's player page also names Fiorentina (no match since 2026-02-28, for Lecce). The likeliest reading is an injured player left off the registered list, which keeps him a Fiorentina player, but no source says so in words, so he stays pending at Fiorentina, the club both player pages name. Tried: legaseriea.it Fiorentina squad, acffiorentina.com first team page, ESPN Fiorentina squad page and player page 262480, Soccerway transfers page rkQyXmLB, all read 2026-10-03. Born 1999-06-03 on both player pages.",
-   "shard": "italy-france"
+   "shard": "italy-france",
+   "withheld": true,
+   "withheldWhy": "Fiorentina's own first team page, the Lega Serie A squad and ESPN's 2026-27 squad leave him out, while two player pages still name Fiorentina"
   },
   {
    "name": "Jordan Amavi",
    "club": "Brest",
    "checkedOn": "2026-10-03",
    "note": "No official source could be read, so the row cannot leave pending. The independent publishers mostly point away from Brest, but not cleanly: ESPN's 2026-27 Brest squad does not list him, yet his ESPN player page (born 1994-03-09) is still titled 'Jordan Amavi - Brest Defender' while its visible header shows only Defender with no club and no recent match, so ESPN contradicts itself; Soccerway's search shows no current team for him, with its transfer list ending at Brest in July 2024 and an injury from April to July 2025. That reads as a free agent since his Brest contract ended, but no source says so in words. Recommendation for the fold: he is very probably not a Brest player, so holding him out (notCurrent) is safer than shipping him at Brest, once one official voice confirms. Tried: sb29.bzh effectif.php (headed 2024-2025 and still lists Romain Del Castillo, who left on 2026-09-01, so it is stale), sb29.bzh equipe-pro.php and its news feed (no squad, no mention), ESPN Brest squad page (id 6997), ESPN player page 192058, Soccerway xQENPIHR, all read 2026-10-03. The ligue1.com player and club pages render no text to a reader.",
-   "shard": "italy-france"
+   "shard": "italy-france",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Brest 2026-27 squad, and Soccerway gives him no current team"
   },
   {
    "name": "Liam Kerrigan",
    "club": "Beveren",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Beveren, the destination is unsettled. Born 2000-05-09, wide midfielder (ESPN id 121469). ESPN's Beveren 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/13450) does not list him, but Beveren's own team page renders in script and could not be read. ESPN itself disagrees on where he is: its search lists Ternana, its athlete record Renate, both Italian Serie C clubs the game does not model. Renate's own squad page is still the 2025/26 one and does not name him. Whichever it is, the row ends in removedClubNotModelled once a club page names him.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Beveren 2026-27 squad; ESPN places him at an Italian Serie C club"
   },
   {
    "name": "Bruninho",
    "club": "Cercle Brugge",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the man could not be identified. The game has him as a 22 year old attacking midfielder. He is on neither Cercle 2026-27 list (https://cerclebrugge.be/en/teams/a-team/ and https://www.espn.com/soccer/team/squad/_/id/3610), and no ESPN Bruninho is known to be him: ESPN search returns about a dozen players of that name, none at Cercle, and the two read in full are other men (Shakhtar, born 2008; Belenenses, born 1998). ESPN's Cercle 2024-25 squad had a Bruno Gonçalves (born 2003-03-14, now Red Bull Bragantino, which the game models), but nothing read ties that name to Bruninho, so he is not moved on a guess. Needs his full name from the source table first.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "on neither Cercle 2026-27 list (the club's own and ESPN's), and the man could not be identified"
   },
   {
    "name": "Raymond Asante",
    "club": "Charleroi",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Charleroi, the destination is on one family only. Born 2004-05-27, Ghanaian forward (ESPN id 346562, Raymond Anokye Asante). ESPN's Charleroi 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/3616) does not list him, and Charleroi's own player directory has no page for him (https://www.sporting-charleroi.be/joueur/raymond-asante/ answers 404; a search of the club's player records finds none). ESPN puts him at Royal Francs Borains (Challenger Pro League, not modelled), but that club's own first team page (https://www.francsborains.be/equipe-a/) does not list him.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Charleroi 2026-27 squad and not in the club's player directory"
   },
   {
    "name": "Simon Mignolet",
    "club": "Club Brugge",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: no official page could be read. Born 1988-03-06, goalkeeper. ESPN's Club Brugge 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/570) lists Sommer, Jackers, De Corte and Driessche in goal and not him, and his ESPN game log ends with Brugge v Gent on 2026-05-24, yet ESPN's athlete record still says Club Brugge, active. Club Brugge's site answered every fetch with HTTP 403 or 429. So he may have left or retired at the end of 2025-26, but no source said so; re-check against the club's squad page or a statement.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Club Brugge 2026-27 squad, which lists four other keepers; his game log ends 2026-05-24"
   },
   {
    "name": "Ivann Botella",
    "club": "La Louvière",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at La Louvière, the destination is on one family only. Born 1999-06-28, French forward (ESPN id 292269). He is on neither La Louvière list (https://www.raal.be/equipe-premiere/ and https://www.espn.com/soccer/team/squad/_/id/131235). ESPN's athlete record puts him at Caen (not modelled), with no 2026-27 game logged; Caen's site answered HTTP 403, so no official page confirms it.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "on neither La Louvière 2026-27 list (the club's own and ESPN's)"
   },
   {
    "name": "Adamo Nagalo",
    "club": "PSV",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not on either PSV 2026-27 list, and no source says where he is. Born 2002-09-22, centre back (ESPN id 316073). He is absent from PSV's squad on the league's page (https://eredivisie.nl/competitie/clubs/psv/) and on ESPN's (https://www.espn.com/soccer/team/squad/_/id/148), yet ESPN's athlete record still says PSV, active, with his last game logged for PSV against Fortuna Sittard on 2026-01-17. He may be injured, loaned or sold; nothing read says which.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "absent from PSV's squad on the Eredivisie's own page and on ESPN's"
   },
   {
    "name": "Kayky",
    "club": "Sparta Rotterdam",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: the man could not be tied to Sparta. He is on neither Sparta 2026-27 list (https://eredivisie.nl/competitie/clubs/sparta-rotterdam/ and https://www.espn.com/soccer/team/squad/_/id/151). Internacional's own page (https://internacional.com.br/equipes/masculino/kayky) has Kayky da Silva Chagas, born 2003-06-11, and ESPN has the same man at Internacional (shirt 11, Brazilian Serie A games to 2026-05-31), which the game models. But ESPN's Sparta squads for 2024-25 and 2025-26 list no Kayky, and ESPN has another Kayky born in 2003 (Kayky Alves, Operário), so moving the game's 22 year old Sparta winger to Internacional would rest on the name alone. Needs the source table's full name or birth date.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "on neither Sparta 2026-27 list (the Eredivisie's own and ESPN's)"
   },
   {
    "name": "Alexander Djiku",
    "club": "Fenerbahçe",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Fenerbahçe on what could be read, the destination is on one family only. Born 1994-08-09, Ghana on ESPN, centre back (ESPN id 180573). He is not on ESPN's Fenerbahçe 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/436) and in none of the 67 Süper Lig match sheets read on tff.org (macId 317784 to 317850, 2026-08-15 to 2026-09-20). ESPN's athlete record puts him at Spartak Moscow (Russia, not modelled), but Spartak's site renders in script, the Russian league's site did not answer, and Fenerbahçe's site answered HTTP 403.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Fenerbahçe 2026-27 squad and in none of 67 Süper Lig match sheets on tff.org"
   },
   {
    "name": "Rodrigo Becão",
    "club": "Fenerbahçe",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Fenerbahçe on what could be read, the destination is on one family only. Born 1996-01-19, centre back (ESPN id 231291). Not on ESPN's Fenerbahçe 2026-27 squad and in none of the 67 tff.org match sheets read. ESPN's athlete record puts him at Rodina Moscow (Russia, not modelled); no Russian page could be read and Fenerbahçe's site answered HTTP 403.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Fenerbahçe 2026-27 squad and in none of 67 Süper Lig match sheets on tff.org"
   },
   {
    "name": "Dries Mertens",
    "club": "Galatasaray",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: he looks retired, but no page that says so could be reached. Born 1987-05-06. ESPN's athlete record (id 89687) marks him Inactive, with his last game logged for Galatasaray against Başakşehir on 2025-05-30; he is not on ESPN's Galatasaray 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/432) and in none of the 67 tff.org match sheets read. No squad page could be found on Galatasaray's own site. An official statement or a second publisher saying he retired would move him to notCurrent.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "ESPN marks him inactive, last game 2025-05-30; not on its Galatasaray 2026-27 squad nor in 67 tff.org match sheets"
   },
   {
    "name": "İsmail Köybaşı",
    "club": "Göztepe",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Göztepe, and no source says where he went. Born 1989-07-10, defender (ESPN id 140110). Göztepe's own squad page (https://www.goztepe.org.tr/Futbol/erkek-a-takim/sporcular) and ESPN's 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/789) both leave him out, and he is in none of the 67 tff.org match sheets read. ESPN's athlete record still says Göztepe, active, with his last game on 2026-05-16, so he may be unattached or retired; nothing read says which.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "Göztepe's own squad page and ESPN's 2026-27 squad both leave him out"
   },
   {
    "name": "Can Keleş",
    "club": "Kasımpaşa",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Kasımpaşa, and no source places him anywhere for 2026-27. Born 2001-09-02, Austria on ESPN, forward (ESPN id 306105). Kasımpaşa's own squad page (https://www.kasimpasa.com.tr/tr/takimlar/kasimpasa-profesyonel-a-takimi) and ESPN's (https://www.espn.com/soccer/team/squad/_/id/6870) both leave him out. ESPN's athlete record says Beşiktaş, but its last logged game is from April 2025, he is not on ESPN's Beşiktaş 2026-27 squad, and he is in none of the 67 tff.org match sheets read.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "Kasımpaşa's own squad page and ESPN's both leave him out"
   },
   {
    "name": "Kévin Rodrigues",
    "club": "Kasımpaşa",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Kasımpaşa, and no source places him anywhere. Born 1994-03-05, France on ESPN, a midfielder there (ESPN id 173618, the Kevin Rodrigues record whose birth year fits the game's age). Kasımpaşa's own squad page and ESPN's 2026-27 squad both leave him out, he is in none of the 67 tff.org match sheets read, and ESPN's athlete record has no team and marks him Inactive. That reads like a free agent, but one family is not enough to call him unattached.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "Kasımpaşa's own squad page and ESPN's 2026-27 squad both leave him out"
   },
   {
    "name": "Denis Drăguș",
    "club": "Trabzonspor",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending: not at Trabzonspor on what could be read, the destination is on one family only. Born 1999-07-06, Romania on ESPN, forward (ESPN id 262595). Not on ESPN's Trabzonspor 2026-27 squad (https://www.espn.com/soccer/team/squad/_/id/997) and in none of the 67 tff.org match sheets read. ESPN's athlete record puts him at FCSB (Romania, not modelled), but FCSB's players page renders in script and Trabzonspor's site answered HTTP 403.",
-   "shard": "benelux-turkey"
+   "shard": "benelux-turkey",
+   "withheld": true,
+   "withheldWhy": "not on ESPN's Trabzonspor 2026-27 squad and in none of 67 Süper Lig match sheets on tff.org"
   },
   {
    "name": "Lars Villiger",
@@ -11331,7 +11387,9 @@
    "club": "Luzern",
    "checkedOn": "2026-10-03",
    "note": "Checked 2026-10-03 and left pending, but the row is very probably wrong. Soccerway (born 1989-07-15) has him leaving Luzern for Grasshoppers on a free on 2023-07-01, last playing in 2024/2025, and its player index now gives him no club. ESPN's player index still names Grasshoppers, but ESPN's Grasshoppers squad page (2025-26 list) does not show him. Two independent publishers therefore agree he left Luzern in 2023, but neither says where he is now, and no official page could be read: fcl.ch answered 522 and gcz.ch's player page did not render. Re-check for a retirement notice.",
-   "shard": "rest"
+   "shard": "rest",
+   "withheld": true,
+   "withheldWhy": "Soccerway and ESPN agree he left Luzern in 2023"
   },
   {
    "name": "Andreas Hansen",
@@ -11345,17 +11403,21 @@
    "club": "Aberdeen",
    "checkedOn": "2026-10-05",
    "note": "Checked 2026-10-03 and 2026-10-05 and left pending for want of an official page. ESPN (OB shirt 9, nine Superliga appearances by 2026-09-19, absent from Aberdeen's 2026-27 squad) and Soccerway (Aberdeen to Odense on 2026-07-10) agree he plays for OB, so the row very probably ships him at the wrong club. But ob.dk's men's page (ob.dk/hold/herrer) and the league's own club page (superliga.dk/klubber/ob, squad tab) rendered no squad even in a browser, and Aberdeen's site gave 404, so no official page was read on either end. The movedTo row two publishers support is kept under heldOnTwoPublishers.",
-   "shard": "rest"
+   "shard": "rest",
+   "withheld": true,
+   "withheldWhy": "ESPN and Soccerway both have him at OB since 2026-07-10, and he is off ESPN's Aberdeen 2026-27 squad"
   },
   {
    "name": "Henry Onyekuru",
    "club": "Al-Fayha",
    "checkedOn": "2026-10-05",
    "note": "Checked 2026-10-03 and 2026-10-05 and left pending because the sources disagree. He is gone from Al Fayha: the league's own Al Fayha squad page and ESPN's both leave him out, and he left on a free for Genclerbirligi on 2025-07-21. Where he is now is not settled. ESPN's player page (id 238772) still names Genclerbirligi, shirt 7, with a 2026-27 Super Lig line of 0 appearances, and Soccerway's header gives a contract to 2027-06-30 (its 'Free agent' is only the transfer type of the 2025 move). Against that, ESPN's Genclerbirligi 2026-27 squad leaves him out and gives shirt 7 to Tiago Gouveia, and the Livesport search lists no team for him. Genclerbirligi is a club the game models, so if he is still under contract the verdict is movedTo Genclerbirligi, not notCurrent. Genclerbirligi's own site answered 503 ('Sitemiz yenileniyor', being rebuilt) and the federation's club page (tff.org kulupID 3606) shows its 2026-2027 squad only after a form postback, so no official page could break the tie.",
-   "shard": "rest"
+   "shard": "rest",
+   "withheld": true,
+   "withheldWhy": "the league's own Al Fayha squad page and ESPN's both leave him out"
   }
  ],
  "adjudicatorWeb2026_10_02": "Web adjudication, 2026-10-02, for the twenty Brazilian rows Round 876 added to pending, after a review found two of them false (Weverton at Grêmio since January, Júnior Alonso at Atlanta United since July). Read with WebFetch and WebSearch only. Family A is the club's own site where it could be reached; family B is independent press and ESPN's 2026-27 squad pages, read after the Brazilian window shut on 2026-09-11. A row left pending only where two publishers agreed on the club. Nineteen of the twenty were settled: ten at a new club (nine moves plus Antonio Sanabria, below), three at clubs the game does not model, seven confirmed where they were. Pedro Raul stays pending with what the check found. The same pass found Antonio Sanabria, held out as removedClubNotModelled at Cremonese, signed for Internacional on 2026-08-20, so he moves to movedTo now that Internacional are modelled.",
  "adjudicatorWeb2026_10_02_ligamx": "Web adjudication, 2026-10-02, for the twenty nine Liga MX rows Round 883 added to pending. Read with WebFetch and WebSearch only. Family A is Liga MX's own Apertura 2026 squad pages (ligamx.net) or the club's own site; family B is independent press, ESPN's 2026-27 squad pages, Soccerway and FotMob, read after the Liga MX window. All twenty nine settled: twelve confirmed at their club, seven at another modelled Mexican club (two on loan), ten at a club the game does not model. A name absent from one squad page alone was never enough to move or drop anybody.",
- "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note and still ships at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page."
+ "adjudicatorShards2026_10": "Web adjudication of every row still pending on 2026-10-03, in six shards read 2026-10-03 to 2026-10-05 (Rounds 930 to 935: Germany; Spain and Portugal; Italy and France; England and MLS; Belgium, the Netherlands and Turkey; the rest), folded by Round 1015 through scripts/foldRosterAdjudication.mjs. Each folded row carries shard, the file under scripts/data/rosterAdjudication2026-10/ that holds its evidence and that shard's notes for the fold. A settled row has two sources from two families (A, the club's or the league's own page; B, an independent publisher on another host). A row the shard left pending, because its families disagreed or no official page could be read, stays pending with the shard's note. Where that note says a 2026-27 squad list leaves him out of the club recorded here, or its sources disagree on that club, the row also carries withheld and withheldWhy, and the bake keeps him out of every squad until two families say where he is; the other pending rows still ship at the club recorded here. Not folded: rest.json's heldOnTwoPublishers (Andreas Hansen confirmed at FC Nordsjælland, Topi Keskinen moved to OB), which the shard keeps pending for want of an official page."
 }
