@@ -169,6 +169,8 @@ const WhodTheyBeat = () => {
           <div className="max-w-md mx-auto">
             <ResultScreen
               won={score >= 7}
+              score={`${score}/${total}`}
+              scoreLabel="beaten finalists named"
               outcomeEmoji={score >= 9 ? '🏆' : score >= 7 ? '🥈' : '😅'}
               headline={`${score}/${total} Remembered!`}
               statLine={<>The handshake line never forgets{score >= 9 ? '.' : score >= 7 ? ', mostly.' : '... but you might.'}</>}

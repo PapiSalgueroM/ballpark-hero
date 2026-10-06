@@ -1,5 +1,10 @@
 import { cn } from '@/lib/utils';
-import type { CareerState, UclTie, UclKoRound } from '@/lib/clubManager';
+import type { CareerState, UclKoRound } from '@/lib/clubManager';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
+// Round 983: the cup card holds the moment and the club line; this card shares them.
+import { BracketSide, tieKey, tieMoment, trophyGlow, useBracketMoment } from '@/components/club-manager/CupBracketCard';
+
+const UCL_ROUNDS: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
 
 interface UclBracketCardProps {
   career: CareerState;
@@ -23,48 +28,25 @@ const ROUND_LABEL: Record<UclKoRound, string> = {
  */
 export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
   const bracket = career.uclBracket;
+  // Round 983: above the empty bracket return, hooks never follow one.
+  const moment = useBracketMoment(career, 'ucl', bracket, UCL_ROUNDS);
   if (!bracket || bracket.length === 0) return null;
 
   // Round 462: an era bracket opens with the round of 16 it really had.
-  const rounds: UclKoRound[] = bracket.some(t => t.round === 'R16') ? ['R16', 'QF', 'SF', 'F'] : ['QF', 'SF', 'F'];
+  const rounds: UclKoRound[] = bracket.some(t => t.round === 'R16') ? UCL_ROUNDS : ['QF', 'SF', 'F'];
   const champion = bracket.find(t => t.round === 'F')?.winner ?? null;
-
-  const side = (name: string, tie: UclTie, isHome: boolean) => {
-    const goals = isHome ? tie.homeGoals : tie.awayGoals;
-    const settled = tie.winner !== null;
-    const through = settled && tie.winner === name;
-    const mine = name === career.clubName;
-    return (
-      <div
-        onClick={onClubClick ? () => onClubClick(name) : undefined}
-        className={cn(
-          'flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors',
-          onClubClick && 'cursor-pointer hover:bg-secondary/50',
-          settled && !through && 'opacity-45',
-        )}
-      >
-        <span className={cn(
-          'flex-1 min-w-0 truncate text-[11px]',
-          mine ? 'text-primary font-bold' : through ? 'text-foreground font-semibold' : 'text-foreground',
-        )}>
-          {name}
-        </span>
-        <span className={cn(
-          'shrink-0 text-[11px] font-bold font-display w-4 text-right',
-          through ? 'text-gold' : 'text-muted-foreground',
-        )}>
-          {goals === null ? '' : goals}
-        </span>
-      </div>
-    );
-  };
 
   return (
     <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div className="text-xs text-muted-foreground uppercase tracking-wider">⭐ Champions League bracket</div>
         {champion && (
-          <div className="text-[10px] font-bold text-gold truncate max-w-[50%] text-right">🏆 {champion}</div>
+          <div
+            className={cn('text-[10px] font-bold text-gold truncate max-w-[50%] text-right', moment?.wonFinal && 'cm-gold-glow rounded-md')}
+            style={moment?.wonFinal ? trophyGlow(moment) : undefined}
+          >
+            🏆 {champion}
+          </div>
         )}
       </div>
 
@@ -85,16 +67,21 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
           <div key={r}>
             <div className="text-[9px] text-muted-foreground uppercase tracking-wider mb-1">{ROUND_LABEL[r]}</div>
             <div className={cn('grid gap-1.5', ties.length > 2 ? 'sm:grid-cols-2' : 'grid-cols-1')}>
-              {ties.map(t => (
+              {ties.map(t => {
+                const m = tieMoment(moment, t);
+                return (
                 <div
                   key={`${t.round}-${t.slot}`}
                   className={cn(
                     'rounded-lg border py-1',
                     t.mine ? 'border-primary/60 bg-primary/10' : 'border-border bg-background/40',
+                    m.drawn && 'cm-tick-in',
                   )}
+                  style={m.drawn ? { animationDelay: m.delay } : undefined}
+                  data-cm-bracket-drawn={m.drawn ? tieKey(t) : undefined}
                 >
-                  {side(t.home, t, true)}
-                  {side(t.away, t, false)}
+                  <BracketSide name={t.home} tie={t} isHome clubName={career.clubName} onClubClick={onClubClick} landing={m.through} delay={m.delay} />
+                  <BracketSide name={t.away} tie={t} isHome={false} clubName={career.clubName} onClubClick={onClubClick} landing={m.through} delay={m.delay} />
                   {/* Round 507: a two legged tie shows the legs under the
                       aggregate, and shows the first leg on its own while the
                       second is still to come, because until then the headline
@@ -127,7 +114,8 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         );
@@ -136,6 +124,9 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
       <p className="text-[9px] text-muted-foreground">
         Every tie is played, including the ones you are not in. Your own tie is decided by your match.
       </p>
+      {/* Round 983: the kit's keyframes, only while a moment plays, and last
+          so the card's space-y gap never lands on the line under it. */}
+      {moment && <CelebrationStyles />}
     </div>
   );
 }

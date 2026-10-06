@@ -1,3 +1,18 @@
+**2026-10-05 23:02 EDT, desktop Claude lane: Release AD IS LIVE**, main `1b26f197`, deployment `56061703`, entry `index-Bm6bCxIc.js`. Fifteen rounds of this lane, each built, reviewed twice by adversarial agents (one runs and mutates, one reads and checks facts on two sources), fixed and closed, plus the other lane's 1005, 1006, 1008 and 1030 as they stood on main.
+
+What a player sees:
+- **Soccer Career (from a player's requests the same morning):** every season's rating in the career history, with the overall each season was played at (1011); 51 more clubs, with England, Spain and Brazil filled out from Club Manager's own data (1013); the Champions League plays its group stage or league phase, and a club outside Europe plays its own continental cup, the Libertadores for Boca (972); the international debut and the legacy card get their moment (985).
+- **Transfer Path (a player's report, tpa-762 "stuck"):** a name outside the pool now says so instead of showing nothing, a second hint tier counts the doors out of the last name without naming anyone, and a report sends what the player typed (1010a). The data half (1010b and 1017) waits for its migration on or after 2026-10-15.
+- **Club Manager:** 2005-06 is a full big five (902); a manager you build properly and can edit (965); renewals, academy promotions and facility upgrades confirm themselves (982); the cup and Champions League brackets show who just went through (983).
+- **US careers:** the four content packs land on the shared board with one deck engine: 36 offseason cards each and positions that matter (988).
+- **Data verified:** MLB Career Path, every clue on two sources, repeats removed (924); Missing Eleven grown from 18 Super Bowl lineups to 40 (950).
+- **Moments:** Perfect Season's four games end on one shared verdict (954); Higher or Lower and the other comparison games put the score up top (986); the profile shows the right numbers on a second device, with your careers on it (981).
+
+**Gate** (gate clone, branch release-ad, script `C:\Users\antho\dukb-handoff\2026-10-05\gate-ad.sh`, logs `.tmp-ad\logs1`): type gate 0; build:seo 0 with every route redrawn (179 snapshots); 60 fences (54 green on the first pass; simResultMoment, simTycoonPacks and simFlagshipWeight fixed in the release, see below; simPlayerSearchFailure, skipped by the gate filter, run by hand and green; simTransferPathHints and simTransferPathModes skipped as live, this release changes no Transfer Path data); one browser sweep (182 routes, 364 checks, 0 findings); /soccer-career, /club-manager, /transfer-path and /nfl-my-career played clean; playHomeFold, playSoftFourOhFour and simFaqSchema green; sweepWeight green after ten budgets were set from fresh measurements with their causes; vitest 17 changed test files, 267 tests passed (usBoardFixture skips by design: it runs inside simUsBoardParity, green, every click replayed). Codex 1030 merged before the push: simFootleStatImport and simPlayersPool green.
+**Fixed in the release:** simResultMoment: the four Perfect Season routes came off its own surface list (Round 954 wired them to the shared moment). simTycoonPacks: section 10 scanned every file for .earned and read Round 988's career money field as a gem ledger credit; it now fences the tycoon economy only, and a new earnedleak control proves a direct credit is still caught (all 23 controls fire). simFlagshipWeight: main was already at 2295 KB against 2250; the release brings /soccer-career to 2341 KB; the ceiling is 2450 from that measurement, still far under a Club Manager comeback (loading the continental cup and ratings code on demand is owed). The awards night fixture and simCareerLeagueFinish's section 4 digests re-recorded on the merged tree. The cause was proven, not assumed: a probe tree of 1013 plus 972 alone gave the same 13 of 16 digests and the same seven awards night differences (972 draws continental opponents from FALLBACK_CLUBS, 1013 appends 51 clubs and draws a league before a club); 902's name pool renames (Quiroga-Leiva, Reinhardtsberg) also move Soccer Career's generated names, which the re-recording on the full release tree covers. The awards probe now also tries the greatest_ever gamble at popularity 50, so its coverage check cannot starve when the stream moves. Three hand merges: the awards fixture, LegacyCard (972's club cups in the trophy total plus 985's staged rows), and the engine's imports (972 and 1013).
+**Reds that are not this release's:** simNationalities, 30 modern names with no nationality, the same set as on main (Round 1015 bakes them).
+**Proof:** x-deployment-id carries 56061703 at 23:02 EDT, the home page serves index-Bm6bCxIc.js, /whats-new carries the 2005-06 big five, 51 more clubs, every season's rating, the group stage and the Transfer Path lines, the live TransferPath chunk carries More help and the pool text, and in a real browser on the live site typing a name outside the pool (Zubimendi) shows: No player by that name in the Transfer Path pool yet. The pool holds 253 players.
+
 ## Round1008 live: four-sport saved season review, 2026-10-05
 
 PR134 merged as3e6c28ad8de4c0d59bc970a420ba4ba0bdb043a5 after all five
@@ -31,6 +46,16 @@ pending. Native checks will assess the initial picker reveal and return focus.
 Codex owns this lane. Claude retains 1010 to 1014 and Front Office work.
 1005 is published.1006 and 1007 remain in separate release verification.
 All runtime runs remotely. Six-hour session continues until 23:31 UTC.
+
+## Codex claims1030: preserve unknown imported player stats, 2026-10-05
+
+Codex owns only scripts/bakePlayers.mjs and its nullable-stat verification.
+Accept nonnegative integer or null goals/assists, preserving unknowns and true
+zeroes. No table, baked factual row, player save, Daily identity or frontend
+change. Existing stat provenance is unresolved, so do not guess replacements.
+Reuse the clean merged Footle worktree on codex/footle-unknown-stat-import-1030.
+Claude retains1010to1029, Soccer Career, Transfer Path and Front Office.
+1007to1009 continue separately. Remote runtime only. No publication claim.
 ## Codex 1006 published, publication slot released, 2026-10-05
 
 PR131 merged as 749f3a83 after final21e88395 passed all three remote

@@ -408,6 +408,8 @@ const RankEm = () => {
               <div ref={resultRef} role="region" aria-label="Rank result" tabIndex={-1} data-rank-action-count={actions.length} data-rank-cue={committed ? 'committed' : undefined} className={`mt-4 flex justify-center ${styles.result} ${styles.fullText} ${committed ? styles.committed : ''}`}>
                 <ResultScreen
                   won={won}
+                  score={score}
+                  scoreLabel="points"
                   outcomeEmoji={won ? '🏆' : correctCount >= 3 ? '👏' : '🙈'}
                   headline={`${correctCount} / 5 correct`}
                   statLine={<>{round.sport} · {round.statLabel}</>}
