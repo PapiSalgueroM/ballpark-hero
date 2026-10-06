@@ -2,7 +2,6 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, renderHook } from '@testing-library/react';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { transformSync } from 'esbuild';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => 'Tester' }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: () => Promise.resolve([]) }));
@@ -96,8 +95,9 @@ function earnMounted(hook: Mounted) {
 describe('Cage Practice earned outcomes', () => {
   it('keeps every normal seeded quick fight identical to the accepted release', () => {
     const source = execFileSync('git', ['show', '2b7dda2951fb9b63e76a2af66970cb682f312105:src/lib/cageClash.ts'], { encoding: 'utf8', windowsHide: true });
+    const compiled = execFileSync(process.execPath, ['-e', "process.stdout.write(require('esbuild').transformSync(require('node:fs').readFileSync(0, 'utf8'), { loader: 'ts', format: 'cjs', target: 'es2020' }).code)"], { input: source, encoding: 'utf8', windowsHide: true, timeout: 10000 });
     const referenceModule = { exports: {} as typeof import('@/lib/cageClash') };
-    new Function('module', 'exports', transformSync(source, { loader: 'ts', format: 'cjs', target: 'es2020' }).code)(referenceModule, referenceModule.exports);
+    new Function('module', 'exports', compiled)(referenceModule, referenceModule.exports);
     const accepted = referenceModule.exports;
     let checked = 0;
     for (const [index, style] of styles.entries()) for (const seed of [1064, 2064]) for (const active of [false, true]) {

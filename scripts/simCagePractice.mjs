@@ -70,7 +70,11 @@ if (mode === 'all') {
   console.log(`simCagePractice: ${Object.keys(titles).length} actual outcomes and ${Object.keys(controls).length} effective controls passed.`);
   process.exit(0);
 }
-const held = await Promise.all([engine, practice, hook, testFile].map(async file => [file, await readFile(path.join(root, file))]));
+const held = [];
+for (const relative of [engine, practice, hook, testFile]) {
+  const file = path.join(root, relative), bytes = await readFile(file);
+  held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, `${relative} source bytes unchanged`)));
+}
 const controlRoot = path.join(root, '.sim-control'); await mkdir(controlRoot, { recursive: true });
 const folder = await mkdtemp(path.join(controlRoot, 'cage-practice-'));
 try {
@@ -84,7 +88,7 @@ try {
     const files = spec.file === hook ? [hook] : [engine, practice];
     for (const original of files) {
       const file = path.join(folder, path.basename(original));
-      await writeFile(file, original === spec.file ? changed : await readFile(path.join(root, original), 'utf8'));
+      await writeFile(file, original === spec.file ? changed : (await readFile(path.join(root, original), 'utf8')).replaceAll('\r\n', '\n'));
       aliases['@/' + original.slice(4).replace(/\.tsx?$/, '')] = file;
     }
     await writeFile(path.join(evidence, `${mode}-changed-source.txt`), changed);
@@ -115,5 +119,5 @@ try {
 } finally {
   assert.equal(path.dirname(folder), controlRoot); assert(path.basename(folder).startsWith('cage-practice-'));
   await rm(folder, { recursive: true, force: true });
-  for (const [file, original] of held) assert.deepEqual(await readFile(path.join(root, file)), original, `${file} source bytes unchanged`);
+  for (const verify of held) await verify();
 }

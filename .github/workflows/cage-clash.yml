@@ -75,8 +75,18 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
       - name: Practice outcomes and effective controls
+        id: practice
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_PRACTICE_CONTROL=all ONLY=simCagePractice node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice.log
+      - name: Preserve practice failure for immediate diagnosis
+        if: ${{ failure() && steps.practice.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-practice-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/practice/
+            cage-clash-artifacts/practice.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
