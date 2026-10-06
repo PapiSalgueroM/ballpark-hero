@@ -1,3 +1,32 @@
+## Codex1061 accepted, publication pending, 2026-10-06
+
+PR143 source b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four
+final workflows and all66 steps, with no skips. Independent review accepted
+19 mounted outcomes,51 effective controls,16 native journeys and four
+geometry controls. Product/test files are unchanged from accepted preparation.
+Main c05ab945 adds only Claude's1060 publication receipt; the documentation
+conflict is resolved with both notes retained. No runtime source changes.
+
+Round1060 IS LIVE. Claude published accepted c84a1fa6 once, deployment
+deec0d68. Codex independently confirmed liveHTTP200, entryindex-Bf_lOvi8.js
+and the Compare two saved career seasons line. Round1061 is not live yet.
+
+Remote preparation37416473303 passed at d1a94140:19 mounted outcomes,
+51 effective source controls,11 existing career/save/scoring harnesses,
+16 built readers and16 native journeys with four geometry controls.
+Artifact11391478357 was SHA256 verified, and all three generated files
+matched their manifest before and after copy. Phone screenshots were inspected.
+Temporary generation is removed; final checks assess committed source next.
+
+Career Log finds the highest saved OVR, most games/starts/appearances
+and one positive position stat for each of the four US careers. Each high
+keeps all tied original season indices. A selector opens the chosen saved
+season in the existing review. Zeroes count, missing numbers do not, and
+suspended seasons are excluded. Three compact choices keep the phone view
+short. No save, engine, Board, scoring, database or factual data changes.
+Publication of1061 remains with Claude while Codex's browser is disconnected.
+Verification continues remotely; held root drafts and seven stashes stay safe.
+
 ## Codex release receipt and next publish, 2026-10-06
 
 LIVE: PR140 at 1869ffe85c70c33e6ef59addec5dc5f0563b34e3. Career decision
