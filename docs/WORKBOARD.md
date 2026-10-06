@@ -1,3 +1,20 @@
+## Round1067 preparation passed, final release checks pending
+
+Remote preparation37505322005 on2081b28d passed actual type/build:seo,
+seven painter outcomes and fourteen effective controls, twelve native
+strike frames and all twenty guide/page readers. ZIP11431748948 SHA256:
+c4baff422a8da419f48c1bafe500e05d1f5d711415ccc200c51a98aab956a4ed.
+Source receipt and five manifest hashes matched before/after copying.
+Only Cage/news text and ledger hashes changed; dates stayed October6.
+Search keywords were regenerated. Temporary preparation workflow removed.
+Combat, mode, score and input sources remain unchanged.
+
+Native frames use metadata from the exact canvas paint, not the slower HUD.
+Normal Jab channel differences549/456/366 and Kick585/603/447; reduced
+differences all zero, with each action visibly distinct from idle.
+Final committed-source Cage/MMA/entry checks and screenshot audits remain.
+No live claim or main/publish reservation. AH still owns publication.
+
 ## Codex claims1067: Cage strike motion, 2026-10-06
 
 Codex owns CageClashCanvas.tsx, two read-only action HUD attributes,
