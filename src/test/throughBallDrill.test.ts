@@ -20,7 +20,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyDrillResult, daySeed, drillForPosition, drillSeed, drillStatFor, lehmer, DRILL_META, type DrillKind } from '@/lib/careerDrills';
 import {
-  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, MAX_PASS, maxThroughBallScore, passTarget, PASSER,
+  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, MAX_PASS, maxThroughBallScore, passTarget, PASSER, PITCH_LEFT, PITCH_RIGHT,
   perfectThroughBall, runnerAt, takeThroughBall, throughBallDeadline, validateThroughBallRecord,
   type ThroughBallInput, type ThroughBallOutcome, type ThroughBallSetup,
 } from '@/lib/throughBallDrill';
@@ -81,6 +81,8 @@ describe('seeded Through Ball rules', { timeout: 20000 }, () => {
       for (const input of [offside, { ...perfect, press: throughBallDeadline(setup) }, { ...perfect, press: Infinity }, { ...perfect, press: NaN }]) {
         expect(takeThroughBall(input, setup)).toMatchObject({ won: false, points: 0, outcome: 'offside' });
         seen.add(takeThroughBall(input, setup).outcome);
+        /* a pass played late says so; a run the board settled because nobody played it does not claim anybody did */
+        expect(takeThroughBall(input, setup).verdict).toBe(input === offside ? 'Offside. He was past the line when you played it.' : 'Offside. You held it too long and he ran past the line.');
       }
       expect(takeThroughBall({ ...perfect, weight: 0.2 }, setup)).toMatchObject({ won: false, outcome: 'short', crossX: null });
       for (const x of setup.defenders) {
@@ -92,11 +94,53 @@ describe('seeded Through Ball rules', { timeout: 20000 }, () => {
       }
       const long = takeThroughBall({ ...perfect, weight: 1 }, setup);
       if (long.target.y <= KEEPER_Y) expect(long.outcome).toBe('keeper');
-      for (let angle = -60; angle <= 60; angle += 6) for (let weight = 0.3; weight <= 1; weight += 0.05) for (const press of [perfect.press - 0.6, perfect.press - 0.3, perfect.press]) {
-        seen.add(takeThroughBall({ angle, weight, press }, setup).outcome);
+      for (let angle = -72; angle <= 72; angle += 6) for (let weight = 0.3; weight <= 1; weight += 0.05) for (const press of [perfect.press - 0.6, perfect.press - 0.3, perfect.press]) {
+        const result = takeThroughBall({ angle, weight, press }, setup);
+        seen.add(result.outcome);
+        /* a ball that ends off the side of the pitch is out of play, never a
+           short one, an overhit one or a goal chance, unless a defender on
+           the line got to it first */
+        const off = result.target.x < PITCH_LEFT || result.target.x > PITCH_RIGHT;
+        if (off) expect(['out', 'cutout']).toContain(result.outcome);
+        else expect(result.outcome).not.toBe('out');
       }
     }
-    expect([...seen].sort()).toEqual(['behind', 'cutout', 'early', 'keeper', 'offside', 'short', 'through', 'wide']);
+    expect([...seen].sort()).toEqual(['behind', 'cutout', 'early', 'keeper', 'offside', 'out', 'short', 'through', 'wide']);
+  });
+
+  /* Round 1032 review: the only cut out check aimed straight at each defender,
+     so a radius of 4 instead of 11 stayed green while balls rolled through
+     drawn men. A defender is drawn 7 wide and the ball 5: a pass crossing 10
+     from his centre touches him and is cut out, one crossing 12 is past him. */
+  it('cuts out a pass that crosses the line within reach of a defender, and only that pass', () => {
+    let near = 0;
+    let clear = 0;
+    for (const run of RUNS.slice(0, 40)) for (const setup of run) {
+      const press = perfectThroughBall(setup).press;
+      for (const x of setup.defenders) for (const offset of [-12, -10, 10, 12]) {
+        const cross = x + offset;
+        if (cross < PITCH_LEFT || cross > PITCH_RIGHT) continue;
+        const aim = aimFor({ x: PASSER.x + (cross - PASSER.x) * 1.3, y: PASSER.y + (setup.line - PASSER.y) * 1.3 });
+        const result = takeThroughBall({ ...aim, press }, setup);
+        expect(result.crossX).toBeCloseTo(cross, 6);
+        if (Math.abs(offset) === 10) { expect(result.outcome).toBe('cutout'); near++; }
+        else { expect(result.outcome).not.toBe('cutout'); clear++; }
+      }
+    }
+    expect(near).toBeGreaterThan(1000);
+    expect(clear).toBeGreaterThan(1000);
+  });
+
+  it('calls a ball off the side of the pitch out of play, wherever it would have stopped', () => {
+    for (const run of RUNS.slice(0, 40)) for (const setup of run) {
+      const press = perfectThroughBall(setup).press;
+      /* steep and full: these leave the pitch before they reach the line */
+      for (const angle of [-70, 70]) {
+        const result = takeThroughBall({ angle, weight: 1, press }, setup);
+        expect(result.crossX).toBeNull();
+        expect(result).toMatchObject({ won: false, outcome: 'out', verdict: 'Out of play. It ran off the side of the pitch.' });
+      }
+    }
   });
 
   it('moves the ball as far as the weight says, at every step of the bar', () => {

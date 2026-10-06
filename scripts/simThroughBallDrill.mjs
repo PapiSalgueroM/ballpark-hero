@@ -25,6 +25,13 @@
        other drill, and the board banks once before the callback.
      - REDUCED MOTION IS STATIC: the runner does not move while the clock
        runs, and the settled pass is drawn where it ended at once.
+     - THE LINE CUTS OUT WHAT TOUCHES IT (added after review): a pass crossing
+       10 from a defender's centre is cut out and one crossing 12 is not, for
+       every defender of 40 runs; the old check only aimed straight at them.
+     - OUT OF PLAY: a ball off the side of the pitch is 'out', never short,
+       overhit or through, and a run nobody played says it was held too long.
+     - THE CLOCK STAYS ON SCREEN from the hold to the line, with and without
+       reduced motion (it used to give way to a "play it" label).
 
    Negative controls, THROUGH_BALL_CONTROL=<name>, each rewriting one asserted
    line in a copy of the source and pointing the suite at it through the
@@ -43,6 +50,17 @@
                    test goes red
      reduced       the runner moves under reduced motion, so the static
                    pitch test goes red
+     edgeclear     a defender only cuts out a ball within 4 of his centre
+                   (clearance from his edge mixed up with his centre), so
+                   the cut out test goes red
+     outwide       the out of play rule is removed, so the out of play test
+                   goes red (wide balls read short or overhit again)
+     held          a run nobody played gets the played-late verdict, so the
+                   verdict test goes red
+     blindclock    the clock gives way to "He is going, play it" from the
+                   hold to the line, so the live clock test goes red
+   Each control prints how many tests it broke; some (weight, offsideearly)
+   break several on purpose, so nothing claims the rest stayed green.
 
    Run: node scripts/simThroughBallDrill.mjs  (vitest is found by walking up
    from the repo root, so a worktree runs it without a copy). */
@@ -68,6 +86,10 @@ const controls = {
   twice: { source: 'drills', changes: [['  if (prev.trainingSeasonYear === year) return prev;', '', 1]], failure: /banks Passing through the shared season pipeline, once, capped by the ceiling/ },
   bank: { source: 'board', changes: [['save({ ...recordRef.current, banked: true });', 'save({ ...recordRef.current, banked: false });', 1]], failure: /completes ten, blocks a daily replay and banks Passing once before the callback/ },
   reduced: { source: 'board', changes: [["reduced && phase === 'playing' ? setup.start : ", '', 1]], failure: /keeps a reduced motion pitch static while the same clock plays the same pass/ },
+  edgeclear: { source: 'engine', changes: [['Math.abs(x - crossX) < BLOCK)', 'Math.abs(x - crossX) < BLOCK - 7)', 1]], failure: /cuts out a pass that crosses the line within reach of a defender, and only that pass/ },
+  outwide: { source: 'engine', changes: [["  if (!onPitch(target.x)) return settle('out');\n", '', 1]], failure: /calls a ball off the side of the pitch out of play, wherever it would have stopped/ },
+  held: { source: 'engine', changes: [["outcome === 'offside' && press >= throughBallDeadline(setup) ? HELD_VERDICT : VERDICTS[outcome]", 'VERDICTS[outcome]', 1]], failure: /settles every verdict the rules name, and no round is free/ },
+  blindclock: { source: 'board', changes: [["{paused ? 'Paused, press Resume' : `${seconds.toFixed(2)}s · ${aimText}`}", "{paused ? 'Paused, press Resume' : phase === 'playing' && seconds >= setup.hold && seconds <= crossAt ? 'He is going, play it' : `${seconds.toFixed(2)}s · ${aimText}`}", 1]], failure: /keeps the live clock on screen from the hold to the line, reduced motion or not/ },
 };
 assert.ok(!control || control in controls, `Unknown Through Ball control ${control}`);
 
@@ -121,13 +143,17 @@ try {
     assert.match(output, new RegExp('FAIL[^\\n]*' +controls[control].failure.source), 'The intended outcome test must be in the actual failure report');
     assert.match(output, /AssertionError|TestingLibraryElementError|expected .* to/i, 'A real assertion must fail rather than module resolution');
     assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|No test files found/);
-    console.log(`simThroughBallDrill ${control}: the control fired its intended test and the rest stayed green, the check works.`);
+    /* Report what happened rather than claim the rest stayed green: some
+       controls (weight, offsideearly) legitimately break several tests. */
+    const counts = output.match(/Tests\s+(\d+) failed\s*\|\s*(\d+) passed/);
+    assert.ok(counts, 'The failed and passed counts must be reported');
+    console.log(`simThroughBallDrill ${control}: the control fired its intended test (${counts[1]} failed, ${counts[2]} passed), the check works.`);
   } else {
     assert.equal(run.status, 0, output.slice(-7000));
-    assert.match(output, /Tests\s+17 passed/);
+    assert.match(output, /Tests\s+20 passed/);
     assert.match(output, /weight ladder over 240 paired runs/);
     assert.match(output, /all round ladder over 240 paired runs/);
-    console.log('simThroughBallDrill: green. Seventeen rules and board checks passed: one seed one run, the perfect pass scores 100, skill beats spam at every measured gap, Passing banks once a season, and reduced motion holds still.');
+    console.log('simThroughBallDrill: green. Twenty rules and board checks passed: one seed one run, the perfect pass scores 100, skill beats spam at every measured gap, a defender cuts out what touches him and nothing else, wide balls are out, Passing banks once a season, the clock stays on screen, and reduced motion holds still.');
   }
   for (const [key, spec] of Object.entries(sources)) assert.equal(await readFile(path.join(root, spec.file), 'utf8'), originals[key], 'Controls must leave the shared source untouched');
 } finally {

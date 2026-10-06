@@ -24,9 +24,11 @@
  * the same seed plays the same ten rounds for everybody at that position on
  * that day and scripts/simCareerDrills.mjs can play thousands of them.
  *
- * THE THREE DRILLS, and who gets which (drillForPosition):
+ * THE FOUR POSITION DRILLS, and who gets which (drillForPosition). Three
+ * have their rules in this file; the fourth, THROUGH BALL for CM and CAM
+ * (Round 1032), has them in src/lib/throughBallDrill.ts beside First Touch's.
  *
- *   WALL SHOT, for CM, CAM, LW, RW and ST. Two axis aim (across and up) and
+ *   WALL SHOT, for LW, RW and ST. Two axis aim (across and up) and
  *   one timed press. A wall stands taller than you can clip from this range,
  *   and a gap in it opens and closes on a cycle: the men step apart and back
  *   together. The rules know the gap, not a count of men, and the board

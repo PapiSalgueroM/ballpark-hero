@@ -32,7 +32,7 @@ const clampAim = (aim: Aim): Aim => ({
 function Rules({ trains }: { trains: string }) {
   return <div className="space-y-2 text-xs text-muted-foreground">
     <p>Ten runs. Your runner starts onside, waits a moment, then cuts in across the defensive line. Drag on the pitch to the spot you want the ball to stop: where you drag is the direction, how far is the weight. Let go to play it.</p>
-    <p>A pass scores 10 when it goes through a gap in the line, stops short of the keeper and lands on his run in time. Play it after he crosses the line and he is offside. Too soft and it dies before the line or behind him; too hard and it runs to the keeper or away from him. Later runs are quicker and the gaps get tighter.</p>
+    <p>A pass scores 10 when it goes through a gap in the line, stops short of the keeper and lands on his run in time. Play it after he crosses the line and he is offside. Too soft and it dies before the line or behind him; too hard and it runs to the keeper or away from him. Off the side of the pitch is out of play. Later runs are quicker and the gaps get tighter. The clock and his timings stay on screen the whole run, including with reduced motion.</p>
     <p>Drag and let go with a mouse or a finger. Or focus the pitch: Left and Right turn the aim, Up and Down set the weight, Space starts the run and plays the pass. The buttons under the pitch do the same. Pause freezes the clock, and coming back from another tab needs Resume.</p>
     <p>Today&apos;s ten save after every ball and can bank once. Practice is unlimited and never banks. One career session per season: 50 earns +1 {trains}, 80 earns +2, capped by your ceiling, with next season&apos;s growth.</p>
     <p><strong className="text-foreground">Example:</strong> he goes at 1.00s and crosses the line at 2.40s. Play it at about 2.20s into the space a step ahead of his run, through the gap, and he takes it in stride for 10. The same pass at 2.50s is offside.</p>
@@ -241,7 +241,6 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
   const boost = drillBoost(record.score, drillHeadroom(career));
   const active = phase === 'playing' || phase === 'resolve';
   const canAim = !paused && (phase === 'ready' || phase === 'playing');
-  const going = phase === 'playing' && seconds >= setup.hold && seconds <= crossAt;
   const actionText = phase === 'ready' ? 'Start run' : phase === 'playing' ? 'Play it' : phase === 'done' ? 'Session complete' : record.rounds === 10 ? 'See session' : 'Next ball';
   const aimText = `${Math.abs(aim.angle).toFixed(0)}° ${aim.angle < 0 ? 'left' : aim.angle > 0 ? 'right' : 'straight'} · weight ${Math.round(aim.weight * 100)}%`;
 
@@ -289,7 +288,7 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
         </svg>
       </div>
       <div className="text-center text-xs tabular-nums h-9" data-through-clock>
-        <div className="font-black">{paused ? 'Paused, press Resume' : going ? 'He is going, play it' : `${seconds.toFixed(2)}s · ${aimText}`}</div>
+        <div className="font-black">{paused ? 'Paused, press Resume' : `${seconds.toFixed(2)}s · ${aimText}`}</div>
         <div className="text-muted-foreground">He goes at {setup.hold.toFixed(2)}s, crosses the line at {crossAt.toFixed(2)}s{reduced ? ' · static pitch' : ''}</div>
       </div>
       <div className="grid grid-cols-4 gap-2">

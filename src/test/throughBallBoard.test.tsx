@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, within } from '@testing-library/react';
 import ThroughBallBoard from '@/components/soccer-career/ThroughBallBoard';
 import TrainingPanel from '@/components/soccer-career/TrainingPanel';
+import SharedTrainingBinding from '@/test/fixtures/TrainingGroundSoccerBinding';
 import { buildThroughBallRun, crossTime, passTarget, perfectThroughBall, runnerAt, takeThroughBall, throughBallDeadline } from '@/lib/throughBallDrill';
 import { DRILL_META, drillSeed, applyDrillResult } from '@/lib/careerDrills';
 import { dailyRecordKey, writeDailyRecord } from '@/lib/dailyRecord';
@@ -81,6 +82,12 @@ describe('actual Through Ball board', { timeout: 20000 }, () => {
     const striker = render(<TrainingPanel career={fixture('ST')} available onDrill={vi.fn()} onComplete={vi.fn()} onClose={vi.fn()} />);
     expect(striker.getByRole('button', { name: /Wall Shot/ })).toBeInTheDocument();
     expect(striker.queryByRole('button', { name: /Through Ball/ })).toBeNull();
+    /* the Round 913 shared training ground binding opens the same board for a
+       midfielder, not DrillBoard (which would deal glove saves under this name) */
+    cleanup();
+    const shared = render(<SharedTrainingBinding career={fixture('CM')} available onDrill={vi.fn()} onComplete={vi.fn()} onClose={vi.fn()} />);
+    fireEvent.click(shared.getByRole('button', { name: /Through Ball/ }));
+    expect(shared.container.querySelector('[data-through-ball-board]')).not.toBeNull();
   });
 
   it('drags and releases the exact engine pass on the live clock, checkpointing once', () => {
@@ -130,7 +137,7 @@ describe('actual Through Ball board', { timeout: 20000 }, () => {
     settle(view, 0, false);
     expect(saved()).toMatchObject({ rounds: 1, count: 0, score: 0 });
     click(view, 'Start run'); advance(throughBallDeadline(setups()[1]) * 1000 + 50);
-    expect(view.getByText('Offside. He was past the line when you played it.')).toBeVisible();
+    expect(view.getByText('Offside. You held it too long and he ran past the line.')).toBeVisible();
     expect(saved()).toMatchObject({ rounds: 2, count: 0 });
     advance(5000); expect(saved().rounds).toBe(2);
   });
@@ -187,6 +194,29 @@ describe('actual Through Ball board', { timeout: 20000 }, () => {
     expect(view.queryByRole('button', { name: 'Bank the session' })).toBeNull();
     expect(localStorage.getItem(KEY)).toBe(before); expect(handlers.onBank).not.toHaveBeenCalled();
     click(view, 'Daily / practice menu'); start(view); expect(view.getByText(/Today · Ball 5\/10/)).toBeVisible();
+  });
+
+  /* Round 1032 review: the clock used to give way to "He is going, play it"
+     from the hold to the line, so with reduced motion (runner frozen) the
+     deciding window had no live cue at all, and the worked example's "about
+     2.20s" was a time the board never showed. */
+  it('keeps the live clock on screen from the hold to the line, reduced motion or not', () => {
+    for (const reduce of [false, true]) {
+      if (reduce) vi.spyOn(window, 'matchMedia').mockImplementation(query => ({ matches: true, media: query, onchange: null, addListener: vi.fn(), removeListener: vi.fn(), addEventListener: vi.fn(), removeEventListener: vi.fn(), dispatchEvent: vi.fn() }));
+      localStorage.clear();
+      const view = draw(); start(view); const setup = setups()[0];
+      click(view, 'Start run');
+      const clock = view.container.querySelector('[data-through-clock]')!;
+      let now = 0;
+      for (const at of [setup.hold + 0.1, (setup.hold + crossTime(setup)) / 2, setup.cue, crossTime(setup) - 0.03]) {
+        const step = Math.round(at * 1000) - now; now += step; advance(step);
+        const shown = clock.firstElementChild!.textContent!;
+        expect(shown).not.toMatch(/play it/i);
+        expect(Number(shown.match(/^(\d+\.\d\d)s/)?.[1])).toBeCloseTo(at, 1);
+      }
+      expect(clock.textContent).toContain(`crosses the line at ${crossTime(setup).toFixed(2)}s`);
+      cleanup();
+    }
   });
 
   it('keeps a reduced motion pitch static while the same clock plays the same pass', () => {

@@ -28,13 +28,15 @@
  *      keeper behind them is the last, and the ball starts deep in your own
  *      half of the drill, so the drill's rule is the law's rule: play it
  *      before he is past the line.
- *   2. PAST THE LINE. A ball that stops short of the line is the defenders'.
- *   3. CLEAR OF THE DEFENDERS. Where the pass crosses the line it has to miss
- *      every defender by BLOCK.
- *   4. SHORT OF THE KEEPER and on the pitch.
- *   5. ON HIS RUN. The spot the ball stops on has to come within the round's reach of
+ *   2. CLEAR OF THE DEFENDERS. Where the pass crosses the line on the pitch
+ *      it has to miss every defender's centre by BLOCK (a defender is drawn
+ *      7 wide and the ball 5, so a ball inside BLOCK touches him).
+ *   3. ON THE PITCH. A ball that runs off the side is out of play.
+ *   4. PAST THE LINE. A ball that stops short of the line is the defenders'.
+ *   5. SHORT OF THE KEEPER.
+ *   6. ON HIS RUN. The spot the ball stops on has to come within the round's reach of
  *      the runner at some moment of his run.
- *   6. IN TIME. Not after he has gone past the spot (LATE_SLACK), and not so
+ *   7. IN TIME. Not after he has gone past the spot (LATE_SLACK), and not so
  *      early that a defender gets back to it first (the round's `wait`).
  *
  * A clean pass scores 10, so ten balls make the same 0 to 100 session the
@@ -95,7 +97,7 @@ export interface ThroughBallInput {
   press: number;
 }
 
-export type ThroughBallOutcome = 'through' | 'offside' | 'short' | 'cutout' | 'keeper' | 'wide' | 'behind' | 'early';
+export type ThroughBallOutcome = 'through' | 'offside' | 'short' | 'cutout' | 'out' | 'keeper' | 'wide' | 'behind' | 'early';
 
 export interface ThroughBallResult {
   won: boolean;
@@ -185,11 +187,16 @@ const VERDICTS: Record<ThroughBallOutcome, string> = {
   offside: 'Offside. He was past the line when you played it.',
   short: 'Underhit. It never got past the line.',
   cutout: 'Cut out. Straight at a defender.',
+  out: 'Out of play. It ran off the side of the pitch.',
   keeper: 'Overhit. It ran through to the keeper.',
   wide: 'Wide of his run. He could not reach it.',
   behind: 'Behind him. He was already past that spot.',
   early: 'Too early. A defender got back to it first.',
 };
+/** The board settles a run nobody played at throughBallDeadline: still
+    offside, but nobody played it, so it says so. */
+const HELD_VERDICT = 'Offside. You held it too long and he ran past the line.';
+const onPitch = (x: number) => x >= PITCH_LEFT && x <= PITCH_RIGHT;
 
 export function takeThroughBall(input: ThroughBallInput, setup: ThroughBallSetup): ThroughBallResult {
   const press = Number.isFinite(input.press) ? Math.max(0, input.press) : Infinity;
@@ -197,13 +204,18 @@ export function takeThroughBall(input: ThroughBallInput, setup: ThroughBallSetup
   const arrival = press + Math.hypot(target.x - PASSER.x, target.y - PASSER.y) / BALL_SPEED;
   const crossX = lineCrossX(target, setup.line);
   const settle = (outcome: ThroughBallOutcome, taken: number | null = null): ThroughBallResult => ({
-    won: outcome === 'through', points: outcome === 'through' ? 10 : 0, outcome, verdict: VERDICTS[outcome],
+    won: outcome === 'through', points: outcome === 'through' ? 10 : 0, outcome,
+    verdict: outcome === 'offside' && press >= throughBallDeadline(setup) ? HELD_VERDICT : VERDICTS[outcome],
     target, line: setup.line, crossX, press, arrival, taken,
   });
   if (!(press <= crossTime(setup))) return settle('offside');
+  /* A ball that reaches the line on the pitch can be cut out there, even if
+     it rolls out of play afterwards. One that leaves the pitch at the side,
+     before the line or after it, is out, whatever its weight. */
+  if (crossX !== null && onPitch(crossX) && setup.defenders.some(x => Math.abs(x - crossX) < BLOCK)) return settle('cutout');
+  if (!onPitch(target.x)) return settle('out');
   if (crossX === null) return settle('short');
-  if (setup.defenders.some(x => Math.abs(x - crossX) < BLOCK)) return settle('cutout');
-  if (target.y <= KEEPER_Y || target.x < PITCH_LEFT || target.x > PITCH_RIGHT) return settle('keeper');
+  if (target.y <= KEEPER_Y) return settle('keeper');
   const window = collectWindow(setup, target, press);
   if (!window) return settle('wide');
   if (window[1] < arrival - LATE_SLACK) return settle('behind');
