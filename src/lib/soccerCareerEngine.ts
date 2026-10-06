@@ -25,7 +25,7 @@ import {
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 929: every season's league finish, and the era aware elite rule. */
-import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
+import { drawLeagueFinish, eliteInYear, managerLeagueField, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
 import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
@@ -435,11 +435,18 @@ export interface ManagerState {
      keep every pre-227 save loading exactly as it did. */
   seasonResults: {
     year: number; club: string; tier: number; result: string; trophy: boolean;
-    /** Final table around the manager: the leaders plus his own row. */
-    table?: { club: string; pts: number; pos: number; you?: boolean }[];
+    /** Final table around the manager: the leaders plus his own row.
+     *  Round 1029: a row marked unnamed is a club of his league the game
+     *  does not know by name; it holds its position and an empty name. */
+    table?: { club: string; pts: number; pos: number; you?: boolean; unnamed?: boolean }[];
     playerPos?: number; playerPts?: number;
-    /** How many clubs the league had, so percentages read true. */
+    /** How many positions the season's table had. Round 1029: the league's
+     *  real size only where the result line prints "of N". */
     leagueSize?: number;
+    /** Round 1029: the league the season was played in, when one is known. */
+    league?: string;
+    /** Round 1029: true when leagueSize is that league's verified size. */
+    sizeVerified?: boolean;
     /** W-D-L line for the league season. */
     record?: string;
     /** How far the domestic cup run went. */
@@ -464,6 +471,9 @@ export interface ManagerState {
   offers?: ManagerJobOffer[];
   /** What to tell the player when the feed is empty. */
   offerNote?: string;
+  /** Round 1029: the league his current job came with. Read only for a club
+   *  the career's club list does not carry; optional, so older saves load. */
+  league?: string;
 }
 
 /** Round 111: one job on the table, with the reason it exists. */
@@ -8118,6 +8128,7 @@ export function acceptManagerOffer(prev: CareerState, index: number): CareerStat
   if (!offer) return s;
   ms.club = offer.club;
   ms.clubTier = offer.tier;
+  ms.league = offer.league;
   ms.unemployed = false;
   ms.seasonsOut = 0;
   ms.offers = [];
@@ -8165,11 +8176,18 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
      the sack only from a finish a board genuinely acts on, and none of the
      three can contradict each other again. */
 
-  const leagueMates = clubs.filter(c => c.tier === ms.clubTier && c.name !== ms.club);
-  /* thin tiers get topped up from the neighbouring tier so the league is
-     always a real field rather than a three horse race */
-  const topUp = clubs.filter(c => Math.abs(c.tier - ms.clubTier) === 1 && c.name !== ms.club);
-  const field = [...leagueMates, ...topUp].slice(0, 19);
+  /* awards elsewhere carry calendar years, so the dugout's do too */
+  const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + ms.season;
+
+  /* Round 1029: the field is his club's own league, not every club in the
+     world at his tier (an Arsenal manager used to finish behind Boca and
+     Flamengo). managerLeagueField (soccerCareerLeague.ts) finds the league
+     and its size; every position is played, but only clubs the game knows
+     in that league carry a name, and the rest hold their place unnamed. */
+  /* a saved league that is not a string (a hand edited save) is ignored */
+  const savedLeague = typeof ms.league === "string" && ms.league.trim() ? ms.league : undefined;
+  const lf = managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random);
+  const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
   const games = field.length * 2; // home and away vs each rival
 
   /* His edge comes from what he has actually done: dugout honours, the
@@ -8190,10 +8208,10 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     while ((v - (v % 3)) / 3 + (v % 3) > games) v -= 1;
     return v;
   };
-  const rows = field.map(c => ({ club: c.name, pts: ptsOf(0), you: false }));
-  rows.push({ club: ms.club, pts: ptsOf(edge), you: true });
+  const rows = field.map(name => ({ club: name ?? "", pts: ptsOf(0), you: false, unnamed: name === null }));
+  rows.push({ club: ms.club, pts: ptsOf(edge), you: true, unnamed: false });
   rows.sort((a, b) => b.pts - a.pts || (a.you ? -1 : 1));
-  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined }));
+  const table = rows.map((r, i) => ({ club: r.club, pts: r.pts, pos: i + 1, you: r.you || undefined, unnamed: r.unnamed || undefined }));
   const me = table.find(r => r.you)!;
   const leagueSize = table.length;
   const relegationLine = leagueSize - 2;
@@ -8229,16 +8247,16 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     (!relegated && ms.clubTier <= 2 && ms.season >= 2 && me.pos > Math.ceil(leagueSize * 0.6) && Math.random() < 0.35);
 
   let result = "";
-  const posLabel = me.pos === 1 ? "1st" : me.pos === 2 ? "2nd" : me.pos === 3 ? "3rd" : `${me.pos}th`;
-  /* awards elsewhere carry calendar years, so the dugout's do too */
-  const calYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + ms.season;
+  const posLabel = ordinal(me.pos);
+  /* Round 1029: "of N" only where N is the league's verified size. */
+  const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";
 
   if (champion) {
     ms.trophies += 1;
-    result = `CHAMPIONS. ${me.pts} points, ${posLabel} of ${leagueSize}. 🏆`;
+    result = `CHAMPIONS. ${me.pts} points, ${lf.sizeVerified ? `${posLabel}${ofSize}` : "top of the table"}. 🏆`;
     s.awards = [...(s.awards ?? []), { year: calYear, name: "League Title (Manager)", emoji: "📋" }];
   } else {
-    result = `Finished ${posLabel} of ${leagueSize} on ${me.pts} points.`;
+    result = `Finished ${posLabel}${ofSize} on ${me.pts} points.`;
   }
   if (wonCup) {
     ms.trophies += 1;
@@ -8277,6 +8295,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
       if (offer.tier <= 2 && earned >= 3 && Math.random() < 0.45) {
         ms.club = offer.name;
         ms.clubTier = offer.tier;
+        ms.league = offer.league;
         ms.departure = 'poached';
         result += ` And HIRED by ${offer.name}.`;
       }
@@ -8288,6 +8307,8 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     tier: ms.clubTier, result, trophy: champion || wonCup,
     table: table.slice(0, 5).some(r => r.you) ? table.slice(0, 5) : [...table.slice(0, 4), me],
     playerPos: me.pos, playerPts: me.pts, leagueSize, record, cup,
+    ...(lf.league ? { league: lf.league } : {}),
+    ...(lf.sizeVerified ? { sizeVerified: true } : {}),
   }];
 
   // National team offer, now earned by the season rather than rolled blind:

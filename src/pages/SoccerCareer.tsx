@@ -3128,13 +3128,24 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
         const last = manager.seasonResults[manager.seasonResults.length - 1];
         if (!last?.table) return null;
         const afterResults = Math.min(manager.seasonResults.length, 5);
+        /* Round 1029: the table is his club's own league. A club of that
+           league the game does not know by name keeps its place, unnamed,
+           and a table with no rival we can name says where he finished. */
+        const league = typeof last.league === "string" && last.league ? last.league : null;
+        const me = last.table.find(r => r.you);
+        const named = last.table.some(r => !r.you && !r.unnamed && r.club);
         return (
           <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table</span>
-              {last.record && <span className="text-[10px] text-muted-foreground">{last.record}</span>}
+            <div className="flex items-center justify-between gap-2">
+              <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table{league ? ` · ${league}` : ""}</span>
+              {last.record && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
             </div>
-            {last.table.map((row, i) => (
+            {!named && me && (
+              <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>
+                We don't know enough {league ? `${league} clubs` : "clubs in this league"} by name to draw the table. You finished {ordinal(me.pos)}{last.sizeVerified && last.leagueSize ? ` of ${last.leagueSize}` : ""} on {me.pts} points.
+              </p>
+            )}
+            {named && last.table.map((row, i) => (
               <div
                 key={`${last.year}-${i}`}
                 className={`cm-tick-in flex items-center justify-between text-xs rounded px-2 py-1 ${row.you ? "bg-primary/15 font-bold" : ""}`}
@@ -3142,7 +3153,9 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>
-                  <span className="truncate">{row.club}</span>
+                  {row.unnamed || !row.club
+                    ? <span className="truncate italic text-muted-foreground">another club</span>
+                    : <span className="truncate">{row.club}</span>}
                 </span>
                 <span className="shrink-0 tabular-nums">{row.pts} pts</span>
               </div>
