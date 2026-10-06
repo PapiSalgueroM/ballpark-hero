@@ -73,6 +73,22 @@
  *   nofold (no accent folding): 125 seasons and the Super Lig probe;
  *   nomarket (no recovery from the market): the old save loses Serie A;
  *   wording ("Promoted" out of a top flight): 2710 lines.
+ * Closing check (2026-10-06), on every season of the same loop:
+ *   g) a season before 2026-27, the season the list's league labels
+ *      describe, names no rival and flags lineupUnknown exactly when the
+ *      list knows clubs of that league (it cannot say who was in the 2012
+ *      Premier League); the field keeps its size;
+ *   h) the Premier League and the Championship swap clubs only from
+ *      2004/05, the first season the second tier had that name; before it
+ *      the tracked league stays put and no line says Promoted or Relegated.
+ *   Measured 29306 seasons, 46597 named rows, 6267 past seasons in a league
+ *   the list knows, 253 finishes in the pair's move zones before 2004/05,
+ *   470 promotions to the Premier League, 121 relegations; rates t1 .1049 /
+ *   .1167, t2 .0868 / .1529 / .1242, t3 .0852 / .1515 / .0611, t4 .0632 /
+ *   .1219, all inside main's band (the pair now stays put before 2004, so
+ *   some fields are 20 rather than 24 and the stream moves).
+ *   Their controls: pastnames (a past season names the 2026-27 list again)
+ *   and era2004 (the pair moves in any year); results in the next lines.
  * Run: node scripts/simManagerCareer.mjs
  */
 import { build } from 'esbuild';
@@ -92,8 +108,8 @@ const CONTROLS = {
   ofsize: { file: 'soccerCareerEngine.ts', from: 'const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";', to: 'const ofSize = ` of ${leagueSize}`;' },
   field10: { file: 'soccerCareerLeague.ts', from: 'export const MANAGER_FIELD = 20;', to: 'export const MANAGER_FIELD = 10;' },
   /* the review fixes' controls (single line strings, so a CRLF checkout matches too) */
-  nomove: { file: 'soccerCareerLeague.ts', from: 'export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null {',
-    to: 'export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null { return null;' },
+  nomove: { file: 'soccerCareerLeague.ts', from: 'export function divisionMove(league: string | null, pos: number, size: number, year: number): { to: string; up: boolean } | null {',
+    to: 'export function divisionMove(league: string | null, pos: number, size: number, year: number): { to: string; up: boolean } | null { return null;' },
   listfirst: { file: 'soccerCareerLeague.ts', from: '? listLeague(input.clubs, input.league) ?? input.league',
     to: '? input.clubs.find(c => clubKey(c.name) === mine)?.league ?? listLeague(input.clubs, input.league) ?? input.league' },
   zones: { file: 'soccerCareerEngine.ts', from: 'const sizeUnknown = lf.league !== null && !lf.sizeVerified;', to: 'const sizeUnknown = false;' },
@@ -101,6 +117,10 @@ const CONTROLS = {
   noaccept: { file: 'soccerCareerEngine.ts', from: '  ms.league = offer.league;', to: '' },
   nofold: { file: 'soccerCareerLeague.ts', from: 'const f = foldName(label);', to: 'const f = label.toLowerCase().trim();' },
   nomarket: { file: 'soccerCareerEngine.ts', from: 'if (marketJob && MARKET) {', to: 'if (false) {' },
+  /* the closing check's controls: a past season names the 2026-27 list again; the English pair moves before the Championship had its name */
+  pastnames: { file: 'soccerCareerLeague.ts', from: 'named: lineupUnknown ? [] : names.slice(0, size - 1)', to: 'named: names.slice(0, size - 1)' },
+  era2004: { file: 'soccerCareerLeague.ts', from: 'if (league === null || year < DIVISION_FROM) return null;', to: 'if (league === null) return null;' },
+  poolyear: { file: null }, // the pool header fence below reads a pool that moved on to 2027-28
   wording: { file: 'soccerCareerEngine.ts', from: '` ${ms.club} move up to Tier ${ms.clubTier}.`', to: '` Promoted with ${ms.club} to Tier ${ms.clubTier}!`' },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
@@ -130,7 +150,7 @@ export const jm = await import('${fwd}/src/lib/managerJobMarket.ts');
 `);
 await build({ entryPoints: [path.join(tmp, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node',
   outfile: path.join(tmp, 'mc.mjs'), logLevel: 'error', alias: { '@': `${fwd}/src` }, plugins: [controlPlugin] });
-if (CONTROL && !applied) { console.error(`control ${CONTROL} never reached its file`); process.exit(2); }
+if (CONTROL && !applied && CONTROL !== 'poolyear') { console.error(`control ${CONTROL} never reached its file`); process.exit(2); }
 if (CONTROL) console.log(`CONTROL ${CONTROL} applied: this run is meant to go red`);
 const { e, cm, lg, rv, ce, jm } = await import(pathToFileURL(path.join(tmp, 'mc.mjs')).href);
 let failures = 0; const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
@@ -294,6 +314,19 @@ function expectedLeague(club, jobLeague) {
   if (jobLeague) return listLabel(jobLeague) ?? jobLeague;
   return FB.find(c => keyOf(c.name) === keyOf(club))?.league ?? null;
 }
+/* The closing check's two year rules, held here rather than read from the
+   module: the list's league labels are the 2026-27 season's (the pool says
+   so in its header, and a regenerated pool that moves on has to move this
+   too), and the second tier was called the Championship from 2004/05. */
+const LIST_SEASON = 2026, MOVES_FROM = 2004;
+let poolHead = fs.readFileSync(path.join(ROOT, 'src/data/soccerCareerClubPool.ts'), 'utf8').split('*/')[0];
+if (CONTROL === 'poolyear') {
+  if (!poolHead.includes('2026-27')) { console.error('control poolyear: the pool header has no 2026-27 to move'); process.exit(2); }
+  poolHead = poolHead.replaceAll('2026-27', '2027-28');
+}
+if (!/2026-27/.test(poolHead)) {
+  fail('the club pool no longer says its labels are 2026-27: move LIST_SEASON here and in soccerCareerLeague.ts with it');
+}
 const PLAIN = new Set(['city', 'united', 'club', 'real', 'sporting', 'athletic', 'atletico', 'town', 'county', 'rovers', 'football']);
 const words = n => foldName(n).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !PLAIN.has(w));
 /** Distinct clubs of `league` the list knows in `year`, his own (and, when he
@@ -320,8 +353,8 @@ function dugout(club, tier, lastYear, league) {
       nationalTeamOffer: false, managingNationalTeam: false, ...(league ? { league } : {}) } };
 }
 const cover = { seasons: 0, home: 0, market: 0, verified: 0, thin: 0, named: 0, unnamed: 0,
-  accepted: 0, relabelled: 0, up: 0, down: 0, zones: 0, bigUnverified: 0 };
-const bad = { league: 0, self: 0, ofN: 0, size: 0, table: 0, known: 0, zone: 0, words: 0 };
+  accepted: 0, relabelled: 0, up: 0, down: 0, zones: 0, bigUnverified: 0, past: 0, early: 0 };
+const bad = { league: 0, self: 0, ofN: 0, size: 0, table: 0, known: 0, zone: 0, words: 0, past: 0 };
 const firstBad = [];
 const note = s => { if (firstBad.length < 6) firstBad.push(s); };
 /** Every check of a), b) and e) on one employed season. `want` is the league
@@ -335,7 +368,12 @@ function checkSeason(s, club0, want, lastYear) {
   /* the field holds every club it knows of that league when they fit, and
      a field of unknown size is 20 or one more than it knows */
   const K = knownIn(want, club0, calYear);
-  if (row.knownRivals !== Math.min(K, row.leagueSize - 1)) { bad.known += 1; note(`${want} ${calYear}: ${row.knownRivals} known, the list has ${K}`); }
+  /* a season before the list's own (2026-27) names nobody, and says so
+     exactly when the list does know clubs of that league */
+  const past = calYear < LIST_SEASON;
+  if (row.knownRivals !== (past ? 0 : Math.min(K, row.leagueSize - 1))) { bad.known += 1; note(`${want} ${calYear}: ${row.knownRivals} known, the list has ${K}`); }
+  if (!!row.lineupUnknown !== (past && K > 0)) { bad.past += 1; note(`${want} ${calYear}: lineupUnknown ${row.lineupUnknown}, the list has ${K}`); }
+  if (past && K > 0) cover.past += 1;
   if (!row.sizeVerified && row.leagueSize !== Math.max(20, K + 1)) { bad.size += 1; note(`${want} ${calYear}: unverified size ${row.leagueSize} for ${K} known`); }
   if (!row.sizeVerified && K >= 20) cover.bigUnverified += 1;
   /* a named league of unknown size prints no position and no points */
@@ -346,10 +384,14 @@ function checkSeason(s, club0, want, lastYear) {
   /* promotion and relegation are said only where the club changes league,
      and always said there */
   const promo = /Promoted with/.test(row.result), rele = /Relegated/.test(row.result);
-  if (row.league && promo && !(row.league === 'Championship' && / to the Premier League!/.test(row.result))) { bad.words += 1; note(`[${row.league}] ${row.result.slice(0, 80)}`); }
-  if (row.league && rele && !(row.league === 'Premier League' && /Relegated to the Championship/.test(row.result))) { bad.words += 1; note(`[${row.league}] ${row.result.slice(0, 80)}`); }
-  if (row.league === 'Premier League' && row.playerPos >= row.leagueSize - 2 && !rele) { bad.words += 1; note(`PL ${row.playerPos}/${row.leagueSize} not relegated: ${row.result.slice(0, 60)}`); }
-  if (row.league === 'Championship' && row.playerPos <= 2 && !promo) { bad.words += 1; note(`Championship ${row.playerPos} not promoted: ${row.result.slice(0, 60)}`); }
+  /* and only from 2004/05, when the second tier took the Championship's name */
+  const moves = calYear >= MOVES_FROM;
+  const pairZone = (row.league === 'Premier League' && row.playerPos >= row.leagueSize - 2) || (row.league === 'Championship' && row.playerPos <= 2);
+  if (pairZone && !moves) cover.early += 1;
+  if (row.league && promo && !(moves && row.league === 'Championship' && / to the Premier League!/.test(row.result))) { bad.words += 1; note(`[${row.league} ${calYear}] ${row.result.slice(0, 80)}`); }
+  if (row.league && rele && !(moves && row.league === 'Premier League' && /Relegated to the Championship/.test(row.result))) { bad.words += 1; note(`[${row.league} ${calYear}] ${row.result.slice(0, 80)}`); }
+  if (moves && row.league === 'Premier League' && row.playerPos >= row.leagueSize - 2 && !rele) { bad.words += 1; note(`PL ${row.playerPos}/${row.leagueSize} not relegated: ${row.result.slice(0, 60)}`); }
+  if (moves && row.league === 'Championship' && row.playerPos <= 2 && !promo) { bad.words += 1; note(`Championship ${row.playerPos} not promoted: ${row.result.slice(0, 60)}`); }
   cover.seasons += 1;
   if (FB.some(c => keyOf(c.name) === keyOf(club0))) cover.home += 1; else cover.market += 1;
   if (row.sizeVerified) cover.verified += 1;
@@ -358,6 +400,7 @@ function checkSeason(s, club0, want, lastYear) {
   for (const r of rivals) {
     if (r.unnamed) { cover.unnamed += 1; if (r.club) { bad.league += 1; firstBad.push(`unnamed row carries a name ${r.club}`); } continue; }
     cover.named += 1;
+    if (past) { bad.past += 1; note(`${club0} ${calYear}: names ${r.club}, a season before the list's own`); }
     const got = byName.get(r.club)?.league ?? '(not a club of the list)';
     if (got !== want) { bad.league += 1; if (firstBad.length < 6) firstBad.push(`${club0} (${want}) S${ms.season}: ${r.club} is ${got}`); }
     if (keyOf(r.club) === keyOf(club0)) { bad.self += 1; if (firstBad.length < 6) firstBad.push(`${club0} meets himself as ${r.club}`); }
@@ -397,6 +440,7 @@ for (const seed of SEEDS) {
            move (Premier League bottom three down, Championship top two up) */
         if (!ms.unemployed) {
           if (ms.club !== c0) want = FB.find(c => c.name === ms.club)?.league ?? null;
+          else if (lastYear + ms.season < MOVES_FROM) { /* before 2004/05 the pair does not move */ }
           else if (want === 'Premier League' && row.playerPos >= row.leagueSize - 2) { want = 'Championship'; cover.down += 1; }
           else if (want === 'Championship' && row.playerPos <= 2) { want = 'Premier League'; cover.up += 1; }
         }
@@ -413,6 +457,7 @@ console.log(`   ${cover.seasons} seasons: ${cover.home} at a club of the list, $
 console.log(`   ${cover.named} named rows checked, ${cover.unnamed} unnamed; wrong league ${bad.league}, himself twice ${bad.self}, "of N" wrong ${bad.ofN}, size wrong ${bad.size}`);
 console.log(`   ${cover.accepted} market jobs taken (${cover.relabelled} in a league the list spells another way), ${cover.up} promotions to the Premier League, ${cover.down} relegations to the Championship, ${cover.zones} seasons in a named league of unknown size (${cover.bigUnverified} knowing 20 or more clubs)`);
 console.log(`   table not his league ${bad.table}, known clubs wrong ${bad.known}, a position in a league of unknown size ${bad.zone}, promotion or relegation words wrong ${bad.words}`);
+console.log(`   ${cover.past} seasons before 2026-27 in a league the list knows clubs of, ${cover.early} finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged ${bad.past}`);
 for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
 /* coverage floors, about half of what this branch measured (29311 seasons:
    28814 at a club of the list, 497 at a market club, 9471 with a verified
@@ -424,8 +469,13 @@ for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
    relegations to the Championship, 14956 seasons of unknown size and 1088
    of them knowing 20 or more clubs (the only fields where an off by one in
    the size can show) */
+/* the closing check's floors, about half of its 6267 seasons before 2026-27
+   in a league the list knows clubs of and 253 finishes in the English
+   pair's move zones before 2004/05 (the quarter of careers that retire in 1996) */
+const PAST_FLOOR = 3000, EARLY_FLOOR = 120;
 if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000
-  || cover.accepted < 700 || cover.relabelled < 500 || cover.up < 300 || cover.down < 80 || cover.zones < 7000 || cover.bigUnverified < 500) {
+  || cover.accepted < 700 || cover.relabelled < 500 || cover.up < 300 || cover.down < 80 || cover.zones < 7000 || cover.bigUnverified < 500
+  || cover.past < PAST_FLOOR || cover.early < EARLY_FLOOR) {
   fail(`a path went unexercised: ${JSON.stringify(cover)}`);
 }
 if (bad.league) fail(`${bad.league} named rows are not clubs of the manager's league`);
@@ -435,6 +485,7 @@ if (bad.size) fail(`${bad.size} tables disagree with the verified league size, o
 if (bad.table) fail(`${bad.table} seasons played in a league other than his own`);
 if (bad.known) fail(`${bad.known} tables name fewer known clubs than fit`);
 if (bad.zone) fail(`${bad.zone} result lines print a position or points in a league of unknown size`);
+if (bad.past) fail(`${bad.past} seasons before 2026-27 name a rival the list cannot place in that year, or flag the lineup wrongly`);
 if (bad.words) fail(`${bad.words} result lines say promoted or relegated where the club does not change league, or stay quiet where it does`);
 /* c) the three cases the round was written for, each six seasons */
 const probe = (club, tier, league, check) => {
