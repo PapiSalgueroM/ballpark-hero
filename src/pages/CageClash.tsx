@@ -35,6 +35,7 @@ export default function CageClash() {
               <li>On top, strike, posture up or pass into a better position. From underneath, block, regain guard, sweep or try to stand.</li>
               <li>Hold Submission to build pressure. Your opponent can resist or escape. Low stamina makes both defending and attacking harder.</li>
               <li>Use Pause any time. Switching away, opening these rules or losing focus pauses the fight. Resume clears held inputs. Refresh starts over.</li>
+              <li>Punches, kicks and ground strikes move through full pixel poses. Your device's reduced motion setting keeps action poses steady.</li>
               <li>Choose Practice before starting to learn four skills with an untimed partner: land three shots and recover gas, earn a takedown, finish a submission, or regain guard and stand up. Only the moves for that drill are active. Retry as often as you like.</li>
               <li>Choose Circuit to face a balanced fighter, a striker and a grappler. Win to advance with Next opponent. A loss or draw ends the run. Every fight starts with fresh health and gas; each has up to three 45 second rounds.</li>
               <li>After a Quick fight or a Circuit fight, open Fight stats to compare shots landed, damage, blocks, takedowns and time on top. Back returns to your result. Damage is rounded and top control is shown in seconds.</li>
