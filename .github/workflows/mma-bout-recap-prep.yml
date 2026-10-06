@@ -49,7 +49,7 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee mma-promotion-artifacts/types.log
           node scripts/genSearchKeywords.mjs 2>&1 | tee mma-promotion-artifacts/search.log
-          PRERENDER_ONLY=/fight-promoter,/whats-new npm run build:seo 2>&1 | tee mma-promotion-artifacts/build.log
+          PRERENDER_ONLY=/free-kick,/fight-promoter,/whats-new npm run build:seo 2>&1 | tee mma-promotion-artifacts/build.log
       - name: MMA mounted outcomes distributions and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MMA_PROMOTION_CONTROL=all ONLY=simMmaPromotion node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/mma.log
@@ -83,7 +83,7 @@ jobs:
           import fs from 'node:fs';
           import path from 'node:path';
           import crypto from 'node:crypto';
-          const files = ['public/fight-promoter/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const files = ['public/free-kick/index.html', 'public/fight-promoter/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
           const manifest = files.map(file => {
             const target = path.join('mma-promotion-artifacts/generated', file);
             fs.mkdirSync(path.dirname(target), { recursive: true });

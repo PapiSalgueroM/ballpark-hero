@@ -1,3 +1,24 @@
+## Rounds 1070 and 1071 preparing one release
+
+2026-10-06. Codex combines Free Kick Shot lab and saved MMA bout recaps
+on codex/mma-bout-recap-1071 to avoid another integration and publish cycle.
+Free Kick source 9810ecc1 includes exact wall input fixtures and 16px
+clearance below the final reveal action. MMA source c939f197 passed its
+preparation gates, including eight recap outcomes, sixteen effective
+faults and all four native profiles. This is preparation, not acceptance.
+
+The combined source must pass final Free Kick, MMA, Cage and entry-guide
+workflows before merging and publishing. Generate only the Free Kick,
+Fight Promoter and news snapshots plus their sitemap, ledger and search
+payloads in remote CI. No app runtime on Anthony's computer.
+
+No engine, record, save schema, real data or scoring changes. Claude keeps
+career, GM, database and agreed guide lanes. AH retains main/publish while
+this candidate is checked. Preserve PR152 to160 and both new guide lines.
+Protected root drafts and seven stashes remain untouched. No production
+DB calls or public scored games. Neither new addition is claimed LIVE.
+Next free round 1072 is unclaimed.
+
 ## Round 1071 claimed: MMA bout recaps, parallel preparation
 
 2026-10-06. Codex continues beyond Cage with Free Kick lab (1070) and

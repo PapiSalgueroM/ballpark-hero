@@ -1,0 +1,107 @@
+name: Free Kick lab preparation
+
+on:
+  push:
+    branches: [codex/free-kick-lab-1070]
+permissions:
+  contents: read
+concurrency:
+  group: free-kick-lab-prep
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+      SEO_SPLIT_BASE_REF: HEAD
+      FREE_KICK_LAB_ARTIFACTS: free-kick-lab-artifacts/mounted
+      FREE_KICK_LAB_NATIVE_ARTIFACTS: free-kick-lab-artifacts/native
+      FREE_KICK_FONT_CACHE: free-kick-lab-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p free-kick-lab-artifacts
+          git rev-parse HEAD > free-kick-lab-artifacts/source-head.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee free-kick-lab-artifacts/fonts.log
+      - name: Preserve the accepted physics and record engines
+        run: git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/freeKick.ts src/lib/arcade.ts src/lib/arcadeRecord.ts src/hooks/useArcadeFlight.ts
+      - name: Harness source and mutation anchors
+        run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee free-kick-lab-artifacts/anchors.log
+      - name: Type check and refresh pages
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee free-kick-lab-artifacts/types.log
+          node scripts/genSearchKeywords.mjs 2>&1 | tee free-kick-lab-artifacts/search.log
+          PRERENDER_ONLY=/free-kick,/whats-new npm run build:seo 2>&1 | tee free-kick-lab-artifacts/build.log
+      - name: Lab outcomes and effective copied controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: FREE_KICK_LAB_CONTROL=all ONLY=simFreeKickLab node scripts/runAllSims.mjs 2>&1 | tee free-kick-lab-artifacts/mounted.log
+      - name: Existing Free Kick and arcade behavior
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simFreeKick simFreeKickPractice simArcadeShotFeedback simArcadePause simArcadeHoldRelease simBuzzerBeater simBuzzerPractice simBuzzerShotLab simThreePointContest; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "free-kick-lab-artifacts/$harness.log" || failed=1
+          done
+          for control in scroll power aimtap charge complete write keys help focus restorewrite restoremark seed share daily booked; do
+            FREE_KICK_PRACTICE_CONTROL="$control" ONLY=simFreeKickPractice node scripts/runAllSims.mjs 2>&1 | tee "free-kick-lab-artifacts/practice-$control.log" || failed=1
+          done
+          ONLY=free-kick NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simDailyReload.mjs 2>&1 | tee free-kick-lab-artifacts/daily-reload.log || failed=1
+          exit "$failed"
+      - name: Every built reader and guide checks
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simGuideHeadings simSeoTitles simSeoMetaSplit simResultMoment simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "free-kick-lab-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Actual lab on phones and keyboard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/freeKickLab1070.mjs 2>&1 | tee free-kick-lab-artifacts/native.log
+      - name: Package verified page candidates
+        if: success()
+        run: |
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const files = ['public/free-kick/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const manifest = files.map(file => {
+            const target = path.join('free-kick-lab-artifacts/generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            fs.copyFileSync(file, target);
+            return { file, sha256: crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex') };
+          });
+          fs.writeFileSync('free-kick-lab-artifacts/generated-manifest.json', JSON.stringify(manifest, null, 2));
+          JS
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: free-kick-lab-prep-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          path: free-kick-lab-artifacts/
