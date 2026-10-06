@@ -334,7 +334,9 @@ console.log('7) the verified Champions League fields, and the full eight group d
      Round 902: the 2005-06 era grew a Serie A, a Bundesliga and a Ligue 1, so nine more of its field are
      baked league clubs now (AC Milan, Juventus, Inter, Udinese, Bayern, Werder Bremen, Schalke, Lyon,
      Lille): eight became seventeen. */
-  const IN_LEAGUE = { era2005: 17, era2010: 16, era2015: 17 };
+  /* Round 971: the 2020-21 era is born a full big five, so nineteen of its real field are baked league clubs
+     (four English, four Spanish, four Italian, four German, three French; the other thirteen are foreign). */
+  const IN_LEAGUE = { era2005: 17, era2010: 16, era2015: 17, era2020: 19 };
   let erasChecked = 0;
   for (const [eraId, field] of Object.entries(ERA_UCL_FIELDS)) {
     erasChecked += 1;
