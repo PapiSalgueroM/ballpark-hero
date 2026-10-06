@@ -9,10 +9,13 @@ on:
       - src/hooks/useCageClash.ts
       - src/lib/cageClash.ts
       - src/lib/cagePractice.ts
+      - src/lib/cageCircuit.ts
       - src/test/cageClash.test.tsx
       - src/test/cagePractice.test.tsx
+      - src/test/cageCircuit.test.tsx
       - scripts/simCageClash.mjs
       - scripts/simCagePractice.mjs
+      - scripts/simCageCircuit.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -39,6 +42,7 @@ jobs:
       VITEST_MIN_FORKS: 1
       SEO_SPLIT_BASE_REF: HEAD
       CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
+      CAGE_CIRCUIT_ARTIFACTS: cage-clash-artifacts/circuit
     steps:
       - uses: actions/checkout@v4
         with:
@@ -81,6 +85,19 @@ jobs:
           path: |
             cage-clash-artifacts/practice/
             cage-clash-artifacts/practice.log
+      - name: Circuit outcomes and effective controls
+        id: circuit
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_CIRCUIT_CONTROL=all ONLY=simCageCircuit node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/circuit.log
+      - name: Preserve circuit failure for immediate diagnosis
+        if: ${{ failure() && steps.circuit.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-circuit-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/circuit/
+            cage-clash-artifacts/circuit.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
