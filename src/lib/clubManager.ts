@@ -12409,9 +12409,10 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   const historic = !!eraId && isHistoricEra(eraId);
   const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
   const isCustom = !!ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === clubName;
-  const league = (isCustom && customLeagueDef(ACTIVE_CUSTOM!.spec, eraId))
+  /* Round 1035: withClubCup, so a club outside its league's cup is set no cup objective. */
+  const league = withClubCup((isCustom && customLeagueDef(ACTIVE_CUSTOM!.spec, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
-    || leagueOf(clubName);
+    || leagueOf(clubName), clubName);
   const objs: BoardObjective[] = [];
   const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId, clubName);
   objs.push({ id: 'league', target: demand.target, label: demand.label });

@@ -36,23 +36,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { POS_MAP, ratingOf, gbpM, usdOfEur, FLOOR_USD } from './lib/cmValueCurve.mjs';
+import { ENGINE_NAME, GROUP_OF, GROUP_DEFAULT } from './lib/aleagueClubs.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIR = path.join(ROOT, 'scripts/data/gatheredSquads/aleague2026');
 const OUT = path.join(ROOT, 'src/data/clubManagerALeague2026.ts');
 const read = f => JSON.parse(fs.readFileSync(path.join(DIR, f), 'utf8'));
-
-/** Ledger slug -> the engine's club name (REAL_LEAGUES, CLUB_COLORS key). */
-export const ENGINE_NAME = {
-  'adelaide-united': 'Adelaide United', 'auckland-fc': 'Auckland FC', 'brisbane-roar': 'Brisbane Roar',
-  'central-coast-mariners': 'Central Coast Mariners', 'macarthur-fc': 'Macarthur FC',
-  'melbourne-city': 'Melbourne City', 'melbourne-victory': 'Melbourne Victory',
-  'newcastle-jets': 'Newcastle Jets', 'perth-glory': 'Perth Glory', 'sydney-fc': 'Sydney FC',
-  'wellington-phoenix': 'Wellington Phoenix', 'western-sydney-wanderers': 'Western Sydney Wanderers',
-};
-/** The ledger's group of each engine position, and each group's default. */
-export const GROUP_OF = { GK: 'GK', CB: 'DEF', LB: 'DEF', RB: 'DEF', CDM: 'MID', CM: 'MID', CAM: 'MID', LM: 'MID', RM: 'MID', LW: 'FWD', RW: 'FWD', ST: 'FWD', CF: 'FWD' };
-export const GROUP_DEFAULT = { GK: 'GK', DEF: 'CB', MID: 'CM', FWD: 'ST' };
 
 const errors = [];
 const membership = read('_membership.json');
@@ -118,7 +107,7 @@ for (const [club, list] of Object.entries(rosters)) {
    that baked club where the two files are joined
    (src/data/clubManagerWorldRosters.ts); the A-League ledger, read
    2026-10-06 on four hosts, is the newer truth. */
-export const SUPERSEDES = {
+const SUPERSEDES = {
   /* Same man: born 1994-02-24, a Scottish winger. The Round 1034 ledger has
      him in Macarthur FC's 2026-27 squad on the club page, ESPN (153012),
      Transfermarkt (146795) and FotMob (230916), all with that birth date.
