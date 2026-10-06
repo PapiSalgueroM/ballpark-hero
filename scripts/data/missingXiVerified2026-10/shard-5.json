@@ -651,7 +651,7 @@
     "Date 2023-05-14 and the 4-2 Barcelona win correct; formation 4-3-3 per ESPN. Entry scoreLine 'Barcelona 4-2 Espanyol' has the right numbers (Sky writes it the same way) but Espanyol were the home side, so home-first would be 'Espanyol 2-4 Barcelona'.",
     "Sources disagree on who Fati and Alonso replaced at 74' (Sky: Fati for Christensen, Alonso for Gavi; ESPN: Alonso for Christensen, Fati for Gavi). Not an entry field.",
     "Blank candidates Balde, Christensen, Raphinha all started: fine.",
-    "Organiser page: laliga.com match URLs for this fixture redirect to a 404 (temporada-2022-2023-laliga-santander-rcd-espanyol-de-barcelona-fc-barcelona-34 -> laliga-easports slug, 404). Two independent hosts used.",
+    "Organiser page: laliga.com match URLs for this fixture redirect to a 404 (temporada-2022-2023-laliga-santander-rcd-espanyol-de-barcelona-fc-barcelona-34 -> the current-season LaLiga slug slug, 404). Two independent hosts used.",
     "Round 1026: no host states a role for Gavi; the tile keeps the label of the slot he took. Open for a role source. ESPN alone puts Gavi left and Raphinha right; ESPN alone has Christensen left and Araujo right."
    ]
   },
@@ -1729,7 +1729,7 @@
    "sources": [
     {
      "host": "fifa.com",
-     "url": "https://www.fifa.com/en/match-centre/match/17/255711/275099/400128137 (read from api.fifa.com/api/v3/live/football/... for match 400128137, the data behind the FIFA match centre)",
+     "url": "https://www.fifa.com/en/match-centre/match/17/255711/275099/400128137 (read from api.fifa.com/api/v3/live/football/... for match 400128137, the data behind the fifa.com match centre)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2022-12-06 15:00Z, Round of 16, Education City Stadium, Doha, Morocco 0-0 Spain, pens 3-0. Morocco tactics 4-3-3, XI: Bounou; Hakimi, Mazraoui, Aguerd, Saiss (C); Amrabat, Ounahi, Amallah; Ziyech, Boufal, En Nesyri. Subs as listed."
@@ -1745,10 +1745,10 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Date 2022-12-06, Round of 16, Morocco 0-0 Spain AET, Morocco won 3-0 on penalties (Sabiri, Ziyech, Hakimi scored) all match. Formation 4-3-3 matches both (FIFA 'tactics 4-3-3').",
-    "Venue: stadium name matches. The entry's city 'Al Rayyan' differs from the city label both sources print ('Doha' in FIFA's data, 'Doha, Qatar' on ESPN). Education City Stadium sits in Al Rayyan municipality, so this is a locator choice rather than an error; flagged for the reviewer, not counted as a diff.",
-    "ESPN's page lists Sabiri twice in the sub list (66' and 82'); FIFA's data has Ezzalzouli 66' for Boufal and Sabiri 82' for En-Nesyri. FIFA taken as authoritative for subs.",
-    "FIFA prints 'Youssef EN NESYRI'; same man as 'Youssef En-Nesyri'."
+    "Date 2022-12-06, Round of 16, Morocco 0-0 Spain AET, Morocco won 3-0 on penalties (Sabiri, Ziyech, Hakimi scored) all match. Formation 4-3-3 matches both (fifa.com 'tactics 4-3-3').",
+    "Venue: stadium name matches. The entry's city 'Al Rayyan' differs from the city label both sources print ('Doha' in fifa.com's data, 'Doha, Qatar' on ESPN). Education City Stadium sits in Al Rayyan municipality, so this is a locator choice rather than an error; flagged for the reviewer, not counted as a diff.",
+    "ESPN's page lists Sabiri twice in the sub list (66' and 82'); fifa.com's data has Ezzalzouli 66' for Boufal and Sabiri 82' for En-Nesyri. fifa.com taken as authoritative for subs.",
+    "fifa.com prints 'Youssef EN NESYRI'; same man as 'Youssef En-Nesyri'."
    ]
   },
   {
@@ -1824,7 +1824,7 @@
     {
      "field": "slots[2] CB",
      "entry": "Nayef Aguerd",
-     "evidence": "Jawad El Yamiq started at centre back (FIFA and ESPN). Aguerd did not play.",
+     "evidence": "Jawad El Yamiq started at centre back (fifa.com and ESPN). Aguerd did not play.",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
     },
@@ -1841,13 +1841,13 @@
      "path": "slots[2].name",
      "from": "Nayef Aguerd",
      "to": "Jawad El Yamiq",
-     "why": "FIFA and ESPN (CD-R): El Yamiq started at centre-back; Aguerd did not play"
+     "why": "fifa.com and ESPN (CD-R): El Yamiq started at centre-back; Aguerd did not play"
     },
     {
      "path": "slots[4].name",
      "from": "Noussair Mazraoui",
      "to": "Yahya Attiat-Allah",
-     "why": "FIFA and ESPN (LB): Attiat-Allah started at left-back; Mazraoui did not play"
+     "why": "fifa.com and ESPN (LB): Attiat-Allah started at left-back; Mazraoui did not play"
     },
     {
      "path": "source",
@@ -1857,9 +1857,9 @@
     }
    ],
    "notes": [
-    "Date 2022-12-10, Quarter-final, Al Thumama Stadium Doha (FIFA), Morocco 1-0 Portugal (En-Nesyri 42') all correct. Formation 4-3-3 matches.",
+    "Date 2022-12-10, Quarter-final, Al Thumama Stadium Doha (fifa.com), Morocco 1-0 Portugal (En-Nesyri 42') all correct. Formation 4-3-3 matches.",
     "The entry's source string ('the identical starting XI Morocco used across their historic knockout run') is wrong: two of the back four changed from the Spain game.",
-    "ESPN prints the venue city as 'Ar-Rayyan, Qatar'; FIFA's data says Al Thumama Stadium, Doha. The organiser is taken for the venue; the entry matches the organiser.",
+    "ESPN prints the venue city as 'Ar-Rayyan, Qatar'; fifa.com's data says Al Thumama Stadium, Doha. The organiser is taken for the venue; the entry matches the organiser.",
     "Blank candidates Saiss, Ziyech, Hakimi all started (Saiss went off at 57')."
    ]
   },
@@ -2863,15 +2863,15 @@
      "path": "blankCandidates[Maicon].fact",
      "from": "Started that night for Roma.",
      "to": null,
-     "why": "FIFA and ESPN: a Brazil match; he started for Brazil, not for Roma (his club, which the club hint already shows)"
+     "why": "fifa.com and ESPN: a Brazil match; he started for Brazil, not for Roma (his club, which the club hint already shows)"
     }
    ],
    "notes": [
-    "XI matches FIFA and ESPN exactly. Date 2014-07-08, Semi-final, Estadio Mineirao Belo Horizonte, Brazil 1-7 Germany all match.",
-    "David Luiz wore the armband (FIFA data marks DAVID LUIZ as captain), matching the entry's source note.",
+    "XI matches fifa.com and ESPN exactly. Date 2014-07-08, Semi-final, Estadio Mineirao Belo Horizonte, Brazil 1-7 Germany all match.",
+    "David Luiz wore the armband (fifa.com data marks DAVID LUIZ as captain), matching the entry's source note.",
     "Facts: ESPN reports Thiago Silva was suspended for a second yellow card of the tournament (booked v Colombia) and Neymar had a broken vertebra from the quarterfinal, consistent with the Dante and Bernard facts.",
-    "Formation 4-2-3-1: not labelled by either source (FIFA 'tactics' null); not counted.",
-    "ESPN's lineups page renders the goalkeeper as 'J. De Leon' (its data label for Julio Cesar, shirt 12 per FIFA) and garbles the substitution text; FIFA's data is used for subs.",
+    "Formation 4-2-3-1: not labelled by either source (fifa.com 'tactics' null); not counted.",
+    "ESPN's lineups page renders the goalkeeper as 'J. De Leon' (its data label for Julio Cesar, shirt 12 per fifa.com) and garbles the substitution text; fifa.com's data is used for subs.",
     "Pattern flag for the reviewer: the generated filler fact 'Started that night for <club>.' is false on every national-team lineup, because the player started for his country."
    ]
   },
@@ -3224,26 +3224,26 @@
      "path": "blankCandidates[Cafu].fact",
      "from": "Started that night for Roma.",
      "to": null,
-     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+     "why": "fifa.com and BeSoccer: a Brazil match; he started for Brazil, not for his club"
     },
     {
      "path": "blankCandidates[Roberto Carlos].fact",
      "from": "Started that night for Real Madrid.",
      "to": null,
-     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+     "why": "fifa.com and BeSoccer: a Brazil match; he started for Brazil, not for his club"
     },
     {
      "path": "blankCandidates[Rivaldo].fact",
      "from": "Started that night for Barcelona.",
      "to": null,
-     "why": "FIFA and BeSoccer: a Brazil match; he started for Brazil, not for his club"
+     "why": "fifa.com and BeSoccer: a Brazil match; he started for Brazil, not for his club"
     }
    ],
    "notes": [
-    "XI matches FIFA and BeSoccer exactly. Date 1998-07-12, Final, Stade de France Saint-Denis, France 3-0 Brazil (Zidane 27', 45+1', Petit 90+3' per FIFA) all match. FIFA's data lists Brazil as the nominal home side ('Brazil 0-3 France'); same result.",
-    "Formation 4-2-2-2 not labelled by FIFA; BeSoccer says 4-4-2. Compatible; not counted.",
-    "Claudio Taffarel appears as 'TAFFAREL' (FIFA) and 'Claudio Taffarel' (BeSoccer); Junior Baiano as 'JUNIOR BAIANO'; same men.",
-    "ESPN's page for this match (gameId 198155) carries no team sheet and credits a goal to Desailly at 69', which is wrong (Desailly was sent off), so it is not used. BeSoccer is used as the independent second host for the XI only; its substitution text was consistent with FIFA's.",
+    "XI matches fifa.com and BeSoccer exactly. Date 1998-07-12, Final, Stade de France Saint-Denis, France 3-0 Brazil (Zidane 27', 45+1', Petit 90+3' per fifa.com) all match. fifa.com's data lists Brazil as the nominal home side ('Brazil 0-3 France'); same result.",
+    "Formation 4-2-2-2 not labelled by fifa.com; BeSoccer says 4-4-2. Compatible; not counted.",
+    "Claudio Taffarel appears as 'TAFFAREL' (fifa.com) and 'Claudio Taffarel' (BeSoccer); Junior Baiano as 'JUNIOR BAIANO'; same men.",
+    "ESPN's page for this match (gameId 198155) carries no team sheet and credits a goal to Desailly at 69', which is wrong (Desailly was sent off), so it is not used. BeSoccer is used as the independent second host for the XI only; its substitution text was consistent with fifa.com's.",
     "Round 1026: the filler fact \"Started that night for <club>\" is false on every national-team lineup and is removed there (nine blanks across five lineups). On club lineups it is true and stays."
    ]
   },
@@ -3639,8 +3639,8 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "XI matches FIFA, ESPN and Sky name for name. Date 2026-07-19, Final, Spain 1-0 Argentina after extra time (Ferran Torres 106', on as a 62nd-minute substitute) all match.",
-    "Venue: FIFA's tournament name 'New York/New Jersey Stadium' and Sky's 'MetLife Stadium' are the same ground as the entry's 'MetLife Stadium, East Rutherford' (ESPN: East Rutherford, New Jersey).",
+    "XI matches fifa.com, ESPN and Sky name for name. Date 2026-07-19, Final, Spain 1-0 Argentina after extra time (Ferran Torres 106', on as a 62nd-minute substitute) all match.",
+    "Venue: fifa.com's tournament name 'New York/New Jersey Stadium' and Sky's 'MetLife Stadium' are the same ground as the entry's 'MetLife Stadium, East Rutherford' (ESPN: East Rutherford, New Jersey).",
     "Blank candidate clubs confirmed against ESPN's squad announcement: Pedro Porro 'Tottenham Hotspur', Mikel Oyarzabal 'Real Sociedad', Alex Baena 'Atletico Madrid'.",
     "Sky writes 'U Simon Mendibil' and 'F Ruiz Pena'; same men."
    ]
@@ -3666,8 +3666,8 @@
    "substitutes": [
     "Nicolas Otamendi 44' for Lisandro Martinez",
     "Leandro Paredes 45' for Nico Gonzalez",
-    "Nahuel Molina for Gonzalo Montiel (ESPN 52', FIFA 58')",
-    "Facundo Medina for Cristian Romero (ESPN 58', FIFA 70')",
+    "Nahuel Molina for Gonzalo Montiel (ESPN 52', fifa.com 58')",
+    "Facundo Medina for Cristian Romero (ESPN 58', fifa.com 70')",
     "Giuliano Simeone 70' for Rodrigo De Paul",
     "Marcos Senesi 102' for Julian Alvarez"
    ],
@@ -3725,9 +3725,9 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "XI matches FIFA, ESPN and Sky name for name. Formation 4-4-2 matches FIFA ('Tactics 4-4-2') and ESPN. Date, venue and 'Spain 1-0 Argentina, AET' match as for 168.",
+    "XI matches fifa.com, ESPN and Sky name for name. Formation 4-4-2 matches fifa.com ('Tactics 4-4-2') and ESPN. Date, venue and 'Spain 1-0 Argentina, AET' match as for 168.",
     "Blank candidate clubs confirmed against SI's roster article: Tagliafico 'Lyon', Montiel 'River Plate', Mac Allister 'Liverpool'.",
-    "Substitution minutes for Molina and Medina differ between FIFA and ESPN; not an entry field."
+    "Substitution minutes for Molina and Medina differ between fifa.com and ESPN; not an entry field."
    ]
   },
   {

@@ -155,7 +155,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/498147",
-     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=498147",
+     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=498147",
      "xi": true,
      "says": "Same England XI, formation 3-1-4-2, Vardy/Rose/Rashford/Dier on. Colombia 1-1 England."
     }
@@ -163,8 +163,8 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "FIFA lists Colombia as the home side (Colombia 1-1 England); the entry writes England first. Same result, not a diff.",
-    "ESPN venue name is the stadium's later sponsor name (Lukoil Arena); FIFA says Spartak Stadium, matching the entry.",
+    "fifa.com lists Colombia as the home side (Colombia 1-1 England); the entry writes England first. Same result, not a diff.",
+    "ESPN venue name is the stadium's later sponsor name (Lukoil Arena); fifa.com says Spartak Stadium, matching the entry.",
     "Roles only: ESPN puts Henderson as the single holding midfielder with Alli centre-left and Lingard centre-right, and Kane left/Sterling right of the front two; the entry draws Henderson CM right, Lingard CM left, Alli CAM, Kane right, Sterling left. Same eleven."
    ]
   },
@@ -540,7 +540,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/48871",
-     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=48871",
+     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=48871",
      "xi": true,
      "says": "Same Brazil XI; Juninho Paulista and Denilson on for Ronaldinho and Ronaldo. Germany 0-2 Brazil, Yokohama Stadium."
     }
@@ -615,7 +615,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/198155",
-     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=198155",
+     "readOn": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=198155",
      "xi": true,
      "says": "France XI Barthez, Desailly, Leboeuf, Lizarazu, Thuram, Petit, Zidane, Deschamps, Guivarc'h, Karembeu, Djorkaeff. Brazil 0-3 France, Stade de France. (No substitution data.)"
     }
@@ -624,14 +624,14 @@
     {
      "field": "slots: Laurent Blanc (CB)",
      "entry": "Laurent Blanc started",
-     "evidence": "Frank Leboeuf started at centre-back (FIFA and ESPN); Blanc is in neither eleven",
+     "evidence": "Frank Leboeuf started at centre-back (fifa.com and ESPN); Blanc is in neither eleven",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
     },
     {
      "field": "slots: Christophe Dugarry (LW)",
      "entry": "Christophe Dugarry started",
-     "evidence": "Christian Karembeu started (FIFA and ESPN); Dugarry came on in the 66th minute for Guivarc'h (FIFA)",
+     "evidence": "Christian Karembeu started (fifa.com and ESPN); Dugarry came on in the 66th minute for Guivarc'h (fifa.com)",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
     }
@@ -641,13 +641,13 @@
      "path": "slots[3].name",
      "from": "Laurent Blanc",
      "to": "Frank Leboeuf",
-     "why": "FIFA and ESPN: Leboeuf started at centre-back; Blanc is in neither eleven"
+     "why": "fifa.com and ESPN: Leboeuf started at centre-back; Blanc is in neither eleven"
     },
     {
      "path": "slots[9].name",
      "from": "Christophe Dugarry",
      "to": "Christian Karembeu",
-     "why": "FIFA and ESPN: Karembeu started; Dugarry came on 66' for Guivarc'h. No host states his role, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Karembeu started; Dugarry came on 66' for Guivarc'h. No host states his role, the tile keeps the slot label"
     }
    ],
    "notes": [
@@ -3546,7 +3546,7 @@
     }
    ],
    "notes": [
-    "Organiser source not readable: laliga.com match pages for 2011-12 404 under every slug tried (laliga-santander, primera-division, laliga-easports), and for the one old season that does load (2010-11) the lineups block is empty. Two independent hosts used.",
+    "Organiser source not readable: laliga.com match pages for 2011-12 404 under every slug tried (laliga-santander, primera-division, the current-season LaLiga slug), and for the one old season that does load (2010-11) the lineups block is empty. Two independent hosts used.",
     "Date, venue, score and 4-2-3-1 match."
    ]
   },
@@ -3793,7 +3793,7 @@
     }
    ],
    "notes": [
-    "Organiser source not readable: laliga.com's own indexed slug for this season (temporada-2016-2017-laliga-santander-...) 301-redirects to a laliga-easports slug that returns 404. Two independent hosts used.",
+    "Organiser source not readable: laliga.com's own indexed slug for this season (temporada-2016-2017-laliga-santander-...) 301-redirects to a the current-season LaLiga slug slug that returns 404. Two independent hosts used.",
     "Blank candidates Isco and Varane started and stay valid. Date, venue, score and 4-3-1-2 match."
    ]
   },

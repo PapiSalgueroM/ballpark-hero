@@ -1210,7 +1210,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/264120 (via site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=264120)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/264120 (via site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=264120)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2010 FIFA World Cup Semifinals, 2010-07-06, Green Point Stadium, Cape Town, Uruguay 2-3 Netherlands. Uruguay 4-4-2, same eleven. Subs Abreu 78, Fernández 84."
@@ -1219,9 +1219,9 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Venue: FIFA and ESPN both say Green Point Stadium, Cape Town, the same ground the entry calls Cape Town Stadium (its post-tournament name). Not a diff.",
-    "Formation: ESPN 4-4-2 (Diego Pérez RM, Álvaro Pereira LM, Cavani and Forlán up front); FIFA's feed carries no formation for 2010 matches. Agrees with the entry.",
-    "Spellings: Maximiliano PEREIRA (FIFA) / Maxi Pereira (ESPN, entry); Egidio AREVALO (FIFA) / Arévalo Ríos (ESPN). Same men."
+    "Venue: fifa.com and ESPN both say Green Point Stadium, Cape Town, the same ground the entry calls Cape Town Stadium (its post-tournament name). Not a diff.",
+    "Formation: ESPN 4-4-2 (Diego Pérez RM, Álvaro Pereira LM, Cavani and Forlán up front); fifa.com's feed carries no formation for 2010 matches. Agrees with the entry.",
+    "Spellings: Maximiliano PEREIRA (fifa.com) / Maxi Pereira (ESPN, entry); Egidio AREVALO (fifa.com) / Arévalo Ríos (ESPN). Same men."
    ]
   },
   {
@@ -1295,7 +1295,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/match/_/gameId/264121 (via site.api.espn.com fifa.world summary?event=264121)",
+     "url": "https://www.espn.com/soccer/match/_/gameId/264121 (via site.api.espn.com all summary?event=264121)",
      "readOn": "2026-10-05",
      "xi": false,
      "says": "2010 FIFA World Cup Semifinals, 2010-07-07, Durban Stadium, Germany 0-1 Spain; Spain formation 4-3-3. No player list."
@@ -1305,8 +1305,8 @@
    "applied": [],
    "notes": [
     "ESPN's line-up for this match is empty (formations only), so Sky Sports' team sheet is the independent source for the eleven; ESPN supplies the formation, date, score and venue.",
-    "Venue: FIFA and ESPN call it Durban Stadium; Sky calls it Moses Mabhida Stadium, the entry's name. Same ground.",
-    "Formation: ESPN 4-3-3; FIFA none. Agrees with the entry. Flanks (Iniesta right, Pedro left in the entry) are not stated by any source read."
+    "Venue: fifa.com and ESPN call it Durban Stadium; Sky calls it Moses Mabhida Stadium, the entry's name. Same ground.",
+    "Formation: ESPN 4-3-3; fifa.com none. Agrees with the entry. Flanks (Iniesta right, Pedro left in the entry) are not stated by any source read."
    ]
   },
   {
@@ -1369,7 +1369,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/498142 (via site.api.espn.com fifa.world summary?event=498142)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/498142 (via site.api.espn.com all summary?event=498142)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2018 FIFA World Cup Semifinals, 2018-07-10, Gazprom Arena, Saint Petersburg, France 1-0 Belgium. France 4-2-3-1, same eleven. Subs N'Zonzi 85, Tolisso 86."
@@ -1378,9 +1378,9 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Formation: ESPN 4-2-3-1. FIFA's tactics field says 4-5-1, but FIFA's own line-up grid places Pogba and Kanté on one line (Y6), Mbappé, Griezmann and Matuidi on the next (Y10) and Giroud alone (Y12), which is 4-2-3-1 written out; 4-5-1 is the same lines grouped coarser. Treated as the same shape, flagged in case the editor prefers the organiser's string.",
-    "Venue: FIFA 'Saint Petersburg Stadium', ESPN 'Gazprom Arena': both are the Krestovsky Stadium of the entry.",
-    "FIFA's grid has Pogba right of Kanté (entry has Kanté on the right); both are CDM in the entry, so no diff."
+    "Formation: ESPN 4-2-3-1. fifa.com's tactics field says 4-5-1, but fifa.com's own line-up grid places Pogba and Kanté on one line (Y6), Mbappé, Griezmann and Matuidi on the next (Y10) and Giroud alone (Y12), which is 4-2-3-1 written out; 4-5-1 is the same lines grouped coarser. Treated as the same shape, flagged in case the editor prefers the organiser's string.",
+    "Venue: fifa.com 'Saint Petersburg Stadium', ESPN 'Gazprom Arena': both are the Krestovsky Stadium of the entry.",
+    "fifa.com's grid has Pogba right of Kanté (entry has Kanté on the right); both are CDM in the entry, so no diff."
    ]
   },
   {
@@ -1445,7 +1445,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/498141 (via site.api.espn.com fifa.world summary?event=498141)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/498141 (via site.api.espn.com all summary?event=498141)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2018 FIFA World Cup Semifinals, 2018-07-11, Luzhniki Stadium, Moscow, Croatia 2-1 England AET. Croatia 4-1-4-1, same eleven. Subs Pivaric 95, Kramaric 101, Corluka 115, Badelj 119."
@@ -1455,7 +1455,7 @@
     {
      "field": "formationLabel",
      "entry": "4-3-3 (Rebic and Perisic as wingers level with Mandzukic)",
-     "evidence": "FIFA (organiser) tactics: 4-5-1, its grid putting Brozović deepest, Rakitić and Modrić next, Perišić and Rebić a line below Mandžukić. ESPN: 4-1-4-1 (Brozović DM, Rakitić and Modrić CM, Perišić LM, Rebić RM, Mandžukić F). Neither source says 4-3-3; both put the wide men in midfield. Same eleven everywhere.",
+     "evidence": "fifa.com (organiser) tactics: 4-5-1, its grid putting Brozović deepest, Rakitić and Modrić next, Perišić and Rebić a line below Mandžukić. ESPN: 4-1-4-1 (Brozović DM, Rakitić and Modrić CM, Perišić LM, Rebić RM, Mandžukić F). Neither source says 4-3-3; both put the wide men in midfield. Same eleven everywhere.",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
     }
@@ -1465,25 +1465,25 @@
      "path": "formationLabel",
      "from": "4-3-3",
      "to": "4-1-4-1",
-     "why": "FIFA (tactics 4-5-1, its grid with Brozovic deepest and Perisic and Rebic level with the midfield) and ESPN (4-1-4-1): neither says 4-3-3"
+     "why": "fifa.com (tactics 4-5-1, its grid with Brozovic deepest and Perisic and Rebic level with the midfield) and ESPN (4-1-4-1): neither says 4-3-3"
     },
     {
      "path": "slots[8].position",
      "from": "RW",
      "to": "RM",
-     "why": "FIFA (midfielder, right) and ESPN (RM)"
+     "why": "fifa.com (midfielder, right) and ESPN (RM)"
     },
     {
      "path": "slots[10].position",
      "from": "LW",
      "to": "LM",
-     "why": "FIFA (midfielder, left) and ESPN (LM)"
+     "why": "fifa.com (midfielder, left) and ESPN (LM)"
     }
    ],
    "notes": [
-    "Eleven, date, score (AET: FIFA resultType 3, ESPN status AET) and venue match. Label only.",
-    "Centre midfield sides: FIFA's grid and ESPN both put Modrić on the right and Rakitić on the left; the entry has Rakitić at x68 (right) and Modrić at x32 (left). Both are CM in the entry, so not counted, but worth swapping if the editor redraws the shape.",
-    "Round 1026: FIFA alone puts Modric right of Rakitic; layout unchanged."
+    "Eleven, date, score (AET: fifa.com resultType 3, ESPN status AET) and venue match. Label only.",
+    "Centre midfield sides: fifa.com's grid and ESPN both put Modrić on the right and Rakitić on the left; the entry has Rakitić at x68 (right) and Modrić at x32 (left). Both are CM in the entry, so not counted, but worth swapping if the editor redraws the shape.",
+    "Round 1026: fifa.com alone puts Modric right of Rakitic; layout unchanged."
    ]
   },
   {
@@ -1546,7 +1546,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/633848 (via site.api.espn.com fifa.world summary?event=633848)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/633848 (via site.api.espn.com all summary?event=633848)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2022 FIFA World Cup Semifinals, 2022-12-14, Al Bayt Stadium, Al Khor, France 2-0 Morocco. France 4-2-3-1, same eleven. Subs Thuram 65, Kolo Muani 79."
@@ -1562,7 +1562,7 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Formation: FIFA (organiser) tactics 4-3-3, grid with Tchouaméni alone in front of the defence, Griezmann and Fofana level ahead of him, and Dembélé, Giroud, Mbappé as a front three. ESPN 4-2-3-1. Third source BeSoccer (read directly) 4-2-3-1. Two of three agree with the entry; the organiser does not. Marked same on the majority, flagged so the editor can weigh the organiser.",
+    "Formation: fifa.com (organiser) tactics 4-3-3, grid with Tchouaméni alone in front of the defence, Griezmann and Fofana level ahead of him, and Dembélé, Giroud, Mbappé as a front three. ESPN 4-2-3-1. Third source BeSoccer (read directly) 4-2-3-1. Two of three agree with the entry; the organiser does not. Marked same on the majority, flagged so the editor can weigh the organiser.",
     "Eleven, date, score and venue match on every source."
    ]
   },
@@ -1629,7 +1629,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/633845 (via site.api.espn.com fifa.world summary?event=633845)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/633845 (via site.api.espn.com all summary?event=633845)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2022 FIFA World Cup Quarterfinals, 2022-12-10, Al Thumama Stadium, Morocco 1-0 Portugal. Portugal 4-3-3, same eleven. Subs Cancelo 51, Ronaldo 51, Leão 69, Vitinha 69, Horta 79."
@@ -1638,8 +1638,8 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Formation: FIFA tactics 4-3-3 and ESPN 4-3-3. Agrees. Flanks agree too (Bruno Fernandes right, João Félix left, Bernardo right of Otávio).",
-    "Venue: FIFA 'Al Thumama Stadium, Doha'; ESPN 'Al Thumama Stadium' with city Ar-Rayyan. Same ground; the entry follows FIFA's city.",
+    "Formation: fifa.com tactics 4-3-3 and ESPN 4-3-3. Agrees. Flanks agree too (Bruno Fernandes right, João Félix left, Bernardo right of Otávio).",
+    "Venue: fifa.com 'Al Thumama Stadium, Doha'; ESPN 'Al Thumama Stadium' with city Ar-Rayyan. Same ground; the entry follows fifa.com's city.",
     "Ronaldo came on at 51, as the entry's comment says."
    ]
   },
@@ -2178,7 +2178,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/191978 (via site.api.espn.com fifa.world summary?event=191978)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/191978 (via site.api.espn.com all summary?event=191978)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2006 FIFA World Cup Semifinals, 2006-07-04, Signal Iduna Park, Dortmund, Germany 0-2 Italy, goals 119' and 120+1'. Same Germany eleven; subs Schweinsteiger 72, Odonkor 83, Neuville 111."
@@ -2188,7 +2188,7 @@
    "applied": [],
    "notes": [
     "Venue: FIFA 'FIFA World Cup Stadium, Dortmund' (its tournament name), ESPN 'Signal Iduna Park, Dortmund'. Same ground as the entry's Westfalenstadion.",
-    "After extra time: FIFA resultType 3 (the same code its feed gives the 2018 Croatia v England semi, which went to extra time); ESPN's status reads only FT but its goals are at 119' and 120+1'.",
+    "After extra time: fifa.com resultType 3 (the same code its feed gives the 2018 Croatia v England semi, which went to extra time); ESPN's status reads only FT but its goals are at 119' and 120+1'.",
     "ESPN spells Philip Lahm."
    ]
   },
@@ -2338,7 +2338,7 @@
     },
     {
      "host": "espn.com",
-     "url": "https://www.espn.com/soccer/lineups/_/gameId/735958 (via site.api.espn.com fifa.cwc summary?event=735958)",
+     "url": "https://www.espn.com/soccer/lineups/_/gameId/735958 (via site.api.espn.com all summary?event=735958)",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "2025 FIFA Club World Cup Final, MetLife Stadium, East Rutherford, Chelsea 3-0 Paris Saint-Germain. Chelsea 4-2-3-1: Sánchez; Gusto, Chalobah, Colwill, Cucurella; Caicedo, Reece James; Palmer, Enzo Fernández, Pedro Neto; João Pedro. Subs Andrey Santos 61, Delap 67, Dewsbury-Hall 77, Nkunku 78."
@@ -2347,9 +2347,9 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "Formation: FIFA tactics 4-2-3-1 and ESPN 4-2-3-1. Agrees.",
-    "Reece James: FIFA lists him in the defender category (his registered position), ESPN places him in the midfield pair (RM of the double pivot) with Gusto at right back, as the entry's comment says.",
-    "Venue: FIFA 'New York/New Jersey Stadium' (its tournament name), ESPN 'MetLife Stadium, East Rutherford, New Jersey'. Same ground."
+    "Formation: fifa.com tactics 4-2-3-1 and ESPN 4-2-3-1. Agrees.",
+    "Reece James: fifa.com lists him in the defender category (his registered position), ESPN places him in the midfield pair (RM of the double pivot) with Gusto at right back, as the entry's comment says.",
+    "Venue: fifa.com 'New York/New Jersey Stadium' (its tournament name), ESPN 'MetLife Stadium, East Rutherford, New Jersey'. Same ground."
    ]
   },
   {

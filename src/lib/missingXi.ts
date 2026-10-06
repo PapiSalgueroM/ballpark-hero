@@ -3909,7 +3909,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'CF', name: 'Gonzalo Higuain', x: 50, y: 18 },
       { position: 'LW', name: 'Lionel Messi', x: 20, y: 24 },
     ],
-    // Di Maria was injured and did not play (named on the bench per FIFA and ESPN); Lavezzi started in the front line and Enzo Perez in midfield (Round 1026).
+    // Di Maria was injured and did not play (named on the bench per fifa.com and ESPN); Lavezzi started in the front line and Enzo Perez in midfield (Round 1026).
     blankCandidates: [
       { name: 'Ezequiel Garay', slotIndex: 2, nationality: 'Argentina', clubAtTime: 'Benfica' },
       { name: 'Marcos Rojo', slotIndex: 3, nationality: 'Argentina', clubAtTime: 'Sporting CP' },

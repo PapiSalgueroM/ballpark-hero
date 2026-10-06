@@ -816,7 +816,7 @@
    ],
    "notes": [
     "Date, score, venue and the other nine names match. Benzema scored both (29', 77' pen). Sky's report headline says the win took Real to their 34th La Liga title, consistent with '(title clinched)'.",
-    "Organiser page not readable: laliga.com redirects old-season match slugs to a 'laliga-easports' slug that returns 404 (tried temporada-2019-2020-laliga-santander-real-madrid-villarreal-cf-37 in en-GB and partido paths). Its search snippet confirms date 16.07.2020, Estadio Alfredo Di Stéfano and 2-1 with Benzema 29' and 77', but no line-up. The two independent sources (ESPN, Sky Sports) agree on all eleven.",
+    "Organiser page not readable: laliga.com redirects old-season match slugs to a the current-season LaLiga slug slug that returns 404 (tried temporada-2019-2020-laliga-santander-real-madrid-villarreal-cf-37 in en-GB and partido paths). Its search snippet confirms date 16.07.2020, Estadio Alfredo Di Stéfano and 2-1 with Benzema 29' and 77', but no line-up. The two independent sources (ESPN, Sky Sports) agree on all eleven.",
     "Round 1026: ESPN alone has Kroos left and Modric right; single source, layout unchanged."
    ]
   },
@@ -5412,7 +5412,7 @@
     {
      "field": "slots[7] (LWB)",
      "entry": "Christian Ziege",
-     "evidence": "Marco Bode started (FIFA and ESPN). Ziege came on 84' for Bode.",
+     "evidence": "Marco Bode started (fifa.com and ESPN). Ziege came on 84' for Bode.",
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
@@ -5423,11 +5423,11 @@
      "path": "slots[7].name",
      "from": "Christian Ziege",
      "to": "Marco Bode",
-     "why": "FIFA and ESPN: Bode started; Ziege came on 84' for him. No host states sides, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Bode started; Ziege came on 84' for him. No host states sides, the tile keeps the slot label"
     }
    ],
    "notes": [
-    "Date, score, venue and competition match. Ballack is absent from both sources' XI, consistent with the entry's suspension note. Jeremies did start (FIFA, ESPN).",
+    "Date, score, venue and competition match. Ballack is absent from both sources' XI, consistent with the entry's suspension note. Jeremies did start (fifa.com, ESPN).",
     "Blank candidates' clubs verified: Metzelder Borussia Dortmund, Schneider and Ramelow Bayer Leverkusen (planetworldcup.com 2002 squad list and national-football-teams.com Germany 2002 both agree). All three started.",
     "Exact wing-back sides (Schneider, Frings, Bode) are not published by either source, so slot sides were not checked.",
     "Round 1026: no host states a role for Bode; the tile keeps the label of the slot he took. Open for a role source.",
@@ -5541,9 +5541,9 @@
     }
    ],
    "notes": [
-    "All eleven names, date, score (AET), venue and stage match FIFA and BBC. ESPN's summary for this match (event 264123) has no rosters, so BBC Sport was used as the independent source.",
+    "All eleven names, date, score (AET), venue and stage match fifa.com and BBC. ESPN's summary for this match (event 264123) has no rosters, so BBC Sport was used as the independent source.",
     "Kuyt and Sneijder clubs (Liverpool, Inter) confirmed by the same squad lists.",
-    "BBC lists the midfield line right to left as Kuyt, van Bommel, Sneijder, de Jong, Robben, which agrees with the entry's Kuyt right, Robben left; FIFA gives no sides.",
+    "BBC lists the midfield line right to left as Kuyt, van Bommel, Sneijder, de Jong, Robben, which agrees with the entry's Kuyt right, Robben left; fifa.com gives no sides.",
     "Round 1026: the skeptic notes Transfermarkt puts Robben right and Kuyt left, the reverse of the entry, and that BBC publishes an order, not sides. Single source each way; not changed."
    ]
   },
@@ -5745,7 +5745,7 @@
     {
      "field": "slots[4] (LB)",
      "entry": "Holger Badstuber",
-     "evidence": "Jérôme Boateng started at left back (FIFA and BBC). Badstuber is not in either source's XI. Boateng went off 51' for Marcell Jansen.",
+     "evidence": "Jérôme Boateng started at left back (fifa.com and BBC). Badstuber is not in either source's XI. Boateng went off 51' for Marcell Jansen.",
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
@@ -5756,11 +5756,11 @@
      "path": "slots[4].name",
      "from": "Holger Badstuber",
      "to": "Jerome Boateng",
-     "why": "FIFA and BBC: Boateng started at left-back (off 51' for Jansen); Badstuber is in neither eleven"
+     "why": "fifa.com and BBC: Boateng started at left-back (off 51' for Jansen); Badstuber is in neither eleven"
     }
    ],
    "notes": [
-    "Date, score, venue and stage match. Trochowski did start in place of the suspended Müller, as the entry says (FIFA and BBC).",
+    "Date, score, venue and stage match. Trochowski did start in place of the suspended Müller, as the entry says (fifa.com and BBC).",
     "Blank candidates' clubs verified: Khedira VfB Stuttgart, Schweinsteiger Bayern Munich, Klose Bayern Munich (planetworldcup.com and worldcup.org.uk 2010 squad lists agree).",
     "ESPN's summary (event 264121) carries no roster, so BBC Sport was used as the independent source."
    ]

@@ -1131,7 +1131,7 @@
    ],
    "substitutes": [
     "Alou Diarra 56' for Vieira",
-    "David Trezeguet for Ribéry (100' per FIFA, 76' per ESPN)",
+    "David Trezeguet for Ribéry (100' per fifa.com, 76' per ESPN)",
     "Sylvain Wiltord 107' for Henry"
    ],
    "fields": {
@@ -1183,7 +1183,7 @@
    "notes": [
     "All eleven names, date 2006-07-09, score 'Italy 1-1 France, AET (Italy won 5-3 on penalties)', venue Olympiastadion Berlin and formation 4-2-3-1 (ESPN) match.",
     "Sides of Ribéry (RW) and Malouda (LW) are not stated by either source; not checked.",
-    "The two sources disagree on Trezeguet's minute (FIFA 100', ESPN 76'); the entry does not carry sub minutes, so this does not affect the verdict.",
+    "The two sources disagree on Trezeguet's minute (fifa.com 100', ESPN 76'); the entry does not carry sub minutes, so this does not affect the verdict.",
     "All three blankCandidates (Sagnol, Abidal, Malouda) are confirmed starters.",
     "ESPN's search-engine extract wrongly listed Wiltord in the XI; the ESPN lineups page itself, read directly, lists Henry starting and Wiltord on at 107'."
    ]
@@ -1207,9 +1207,9 @@
     "Ezequiel Lavezzi"
    ],
    "substitutes": [
-    "Sergio Agüero 45' (half-time, as printed by FIFA and ESPN) for Lavezzi",
-    "Rodrigo Palacio for Higuaín (77' per FIFA, 65' per ESPN)",
-    "Fernando Gago for Enzo Pérez (85' per FIFA, 86' per ESPN)"
+    "Sergio Agüero 45' (half-time, as printed by fifa.com and ESPN) for Lavezzi",
+    "Rodrigo Palacio for Higuaín (77' per fifa.com, 65' per ESPN)",
+    "Fernando Gago for Enzo Pérez (85' per fifa.com, 86' per ESPN)"
    ],
    "fields": {
     "matchDate": "2014-07-13",
@@ -1259,7 +1259,7 @@
     {
      "field": "slots[8] (RW)",
      "entry": "Angel Di Maria",
-     "evidence": "Di María was on the bench and did not play (FIFA Status 2, ESPN bench #7). Ezequiel Lavezzi started; he is missing from the entry.",
+     "evidence": "Di María was on the bench and did not play (fifa.com Status 2, ESPN bench #7). Ezequiel Lavezzi started; he is missing from the entry.",
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied"
@@ -1267,15 +1267,15 @@
     {
      "field": "slots[3] and slots[4] (CB Rojo / LB Demichelis)",
      "entry": "Marcos Rojo CB, Martin Demichelis LB",
-     "evidence": "ESPN lists Rojo at LB and Demichelis at CB. FIFA lists both only as 'Defender'. Single-source position check.",
+     "evidence": "ESPN lists Rojo at LB and Demichelis at CB. fifa.com lists both only as 'Defender'. Single-source position check.",
      "severity": "minor",
      "decision": "kept: single source",
-     "reason": "ESPN alone has Rojo LB and Demichelis CB; FIFA gives no roles. The Rojo blank keeps CB."
+     "reason": "ESPN alone has Rojo LB and Demichelis CB; fifa.com gives no roles. The Rojo blank keeps CB."
     },
     {
      "field": "slots[10] (LW Messi)",
      "entry": "Lionel Messi LW",
-     "evidence": "ESPN lists Messi RW/F and Lavezzi LW. FIFA lists both only as 'Forward'. Single-source position check.",
+     "evidence": "ESPN lists Messi RW/F and Lavezzi LW. fifa.com lists both only as 'Forward'. Single-source position check.",
      "severity": "minor",
      "decision": "kept: single source",
      "reason": "ESPN alone states the front three sides."
@@ -1283,10 +1283,10 @@
     {
      "field": "formationLabel",
      "entry": "4-3-3",
-     "evidence": "ESPN: 4-2-3-1. FIFA publishes no tactic for this match.",
+     "evidence": "ESPN: 4-2-3-1. fifa.com publishes no tactic for this match.",
      "severity": "minor",
      "decision": "kept: single source",
-     "reason": "ESPN 4-2-3-1; FIFA states none. Entry keeps 4-3-3."
+     "reason": "ESPN 4-2-3-1; fifa.com states none. Entry keeps 4-3-3."
     },
     {
      "field": "inline comment (internal)",
@@ -1302,12 +1302,12 @@
      "path": "slots[8].name",
      "from": "Angel Di Maria",
      "to": "Ezequiel Lavezzi",
-     "why": "FIFA and ESPN: Lavezzi started (ESPN AM-R); Di Maria was on the bench and did not play"
+     "why": "fifa.com and ESPN: Lavezzi started (ESPN AM-R); Di Maria was on the bench and did not play"
     },
     {
      "path": "comment",
      "from": "// Di Maria was actually injured and unavailable; Enzo Perez started on the right in his place - a real, well-documented swap.",
-     "to": "// Di Maria was injured and did not play (named on the bench per FIFA and ESPN); Lavezzi started in the front line and Enzo Perez in midfield (Round 1026).",
+     "to": "// Di Maria was injured and did not play (named on the bench per fifa.com and ESPN); Lavezzi started in the front line and Enzo Perez in midfield (Round 1026).",
      "why": "the comment and the slots disagreed; the slots had Di Maria starting"
     },
     {
@@ -1387,18 +1387,18 @@
     {
      "field": "formationLabel",
      "entry": "4-3-3",
-     "evidence": "ESPN: 4-1-4-1. FIFA's tactics field: 4-5-1. Neither says 4-3-3.",
+     "evidence": "ESPN: 4-1-4-1. fifa.com's tactics field: 4-5-1. Neither says 4-3-3.",
      "severity": "minor",
      "decision": "applied",
-     "reason": "ESPN 4-1-4-1 and FIFA 4-5-1, the same shape"
+     "reason": "ESPN 4-1-4-1 and fifa.com 4-5-1, the same shape"
     },
     {
      "field": "slots[5] (CDM Rakitić) and slots[7] (CM Brozović)",
      "entry": "Rakitić CDM, Brozović CM",
-     "evidence": "ESPN lists Brozović as the DM and Rakitić as a (right) midfielder. FIFA lists all midfielders only as 'Midfielder'. Single-source position check.",
+     "evidence": "ESPN lists Brozović as the DM and Rakitić as a (right) midfielder. fifa.com lists all midfielders only as 'Midfielder'. Single-source position check.",
      "severity": "minor",
      "decision": "kept: single source",
-     "reason": "ESPN alone has Brozovic as the holding player; FIFA lists midfielders without roles."
+     "reason": "ESPN alone has Brozovic as the holding player; fifa.com lists midfielders without roles."
     }
    ],
    "applied": [
@@ -1406,24 +1406,24 @@
      "path": "formationLabel",
      "from": "4-3-3",
      "to": "4-1-4-1",
-     "why": "ESPN states 4-1-4-1 and FIFA's tactics field 4-5-1, the same one-striker shape; neither says 4-3-3"
+     "why": "ESPN states 4-1-4-1 and fifa.com's tactics field 4-5-1, the same one-striker shape; neither says 4-3-3"
     },
     {
      "path": "slots[8].position",
      "from": "RW",
      "to": "RM",
-     "why": "in the five-man midfield both hosts state (FIFA 4-5-1, ESPN 4-1-4-1), ESPN has Rebic RM"
+     "why": "in the five-man midfield both hosts state (fifa.com 4-5-1, ESPN 4-1-4-1), ESPN has Rebic RM"
     },
     {
      "path": "slots[10].position",
      "from": "LW",
      "to": "LM",
-     "why": "in the five-man midfield both hosts state (FIFA 4-5-1, ESPN 4-1-4-1), ESPN has Perisic LM"
+     "why": "in the five-man midfield both hosts state (fifa.com 4-5-1, ESPN 4-1-4-1), ESPN has Perisic LM"
     }
    ],
    "notes": [
     "All eleven names match both sources. Date 2018-07-15, score France 4-2 Croatia and venue Luzhniki Stadium match.",
-    "FIFA's API summary printed ten Status 1 names and omitted Strinić, but its own substitution list has Strinić going off at 82'; ESPN lists him at LB. He started.",
+    "fifa.com's API summary printed ten Status 1 names and omitted Strinić, but its own substitution list has Strinić going off at 82'; ESPN lists him at LB. He started.",
     "Both blankCandidates (Vrsaljko, Vida) are confirmed starters. Names with diacritics in the entry ('Mario Mandžukić', 'Ivan Perišić') and without ('Sime Vrsaljko', 'Danijel Subasic') are the same men as published."
    ]
   },
@@ -1512,10 +1512,10 @@
     {
      "field": "formationLabel",
      "entry": "4-2-3-1",
-     "evidence": "ESPN: 4-2-3-1 (matches). FIFA's tactics field: 4-3-3. The two sources disagree; recorded for completeness, not decisive.",
+     "evidence": "ESPN: 4-2-3-1 (matches). fifa.com's tactics field: 4-3-3. The two sources disagree; recorded for completeness, not decisive.",
      "severity": "minor",
      "decision": "kept: sources split",
-     "reason": "ESPN 4-2-3-1 (the entry), FIFA 4-3-3."
+     "reason": "ESPN 4-2-3-1 (the entry), fifa.com 4-3-3."
     }
    ],
    "applied": [
@@ -1523,19 +1523,19 @@
      "path": "slots[3].name",
      "from": "Ibrahima Konate",
      "to": "Dayot Upamecano",
-     "why": "FIFA and ESPN: Upamecano started at centre-back; Konate came on 113' for Varane"
+     "why": "fifa.com and ESPN: Upamecano started at centre-back; Konate came on 113' for Varane"
     },
     {
      "path": "blankCandidates[Ibrahima Konate]",
      "from": "candidate",
      "to": null,
-     "why": "a 113th minute substitute (FIFA, ESPN)"
+     "why": "a 113th minute substitute (fifa.com, ESPN)"
     }
    ],
    "notes": [
     "Date 2022-12-18, score 'Argentina 3-3 France, AET (Argentina won 4-2 on penalties)' and venue Lusail Stadium match both sources.",
     "Ten of eleven names correct; only Konaté (should be Upamecano) is wrong.",
-    "ESPN's fetched sub list paired Kolo Muani with Giroud and showed Thuram at 87'; FIFA pairs Kolo Muani with Dembélé and Thuram with Giroud, both at 41'. FIFA's pairing is used above; the entry carries no subs.",
+    "ESPN's fetched sub list paired Kolo Muani with Giroud and showed Thuram at 87'; fifa.com pairs Kolo Muani with Dembélé and Thuram with Giroud, both at 41'. fifa.com's pairing is used above; the entry carries no subs.",
     "blankCandidates Koundé and Tchouaméni are confirmed starters."
    ]
   },
@@ -1988,7 +1988,7 @@
    "applied": [],
    "notes": [
     "All eleven names, date 2018-07-11, score 'Croatia 2-1 England, AET' (Trippier 5', Perišić 68', Mandžukić 109') and venue Luzhniki match.",
-    "formationLabel 3-5-2 matches FIFA's tactics field; ESPN calls the same shape 3-1-4-2 (Henderson as the single holding midfielder). Treated as the same.",
+    "formationLabel 3-5-2 matches fifa.com's tactics field; ESPN calls the same shape 3-1-4-2 (Henderson as the single holding midfielder). Treated as the same.",
     "All three blankCandidates (Lingard, Trippier, Alli) are confirmed starters."
    ]
   },
@@ -2076,11 +2076,11 @@
      "path": "slots[10].name",
      "from": "Marko Livaja",
      "to": "Mario Pasalic",
-     "why": "FIFA and ESPN: Pasalic started; Livaja came on 72' for Kramaric. Only ESPN states wings (Pasalic RF, Perisic LF), so the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Pasalic started; Livaja came on 72' for Kramaric. Only ESPN states wings (Pasalic RF, Perisic LF), so the tile keeps the slot label"
     }
    ],
    "notes": [
-    "Date 2022-12-13, score Argentina 3-0 Croatia, venue Lusail Stadium and formation 4-3-3 (FIFA and ESPN) match.",
+    "Date 2022-12-13, score Argentina 3-0 Croatia, venue Lusail Stadium and formation 4-3-3 (fifa.com and ESPN) match.",
     "Ten of eleven names correct. Which wing Perišić and Pašalić played is not stated by either source.",
     "All three blankCandidates (Lovren, Kramarić, Perišić) are confirmed starters.",
     "Round 1026: no host states a role for Pasalic; the tile keeps the label of the slot he took. Open for a role source. ESPN alone puts Pasalic right and Perisic left."
@@ -2157,7 +2157,7 @@
     {
      "field": "slots[4] (RWB)",
      "entry": "Thomas Meunier",
-     "evidence": "Meunier is not in Belgium's matchday squad on either source (FIFA bench list and ESPN page do not list him). Nacer Chadli started in that role.",
+     "evidence": "Meunier is not in Belgium's matchday squad on either source (fifa.com bench list and ESPN page do not list him). Nacer Chadli started in that role.",
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
@@ -2197,7 +2197,7 @@
     {
      "field": "formationLabel",
      "entry": "3-4-3",
-     "evidence": "ESPN: 4-2-3-1. FIFA's tactics field: 4-3-3. Neither says 3-4-3.",
+     "evidence": "ESPN: 4-2-3-1. fifa.com's tactics field: 4-3-3. Neither says 3-4-3.",
      "severity": "minor",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
@@ -2208,55 +2208,55 @@
      "path": "formationLabel",
      "from": "3-4-3",
      "to": "4-3-3",
-     "why": "FIFA (tactics 4-3-3 and its own pitch grid) and ESPN (4-2-3-1) both have a back four with Chadli at right-back and Vertonghen at left-back, so 3-4-3 is refuted; the hosts split on the midfield, and the label follows the organiser"
+     "why": "fifa.com (tactics 4-3-3 and its own pitch grid) and ESPN (4-2-3-1) both have a back four with Chadli at right-back and Vertonghen at left-back, so 3-4-3 is refuted; the hosts split on the midfield, and the label follows the organiser"
     },
     {
      "path": "slots[3].position",
      "from": "CB",
      "to": "LB",
-     "why": "FIFA (defender, far left of the line) and ESPN (LB)"
+     "why": "fifa.com (defender, far left of the line) and ESPN (LB)"
     },
     {
      "path": "slots[4].name",
      "from": "Thomas Meunier",
      "to": "Nacer Chadli",
-     "why": "FIFA (defender, far right) and ESPN (RB): Chadli started; Meunier was not in the matchday squad (suspended)"
+     "why": "fifa.com (defender, far right) and ESPN (RB): Chadli started; Meunier was not in the matchday squad (suspended)"
     },
     {
      "path": "slots[4].position",
      "from": "RWB",
      "to": "RB",
-     "why": "FIFA (defender, far right) and ESPN (RB): Chadli started; Meunier was not in the matchday squad (suspended)"
+     "why": "fifa.com (defender, far right) and ESPN (RB): Chadli started; Meunier was not in the matchday squad (suspended)"
     },
     {
      "path": "slots[7].name",
      "from": "Yannick Carrasco",
      "to": "Moussa Dembele",
-     "why": "FIFA (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
+     "why": "fifa.com (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
     },
     {
      "path": "slots[7].position",
      "from": "LWB",
      "to": "CM",
-     "why": "FIFA (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
+     "why": "fifa.com (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
     },
     {
      "path": "slots[8].name",
      "from": "Dries Mertens",
      "to": "Kevin De Bruyne",
-     "why": "FIFA (forward, right) and ESPN (AM-R): De Bruyne started on the right; Mertens came on 60'"
+     "why": "fifa.com (forward, right) and ESPN (AM-R): De Bruyne started on the right; Mertens came on 60'"
     },
     {
      "path": "blankCandidates[Yannick Carrasco]",
      "from": "candidate",
      "to": null,
-     "why": "an 80th minute substitute (FIFA, ESPN)"
+     "why": "an 80th minute substitute (fifa.com, ESPN)"
     },
     {
      "path": "blankCandidates[Dries Mertens]",
      "from": "candidate",
      "to": null,
-     "why": "a 60th minute substitute (FIFA, ESPN)"
+     "why": "a 60th minute substitute (fifa.com, ESPN)"
     },
     {
      "path": "blankCandidates[Kevin De Bruyne]",
@@ -2288,20 +2288,20 @@
      "path": "slots[2].side",
      "from": "centre",
      "to": "left",
-     "why": "layout: FIFA and ESPN (CD-L), left of centre in a back four"
+     "why": "layout: fifa.com and ESPN (CD-L), left of centre in a back four"
     },
     {
      "path": "slots[7].side",
      "from": "left",
      "to": "centre",
-     "why": "FIFA (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
+     "why": "fifa.com (midfielder, the deepest) and ESPN (midfielder): Dembele started; Carrasco came on 80'"
     }
    ],
    "notes": [
     "Date 2018-07-10, score France 1-0 Belgium (Umtiti 51') and venue Saint Petersburg Stadium match.",
     "Correct starters already in the entry: Courtois, Alderweireld, Kompany, Vertonghen, Witsel, Fellaini, Hazard, Lukaku (8 of 11).",
     "blankCandidate Witsel is a confirmed starter.",
-    "Round 1026: formation set to the organiser's 4-3-3 (FIFA label and grid); ESPN states 4-2-3-1. Both refute the old 3-4-3. New blanks De Bruyne and Alderweireld carry clubs read on planetworldcup.com and worldcup.org.uk."
+    "Round 1026: formation set to the organiser's 4-3-3 (fifa.com label and grid); ESPN states 4-2-3-1. Both refute the old 3-4-3. New blanks De Bruyne and Alderweireld carry clubs read on planetworldcup.com and worldcup.org.uk."
    ]
   },
   {
@@ -2323,9 +2323,9 @@
     "Robin van Persie"
    ],
    "substitutes": [
-    "Daryl Janmaat at half-time (FIFA prints 45') for Martins Indi",
-    "Jordy Clasie 61' for De Jong (FIFA)",
-    "Klaas-Jan Huntelaar 95' for Van Persie (FIFA)"
+    "Daryl Janmaat at half-time (fifa.com prints 45') for Martins Indi",
+    "Jordy Clasie 61' for De Jong (fifa.com)",
+    "Klaas-Jan Huntelaar 95' for Van Persie (fifa.com)"
    ],
    "fields": {
     "matchDate": "2014-07-09",
@@ -2384,7 +2384,7 @@
     {
      "field": "slots[7] (CM)",
      "entry": "Jonathan de Guzman",
-     "evidence": "De Guzmán was an unused substitute (FIFA bench list; not mentioned in ESPN's player grades).",
+     "evidence": "De Guzmán was an unused substitute (fifa.com bench list; not mentioned in ESPN's player grades).",
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
@@ -2411,28 +2411,28 @@
      "path": "slots[1].name",
      "from": "Daryl Janmaat",
      "to": "Dirk Kuyt",
-     "why": "FIFA and ESPN: Kuyt started; Janmaat came on at half-time for Martins Indi. No host states his role, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Kuyt started; Janmaat came on at half-time for Martins Indi. No host states his role, the tile keeps the slot label"
     },
     {
      "path": "slots[7].name",
      "from": "Jonathan de Guzman",
      "to": "Georginio Wijnaldum",
-     "why": "FIFA and ESPN: Wijnaldum started (FIFA midfielder); de Guzman was an unused substitute"
+     "why": "fifa.com and ESPN: Wijnaldum started (fifa.com midfielder); de Guzman was an unused substitute"
     },
     {
      "path": "blankCandidates[Daryl Janmaat]",
      "from": "candidate",
      "to": null,
-     "why": "a half-time substitute (FIFA, ESPN)"
+     "why": "a half-time substitute (fifa.com, ESPN)"
     }
    ],
    "notes": [
-    "Date 2014-07-09, score 'Netherlands 0-0 Argentina, AET (Argentina won 4-2 on penalties)' and venue (Arena Corinthians, published by FIFA under its current name Neo Química Arena) match.",
-    "The inline comment that Cillessen played the full match and Krul did not come on is consistent with both sources (Krul is on FIFA's bench list; no goalkeeper substitution).",
+    "Date 2014-07-09, score 'Netherlands 0-0 Argentina, AET (Argentina won 4-2 on penalties)' and venue (Arena Corinthians, published by fifa.com under its current name Neo Química Arena) match.",
+    "The inline comment that Cillessen played the full match and Krul did not come on is consistent with both sources (Krul is on fifa.com's bench list; no goalkeeper substitution).",
     "formationLabel 5-3-2 cannot be checked: neither source states a formation for this match. Not counted.",
     "blankCandidates Martins Indi and Sneijder are confirmed starters (Martins Indi off at half-time).",
     "ESPN's lineups and match pages did not render the team sheet to the fetch tool; ESPN's own published player ratings for the match (starters and subs listed separately) were used instead.",
-    "Round 1026: no host states a role for Kuyt (FIFA lists him a forward); the tile keeps the label of the slot he took. Open for a role source.",
+    "Round 1026: no host states a role for Kuyt (fifa.com lists him a forward); the tile keeps the label of the slot he took. Open for a role source.",
     "Round 1026: formation 5-3-2 is not published by either host and stays unverified."
    ]
   },

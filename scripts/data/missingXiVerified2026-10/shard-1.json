@@ -19,7 +19,7 @@
    {
     "id": "wc-2018-final-france",
     "field": "diffs[1] formationLabel (entry 4-4-2 called wrong)",
-    "recorded": "Diff: FIFA 4-5-1 (coordinates 4-2-3-1) and besoccer 4-2-3-1 disagree with the entry; ESPN agrees with 4-4-2",
+    "recorded": "Diff: fifa.com 4-5-1 (coordinates 4-2-3-1) and besoccer 4-2-3-1 disagree with the entry; ESPN agrees with 4-4-2",
     "found": "Sources split four ways, and the diff text itself calls it a split. RSSSF labels France '(4-3-3)'. Coaches' Voice says 'France set up in a 4-4-2 shape when defending', and Total Football Analysis describes a 4-4-2 out of possession. ESPN says 4-4-2. Under the shard's own rule ('a split is recorded as a note') this should be a note. The Matuidi clubAtTime diff in the same lineup is correct and stays.",
     "sources": "https://www.rsssf.org/tables/2018full.html ; https://learning.coachesvoice.com/tactics-france-croatia-mbappe-pogba-griezmann-lloris-perisic/ ; https://totalfootballanalysis.com/match-analysis/fifa-world-cup-final-2018-france-vs-croatia-tactical-analysis"
    },
@@ -1365,7 +1365,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/191983",
-     "via": "site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=191983",
+     "via": "site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=191983",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Olympiastadion Berlin, Italy 1 - France 1, FT-Pens, same eleven and subs."
@@ -1440,7 +1440,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/191978",
-     "via": "site.api.espn.com fifa.world summary?event=191978",
+     "via": "site.api.espn.com all summary?event=191978",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Signal Iduna Park, Germany 0 - Italy 2, goals 119' and 120'+1', same eleven and subs."
@@ -1526,7 +1526,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/264123",
-     "via": "site.api.espn.com fifa.world summary?event=264123",
+     "via": "site.api.espn.com all summary?event=264123",
      "readOn": "2026-10-05",
      "xi": false,
      "says": "Netherlands 0 - Spain 1, AET, Spain formation 4-2-3-1; no roster entries in the feed."
@@ -1537,8 +1537,8 @@
    "notes": [
     "2010-07-11, Soccer City Johannesburg (ESPN: FNB Stadium, same ground), Netherlands 0-1 Spain AET: match.",
     "ESPN's feed has no roster for this match, only the formation, so the independent eleven is from besoccer.",
-    "Formation split: ESPN 4-2-3-1 (agrees with entry), besoccer 4-3-3, FIFA silent. Not counted as a diff.",
-    "Iniesta RW / Pedro LW sides are not confirmed by any source read here (FIFA gives no coordinates for 2010).",
+    "Formation split: ESPN 4-2-3-1 (agrees with entry), besoccer 4-3-3, fifa.com silent. Not counted as a diff.",
+    "Iniesta RW / Pedro LW sides are not confirmed by any source read here (fifa.com gives no coordinates for 2010).",
     "Round 1026: the skeptic read RSSSF as Pedro right and Iniesta left, the reverse of the entry (Iniesta RW, Pedro LW). One source; not changed. Open lead for the Pedro blank hint."
    ]
   },
@@ -1605,7 +1605,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/383239",
-     "via": "site.api.espn.com fifa.world summary?event=383239",
+     "via": "site.api.espn.com all summary?event=383239",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Germany 1 - Argentina 0, AET, Germany 4-3-3, same eleven and subs."
@@ -1622,8 +1622,8 @@
    "applied": [],
    "notes": [
     "2014-07-13, Maracanã Rio de Janeiro, Germany 1-0 Argentina AET (Götze 112'): match. Kramer off at 30' (entry comment says ~31'), Götze an 87' sub: entry comments correct.",
-    "Formation split: besoccer 4-2-3-1 (agrees with entry), ESPN 4-3-3, FIFA silent. Not counted as a diff.",
-    "FIFA lists Lahm in its MF position group; ESPN has him RB as the entry does.",
+    "Formation split: besoccer 4-2-3-1 (agrees with entry), ESPN 4-3-3, fifa.com silent. Not counted as a diff.",
+    "fifa.com lists Lahm in its MF position group; ESPN has him RB as the entry does.",
     "Round 1026: formation split. RSSSF 4-1-4-1, ESPN 4-3-3, besoccer 4-2-3-1 (the entry). No two sources agree on a new label, entry keeps 4-2-3-1."
    ]
   },
@@ -1690,7 +1690,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/383242",
-     "via": "site.api.espn.com fifa.world summary?event=383242",
+     "via": "site.api.espn.com all summary?event=383242",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Brazil 1 - Germany 7, Germany 4-3-3, same eleven and subs."
@@ -1707,7 +1707,7 @@
    "applied": [],
    "notes": [
     "2014-07-08, Estádio Mineirão Belo Horizonte, Brazil 1-7 Germany, Semi-final: match. Same XI as the final except Khedira for Kramer: confirmed.",
-    "Formation split as for the final: besoccer 4-2-3-1 (agrees), ESPN 4-3-3, FIFA silent.",
+    "Formation split as for the final: besoccer 4-2-3-1 (agrees), ESPN 4-3-3, fifa.com silent.",
     "Round 1026: formation split. RSSSF 4-1-4-1, ESPN 4-3-3, besoccer 4-2-3-1 (the entry). No two sources agree on a new label, entry keeps 4-2-3-1."
    ]
   },
@@ -1777,7 +1777,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/498139",
-     "via": "site.api.espn.com fifa.world summary?event=498139",
+     "via": "site.api.espn.com all summary?event=498139",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "France 4 - Croatia 2, France 4-4-2: Lloris; Pavard, Varane, Umtiti, Hernández; Mbappé RM, Pogba, Kanté, Matuidi LM; Griezmann, Giroud."
@@ -1822,9 +1822,9 @@
     {
      "field": "formationLabel",
      "entry": "4-4-2",
-     "evidence": "Sources split three ways. FIFA (organiser) states 4-5-1, and its tactical coordinates draw a 4-2-3-1 (Kanté 6,6 and Pogba 14,6; Matuidi 5,10, Griezmann 10,10, Mbappé 15,10; Giroud 10,12). besoccer: 4-2-3-1. ESPN: 4-4-2 (agrees with the entry). The organiser does not say 4-4-2.",
+     "evidence": "Sources split three ways. fifa.com (organiser) states 4-5-1, and its tactical coordinates draw a 4-2-3-1 (Kanté 6,6 and Pogba 14,6; Matuidi 5,10, Griezmann 10,10, Mbappé 15,10; Giroud 10,12). besoccer: 4-2-3-1. ESPN: 4-4-2 (agrees with the entry). The organiser does not say 4-4-2.",
      "decision": "kept: sources split",
-     "reason": "RSSSF 4-3-3, ESPN and Coaches Voice 4-4-2 (the entry), FIFA 4-5-1, besoccer 4-2-3-1. The shard 1 skeptic overturned this diff. Entry keeps 4-4-2."
+     "reason": "RSSSF 4-3-3, ESPN and Coaches Voice 4-4-2 (the entry), fifa.com 4-5-1, besoccer 4-2-3-1. The shard 1 skeptic overturned this diff. Entry keeps 4-4-2."
     }
    ],
    "applied": [
@@ -1837,7 +1837,7 @@
    ],
    "notes": [
     "Eleven, date 2018-07-15, Luzhniki Stadium Moscow, France 4-2 Croatia, Final: all match.",
-    "Layout only: FIFA and ESPN both put Pogba right-centre and Kanté left-centre (FIFA x Pogba 14, Kanté 6 with Pavard at 18; ESPN Kanté CM-L, Pogba CM-R); the entry draws Kanté at x=60 (right). Both CM.",
+    "Layout only: fifa.com and ESPN both put Pogba right-centre and Kanté left-centre (fifa.com x Pogba 14, Kanté 6 with Pavard at 18; ESPN Kanté CM-L, Pogba CM-R); the entry draws Kanté at x=60 (right). Both CM.",
     "Pavard (VfB Stuttgart) and Umtiti (Barcelona) clubAtTime were not re-sourced in this pass."
    ]
   },
@@ -1907,7 +1907,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/633850",
-     "via": "site.api.espn.com fifa.world summary?event=633850",
+     "via": "site.api.espn.com all summary?event=633850",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Argentina 3 (pens 4) - France 3 (pens 2), Argentina 4-3-3, same eleven and subs."
@@ -1916,8 +1916,8 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "2022-12-18, Lusail Stadium, 3-3 AET, Argentina 4-2 on penalties, Final, 4-3-3: all match (FIFA tactics 4-3-3, ESPN 4-3-3). FIFA gives the stadium's municipality as Al Daayen; ESPN says Lusail. Same ground.",
-    "Layout only: both sources put De Paul right-centre and Mac Allister left-centre (FIFA x De Paul 14, Mac Allister 6; ESPN De Paul RM, Mac Allister LM); the entry draws Mac Allister at x=68 (right) and De Paul at x=32. Both CM."
+    "2022-12-18, Lusail Stadium, 3-3 AET, Argentina 4-2 on penalties, Final, 4-3-3: all match (fifa.com tactics 4-3-3, ESPN 4-3-3). fifa.com gives the stadium's municipality as Al Daayen; ESPN says Lusail. Same ground.",
+    "Layout only: both sources put De Paul right-centre and Mac Allister left-centre (fifa.com x De Paul 14, Mac Allister 6; ESPN De Paul RM, Mac Allister LM); the entry draws Mac Allister at x=68 (right) and De Paul at x=32. Both CM."
    ]
   },
   {
@@ -1985,7 +1985,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/633847",
-     "via": "site.api.espn.com fifa.world summary?event=633847",
+     "via": "site.api.espn.com all summary?event=633847",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Argentina 3 - Croatia 0, Argentina 4-4-2, same eleven and subs."
@@ -1994,7 +1994,7 @@
    "diffs": [],
    "applied": [],
    "notes": [
-    "2022-12-13, Lusail Stadium, Argentina 3-0 Croatia, Semi-final, 4-4-2 (FIFA and ESPN): all match. Paredes started, Di María did not: confirmed. Sides of Paredes/Enzo and Messi/Álvarez agree with FIFA coordinates."
+    "2022-12-13, Lusail Stadium, Argentina 3-0 Croatia, Semi-final, 4-4-2 (fifa.com and ESPN): all match. Paredes started, Di María did not: confirmed. Sides of Paredes/Enzo and Messi/Álvarez agree with fifa.com coordinates."
    ]
   },
   {
@@ -2059,7 +2059,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/264120",
-     "via": "site.api.espn.com fifa.world summary?event=264120",
+     "via": "site.api.espn.com all summary?event=264120",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Uruguay 2 - Netherlands 3, Netherlands 4-2-3-1, same eleven and subs."
@@ -2118,7 +2118,7 @@
    ],
    "notes": [
     "Eleven, date 2010-07-06, Uruguay 2-3 Netherlands, Semi-final, ESPN formation 4-2-3-1: all match. Boulahrouz and de Zeeuw starting for the suspended van der Wiel and de Jong: confirmed by both elevens.",
-    "Venue: FIFA and ESPN both say 'Green Point Stadium', Cape Town; the entry's 'Cape Town Stadium' is the same ground's official name. Not counted.",
+    "Venue: fifa.com and ESPN both say 'Green Point Stadium', Cape Town; the entry's 'Cape Town Stadium' is the same ground's official name. Not counted.",
     "Boulahrouz clubAtTime 'Stuttgart' agrees with the ESPN AP squad list."
    ]
   },
@@ -3120,7 +3120,7 @@
     {
      "host": "espn.com",
      "url": "https://www.espn.com/soccer/match/_/gameId/264073",
-     "via": "site.api.espn.com fifa.world summary?event=264073",
+     "via": "site.api.espn.com all summary?event=264073",
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Moses Mabhida Stadium Durban, Spain 0 - Switzerland 1, Spain 4-3-3, same eleven and subs."
@@ -3137,14 +3137,14 @@
     {
      "field": "formationLabel",
      "entry": "4-2-3-1",
-     "evidence": "ESPN: 4-3-3 (Busquets CM, Xavi LM, Xabi Alonso RM; Silva RF, Villa F, Iniesta LF). besoccer: 4-3-3. FIFA's feed gives no formation (tactics null), so this rests on two independent sources agreeing against the entry.",
+     "evidence": "ESPN: 4-3-3 (Busquets CM, Xavi LM, Xabi Alonso RM; Silva RF, Villa F, Iniesta LF). besoccer: 4-3-3. fifa.com's feed gives no formation (tactics null), so this rests on two independent sources agreeing against the entry.",
      "decision": "overturned by the skeptic",
      "reason": "RSSSF and Zonal Marking state 4-2-3-1 (the entry); ESPN and besoccer state 4-3-3. Sources split, entry keeps 4-2-3-1."
     }
    ],
    "applied": [],
    "notes": [
-    "Eleven, date 2010-06-16, Durban (FIFA 'Durban Stadium', ESPN 'Moses Mabhida Stadium', same ground), Group H, Switzerland 1-0: all match. FIFA and ESPN list Spain as the home side ('Spain 0-1 Switzerland'); the entry writes 'Switzerland 1-0 Spain', same result.",
+    "Eleven, date 2010-06-16, Durban (fifa.com 'Durban Stadium', ESPN 'Moses Mabhida Stadium', same ground), Group H, Switzerland 1-0: all match. fifa.com and ESPN list Spain as the home side ('Spain 0-1 Switzerland'); the entry writes 'Switzerland 1-0 Spain', same result.",
     "clubAtTime: ESPN's AP 2010 squad list gives Silva (Valencia), Capdevila (Villarreal), Xabi Alonso (Real Madrid), agreeing with the entry; one source only."
    ]
   }
