@@ -96,7 +96,8 @@
  *   eraseed        era saves are seeded too                          -> section 18, the once check
  *   worldseed      a job move's fresh club is seeded too             -> section 18, the once check
  *   rollseed       every summer seeds them again                     -> section 18, the once check
- *   elevenopen     interest forgets the eleventh best line           -> section 18, the line check
+ *   elevenopen     interest forgets the eleventh best line           -> section 18, the cover and line checks
+ *   elevenmine     the eleventh best line holds your ex-players too  -> section 18, the ex-player check
  *   realflip       a real free agent signs on for the plain fee      -> section 18, the sell on check
  *
  * Section 18 is Round 1033: real footballers two sources said had no club
@@ -199,12 +200,16 @@ if (CONTROL === 'nosev') {
     '  if (!bid) return null;\n  if (false) return null;');
 } else if (CONTROL === 'keenall') {
   rewrite('keenall', 'engine',
-    '  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
     '  return true;');
 } else if (CONTROL === 'elevenopen') {
   rewrite('elevenopen', 'engine',
-    '  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
     '  return fa.rating <= mine - 6;');
+} else if (CONTROL === 'elevenmine') {
+  rewrite('elevenmine', 'engine',
+    '  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));',
+    '  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);');
 } else if (CONTROL === 'realflip') {
   rewrite('realflip', 'engine',
     "  const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;",
@@ -1633,46 +1638,88 @@ console.log("18) a modern day one opens with today's real free agents, and only 
 
   /* COVER, NOT AN UPGRADE. The rule this pool has lived under since Round
      619. Journeymen sit 20 to 26 under the club; a real man sits wherever his
-     value puts him, so the interest rule now also refuses anybody above your
-     eleventh best. Measured with probes over 53 clubs (every 7th of the
-     leagues) and seeds 1 to 3, the strongest signal being whether signing him
+     value puts him, so the interest rule now also refuses a man who never
+     played for you if he is above your eleventh best. Measured with probes
+     over 53 clubs (every 7th of the leagues) and seeds 1 to 3 while eight
+     real men shipped, the strongest signal being whether signing him
      raises the best eleven average every level in this game is read off:
        before the round:            0 of 954 signable men raised it
        real men, no eleventh line: 12 of 681 signable real men did (1, 7, 4)
        real men, with it:           0 of 669 (signable real 219, 226, 224)
-     Here every 14th club over one seed: zero is the rule, not a band, and
-     the floor on signable real men is a third of the per club rate measured
-     (about 4.2 a club), so the list is not cover by being unsignable. */
-  const sample = cm.REAL_LEAGUES.flatMap(l => l.clubs).filter((_, i) => i % 14 === 0);
+     Review of the round: that sample (every 14th club, one seed) never met
+     a club where the line binds, so it stayed green with the line removed.
+     It now runs every club on day one AND in season two (the real men
+     carried a summer, squads thinned by deals left to run out), with the
+     seven men that ship after the review. Club i at seed base + i, season
+     two at base + 500 + i, three at base + 900 + i; bases 9100, 19100, 29100:
+       with the line, raises on day one and in season two:  0, 0, 0
+       no line (elevenopen), base 9100:  18 on day one, 31 in season two
+       signable real men on day one:  1487, 1535, 1510 (4.0 to 4.2 a club)
+       of signable strangers, day one and season two, the share who would
+       start in the picked XI:  9.5, 8.9, 9.9 percent (journeymen alone
+       before the round 5.0 to 5.7; nobody refused, keenall, 17.7)
+       own ex-players in season three above the eleventh best but inside
+       the level rule:  242, 234, 220, none refused (elevenmine: all)
+     Zero raises is the rule, not a band. The floors are a third of the
+     measured rates, and the start share ceiling of 13 percent sits between
+     the 9.9 measured and the 17.7 of a pool nobody refuses. This runs 9100. */
+  const sample = cm.REAL_LEAGUES.flatMap(l => l.clubs);
   const top11 = (sq) => { const rs = sq.map(p => p.rating).sort((a, b) => b - a).slice(0, 11); while (rs.length < 11) rs.push(60); return rs.reduce((a, b) => a + b, 0) / 11; };
   let signableAll = 0;
-  let signableReal = 0;
+  let dayOneReal = 0;
   let walkIn = 0;
+  let exGap = 0;
   const raised = [];
+  const exRefused = [];
   let wide = null;
   for (let i = 0; i < sample.length; i += 1) {
-    let st;
-    try { st = seeded(9100 + i, () => cm.startCareer(sample[i])); } catch { continue; }
-    const level = st.clubStrengths[st.clubName];
-    const eleventh = cm.eleventhBestRating(st.squad);
-    if (!wide && eleventh + 1 <= level - 6) wide = st;
-    for (const fa of st.freeAgents ?? []) {
-      if (cm.freeAgentBlock(st, fa) !== null) continue;
-      signableAll += 1;
-      if (REAL_FA.has(fa.name)) signableReal += 1;
-      const after = cm.signFreeAgent(st, fa.name);
-      if (!after) continue;
-      if (top11(after.squad) > top11(st.squad) + 1e-9) raised.push(`${fa.name} ${fa.rating} at ${sample[i]} (eleventh ${eleventh})`);
-      const me = after.squad[after.squad.length - 1];
-      if (cm.autoPickXI(after.squad, cm.FORMATIONS[after.formationIndex]).includes(me.id)) walkIn += 1;
+    let s1;
+    let s2;
+    let s3;
+    try {
+      s1 = seeded(9100 + i, () => cm.startCareer(sample[i]));
+      s2 = seeded(9600 + i, () => cm.startNextSeason(s1));
+      s3 = seeded(10000 + i, () => cm.startNextSeason(s2));
+    } catch { continue; }
+    for (const st of [s1, s2]) {
+      const level = st.clubStrengths[st.clubName];
+      const eleventh = cm.eleventhBestRating(st.squad);
+      if (!wide && eleventh + 1 <= level - 6) wide = st;
+      for (const fa of st.freeAgents ?? []) {
+        if (fa.fromMyClub || cm.freeAgentBlock(st, fa) !== null) continue;
+        signableAll += 1;
+        if (st === s1 && REAL_FA.has(fa.name)) dayOneReal += 1;
+        const after = cm.signFreeAgent(st, fa.name);
+        if (!after) continue;
+        if (top11(after.squad) > top11(st.squad) + 1e-9) raised.push(`${fa.name} ${fa.rating} at ${sample[i]} in season ${st === s1 ? 'one' : 'two'} (eleventh ${eleventh})`);
+        const me = after.squad[after.squad.length - 1];
+        if (cm.autoPickXI(after.squad, cm.FORMATIONS[after.formationIndex]).includes(me.id)) walkIn += 1;
+      }
+    }
+    /* Your own ex-players: a man whose deal ran out comes back after his
+       season away under the level rule alone, as before the round. */
+    const level3 = s3.clubStrengths[s3.clubName];
+    const e3 = cm.eleventhBestRating(s3.squad);
+    for (const fa of s3.freeAgents ?? []) {
+      if (!fa.fromMyClub || fa.reason !== 'expired' || fa.since === s3.season) continue;
+      if (!(fa.rating <= level3 - 6 && fa.rating > e3)) continue;
+      exGap += 1;
+      if (!cm.freeAgentInterest(s3, fa)) exRefused.push(`${fa.name} ${fa.rating} at ${sample[i]} (eleventh ${e3})`);
     }
   }
-  const floor = Math.round(sample.length * 4.2 / 3);
-  console.log(`   ${sample.length} clubs: ${signableAll} signable free agents (${signableReal} real), ${walkIn} would start in the picked XI at a thin position, ${raised.length} raise the best eleven`);
+  const realFloor = Math.round(sample.length * 4.1 / 3);
+  const exFloor = Math.round(sample.length * 0.63 / 3);
+  const share = walkIn / Math.max(1, signableAll);
+  console.log(`   ${sample.length} clubs, day one and season two: ${signableAll} signable strangers (${dayOneReal} real men on day one), ${walkIn} would start in the picked XI (${(100 * share).toFixed(1)} percent), ${raised.length} raise the best eleven`);
   if (raised.length) fail(`${raised.length} signable free agents raise the best eleven, so the pool is an upgrade rack: ${raised.slice(0, 3).join(', ')}`);
-  else ok(`no signable free agent at ${sample.length} clubs raises the best eleven`);
-  if (signableReal < floor) fail(`only ${signableReal} real free agents are signable across ${sample.length} clubs (floor ${floor}), so the list is cover only by being out of reach`);
-  else ok(`${signableReal} real free agents are signable across ${sample.length} clubs (floor ${floor})`);
+  else ok(`no signable stranger at ${sample.length} clubs raises the best eleven, on day one or in season two`);
+  if (dayOneReal < realFloor) fail(`only ${dayOneReal} real free agents are signable on day one across ${sample.length} clubs (floor ${realFloor}), so the list is cover only by being out of reach`);
+  else ok(`${dayOneReal} real free agents are signable on day one across ${sample.length} clubs (floor ${realFloor})`);
+  if (!(share < 0.13)) fail(`${(100 * share).toFixed(1)} percent of signable strangers would start in the picked XI (ceiling 13), so the pool is a first team source`);
+  else ok(`${(100 * share).toFixed(1)} percent of signable strangers would start in the picked XI (ceiling 13)`);
+  if (exGap < exFloor) fail(`only ${exGap} ex-players in season three sit above the eleventh best inside the level rule (floor ${exFloor}), so the ex-player check sees too little`);
+  else if (exRefused.length) fail(`${exRefused.length} of ${exGap} of your own ex-players are refused by the eleventh best line, which is for strangers: ${exRefused.slice(0, 3).join(', ')}`);
+  else ok(`all ${exGap} of your own ex-players in season three above the eleventh best come back under the level rule, as before the round`);
   /* The rule itself, one step either side of the line, at a sampled club
      whose eleventh man sits far enough under its level for the step to land
      between the two rules. When none does, Everton's squad is made wide by
@@ -1696,12 +1743,17 @@ console.log("18) a modern day one opens with today's real free agents, and only 
 
   /* NOT A FREE ASSET. Section 16's policy on the real men: sign every one
      who will come, list him, take every bid in the window. Their values are
-     real, so on a 0.5m fee Iuri Medeiros (worth 1.5m) sold on at a profit.
-     The fee floor at his value closes it. Measured per sale over these ten
-     clubs, seeds 1 to 3 (per club seed = 100 x seed + club index):
-       no floor:       +0.16, +0.22 a sale (52 and 49 sales)
-       floor at value: -0.10, -0.06, -0.04 (52, 49, 48 sales)
-     The ceiling sits between the two at +0.06, and this runs seed 1. */
+     real, so on a 0.5m fee a man worth 1.5m sold on at a profit. The fee
+     floor at his value closes it. Measured per sale over these ten clubs,
+     seeds 1 to 3 (per club seed = 100 x seed + club index), with the seven
+     men that ship after the review (the 1.5m man was dropped):
+       no floor:       +0.05, +0.07, +0.06 a sale, 24, 24, 20 of 48, 46, 46
+                       sales at a profit (43 to 52 percent)
+       floor at value: -0.09, -0.08, -0.06 a sale, 3, 2, 2 at a profit
+                       (4 to 6 percent)
+     The profit share is the stronger signal, so it carries the check, with
+     its ceiling of 25 percent between the two; the mean must also stay under
+     zero, which is what "does not pay" means. This runs seed 1. */
   const FLIP = ['Everton', 'Brentford', 'Napoli', 'Ajax', 'Arsenal', 'Inter Miami', 'Real Madrid', 'Sheffield United', 'Hamburg', 'Le Havre'];
   const flips = [];
   for (let i = 0; i < FLIP.length; i += 1) {
@@ -1732,10 +1784,11 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     });
   }
   const flipMean = mean(flips);
+  const flipShare = flips.filter(m => m > 0).length / Math.max(1, flips.length);
   console.log(`   ${flips.length} real free agents signed and sold on at ${FLIP.length} clubs, ${flipMean.toFixed(2)}m a sale against what he cost`);
   if (flips.length < 20) fail(`only ${flips.length} real free agents sold on, too few to say what a sale earns`);
-  else if (!(flipMean < 0.06)) fail(`signing a real free agent to sell him on makes ${flipMean.toFixed(2)}m a sale (ceiling 0.06m), so the list is a free asset`);
-  else ok(`signing a real free agent to sell him on does not pay: ${flipMean.toFixed(2)}m a sale (ceiling 0.06m)`);
+  else if (!(flipShare < 0.25) || !(flipMean < 0)) fail(`signing a real free agent to sell him on pays: ${(100 * flipShare).toFixed(0)} percent of sales at a profit (ceiling 25), ${flipMean.toFixed(2)}m a sale (ceiling 0), so the list is a free asset`);
+  else ok(`signing a real free agent to sell him on does not pay: ${(100 * flipShare).toFixed(0)} percent of sales at a profit (ceiling 25), ${flipMean.toFixed(2)}m a sale`);
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

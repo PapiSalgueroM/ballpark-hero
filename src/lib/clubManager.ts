@@ -6612,8 +6612,13 @@ export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
      than the eleventh man. Measured over 53 clubs and three seeds: before
      this round none of 954 signable men raised a best eleven; with the eight
      real men in and no such line, 12 of 681 signable real ones did; with it,
-     none of 669. The pool is cover. */
-  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);
+     none of 669. The pool is cover.
+     Round 1033 review: not for your own ex-players. A man whose deal ran out
+     with you comes back after his season away under the Round 619 rule alone,
+     as he always has; the line was measured on strangers and is for them.
+     Applied to everyone it refused 21 of the 33 ex-players the level rule
+     lets back in season three (27 clubs, contracts left to run out). */
+  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));
 }
 
 /** Round 1033: the rating a man must beat to get into the best eleven,
@@ -6661,7 +6666,7 @@ export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fe
   /* Round 1033: a real man with no club knows what he is worth, so he never
      signs on for less than his value. Without this he was a free asset: over
      ten clubs and two seeds, signing every real free agent and selling him on
-     made 0.16m and 0.22m a sale (Iuri Medeiros, worth 1.5m, came for 0.5m). */
+     made 0.16m and 0.22m a sale (a man worth 1.5m came for 0.5m). */
   const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;
   const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);
   return { wage, years, fee };
