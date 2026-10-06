@@ -214,8 +214,33 @@ const DIGEST_SEEDS = 16;
    Re-recorded at Release AD (2026-10-05, twice, identical): careers 1, 2 and 8 move
    because Round 972 draws continental opponents from FALLBACK_CLUBS and Round
    1013 appends 51 clubs to it. Proven on a tree of 1013 plus 972 alone (13 of
-   16 matched, the same three moved); each round alone was green on its branch. */
-const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   16 matched, the same three moved); each round alone was green on its branch.
+   RE-RECORDED by Round 1012 (club derbies in Soccer Career), on purpose. The
+   derby swing moves popularity and morale, which gate events and dilemmas, so
+   the stream after a derby season legitimately moves. What was measured first
+   (2026-10-05, on the Round 1012 tree):
+   - the round's three rewords alone (event 1 "Late Winner!", tunnel_brawl and
+     ultras_tattoo no longer say derby), in a build with the derbies switched
+     off, give 16 of these 16 old digests unchanged;
+   - scripts/simCareerDerbies.mjs section 5 runs these same 16 careers in a
+     build with no derbies and a build that resolves them with the swing off:
+     16 of 16 equal once the derbies key is dropped, with 140 derby seasons
+     played, so detecting and resolving a derby draws nothing from
+     Math.random; only the bounded swing moves the stream.
+   Round 1012 then merged Release AD (origin/main 37ce6d5e, Rounds 1011,
+   1013 and 972) and was re-recorded once more on the merged tree
+   (2026-10-06, twice, identical). On that tree simCareerDerbies section 5's
+   bundle A (no derbies, rewords in) prints exactly Release AD's list,
+   ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad',
+   'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a',
+   '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1',
+   'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce',
+   '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684',
+   '3e5b99f018877dbe'], 16 of 16, and bundle B (derbies resolved, swing off)
+   equals it 16 of 16. With Round 1013's clubs the 16 careers play 160
+   derby seasons between them and all 16 digests move, only through the
+   swing. The stream control below still turns section 4 red. */
+const BASELINE = ['9f88c7e2a3533c92', '09487908f21e5673', '137be606bdb3965f', '9d1002a558de6175', 'a339f65db70dab9a', '025d489afaadc84c', '7bf99192ff899949', '06f3cb2054fcf302', 'fd6e3b6921c0fc9a', '8223eadb342cff94', 'd3fc4fd71ea0964a', 'bf55ea038d4784eb', 'dad30a730ee92571', 'c8f760fd4b26c677', 'eafed0733348923f', '09c0ce4d94320c9f'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
