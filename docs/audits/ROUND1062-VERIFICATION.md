@@ -77,3 +77,21 @@ Source and seven manifest values matched before and after copy. Only the
 updates snapshot, lastmod ledger and search differ from integrated source.
 Integrated final committed-source CI remains pending; no1062 live claim.
 
+
+## Integrated final acceptance
+
+Exact source11f6675d8cf73d28756f7faf40db3d4ae38391da passed allthree
+workflows and44steps with zero skips. MMA37431245658 passed outcomes and
+effective controls, all15 fight/career/scoring regressions,16 built readers,
+four native MMA/saved-boxing journeys andfour geometry/focus controls.
+Career entry37431245665 passed mounted controls,18 readers/guide harnesses,
+all six guide mutations in their intended sections and native journeys.
+Sport hub37431245640 independently passed all14steps,7 mounted outcomes,
+eight controls,17 readers,18 native journeys andlight/overflow checks.
+Actual closing logs were inspected. Independent integration acceptance
+confirms boxing unchanged, MMA source/tests unchanged from4a31748b,
+AE receipt preserved, combined update entries and helper workflow excluded.
+No blocker. This final receipt changes documentation only. PR144 may land
+without repeating runtime gates. Claude holds publication after landing.
+No1062 live claim until independently verified.
+
