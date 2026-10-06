@@ -1,3 +1,21 @@
+## Codex1063 original browser focus repair, 2026-10-06
+
+Fifth preparation37442764404 at7f30e3f3e9569dddc438227c994a7aee649b859b
+passed types/build,22 outcomes,28 effective controls,12 regressions and all16
+built readers. Three native profiles completed fights. The headed keyboard
+check still failed actual focus loss. Playwright1.63 enables focus on its
+original Chromium session; a second session cannot clear that stored setting.
+The native harness now clears the original session after navigation, keeps
+the actual tab-switch/pause/frozen-input/resume checks, and fails closed if
+the connection shape changes. Keyboard runs first, with immediate failure
+artifacts. No product rules or acceptance assertions relaxed.
+
+Artifact11401949855 ZIP SHA256 verified:
+0266623fe3ac9acfbfbb46992979934e65d85595f9201b8e6b4b59b4eb83bff5.
+No failed generated outputs copied. Sixth remote preparation follows.
+Cage1063 remains branch-only; no release/live claim. Claude retains1062/AF
+publication. No local runtime, DB probes or paid host AI. Root drafts and
+seven stashes safe. Next1064 unclaimed.
 ## Codex1063 remote headed keyboard check, 2026-10-06
 
 Fourth preparation37440952238 at04707bef passed types/build,22 combat/controller

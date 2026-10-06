@@ -85,8 +85,18 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
       - name: Native pixel combat and input lifecycle
+        id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: xvfb-run -a node scripts/qa/cageClash1063.mjs 2>&1 | tee cage-clash-artifacts/native.log
+      - name: Preserve native failure for immediate diagnosis
+        if: ${{ failure() && steps.native.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-native-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/native/
+            cage-clash-artifacts/native.log
       - name: Existing combat scoring guides and home
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

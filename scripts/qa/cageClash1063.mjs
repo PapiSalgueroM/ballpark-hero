@@ -13,10 +13,10 @@ fs.mkdirSync(OUT, { recursive: true }); assert(fs.existsSync(path.join(ROOT, 'di
 const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
 assert.equal(fontLinks.length, 1, 'Fonts use the actual template stylesheet');
 const profiles = [
+  { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true },
   { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true },
   { width: 390, height: 844, input: 'touch', theme: 'light', reduced: false },
   { width: 1280, height: 720, input: 'mouse', theme: 'dark', reduced: false },
-  { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true },
 ];
 const report = { cases: [], controls: [], coverage: [], forwardedWrites: 0 };
 const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
@@ -32,6 +32,12 @@ const ready = new Promise((resolve, reject) => {
 });
 const keys = { left: 'ArrowLeft', right: 'ArrowRight', guard: 'Space', jab: 'j', power: 'k', kick: 'l', grapple: 'u', submit: 'i', escape: 'o' };
 const root = page => page.locator('[data-cage-screen]');
+async function useNativeFocus(page) {
+  assert.equal(typeof page._connection?.toImpl, 'function', 'Native focus requires the in-process browser connection');
+  const client = page._connection.toImpl(page)?.delegate?._mainFrameSession?._client;
+  assert.equal(typeof client?.send, 'function', 'Native focus requires the original Chromium page session');
+  await client.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+}
 async function hud(page) {
   return root(page).evaluate(el => {
     const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? Object.fromEntries(['x', 'health', 'stamina', 'submission'].map(k => [k, Number(node.dataset[k])])) : null; };
@@ -103,10 +109,6 @@ try {
     page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.assetErrors.push(`${request.url()}: ${request.failure()?.errorText}`); });
     page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(`${response.status()} ${response.url()}`); });
     const cdp = await context.newCDPSession(page);
-    if (profile.input === 'keyboard') {
-      await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
-      await page.bringToFront();
-    }
     const control = name => page.locator(`[data-cage-control="${name}"]`);
     const button = name => page.getByRole('button', { name, exact: true });
     async function hold(name, ms, cancel = false) {
@@ -130,6 +132,10 @@ try {
     try {
       await page.clock.install();
       await page.goto(`${BASE}/cage-clash`, { waitUntil: 'domcontentloaded' }); await root(page).waitFor();
+      if (profile.input === 'keyboard') {
+        await useNativeFocus(page);
+        await page.bringToFront();
+      }
       row.fonts = await page.evaluate(async () => {
         await document.fonts.ready; const faces = [];
         for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
@@ -199,8 +205,7 @@ try {
         assert(await page.evaluate(() => document.hasFocus()), 'The arena begins with actual browser focus');
         const other = await context.newPage();
         try {
-          const otherCdp = await context.newCDPSession(other);
-          await otherCdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+          await useNativeFocus(other);
           await other.bringToFront();
           await other.waitForFunction(() => document.hasFocus(), null, { polling: 100, timeout: 3000 });
           await page.waitForFunction(() => !document.hasFocus(), null, { polling: 100, timeout: 3000 });
@@ -261,7 +266,7 @@ try {
       assert.equal(await page.evaluate(() => localStorage.getItem('cage-unrelated')), 'untouched');
       assert.deepEqual(row.errors, []); assert.deepEqual(row.assetErrors, []); row.passed = true;
       console.log(`cageClash1063 ${id}: real controls, complete fight, release, help pause, pixels, geometry and isolated network passed.`);
-    } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); }
+    } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
   assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
