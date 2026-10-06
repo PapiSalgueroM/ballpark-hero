@@ -325,6 +325,11 @@ const ALSO_REAL_ELSEWHERE = [
      Club Manager world now. He is still a real man, and listing him here
      keeps the guard's set exactly what it was, so no seed re-rolls. */
   'Kian Hansen',
+  /* Round 1015: Rafa Soares, the Portuguese left back, is withheld from
+     every modern squad until two sources say where he plays (off the 2026-27
+     Famalicao squad, probably at Estrela). Still a real man, so listing him
+     keeps the set of the guard as it was and no seed re-rolls. */
+  'Rafa Soares',
 ];
 
 /**
@@ -352,6 +357,13 @@ export const ERA_NAMES_THE_FILLER_COULD_BUILD = [
   'Jesper Hansen', 'Thiago Silva', 'Yannick Carrasco',
   /* Round 902: the 2005-06 Serie A, Bundesliga and Ligue 1 brought four more. */
   'Lucas Pereira', 'Matteo Ferrari', 'Pablo Thiam', 'Yannick Fischer',
+  /* Round 971: the 2020-21 big five holds four more real men the generator
+     could build. Jonas Hofmann (Gladbach) and Juan Miranda (Schalke) are in
+     the 2026 rosters too, so the guard's set does not change for them; Matteo
+     Ricci (Spezia) and Thiago Mendes (Lyon) are new to it, so a made up
+     youth who would have carried one of those two names now re-rolls, the
+     one change this list makes to a seed's name. */
+  'Jonas Hofmann', 'Juan Miranda', 'Matteo Ricci', 'Thiago Mendes',
 ];
 
 function realNames(): Set<string> {
@@ -516,6 +528,8 @@ const ERA_BAKES: Record<string, () => Promise<EraBake>> = {
   era2010: () => import('@/data/clubManagerEra2010').then(m => ({ rosters: m.ERA2010_ROSTERS, partial: m.ERA2010_PARTIAL, players: m.ERA2010_META.players })),
   era2015: () => import('@/data/clubManagerEra2015').then(m => ({ rosters: m.ERA2015_ROSTERS, partial: m.ERA2015_PARTIAL, players: m.ERA2015_META.players })),
   era2005: () => import('@/data/clubManagerEra2005').then(m => ({ rosters: m.ERA2005_ROSTERS, partial: m.ERA2005_PARTIAL, players: m.ERA2005_META.players })),
+  /* Round 971: the 2020-21 big five, its own chunk like the other three. */
+  era2020: () => import('@/data/clubManagerEra2020').then(m => ({ rosters: m.ERA2020_ROSTERS, partial: m.ERA2020_PARTIAL, players: m.ERA2020_META.players })),
 };
 
 /** The era bakes that have arrived, keyed by era id. Filled by
@@ -603,6 +617,17 @@ const ERA_RATING_UPLIFT: Record<string, { pivot: number; gain: number }> = {
      era tracks how far that era's money sits below 2026's, which is why it
      climbs as the seasons get older: 0.6, 0.7, 1.67. */
   era2005: { pivot: 80, gain: 1.67 },
+  /* Round 971, calibrated off the measured 2020 bake by the rule the three
+     above follow, the gain tracking how far the era's money sits below
+     2026's. Measured over the top 50 of each bake (the median ratio of an
+     era's k-th best value to the 2026 bake's k-th best): 0.25 in 2005, 0.33
+     in 2010, 0.50 in 2015 and 0.93 in 2020, which is 7.8, 6.2, 3.8 and 0.4
+     rating points on the bake curve. The shipped gains are 0.21, 0.11 and
+     0.16 per point of that gap, a mean of 0.16, and 0.16 times 0.4 is 0.06.
+     2020 money is 2026 money give or take, so the uplift is close to
+     nothing: raw Mbappé 93 lands at the modern best of 94, raw Messi, De
+     Bruyne and Salah 91 at 92, and everyone at 88 or below stays put. */
+  era2020: { pivot: 80, gain: 0.06 },
 };
 
 export function eraUpliftRating(eraId: string | undefined, r: number): number {
@@ -839,6 +864,46 @@ export const CM_ERAS: CMEra[] = [
        They say what the squads really are now. */
     blurb: 'Today. Real squads as of August 2026, thin ones topped up with made up youth.',
     honesty: 'Real data: every real player has his real name, age and value as of August 2026. Thin squads are padded with made up youth players and say so.',
+  },
+  /* Round 971: the fourth past season, the newest, so it sits first. The
+     blurb names only squads the bake carries (its anchors in
+     scripts/bakeEra2020.mjs), and the honesty line owns up to the summer
+     movers no dated record placed.
+     Review fix: the honesty line says what the bake does. A move is made
+     where a dated record shows it AND the next season's row names the club;
+     a leaver whose new club no row confirms is left out (Glik, Tatarusanu);
+     a mover no record covered stays put (Lazaro, Biraghi). The empty
+     stadiums are that season's, read 2026-10-05: premierleague.com ("How has
+     the COVID-19 pandemic affected Premier League matches?": behind closed
+     doors "largely ... throughout the season", fans back in limited numbers
+     in December in some areas and in May) and Sky Sports ("How 2020 changed
+     football: Fans stay at home"). The brief also asked for five
+     substitutes, but the Premier League voted to stay at three for 2020-21
+     (Sky Sports, "Premier League clubs vote against allowing five
+     substitutes in 2020/21 season"; ESPN), so the card does not claim it.
+     Closing check fix, every source read 2026-10-05. The empty stadiums
+     were all five leagues', not only England's: Deloitte's Annual Review of
+     Football Finance 2022 (deloitte.com/ce/en/industries/tmt/research/
+     gx-annual-review-of-football-finance.html: "matches played behind
+     closed doors and stadia empty for the majority of the season") and
+     KPMG Football Benchmark on the big five clubs (essma.eu, 7 September
+     2021: the 2020/21 season "was played in empty stadiums"). The
+     substitutes are said as they were: five in the other four leagues
+     (Inside World Football, 18 December 2020, naming La Liga, the
+     Bundesliga, Serie A and Ligue 1; ESPN, Dale Johnson, 4 August 2022,
+     espn.com/soccer/story/_/id/37630254), three in the Premier League (Sky
+     Sports 12062269, 4 September 2020: "three replacements from seven";
+     ESPN 37585852, 6 August 2020; NBC Sports, 17 December 2020). The engine
+     allows three changes a match in every league (MAX_SUBS in
+     clubManager.ts), so the card says that too and promises nothing the
+     match does not apply. */
+  {
+    id: 'era2020',
+    label: seasonLabel(2020),
+    startYear: 2020,
+    emoji: '\u{1F3DF}\u{FE0F}',
+    blurb: 'Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG, Bruno at United, Lewandowski at Bayern. All of the big five, 2020-21.',
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2020')} with their real 2020 ages and values, all 98 clubs of the 2020-21 Premier League, La Liga, Serie A, Bundesliga and Ligue 1, a season played mostly in empty stadiums. Spain, Italy, Germany and France let a side make five changes that year while the Premier League stayed at three; every match here allows three. Summer 2020 moves are made where a dated record shows them and the next season's data agrees. A man who left for a club the data can't confirm is left out rather than guessed, and a mover no record covered still sits at his old club. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2015',

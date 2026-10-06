@@ -699,14 +699,18 @@ export function buildSchedule(rng: () => number): GmGame[][] {
 // Game sim
 // ---------------------------------------------------------------------------
 
-export function winProb(home: GmTeamState, away: GmTeamState): number {
-  const gap = teamStrength(home) - teamStrength(away) + 2;
+/* Round 1019: the two edges are strength points a GM desk adds (a staff's
+   bounded edge, src/lib/nflGmDesk.ts). Both default to nothing, so every
+   caller that passes none plays exactly as before. */
+export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0): number {
+  const gap = (teamStrength(home) + edgeHome) - (teamStrength(away) + edgeAway) + 2;
   return 1 / (1 + Math.pow(10, -gap / 14));
 }
 
-export function simGame(g: GmGame, teams: Record<string, GmTeamState>, rng: () => number): GmGame {
+/** Round 1019: `edges` is strength points by club from a GM desk. Absent, the game plays exactly as it always has. */
+export function simGame(g: GmGame, teams: Record<string, GmTeamState>, rng: () => number, edges?: Record<string, number>): GmGame {
   const home = teams[g.home], away = teams[g.away];
-  const p = winProb(home, away);
+  const p = edges ? winProb(home, away, edges[g.home] ?? 0, edges[g.away] ?? 0) : winProb(home, away);
   const homeWins = rng() < p;
   const base = 16 + Math.floor(rng() * 15);
   const margin = 1 + Math.floor(rng() * 17);
@@ -720,14 +724,21 @@ export function simGame(g: GmGame, teams: Record<string, GmTeamState>, rng: () =
   return done;
 }
 
-/** Weekly injury pass: small chance a starter goes down 1-4 weeks. */
-export function injuryPass(teams: Record<string, GmTeamState>, rng: () => number): { team: string; player: string; weeks: number }[] {
+/** Weekly injury pass: small chance a starter goes down 1-4 weeks.
+    Round 1019: `weeksFor` turns the weeks the engine drew into the weeks he
+    is really out (a GM desk's trainer). It draws nothing from rng, and
+    absent the pass is exactly what it always was. */
+export function injuryPass(
+  teams: Record<string, GmTeamState>, rng: () => number,
+  weeksFor?: (abbr: string, p: GmPlayer, weeks: number) => number,
+): { team: string; player: string; weeks: number }[] {
   const news: { team: string; player: string; weeks: number }[] = [];
   for (const t of Object.values(teams)) {
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
       if (rng() < 0.012) {
         p.out = 1 + Math.floor(rng() * 4);
+        if (weeksFor) p.out = weeksFor(t.abbr, p, p.out);
         news.push({ team: t.abbr, player: p.name, weeks: p.out });
       }
     }
@@ -775,6 +786,8 @@ export interface PlayoffRound {
 export function runPlayoffs(
   teams: Record<string, GmTeamState>,
   rng: () => number,
+  /** Round 1019: a GM desk's strength points by club. Absent, the bracket plays exactly as before. */
+  edges?: Record<string, number>,
 ): { rounds: PlayoffRound[]; champion: string } {
   const rounds: PlayoffRound[] = [];
   const bracket: Record<'AFC' | 'NFC', string[]> = {
@@ -785,7 +798,7 @@ export function runPlayoffs(
   (['AFC', 'NFC'] as const).forEach(conf => bracket[conf].forEach((t, i) => { seedOf[t] = i + 1; }));
 
   const playRound = (name: string, pairs: [string, string][]): string[] => {
-    const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng));
+    const games = pairs.map(([h, a]) => simGame({ week: 0, home: h, away: a, homeScore: 0, awayScore: 0, winner: '' }, teams, rng, edges));
     // playoff games should not count toward regular season records
     for (const g of games) {
       teams[g.winner].wins -= 1;

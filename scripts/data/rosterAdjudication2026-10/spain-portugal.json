@@ -1,0 +1,956 @@
+{
+ "round": 931,
+ "shard": "Spain and Portugal: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in La Liga or the Primeira Liga as Club Manager models them for 2026-27 (48 rows at origin/main 5f2622fd: Spain 31, Portugal 17)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Each row was read on the web on 2026-10-03, never a wiki. Most pages were read with WebFetch and WebSearch; where WebFetch could not render a page or summarised it poorly, the raw page or the public JSON behind it was fetched from the shell with curl or a small node script and read directly (ESPN squad pages for several seasons, the Eredivisie's Feyenoord page, the Braga, Porto, Vitória and Tondela sites, Liga Portugal's public player records at www.ligaportugal.pt/bo/api/players and Vitória's own player records). A source fetched that way is the same publisher's page as its url says, read as text rather than through a summary. A row leaves pending only when an official page (family A: the LaLiga player or match page, the Liga Portugal page, a club's own squad page or announcement, or a governing body such as the AFC) and an independent publisher on another host (family B: Soccerway, FotMob, ESPN) agree where the man is. Birth dates are in the note so a namesake cannot be mistaken for him. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows; realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "counts": {"rows": 48, "confirmedStill": 14, "movedTo": 8, "removedClubNotModelled": 7, "notCurrent": 1, "pending": 18},
+ "forTheFold": "30 of the 48 rows are settled on both families; 18 stay pending, each with its reason and what was tried. Read before folding: (1) The web search budget of the session ran out early in this shard, so every row after Benfica was read only through pages reached directly or by following links (ESPN squad and player pages, LaLiga player and match pages, club and league pages). That is why the pending list is long, not because the evidence points the other way. (2) Spain settled well: LaLiga's player and match pages answered for 29 of 31 Spanish rows. Portugal did not: Porto, Braga, Vitória, Famalicão, Estrela and Liga Portugal all render their squads in script, and Liga Portugal's public player records (www.ligaportugal.pt/bo/api/players) carry name, birth date and shirt number but no club. Benfica's and Sporting's own squad pages did answer. So five Portuguese rows (Cláudio Ramos, Vasco Sousa, Diego Rodrigues, Gustavo Silva, Toni Borevković) are pending on one family only: ESPN's 2026-27 page and the league's shirt number both put each man where the game already has him, so leaving them pending changes nothing in game. The exception is Borevković: ESPN's player page also lists him starting three Süper Lig games for Samsunspor (modelled) in August 2026 before two Vitória games in September, and nothing read explains it, so his row is not a plain one family short case. (3) Eight pending rows are not at the from club on every source read, only the destination is unsettled: Renato Sanches (not on Benfica's or PSG's 2026-27 pages), Tiago Gouveia (ESPN: Gençlerbirliği, modelled), Brian Oliván, Agustín Álvarez, Clément Michelin, André Horta, Kaio César (ESPN: Corinthians, modelled) and Tiago Silva. For Oliván, Álvarez, Michelin, Horta and Tiago Silva every candidate club read is unmodelled, but only two of them have an official page behind them. Michelin and Horta: LaLiga's own player page puts each at an unmodelled club (Real Valladolid, Almería) and ESPN leaves each out of his from club, so both families agree he has left; the lead may remove those two now and record the club later. Oliván, Álvarez and Tiago Silva rest on ESPN alone (and Talleres' own squad page does not list Álvarez), so removing them now would skip the rule that both families agree; they wait for an official page. Gouveia, Kaio César and Rafa Soares (ESPN: Estrela Amadora, modelled) would be moves if an official page agrees. (4) Namesakes: LaLiga's page under the slug gerard-moreno is a goalkeeper born 2005 at Sporting Gijón, not Villarreal's Gerard Moreno (born 1992), and was not used; Youssef Enríquez is the man LaLiga files under youssef-lekhedim and ESPN lists as Youssef Lekhedim (same shirt 3, same birth date 2005-10-07); Vasco Sousa has a namesake league record (a defender born 2004). (5) Every to field is a Club Manager club name (Getafe, FC Copenhagen, Rayo Vallecano, Levante, Mainz, Real Betis, Feyenoord twice), and every removed row's club is in no modelled league. Lekue is notCurrent because he retired; the Athletic Club announcement page refuses WebFetch (HTTP 403), so its title was read from the search index and FotMob, El Gol Digital and the 2026-27 LaLiga and ESPN squads carry the rest. (6) A convention for the lead to rule on across shards: two removals here rest on an official page that proves only an absence. Ángel Correa: Liga MX's Tigres page shows he is not at Tigres, and no official Atlético or River Plate page could be read. Hugo Félix: Benfica's page shows he is not at Benfica, and Tondela's site renders its squad in script. Both destinations are on two independent publishers (Soccerway with FotMob or EFE). That is weaker than the rule that both families agree where the man is; Germany's shard (Round 930) has a similar row (Joel Vega Zambrano). Either keep such rows as removals, since no source read puts the man at his from club and every destination read is unmodelled, or move them to pending until an official destination page is read.",
+ "confirmedStill": [
+  {
+   "name": "Hugo Novoa",
+   "club": "Alavés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-01-24. Alavés number 12 for 2026-27, on the bench against Osasuna on 2026-09-06. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/hugo-novoa",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Deportivo Alavés, shirt 12, born 24-01-2003"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/96",
+     "publisher": "ESPN (Alavés squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "forward, shirt 12, age 23"
+    }
+   ]
+  },
+  {
+   "name": "Youssef Enríquez",
+   "club": "Alavés",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-10-07, the Madrid born left back signed from Real Madrid Castilla in July 2025. LaLiga's page for him sits under the slug youssef-lekhedim and ESPN lists him as Youssef Lekhedim (his second surname), number 3, age 20: same shirt, same birth date, same man.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-ES/player/youssef-lekhedim",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "full name Youssef Enriquez, Deportivo Alavés, shirt 3, born 2005-10-07, 6 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1403692/youssef-enriquez",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Deportivo Alavés since July 2025, not on loan, born 2005-10-07, played 25 minutes at Athletic Club on 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/96",
+     "publisher": "ESPN (Alavés squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Youssef Lekhedim, defender, shirt 3, age 20"
+    }
+   ]
+  },
+  {
+   "name": "Yeray Álvarez",
+   "club": "Athletic Club",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-01-24. Athletic's number 5, started the 2026-27 league game against Sevilla on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Yeray, shirt 5, in the Athletic Club starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Yeray, defender, shirt 5, age 31"
+    }
+   ]
+  },
+  {
+   "name": "Yuri Berchiche",
+   "club": "Athletic Club",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1990-02-10. Athletic's number 17, started the 2026-27 league game against Sevilla on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Yuri, shirt 17, in the Athletic Club starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Yuri Berchiche, defender, shirt 17, age 36"
+    }
+   ]
+  },
+  {
+   "name": "Gianluca Prestianni",
+   "club": "Benfica",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2006-01-31, the Argentine forward. Benfica's number 25 on the club's own 2026-27 squad page and on ESPN's. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.slbenfica.pt/en-us/futebol/plantel-principal",
+     "publisher": "SL Benfica (first team squad, season 2026/27)",
+     "readOn": "2026-10-03",
+     "says": "Prestianni listed among the forwards; his profile page gives shirt 25 and born 2006-01-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1929",
+     "publisher": "ESPN (Benfica squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Gianluca Prestianni, forward, shirt 25, age 20"
+    }
+   ]
+  },
+  {
+   "name": "Juanmi",
+   "club": "Getafe",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Juan Miguel Jiménez López, born 1993-05-20, the forward. Getafe's number 7 for 2026-27, no league minutes yet. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/juanmi",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Getafe, shirt 7, full name Juan Miguel Jiménez López, born 1993-05-20, 0 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Juanmi, forward, shirt 7, age 33"
+    }
+   ]
+  },
+  {
+   "name": "Isi Palazón",
+   "club": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-27. Rayo's number 7, started the 2026-27 opener at Sevilla on 2026-08-15. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-sevilla-fc-rayo-vallecano-1",
+     "publisher": "LaLiga (match page, Sevilla v Rayo Vallecano, matchday 1, 2026-08-15)",
+     "readOn": "2026-10-03",
+     "says": "Isi in the Rayo Vallecano starting eleven, substituted at 64 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/264197/isi-palazon",
+     "publisher": "ESPN (player page; the Rayo 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Rayo Vallecano, shirt 7, born 1994-12-27, played 2026-08-15 at Sevilla and 2026-08-20 v Alavés"
+    }
+   ]
+  },
+  {
+   "name": "Peque Fernández",
+   "club": "Sevilla",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-10-04, the forward ESPN lists as Peque. Sevilla's number 10, scored a late penalty in the 2026-27 opener against Rayo on 2026-08-15 and started at Athletic on 2026-08-22. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-sevilla-fc-rayo-vallecano-1",
+     "publisher": "LaLiga (match page, Sevilla v Rayo Vallecano, matchday 1, 2026-08-15)",
+     "readOn": "2026-10-03",
+     "says": "10 Peque on the Sevilla bench, on at half time, scored a penalty at 90 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "Peque Fernández in the Sevilla starting eleven, booked at 22 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/347359/peque",
+     "publisher": "ESPN (player page; the Sevilla 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Sevilla, shirt 10, born 2002-10-04, played 2026-08-15, 2026-08-22 and 2026-08-29"
+    }
+   ]
+  },
+  {
+   "name": "Gerard Moreno",
+   "club": "Villarreal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-04-07, Villarreal's number 7, started at Alavés on 2026-08-28. Namesake: LaLiga's page under the slug gerard-moreno is a different man, a goalkeeper born 2005-02-12 at Sporting Gijón (second tier, not modelled, not in the game), so that page is not used here.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-deportivo-alaves-villarreal-cf-3",
+     "publisher": "LaLiga (match page, Alavés v Villarreal, matchday 3, 2026-08-28)",
+     "readOn": "2026-10-03",
+     "says": "Gerard Moreno in the Villarreal starting eleven, in attack beside Mikautadze"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/156172/gerard-moreno",
+     "publisher": "ESPN (player page; the Villarreal 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Villarreal, shirt 7, born 1992-04-07, played v Levante on 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Diego Llorente",
+   "club": "Real Betis",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-08-16, Betis's number 3, started against Real Madrid on 2026-09-04 and went off injured at 39 minutes. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-real-betis-real-madrid-4",
+     "publisher": "LaLiga (match page, Real Betis v Real Madrid, matchday 4, 2026-09-04)",
+     "readOn": "2026-10-03",
+     "says": "3 Llorente in the Betis starting eleven, replaced by Bartra at 39 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/181530/diego-llorente",
+     "publisher": "ESPN (player page; the Real Betis 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Real Betis, shirt 3, born 1993-08-16, started at Valencia and v Real Madrid"
+    }
+   ]
+  },
+  {
+   "name": "Kike Barja",
+   "club": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-04-01, Osasuna's number 11, six league games so far in 2026-27. ESPN writes him Enrique Barja. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/kike-barja",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Osasuna, shirt 11, born 1997-04-01, 6 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/97",
+     "publisher": "ESPN (Osasuna squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Enrique Barja, forward, shirt 11, age 29"
+    }
+   ]
+  },
+  {
+   "name": "Moi Gómez",
+   "club": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-06-23, Osasuna's number 16, set up Budimir's goal at Alavés on 2026-09-06. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/moi-gomez",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Osasuna, shirt 16, born 1994-06-23, 4 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/97",
+     "publisher": "ESPN (Osasuna squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Moi Gómez, forward, shirt 16, age 32"
+    }
+   ]
+  },
+  {
+   "name": "David Mella",
+   "club": "Deportivo La Coruña",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-05-23, the winger. Deportivo's number 11, three La Liga games so far in 2026-27 after the promotion. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/david-mella",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Real Club Deportivo de A Coruña, shirt 11, born 2005-05-23, 3 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375390/david-mella",
+     "publisher": "ESPN (player page; the Deportivo 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Deportivo, shirt 11, born 2005-05-23, started v Real Betis on 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Andrés Martín",
+   "club": "Racing Santander",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-11, Racing's number 11, started each of their first three La Liga games of 2026-27. No namesake in the game.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-getafe-cf-r-racing-club-2",
+     "publisher": "LaLiga (match page, Getafe v Racing, matchday 2, 2026-08-23)",
+     "readOn": "2026-10-03",
+     "says": "11 Andrés Martín in the Racing starting eleven"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-r-racing-club-elche-cf-3",
+     "publisher": "LaLiga (match page, Racing v Elche, matchday 3, 2026-08-28)",
+     "readOn": "2026-10-03",
+     "says": "Andrés Martín, shirt 11, started, off injured at 59 minutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/3141/andres-martin",
+     "publisher": "ESPN (player page; the Racing Santander 2026-27 squad page agrees)",
+     "readOn": "2026-10-03",
+     "says": "Racing Santander, shirt 11, born 1999-07-11, started 2026-08-16, 2026-08-23 and 2026-08-28"
+    }
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Abdel Abqar",
+   "from": "Alavés",
+   "to": "Getafe",
+   "realClub": "Getafe",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-03-10, Moroccan centre back. Left Alavés at the end of his contract and joined Getafe on a free on 2025-07-29, contract to 2028-06-30. Getafe number 5 in 2026-27.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/abqar",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Getafe, shirt 5, born 10-03-1999, 2 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/abqar-abdelkebir/Gp35on1c/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Alavés to Getafe 2025-07-29 as a free agent, born 1999-03-10, contract to 2028-06-30"
+    }
+   ]
+  },
+  {
+   "name": "Alex Král",
+   "from": "Espanyol",
+   "to": "FC Copenhagen",
+   "realClub": "FC København",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-05-19, the Czech midfielder. Espanyol's number 20 in 2024-25, gone from their 2025-26 and 2026-27 squads; FC København's number 33, starting Danish Superliga games in September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.fck.dk/holdet",
+     "publisher": "FC København (first team squad)",
+     "readOn": "2026-10-03",
+     "says": "33 Král among the midfielders"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/257085/alex-kral",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "F.C. København, shirt 33, born 1998-05-19, started at Brøndby on 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/88",
+     "publisher": "ESPN (Espanyol squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Marash Kumbulla",
+   "from": "Espanyol",
+   "to": "Rayo Vallecano",
+   "realClub": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-02-08, the Albanian centre back. Espanyol's number 4 in 2024-25, at Mallorca in 2025-26 (ESPN shows his league games for them to April 2026), and Rayo Vallecano's number 3 for 2026-27, with no league minutes yet.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/player/marash-kumbulla",
+     "publisher": "LaLiga (player page, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "Rayo Vallecano, shirt 3, born 08-02-2000, 0 matches this season"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/101",
+     "publisher": "ESPN (Rayo Vallecano squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Marash Kumbulla, defender, shirt 3, age 26"
+    }
+   ]
+  },
+  {
+   "name": "Jon Ander Olasagasti",
+   "from": "Real Sociedad",
+   "to": "Levante",
+   "realClub": "Levante",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-08-16, the midfielder. In Real Sociedad's 2024-25 squad, gone from their 2026-27 one; started for Levante at Málaga on 2026-09-06 and ESPN shows him in five Levante league games from 2026-08-24 to 2026-09-20.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "Jon Ander Olasagasti in the Levante starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/317784/jon-ander-olasagasti",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Levante, shirt 8, born 2000-08-16, five LaLiga matches for Levante from 2026-08-24 to 2026-09-20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/89",
+     "publisher": "ESPN (Real Sociedad squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Sheraldo Becker",
+   "from": "Real Sociedad",
+   "to": "Mainz",
+   "realClub": "1. FSV Mainz 05",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-02-09, the Surinamese forward. In Real Sociedad's 2024-25 squad, gone from their 2026-27 one; listed among Mainz's 2026-27 strikers and playing their Bundesliga games in August and September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.bundesliga.com/en/bundesliga/clubs/1-fsv-mainz-05/squad",
+     "publisher": "Bundesliga (Mainz squad, season 2026-2027)",
+     "readOn": "2026-10-03",
+     "says": "listed among the strikers"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/195027/sheraldo-becker",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Mainz, shirt 23, born 1995-02-09, four Bundesliga matches for Mainz from 2026-08-29 to 2026-09-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/89",
+     "publisher": "ESPN (Real Sociedad squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Iker Losada",
+   "from": "Celta Vigo",
+   "to": "Real Betis",
+   "realClub": "Real Betis",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-08-01, the forward. Celta's number 14 in 2024-25, not in Celta's 2026-27 squad. ESPN shows him playing for Levante in La Liga to 2026-05-23, then for Betis from August 2026; he is Betis's number 14 and the only Iker in their squad, and LaLiga names 14 Iker on the Betis bench against Real Madrid.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-real-betis-real-madrid-4",
+     "publisher": "LaLiga (match page, Real Betis v Real Madrid, matchday 4, 2026-09-04)",
+     "readOn": "2026-10-03",
+     "says": "14 Iker among the Betis substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/244",
+     "publisher": "ESPN (Real Betis squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "Iker Losada, forward, shirt 14, age 25; no other Iker in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/292222/iker-losada",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Real Betis, shirt 14, born 2001-08-01"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/85",
+     "publisher": "ESPN (Celta Vigo squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Jeremiah St. Juste",
+   "from": "Sporting CP",
+   "to": "Feyenoord",
+   "realClub": "Feyenoord",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-10-19, the Dutch centre back ESPN writes as Jerry St. Juste. Sporting's number 3 in 2024-25, gone from Sporting's own 2026-27 squad page and from ESPN's 2025-26 one; Feyenoord's number 6, playing their Eredivisie and Champions League games in August and September 2026.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://eredivisie.com/competition/clubs/feyenoord/",
+     "publisher": "Eredivisie (Feyenoord club page, carrying 2026/27 news)",
+     "readOn": "2026-10-03",
+     "says": "J. St. Juste, number 6, defender, profile at eredivisie.com/clubs/feyenoord/players/jeremiah-israel-st-juste/"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sporting.pt/pt/futebol/equipa-principal/plantel",
+     "publisher": "Sporting CP (first team squad, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not among the nine defenders or anywhere in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/215524/jerry-st-juste",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Feyenoord Rotterdam, shirt 6, born 1996-10-19, played v Cambuur 2026-08-23 to v Utrecht 2026-09-20"
+    }
+   ]
+  },
+  {
+   "name": "Gonçalo Borges",
+   "from": "Porto",
+   "to": "Feyenoord",
+   "realClub": "Feyenoord",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-03-29, the winger (Gonçalo Óscar Albuquerque Borges on the league's profile). In Porto's 2024-25 squad on ESPN, not in their 2025-26 or 2026-27 one; Feyenoord's number 11, played against Go Ahead Eagles at home on 2026-08-16 and against Barcelona on 2026-09-09.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://eredivisie.com/competition/clubs/feyenoord/",
+     "publisher": "Eredivisie (Feyenoord club page, carrying 2026/27 news)",
+     "readOn": "2026-10-03",
+     "says": "Gonçalo Borges, number 11, attacker, profile at eredivisie.com/clubs/feyenoord/players/goncalo-oscar-albuquerque-borges/"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/332362/goncalo-borges",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Feyenoord Rotterdam, shirt 11, born 2001-03-29"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/437",
+     "publisher": "ESPN (FC Porto squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Stoichkov",
+   "from": "Alavés",
+   "realClub": "Johor Darul Ta'zim",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Juan Diego Molina Martínez, born 1993-11-05. Sold by Alavés to Granada in January 2025, loaned to Deportivo La Coruña for 2025-26, back at Granada on 2026-06-30 and joined Johor Darul Ta'zim in Malaysia on 2026-08-01. Malaysia is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.the-afc.com/en/more/transfers.html/news/jdt-nab-stoichkov-ha-noi-add-jung",
+     "publisher": "Asian Football Confederation (transfer news, 2026-08-02)",
+     "readOn": "2026-10-03",
+     "says": "the 32 year old former Granada CF player joined Malaysian champions Johor Darul Ta'zim"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/stoichkov/Kneifk5H/transfers/",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Granada CF to Johor DT 2026-08-01, born 1993-11-05, contract to 2027-06-30"
+    }
+   ]
+  },
+  {
+   "name": "Ángel Correa",
+   "from": "Atlético Madrid",
+   "realClub": "River Plate",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-03-09, the Argentine forward. Sold by Atlético to Tigres UANL on 2025-07-09, then by Tigres to River Plate on 2026-07-24, contract to December 2029. Tigres is modelled (Liga MX) but he is no longer there; Argentina is not modelled. The only official page read is Liga MX's, and it shows only that he is not at Tigres; no official page covers Atlético (LaLiga's page for him answers 404, Atlético's squad page answered HTTP 500) or River Plate (its squad and news pages render in script). The destination therefore rests on two independent publishers alone. See forTheFold (6).",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://ligamx.net/cancha/club/16/tigres",
+     "publisher": "Liga MX (Tigres UANL Apertura 2026 squad)",
+     "readOn": "2026-10-03",
+     "says": "not listed among the five forwards or anywhere in the squad"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/correa-angel/McWkid34/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "Tigres UANL to River Plate 2026-07-24, born 1995-03-09, contract to 2029-12-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.swissinfo.ch/spa/river-plate-oficializ%c3%b3-la-llegada-de-delantero-%c3%81ngel-correa%2c-quien-firmar%c3%a1-hasta-2029/91796383",
+     "publisher": "EFE via Swissinfo (2026-07-24)",
+     "readOn": "2026-10-03",
+     "says": "River Plate agreed the permanent transfer from Tigres UANL, contract to December 2029"
+    }
+   ]
+  },
+  {
+   "name": "Hugo Félix",
+   "from": "Benfica",
+   "realClub": "Tondela",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2004-03-03. Left Benfica and joined Tondela as a free agent in September 2025, contract to 2029-06-30. Tondela is not in Club Manager's 2026-27 Primeira Liga and no other league models it. The departure is on Benfica's own page, the destination on two independent publishers only: Tondela's site renders its squad in script (raw page read 2026-10-03, no player names) and no league page naming his club was read, so family A here proves only that he is not at Benfica. See forTheFold (6).",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.slbenfica.pt/en-us/futebol/plantel-principal",
+     "publisher": "SL Benfica (first team squad, season 2026/27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    },
+    {
+     "family": "B",
+     "url": "https://us.soccerway.com/player/felix-hugo/zkgZgom6/transfers",
+     "publisher": "Soccerway",
+     "readOn": "2026-10-03",
+     "says": "current club Tondela, born 2004-03-03, contract to 2029-06-30"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/1374503",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Tondela since September 2025 as a free agent, born 2004-03-03; Benfica and Benfica B until June 2025"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/1929",
+     "publisher": "ESPN (Benfica squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Álex Sola",
+   "from": "Getafe",
+   "realClub": "Almería",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-09, the winger. Not in Getafe's 2025-26 or 2026-27 squad on ESPN; plays for Almería in LaLiga Hypermotion (the second tier), shirt 20. The second tier of Spain is not modelled. Not the Getafe forward Álex Sancris.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-rcd-mallorca-ud-almeria-7",
+     "publisher": "LaLiga (match page, Mallorca v Almería, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Álex Sola on the Almería bench, came on in the 79th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/286167/alex-sola",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Almería, shirt 20, born 1999-06-09, five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Carles Pérez",
+   "from": "Getafe",
+   "realClub": "Girona",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-02-16, the winger. Getafe had him in 2024-25; ESPN shows him in the Greek Super League in May 2026 and at Girona in LaLiga Hypermotion (the second tier, after Girona went down) from September 2026, shirt 23. Girona is not in Club Manager's 2026-27 La Liga and the second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-girona-fc-albacete-bp-7",
+     "publisher": "LaLiga (match page, Girona v Albacete, LaLiga Hypermotion matchday 7, 2026-09-25)",
+     "readOn": "2026-10-03",
+     "says": "C. Pérez, shirt 23, in the Girona starting eleven, off in the 84th minute"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/261468/carles-perez",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Girona, shirt 23, born 1998-02-16, four LaLiga 2 matches from 2026-09-05 to 2026-09-25"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Juan Bernat",
+   "from": "Getafe",
+   "realClub": "Eibar",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-03-01, the left back. Getafe had him in 2024-25; he starts for Eibar in LaLiga Hypermotion (the second tier) in 2026-27, shirt 24. The second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-sd-eibar-ud-las-palmas-7",
+     "publisher": "LaLiga (match page, Eibar v Las Palmas, LaLiga Hypermotion matchday 7, 2026-09-27)",
+     "readOn": "2026-10-03",
+     "says": "Juan Bernat, shirt 24, in the Eibar starting eleven"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/164194/juan-bernat",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Eibar, shirt 24, born 1993-03-01, started five LaLiga 2 matches from 2026-08-23 to 2026-09-27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/2922",
+     "publisher": "ESPN (Getafe squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  },
+  {
+   "name": "Antoñito Cordero",
+   "from": "Málaga",
+   "realClub": "Cádiz",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Antonio Cordero, born 2006-11-14, the winger. Málaga's number 26 in 2024-25, not in Málaga's 2026-27 squad; plays for Cádiz in LaLiga Hypermotion (the second tier), shirt 16. The second tier of Spain is not modelled.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-hypermotion-cadiz-cf-girona-fc-6",
+     "publisher": "LaLiga (match page, Cádiz v Girona, LaLiga Hypermotion matchday 6, 2026-09-19)",
+     "readOn": "2026-10-03",
+     "says": "16 Antoñito C. on the Cádiz bench, came on at 61 minutes"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-malaga-cf-levante-ud-4",
+     "publisher": "LaLiga (match page, Málaga v Levante, matchday 4, 2026-09-06)",
+     "readOn": "2026-10-03",
+     "says": "not in the Málaga eleven or among the substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/375875/antonio-cordero",
+     "publisher": "ESPN (player page)",
+     "readOn": "2026-10-03",
+     "says": "Cádiz, shirt 16, born 2006-11-14, five LaLiga 2 matches for Cádiz from 2026-08-30 to 2026-09-26"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/99",
+     "publisher": "ESPN (Málaga squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Iñigo Lekue",
+   "from": "Athletic Club",
+   "why": "Retired. Born 1993-05-04, a one club man: he played the last minutes of his professional career against Real Madrid on 2026-05-23, and his time at Athletic ended in June 2026. Not in Athletic's 2026-27 squad, and no club since.",
+   "adjudicatedOn": "2026-10-03",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.athletic-club.eus/en/news/2026/05/11/lekue-retires-as-a-one-club-man/",
+     "publisher": "Athletic Club (club news, 2026-05-11; the page answers WebFetch with HTTP 403, the title was read in the search index)",
+     "readOn": "2026-10-03",
+     "says": "Lekue retires as a One Club Man"
+    },
+    {
+     "family": "A",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2026-2027-laliga-ea-sports-athletic-club-sevilla-fc-2",
+     "publisher": "LaLiga (match page, Athletic Club v Sevilla, 2026-08-22)",
+     "readOn": "2026-10-03",
+     "says": "not in the Athletic Club eleven or among the twelve substitutes"
+    },
+    {
+     "family": "B",
+     "url": "https://www.fotmob.com/players/616544/inigo-lekue",
+     "publisher": "FotMob",
+     "readOn": "2026-10-03",
+     "says": "Retired, born 1993-05-04, Athletic Club July 2015 to June 2026, last match 2026-05-23 v Real Madrid"
+    },
+    {
+     "family": "B",
+     "url": "https://www.elgoldigital.com/futbol/athletic-club/valverde-ultimo-partido-athletic-bernabeu-lekue-retirada/",
+     "publisher": "El Gol Digital (2026-05-23)",
+     "readOn": "2026-10-03",
+     "says": "plays the last minutes of his professional career"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/93",
+     "publisher": "ESPN (Athletic Club squad page, season 2026-27)",
+     "readOn": "2026-10-03",
+     "says": "not listed"
+    }
+   ]
+  }
+ ],
+ "pending": [
+  {
+   "name": "Nico Mantl",
+   "club": "Arouca",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2000-02-06, German goalkeeper. Arouca loaned him to Blau-Weiss Linz from 2026-01-28 to 2026-06-30 (Soccerway, FotMob). A preseason Flashscore piece lists him in Arouca's provisional 2026-27 squad (https://www.flashscore.pt/noticias/arouca-com-menos-mexidas-procura-melhorar-a-oitava-posicao-da-epoca-passada/0dMDWOCM/), but ESPN's Arouca 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/15784) lists only Vinarcik, De Arruabarrena and Martim Duarte in goal, FotMob shows no match since 2026-05-16 for Linz, and no official Arouca or Liga Portugal page could be read (both render their squads in script). Re-check against Liga Portugal's player page."
+  },
+  {
+   "name": "Renato Sanches",
+   "club": "Benfica",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending, but he is certainly not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's (https://www.espn.com/soccer/team/squad/_/id/1929) both leave him out. Born 1997-08-18. Benfica was only a 2024-25 loan from PSG; he spent 2025-26 on loan at Panathinaikos (announced by the club on 2025-08-24, https://www.pao.gr/en/transfer/renato-sanches-is-green/) and Soccerway (https://us.soccerway.com/player/sanches-renato/Kbo7UsAS/transfers) records his return to PSG on 2026-06-30. But PSG's own 2026-27 squad page (https://www.psg.fr/en/mens-football/players) and ESPN's PSG page (https://www.espn.com/soccer/team/squad/_/id/160) both leave him out too, FotMob (https://www.fotmob.com/players/589344/renato-sanches) shows nothing after the loan, and no source found names a 2026-27 club or says he is unattached. The safe in-game effect is removal from Benfica; which list he belongs in needs a source for where he is."
+  },
+  {
+   "name": "Tiago Gouveia",
+   "club": "Benfica",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending for want of an official page on the destination. Born 2001-06-18. Not at Benfica: Benfica's own 2026-27 squad page (https://www.slbenfica.pt/en-us/futebol/plantel-principal) and ESPN's 2025-26 and 2026-27 Benfica pages leave him out. ESPN listed him at Nice in 2025-26 (shirt 47) and its player page (https://www.espn.com/soccer/player/_/id/290081/tiago-gouveia) now has him at Gençlerbirliği, shirt 7, with five Süper Lig matches from 2026-08-23 to 2026-09-19. Gençlerbirliği is modelled, so this would be a move, but the club's site answered HTTP 522 and no Süper Lig or TFF page was read. Re-check with a TFF or club page."
+  },
+  {
+   "name": "Brian Oliván",
+   "club": "Espanyol",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending, though he is not at Espanyol: ESPN's Espanyol pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/88) leave him out, and he was their number 14 in 2024-25. Born 1994-04-01. ESPN's player page (https://www.espn.com/soccer/player/_/id/213067/brian-olivan) shows his last games for Sporting Gijón in LaLiga 2 up to 2026-05-30 and a header naming AEK Larnaca, yet ESPN's AEK Larnaca page (2025-26, https://www.espn.com/soccer/team/squad/_/id/4039) does not list him. No official page was found and both candidate clubs are unmodelled, so the in-game effect of either answer is removal; the row waits for a second source on where he is."
+  },
+  {
+   "name": "Adam Boayar",
+   "club": "Elche",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending for want of an official page. Born 2005-10-13. ESPN's Elche 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3751) lists him, forward, shirt 32, and his ESPN player page (https://www.espn.com/soccer/player/_/id/367682/adam-boayar) names Elche, but its last match for them is 2026-02-20. He is not in either Elche match LaLiga published that was read (Racing v Elche 2026-08-28, Athletic v Elche 2026-09-12, only partly listed), LaLiga's player page could not be found by slug and Elche's site shows no squad. Most likely still an Elche player; one official page settles it."
+  },
+  {
+   "name": "Agustín Álvarez",
+   "club": "Elche",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 2001-05-19, the Uruguayan forward. ESPN's Elche 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/3751) leaves him out and his ESPN player page (https://www.espn.com/soccer/player/_/id/307473/agustin-alvarez-martinez) has him at Talleres (Córdoba), shirt 9, in five Argentine league games from 2026-08-24 to 2026-09-19. But Talleres' own men's squad page (https://www.clubtalleres.com.ar/plantel-profesional/) does not list him. Argentina is not modelled, so if ESPN is right the in-game effect is removal."
+  },
+  {
+   "name": "Clément Michelin",
+   "club": "Racing Santander",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree. Born 1997-05-11, the French right back. Not at Racing: ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out. LaLiga's player page (https://www.laliga.com/en-GB/player/clement-michelin) puts him at Real Valladolid for 2026-27 with no shirt number and no minutes, but ESPN's Valladolid 2026-27 page (https://www.espn.com/soccer/team/squad/_/id/95) does not list him. Valladolid is in the second tier and not modelled, so if LaLiga is right the in-game effect is removal."
+  },
+  {
+   "name": "Ekain Zenitagoia",
+   "club": "Racing Santander",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: no source places him. ESPN's Racing pages for 2025-26 and 2026-27 (https://www.espn.com/soccer/team/squad/_/id/87) leave him out, LaLiga's page under his name (https://www.laliga.com/en-GB/player/ekain-zenitagoia) says it has no data on him, and neither ESPN's Real Valladolid nor Sporting Gijón 2026-27 page lists him. No birth date was read, so a namesake cannot be ruled out either. Needs a source that names his current club."
+  },
+  {
+   "name": "Cláudio Ramos",
+   "club": "Porto",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Porto, but no official page that names his club could be read. Born 1991-11-16, goalkeeper. ESPN's Porto 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/437) lists him, shirt 14, age 34. Liga Portugal's own player record (https://www.ligaportugal.pt/bo/api/players/8442, refreshed 2026-10-03) gives shirt 14, born 1991-11-16 and the 2025/26 league title, but carries no club field. Porto's and Liga Portugal's squad pages render in script and returned no names. Settle with any official Porto or league squad page."
+  },
+  {
+   "name": "Vasco Sousa",
+   "club": "Porto",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Porto. Vasco José Cardoso Sousa, born 2003-04-03, midfielder. ESPN's Porto 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/437) lists him, shirt 15, age 23. Liga Portugal's own player record (id 8476, refreshed 2026-10-03) gives shirt 15 and that birth date but no club. A different Vasco Sousa (Vasco Pereira Sousa, born 2004-04-06, a defender) also has a league record. Settle with any official Porto or league squad page."
+  },
+  {
+   "name": "Diego Rodrigues",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Braga. Diego Henrique Oliveira Rodrigues, born 2005-05-24, midfielder. ESPN's Braga 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/2994) lists him, shirt 50, age 21; Liga Portugal's player record (id 8705, refreshed 2026-10-03) gives shirt 50 and that birth date but no club. Braga's site is a script app and its squad page could not be read."
+  },
+  {
+   "name": "André Horta",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the sources disagree on where he is, though not on Braga. André Filipe Luz Horta, born 1996-11-07. ESPN has no André Horta in Braga's squads from 2023-24 to 2026-27 (raw page read for each season), and Liga Portugal's record for him was last touched 2025-01-27. ESPN's player page (https://www.espn.com/soccer/player/_/id/214565/andre-horta) shows him at Almería in LaLiga 2 to 2026-05-24 and then at Al Ula, shirt 7, in the Saudi King's Cup on 2026-08-19. LaLiga's player page (https://www.laliga.com/en-GB/player/andre-horta) still lists Almería for 2026-27, with no shirt number and no minutes. Neither Almería (Spanish second tier) nor Al Ula is modelled, so either answer means removal; the row waits for a second source on the club."
+  },
+  {
+   "name": "Vasconcelos",
+   "club": "Braga",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending: the man could not be identified. The game row carries only the single name Vasconcelos (attacking midfielder, aged 20). ESPN's Braga squads from 2022-23 to 2026-27 (raw pages read) never list a Vasconcelos, and Liga Portugal's player records hold only two Vasconcelos, both defenders born in 1989 and 1997. He may be a Braga B or youth player; the full name and birth date from the 2025 source row are needed before anyone can check him."
+  },
+  {
+   "name": "Rafa Soares",
+   "club": "Famalicão",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Luís Rafael Soares Alves, born 1995-05-09, left back. Not at Famalicão on ESPN: their 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/12698) leaves him out, and he was in their 2024-25 one. ESPN's player page (https://www.espn.com/soccer/player/_/id/219663/rafa-soares) has him at Estrela (Estrela Amadora, modelled), shirt 55, in five league games from 2026-08-30 to 2026-09-20, and Liga Portugal's player record (id 8743, refreshed 2026-10-03) gives shirt 55 but no club. Estrela's site did not resolve. Settle with an official Estrela or league page: if it agrees, this is a move to Estrela Amadora."
+  },
+  {
+   "name": "Gustavo Silva",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family: everything read says he is still at Vitória. Gustavo da Silva Cunha, born 1999-06-01, the Brazilian forward. ESPN's Vitória 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5309) lists him as Gustavo da Silva, shirt 11, with league games to 2026-09-20; Liga Portugal's player record (id 8654, refreshed 2026-10-03) gives shirt 11 and that birth date but no club. Vitória's squad page loads its names in script, and the club's player records reachable through its site date from 2021 and 2022."
+  },
+  {
+   "name": "Toni Borevković",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family, with contrary evidence: the latest games put him at Vitória, but he started three Süper Lig games for Samsunspor in August. Born 1997-06-18, Croatian centre back. ESPN's Vitória 2026-27 squad page (https://www.espn.com/soccer/team/squad/_/id/5309) lists him, shirt 21. His ESPN player page (https://www.espn.com/soccer/player/_/id/275239/toni-borevkovic, read twice on 2026-10-03; it prints no year on match rows) lists him under Samsunspor, starting, in Göztepe v Samsunspor on 08-17, Samsunspor v Rizespor on 08-22 and Fenerbahçe v Samsunspor on 08-30, then under Vitória in Vitória v Académico de Viseu on 09-12 (substitute) and Moreirense v Vitória on 09-20 (started). Nothing read explains the Samsunspor games or records a move either way. Liga Portugal's player record (id 8616, refreshed 2026-10-03) gives shirt 21 but no club. Samsunspor is modelled, so the club matters in game: needs an official Vitória, Liga Portugal or TFF page."
+  },
+  {
+   "name": "Kaio César",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Kaio César Andrade Lima, born 2004-02-15, the Brazilian winger. Not at Vitória: ESPN's Vitória pages for 2024-25, 2025-26 and 2026-27 leave him out, and Liga Portugal's record for him was last touched 2024-11-12. ESPN's player page (https://www.espn.com/soccer/player/_/id/347456/kaio) has him at Corinthians, shirt 37, in Série A and Libertadores games from 2026-09-06 to 2026-09-20. Corinthians is modelled, so if an official page agrees this is a move to Corinthians; Corinthians' own squad page refused the request."
+  },
+  {
+   "name": "Tiago Silva",
+   "club": "Vitória Guimarães",
+   "checkedOn": "2026-10-03",
+   "note": "Checked 2026-10-03 and left pending on one family. Tiago Rafael Maia da Silva, born 1993-06-02, midfielder (Liga Portugal's record, id 8633, last touched 2026-08-04, nine league records share the name). ESPN's Vitória 2026-27 squad page leaves him out, and his ESPN player page (https://www.espn.com/soccer/player/_/id/189474/tiago-silva) has him at Al Shamal of Qatar, shirt 70, playing an AFC Champions League Elite game on 09-14, after three Vitória league games on 08-16, 08-23 and 08-30 (ESPN prints no year on those). ESPN is the only source for the departure and the destination. Qatar is not modelled, so if an official page agrees this is removal."
+  }
+ ]
+}

@@ -4,6 +4,7 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { CbbProgramSearch } from './CbbProgramSearch';
 import { CbbProgramHowToPlay } from './CbbProgramHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, type CbbProgramState } from '@/types/cbbProgram';
 import feedbackStyles from './CbbProgramFeedback.module.css';
@@ -33,6 +34,9 @@ export function CbbProgramBoard() {
     const timer = window.setTimeout(() => setFeedback(null), 600);
     return () => window.clearTimeout(timer);
   }, [feedback]);
+
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.puzzle.id}` : null, gameState ? gameState.gameStatus !== 'playing' : false);
 
   if (!gameState) {
     return (
@@ -178,9 +182,9 @@ export function CbbProgramBoard() {
 
         {isOver && (
           <div data-cbb-program-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-amber-500/20 bg-slate-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
+            <ClueFinishMoment won={gameStatus === 'won'} gamePath="/guess-cbb-team" score={score} live={liveFinish} />
             {gameStatus === 'won' ? (
               <>
-                <p className="text-3xl">🏆</p>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-amber-400`}>{puzzle.school_name}</p>
                 <p className="text-slate-400">
                   Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-amber-400 font-bold">{score} pts</span>
@@ -188,7 +192,6 @@ export function CbbProgramBoard() {
               </>
             ) : (
               <>
-                <p className="text-3xl">😤</p>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-amber-400`}>It was {puzzle.school_name}</p>
                 <p className="text-slate-400">Better luck next time!</p>
               </>

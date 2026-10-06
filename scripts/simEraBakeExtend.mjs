@@ -24,9 +24,11 @@
  *      ERA_PULL and ERA_NEXT), the real 2015-16 bake is rebuilt from the
  *      60 club file it grew from (git show 89d31144) with --check, which must
  *      say byte identical, and since Round 901 the 2010-11 bake the same way
- *      from its 40 club file (git show 06dc0741), and since Round 902 the
- *      2005-06 bake from its 40 club file (git show 06dc0741 too, Round 899's
- *      head, where the 2005-06 file was still Round 176's). Without the pulls this part prints SKIPPED and why;
+ *      from its 40 club file (git show 06dc0741), since Round 902 the 2005-06
+ *      bake from its 40 club file (git show 06dc0741 too, Round 899's head,
+ *      where the 2005-06 file was still Round 176's), and since Round 971 the
+ *      2020-21 bake, which grows from an empty era of its own and reads one
+ *      pull (ERA_PULL_2020). Without the pulls this part prints SKIPPED and why;
  *      A and B do not need them and always run.
  *
  * Round 901 review fix: a name with rows at two clubs of the new leagues is
@@ -39,8 +41,11 @@
  * run must then end red. SIM_ERA_EXTEND_CONTROL=c2drift (Round 902 review
  * fix) runs C's 2005-06 rebuild on a copy of that bake with one proved
  * correction cut out, and it must then say the rebuilt file differs (it refuses with exit 2
- * when the pulls are not here or the line is gone). Nothing on disk outside
- * the temp folder changes.
+ * when the pulls are not here or the line is gone).
+ * SIM_ERA_EXTEND_CONTROL=stale2020 (Round 971) leaves the lib alone and runs
+ * the 2020-21 rebuild against a copy of the shipped era file with one name
+ * edited by hand: part C must go red on it. Nothing on disk outside the
+ * temp folder changes.
  *
  * Run: node scripts/simEraBakeExtend.mjs
  */
@@ -73,10 +78,15 @@ const CONTROL = process.env.SIM_ERA_EXTEND_CONTROL ?? '';
    rebuild must go red. A and B run on the real lib; the other eras' rebuilds
    are skipped. */
 const C2_DRIFT = /^ {2}\{ n: 'Kevin Kuranyi', to: 'Schalke 04',.*\r?\n/m;
+/* Round 971 review fix: the one control aimed at part C rather than the lib.
+   It hands the 2020-21 rebuild a copy of the shipped era file with one
+   player's name changed, the way a hand edit of the generated file would,
+   and the run must end red on that rebuild. */
+const C_CONTROL = CONTROL === 'stale2020';
 let libUrl = pathToFileURL(LIB).href;
 if (CONTROL === 'c2drift') {
   console.log('CONTROL c2drift: the 2005-06 rebuild runs a bake copy without the Kuranyi move');
-} else if (CONTROL) {
+} else if (CONTROL && !C_CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
   const src = fs.readFileSync(LIB, 'utf8');
@@ -260,21 +270,28 @@ console.log('B) every guard dies on its own bad correction');
 /* ---------- C. the real era bakes rebuild byte for byte ---------- */
 /* Round 901: one entry per era the shared step has extended, each rebuilt
    from the file it grew from (the commit is the last one before its extend). */
+/* Round 971 review fix: 2020-21 is the third. It grows from an EMPTY era the
+   bake writes itself (no git base) and reads one pull holding both years
+   (ERA_PULL_2020 overrides), so a change to the shared step or a hand edit
+   of src/data/clubManagerEra2020.ts that undoes a summer 2020 correction
+   turns this red. Before it, only a manual --check would have seen either. */
+const PULL_0515 = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
+const NEXT_0515 = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
+const PULL_2020 = process.env.ERA_PULL_2020 ?? 'C:/Users/antho/dukb-handoff/data/market-base-2020-2021.json';
 const REBUILDS = [
-  { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60 },
-  { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40 },
+  { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60, pulls: [PULL_0515, NEXT_0515] },
+  { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40, pulls: [PULL_0515, NEXT_0515] },
   /* Round 902: base 06dc0741 is Round 899's head, where the 2005-06 file was
      still Round 176's. drift is the line control c2drift cuts. */
-  { label: '2005-06', script: 'bakeEra2005.mjs', base: '06dc0741', file: 'clubManagerEra2005.ts', clubs: 40, drift: C2_DRIFT },
+  { label: '2005-06', script: 'bakeEra2005.mjs', base: '06dc0741', file: 'clubManagerEra2005.ts', clubs: 40, pulls: [PULL_0515, NEXT_0515], drift: C2_DRIFT },
+  { label: '2020-21', script: 'bakeEra2020.mjs', base: null, file: 'clubManagerEra2020.ts', clubs: 0, pulls: [PULL_2020] },
 ];
 for (const rb of REBUILDS) {
   console.log(`C) the ${rb.label} bake rebuilds from its ${rb.clubs} club base byte for byte`);
-  const PULL = process.env.ERA_PULL ?? 'C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json';
-  const NEXT_PULL = process.env.ERA_NEXT ?? 'C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json';
   let skip = null;
   const drift = CONTROL === 'c2drift' && rb.drift;
-  if (CONTROL && !drift) skip = 'a control run checks A and B only';
-  else if (!fs.existsSync(PULL) || !fs.existsSync(NEXT_PULL)) skip = `the offline pulls are not on this machine (${PULL}, ${NEXT_PULL}); set ERA_PULL and ERA_NEXT to run it`;
+  if (CONTROL && !drift && !(C_CONTROL && rb.label === '2020-21')) skip = 'a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)';
+  else if (!rb.pulls.every(p => fs.existsSync(p))) skip = `the offline pulls are not on this machine (${rb.pulls.join(', ')}); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it`;
   if (skip && drift) { console.error(`CONTROL c2drift did not apply: ${skip}`); process.exit(2); }
   /* The bake it runs: the real one, or under c2drift a copy laid out the way
      the bake expects (scripts/, scripts/lib/, and the shipped era file it
@@ -293,18 +310,30 @@ for (const rb of REBUILDS) {
     console.log('   CONTROL c2drift applied: the bake copy has no Kuranyi move');
   }
   let base = null;
-  if (!skip) {
+  if (!skip && rb.base) {
     try {
       base = path.join(TMP, `base-${rb.label}.ts`);
       fs.writeFileSync(base, execFileSync('git', ['show', `${rb.base}:src/data/${rb.file}`], { cwd: ROOT, maxBuffer: 1 << 26 }));
     } catch { skip = `git cannot show the ${rb.clubs} club base (${rb.base}), a shallow clone?`; }
   }
   if (skip) { console.log(`   SKIPPED: ${skip}`); continue; }
+  const args = rb.base
+    ? ['--extend-big-five', '--check', `--base=${base}`, `--pull=${rb.pulls[0]}`, `--next=${rb.pulls[1]}`]
+    : ['--check', `--pull=${rb.pulls[0]}`];
+  if (C_CONTROL && rb.label === '2020-21') {
+    const shipped = fs.readFileSync(path.join(ROOT, 'src', 'data', rb.file), 'utf8');
+    const was = "n: 'Kai Havertz'";
+    if (!shipped.includes(was)) { console.error(`CONTROL stale2020 did not apply: the shipped era file has no "${was}"`); process.exit(2); }
+    const stale = path.join(TMP, `stale-${rb.file}`);
+    fs.writeFileSync(stale, shipped.replace(was, "n: 'Kai Havertz Edited'"));
+    args.push(`--against=${stale}`);
+    console.log(`   CONTROL stale2020 applied: the rebuild is compared with a copy where "${was}" was edited by hand`);
+  }
   let out = '';
   let code = 0;
   try {
-    out = execFileSync(process.execPath, [bake, '--extend-big-five', '--check',
-      `--base=${base}`, `--pull=${PULL}`, `--next=${NEXT_PULL}`], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
+    out = execFileSync(process.execPath, [bake, ...args],
+      { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
   } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
   const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
   console.log(`   ${verdict || '(no verdict line)'}`);

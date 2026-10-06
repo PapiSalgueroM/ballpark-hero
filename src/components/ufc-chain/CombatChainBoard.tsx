@@ -6,6 +6,7 @@ import { ChainTimeline } from './ChainTimeline';
 import { ModeSelector } from './ModeSelector';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ChainFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -24,6 +25,8 @@ export function CombatChainBoard() {
   const [playerRank, setPlayerRank] = useState<number | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [saving, setSaving] = useState(false);
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.chain[0]?.fighter.name ?? ''}` : null, gameState?.gameStatus === 'ended');
 
   const fetchLeaderboard = async () => {
     const { data } = await supabase
@@ -179,22 +182,15 @@ export function CombatChainBoard() {
           /* Game Over Screen */
           <div className="text-center">
             <div className="bg-gray-900 rounded-xl p-8 border border-red-600 max-w-lg mx-auto mb-6">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">Game Over!</h2>
-              <p className="text-gray-300 mb-4">{gameState.gameOverReason}</p>
-              
-              {/* Badge Display */}
-              {gameState.earnedBadge && (
-                <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-yellow-900/50 rounded-lg border border-yellow-600">
-                  <div className="text-3xl mb-2">{gameState.earnedBadge.emoji}</div>
-                  <div className="text-xl font-bold text-yellow-400">
-                    {gameState.earnedBadge.name}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    Chain of {chainLength}!
-                  </div>
-                </div>
-              )}
-              
+              <ChainFinishMoment
+                chainLength={chainLength}
+                badge={gameState.earnedBadge}
+                reason={gameState.gameOverReason}
+                gamePath="/ufc-chain"
+                live={liveFinish}
+                className="mb-6"
+              />
+
               {gameState.correctAnswer && (
                 <div className="mb-4">
                   <p className="text-gray-400 mb-2">Correct answer was:</p>
@@ -207,18 +203,15 @@ export function CombatChainBoard() {
                 </div>
               )}
 
-              <div className="text-xl text-red-400 font-bold mb-2">
-                Final Score: {gameState.score}
-              </div>
-              
-              {multiplier > 1 && (
-                <div className="text-sm text-green-400 mb-4">
-                  Includes x{multiplier} chain bonus!
+              <div className="mb-6">
+                <div className="text-xl text-red-400 font-bold">
+                  Final Score: {gameState.score}
                 </div>
-              )}
-
-              <div className="text-lg text-red-300 mb-6">
-                Chain Length: {chainLength}
+                {multiplier > 1 && (
+                  <div className="mt-2 text-sm text-green-400">
+                    Includes x{multiplier} chain bonus!
+                  </div>
+                )}
               </div>
 
               {/* Nickname & Save */}

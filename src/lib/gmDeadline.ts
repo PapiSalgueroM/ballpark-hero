@@ -151,8 +151,14 @@ export interface StanceReport {
 /** Split the league. `spots` is playoff places per group (or in all, when no
     row carries a group). A club in a place is a buyer; one within BUYER_Z of
     the line still is; one SELLER_Z or more adrift sells; the rest hold.
-    Before a game is played nobody has a record and everybody holds. */
-export function deadlineStances(rows: StanceRow[], spots: number): StanceReport {
+    Before a game is played nobody has a record and everybody holds.
+    Round 1019, optional `placed`: the clubs that hold a playoff place today
+    when the bracket is not simply the best records (NFL division winners
+    plus wild cards). Given, those clubs are the ones in a place, and the line
+    the rest chase is the last of them above the first club out of one, so a
+    weak division leader does not drag the line down. Absent, the first
+    `spots` by record are in, exactly as before. */
+export function deadlineStances(rows: StanceRow[], spots: number, placed?: ReadonlySet<string>): StanceReport {
   const stance: Record<string, DeadlineStance> = {};
   const gap: Record<string, number> = {};
   const groups = new Map<string, StanceRow[]>();
@@ -163,14 +169,16 @@ export function deadlineStances(rows: StanceRow[], spots: number): StanceReport 
   }
   for (const list of groups.values()) {
     const sorted = [...list].sort((a, b) => winShare(b) - winShare(a) || (b.diff ?? 0) - (a.diff ?? 0) || a.id.localeCompare(b.id));
-    const line = sorted[Math.min(spots, sorted.length) - 1];
+    const inPlace = (r: StanceRow, i: number): boolean => (placed ? placed.has(r.id) : i < spots);
+    const firstOut = sorted.findIndex((r, i) => !inPlace(r, i));
+    const line = sorted[(firstOut < 0 ? sorted.length : firstOut) - 1];
     const lineShare = line ? winShare(line) : 0.5;
     sorted.forEach((r, i) => {
       const games = r.wins + r.losses;
       if (games <= 0) { stance[r.id] = 'holding'; gap[r.id] = 0; return; }
       const z = (lineShare - winShare(r)) / Math.sqrt(0.25 / games);
-      gap[r.id] = i < spots ? Math.min(0, z) : z;
-      if (i < spots || z <= BUYER_Z) stance[r.id] = 'buyer';
+      gap[r.id] = inPlace(r, i) ? Math.min(0, z) : z;
+      if (inPlace(r, i) || z <= BUYER_Z) stance[r.id] = 'buyer';
       else if (z >= SELLER_Z) stance[r.id] = 'seller';
       else stance[r.id] = 'holding';
     });

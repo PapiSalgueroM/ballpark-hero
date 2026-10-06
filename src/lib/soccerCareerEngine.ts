@@ -26,6 +26,8 @@ import {
 import type { PhoneChoiceDef } from "./careerEras";
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { drawLeagueFinish, eliteInYear } from "./soccerCareerLeague";
+/* Round 1012: real club rivalries, played as league derbies each season. */
+import { resolveSeasonDerbies, applySeasonDerbies, type SeasonDerby } from "./soccerCareerDerby";
 /* Round 130: the phone is a real phone now. Threads, contacts, a relationship
    that cools when you ignore people, and a sports feed driven by a world model
    that actually moves players between clubs. All of it lives in soccerPhone so
@@ -199,6 +201,11 @@ export interface SeasonRecord {
   leagueFinish?: number;
   /** Round 929: clubs in that league that season, only where verified. */
   leagueSize?: number;
+  /** Round 1012: the season's league derbies against real rivals. Present
+      only on a playing season where one was on (soccerCareerDerby.ts), so a
+      season without one, and every season from before that round, has no
+      key at all. Read it through readSeasonDerbies. */
+  derbies?: SeasonDerby[];
   domesticCup: boolean;
   championsLeague: boolean;
   worldCup: boolean;
@@ -1457,7 +1464,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "tunnel_brawl",
     emoji: "🥊",
     title: "TUNNEL INCIDENT",
-    description: "After a brutal derby loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
+    description: "After a brutal loss, an opposition player shoves you in the tunnel and says something about your family. Cameras are everywhere. Your teammates are already grabbing your shirt to hold you back.",
     choices: [
       { label: "Swing back", emoji: "👊", consequence: "Fined two weeks' wages, popularity -10 (your ultras loved it, nobody else did)" },
       { label: "Walk away, report it", emoji: "🚶", consequence: "Federation fines the other player, your reputation +15" },
@@ -1612,7 +1619,7 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
     id: "ultras_tattoo",
     emoji: "🐉",
     title: "THE ULTRAS' DEMAND",
-    description: "After your derby winner, the ultras unfurl a banner: TATTOO THE CREST OR YOU NEVER LOVED US. They are outside training with a tattoo artist. He seems extremely available.",
+    description: "After your late winner, the ultras unfurl a banner: TATTOO THE CREST OR YOU NEVER LOVED US. They are outside training with a tattoo artist. He seems extremely available.",
     choices: [
       { label: "Get the crest tattooed", emoji: "🐉", consequence: "Popularity +15 here forever. Awkward if you ever transfer" },
       { label: "Henna prank first", emoji: "🖌️", consequence: "Popularity +8 for the joke", risk: "30% chance they find out it washed off: -10" },
@@ -3444,7 +3451,9 @@ function resolveInvestments(s: CareerState): void {
 }
 
 
-const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
+/* Exported (Round 1012) only so simCareerDerbies can replay a season's
+   derbies with the list the engine really passes in. */
+export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 
 /* ─── Fallback club roster ───
    Used when the soccer_career_clubs table is unreachable or empty, so the game
@@ -3904,6 +3913,29 @@ function calcAssists(position: string, apps: number, overall?: number, mult = 1)
 }
 
 /* ─── Season rating 1-10 ─── */
+/* Round 1016: a defender is rated on his defending. A player wrote in on
+   2026-10-05 that as a CB or CDM goals should not matter as much, and the
+   engine agreed with him the wrong way: only the keeper's clean sheets reached
+   the rating, so centre backs had the most poor seasons on the pitch and the
+   fewest elite ones. Measured over 10,000 seeded careers before this round
+   (creation screen builds, both eras): CB 24% poor and 28% elite, the
+   strikers, wingers and number tens 12 to 15% poor and 47 to 49% elite
+   (scripts/simCareerPositionRatings.mjs has the numbers).
+   Back line: each clean sheet he kept, the number already drawn for the
+   season and shown in his history. Holding midfielder: nothing defensive is
+   drawn for him, so the honest proxy is the team's EXPECTED clean sheets in
+   the games he played, his appearances times 0.325, the middle of the 20 to
+   45 percent share the back line draws in generateSeasonStats. It is a pure
+   function of numbers already drawn, so it adds no Math.random call and is
+   never shown as a stat. */
+const DEFENSIVE_SHEET_CREDIT = 0.035;
+const CDM_EXPECTED_SHEET_SHARE = 0.325;
+const CDM_CREDIT_SHARE = 0.75;
+export function defensiveRatingCredit(position: string, apps: number, cleanSheets: number): number {
+  if (position === "CB" || position === "LB" || position === "RB") return cleanSheets * DEFENSIVE_SHEET_CREDIT;
+  if (position === "CDM") return apps * CDM_EXPECTED_SHEET_SHARE * DEFENSIVE_SHEET_CREDIT * CDM_CREDIT_SHARE;
+  return 0;
+}
 function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
@@ -3911,6 +3943,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
   if (position === "GK") { base += cleanSheets * 0.08; }
   else if (["ST", "LW", "RW", "CAM"].includes(position)) { base += goals * 0.04 + assists * 0.03; }
   else { base += goals * 0.06 + assists * 0.04; }
+  base += defensiveRatingCredit(position, apps, cleanSheets);
   if (apps >= 30) base += 0.3;
   else if (apps < 15) base -= 0.4;
   /* Round 131: a build that suits the job reads better in the ratings than a
@@ -3922,7 +3955,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
 }
 
 /* ─── Season simulation ─── */
-function generateSeasonStats(state: CareerState): SeasonRecord {
+function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecord {
   const { position, age, overall, currentClubTier } = state;
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
@@ -3975,6 +4008,18 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     league: state.currentLeague, year: seasonYear, tier: currentClubTier, elite: isElite, rating, leagueTitle: winLeague,
     seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}`,
   });
+  /* Round 1012: the season's derbies against real rivals in the same league,
+     drawn from a generator keyed off this season and each rival, so the main
+     Math.random stream does not move. The key is spread only when there is a
+     derby, so every other season serialises exactly as before. A severe
+     injury season goes on the record without its title (playPendingProSeason
+     drops it, the table was never finished for him), so its derbies are drawn
+     without the title nudge too and the row never contradicts itself. */
+  const derbies = resolveSeasonDerbies({
+    club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
+    position, apps, leagueApps, goals, leagueTitle: winLeague && !(injured && injurySevere),
+    seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}|derby`,
+  });
 
   return {
     year: lastYear + 1, age,
@@ -3982,7 +4027,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
     ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
-    leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
+    leagueTitle: winLeague, ...finish, ...(derbies.length > 0 ? { derbies } : {}), domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
@@ -5072,10 +5117,14 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    finished six years behind its own calendar (audit QA847-14). */
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   
-  const season = generateSeasonStats(s);
+  const season = generateSeasonStats(s, clubs);
   // Injury report, named injuries that actually cost matches
+  if (season.injury) s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
+  /* Round 1012: the derbies' bounded swing and log lines, after the injury
+     line so the season's own news leads the story, and before the severe
+     injury branch so an injured season keeps the derbies he did play. */
+  applySeasonDerbies(s, season);
   if (season.injury) {
-    s.events.push(`🚑 Injury: ${season.injury}, out ${season.injuryWeeks} weeks, missed matches`);
     if (season.injurySevere) {
       /* Round 253: a serious injury is a chapter, not a stat line. The
          season pauses here and the player chooses how to come back, and
@@ -5835,12 +5884,12 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
-    { id: 1, emoji: "⚽", title: "Derby Hero!", description: "You score a last-minute winner in the derby. The crowd goes wild.",
+    { id: 1, emoji: "⚽", title: "Late Winner!", description: "You score a last-minute winner. The crowd goes wild.",
       category: "positive", choices: [
         { label: "Celebrate wildly", emoji: "🎉", color: "bg-emerald-600", consequence: "Popularity +10, Social media +50k",
-          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner! Popularity soared"]; return s; } },
+          apply: s => { s.popularity = clamp(s.popularity + 10, 0, 100); s.events = [...s.events, "⚽ Scored a last-minute winner! Popularity soared"]; return s; } },
         { label: "Stay humble", emoji: "🤝", color: "bg-blue-600", consequence: "Morale +10, Team chemistry boost",
-          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a derby winner, stayed humble"]; return s; } },
+          apply: s => { s.morale = clamp(s.morale + 10, 0, 100); s.events = [...s.events, "⚽ Scored a last-minute winner, stayed humble"]; return s; } },
       ] },
     { id: 2, emoji: "🎙️", title: "Manager Praise", description: "A top manager says in an interview you are one of the best players in your position in the world.",
       category: "positive", choices: [
@@ -6620,40 +6669,6 @@ interface RealContender {
   baseGoals: [number, number]; // min/max goals range
   startAge: number; // age in 2024
 }
-
-const REAL_CONTENDERS: RealContender[] = [
-  { name: "Erling Haaland", nationality: "Norway", position: "ST", club: "Man City", baseGoals: [25, 45], startAge: 24 },
-  { name: "Kylian Mbappé", nationality: "France", position: "ST", club: "Real Madrid", baseGoals: [20, 40], startAge: 25 },
-  { name: "Vinícius Jr", nationality: "Brazil", position: "LW", club: "Real Madrid", baseGoals: [15, 30], startAge: 24 },
-  { name: "Jude Bellingham", nationality: "England", position: "CAM", club: "Real Madrid", baseGoals: [12, 25], startAge: 21 },
-  { name: "Mohamed Salah", nationality: "Egypt", position: "RW", club: "Liverpool", baseGoals: [18, 32], startAge: 32 },
-  { name: "Lamine Yamal", nationality: "Spain", position: "RW", club: "Barcelona", baseGoals: [8, 20], startAge: 17 },
-  { name: "Florian Wirtz", nationality: "Germany", position: "CAM", club: "Bayern Munich", baseGoals: [10, 22], startAge: 21 },
-  { name: "Bukayo Saka", nationality: "England", position: "RW", club: "Arsenal", baseGoals: [12, 24], startAge: 23 },
-  { name: "Pedri", nationality: "Spain", position: "CM", club: "Barcelona", baseGoals: [5, 15], startAge: 22 },
-  { name: "Gavi", nationality: "Spain", position: "CM", club: "Barcelona", baseGoals: [4, 12], startAge: 20 },
-  { name: "Phil Foden", nationality: "England", position: "CAM", club: "Man City", baseGoals: [10, 22], startAge: 24 },
-  { name: "Rodri", nationality: "Spain", position: "CDM", club: "Man City", baseGoals: [3, 10], startAge: 28 },
-  { name: "Federico Valverde", nationality: "Uruguay", position: "CM", club: "Real Madrid", baseGoals: [5, 15], startAge: 26 },
-  { name: "Raphinha", nationality: "Brazil", position: "RW", club: "Barcelona", baseGoals: [10, 22], startAge: 27 },
-  { name: "Rúben Dias", nationality: "Portugal", position: "CB", club: "Man City", baseGoals: [1, 5], startAge: 27 },
-  { name: "Declan Rice", nationality: "England", position: "CDM", club: "Arsenal", baseGoals: [3, 10], startAge: 25 },
-  { name: "Harry Kane", nationality: "England", position: "ST", club: "Bayern Munich", baseGoals: [22, 40], startAge: 31 },
-  { name: "Roberto Firmino", nationality: "Brazil", position: "ST", club: "Al-Ahli", baseGoals: [10, 22], startAge: 33 },
-  { name: "Antoine Griezmann", nationality: "France", position: "CAM", club: "Atletico Madrid", baseGoals: [12, 24], startAge: 33 },
-  { name: "Bernardo Silva", nationality: "Portugal", position: "CAM", club: "Man City", baseGoals: [8, 18], startAge: 30 },
-];
-
-const REPLACEMENT_YOUNG_PLAYERS: RealContender[] = [
-  { name: "Endrick", nationality: "Brazil", position: "ST", club: "Real Madrid", baseGoals: [10, 25], startAge: 18 },
-  { name: "Alejandro Garnacho", nationality: "Argentina", position: "LW", club: "Man United", baseGoals: [8, 20], startAge: 20 },
-  { name: "Mathys Tel", nationality: "France", position: "ST", club: "Bayern Munich", baseGoals: [8, 20], startAge: 19 },
-  { name: "Kobbie Mainoo", nationality: "England", position: "CM", club: "Man United", baseGoals: [3, 12], startAge: 19 },
-  { name: "Warren Zaïre-Emery", nationality: "France", position: "CM", club: "PSG", baseGoals: [4, 14], startAge: 18 },
-  { name: "Pau Cubarsí", nationality: "Spain", position: "CB", club: "Barcelona", baseGoals: [1, 5], startAge: 17 },
-  { name: "Nico Williams", nationality: "Spain", position: "LW", club: "Athletic Bilbao", baseGoals: [10, 22], startAge: 22 },
-  { name: "Xavi Simons", nationality: "Netherlands", position: "CAM", club: "PSG", baseGoals: [10, 20], startAge: 21 },
-];
 
 /* ─── Generated player name pools by nationality ───
 

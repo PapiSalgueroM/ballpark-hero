@@ -2,6 +2,62 @@ import type { GameContentMap } from './types';
 
 // F1, tennis, golf, NASCAR and combat sports game guides. Casual human tone, no em dashes anywhere.
 export const MORE_SPORTS_CONTENT: GameContentMap = {
+  '/cage-clash': {
+    intro: [
+      'Cage Clash puts you in control of an original pixel fighter. Move around the cage, find a gap in the guard and decide whether to keep trading shots or take the fight to the ground. Every hit, takedown and submission comes from what happens in the fight.',
+      'Pick a balanced fighter, a striker or a grappler, then choose the style you want to face. Each fight lasts up to three short arcade rounds. Play with the touch controls or use the keyboard. No account or download needed.',
+      'Circuit turns those skills into a three fight run. Beat a balanced opponent, a striker and a grappler in order. Track your wins in the opponent tiles and adapt your plan for each style.',
+    ],
+    headings: {
+      howToPlay: 'How to play Cage Clash on phone or keyboard',
+      rules: 'Cage Clash rules for strikes and grappling',
+      example: 'Cage Clash example: from clinch to submission',
+      tips: 'Cage Clash tips for stamina and ground control',
+      faq: 'Cage Clash FAQ: controls, scoring and pauses',
+    },
+    howToPlay: [
+      'Choose Quick fight, your fighting style and the CPU style, read the controls and start a fight. Choose Practice for four untimed drills with a passive partner.',
+      'Hold the movement buttons to get in range. Hold Guard to block. Use Punch, Heavy or Kick when you have an opening and enough stamina.',
+      'Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.',
+      'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
+      'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
+      'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
+      'Choose Circuit to take on all three styles. A win unlocks Next opponent; a loss or draw ends the run. Every opponent starts a fresh fight with full health and stamina.',
+      'Open Fight stats after a Quick fight or any Circuit fight to compare your shots landed, damage dealt, blocks, takedowns and time on top against the CPU. Back returns to the result so you can start another fight or advance.',
+    ],
+    rules: [
+      'A fight has up to three 45 second arcade rounds. Between rounds, the clock waits for you to continue.',
+      'Strikes need the correct range. Attacks spend stamina and have a cooldown. Holding a button does not create free attacks.',
+      'Guard reduces incoming strike damage and costs stamina. Low stamina weakens your attacks and your defense.',
+      'A clinch starts at close range. Takedowns decide who lands on top. Position, style and stamina matter on the ground.',
+      'Health reaching zero ends the fight by knockout. Full submission progress ends it by submission. Otherwise, earned round points decide the result.',
+      'Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.',
+      'Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.',
+      'Practice uses the same range, stamina and ground rules with an untimed partner. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
+      'Circuit records one completion for the run. Add the earned fight scores, divide by three and round to the nearest whole point. Unplayed fights contribute zero. Quitting or refreshing an unfinished circuit earns no points.',
+      'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
+      'Fight stats describe only the fight you just finished. Damage is rounded to a whole number. Top control is time spent on top, shown in seconds. Opening or closing the recap does not change your score.',
+    ],
+    example: [
+      'You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.',
+      'Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.',
+      'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
+      'A Circuit run with fight scores of 80, 90 and 85 earns 85/100. If the first fight ends in a loss with 30 earned points, the run ends at 10/100 because the two unplayed fights count as zero.',
+      'If you landed 12 shots and the CPU landed 8, the Shots landed row shows 12 under You and 8 under CPU. More shots alone do not decide a fight: check the damage, takedowns and top control too.',
+    ],
+    tips: [
+      'Distance is a defense. Step out of punching range when you need a moment to recover.',
+      'Mix your strikes. Kicks reach farther, while the closer attacks work when the opponent lets you inside.',
+      'Read the position label and button names after a takedown. A button that passed on top becomes a sweep underneath.',
+      'Try the same style against different opponents. The CPU uses the same range, stamina and legal action rules you do.',
+    ],
+    faqs: [
+      { q: 'Can I grapple and submit an opponent?', a: 'Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it.' },
+      { q: 'What are the keyboard controls?', a: 'Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position.' },
+      { q: 'Does a fight keep running when I switch tabs?', a: 'No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too.' },
+      { q: 'Does my fight save if I refresh?', a: 'Refreshing starts over in every mode. Quick fight records its score after a completed fight. Circuit records one score when the run ends; Practice earns no points. Quitting an unfinished fight or circuit earns no score.' },
+    ],
+  },
   '/f1-driver': {
     intro: [
       "Somewhere in Formula 1 history sits a driver, and the game knows exactly who. Guess The F1 Driver hides one of 20 grand prix greats behind six clues that unlock one at a time.",
@@ -1508,127 +1564,151 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
 
   '/fight-promoter': {
     intro: [
-      "Fight Promoter is a free boxing matchmaking sim. You book the room, decide who fights whom, set the ticket price and pay the purses. Everything else in the building is somebody else's problem.",
-      "There are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
-      "So the money says feed him and your name says make the fight. Measured in the game's own engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in it is invented.",
+      "Fight Promoter is a free MMA and boxing management sim. Run a fictional MMA organization with contracts, division rankings and championship belts, or play the original boxing matchmaking game. Each mode has its own save.",
+      "In boxing mode, there are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
+      "In boxing mode, the money says feed him and your name says make the fight. Measured in that engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in both modes is invented.",
     ],
     headings: {
-      howToPlay: "How to play Fight Promoter, a free boxing matchmaking sim",
-      rules: "Fight Promoter rules for purses, names and the room",
-      example: "Fight Promoter walkthrough: from a leisure centre to the arena",
+      howToPlay: "How to play Fight Promoter, MMA and boxing management",
+      rules: "Fight Promoter rules for contracts, belts and purses",
+      example: "Fight Promoter walkthroughs for MMA and boxing events",
       tips: "Fight Promoter tips for pricing tickets and protecting your draw",
       faq: "Fight Promoter FAQ: fighters, purses and your promotion's name",
     },
     howToPlaySections: [
       {
+        heading: "Running your MMA organization",
+        items: [
+          "Choose MMA and name your promotion. You start with $120,000, twelve signed fighters and three divisions. Every fighter and result is fictional.",
+          "MMA: Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
+          "MMA: Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
+          "MMA: Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
+        ],
+      },
+      {
         heading: "Naming your promotion",
-        items: ["Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
+        items: ["Boxing: Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
       },
       {
         heading: "Picking a room for the show",
-        items: ["Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you."],
+        items: ["Boxing: Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you."],
         subsections: [
           {
             heading: "Setting the ticket price",
-            items: ["Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away."],
+            items: ["Boxing: Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away."],
           },
         ],
       },
       {
         heading: "Building the card at matching weights",
-        items: ["Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight."],
+        items: ["Boxing: Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight."],
       },
       {
         heading: "Weighing the appeal before committing",
-        items: ["Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match."],
+        items: ["Boxing: Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match."],
       },
       {
         heading: "Reading the room after the show",
-        items: ["Put the show on, then read the room. A one sided beating earns you nothing at all."],
+        items: ["Boxing: Put the show on, then read the room. A one sided beating earns you nothing at all."],
       },
     ],
     ruleSections: [
       {
+        heading: "MMA recovery, rankings and championship belts",
+        items: [
+          "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
+          "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
+          "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+          "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
+        ],
+      },
+      {
         heading: "Paying purses and covering the room",
         items: [
-          "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
-          "The room costs its hire fee whether anybody turns up or not.",
+          "Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+          "Boxing: The room costs its hire fee whether anybody turns up or not.",
         ],
       },
       {
         heading: "Growing your name on bigger buildings",
         items: [
-          "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
-          "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+          "Boxing: Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+          "Boxing: Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
         ],
         subsections: [
           {
             heading: "Judging quality by how close a fight was",
-            items: ["Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it."],
+            items: ["Boxing: Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it."],
           },
         ],
       },
       {
         heading: "Protecting a record and losing your card",
         items: [
-          "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
-          "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+          "Boxing: A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+          "Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
         ],
       },
       {
         heading: "Retirement, going broke and no betting",
         items: [
-          "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
-          "Go below zero after a show and you are out of the business.",
+          "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+          "Boxing: Go below zero after a show and you are out of the business.",
           "There is no betting anywhere in this game.",
         ],
       },
     ],
     exampleSections: [
       {
+        heading: "Booking a vacant MMA title",
+        paragraphs: ["MMA: Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card."],
+      },
+      {
         heading: "Filling a leisure centre on a name",
-        paragraphs: ["Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
+        paragraphs: ["Boxing: Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
       },
       {
         heading: "Making the fight instead of feeding him",
-        paragraphs: ["Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight."],
+        paragraphs: ["Boxing: Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight."],
       },
       {
         heading: "A close loss that grows your name",
-        paragraphs: ["He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call."],
+        paragraphs: ["Boxing: He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call."],
       },
       {
         heading: "Reaching the arena twenty shows on",
-        paragraphs: ["Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."],
+        paragraphs: ["Boxing: Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."],
       },
     ],
     tipSections: [
       {
         heading: "Feeding somebody in the early shows",
-        items: ["Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you."],
+        items: ["Boxing: Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you."],
       },
       {
         heading: "Watching the projected house move",
-        items: ["The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it."],
+        items: ["Boxing: The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it."],
       },
       {
         heading: "Matching close fighters and spending your draw",
         items: [
-          "Two men at the same weight with ratings within about ten points is the fight worth making.",
-          "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+          "Boxing: Two men at the same weight with ratings within about ten points is the fight worth making.",
+          "Boxing: Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
         ],
       },
       {
         heading: "Why a damaged veteran still sells",
-        items: ["A damaged veteran still sells. That is exactly why he is still on your books."],
+        items: ["Boxing: A damaged veteran still sells. That is exactly why he is still on your books."],
       },
     ],
     faqs: [
-      { q: "Why did a sold out show still lose money?", a: "The guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
-      { q: "Why is my name not growing?", a: "Your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
-      { q: "Where did my best fighter go?", a: "He left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
+      { q: "Can I run an MMA organization?", a: "Yes. Choose MMA to sign fighters, build three bout cards, run division title fights and manage the business across twelve events. Boxing has its own separate save." },
+      { q: "Are there submissions in MMA mode?", a: "Yes. Grappling creates takedowns, control and submission attempts, while striking can produce a knockout. Saved results come from the fight engine." },
+      { q: "Why did a sold out show still lose money?", a: "In boxing mode, the guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
+      { q: "Why is my name not growing?", a: "In boxing mode, your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
+      { q: "Where did my best fighter go?", a: "In boxing mode, he left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
       { q: "Are the fighters real?", a: "No. Every fighter is generated. No real boxer is matched, paid, beaten or promoted anywhere in this game, and no real venue is named." },
-      { q: "Is this the same as Fight Career and Fight Gym?", a: "Same fighters and the same bouts, a third chair. In the career you take the damage, in the gym you answer for it, and here you sell tickets on it." },
+      { q: "Is this the same as Fight Career and Fight Gym?", a: "Boxing mode uses the same fighters and bouts from those games. MMA mode has its own generated roster, grappling engine, contracts and belts." },
     ],
   },
   '/fight-gym': {

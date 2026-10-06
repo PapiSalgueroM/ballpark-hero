@@ -6,6 +6,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+import BrokenSaveRestore from "@/components/BrokenSaveRestore";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { LiveTicker } from "@/components/layout/LiveTicker";
@@ -56,6 +57,7 @@ const UfcChain = lazy(() => import("./pages/UfcChain"));
 const FightCareer = lazy(() => import("./pages/FightCareer"));
 const FightGym = lazy(() => import("./pages/FightGym"));
 const FightPromoter = lazy(() => import("./pages/FightPromoter"));
+const CageClash = lazy(() => import("./pages/CageClash"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const GuessTheYear = lazy(() => import("./pages/GuessTheYear"));
@@ -363,6 +365,7 @@ const AppContent = () => {
         <Route path="/fight-career" element={<FightCareer />} />
         <Route path="/fight-gym" element={<FightGym />} />
         <Route path="/fight-promoter" element={<FightPromoter />} />
+        <Route path="/cage-clash" element={<CageClash />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
@@ -538,6 +541,10 @@ const AppContent = () => {
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {/* Round 958: the way back from a fresh start. On a long game's page,
+          while a save it set aside exists, offers to put it back. Inside the
+          boundary, so a throw here costs the page and not the site. */}
+      <BrokenSaveRestore pathname={pathname} />
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.

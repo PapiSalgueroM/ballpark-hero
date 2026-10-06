@@ -176,14 +176,33 @@ export interface FanFacts {
   standing: number;
   /** Already formatted by the sport: "1.2M" or "340K". */
   followers: string;
+  /** Round 1012: the latest season's derby you played, when there was one.
+      Only Soccer Career passes it, so every other career reads as before. */
+  derby?: { won: number; lost: number; rival: string };
+}
+
+/** Round 1012: the anonymous fans on a derby. No line for a run of draws. */
+export function derbyFanLine(d: { won: number; lost: number; rival: string }): string | null {
+  if (d.won > 0 && d.lost === 0) return `${d.rival} fans have gone very quiet. Love to see it`;
+  if (d.lost > 0 && d.won === 0) return `Losing to ${d.rival} is not a bad week, it is a bad year`;
+  if (d.won > 0 && d.lost > 0) return `One each against ${d.rival}. I will take it, just about`;
+  return null;
 }
 
 /**
  * Three comments under the latest post, tiered by standing. The ladder is the
  * Round 130 one that has been on the flagship's phone since; only the four
- * lines that name a sport change from game to game.
+ * lines that name a sport change from game to game. A derby swaps the second
+ * comment for one line about it (Round 1012).
  */
 export function fanComments(sport: SocialSport, f: FanFacts): string[] {
+  const lines = fanLadder(sport, f);
+  const derby = f.derby ? derbyFanLine(f.derby) : null;
+  if (derby) lines[1] = derby;
+  return lines;
+}
+
+function fanLadder(sport: SocialSport, f: FanFacts): string[] {
   const v = VOICE[sport];
   if (f.standing >= 70) return [v.best, v.keepsake, `${f.followers} followers and still humble. Rare.`];
   if (f.standing >= 50) return ['Decent season tbh', 'We rate you around here', askForMore(sport, f.pos)];

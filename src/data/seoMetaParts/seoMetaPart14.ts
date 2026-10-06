@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 14 of 32: 4 entries. */
+/* Part 14 of 32: 5 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/cage-clash": {
+    title: "Cage Clash: Pixel MMA Fighting Game",
+    description: "Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.",
+  },
   "/gauntlet-draft": {
     title: "Gauntlet Draft: Soccer Draft and Knockout Cup",
     description: "Pick your XI from five real players per slot, then survive a five round knockout cup against stronger and stronger teams. Free daily soccer draft game.",

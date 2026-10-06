@@ -48,6 +48,9 @@
  *   5. Every PENDING player is still at exactly the club the ledger records.
  *      This is the one that stops the ledger rotting: adjudicate a player and
  *      you must move his row out of `pending`, you cannot just edit the roster.
+ *      Since the Round 1015 review a pending row marked `withheld` (a 2026-27
+ *      squad list leaves him out of that club, see foldRosterAdjudication.mjs)
+ *      must instead be in no squad at all.
  *   6. No name sits in two categories, and the five categories still add up to
  *      the recorded population.
  *   7. Every club the changes left under 8 players is marked CM_PARTIAL, which
@@ -68,6 +71,10 @@
  *   ROSTER_ADJ_CONTROL=alaba   Alaba back in the Real Madrid block. Section 10.
  *   ROSTER_ADJ_CONTROL=mudryk  Mudryk out of Tottenham and back in the Chelsea
  *                              block. Section 11.
+ *   ROSTER_ADJ_CONTROL=withheld  Renato Sanches, pending and withheld, back in
+ *                              the Benfica block where the bake had him. Section 5.
+ *   ROSTER_ADJ_CONTROL=held    Cláudio Ramos, pending and held at his club, out
+ *                              of the Porto block. Section 5.
  * A control refuses to run unless every block and row it touches appears exactly
  * once, and unless the edit really changes the source.
  *
@@ -98,6 +105,10 @@ const CONTROLS = {
   mudryk: { expect: '11', what: 'Mykhaylo Mudryk taken out of Tottenham and put back in the Chelsea block',
     remove: [['Tottenham', 'Mykhaylo Mudryk']],
     add: [['Chelsea', `    { n: 'Mykhaylo Mudryk', p: 'LW', a: 24, v: 13.5, r: 80 },`]] },
+  withheld: { expect: '5', what: 'Renato Sanches (pending, withheld) put back in the Benfica block, as shipped before the Round 1015 review',
+    add: [['Benfica', `    { n: 'Renato Sanches', p: 'CM', a: 28, v: 2.9, r: 71 },`]] },
+  held: { expect: '5', what: 'Cláudio Ramos (pending, held at his club) taken out of the Porto block',
+    remove: [['Porto', 'Cláudio Ramos']] },
 };
 const CONTROL = process.env.ROSTER_ADJ_CONTROL || '';
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) {
@@ -213,10 +224,17 @@ for (const c of L.confirmedStill) {
 if (failures === before) console.log(`   ${L.confirmedStill.length} confirmed players still present`);
 
 /* ------------------------------------------------------------------ */
-begin('5', '5) Every pending player is still at exactly the club the ledger records');
+begin('5', '5) Every pending player is still at exactly the club the ledger records, and every withheld one is in no squad');
 before = failures;
 let drifted = 0;
-for (const p of L.pending) {
+const withheld = L.pending.filter(p => p.withheld);
+for (const p of withheld) {
+  if (!p.withheldWhy) fail(`${p.name} is withheld with no withheldWhy`);
+  const at = clubsOf(p.name);
+  if (at.length) fail(`${p.name} is pending and withheld (${p.withheldWhy}) but the roster has him at ${at.join(', ')}. A withheld man ships in no squad until two families say where he is.`);
+}
+if (failures === before) console.log(`   ${withheld.length} withheld pending rows are in no squad`);
+for (const p of L.pending.filter(q => !q.withheld)) {
   const at = clubsOf(p.name);
   if (!at.includes(p.club)) {
     drifted += 1;
@@ -224,7 +242,7 @@ for (const p of L.pending) {
   }
 }
 if (drifted > 8) fail(`...and ${drifted - 8} more pending rows that no longer describe the shipped roster`);
-if (failures === before) console.log(`   all ${L.pending.length} pending rows still describe the shipped file`);
+if (failures === before) console.log(`   all ${L.pending.length - withheld.length} pending rows that are not withheld still describe the shipped file`);
 
 /* ------------------------------------------------------------------ */
 begin('6', '6) The five categories are disjoint and still add up');

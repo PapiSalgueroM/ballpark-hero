@@ -25,6 +25,10 @@ export interface SeoMeta {
 }
 
 export const SEO_META: Record<string, SeoMeta> = {
+  '/cage-clash': {
+    title: 'Cage Clash: Pixel MMA Fighting Game',
+    description: 'Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.',
+  },
   '/budget-builder': {
     title: '$1B Budget Builder: Soccer Squad Building Game',
     description: 'You get $1 billion and real market values. Pick a formation, sign eleven soccer players and see what rating your money actually bought. Free, no sign up.',
@@ -442,8 +446,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Two VFL and AFL greats side by side: who kicked more career goals? Sixty retired legends, so no total ever moves. Free daily Aussie rules footy trivia.',
   },
   '/aussie-rules-manager': {
-    title: 'Aussie Rules Manager: Free Footy Management Game',
-    description: 'Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game.',
+    title: 'Aussie Rules Manager: Free Footy Season Game',
+    description: 'Run a fictional Aussie rules club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.',
   },
   '/guess-nascar-driver': {
     title: 'Guess The Driver: NASCAR Cup Series Quiz',
@@ -458,8 +462,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Turn pro as a nobody, pick your fights, run your camps and climb to a world title before the damage catches up. Free boxing career sim, invented fighters.',
   },
   '/fight-promoter': {
-    title: 'Fight Promoter: Boxing Promotion Sim Game',
-    description: 'Book the room, make the fights, set the ticket price and pay the purses. Selling tonight and building your name pull apart. Free boxing matchmaking sim.',
+    title: 'Fight Promoter: MMA and Boxing Management Sim',
+    description: 'Run a free MMA or boxing promotion. Sign fictional fighters, book cards, crown division champions and manage ticket prices, contracts and event costs.',
   },
   '/fight-gym': {
     title: 'Fight Gym: Boxing Gym Management Sim',

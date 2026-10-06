@@ -70,8 +70,8 @@
  *   continuecold   the row renders its heading with no save in the browser
  *   aussiemissing  the new manager's real save has no registered card
  *   aussiekey      the manager card reads a key its hook never writes
- *   aussiefield    the action log's club ID is mistaken for a display name
- *   aussieround    the action count is falsely displayed as a round
+ *   aussiefield    the club ID (myClub) is mistaken for the display name
+ *   aussieround    the round inside the season is shown as the season count
  *   favfirst       the favourite sport is ignored
  *   favtrust       any stored string is taken as a sport
  *
@@ -143,14 +143,14 @@ railSrc = controlled('progress', railSrc, '{game.label}',
 let shippedSrc = read('src/components/home/JustShipped.tsx');
 shippedSrc = controlled('shipped', shippedSrc, 'justShipped(JUST_SHIPPED_COUNT)', 'justShipped(JUST_SHIPPED_COUNT).reverse()');
 let continueSrc = read('src/data/continueSaves.ts');
-const aussieRow = "{ path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v1' }";
+const aussieRow = "{ path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v2', name: ['clubName'], count: { at: ['season'], say: 'season {n}' } }";
 if (CONTROL.startsWith('aussie') && continueSrc.split(aussieRow).length !== 2) {
   console.error('Aussie control needs one unique real Continue row'); process.exit(1);
 }
 continueSrc = controlled('aussiemissing', continueSrc, `  ${aussieRow},\n`, '');
-continueSrc = controlled('aussiekey', continueSrc, aussieRow, aussieRow.replace('save-v1', 'save-v2'));
-continueSrc = controlled('aussiefield', continueSrc, aussieRow, aussieRow.replace(' }', ", name: ['clubId'] }"));
-continueSrc = controlled('aussieround', continueSrc, aussieRow, aussieRow.replace(' }', ", count: { at: ['actions'], say: 'round {n}' } }"));
+continueSrc = controlled('aussiekey', continueSrc, aussieRow, aussieRow.replace('save-v2', 'save-v9'));
+continueSrc = controlled('aussiefield', continueSrc, aussieRow, aussieRow.replace("name: ['clubName']", "name: ['myClub']"));
+continueSrc = controlled('aussieround', continueSrc, aussieRow, aussieRow.replace("at: ['season']", "at: ['round']"));
 continueSrc = controlled('continuekey', continueSrc, "saveKey: 'fight-gym-save-v1'", "saveKey: 'fight-gym-save-v2'");
 continueSrc = controlled('continuefield', continueSrc, "at: ['matchNo']", "at: ['matchNum']");
 continueSrc = controlled('continueguard', continueSrc,
@@ -212,6 +212,7 @@ await build({
       import * as CFB from './src/lib/cfbDynasty';
       import * as CBB from './src/lib/cbbDynasty';
       import * as AR from './src/lib/aussieRulesManager';
+      import * as ARL from './src/lib/aussieRulesLeague';
       export { SAVE_KEY as AUSSIE_SAVE_KEY } from './src/lib/aussieRulesManager';
       export const restoreAussie = AR.readManagerSave;
       export const aussieResumeSaves = () => {
@@ -255,6 +256,7 @@ await build({
           '/front-office': { raw: JSON.stringify({ league, myTeam: foTeam, phase: 'hub', titles: 0, seasonsPlayed: 0 }), want: new RegExp('^' + foTeam + ', 20\\\\d\\\\d season$') },
           '/cfb-dynasty': { raw: JSON.stringify({ st: CFB.initCfb(cfbTeam, rng), phase: 'hub', recruits: null, portal: null }), want: new RegExp('^' + cfbTeam + ', 20\\\\d\\\\d season$') },
           '/cbb-dynasty': { raw: JSON.stringify({ st: CBB.initCbb(cbbTeam, rng), phase: 'hub', recruits: null, portal: null }), want: new RegExp('^' + cbbTeam + ', 20\\\\d\\\\d season$') },
+          '/aussie-rules-manager': { raw: JSON.stringify(ARL.createLeague(7, 'club-00')), want: /^Caldermere Comets, season 1$/ },
         };
       };
     `,
@@ -493,7 +495,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
     '/nhl-my-career': ['src/lib/nhlCareerSport.ts', 'src/lib/nhlMyCareer.ts'],
     '/nhl-front-office': ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/lib/nhlFrontOffice.ts'],
-    '/aussie-rules-manager': ['src/lib/aussieRulesManager.ts'],
+    '/aussie-rules-manager': ['src/lib/aussieRulesLeague.ts', 'src/lib/aussieRulesManager.ts'],
     '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
     '/fight-promoter': ['src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
     '/fight-gym': ['src/components/fight-gym/FightGymBoard.tsx', 'src/lib/fightGym.ts'],
@@ -505,6 +507,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     'rank-em-legends-circuit-v1': 'Rank Em opens on Daily; its saved three-puzzle side mode is reopened with Legends circuit, not the long-form Continue row',
     'dukb-face-off-v1': 'Face Off is a daily quiz; its save is a match record, not a run to go back to',
     'dukb-contract-chaos-v1': 'Contract Chaos plays its five seasons in one sitting; its save is a play record (played, best, total, the daily), not a run to go back to',
+    'aussie-rules-manager-save-v1': 'the legacy ten round Aussie Rules season still resumes on its own page; the one card points at the full season (save v2) that replaced it',
   };
   const SAVE_CONST = /\bconst\s+[A-Z_]*SAVE_KEY\s*=\s*(['"])([^'"]+)\1/g;
   const code = rel => stripComments(read(rel));
@@ -670,7 +673,8 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (got.length !== 1 || got[0].href !== e.path) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${e.path}`);
     else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(SAVED_FALLBACK))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
   }
-  /* Action logs contain no saved club name or round; replay belongs to the game. */
+  /* Round 1014: the legacy ten round action log still resumes on its own page,
+     but the one card belongs to the full season's save (v2), which names its club and season. */
   const aussie = CONTINUE_SAVES.find(entry => entry.path === '/aussie-rules-manager');
   const aussieSaves = front.aussieResumeSaves();
   if (JSON.stringify(aussieSaves.map(value => value.state.phase)) !== JSON.stringify(['prepare', 'break', 'complete'])) fail(7, 'the actual Aussie fixtures did not reach initial, quarter break and completed states');
@@ -679,15 +683,13 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (!restored || JSON.stringify(restored.state) !== JSON.stringify(state)) fail(7, 'the serialized Aussie action log does not resume its actual engine state');
     const shape = JSON.parse(raw);
     if (JSON.stringify(Object.keys(shape).sort()) !== JSON.stringify(['actions', 'clubId', 'seed', 'version'])) fail(7, 'the Aussie fixture is not the strict saved action-log shape');
-    if (!aussie || describeSave(aussie, raw) !== null) fail(7, 'Aussie Continue must not invent a display name or round from the action log');
+    if (!aussie || aussie.saveKey !== 'aussie-rules-manager-save-v2' || front.AUSSIE_SAVE_KEY !== 'aussie-rules-manager-save-v1') fail(7, 'the Aussie card must read the full season save, and the legacy key must stay the v1 action log');
     store.clear(); store.set(front.AUSSIE_SAVE_KEY, raw);
     const got = cards(withWindow(() => front.renderContinue()));
-    const game = gameByPath.get('/aussie-rules-manager');
-    const expected = `${game.emoji} ${game.label} ${SAVED_FALLBACK}`;
-    if (got.length !== 1 || got[0].href !== '/aussie-rules-manager' || got[0].inner !== expected) fail(7, `a real ${state.phase} Aussie save must render exactly its generic saved card, got ${JSON.stringify(got)}`);
+    if (got.length !== 0) fail(7, `a legacy ${state.phase} Aussie save must not render a Continue card (it resumes on the page), got ${JSON.stringify(got)}`);
     if (store.get(front.AUSSIE_SAVE_KEY) !== raw) fail(7, 'Continue changed the serialized Aussie save bytes');
   }
-  for (const unrelated of [null, 'aussie-rules-manager-save-v2']) {
+  for (const unrelated of [null, 'aussie-rules-manager-save-v9']) {
     store.clear(); if (unrelated) store.set(unrelated, aussieSaves[1].raw);
     if (savedGames(globalThis.localStorage).length !== 0 || cards(withWindow(() => front.renderContinue())).length !== 0) fail(7, 'an absent Aussie key or another save version must not create a Continue card');
   }

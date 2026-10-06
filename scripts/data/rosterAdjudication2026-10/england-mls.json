@@ -1,0 +1,603 @@
+{
+ "round": 933,
+ "shard": "England and MLS: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Championship (the game's 2026-27 English second tier, which holds all thirteen English clubs in this shard: Blackburn Rovers, Bolton Wanderers, Burnley, Cardiff City, Middlesbrough, Portsmouth, QPR, Swansea City, Watford, West Brom, West Ham, Wolves, Wrexham) or in MLS, both conferences (49 rows at origin/main 5f2622fd: 24 English, 25 MLS)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Every row was read on the web on 2026-10-03 with WebFetch and plain HTTP reads of the pages themselves; the session's WebSearch budget was already spent, so no row rests on a search snippet, and none on memory. A row leaves pending only when an official source (family A) and an independent publisher on another host (family B) agree where the man is. Family A is the club's own squad page or player profile, the league's own data (for MLS, the roster data at stats-api.mlssoccer.com that every club's /roster/ page is drawn from, plus mlssoccer.com transaction articles; for the Premier League, the premierleague.com squad feed), or the club's own match report. Several EFL club pages draw their squad with script, so those were read through r.jina.ai, a reader that renders the official page; the URL cited is the club's own. Family B is ESPN: its player pages (club, birth date and match log), its 2026-27 squad pages, and one ESPN story. A man is told apart from namesakes by birth date, which is in every note, and by shirt number where both sides give one. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows (checked against all 368 baked clubs); realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "counts": {"rows": 49, "confirmedStill": 16, "movedTo": 17, "removedClubNotModelled": 10, "notCurrent": 6, "pending": 0},
+ "forTheFold": "All 49 rows are settled; none is left pending. Read before folding: (1) notCurrent holds six men, and only one of them (Jordi Alba, retired after the 2025 MLS season) is reported as such. The other five are certain on both families to be off the club the bake puts them at, but their club today is not confirmed by an official page, and each why says so: Javairô Dilrosun (ESPN says Al Sadd, whose own page does not list him), Paxton Pomykal (bought out by FC Dallas, no later club found), Nathan Redmond and Matt Ritchie (on no 2026-27 squad found), and Yasser Larouci, where ESPN has him playing Ligue 1 for Le Mans, a club the game models, but Le Mans' own players page is last season's; one official Le Mans read would move him to movedTo Le Mans. (2) Loans: AZ Jackson is movedTo Minnesota United on loan from Jagiellonia Białystok; Tomás Avilés (O'Higgins, from Inter Miami) and Florian Bianchini (Clermont, from Swansea) are removedClubNotModelled on loan. Joe Worrall plays for Wrexham while Burnley's page still lists him, so he may be on loan too; no announcement was read and the loan fields are left off. (3) Rows that cross shards: from this shard into clubs other shards own, David Martínez to FC Midtjylland, Jannes Horn to Rapid Wien, Zan Celar to Basel, Luís Guilherme to Sporting CP, Sasa Kalajdzic to LASK; and Ethan Horvath, an English row (Cardiff), to New York Red Bulls. (4) Squad sizes, measured against src/data/clubManagerRosters.ts at 5f2622fd for this shard alone: FC Dallas falls from 9 to 7 and is not yet in CM_PARTIAL, so it must join it after the re-bake (simRosterAdjudication section 7). Already partial and lower still: Blackburn 7 to 6, CF Montréal 7 to 6, Cardiff 5 to 4, D.C. United 7 to 6, LA Galaxy 6 to 5, Portsmouth 6 to 6. Rising to 8 from partial: Charlton Athletic (from 6) and LASK (from 7). At the line: Toronto FC stays at 8 and LAFC falls from 10 to 8. Burnley loses three (30 to 27). The other five shards move these numbers too, so the lead's re-bake has the final word. (5) ESPN's record for David Martínez carries a wrong birth date (2000-03-11, against MLS and FC Midtjylland's 2006-02-07); the row rests on the club pages for identity and on ESPN's game log and shirt number for the agreement.",
+ "confirmedStill": [
+  {
+   "name": "Theodore Ku-DiPietro",
+   "club": "Colorado Rapids",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-01-28 (MLS and ESPN agree), listed by both as Ted Ku-Dipietro. His last ESPN appearance is 2026-03-14, so he may be injured, but he is on the club's current roster.",
+   "sources": [
+    {"family": "A", "url": "https://www.coloradorapids.com/roster/", "publisher": "Colorado Rapids roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000J)", "readOn": "2026-10-03", "says": "Ted Ku-Dipietro, shirt 21, born 2002-01-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/288873/ted-ku-dipietro", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Colorado Rapids, born 2002-01-28; MLS appearances for Colorado from 2026-02-23 to 2026-03-14"}
+   ]
+  },
+  {
+   "name": "Jared Stroud",
+   "club": "D.C. United",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-07-10 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.dcunited.com/roster/", "publisher": "D.C. United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000D)", "readOn": "2026-10-03", "says": "Jared Stroud, shirt 8, born 1996-07-10"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/271884/jared-stroud", "publisher": "ESPN", "readOn": "2026-10-03", "says": "D.C. United; MLS appearances for D.C. from 2026-08-19 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Marco Reus",
+   "club": "LA Galaxy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-05-31 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.lagalaxy.com/roster/", "publisher": "LA Galaxy roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000G)", "readOn": "2026-10-03", "says": "Marco Reus, shirt 18, born 1989-05-31"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/122356/marco-reus", "publisher": "ESPN", "readOn": "2026-10-03", "says": "LA Galaxy; MLS appearances for LA from 2026-09-06 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Bongokuhle Hlongwane",
+   "club": "Minnesota United",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-06-20 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mnufc.com/roster/", "publisher": "Minnesota United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000L)", "readOn": "2026-10-03", "says": "Bongokuhle Hlongwane, shirt 21, born 2000-06-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/287784/bongokuhle-hlongwane", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Minnesota United FC; MLS appearances for Minnesota from 2026-08-02 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Indiana Vassilev",
+   "club": "Philadelphia Union",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-16 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.philadelphiaunion.com/roster/", "publisher": "Philadelphia Union roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000002)", "readOn": "2026-10-03", "says": "Indiana Vassilev, shirt 19, born 2001-02-16"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/266026/indiana-vassilev", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Philadelphia Union; MLS appearances for Philadelphia from 2026-09-05 to 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Dominik Marczuk",
+   "club": "Real Salt Lake",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-11-01 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.rsl.com/roster/", "publisher": "Real Salt Lake roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000R)", "readOn": "2026-10-03", "says": "Dominik Marczuk, shirt 11, born 2003-11-01"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/364658/dominik-marczuk", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Real Salt Lake; MLS appearances for RSL from 2026-08-22 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Marcus Ingvartsen",
+   "club": "San Diego FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-01-04 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.sandiegofc.com/roster/", "publisher": "San Diego FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000065)", "readOn": "2026-10-03", "says": "Marcus Ingvartsen, shirt 7, born 1996-01-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/186324/marcus-ingvartsen", "publisher": "ESPN", "readOn": "2026-10-03", "says": "San Diego FC; MLS appearances for San Diego from 2026-08-16 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Jordan Morris",
+   "club": "Seattle Sounders",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-10-26 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.soundersfc.com/roster/", "publisher": "Seattle Sounders roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000S)", "readOn": "2026-10-03", "says": "Jordan Morris, shirt 13, born 1994-10-26"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/210252/jordan-morris", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Seattle Sounders FC; MLS appearances for Seattle from 2026-09-13 to 2026-10-02"}
+   ]
+  },
+  {
+   "name": "Tomas Totland",
+   "club": "St. Louis City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-09-28 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.stlcitysc.com/roster/", "publisher": "St. Louis CITY SC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00001L)", "readOn": "2026-10-03", "says": "Tomas Totland, shirt 14, born 1999-09-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/252749/tomas-totland", "publisher": "ESPN", "readOn": "2026-10-03", "says": "St. Louis CITY SC; MLS appearances for St. Louis from 2026-09-10 to 2026-09-30"}
+   ]
+  },
+  {
+   "name": "Enso González",
+   "club": "Wolves",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-01-20 (ESPN). Both lists give him shirt 30. ESPN shows no league appearance for Wolves this season, so he is a squad player, not a regular, but he is in the squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "forwards: 30 Enso Gonzalez"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/380", "publisher": "ESPN (Wolverhampton Wanderers squad, season 2026-27)", "readOn": "2026-10-03", "says": "Enso González, shirt 30, forward, born 2005-01-20"}
+   ]
+  },
+  {
+   "name": "Augustus Kargbo",
+   "club": "Blackburn Rovers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-08-24 (ESPN). Both lists give him shirt 7. ESPN records no appearance for him since October 2025, so he may be injured, but both carry him in the 2026-27 squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "forwards: 7 Augustus Kargbo, wide forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/365", "publisher": "ESPN (Blackburn Rovers squad, season 2026-27)", "readOn": "2026-10-03", "says": "Augustus Kargbo, shirt 7, forward, born 1999-08-24"}
+   ]
+  },
+  {
+   "name": "John McAtee",
+   "club": "Bolton Wanderers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-23 (ESPN). Both lists give him shirt 45.",
+   "sources": [
+    {"family": "A", "url": "https://www.bwfc.co.uk/squad/68", "publisher": "Bolton Wanderers FC (first team squad page)", "readOn": "2026-10-03", "says": "forwards: 45 John McAtee"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/255851/john-mcatee", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Bolton Wanderers, shirt 45, born 1999-07-23; Championship appearances for Bolton from 2026-08-22 to 2026-09-08"}
+   ]
+  },
+  {
+   "name": "Jordan Beyer",
+   "club": "Burnley",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-05-19 (Burnley and ESPN agree). Both lists give him shirt 36. He has made no appearance in 2026-27 (Burnley's own profile shows 0) and ESPN's log for him stops in December 2023; Burnley's biography mentions a long injury. Low playing time, but both carry him in the current squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "Jordan Beyer, defender, jersey number 36, born 19/05/2000"},
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/player-profile/241231", "publisher": "Burnley FC (player profile)", "readOn": "2026-10-03", "says": "2026/27 stats: 0 appearances"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/379", "publisher": "ESPN (Burnley squad, season 2026-27)", "readOn": "2026-10-03", "says": "Jordan Beyer, shirt 36, defender, born 2000-05-19"}
+   ]
+  },
+  {
+   "name": "Perry Ng",
+   "club": "Cardiff City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-06-24 (ESPN).",
+   "sources": [
+    {"family": "A", "url": "https://www.cardiffcityfc.co.uk/squad/594", "publisher": "Cardiff City FC (first team squad page)", "readOn": "2026-10-03", "says": "Perry Ng listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/205676/perry-ng", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Cardiff City, born 1996-06-24; Championship appearances for Cardiff from 2026-09-02 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Daniel Bachmann",
+   "club": "Watford",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Austrian goalkeeper, born 1994-07-09 (ESPN). Both lists give him shirt 26.",
+   "sources": [
+    {"family": "A", "url": "https://www.watfordfc.com/teams/first-team", "publisher": "Watford FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "goalkeepers: 26 Daniel Bachmann"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/395", "publisher": "ESPN (Watford squad, season 2026-27)", "readOn": "2026-10-03", "says": "Daniel Bachmann, shirt 26, goalkeeper, born 1994-07-09; played for Watford v Peterborough, Carabao Cup, 2026-08-25"}
+   ]
+  },
+  {
+   "name": "Danny Ward",
+   "club": "Wrexham",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Wales goalkeeper, born 1993-06-22 (ESPN), not the striker of the same name born 1990: the baked row is a goalkeeper aged 32, and both lists give the goalkeeper shirt 21.",
+   "sources": [
+    {"family": "A", "url": "https://www.wrexhamafc.co.uk/teams/first-team", "publisher": "Wrexham AFC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "goalkeepers: 21 Danny Ward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/352", "publisher": "ESPN (Wrexham squad, season 2026-27)", "readOn": "2026-10-03", "says": "Danny Ward, shirt 21, goalkeeper, born 1993-06-22"}
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Omir Fernandez",
+   "from": "Colorado Rapids",
+   "to": "Portland Timbers",
+   "realClub": "Portland Timbers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-02-08 (MLS and ESPN agree). Traded from Colorado to Portland on 2025-04-18 for up to $250k in allocation money, so the 2025 row was already a season out of date.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/portland-timbers-acquire-omir-fernandez-from-colorado-rapids", "publisher": "MLS (mlssoccer.com, 2025-04-19)", "readOn": "2026-10-03", "says": "Portland Timbers acquire Omir Fernandez from the Colorado Rapids"},
+    {"family": "A", "url": "https://www.timbers.com/roster/", "publisher": "Portland Timbers roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000P)", "readOn": "2026-10-03", "says": "Omir Fernández, shirt 22, born 1999-02-08; not on the Colorado Rapids roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/252818/omir-fernandez", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Portland Timbers; MLS appearances for Portland from 2026-08-23 to 2026-09-20"}
+   ]
+  },
+  {
+   "name": "AZ Jackson",
+   "from": "Columbus Crew",
+   "to": "Minnesota United",
+   "realClub": "Minnesota United",
+   "loan": true,
+   "loanFrom": "Jagiellonia Białystok",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Aziel Jackson, born 2001-10-25 (MLS and ESPN agree). Columbus sold him to Jagiellonia Białystok on 2025-07-23. He spent the first half of 2026 on loan at Vancouver, then Minnesota took him on loan on 2026-08-13 for the rest of the 2026 MLS season with a purchase option. Placed at the club he plays for, the ledger's loanPolicy.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/columbus-crew-transfer-aziel-jackson-to-polish-club", "publisher": "MLS (mlssoccer.com, 2025-07-23)", "readOn": "2026-10-03", "says": "Columbus transfer Aziel Jackson to Jagiellonia Białystok"},
+    {"family": "A", "url": "https://www.mlssoccer.com/news/minnesota-united-acquire-aziel-jackson-on-loan", "publisher": "MLS (mlssoccer.com, 2026-08-13)", "readOn": "2026-10-03", "says": "Minnesota acquire him on loan from Jagiellonia for the rest of the 2026 season, purchase option"},
+    {"family": "A", "url": "https://www.mnufc.com/roster/", "publisher": "Minnesota United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000L)", "readOn": "2026-10-03", "says": "Aziel Jackson, shirt 16, born 2001-10-25; not on the Columbus Crew roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/318536/aziel-jackson", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Minnesota United FC; Vancouver appearances in May 2026, Minnesota appearances from 2026-08-20 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "David Schnegg",
+   "from": "D.C. United",
+   "to": "Charlotte FC",
+   "realClub": "Charlotte FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-09-29 (MLS and ESPN agree). Claimed off waivers by Charlotte on 2026-01-15, contract through 2026 with an option for 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/charlotte-fc-sign-defender-david-schnegg-via-waivers", "publisher": "MLS (mlssoccer.com, 2026-01-15)", "readOn": "2026-10-03", "says": "Charlotte FC claim left back David Schnegg off waivers"},
+    {"family": "A", "url": "https://www.dcunited.com/roster/", "publisher": "D.C. United roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21300", "publisher": "ESPN (Charlotte FC squad, season 2026)", "readOn": "2026-10-03", "says": "David Schnegg, shirt 23, born 1998-09-29; MLS appearances for Charlotte from 2026-08-29 to 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Lewis Morgan",
+   "from": "New York Red Bulls",
+   "to": "Toronto FC",
+   "realClub": "Toronto FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-09-30 (MLS and ESPN agree). Red Bull New York traded him to San Diego, and San Diego traded him on to Toronto on 2026-09-02 for a 2026 international roster slot.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/toronto-fc-acquire-lewis-morgan-from-san-diego-fc", "publisher": "MLS (mlssoccer.com, 2026-09-02)", "readOn": "2026-10-03", "says": "Toronto FC acquire Lewis Morgan from San Diego FC"},
+    {"family": "A", "url": "https://www.torontofc.ca/roster/", "publisher": "Toronto FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000M)", "readOn": "2026-10-03", "says": "Lewis Morgan, shirt 90, born 1996-09-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/181028/lewis-morgan", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Toronto FC; San Diego appearance 2026-08-23, Toronto appearances from 2026-09-05 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "Duncan McGuire",
+   "from": "Orlando City",
+   "to": "Houston Dynamo",
+   "realClub": "Houston Dynamo FC",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-05 (MLS and ESPN agree). Traded from Orlando to Houston on 2026-07-10 for up to $2.4 million in allocation money, contract through 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/houston-dynamo-acquire-duncan-mcguire-from-orlando-city", "publisher": "MLS (mlssoccer.com, 2026-07-10)", "readOn": "2026-10-03", "says": "Houston Dynamo acquire Duncan McGuire from Orlando City"},
+    {"family": "A", "url": "https://www.houstondynamofc.com/roster/", "publisher": "Houston Dynamo roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000H)", "readOn": "2026-10-03", "says": "Duncan McGuire, shirt 23, born 2001-02-05; not on the Orlando City roster"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/294071/duncan-mcguire", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Houston Dynamo FC; MLS appearances for Houston from 2026-09-05 to 2026-09-27"}
+   ]
+  },
+  {
+   "name": "David Martínez",
+   "from": "LAFC",
+   "to": "FC Midtjylland",
+   "realClub": "FC Midtjylland",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Venezuelan winger, born 2006-02-07 (MLS and FC Midtjylland agree). He played for LAFC in the Leagues Cup up to 2026-08-13 and has since played in the Danish Superliga. ESPN's record for him carries a wrong birth date (2000-03-11) and another man's club, but its LAFC game log, its Midtjylland game log and the shirt number 98 on its Midtjylland squad all match the club's own page, so it is this player. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.fcm.dk/herreholdet/truppen/", "publisher": "FC Midtjylland (men's squad page)", "readOn": "2026-10-03", "says": "midfield: David Martinez 98"},
+    {"family": "A", "url": "https://www.fcm.dk/truppen/david-martinez/", "publisher": "FC Midtjylland (player profile)", "readOn": "2026-10-03", "says": "#98, born 07.02.2006, Venezuela, 3 matches for FCM"},
+    {"family": "A", "url": "https://www.lafc.com/roster/", "publisher": "LAFC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000001)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/572", "publisher": "ESPN (FC Midtjylland squad, season 2026-27)", "readOn": "2026-10-03", "says": "David Martínez, shirt 98, midfielder; game log LAFC v Querétaro 2026-08-13, then Midtjylland v Brøndby 2026-09-14 and v Odense 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Jannes Horn",
+   "from": "St. Louis City",
+   "to": "Rapid Wien",
+   "realClub": "SK Rapid Wien",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-02-06 (Rapid and ESPN agree). He joined St. Louis on loan from Nürnberg in August 2024; he is now in Rapid's squad and has played in the Austrian Bundesliga and the Conference League qualifiers in August and September 2026. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.skrapid.at/teams/spieler/jannes-kilian-horn", "publisher": "SK Rapid Wien (player profile)", "readOn": "2026-10-03", "says": "38 Jannes Horn, Abwehr, born 06.02.1997, 7 Bundesliga appearances"},
+    {"family": "A", "url": "https://www.stlcitysc.com/roster/", "publisher": "St. Louis CITY SC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad, season 2026-27)", "readOn": "2026-10-03", "says": "Jannes Horn, shirt 38, defender, born 1997-02-06; Rapid appearances from 2026-08-26 to 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Ethan Horvath",
+   "from": "Cardiff City",
+   "to": "New York Red Bulls",
+   "realClub": "Red Bull New York",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The United States goalkeeper, born 1995-06-09 (MLS and ESPN agree). Joined Red Bull New York from Cardiff on a free transfer on 2026-01-29, contract through June 2027.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/red-bull-new-york-acquire-usmnt-goalkeeper-ethan-horvath", "publisher": "MLS (mlssoccer.com, 2026-01-29)", "readOn": "2026-10-03", "says": "Red Bull New York acquire Ethan Horvath from Cardiff City on a free transfer"},
+    {"family": "A", "url": "https://www.newyorkredbulls.com/roster/", "publisher": "New York Red Bulls roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-00000B)", "readOn": "2026-10-03", "says": "Ethan Horvath, shirt 34, born 1995-06-09"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/192027/ethan-horvath", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Red Bull New York; MLS appearances from 2026-09-06 to 2026-09-30"}
+   ]
+  },
+  {
+   "name": "Joe Rankin-Costello",
+   "from": "Blackburn Rovers",
+   "to": "Charlton Athletic",
+   "realClub": "Charlton Athletic",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-07-26 (ESPN). Both lists give him shirt 26. Charlton's squad page does not mark him as a loan (it tags its loanees 'In on loan'), and Blackburn's page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.cafc.co.uk/squad/8", "publisher": "Charlton Athletic FC (first team squad page)", "readOn": "2026-10-03", "says": "midfielders: 26 Joe Rankin-Costello"},
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/243354/joe-rankin-costello", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Charlton Athletic, shirt 26; Charlton appearances from 2026-08-26 to 2026-09-09"}
+   ]
+  },
+  {
+   "name": "Karlan Grant",
+   "from": "West Brom",
+   "to": "Charlton Athletic",
+   "realClub": "Charlton Athletic",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-09-18 (ESPN). Both lists give him shirt 9. Not marked as a loan on Charlton's page, and West Brom's squad page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.cafc.co.uk/squad/8", "publisher": "Charlton Athletic FC (first team squad page)", "readOn": "2026-10-03", "says": "forwards: 9 Karlan Grant"},
+    {"family": "A", "url": "https://www.wba.co.uk/players/1053", "publisher": "West Bromwich Albion FC (squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/212520/karlan-grant", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Charlton Athletic, shirt 9, born 1997-09-18; Charlton appearances from 2026-09-02 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Jeremy Sarmiento",
+   "from": "Burnley",
+   "to": "Middlesbrough",
+   "realClub": "Middlesbrough",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Ecuador international, born 2002-06-16 (ESPN; Middlesbrough's biography says born in Madrid in June 2002). Middlesbrough's own biography: after a 2025-26 loan at Cremonese he was recalled by Brighton and joined Boro in January 2026, a loan that became permanent. Both lists give him shirt 16. Burnley's squad page does not list him.",
+   "sources": [
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/mens/jeremysarmiento", "publisher": "Middlesbrough FC (player profile, read through r.jina.ai)", "readOn": "2026-10-03", "says": "joined Boro in January 2026, initially on loan, made permanent"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "16 Jeremy Sarmiento, forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/328013/jeremy-sarmiento", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Middlesbrough, shirt 16, born 2002-06-16; Middlesbrough appearances from 2026-08-22 to 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Joe Worrall",
+   "from": "Burnley",
+   "to": "Wrexham",
+   "realClub": "Wrexham",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-01-10 (Burnley and ESPN agree). He played for Burnley in the Carabao Cup on 2026-08-08 and for Wrexham from 2026-09-11. Burnley's squad page still carries him at shirt 4, which points to a loan, but no loan announcement was read, so the loan fields are left off. He is placed at the club he plays for either way, the ledger's loanPolicy.",
+   "sources": [
+    {"family": "A", "url": "https://www.wrexhamafc.co.uk/teams/first-team", "publisher": "Wrexham AFC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "defenders: 6 Joe Worrall"},
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "Joe Worrall, defender, jersey number 4 (still listed)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/352", "publisher": "ESPN (Wrexham squad, season 2026-27)", "readOn": "2026-10-03", "says": "Joe Worrall, shirt 6, defender, born 1997-01-10; played for Wrexham v West Ham 2026-09-11; not on ESPN's Burnley squad"}
+   ]
+  },
+  {
+   "name": "John Swift",
+   "from": "West Brom",
+   "to": "Portsmouth",
+   "realClub": "Portsmouth",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-06-23 (ESPN). ESPN has him playing for Portsmouth since at least April 2026 and in 2026-27; both lists give him shirt 8. West Brom's squad page no longer lists him. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.portsmouthfc.co.uk/teams/first-team/", "publisher": "Portsmouth FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "midfielders: 8 John Swift"},
+    {"family": "A", "url": "https://www.wba.co.uk/players/1053", "publisher": "West Bromwich Albion FC (squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/4775/john-swift", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Portsmouth, shirt 8, born 1995-06-23; Portsmouth appearances 2026-04-14 to 2026-05-02 and 2026-08-08 to 2026-08-29"}
+   ]
+  },
+  {
+   "name": "Daniel Bentley",
+   "from": "Wolves",
+   "to": "Coventry City",
+   "realClub": "Coventry City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The goalkeeper, born 1993-07-13 (Premier League and ESPN agree). Played for Wolves up to 2026-08-14 and joined Coventry on 2026-08-21, not on loan.",
+   "sources": [
+    {"family": "A", "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad", "publisher": "Premier League data feed (premierleague.com)", "readOn": "2026-10-03", "says": "Coventry City 2026/27: Dan Bentley, shirt 25, goalkeeper, joined 2026-08-21, loan 0, born 1993-07-13"},
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/143007/daniel-bentley", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Coventry City; Wolves appearances to 2026-08-14, Coventry appearances 2026-08-25 and 2026-09-16"}
+   ]
+  },
+  {
+   "name": "Zan Celar",
+   "from": "QPR",
+   "to": "Basel",
+   "realClub": "FC Basel",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Slovenia striker, born 1999-03-14 (ESPN). Spent spring 2026 at Fortuna Düsseldorf and is now in Basel's squad (friendly v Juventus 2026-07-18). QPR's page lists him neither in the squad nor among its loaned out players. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel 1893 (first team players page)", "readOn": "2026-10-03", "says": "Angriff: 9 Zan Celar"},
+    {"family": "A", "url": "https://www.qpr.co.uk/teams/first-team", "publisher": "Queens Park Rangers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/279948/zan-celar", "publisher": "ESPN", "readOn": "2026-10-03", "says": "FC Basel, born 1999-03-14; Düsseldorf appearances March and April 2026, Basel v Juventus 2026-07-18"}
+   ]
+  },
+  {
+   "name": "Luís Guilherme",
+   "from": "West Ham",
+   "to": "Sporting CP",
+   "realClub": "Sporting CP",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Brazilian winger born 2006-02-09 (ESPN), the baked row's age 19 fits. West Ham's page lists him neither in the squad nor among its players on loan; Sporting list him among their forwards and he has played their league and Champions League games since 2026-08-22. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.sporting.pt/pt/futebol/equipa-principal/plantel", "publisher": "Sporting Clube de Portugal (first team squad page)", "readOn": "2026-10-03", "says": "Avançado: Luís Guilherme"},
+    {"family": "A", "url": "https://www.whufc.com/en/teams/mens-team", "publisher": "West Ham United FC (men's first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among players on loan"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/361429/luis-guilherme", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Sporting CP, born 2006-02-09; Primeira Liga appearances 2026-08-22 to 2026-09-13, Champions League v Galatasaray 2026-09-09; not on ESPN's West Ham squad"}
+   ]
+  },
+  {
+   "name": "Sasa Kalajdzic",
+   "from": "Wolves",
+   "to": "LASK",
+   "realClub": "LASK",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Austria striker, born 1997-07-07 (ESPN). LASK list him at shirt 11 with two appearances; Wolves list him neither in the squad nor on loan. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (pros squad page)", "readOn": "2026-10-03", "says": "Sturm: Saša Kalajdžić, 11, 2 Spiele"},
+    {"family": "A", "url": "https://www.wolves.co.uk/teams/mens-first-team/", "publisher": "Wolverhampton Wanderers FC (men's first team page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/259131/sasa-kalajdzic", "publisher": "ESPN", "readOn": "2026-10-03", "says": "LASK Linz, born 1997-07-07; LASK v Hartberg 2026-09-20, Austria Nations League games in September 2026"}
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Osman Bukari",
+   "from": "Austin FC",
+   "realClub": "Red Star Belgrade (Crvena zvezda)",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-12-13 (MLS and ESPN agree). Back at Red Star, the club Austin bought him from in 2024: he has played their Champions League and Europa League qualifiers from 2026-07-29. Whether it is a loan or a sale was not read. The game models no Serbian league.",
+   "sources": [
+    {"family": "A", "url": "https://www.crvenazvezdafk.com/en/timovi/prvi-tim", "publisher": "FK Crvena zvezda (first team page)", "readOn": "2026-10-03", "says": "midfield: Osman Bukari, 14"},
+    {"family": "A", "url": "https://www.austinfc.com/roster/", "publisher": "Austin FC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000003)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/276407/osman-bukari", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Red Star Belgrade, born 1998-12-13; Red Star appearances v Larne, Hapoel Be'er Sheva and Viktoria Plzen, 2026-07-29 to 2026-08-27; not on ESPN's Austin FC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Tomás Avilés",
+   "from": "Inter Miami",
+   "realClub": "O'Higgins (Chile), on loan from Inter Miami",
+   "loan": true,
+   "loanFrom": "Inter Miami",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2004-02-03 (MLS and ESPN agree). Inter Miami loaned him to O'Higgins through 2026 on 2026-07-16, after half a season on loan at CF Montréal. Placed at the club he plays for, the ledger's loanPolicy, and the game models no Chilean league, so he leaves Inter Miami's squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/inter-miami-loan-tomas-aviles-to-chilean-club", "publisher": "MLS (mlssoccer.com, 2026-07-16)", "readOn": "2026-10-03", "says": "Inter Miami loan Avilés to O'Higgins through 2026"},
+    {"family": "A", "url": "https://www.intermiamicf.com/roster/", "publisher": "Inter Miami roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000008)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/358595/tomas-aviles", "publisher": "ESPN", "readOn": "2026-10-03", "says": "O'Higgins, born 2004-02-03; O'Higgins appearances in the Chilean Primera and Copa Chile, 2026-09-06 to 2026-09-30"}
+   ]
+  },
+  {
+   "name": "Miki Yamane",
+   "from": "LA Galaxy",
+   "realClub": "Urawa Red Diamonds",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-12-22 (MLS and ESPN agree). Transferred from the Galaxy to Urawa on 2026-08-16. The game models no Japanese league.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/la-galaxy-transfer-miki-yamane-to-japanese-club", "publisher": "MLS (mlssoccer.com, 2026-08-17)", "readOn": "2026-10-03", "says": "LA Galaxy transfer Miki Yamane to Urawa Red Diamonds"},
+    {"family": "A", "url": "https://www.lagalaxy.com/roster/", "publisher": "LA Galaxy roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/238050/miki-yamane", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Urawa Red Diamonds; last Galaxy appearance 2026-07-26, J1 League appearances for Urawa from 2026-08-23"}
+   ]
+  },
+  {
+   "name": "Lorenzo Insigne",
+   "from": "Toronto FC",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1991-06-04 (ESPN). Toronto and Insigne ended his contract by mutual agreement on 2025-07-01; ESPN has him at Pescara in 2025-26 and at Sampdoria in Serie B in 2026-27. Sampdoria's own report of their 2-1 win over Catanzaro on 2026-09-19 names Insigne in the starting eleven and as a scorer. The report gives only the surname, and his brother Roberto is also a winger, so the first name rests on ESPN, whose Sampdoria squad carries one Insigne, Lorenzo, shirt 10. The game models no Serie B.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/toronto-fc-mutually-part-ways-with-lorenzo-insigne", "publisher": "MLS (mlssoccer.com, 2025-07-01)", "readOn": "2026-10-03", "says": "Toronto FC and Insigne mutually agree to terminate his contract"},
+    {"family": "A", "url": "https://www.sampdoria.it/news/team/2026/09/19/la-samp-rimonta-il-catanzaro-e-trova-la-prima-vittoria/", "publisher": "U.C. Sampdoria (match report, 2026-09-19)", "readOn": "2026-10-03", "says": "Serie BKT 2026/27, Sampdoria 2 Catanzaro 1, goal: Insigne; starting eleven includes Insigne"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2734", "publisher": "ESPN (Sampdoria squad, season 2026-27)", "readOn": "2026-10-03", "says": "Lorenzo Insigne, shirt 10, forward, born 1991-06-04; Sampdoria appearances 2026-08-29 to 2026-09-19; not on ESPN's Toronto FC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Bryce Duke",
+   "from": "CF Montréal",
+   "realClub": "Wellington Phoenix",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-02-28 (MLS and ESPN; Wellington's profile gives age 25, which fits). He left Montréal, signed for San Diego FC as a free agent on 2026-02-09, played for San Diego up to 2026-09-05 and is now in Wellington Phoenix's A-League squad. Terms of the Wellington move were not read. The game models no Australian league.",
+   "sources": [
+    {"family": "A", "url": "https://wellingtonphoenix.com/squads/men/", "publisher": "Wellington Phoenix (men's squad page)", "readOn": "2026-10-03", "says": "midfielders: 7 Bryce Duke"},
+    {"family": "A", "url": "https://www.mlssoccer.com/news/san-diego-fc-sign-midfielder-bryce-duke", "publisher": "MLS (mlssoccer.com, 2026-02-09)", "readOn": "2026-10-03", "says": "San Diego FC sign Bryce Duke via free agency"},
+    {"family": "A", "url": "https://www.cfmontreal.com/roster/", "publisher": "CF Montréal and San Diego FC rosters (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "on neither"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/302238/bryce-duke", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Wellington Phoenix FC, born 2001-02-28, next match A-League Men; San Diego appearances 2026-04-12 to 2026-09-05"}
+   ]
+  },
+  {
+   "name": "Léo Chú",
+   "from": "FC Dallas",
+   "realClub": "Avaí",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Leonardo Alves Chú Franco, born 2000-04-06 (Avaí and ESPN agree). Playing for Avaí in Brazil's Série B in August and September 2026. The game models Brazil's Série A only.",
+   "sources": [
+    {"family": "A", "url": "https://avai.com.br/elenco-profissional/leo-chu/", "publisher": "Avaí F.C. (professional squad profile)", "readOn": "2026-10-03", "says": "Atacante, Leonardo Alves Chú Franco, born 06/04/2000"},
+    {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA, club MLS-CLU-000005)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/300110/leo-chu", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Avaí, born 2000-04-06; Série B appearances 2026-08-19 to 2026-09-09; not on ESPN's FC Dallas 2026 squad"}
+   ]
+  },
+  {
+   "name": "Danny Ings",
+   "from": "West Ham",
+   "realClub": "Wycombe Wanderers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-07-23 (ESPN). He spent 2025-26 at Sheffield United and is now at Wycombe, in League One, which the game does not model. Wycombe's page does not tag him as a loanee (it tags its loanees 'Loaned in'), and West Ham's page lists him neither in the squad nor among its players on loan. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.wwfc.com/teams/first-team", "publisher": "Wycombe Wanderers FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "28 Danny Ings"},
+    {"family": "A", "url": "https://www.whufc.com/en/teams/mens-team", "publisher": "West Ham United FC (men's first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among players on loan"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/141706/danny-ings", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Wycombe Wanderers, shirt 28, born 1992-07-23; Sheffield United appearances to 2026-05-02, scored for Wycombe v Reading 2026-09-26"}
+   ]
+  },
+  {
+   "name": "Florian Bianchini",
+   "from": "Swansea City",
+   "realClub": "Clermont Foot, on loan from Swansea City",
+   "loan": true,
+   "loanFrom": "Swansea City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-06-25 (ESPN). Swansea list him as out on loan and Clermont list him in their squad; he plays in Ligue 2, which the game does not model. Placed at the club he plays for, the ledger's loanPolicy, so he leaves Swansea's squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.swanseacity.com/players/149", "publisher": "Swansea City AFC (players page)", "readOn": "2026-10-03", "says": "Out on Loan: Florian Bianchini"},
+    {"family": "A", "url": "https://www.clermontfoot.com/equipes", "publisher": "Clermont Foot 63 (squad page)", "readOn": "2026-10-03", "says": "Attaquant: 7 Florian Bianchini"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/307854/florian-bianchini", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Clermont Foot, born 2001-06-25; Ligue 2 appearances 2026-09-04 to 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Kelechi Iheanacho",
+   "from": "Middlesbrough",
+   "realClub": "Bursaspor",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Nigeria striker, born 1996-10-03 (ESPN). He finished 2025-26 at Celtic and has scored nine in seven league games for Bursaspor this season (ESPN, 2026-09-18). Middlesbrough's page does not list him. The game models no Bursaspor. Transfer terms were not read.",
+   "sources": [
+    {"family": "A", "url": "https://www.bursaspor.org.tr/bursaspor-futbolcular", "publisher": "Bursaspor Kulübü (official players page)", "readOn": "2026-10-03", "says": "Kelechi Iheanacho, Hücum"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/story/_/id/49970583/nigeria-name-injured-osimhen-recall-nwabali-iheanacho-afcon-qualifiers", "publisher": "ESPN (2026-09-18)", "readOn": "2026-10-03", "says": "Nigeria squad: Kelechi Iheanacho (Bursaspor FC, Turkey), nine goals in seven league games"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/39902/kelechi-iheanacho", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Bursaspor, born 1996-10-03; Celtic appearances to 2026-05-23"}
+   ]
+  },
+  {
+   "name": "Isaiah Jones",
+   "from": "Middlesbrough",
+   "realClub": "Luton Town",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-06-26 (ESPN). Luton list him at shirt 25 and do not tag him as a loanee (they tag theirs 'Loaned in'); ESPN agrees on the shirt. Middlesbrough's page does not list him. Luton are in League One, which the game does not model.",
+   "sources": [
+    {"family": "A", "url": "https://www.lutontown.co.uk/teams/first-team", "publisher": "Luton Town FC (first team page, script rendered, read through r.jina.ai)", "readOn": "2026-10-03", "says": "25 Isaiah Jones, right back"},
+    {"family": "A", "url": "https://www.mfc.co.uk/teams/first-team", "publisher": "Middlesbrough FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/301", "publisher": "ESPN (Luton Town squad, season 2026-27)", "readOn": "2026-10-03", "says": "Isaiah Jones, shirt 25, forward, born 1999-06-26"}
+   ]
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Jordi Alba",
+   "from": "Inter Miami",
+   "why": "Retired. Inter Miami and Alba announced on 2025-10-07 that he would retire after the 2025 season, which ended with the MLS Cup final on 2025-12-06, his last match.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-03-21 (MLS and ESPN agree). ESPN's record marks him inactive.",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/inter-miami-defender-jordi-alba-to-retire-after-2025-season", "publisher": "MLS (mlssoccer.com, 2025-10-07)", "readOn": "2026-10-03", "says": "Jordi Alba will retire after Inter Miami's 2025 season"},
+    {"family": "A", "url": "https://www.intermiamicf.com/roster/", "publisher": "Inter Miami roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/story/_/id/47227677/lionel-messi-jordi-alba-sergio-busquets-mls-cup-inter-miami", "publisher": "ESPN (2025-12-07)", "readOn": "2026-10-03", "says": "Messi bids farewell to Alba and Busquets after the MLS Cup"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/121021/jordi-alba", "publisher": "ESPN", "readOn": "2026-10-03", "says": "inactive; last match 2025-12-06, MLS Cup v Vancouver; not on ESPN's Inter Miami 2026 squad"}
+   ]
+  },
+  {
+   "name": "Javairô Dilrosun",
+   "from": "LAFC",
+   "why": "Not at LAFC, certain on both families: LAFC only had him on loan from Club América until 2025-07-24, and neither the league's current LAFC roster nor ESPN's lists him. His club today is NOT confirmed: ESPN places him at Al Sadd (AFC Champions League Elite appearances on 2026-02-17 and 2026-04-16), but Al Sadd's own first team page, read the same day, does not list him. So he leaves LAFC and no destination is claimed. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-06-22 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/lafc-acquire-javairo-dilrosun-on-loan-from-club-america", "publisher": "MLS (mlssoccer.com, 2025-06-11)", "readOn": "2026-10-03", "says": "LAFC acquire Dilrosun on loan from Club América through July 24"},
+    {"family": "A", "url": "https://www.lafc.com/roster/", "publisher": "LAFC roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://al-saddclub.com/teams/", "publisher": "Al Sadd Sports Club (football team page)", "readOn": "2026-10-03", "says": "30 players listed, Dilrosun not among them"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/258971/javairo-dilrosun", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Al Sadd; last LAFC appearance 2025-07-26; not on ESPN's LAFC 2026 squad"}
+   ]
+  },
+  {
+   "name": "Paxton Pomykal",
+   "from": "FC Dallas",
+   "why": "Not at FC Dallas, certain on both families: Dallas bought out his guaranteed contract on 2026-02-19 and he is on neither the league's current Dallas roster nor ESPN's Dallas squad. No later club was found on mlssoccer.com or ESPN (ESPN's player header still says FC Dallas, but its Dallas squad does not carry him and his last match there is 2025-10-19). Unattached is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-12-17 (MLS and ESPN agree).",
+   "sources": [
+    {"family": "A", "url": "https://www.mlssoccer.com/news/fc-dallas-exercise-buyout-of-paxton-pomykal", "publisher": "MLS (mlssoccer.com, 2026-02-19)", "readOn": "2026-10-03", "says": "FC Dallas exercise a guaranteed contract buyout on Pomykal; he no longer occupies a senior roster spot"},
+    {"family": "A", "url": "https://www.fcdallas.com/roster/", "publisher": "FC Dallas roster (MLS league data, stats-api.mlssoccer.com season MLS-SEA-0001KA)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/185", "publisher": "ESPN (FC Dallas squad, season 2026)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Yasser Larouci",
+   "from": "Watford",
+   "why": "Not at Watford, certain on both families: Watford list him neither in the squad nor among their loaned out players, and ESPN's Watford squad does not carry him. His club today is NOT confirmed by an official page: ESPN places him at Le Mans, a club the game models, with Ligue 1 appearances from 2026-08-22 to 2026-09-19 after a spell at Kifisia in spring 2026, but Le Mans' own players page still shows last season's Ligue 2 squad and the league's pages did not render. So he leaves Watford and no destination is claimed. One official Le Mans read would let the fold move him to Le Mans instead.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-01-01 (ESPN).",
+   "sources": [
+    {"family": "A", "url": "https://www.watfordfc.com/teams/first-team", "publisher": "Watford FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed, not among loaned out"},
+    {"family": "A", "url": "https://www.lemansfc.fr/index.php?section=equipes-masculines", "publisher": "Le Mans FC (players page, titled Ligue 2, stale)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/289837/yasser-larouci", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Le Mans, born 2001-01-01; Kifisia appearances May 2026, Le Mans Ligue 1 appearances 2026-08-22 to 2026-09-19; not on ESPN's Watford squad"}
+   ]
+  },
+  {
+   "name": "Nathan Redmond",
+   "from": "Burnley",
+   "why": "Not at Burnley, certain on both families: neither Burnley's squad page nor ESPN's Burnley squad lists him. ESPN has him at Sheffield Wednesday in January 2026 and Blackburn in April 2026, but Blackburn's current first team page does not list him, and no 2026-27 squad in ESPN's top four English divisions, the Scottish Premiership or MLS carries him. Unattached is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-03-06 (ESPN). ESPN's player header still says Blackburn Rovers, but its Blackburn squad does not carry him.",
+   "sources": [
+    {"family": "A", "url": "https://www.burnleyfootballclub.com/mens-squad", "publisher": "Burnley FC (men's squad page)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.rovers.co.uk/teams/first-team", "publisher": "Blackburn Rovers FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/146091/nathan-redmond", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Sheffield Wednesday appearances January 2026, Blackburn appearances 2026-04-11 and 2026-04-14, nothing since; on no 2026-27 squad ESPN lists for the Premier League, Championship, League One, League Two, Scottish Premiership or MLS"}
+   ]
+  },
+  {
+   "name": "Matt Ritchie",
+   "from": "Portsmouth",
+   "why": "Not at Portsmouth, certain on both families: neither Portsmouth's first team page nor ESPN's Portsmouth squad lists him. ESPN has him at Reading in League One up to 2026-05-02, but Reading's current first team page does not list him, and no 2026-27 squad in ESPN's top four English divisions, the Scottish Premiership or MLS carries him. He turned 37 in September 2026. Unattached or retired is INFERRED, not reported. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1989-09-10 (ESPN). ESPN's player header still says Reading, with no next match.",
+   "sources": [
+    {"family": "A", "url": "https://www.portsmouthfc.co.uk/teams/first-team/", "publisher": "Portsmouth FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.readingfc.co.uk/teams/first-team", "publisher": "Reading FC (first team page, read through r.jina.ai)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/126500/matt-ritchie", "publisher": "ESPN", "readOn": "2026-10-03", "says": "Reading appearances 2026-04-03 to 2026-05-02, nothing since; on no 2026-27 squad ESPN lists for the four English divisions, the Scottish Premiership or MLS"}
+   ]
+  }
+ ],
+ "pending": []
+}

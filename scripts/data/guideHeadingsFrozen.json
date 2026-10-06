@@ -404,7 +404,7 @@
     },
     "/club-manager": {
       "howToPlay": [
-        "Pick your era (today, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
+        "Pick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
         "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
         "In today's world, the World editor tile on the nation step lets you rebuild the map before you pick: tap a club, then tap the club in another league it swaps with. Every move is a swap, so every league keeps its real size, its fixtures and its places, and you can make as many as you like, from one club to a whole super league.",
         "Example: swap Celtic with Brentford and take Celtic. You play a full Premier League season and the FA Cup, Brentford play in Scotland, and both boards judge their club against its new league, so Brentford are asked to win the Scottish Premiership and Celtic are asked to stay up. Your first season's Europe goes to the clubs who really qualified last season, wherever they play now; after that your edited tables decide it, and the edited leagues promote and relegate like any other. Reset puts the real world back.",
@@ -423,7 +423,7 @@
         "Every league plays its real length: 38 rounds in the Premier League, 46 in the Championship, 34 in the Bundesliga, with the domestic cup from a round of 16 to the final and a full Champions League on top for qualified clubs.",
         "Brazil's Serie A is 20 clubs over 38 rounds with four going down and the Copa do Brasil as its cup. Three simplifications: it plays on the game's August to May calendar like MLS does rather than Brazil's own January to December one, the Copa Libertadores is not modelled, so a Brazilian club's season is the league and the cup, and clubs level on points are split by goal difference then goals scored, where the real table looks at wins first.",
         "Liga MX is 18 clubs and nobody goes down, because relegation is suspended for 2026-27. Three simplifications: the Apertura and the Clausura are played as one 34 round double round robin with one champion, the Liguilla is not played (the board still asks a playoff club to finish in the top eight, the places that reach it), and clubs level on points are split by goal difference then goals scored, the real table's first two steps, and the game stops there. There is no cup, because the Copa MX has not been played since 2020, and the Leagues Cup is not modelled.",
-        "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
+        "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06. Money in 2020-21 was close to today's, so its stars rate about where they would now, Mbappé level with the best of 2026. Leicester still start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
         "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds, and your backing sets your wage room. Start with a better squad than the money buys and it plays that well, but your made up players sell on at that money's squad prices, still rising as they improve. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
         "Two meters sit under the club name on every tab, words by default and the number out of 100 on tap. The board meter is the sack race itself: it opens at 60 in your first season, anywhere from 35 to 82 after that depending on how the last one went, and swings with results, cup runs, promises to the press and position against expectation. Safe is 60 and above, Under pressure is 10 to 59, under 10 reads One bad week from the sack, and at zero you are sacked. Only a result can sack you: a press answer or a handshake with another club can take the board to its last point, never to zero. The fan meter is read off this season's results (recent ones count most), your position against the club's expectation, the ticket policy and the trophies lifted this season: Singing at 65 and above, Grumbling from 40 to 64, Turning under 40, Hopeful before a ball is kicked.",
         "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
@@ -986,37 +986,46 @@
     },
     "/fight-promoter": {
       "howToPlay": [
-        "Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
-        "Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
-        "Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
-        "Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
-        "Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
-        "Put the show on, then read the room. A one sided beating earns you nothing at all."
+        "Choose MMA and name your promotion. You start with $120,000, twelve signed fighters and three divisions. Every fighter and result is fictional.",
+        "MMA: Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
+        "MMA: Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
+        "MMA: Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
+        "Boxing: Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
+        "Boxing: Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
+        "Boxing: Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
+        "Boxing: Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
+        "Boxing: Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
+        "Boxing: Put the show on, then read the room. A one sided beating earns you nothing at all."
       ],
       "rules": [
-        "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
-        "The room costs its hire fee whether anybody turns up or not.",
-        "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
-        "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
-        "Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
-        "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
-        "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
-        "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
-        "Go below zero after a show and you are out of the business.",
+        "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
+        "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
+        "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+        "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
+        "Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+        "Boxing: The room costs its hire fee whether anybody turns up or not.",
+        "Boxing: Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+        "Boxing: Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+        "Boxing: Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
+        "Boxing: A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+        "Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+        "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+        "Boxing: Go below zero after a show and you are out of the business.",
         "There is no betting anywhere in this game."
       ],
       "example": [
-        "Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
-        "Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
-        "He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
-        "Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."
+        "MMA: Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card.",
+        "Boxing: Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
+        "Boxing: Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
+        "Boxing: He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
+        "Boxing: Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."
       ],
       "tips": [
-        "Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
-        "The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
-        "Two men at the same weight with ratings within about ten points is the fight worth making.",
-        "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
-        "A damaged veteran still sells. That is exactly why he is still on your books."
+        "Boxing: Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
+        "Boxing: The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
+        "Boxing: Two men at the same weight with ratings within about ten points is the fight worth making.",
+        "Boxing: Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+        "Boxing: A damaged veteran still sells. That is exactly why he is still on your books."
       ]
     },
     "/football-connect-4": {
@@ -1129,6 +1138,7 @@
         "The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. A call-up needs a roster spot and room for his displayed fictional salary, including dead money. The roster holds 53: at the limit you cut or trade before you can sign anybody.",
         "After the Super Bowl, use the draft picks your team still owns. Trading a pick away costs a selection in your next draft. If you traded them all away, decide the franchise tag, then run the league draft and offseason. Scout grades can lie. Defensive picks join your roster like every other selection.",
         "On the draft screen, before your last pick opens free agency, tag one man whose deal is up. The card shows every expiring contract with its tag price, and the button says why when a tag is refused.",
+        "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them on, and an older save plays on as it did until you open one. Say you hire a level 7 offensive coordinator off the Staff shortlist: his points land on the offense, which is 72 percent of how this game rates a team, so the club gets a little stronger every week. The computer clubs have no staff edge, so even the staff you start with is a step up on them. Your first round pick's rookie deal runs out this spring, so the Re-sign desk offers his fifth year option: one guaranteed season, priced off his rating. Pick it up, or keep him at his ask, push once with your own number, or let him go. At Week 8 you call a club that is well out of the playoff places, which makes it a seller: it marks its veterans down and wants picks and young players. So you send a young depth receiver and a third rounder for its veteran corner. Where you sit in the standings changes nothing in the price, only where they sit does. The receiver's contract goes with him, and 15 percent of his salary for every season he had left stays on your cap this year as dead money, never more than cutting him would have left. Wait until Week 10 is played and the deadline has shut every deal until the season is over. The money is this game's own, never a real contract.",
         "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you."
       ],
       "rules": [

@@ -1,0 +1,686 @@
+{
+ "round": 932,
+ "shard": "Italy and France: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in the Club Manager Serie A or Ligue 1 (51 rows at origin/main 5f2622fd: Italy 32 across Atalanta, Cagliari, Como, Fiorentina, Frosinone, Inter Milan, Lazio, Lecce, Monza, Napoli, Parma, Roma, Sassuolo, Torino, Udinese and Venezia; France 19 across Angers, Brest, Le Havre, Lens, Lille, Lorient, Lyon, Marseille, Monaco, PSG, Strasbourg, Toulouse and Troyes)",
+ "adjudicatedOn": "2026-10-03",
+ "method": "Each row was read on the web on 2026-10-03 with WebFetch and WebSearch. A row leaves pending only when an official page (family A: the Lega Serie A squad page at legaseriea.it, the Ligue 1 club page at ligue1.com, a club's own squad page or announcement, or a national federation's player licence page or match sheet) and an independent publisher on another host (family B: ESPN squad or player pages, Soccerway, FotMob) agree where the man is. Wikipedia and other wikis are never a source. Birth dates go in the note where a source gives one, so a namesake cannot be mistaken for him; every one of the 51 names appears exactly once in src/data/clubManagerRosters.ts at origin/main 5f2622fd, so no namesake in the game is involved. A season-long loanee is placed at the club he plays for, with loan and loanFrom as information only, the ledger's loanPolicy. The to field is the Club Manager club name the bake knows (checked against the 368 clubs of src/data/clubManagerRosters.ts at origin/main 5f2622fd); realClub is the club as the sources write it. This file is folded into rosterConfirmation2026.json by the lead; nothing reads it directly.",
+ "counts": {"rows": 51, "confirmedStill": 6, "movedTo": 20, "removedClubNotModelled": 21, "notCurrent": 2, "pending": 2},
+ "forTheFold": "49 of the 51 rows are settled; 2 stay pending with the reason. Read before folding: (1) All 20 movedTo rows carry an official page that names the destination (a league squad page, the club's own squad page or announcement, or the national federation's licence page). Three got theirs in the review pass of 2026-10-03, after the first pass had only the departure official: Jordan Zemura (Udinese's own announcement of 2026-08-02 of his loan to Watford; Watford's squad page renders no names without a login token), Pedro Pereira (the Turkish Football Federation's licence page, Gencerbirligi contract to June 2027 with its 2026-27 registration dated 2026-08-05, and its match sheet of 2026-08-28; Gencerbirligi's own site returns HTTP 522) and Abakar Sylla (Gaziantep FK's own first team page at gaziantepfk.org, shirt 21). (2) Of the 21 removedClubNotModelled rows, 18 carry the official voice only for the departure, so their realClub string rests on independent publishers alone: Simone Scuffet, Tommaso Augello, Alberto Moreno, Filippo Distefano, Riccardo Marchizza, Frédéric Guilbert, Antonio Candela, Gianluca Caprari, Samuele Mulattieri, Yann Karamoh, Antoine Joujou, Arthur Desmas, Reda Khadra, Wesley Saïd and Thierno Baldé on two publishers each, and Farid El Melali (CR Belouizdad), Presnel Kimpembe (Al-Kharitiyath) and Shavy Babicka (United FC) on ONE publisher each. None of those clubs is modelled, so the in-game effect, removal, stands on both families either way; treat the realClub strings as information, not as two-sourced facts. Arthur Desmas is also thin on currency: ESPN's newest Al-Duhail match for him is from October 2025 and Soccerway shows no contract end. The other three removals carry an official voice for the destination: Damián Pizarro (Udinese's own announcement of his loan to Audax Italiano, with En Cancha quoting Audax as an independent report), Zito Luvumbo (Cagliari's own announcement of his loan to Mallorca, plus ESPN's 2026-27 Mallorca squad and Soccerway) and Joaquín Correa (Estudiantes de La Plata's own squad page). (3) The two notCurrent rows do NOT meet the brief's bar of two sources for the status itself, only for the departure: Gaetano Castrovilli (unattached is INFERRED: not in Lazio's or Cesena's 2026/2027 squad, no club on Soccerway, ESPN stale at Cesena) and Alessio Iovine (retired rests on Soccerway alone; ESPN still says Como against its own 2026-27 Como squad). Both are off their from club on both families, and neither a free agent, a retired player nor Cesena is modelled, so the removal holds; they are kept out of pending because pending would ship each man at a club both families say he has left. Re-check both at the next adjudication. (4) Pending, in the ledger's pending shape (name, club, checkedOn, note): Riccardo Sottil, where the families disagree (Fiorentina's own page and the league page leave him out, Soccerway and ESPN's player page keep him at Fiorentina, injured, under contract to 2027), so he stays at Fiorentina; and Jordan Amavi, where no official source could be read, ESPN's 2026-27 Brest squad and Soccerway point away from Brest but ESPN's player page is still titled Brest Defender, so the recommendation is to hold him out once one official voice confirms. (5) Information-only loan fields, per the ledger's loanPolicy: Zemura (Watford from Udinese), Lucas Michal (Cercle Brugge from Monaco), Pizarro (Audax Italiano from Udinese), Zito Luvumbo (Mallorca from Cagliari), Samuele Mulattieri (Hellas Verona from Sassuolo), Antonio Candela (Catanzaro from Spezia) and Babicka (United FC from Crvena zvezda). (6) Every to value is spelled exactly as in src/data/clubManagerRosters.ts, diacritics included (CF Montréal, Kasımpaşa, Gençlerbirliği, Lausanne-Sport, Gaziantep FK). (7) The legaseriea.it squad pages carry no season label; each row's publisher text names a summer 2026 arrival on the same page to show it is current, and the ESPN squad pages are labelled 2026-27. Spellings that differ by publisher: ESPN writes Lucas Michel, Soccerway writes Di Stefano, Kasimpasa's site writes Benedyzcak. ESPN's Lorient squad links Mohamed Bamba to a namesake's page, so ESPN is not used for him. (8) Found while reading, OUTSIDE this shard and not acted on: David Alaba, notCurrent in the ledger since 2026-09-15 as unattached, is in Udinese's current squad on legaseriea.it (shirt 5, defender) and on ESPN's 2026-27 Udinese squad, so he now has a modelled club and the ledger row is stale; Branco van den Boomen (pending at Ajax) is in Angers's squad on angers-sco.fr and on ESPN's 2026-27 Angers page; a Dan Bentley is in Coventry City's 2026 squad in the Premier League data feed (Daniel Bentley is pending at Wolves), not checked to be the same man.",
+ "confirmedStill": [
+  {
+   "name": "Mohamed Bamba",
+   "club": "Lorient",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Ivorian forward born 2001-12-10, Lorient's number 9 since January 2024, contract to June 2028. ESPN's Lorient squad lists a Mohamed Bamba at 9 but links him to a namesake's page (a French midfielder born 2004-10-08, now at Gil Vicente), so ESPN is not used for this row.",
+   "sources": [
+    {"family": "A", "url": "https://www.fclorient.bzh/lequipe-professionnelle-2026-2027/", "publisher": "FC Lorient (professional squad 2026-2027)", "readOn": "2026-10-03", "says": "listed, forward, shirt 9"},
+    {"family": "B", "url": "https://us.soccerway.com/player/bamba-muhammad/2ZLbrRiB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "current club Lorient, forward, born 2001-12-10, Ivory Coast, contract to 2028-06-30"}
+   ]
+  },
+  {
+   "name": "Matteo Politano",
+   "club": "Napoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Napoli's number 21, aged 33 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/napoli/squad", "publisher": "Lega Serie A (Napoli squad, current: carries Noa Lang and Kevin De Bruyne)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/114/napoli", "publisher": "ESPN (Napoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 33"}
+   ]
+  },
+  {
+   "name": "Paulo Dybala",
+   "club": "Roma",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Roma's number 21, aged 32 on ESPN, with five appearances already this season. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/roma/squad", "publisher": "Lega Serie A (Roma squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/104/as-roma", "publisher": "ESPN (AS Roma squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 21, age 32, 5 appearances"}
+   ]
+  },
+  {
+   "name": "Dany Mota",
+   "club": "Monza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Monza's number 47, aged 28 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 47"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 47, age 28"}
+   ]
+  },
+  {
+   "name": "Omari Forson",
+   "club": "Monza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Monza's number 11, aged 22 on ESPN. On both current squad pages.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "listed, midfielder, shirt 11"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 22"}
+   ]
+  },
+  {
+   "name": "Emmanuel Biumla",
+   "club": "Angers",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Angers's number 24, aged 21 on ESPN (no appearances yet this season). On both current squad pages; the club lists him among the defenders, ESPN among the midfielders.",
+   "sources": [
+    {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "listed among the defenders"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "shirt 24, age 21, France, 0 appearances"}
+   ]
+  }
+ ],
+ "movedTo": [
+  {
+   "name": "Giacomo Raspadori",
+   "from": "Napoli",
+   "to": "Atalanta",
+   "realClub": "Atalanta",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Atalanta's number 18 on the league page. Not in Napoli's current squad on either page; in Atalanta's on both.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/atalanta/squad", "publisher": "Lega Serie A (Atalanta squad, current: carries Franck Kessie, a summer 2026 arrival)", "readOn": "2026-10-03", "says": "listed, forward, shirt 18"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/napoli/squad", "publisher": "Lega Serie A (Napoli squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/105/atalanta", "publisher": "ESPN (Atalanta squad page, season 2026-27)", "readOn": "2026-10-03", "says": "listed among the forwards"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/114/napoli", "publisher": "ESPN (Napoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Nicolò Zaniolo",
+   "from": "Atalanta",
+   "to": "Udinese",
+   "realClub": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Udinese's number 10, aged 27 on ESPN. Not in Atalanta's 2026-27 squad on ESPN; on the current Udinese squad on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current: carries Lazar Jovanovic, signed 2026-09-01)", "readOn": "2026-10-03", "says": "listed, shirt 10, forward"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 10, age 27"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/105/atalanta", "publisher": "ESPN (Atalanta squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Alexis Sánchez",
+   "from": "Udinese",
+   "to": "CF Montréal",
+   "realClub": "CF Montréal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1988-12-19. Left Udinese for Sevilla in September 2025, left Sevilla when his contract ran out in summer 2026, and signed for CF Montreal as a Designated Player on 2026-08-11, through the 2027 MLS Sprint Season.",
+   "sources": [
+    {"family": "A", "url": "https://en.cfmontreal.com/news/cf-montreal-signs-alexis-sanchez-as-a-designated-player", "publisher": "CF Montreal (club announcement, 2026-08-11)", "readOn": "2026-10-03", "says": "signed as a Designated Player from Sevilla, born 1988-12-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/92055/alexis-sanchez", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "CF Montreal number 10, born 1988-12-19, played 2026-09-26"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Isaak Touré",
+   "from": "Udinese",
+   "to": "Lorient",
+   "realClub": "Lorient",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-28. His loan at Udinese ended in 2025 and he went back to Lorient, where he wears 95 in the 2026-27 squad.",
+   "sources": [
+    {"family": "A", "url": "https://www.fclorient.bzh/lequipe-professionnelle-2026-2027/", "publisher": "FC Lorient (professional squad 2026-2027)", "readOn": "2026-10-03", "says": "listed, defender, shirt 95"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/273/lorient", "publisher": "ESPN (Lorient squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 95, age 23"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/306535/isaak-toure", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lorient number 95, born 2003-03-28"}
+   ]
+  },
+  {
+   "name": "Jordan Zemura",
+   "from": "Udinese",
+   "to": "Watford",
+   "realClub": "Watford, on loan from Udinese",
+   "loan": true,
+   "loanFrom": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1999-11-14. Joined Watford on a season-long loan from Udinese in August 2026, to June 2027; he played the Championship match against Stoke on 2026-09-12. The two publishers disagree on his shirt (FotMob 26, ESPN 33), not on his club. Watford's own squad page renders no names without a login token, so the official voice for the destination is Udinese's own announcement of 2026-08-02 naming Watford and the loan's end date, and ESPN's Watford matches up to 2026-09-12 show the loan is running; the league page no longer lists him at Udinese.",
+   "sources": [
+    {"family": "A", "url": "https://www.udinese.it/news/squadra/jordan-zemura-al-watford-fc", "publisher": "Udinese Calcio (club announcement, 2026-08-02)", "readOn": "2026-10-03", "says": "Udinese has loaned Jordan Zemura to Watford FC until 2027-06-30"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.fotmob.com/en-GB/players/982633/jordan-zemura", "publisher": "FotMob", "readOn": "2026-10-03", "says": "Watford, on loan from Udinese August 2026 to June 2027, born 1999-11-14, played 2026-09-12"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/283171/jordan-zemura", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Watford, born 1999-11-14, Championship matches from 2026-08-29 to 2026-09-12"}
+   ]
+  },
+  {
+   "name": "Stefan de Vrij",
+   "from": "Inter Milan",
+   "to": "Panathinaikos",
+   "realClub": "Panathinaikos",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-02-05. Gone from Inter's current squad; Panathinaikos's number 6, with Greek Super League matches from 2026-08-31 to 2026-09-20.",
+   "sources": [
+    {"family": "A", "url": "https://www.pao.gr/en/team/squad/", "publisher": "Panathinaikos FC (squad page)", "readOn": "2026-10-03", "says": "6, Stefan de Vrij, defender; the club home page gives his birth date 05/02/1992"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/inter/squad", "publisher": "Lega Serie A (Inter squad, current: carries John Stones and Curtis Jones)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/141443/stefan-de-vrij", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Panathinaikos number 6, born 1992-02-05, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/110/internazionale", "publisher": "ESPN (Internazionale squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Loum Tchaouna",
+   "from": "Lazio",
+   "to": "Coventry City",
+   "realClub": "Coventry City",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-09-08. Gone from Lazio's current squad; Coventry City's number 17 in the Premier League, a permanent player there (loan flag 0), with league matches from 2026-08-21 to 2026-09-19.",
+   "sources": [
+    {"family": "A", "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad", "publisher": "Premier League data feed (premierleague.com), Coventry City squad, season 2026", "readOn": "2026-10-03", "says": "shirt 17, forward, born 2003-09-08, loan 0"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/324541/loum-tchaouna", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Coventry City number 17, born 2003-09-08, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Albert Gudmundsson",
+   "from": "Fiorentina",
+   "to": "Lazio",
+   "realClub": "Lazio",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Lazio's number 80 on the league page. Not in Fiorentina's current squad on the club, league or ESPN pages; in Lazio's on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "listed, forward, shirt 80"},
+    {"family": "A", "url": "https://www.acffiorentina.com/fiorentina-prima-squadra-maschile", "publisher": "ACF Fiorentina (men's first team, current: carries Franco Mastantuono and Radu Dragusin)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "listed among the forwards"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/109/fiorentina", "publisher": "ESPN (Fiorentina squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Christian Kouamé",
+   "from": "Fiorentina",
+   "to": "Aris",
+   "realClub": "Aris",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-12-06. Left Fiorentina for Aris on 2026-02-06, contract to June 2027; Aris's number 8, with Greek Super League matches from 2026-08-30 to 2026-09-19.",
+   "sources": [
+    {"family": "A", "url": "https://www.arisfc.com.gr/el/team/players.html", "publisher": "Aris FC (players page)", "readOn": "2026-10-03", "says": "8, Kouame, forward"},
+    {"family": "A", "url": "https://www.acffiorentina.com/fiorentina-prima-squadra-maschile", "publisher": "ACF Fiorentina (men's first team, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/kouame-cristian/6ZevPMzQ/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Fiorentina to Aris 2026-02-06, born 1997-12-06, contract to 2027-06-30, current club Aris"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/241415/christian-kouame", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Aris number 8, born 1997-12-06, played 2026-09-19"}
+   ]
+  },
+  {
+   "name": "Thórir Jóhann Helgason",
+   "from": "Lecce",
+   "to": "Venezia",
+   "realClub": "Venezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-09-28. Left Lecce when his contract ran out and joined Venezia on a free on 2026-07-01, contract to June 2029; Venezia's number 21.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/venezia/squad", "publisher": "Lega Serie A (Venezia squad, current)", "readOn": "2026-10-03", "says": "listed, midfielder, shirt 21"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/lecce/squad", "publisher": "Lega Serie A (Lecce squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 21, age 26"},
+    {"family": "B", "url": "https://us.soccerway.com/player/helgason-thorir/QsP2aUC4/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lecce to Venezia free 2026-07-01, born 2000-09-28, contract to 2029-06-30"}
+   ]
+  },
+  {
+   "name": "Pedro Pereira",
+   "from": "Monza",
+   "to": "Gençlerbirliği",
+   "realClub": "Gençlerbirliği",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The Portuguese right back born 1998-01-22 (the baked row is an RB aged 27, so it is him and not one of the many namesakes). Left Monza on a free and joined Gencerbirligi on 2025-07-24, contract to June 2027; their number 13 in the 2026-27 squad. Gencerbirligi's own site did not answer (HTTP 522), so the official voice for the destination is the Turkish Football Federation: his licence page (full name Pedro Miguel de Almeida Lopes Pereira, born in Lisbon on 1998-01-22) carries the Gencerbirligi contract with its 2026-27 registration dated 2026-08-05, and the federation's sheet of the Gencerbirligi v Erzurumspor match of 2026-08-28 names him. The league page no longer lists him at Monza.",
+   "sources": [
+    {"family": "A", "url": "https://www.tff.org/Default.aspx?pageId=30&kisiId=2420216", "publisher": "Turkish Football Federation (player licence page)", "readOn": "2026-10-03", "says": "Pedro Miguel de Almeida Lopes Pereira, born 1998-01-22 in Lisbon, Portugal; club Genclerbirligi, contract 2025-07-25 to 2027-06-30, registration renewed (vize) 2026-08-05"},
+    {"family": "A", "url": "https://www.tff.org/Default.aspx?pageId=29&macId=317806", "publisher": "Turkish Football Federation (match sheet, Genclerbirligi v Erzurumspor FK, 2026-08-28)", "readOn": "2026-10-03", "says": "Pedro Miguel de Almeida Lopes Pereira in the Genclerbirligi line up"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/pereira-pedro/8t5OxIB9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Genclerbirligi free 2025-07-24, born 1998-01-22, Portugal, defender, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/996/genclerbirligi", "publisher": "ESPN (Genclerbirligi squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 13, age 28, Portugal (player id 224188)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Adrian Benedyczak",
+   "from": "Parma",
+   "to": "Kasımpaşa",
+   "realClub": "Kasımpaşa",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-11-24. On loan at Kasimpasa from Parma from February 2026, then sold to them outright on 2026-07-28, contract to June 2030; Kasimpasa's number 9, with Super Lig matches from 2026-08-22 to 2026-09-18.",
+   "sources": [
+    {"family": "A", "url": "https://www.kasimpasa.com.tr/tr/takimlar/kasimpasa-profesyonel-a-takimi", "publisher": "Kasimpasa SK (professional first team)", "readOn": "2026-10-03", "says": "listed (spelled Benedyzcak), profile /tr/oyuncu/adrian-benedyzcak_733.html"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/parma/squad", "publisher": "Lega Serie A (Parma squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/benedyczak-adrian/KSn7To32/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Parma to Kasimpasa 2026-07-28, born 2000-11-24, contract to 2030-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/288482/adrian-benedyczak", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Kasimpasa number 9, born 2000-11-24, played 2026-09-18"}
+   ]
+  },
+  {
+   "name": "Duje Caleta-Car",
+   "from": "Lyon",
+   "to": "Sassuolo",
+   "realClub": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Sassuolo's number 15, aged 30 on ESPN, with two appearances in 2026-27. Not in Lyon's 2026-27 squad on ESPN; in Sassuolo's on both the league page and ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/sassuolo/squad", "publisher": "Lega Serie A (Sassuolo squad, current)", "readOn": "2026-10-03", "says": "listed, defender, shirt 15"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo", "publisher": "ESPN (Sassuolo squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 15, age 30, 2 appearances (player id 194766)"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/167/lyon", "publisher": "ESPN (Lyon squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Romain Del Castillo",
+   "from": "Brest",
+   "to": "Osasuna",
+   "realClub": "Osasuna",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-03-29. Played Brest's first two Ligue 1 matches of 2026-27, then was sold to Osasuna on 2026-09-01, contract to June 2028; Osasuna's number 20, with LaLiga matches on 2026-09-12 and 2026-09-16. Brest's own squad page still lists him, but it is an old page (it is headed 2024-2025 and carries men who have left), so it is not used.",
+   "sources": [
+    {"family": "A", "url": "https://www.osasuna.es/en/team", "publisher": "CA Osasuna (first team roster, 2026)", "readOn": "2026-10-03", "says": "20, Romain Del Castillo, midfielder"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/230896/romain-del-castillo", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Osasuna number 20, born 1996-03-29, played 2026-09-16; last Brest match 2026-08-29"},
+    {"family": "B", "url": "https://us.soccerway.com/player/del-castillo-romain/hnER3xyT/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Brest to Osasuna 2026-09-01, born 1996-03-29, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6997/brest", "publisher": "ESPN (Brest squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Massadio Haïdara",
+   "from": "Brest",
+   "to": "Kocaelispor",
+   "realClub": "Kocaelispor",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-12-02. Left Brest on a free and joined Kocaelispor on 2025-07-03, contract to June 2027; their number 21, with six appearances in 2026-27 on ESPN.",
+   "sources": [
+    {"family": "A", "url": "https://www.kocaelispor.com.tr/", "publisher": "Kocaelispor (club site, A team roster)", "readOn": "2026-10-03", "says": "#21 Massadio Haidara, defender, profile /oyuncu/massadio-haidara"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/995/kocaelispor", "publisher": "ESPN (Kocaelispor squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 21, age 33, Mali, 6 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/haidara-massadio/YqmUoTve/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Brest to Kocaelispor free 2025-07-03, born 1992-12-02, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6997/brest", "publisher": "ESPN (Brest squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Étienne Youté Kinkoué",
+   "from": "Le Havre",
+   "to": "Lausanne-Sport",
+   "realClub": "Lausanne-Sport",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-01-14. Left Le Havre on a free and joined Lausanne-Sport on 2026-09-03, contract to June 2029; their number 4.",
+   "sources": [
+    {"family": "A", "url": "https://www.lausanne-sport.ch/contingent/", "publisher": "FC Lausanne-Sport (first team squad)", "readOn": "2026-10-03", "says": "4, Etienne Youte Kinkoue, defender"},
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/youte-kinkoue-etienne/WvnBSOGB/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Lausanne free 2026-09-03, born 2002-01-14, contract to 2029-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/297168/etienne-youte-kinkoue", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lausanne Sports, defender, born 2002-01-14"}
+   ]
+  },
+  {
+   "name": "Rémy Cabella",
+   "from": "Lille",
+   "to": "Volos",
+   "realClub": "Volos",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1990-03-08. Left Lille for Olympiacos on a free in July 2025, spent the spring of 2026 on loan at Nantes, and joined Volos on a free on 2026-09-14, contract to June 2027; no appearance for them yet. ESPN's player page still heads him as Olympiacos, but Olympiacos's own squad does not list him and ESPN's last match for him is for Nantes on 2026-05-17, so that header is stale.",
+   "sources": [
+    {"family": "A", "url": "https://www.slgr.gr/en/team/1190/teamComp/25/", "publisher": "Super League Greece (Volos NFC squad, season 2026-2027)", "readOn": "2026-10-03", "says": "5, Remy Cabella, forward, born 1990-03-08, France, 0 appearances"},
+    {"family": "A", "url": "https://www.losc.fr/effectif/lille/76", "publisher": "LOSC Lille (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.olympiacos.org/en/team/", "publisher": "Olympiacos FC (first team squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/cabella-remy/hl6k3P1f/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lille to Olympiacos free 2025-07-01, Olympiacos to Nantes loan 2026-01-01, back 2026-06-30, Olympiacos to Volos free 2026-09-14, born 1990-03-08, contract to 2027-06-30"},
+    {"family": "B", "url": "https://us.soccerway.com/team/volos/nDZbFBqG/squad/", "publisher": "Soccerway (Volos squad 2026-2027)", "readOn": "2026-10-03", "says": "20, Cabella Remy, midfielder, age 36, 0 minutes"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/166/lille", "publisher": "ESPN (Lille squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Luiz Felipe",
+   "from": "Marseille",
+   "to": "Rayo Vallecano",
+   "realClub": "Rayo Vallecano",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-03-22, the Italy international centre back. Left Marseille on a free and joined Rayo Vallecano on 2025-07-07, contract to June 2027; their number 5, currently injured (hamstring) with no 2026-27 minutes.",
+   "sources": [
+    {"family": "A", "url": "https://www.rayovallecano.es/jugadores", "publisher": "Rayo Vallecano (first team squad)", "readOn": "2026-10-03", "says": "5, defender, Luiz Felipe"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/101/rayo-vallecano", "publisher": "ESPN (Rayo Vallecano squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 5, age 29, Italy (player id 225637)"},
+    {"family": "B", "url": "https://us.soccerway.com/player/luiz-felipe/G2OoCE97/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Marseille to Rayo Vallecano free 2025-07-07, born 1997-03-22, Italy, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/176/marseille", "publisher": "ESPN (Marseille squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Lucas Michal",
+   "from": "Monaco",
+   "to": "Cercle Brugge",
+   "realClub": "Cercle Brugge, on loan from Monaco",
+   "loan": true,
+   "loanFrom": "Monaco",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-06-22. After a spring 2026 loan at Metz, Monaco loaned him to Cercle Brugge on 2026-07-30, to June 2027; their number 22, with six appearances in 2026-27. ESPN spells him Lucas Michel.",
+   "sources": [
+    {"family": "A", "url": "https://www.cerclebrugge.be/teams/a-team/", "publisher": "Cercle Brugge (A team squad)", "readOn": "2026-10-03", "says": "22, Lucas Michal, attacker, age 21"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3610/cercle-brugge-ksv", "publisher": "ESPN (Cercle Brugge squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Lucas Michel, forward, shirt 22, age 21, France, 6 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/michal-lucas/fD49VLmq/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Cercle Brugge from Monaco 2026-07-30 to 2027-06-30, born 2005-06-22"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/174/as-monaco", "publisher": "ESPN (AS Monaco squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Abakar Sylla",
+   "from": "Strasbourg",
+   "to": "Gaziantep FK",
+   "realClub": "Gaziantep FK",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-12-25. After a spring 2026 loan at Nantes he went back to Strasbourg and was sold to Gaziantep on 2026-09-04, contract to June 2028; their number 21, with Super Lig matches on 2026-09-07 and 2026-09-14. Gaziantep's own first team page lists him at 21 (the page carries no season label, but he only signed on 2026-09-04, so a page that lists him is current); the club's site is gaziantepfk.org, not the .org.tr host first tried. Strasbourg's 2026-27 squad no longer lists him.",
+   "sources": [
+    {"family": "A", "url": "https://gaziantepfk.org/branslar/futbol/profesyonel-a-futbol-takimi", "publisher": "Gaziantep FK (professional first team squad; no season label, current because it lists a 2026-09-04 signing)", "readOn": "2026-10-03", "says": "21, Abakar Sylla"},
+    {"family": "A", "url": "https://www.rcstrasbourgalsace.fr/leffectif-pro-26-27/", "publisher": "RC Strasbourg Alsace (professional squad 26-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/20070/gaziantep-fk", "publisher": "ESPN (Gaziantep FK squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 21, age 23, Ivory Coast"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/340239/abakar-sylla", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Gaziantep FK number 21, born 2002-12-25, played 2026-09-14"},
+    {"family": "B", "url": "https://us.soccerway.com/player/sylla-abakar/lOBSekrn/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Strasbourg to Gaziantep 2026-09-04, born 2002-12-25, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg", "publisher": "ESPN (Strasbourg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  }
+ ],
+ "removedClubNotModelled": [
+  {
+   "name": "Damián Pizarro",
+   "from": "Udinese",
+   "realClub": "Audax Italiano, on loan from Udinese",
+   "loan": true,
+   "loanFrom": "Udinese",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2005-03-28. Udinese loaned him to Le Havre (August 2025, ended early in January 2026), then Racing Club from January 2026 (Udinese announced that loan to run to 2026-12-31; Soccerway records his return on 2026-06-30, and the Audax loan of July 2026 means it did end early), then Audax Italiano from 2026-07-29 to June 2027. Chile is not modelled. The destination's official voice is Udinese's own announcement; En Cancha, quoting Audax Italiano's announcement, is kept as a second independent report.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/udinese/squad", "publisher": "Lega Serie A (Udinese squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.udinese.it/news/squadra/pizarro-in-prestito-all-audax-italiano", "publisher": "Udinese Calcio (club announcement, 2026-07-29)", "readOn": "2026-10-03", "says": "Damian Pizarro joins Audax Italiano on loan until 2027-06-30"},
+    {"family": "B", "url": "https://www.encancha.cl/futbol-chileno/primera/2026/07/29/capacidad-goleadora-damian-pizarro-tiene-nuevo-equipo-en-chile-y-ya-fue-presentado-oficialmente/", "publisher": "En Cancha (Chilean newspaper, 2026-07-29, quoting Audax Italiano's announcement)", "readOn": "2026-10-03", "says": "officially joins on loan from Udinese until June 2027"},
+    {"family": "B", "url": "https://us.soccerway.com/player/pizarro-damian/O8lwaueL/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Le Havre 2025-08-26, back 2026-01-13; loaned to Racing Club 2026-01-27, back 2026-06-30; loaned to Audax Italiano 2026-07-29, back to Udinese 2027-06-30; current club Audax Italiano; born 2005-03-28"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/118/udinese", "publisher": "ESPN (Udinese squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Joaquín Correa",
+   "from": "Inter Milan",
+   "realClub": "Estudiantes de La Plata",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-08-13. Gone from Inter's current squad; Estudiantes's number 32, with Liga Profesional and Libertadores matches from 2026-08-31 to 2026-09-16. Argentina is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://estudiantesdelaplata.com/futbol/futbol-profesional/", "publisher": "Estudiantes de La Plata (professional squad)", "readOn": "2026-10-03", "says": "32, Joaquin Correa"},
+    {"family": "A", "url": "https://www.legaseriea.it/team/inter/squad", "publisher": "Lega Serie A (Inter squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/195638/joaquin-correa", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estudiantes de La Plata number 32, born 1994-08-13, played 2026-09-16"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/110/internazionale", "publisher": "ESPN (Internazionale squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Simone Scuffet",
+   "from": "Cagliari",
+   "realClub": "Pisa",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1996-05-31. Sold by Cagliari to Pisa on 2025-07-23, contract to June 2028; Pisa's number 1, played the Coppa Italia tie at Fiorentina on 2026-09-15. Pisa is not modelled. The official voice is the league page that no longer lists him at Cagliari; Pisa's own squad page did not answer.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/cagliari/squad", "publisher": "Lega Serie A (Cagliari squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/scuffet-simone/0nQhrI82/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cagliari to Pisa 2025-07-23, born 1996-05-31, contract to 2028-06-30, current club Pisa"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/181784/simone-scuffet", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Pisa number 1, born 1996-05-31, played 2026-09-15"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari", "publisher": "ESPN (Cagliari squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Tommaso Augello",
+   "from": "Cagliari",
+   "realClub": "Palermo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-08-30. Left Cagliari on a free and joined Palermo on 2025-07-08, contract to June 2027; Palermo's number 3, with Serie B matches from 2026-08-23 to 2026-09-19. Palermo is not modelled. The official voice is the league page that no longer lists him at Cagliari; Palermo's own squad page renders no names to a reader.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/cagliari/squad", "publisher": "Lega Serie A (Cagliari squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/augello-tommaso/pUpsjuw3/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cagliari to Palermo free 2025-07-08, born 1994-08-30, contract to 2027-06-30, current club Palermo"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/260197/tommaso-augello", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Palermo number 3, born 1994-08-30, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari", "publisher": "ESPN (Cagliari squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Zito Luvumbo",
+   "from": "Cagliari",
+   "realClub": "Mallorca, on loan from Cagliari",
+   "loan": true,
+   "loanFrom": "Cagliari",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2002-03-09. Loaned by Cagliari to Mallorca on 2026-02-02, and on 2026-07-10 Cagliari announced a new loan to Mallorca to the end of 2026-27, with an option to buy that becomes an obligation on sporting conditions. Mallorca went down from LaLiga in 2026 and is not modelled in the current game. ESPN's two Zito Luvumbo player pages are Angola national team records, but ESPN's 2026-27 Mallorca squad page lists him at 11, aged 24, Angola, which matches his birth date.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/cagliari/squad", "publisher": "Lega Serie A (Cagliari squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://cagliaricalcio.com/news/luvumbo-al-maiorca-cagliaricalcio-seria-liga/", "publisher": "Cagliari Calcio (club announcement, 2026-07-10)", "readOn": "2026-10-03", "says": "Zito Luvumbo joins RCD Mallorca on loan to the end of the 2026/27 season, option to buy that becomes an obligation on sporting conditions"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/84/mallorca", "publisher": "ESPN (Mallorca squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Zito Luvumbo, forward, shirt 11, age 24, Angola, 5 appearances"},
+    {"family": "B", "url": "https://us.soccerway.com/player/luvumbo-zito/QZQ9DtPs/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at Mallorca from Cagliari since 2026-02-02, to 2027-06-30, born 2002-03-09"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2925/cagliari", "publisher": "ESPN (Cagliari squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Alberto Moreno",
+   "from": "Como",
+   "realClub": "Mallorca",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1992-07-05. Left Como when his contract ran out and joined Mallorca on a free on 2026-08-24, contract to June 2027; Mallorca's number 5, played in LALIGA 2 on 2026-09-27. Mallorca went down from LaLiga in 2026 and is not modelled in the current game.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/como/squad", "publisher": "Lega Serie A (Como squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/moreno-alberto/pdBI3oS8/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Como to Mallorca free 2026-08-24, born 1992-07-05, contract to 2027-06-30, current club Mallorca"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/172998/alberto-moreno", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Mallorca number 5, born 1992-07-05, played 2026-09-27; last Como match 2026-05-24"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como", "publisher": "ESPN (Como squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Filippo Distefano",
+   "from": "Frosinone",
+   "realClub": "Empoli",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-08-28 (Soccerway spells him Di Stefano). His 2024-25 loan at Frosinone was from Fiorentina; after a loan at Carrarese he was sold by Fiorentina to Empoli on 2026-07-21, contract to June 2029. Empoli's number 20, with Serie B matches from 2026-08-22 to 2026-09-20. Empoli is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/frosinone/squad", "publisher": "Lega Serie A (Frosinone squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/di-stefano-filippo/YTpHlpak/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Fiorentina to Empoli 2026-07-21, born 2003-08-28, contract to 2029-06-30, current club Empoli"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/331072/filippo-distefano", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Empoli number 20, born 2003-08-28, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone", "publisher": "ESPN (Frosinone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Riccardo Marchizza",
+   "from": "Frosinone",
+   "realClub": "Vicenza",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-03-26. Left Frosinone when his contract ran out and joined Vicenza on a free on 2026-07-08, contract to June 2028; Vicenza's number 5, with Serie B matches from 2026-08-21 to 2026-09-20. Vicenza is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/frosinone/squad", "publisher": "Lega Serie A (Frosinone squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/marchizza-riccardo/fL14Xe6b/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Frosinone to Vicenza free 2026-07-08, born 1998-03-26, contract to 2028-06-30, current club Vicenza"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/227272/riccardo-marchizza", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Vicenza number 5, born 1998-03-26, played 2026-09-20; last Frosinone match 2026-03-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4057/frosinone", "publisher": "ESPN (Frosinone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Frédéric Guilbert",
+   "from": "Lecce",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-12-24. Left Lecce and joined Nantes on a free on 2026-01-28, contract to June 2028; Nantes's number 24, with Ligue 2 matches from 2026-08-14 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lecce/squad", "publisher": "Lega Serie A (Lecce squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/guilbert-frederic/6TtQuJeb/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lecce to Nantes free 2026-01-28, born 1994-12-24, contract to 2028-06-30, current club Nantes"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/215709/frederic-guilbert", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nantes number 24, born 1994-12-24, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/113/lecce", "publisher": "ESPN (Lecce squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Antonio Candela",
+   "from": "Venezia",
+   "realClub": "Catanzaro, on loan from Spezia",
+   "loan": true,
+   "loanFrom": "Spezia",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-04-27. No longer a Venezia player: Soccerway has him on loan at Catanzaro from Spezia since July 2026, to 2027-06-30, after a loan at Empoli in the spring. Catanzaro's number 27, with Serie B matches from 2026-08-21 to 2026-09-19. Neither Catanzaro nor Spezia is modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/venezia/squad", "publisher": "Lega Serie A (Venezia squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/candela-antonio/nHot9WLH/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at Catanzaro from Spezia from July 2026 to 2027-06-30, born 2000-04-27"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/250668/antonio-candela", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Catanzaro number 27, born 2000-04-27, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/17530/venezia", "publisher": "ESPN (Venezia squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Gianluca Caprari",
+   "from": "Monza",
+   "realClub": "Padova",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1993-07-30. Moved from Monza to Padova on 2026-01-30, contract to June 2027; Padova's number 10, with Serie B matches from 2026-08-23 to 2026-09-12. Padova is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/monza/squad", "publisher": "Lega Serie A (Monza squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/caprari-gianluca/hM9I17fh/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Monza to Padova 2026-01-30, born 1993-07-30, contract to 2027-06-30, current club Padova"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/156792/gianluca-caprari", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Padova number 10, born 1993-07-30, played 2026-09-12"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4007/monza", "publisher": "ESPN (Monza squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Samuele Mulattieri",
+   "from": "Sassuolo",
+   "realClub": "Hellas Verona, on loan from Sassuolo",
+   "loan": true,
+   "loanFrom": "Sassuolo",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000-10-07. After a 2025-26 loan at Deportivo, Sassuolo loaned him to Hellas Verona on 2026-07-31, to June 2027; Verona's number 19, with Serie B matches from 2026-08-29 to 2026-09-20. Verona is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/sassuolo/squad", "publisher": "Lega Serie A (Sassuolo squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/mulattieri-samuele/f3tdpb62/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loaned to Verona from Sassuolo 2026-07-31 to 2027-06-30, born 2000-10-07"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/271140/samuele-mulattieri", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Hellas Verona number 19, born 2000-10-07, played 2026-09-20"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3997/sassuolo", "publisher": "ESPN (Sassuolo squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Yann Karamoh",
+   "from": "Torino",
+   "realClub": "Sampdoria",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1998-07-08. Left Torino on a free for Porto on 2025-09-18, then joined Sampdoria on a free on 2026-09-05, contract to June 2027; Sampdoria's number 14, played in Serie B on 2026-09-13. Sampdoria is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/torino/squad", "publisher": "Lega Serie A (Torino squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/karamoh-yann/OQYJ3VXT/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Torino to Porto free 2025-09-18, Porto to Sampdoria free 2026-09-05, born 1998-07-08, contract to 2027-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/225555/yann-karamoh", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Sampdoria number 14, born 1998-07-08, played 2026-09-13"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/239/torino", "publisher": "ESPN (Torino squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Farid El Melali",
+   "from": "Angers",
+   "realClub": "CR Belouizdad",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-07-13. Left Angers on a free for CR Belouizdad on 2025-08-31, contract to June 2030. Algeria is not modelled. The destination rests on Soccerway alone (the ESPN search answered with a connection error twice); off Angers is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://angers-sco.fr/equipe-pro/effectif/", "publisher": "Angers SCO (professional squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/7868/angers", "publisher": "ESPN (Angers squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/el-melali-farid/Yu4ZEgGr/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Angers to CR Belouizdad free 2025-08-31, born 1997-07-13, contract to 2030-06-30"}
+   ]
+  },
+  {
+   "name": "Antoine Joujou",
+   "from": "Le Havre",
+   "realClub": "Nantes",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2003-03-12. His Le Havre spell was a loan from Parma; Parma then loaned him to Famalicao and sold him to Nantes on 2026-08-21, contract to June 2029. Nantes's number 7, with Ligue 2 matches from 2026-08-29 to 2026-09-19. Nantes is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/joujou-antoine/n5pKaQsh/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Parma to Nantes 2026-08-21, born 2003-03-12, contract to 2029-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/357235/antoine-joujou", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nantes number 7, born 2003-03-12, played 2026-09-19"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Arthur Desmas",
+   "from": "Le Havre",
+   "realClub": "Al-Duhail",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1994-04-07. Left Le Havre on a free and joined Al-Duhail on 2025-09-28; their number 16, with AFC Champions League Elite matches in the autumn of 2025. Qatar is not modelled. The realClub value is thin on currency: ESPN's newest Al-Duhail match for him is from October 2025 and Soccerway shows no contract end, so Al-Duhail is the last club both publishers record rather than one confirmed for 2026-27. The removal from Le Havre stands either way, on Le Havre's own squad and ESPN's.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/desmas-arthur/xMzvOmz3/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Le Havre to Al-Duhail free 2025-09-28, born 1994-04-07, goalkeeper"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/226999/arthur-desmas", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Al Duhail number 16, born 1994-04-07"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Reda Khadra",
+   "from": "Le Havre",
+   "realClub": "Qarabağ",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2001-07-04. His Le Havre spell was a loan from Reims that ended on 2026-06-30; Reims sold him to Qarabag on 2026-08-28, contract to June 2028. Azerbaijan is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://hac.football/fr/players?competition=LI1", "publisher": "Le Havre AC (Ligue 1 squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/khadra-reda/tSf0YZjE/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Reims to Qarabag 2026-08-28, back from loan at Le Havre 2026-06-30, born 2001-07-04, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/294632/reda-khadra", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FK Qarabag, born 2001-07-04"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre-ac", "publisher": "ESPN (Le Havre squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Wesley Saïd",
+   "from": "Lens",
+   "realClub": "Al-Shamal",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-04-19. Left Lens when his contract ran out and joined Al-Shamal on a free on 2026-07-18, contract to June 2028; their number 22, played in the AFC Champions League Elite on 2026-09-14. Qatar is not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.rclens.fr/fr/equipe-premiere/effectif/joueurs", "publisher": "RC Lens (first team squad, with its loaned-out list)", "readOn": "2026-10-03", "says": "not listed, nor among the loaned players"},
+    {"family": "B", "url": "https://us.soccerway.com/player/said-wesley/400jX4xg/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lens to Shamal free 2026-07-18, born 1995-04-19, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/186189/wesley-said", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Al Shamal number 22, born 1995-04-19, played 2026-09-14"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/175/lens", "publisher": "ESPN (Lens squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Presnel Kimpembe",
+   "from": "PSG",
+   "realClub": "Al-Kharitiyath",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1995-08-13. Left PSG for Qatar SC on 2025-09-07 and joined Al-Kharitiyath on a free on 2026-07-01. Qatar is not modelled. The destination rests on Soccerway alone (ESPN's player page is a stale PSG shell with no matches); off PSG is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://www.psg.fr/equipes/equipe-premiere/effectif", "publisher": "Paris Saint-Germain (men's first team squad 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/160/paris-saint-germain", "publisher": "ESPN (Paris Saint-Germain squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/kimpembe-presnel/dMyiR1D8/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "PSG to Qatar SC 2025-09-07, Qatar SC to Al-Kharitiyath free 2026-07-01, born 1995-08-13"}
+   ]
+  },
+  {
+   "name": "Shavy Babicka",
+   "from": "Toulouse",
+   "realClub": "United FC, on loan from Crvena zvezda",
+   "loan": true,
+   "loanFrom": "Crvena zvezda",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 2000 (Soccerway 2000-06-01, ESPN 2000-05-31). Sold by Toulouse to Crvena zvezda in August 2025, loaned to Karagumruk in January 2026, then to United FC from 2026-07-26 to June 2027. None of those clubs is modelled. The destination rests on Soccerway alone (ESPN's page shows no club); off Toulouse is two-sourced, which is all the removal needs.",
+   "sources": [
+    {"family": "A", "url": "https://www.toulousefc.com/equipes/equipe-professionnelle/effectif", "publisher": "Toulouse FC (professional squad 2026/2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/179/toulouse", "publisher": "ESPN (Toulouse squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/babicka-shavy/zwDOyrZu/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "on loan at United FC from Crvena zvezda from 2026-07-26 to 2027-06-30, Toulouse to Crvena zvezda August 2025"}
+   ]
+  },
+  {
+   "name": "Thierno Baldé",
+   "from": "Troyes",
+   "realClub": "Nancy",
+   "adjudicatedOn": "2026-10-03",
+   "note": "The right back born 2002-06-10, a PSG academy player. Left Troyes on a free and joined Nancy on 2026-08-05, contract to June 2028; Nancy's number 19, played in Ligue 2 on 2026-08-14. Nancy is in Ligue 2 and not modelled.",
+   "sources": [
+    {"family": "A", "url": "https://www.estac.fr/equipe-premiere/effectif/", "publisher": "ESTAC Troyes (first team squad)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/balde-thierno/OAOSz9F9/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Troyes to Nancy free 2026-08-05, born 2002-06-10, defender, contract to 2028-06-30"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/322891/thierno-balde", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "AS Nancy Lorraine number 19, born 2002-06-10, played 2026-08-14"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/170/troyes", "publisher": "ESPN (Troyes squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  }
+ ],
+ "notCurrent": [
+  {
+   "name": "Gaetano Castrovilli",
+   "from": "Lazio",
+   "why": "Not at Lazio: he left them on a free to Bari on 2025-08-21 and joined Cesena on 2026-02-02. He is not in Cesena's 2026/2027 squad, and Soccerway shows no current club. Unattached is INFERRED, medium confidence, and does NOT meet the brief's bar of two sources for the status itself: ESPN still names Cesena but shows no match for him after 2026-05-08, and no second publisher says he is without a club (also tried: the Lega Serie A player page, which returns 404, and Cesena's site search; Transfermarkt is blocked to the reader). What IS two-sourced is that he is off Lazio (the league page and ESPN's 2026-27 Lazio squad), and neither Cesena (Serie B) nor a free agent is modelled, so the in-game effect, removal, is the same either way. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1997-02-17.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/lazio/squad", "publisher": "Lega Serie A (Lazio squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "A", "url": "https://www.cesenafc.com/teams/prima-squadra/team", "publisher": "Cesena FC (first team squad 2026/2027)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/castrovilli-gaetano/ALBpOZPH/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lazio to Bari free 2025-08-21, Bari to Cesena 2026-02-02, born 1997-02-17, no current club in the header"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/210230/gaetano-castrovilli", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Cesena number 8, born 1997-02-17, last match listed 2026-05-08"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/112/lazio", "publisher": "ESPN (Lazio squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"}
+   ]
+  },
+  {
+   "name": "Alessio Iovine",
+   "from": "Como",
+   "why": "Not at Como: neither the league's current Como squad nor ESPN's 2026-27 Como squad lists him. Soccerway records his career as ended. Retired rests on that ONE source (ESPN's player page still says Como, with no shirt number and no match, and ESPN's search lists him as a Como player, both stale against ESPN's own 2026-27 Como squad), so it is medium confidence and does NOT meet the brief's bar of two sources for the status itself (also tried: the Lega Serie A player page, which returns 404, and Como's site search, which finds only a 2024 feature; Transfermarkt is blocked to the reader and the FotMob API returns 404). Off Como is two-sourced (the league page and ESPN's 2026-27 Como squad), and no current club is named anywhere, so the in-game effect, removal, rests on both families. Re-check at the next adjudication.",
+   "adjudicatedOn": "2026-10-03",
+   "note": "Born 1991-02-01, a Como midfielder since July 2019.",
+   "sources": [
+    {"family": "A", "url": "https://www.legaseriea.it/team/como/squad", "publisher": "Lega Serie A (Como squad, current)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2572/como", "publisher": "ESPN (Como squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not listed"},
+    {"family": "B", "url": "https://us.soccerway.com/player/lovino-alessio/UieHuD3i/transfers", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "end of career, born 1991-02-01, last move Giana Erminio to Como 2019-07-05"},
+    {"family": "B", "url": "https://www.espn.com/soccer/player/_/id/323140/alessio-iovine", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Como midfielder, born 1991-02-01, no shirt number, no match shown"}
+   ]
+  }
+ ],
+ "pending": [
+  {
+   "name": "Riccardo Sottil",
+   "club": "Fiorentina",
+   "checkedOn": "2026-10-03",
+   "note": "The two families disagree. Family A leaves him out: Fiorentina's own first team page and the Lega Serie A Fiorentina squad do not list him, and neither does ESPN's 2026-27 squad page. Family B keeps him at Fiorentina: Soccerway says his loan at Lecce ended on 2026-06-30, he is back at Fiorentina under contract to June 2027 and out with a back injury, and ESPN's player page also names Fiorentina (no match since 2026-02-28, for Lecce). The likeliest reading is an injured player left off the registered list, which keeps him a Fiorentina player, but no source says so in words, so he stays pending at Fiorentina, the club both player pages name. Tried: legaseriea.it Fiorentina squad, acffiorentina.com first team page, ESPN Fiorentina squad page and player page 262480, Soccerway transfers page rkQyXmLB, all read 2026-10-03. Born 1999-06-03 on both player pages."
+  },
+  {
+   "name": "Jordan Amavi",
+   "club": "Brest",
+   "checkedOn": "2026-10-03",
+   "note": "No official source could be read, so the row cannot leave pending. The independent publishers mostly point away from Brest, but not cleanly: ESPN's 2026-27 Brest squad does not list him, yet his ESPN player page (born 1994-03-09) is still titled 'Jordan Amavi - Brest Defender' while its visible header shows only Defender with no club and no recent match, so ESPN contradicts itself; Soccerway's search shows no current team for him, with its transfer list ending at Brest in July 2024 and an injury from April to July 2025. That reads as a free agent since his Brest contract ended, but no source says so in words. Recommendation for the fold: he is very probably not a Brest player, so holding him out (notCurrent) is safer than shipping him at Brest, once one official voice confirms. Tried: sb29.bzh effectif.php (headed 2024-2025 and still lists Romain Del Castillo, who left on 2026-09-01, so it is stale), sb29.bzh equipe-pro.php and its news feed (no squad, no mention), ESPN Brest squad page (id 6997), ESPN player page 192058, Soccerway xQENPIHR, all read 2026-10-03. The ligue1.com player and club pages render no text to a reader."
+  }
+ ]
+}

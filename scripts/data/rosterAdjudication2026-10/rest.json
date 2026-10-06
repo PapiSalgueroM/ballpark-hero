@@ -1,0 +1,720 @@
+{
+  "round": 935,
+  "shard": "rest: every pending row of scripts/data/rosterConfirmation2026.json whose club plays in none of the Bundesliga, 2. Bundesliga, La Liga, Primeira Liga, Serie A, Ligue 1, Premier League, Championship, MLS, Belgian Pro League, Eredivisie or Super Lig, by the league table in src/lib/clubManager.ts. That is the Austrian Bundesliga, Swiss Super League, Saudi Pro League, Scottish Premiership, Super League Greece, SuperSport HNL, Danish Superliga and the Brasileirao (Liga MX has no pending row left).",
+  "measuredRowCount": 59,
+  "measuredRowCountByLeague": { "austria": 10, "switzerland": 16, "saudi": 10, "scottish": 4, "greece": 7, "croatia": 6, "denmark": 5, "brasileirao": 1 },
+  "adjudicatedOn": "2026-10-03",
+  "method": "Read with WebFetch on 2026-10-03 (the session's web search budget was spent, so pages were reached by their own navigation, by ESPN's public search endpoint and by the Livesport search endpoint behind Soccerway). Family A is the club's own squad page or the league's own page (bundesliga.at, hnl.hr, slgr.gr, spl.com.sa, ligaportugal.pt, the clubs' sites). Family B is an independent publisher on another host: ESPN's 2026-27 squad and player pages and Soccerway's player pages, which count as two publishers. A row leaves pending when an A and a B source agree on the day read. On 2026-10-03, seventeen rows were settled on ESPN and Soccerway alone because the official page for the club the verdict names would not answer a plain fetch (many club sites render their squad by script, some answered 403, 404 or 522). A review held that against the rule, so on 2026-10-05 those pages were read again in a headless browser, which renders them. Thirteen now carry an official page that agrees (Liga Portugal's club pages for the five Portuguese moves, the clubs' own pages for the rest). Giacomo Bonaventura's notCurrent rests on the league's own Al Shabab page, as the ledger's notCurrent rows do. Andreas Hansen and Topi Keskinen still have no official page that renders a squad, so they are back in pending, with the verdict two publishers support kept under heldOnTwoPublishers. Henry Onyekuru is in pending because the publishers disagree on where he is. A row resting on one publisher stays pending. Namesakes are told apart by the birth date or age the sources print against the baked age in src/data/clubManagerRosters.ts (a 2025 row, so one year younger). Same row shapes as the ledger: confirmedStill rows carry club, movedTo rows carry from, to and realClub, removedClubNotModelled rows carry from and realClub, notCurrent rows carry from and why, pending rows carry club, checkedOn and the reason.",
+  "confirmedStill": [
+    {
+      "name": "Jonas Auer",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Left back, shirt 23, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "defender, shirt 23" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 23, age 26" }
+      ]
+    },
+    {
+      "name": "Matthias Seidl",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder, shirt 18, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "midfielder, shirt 18" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 18, age 25" }
+      ]
+    },
+    {
+      "name": "Nikolaus Wurmbrand",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 15, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "attacker, shirt 15" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 15, age 20" }
+      ]
+    },
+    {
+      "name": "Serge-Philippe Raux-Yao",
+      "club": "Rapid Wien",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Centre back, shirt 6, in both 2026-27 squad lists (ESPN spells him Serge Raux Yao).",
+      "sources": [
+        { "family": "A", "url": "https://www.skrapid.at/teams/sk-rapid/", "publisher": "SK Rapid (first team squad page)", "readOn": "2026-10-03", "says": "defender, shirt 6" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/519", "publisher": "ESPN (Rapid Vienna squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Serge Raux Yao, defender, shirt 6, age 27" }
+      ]
+    },
+    {
+      "name": "Krystof Danek",
+      "club": "LASK",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder, shirt 9, in both 2026-27 squad lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (Profis squad page)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, 7 games 1 goal 1 assist" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4411", "publisher": "ESPN (LASK Linz squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 9, age 23" }
+      ]
+    },
+    {
+      "name": "Ivan Nevistic",
+      "club": "Dinamo Zagreb",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Goalkeeper born 1998-07-31, three HNL appearances for Dinamo in 2026-27 on the league's own table.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/dinamo/", "publisher": "SuperSport HNL (Dinamo player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 3 appearances" },
+        { "family": "B", "url": "https://www.soccerway.com/player/nevistic-ivan/Qk9dNm0G/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Din. Zagreb, goalkeeper, born 1998-07-31, contract to 2028-06-30, HNL and Champions League appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Lukas Kacavenda",
+      "club": "Dinamo Zagreb",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder born 2003-03-02. Spent 2025-26 on loan at LASK and came back on 2026-06-30; seven HNL appearances for Dinamo in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/dinamo/", "publisher": "SuperSport HNL (Dinamo player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 7 appearances" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kacavenda-lukas/djxsB91T/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Dinamo Zagreb, born 2003-03-02, loan to LASK 2025-07-01, back 2026-06-30, 7 HNL and 6 Champions League appearances in 2026/27" }
+      ]
+    },
+    {
+      "name": "Marko Livaja",
+      "club": "Hajduk Split",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 1993-08-26, seven HNL appearances and three goals for Hajduk in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed, 7 appearances, 3 goals" },
+        { "family": "B", "url": "https://www.soccerway.com/player/livaja-marko/8CyvzF4J/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hajduk Split, born 1993-08-26, contract to 2027-06-30, 7 appearances 3 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Xherdan Shaqiri",
+      "club": "Basel",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Born 1991-10-10, shirt 10, nine appearances and three goals in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "midfielder, shirt 10" },
+        { "family": "B", "url": "https://www.soccerway.com/player/shaqiri-xherdan/CKcCpcKN/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Basel, born 1991-10-10, contract to 2027-06-30, 9 appearances 3 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Martim Marques",
+      "club": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Portuguese defender born 2004-02-11, shirt 26, six Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "defender, shirt 26" },
+        { "family": "B", "url": "https://www.soccerway.com/player/marques-martim/0WQeBnIt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 2004-02-11, contract to 2029-06-30, 6 Super League appearances 2 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Uran Bislimi",
+      "club": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Midfielder born 1999-09-25, shirt 25, nine Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/bislimi-uran/pfn3aHPA/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1999-09-25, contract to 2027-06-30, 9 Super League and 6 Conference League appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Jota",
+      "club": "Celtic",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Portuguese forward born 1999-03-30, bought from Rennes on 2025-01-27, contract to 2030-06-30, shirt 7 in ESPN's 2026-27 squad with no appearance yet; Soccerway lists a knee injury from 2025-08-09. Celtic's own first team page, read in a browser on 2026-10-05, lists him among the forwards as number 7.",
+      "sources": [
+        { "family": "A", "url": "https://www.celticfc.com/teams/first-team", "publisher": "Celtic FC (men's first team page)", "readOn": "2026-10-05", "says": "FORWARDS: 7 JOTA; loaned out list runs to 2026/12/29 and 2027/06/29" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/256", "publisher": "ESPN (Celtic squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 7, age 27, no appearances shown" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jota/OOmhPCaf/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Celtic, born 1999-03-30, contract to 2030-06-30, knee injury" }
+      ]
+    },
+    {
+      "name": "Ilyas Chouaref",
+      "club": "Sion",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 2000-12-12 (Malta international), shirt 7, seven Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcsion.ch/fr/les-equipes/", "publisher": "FC Sion (Equipe premiere page)", "readOn": "2026-10-03", "says": "attaquant, shirt 7, born 2000-12-12" },
+        { "family": "B", "url": "https://www.soccerway.com/player/chouaref-ylyas/bV1XwLf5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Sion, born 2000-12-12, contract to 2028-06-30, 7 Super League appearances 2 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Mohamed Elyounoussi",
+      "club": "FC Copenhagen",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Shirt 10, eight appearances and six goals in 2026-27 on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.fck.dk/holdet", "publisher": "F.C. Kobenhavn (Forsteholdet page)", "readOn": "2026-10-03", "says": "forward, shirt 10" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/909", "publisher": "ESPN (F.C. Kobenhavn squad page, season 2026-27)", "readOn": "2026-10-03", "says": "midfielder, shirt 10, age 32, 8 appearances 6 goals" }
+      ]
+    },
+    {
+      "name": "Mikel Gogorza",
+      "club": "FC Midtjylland",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Shirt 41 in both 2026-27 lists, no appearance yet on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcm.dk/herreholdet/truppen/", "publisher": "FC Midtjylland (Truppen page)", "readOn": "2026-10-03", "says": "midfield, shirt 41" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/572", "publisher": "ESPN (FC Midtjylland squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 41, age 20" }
+      ]
+    },
+    {
+      "name": "Abdulrahman Ghareeb",
+      "club": "Al-Nassr",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 29, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-nassr/squad", "publisher": "Saudi Pro League (Al Nassr squad page)", "readOn": "2026-10-03", "says": "forward, shirt 29" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/817", "publisher": "ESPN (Al Nassr squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 29, age 29" }
+      ]
+    },
+    {
+      "name": "Saad Haqawi",
+      "club": "Al-Nassr",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward, shirt 60, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-nassr/squad", "publisher": "Saudi Pro League (Al Nassr squad page)", "readOn": "2026-10-03", "says": "forward, shirt 60" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/817", "publisher": "ESPN (Al Nassr squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 60, age 20" }
+      ]
+    },
+    {
+      "name": "Danilo Pereira",
+      "club": "Al-Ittihad",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Defender, shirt 2, in both 2026-27 lists.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-ittihad/squad", "publisher": "Saudi Pro League (Al Ittihad squad page)", "readOn": "2026-10-03", "says": "defender, shirt 2" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/2276", "publisher": "ESPN (Al Ittihad squad page, season 2026-27)", "readOn": "2026-10-03", "says": "defender, shirt 2, age 35" }
+      ]
+    },
+    {
+      "name": "Stavro Pilo",
+      "club": "AEK Athens",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Albanian left back born 2000-12-10, at AEK since 2023-07-01, shirt 3, five league appearances in 2026-27. The league and ESPN spell him Stavros Pilios; Soccerway's page carries both forms and the same birth date, so it is one man.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1186/teamComp/25/", "publisher": "Super League Greece (AEK 2026-2027 roster)", "readOn": "2026-10-03", "says": "Stavros Pilios, defender, shirt 3, born 2000-12-10, 5 appearances" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/887", "publisher": "ESPN (AEK Athens squad page, season 2026-27)", "readOn": "2026-10-03", "says": "Stavros Pilios, defender, shirt 3, age 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/pilios-stavros/MBLcgFGf/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Stavro Pilo, AEK Athens, born 2000-12-10, Albania, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Taxiarchis Fountas",
+      "club": "OFI",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Forward born 1995-09-04, shirt 11, five league appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1196/teamComp/25/", "publisher": "Super League Greece (OFI 2026-2027 roster)", "readOn": "2026-10-03", "says": "forward, shirt 11, born 1995-09-04, 5 appearances" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/1010", "publisher": "ESPN (OFI Crete squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 31" }
+      ]
+    },
+    {
+      "name": "Pedro Raul",
+      "club": "Corinthians",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Forward born 1996-11-05, shirt 18. The 2026-10-02 pass held him because press said Corinthians wanted to sell before the window shut and nothing after the window confirmed he stayed. Both publishers now do: ESPN shows him coming on for Corinthians in Serie A on 2026-09-20, after the Brazilian window closed on 2026-09-11, and Soccerway shows no transfer since he came back from the Ceara loan on 2025-12-31, with a contract to 2028-12-31. Corinthians' own professional squad page, read in a browser on 2026-10-05, lists him among the forwards.",
+      "sources": [
+        { "family": "A", "url": "https://www.corinthians.com.br/futebol/profissional/elenco", "publisher": "Corinthians (professional squad page)", "readOn": "2026-10-05", "says": "ATACANTES: Pedro Raul, beside Yuri Alberto, Memphis, Lingard" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/234070/pedro-raul", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Corinthians, shirt 18, born 1996-11-05, substitute in Serie A on 2026-08-30, 2026-09-06 and 2026-09-20 and in the Libertadores on 2026-09-09 and 2026-09-16" },
+        { "family": "B", "url": "https://www.soccerway.com/player/pedro-raul/SbL3tZWd/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Corinthians, born 1996-11-05, contract to 2028-12-31, back from the Ceara loan 2025-12-31, 14 Serie A appearances in 2026, no later transfer" }
+      ]
+    }
+  ],
+  "movedTo": [
+    {
+      "name": "Isak Jansson",
+      "from": "Rapid Wien",
+      "to": "Nice",
+      "realClub": "Nice",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swedish forward born 2002-01-31, shirt 21 at Nice for 2026-27 and absent from both Rapid squad lists. ESPN shows him on the Nice bench in Ligue 1 on 2026-08-30 and 2026-09-12.",
+      "sources": [
+        { "family": "A", "url": "https://www.ogcnice.com/fr/f/equipes/2026-2027/equipe-pro", "publisher": "OGC Nice (2026-2027 first team squad page)", "readOn": "2026-10-03", "says": "attacker, shirt 21" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/282597/isak-jansson", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Nice, forward, shirt 21, born 2002-01-31, Sweden, two Ligue 1 substitute appearances in 2026-27" }
+      ]
+    },
+    {
+      "name": "Lovro Zvonarek",
+      "from": "Sturm Graz",
+      "to": "Estrela Amadora",
+      "realClub": "Estrela Amadora",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Croatian midfielder born 2005-05-08. Sturm Graz was a 2024-25 loan from Bayern; he spent 2025-26 on loan at Grasshoppers and Estrela bought him from Bayern on 2026-07-16. Absent from Sturm's 2026-27 squad on the league's own page. Liga Portugal's own Estrela squad page for 2026-2027 (read 2026-10-05 in a browser) lists him among the midfielders as number 14, and two independent publishers agree, with league starts for Estrela on 2026-09-14 and 2026-09-20.",
+      "sources": [
+        { "family": "A", "url": "https://www.ligaportugal.pt/team/112/estrela-amadora?tab=squad", "publisher": "Liga Portugal (Estrela Amadora squad page, season 2026-2027)", "readOn": "2026-10-05", "says": "MEDIOS: 14 Lovro Zvonarek" },
+        { "family": "A", "url": "https://www.bundesliga.at/team/sk-puntigamer-sturm-graz/6505/kader", "publisher": "Austrian Bundesliga (Sturm Graz 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/346760/lovro-zvonarek", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estrela, shirt 14, born 2005-05-08, started at Academico de Viseu 2026-09-20 and against Rio Ave 2026-09-14 in the Portuguese Liga" },
+        { "family": "B", "url": "https://www.soccerway.com/player/zvonarek-lovro/lAIL4mGi/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Bayern to Estrela 2026-07-16, 1.5m transfer, contract to 2029-06-30; loan at Grasshoppers 2025-07-29 to 2026-06-30" }
+      ]
+    },
+    {
+      "name": "Adrian Leon Barisic",
+      "from": "Basel",
+      "to": "Braga",
+      "realClub": "Braga",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Bosnian centre back born 2001-07-19. On loan at Braga from January 2026, bought outright on 2026-07-01, shirt 37, league starts for Braga on 2026-09-14 and 2026-09-20. Absent from Basel's own squad page. Liga Portugal's own Braga squad page for 2026-2027 (read 2026-10-05) lists him among the defenders as number 37, and two independent publishers agree.",
+      "sources": [
+        { "family": "A", "url": "https://www.ligaportugal.pt/team/285/sc-braga?tab=squad", "publisher": "Liga Portugal (SC Braga squad page, season 2026-2027)", "readOn": "2026-10-05", "says": "DEFESAS: 37 Barisic" },
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/322209/adrian-leon-barisic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Braga, shirt 37, born 2001-07-19, started against Estoril 2026-09-14 and Santa Clara 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/barisic-adrian/Wh521XJd/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "loan Basel to Braga 2026-01-20; transfer Basel to Braga 2026-07-01, 3.5m, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Finn van Breemen",
+      "from": "Basel",
+      "to": "Famalicão",
+      "realClub": "Famalicão",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Dutch centre back born 2003-02-25. Sold by Basel to Famalicao on 2026-07-01, shirt 4, seven league appearances for Famalicao by 2026-09-19. Absent from Basel's own squad page. Liga Portugal's own Famalicao squad page for 2026-2027 (read 2026-10-05) lists him among the defenders as number 4 (as Finn Breemen), and two independent publishers agree.",
+      "sources": [
+        { "family": "A", "url": "https://www.ligaportugal.pt/team/141/fc-famalicao?tab=squad", "publisher": "Liga Portugal (FC Famalicao squad page, season 2026-2027)", "readOn": "2026-10-05", "says": "DEFESAS: 4 Finn Breemen" },
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/340623/finn-van-breemen", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FC Famalicao, shirt 4, born 2003-02-25, started five Portuguese Liga games from 2026-08-23 to 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/van-breemen-finn/IPWz2xmG/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Basel to Famalicao 2026-07-01, 1.5m, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Marin Soticek",
+      "from": "Basel",
+      "to": "Hajduk Split",
+      "realClub": "Hajduk Split, on a season-long loan from Basel",
+      "loan": true,
+      "loanFrom": "Basel",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian forward born 2004-09-18, loaned to Hajduk on 2026-07-29 until 2027-06-30, eight HNL appearances and two goals for Hajduk in 2026-27. Placed at the club he plays for, per loanPolicy; the loan fields are information only.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "Marin Soticek listed, 8 appearances, 2 goals" },
+        { "family": "A", "url": "https://fcb.ch/pages/1-mannschaft/spieler", "publisher": "FC Basel (1. Mannschaft players page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/soticek-marin/2JBIvUPJ/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hajduk Split on loan from Basel, loan from 2026-07-29 to 2027-06-30, born 2004-09-18" }
+      ]
+    },
+    {
+      "name": "Roko Jurisic",
+      "from": "Osijek",
+      "to": "Estoril",
+      "realClub": "Estoril",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Croatian defender born 2001-09-28. Played five HNL games for Osijek in 2026-27 (the league's table keeps them), then was sold to Estoril on 2026-09-04, shirt 21, starting at Braga 2026-09-14 and against Casa Pia 2026-09-20. Liga Portugal's own Estoril squad page for 2026-2027 (read 2026-10-05) lists him as number 21, and two independent publishers agree.",
+      "sources": [
+        { "family": "A", "url": "https://www.ligaportugal.pt/team/176/estoril-praia?tab=squad", "publisher": "Liga Portugal (Estoril Praia squad page, season 2026-2027)", "readOn": "2026-10-05", "says": "21 Jurisic" },
+        { "family": "A", "url": "https://hnl.hr/klubovi/osijek/", "publisher": "SuperSport HNL (Osijek player table, 2026-2027)", "readOn": "2026-10-03", "says": "listed with 5 appearances, 404 minutes, consistent with a September sale" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/310038/roko-jurisic", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Estoril, shirt 21, born 2001-09-28, Portuguese Liga starts 2026-09-14 and 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jurisic-roko/p87XoL39/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Osijek to Estoril 2026-09-04, 500k, contract to 2029-06-30" }
+      ]
+    },
+    {
+      "name": "Georgios Koutsias",
+      "from": "Lugano",
+      "to": "Famalicão",
+      "realClub": "Famalicão",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Greek forward born 2004-02-08. Sold by Lugano to Famalicao on 2026-07-24, shirt 70, seven league starts and five goals by 2026-09-19. Absent from Lugano's own squad page. Liga Portugal's own Famalicao squad page for 2026-2027 (read 2026-10-05) lists him as number 70, and two independent publishers agree.",
+      "sources": [
+        { "family": "A", "url": "https://www.ligaportugal.pt/team/141/fc-famalicao?tab=squad", "publisher": "Liga Portugal (FC Famalicao squad page, season 2026-2027)", "readOn": "2026-10-05", "says": "70 Koutsias" },
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/304317/georgios-koutsias", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "FC Famalicao, shirt 70, born 2004-02-08, 7 Portuguese Liga starts 5 goals in 2026-27" },
+        { "family": "B", "url": "https://www.soccerway.com/player/koutsias-georgios/dzmQbSaB/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano to Famalicao 2026-07-24, 2.5m, contract to 2031-06-30" }
+      ]
+    },
+    {
+      "name": "Ezgjan Alioski",
+      "from": "Al-Ahli",
+      "to": "Lugano",
+      "realClub": "Lugano",
+      "adjudicatedOn": "2026-10-03",
+      "note": "North Macedonian born 1992-02-12. Left Al-Ahli on a free for Lugano on 2025-07-01, shirt 7, three Super League appearances in 2026-27.",
+      "sources": [
+        { "family": "A", "url": "https://www.fclugano.com/teams/prima-squadra", "publisher": "FC Lugano (Prima Squadra page)", "readOn": "2026-10-03", "says": "midfielder, shirt 7" },
+        { "family": "B", "url": "https://www.soccerway.com/player/alioski-egzijan/ObGOBo9F/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Lugano, born 1992-02-12, Al Ahli to Lugano 2025-07-01 free, contract to 2027-06-30, 3 Super League appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Thibault Klidjé",
+      "from": "Luzern",
+      "to": "Hibernian",
+      "realClub": "Hibernian",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Togolese forward born 2001-07-10. Sold by Luzern to Hibernian on 2025-07-13, on loan at Randers from February to June 2026, back at Hibernian for 2026-27 with shirt 18 and Premiership appearances. Hibernian's own first team page, read in a browser on 2026-10-05, lists him among the forwards as number 18.",
+      "sources": [
+        { "family": "A", "url": "https://www.hibernianfc.co.uk/teams/first-team", "publisher": "Hibernian FC (men's first team page)", "readOn": "2026-10-05", "says": "Forwards: 18 Thibault Klidje; loaned out list runs to 31/12/2026" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/258", "publisher": "ESPN (Hibernian squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 18, age 25" },
+        { "family": "B", "url": "https://www.soccerway.com/player/klidje-thibault/GbbVBRzj/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Hibernian, born 2001-07-10, Luzern to Hibernian 2025-07-13 1.2m, loan to Randers 2026-02-02 back 2026-06-30, Premiership appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Duk",
+      "from": "Aberdeen",
+      "to": "Atlas",
+      "realClub": "Atlas",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Cape Verdean forward born 2000-02-16. Sold by Aberdeen to Leganes on 2025-02-03 and by Leganes to Atlas on 2026-07-01; shirt 11 in ESPN's Atlas 2026-27 squad, eight Liga MX appearances. Liga MX's Atlas page (ligamx.net/cancha/club/3) renders its roster sections empty, but Atlas's own site lists him in the men's squad as forward number 11 (read 2026-10-05).",
+      "sources": [
+        { "family": "A", "url": "https://www.atlasfc.com.mx/#plantel", "publisher": "Atlas FC (men's squad on the club home page)", "readOn": "2026-10-05", "says": "DUK, Delantero, Dorsal 11, Nacionalidad Caboverdiano; 26 men listed" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/216", "publisher": "ESPN (Atlas squad page, season 2026-27)", "readOn": "2026-10-03", "says": "forward, shirt 11, age 26, Cape Verde Islands" },
+        { "family": "B", "url": "https://www.soccerway.com/player/duk/YeG6Lfce/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Atlas, born 2000-02-16, Aberdeen to Leganes 2025-02-03, Leganes to Atlas 2026-07-01 2.0m, 8 Liga MX appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/263", "publisher": "ESPN (Aberdeen squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Alexis Antunes",
+      "from": "Servette",
+      "to": "Göztepe",
+      "realClub": "Göztepe",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Swiss midfielder born 2000-07-31. Sold by Servette to Goztepe on 2026-01-05, shirt 8, Super Lig appearances from 2026-08-17 to 2026-09-20. Absent from Servette's own squad page; Goztepe's own men's first team page (read 2026-10-05) lists him among the midfielders as number 8.",
+      "sources": [
+        { "family": "A", "url": "https://www.goztepe.org.tr/Futbol/erkek-a-takim/sporcular", "publisher": "Goztepe (men's A team squad page)", "readOn": "2026-10-05", "says": "ORTA SAHA: ALEXIS ANTUNES 8" },
+        { "family": "A", "url": "https://servettefc.ch/equipe-premiere/effectif/", "publisher": "Servette FC (Effectif page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/290184/alexis-antunes", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Goztepe, shirt 8, born 2000-07-31, Super Lig games 2026-08-17, 2026-09-07, 2026-09-12, 2026-09-20" },
+        { "family": "B", "url": "https://www.soccerway.com/player/antunes-alexis/YVSZXHHU/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Servette to Goztepe 2026-01-05, 537k, contract to 2029-06-30, 6 Super Lig appearances 4 goals in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Gora Diouf",
+      "from": "Sion",
+      "to": "Mechelen",
+      "realClub": "Mechelen",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Senegalese centre back born 2003-09-20. Left Sion on a free for KV Mechelen on 2025-07-01, shirt 4.",
+      "sources": [
+        { "family": "A", "url": "https://kvmechelen.be/selectie/", "publisher": "KV Mechelen (A-kern selection page)", "readOn": "2026-10-03", "says": "defender, shirt 4" },
+        { "family": "B", "url": "https://www.soccerway.com/player/diouf-gora/6cwkTzBJ/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "KV Mechelen, born 2003-09-20, Sion to KV Mechelen 2025-07-01 free, contract to 2028-06-30, 1 appearance in 2026/2027" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Gora%20Diouf&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/350454/gora-diouf)", "readOn": "2026-10-03", "says": "KV Mechelen, Belgian Pro League" }
+      ]
+    },
+    {
+      "name": "Ebrima Colley",
+      "from": "Young Boys",
+      "to": "Konyaspor",
+      "realClub": "Konyaspor, on a season-long loan from Young Boys",
+      "loan": true,
+      "loanFrom": "Young Boys",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Gambian forward born 2000-02-01, loaned to Konyaspor on 2026-07-15 until 2027-06-30, shirt 19, Super Lig appearance against Kasimpasa on 2026-09-18. Absent from Young Boys' own squad page; Konyaspor's own squad page (read 2026-10-05) lists him as number 19, born 01.02.2000, Gambian. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.konyaspor.org.tr/futbolcular", "publisher": "Konyaspor (first team squad page, 28 players by position)", "readOn": "2026-10-05", "says": "EBRIMA COLLEY #19, Orta Saha, born 01.02.2000, Gambiya" },
+        { "family": "A", "url": "https://www.bscyb.ch/kader", "publisher": "BSC Young Boys (Kader page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/287077/ebrima-colley", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Konyaspor, shirt 19, born 2000-02-01, Super Lig substitute appearance 2026-09-18" },
+        { "family": "B", "url": "https://www.soccerway.com/player/colley-ebrima/t6HYZ4HP/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Konyaspor on loan from Young Boys 2026-07-15 to 2027-06-30, 5 Super Lig appearances 1 goal in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Zidan Sertdemir",
+      "from": "FC Nordsjælland",
+      "to": "Lyngby",
+      "realClub": "Lyngby",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Danish midfielder born 2005-02-04. Sold by Nordsjaelland to Preussen Munster on 2025-08-31, then to Lyngby on 2026-09-01, shirt 16. Absent from ESPN's Nordsjaelland 2026-27 squad.",
+      "sources": [
+        { "family": "A", "url": "https://lyngby-boldklub.dk/foersteholdstruppen/", "publisher": "Lyngby Boldklub (first team squad page)", "readOn": "2026-10-03", "says": "shirt 16" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/322760/zidan-sertdemir", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Lyngby Boldklub, shirt 16, born 2005-02-04; last listed games for Preussen Munster in the 2. Bundesliga to 2026-05-17" },
+        { "family": "B", "url": "https://www.soccerway.com/player/sertdemir-zidane/fsOZHtn5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland to Preussen Munster 2025-08-31, Preussen Munster to Lyngby 2026-09-01, contract to 2030-06-30" }
+      ]
+    },
+    {
+      "name": "Musa Barrow",
+      "from": "Al-Taawoun",
+      "to": "Al-Khaleej",
+      "realClub": "Al-Khaleej",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Gambian forward born 1998-11-14. Left Al Taawoun on a free for Al Khaleej on 2026-07-31, shirt 99, six league appearances in 2026-27. Absent from Al Taawoun's squad on the league's page and on ESPN.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-khaleej/squad", "publisher": "Saudi Pro League (Al Khaleej squad page)", "readOn": "2026-10-03", "says": "forward, shirt 99, Gambia" },
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-taawoun/squad", "publisher": "Saudi Pro League (Al Taawoun squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/barrow-musa/ppDqdKi5/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Khaleej, born 1998-11-14, Al Taawon to Al Khaleej 2026-07-31 free, contract to 2027-06-30, 6 league appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18459", "publisher": "ESPN (Al Taawoun squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Glen Kamara",
+      "from": "Al-Shabab",
+      "to": "QPR",
+      "realClub": "Queens Park Rangers, on a season-long loan from Rennes",
+      "loan": true,
+      "loanFrom": "Rennes",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Finnish midfielder born 1995-10-28. Al Shabab was a loan from Rennes that ended on 2025-06-30; Rennes loaned him to QPR on 2026-08-03 until 2027-06-30, shirt 18, Championship games from 2026-09-05 to 2026-09-19. Absent from Al Shabab's squad on the league's page and on ESPN. QPR's own first team page (read 2026-10-05) lists him as number 18, loaned in from Rennes. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.qpr.co.uk/teams/first-team", "publisher": "Queens Park Rangers (first team page)", "readOn": "2026-10-05", "says": "Midfielders: 18 Glen Kamara, Loaned in: Rennes" },
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-shabab/squad", "publisher": "Saudi Pro League (Al Shabab squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/175064/glen-kamara", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Queens Park Rangers, shirt 18, born 1995-10-28, Championship games 2026-09-05, 2026-09-09, 2026-09-12, 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kamara-glen/IPBMorSq/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "QPR on loan from Rennes 2026-08-03 to 2027-06-30; Al Shabab loan ended 2025-06-30; 7 Championship appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Lucas Chaves",
+      "from": "Panetolikos",
+      "to": "Panathinaikos",
+      "realClub": "Panathinaikos, on loan from Argentinos Juniors",
+      "loan": true,
+      "loanFrom": "Argentinos Juniors",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Argentine goalkeeper born 1995-08-09. Panetolikos was a loan from Argentinos Juniors that ended on 2025-12-31; Argentinos loaned him to Panathinaikos on 2026-01-06 until 2027-06-30. Shirt 12, no appearance yet in 2026-27. Not in Panetolikos' 2026-2027 roster. Placed at the club he plays for, per loanPolicy.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1197/teamComp/25/", "publisher": "Super League Greece (Panathinaikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "goalkeeper, shirt 12, born 1995, Argentina, 0 appearances" },
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1198/teamComp/25/", "publisher": "Super League Greece (Panetolikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/215870/lucas-chaves", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Panathinaikos, shirt 12, born 1995-08-09" },
+        { "family": "B", "url": "https://www.soccerway.com/player/chavez-lucas/APZUiQNn/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Panathinaikos on loan from Argentinos Jrs 2026-01-06 to 2027-06-30; Panetolikos loan ended 2025-12-31" }
+      ]
+    }
+  ],
+  "removedClubNotModelled": [
+    {
+      "name": "Robert Zulj",
+      "from": "LASK",
+      "realClub": "Ratchaburi FC (Thailand)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian forward born 1992-02-05. Left LASK on a free to Buriram United on 2025-07-08 and joined Ratchaburi on a free on 2026-09-16. Thailand is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.lask.at/de/m/teams/pros", "publisher": "LASK (Profis squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/150652/robert-zulj", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Ratchaburi FC, born 1992-02-05, Austria; last listed starts for Buriram United in the AFC Champions League Elite" },
+        { "family": "B", "url": "https://www.soccerway.com/player/zulj-robert/UTHdgaQb/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "LASK to Buriram 2025-07-08 free; Buriram to Ratchaburi 2026-09-16 free; contract to 2027-06-30" }
+      ]
+    },
+    {
+      "name": "Mario Kröpfl",
+      "from": "Hartberg",
+      "realClub": "Unconfirmed: left Hartberg, current club on one source only (Soccerway names ATUS Velden, Austrian amateur football, from 2024-07-01)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian midfielder born 1989-12-21. Not in Hartberg's 2026/2027 squad on the league's page or on ESPN's squad page, so the removal stands on both families. Where he plays now is not settled: Soccerway has him leaving Hartberg for ATUS Velden on 2024-07-01, a destination on one source only, and ESPN's player index still names Hartberg, a stale profile its own squad page contradicts. Nothing places him at any club the game models.",
+      "sources": [
+        { "family": "A", "url": "https://www.bundesliga.at/team/tsv-egger-glas-hartberg/6522/kader", "publisher": "Austrian Bundesliga (Hartberg 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/6907", "publisher": "ESPN (TSV Hartberg squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/kropfl-mario/WW53Ta3N/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-12-21; Lafnitz to Hartberg 2022-01-01; Hartberg to Atus Velden 2024-07-01 free" }
+      ]
+    },
+    {
+      "name": "Emanuel Schreiner",
+      "from": "Altach",
+      "realClub": "Unconfirmed: left Altach in 2023, current club not settled (Soccerway alone, and its own page disagrees: header Weisskirchen, newest season row 2026 at Lillehammer in Norway)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Austrian born 1989-02-02. Not in Altach's 2026/2027 squad on the league's page or on ESPN's squad page, so the removal stands on both families. Where he plays now is not settled: Soccerway has him leaving Altach for Weisskirchen on 2023-07-01 after ten seasons and its header still names Weisskirchen, but its career table's newest row is 2026 at Lillehammer (Norway, Division 3 Group 6, one appearance) above 2024/2025 at Weisskirchen. That is one source contradicting itself. ESPN's player index still names Altach, a stale profile its own squad page contradicts. Nothing places him at any club the game models.",
+      "sources": [
+        { "family": "A", "url": "https://www.bundesliga.at/team/scr-altach/6495/kader", "publisher": "Austrian Bundesliga (Altach 2026/2027 squad)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/4405", "publisher": "ESPN (SC Rheindorf Altach squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/schreiner-emanuel/QT80kXI0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-02-02; header Weisskirchen; Altach to Weisskirchen 2023-07-01; career table newest row 2026 Lillehammer, Division 3 Group 6, 1 appearance, then 2024/2025 Weisskirchen" }
+      ]
+    },
+    {
+      "name": "Stipe Biuk",
+      "from": "Hajduk Split",
+      "realClub": "Widzew Lodz (Poland)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Croatian forward born 2002-12-26. Hajduk was a 2024-25 loan from Valladolid that ended on 2025-06-30; he joined Widzew Lodz on a free on 2026-08-21. Not in Hajduk's 2026-27 player table. Poland is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "not listed" },
+        { "family": "B", "url": "https://www.soccerway.com/player/biuk-stipe/MBmNyYIa/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Widzew Lodz, born 2002-12-26, Valladolid to Widzew 2026-08-21 free, contract to 2029-06-30" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Stipe%20Biuk&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/319496/stipe-biuk)", "readOn": "2026-10-03", "says": "Widzew Lodz" }
+      ]
+    },
+    {
+      "name": "Ivan Lucic",
+      "from": "Hajduk Split",
+      "realClub": "Miedz Legnica (Poland)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Goalkeeper born 1995-03-23 (Austrian passport). Left Hajduk on a free for Miedz Legnica on 2026-01-26. Not in Hajduk's 2026-27 player table. Poland is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://hnl.hr/klubovi/hajduk/", "publisher": "SuperSport HNL (Hajduk player table, 2026-2027)", "readOn": "2026-10-03", "says": "not listed" },
+        { "family": "B", "url": "https://www.soccerway.com/player/lucic-ivan/nZCskbG4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Legnica, goalkeeper, born 1995-03-23, Hajduk Split to Legnica 2026-01-26 free, contract to 2028-06-30" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Ivan%20Lucic&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/207181/ivan-lucic)", "readOn": "2026-10-03", "says": "Miedz Legnica" }
+      ]
+    },
+    {
+      "name": "Graham Carey",
+      "from": "St Johnstone",
+      "realClub": "Livingston (Scottish Championship)",
+      "adjudicatedOn": "2026-10-05",
+      "note": "Irish forward born 1989-05-20. Left St Johnstone on a free for Livingston on 2025-07-01, on loan at Dunfermline from January to May 2026, back at Livingston for 2026-27 with Championship appearances. Livingston is not in the game's Scottish Premiership list. Livingston's own 2026-27 playing squad page (read 2026-10-05) lists him as number 27, forward, born 20 May 1989, Irish; its profile says 'Signed July 2026' where Soccerway dates the move to 2025-07-01, but both place him at Livingston now.",
+      "sources": [
+        { "family": "A", "url": "https://livingstonfc.co.uk/team/men/playing-squad/graham-carey/", "publisher": "Livingston FC (men's playing squad, 2026-27)", "readOn": "2026-10-05", "says": "Squad No 27, Forward, Born 20 May 1989, Irish, Signed July 2026, previous clubs include St Johnstone" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/140769/graham-carey", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Livingston, shirt 27, born 1989-05-20, SPFL Championship appearances 2026-08-01, 2026-08-07, 2026-09-11" },
+        { "family": "B", "url": "https://www.soccerway.com/player/carey-graham/CpB5IzL3/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "St Johnstone to Livingston 2025-07-01 free, contract to 2027-06-30, 4 Championship appearances in 2026/2027" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/267", "publisher": "ESPN (St Johnstone squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+      ]
+    },
+    {
+      "name": "Théo Magnin",
+      "from": "Servette",
+      "realClub": "Red Star FC (France, Ligue 2)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swiss right back born 2003-08-09. Left Servette on a free for Red Star on 2026-02-01, shirt 2, seven Ligue 2 starts in 2026-27. Ligue 2 is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://servettefc.ch/equipe-premiere/effectif/", "publisher": "Servette FC (Effectif page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/334979/theo-magnin", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Red Star FC 93, shirt 2, born 2003-08-09, Ligue 2 starts 2026-08-21 to 2026-09-19" },
+        { "family": "B", "url": "https://www.soccerway.com/player/magnin-theo/A9rfNiEq/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Servette to Red Star 2026-02-01 free, contract to 2028-06-30, 7 Ligue 2 appearances in 2026/2027" }
+      ]
+    },
+    {
+      "name": "Joël Ris",
+      "from": "Vaduz",
+      "realClub": "Unconfirmed: left Vaduz in 2023, current club on one source only (Soccerway names SC Cham, Swiss Promotion League, from 2025-07-01)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Swiss midfielder born 2001-01-16. Played for Vaduz in 2021-22 and 2022-23, then Bulle, Kriens (2024-07-16) and Cham (2025-07-01) by Soccerway. Not in Vaduz's own squad, so the removal stands on the official page. The destination is Soccerway alone and is recorded as unconfirmed; ESPN's player index still names Vaduz, a stale profile the club's own page contradicts. Nothing places him at a club the game models.",
+      "sources": [
+        { "family": "A", "url": "https://www.fcvaduz.li/teams/1-mannschaft", "publisher": "FC Vaduz (1. Mannschaft Kader)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/ris-joel/lpMtkuTC/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Cham (Promotion League), born 2001-01-16, Bulle to Kriens 2024-07-16, Kriens to Cham 2025-07-01, contract to 2027-06-30" }
+      ]
+    },
+    {
+      "name": "Serginho",
+      "from": "Viborg FF",
+      "realClub": "Unconfirmed: left Viborg in 2025, current club on one source only (Soccerway names Al Wasl, United Arab Emirates, from 2025-08-04)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "The Cape Verdean forward born 2001-01-29 (baked age 24 matches), at Viborg from Estoril on 2023-07-31 and, by Soccerway, sold to Al Wasl on 2025-08-04, with UAE League appearances in 2026/2027. Not in Viborg's own squad or ESPN's Viborg 2026-27 squad, so the removal stands on both families. The destination is Soccerway alone and is recorded as unconfirmed. Not the Brazilian Serginho born 1995 now at Atromitos, nor the Portuguese one born 1999 now at Levski Sofia; neither ever played for Viborg. The UAE is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.vff.dk/ligaen/truppen", "publisher": "Viborg FF (Truppen page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3153", "publisher": "ESPN (Viborg FF squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/serginho/fNsSBRtt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Wasl, born 2001-01-29, Cape Verde, Estoril to Viborg 2023-07-31 500k, Viborg to Al Wasl 2025-08-04 3.5m" }
+      ]
+    },
+    {
+      "name": "Mateus Castro",
+      "from": "Al-Taawoun",
+      "realClub": "Unconfirmed: left Al Taawoun in 2025, current club on one source only (Soccerway names Nagoya Grampus, Japan, from 2025-01-22)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Brazilian forward born 1994-09-11 (baked age 31 matches). By Soccerway, joined Al Taawoun from Nagoya in August 2023 and went back to Nagoya on 2025-01-22, with four J1 League appearances in 2026. Absent from Al Taawoun's squad on the league's page and on ESPN, so the removal stands on both families. The destination is Soccerway alone (it lists him as Mateus) and is recorded as unconfirmed: ESPN's search has no hit for him and no second source was found. Japan is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-taawoun/squad", "publisher": "Saudi Pro League (Al Taawoun squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/18459", "publisher": "ESPN (Al Taawoun squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/mateus/xS3VYFu2/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nagoya Grampus, born 1994-09-11, Brazil, Nagoya to Al Taawon 2023-08-03 2.8m, Al Taawon to Nagoya 2025-01-22, 4 J1 League appearances in 2026" }
+      ]
+    },
+    {
+      "name": "Mohammed Majrashi",
+      "from": "Al-Faisaly",
+      "realClub": "Unconfirmed: left Al-Faisaly in 2025, current club on one source only (Soccerway names Al Anwar, Saudi First Division, from 2025-09-20)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Saudi forward born 1991-05-20 (baked age 34 matches). By Soccerway, joined Al-Faisaly from Al Fayha on 2024-08-18 and left on a free for Al Anwar on 2025-09-20. Absent from Al-Faisaly's squad on the league's page and on ESPN, so the removal stands on both families. The destination is Soccerway alone and is recorded as unconfirmed; several other Saudi players share the surname, and this is the forward born 1991. The Saudi second tier is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-faisaly/squad", "publisher": "Saudi Pro League (Al Faisaly squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/21446", "publisher": "ESPN (Al Faisaly squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/majrashi-mohammed/SbH1Vole/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Al Anwar (Saudi Division 1), forward, born 1991-05-20, Al Fayha to Al-Faisaly 2024-08-18, Al-Faisaly to Al Anwar 2025-09-20 free" }
+      ]
+    },
+    {
+      "name": "Michael Gardawski",
+      "from": "Asteras Tripolis",
+      "realClub": "Unconfirmed: left Asteras in 2023, current club not settled (Soccerway alone names Eintracht Hohkeppel, German Regionalliga West, and its newest season row there is 2024/2025)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "German midfielder born 1990-09-25. By Soccerway, left Asteras for Ionikos on 2023-09-29 and joined Eintracht Hohkeppel on 2024-07-18. Not in Asteras' 2026-2027 roster on the league's page or on ESPN, so the removal stands on both families. The destination is Soccerway alone and stale (its newest season row is 2024/2025 at Hohkeppel), so it is recorded as unconfirmed; ESPN's player index still names Asteras, a stale profile its own squad page contradicts. German regional football is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1188/teamComp/25/", "publisher": "Super League Greece (Asteras Aktor 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/8354", "publisher": "ESPN (Asteras Tripoli squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/gardawski-michael/Oxf2y87M/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Eintracht Hohkeppel (Regionalliga West), born 1990-09-25, Asteras to Ionikos 2023-09-29, Ionikos to Hohkeppel 2024-07-18" }
+      ]
+    },
+    {
+      "name": "Denzel Jubitana",
+      "from": "Atromitos",
+      "realClub": "Neftci Baku (Azerbaijan)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Surinamese forward born 1999-05-06. Left Atromitos on a free for Neftci Baku on 2026-08-28. Not in Atromitos' 2026-2027 roster on the league's page or on ESPN. Azerbaijan is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1189/teamComp/25/", "publisher": "Super League Greece (Atromitos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/jubitana-denzel/OC7MNNXt/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Neftci Baku, born 1999-05-06, Atromitos to Neftci Baku 2026-08-28 free, contract to 2028-06-30, 1 league appearance in 2026/2027" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Denzel%20Jubitana&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/255745/denzel-jubitana)", "readOn": "2026-10-03", "says": "Neftchi" }
+      ]
+    },
+    {
+      "name": "Ramiro Macagno",
+      "from": "Levadiakos",
+      "realClub": "Independiente Rivadavia (Argentina), on loan from Levadiakos",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Argentine goalkeeper born 1997-03-18. Joined Levadiakos on a free on 2025-02-03 and was loaned to Independiente Rivadavia in January 2026, playing in Argentina's Liga Profesional in 2026. Not in Levadiakos' 2026-2027 roster on the league's page or on ESPN. Per loanPolicy he is placed at the club he plays for, which the game does not model; Soccerway dates the loan's end to 2026-12-31, so re-check in January.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1194/teamComp/25/", "publisher": "Super League Greece (Levadiakos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/macagno-ramiro/nBQsG1sc/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Ind. Rivadavia on loan from Levadiakos, born 1997-03-18, loan return dated 2026-12-31, Liga Profesional appearances in 2026" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Ramiro%20Macagno&limit=10", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/227881/ramiro-macagno)", "readOn": "2026-10-03", "says": "Independiente Rivadavia (Copa Argentina)" }
+      ]
+    },
+    {
+      "name": "Sergio Díaz",
+      "from": "Panetolikos",
+      "realClub": "Barcelona SC (Ecuador)",
+      "adjudicatedOn": "2026-10-03",
+      "note": "Paraguayan forward born 1998-03-05 (baked age 27 matches), at Panetolikos in 2023-24 and 2024-25. Left on a free for Sportivo Luqueno on 2025-07-01 and joined Barcelona SC on a free on 2026-07-13, nine Liga Pro appearances in 2026. Not in Panetolikos' 2026-2027 roster on the league's page or on ESPN. Ecuador is not modelled.",
+      "sources": [
+        { "family": "A", "url": "https://www.slgr.gr/en/team/1198/teamComp/25/", "publisher": "Super League Greece (Panetolikos 2026-2027 roster)", "readOn": "2026-10-03", "says": "not in the roster" },
+        { "family": "B", "url": "https://www.soccerway.com/player/diaz-sergio/Ugta8ie0/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Barcelona SC (Ecuador), born 1998-03-05, Paraguay, Panetolikos to Sp. Luqueno 2025-07-01 free, Sp. Luqueno to Barcelona SC 2026-07-13 free" },
+        { "family": "B", "url": "https://site.web.api.espn.com/apis/search/v2?query=Sergio%20Diaz&limit=20", "publisher": "ESPN (player index, links https://www.espn.com/soccer/player/_/id/93381/sergio-diaz)", "readOn": "2026-10-03", "says": "Sergio Diaz, Barcelona SC" }
+      ]
+    }
+  ],
+  "notCurrent": [
+    {
+      "name": "Giacomo Bonaventura",
+      "from": "Al-Shabab",
+      "why": "Unattached on the evidence read. Italian midfielder born 1989-08-22. Joined Al Shabab on a free from Fiorentina on 2024-08-05 and his last season on record is 2024/2025 there. Not in Al Shabab's 2026-27 squad on the league's page or on ESPN, and Soccerway gives him no club. ESPN's player index still labels him Al Shabab, a stale profile its own squad page contradicts. No retirement notice was found. Medium confidence: re-check at the next adjudication. The family A source is the league's own Al Shabab squad page, the same kind of official read the ledger's notCurrent rows rest on (Neto and Krafth are absent from their club's official 2026/27 list): no official page can show a man without a club, and no source read places him at any club but the stale ESPN index.",
+      "adjudicatedOn": "2026-10-05",
+      "sources": [
+        { "family": "A", "url": "https://www.spl.com.sa/en/teams/al-shabab/squad", "publisher": "Saudi Pro League (Al Shabab squad page)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/793", "publisher": "ESPN (Al Shabab squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" },
+        { "family": "B", "url": "https://www.soccerway.com/player/bonaventura-giacomo/lxFZfQF4/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "born 1989-08-22, Fiorentina to Al Shabab 2024-08-05 free, header names no club and no contract; newest season row 2024/2025 at Al Shabab, Saudi Professional League, 29 appearances" }
+      ]
+    }
+  ],
+  "pending": [
+    {
+      "name": "Lars Villiger",
+      "club": "Luzern",
+      "checkedOn": "2026-10-03",
+      "note": "Checked 2026-10-03 and left pending on one source. Soccerway has him at Luzern (born 2003-04-29, contract to 2028-06-30, four Super League and two cup appearances in 2026/2027, no transfer since 2023), so the row is probably right. But Luzern's own site (fcl.ch) answered 522 on three tries, ESPN's Luzern squad page is still the 2025-26 list and does not show him, and ESPN's player search does not know him, so no second publisher on another host was read."
+    },
+    {
+      "name": "Pascal Schürpf",
+      "club": "Luzern",
+      "checkedOn": "2026-10-03",
+      "note": "Checked 2026-10-03 and left pending, but the row is very probably wrong. Soccerway (born 1989-07-15) has him leaving Luzern for Grasshoppers on a free on 2023-07-01, last playing in 2024/2025, and its player index now gives him no club. ESPN's player index still names Grasshoppers, but ESPN's Grasshoppers squad page (2025-26 list) does not show him. Two independent publishers therefore agree he left Luzern in 2023, but neither says where he is now, and no official page could be read: fcl.ch answered 522 and gcz.ch's player page did not render. Re-check for a retirement notice."
+    },
+    {
+      "name": "Andreas Hansen",
+      "club": "FC Nordsjælland",
+      "checkedOn": "2026-10-05",
+      "note": "Checked 2026-10-03 and 2026-10-05 and left pending for want of an official page. ESPN's FC Nordsjaelland 2026-27 squad (goalkeeper, shirt 13) and Soccerway (born 1995-08-11, contract to 2028-06-30, nine Superliga and six Conference League appearances in 2026/2027) both place him at FC Nordsjaelland, so the row is very probably right. But fcn.dk's men's page (fcn.dk/hold/herrer) and the league's own club page (superliga.dk/klubber/fc-nordsjaelland, squad tab) rendered no squad even in a browser, so no official page was read. The confirmedStill row two publishers support is kept under heldOnTwoPublishers."
+    },
+    {
+      "name": "Topi Keskinen",
+      "club": "Aberdeen",
+      "checkedOn": "2026-10-05",
+      "note": "Checked 2026-10-03 and 2026-10-05 and left pending for want of an official page. ESPN (OB shirt 9, nine Superliga appearances by 2026-09-19, absent from Aberdeen's 2026-27 squad) and Soccerway (Aberdeen to Odense on 2026-07-10) agree he plays for OB, so the row very probably ships him at the wrong club. But ob.dk's men's page (ob.dk/hold/herrer) and the league's own club page (superliga.dk/klubber/ob, squad tab) rendered no squad even in a browser, and Aberdeen's site gave 404, so no official page was read on either end. The movedTo row two publishers support is kept under heldOnTwoPublishers."
+    },
+    {
+      "name": "Henry Onyekuru",
+      "club": "Al-Fayha",
+      "checkedOn": "2026-10-05",
+      "note": "Checked 2026-10-03 and 2026-10-05 and left pending because the sources disagree. He is gone from Al Fayha: the league's own Al Fayha squad page and ESPN's both leave him out, and he left on a free for Genclerbirligi on 2025-07-21. Where he is now is not settled. ESPN's player page (id 238772) still names Genclerbirligi, shirt 7, with a 2026-27 Super Lig line of 0 appearances, and Soccerway's header gives a contract to 2027-06-30 (its 'Free agent' is only the transfer type of the 2025 move). Against that, ESPN's Genclerbirligi 2026-27 squad leaves him out and gives shirt 7 to Tiago Gouveia, and the Livesport search lists no team for him. Genclerbirligi is a club the game models, so if he is still under contract the verdict is movedTo Genclerbirligi, not notCurrent. Genclerbirligi's own site answered 503 ('Sitemiz yenileniyor', being rebuilt) and the federation's club page (tff.org kulupID 3606) shows its 2026-2027 squad only after a form postback, so no official page could break the tie."
+    }
+  ],
+  "heldOnTwoPublishers": {
+    "rule": "Rows two independent publishers on different hosts agree on, with dated 2026-27 evidence, but whose official page could not be read on 2026-10-03 or 2026-10-05 even in a browser. The brief settles a row only when an official page and an independent publisher agree, so they sit in pending. If the lead applies the 2026-10-02 precedent (adjudicatorWeb2026_10_02: a row left pending only where two publishers agreed on the club), each row here can be promoted as it stands; its pending entry is then dropped.",
+    "confirmedStill": [
+      {
+        "name": "Andreas Hansen",
+        "club": "FC Nordsjælland",
+        "adjudicatedOn": "2026-10-03",
+        "note": "Goalkeeper born 1995-08-11, shirt 13, nine Superliga and six Conference League appearances in 2026-27. FC Nordsjaelland's own site gave no squad to a plain fetch, so this rests on two independent publishers that agree.",
+        "sources": [
+          { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/3101", "publisher": "ESPN (FC Nordsjaelland squad page, season 2026-27)", "readOn": "2026-10-03", "says": "goalkeeper, shirt 13, age 31" },
+          { "family": "B", "url": "https://www.soccerway.com/player/hansen-andreas/tv1OOujN/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Nordsjaelland, born 1995-08-11, contract to 2028-06-30, 9 Superliga and 6 Conference League appearances in 2026/2027" }
+        ]
+      }
+    ],
+    "movedTo": [
+      {
+        "name": "Topi Keskinen",
+        "from": "Aberdeen",
+        "to": "OB",
+        "realClub": "OB (Odense Boldklub)",
+        "adjudicatedOn": "2026-10-03",
+        "note": "Finnish forward born 2003-03-07. Sold by Aberdeen to Odense on 2026-07-10, shirt 9, nine Superliga appearances by 2026-09-19. Absent from ESPN's Aberdeen 2026-27 squad. Aberdeen's site gave 404 and OB's site was not reached, so this rests on two independent publishers that agree.",
+        "sources": [
+          { "family": "B", "url": "https://www.espn.com/soccer/player/_/id/341438/topi-keskinen", "publisher": "ESPN (player page)", "readOn": "2026-10-03", "says": "Odense Boldklub, shirt 9, born 2003-03-07, Superliga starts 2026-09-13 (1 goal) and 2026-09-19" },
+          { "family": "B", "url": "https://www.soccerway.com/player/keskinen-topi/tYPHS2vA/", "publisher": "Soccerway", "readOn": "2026-10-03", "says": "Aberdeen to Odense 2026-07-10, 1.0m, contract to 2031-06-30, 9 Superliga appearances in 2026/2027" },
+          { "family": "B", "url": "https://www.espn.com/soccer/team/squad/_/id/263", "publisher": "ESPN (Aberdeen squad page, season 2026-27)", "readOn": "2026-10-03", "says": "not in the squad" }
+        ]
+      }
+    ]
+  }
+}

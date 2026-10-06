@@ -34,6 +34,12 @@
  *   5. The boundary's own render is trivial: no hooks, no imports of game code,
  *      no data access. It is the last thing standing when something else has
  *      already failed, so if it can throw there is nothing underneath it.
+ *      Since Round 958 the class does reach storage and the clock, but only
+ *      through src/lib/brokenSaveRecovery.ts (the fresh start button), whose
+ *      every call is wrapped so it never throws. This section reads the class
+ *      body only, so it cannot see inside that helper; the never-throw contract
+ *      is pinned by src/test/routeErrorRecovery.test.tsx ("never throws when
+ *      every storage call throws").
  *
  * NEGATIVE CONTROLS, one per claim that could go green for the wrong reason:
  *   BOUNDARY_CONTROL=unwrapped removes the boundary from the in-memory copy of
@@ -219,7 +225,7 @@ for (const [what, re] of [
 ]) {
   if (re.test(body)) fail(`the boundary uses ${what}, and it is the last thing standing when something else has already failed`);
 }
-if (failures === before) console.log('   no hooks, no imports, no fetch, no storage, no clock');
+if (failures === before) console.log('   no hooks, no imports, no fetch, no storage, no clock in the class body (storage and the clock only through src/lib/brokenSaveRecovery.ts, never-throw pinned in its vitest)');
 
 /* ------------------------------------------------------------------ */
 if (CONTROL) {

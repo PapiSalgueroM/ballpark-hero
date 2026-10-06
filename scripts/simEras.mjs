@@ -570,6 +570,13 @@ console.log('7) The era menu is exactly what the owner asked for and the data su
   if (CM_ERAS.length !== 1 + historicCount) {
     fail(`${CM_ERAS.length} eras on the menu but only ${historicCount} historical bakes plus today; something is offered without data`);
   }
+  /* Round 971: the fourth past season, 2020-21, the five year step. The menu
+     is today then the pasts newest first, and the newest is a whole big five. */
+  const menu = CM_ERAS.map(e => e.id).join(',');
+  if (menu !== 'now,era2020,era2015,era2010,era2005') fail(`the era menu reads ${menu}`);
+  const w20 = HISTORIC_ROSTERS.era2020 ?? {};
+  if (Object.keys(w20).length !== 98) fail(`the 2020-21 bake holds ${Object.keys(w20).length} clubs, the big five of that season is 98`);
+  if (!/Premier League, La Liga, Serie A, Bundesliga and Ligue 1/.test(eraById('era2020').honesty)) fail('the 2020-21 honesty line does not name the five leagues');
   if (eraById(DEFAULT_ERA_ID).startYear !== CM_BASE_YEAR) fail('the default era is not the real data');
   if (eraById('nonsense-id').id !== CM_ERAS[0].id) fail('an unknown era id does not fall back to the real one');
   // Round 132 saves may still carry the removed era ids. They must not crash,
