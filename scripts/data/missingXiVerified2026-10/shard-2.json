@@ -976,6 +976,30 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Jankulovski at LB and Gilardino starting over Pippo alone up top.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Inzaghi started alone up front and scored twice; Gilardino came on late.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "centre",
+     "to": "right",
+     "why": "layout: Kaka and Seedorf side by side behind Inzaghi (ESPN); sides not stated"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "centre",
+     "to": "left",
+     "why": "layout: Kaka and Seedorf side by side behind Inzaghi (ESPN); sides not stated"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: the lone striker"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "UEFA, ESPN and RSSSF: Pirlo started; Gilardino came on 88' for Inzaghi. ESPN puts Pirlo in the midfield three"
     }
    ],
    "notes": [
@@ -1370,6 +1394,30 @@
      "from": "ST",
      "to": "LM",
      "why": "UEFA and ESPN: Silva started, Villa was an unused substitute. UEFA coordinates put Silva wide left of the line of four; ESPN midfielder"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "centre",
+     "why": "UEFA coordinates: Senna alone between the back four and the midfield line; ESPN midfielder"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA coordinates put Xavi right of centre in the line of four, not on the left wing; ESPN midfielder"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN: Silva started, Villa was an unused substitute. UEFA coordinates put Silva wide left of the line of four; ESPN midfielder"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "layout: the lone striker"
     }
    ],
    "notes": [
@@ -1475,6 +1523,30 @@
      "path": "slots[10].position",
      "from": "LW",
      "to": "RW",
+     "why": "UEFA and ESPN (RF): Silva played on the right"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN: Alonso on the left of the three"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA and ESPN: Xavi on the right of the three"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN (LF): Iniesta played on the left"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
      "why": "UEFA and ESPN (RF): Silva played on the right"
     }
    ],
@@ -1632,6 +1704,42 @@
      "from": "// Ronaldo went off injured in the 25th minute (real, well-documented), replaced by Ricardo Quaresma's positional shift and Renato Sanches remaining central.",
      "to": "// Ronaldo went off injured in the 25th minute; Quaresma came on for him (he did not start). Round 1026: XI and shape checked on UEFA and ESPN.",
      "why": "the comment had Quaresma starting"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN: Joao Mario started (ESPN LM, UEFA left of the line of three); Quaresma came on 25' for Ronaldo"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "centre",
+     "why": "UEFA (defensive midfielder, alone) and ESPN (the holding player in a 4-1-3-2)"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "centre",
+     "why": "UEFA and ESPN: Adrien Silva started (ESPN CM, UEFA centre of the line of three); Moutinho came on 66'"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA (right of the line of three) and ESPN (RM)"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN (CF-L): Ronaldo the left one of the front two"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA and ESPN (CF-R): Nani the right one of the front two"
     }
    ],
    "notes": [
@@ -1781,6 +1889,18 @@
      "from": "Wikipedia infobox + CONMEBOL official match centre archive, agree Di Maria (not Lautaro alone) started centrally and scored the winner.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Montiel, not Molina, at right-back; Di Maria scored the winner from the right of a 4-4-2.",
      "why": "the internal note vouched for the wrong eleven and shape"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "left",
+     "why": "in the 4-4-2 both hosts state, ESPN has Paredes CM-L"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "right",
+     "why": "in the 4-4-2 both hosts state, ESPN has Di Maria RM"
     }
    ],
    "notes": [
@@ -2113,6 +2233,36 @@
      "from": "Wikipedia infobox + CONMEBOL archive, agree on Puch (not Vargas alone) rounding out the front three.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Fuenzalida, not Puch, completed the front three; Medel started at centre-back.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[2].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: ESPN has Jara CD-L, Medel CD-R"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "right",
+     "why": "ESPN and BeSoccer: Medel started at centre-back beside Jara; Francisco Silva came on 103'"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "centre",
+     "why": "in the 4-3-3 both hosts state, ESPN has Vargas the central forward (F)"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "left",
+     "why": "in the 4-3-3 both hosts state, ESPN has Sanchez LF"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
+     "why": "ESPN and BeSoccer: Fuenzalida started (ESPN RF); Puch came on 80' for him"
     }
    ],
    "notes": [
@@ -2249,6 +2399,30 @@
      "path": "slots[10].position",
      "from": "LW",
      "to": "RM",
+     "why": "in the 4-4-2 both hosts state, ESPN has Di Maria RM"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "right",
+     "why": "in the 4-4-2 both hosts state, ESPN has De Paul CM-R"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "in the 4-4-2 both hosts state, ESPN has Mac Allister LM"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "left",
+     "why": "in the 4-4-2 both hosts state, ESPN has Alvarez CF-L"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
      "why": "in the 4-4-2 both hosts state, ESPN has Di Maria RM"
     }
    ],
@@ -2691,6 +2865,18 @@
       "clubAtTime": "Liverpool"
      },
      "why": "started on both hosts; spelling already a verified blank in cl-2007-final-liverpool"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "right",
+     "why": "UEFA and ESPN: Hamann started; Alonso was not in the matchday squad. UEFA puts him right of the holding pair"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "centre",
+     "to": "left",
+     "why": "UEFA and ESPN: Biscan started in midfield (UEFA left of the holding pair); Cisse came on 60' for Baros"
     }
    ],
    "notes": [
@@ -2946,6 +3132,18 @@
      "from": "Wikipedia match report + Manchester City official retrospective + Sky Sports lineup graphic, unanimous.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Kolarov, David Silva and Javi Garcia started; Clichy, Navas and Fernandinho did not.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "premierleague.com and ESPN: Javi Garcia started beside Yaya Toure (ESPN CM-L); Fernandinho came on 69'"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "layout: ESPN CM-R"
     }
    ],
    "notes": [
@@ -3128,6 +3326,36 @@
      "from": "Wikipedia match report + Manchester City official site + Sky Sports lineup graphic, unanimous.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Kompany, Bernardo Silva and Sterling started in a 4-4-1-1.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "right",
+     "why": "premierleague.com and ESPN: Bernardo Silva started (ESPN RM); Fernandinho was not in the matchday squad"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: ESPN CM-L in the 4-4-1-1 both hosts state"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "layout: ESPN CM-R in the 4-4-1-1 both hosts state"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "in the 4-4-1-1 both hosts state, ESPN has Mahrez LM"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "premierleague.com and ESPN: Sterling started (ESPN RCF, behind Aguero); Sane was an unused substitute"
     }
    ],
    "notes": [
@@ -3819,6 +4047,36 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree Manolas scored the decisive header and this was the starting XI.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Roma played a 3-5-2: Juan Jesus and Schick started, Under came on and Perotti was not in the squad.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "centre",
+     "why": "layout: back three"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "right",
+     "why": "UEFA and ESPN both label him a central midfielder; the hosts disagree on his side"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: both hosts put De Rossi in the centre of the three"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA and ESPN: Schick started up front with Dzeko; Under came on 73' for him"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "right",
+     "why": "UEFA and ESPN: one of two strikers; the hosts disagree on sides"
     }
    ],
    "notes": [
@@ -3988,6 +4246,24 @@
      "from": "// Kane was injured and unavailable; Llorente (unlikely hat-trick-adjacent hero) started up front.",
      "to": "// Kane was injured and unavailable; Lucas Moura started up front and scored a hat-trick. Llorente came on at half-time (Round 1026, UEFA and ESPN).",
      "why": "the comment had Llorente starting"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA (left of Lucas Moura) and ESPN (AM-L): Son played on the left"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "left",
+     "to": "centre",
+     "why": "UEFA (forward) and ESPN (F): Lucas was the most advanced player, not the left winger"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "centre",
+     "to": "right",
+     "why": "UEFA and ESPN: Eriksen started as an attacking midfielder (ESPN AM-R); Llorente came on at half-time"
     }
    ],
    "notes": [
@@ -4438,6 +4714,18 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, unanimous on the starting XI for this classic semifinal.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Ashley Cole and Ballack started; Bridge was not in the squad and Malouda came on.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "UEFA (left of centre) and ESPN (LM): Lampard on the left of the central pair"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA (wide right, level with Kalou) and ESPN (RF): Joe Cole played on the right of the attack"
     }
    ],
    "notes": [

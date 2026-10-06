@@ -555,6 +555,30 @@
      "from": "LW",
      "to": "LM",
      "why": "UEFA match data (tactical coordinates) and ESPN agree he was the left side of the line of four (ESPN LM)"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "centre",
+     "why": "layout for the back three"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "centre",
+     "to": "left",
+     "why": "layout: Rodri left of Stones (ESPN CM-L, UEFA x)"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "centre",
+     "to": "left",
+     "why": "layout: Gundogan left of De Bruyne (ESPN AM-L)"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "left",
+     "to": "right",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree he played in the line of four, right of Gundogan (ESPN AM-R)"
     }
    ],
    "notes": [
@@ -1063,6 +1087,24 @@
      "path": "slots[10].position",
      "from": "CF",
      "to": "CAM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree Havertz played behind Werner, level with Mount (ESPN CF-R)"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "layout: Mount was the left one of the pair behind Werner (ESPN CF-L, UEFA x)"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "left",
+     "to": "centre",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree Werner was the centre forward (ESPN F, UEFA STRIKER, the most advanced player)"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "centre",
+     "to": "right",
      "why": "UEFA match data (tactical coordinates) and ESPN agree Havertz played behind Werner, level with Mount (ESPN CF-R)"
     }
    ],
@@ -2329,6 +2371,18 @@
      "from": "4-4-2",
      "to": "4-4-1-1",
      "why": "premierleague.com and ESPN both state 4-4-1-1 (Tevez behind Aguero); no skeptic contradicted it"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: Tevez behind Aguero (ESPN RCF)"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "layout: Aguero the most advanced (ESPN F)"
     }
    ],
    "notes": [
@@ -2976,6 +3030,24 @@
      "from": "Formation is 4-2-3-1 per match-specific archive.",
      "to": "Round 1026: formation is 4-3-3 per premierleague.com and ESPN (scripts/data/missingXiVerified2026-10).",
      "why": "the internal note contradicted the corrected label"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: Gerrard the deepest of the three (tomkinstimes 4-1-2-3)"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "left",
+     "to": "right",
+     "why": "layout: Henderson on the right of the three (ESPN RM)"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "centre",
+     "to": "left",
+     "why": "premierleague.com lists him in a midfield three, ESPN LM; not a No. 10 behind a front three"
     }
    ],
    "notes": [
