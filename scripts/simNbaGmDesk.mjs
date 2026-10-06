@@ -121,7 +121,11 @@
  *                          total opening edge 0.00; with the size anchored staff of before,
  *                          1 of 90 (opening edge 118.00 over the 90)
  * minSheets, minSheetGone and minSheetFull moved to 70 percent of the new lowest
- * set (49, 16, 16); every other floor was already under it.
+ * set (49, 16, 16); every other floor was already under it. The two new
+ * controls on seeds 1..10, each red only in its own check: dayonestature 87
+ * in 5 (3 of 90 clubs played the same under the old anchor too), sheetrepick 34 in 2 (on the
+ * walk itself, not only the full draft copies, the summer sent a let go man
+ * to another club than the one written down).
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
