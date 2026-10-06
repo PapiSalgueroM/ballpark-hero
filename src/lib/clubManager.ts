@@ -6658,7 +6658,12 @@ export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fe
      he asked before Round 632 (wageFor prices a pad off the curve). */
   const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ name: fa.name, rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
   const years = fa.age >= 31 ? 2 : 3;
-  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);
+  /* Round 1033: a real man with no club knows what he is worth, so he never
+     signs on for less than his value. Without this he was a free asset: over
+     ten clubs and two seeds, signing every real free agent and selling him on
+     made 0.16m and 0.22m a sale (Iuri Medeiros, worth 1.5m, came for 0.5m). */
+  const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;
+  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);
   return { wage, years, fee };
 }
 

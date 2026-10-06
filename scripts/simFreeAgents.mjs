@@ -97,6 +97,7 @@
  *   worldseed      a job move's fresh club is seeded too             -> section 18, the once check
  *   rollseed       every summer seeds them again                     -> section 18, the once check
  *   elevenopen     interest forgets the eleventh best line           -> section 18, the line check
+ *   realflip       a real free agent signs on for the plain fee      -> section 18, the sell on check
  *
  * Section 18 is Round 1033: real footballers two sources said had no club
  * (scripts/data/cmFreeAgents2026.json) open a modern career in the pool, once,
@@ -204,6 +205,10 @@ if (CONTROL === 'nosev') {
   rewrite('elevenopen', 'engine',
     '  return fa.rating <= mine - 6 && fa.rating <= eleventhBestRating(career.squad);',
     '  return fa.rating <= mine - 6;');
+} else if (CONTROL === 'realflip') {
+  rewrite('realflip', 'engine',
+    "  const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;",
+    '  const floor = FREE_AGENT_MIN_FEE;');
 } else if (CONTROL === 'realcount') {
   rewrite('realcount', 'engine',
     "  let have = pool.filter(f => f.reason === 'unattached' && f.generated).length;",
@@ -1673,6 +1678,49 @@ console.log("18) a modern day one opens with today's real free agents, and only 
     else if (over) fail(`a real man rated ${e + 1}, above the eleventh best at ${wide.clubName} (level ${wide.clubStrengths[wide.clubName].toFixed(1)}), would sign`);
     else ok(`at ${wide.clubName} a man level with the eleventh best signs and one point above him does not`);
   }
+
+  /* NOT A FREE ASSET. Section 16's policy on the real men: sign every one
+     who will come, list him, take every bid in the window. Their values are
+     real, so on a 0.5m fee Iuri Medeiros (worth 1.5m) sold on at a profit.
+     The fee floor at his value closes it. Measured per sale over these ten
+     clubs, seeds 1 to 3 (per club seed = 100 x seed + club index):
+       no floor:       +0.16, +0.22 a sale (52 and 49 sales)
+       floor at value: -0.10, -0.06, -0.04 (52, 49, 48 sales)
+     The ceiling sits between the two at +0.06, and this runs seed 1. */
+  const FLIP = ['Everton', 'Brentford', 'Napoli', 'Ajax', 'Arsenal', 'Inter Miami', 'Real Madrid', 'Sheffield United', 'Hamburg', 'Le Havre'];
+  const flips = [];
+  for (let i = 0; i < FLIP.length; i += 1) {
+    seeded(100 + i, () => {
+      let st = cm.startCareer(FLIP[i]);
+      const paid = new Map();
+      for (const f of (st.freeAgents ?? []).filter(x => REAL_FA.has(x.name))) {
+        const next = cm.signFreeAgent(st, f.name);
+        if (!next) continue;
+        paid.set(f.name, Math.round((st.budget - next.budget) * 10) / 10);
+        st = next;
+      }
+      const ids = st.squad.filter(p => paid.has(p.name)).map(p => p.id);
+      for (const id of ids) st = cm.setTransferStatus(st, id, 'listed');
+      let calls = 0;
+      while (st.transferWindow && calls < 12 && !st.sacked) {
+        for (const b of [...(st.incomingBids ?? [])]) {
+          if (b.loan || !ids.includes(b.playerId)) continue;
+          const man = st.squad.find(p => p.id === b.playerId);
+          const next = man ? cm.acceptBid(st, b.playerId) : null;
+          if (!next) continue;
+          flips.push(b.offer - paid.get(man.name));
+          st = next;
+        }
+        st = cm.playNextEntry(st, { skipHalftime: true }).state;
+        calls += 1;
+      }
+    });
+  }
+  const flipMean = mean(flips);
+  console.log(`   ${flips.length} real free agents signed and sold on at ${FLIP.length} clubs, ${flipMean.toFixed(2)}m a sale against what he cost`);
+  if (flips.length < 20) fail(`only ${flips.length} real free agents sold on, too few to say what a sale earns`);
+  else if (!(flipMean < 0.06)) fail(`signing a real free agent to sell him on makes ${flipMean.toFixed(2)}m a sale (ceiling 0.06m), so the list is a free asset`);
+  else ok(`signing a real free agent to sell him on does not pay: ${flipMean.toFixed(2)}m a sale (ceiling 0.06m)`);
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
