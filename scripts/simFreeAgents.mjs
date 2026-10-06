@@ -48,7 +48,7 @@
  *   openall        startNegotiation stops checking the window        -> section 3
  *   offeropen      makeOffer stops checking the window               -> section 3
  *   bidopen        acceptBid stops checking the window               -> section 3
- *   keenall        every free agent will sign for anyone             -> sections 4 and 9
+ *   keenall        every free agent will sign for anyone             -> sections 4, 9 and 18
  *   nodecay        the pool never ages out                           -> section 4
  *   nodecaywire    the rollover skips the decay                      -> section 4
  *   nodedupe       the pool accepts a duplicate                      -> section 5
@@ -75,7 +75,7 @@
  *   nojourneymen   the pool is never topped up                       -> sections 13 and 16
  *   movekeeps      the old club's journeymen follow a job move       -> section 13, both move checks
  *   goodjourneymen journeymen rated above the club's level           -> sections 13 and 16
- *   unflagged      journeymen not flagged as made up                 -> section 13
+ *   unflagged      journeymen not flagged as made up                 -> sections 13 and 18
  *   realname       a journeyman wears a real player's name           -> section 13
  *   novalue        journeymen priced with no value, so wages go wild -> section 13
  *   projall        the projection bills a settlement all season      -> section 14
@@ -92,7 +92,7 @@
  *   blocklist      the signing rule reads only the pool record       -> section 17
  *   ledgersquad    a man on a baked squad is in the ledger as free   -> section 18, the ledger and day one checks
  *   noseed         a new modern career is never seeded               -> section 18, day one
- *   realcount      the real men count as journeymen in the top up    -> section 18, day one
+ *   realcount      the real men count as journeymen in the top up    -> section 18, the summer top up check
  *   eraseed        era saves are seeded too                          -> section 18, the once check
  *   worldseed      a job move's fresh club is seeded too             -> section 18, the once check
  *   rollseed       every summer seeds them again                     -> section 18, the once check
@@ -1577,6 +1577,21 @@ console.log("18) a modern day one opens with today's real free agents, and only 
   else ok('every one is in as the file rates, ages and values him, priced by freeAgentTerms off that value');
   if (shortJm.length) fail(`the real men took journeyman places, made up men on day one: ${shortJm.join(', ')} (want ${cm.FREE_AGENT_POOL_TARGET})`);
   else ok(`the ${cm.FREE_AGENT_POOL_TARGET} made up journeymen are still there beside them`);
+  /* And after a summer. Day one tops up before the real men arrive, so it
+     cannot tell whether the top up counts them; a summer can. Sign two
+     journeymen and the summer must make up two more, real men or not. */
+  let jst = { ...clone(everton), wageCap: Number.MAX_SAFE_INTEGER };
+  let signedJm = 0;
+  for (const f of (jst.freeAgents ?? []).filter(x => x.reason === 'unattached' && x.generated)) {
+    if (signedJm >= 2) break;
+    const nx = cm.signFreeAgent(jst, f.name);
+    if (nx) { jst = nx; signedJm += 1; }
+  }
+  const jn1 = seeded(9054, () => cm.startNextSeason(jst));
+  const jmAfter = (jn1.freeAgents ?? []).filter(f => f.reason === 'unattached' && f.generated).length;
+  if (signedJm < 2) fail(`only ${signedJm} journeymen could be signed at Everton, so the summer top up check sees nothing`);
+  else if (jmAfter !== cm.FREE_AGENT_POOL_TARGET) fail(`two journeymen signed, and the summer leaves ${jmAfter} made up men, not ${cm.FREE_AGENT_POOL_TARGET}: the real men are counted as journeymen`);
+  else ok(`two journeymen signed on day one, and the summer tops the made up men back up to ${cm.FREE_AGENT_POOL_TARGET} with the real men still listed`);
 
   /* ONCE. The claim is about today, so nothing but a brand new career in
      today's world is seeded: not an era save, not a job move's fresh club, not
