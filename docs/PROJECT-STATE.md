@@ -1,3 +1,23 @@
+## Codex1063 remote headed keyboard check, 2026-10-06
+
+Fourth preparation37440952238 at04707bef passed types/build,22 combat/controller
+outcomes,28 effective controls,12 regressions and all16 built readers. Three
+native profiles completed actual fights (320touch,390touch,1280mouse), all
+seven combat states and all4 effective geometry controls. Help settled at
+scale1/opacity1 on every profile. All8 font faces loaded. Zero forwarded writes.
+The headless keyboard target still reports focused after activating another
+tab and removing its focus override, so native keyboard focus acceptance is
+not proved. Move the native script to remote headed Chromium under Xvfb;
+keep real focus loss, pause, frozen state, cleared held input and explicit
+resume assertions. No synthetic blur, no bypass and no local runtime.
+
+Artifact11401717542 ZIP SHA256 verified:
+5ed1d14337025148e77cd0eab49cda4b2d5589c37a16a98c82b1d8d4e186e2e8.
+Root viewed actual light phone submission and desktop standing screens.
+No failed generated outputs copied, no release or live claim. Claude retains
+1062/AF publication slot. IAB publisher available if coordinated fallback needed.
+Cage1063 stays branch-only. Next1064 unclaimed. Root held drafts safe.
+
 ## Codex1063 native timing repairs, 2026-10-06
 
 Third preparation37438939732 at76613b21490dfa4aba6126f389a8193aa2d56414

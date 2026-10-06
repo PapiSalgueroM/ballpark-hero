@@ -72,7 +72,7 @@ async function choose(locator, value, profile) {
 }
 const coverage = new Set();
 try {
-  await ready; browser = await chromium.launch({ headless: true });
+  await ready; browser = await chromium.launch({ headless: false });
   for (const profile of profiles) {
     const id = `${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
     const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0 };
@@ -103,6 +103,10 @@ try {
     page.on('requestfailed', request => { if (request.url().startsWith(BASE)) row.assetErrors.push(`${request.url()}: ${request.failure()?.errorText}`); });
     page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(`${response.status()} ${response.url()}`); });
     const cdp = await context.newCDPSession(page);
+    if (profile.input === 'keyboard') {
+      await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+      await page.bringToFront();
+    }
     const control = name => page.locator(`[data-cage-control="${name}"]`);
     const button = name => page.getByRole('button', { name, exact: true });
     async function hold(name, ms, cancel = false) {
@@ -195,9 +199,10 @@ try {
         assert(await page.evaluate(() => document.hasFocus()), 'The arena begins with actual browser focus');
         const other = await context.newPage();
         try {
+          const otherCdp = await context.newCDPSession(other);
+          await otherCdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
           await other.bringToFront();
-          // Playwright enables focus emulation on every page. Remove it to expose native focus loss.
-          await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+          await other.waitForFunction(() => document.hasFocus(), null, { polling: 100, timeout: 3000 });
           await page.waitForFunction(() => !document.hasFocus(), null, { polling: 100, timeout: 3000 });
           row.focusLost = await page.evaluate(() => ({ focused: document.hasFocus(), hidden: document.hidden }));
           assert.equal(row.focusLost.focused, false); await page.clock.runFor(250);
@@ -205,8 +210,8 @@ try {
           await page.clock.runFor(250); assert.deepEqual(await hud(page), frozen, 'Unfocused combat stays frozen');
         } finally {
           await page.keyboard.up('ArrowLeft'); await other.close(); await page.bringToFront();
-          await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
         }
+        await page.waitForFunction(() => document.hasFocus(), null, { polling: 100, timeout: 3000 });
         assert(await page.evaluate(() => document.hasFocus()), 'Browser focus is restored before explicit resume');
         const returned = await hud(page); assert(returned.paused, 'Restoring browser focus does not resume the fight');
         await activate(button('Resume fight'), profile); const x = (await hud(page)).player.x; await page.clock.runFor(180);
