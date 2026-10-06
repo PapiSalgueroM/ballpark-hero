@@ -72,7 +72,8 @@ if (mode === 'all') {
 }
 const held = [];
 for (const relative of [engine, practice, hook, testFile]) {
-  const file = path.join(root, relative), bytes = await readFile(file);
+  const file = path.join(root, relative);
+  const bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, `${relative} source bytes unchanged`)));
 }
 const controlRoot = path.join(root, '.sim-control'); await mkdir(controlRoot, { recursive: true });
