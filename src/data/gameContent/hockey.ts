@@ -905,8 +905,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Play seasons, offseasons and free agency",
         items: [
           "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
-          "Face one big offseason decision each year: training, trade requests, media noise.",
-          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
+          "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while.",
+          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
           "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
           "Age, decline, retire, then read the legacy verdict.",
@@ -966,7 +966,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Reading an actual capped change",
         paragraphs: [
-          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         ],
       },
       {

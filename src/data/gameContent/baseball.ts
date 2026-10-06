@@ -918,8 +918,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
           {
             heading: "Handling offseason events",
             items: [
-              "Handle the offseason event: winter training, surgery calls, trade rumors.",
-              "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
+              "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while.",
+              "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
             ],
           },
         ],
@@ -1011,7 +1011,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading an actual capped change",
         paragraphs: [
-          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         ],
       },
       {

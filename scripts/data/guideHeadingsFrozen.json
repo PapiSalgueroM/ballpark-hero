@@ -1914,8 +1914,10 @@
         "Answer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
         "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
+        "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
-        "Handle the offseason event: winter training, surgery calls, trade rumors.",
+        "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while.",
+        "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "When team control ends, hit the open market for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
         "Stack awards and rings, fight aging, and retire to a verdict."
       ],
@@ -1934,6 +1936,7 @@
         "One career at a time, saved automatically in your browser."
       ],
       "example": [
+        "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         "You build a Slugging Shortstop who goes 12th overall. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
         "You chase the money, the new fanbase starts cold, and the decline grinds. At 38 you retire with 430 homers, a ring and five All-Star nods. Verdict: Hall of Famer.",
         "Both benches empty after a pitch up and in, your rival is first out of his dugout, and the card asks what you do about it. Answer it on the field heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Play peacemaker on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's numbers."
@@ -2223,7 +2226,9 @@
         "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
         "Check the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.",
         "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
-        "Handle the offseason event, one big decision per summer.",
+        "Handle the summer, up to three decisions one card at a time. Only the first card can move your rating, and a card you just saw rests for a while.",
+        "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
+        "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
         "Retire when the body or the fire quits, and face the legacy verdict."
       ],
@@ -2242,6 +2247,7 @@
         "The season the game retires you (41, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no summer runs, no early lifts, no extension talk."
       ],
       "example": [
+        "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
         "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
         "Your rival takes you out on a drive and the refs upgrade it to a flagrant. Give it right back heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Help him up on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's box score."
@@ -2605,7 +2611,9 @@
         "Get drafted by a real club; your slot reflects your starting ability.",
         "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
-        "Face one big offseason decision each year: training, trade requests, media noise.",
+        "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while.",
+        "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
+        "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
         "Age, decline, retire, then read the legacy verdict."
       ],
@@ -2624,6 +2632,7 @@
         "One career saves automatically in your browser; a new one replaces it."
       ],
       "example": [
+        "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         "Say your Sniper winger goes 23rd overall to a rebuilding club. Year one is 24 goals and silence. At 23 you erupt for 47 with an All-Star nod, but the losing wrecks your morale, so you force a trade to a contender.",
         "At 27 you win the Cup. The legs go at 33, you switch to maintenance summers, grab two more years and retire at 38: one Cup, six All-Star nods, a franchise icon verdict. The Hall says not quite.",
         "Your rival gets away with a cheap shot after the whistle, no call, and the card asks what you do about it. Settle it next game heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets the penalty (Morale -5, Fanbase -5, Net worth -$100k). Shrug it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's line."

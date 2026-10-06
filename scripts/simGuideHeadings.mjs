@@ -70,12 +70,14 @@ const CONVERTED_FLOOR = 131;
 /* Round 1031 adds these verified instructions without rewriting the frozen
    pre-conversion record. Only these exact parts on these four routes extend it. */
 const CAREER_GUIDE_ROUTES = new Set(['/nba-my-career', '/nfl-my-career', '/mlb-my-career', '/nhl-my-career']);
+/* Round 1038: the two receipt lines reworded for the summer (Continue opens
+   the next card until the last one), in all four guides. */
 const CAREER_GUIDE_ADDITIONS = {
   howToPlay: [
-    'After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.',
+    'After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.',
     'Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.',
   ],
-  example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.'],
+  example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.'],
 };
 const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, careerline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
@@ -318,17 +320,12 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
     for (const s of strings(c)) if (DASH.test(s)) f.push(`${route}: a dash in "${s.slice(0, 70)}..."`);
     if (!fixture.routes[route]) f.push(`${route}: converted with no frozen original in scripts/data/guideHeadingsFrozen.json, so nothing proves no sentence was cut; freeze before converting`);
   }
-  /* Round 1038: a career route refreshed after the additions landed already
-     carries them in its own frozen list (--refresh reads the whole guide),
-     and may have reworded them for a verified change (the NFL summer did),
-     so the additions are added only to routes frozen before them. */
-  const carriesAdditions = frozen => PARTS.some(p => (frozen[p] ?? []).includes(CAREER_GUIDE_ADDITIONS.howToPlay[1]));
   for (const [route, frozen] of Object.entries(fixture.routes)) {
     const c = content.get(route);
     if (!c) { f.push(`${route}: frozen in the fixture but no game with a guide lives there any more`); continue; }
     const flat = flatGuide(c);
     for (const p of PARTS) {
-      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) && !carriesAdditions(frozen) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
+      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
       const now = flat[p] ?? [];
       for (const s of was) {
         sentences += 1;
