@@ -14,9 +14,10 @@ export const AFL_CALLS: CoachCallsPack = {
   /** A goal. */
   oneScore: 6,
   blowout: 24,
-  /** The college engines' scale. The Aussie Rules engine's own works out near
-   *  1.6 a point of strength (0.006 of possession a minute for 80 minutes at
-   *  about 1.7 points a possession), so 1.5 keeps it slightly under. */
+  /** The college engines' scale. The Aussie Rules engine has no such constant:
+   *  simCoachCalls measures its slope (final margin on the two lineups'
+   *  strength gap) at 1.55 to 2.03 points a rating point over 8 seed bases, so
+   *  1.5 sits at or a little under it. */
   pointsPerEdge: 1.5,
   /** Lower than the college packs: the six clubs are drawn from one pool and sit
    *  close together, so a full plan here would outweigh the roster. */
