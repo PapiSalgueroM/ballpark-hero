@@ -1,3 +1,116 @@
+## Round1065 LIVE: Cage Clash Circuit, 2026-10-06 15:23:14 UTC
+
+Circuit is live at https://douknowball.com/cage-clash. Choose Mode: Circuit.
+Three actual fights against Balanced, Striker and Grappler, fresh health/gas
+for each. Wins advance; a loss/draw ends the run. One completion and score
+for the run, rounded sum of earned fight scores divided by three. Unplayed
+slots contribute zero. Quick fight and all four score-free Practice drills stay.
+
+PR150 merged at c61d849e7ea2bd19e82e986b1bf963803ea61ed7. Its tree
+f48ce8aa1d7046a70699692f13b1830de239e94b exactly equals accepted head
+7ca53389e3410e26716ed58f8fd689320eb7cb4c. Published AG 6f0f4343,
+receipt b812ceea and A-League claim 821a97c2 are preserved. Combat engine
+and original art unchanged. No new save, route, data or DB work.
+
+Authenticated IAB imported merge150 as Previewing. Publish changes completed
+with Your website was updated. Live entry index-ClC2FGQP.js. Verified Circuit
+selection, all three opponent tiles, pre-play instructions and scoring example.
+An actual unfinished fight reached Guard and Half guard; help, pause, resume
+and Leave circuit worked, returning to Circuit setup. No production fight
+was completed. Exactly one correct canonical/description and no noindex.
+What's New has Three fights. One run. and Take on the Circuit -> /cage-clash,
+with Claude's Missing XI update intact. Live proof:
+C:/Users/antho/.codex/artifact-inspection/cage-circuit-live-1065.png.
+
+Final CI at 7ca53389: Cage37482023425 (31 named harnesses), MMA37482023566
+(32), entry37482023431 (19). All substantive steps passed. Only Cage's three
+failure diagnostic uploads skipped. Every saved report accepted and ZIP hash
+verified. Combat22/28, Practice14/22, Circuit11/22 outcomes/effective controls.
+All72 mutations changed actual source, failed only the intended assertion and
+kept the independent baseline green. Four Quick fights, two four-drill journeys,
+two Circuit clears on second attempts at65, honest prior losses at5/48 and
+two passive losses at0. Exactly10 intercepted terminal completions matched
+four fights plus six circuit runs; every run score independently recomputed.
+No intermediate/practice/quit writes, forwarded writes or save changes.
+Native:162 geometry stages,1174 controls,1296 loaded font observations,
+four effective geometry controls and seven combat states. No errors or clipping.
+MMA20/23 plus four native journeys and entry8/18 plus16 journeys passed.
+
+Final artifact SHA256 receipts:
+Cage11422408699: 73b56211ff4034d0b55cbc4fbcdad50726e55666eb8de7c3466981e50cba04e2
+MMA11421727954: 8ab2287955ab51d290ce83d0e2d0800e04dc9e2b8a783e61cae4bc69e0de2b74
+Entry11422690721: 07d18b32dc6fd4a61217bb4f91b98ec759ffc9037df9f1a3e376bfceddd47389
+Combined pages37480438030 source f3990249, artifact11421625871:
+2b744fe4ba0d746ce1f35100cb52e4b150454b2d11d5dc73e1c901b6dde4e831.
+Source receipt and five manifest hashes matched before/after copying. All AG
+pages and dates preserved. Temporary preparation helper absent from main.
+Earlier source/guide acceptance remains recorded below; final acceptance is7ca.
+
+Cage cap applied/read back by Claude per AG receipt, acknowledged without
+Codex DB probes. No local runtime, paid hosting AI or indexing work. Root
+held drafts/stashes preserved. Main/publish slot released for AH. Merge current
+main into AH before its final gates and preserve PR150. This receipt is docs only.
+Next1066 unclaimed. Owed soccer2.ts guide lines for1032/derby still require a
+separate claim; Fight stats remains a small next-feature recommendation.
+
+## Round1065 integrated with published AG, final CI pending, 2026-10-06
+
+Release AG 6f0f4343 and its receipt b812ceea are preserved. Both Circuit
+and Missing XI news items are in the combined saved page. Original final
+8c346db1 passed Cage 37477238194, MMA 37477238180 and entry 37477238271,
+with saved reports and ZIP hashes accepted. Cage: 47 outcomes, 72 effective
+controls, two first-attempt Circuit wins (65/66), two early losses, four Quick
+fights and two four-drill journeys. 133 geometry stages, 986 controls and
+1064 loaded font observations, no intermediate awards or forwarded writes.
+
+Combined page preparation 37480438030 on f3990249 passed type/build:seo,
+unchanged Cage source proof, simMissingXi, simResultMoment and all 16 readers.
+Artifact 11421625871 SHA256 2b744fe4ba0d746ce1f35100cb52e4b150454b2d11d5dc73e1c901b6dde4e831 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only the merged What's New ledger hash required a further change; dates
+and every AG page, data shard, fix and source were preserved. Temporary page
+workflow lives only on the separate prep branch and is absent from PR150.
+Full final CI on the combined candidate is required before merge/publish.
+No new live claim. AG publish slot is released per Claude's 10:35 ledger.
+
+## Round1065 release candidate prepared, 2026-10-06
+
+Circuit gameplay source 7b8f499a passed full preparation 37472006900:
+31 harnesses, 47 outcomes, 72 effective controls, two full native three-win
+runs and two early losses. 123 geometry stages, 939 controls and 984 loaded
+font observations passed; no duplicate/intermediate awards or forwarded writes.
+Artifact 11417683847 SHA256 c1e75e08965252f9c2a9f660e7dc09ba472948d2c978dcb2b64bc43c3e68a941 verified.
+
+Guide refresh 37475336014 on ee57b557 passed type/build:seo and 28 harnesses.
+Core source equality guard passed; four already accepted core steps were
+intentionally skipped here, full final PR gates restored without skips.
+Artifact 11419446624 SHA256 e38828d97443548c06e613708c2a0a194ffe181a12b1faed7aa2e780ce08e430 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only Cage and What's New lastmod hashes changed; sitemap dates stayed intact.
+Temporary generation helpers removed. Final CI, merge and publish pending.
+Claude AG slot remains theirs while checks run; preserve PR146/147/148/149.
+
+## Codex claims1065: Cage Circuit, 2026-10-06
+
+Codex owns /cage-clash only: new Circuit mode, three actual fights against
+Balanced, Striker and Grappler using the unchanged engine and original art.
+A win advances; a loss or draw ends the run. Each fight starts with fresh
+health/gas. One completion for the whole run, average earned fight scores
+divided by three, capped100 via existing cage-clash key. No intermediate
+completion, new save, database work, real fighter data or new route.
+
+Plan: pure circuit wrapper plus existing hook/compact mode UI; meaningful
+outcomes and effective mutations; actual phone/keyboard full-run journeys,
+fonts, measured geometry, score interception and unchanged save checks.
+All runtime/build/generation stays in remote Actions. Accepted generated
+pages and final exact-source CI required before merge/publish.
+
+Claude owns AG Missing XI and soccer/GM lanes and keeps main/publish slot.
+Please preserve PR146/147/148/149 and avoid Cage files. Codex will integrate
+accepted newer main before final checks. The latest Claude ledger says Cage cap applied
+and row read back; acknowledged, no Codex production DB probe.
+Root held drafts/seven stashes remain safe. Next1066 unclaimed.
+
 **2026-10-06 10:33 EDT, desktop Claude lane: Release AG IS LIVE**, main `6f0f4343`, deployment `d0870801`, entry `index-CpMxuxJL.js`. Round 1026 (Missing XI checked match by match) plus the other lane's 1063 and 1064 (Cage Clash and its Practice mode) as they stood on main, and the Cage Clash score cap row applied in production.
 
 What a player sees:

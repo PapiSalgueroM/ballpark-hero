@@ -36,10 +36,12 @@ export default function CageClash() {
               <li>Hold Submission to build pressure. Your opponent can resist or escape. Low stamina makes both defending and attacking harder.</li>
               <li>Use Pause any time. Switching away, opening these rules or losing focus pauses the fight. Resume clears held inputs. Refresh starts over.</li>
               <li>Choose Practice before starting to learn four skills with an untimed partner: land three shots and recover gas, earn a takedown, finish a submission, or regain guard and stand up. Only the moves for that drill are active. Retry as often as you like.</li>
+              <li>Choose Circuit to face a balanced fighter, a striker and a grappler. Win to advance with Next opponent. A loss or draw ends the run. Every fight starts with fresh health and gas; each has up to three 45 second rounds.</li>
               <li>Keyboard: arrows or A/D to move, Space to guard, J/K/L for the upper action row and U/I/O for the lower row. P or Escape pauses.</li>
             </ul>
             <p className="text-sm"><strong>Try this:</strong> move into punching range, block a shot, then clinch. Use Takedown, pass from guard and hold Submission when you have stamina. If the opponent gets on top, defend and try a sweep or stand up.</p>
             <p className="text-xs text-muted-foreground">Quick fight scores are out of 100: a win earns 50, a winning finish adds 15, damage earns up to 20 and defense or ground control earns up to 15. A draw earns 25 outcome points. Practice and quitting earn no score. The fighters and arcade rules are fictional.</p>
+            <p className="text-xs text-muted-foreground">Circuit awards one run score when you finish or lose: add your fight scores, divide by three and round to the nearest point. Unplayed fights count as zero. Three scores of 80, 90 and 85 earn 85/100. Losing the first fight with 30 points earns 10/100.</p>
           </DialogContent>
         </Dialog>
         <GameSeoContent pageHasOwnH1 title="Cage Clash: Pixel MMA Fighting Game" description="Take control of your own fighter in an original pixel cage. Pick a style, manage distance and stamina, then choose between striking and grappling." />
