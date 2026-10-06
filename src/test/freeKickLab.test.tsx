@@ -159,7 +159,7 @@ describe('Free Kick Shot lab actual mounted outcomes', () => {
   it('stops wall traces at real contact and omits imaginary goal crossing readings', () => {
     reducedMotion(); const view = enterLab(); shoot(); fireEvent.click(button('Change setup'));
     const setup = buildRun(SEED)[1]; const wall = wallSpan(setup)!;
-    const blockedAim: Aim = { x: wall.hi > 0 ? .25 : -.25, y: .25, power: .7, curve: 0 };
+    const blockedAim: Aim = { x: wall.hi > 0 ? .25 : -.25, y: 0, power: .7, curve: 0 };
     const blocked = expected(blockedAim, 1); expect(blocked.hitWall).toBe(true); expect(blocked.path).toHaveLength(25);
     setAim(view, blockedAim); expect(shoot()).toEqual(blocked); settle(view);
     expectDrawn(view, 'current', blockedAim, blocked, 1);

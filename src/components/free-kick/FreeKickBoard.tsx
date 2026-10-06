@@ -611,7 +611,7 @@ export default function FreeKickBoard() {
           <Button ref={labRetry} className="min-h-[44px] whitespace-normal" onKeyDown={labKeyDown} onClick={() => repeatLab(false)}>Retry this kick</Button>
           <Button variant="outline" className="min-h-[44px]" onKeyDown={labKeyDown} onClick={() => repeatLab(true)}>Change setup</Button>
         </div>
-        <div ref={labActionRef}><Button variant="outline" className="min-h-[44px] w-full" onKeyDown={labKeyDown} onClick={leaveLab}>Back to modes</Button></div>
+        <div ref={labActionRef} className="scroll-mb-4"><Button variant="outline" className="min-h-[44px] w-full" onKeyDown={labKeyDown} onClick={leaveLab}>Back to modes</Button></div>
       </div>}
       {mode !== 'lab' && phase === 'kickEnd' && result && (
         <ArcadeShotFeedback key={`${mode}-${kickIdx}`} sport="goal" success={result.scored} verdict={result.scored ? 'Goal' : result.verdict} points={result.points}>
