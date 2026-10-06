@@ -16,9 +16,10 @@
  * checks what the board handed the engine and what the winter wrote down:
  * every expiring man decided on the re-sign desk and the feed saying so, the
  * staff edge and the trainer on the round, the edge in October. Measured
- * 2026-10-05 by hand mutation of the board: the winter's `if (deskNow) {`
- * made `if (false && deskNow) {`, and the round handed `undefined` in place
- * of the desk's options, each turns this walk red.
+ * 2026-10-05 by hand mutation of the board, each turns this walk red for its
+ * own reason: the winter's `if (deskNow) {` made `if (false && deskNow) {`
+ * (no decision recorded), the round handed `undefined` in place of the
+ * desk's options, and October handed `undefined` in place of the edges.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';

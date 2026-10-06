@@ -48,9 +48,11 @@
         a full level 10 desk, a middling owner's day one desk, a level 1 desk,
         the dearest name on every shortlist at the top, the pay offs to clear
         a level 10 desk):
-          nfl 59/34/13/48/30  nba 64/36/14/39/24  mlb 62/34/13/35/22
+          nfl 59/34/13/48/30  nba 64/36/14/39/24  mlb 65/35/14/35/22
           nhl 72/38/15/43/27  cfb 23/15/6/13/23   cbb 26/13/7/15/26
           fightGym 30/15/6/8/5  afl 54/33/12/42/27
+        (mlb remeasured 2026-10-05 in Round 1020, when its clock went from 26
+        weeks to the board's 27 rounds with the wage per tick unchanged.)
         Ceilings 85, 60, (floor 3), 60, 60. Deterministic arithmetic. The fees
         are read off the fee each shortlist QUOTES, and every quote is held to
         the fee rule with the post's pay multiple.
