@@ -87,6 +87,15 @@ const VERIFIED_OVERRIDES = {
        Resolved 2026-08-19 with a targeted ILIKE query via the MCP. */
     'Sandro Tonali': 'Italy',
   },
+  era2015: {
+    /* Round 1015 review: Udinese's Guilherme (defensive midfield, 23 in his
+       2015 row). The window's richest row was Lokomotiv Moscow's goalkeeper
+       (Russia), which is what shipped; his own row says Qatar, but
+       Wikipedia's 2015-16 Udinese season page lists the squad's Guilherme as
+       Guilherme dos Santos Torres of Brazil (read 2026-10-06). The two
+       sources disagree, so he carries no flag rather than either one. */
+    Guilherme: '?',
+  },
 };
 
 let failed = false;
@@ -209,9 +218,13 @@ if (process.argv.includes('--prune')) {
      market-base-2006-2011-2016.json, both pulled from player_market_values
      with nationality) under the SAME windows and tie breaks as the queries
      above: the window's years only, the preferred year first, then the
-     highest market_value_usd. Where two rows tie on both and disagree on the
-     country, Postgres would have picked one at random, so the name is left
-     unresolved instead. Every answer is compared with the shipped map, and a
+     highest market_value_usd. Where the window holds two men of the name with
+     different countries, only the rows of the roster's own man (same age and
+     position) are read, when there are any (see the loop). Where two rows
+     still tie on both and disagree on the country, Postgres would have picked
+     one at random, so the name is left unresolved instead. An answer the
+     roster's own man decided may correct the shipped map, and says so; every
+     other answer is compared with the shipped map, and a
      disagreement kills the run: one of the two is wrong and this run cannot
      say which.
    - The modern world has no offline pull with a country in it. It keeps every
@@ -294,18 +307,28 @@ if (process.argv.includes('--offline')) {
       for (const n of names) {
         const cand = (byName.get(n) ?? []).filter(r => years.includes(r.year))
           .sort((a, b) => (b.year === prefer) - (a.year === prefer) || b.usd - a.usd);
-        let nat = cand[0]?.nat ?? null;
-        const tied = cand.filter(r => r.year === cand[0].year && r.usd === cand[0].usd);
-        let tieBroken = false;
-        if (new Set(tied.map(r => r.nat)).size > 1) {
-          /* Two men of one name tied on year and value: the query above let
-             Postgres pick one at random. Keep the row that is the roster's own
-             man, same age and same position, if exactly one country is left;
-             otherwise the name stays unresolved. */
-          const his = new Set(tied.filter(r => r.age === man.get(n)?.a && POS_MAP[r.pos] === man.get(n)?.p).map(r => r.nat));
-          nat = his.size === 1 ? [...his][0] : null;
-          tieBroken = true;
-          console.log(`  ${w.id}: ${n} ties ${tied.length} rows (${tied.map(r => `${r.nat} ${r.pos} ${r.age}`).join(', ')}); the roster's man (${man.get(n)?.p} ${man.get(n)?.a}) is ${nat ?? 'not one of them alone'}`);
+        /* Two men of one name in the window with different countries. The
+           query above took the preferred year's richest row, which is the
+           roster's own man only when he is the richer one: an exact tie was a
+           random pick (Pablo Hernández, Simão), and a richer namesake simply
+           won (Round 1015 review: Barcelona's right back Douglas wore the
+           Dutch flag of a Dynamo Moscow centre back, West Brom's Andy Johnson
+           the English flag of Crystal Palace's striker). So whenever the
+           window's rows disagree on the country, only the rows that are the
+           roster's own man (same age and same position) are read, in the same
+           order; if none is, all of them are, as before. A tie left between
+           two countries at the top leaves the name unresolved. */
+        let pool = cand;
+        let idUsed = false;
+        if (new Set(cand.map(r => r.nat)).size > 1) {
+          const his = cand.filter(r => r.age === man.get(n)?.a && POS_MAP[r.pos] === man.get(n)?.p);
+          if (his.length) { pool = his; idUsed = true; }
+        }
+        const tied = pool.filter(r => r.year === pool[0].year && r.usd === pool[0].usd);
+        let nat = new Set(tied.map(r => r.nat)).size > 1 ? null : (pool[0]?.nat ?? null);
+        const tieBroken = idUsed;
+        if (idUsed && (nat !== cand[0].nat || new Set(cand.filter(r => r.year === cand[0].year && r.usd === cand[0].usd).map(r => r.nat)).size > 1)) {
+          console.log(`  ${w.id}: ${n}: the window's first row is ${cand[0].nat} (${cand[0].pos} ${cand[0].age}); the roster's man (${man.get(n)?.p} ${man.get(n)?.a}) is ${nat ?? 'not one country alone'}`);
         }
         nat = overrides[n] ?? nat;
         if (!nat || nat === '?') { missing.push(n); continue; }
@@ -314,7 +337,7 @@ if (process.argv.includes('--offline')) {
         if (was !== nat) (tieBroken ? corrected : disagree).push(`${n} (shipped ${was ?? 'nothing'}, dump ${nat})`);
       }
       if (disagree.length) die(`${w.id}: ${disagree.length} answers differ from the shipped map: ${disagree.slice(0, 12).join('; ')}`);
-      if (corrected.length) console.log(`  ${w.id}: CORRECTED ${corrected.length} shipped answers that were a random pick between namesakes: ${corrected.join('; ')}`);
+      if (corrected.length) console.log(`  ${w.id}: CORRECTED ${corrected.length} shipped answers that were a namesake's country, not the roster man's:${corrected.join('; ')}`);
       console.log(`  ${w.id}: ${Object.keys(map).length} of ${names.length} names resolved from the era dumps, the rest of the shipped map agreeing`);
     } else {
       const shipped = SHIPPED[w.id] ?? {};

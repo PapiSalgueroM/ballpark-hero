@@ -58,18 +58,28 @@ const namesOf = f => {
    the other's flag. */
 const ALLOWED_MISSING = {
   now: ['Alan Franco', 'Allan', 'Dudu', 'José Luis Rodríguez', 'Matheus Pereira', 'Paulinho'],
-  era2015: [], era2010: [], era2005: [],
+  /* Round 1015 review: Udinese's Guilherme, whose own table row (Qatar) and
+     Wikipedia's 2015-16 Udinese squad (Brazil) disagree. Section 2 pins that
+     he stays without a flag rather than wearing either. */
+  era2015: ['Guilherme'], era2010: [], era2005: [],
 };
 
 /* NEGATIVE CONTROL, NAT_CONTROL=randompick: puts back the 2015 Simão the
    Round 194 query picked at random between two namesakes (Portugal), and the
    section 2 pin must go red. */
+/* NAT_CONTROL=richer: puts back the 2015 Douglas the window's richer namesake
+   gave (Netherlands), and the section 2 pin must go red. */
+const CONTROLS = {
+  randompick: { world: 'era2015', name: 'Simão', was: 'Mozambique', put: 'Portugal', expect: 'era2015 Simão: expected Mozambique' },
+  richer: { world: 'era2015', name: 'Douglas', was: 'Brazil', put: 'Netherlands', expect: 'era2015 Douglas: expected Brazil' },
+};
 const CONTROL = process.env.NAT_CONTROL || '';
-if (CONTROL && CONTROL !== 'randompick') { console.error(`NAT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) { console.error(`NAT_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 if (CONTROL) {
-  if (NATIONALITY_BY_WORLD.era2015?.['Simão'] !== 'Mozambique') { console.error('control refuses to run: the 2015 Simão is not Mozambican in the shipped map'); process.exit(1); }
-  NATIONALITY_BY_WORLD.era2015['Simão'] = 'Portugal';
-  console.log('   NEGATIVE CONTROL ON: the 2015 Simão put back as Portuguese, section 2 must go red');
+  const c = CONTROLS[CONTROL];
+  if (NATIONALITY_BY_WORLD[c.world]?.[c.name] !== c.was) { console.error(`control refuses to run: the ${c.world} ${c.name} is not ${c.was} in the shipped map`); process.exit(1); }
+  NATIONALITY_BY_WORLD[c.world][c.name] = c.put;
+  console.log(`   NEGATIVE CONTROL ON: the ${c.world} ${c.name} put back as ${c.put}, section 2 must go red`);
 }
 const failed = [];
 
@@ -116,10 +126,23 @@ console.log('2) The same name wears the right flag in each world');
     ['era2015', 'Simão', 'Mozambique'],
     ['era2015', 'Álvaro González', 'Spain'],
     ['era2010', 'Edinho', 'Portugal'],
+    /* Round 1015 review: not a tie, a richer namesake. The window's top row
+       was another man, so the shipped flag was his. Each checked against the
+       man's own Wikipedia page on 2026-10-06: Barcelona's right back Douglas
+       Pereira dos Santos (b. 1990, Brazil; not Dynamo Moscow's Dutch centre
+       back), Osasuna's keeper Ricardo Lopez Felipe (b. 1971, Spain; not
+       Sporting's Portuguese keeper), West Brom's Andy Johnson (b. 1974,
+       Wales caps 1998 to 2004; not Crystal Palace's English striker). */
+    ['era2015', 'Douglas', 'Brazil'],
+    ['era2005', 'Ricardo', 'Spain'],
+    ['era2005', 'Andy Johnson', 'Wales'],
+    /* No flag at all: his two sources disagree (see ALLOWED_MISSING). Before
+       the review he wore Lokomotiv's goalkeeper's Russian flag. */
+    ['era2015', 'Guilherme', null],
   ];
   for (const [world, name, nat] of pins) {
-    const got = NATIONALITY_BY_WORLD[world][name];
-    if (got !== nat) fail(`${world} ${name}: expected ${nat}, got ${got}`);
+    const got = NATIONALITY_BY_WORLD[world][name] ?? null;
+    if (got !== nat) fail(`${world} ${name}: expected ${nat ?? 'no entry'}, got ${got ?? 'no entry'}`);
   }
 }
 
@@ -179,8 +202,8 @@ console.log('6) No em or en dash anywhere in the shipped map');
 
 console.log('');
 if (CONTROL) {
-  const hit = failed.some(m => m.startsWith('era2015 Simão: expected Mozambique'));
-  console.log(hit ? '   CONTROL FIRED: section 2 caught the random pick' : '   CONTROL DID NOT FIRE: section 2 stayed green');
+  const hit = failed.some(m => m.startsWith(CONTROLS[CONTROL].expect));
+  console.log(hit ? `   CONTROL FIRED: section 2 caught ${CONTROL}` : '   CONTROL DID NOT FIRE: section 2 stayed green');
   process.exit(hit ? 0 : 1);
 }
 if (failures > 0) {
