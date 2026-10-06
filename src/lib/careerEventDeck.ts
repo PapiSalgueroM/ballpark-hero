@@ -84,21 +84,11 @@ export function takeFresh<E extends LedgerCard>(
 
 /** The pick the four US engines have always made, written once: an open
  *  corruption arc takes the card 45 percent of the time (from the corruption
- *  cards), otherwise one uniform pick from the whole deck. With `fresh`
- *  absent the draws, their order and the result are exactly what each
- *  engine's own copy did. With it, the same draws run over the cards `fresh`
- *  accepts. When every open arc card is resting, the pick goes to the whole
- *  deck instead (the same one draw), so an arc card never repeats inside its
- *  cooldown; and when `fresh` would empty the whole deck, the pick falls back
- *  to every card, so an offseason is never empty. */
-export function pickDeckCard<E>(deck: E[], corrupt: E[], arcOpen: boolean, rng: () => number, fresh?: (e: E) => boolean): E {
-  if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
-    const pool = fresh ? corrupt.filter(fresh) : corrupt;
-    if (pool.length > 0) return pool[Math.floor(rng() * pool.length)];
-  }
-  const kept = fresh ? deck.filter(fresh) : deck;
-  const pool = kept.length > 0 ? kept : deck;
-  return pool[Math.floor(rng() * pool.length)];
+ *  cards), otherwise one uniform pick from the whole deck. The draws, their
+ *  order and the result are exactly what each engine's own copy did. */
+export function pickDeckCard<E>(deck: E[], corrupt: E[], arcOpen: boolean, rng: () => number): E {
+  if (arcOpen && corrupt.length > 0 && rng() < 0.45) return corrupt[Math.floor(rng() * corrupt.length)];
+  return deck[Math.floor(rng() * deck.length)];
 }
 
 /** The ledger as a save may hold it: only finite numbers survive, and

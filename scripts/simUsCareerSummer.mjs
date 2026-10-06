@@ -62,8 +62,15 @@
      median legacy score              7.5 percent of off's median
      Hall of Fame share               3 percentage points
      headline awards per season       15 percent of off's rate
-   (headline awards are simAwards' MAJOR table: NFL MVP and Defensive Player
-   of the Year, NBA MVP, MLB MVP and Cy Young, NHL Hart, Norris and Vezina.)
+   Headline awards are simAwards' MAJOR table (NFL MVP and Defensive Player
+   of the Year, NBA MVP, MLB MVP and Cy Young, NHL Hart, Norris and Vezina)
+   plus its all-league honour (All-Pro, All-NBA, All-Star). Written first as
+   the MAJOR table alone; the first measurement put that rate's interval at
+   about plus or minus 17 percent with 3000 careers a side (an MVP is rare),
+   so a 15 percent bound could not be met at any size this harness can run
+   even with no effect at all. The all-league honour was added to the count
+   and the tolerance was left exactly where it was set. The MAJOR table alone
+   is still what 6b checks.
 
    MEASURED: see the MEASURED block at the end of this header.
 
@@ -91,7 +98,6 @@ process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }
 const LEDGER = 'src/lib/careerEventDeck.ts';
 const SUMMER = 'src/lib/usCareerSummer.ts';
 const BINDINGS = ['nfl', 'nba', 'mlb', 'nhl'].map(s => `src/lib/${s}CareerSport.ts`);
-const ENGINES = { nfl: ['src/lib/nflMyCareer.ts', 'buildNflDeck'], nba: ['src/lib/nbaMyCareer.ts', 'buildNbaDeck'], mlb: ['src/lib/mlbMyCareer.ts', 'buildMlbDeck'], nhl: ['src/lib/nhlMyCareer.ts', 'buildNhlDeck'] };
 const ONE_CARD_LINE = 'summer: { cards: 3, cooldowns: true, fallbackCooldown: 1 },';
 const CONTROLS = {
   onecard: { section: '1', note: 'the four bindings deal one card', edits: BINDINGS.map(file => ({ file, from: ONE_CARD_LINE, to: 'summer: { cards: 1, cooldowns: true, fallbackCooldown: 1 },' })) },
@@ -99,20 +105,14 @@ const CONTROLS = {
   samestory: { section: '3', note: 'a summer forgets the keys it already dealt', edits: [{ file: LEDGER, from: 'const taken = new Set<string>(excludeKeys);', to: 'const taken = new Set<string>();' }] },
   pressfilter: {
     section: '3b', note: 'the cooldown reaches the press room, big moments included',
-    edits: [
-      { file: SUMMER, from: 'const outsideLedger = (e: UsCareerEvent<C>) => !!e.press;', to: 'const outsideLedger = (_e: UsCareerEvent<C>) => false;' },
-      ...Object.values(ENGINES).flatMap(([file, fn]) => [
-        { file, from: `= ${fn}(c, rng, true);`, to: `= ${fn}(c, rng, !fresh);` },
-        { file, from: '  if (big) return big;', to: '  if (big && (!fresh || fresh(big))) return big;' },
-      ]),
-    ],
+    edits: [{ file: SUMMER, from: 'const outsideLedger = (e: UsCareerEvent<C>) => !!e.press;', to: 'const outsideLedger = (_e: UsCareerEvent<C>) => false;' }],
   },
   mathrandom: { section: '4', note: 'cards 2 and 3 are dealt on Math.random', edits: [{ file: SUMMER, from: 'const r = slotStream(c, sport.slug, year, i);', to: 'const r = Math.random;' }] },
-  nofallback: { section: '5', note: 'a deck the filter empties stays empty', edits: [{ file: LEDGER, from: 'const pool = kept.length > 0 ? kept : deck;', to: 'const pool = kept;' }] },
+  nofallback: { section: '5', note: 'a summer whose deck is all resting deals nothing', edits: [{ file: SUMMER, from: 'if (first === raw && any) first = any;', to: 'if (first === raw) first = any as UsCareerEvent<C>;' }] },
   doubletraining: {
     section: '6', note: 'the Offseason focus card in every slot',
     edits: [
-      { file: SUMMER, from: 'const first = sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);', to: "const first = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).find(x => x.id === 'training') ?? sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);" },
+      { file: SUMMER, from: 'const picked: UsCareerEvent<C>[] = [first];', to: "first = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).find(x => x.id === 'training') ?? first; const picked: UsCareerEvent<C>[] = [first];" },
       { file: SUMMER, from: '[e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);', to: "e = deck.find(x => x.id === 'training'); break;" },
     ],
   },
@@ -255,6 +255,8 @@ const median = a => { const s = [...a].sort((x, y) => x - y); const n = s.length
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN);
 const MAJOR = { nfl: ['MVP', 'Defensive Player of the Year'], nba: ['MVP'], mlb: ['MVP', 'Cy Young'], nhl: ['Hart', 'Norris', 'Vezina'] };
 const majorsOf = (slug, c) => c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => MAJOR[slug].includes(a)).length, 0);
+const ALL_LEAGUE = { nfl: 'All-Pro', nba: 'All-NBA', mlb: 'All-Star', nhl: 'All-Star' };
+const headlinesOf = (slug, c) => c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => MAJOR[slug].includes(a) || a === ALL_LEAGUE[slug]).length, 0);
 const want = s => SECTIONS.has(s);
 
 /* ─── the main runs: every sport, on and off, the same careers ──────────── */
@@ -442,7 +444,7 @@ if (want('6')) {
         const ci = 100000 * (s + 1) + i;
         for (const [side, sp] of [['on', sport], ['off', off]]) {
           const r = playCareer(slug, sp, ci);
-          rows[side].push({ peak: r.peak, legacy: r.legacy.score, hof: r.legacy.hof ? 1 : 0, majors: majorsOf(slug, r.c), seasons: r.c.seasons.length });
+          rows[side].push({ peak: r.peak, legacy: r.legacy.score, hof: r.legacy.hof ? 1 : 0, majors: majorsOf(slug, r.c), headlines: headlinesOf(slug, r.c), seasons: r.c.seasons.length });
         }
       }
     }
@@ -454,7 +456,7 @@ if (want('6')) {
     const pOn = mean(col('on', 'hof')), pOff = mean(col('off', 'hof'));
     const seHof = Math.sqrt(pOn * (1 - pOn) / nOn + pOff * (1 - pOff) / nOff);
     const legRel = (a, b) => median(a.map(x => x.legacy)) / median(b.map(x => x.legacy)) - 1;
-    const headRel = (a, b) => (a.reduce((n, x) => n + x.majors, 0) / a.reduce((n, x) => n + x.seasons, 0)) / (b.reduce((n, x) => n + x.majors, 0) / b.reduce((n, x) => n + x.seasons, 0)) - 1;
+    const headRel = (a, b) => (a.reduce((n, x) => n + x.headlines, 0) / a.reduce((n, x) => n + x.seasons, 0)) / (b.reduce((n, x) => n + x.headlines, 0) / b.reduce((n, x) => n + x.seasons, 0)) - 1;
     const checks = [
       ['peak OVR', dPeak, [dPeak - 1.96 * sePeak, dPeak + 1.96 * sePeak], TOL.peak, v => v.toFixed(2)],
       ['median legacy', legRel(rows.on, rows.off), bootstrap(rows.on, rows.off, legRel), TOL.legacyRel, v => `${(100 * v).toFixed(1)}%`],

@@ -242,8 +242,8 @@ export interface MlbCareerEvent {
   options: { label: string; effect: string; apply: (c: MlbCareerState, rng: () => number) => string }[];
   /** Round 919: the deck section a card sits under, the seasons it rests
       after it fires (99 means once a career), and a key shared by cards that
-      tell one story. All optional and read by nothing yet, so the draw is
-      byte for byte what it was. */
+      tell one story. All optional. Since Round 1038 the summer's cooldown ledger
+      reads them (usCareerSummer.ts); the one card draw never does. */
   category?: string;
   cooldown?: number;
   story?: string;
@@ -791,12 +791,11 @@ export function mlbEventDeck(c: MlbCareerState, rng: () => number): MlbCareerEve
   return buildMlbDeck(c, rng, false).deck;
 }
 
-/** One card. Round 1038: `fresh`, when given, keeps the pick to the cards it
- *  accepts; absent, every draw is what it always was. */
-export function drawMlbEvent(c: MlbCareerState, rng: () => number, fresh?: (e: MlbCareerEvent) => boolean): MlbCareerEvent {
+/** One card, every draw what it always was. */
+export function drawMlbEvent(c: MlbCareerState, rng: () => number): MlbCareerEvent {
   const { big, deck, corrupt, arcOpen } = buildMlbDeck(c, rng, true);
   if (big) return big;
-  return pickDeckCard(deck, corrupt, arcOpen, rng, fresh);
+  return pickDeckCard(deck, corrupt, arcOpen, rng);
 }
 
 function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean): { big: MlbCareerEvent | null; deck: MlbCareerEvent[]; corrupt: MlbCareerEvent[]; arcOpen: boolean } {

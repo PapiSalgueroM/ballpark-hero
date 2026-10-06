@@ -203,9 +203,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
   simSeason(c: C, teamQuality: number, rng: () => number): { line: L; notes: string[] };
   progress(c: C, rng: () => number): string[];
-  /** One card. `fresh` (Round 1038) keeps the pick to the cards it accepts;
-   *  absent, the draw is what it always was. */
-  drawEvent(c: C, rng: () => number, fresh?: (e: UsCareerEvent<C>) => boolean): UsCareerEvent<C>;
+  drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
   /** Round 1038: every card drawEvent could have picked, built with the same
    *  draws, so a dealt card can be found again by id. */
   eventDeck(c: C, rng: () => number): UsCareerEvent<C>[];

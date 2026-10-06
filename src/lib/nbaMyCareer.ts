@@ -201,7 +201,7 @@ export interface NbaCareerEvent {
   options: { label: string; effect: string; apply: (c: NbaCareerState, rng: () => number) => string }[];
   /** Round 918: the table the summer step list will read, the same three
    *  fields the flagship's cards carry (soccerCareerEngine RandomEvent).
-   *  Read by nothing yet, so the draw is byte for byte what it was.
+   *  Since Round 1038 the summer's cooldown ledger reads them (usCareerSummer.ts); the one card draw never does.
    *  category is the deck's own section; cooldown is seasons the card sits
    *  out after it fires (99 means once a career); cards sharing a story
    *  share one cooldown ledger entry. All optional. */
@@ -808,12 +808,11 @@ export function nbaEventDeck(c: NbaCareerState, rng: () => number): NbaCareerEve
   return buildNbaDeck(c, rng, false).deck;
 }
 
-/** One card. Round 1038: `fresh`, when given, keeps the pick to the cards it
- *  accepts; absent, every draw is what it always was. */
-export function drawNbaEvent(c: NbaCareerState, rng: () => number, fresh?: (e: NbaCareerEvent) => boolean): NbaCareerEvent {
+/** One card, every draw what it always was. */
+export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEvent {
   const { big, deck, corrupt, arcOpen } = buildNbaDeck(c, rng, true);
   if (big) return big;
-  return pickDeckCard(deck, corrupt, arcOpen, rng, fresh);
+  return pickDeckCard(deck, corrupt, arcOpen, rng);
 }
 
 function buildNbaDeck(c: NbaCareerState, rng: () => number, stopAtBig: boolean): { big: NbaCareerEvent | null; deck: NbaCareerEvent[]; corrupt: NbaCareerEvent[]; arcOpen: boolean } {

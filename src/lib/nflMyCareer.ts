@@ -301,7 +301,7 @@ export interface CareerEvent {
   body: string;
   /** Round 917: the deck section a card sits under, the seasons it rests
       after it fires, and a key shared by cards that tell one story. All
-      optional and read by nothing yet (nflCareerLifeTags.ts). */
+      optional; since Round 1038 the summer's cooldown ledger reads them (nflCareerLifeTags.ts, usCareerSummer.ts). */
   category?: import('./nflCareerLifeTags').NflLifeCategory;
   cooldown?: number;
   story?: string;
@@ -926,13 +926,11 @@ export function nflEventDeck(c: CareerState, rng: () => number): CareerEvent[] {
   return buildNflDeck(c, rng, false).deck;
 }
 
-/** Between-season decision deck: one card. Round 1038: `fresh`, when given,
-    keeps the pick to the cards it accepts (the summer's cooldown filter);
-    absent, every draw is what it always was. */
-export function drawEvent(c: CareerState, rng: () => number, fresh?: (e: CareerEvent) => boolean): CareerEvent {
+/** Between-season decision deck: one card, every draw what it always was. */
+export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
   const { big, deck, corrupt, arcOpen } = buildNflDeck(c, rng, true);
   if (big) return big;
-  return pickDeckCard(deck, corrupt, arcOpen, rng, fresh);
+  return pickDeckCard(deck, corrupt, arcOpen, rng);
 }
 
 function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { big: CareerEvent | null; deck: CareerEvent[]; corrupt: CareerEvent[]; arcOpen: boolean } {

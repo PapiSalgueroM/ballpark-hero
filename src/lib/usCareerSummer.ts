@@ -62,15 +62,30 @@ export function summerApplyRng(c: UsCareerCore, slug: string, year: number, i: n
   return keyedRng(`summer-apply:${slug}:${summerCareerKey(c)}:${year}:${i}`);
 }
 
+/** A probe stream: its first draw is pinned (the low or high end, where a
+ *  coin flip on an answer lives), every later one keyed, so a loop on the
+ *  stream always ends. */
+const probeStream = (key: string, first: number | null): (() => number) => {
+  const rest = keyedRng(key);
+  let pinned = first !== null;
+  return () => {
+    if (!pinned) return rest();
+    pinned = false;
+    return first as number;
+  };
+};
+
 /** Whether any answer to the card can move the rating or its ceiling. Each
- *  answer is tried on copies of the career with three keyed streams, never
- *  on the career itself and never on Math.random. */
+ *  answer is tried on copies of the career, never on the career itself and
+ *  never on Math.random: once with the first draw at the bottom of the range,
+ *  once at the top, and once on a keyed stream, so a raise behind a coin flip
+ *  (mlbA_shoulder_scare's 40 percent) is still found. */
 export function movesRating<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): boolean {
   for (let k = 0; k < e.options.length; k += 1) {
-    for (let s = 0; s < 3; s += 1) {
+    for (const first of [0, 0.9999, null]) {
       const probe = JSON.parse(snapshot) as C;
       try {
-        e.options[k].apply(probe, keyedRng(`rating-probe:${e.id}:${k}:${s}`));
+        e.options[k].apply(probe, probeStream(`rating-probe:${e.id}:${k}:${first}`, first));
       } catch {
         return true;
       }
@@ -88,13 +103,35 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
   const year = summerSeason(c);
   const ledger = knob.cooldowns ? sanitizeLedger(c.eventLastFired) : {};
   const outsideLedger = (e: UsCareerEvent<C>) => !!e.press;
-  const fresh = knob.cooldowns
-    ? (e: UsCareerEvent<C>) => outsideLedger(e) || !onCooldown(ledger, e, year, knob.fallbackCooldown)
-    : undefined;
-  const first = sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);
+  const snapshot = JSON.stringify(c);
+  /* Card 1 is drawn exactly as the one card offseason draws (the big press
+     moment, the open arc's weight, one uniform pick), on its own stream. If
+     that card is resting, another fresh card OF THE SAME KIND takes its place:
+     a rating card for a rating card, anything else for anything else. Without
+     that, the later slots (which deal only cards that leave the rating alone)
+     use up the quiet cards and card 1 turns into a rating card more often
+     than it ever was: measured on MLB, 38 percent of card 1s became 49. */
+  const raw = sport.drawEvent(c, slotStream(c, sport.slug, year, 0));
+  let first = raw;
+  if (knob.cooldowns && !outsideLedger(raw) && onCooldown(ledger, raw, year, knob.fallbackCooldown)) {
+    const kind = movesRating(c, raw, snapshot);
+    const redraw = keyedRng(`summer-redraw:${sport.slug}:${summerCareerKey(c)}:${year}`);
+    const deck = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).filter(e => e.press !== 'big');
+    const passed = new Set<string>();
+    let any: UsCareerEvent<C> | undefined;
+    for (;;) {
+      const [cand] = takeFresh(deck, 1, ledger, year, knob.fallbackCooldown, passed, redraw, outsideLedger);
+      if (!cand) break;
+      any ??= cand;
+      if (movesRating(c, cand, snapshot) === kind) { first = cand; break; }
+      passed.add(ledgerKey(cand));
+    }
+    /* No fresh card of that kind: any fresh card, and if every card in the
+       deck is resting, the drawn one anyway, so a summer is never empty. */
+    if (first === raw && any) first = any;
+  }
   const picked: UsCareerEvent<C>[] = [first];
   const taken = new Set<string>([ledgerKey(first)]);
-  const snapshot = JSON.stringify(c);
   for (let i = 1; i < knob.cards; i += 1) {
     const r = slotStream(c, sport.slug, year, i);
     const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big');
