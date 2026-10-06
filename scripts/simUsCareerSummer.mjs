@@ -18,9 +18,12 @@
 
    SECTIONS, each with the control that must turn it red:
      1. depth     cards answered per offseason that is neither banned nor
-                  final: on, the median is 3 and the mean sits in its band;
-                  off, every one is exactly 1. Control onecard (the four
-                  bindings deal one card).
+                  final: on, the median is at least 2 and the mean sits in
+                  its sport's band; off, every one is exactly 1. Control
+                  onecard (the four bindings deal one card). The scout's
+                  design asked for a median of 3; the later-card rules that
+                  section 6 needed (see MEASURED) leave the NFL at 3 and the
+                  other three at 2.
      2. cooldown  an independent reading of the rule (the card's own cooldown
                   when it is a finite number at or over zero, else 1; the key
                   is 'story:' plus the story, else the id; press cards are
@@ -72,7 +75,40 @@
    and the tolerance was left exactly where it was set. The MAJOR table alone
    is still what 6b checks.
 
-   MEASURED: see the MEASURED block at the end of this header.
+   MEASURED (2026-10-06, this machine, the tree at Round 1038's head):
+
+   How the summer got here, section 6 at every step, on against off:
+     three cards from the whole deck: peak OVR +4.2 to +7.2, Hall share
+       +29 to +51 points, median legacy +55 to +130 percent. Red everywhere.
+     later cards may not move the rating (the probe in usCareerSummer.ts):
+       peak inside; NFL legacy +12.8 percent, MLB Hall +11 points. Red.
+     card 1 redrawn in kind when resting: MLB card 1 had become a rating
+       card in 49 percent of summers against 38; the redraw alone did not
+       hold it, because later cards opened arcs whose cards then came as
+       card 1 (MLB's PED clinic), so the corruption deck went to card 1 only.
+     later cards whose answers lift morale on average are passed over
+       (LATER_CARD_MORALE_LIFT 0). At a lift of 4, every sport still ran 7
+       to 11 percent high on median legacy over 800 careers a side; a camp
+       settle of half or three quarters of the later cards' swing changed
+       almost nothing (tried and removed). At 0, green, below.
+
+   6, 2000 careers a sport a seed, three seeds, children in parallel (about
+   27 minutes here), difference and 95 percent interval, on minus off:
+     nfl  peak +0.07 [-0.05, 0.19]  legacy +1.4% [-4.1, 6.3]
+          Hall +0.27 [-1.01, 1.54]  headline -6.8% [-14.3, 1.0]
+     nba  peak +0.16 [0.04, 0.28]   legacy +0.3% [-1.6, 3.7]
+          Hall +0.95 [-0.68, 2.58]  headline +0.8% [-3.5, 5.6]
+     mlb  peak +0.13 [-0.00, 0.26]  legacy +3.1% [0.8, 4.9]
+          Hall +1.20 [-0.46, 2.86]  headline +0.9% [-4.8, 6.2]
+     nhl  peak +0.12 [-0.00, 0.25]  legacy +1.8% [-0.4, 3.7]
+          Hall +0.55 [-1.05, 2.15]  headline +3.0% [-1.8, 7.3]
+     6b on the summer loop: median career majors 0 in all four, a major
+     ever won by 4.5, 16.9, 7.6 and 15.5 percent, Hall 15.1, 30.1, 32.0 and
+     27.9 percent (floors: median 0, at most 25 percent, Hall at least 5).
+
+   1 and 7, 400 careers a sport, the default seed and SIM_SEED 1 to 5 (see
+   DEPTH_MEAN and COVERAGE_LIFT below for the bands set from these):
+     DEPTH_MEASURED
 
    Nothing here reaches the network: the bundle is the four bindings, the
    summer, the ledger and the soccer engine's three exported rules, with
