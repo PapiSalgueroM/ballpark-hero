@@ -5957,7 +5957,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Inter Milan',
     scoreLine: 'Bayern Munich 0-2 Inter Milan',
     venue: 'Santiago Bernabeu, Madrid',
-    formationLabel: '4-2-3-1',
+    formationLabel: '4-4-2',
     // Ribery was suspended, so Altintop started on the left.
     slots: [
       GK('Hans-Jorg Butt'),
@@ -5965,12 +5965,12 @@ export const LINEUPS: Lineup[] = [
       { position: 'CB', name: 'Daniel Van Buyten', x: 62, y: 74 },
       { position: 'CB', name: 'Martin Demichelis', x: 38, y: 74 },
       { position: 'LB', name: 'Holger Badstuber', x: 16, y: 70 },
-      { position: 'CDM', name: 'Mark van Bommel', x: 62, y: 56 },
-      { position: 'CDM', name: 'Bastian Schweinsteiger', x: 38, y: 56 },
-      { position: 'RW', name: 'Arjen Robben', x: 80, y: 26 },
-      { position: 'CAM', name: 'Thomas Muller', x: 50, y: 40 },
-      { position: 'LW', name: 'Hamit Altintop', x: 20, y: 26 },
-      { position: 'ST', name: 'Ivica Olic', x: 50, y: 16 },
+      { position: 'CM', name: 'Mark van Bommel', x: 60, y: 52 },
+      { position: 'CM', name: 'Bastian Schweinsteiger', x: 40, y: 52 },
+      { position: 'RM', name: 'Arjen Robben', x: 82, y: 48 },
+      { position: 'ST', name: 'Thomas Muller', x: 40, y: 18 },
+      { position: 'LM', name: 'Hamit Altintop', x: 18, y: 48 },
+      { position: 'ST', name: 'Ivica Olic', x: 60, y: 18 },
     ],
     blankCandidates: [
       { name: 'Daniel Van Buyten', slotIndex: 2, nationality: 'Belgium', clubAtTime: 'Bayern Munich' },
@@ -6384,7 +6384,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'England',
     scoreLine: 'Croatia 2-1 England (after extra time)',
     venue: 'Luzhniki Stadium, Moscow',
-    formationLabel: '4-3-3',
+    formationLabel: '4-1-4-1',
     // Brozovic came in for Kramaric to hold the midfield; Vrsaljko started despite the knee that had troubled him all week.
     slots: [
       GK('Danijel Subasic'),
@@ -6392,12 +6392,12 @@ export const LINEUPS: Lineup[] = [
       { position: 'CB', name: 'Dejan Lovren', x: 62, y: 74 },
       { position: 'CB', name: 'Domagoj Vida', x: 38, y: 74 },
       { position: 'LB', name: 'Ivan Strinic', x: 16, y: 70 },
-      { position: 'CDM', name: 'Marcelo Brozovic', x: 50, y: 58 },
+      { position: 'CDM', name: 'Marcelo Brozovic', x: 50, y: 62 },
       { position: 'CM', name: 'Ivan Rakitic', x: 68, y: 50 },
       { position: 'CM', name: 'Luka Modric', x: 32, y: 50 },
-      { position: 'RW', name: 'Ante Rebic', x: 80, y: 24 },
-      { position: 'ST', name: 'Mario Mandžukić', x: 50, y: 18 },
-      { position: 'LW', name: 'Ivan Perišić', x: 20, y: 24 },
+      { position: 'RM', name: 'Ante Rebic', x: 84, y: 46 },
+      { position: 'ST', name: 'Mario Mandžukić', x: 50, y: 16 },
+      { position: 'LM', name: 'Ivan Perišić', x: 16, y: 46 },
     ],
     blankCandidates: [
       { name: 'Sime Vrsaljko', slotIndex: 1, nationality: 'Croatia', clubAtTime: 'Atletico Madrid' },
@@ -6777,7 +6777,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Manchester City',
     scoreLine: 'Crystal Palace 1-0 Manchester City',
     venue: 'Wembley Stadium, London',
-    formationLabel: '3-4-3',
+    formationLabel: '3-4-2-1',
     slots: [
       GK('Dean Henderson'),
       { position: 'CB', name: 'Chris Richards', x: 68, y: 76 },
@@ -6787,8 +6787,8 @@ export const LINEUPS: Lineup[] = [
       { position: 'CM', name: 'Adam Wharton', x: 62, y: 56 },
       { position: 'CM', name: 'Daichi Kamada', x: 38, y: 56 },
       { position: 'LWB', name: 'Tyrick Mitchell', x: 14, y: 52 },
-      { position: 'RW', name: 'Ismaila Sarr', x: 68, y: 26 },
-      { position: 'LW', name: 'Eberechi Eze', x: 32, y: 26 },
+      { position: 'CAM', name: 'Ismaila Sarr', x: 62, y: 32 },
+      { position: 'CAM', name: 'Eberechi Eze', x: 38, y: 32 },
       { position: 'ST', name: 'Jean-Philippe Mateta', x: 50, y: 16 },
     ],
     blankCandidates: [
