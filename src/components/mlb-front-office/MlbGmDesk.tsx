@@ -208,8 +208,8 @@ function DealsPanel({ desk, facts }: Props) {
       </label>
       <p className="text-center text-[11px] text-muted-foreground">
         Clubs in an October place buy: they rate every veteran higher and every young player lower, theirs and yours alike, so a vet fetches more from them. Clubs well out of it sell, the other way round.
-        MLB clubs cannot trade draft picks, so a deal is players, plus cash if you want it.
-        Cash: keep paying up to {Math.round(MLB_CASH_RETENTION.maxShare * 100)} percent of a man&apos;s salary, {MLB_CASH_RETENTION.maxDealsPerClub} deals at a time. The league sets no such limit; this game does.
+        In MLB only Competitive Balance picks can be traded, and this game awards none, so a deal is players, plus cash if you want it.
+        Cash: keep paying up to {Math.round(MLB_CASH_RETENTION.maxShare * 100)} percent of a man&apos;s salary, {MLB_CASH_RETENTION.maxDealsPerClub} deals at a time, and on any one contract {MLB_CASH_RETENTION.maxTimesPerContract} times at most. These limits are this game&apos;s own.
       </p>
       {myPlayersIn.length > 0 && (
         <div className="space-y-1 rounded-lg border border-border p-2" data-mlb-cash>
@@ -293,10 +293,10 @@ export function MlbDeskHelp({ league }: { league: MlbLeague }) {
           <ul className="list-disc space-y-1 pl-5">
             <li><b>Staff.</b> Hire a manager, a pitching coach, a hitting coach, a scouting director, a farm director and a trainer. The pitching coach adds rating points to the three starters and two relievers the sim plays, the hitting coach to the eight bats, the scout&apos;s draft grades miss by less, young men grow a little faster over the winter and IL stints get shorter. Other clubs come for your best coaches during the season: match the offer or let him go.</li>
             <li><b>Re-sign desk.</b> Every man whose deal runs out is your call, never a coin flip. A man you drafted is under club control: from three seasons he is arbitration eligible and you can tender him one season he cannot walk away from, and from six he is a free agent. A free agent you had all season can get the qualifying offer, one season at the average of the 125 best salaries in this save. If he turns it down and signs somewhere else, you get an extra round 2 pick.</li>
-            <li><b>Draft picks.</b> MLB clubs cannot trade draft picks, so yours stay yours.</li>
-            <li><b>Trade desk.</b> Up to five players a side, and cash toward a salary you send: up to {Math.round(MLB_CASH_RETENTION.maxShare * 100)} percent, {MLB_CASH_RETENTION.maxDealsPerClub} deals at a time (the league sets no limit, this game does). Deals shut once round {shutAfter} is played and open again after the season. Clubs in an October place buy veterans, clubs well out of it sell.</li>
+            <li><b>Draft picks.</b> Ordinary MLB picks cannot be traded. Only Competitive Balance picks can, and this game awards none, so yours stay yours.</li>
+            <li><b>Trade desk.</b> Up to five players a side, and cash toward a salary you send: up to {Math.round(MLB_CASH_RETENTION.maxShare * 100)} percent, {MLB_CASH_RETENTION.maxDealsPerClub} deals at a time, and on any one contract {MLB_CASH_RETENTION.maxTimesPerContract} times at most (these limits are this game&apos;s own). Deals shut once round {shutAfter} is played and open again after the season. Clubs in an October place buy veterans, clubs well out of it sell.</li>
           </ul>
-          <p><b>Worked example.</b> In spring you hire a level 5 pitching coach: every arm the sim plays is {level5Points} rating points better from the next round. Three seasons after you drafted your shortstop, his deal runs out and the re-sign box says he is arbitration eligible, so you tender him one season and he stays. With two rounds to the deadline a selling club wants youth, so you send a 31 year old reliever with half his salary in cash for their young outfielder. Once round {shutAfter} is played the trade desk says Deadline passed until October is over.</p>
+          <p><b>Worked example.</b> In spring you hire a level 5 pitching coach: every arm the sim plays is {level5Points} rating points better from the next round. Three seasons after you drafted your shortstop, his deal runs out and the re-sign box says he is arbitration eligible, so you tender him one season and he stays. With two rounds to the deadline a club in an October place is buying, and it rates veterans up and its own youngsters down, so you send it a 31 year old reliever with half his salary in cash for its young outfielder. Once round {shutAfter} is played the trade desk says Deadline passed until October is over.</p>
           <p className="text-muted-foreground">The money is this game&apos;s own figures, not real contracts.</p>
         </div>
       </HowToPlayPopover>

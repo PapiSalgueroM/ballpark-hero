@@ -6,7 +6,8 @@
  * that is not running, and nothing is written to the save until a box is
  * tapped. The first tap switches the desk on and saves it. A save with the
  * desk past round 19 says the deadline has passed, and the trade desk says
- * MLB picks cannot be traded. scripts/simMlbGmDesk.mjs holds the rules.
+ * only Competitive Balance picks can be traded and this game awards none.
+ * scripts/simMlbGmDesk.mjs holds the rules.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
@@ -57,6 +58,6 @@ describe('1020 MLB GM desk on the board', () => {
     expect(screen.getByLabelText('How the GM desk works')).toBeTruthy();
     fireEvent.click(screen.getByText('Trade desk'));
     expect(document.querySelector('[data-mlb-desk-deals]')).toBeTruthy();
-    expect(screen.getAllByText(/cannot trade draft picks/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/only Competitive Balance picks can be traded, and this game awards none/).length).toBeGreaterThan(0);
   });
 });

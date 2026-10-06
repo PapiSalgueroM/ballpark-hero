@@ -19,9 +19,10 @@
  *      each of the board's four old trade handlers asks it first, and with
  *      the desk on the old paths put no pick in a deal
  *   4  picks are conserved league wide: every club's own pick in every round
- *      of the draft carried exists exactly once and is still its own (MLB
- *      picks cannot be traded: every package carrying one is refused by the
- *      pick rule), every extra pick is one a turned down qualifying offer
+ *      of the draft carried exists exactly once and is still its own
+ *      (ordinary MLB picks cannot be traded and this game awards no
+ *      Competitive Balance pick: every package carrying one is refused by
+ *      the pick rule), every extra pick is one a turned down qualifying offer
  *      paid, and every engine list is the ledger's
  *   5  the staff's effects change their consumer at every level step: the
  *      win probability, the scouting miss, the rounds an injury costs, the
@@ -365,7 +366,7 @@ function checkPicks(lg, desk, where) {
   if (!P.validateLedger(ledger, ids(lg), rules())) { problems.s4.push(`${where}: the stored pick ledger does not validate`); return; }
   for (const p of P.ledgerProblems(ledger, ids(lg), lg.season, rules())) problems.s4.push(`${where}: ${p}`);
   for (const p of ledger.picks) {
-    if (p.holder !== p.orig) problems.s4.push(`${where}: ${P.pickKey(p)} belongs to ${p.orig} and is held by ${p.holder}, but MLB picks cannot be traded`);
+    if (p.holder !== p.orig) problems.s4.push(`${where}: ${P.pickKey(p)} belongs to ${p.orig} and is held by ${p.holder}, but ordinary MLB picks cannot be traded`);
     if (P.pickKind(p) === 'comp' && p.orig !== TEAM) problems.s4.push(`${where}: ${P.pickKey(p)} is an extra pick for a club the desk does not run`);
   }
   const comps = ledger.picks.filter(p => P.pickKind(p) === 'comp').length;
@@ -729,7 +730,7 @@ begin('6', 'migration keeps every marker, a corrupt block resets alone, cash in 
       return D.mlbProposePackage(lc, dk, TEAM, { from: TEAM, to: 'SEA', give: [{ kind: 'player', id: y.id, retain: 0.5 }], get: [{ kind: 'player', id: byValue(lc.teams.SEA.players)[0].id }] }).verdict;
     };
     const twice = tryWith([row('ATL'), row('DET')]);
-    if (twice.verdict !== 'invalid' || !String(twice.reason).includes('as often as the league allows')) fail(`a contract already carrying cash twice took it a third time: ${J(twice)}`);
+    if (twice.verdict !== 'invalid' || !String(twice.reason).includes('as often as this game allows')) fail(`a contract already carrying cash twice took it a third time: ${J(twice)}`);
     const once = tryWith([row('ATL')]);
     if (once.verdict !== 'accepted') fail(`a contract carrying cash once could not carry it again: ${J(once)}`);
   }
@@ -776,7 +777,7 @@ begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every 
     let html = '';
     try { html = render(p.Panel, props); } catch (e) { fail(`the ${p.key} panel threw: ${String(e).slice(0, 160)}`); continue; }
     if (!html.includes(marks[p.key])) fail(`the ${p.key} panel drew without its ${marks[p.key]} mark`);
-    if (p.key === 'deals' && !html.includes('cannot trade draft picks')) fail('the trade desk does not say MLB picks cannot be traded');
+    if (p.key === 'deals' && !html.includes('only Competitive Balance picks can be traded, and this game awards none')) fail('the trade desk does not say only Competitive Balance picks can be traded and this game awards none');
   }
   const cases = C.deskCases(HOST, lg, D.mlbContractsOf(desk, lg, TEAM)).length;
   const html = render(MLB_DESK_PANELS.find(p => p.key === 'contracts').Panel, props);

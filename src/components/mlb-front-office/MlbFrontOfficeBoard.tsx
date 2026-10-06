@@ -606,7 +606,7 @@ export default function MlbFrontOfficeBoard() {
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
     if (!league || !myTradePiece || deadlineBlock()) return;
-    /* Round 1020: with the desk on, a sweetened offer is off the table (MLB picks cannot be traded). */
+    /* Round 1020: with the desk on, a sweetened offer is off the table (ordinary MLB picks cannot be traded). */
     const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, gm ? mlbDeskFinderTrade : mlbTrade, mlbTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
@@ -1114,7 +1114,7 @@ export default function MlbFrontOfficeBoard() {
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2" data-mlb-trade-roster="finder">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
-            <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked.{gm ? ' No pick sweeteners: MLB clubs cannot trade draft picks.' : ''}</p>
+            <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked.{gm ? ' No pick sweeteners: in MLB only Competitive Balance picks can be traded, and this game awards none.' : ''}</p>
             <p tabIndex={-1} data-mlb-trade-count className="text-center text-[10px] text-muted-foreground">Showing {Math.min(tradeOwnVisible, tradeOwnPlayers.length)} of {tradeOwnPlayers.length} players</p>
             <div className={cn(tradeRosterStyles.list, 'grid grid-cols-2 gap-1')} data-mlb-trade-list="finder">
               {tradeOwnPlayers.slice(0, tradeOwnVisible).map(p => (
@@ -1164,7 +1164,7 @@ export default function MlbFrontOfficeBoard() {
           })()}
           {tradePartner && !talks && (
             <>
-              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: {gm ? 'a lesser man instead, or the dial tone. MLB clubs cannot trade draft picks, so none goes in.' : 'a pick to close the gap, a lesser man instead, or the dial tone.'}{gm ? ` Deals shut once round ${mlbTradeWindow(league).deadlineAfter + 1} is played.` : ''}</p>
+              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: {gm ? 'a lesser man instead, or the dial tone. In MLB only Competitive Balance picks can be traded, and this game awards none, so none goes in.' : 'a pick to close the gap, a lesser man instead, or the dial tone.'}{gm ? ` Deals shut once round ${mlbTradeWindow(league).deadlineAfter + 1} is played.` : ''}</p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="min-w-0 space-y-1" data-mlb-trade-roster="send">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>

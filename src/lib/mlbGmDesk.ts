@@ -15,7 +15,8 @@
  *              desk under MLB's own rules (club control, arbitration, the
  *              qualifying offer), never to the engine's coin flip
  *   picks      the pick ledger (gmPicks) over this game's two round draft.
- *              MLB picks cannot be traded (MLB_PICK_RULES), so the ledger
+ *              Ordinary MLB picks cannot be traded and this game awards no
+ *              Competitive Balance pick (MLB_PICK_RULES), so the ledger
  *              only ever grows by the extra pick a turned down qualifying
  *              offer brings, and every other pick stays with its own club
  *   staff      the staff block (gmStaff) and the purse it is paid from
@@ -256,9 +257,10 @@ export function syncMlbPicks(league: MlbLeague, ledger: GmPickLedger): void {
 }
 
 /**
- * The older trade paths with the desk on. MLB clubs cannot trade draft picks
- * (MLB_PICK_RULES), so the trade finder's sweetened offers are refused here
- * and the phone talks are handed no pick to add; a man for a man still goes
+ * The older trade paths with the desk on. In MLB only Competitive Balance
+ * picks can be traded and this game awards none (MLB_PICK_RULES), so the
+ * trade finder's sweetened offers are refused here and the phone talks are
+ * handed no pick to add; a man for a man still goes
  * through the engine's own trade exactly as before.
  */
 export function mlbDeskFinderTrade(
@@ -269,7 +271,7 @@ export function mlbDeskFinderTrade(
 }
 
 /** What the old trade paths say when a pick would have gone into a deal with the desk on. */
-export const MLB_NO_PICK_TRADES = 'MLB clubs cannot trade draft picks, so this desk deals players and cash only.';
+export const MLB_NO_PICK_TRADES = 'In MLB only Competitive Balance picks can be traded, and this game awards none, so this desk deals players and cash only.';
 
 /* ------------------------------------------------------------------ */
 /* The deadline, and who is buying                                    */
@@ -563,7 +565,7 @@ export function mlbPicksTile(desk: GmDesk, league: MlbLeague, team: string): GmT
   return {
     icon: '🎟️',
     value: `${plural(mine.length, 'pick')} in ${league.season}`,
-    sub: extra ? `${plural(extra, 'extra pick')} from a qualifying offer` : 'MLB picks cannot be traded',
+    sub: extra ? `${plural(extra, 'extra pick')} from a qualifying offer` : 'Ordinary MLB picks cannot be traded',
     accent: false,
   };
 }
