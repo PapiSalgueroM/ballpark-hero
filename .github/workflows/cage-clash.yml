@@ -41,6 +41,7 @@ jobs:
       VITEST_MAX_FORKS: 1
       VITEST_MIN_FORKS: 1
       SEO_SPLIT_BASE_REF: HEAD
+      CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
     steps:
       - uses: actions/checkout@v4
         with:
