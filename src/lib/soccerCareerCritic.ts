@@ -41,7 +41,7 @@ export function soccerCriticName(c: CareerState): string {
 
 const trophiesIn = (s: SeasonRecord): number =>
   (s.leagueTitle ? 1 : 0) + (s.domesticCup ? 1 : 0) + (s.championsLeague ? 1 : 0)
-  + (s.worldCup ? 1 : 0) + (s.continentalCup ? 1 : 0);
+  + (s.worldCup ? 1 : 0) + (s.continentalCup ? 1 : 0) + (s.clubCupTitle ? 1 : 0);
 
 /** The factual half of a column: what the season actually was, in the stat
  *  the position carries. */

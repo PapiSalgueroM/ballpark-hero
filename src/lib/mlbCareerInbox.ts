@@ -111,6 +111,47 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
       { label: "Thank him", reply: "Wouldn't be here without you coach. I'll be back", karma: 5, morale: 2 },
     ],
   },
+  /* Round 919: five more for draft day, which had five. */
+  {
+    id: "draft_hs_coach", from: "High school coach", emoji: "🏫", phase: "any", beat: "draft",
+    text: "The booster club wants to paint your number on the outfield fence at the old field. Before they do: are you keeping the number or picking a new one?",
+    choices: [
+      { label: "Keep it, paint it big", reply: "Same number. Paint it big enough to see from the road", karma: 4, popularity: 2 },
+      { label: "Send a signed bat for the trophy case", reply: "Signed bat is coming this week. Tell the kids to swing hard", karma: 7, popularity: 1, cash: -0.01 },
+    ],
+  },
+  {
+    id: "draft_bonus_advisor", from: "Financial advisor", emoji: "📈", phase: "any", beat: "draft",
+    text: "Signing bonus lands next week. Before anybody sells you a truck, give me one hour. Most of it is taxes and the rest is a plan.",
+    choices: [
+      { label: "One hour, this week", reply: "Tuesday works. Bring the plan", karma: 4, morale: 1 },
+      { label: "Truck first, plan second", reply: "Truck first. I've wanted it since I was twelve", karma: -3, morale: 3, cash: -0.06 },
+    ],
+  },
+  {
+    id: "draft_clubhouse", from: "Clubhouse manager", emoji: "🧺", phase: "any", beat: "draft",
+    text: "Welcome. I need a cap size, a cleat size and a number. The one you wore in school belongs to a coach here and he is not giving it up.",
+    choices: [
+      { label: "Pick a new one", reply: "Give me whatever's open. I'll make people remember it", karma: 4, morale: 2 },
+      { label: "Ask the coach anyway", reply: "Let me at least ask him. Worst he can say is no", karma: -1, popularity: 1 },
+    ],
+  },
+  {
+    id: "draft_farm_director", from: "Farm director", emoji: "🌱", phase: "any", beat: "draft",
+    text: "Report Monday. We have a plan for your first summer: innings or at bats, a weight program, and one thing to fix. Want the one thing now?",
+    choices: [
+      { label: "Tell me now", reply: "Tell me now. I'll start on it tonight", karma: 5, morale: 1 },
+      { label: "Let me enjoy tonight", reply: "Monday, I promise. Tonight is for my family", karma: 1, morale: 3 },
+    ],
+  },
+  {
+    id: "draft_best_friend", from: "Best friend", emoji: "🤝", phase: "any", beat: "draft",
+    text: "bro you got DRAFTED. do i have to buy a jersey or do you just give me one",
+    choices: [
+      { label: "First one's yours", reply: "First jersey I get is yours. Signed", karma: 5, morale: 2 },
+      { label: "Buy it like everybody else", reply: "Buy it like everybody else. Support the team", karma: 1, morale: 2, popularity: 1 },
+    ],
+  },
 
   /* ── spring training ── */
   {
@@ -395,6 +436,47 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
       { label: "Decline, locked in", reply: "Locked in this week. After we win", karma: 3, morale: 2 },
     ],
   },
+  /* Round 919: five more for October, which had five. */
+  {
+    id: "oct_scouting_report", from: "Advance scout", emoji: "📒", phase: "any", beat: "october",
+    text: "The series report is forty pages. Every pitch, every count, every tell. Read it tonight, or trust what got you here?",
+    choices: [
+      { label: "Read every page", reply: "Sending it to my tablet. I'll know it cold by first pitch", karma: 4, morale: 1 },
+      { label: "Give me the top three things", reply: "Top three only. I play better when I keep it simple", karma: 2, morale: 3 },
+    ],
+  },
+  {
+    id: "oct_old_teammate", from: "Old minor league teammate", emoji: "🚌", phase: "any", beat: "october",
+    text: "Watching you in October from a motel in the Dominican winter league. Some of us are still riding the bus. Go win it for the bus.",
+    choices: [
+      { label: "Send him a playoff hat", reply: "Hat's on the way. Wear it on the bus", karma: 7, morale: 3 },
+      { label: "Say thanks", reply: "Means a lot man. Keep swinging", karma: 3, morale: 2 },
+    ],
+  },
+  {
+    id: "oct_ex", from: "Ex", emoji: "💔", phase: "any", beat: "october",
+    text: "hey. long time. any chance of two tickets for Game 3? no pressure",
+    choices: [
+      { label: "Leave two at will call", reply: "Two at will call under your name. Enjoy the game", karma: 4, morale: -1, cash: -0.01 },
+      { label: "Leave it on read", reply: "", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "oct_grounds_crew", from: "Grounds crew", emoji: "🌧️", phase: "any", beat: "october",
+    text: "Tarp crew has pulled it four times this week, at 2am twice. The guys would love a signed ball for the shed.",
+    choices: [
+      { label: "Signed balls and breakfast", reply: "A ball for every guy and breakfast on me tomorrow", karma: 9, popularity: 1, cash: -0.02 },
+      { label: "One signed ball", reply: "One ball, signed, for the shed. Thank you guys", karma: 4 },
+    ],
+  },
+  {
+    id: "oct_dad_superstition", from: "Dad", emoji: "🧢", phase: "any", beat: "october",
+    text: "I wore the same shirt for every game of the last series. Your mother wants to burn it. Do I wash it or not?",
+    choices: [
+      { label: "Do not wash it", reply: "Do NOT wash that shirt. Not until we're done", karma: 3, morale: 4 },
+      { label: "Wash it, it's not the shirt", reply: "Wash it dad. It's not the shirt, I promise", karma: 2, morale: 1 },
+    ],
+  },
 
   /* ── the offseason ── */
   {
@@ -533,6 +615,39 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
       { label: "Send a link", reply: "Sending you an article mama, it's normal", karma: 0 },
     ],
   },
+  /* Round 919: four more for an arbitration winter, which had four. */
+  {
+    id: "arb_analyst", from: "Agency analyst", emoji: "📊", phase: "any", beat: "arbitration",
+    text: "Built your case. Players with your service time and numbers, what they got, why you're better. Want to read it before we file?",
+    choices: [
+      { label: "Send it, I'll read it all", reply: "Send it. I want to know every number in there", karma: 3, morale: 2 },
+      { label: "Just tell me the figure", reply: "Just tell me the number we're filing", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "arb_beat_writer", from: "Beat writer", emoji: "📰", phase: "any", beat: "arbitration",
+    text: "Hearing your side and the club are still apart. Anything on the record before the figures come out?",
+    choices: [
+      { label: "No comment, love it here", reply: "It's business. I love it here. That's it", karma: 4, popularity: 1 },
+      { label: "Say the club is lowballing", reply: "They know what I did last year. So does everybody else", karma: -4, popularity: 3, morale: -1 },
+    ],
+  },
+  {
+    id: "arb_teammate", from: "Teammate", emoji: "⚾", phase: "any", beat: "arbitration",
+    text: "Settled an hour before my hearing last year. Split the difference and slept fine. Where are you at?",
+    choices: [
+      { label: "Leaning toward settling", reply: "Leaning that way. Nobody wins in that room", karma: 3, morale: 2 },
+      { label: "Going all the way", reply: "Going in. I want them to say it to my face", karma: -2, morale: 1, popularity: 1 },
+    ],
+  },
+  {
+    id: "arb_partner", from: "Partner", emoji: "💛", phase: "any", minAge: 23, beat: "arbitration",
+    text: "The hearing is the same week as my birthday. I'm not mad. I'm just saying it out loud so you know I know.",
+    choices: [
+      { label: "Plan the birthday first", reply: "Birthday is booked. The hearing works around it", karma: 7, morale: 3, cash: -0.02 },
+      { label: "We'll celebrate after", reply: "We'll do it big after the hearing, promise", karma: -1, morale: 1 },
+    ],
+  },
 
   /* ── a free agency winter ── */
   {
@@ -573,6 +688,47 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Make a plan", reply: "Let's sit down this week. Real plan", karma: 3, morale: 2, cash: -0.05 },
       { label: "Later", reply: "After I sign. One thing at a time", karma: 0 },
+    ],
+  },
+  /* Round 919: five more for a free agency winter, which had five. */
+  {
+    id: "fa_realtor", from: "Realtor", emoji: "🏠", phase: "any", minAge: 24, beat: "freeagency",
+    text: "Do I list the house now or wait until you sign? Spring buyers pay more, but you might be staying.",
+    choices: [
+      { label: "Wait until I sign", reply: "Hold it. I might be staying", karma: 2, morale: 1 },
+      { label: "List it now", reply: "List it. Either way I'm moving on", karma: -1, morale: 2, cash: 0.05 },
+    ],
+  },
+  {
+    id: "fa_old_manager", from: "Old minor league manager", emoji: "📋", phase: "any", beat: "freeagency",
+    text: "Coaching for a club now. They'd love you here, and I'd love to see you in our dugout. No pressure, just letting you know.",
+    choices: [
+      { label: "Tell your agent to call them", reply: "I'll have my agent call. Good to hear from you, skip", karma: 3, morale: 2 },
+      { label: "Keep it friendly", reply: "Appreciate it skip. Let's see how it shakes out", karma: 2, morale: 1 },
+    ],
+  },
+  {
+    id: "fa_little_brother", from: "Little brother", emoji: "🧒", phase: "any", beat: "freeagency",
+    text: "if you sign somewhere with a pool in the stadium i'm moving in with you. not a joke",
+    choices: [
+      { label: "Deal, pack your bags", reply: "Pool or no pool, the guest room is yours", karma: 5, morale: 3 },
+      { label: "Finish school first", reply: "Finish the year first. Then we'll talk about the pool", karma: 3, morale: 1 },
+    ],
+  },
+  {
+    id: "fa_beat_writer", from: "Beat writer", emoji: "📰", phase: "any", beat: "freeagency",
+    text: "Hearing you're close with two clubs. Confirm, deny, or say something I can actually print?",
+    choices: [
+      { label: "No comment", reply: "When there's something to say, my agent will say it", karma: 3 },
+      { label: "Give him a hint", reply: "Let's just say I like warm weather", karma: -2, popularity: 3, morale: 1 },
+    ],
+  },
+  {
+    id: "fa_clubhouse_manager", from: "Clubhouse manager", emoji: "🧺", phase: "any", beat: "freeagency",
+    text: "Cleaning out lockers for the winter. Yours is still taped up with your name. Leave it, or should I box it up?",
+    choices: [
+      { label: "Leave it up", reply: "Leave the tape on. I'm trying to come back", karma: 5, morale: 2 },
+      { label: "Box it up", reply: "Box it up. Thank you for everything, really", karma: 3, morale: -1, cash: -0.01 },
     ],
   },
 ];

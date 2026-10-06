@@ -43,8 +43,42 @@ export function scoutFinds(W, count = 500) {
   return finds.slice(0, count);
 }
 
+/* A generated name that turns out to be a real man gets renamed in
+   src/lib/intlNames.ts (Round 899: Lamine Gassama became Lamine Gassama-Ndoye).
+   That moves the name on the finds he was drawn into and nothing else, so the
+   baseline takes the same rename here instead of being re-recorded:
+     node scripts/genAcademyScoutBaseline.mjs --rename "<old name>=<new name>" --why "<round and reason>"
+   Only the name field of finds carrying exactly the old name changes, every
+   other find stays byte for byte, and the rename is listed in the file. It
+   refuses when no find carries the old name, so it can never pass by changing
+   nothing. S8 then still holds every other byte of the 500 finds. */
+function renameInBaseline(spec, why) {
+  const eq = spec.indexOf('=');
+  const from = spec.slice(0, eq), to = spec.slice(eq + 1);
+  if (eq < 1 || !to || from === to || !why) {
+    console.error('usage: --rename "<old name>=<new name>" --why "<round and reason>"');
+    process.exit(1);
+  }
+  const base = JSON.parse(fs.readFileSync(OUT, 'utf8'));
+  let changed = 0;
+  const finds = base.finds.map(f => {
+    const p = JSON.parse(f);
+    if (p.name !== from) return f;
+    if (JSON.stringify(p) !== f) { console.error(`a find does not round trip as JSON, refusing: ${f.slice(0, 80)}`); process.exit(1); }
+    changed += 1;
+    return JSON.stringify({ ...p, name: to });
+  });
+  if (changed === 0) { console.error(`no find in the baseline is named ${from}; nothing to rename`); process.exit(1); }
+  const renamed = [...(base.renamed ?? []), { from, to, finds: changed, why }];
+  fs.writeFileSync(OUT, JSON.stringify({ captured: base.captured, renamed, finds }, null, 1) + '\n');
+  console.log(`renamed ${from} to ${to} in ${changed} of ${finds.length} scout finds in ${path.relative(ROOT, OUT)}`);
+}
+
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
-if (isMain) {
+const argAfter = name => { const i = process.argv.indexOf(name); return i >= 0 ? process.argv[i + 1] : null; };
+if (isMain && argAfter('--rename') !== null) {
+  renameInBaseline(argAfter('--rename'), argAfter('--why'));
+} else if (isMain) {
   if (fs.existsSync(OUT) && !process.argv.includes('--force')) {
     console.error(`${path.relative(ROOT, OUT)} already exists. It is a pre-packs record; rerunning it now would not be one.`);
     process.exit(1);

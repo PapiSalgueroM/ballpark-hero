@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState, type MutableRefObject } from "react";
 import { Button } from "@/components/ui/button";
 import { FlagImg } from "@/components/FlagImg";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { Confetti } from "@/components/soccer-career/CareerFx";
+import { beatStyle, tournamentMomentKey, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices } from "@/components/career/AwardsNightCard";
 import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
@@ -105,82 +106,16 @@ type Screen = "home" | "qualifying" | "squad" | "bracket" | "matches";
 /* Round 926: the end of a tournament is a moment, and a moment plays once.
    It plays when the card first lands, never again when a tile is opened and
    closed, and never when a save still sitting on this card is reopened: on a
-   reload, in a new tab, or after the browser was closed. The save is not ours
-   to write (the engine owns it), so the memory is a short list in the same
-   localStorage the save lives in, with an in memory set behind it.
+   reload, in a new tab, or after the browser was closed.
 
-   The key is the run, not just the edition. Tournament years follow a fixed
-   calendar, so a second career with the same nation reaches the same World
-   Cup in the same year; the key therefore carries this run's own numbers (his
-   games, his ratings, the scores) through a small hash, and a different
-   career's win is a different key and gets its own moment.
-
-   What happens when the memory fails: if storage cannot be read, the card
-   plays. That is the storage the save is read from, so a browser that cannot
-   read it has not reopened this save from it; the card in front of it is new.
-   The save lives only in this browser's localStorage (no export, no sync), so
-   it cannot turn up somewhere that has not seen its moment. Two cases do play
-   it again, both rare: a save already sitting on a won card when this shipped
-   has an empty list and plays the moment once on its next load; and if
-   setItem keeps throwing (storage full or blocked), nothing is remembered past
-   this load, so every reload plays it. The list keeps the newest MOMENT_KEEP
-   keys and drops the oldest; only one save exists, so the card on screen is
-   always among the newest. */
-const MOMENT_STORE = "dukb-intl-moments";
-const MOMENT_KEEP = 60;
-const momentsThisLoad = new Set<string>();
-
-/** FNV-1a over a string, as 8 hex digits. Not security, just a short tag. */
-function shortHash(s: string): string {
-  let h = 0x811c9dc5;
-  for (let i = 0; i < s.length; i++) {
-    h ^= s.charCodeAt(i);
-    h = Math.imul(h, 0x01000193);
-  }
-  return (h >>> 0).toString(16).padStart(8, "0");
-}
-
-function momentKey(t: IntlTournament): string {
-  const run = JSON.stringify([
-    t.champion, t.runnerUp, t.playerApps, t.playerGoals, t.playerAssists, t.playerAvgRating,
-    t.squad?.myScore,
-    (t.matches ?? []).map(m => [m.round, m.home, m.away, m.homeGoals, m.awayGoals, m.playerGoals, m.playerAssists, m.playerRating]),
-    (t.bracket ?? []).map(b => [b.round, b.slot, b.home, b.away, b.homeGoals, b.awayGoals]),
-  ]);
-  return `${t.nation}|${t.name}|${t.year}|${t.myResult}|${shortHash(run)}`;
-}
-
-function readMoments(): string[] {
-  const raw = window.localStorage.getItem(MOMENT_STORE);
-  if (!raw) return [];
-  try {
-    const list: unknown = JSON.parse(raw);
-    return Array.isArray(list) ? list.filter((k): k is string => typeof k === "string") : [];
-  } catch {
-    return [];
-  }
-}
-
-function momentPlayed(key: string): boolean {
-  if (momentsThisLoad.has(key)) return true;
-  try {
-    return readMoments().includes(key);
-  } catch {
-    return false;
-  }
-}
-
-function markMomentPlayed(key: string): void {
-  momentsThisLoad.add(key);
-  try {
-    const kept = readMoments().filter(k => k !== key);
-    kept.push(key);
-    window.localStorage.setItem(MOMENT_STORE, JSON.stringify(kept.slice(-MOMENT_KEEP)));
-  } catch {
-    /* Storage blocked or full: the in memory set still stops a replay this visit. */
-  }
-}
-
+   Round 985 moved it onto the page's one rule for moments (careerMoments.ts),
+   which needs no storage: the page settles every moment the save already
+   holds when it loads it, this card's included, so only a tournament that
+   ends in this visit plays. That closes both replays the first version had
+   to accept (a save already on a won card the day it shipped, and a browser
+   that could not write its list). The key is still the run, not just the
+   edition (tournamentMomentKey), so a different career's win gets its own
+   moment. */
 /** The card's entrance pace: the kit's stagger, started early and stepped a
     little tighter than a season feed, because it carries up to fourteen beats
     and the speech should not wait three seconds behind them. */
@@ -209,15 +144,19 @@ export function TournamentCard({
      that return is React error #310. */
   const [table, setTable] = useState<"group" | "road">("group");
   const revealRef = useRevealScroll<HTMLDivElement>(screen);
-  /* Round 926: true only on the first landing of this tournament's card.
-     Read here (pure, so a discarded render reads the same answer), written
-     in the effect below once the render has committed. Opening any tile
-     turns it off, so Back does not replay the entrance. */
-  const momentId = momentKey(t);
-  const [fresh, setFresh] = useState(() => !momentPlayed(momentId));
-  useEffect(() => {
-    if (fresh) markMomentPlayed(momentId);
-  }, [fresh, momentId]);
+  /* Round 926: true only on the first landing of this tournament's card, by
+     the page's one rule for moments (careerMoments.ts): it holds on its first
+     frame until the card is seen and is settled then. Opening any tile turns
+     it off, so Back does not replay the entrance. The card's outer element
+     carries both the reveal ref and the moment's watch. */
+  const moment = useCareerMoment(tournamentMomentKey(t));
+  const [tileOpened, setTileOpened] = useState(false);
+  const fresh = moment.fresh && !tileOpened;
+  const watchRef = moment.ref;
+  const cardRef = useCallback((el: HTMLDivElement | null) => {
+    (revealRef as MutableRefObject<HTMLDivElement | null>).current = el;
+    watchRef(el);
+  }, [revealRef, watchRef]);
   const isWinner = t.myResult === "Winner";
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
@@ -442,13 +381,14 @@ export function TournamentCard({
   const won = fresh && isWinner;
   const quiet = fresh && !isWinner;
   let beat = 0;
-  const nextBeat = () => ({ animationDelay: beatDelay(beat++) });
+  const nextBeat = () => beatStyle(moment, beatDelay(beat++));
 
   return (
     <div
-      ref={revealRef}
+      ref={cardRef}
       data-intl-moment={won ? "won" : quiet ? "quiet" : "none"}
       className={`relative rounded-xl border-2 ${border} bg-gradient-to-b ${grad} to-transparent p-4 space-y-3${quiet ? " cm-rise" : ""}`}
+      style={quiet && !moment.live ? { animationPlayState: "paused" } : undefined}
     >
       <div className="text-center space-y-1.5">
         <div className={`text-3xl${won ? " cm-slam" : ""}`} style={won ? nextBeat() : undefined}>
@@ -519,7 +459,7 @@ export function TournamentCard({
             style={won ? nextBeat() : undefined}
           >
             <button
-              onClick={() => { setFresh(false); setScreen(tile.key); }}
+              onClick={() => { setTileOpened(true); setScreen(tile.key); }}
               className="w-full h-full bg-muted/20 hover:bg-muted/40 border border-border rounded-lg p-2 text-left transition-colors min-w-0"
             >
               <div className="text-base leading-none">{tile.emoji}</div>
@@ -546,8 +486,9 @@ export function TournamentCard({
       {/* Round 926: last child on purpose. It is absolutely positioned over
           the whole card, and as the first child it would push the headline
           down by the space-y gap. Pointer events off, aria hidden, and it
-          renders nothing for a visitor who asked for less motion. */}
-      {won && <Confetti pieces={60} gold />}
+          renders nothing for a visitor who asked for less motion. It waits
+          for the card to be seen, like the beats (Round 985). */}
+      {won && moment.live && <Confetti pieces={60} gold />}
     </div>
   );
 }

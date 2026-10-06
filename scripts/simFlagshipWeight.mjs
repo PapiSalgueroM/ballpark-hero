@@ -189,8 +189,15 @@ if (!existsSync(ASSETS)) {
        sit well under 2015 + 444. 2250 KB gives 235 KB of room for Soccer
        Career's own growth, which is more than a year of it at the rate this
        game has been adding data, and still fails the moment another engine
-       lands. Raise it only with a fresh measurement in this comment. */
-    const CEILING_KB = 2250;
+       lands. Raise it only with a fresh measurement in this comment.
+       Raised at Release AD (2026-10-05) with a fresh measurement: main was
+       already at 2295 KB (over 2250 before the release), and Release AD's four
+       Soccer Career rounds bring it to 2341 KB (972 the group stage and the
+       continental cups, 985 the debut and legacy moments, 1011 the season
+       ratings, 1013 the 51 club pool). 2450 leaves 109 KB of room and still sits
+       far under 2341 + 444, so Club Manager coming back still fails. A later
+       round owes loading the continental cup and ratings code on demand. */
+    const CEILING_KB = 2450;
     if (rawK > CEILING_KB) {
       fail(`/soccer-career now needs ${rawK.toFixed(0)} KB of JavaScript before it can render, over the ${CEILING_KB} KB ceiling. Check what got statically imported.`);
     }

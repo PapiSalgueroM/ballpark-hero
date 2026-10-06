@@ -613,7 +613,7 @@ describe.skipIf(!MODE)('the four US career boards against the recorded fixture',
     if (MODE !== 'record' || !process.env.US_BOARD_FIXTURE_OUT) return;
     if (Object.keys(built).length !== SPORTS.length) return;
     const header = {
-      what: 'Round 900: the four US career boards, every click and every save, recorded before they became one board',
+      what: 'Round 900: the four US career boards, every click and every save. First recorded before they became one board; re-recorded on purpose since (Round 988, the career content packs), so recordedFrom names the tree and scripts/simUsBoardParity.mjs says what moved',
       recordedFrom: process.env.US_BOARD_FIXTURE_SHA ?? 'unknown',
       clock: PINNED_NOW,
       rerecord: 'node scripts/recordUsBoardFixture.mjs',

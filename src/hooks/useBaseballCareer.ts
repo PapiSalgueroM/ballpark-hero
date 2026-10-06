@@ -3,6 +3,7 @@ import { baseballCareerPuzzles } from '@/data/baseballCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { isCareerGuessMatch } from '@/lib/careerGuess';
 
 export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 
@@ -31,6 +32,9 @@ export function useBaseballCareer() {
   } = useDailyPuzzle<Puzzle, CareerAction>({
     gameSlug: 'baseball-career',
     puzzles: baseballCareerPuzzles,
+    // Round 924: the save carries the row id, so a later change to the pool cannot hand
+    // today's clue log to a different player
+    getPuzzleId: (p) => p.id,
     maxGuesses: 999, // game ends only via isWon / isLost
     isWon: (g) => g.some(a => a.t === 'won'),
     isLost: (g) => g.some(a => a.t === 'give'),
@@ -105,9 +109,8 @@ export function useBaseballCareer() {
 
   const submitGuess = useCallback((guess: string) => {
     if (activeStatus !== 'playing' || !player) return;
-    const normalized = guess.trim().toLowerCase();
-    const target = player.name.toLowerCase();
-    if (normalized === target || normalized === target.split(' ').pop()) {
+    // Round 924: full name or surname, accents and a trailing Jr. ignored (src/lib/careerGuess.ts)
+    if (isCareerGuessMatch(guess, player.name)) {
       if (mode === 'daily') {
         addDailyAction({ t: 'won' });
       } else {

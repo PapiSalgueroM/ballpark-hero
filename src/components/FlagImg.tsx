@@ -73,6 +73,9 @@ export const FLAG_CODES: Record<string, string> = {
   "Barbados": "bb", "St. Kitts & Nevis": "kn", "Grenada": "gd",
   "Seychelles": "sc", "Martinique": "mq", "Chad": "td", "Burundi": "bi",
   "Yemen": "ye", "Mauritania": "mr", "Saint-Martin": "mf", "Mauritius": "mu",
+  // Round 902: Namibia, which the 2005-06 Bundesliga and Ligue 1 rows brought
+  // (they brought French Guiana too, which Round 901 already flags just below).
+  "Namibia": "na",
   /* Round 901: two nationalities the 2010-11 Serie A, Bundesliga and Ligue 1
      rows carry that had no flag yet. ISO 3166-1 alpha-2 codes, both served by
      flagcdn (probed 2026-10-03, w40 returns 200 for ne and gf). */
