@@ -96,7 +96,11 @@
  * 700 in 3, noguard 1 in 3, droppick 123 in 4, flatstaff 46 in 5, flatgrowth
  * 19 in 5, nodefault 8 in 1 and 5 (check 5 compares a level 1 staff against
  * the engine with no desk, so a default edge shows there too), pilefit 3 in 6.
- * Each red only in its own check otherwise.
+ * Each red only in its own check otherwise. The review fix's controls, run on
+ * seeds 1..10 on 2026-10-06, each red only in its own check: noedgeround 9 in
+ * 5, noedgepo 9 in 5, noinjhook 9 in 5, nomirror 60 in 4, nostepien 2 in 4,
+ * noruleblock 1 in 3; noguard (its anchor now carries pickRuleBlock) still 1
+ * in 3, and coinflip still 73 in 2 with the walk in the board's order.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
