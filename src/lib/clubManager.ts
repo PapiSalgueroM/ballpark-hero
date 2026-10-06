@@ -43,8 +43,11 @@ import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
 // imports nothing but types, so reading it at module scope is safe.
-import { CM_ROSTERS, CM_ROSTER_META, CM_PARTIAL } from '@/data/clubManagerRosters';
+import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+// Round 1035: the modern squads are the baked file joined with the A-League
+// Men's generated one, in one place both engine files read.
+import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
@@ -2628,6 +2631,10 @@ export interface LeagueRules {
   flag: string;
   /** The domestic cup, or null for a league with none. */
   cup: string | null;
+  /** Round 1035: clubs of this league that do not enter its cup (the two
+   *  New Zealand clubs of the A-League Men). They are never drawn, and a
+   *  career at one plays no cup at all, as a cupless league does. */
+  cupExcluded?: string[];
   /** The UEFA places the table hands out, or null outside UEFA's
    *  competitions in this game (no Champions League from this league). */
   europe: EuroSlots | null;
@@ -2805,6 +2812,44 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 10, target: 8, label: 'Make the Liguilla' }, floorFromBottom: 4, season: 'autumnSpring',
     simplified: 'The Apertura and Clausura are played as one double round robin and the Liguilla is not played, so the table settles the season. There is no domestic cup (the Copa MX has not been played since 2020), and clubs level on points split by goal difference then goals scored, the real table\'s first two steps.',
+  },
+  /* Round 1035: the A-League Men 2026-27. Each fact read 2026-10-06:
+     - 12 clubs, no promotion or relegation (drop 0, the playoffs ladder).
+     - 26 games a club, the full home and away 22 plus four third meetings,
+       over 28 matchweeks from Friday 16 October 2026, Grand Final on the
+       weekend of 3 to 6 June 2027: the league's own fixture release
+       (https://aleagues.com.au/news/aleague-men-2026-2027-fixture-list-revealed-key-dates-fixture-information/,
+       16 July 2026) and Football360 the same day
+       (https://football360.com.au/a-league-men-fixtures-released-key-dates-matches-will-they-play-through-asian-cup/).
+       The engine plays the double round robin, 22 rounds.
+     - The top six make the finals series (first and second straight to the
+       semi finals, third to sixth in the elimination finals): the league's
+       2026 finals page (https://aleagues.com.au/isuzu-ute-a-league-men-finals-series-2026/)
+       and Football360's elimination finals preview
+       (https://football360.com.au/a-league-elimination-finals-preview-auckland-fc-melbourne-city-melbourne-victory-sydney-fc-kisnorbo-reunion/).
+       THIN for 2026-27: those two describe the 2025-26 season; neither
+       fixture release above restates the cut, and only an encyclopedia's
+       2026-27 page (a spot check) says the top six again. The cut is the
+       board's rung only, since the finals are not played here.
+     - The Australia Cup is for Australian clubs only from the 2026 edition,
+       so Auckland FC and Wellington Phoenix do not enter it: Football
+       Australia (https://footballaustralia.com.au/news/football-australia-announces-refined-competitions-structure-2026,
+       28 January 2026, "Auckland FC and Wellington Phoenix FC no longer
+       participating"), Football360
+       (https://football360.com.au/australia-cup-wellington-auckland-new-zealand-teams-omitted/,
+       27 January 2026) and RNZ (https://www.rnz.co.nz/news/sport/585350, 29
+       January 2026). The ten Australian clubs enter at the round of 32.
+     - No continental row: the Asian places explained in print
+       (https://football360.com.au/a-league-afc-champions-league-elite-acl-two-explained-who-has-qualified/,
+       26 April 2026) are the 2025-26 table's, nothing yet says what the
+       2026-27 table hands out, and the two New Zealand clubs are not
+       eligible for Asian competition at all.
+     - Clubs level on points: no order verified, so the gdGfOnly default. */
+  aleague: {
+    nationId: 'australia', flag: 'Australia', cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],
+    europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
+    simplified: 'The real season is 26 games (home and away plus four third meetings) and ends in a top six finals series; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3202,6 +3247,15 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'ligamx', name: 'Liga MX',
     clubs: ['América', 'Guadalajara', 'Cruz Azul', 'Monterrey', 'Tigres UANL', 'Toluca', 'Pumas UNAM', 'Pachuca', 'León', 'Santos Laguna', 'Atlas', 'Necaxa', 'Puebla', 'Querétaro', 'Tijuana', 'FC Juárez', 'Atlético San Luis', 'Atlante'],
   },
+  /* Round 1035: the A-League Men 2026-27, exactly the twelve clubs of
+     scripts/data/gatheredSquads/aleague2026/_membership.json (the league's
+     own 2026/2027 ladder and ESPN's 2026-27 standings, read 2026-10-06).
+     Squads from src/data/clubManagerALeague2026.ts, generated offline from
+     the Round 1034 ledgers. */
+  {
+    id: 'aleague', name: 'A-League Men',
+    clubs: ['Adelaide United', 'Auckland FC', 'Brisbane Roar', 'Central Coast Mariners', 'Macarthur FC', 'Melbourne City', 'Melbourne Victory', 'Newcastle Jets', 'Perth Glory', 'Sydney FC', 'Wellington Phoenix', 'Western Sydney Wanderers'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3533,7 +3587,22 @@ export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'> &
     const lg = customLeagueDef(career.customClub, career.eraId);
     if (lg) return lg;
   }
-  return eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName);
+  return withClubCup(eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName), career.clubName);
+}
+
+/** Round 1035: does this club enter its league's cup? False only for a club
+ *  its rules row lists in cupExcluded (Auckland FC and Wellington Phoenix,
+ *  New Zealand clubs in an Australian cup's league). */
+export function clubEntersCup(leagueId: string, clubName: string): boolean {
+  return !(leagueRulesOf(leagueId).cupExcluded ?? []).includes(clubName);
+}
+
+/** The league as a career at this club sees it: a club that does not enter
+ *  the league's cup plays a cupless season, exactly as a cupless league
+ *  does (no cup in the calendar, no bracket, no cup objective). Every other
+ *  club gets the def back untouched. */
+function withClubCup(league: LeagueDef, clubName: string): LeagueDef {
+  return league.cupName !== null && !clubEntersCup(league.id, clubName) ? { ...league, cupName: null } : league;
 }
 
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */
@@ -3684,6 +3753,8 @@ export const NATIONS: NationDef[] = [
   { id: 'brazil', name: 'Brazil', flag: '🇧🇷' },
   // Round 883
   { id: 'mexico', name: 'Mexico', flag: '🇲🇽' },
+  // Round 1035
+  { id: 'australia', name: 'Australia', flag: '🇦🇺' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -3858,6 +3929,15 @@ const CLUB_COLORS: Record<string, string> = {
   'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
   'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
   'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
+  // Round 1035: A-League Men (plain shirt colours from this file's palette, no
+  // crest art), each where ESPN's team colour and FotMob's agree, read
+  // 2026-10-06. Auckland FC (black on ESPN, blue on FotMob) and Macarthur FC
+  // (gold on ESPN, black or white on FotMob) disagree, so they take the
+  // neutral default every unlisted club gets.
+  'Adelaide United': '#d02128', 'Western Sydney Wanderers': '#d02128',
+  'Brisbane Roar': '#f5a800', 'Central Coast Mariners': '#f5d800',
+  'Wellington Phoenix': '#f5d800', 'Sydney FC': '#6cabdd', 'Melbourne City': '#6cabdd',
+  'Melbourne Victory': '#1b3f94', 'Newcastle Jets': '#0057b8', 'Perth Glory': '#5c2d91',
 };
 
 /**
@@ -11811,7 +11891,9 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
      before this round plays one cup across all its leagues, so for them this
      is the whole nation as before. */
   const ids = nation ? nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName) : [myLeague.id];
-  return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
+  /* Round 1035: a club its league's row leaves out of the cup is never drawn
+     (the A-League's two New Zealand clubs and the Australia Cup). */
+  return ids.flatMap(id => playableClubs(id).filter(c => clubEntersCup(id, c.name))).filter(c => c.name !== dropped);
 }
 
 /**
@@ -16639,9 +16721,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
   const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
-  const league = (custom && customLeagueDef(custom, era.id))
+  // Round 1035: withClubCup, so a club outside its league's cup starts cupless.
+  const league = withClubCup((custom && customLeagueDef(custom, era.id))
     || (historic && eraLeagueOf(club.name, era.id))
-    || leagueOf(club.name);
+    || leagueOf(club.name), club.name);
   const leagueClubs = shuffle(custom
     ? league.clubs.map(c => (c === custom!.replacedClub ? custom!.name : c))
     : [...league.clubs]);
@@ -18735,9 +18818,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       }
     }
   }
-  const nextLeague = (custom && customLeagueDef(custom, eraId))
+  // Round 1035: withClubCup, so a club outside its league's cup plays none.
+  const nextLeague = withClubCup((custom && customLeagueDef(custom, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
-    || leagueOf(clubName);
+    || leagueOf(clubName), clubName);
   /* Round 310: prevPos alone lies the summer you come up: first in the
      Championship is not a Champions League place. summary.qualifiedUcl
      already encodes the league it was earned in; the fallback arm now
