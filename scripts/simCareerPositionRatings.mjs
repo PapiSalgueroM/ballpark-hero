@@ -1,6 +1,39 @@
 /* Round 1016: Soccer Career rates defenders and holding midfielders on their
    defending.
 
+   A player wrote in on 2026-10-05: as a CB or CDM goals should not matter as
+   much as overall performance. calcSeasonRating agreed with him the wrong way
+   round. Only a keeper's clean sheets reached the rating; every other outfield
+   player was rated on goals and assists, so centre backs had the most poor
+   seasons on the pitch and the fewest elite ones. The round gives the back
+   line (CB, LB, RB) 0.035 a clean sheet he kept (the number already drawn for
+   the season and shown in his history) and a holding midfielder three
+   quarters of that on the team's EXPECTED clean sheets in his games (his
+   appearances times 0.325, the middle of the back line's 20 to 45 percent
+   draw), because nothing defensive is drawn for him. No new Math.random call.
+
+   This bundles the real engine twice from source: the tree, and the tree
+   with the rule's one line taken out (the rule before this round). The fleet
+   is every position the creation screen offers, a 2020 and a 1990 start,
+   PER careers each (default 60), built the way the creation screen builds a
+   player: rollStartingOverall, rollPotential and generateStatsFromOverall's
+   position offsets, every position on the same seeds. It measures:
+
+   1. every outfield position's poor share (a season rated 6.3 or under, the
+      club's strike line) and elite share (7.5 or over), ratingBand's own
+      bands, sit inside the band the attacking positions (ST, LW, RW, CAM)
+      span in the same run, widened by MARGIN; the keeper is printed, never
+      asserted (an outlier the other way, 67 percent elite, not this round's);
+   2. downstream, the same seeds on both engines: every career at a position
+      the rule does not touch is byte identical, and the defenders' (CB, LB,
+      RB, CDM) peak overall, trophies and release share move inside measured
+      bands, with a ceiling on their Ballon d'Or rate;
+   3. the rule is pure: calcSeasonRating over a 19,440 cell grid with
+      Math.random held to one value makes exactly one draw, repeats itself,
+      leaves untouched positions alone and moves a defender by his credit;
+   4. old saves: careers played on the rule before, loaded with repairCareer
+      and played on, keep every stored season rating.
+
    HEADER_NUMBERS_GO_HERE
 
    Run: node scripts/simCareerPositionRatings.mjs [seedOffset] [careersPerPositionAndEra] */
