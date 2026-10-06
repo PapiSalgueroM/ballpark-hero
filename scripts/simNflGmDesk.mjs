@@ -46,7 +46,29 @@
  * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nflGmDeskFixture.json from that engine.
  *
- * MEASURED: see the block at the end of this header, written after the runs.
+ * MEASURED 2026-10-05 on three seed sets of ten (1..10, 11..20, 21..30), ten
+ * seasons a seed, full rosters, the GM at Kansas City, totals per set (the
+ * walk is deterministic: the same set run twice printed the same numbers):
+ *   expiring men decided   1632 / 1597 / 1658   (by the GM 820 / 803 / 829, by the staff's rule 812 / 794 / 829)
+ *   draftees come up       160 / 162 / 156, every one after exactly four seasons; 60 / 60 / 60 first rounders with the option
+ *   tags                   41 / 41 / 41 tagged men held by the tag, none on the desk
+ *   deals before deadline  692 / 723 / 711   tries after it 700 each, landed 0; refusal agreed 1700 weeks each
+ *   deals moving a pick    692 / 721 / 709   leaving dead money on your cap 692 / 721 / 711, every one the rule's figure
+ *   buyer and seller places at the deadline  1700 / 1719 / 1717 and 435 / 433 / 406
+ *   staff ladder (fixed)   edge 0 to 3.00 strength, win .408 to .530 (Kansas City at home to
+ *                          Buffalo), scouting miss 2.20 to 0.56, a three week injury 3.00 to 2.25 weeks;
+ *                          alone, the head coach takes the win .408 to .438, the offensive
+ *                          coordinator to .473, the defensive coordinator to .433
+ * Every floor in T100 sits near 70 percent of the lowest set. Every control
+ * was run on seeds 1 and 2 (twenty seasons, floors scaled) and fired in its
+ * own check, failures counted: coinflip 121 in 2, shortrookie 43 in 2,
+ * latetrade 140 in 3, noguard 1 in 3, droppick 84 in 4, flatstaff 63 in 5,
+ * flatstep 2 in 5, onepost 27 in 5, nodead 137 in 6, nodefault 10 in 1 and 5.
+ * nodefault reads half a strength point by default: at a hundredth of one,
+ * the measured first draft of the control, no game of the nine replayed
+ * seasons changed hands, so the replay cannot see an edge that small, and
+ * section 5's level 1 check (the win probability with a level 1 staff equals
+ * the one with no desk, to 1e-12) is the net under it.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -76,11 +98,14 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 const SEEDS = (process.env.SIM_NFL_GM_DESK_SEEDS || '1,2,3,4,5,6,7,8,9,10').split(',').map(Number);
 const SEASONS = Number(process.env.SIM_NFL_GM_DESK_SEASONS || 10);
 
-/* Floors: the measured size of each walk, see MEASURED in the header. Zero until measured. */
-const T = {
-  minDecisions: 0, minGm: 0, minAuto: 0, minEarlyDeals: 0, minLateTries: 0, minPickMoves: 0,
-  minDrafteesUp: 0, minOptions: 0, minTagged: 0, minDead: 0,
+/* Floors: the measured size of each walk on ten seeds of ten seasons, see
+   MEASURED in the header. A shorter walk (SIM_NFL_GM_DESK_SEEDS, used to run
+   the controls quickly) scales them by its share of those hundred seasons. */
+const T100 = {
+  minDecisions: 1100, minGm: 560, minAuto: 550, minEarlyDeals: 480, minLateTries: 490, minPickMoves: 480,
+  minDrafteesUp: 109, minOptions: 42, minTagged: 28, minDead: 480,
 };
+const T = Object.fromEntries(Object.entries(T100).map(([k, v]) => [k, Math.floor(v * SEEDS.length * SEASONS / 100)]));
 
 function modulesDir() {
   let d = ROOT;
@@ -125,7 +150,7 @@ const EDITS = {
     '  return Math.max(62, Math.min(92, p.trueOvr + gmScoutNoise(u, level === 6 ? 5 : level)));'],
   onepost: ['desk', "  return e('offEdge') * NFL_OFFENSE_WEIGHT + e('defEdge') * NFL_DEFENSE_WEIGHT;", "  return e('offEdge') * NFL_OFFENSE_WEIGHT + e('defenseEdge') * NFL_DEFENSE_WEIGHT;"],
   nodefault: ['engine', 'export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0): number {',
-    'export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0.01, edgeAway = 0): number {'],
+    'export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0.5, edgeAway = 0): number {'],
   nodead: ['desk', '    if (amount <= 0) continue;', '    if (amount <= 0 || amount > 0) continue;'],
 };
 const overrides = new Map();
@@ -639,6 +664,7 @@ console.log(`   edge ${ladder[0].edge.toFixed(2)} to ${ladder[9].edge.toFixed(2)
 begin('6', 'migration keeps every marker, a corrupt block resets alone, a trade moves the contract and leaves the dead money the rule sets');
 for (const p of problems.s6) fail(p);
 if (stats.deadDeals < T.minDead) fail(`only ${stats.deadDeals} walk deals left dead money behind, floor ${T.minDead}`);
+console.log(`   ${stats.deadDeals} walk deals left dead money on your cap, every one the rule's figure`);
 {
   const lg = newLeague(mulberry32(6));
   lg.teams.BUF.picks = [1]; lg.teams.MIA.picks = [1, 2, 2, 3]; lg.teams.NYJ.picks = [];
