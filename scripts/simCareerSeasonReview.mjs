@@ -8,9 +8,19 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url);
 const component = 'src/components/us-career/CareerSeasonReview.tsx';
+const comparison = 'src/components/us-career/CareerSeasonComparison.tsx';
+const highs = 'src/components/us-career/CareerSeasonHighs.tsx';
 const helper = 'src/lib/usCareerSeasonReview.ts', board = 'src/components/us-career/UsCareerBoard.tsx';
 const testFile = 'src/test/careerSeasonReview.test.tsx';
 const titles = {
+  highsPositions: 'finds saved season highs from the correct positive field for every position',
+  highsTies: 'keeps every tied original index latest first and compares raw high values before formatting',
+  highsSparse: 'keeps zero highs while excluding missing nonfinite and suspended seasons',
+  highsNavigation: 'opens the original tied high season and restores each navigation focus',
+  comparison: 'compares distinct original season indices and returns focus to Compare seasons',
+  positionComparison: 'compares every saved position field in its existing units without postseason prose',
+  rawComparison: 'subtracts raw saved rates before rounding and keeps neutral reversed changes',
+  sparseComparison: 'keeps missing zero and suspended comparison values distinct',
   nba: 'shows the saved NBA regular and postseason values separately',
   nfl: 'shows NFL passing and defensive stats for their saved positions',
   mlb: 'distinguishes MLB batting starts and relief appearances from saved stats',
@@ -24,6 +34,31 @@ const titles = {
   baseline: 'restores existing retirement legacy and exact save bytes without another completion',
 };
 const controls = {
+  highsNba: { file: helper, from: "const positionLabel = sport.slug === 'nba' ? 'Points per game'", to: "const positionLabel = sport.slug === 'nba' ? 'Assists per game'", test: titles.highsPositions },
+  highsNfl: { file: helper, from: "QB: 'Passing yards'", to: "QB: 'Interceptions thrown'", test: titles.highsPositions },
+  highsMlb: { file: helper, from: "career.pos === 'SP' ? 'Wins'", to: "career.pos === 'RP' ? 'Wins'", test: titles.highsPositions },
+  highsNhl: { file: helper, from: "career.pos === 'G' ? 'Wins' : 'Points'", to: "career.pos === 'C' ? 'Wins' : 'Points'", test: titles.highsPositions },
+  highsMaximum: { file: helper, from: 'Math.max(...valid.map(value => value.raw!))', to: 'Math.min(...valid.map(value => value.raw!))', test: titles.highsPositions },
+  highsRaw: { file: helper, from: "return { index, raw: stat?.numeric?.raw, value: stat?.value ?? 'Not recorded' };", to: "return { index, raw: Number(stat?.value), value: stat?.value ?? 'Not recorded' };", test: titles.highsTies },
+  highsTies: { file: helper, from: 'valid.filter(value => value.raw === highest).reverse()', to: 'valid.filter(value => value.raw === highest).reverse().slice(0, 1)', test: titles.highsTies },
+  highsOrder: { file: helper, from: 'valid.filter(value => value.raw === highest).reverse()', to: 'valid.filter(value => value.raw === highest)', test: titles.highsTies },
+  highsIndices: { file: helper, from: 'indices: tied.map(value => value.index)', to: 'indices: tied.map((value, index) => index)', test: titles.highsPositions },
+  highsZero: { file: helper, from: 'values.filter(value => recorded(value.raw))', to: 'values.filter(value => recorded(value.raw) && value.raw !== 0)', test: titles.highsSparse },
+  highsFinite: { file: helper, from: 'values.filter(value => recorded(value.raw))', to: "values.filter(value => typeof value.raw === 'number' && !Number.isNaN(value.raw))", test: titles.highsSparse },
+  highsMissing: { file: helper, from: "if (!valid.length) return { label, value: 'Not recorded', indices: [] };", to: "if (!valid.length) return { label, value: '0', indices: [] };", test: titles.highsSparse },
+  highsSuspended: { file: helper, from: ".filter(({ season }) => season.teamResult !== 'SUSPENDED')", to: '.filter(() => true)', test: titles.highsSparse },
+  highsOpen: { file: highs, from: 'onClick={() => onReview(index)}', to: 'onClick={() => onReview(high.indices[0])}', test: titles.highsNavigation },
+  highsFocus: { file: component, from: 'highsButton.current?.focus({ preventScroll: true });', to: 'void highsButton.current;', test: titles.highsNavigation },
+  highsWrite: { file: highs, from: 'setMetric(chosen); setPicked(item.indices[0]);', to: "setMetric(chosen); setPicked(item.indices[0]); localStorage.setItem(sport.saveKey, '{}');", test: titles.live },
+  highsRandom: { file: highs, from: 'setMetric(chosen); setPicked(item.indices[0]);', to: 'setMetric(chosen); setPicked(item.indices[0]); Math.random();', test: titles.live },
+  compareIndices: { file: comparison, from: 'useState(career.seasons.length - 2)', to: 'useState(career.seasons.length - 1)', test: titles.comparison },
+  compareDelta: { file: comparison, from: 'const change = Number((b - a).toFixed(digits ?? 6));', to: 'const change = Number((a - b).toFixed(digits ?? 6));', test: titles.rawComparison },
+  compareRaw: { file: helper, from: 'numeric: { raw: recorded(value) ? value : undefined, digits },', to: 'numeric: { raw: recorded(value) ? Number(value.toFixed(digits ?? 6)) : undefined, digits },', test: titles.rawComparison },
+  compareMissing: { file: comparison, from: "if (!finite(a) || !finite(b)) return 'Not recorded';", to: "if (!finite(a) || !finite(b)) return '0';", test: titles.sparseComparison },
+  compareSuspended: { file: comparison, from: "const suspended = tab === 'Regular season' && seasons.some(season => season.teamResult === 'SUSPENDED');", to: 'const suspended = false;', test: titles.sparseComparison },
+  compareFocus: { file: component, from: 'compareButton.current?.focus({ preventScroll: true });', to: 'void compareButton.current;', test: titles.comparison },
+  compareWrite: { file: comparison, from: 'onClick={() => setTab(value)}', to: "onClick={() => { setTab(value); localStorage.setItem(sport.saveKey, '{}'); }}", test: titles.live },
+  compareRandom: { file: comparison, from: 'onClick={() => setTab(value)}', to: 'onClick={() => { setTab(value); Math.random(); }}', test: titles.live },
   nbaRegular: { file: helper, from: "number('Points per game', s.ppg)", to: "number('Points per game', s.poPpg)", test: titles.nba },
   nbaPostseason: { file: helper, from: "number('Assists per game', s.poApg)", to: "number('Assists per game', s.apg)", test: titles.nba },
   nflPassing: { file: helper, from: "number('Passing yards', s.passYds)", to: "number('Passing yards', s.ints)", test: titles.nfl },
@@ -50,7 +85,7 @@ const controls = {
     { from: "import { cn } from '@/lib/utils';", to: "import { cn } from '@/lib/utils';\nimport { recordCompletion } from '@/lib/completions';" },
     { from: 'lastSelected.current = index;', to: 'lastSelected.current = index; recordCompletion(sport.gameSlug, 1);' },
   ], test: titles.live },
-  returnFocus: { file: board, from: 'target?.focus({ preventScroll: true });', to: 'target?.blur();', test: titles.live },
+  returnFocus: { file: board, from: "hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current]", to: 'null', test: titles.live },
   pendingEvent: { file: board, from: "phase !== 'coach' && phase !== 'freeagency' && panel === 'log'", to: "phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log'", test: titles.event, message: /Career Log opens while the ordinary choice stays pending/ },
   retiredBack: { file: board, from: "if (phase === 'retired') setRetiredReview(false);", to: "if (phase === 'retired') setRetiredReview(true);", test: titles.retired },
 };
@@ -75,7 +110,7 @@ if (control === 'all') {
   process.exit(0);
 }
 const held = [];
-for (const relative of [component, helper, board, testFile, 'src/test/fixtures/careerSeasonReview1008.ts', ...['nba', 'nfl', 'mlb', 'nhl'].map(s => `src/lib/${s}CareerSport.ts`)]) {
+for (const relative of [component, comparison, highs, helper, board, testFile, 'src/test/fixtures/careerSeasonReview1008.ts', ...['nba', 'nfl', 'mlb', 'nhl'].map(s => `src/lib/${s}CareerSport.ts`)]) {
   const file = path.join(root, relative), bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, relative + ' raw bytes held')));
 }

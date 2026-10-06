@@ -140,11 +140,11 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
     sources: {
       tierCap: [
         src('https://www.si.com/nfl/bengals/news/nfl-makes-changes-to-practice-squad-rules-ahead-of-2022-season', 'NFL teams will be able to have 16 players on their practice squad (2022 changes).'),
-        src('https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', 'Squads expand to 17 in 2024, the added place being one international player, so 16 otherwise.'),
+        ({ url: 'https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', read: READ, says: 'Squads expand to 17 in 2024, the added place being one international player, so 16 otherwise.' } as FarmSource),
       ],
       tierExempt: [
         src('https://web.archive.org/web/2024id_/https://operations.nfl.com/updates/football-ops/nfl-to-expand-practice-squad-to-include-one-international-player-for-all-32-clubs-in-2024/', 'Beginning in 2024 the practice squad expands to 17 if one player is a qualifying international player.'),
-        src('https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', 'All practice squads include an international player from 2024, 17 players in all.'),
+        ({ url: 'https://www.espn.com/nfl/story/_/id/38392717/all-32-practice-squads-include-international-player-24', read: READ, says: 'All practice squads include an international player from 2024, 17 players in all.' } as FarmSource),
       ],
       elevationsPerSeason: [
         src('https://www.si.com/nfl/bengals/news/nfl-makes-changes-to-practice-squad-rules-ahead-of-2022-season', 'Players can be elevated up to three times during the year.'),
@@ -198,11 +198,11 @@ export const FARM_RULES: Record<FarmSport, FarmRules> = {
       ],
       activeMax: [
         src('https://www.mlb.com/glossary/transactions/26-man-roster', 'The 26 man roster runs from Opening Day through August 31.'),
-        src('https://www.espn.com/mlb/story/_/id/26259301/mlb-tweaks-some-rules-now-more-coming-20', 'Regular season rosters expand from 25 to 26 (2019 agreement, from 2020).'),
+        ({ url: 'https://www.espn.com/mlb/story/_/id/26259301/mlb-tweaks-some-rules-now-more-coming-20', read: READ, says: 'Regular season rosters expand from 25 to 26 (2019 agreement, from 2020).' } as FarmSource),
       ],
       septemberActiveMax: [
         src('https://www.mlb.com/glossary/transactions/26-man-roster', 'From September 1 through the end of the regular season clubs carry 28.'),
-        src('https://www.espn.com/mlb/story/_/id/26259301/mlb-tweaks-some-rules-now-more-coming-20', 'September rosters contract to a maximum of 28.'),
+        ({ url: 'https://www.espn.com/mlb/story/_/id/26259301/mlb-tweaks-some-rules-now-more-coming-20', read: READ, says: 'September rosters contract to a maximum of 28.' } as FarmSource),
       ],
       optionYears: [
         src('https://www.mlb.com/glossary/transactions/minor-league-options', 'Three options, one used per season; out of options a man is designated and must pass outright waivers.'),

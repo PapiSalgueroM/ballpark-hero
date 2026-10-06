@@ -37,6 +37,7 @@
  *   skiplevel  the renderer prints a section heading as h4 directly under h2   section 2
  *   nokeyword  the Club Manager rules h2 loses the game's name                 section 1
  *   lostline   one Club Manager rule sentence is dropped from the sections     section 1
+ *   careerline one explicitly reviewed career instruction is dropped          section 1
  *   unconvert  the Stadium Tycoon guide goes back to flat lists                section 3
  *   snapdrift  a Club Manager snapshot carries one stale h3                    section 4
  * Under a control the harness exits 1 when exactly the predicted section is
@@ -66,7 +67,17 @@ const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 /* Raise this in the round that converts another guide. */
 const CONVERTED_FLOOR = 131;
 
-const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, unconvert: 3, snapdrift: 4 };
+/* Round 1031 adds these verified instructions without rewriting the frozen
+   pre-conversion record. Only these exact parts on these four routes extend it. */
+const CAREER_GUIDE_ROUTES = new Set(['/nba-my-career', '/nfl-my-career', '/mlb-my-career', '/nhl-my-career']);
+const CAREER_GUIDE_ADDITIONS = {
+  howToPlay: [
+    'After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.',
+    'Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.',
+  ],
+  example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.'],
+};
+const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, careerline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`GUIDE_HEADINGS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -196,6 +207,14 @@ if (CONTROL === 'unconvert') {
   delete c.headings;
   console.log('CONTROL unconvert: the Stadium Tycoon guide is back to flat lists; section 3 must go red');
 }
+if (CONTROL === 'careerline') {
+  const line = CAREER_GUIDE_ADDITIONS.howToPlay[0];
+  const sections = content.get('/nba-my-career')?.howToPlaySections ?? [];
+  const home = sections.flatMap(s => [s, ...(s.subsections ?? [])]).find(s => s.items.includes(line));
+  if (!home) abort('control careerline: the reviewed NBA decision instruction is missing');
+  home.items.splice(home.items.indexOf(line), 1);
+  console.log('CONTROL careerline: the reviewed NBA decision instruction was removed; section 1 must go red');
+}
 
 /* ---- helpers ---- */
 const decode = s => s
@@ -304,7 +323,7 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
     if (!c) { f.push(`${route}: frozen in the fixture but no game with a guide lives there any more`); continue; }
     const flat = flatGuide(c);
     for (const p of PARTS) {
-      const was = frozen[p];
+      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
       const now = flat[p] ?? [];
       for (const s of was) {
         sentences += 1;
@@ -315,7 +334,7 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
       if (JSON.stringify(was) === JSON.stringify(now)) orderKept += 1;
     }
   }
-  notes[1] = `${converted.length} converted guide${converted.length === 1 ? '' : 's'}, ${headingCount} headings checked; ${sentences} frozen sentences checked across ${Object.keys(fixture.routes).length} routes (${orderKept} of ${Object.keys(fixture.routes).length * PARTS.length} parts also keep their original order)`;
+  notes[1] = `${converted.length} converted guide${converted.length === 1 ? '' : 's'}, ${headingCount} headings checked; ${sentences} frozen or explicitly reviewed sentences checked across ${Object.keys(fixture.routes).length} routes (${orderKept} of ${Object.keys(fixture.routes).length * PARTS.length} parts also keep their original order)`;
 }
 
 /* ---------- 2. the outline ---------- */

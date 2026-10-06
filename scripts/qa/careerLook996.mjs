@@ -78,7 +78,10 @@ try {
     const context = await browser.newContext({ viewport: { width, height: touch ? 844 : 1000 },
       isMobile: touch, hasTouch: touch, deviceScaleFactor: 1,
       reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
-      storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: 'cookie-consent', value: 'essential' }] }] },
+      storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
+        { name: 'cookie-consent', value: 'essential' },
+        ...(sport.slug === 'soccer' ? [] : [{ name: `rules-gate-seen:${result.route}`, value: '1' }]),
+      ] }] },
     });
     await context.route('**/*', route => {
       const request = route.request();
