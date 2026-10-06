@@ -450,9 +450,10 @@ export interface ManagerState {
     /** Round 1029: how many rivals in the whole table the game could name,
      *  so the page tells "nobody to name" from a window that missed them. */
     knownRivals?: number;
-    /** Round 1029: true when the game knows clubs of that league but not who
-     *  was in it that season (a season before the list's own), so the
-     *  table names nobody and the page says why. */
+    /** Round 1029: a season before the list's own (2026-27) in a league the
+     *  game holds: it knows neither who was in that league that season nor
+     *  whether his club was, so the season names no rival and no league
+     *  (`league` is kept, unprinted) and the page says why. */
     lineupUnknown?: boolean;
     /** W-D-L line for the league season. */
     record?: string;
@@ -8280,6 +8281,10 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
   /* only the English pair moves a club between named divisions, and only
      from 2004/05, when the second tier took the Championship's name */
   const move = divisionMove(lf.league, me.pos, leagueSize, calYear);
+  /* a season before 2026-27 still moves the club (it decides where he plays
+     from then on) but names neither division: the game does not know which
+     league his club was in that year */
+  const dest = (to: string) => (lf.lineupUnknown ? "" : ` to the ${to}`);
 
   if (champion) {
     ms.trophies += 1;
@@ -8302,7 +8307,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     /* Round 1029: in a named league "Relegated" is said only where the club
        really leaves it (the Premier League); elsewhere the drop is a tier */
     result += !relegated ? " The board ran out of patience. Sacked."
-      : move && !move.up ? ` Relegated to the ${move.to}, and sacked on the spot.`
+      : move && !move.up ? ` Relegated${dest(move.to)}, and sacked on the spot.`
       : lf.league ? " Sacked on the spot." : " Relegated, and sacked on the spot.";
     ms.unemployed = true;
     ms.seasonsOut = 0;
@@ -8314,19 +8319,19 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
       : ' Nobody has called.';
   } else if (relegated) {
     ms.clubTier += 1;
-    result += move && !move.up ? ` Relegated to the ${move.to}, but the board kept faith. Going down with the club.`
+    result += move && !move.up ? ` Relegated${dest(move.to)}, but the board kept faith. Going down with the club.`
       : lf.league ? ` Down to Tier ${ms.clubTier}, but the board kept faith.`
       : " Relegated, but the board kept faith. Going down with the club.";
   } else if (promoted) {
     ms.promotions += 1;
     ms.clubTier -= 1;
-    result += move && move.up ? ` Promoted with ${ms.club} to the ${move.to}!`
+    result += move && move.up ? ` Promoted with ${ms.club}${dest(move.to)}!`
       : lf.league ? ` ${ms.club} move up to Tier ${ms.clubTier}.`
       : ` Promoted with ${ms.club} to Tier ${ms.clubTier}!`;
   } else if (move) {
     /* the tier ladder left him where he was (a Tier 4 club has no tier
        below it), but the table still moves the club */
-    result += move.up ? ` Promoted with ${ms.club} to the ${move.to}!` : ` Relegated to the ${move.to}. The board kept faith.`;
+    result += move.up ? ` Promoted with ${ms.club}${dest(move.to)}!` : ` Relegated${dest(move.to)}. The board kept faith.`;
   } else if (!champion && ms.clubTier >= 2 && me.pos <= 4 && ms.season >= 2) {
     /* A top four finish down the pyramid gets noticed. Round 111 rule kept:
        a bigger club only MOVES if the record justifies it. */

@@ -226,7 +226,12 @@ export function ordinal(n: number): string {
      header), and adjustClubsForYear moves a club's tier, never its league,
      so the game cannot say who was in a league in 2012: Coventry City in
      that year's Premier League would be a fact made up. Every place is
-     still played and counted, and the field keeps its size. */
+     still played and counted, and the field keeps its size. Nor can it
+     say which league his club was in that year, so such a season names no
+     league either: not over the table, not under it, not in a move line
+     (dugoutTableWords below, and the engine's season line). The league
+     is still kept, unprinted, so a promotion in 2015 still decides where
+     he plays from 2026-27, and from then on nothing is hidden. */
 export const MANAGER_FIELD = 20;
 /** The season (start year) the career list's league labels describe. */
 export const LIST_SEASON = 2026;
@@ -314,8 +319,9 @@ export interface ManagerLeagueField {
   sizeVerified: boolean;
   /** The rivals named in this season's table, at most size - 1. */
   named: string[];
-  /** True when the game knows clubs of this league but not who was in it
-   *  that season (a season before LIST_SEASON), so it names nobody. */
+  /** True for a season before LIST_SEASON in a league the game holds: it
+   *  knows neither who was in that league that season nor whether his club
+   *  was, so the season names no rival and no league. */
   lineupUnknown: boolean;
 }
 
@@ -346,6 +352,58 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
       [names[i], names[j]] = [names[j], names[i]];
     }
   }
-  const lineupUnknown = input.year < LIST_SEASON && names.length > 0;
+  const lineupUnknown = input.year < LIST_SEASON && league !== null;
   return { league, size, sizeVerified: verified !== null, named: lineupUnknown ? [] : names.slice(0, size - 1), lineupUnknown };
+}
+
+/** One dugout season as the save holds it, old saves included. */
+export interface DugoutTableRow {
+  league?: unknown;
+  sizeVerified?: unknown;
+  leagueSize?: number;
+  knownRivals?: unknown;
+  lineupUnknown?: unknown;
+  table?: { club: string; pts: number; pos: number; you?: boolean; unnamed?: boolean }[];
+}
+export interface DugoutTableWords {
+  /** The heading over the table. */
+  header: string;
+  /** Whether any rival in the whole table carries a name. */
+  named: boolean;
+  /** A league whose size the game does not know: the order only, no
+   *  position, points or record. */
+  sizeUnknown: boolean;
+  /** The line in place of the rows when nobody is named, or null. */
+  note: string | null;
+  /** The line over a named table of unknown size, or null. */
+  orderNote: string | null;
+}
+
+/** The words around the dugout's final table, here rather than in the page
+ *  so the harness reads exactly what the page prints. A season flagged
+ *  lineupUnknown names no league in any of them. */
+export function dugoutTableWords(last: DugoutTableRow): DugoutTableWords {
+  const held = typeof last.league === "string" && last.league ? last.league : null;
+  const league = last.lineupUnknown === true ? null : held;
+  const table = last.table ?? [];
+  const me = table.find(r => r.you);
+  /* the whole table, not just the five rows kept (an older row only has
+     those five to go on) */
+  const named = typeof last.knownRivals === "number"
+    ? last.knownRivals > 0
+    : table.some(r => !r.you && !r.unnamed && r.club);
+  const sizeUnknown = held !== null && last.sizeVerified !== true;
+  const size = last.leagueSize ?? table.length;
+  const why = last.lineupUnknown === true
+    ? "We don't know who was in the league that year, so the rest of the field is counted, not named."
+    : `We don't know enough ${league ? `${league} clubs` : "clubs in this league"} by name to draw the table.`;
+  const where = !me ? "" : sizeUnknown ? `${finishZone(me.pos, size)}.`
+    : `${ordinal(me.pos)}${last.sizeVerified === true && last.leagueSize ? ` of ${last.leagueSize}` : ""} on ${me.pts} points.`;
+  return {
+    header: `Final table${league ? ` · ${league}` : ""}`,
+    named,
+    sizeUnknown,
+    note: !named && me ? `${why} You finished ${where}` : null,
+    orderNote: named && sizeUnknown ? `The order only: we don't know how many clubs the ${league ?? "league"} has.` : null,
+  };
 }

@@ -185,7 +185,7 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     expect(t.rows).toEqual(['Boca Juniors', 'Arsenal', 'Ajax', 'Flamengo', 'Bayern Munich']);
   });
 
-  it('a season before the list\'s own names nobody and says why', async () => {
+  it('a season before the list\'s own names nobody and no league, and says why', async () => {
     const s = dugout('Arsenal', 1, undefined, 1990);
     const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
     expect(s.seasons[s.seasons.length - 1].year).toBeLessThan(2025);
@@ -194,9 +194,11 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     expect(last.knownRivals).toBe(0);
     expect(last.table!.filter(r => !r.you).every(r => r.unnamed && !r.club)).toBe(true);
     const t = await finalTable(s);
-    expect(t.label).toBe('Final table · Premier League');
+    /* the game holds today's label for Arsenal, not the league of that year */
+    expect(t.label).toBe('Final table');
     expect(t.rows).toEqual([]);
-    expect(t.text).toContain("We can't say for sure who was in the Premier League that season, so there's no table.");
+    expect(t.text).toContain("We don't know who was in the league that year, so the rest of the field is counted, not named.");
     expect(t.text).not.toContain("We don't know enough");
+    expect(`${t.text} ${last.result}`).not.toMatch(/Premier League|Championship/);
   });
 });

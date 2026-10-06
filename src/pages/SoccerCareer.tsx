@@ -72,7 +72,7 @@ import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRati
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
-import { finishZone, ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
+import { dugoutTableWords, ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
 import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
@@ -3130,36 +3130,22 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
         const afterResults = Math.min(manager.seasonResults.length, 5);
         /* Round 1029: the table is his club's own league. A club of that
            league the game does not know by name keeps its place, unnamed,
-           and a table with no rival we can name says where he finished. */
-        const league = typeof last.league === "string" && last.league ? last.league : null;
-        const me = last.table.find(r => r.you);
-        /* whether the game could name anyone in the whole table, not just in
-           the five rows kept (an older row only has those five to go on) */
-        const named = typeof last.knownRivals === "number"
-          ? last.knownRivals > 0
-          : last.table.some(r => !r.you && !r.unnamed && r.club);
-        /* a named league whose size the game does not know: the order only,
-           no position, points or record, which could claim places or games
-           that league does not have */
-        const sizeUnknown = league !== null && !last.sizeVerified;
-        const size = last.leagueSize ?? last.table.length;
+           and a table with no rival we can name says where he finished. A
+           season before 2026-27 names no league at all: the game does not
+           know which one his club was in that year. The words come from
+           dugoutTableWords, which the harness reads too. */
+        const { header, named, sizeUnknown, note, orderNote } = dugoutTableWords(last);
         return (
           <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
             <div className="flex items-center justify-between gap-2">
-              <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table{league ? ` · ${league}` : ""}</span>
+              <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{header}</span>
               {last.record && !sizeUnknown && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
             </div>
-            {!named && me && (
-              <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>
-                {last.lineupUnknown === true
-                  ? `We can't say for sure who was in ${league ? leagueWithArticle(league) : "the league"} that season, so there's no table.`
-                  : `We don't know enough ${league ? `${league} clubs` : "clubs in this league"} by name to draw the table.`} You finished {sizeUnknown
-                  ? `${finishZone(me.pos, size)}.`
-                  : `${ordinal(me.pos)}${last.sizeVerified && last.leagueSize ? ` of ${last.leagueSize}` : ""} on ${me.pts} points.`}
-              </p>
+            {note && (
+              <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>{note}</p>
             )}
-            {named && sizeUnknown && (
-              <p className="text-[10px] text-muted-foreground">The order only: we don't know how many clubs the {league} has.</p>
+            {orderNote && (
+              <p className="text-[10px] text-muted-foreground">{orderNote}</p>
             )}
             {named && last.table.map((row, i) => (
               <div

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { divisionMove, drawLeagueFinish, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, dugoutTableWords, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -241,6 +241,13 @@ describe("managerLeagueField (Round 1029)", () => {
     expect(calls(2012)).toBeGreaterThan(0);
   });
 
+  it("flags a past season in a league it holds even when it knows no other club there", () => {
+    const solo = [...CLUBS, row("Lone FC", "Allsvenskan", "Sweden", 3)];
+    const at = (y: number) => managerLeagueField({ clubs: solo, club: "Lone FC", year: y }, seq(0.5));
+    expect([at(2012).league, at(2012).named, at(2012).lineupUnknown]).toEqual(["Allsvenskan", [], true]);
+    expect(at(2026).lineupUnknown).toBe(false);
+  });
+
   it("names nobody when nothing names the league", () => {
     const f = managerLeagueField({ clubs: CLUBS, club: "Unknown FC", year: 2030 }, seq(0.5));
     expect(f).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [], lineupUnknown: false });
@@ -254,5 +261,34 @@ describe("managerLeagueField (Round 1029)", () => {
     let calls = 0;
     managerLeagueField({ clubs: CLUBS, club: "Norwich City", year: 2030 }, () => { calls += 1; return 0.5; });
     expect(calls).toBe(0);
+  });
+});
+
+describe("dugoutTableWords (Round 1029)", () => {
+  const blank = (pos: number) => ({ club: "", pts: 90 - pos * 3, pos, unnamed: true });
+  const me = { club: "Swansea City", pts: 70, pos: 6, you: true };
+  const table = [blank(1), blank(2), blank(3), blank(4), me];
+
+  it("names the league from 2026-27 on", () => {
+    const w = dugoutTableWords({ league: "Championship", sizeVerified: true, leagueSize: 24, knownRivals: 0, table });
+    expect(w.header).toBe("Final table · Championship");
+    expect(w.note).toBe("We don't know enough Championship clubs by name to draw the table. You finished 6th of 24 on 70 points.");
+  });
+
+  it("names no league over or under a past season's table", () => {
+    const past = dugoutTableWords({ league: "Championship", sizeVerified: true, leagueSize: 24, knownRivals: 0, lineupUnknown: true, table });
+    expect(past.header).toBe("Final table");
+    expect(past.note).toBe("We don't know who was in the league that year, so the rest of the field is counted, not named. You finished 6th of 24 on 70 points.");
+    const zone = dugoutTableWords({ league: "Allsvenskan", leagueSize: 20, knownRivals: 0, lineupUnknown: true, table });
+    expect([zone.header, zone.sizeUnknown]).toEqual(["Final table", true]);
+    expect(zone.note).toBe("We don't know who was in the league that year, so the rest of the field is counted, not named. You finished in the top half.");
+    for (const w of [past, zone]) expect(`${w.header} ${w.note} ${w.orderNote}`).not.toMatch(/Championship|Allsvenskan/);
+  });
+
+  it("keeps an old save's table and its order note", () => {
+    const old = dugoutTableWords({ leagueSize: 20, table: [{ club: "Ajax", pts: 80, pos: 1 }, me] });
+    expect([old.header, old.named, old.sizeUnknown, old.note, old.orderNote]).toEqual(["Final table", true, false, null, null]);
+    const mls = dugoutTableWords({ league: "MLS", leagueSize: 30, knownRivals: 12, table });
+    expect(mls.orderNote).toBe("The order only: we don't know how many clubs the MLS has.");
   });
 });
