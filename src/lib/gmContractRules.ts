@@ -173,7 +173,7 @@ export const CONTRACT_RULES: ContractRule[] = [
     sport: 'nfl',
     name: 'Franchise tag',
     plain: 'Each club may tag one of its own free agents a year and keep him for one season at a set, fully guaranteed tender.',
-    inGame: 'Already in the NFL front office since Round 723, with its own sources in src/lib/frontOffice.ts. A tagged man never reaches the desk.',
+    inGame: 'The NFL Front Office had the tag before the desk and it works the same way: tag a man and he never comes up on the re-sign desk.',
     sources: [
       { url: 'https://www.profootballhof.com/news/2020-franchise-and-transition-players-named', says: 'Each club may designate one franchise player among its veteran free agents.' },
       { url: 'https://www.buffalobills.com/news/a-closer-look-what-is-the-franchise-tag-12632897', says: 'One year, at the mean of the five largest prior year salaries at his position or 120 percent of his own prior year salary, whichever is greater.' },
@@ -188,6 +188,19 @@ export const CONTRACT_RULES: ContractRule[] = [
     sources: [
       { url: 'https://www.espn.com/nfl/story/_/id/39900614/fifth-year-option-tracker-nfl-players-2021-first-round-draft-class', says: 'First round picks only; four year rookie deals; fully guaranteed once exercised; four tiers: basic, playing time, one Pro Bowl, multiple Pro Bowls.' },
       { url: 'https://www.si.com/nfl/draft/how-rookie-contracts-work-nfl-salary-length', says: 'All drafted rookies get four year contracts; first round picks have a fifth year team option, priced after the third season on performance, playing time and accolades.' },
+    ],
+  },
+  {
+    /* Round 1019, read 2026-10-05. */
+    id: 'nfl-trade-dead-money',
+    sport: 'nfl',
+    name: 'A traded contract moves whole, the bonus stays behind',
+    plain: "When a player is traded his contract goes with him and his new club pays his salary from then on. His old club keeps the part of his signing bonus it has not yet counted against its cap as dead money: all of it this season, or for a trade after June 1 this season's share now and the rest the season after. Nothing lets the old club keep paying part of his salary the way an NHL club can.",
+    inGame: "Deals here carry one figure and no separate bonus, so the new club takes his whole salary and the old club keeps a share of it as dead money this season: the game's own share, 15 percent for every season he had left, never more than a cut would leave (half his salary). The game puts all of it on this season, the way a real trade before June 1 does, and pushes none of it to the next season, even though its trades happen during the season. A tagged man or one on his option year is on a guaranteed one year deal with no bonus, so he moves with nothing left behind. The trade desk refuses kept salary for the NFL. The sources describe the bonus staying behind; that there is no NFL version of retained salary is this game's reading of them, since the only way they show a club eating money is turning salary into bonus before the deal.",
+    sources: [
+      { url: 'https://www.cbssports.com/nfl/news/agents-take-antonio-brown-ryan-tannehill-top-the-12-biggest-dead-money-charges-in-2019', says: 'The original club keeps the remaining bonus proration as dead money and the acquiring club takes the contract from there (Beckham: the Giants kept 16M); Miami turned 5M of Tannehill\'s salary into bonus before trading him, which cut Tennessee\'s cap hit. Before June 1 the remaining proration accelerates onto this season\'s cap; after June 1 only the current year\'s proration counts and the rest waits for the next league year.' },
+      { url: 'https://www.espn.com/nfl/story/_/id/39665413/what-dead-money-largest-nfl-salary-cap-hits-ever-player-team', says: 'Dead money is any remaining signing bonus proration not yet counted when a player is released or traded; Seattle took a 26M dead money charge when it traded Russell Wilson to Denver.' },
+      { url: 'https://www.cbssports.com/nfl/news/nfl-june-1-salary-cap-myles-garrett-trade-aj-brown/', says: 'The trading club carries the dead cap: before June 1 it takes the whole hit at once, after June 1 it may spread it over two seasons, so Cleveland takes a charge in 2026 and 2027 for trading Myles Garrett after June 1.' },
     ],
   },
   {

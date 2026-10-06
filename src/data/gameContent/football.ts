@@ -188,6 +188,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Running the GM desk: a coach, a contract and a deadline deal",
+        items: [
+          "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them on, and an older save plays on as it did until you open one. Say you hire a level 7 offensive coordinator off the Staff shortlist: his points land on the offense, which is 72 percent of how this game rates a team, so the club gets a little stronger every week. The computer clubs have no staff edge, so even the staff you start with is a step up on them. Your first round pick's rookie deal runs out this spring, so the Re-sign desk offers his fifth year option: one guaranteed season, priced off his rating. Pick it up, or keep him at his ask, push once with your own number, or let him go. At Week 8 you call a club that is well out of the playoff places, which makes it a seller: it marks its veterans down and wants picks and young players. So you send a young depth receiver and a third rounder for its veteran corner. Where you sit in the standings changes nothing in the price, only where they sit does. The receiver's contract goes with him, and 15 percent of his salary for every season he had left stays on your cap this year as dead money, never more than cutting him would have left. Wait until Week 10 is played and the deadline has shut every deal until the season is over. The money is this game's own, never a real contract.",
+        ],
+      },
+      {
         heading: "Running the offseason between titles",
         items: [
           "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you.",

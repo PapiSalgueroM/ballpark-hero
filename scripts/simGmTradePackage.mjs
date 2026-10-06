@@ -297,6 +297,15 @@ for (const key of ['nfl', 'nhl']) {
     const lg2 = makeLeague(sport, gm, 9);
     const pkg = { from: 'C01', to: 'C02', give: [{ ...firstMan(lg2, 'C01'), retain: 0.25 }], get: [firstMan(lg2, 'C02')] };
     const v = gm.pkg.evaluatePackage(pkg, plainCtx(sport, lg2));
+    /* Round 1019: the NFL has no kept salary as a league rule (the contract
+       moves whole, the old club keeps dead money: nfl-trade-dead-money in
+       gmContractRules.ts), so its refusal says the league's words; the
+       others are still this game's limit. */
+    if (key === 'nfl') {
+      ok(2, 'nfl: salary cannot be retained, and the refusal says the contract moves whole',
+        v.verdict === 'invalid' && v.step === 3 && /contract moves whole/.test(v.reason ?? '') && /dead money/.test(v.reason ?? ''), `${v.verdict} ${v.reason ?? ''}`);
+      continue;
+    }
     ok(2, `${key}: salary cannot be retained here, and the refusal says it is the game's limit`,
       v.verdict === 'invalid' && v.step === 3 && /retained/i.test(v.reason ?? '') && /this game/.test(v.reason ?? ''), `${v.verdict} ${v.reason ?? ''}`);
   }
