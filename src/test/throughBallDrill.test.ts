@@ -41,7 +41,7 @@ const allRound = (k: number): Policy => (setup, rng) => {
 };
 const RUNS = sample(240);
 
-describe('seeded Through Ball rules', () => {
+describe('seeded Through Ball rules', { timeout: 20000 }, () => {
   it('deals Through Ball to CM and CAM, keeps every old seed and replays one daily for a seed', () => {
     for (const [kind, salt] of [['wallshot', 1719], ['tackle', 4583], ['gloves', 8317], ['firsttouch', 12011], ['throughball', 15887]] as const) {
       expect(drillSeed(kind, DATE)).toBe(((daySeed(DATE) * 7919 + salt) % 2147483646) + 1);

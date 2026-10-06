@@ -59,7 +59,9 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); Object.defineProperty(document, 'hidden', { configurable: true, value: false }); });
 
-describe('actual Through Ball board', () => {
+/* Twenty seconds, not five: on a machine running many suites at once the first
+   render of the training ground alone has taken over five. */
+describe('actual Through Ball board', { timeout: 20000 }, () => {
   it('deals Through Ball to CM and CAM in the training ground, with rules before play', () => {
     for (const position of ['CM', 'CAM']) {
       const onDrill = vi.fn(); const onComplete = vi.fn();

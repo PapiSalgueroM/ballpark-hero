@@ -17,7 +17,9 @@ import type { CareerState } from "@/lib/soccerCareerEngine";
 import { trainingStatFor, type TrainingDrill } from "@/lib/soccerCareerEngine";
 import DrillBoard from "./DrillBoard";
 import FirstTouchBoard from "./FirstTouchBoard";
-import ThroughBallBoard from "./ThroughBallBoard";
+/* Round 1032: imported by alias, so a harness that copies this panel elsewhere
+   (simTrainingFeedbackMotion) still resolves it. */
+import ThroughBallBoard from "@/components/soccer-career/ThroughBallBoard";
 import { DRILL_META, drillForPosition, drillStatFor, type DrillKind } from "@/lib/careerDrills";
 import feedback from "./TrainingFeedback.module.css";
 
