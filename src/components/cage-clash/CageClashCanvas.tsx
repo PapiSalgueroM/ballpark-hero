@@ -171,9 +171,14 @@ export function CageClashCanvas({ fightRef, drawRef }: Props) {
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext('2d');
-    if (!ctx) return;
+    if (!canvas || !ctx) return;
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const paint = (fight: CageFight | null) => paintCageArena(ctx, fight, motion.matches);
+    const paint = (fight: CageFight | null) => {
+      paintCageArena(ctx, fight, motion.matches);
+      canvas.dataset.paintTick = String(fight?.tick ?? 0);
+      canvas.dataset.playerAction = fight?.player.action ?? 'idle';
+      canvas.dataset.playerActionTicks = String(fight?.player.actionTicks ?? 0);
+    };
     drawRef.current = paint;
     paint(fightRef.current);
     const change = () => paint(fightRef.current);

@@ -177,7 +177,7 @@ try {
       const readCrop = move => page.locator('canvas').evaluate((canvas, action) => {
         const actorX = Math.round(28 + Number(document.querySelector('[data-cage-fighter="player"]').dataset.x) * 2.64);
         const [x, y, width, height] = action === 'jab' ? [actorX + 6, 93, 31, 12] : [actorX + 8, 109, 30, 20];
-        return { x, y, width, height, pixels: [...canvas.getContext('2d').getImageData(x, y, width, height).data] };
+        return { x, y, width, height, paintTick: Number(canvas.dataset.paintTick), action: canvas.dataset.playerAction, actionTicks: Number(canvas.dataset.playerActionTicks), pixels: [...canvas.getContext('2d').getImageData(x, y, width, height).data] };
       }, move);
       for (const action of ['jab', 'kick']) {
         await page.clock.runFor(1000); const before = await hud(page);
@@ -189,17 +189,18 @@ try {
         await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2, id: 7 }] });
         try {
           for (const [phase, low, high] of [['windup', 5, 6], ['contact', 3, 4], ['recovery', 1, 2]]) {
-            let state;
+            let crop;
             for (let frame = 0; frame < 24; frame++) {
-              await page.clock.runFor(16); state = await hud(page);
-              if (state.player.action === action && state.player.actionTicks >= low && state.player.actionTicks <= high) break;
+              await page.clock.runFor(16); crop = await readCrop(action);
+              if (crop.action === action && crop.actionTicks >= low && crop.actionTicks <= high) break;
             }
-            assert(state.player.action === action && state.player.actionTicks >= low && state.player.actionTicks <= high, `Real ${action} reaches its ${phase} action window`);
+            assert(crop.action === action && crop.actionTicks >= low && crop.actionTicks <= high, `Rendered ${action} reaches its ${phase} action window`);
+            assert(Number.isInteger(crop.paintTick) && crop.paintTick > before.tick, 'The actual painted strike advances beyond the resting fight');
+            const state = await hud(page);
             if (!released) { await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); released = true; }
             assert.equal(state.player.x, before.player.x); assert.equal(state.cpu.x, before.cpu.x); assert.equal(state.position, 'standing');
-            const crop = await readCrop(action);
             pixels.push(crop.pixels); const stage = `practice-${profile.reduced ? 'reduced' : 'motion'}-${action}-${phase}`;
-            frames.push({ phase, tick: state.tick, actionTicks: state.player.actionTicks, crop: { x: crop.x, y: crop.y, width: crop.width, height: crop.height, sha256: createHash('sha256').update(Uint8Array.from(crop.pixels)).digest('hex') } });
+            frames.push({ phase, paintTick: crop.paintTick, hudTick: state.tick, actionTicks: crop.actionTicks, crop: { x: crop.x, y: crop.y, width: crop.width, height: crop.height, sha256: createHash('sha256').update(Uint8Array.from(crop.pixels)).digest('hex') } });
             await inspect(stage);
           }
         } finally { if (!released) await cdp.send('Input.dispatchTouchEvent', { type: 'touchCancel', touchPoints: [] }); }
