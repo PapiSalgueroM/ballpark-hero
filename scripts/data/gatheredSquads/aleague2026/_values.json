@@ -1,0 +1,2319 @@
+{
+ "league": "A-League Men",
+ "season": "2026-27",
+ "round": 1035,
+ "read": "2026-10-06",
+ "source": {
+  "host": "transfermarkt.com",
+  "kind": "the value site the Club Manager bake reads (player_market_values is Transfermarkt shaped)",
+  "currency": "EUR"
+ },
+ "method": [
+  "Each club's Transfermarkt 26/27 detailed squad page (kader, plus/1, season 26/27 selected on the page) was read on 2026-10-06 and every Round 1034 ledger row was matched to it by its Transfermarkt player id, never by name.",
+  "valueEur is the page's market value as printed (EUR 450k is 450000). A dash on the page is null: the player has no value there and is NOT given one; the generator gives him the curve's floor and lists him in noValue.",
+  "tmPosition is the page's detailed position. The generator maps it through the bake's position map; where it disagrees with the ledger's two source group, the group wins.",
+  "Values convert to USD at the house rate (scripts/lib/cmValueCurve.mjs, EUR 1 = USD 1.08, the rate scripts/data/defensiveMidfield2026.json records) and to a rating on the bake's own curve, both imported, never copied."
+ ],
+ "counts": {
+  "rows": 312,
+  "valued": 249,
+  "noValue": 63
+ },
+ "clubs": [
+  {
+   "slug": "adelaide-united",
+   "club": "Adelaide United FC",
+   "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 30,
+   "players": [
+    {
+     "name": "Max Vartuli",
+     "tmId": "1001362",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Joshua Smits",
+     "tmId": "190687",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Ethan Cox",
+     "tmId": "745416",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Bart Vriends",
+     "tmId": "129991",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Panagiotis Kikianis",
+     "tmId": "1099708",
+     "valueText": "€1.30m",
+     "valueEur": 1300000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Ryan Kitto",
+     "tmId": "296454",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Israel Mbula-Monga",
+     "tmId": "1464075",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Dylan Pierias",
+     "tmId": "486972",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Sotirios Phillis",
+     "tmId": "1104727",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Vinko Stanisic",
+     "tmId": "1431808",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Malual Nichola",
+     "tmId": null,
+     "valueText": null,
+     "valueEur": null,
+     "tmPosition": null,
+     "note": "no Transfermarkt id in the ledger row"
+    },
+    {
+     "name": "Feyzo Kasumovic",
+     "tmId": "1293968",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Denver Minster",
+     "tmId": "1594872",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Jonny Yull",
+     "tmId": "857060",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Jay Barnett",
+     "tmId": "647456",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Luke Duzel",
+     "tmId": "703660",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Ryan White",
+     "tmId": "1241886",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Ethan Alagich",
+     "tmId": "941357",
+     "valueText": "€900k",
+     "valueEur": 900000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Fabian Talladira",
+     "tmId": "1104730",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Joey Garuccio",
+     "tmId": "1321410",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Juan Muñiz",
+     "tmId": "85357",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Anselmo de Moraes",
+     "tmId": "114341",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Craig Goodwin",
+     "tmId": "214798",
+     "valueText": "€700k",
+     "valueEur": 700000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Ben Folami",
+     "tmId": "532107",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Jake Najdovski",
+     "tmId": "1029949",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Jacob Brazete",
+     "tmId": "1158287",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Mitchell Smith",
+     "tmId": "1594871",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Striker"
+    },
+    {
+     "name": "Brody Burkitt",
+     "tmId": "1403601",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Harry Crawford",
+     "tmId": "1289687",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Amlani Tatu",
+     "tmId": "1237914",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Ajak Riak",
+     "tmId": "983840",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Forward"
+    }
+   ]
+  },
+  {
+   "slug": "auckland-fc",
+   "club": "Auckland FC",
+   "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 25,
+   "players": [
+    {
+     "name": "Michael Woud",
+     "tmId": "350347",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Oli Sail",
+     "tmId": "290838",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Joseph Knowles",
+     "tmId": "887859",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Hiroki Sakai",
+     "tmId": "83002",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Nando Pijnaker",
+     "tmId": "455425",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Francis de Vries",
+     "tmId": "207061",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Callan Elliot",
+     "tmId": "482204",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Ronan Wynne",
+     "tmId": "627143",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Luka Vicelich",
+     "tmId": "1153793",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Aaron Calver",
+     "tmId": "255162",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Cameron Howieson",
+     "tmId": "172323",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Felipe Gallegos",
+     "tmId": "155054",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Lachlan Bayliss",
+     "tmId": "1109358",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Daniel Normann",
+     "tmId": "1352333",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Marley Leuluai",
+     "tmId": "1092671",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Oliver Middleton",
+     "tmId": "1010896",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Jake Brimmer",
+     "tmId": "337282",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Sam Cosgrove",
+     "tmId": "351691",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Isa Prins",
+     "tmId": "1104291",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Aaron Cartwright",
+     "tmId": "1291443",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Logan Rogerson",
+     "tmId": "312317",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Jonty Bidois",
+     "tmId": "1016716",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Van Fitzharris",
+     "tmId": "1289282",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Lachlan Brook",
+     "tmId": "507115",
+     "valueText": "€650k",
+     "valueEur": 650000,
+     "tmPosition": "Left Winger"
+    }
+   ]
+  },
+  {
+   "slug": "brisbane-roar",
+   "club": "Brisbane Roar FC",
+   "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 26,
+   "players": [
+    {
+     "name": "Dean Bouzanis",
+     "tmId": "50104",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Oscar Page",
+     "tmId": "1240369",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "George Plusnin",
+     "tmId": "1336427",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Jacob Nasso",
+     "tmId": "1121271",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Dimitri Valkanis",
+     "tmId": "1056224",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Tom Aldred",
+     "tmId": "95076",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Tate Russell",
+     "tmId": "589458",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Hosine Bility",
+     "tmId": "710470",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Joel King",
+     "tmId": "616430",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Archie Mitchell",
+     "tmId": "1378246",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Noah Maieroni",
+     "tmId": "1326936",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Tae-Hee Nam",
+     "tmId": "118451",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Emin Durakovic",
+     "tmId": "1066862",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Max Court",
+     "tmId": "1333552",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Emmett Shaw",
+     "tmId": "1484878",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Jordan Lauton",
+     "tmId": "1099425",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Milorad Stajic",
+     "tmId": "499341",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Tyrese Francois",
+     "tmId": "528888",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Taj Sorensen",
+     "tmId": "1567445",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Striker"
+    },
+    {
+     "name": "Virgiliu Postolachi",
+     "tmId": "536519",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Marko Ilic",
+     "tmId": "595096",
+     "valueText": "€225k",
+     "valueEur": 225000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Justin Vidic",
+     "tmId": "1116294",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Sabit Ngor",
+     "tmId": "1107973",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Nathan Amanatidis",
+     "tmId": "1145209",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Niall Thom",
+     "tmId": "1326934",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Right Winger"
+    }
+   ]
+  },
+  {
+   "slug": "central-coast-mariners",
+   "club": "Central Coast Mariners FC",
+   "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 30,
+   "players": [
+    {
+     "name": "Andrew Redmayne",
+     "tmId": "51975",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Dylan Peraic-Cullen",
+     "tmId": "1110879",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Trent Sainsbury",
+     "tmId": "145840",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Lucas Mauragis",
+     "tmId": "795253",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Storm Roux",
+     "tmId": "175699",
+     "valueText": "€225k",
+     "valueEur": 225000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Diesel Herrington",
+     "tmId": "1043709",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Shumba Mutokoyi",
+     "tmId": "1385159",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Haine Eames",
+     "tmId": "1271537",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Harrison Steele",
+     "tmId": "959614",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Arthur De Lima",
+     "tmId": "1238281",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Laurence Taylor",
+     "tmId": "1373016",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Bailey Brandtman",
+     "tmId": "1110715",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Oliver O'Carroll",
+     "tmId": "1413345",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Noah McCann",
+     "tmId": "1089414",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Max Naylor",
+     "tmId": "1329719",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Luke Becvinovski",
+     "tmId": "1413330",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Alex Bolton",
+     "tmId": "1273794",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Midfielder"
+    },
+    {
+     "name": "Stevan Rujak",
+     "tmId": "1533960",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Presley Ortiz",
+     "tmId": "732867",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Gabriel Tilo",
+     "tmId": "1435608",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Daniel Scarlett",
+     "tmId": "1510203",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Striker"
+    },
+    {
+     "name": "Rufai Abubakar",
+     "tmId": "1400027",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Oli Lavale",
+     "tmId": "1176547",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Jesse Mantell",
+     "tmId": "1373017",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Callum McCaskey",
+     "tmId": "1407158",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    }
+   ]
+  },
+  {
+   "slug": "macarthur-fc",
+   "club": "Macarthur FC",
+   "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 27,
+   "players": [
+    {
+     "name": "Alexander Robinson",
+     "tmId": "1110729",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "James Hilton",
+     "tmId": "1128985",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Tatsuki Nara",
+     "tmId": "188113",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Jonathan Aspropotamitis",
+     "tmId": "363689",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Harry Politidis",
+     "tmId": "1118085",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Nathan Paull",
+     "tmId": "1109823",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Callum Talbot",
+     "tmId": "843401",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Sebastian Krslovic",
+     "tmId": "1179903",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Will McKay",
+     "tmId": "1169747",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Harry Menham",
+     "tmId": "1150897",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Ryan Fraser",
+     "tmId": "146795",
+     "valueText": "€1.50m",
+     "valueEur": 1500000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Oliver Randazzo",
+     "tmId": "1110867",
+     "valueText": "€275k",
+     "valueEur": 275000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Dylan Rose",
+     "tmId": "1129403",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Liam Rose",
+     "tmId": "329834",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Kosta Grozos",
+     "tmId": "500924",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Kai Kennedy",
+     "tmId": "567150",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Connor Pain",
+     "tmId": "257682",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Luke Vickery",
+     "tmId": "1234443",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Ben Gibson",
+     "tmId": "1109825",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Bernardo Oliveira",
+     "tmId": "883217",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Michael Pratezina",
+     "tmId": "1385157",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Apostolos Stamatelopoulos",
+     "tmId": "547924",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Henrique Oliveira",
+     "tmId": "1329718",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Dean Bosnjak",
+     "tmId": "1144775",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Jing Reec",
+     "tmId": "899867",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Zane Helweh",
+     "tmId": "1173591",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Musa Touré",
+     "tmId": "1069960",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Forward"
+    }
+   ]
+  },
+  {
+   "slug": "melbourne-city",
+   "club": "Melbourne City FC",
+   "url": "https://www.transfermarkt.com/melbourne-city-fc/kader/verein/25580/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 30,
+   "players": [
+    {
+     "name": "Macklin Freke",
+     "tmId": "631103",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "James Nieuwenhuizen",
+     "tmId": "1064381",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Lachie Charles",
+     "tmId": "1234191",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Harrison Delbridge",
+     "tmId": "318541",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Liam Bonetig",
+     "tmId": "1118925",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Nathaniel Atkinson",
+     "tmId": "556038",
+     "valueText": "€700k",
+     "valueEur": 700000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Besian Kutleshi",
+     "tmId": "1273787",
+     "valueText": "€275k",
+     "valueEur": 275000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Aziz Behich",
+     "tmId": "136834",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Peter Antoniou",
+     "tmId": "1104712",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Ryan Kalms",
+     "tmId": "1102336",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Jayden Necovski",
+     "tmId": "1234223",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Mathew Baker",
+     "tmId": "1275360",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Matheus Rossetto",
+     "tmId": "445000",
+     "valueText": "€1.00m",
+     "valueEur": 1000000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Emiliano Marcondes",
+     "tmId": "232964",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Quinn MacNicol",
+     "tmId": "1168791",
+     "valueText": "€275k",
+     "valueEur": 275000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Alessandro Lopane",
+     "tmId": "819840",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Kavian Rahmani",
+     "tmId": "1234222",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Lawrence Wong",
+     "tmId": "1289575",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Mathew Leckie",
+     "tmId": "126214",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Max Caputo",
+     "tmId": "899868",
+     "valueText": "€800k",
+     "valueEur": 800000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Awer Mabil",
+     "tmId": "255729",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Andrew Nabbout",
+     "tmId": "247289",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Benjamin Mazzeo",
+     "tmId": "1183855",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Medin Memeti",
+     "tmId": "1183854",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Akeem Gerald",
+     "tmId": "1432380",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Beckham Baker",
+     "tmId": "1429538",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Roland Ballah",
+     "tmId": "1517838",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Takeshi Kanamori",
+     "tmId": "257110",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right Winger"
+    }
+   ]
+  },
+  {
+   "slug": "melbourne-victory",
+   "club": "Melbourne Victory",
+   "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 25,
+   "players": [
+    {
+     "name": "Jack Duncan",
+     "tmId": "171382",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Daniel Graskoski",
+     "tmId": "1106575",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Jack Warshawsky",
+     "tmId": "1005338",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Jason Davidson",
+     "tmId": "137669",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Brendan Hamill",
+     "tmId": "147600",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Joshua Inserra",
+     "tmId": "1132512",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Franco Lino",
+     "tmId": "1144488",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Jordi Valadon",
+     "tmId": "979025",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Denis Genreau",
+     "tmId": "470618",
+     "valueText": "€700k",
+     "valueEur": 700000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Louis D'Arrigo",
+     "tmId": "561650",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Oliver Dragicevic",
+     "tmId": "1356499",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Xavier Stella",
+     "tmId": "1232652",
+     "valueText": "€175k",
+     "valueEur": 175000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Clerismario Santos Rodrigues",
+     "tmId": "697520",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Matthew Grimaldi",
+     "tmId": "1127122",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Keegan Jelacic",
+     "tmId": "677510",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Charles Nduka",
+     "tmId": "856284",
+     "valueText": "€275k",
+     "valueEur": 275000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Harry Shillington",
+     "tmId": "1144487",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Harrison Sawyer",
+     "tmId": "483593",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Phillip Ziereis",
+     "tmId": "152627",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Tom Lockyer",
+     "tmId": "207742",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Guillermo May",
+     "tmId": "479718",
+     "valueText": "€650k",
+     "valueEur": 650000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Mikey Ghossaini",
+     "tmId": "1234302",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Jack Mihailidis",
+     "tmId": "1373901",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Attacking Midfield"
+    }
+   ]
+  },
+  {
+   "slug": "newcastle-jets",
+   "club": "Newcastle Jets FC",
+   "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 24,
+   "players": [
+    {
+     "name": "James Delianov",
+     "tmId": "399981",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Alex Nassiep",
+     "tmId": "1336425",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Jordan Baylis",
+     "tmId": "1286282",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Alex Grant",
+     "tmId": "225068",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Joe Shaughnessy",
+     "tmId": "119574",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Will Kennedy",
+     "tmId": "1111966",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Joel Bertolissio",
+     "tmId": "1105789",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Daniel Wilmering",
+     "tmId": "660145",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Thomas Aquilina",
+     "tmId": "652486",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Max Cooper",
+     "tmId": "1432453",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Zane Schreiber",
+     "tmId": "1111965",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Zach Clough",
+     "tmId": "246351",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Max Burgess",
+     "tmId": "343049",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Alex Badolato",
+     "tmId": "957230",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Alex Nunes",
+     "tmId": "1251566",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Julian Recchia",
+     "tmId": "1530071",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Will Dobson",
+     "tmId": "1299227",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Patrick Wood",
+     "tmId": "833603",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Nikos Vergos",
+     "tmId": "118302",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Joe Lolley",
+     "tmId": "287167",
+     "valueText": "€750k",
+     "valueEur": 750000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Oscar Gonzalez",
+     "tmId": "1423160",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Oscar Fryer",
+     "tmId": "1144781",
+     "valueText": "€75k",
+     "valueEur": 75000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Oliver Cockle",
+     "tmId": "1489849",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Xavier Bertoncello",
+     "tmId": "1432451",
+     "valueText": "€375k",
+     "valueEur": 375000,
+     "tmPosition": "Left Winger"
+    }
+   ]
+  },
+  {
+   "slug": "perth-glory",
+   "club": "Perth Glory FC",
+   "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 28,
+   "players": [
+    {
+     "name": "Matt Sutton",
+     "tmId": "561484",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Ryan Warner",
+     "tmId": "1118927",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Daniel Solsky",
+     "tmId": "1279262",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Andriano Lebib",
+     "tmId": "1104722",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Sam Sutton",
+     "tmId": "470986",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Brian Kaltak",
+     "tmId": "185114",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Charbel Shamoon",
+     "tmId": "1112869",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Tadi Kuzamba",
+     "tmId": "1285841",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Riley Foxe",
+     "tmId": "1408382",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Matt Dench",
+     "tmId": "965604",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Lachlan Jackson",
+     "tmId": "298883",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Cher Deng",
+     "tmId": "1233818",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Brandon O'Neill",
+     "tmId": null,
+     "valueText": null,
+     "valueEur": null,
+     "tmPosition": null,
+     "note": "no Transfermarkt id in the ledger row"
+    },
+    {
+     "name": "Trent Ostler",
+     "tmId": "692320",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "William Freney",
+     "tmId": "1169749",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Sebastian Despotovski",
+     "tmId": "1404854",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Anthony Didulica",
+     "tmId": "1273793",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Henry Hore",
+     "tmId": "560763",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Giovanni De Abreu",
+     "tmId": "1145213",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Lucas Scicluna",
+     "tmId": "1050131",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Calem Nieuwenhof",
+     "tmId": "734487",
+     "valueText": "€800k",
+     "valueEur": 800000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Jaiden Kucharski",
+     "tmId": "867754",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Tom Lawrence",
+     "tmId": "229970",
+     "valueText": "€1.00m",
+     "valueEur": 1000000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Oliver Evans",
+     "tmId": "1415926",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Stefan Colakovski",
+     "tmId": "714272",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Matt Ellis",
+     "tmId": "724770",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Pieter Jacobsz",
+     "tmId": "1603333",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Sebastian Kukucka",
+     "tmId": "1544725",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Striker"
+    }
+   ]
+  },
+  {
+   "slug": "sydney-fc",
+   "club": "Sydney FC",
+   "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 27,
+   "players": [
+    {
+     "name": "Gus Hoefsloot",
+     "tmId": "1109829",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Harrison Devenish-Meares",
+     "tmId": "877833",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Sandy Zaverdinos",
+     "tmId": "1169773",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "James Overy",
+     "tmId": "1154164",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Jordan Courtney-Perkins",
+     "tmId": "691325",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Jacob Farrell",
+     "tmId": "949477",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Ben Garuccio",
+     "tmId": "187359",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Rhyan Grant",
+     "tmId": "108108",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Ethan Dyer",
+     "tmId": "1291441",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Marcel Tisserand",
+     "tmId": "170463",
+     "valueText": "€1.00m",
+     "valueEur": 1000000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Tyler Williams",
+     "tmId": "1226710",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Alexandar Popović",
+     "tmId": "904309",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Wataru Kamijo",
+     "tmId": "1158288",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Takahiro Sekine",
+     "tmId": "296787",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Left Midfield"
+    },
+    {
+     "name": "Jake Hollman",
+     "tmId": "811400",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Nickolas Alfaro",
+     "tmId": null,
+     "valueText": null,
+     "valueEur": null,
+     "tmPosition": null,
+     "note": "no Transfermarkt id in the ledger row"
+    },
+    {
+     "name": "Joe Lacey",
+     "tmId": "1158702",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Marin France",
+     "tmId": "1179902",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Rhys Youlley",
+     "tmId": "1075719",
+     "valueText": "€375k",
+     "valueEur": 375000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Akol Akon",
+     "tmId": "1334905",
+     "valueText": "€350k",
+     "valueEur": 350000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Oriola Sunday",
+     "tmId": "957466",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Abel Walatee",
+     "tmId": "1146650",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Gabriel Popović",
+     "tmId": "692321",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Zach Harrison",
+     "tmId": "1575937",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Striker"
+    },
+    {
+     "name": "Tiago Quintal",
+     "tmId": "1109205",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Mathias Macallister",
+     "tmId": "1226712",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Al Hassan Touré",
+     "tmId": "692440",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Víctor Campuzano",
+     "tmId": "394285",
+     "valueText": "€700k",
+     "valueEur": 700000,
+     "tmPosition": "Centre-Forward"
+    }
+   ]
+  },
+  {
+   "slug": "wellington-phoenix",
+   "club": "Wellington Phoenix FC",
+   "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 21,
+   "players": [
+    {
+     "name": "Alby Kelly-Heald",
+     "tmId": "877280",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Eamonn McCarron",
+     "tmId": "1079362",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Henry Gray",
+     "tmId": "877945",
+     "valueText": "€125k",
+     "valueEur": 125000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Isaac Hughes",
+     "tmId": "953953",
+     "valueText": "€550k",
+     "valueEur": 550000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Bill Tuiloma",
+     "tmId": "172333",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Matthew Sheridan",
+     "tmId": "877294",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "James McGarry",
+     "tmId": "345343",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Lukas Kelly-Heald",
+     "tmId": "877290",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Xuan Loke",
+     "tmId": "881221",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Jayden Smith",
+     "tmId": "1183555",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Walter Scott",
+     "tmId": "560827",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Alex Rufer",
+     "tmId": "256019",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Kazuki Nagasawa",
+     "tmId": "263685",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Bryce Duke",
+     "tmId": "739675",
+     "valueText": "€800k",
+     "valueEur": 800000,
+     "tmPosition": "Attacking Midfield"
+    },
+    {
+     "name": "Max Anderson",
+     "tmId": "396561",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Fin Roa Conchie",
+     "tmId": "857968",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Anaru Cassidy",
+     "tmId": "1092674",
+     "valueText": "€125k",
+     "valueEur": 125000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Rafael Durán",
+     "tmId": "552958",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Corban Piper",
+     "tmId": "888602",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Riley Bidois",
+     "tmId": "724808",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Nathan Walker",
+     "tmId": "1200303",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Left Winger"
+    }
+   ]
+  },
+  {
+   "slug": "western-sydney-wanderers",
+   "club": "Western Sydney Wanderers FC",
+   "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+   "read": "2026-10-06",
+   "pageRows": 29,
+   "players": [
+    {
+     "name": "Lawrence Thomas",
+     "tmId": "181337",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Jordan Holmes",
+     "tmId": "399158",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Tristan Vidackovic",
+     "tmId": "1077355",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Goalkeeper"
+    },
+    {
+     "name": "Alex Gersbach",
+     "tmId": "331017",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Left-Back"
+    },
+    {
+     "name": "Anthony Pantazopoulos",
+     "tmId": "873755",
+     "valueText": "€500k",
+     "valueEur": 500000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Nathan Barrie",
+     "tmId": "1145212",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Ricky Fransen",
+     "tmId": "1278592",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Jarrod Carluccio",
+     "tmId": "749273",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Emile Katrib",
+     "tmId": "1484876",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Defender"
+    },
+    {
+     "name": "Panashe Madanha",
+     "tmId": "1038443",
+     "valueText": "€200k",
+     "valueEur": 200000,
+     "tmPosition": "Right-Back"
+    },
+    {
+     "name": "Marcus Savic",
+     "tmId": "1413350",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Germán Ferreyra",
+     "tmId": "294857",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Centre-Back"
+    },
+    {
+     "name": "Dylan Scicluna",
+     "tmId": "576346",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Steven Ugarkovic",
+     "tmId": "262971",
+     "valueText": "€400k",
+     "valueEur": 400000,
+     "tmPosition": "Defensive Midfield"
+    },
+    {
+     "name": "Miguel Di Pizio",
+     "tmId": "1109206",
+     "valueText": "€450k",
+     "valueEur": 450000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Oscar Morrison",
+     "tmId": "1419331",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Midfielder"
+    },
+    {
+     "name": "Joshua Cetinic",
+     "tmId": "1387679",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Angus Thurgate",
+     "tmId": "559464",
+     "valueText": "€650k",
+     "valueEur": 650000,
+     "tmPosition": "Central Midfield"
+    },
+    {
+     "name": "Hiroshi Ibusuki",
+     "tmId": "98074",
+     "valueText": "€150k",
+     "valueEur": 150000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Aydan Hammond",
+     "tmId": "1121750",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Brandon Borrello",
+     "tmId": "293592",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Alaat Abdul-Rahman",
+     "tmId": "1373100",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Awan Lual",
+     "tmId": "1179908",
+     "valueText": "€100k",
+     "valueEur": 100000,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Nicolas Milanovic",
+     "tmId": "794777",
+     "valueText": "€600k",
+     "valueEur": 600000,
+     "tmPosition": "Right Winger"
+    },
+    {
+     "name": "Liam Gillion",
+     "tmId": "878242",
+     "valueText": "€300k",
+     "valueEur": 300000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Jai Rose",
+     "tmId": "1226709",
+     "valueText": "€250k",
+     "valueEur": 250000,
+     "tmPosition": "Left Winger"
+    },
+    {
+     "name": "Georgio Hassarati",
+     "tmId": "1413326",
+     "valueText": "-",
+     "valueEur": null,
+     "tmPosition": "Centre-Forward"
+    },
+    {
+     "name": "Atiya Waraga",
+     "tmId": "1361979",
+     "valueText": "€50k",
+     "valueEur": 50000,
+     "tmPosition": "Centre-Forward"
+    }
+   ]
+  }
+ ]
+}
