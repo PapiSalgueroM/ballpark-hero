@@ -46,8 +46,11 @@ const DECISION_LABEL: Record<GmDecision['kind'], string> = {
 /* Round 1018: the NBA keeps restricted free agency beside a man's Bird
    rights, so its tile names both; and a sheet that paid nothing says so
    rather than promising picks. */
-const classLabel = (c: DeskCase): string =>
-  c.restricted && c.cls !== 'restricted' ? `Restricted free agent, ${CLASS_LABEL[c.cls].toLowerCase()}` : CLASS_LABEL[c.cls];
+const classLabel = (c: DeskCase): string => {
+  const label = CLASS_LABEL[c.cls];
+  /* Only the first letter drops, so Bird keeps its capital. */
+  return c.restricted && c.cls !== 'restricted' ? `Restricted free agent, ${label.charAt(0).toLowerCase()}${label.slice(1)}` : label;
+};
 const decisionLabel = (d: GmDecision): string =>
   d.kind === 'take-picks' && !d.picks?.length ? 'Gone to the rival on its sheet' : DECISION_LABEL[d.kind];
 
