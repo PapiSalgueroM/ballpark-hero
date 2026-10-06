@@ -7,6 +7,9 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';
 /* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 1013: the clubs generated from Club Manager's four leagues. The file
+   imports nothing, so Club Manager never enters this page's bundle. */
+import { CAREER_CLUB_POOL } from '@/data/soccerCareerClubPool';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -2367,6 +2370,42 @@ export function getFlag(country: string): string { return FLAG_MAP[country] || "
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+/* Round 1013: the market's draw rule. Club Manager filled four leagues to
+   their full lineups, which put 50 new clubs into tier 4 at once. A plain
+   pick would hand those four leagues 42% of every tier 4 offer and crowd out
+   the rest of the world, so the market first draws a league (within the
+   tier), weighted by its club count capped at LEAGUE_DRAW_CAP, then a club
+   inside it. 5 is the largest league group in any tier of the raw hand
+   list, so on that list every club keeps exactly its old chance. It is not
+   neutral everywhere, and simCareerClubPool pins where it is not: after
+   era rules the Premier League's tier 3 holds 6 or 7 hand clubs in some
+   seasons (to 1996, 2007 to 2009, 2017 to 2021), and those clubs keep 5/6
+   or 5/7 of that group's old share. On the full pool every hand tier 4
+   club outside the four leagues goes from 1/87 to 1/100 of tier 4 draws,
+   and the hand clubs inside them now share their league's 5 with the new
+   clubs (Norwich 1/440, Brentford and Palace 1/160, Betis and Celta 1/260,
+   Cruzeiro and Santos 1/280). Always two Math.random calls. */
+export const LEAGUE_DRAW_CAP = 5;
+export function leagueDrawGroups(candidates: ClubData[]): { key: string; clubs: ClubData[]; weight: number }[] {
+  const groups = new Map<string, ClubData[]>();
+  for (const club of candidates) {
+    const key = `${club.league}|${club.tier}`;
+    const list = groups.get(key);
+    if (list) list.push(club); else groups.set(key, [club]);
+  }
+  return [...groups].map(([key, clubs]) => ({ key, clubs, weight: Math.min(clubs.length, LEAGUE_DRAW_CAP) }));
+}
+export function pickAcrossLeagues(candidates: ClubData[]): ClubData {
+  const groups = leagueDrawGroups(candidates);
+  if (!groups.length) return candidates[0];
+  let r = Math.random() * groups.reduce((s, g) => s + g.weight, 0);
+  let chosen = groups[groups.length - 1];
+  for (const g of groups) {
+    if (r < g.weight) { chosen = g; break; }
+    r -= g.weight;
+  }
+  return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];
+}
 const pickN = <T,>(arr: T[], n: number): T[] => {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, n);
@@ -2388,38 +2427,38 @@ export function getYouthAcademyClub(clubs: ClubData[], nationality: string, over
     if (anyT1Home.length > 0) return pick(anyT1Home);
     const anyElite = clubs.filter(c => ELITE_CLUBS.includes(c.name));
     if (anyElite.length > 0) return pick(anyElite);
-    return pick(getClubsByTier(clubs, 1));
+    return pickAcrossLeagues(getClubsByTier(clubs, 1));
   }
   if (ovr >= 66) {
     // Good club academy (Tier 1-2)
     const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 1 || c.tier === 2));
     if (homeTiers.length > 0) return pick(homeTiers);
     const anyT1T2 = clubs.filter(c => c.tier === 1 || c.tier === 2);
-    if (anyT1T2.length > 0) return pick(anyT1T2);
-    return pick(getClubsByTier(clubs, 2));
+    if (anyT1T2.length > 0) return pickAcrossLeagues(anyT1T2);
+    return pickAcrossLeagues(getClubsByTier(clubs, 2));
   }
   if (ovr >= 55) {
     // Mid league academy (Tier 2-3)
     const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 2 || c.tier === 3));
     if (homeTiers.length > 0) return pick(homeTiers);
     const anyT2T3 = clubs.filter(c => c.tier === 2 || c.tier === 3);
-    if (anyT2T3.length > 0) return pick(anyT2T3);
-    return pick(getClubsByTier(clubs, 3));
+    if (anyT2T3.length > 0) return pickAcrossLeagues(anyT2T3);
+    return pickAcrossLeagues(getClubsByTier(clubs, 3));
   }
   if (ovr >= 40) {
     // Lower league (Tier 3-4)
     const homeClubs = clubs.filter(c => c.country === nationality && c.tier >= 3);
     if (homeClubs.length > 0) return pick(homeClubs);
     const anyT3T4 = clubs.filter(c => c.tier >= 3);
-    if (anyT3T4.length > 0) return pick(anyT3T4);
-    return pick(getClubsByTier(clubs, 4));
+    if (anyT3T4.length > 0) return pickAcrossLeagues(anyT3T4);
+    return pickAcrossLeagues(getClubsByTier(clubs, 4));
   }
   // 25-39: Tiny non-league (Tier 4)
   const homeT4 = clubs.filter(c => c.country === nationality && c.tier === 4);
   if (homeT4.length > 0) return pick(homeT4);
   const t4 = getClubsByTier(clubs, 4);
-  if (t4.length > 0) return pick(t4);
-  return pick(getClubsByTier(clubs, 3));
+  if (t4.length > 0) return pickAcrossLeagues(t4);
+  return pickAcrossLeagues(getClubsByTier(clubs, 3));
 }
 
 export function calcOverall(s: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number }, position: string): number {
@@ -3354,8 +3393,12 @@ const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelo
 
 /* ─── Fallback club roster ───
    Used when the soccer_career_clubs table is unreachable or empty, so the game
-   can always start instead of hanging on a blank/failed fetch. */
-export const FALLBACK_CLUBS: ClubData[] = [
+   can always start instead of hanging on a blank/failed fetch.
+   Round 1013: these 190 hand rows are HAND_CLUBS and are never renamed,
+   removed or reordered (saves and the academy lookups read clubs by name).
+   FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
+   every hand row keeps its index. */
+export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
   { id: "fb-2", name: "Barcelona", country: "Spain", tier: 1, color: "#A50044", league: "La Liga" },
@@ -3561,6 +3604,11 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-189", name: "Botafogo", country: "Brazil", tier: 3, color: "#1A1A1A", league: "Brasileirao" },
   { id: "fb-190", name: "Cruzeiro", country: "Brazil", tier: 4, color: "#0033A0", league: "Brasileirao" },
 ];
+/* Round 1013: Club Manager's Premier League, Championship, La Liga and
+   Brasileirao, filled to their full lineups. Generated by
+   scripts/genCareerClubPool.mjs; rerun it after any change to those four
+   REAL_LEAGUES rows, and scripts/simCareerClubPool.mjs fails while it is stale. */
+export const FALLBACK_CLUBS: ClubData[] = [...HAND_CLUBS, ...CAREER_CLUB_POOL];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
 /* Round 217: the league appearance band, pulled out of calcAppearances so
@@ -3946,7 +3994,7 @@ export function generateContractOffers(clubs: ClubData[], overall: number, age: 
   for (const tier of targetTiers) {
     const candidates = getClubsByTier(clubs, tier).filter(c => !usedNames.has(c.name));
     if (candidates.length === 0) continue;
-    const club = pick(candidates);
+    const club = pickAcrossLeagues(candidates);
     usedNames.add(club.name);
     offers.push({ club, contractYears: rand(2, 4), wage: wageForTier(tier, overall), transferFee: 0 });
   }
@@ -4079,7 +4127,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
       !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20,
     );
     if (candidates.length === 0) continue;
-    const club = pick(candidates);
+    const club = pickAcrossLeagues(candidates);
     exclude.add(club.name);
     /* wage unchanged: the parent club keeps paying the contract */
     offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
@@ -4115,7 +4163,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
 function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
   const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
-  const club = pick(candidates);
+  const club = pickAcrossLeagues(candidates);
   exclude.add(club.name);
   let wage = wageForTier(tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
@@ -4241,7 +4289,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
         const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
         if (!candidates.length) continue;
-        const club = pick(candidates);
+        const club = pickAcrossLeagues(candidates);
         exclude.add(club.name);
         offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
       }

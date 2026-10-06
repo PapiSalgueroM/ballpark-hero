@@ -193,8 +193,13 @@ function digest(s) {
 }
 const DIGEST_SEEDS = 16;
 /* Recorded with --record on the untouched tree at origin/main 5f2622fd, before
-   any line of this round existed, and twice to prove the digest is stable. */
-const BASELINE = ['539858d7000e4591', 'e62cdae073abe906', 'da4789abe4543321', '92f21863034d5bce', '707970f71384bd3d', '5879c7a10fb90659', '1a9c7b940f5968e4', '69e1d33d413b0656', '8cdcb230d5724e65', '4ebd88d3d4b6a6a0', '48ca4ba73be9e9fe', '74d8b0a22eed6238', 'de756b5070df2302', '197b2357e2742487', '2dc97ee74f43440b', '6009b15056656286'];
+   any line of this round existed, and twice to prove the digest is stable.
+   Re-recorded by Round 1013 (twice, identical) after proving this harness
+   green on origin/main 47197830 with the old digests: the round appends 51
+   clubs to FALLBACK_CLUBS and the market draws a league before a club (two
+   Math.random calls where pick made one), so every seeded career signs
+   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch. */
+const BASELINE = ['a792f71cce86f4d9', 'db43ec1b04769114', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'a4728affe6a4f65a', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
