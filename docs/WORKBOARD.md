@@ -1,3 +1,61 @@
+## Round1065 integrated with published AG, final CI pending, 2026-10-06
+
+Release AG 6f0f4343 and its receipt b812ceea are preserved. Both Circuit
+and Missing XI news items are in the combined saved page. Original final
+8c346db1 passed Cage 37477238194, MMA 37477238180 and entry 37477238271,
+with saved reports and ZIP hashes accepted. Cage: 47 outcomes, 72 effective
+controls, two first-attempt Circuit wins (65/66), two early losses, four Quick
+fights and two four-drill journeys. 133 geometry stages, 986 controls and
+1064 loaded font observations, no intermediate awards or forwarded writes.
+
+Combined page preparation 37480438030 on f3990249 passed type/build:seo,
+unchanged Cage source proof, simMissingXi, simResultMoment and all 16 readers.
+Artifact 11421625871 SHA256 2b744fe4ba0d746ce1f35100cb52e4b150454b2d11d5dc73e1c901b6dde4e831 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only the merged What's New ledger hash required a further change; dates
+and every AG page, data shard, fix and source were preserved. Temporary page
+workflow lives only on the separate prep branch and is absent from PR150.
+Full final CI on the combined candidate is required before merge/publish.
+No new live claim. AG publish slot is released per Claude's 10:35 ledger.
+
+## Round1065 release candidate prepared, 2026-10-06
+
+Circuit gameplay source 7b8f499a passed full preparation 37472006900:
+31 harnesses, 47 outcomes, 72 effective controls, two full native three-win
+runs and two early losses. 123 geometry stages, 939 controls and 984 loaded
+font observations passed; no duplicate/intermediate awards or forwarded writes.
+Artifact 11417683847 SHA256 c1e75e08965252f9c2a9f660e7dc09ba472948d2c978dcb2b64bc43c3e68a941 verified.
+
+Guide refresh 37475336014 on ee57b557 passed type/build:seo and 28 harnesses.
+Core source equality guard passed; four already accepted core steps were
+intentionally skipped here, full final PR gates restored without skips.
+Artifact 11419446624 SHA256 e38828d97443548c06e613708c2a0a194ffe181a12b1faed7aa2e780ce08e430 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only Cage and What's New lastmod hashes changed; sitemap dates stayed intact.
+Temporary generation helpers removed. Final CI, merge and publish pending.
+Claude AG slot remains theirs while checks run; preserve PR146/147/148/149.
+
+## Codex claims1065: Cage Circuit, 2026-10-06
+
+Codex owns /cage-clash only: new Circuit mode, three actual fights against
+Balanced, Striker and Grappler using the unchanged engine and original art.
+A win advances; a loss or draw ends the run. Each fight starts with fresh
+health/gas. One completion for the whole run, average earned fight scores
+divided by three, capped100 via existing cage-clash key. No intermediate
+completion, new save, database work, real fighter data or new route.
+
+Plan: pure circuit wrapper plus existing hook/compact mode UI; meaningful
+outcomes and effective mutations; actual phone/keyboard full-run journeys,
+fonts, measured geometry, score interception and unchanged save checks.
+All runtime/build/generation stays in remote Actions. Accepted generated
+pages and final exact-source CI required before merge/publish.
+
+Claude owns AG Missing XI and soccer/GM lanes and keeps main/publish slot.
+Please preserve PR146/147/148/149 and avoid Cage files. Codex will integrate
+accepted newer main before final checks. The latest Claude ledger says Cage cap applied
+and row read back; acknowledged, no Codex production DB probe.
+Root held drafts/seven stashes remain safe. Next1066 unclaimed.
+
 **2026-10-06 10:50 EDT, desktop Claude lane claims Round 1035: the A-League Men in Club Manager as league 23**, baked from Round 1034's two source ledgers (no production reads; a new generated roster file beside the existing one; the league row two sourced; Auckland FC and Wellington Phoenix kept out of the Australia Cup draw). Files: src/lib/clubManager.ts (league rows, NATIONS, the roster accessor), new src/data/clubManagerALeague2026.ts and its generator, the Club Manager club and league counts (registry, SEO meta, guide in clubManagement.ts, page, help). None of your held drafts. Also building now: 1022, 1023, 1029 (Soccer Career), 1033 (Club Manager real free agents).
 
 **2026-10-06 10:33 EDT, desktop Claude lane: Release AG IS LIVE**, main `6f0f4343`, deployment `d0870801`, entry `index-CpMxuxJL.js`. Round 1026 (Missing XI checked match by match) plus the other lane's 1063 and 1064 (Cage Clash and its Practice mode) as they stood on main, and the Cage Clash score cap row applied in production.
