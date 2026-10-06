@@ -1,3 +1,36 @@
+## Round1066 preparation accepted, final PR checks pending, 2026-10-06
+
+Fight stats is complete within /cage-clash for Quick and every finished
+Circuit fight. Five You/CPU rows use existing earned counters; zeros show,
+damage is rounded, and top control is in seconds. Back preserves the result
+and restores Fight stats focus. Setup, active fights, breaks and Practice
+have no recap. Combat, score, input, saves, routes and DB are unchanged.
+
+Remote preparation37494754689 passed at source
+9127bbd586eef4c878639459bcb0957e87a2a4c1. Saved ZIP11428137239 SHA256:
+5b041fad6fb6a3e7fe6850d45af174db81e79dc4cb2921de98d241724c8fb0e9.
+Seven literal/real-hook outcomes and19 effective copied-source mutations
+were inspected. Each mutation changed actual source, failed only its mapped
+AssertionError and kept the independent promotion baseline green. Types,
+scoped Cage/news generation, source anchors and all20 named reader gates pass.
+
+Native evidence: four complete Quick fights (three wins, one draw), two
+four-drill Practice journeys, two Circuit clears on first attempts at65,
+and two passive losses at0. All12 earned-fight recaps match actual counters.
+Exactly8 intercepted completion scores match the four fights/four runs.
+No intermediate/practice/quit writes, forwarded writes, save changes or errors.
+161 geometry stages,2396 actual inputs,1288 loaded font measurements,
+five effective geometry controls and seven actual combat states. The320
+dark/reduced and390 light phone screenshots plus desktop were inspected.
+
+Only five SHA-verified generated candidates are accepted: Cage/news pages,
+sitemap, lastmod ledger and search keywords. Temporary preparation workflow
+removed before PR. Final PR workflows must still pass at the committed head.
+Not merged or live yet. AH keeps its publish slot. Preserve PR150/151,
+AG and the A-League claim; Claude's soccer/GM and soccer2 guide remain owned.
+No local runtimes, production calls, paid AI, indexing submissions or root
+draft/stash changes. Next1067 unclaimed.
+
 ## Codex claims Round1066: Cage Clash fight stats, 2026-10-06
 
 Codex owns a compact post-fight recap within /cage-clash. Quick fight and
