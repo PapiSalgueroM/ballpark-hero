@@ -45,7 +45,7 @@ import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobH
    here unchanged, so every import from this module keeps working; the
    fixture scripts/data/calDateFixture946.json, recorded before the move,
    proves the calendar built on them did not move a day. */
-import { addDays, dateKey, dayOfWeek, daysInMonth } from '@/lib/calDate';
+import { addDays, dateKey, dayOfWeek, daysInMonth, shortDate } from '@/lib/calDate';
 import type { CalDate } from '@/lib/calDate';
 export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';
 export type { CalDate } from '@/lib/calDate';
@@ -201,14 +201,6 @@ function lateEntryDates(worldYear: number, calendar: { type: string }[], plan: S
     if (isLeague(i) && between && !midweek.has(i + 1)) midweek.add(i);
   }
   return drawEntries(plan.kickoff, worldYear, calendar, midweek);
-}
-
-export const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-/** "Sat 8 Aug". */
-export function shortDate(date: CalDate): string {
-  return `${DAY_NAMES[dayOfWeek(date.y, date.m, date.d)]} ${date.d} ${MONTH_NAMES[date.m - 1].slice(0, 3)}`;
 }
 
 /* ================================================================== */
