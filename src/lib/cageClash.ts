@@ -1,5 +1,6 @@
 export type CageStyle = 'balanced' | 'striker' | 'grappler';
 export type CageAction = 'jab' | 'power' | 'kick' | 'grapple' | 'submit' | 'escape';
+export type CageActionReadiness = 'Ready' | 'Move closer' | 'Recover gas' | 'Recovering' | 'Unavailable';
 export type CageSide = 'player' | 'cpu';
 export type CagePose = 'idle' | 'move' | 'guard' | CageAction;
 export interface CageInput { move: -1 | 0 | 1; guard: boolean; action: CageAction | null }
@@ -51,6 +52,20 @@ export function canCageAction(state: CageFight, action: CageAction, side: CageSi
   if (action === 'grapple' && state.position === 'ground' && state.top === side) return state.groundLevel < 2;
   return true;
 }
+export function cageActionCost(state: CageFight, action: CageAction, side: CageSide = 'player'): number {
+  if (action === 'submit') return state[side].submission === 0 ? CAGE_ACTION_COSTS.submit + .8 : .8;
+  return state.position === 'ground' && action === 'kick' ? 8 : CAGE_ACTION_COSTS[action];
+}
+export function cageActionRange(action: CageAction): number {
+  return action === 'kick' ? 20 : action === 'power' ? 12 : action === 'jab' ? 10 : action === 'grapple' ? 9 : Infinity;
+}
+export function cageActionReadiness(state: CageFight, action: CageAction, side: CageSide = 'player'): CageActionReadiness {
+  if (!canCageAction(state, action, side)) return 'Unavailable';
+  if (state[side].stamina < cageActionCost(state, action, side)) return 'Recover gas';
+  if (state[side].cooldown > 0) return 'Recovering';
+  if (state.position === 'standing' && Math.abs(state[side].x - state[opposite(side)].x) > cageActionRange(action)) return 'Move closer';
+  return 'Ready';
+}
 export function cageActionLabel(state: CageFight, action: CageAction, side: CageSide = 'player'): string {
   if (state.position === 'ground') {
     const top = state.top === side;
@@ -88,7 +103,7 @@ function stand(state: CageFight) {
 }
 function hit(state: CageFight, side: CageSide, defense: CageInput, action: 'jab' | 'power' | 'kick', rng: () => number) {
   const attacker = state[side], target = state[opposite(side)];
-  const range = action === 'kick' ? 20 : action === 'power' ? 12 : 10;
+  const range = cageActionRange(action);
   if (state.position === 'standing' && Math.abs(attacker.x - target.x) > range) {
     state.message = 'That strike missed. Get closer.'; return;
   }
@@ -111,13 +126,10 @@ function hit(state: CageFight, side: CageSide, defense: CageInput, action: 'jab'
   }
   if (target.health === 0) finish(state, side, 'KO');
 }
-function actionCost(state: CageFight, action: CageAction): number {
-  return state.position === 'ground' && action === 'kick' ? 8 : CAGE_ACTION_COSTS[action];
-}
 function execute(state: CageFight, side: CageSide, input: CageInput, defense: CageInput, rng: () => number) {
   const action = input.action, actor = state[side], target = state[opposite(side)];
   if (!action || action === 'submit' || !canCageAction(state, action, side) || actor.cooldown > 0) return;
-  const cost = actionCost(state, action);
+  const cost = cageActionCost(state, action, side);
   if (actor.stamina < cost) return;
   actor.stamina -= cost; actor.cooldown = CAGE_COOLDOWNS[action]; pose(actor, action);
   if (action === 'jab' || action === 'power' || (action === 'kick' && state.position !== 'ground')) {
@@ -126,7 +138,7 @@ function execute(state: CageFight, side: CageSide, input: CageInput, defense: Ca
   const advantage = (actor.stamina - target.stamina) / 300 + (actor.style === 'grappler' ? .13 : actor.style === 'striker' ? -.07 : 0);
   if (action === 'grapple') {
     if (state.position === 'standing') {
-      if (Math.abs(actor.x - target.x) > 9) { state.message = 'Too far to clinch.'; return; }
+      if (Math.abs(actor.x - target.x) > cageActionRange(action)) { state.message = 'Too far to clinch.'; return; }
       state.position = 'clinch'; state.message = 'Clinch. Takedown or break away.';
     } else if (state.position === 'clinch') {
       if (rng() < clamp(.58 + advantage - (guardActive(target, defense) ? .13 : 0), .2, .85)) {
@@ -165,7 +177,7 @@ function submission(state: CageFight, side: CageSide, input: CageInput, defense:
   if (input.action !== 'submit' || !canCageAction(state, 'submit', side) || actor.cooldown > 0) {
     actor.submission = Math.max(0, actor.submission - 1); return;
   }
-  const cost = actor.submission === 0 ? CAGE_ACTION_COSTS.submit + .8 : .8;
+  const cost = cageActionCost(state, 'submit', side);
   if (actor.stamina < cost) { actor.submission = Math.max(0, actor.submission - 2); return; }
   actor.stamina -= cost; pose(actor, 'submit', 2);
   const defenseFactor = guardActive(target, defense) ? 1 - .65 * target.stamina / 100 : 1;
