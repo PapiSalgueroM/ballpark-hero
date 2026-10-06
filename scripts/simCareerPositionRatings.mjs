@@ -110,15 +110,32 @@ const ENGINE_SRC = fs.readFileSync(ENGINE_FILE, 'utf8').replace(/\r\n/g, '\n');
    before this round: the keeper's clean sheets were the only defensive input. */
 const CREDIT_LINE = '  base += defensiveRatingCredit(position, apps, cleanSheets);\n';
 const CREDIT_CONST = 'const DEFENSIVE_SHEET_CREDIT = 0.035;';
+const CDM_SHARE_CONST = 'const CDM_CREDIT_SHARE = 0.75;';
+/* repairCareer runs on every load, so it is where a "re-rate the history"
+   change would go. It also runs at every season turn, which is why that
+   control leaves sections 1 and 2 free. */
+const REPAIR_ANCHOR = '  s.story = cleanCareerStory(s.story);\n';
+const RERATE = '  if (Array.isArray(s.seasons)) s.seasons = s.seasons.map(x => x && x.type === "playing" && typeof x.rating === "number" ? { ...x, rating: Math.min(10, parseFloat((x.rating + defensiveRatingCredit(s.position, x.apps || 0, x.cleanSheets || 0)).toFixed(1))) } : x);\n';
+/* red: the sections that must go red; free: sections the mutation also
+   reaches whose verdict this control does not judge; every other section
+   must stay green. */
 const CONTROLS = {
   oldrule: { from: CREDIT_LINE, to: '', red: [1, 2, 3] },
-  overcredit: { from: CREDIT_CONST, to: 'const DEFENSIVE_SHEET_CREDIT = 0.035 * 4;', red: [1, 2] },
+  overcredit: { from: CREDIT_CONST, to: 'const DEFENSIVE_SHEET_CREDIT = 0.035 * 4;', red: [1, 2, 3] },
   stream: { from: CREDIT_LINE, to: '  base += defensiveRatingCredit(position, apps, cleanSheets) + 0 * Math.random();\n', red: [2, 3] },
+  retune: { from: CDM_SHARE_CONST, to: 'const CDM_CREDIT_SHARE = 0.5;', red: [3], free: [1, 2] },
+  rerate: { from: REPAIR_ANCHOR, to: REPAIR_ANCHOR + RERATE, red: [4], free: [1, 2] },
 };
 /* Margins and floors, measured (see the header). */
-const MARGIN = { poor: 3, elite: 5 };
+const MARGIN = { poor: 4, elite: 4 };
 const FLOOR = { seasons: 800, careers: 240, identity: 60, cells: 9000, saves: 16, newRows: 24 };
-const DELTA = { peak: [0.15, 0.95], trophies: [0.05, 0.45], released: [-3, 3] };
+const DELTA = { peak: [0.13, 0.83], trophies: [-0.19, 0.55], released: [-2.65, 1.75] };
+/* The tuning every band here was measured with. Section 1's bands are
+   outcome bands and cannot see a change much under a third of the credit
+   (the review measured 0.025 a clean sheet and a half share for the holding
+   midfielder passing them), so section 3 holds the values themselves: a
+   retune has to re-measure the header. */
+const TUNED = { sheet: 0.035, cdmExpected: 0.325, cdmShare: 0.75 };
 const BDOR_CEILING = 1;
 const count = (hay, needle) => hay.split(needle).length - 1;
 function swap(src, from, to, label) {
@@ -136,7 +153,7 @@ let CUR_SRC = ENGINE_SRC;
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   CUR_SRC = swap(ENGINE_SRC, c.from, c.to, `control ${CONTROL}`);
-  console.log(`CONTROL ${CONTROL}: expected red set {${c.red.join(', ')}}`);
+  console.log(`CONTROL ${CONTROL}: expected red set {${c.red.join(', ')}}${c.free ? `, sections ${c.free.join(' and ')} not judged` : ''}`);
 }
 CUR_SRC += EXPOSE;
 
@@ -287,7 +304,8 @@ const IDENTITY = 10;
 function fleet(E, before = false) {
   const out = {};
   POSITIONS.forEach(position => {
-    const o = out[position] = { seasons: 0, poor: 0, elite: 0, careers: 0, peak: 0, trophies: 0, bdor: 0, released: 0, digests: [] };
+    const o = out[position] = { seasons: 0, poor: 0, elite: 0, careers: 0, peak: 0, trophies: 0, bdor: 0, released: 0, digests: [], era: {} };
+    for (const [, era] of ERAS) o.era[era] = { seasons: 0, poor: 0, elite: 0 };
     const per = before && !DEFENCE.includes(position) ? Math.min(IDENTITY, PER) : PER;
     ERAS.forEach(([startYear, era], ei) => { for (let i = 0; i < per; i++) {
       const seed = OFFSET * 1000003 + 7 + (ei * PER + i) * 7919;
@@ -297,6 +315,8 @@ function fleet(E, before = false) {
         o.seasons += 1;
         const b = CUR.R.ratingBand(r.rating);
         if (b === 'poor') o.poor += 1; else if (b === 'elite') o.elite += 1;
+        const e = o.era[era];
+        e.seasons += 1; if (b === 'poor') e.poor += 1; else if (b === 'elite') e.elite += 1;
       }
       o.careers += 1; o.peak += peak; o.released += released > 0 ? 1 : 0;
       for (const r of s.seasons) {
@@ -331,6 +351,13 @@ for (const p of POSITIONS) {
   const n = NEWF[p], o = OLDF[p];
   console.log(`   ${p.padEnd(4)} ${String(n.seasons).padStart(5)} seasons  poor ${share(n, 'poor').toFixed(1).padStart(4)}%  elite ${share(n, 'elite').toFixed(1).padStart(4)}%   ${DEFENCE.includes(p) ? `(rule before this round: poor ${share(o, 'poor').toFixed(1)}%, elite ${share(o, 'elite').toFixed(1)}%)` : '(the rule does not touch this position)'}`);
   floorCheck(n.seasons, FLOOR.seasons, `${p} rated seasons`);
+}
+/* By era, printed for the header, never asserted (a single era is half the
+   sample). The rule before only ran in full for the defenders; every other
+   position is untouched, so its numbers are the same on both rules. */
+const eraShare = (o, era) => { const e = o.era[era]; return `${(100 * e.poor / e.seasons).toFixed(1)}/${(100 * e.elite / e.seasons).toFixed(1)}`; };
+for (const [, era] of ERAS) {
+  console.log(`   ${era} poor/elite: ${POSITIONS.map(p => `${p} ${eraShare(NEWF[p], era)}${DEFENCE.includes(p) ? ` (before ${eraShare(OLDF[p], era)})` : ''}`).join('  ')}`);
 }
 for (const p of [...DEFENCE, 'CM']) for (const k of ['poor', 'elite']) {
   const v = share(NEWF[p], k);
@@ -394,6 +421,14 @@ const cdmFree = [0, 6, 14].every(cs => CUR.defensiveRatingCredit('CDM', 30, cs) 
 const backFree = [8, 20, 38].every(a => CUR.defensiveRatingCredit('CB', a, 6) === CUR.defensiveRatingCredit('CB', 38, 6));
 console.log(`   ${cells} cells: ${drawBreaks} with other than one draw, ${repeatBreaks} that did not repeat, ${untouchedBreaks} untouched positions that moved, ${creditBreaks} defenders off their credit`);
 console.log(`   the back line's credit reads clean sheets only: ${backFree}; the holding midfielder's reads appearances only: ${cdmFree}`);
+let pinCells = 0, pinBreaks = 0;
+for (const p of POSITIONS) for (const apps of [0, 8, 20, 38]) for (const cs of [0, 6, 14]) {
+  if (cs > apps) continue;
+  pinCells += 1;
+  const want = ['CB', 'LB', 'RB'].includes(p) ? cs * TUNED.sheet : p === 'CDM' ? apps * TUNED.cdmExpected * TUNED.sheet * TUNED.cdmShare : 0;
+  if (Math.abs(CUR.defensiveRatingCredit(p, apps, cs) - want) > 1e-12) { pinBreaks += 1; if (breaks.length < 4) breaks.push(`${p} apps ${apps} clean sheets ${cs}: credit ${CUR.defensiveRatingCredit(p, apps, cs).toFixed(4)}, the measured tuning gives ${want.toFixed(4)}`); }
+}
+console.log(`   ${pinCells} credit cells against the tuning the bands were measured with (${TUNED.sheet} a clean sheet, the holding midfielder ${TUNED.cdmShare} of it on ${TUNED.cdmExpected} expected a game): ${pinBreaks} off it`);
 for (const b of breaks) console.log('   e.g. ' + b);
 floorCheck(cells, FLOOR.cells, 'grid cells');
 if (drawBreaks) fail(`${drawBreaks} cells made other than one Math.random call, so the stream moved`);
@@ -401,6 +436,8 @@ if (repeatBreaks) fail(`${repeatBreaks} cells gave a different rating for the sa
 if (untouchedBreaks) fail(`${untouchedBreaks} cells at a position the rule does not touch changed`);
 if (creditBreaks) fail(`${creditBreaks} defender cells moved by something other than their credit`);
 if (!cdmFree || !backFree) fail('a credit reads an input it should not');
+floorCheck(pinCells, 30, 'credit cells');
+if (pinBreaks) fail(`${pinBreaks} credit cells are off the tuning the header's bands were measured with; re-measure before changing it`);
 
 /* ── 4. old saves: a rating already in a save is history ── */
 section = 4;
@@ -433,9 +470,9 @@ if (rowBreaks) fail(`${rowBreaks} old saves had a stored season rewritten`);
 /* ── verdict ── */
 const redList = [...red].sort((a, b) => a - b);
 if (CONTROL) {
-  const want = CONTROLS[CONTROL].red;
-  const ok = want.length === redList.length && want.every((v, i) => v === redList[i]);
-  console.log(`\nCONTROL ${CONTROL}: red set {${redList.join(', ')}}, expected {${want.join(', ')}}: ${ok ? 'the control fired as it should' : 'WRONG'}`);
+  const want = CONTROLS[CONTROL].red, free = CONTROLS[CONTROL].free || [];
+  const ok = want.every(v => red.has(v)) && redList.every(v => want.includes(v) || free.includes(v));
+  console.log(`\nCONTROL ${CONTROL}: red set {${redList.join(', ')}}, expected {${want.join(', ')}}${free.length ? ` (sections ${free.join(' and ')} not judged)` : ''}: ${ok ? 'the control fired as it should' : 'WRONG'}`);
   process.exit(ok ? 1 : 2);
 }
 console.log(failures ? `\n${failures} failure(s) in section(s) ${redList.join(', ')}` : '\nall sections green: defenders and holding midfielders are rated on their defending');
