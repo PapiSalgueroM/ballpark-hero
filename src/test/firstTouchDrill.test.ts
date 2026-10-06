@@ -9,7 +9,9 @@ describe('seeded First Touch rules', () => {
     for (const [kind, salt] of [['wallshot', 1719], ['tackle', 4583], ['gloves', 8317]] as const) {
       expect(drillSeed(kind, date)).toBe(((daySeed(date) * 7919 + salt) % 2147483646) + 1);
     }
-    expect(['CM', 'CAM', 'LW', 'RW', 'ST'].map(drillForPosition)).toEqual(Array(5).fill('wallshot'));
+    /* Round 1032: CM and CAM thread through balls; the rest still shoot. */
+    expect(['LW', 'RW', 'ST'].map(drillForPosition)).toEqual(Array(3).fill('wallshot'));
+    expect(['CM', 'CAM'].map(drillForPosition)).toEqual(Array(2).fill('throughball'));
     expect(['CB', 'LB', 'RB', 'CDM'].map(drillForPosition)).toEqual(Array(4).fill('tackle'));
     expect(drillForPosition('GK')).toBe('gloves');
     const seed = drillSeed('firsttouch', date);

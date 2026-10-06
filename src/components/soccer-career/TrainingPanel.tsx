@@ -17,13 +17,17 @@ import type { CareerState } from "@/lib/soccerCareerEngine";
 import { trainingStatFor, type TrainingDrill } from "@/lib/soccerCareerEngine";
 import DrillBoard from "./DrillBoard";
 import FirstTouchBoard from "./FirstTouchBoard";
+/* Round 1032: imported by alias, so a harness that copies this panel elsewhere
+   (simTrainingFeedbackMotion) still resolves it. */
+import ThroughBallBoard from "@/components/soccer-career/ThroughBallBoard";
 import { DRILL_META, drillForPosition, drillStatFor, type DrillKind } from "@/lib/careerDrills";
 import feedback from "./TrainingFeedback.module.css";
 
 /* Round 468: "arcade" is the position drill, played on the shared arcade
    engine in DrillBoard. It sits beside the Round 81 tiles rather than
    replacing them, and it banks through its own rule (applyDrillResult). */
-type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch";
+/* Round 1032: "throughball" is the CM and CAM position drill, on its own board. */
+type Screen = "menu" | "dribbling" | "pace" | "shooting" | "passing" | "result" | "arcade" | "firsttouch" | "throughball";
 
 const CONES = [
   { x: 50, y: 90 }, { x: 24, y: 78 }, { x: 68, y: 68 }, { x: 30, y: 56 },
@@ -301,12 +305,12 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
               const k = drillForPosition(career.position);
               const m = DRILL_META[k];
               return (
-                <button onClick={() => setScreen("arcade")}
+                <button onClick={() => setScreen(k === "throughball" ? "throughball" : "arcade")}
                   className="w-full flex items-center gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 p-3.5 text-left transition-colors">
                   <span className="text-3xl">{m.emoji}</span>
                   <span className="flex-1">
                     <span className="block text-sm font-black">{m.name} <span className="ml-1 align-middle rounded bg-emerald-500 px-1.5 py-0.5 text-[9px] font-black text-black">NEW</span></span>
-                    <span className="block text-[10px] text-muted-foreground">Your {career.position} drill. Trains {m.statLabel}. Today's ten count, practice is free.</span>
+                    <span className="block text-[10px] text-muted-foreground">Your {career.position} drill. Trains {drillStatFor(k, career.position).label}. Today's ten count, practice is free.</span>
                   </span>
                   <span className="text-muted-foreground">›</span>
                 </button>
@@ -351,6 +355,8 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
         )}
 
         {screen === "firsttouch" && <FirstTouchBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
+
+        {screen === "throughball" && <ThroughBallBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />}
 
         {screen === "arcade" && (
           <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={() => setScreen("menu")} />

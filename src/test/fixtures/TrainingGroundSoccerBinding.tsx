@@ -7,6 +7,7 @@ import type { TrainingSport } from "@/lib/careerTraining";
 import TrainingGround, { type TrainingExtra } from "@/components/career/TrainingGround";
 import DrillBoard from "@/components/soccer-career/DrillBoard";
 import FirstTouchBoard from "@/components/soccer-career/FirstTouchBoard";
+import ThroughBallBoard from "@/components/soccer-career/ThroughBallBoard";
 import { DRILL_META, drillForPosition, drillStatFor, type DrillKind } from "@/lib/careerDrills";
 
 const PITCH = "linear-gradient(180deg, #14532d, #166534)";
@@ -88,7 +89,8 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
      replacing them, and it banks through its own rule (applyDrillResult).
      Always open, because practice is unlimited; only today's ten bank, and
      only while the season's session is still there. */
-  const arcade = DRILL_META[drillForPosition(career.position)];
+  const kind = drillForPosition(career.position);
+  const arcade = DRILL_META[kind];
   const extras: TrainingExtra[] = [
     {
       id: "arcade",
@@ -103,7 +105,12 @@ export default function TrainingPanel({ career, available, onComplete, onDrill, 
           <span className="text-muted-foreground">›</span>
         </button>
       ),
-      screen: back => <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={back} />,
+      /* Round 1032: CM and CAM are dealt Through Ball, which has its own
+         board, as in the live TrainingPanel. DrillBoard only knows the three
+         older drills and would deal glove saves under the Through Ball name. */
+      screen: back => kind === "throughball"
+        ? <ThroughBallBoard career={career} canBank={available} onBank={onDrill} onBack={back} />
+        : <DrillBoard career={career} canBank={available} onBank={onDrill} onBack={back} />,
     },
     {
       id: "firsttouch",
