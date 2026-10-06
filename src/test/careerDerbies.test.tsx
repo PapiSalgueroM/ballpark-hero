@@ -7,6 +7,8 @@
  *      carries the W-D-L chip, and the Career Stats card the career line.
  *   2. The same save with every derby stripped, which is what a save from
  *      before this round looks like: none of it shows, and no Derby Hero.
+ *   3. The "?" help shows each derby rule exactly once.
+ *   4. An extra rule the guide already carries is not shown twice.
  * Mocks as in careerStory.test.tsx: nothing here reaches the network.
  */
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
@@ -61,7 +63,10 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import SoccerCareer from '@/pages/SoccerCareer';
-import { readSeasonDerbies, derbyRecord } from '@/lib/soccerCareerDerby';
+import { readSeasonDerbies, derbyRecord, DERBY_HELP_RULES } from '@/lib/soccerCareerDerby';
+import { GameHelp } from '@/components/game/GameHelp';
+import { loadGameContent } from '@/data/gameContent/loader';
+import { flatGuide } from '@/data/gameContent/guideShape';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const SAVE_KEY = 'soccerCareerSave';
@@ -165,5 +170,45 @@ describe('Soccer Career: derbies on the real page', () => {
     expect(v.container.querySelector('[data-career-derbies]')).toBeNull();
     expect(v.container.textContent ?? '').not.toContain('Derby Hero');
     expect(v.container.textContent ?? '').not.toContain('Derbies:');
+  }, 120_000);
+
+  /* The "?" help on /soccer-career carries the derby rules once each, next
+     to the guide's own rules. Without the page's extraRules this goes red
+     while the held guide has no derby paragraph of its own. */
+  it('the "?" help explains derbies, once each', async () => {
+    const v = render(<HelmetProvider><MemoryRouter initialEntries={['/soccer-career']}><SoccerCareer /></MemoryRouter></HelmetProvider>);
+    let trigger: HTMLElement | null = null;
+    for (let i = 0; i < 100 && !trigger; i++) {
+      await tick(50);
+      trigger = v.queryByRole('button', { name: 'How to play' });
+    }
+    expect(trigger, 'the guide loaded and the "?" trigger rendered').not.toBeNull();
+    await act(async () => { trigger!.click(); });
+    await tick(20);
+    const text = document.body.textContent ?? '';
+    expect(text).toContain('The rules');
+    for (const rule of DERBY_HELP_RULES) {
+      expect(text.split(rule).length - 1, rule.slice(0, 40)).toBe(1);
+    }
+  }, 120_000);
+
+  /* When the guide gains a rule word for word, the page's copy of it is
+     skipped, so handing the derby paragraph to the guide never doubles it. */
+  it('an extra rule the guide already carries shows once', async () => {
+    const content = await loadGameContent('/soccer-career');
+    const own = content ? flatGuide(content).rules : [];
+    expect(own.length, 'the guide has rules of its own').toBeGreaterThan(0);
+    const v = render(<MemoryRouter initialEntries={['/soccer-career']}><GameHelp extraRules={[own[0], 'A rule only the page adds.']} /></MemoryRouter>);
+    let trigger: HTMLElement | null = null;
+    for (let i = 0; i < 100 && !trigger; i++) {
+      await tick(50);
+      trigger = v.queryByRole('button', { name: 'How to play' });
+    }
+    expect(trigger).not.toBeNull();
+    await act(async () => { trigger!.click(); });
+    await tick(20);
+    const text = document.body.textContent ?? '';
+    expect(text.split(own[0]).length - 1).toBe(1);
+    expect(text.split('A rule only the page adds.').length - 1).toBe(1);
   }, 120_000);
 });

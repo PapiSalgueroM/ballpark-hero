@@ -74,7 +74,7 @@ import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
-import { derbyHeroSeasons } from "@/lib/soccerCareerDerby";
+import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
 /* Round 131: height, weight and the specifics under each family. */
 import {
@@ -1264,7 +1264,7 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveError && !career && (
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
