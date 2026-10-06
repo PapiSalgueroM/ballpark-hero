@@ -5105,6 +5105,38 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   return playPendingProSeason(s, clubs);
 }
 
+/* Round 1022: each nation's men's all time international scoring record, the
+   number a career has to pass for the All Time Top Scorer award and its
+   "Became X's All Time Top International Scorer" line. Every row is two source
+   verified in scripts/data/soccerCareerFacts.json (holder, sources, the date
+   read) and scripts/simCareerFacts.mjs holds this table to that file. Snapshot
+   of 2026-10-06: Argentina Messi, Belgium Lukaku, Brazil Neymar (FIFA count),
+   Colombia Falcao, Croatia Suker, Egypt Hossam Hassan, England Kane, France
+   Mbappe, Germany Klose, Italy Riva, Japan Kamamoto, Netherlands Depay,
+   Nigeria Yekini, Norway Haaland, Portugal Ronaldo, South Korea Son, Spain
+   Villa, Uruguay Suarez. Records held by active players move; refresh the
+   file and this table together. A nation with no verified row gets no award:
+   the old `|| 40` default made one up for every other nation, and the old
+   rows (Spain 29, Belgium 68, Uruguay 36 and more) were far below the truth.
+   Senegal is left out until two current sources agree on Mane's count. */
+export const INT_SCORING_RECORDS: Readonly<Record<string, number>> = {
+  Argentina: 125, Belgium: 94, Brazil: 80, Colombia: 36, Croatia: 45, Egypt: 69,
+  England: 89, France: 67, Germany: 71, Italy: 35, Japan: 75, Netherlands: 55,
+  Nigeria: 37, Norway: 65, Portugal: 146, "South Korea": 59, Spain: 59, Uruguay: 69,
+};
+
+/* The award, once per career, when his international goals pass his nation's
+   verified record. No draws, so lifting it out of the season moved nothing. */
+export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
+  if (!s.internationalCareer) return;
+  const record = INT_SCORING_RECORDS[s.nationality];
+  if (record === undefined) return;
+  const intGoals = s.intStats.goals;
+  if (intGoals <= record || s.awards.some(a => a.name === "All Time Top Scorer")) return;
+  s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
+  s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
+}
+
 /* Round 850: the season itself, split off the start of the year above so the
    retirement talk can sit between the two. Everything above is the year
    beginning (the birthday, bans, the heat, the drug test, forced retirement);
@@ -5412,21 +5444,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  // All Time Top Scorer for country, international goals record
-  const INT_RECORDS: Record<string, number> = {
-    Brazil: 77, France: 57, Argentina: 106, Germany: 71, Spain: 29, England: 66,
-    Portugal: 135, Netherlands: 50, Italy: 35, Belgium: 68, Croatia: 35, Uruguay: 36,
-    Norway: 33, Egypt: 51, Colombia: 25, Nigeria: 28, Senegal: 35, Japan: 55, "South Korea": 36,
-  };
-  if (s.internationalCareer) {
-    const intGoals = s.intStats.goals;
-    const record = INT_RECORDS[s.nationality] || 40;
-    const alreadyTopScorer = s.awards.some(a => a.name === "All Time Top Scorer");
-    if (!alreadyTopScorer && intGoals > record) {
-      s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
-      s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
-    }
-  }
+  awardAllTimeTopScorer(s, thisYear);
 
   // Fair Play Award, good conduct season (low cards, high rating)
   if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
