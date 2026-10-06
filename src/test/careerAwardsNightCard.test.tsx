@@ -330,6 +330,8 @@ describe('Soccer Career: the tournament winner\'s speech', () => {
     /* the moved line is the before and after of the meters, nothing else */
     expect(spoken.moved).toBe(movedBetween(start, after));
     expect(spoken.moved).toContain('Popularity +5');
+    /* Round 1023 review: followers are counted in millions, so +3 is "+3M" */
+    expect(spoken.moved).toContain('Followers +3M');
     expect(after.events.length).toBe(start.events.length + 1);
     expect(after.events[after.events.length - 1]).toBe(kids.line(after, 'sure'));
     card = tournamentCard(v.container);

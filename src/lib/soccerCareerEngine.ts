@@ -6635,7 +6635,10 @@ const SOCCER_AWARDS_METERS: Record<SoccerAwardsMeter, AwardsMeter<CareerState>> 
   morale: { label: "Morale", add: (s, d) => { s.morale = clamp(s.morale + d, 0, 100); }, read: s => s.morale },
   integrityBonus: { label: "Integrity", add: (s, d) => { s.integrityBonus += d; }, read: s => s.integrityBonus },
   rivalryIntensity: { label: "Rivalry", add: (s, d) => { s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + d, 0, 100); }, read: s => s.rivalryIntensity ?? 0 },
-  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers },
+  /* Round 1023 review: followers are counted in millions (formatFollowers),
+     so a move of 3 is three million and the card says "+3M", the way the
+     rest of the site writes a follower change ("+1M", "+500k"). */
+  socialMediaFollowers: { label: "Followers", add: (s, d) => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + d) * 100) / 100; }, read: s => s.socialMediaFollowers, show: d => `${d >= 0 ? "+" : "-"}${Math.abs(d) >= 1 ? `${Math.round(Math.abs(d) * 100) / 100}M` : `${Math.round(Math.abs(d) * 1000)}k`}` },
   marketValue: { label: "Market Value", add: (s, d) => { s.marketValue = Math.round((s.marketValue + d) * 10) / 10; }, read: s => s.marketValue, show: d => `${d >= 0 ? "+" : "-"}€${Math.abs(d)}M` },
 };
 
@@ -6762,6 +6765,14 @@ function calcBdorPoints(goals: number, assists: number, overall: number, clubTie
   if (topClubs.includes(club)) pts += 5;
   return Math.round(pts);
 }
+
+/* Round 1023 review: the rivals the last night judged dominance against, by
+   name. Kept beside the engine, never on the save and never read by the game,
+   so simBallonDorFairness can hold it against the rivals the card seats on
+   every night: judged one man short or one man over, the old outcome checks
+   stayed green while the engine judged seasons differently. */
+let lastJudged: { year: number; names: string[] } | null = null;
+export function lastBallonDorJudged(): { year: number; names: string[] } | null { return lastJudged; }
 
 function calculateBallonDor(state: CareerState, season: SeasonRecord, year: number, world?: WorldSeason): BallonDorResult {
   const yearOffset = year - 2024;
@@ -6944,6 +6955,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
      dominant against ten either, so a player left off the ballot loses
      nothing by it. */
   const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
+  lastJudged = { year, names: visibleField.map(n => n.name) };
   const fieldBest = visibleField.reduce(
     (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
     0,

@@ -116,6 +116,7 @@
  *   wctwice       the tournament speech loses its once-only guard -> section 7
  *   wcnominal     the tournament card reports the steps, not what landed -> section 7
  *   wccardmute    the tournament card stops showing the speech    -> section 7
+ *   followersbare a follower move prints as a bare "+3" again    -> section 7
  * Each patch is refused unless the exact text it replaces is present, so a
  * control can never pass by changing nothing. Measured on the round's tree:
  * every control turns its own section red (winnernottop also breaks sections
@@ -130,6 +131,13 @@
  * numberedline's card line now carries a true number, so sections 6 and 7
  * require the card's line to be words only, the numbers once in the moved
  * line beside it (red again: 6).
+ * Round 1023's review: the tournament card printed "Followers +3" for a move
+ * of three million followers (the save counts them in millions), and the
+ * claims parser dropped units, so nothing saw it. The followers meter now
+ * shows "+3M", the parser keeps the unit and requires each meter's own
+ * (market value and followers in millions, the rest plain points), and
+ * section 7 requires some card to name a follower move so the unit check
+ * cannot pass by never running. Control followersbare takes the unit off.
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
@@ -215,6 +223,16 @@ const CONTROLS = {
       file: 'src/components/soccer-career/InternationalPanel.tsx',
       from: '      {isWinner && given && <SpokenSpeech speech={given} />}',
       to: '      {null}',
+    }],
+  },
+  /* Round 1023 review: a follower move prints as a bare number again
+     ("Followers +3" for three million). */
+  followersbare: {
+    section: 7,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: 'read: s => s.socialMediaFollowers, show: d =>',
+      to: 'read: s => s.socialMediaFollowers, unshown: d =>',
     }],
   },
   legacyreal: { section: 4, patches: [] },
@@ -717,9 +735,20 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   const ids = Object.keys(METERS);
   const labels = new Set(ids.map(k => METERS[k].label));
   const labelToId = Object.fromEntries(ids.map(k => [METERS[k].label, k]));
-  /* Every "Word +N" or "Word +€NM" a line prints, whatever the word. */
-  const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])€?(\d+(?:\.\d+)?)M?/g)]
-    .map(m => ({ label: m[1], delta: Number(m[2] + m[3]) }));
+  /* Every "Word +N", "Word +€NM", "Word +NM" or "Word +Nk" a line prints,
+     whatever the word, with the unit it printed and its value in the unit the
+     save keeps ("+500k" is 0.5 of a million). Round 1023's review: the parser
+     used to drop the unit, so "Followers +3" passed for a move of three
+     MILLION followers. */
+  const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])(€?)(\d+(?:\.\d+)?)([Mk]?)/g)]
+    .map(m => ({ label: m[1], said: `${m[2]}${m[3]}${m[4]}${m[5]}`, unit: m[3] + m[5],
+      delta: Math.round(Number(m[2] + m[4]) * (m[5] === 'k' ? 0.001 : 1) * 1000) / 1000 }));
+  /* The units a card may print each meter in, read from how the save keeps it
+     (not from the engine's own show(), which is what this checks): market
+     value and followers are counted in millions (formatFollowers), the rest
+     are plain points. */
+  const UNITS = { marketValue: ['€M'], socialMediaFollowers: ['M', 'k'] };
+  const unitsOf = id => UNITS[id] ?? [''];
   /* What changed on every meter between two saves, unmoved ones left out. */
   const movedBetween = (before, after) => Object.fromEntries(ids
     .map(k => [k, Math.round(((after[k] ?? 0) - (before[k] ?? 0)) * 100) / 100]).filter(([, v]) => v !== 0));
@@ -729,6 +758,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
     const bad = [];
     for (const c of claims(text)) {
       if (!labels.has(c.label)) bad.push(`says "${c.label} ${c.delta}" and there is no such meter`);
+      else if (!unitsOf(labelToId[c.label]).includes(c.unit)) bad.push(`says "${c.label} ${c.said}", and ${c.label} is counted in ${unitsOf(labelToId[c.label]).map(u => u || 'plain points').join(' or ')}`);
       else if (did[labelToId[c.label]] !== c.delta) bad.push(`says ${c.label} ${c.delta}, it moved ${did[labelToId[c.label]] ?? 0}`);
     }
     const namedClaims = claims(named);
@@ -901,7 +931,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   section = 7;
   console.log('\n7) A won tournament: the speech is given on the card, once, and the card shows what it did');
   const WC = soccer.SOCCER_WORLD_CUP_SPEECHES;
-  let wcGiven = 0, wcCut = 0;
+  let wcGiven = 0, wcCut = 0, wcFollowers = 0;
   const wcBad = [];
   liveTournaments.forEach((real, k) => {
     if (!soccer.worldCupSpeechOpen(real)) { wcBad.push(`real won tournament ${k} offers no speech`); return; }
@@ -925,6 +955,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       for (const st of [...opt.effect, ...(opt.risk ? opt.risk[outcome] : [])]) asked[st.meter] = (asked[st.meter] ?? 0) + st.delta;
       if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) wcCut += 1;
       for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) wcBad.push(`${tag}: the card ${b}`);
+      if (claims(sp.moved).some(c => c.label === 'Followers')) wcFollowers += 1;
       if (claims(sp.line).length) wcBad.push(`${tag}: the card's line prints a number beside the moved line`);
       for (const b of lies(logged, did, logged).filter(x => !x.includes('never says so'))) wcBad.push(`${tag}: the log line ${b}`);
       if (soccer.worldCupSpeechOpen(out)) wcBad.push(`${tag}: still offers a speech after one`);
@@ -940,10 +971,11 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       if (next.pendingTournament || next.phase === 'world_cup' || next.popularity !== out.popularity) wcBad.push(`${tag}: Continue does not leave the tournament as it was`);
     }
   });
-  console.log(`   ${liveTournaments.length} real won tournaments, ${wcGiven} speeches given on the card, ${wcCut} cut short by a cap; ${wcBad.length} problems`);
+  console.log(`   ${liveTournaments.length} real won tournaments, ${wcGiven} speeches given on the card, ${wcCut} cut short by a cap, ${wcFollowers} naming a follower move; ${wcBad.length} problems`);
   check(liveTournaments.length >= 10, `only ${liveTournaments.length} real won tournaments in the replay`);
   check(wcGiven === 4 * liveTournaments.length, 'not every speech was given on every real won tournament');
   check(wcCut > 0, 'no real tournament speech was cut by a cap, so this cannot tell a measured card from one that prints the steps');
+  check(wcFollowers > 0, 'no card named a follower move, so the unit check never ran');
   for (const b of wcBad.slice(0, 5)) fail(b);
   if (wcBad.length > 5) fail(`and ${wcBad.length - 5} more`);
   if (liveTournaments.length) {
