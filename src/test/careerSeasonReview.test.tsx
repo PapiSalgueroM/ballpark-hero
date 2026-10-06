@@ -66,7 +66,7 @@ describe('saved career season review', () => {
     click('Compare seasons');
     expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Compare seasons' }));
     const first = screen.getByRole('combobox', { name: 'First season' }), second = screen.getByRole('combobox', { name: 'Second season' });
-    expect(first).toHaveValue('1'); expect(second).toHaveValue('2');
+    expect((first as HTMLSelectElement).value).toBe('1'); expect((second as HTMLSelectElement).value).toBe('2');
     expect([...first.querySelectorAll('option')].map(option => option.value)).toEqual(['1', '0']);
     expect([...second.querySelectorAll('option')].map(option => option.value)).toEqual(['2', '0']);
     expect(comparisons()).toEqual({ 'Season OVR': ['84', '82', '-2'], Games: ['76', '75', '-1'], 'Age that season': ['25', '26', '+1'], 'Season salary': ['$12.75M', '$14M', '+$1.25M'] });

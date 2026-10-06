@@ -38,7 +38,7 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
   const choices = career.seasons.map((season, index) => ({ season, index })).reverse();
   const suspended = tab === 'Regular season' && seasons.some(season => season.teamResult === 'SUSPENDED');
 
-  return <section data-career-season-comparison="" className="space-y-3" aria-labelledby="career-season-compare-title">
+  return <section data-career-season-comparison="" className="space-y-2" aria-labelledby="career-season-compare-title">
     <button data-season-compare-back="" onClick={onBack} className={control}>Back to seasons</button>
     <div><h2 ref={title} id="career-season-compare-title" data-season-compare-title="" tabIndex={-1} className="font-display text-xl font-bold">Compare seasons</h2>
       <p className="mt-1 text-sm text-muted-foreground">Change shows the second season minus the first.</p></div>
@@ -56,12 +56,12 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
       {tabs.map(value => <button key={value} data-season-compare-tab={value} aria-pressed={tab === value} onClick={() => setTab(value)}
         className={cn(control, tab === value && 'border-primary bg-primary text-primary-foreground')}>{value}</button>)}
     </div>
-    <div className="rounded-2xl border border-border bg-card p-3">
+    <div className="rounded-2xl border border-border bg-card p-2">
       <div className="grid grid-cols-3 gap-2 pb-2 text-center text-xs text-muted-foreground"><span>First season</span><span>Second season</span><span>Change</span></div>
-      <dl className="space-y-2">
+      <dl className="space-y-1">
         {labels.map(label => {
           const stats = sides.map(side => side.find(stat => stat.label === label) ?? { label, value: 'Not recorded' });
-          return <div key={label} data-season-compare-stat={label} className="rounded-xl bg-secondary/50 p-2">
+          return <div key={label} data-season-compare-stat={label} className="rounded-xl bg-secondary/50 px-2 py-1">
             <dt className="mb-1 text-xs text-muted-foreground">{label}</dt>
             <div className="grid grid-cols-3 gap-2 text-center text-sm font-semibold tabular-nums">
               <dd data-compare-first="" className="min-w-0 break-words">{tab === 'Regular season' && seasons[0].teamResult === 'SUSPENDED' ? 'Not played' : stats[0].value}</dd>
