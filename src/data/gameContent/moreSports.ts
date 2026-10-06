@@ -6,6 +6,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     intro: [
       'Cage Clash puts you in control of an original pixel fighter. Move around the cage, find a gap in the guard and decide whether to keep trading shots or take the fight to the ground. Every hit, takedown and submission comes from what happens in the fight.',
       'Pick a balanced fighter, a striker or a grappler, then choose the style you want to face. Each fight lasts up to three short arcade rounds. Play with the touch controls or use the keyboard. No account or download needed.',
+      'Circuit turns those skills into a three fight run. Beat a balanced opponent, a striker and a grappler in order. Track your wins in the opponent tiles and adapt your plan for each style.',
     ],
     headings: {
       howToPlay: 'How to play Cage Clash on phone or keyboard',
@@ -21,6 +22,8 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
       'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
       'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
+      'Choose Circuit to take on all three styles. A win unlocks Next opponent; a loss or draw ends the run. Every opponent starts a fresh fight with full health and stamina.',
+      'Open Fight stats after a Quick fight or any Circuit fight to compare your shots landed, damage dealt, blocks, takedowns and time on top against the CPU. Back returns to the result so you can start another fight or advance.',
     ],
     rules: [
       'A fight has up to three 45 second arcade rounds. Between rounds, the clock waits for you to continue.',
@@ -31,12 +34,16 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.',
       'Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.',
       'Practice uses the same range, stamina and ground rules with an untimed partner. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
+      'Circuit records one completion for the run. Add the earned fight scores, divide by three and round to the nearest whole point. Unplayed fights contribute zero. Quitting or refreshing an unfinished circuit earns no points.',
       'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
+      'Fight stats describe only the fight you just finished. Damage is rounded to a whole number. Top control is time spent on top, shown in seconds. Opening or closing the recap does not change your score.',
     ],
     example: [
       'You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.',
       'Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.',
       'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
+      'A Circuit run with fight scores of 80, 90 and 85 earns 85/100. If the first fight ends in a loss with 30 earned points, the run ends at 10/100 because the two unplayed fights count as zero.',
+      'If you landed 12 shots and the CPU landed 8, the Shots landed row shows 12 under You and 8 under CPU. More shots alone do not decide a fight: check the damage, takedowns and top control too.',
     ],
     tips: [
       'Distance is a defense. Step out of punching range when you need a moment to recover.',
@@ -48,7 +55,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       { q: 'Can I grapple and submit an opponent?', a: 'Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it.' },
       { q: 'What are the keyboard controls?', a: 'Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position.' },
       { q: 'Does a fight keep running when I switch tabs?', a: 'No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too.' },
-      { q: 'Does my fight save if I refresh?', a: 'These are quick fights, so refreshing starts over. A completed fight records its earned score through the normal site scoring system. Quitting does not award a score.' },
+      { q: 'Does my fight save if I refresh?', a: 'Refreshing starts over in every mode. Quick fight records its score after a completed fight. Circuit records one score when the run ends; Practice earns no points. Quitting an unfinished fight or circuit earns no score.' },
     ],
   },
   '/f1-driver': {
