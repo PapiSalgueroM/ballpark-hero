@@ -113,6 +113,14 @@ const NEW_LEAGUES = [
     pairs: [['América', 'Necaxa'], ['Guadalajara', 'FC Juárez']],
     managed: ['Pumas UNAM', 'León', 'Atlético San Luis', 'Pachuca', 'Monterrey', 'Tijuana'],
   },
+  /* Round 1035: the A-League Men. Its managed clubs all enter the Australia
+     Cup; the two that do not (Auckland FC, Wellington Phoenix) are played by
+     scripts/simClubManagerALeague.mjs, which holds the cup exclusion. */
+  {
+    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 2,
+    pairs: [['Adelaide United', 'Central Coast Mariners'], ['Melbourne City', 'Brisbane Roar']],
+    managed: ['Perth Glory', 'Newcastle Jets', 'Melbourne Victory', 'Western Sydney Wanderers', 'Sydney FC', 'Macarthur FC'],
+  },
 ];
 /* Round 883: what a league that relegates nobody must never say. */
 /* The review widened it past the three phrasings the engine used then to

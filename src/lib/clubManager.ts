@@ -2153,6 +2153,11 @@ export interface CareerState {
   nationJob?: NationJob | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
+  /** Round 1035: a cup field short of sixteen clubs (a one league nation:
+   *  Scotland, Croatia, Denmark, the A-League's ten Australian clubs) plays
+   *  only as many round of 16 ties as it needs; these clubs go straight to
+   *  the quarter-finals. Absent for a full field and in older saves. */
+  cupByes?: string[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
   wageCap?: number;
   /** Round 71: sellers who walked away from me this window. */
@@ -11924,8 +11929,21 @@ function buildCupBracket(state: CareerState): CupTie[] {
   }
   const rest = shuffle(field.slice(1));
   const ordered = [state.clubName, ...rest];
+  /* Round 1035: a field of nine to fifteen clubs (a nation with one modelled
+     league: Scotland and Denmark draw twelve, Croatia and the A-League's
+     Australian clubs ten) used to pair everybody in the round of 16, which
+     left an odd number of winners: the quarter-finals or the semi-finals
+     dropped a club and no final was ever drawn, so the cup had no winner
+     unless the manager's own club went all the way. Now the round of 16 plays
+     only the ties the field needs to leave eight (field minus eight of them)
+     and the rest go straight to the quarter-finals. My own club is always in
+     a real tie, so the calendar's round of 16 week is never empty. */
+  const short = ordered.length > 8 && ordered.length < 16;
+  const realTies = short ? ordered.length - 8 : 8;
+  if (short) state.cupByes = ordered.slice(realTies * 2);
+  else delete state.cupByes;
   const ties: CupTie[] = [];
-  for (let i = 0; i < 8 && i * 2 + 1 < ordered.length; i++) {
+  for (let i = 0; i < realTies && i * 2 + 1 < ordered.length; i++) {
     const home = ordered[i * 2];
     const away = ordered[i * 2 + 1];
     ties.push({
@@ -11970,7 +11988,18 @@ function advanceCupBracket(state: CareerState, round: CupRound): void {
   if (bracket.some(t => t.round === next)) return;
   const thisRound = bracket.filter(t => t.round === round).sort((a, b) => a.slot - b.slot);
   if (thisRound.some(t => !t.winner)) return;   // my tie is settled by my match
-  const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  let winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  /* Round 1035: the clubs a short field gave a bye join the quarter-finals,
+     each round of 16 winner paired with one of them first. */
+  if (round === 'R16' && state.cupByes?.length) {
+    const byes = state.cupByes;
+    const merged: string[] = [];
+    for (let i = 0; i < Math.max(winners.length, byes.length); i++) {
+      if (i < winners.length) merged.push(winners[i]);
+      if (i < byes.length) merged.push(byes[i]);
+    }
+    winners = merged;
+  }
   for (let i = 0; i * 2 + 1 < winners.length; i++) {
     const home = winners[i * 2];
     const away = winners[i * 2 + 1];
