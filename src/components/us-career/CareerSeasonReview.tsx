@@ -3,6 +3,7 @@ import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
+import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
 
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const recorded = (value: unknown) => finite(value) ? String(value) : 'Not recorded';
@@ -24,24 +25,28 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const [selected, setSelected] = useState<number | null>(null);
   const [tab, setTab] = useState<Tab>('Overview');
   const [comparing, setComparing] = useState(false);
+  const [highs, setHighs] = useState(false);
   const compareButton = useRef<HTMLButtonElement>(null);
+  const highsButton = useRef<HTMLButtonElement>(null);
   const returnCompare = useRef(false);
+  const returnHighs = useRef(false);
   const lastSelected = useRef(Math.max(0, career.seasons.length - 1));
   const picker = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
   const back = useRef<HTMLButtonElement>(null);
-  const area = useRevealScroll<HTMLDivElement>(`${selected}:${tab}:${comparing}`, { enabled: comparing || selected !== null || career.seasons.length === 0, skipFirst: false });
+  const area = useRevealScroll<HTMLDivElement>(`${selected}:${tab}:${comparing}:${highs}`, { enabled: comparing || highs || selected !== null || career.seasons.length === 0, skipFirst: false });
   const pickedTile = useRevealScroll<HTMLButtonElement>(selected, { enabled: selected === null, skipFirst: false });
   const season = selected === null ? undefined : career.seasons[selected];
   const previous = selected !== null && selected > 0 ? career.seasons[selected - 1] : undefined;
   const detail = season ? sport.reviewStats(season, career.pos) : null;
 
   useEffect(() => {
-    if (comparing) return;
+    if (comparing || highs) return;
     if (returnCompare.current) { returnCompare.current = false; compareButton.current?.focus({ preventScroll: true }); return; }
+    if (returnHighs.current) { returnHighs.current = false; highsButton.current?.focus({ preventScroll: true }); return; }
     if (selected !== null) title.current?.focus({ preventScroll: true });
     else (picker.current?.querySelector<HTMLButtonElement>(`[data-season-tile="${lastSelected.current}"]`) ?? back.current)?.focus({ preventScroll: true });
-  }, [selected, comparing]);
+  }, [selected, comparing, highs]);
 
   const choose = (index: number) => {
     lastSelected.current = index;
@@ -49,6 +54,10 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
     setSelected(index);
   };
   const control = 'min-h-[44px] rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
+
+  if (highs) return <div ref={area} data-career-season-review="" data-no-prerender="" className="mx-auto max-w-lg">
+    <CareerSeasonHighs career={career} sport={sport} onBack={() => { returnHighs.current = true; setHighs(false); }} onReview={index => { setHighs(false); choose(index); }} />
+  </div>;
 
   if (comparing) return <div ref={area} data-career-season-review="" data-no-prerender="" className="mx-auto max-w-lg">
     <CareerSeasonComparison career={career} sport={sport} onBack={() => { returnCompare.current = true; setComparing(false); }} />
@@ -58,7 +67,10 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
     <button ref={back} onClick={season ? () => setSelected(null) : onBack} className={control}>{season ? 'Back to seasons' : backLabel}</button>
     {!season || !detail ? <>
       <div><h2 className="font-display text-xl font-bold">Career Log</h2><p className="mt-1 text-sm text-muted-foreground">Pick a year to review your saved season. No extra season is played.</p></div>
-      {career.seasons.length >= 2 && <button ref={compareButton} data-season-compare-open="" onClick={() => setComparing(true)} className={control}>Compare seasons</button>}
+      {career.seasons.length >= 1 && <div className="flex flex-wrap gap-2">
+        <button ref={highsButton} data-season-highs-open="" onClick={() => setHighs(true)} className={control}>Season highs</button>
+        {career.seasons.length >= 2 && <button ref={compareButton} data-season-compare-open="" onClick={() => setComparing(true)} className={control}>Compare seasons</button>}
+      </div>}
       {career.seasons.length === 0 ? <p className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">No seasons on the books yet. Go play one.</p>
         : <div ref={picker} role="group" aria-label="Choose a season" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {career.seasons.map((saved, index) => ({ saved, index })).reverse().map(({ saved, index }) => <button key={index} ref={index === lastSelected.current ? pickedTile : null} data-season-tile={index}

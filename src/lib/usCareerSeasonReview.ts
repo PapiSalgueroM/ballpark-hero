@@ -2,6 +2,7 @@ import type { CareerPos, SeasonLine } from '@/lib/nflMyCareer';
 import type { NbaSeasonLine } from '@/lib/nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
+import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
 export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string; regularValues: CareerReviewStat[] }
@@ -55,4 +56,32 @@ export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerRevi
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points)],
     pos === 'G' ? [number('Games', s.poGames), number('Wins', s.poWins), number('Save percentage', s.poSvpct, 3)]
       : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints)]);
+}
+
+export interface CareerSeasonHigh { label: string; value: string; indices: number[] }
+
+export function seasonHighs(career: UsCareerCore, sport: UsCareerSport): CareerSeasonHigh[] {
+  const nflLabels: Record<string, string> = { QB: 'Passing yards', RB: 'Rushing yards', WR: 'Receiving yards', TE: 'Receiving yards', LB: 'Tackles', CB: 'Interceptions', EDGE: 'Sacks', K: 'Field goals made' };
+  const positionLabel = sport.slug === 'nba' ? 'Points per game'
+    : sport.slug === 'nfl' ? nflLabels[career.pos] ?? 'Performance'
+      : sport.slug === 'mlb' ? career.pos === 'SP' ? 'Wins' : career.pos === 'RP' ? 'Saves' : 'Home runs'
+        : career.pos === 'G' ? 'Wins' : 'Points';
+  const gamesLabel = career.seasons.length ? sport.reviewStats(career.seasons[0], career.pos).gamesLabel : 'Games';
+  const seasons = career.seasons.map((season, index) => ({ season, index }))
+    .filter(({ season }) => season.teamResult !== 'SUSPENDED');
+  const metrics = [
+    { label: 'Season OVR', values: seasons.map(({ season, index }) => ({ index, raw: season.ovr, value: String(season.ovr) })) },
+    { label: gamesLabel, values: seasons.map(({ season, index }) => ({ index, raw: season.games, value: String(season.games) })) },
+    { label: positionLabel, values: seasons.map(({ season, index }) => {
+      const stat = sport.reviewStats(season, career.pos).regularValues.find(stat => stat.label === positionLabel);
+      return { index, raw: stat?.numeric?.raw, value: stat?.value ?? 'Not recorded' };
+    }) },
+  ];
+  return metrics.map(({ label, values }) => {
+    const valid = values.filter(value => recorded(value.raw));
+    if (!valid.length) return { label, value: 'Not recorded', indices: [] };
+    const highest = Math.max(...valid.map(value => value.raw!));
+    const tied = valid.filter(value => value.raw === highest).reverse();
+    return { label, value: tied[0].value, indices: tied.map(value => value.index) };
+  });
 }
