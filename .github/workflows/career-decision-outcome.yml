@@ -14,6 +14,30 @@ on:
       - src/lib/usCareerDecisionOutcome.ts
       - src/lib/usCareerSport.ts
       - src/lib/*CareerSport.ts
+      - src/lib/nbaMyCareer.ts
+      - src/lib/nflMyCareer.ts
+      - src/lib/mlbMyCareer.ts
+      - src/lib/nhlMyCareer.ts
+      - src/lib/nbaCareer*.ts
+      - src/lib/nflCareer*.ts
+      - src/lib/mlbCareer*.ts
+      - src/lib/nhlCareer*.ts
+      - src/lib/usCareerDeckC.ts
+      - src/lib/careerHeadroom.ts
+      - src/lib/usCareerAnnualBenefits.ts
+      - src/lib/usCareerRecovery.ts
+      - src/lib/careerVariance.ts
+      - src/lib/careerAwards.ts
+      - src/lib/careerRival.ts
+      - src/lib/careerInbox.ts
+      - src/lib/careerRivalryEvents.ts
+      - src/lib/careerRivalryChoices.ts
+      - src/lib/careerMoney.ts
+      - src/lib/careerSocial.ts
+      - src/lib/keyedRng.ts
+      - src/data/conquestDataNba.ts
+      - src/data/conquestDataMlb.ts
+      - src/data/conquestDataNhl.ts
       - src/test/careerDecisionOutcome.test.tsx
       - src/test/fixtures/careerDecisionOutcome1009.ts
       - scripts/simCareerDecisionOutcome.mjs

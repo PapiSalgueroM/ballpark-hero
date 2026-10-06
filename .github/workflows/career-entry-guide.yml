@@ -12,6 +12,32 @@ on:
       - src/pages/NhlMyCareer.tsx
       - src/components/us-career/UsCareerBoard.tsx
       - src/components/us-career/SeasonRevealCard.tsx
+      - src/lib/usCareerSport.ts
+      - src/lib/*CareerSport.ts
+      - src/lib/nbaMyCareer.ts
+      - src/lib/nflMyCareer.ts
+      - src/lib/mlbMyCareer.ts
+      - src/lib/nhlMyCareer.ts
+      - src/lib/nbaCareer*.ts
+      - src/lib/nflCareer*.ts
+      - src/lib/mlbCareer*.ts
+      - src/lib/nhlCareer*.ts
+      - src/lib/usCareerDeckC.ts
+      - src/lib/careerHeadroom.ts
+      - src/lib/usCareerAnnualBenefits.ts
+      - src/lib/usCareerRecovery.ts
+      - src/lib/careerVariance.ts
+      - src/lib/careerAwards.ts
+      - src/lib/careerRival.ts
+      - src/lib/careerInbox.ts
+      - src/lib/careerRivalryEvents.ts
+      - src/lib/careerRivalryChoices.ts
+      - src/lib/careerMoney.ts
+      - src/lib/careerSocial.ts
+      - src/lib/keyedRng.ts
+      - src/data/conquestDataNba.ts
+      - src/data/conquestDataMlb.ts
+      - src/data/conquestDataNhl.ts
       - src/data/gameContent/basketball.ts
       - src/data/gameContent/football.ts
       - src/data/gameContent/baseball.ts
