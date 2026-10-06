@@ -32,30 +32,26 @@
    7 OLD SAVES   saves at West Ham, Wolves, Girona, Norwich City, Flamengo and
                  Real Madrid built on the pre-round pool load and play on.
 
-   No pinned exceptions since Round 1022. Round 1013 (lead's decision
-   2026-10-05, option (a)) kept West Ham and Wolves on "Premier League" and
-   Girona on "La Liga" against Club Manager's 2026-27 world. Round 1022's
-   brief asked for every hand label to be the club's 2026-27 league, two
-   source verified (scripts/data/soccerCareerFacts.json, held by
-   scripts/simCareerFacts.mjs), so West Ham and Wolves now read
-   "Championship" and Girona "Segunda Division", and every label here carries
-   Club Manager's lineup exactly. Soccer Career still labels a club by one
-   league in every era, so a 2015 career at West Ham now reads Championship;
-   the league by year override stays queued as its own round. The hand rows
-   are still never renamed, removed, reordered or retiered (section 4).
+   The pinned exceptions (lead's decision 2026-10-05, option (a)): Soccer
+   Career labels a club by one league in every era, and the 190 hand rows are
+   never rewritten. So West Ham and Wolves keep "Premier League" and Girona
+   keeps "La Liga" although Club Manager's 2026-27 world has West Ham and
+   Wolves in the Championship and Girona in the Segunda. A league by year
+   override is queued as its own round; until it lands these three are the
+   only clubs allowed to differ, and section 2 names them.
 
    Negative controls, SIM_CLUB_POOL_CONTROL=<name>. Each asserts the source
    string it rewrites exists (in memory, never on disk), and the run exits 0
    only if its target section went red:
      stale        drop Coventry City from Club Manager's premier row   -> 1
-     relabel      relabel West Ham back to "Premier League"            -> 2
+     relabel      relabel West Ham "Championship"                      -> 2
      tier         Leeds United at tier 1 in the bundled pool           -> 4
      uncapped     LEAGUE_DRAW_CAP = Infinity                           -> 6
      nopool       FALLBACK_CLUBS without the generated rows            -> 2
      picksite     makeOffer back on the plain pick                     -> 6
      dropclub     drop West Ham from FALLBACK_CLUBS (its hand row and so
                   the old save stay): the save's club no longer resolves -> 7
-     reread       retier Wolves (Championship) to t4 in FALLBACK_CLUBS only
+     reread       relabel Wolves "Championship" t4 in FALLBACK_CLUBS only
                   and make repairCareer re-read league and tier from the
                   list, the regression a league by year override could
                   bring: the round trip and drift checks fire          -> 7
@@ -107,7 +103,7 @@ const swap = (from, to) => s => {
 };
 const CONTROLS = {
   stale: ['1', 'lib/clubManager.ts', swap(`'Coventry City', 'Crystal Palace'`, `'Crystal Palace'`)],
-  relabel: ['2', 'lib/soccerCareerEngine.ts', swap(`name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Championship"`, `name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League"`)],
+  relabel: ['2', 'lib/soccerCareerEngine.ts', swap(`name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League"`, `name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Championship"`)],
   tier: ['4', 'data/soccerCareerClubPool.ts', swap(`name: "Leeds United", country: "England", tier: 4`, `name: "Leeds United", country: "England", tier: 1`)],
   uncapped: ['6', 'lib/soccerCareerEngine.ts', swap('export const LEAGUE_DRAW_CAP = 5;', 'export const LEAGUE_DRAW_CAP = Infinity;')],
   nopool: ['2', 'lib/soccerCareerEngine.ts', swap('[...HAND_CLUBS, ...CAREER_CLUB_POOL]', '[...HAND_CLUBS]')],
@@ -195,9 +191,9 @@ const cmName = n => NAME_ALIASES[n] ?? inputs.fold(n);
 /* ─── 2. MEMBERSHIP ─── */
 head('2', 'MEMBERSHIP: each label carries Club Manager\'s lineup in the 2026 view');
 const PINNED = {
-  premier: { extra: [], missing: [] },
-  championship: { extra: [], missing: [] },
-  laliga: { extra: [], missing: [] },
+  premier: { extra: ['West Ham', 'Wolves'], missing: [] },
+  championship: { extra: [], missing: ['West Ham', 'Wolves'] },
+  laliga: { extra: ['Girona'], missing: [] },
   brasileirao: { extra: [], missing: [] },
 };
 const view2026 = eras.adjustClubsForYear(POOL, 2026);
@@ -211,11 +207,9 @@ for (const id of POOL_LEAGUES) {
   ok(!extra.length && !missing.length, `${label}: extra [${extra.join(', ')}] missing [${missing.join(', ')}]`);
   console.log(`  ${label}: ${actual.size} clubs (Club Manager ${cmNames.length}, pinned +${PINNED[id].extra.join('/') || 0} -${PINNED[id].missing.join('/') || 0})`);
 }
-/* Round 1022: the three former exceptions carry their verified 2026-27 league. */
-for (const n of ['West Ham', 'Wolves']) ok(HAND.find(c => c.name === n)?.league === 'Championship', `${n} carries its 2026-27 label "Championship"`);
-ok(HAND.find(c => c.name === 'Girona')?.league === 'Segunda Division', 'Girona carries its 2026-27 label "Segunda Division"');
-const segunda = POOL.filter(c => c.league === 'Segunda Division').map(c => c.name);
-ok(segunda.length === 1 && segunda[0] === 'Girona', `only Girona is labelled "Segunda Division" (Club Manager has no Segunda to generate from): ${segunda.join(', ')}`);
+for (const n of ['West Ham', 'Wolves']) ok(HAND.find(c => c.name === n)?.league === 'Premier League', `${n} keeps its hand label "Premier League"`);
+ok(HAND.find(c => c.name === 'Girona')?.league === 'La Liga', 'Girona keeps its hand label "La Liga"');
+ok(!POOL.some(c => c.league === 'Segunda Division'), 'no club carries a "Segunda Division" label (option (a))');
 ok(GENERATED.length > 0, `the engine appends generated rows (${GENERATED.length})`);
 
 /* ─── 3. IDENTITY ─── */
@@ -299,13 +293,9 @@ const margin = Math.round((inputs.xiOf('Nottingham Forest') - inputs.xiOf('Aston
 console.log(`  Forest XI ${inputs.xiOf('Nottingham Forest')} vs Aston Villa (t3) ${inputs.xiOf('Aston Villa')}: margin ${margin}. At or below 0 Forest drops to tier 3 on the next regenerate.`);
 /* HAND_CLUBS as origin/main shipped it before this round (cbc4e03a's
    FALLBACK_CLUBS, all six fields). Saves and the academy lookups read these
-   rows by name, so they are never renamed, removed, reordered or retiered.
-   Round 1022 took the league out of the print (it was 52c917c0fb1034e0 with
-   it): the labels are facts that move with promotion and relegation, two
-   source verified and held row by row by scripts/simCareerFacts.mjs. The
-   other five fields are unchanged since cbc4e03a. */
-const HAND_FINGERPRINT = '9c5e7a1a61623dd9';
-const handPrint = createHash('sha256').update(JSON.stringify(HAND.map(c => [c.id, c.name, c.country, c.tier, c.color]))).digest('hex').slice(0, 16);
+   rows by name, so they are never renamed, removed, reordered or retiered. */
+const HAND_FINGERPRINT = '52c917c0fb1034e0';
+const handPrint = createHash('sha256').update(JSON.stringify(HAND.map(c => [c.id, c.name, c.country, c.tier, c.color, c.league]))).digest('hex').slice(0, 16);
 ok(HAND.length === 190, `HAND_CLUBS has ${HAND.length} rows, 190 expected`);
 ok(handPrint === HAND_FINGERPRINT, `HAND_CLUBS fingerprint ${handPrint}, frozen ${HAND_FINGERPRINT}`);
 ok(POOL.slice(0, HAND.length).every((c, i) => c === HAND[i]), 'FALLBACK_CLUBS starts with HAND_CLUBS in order, so every hand index survives');
@@ -395,15 +385,17 @@ for (const tiers of handSets) {
 }
 /* The raw list is not what a career draws from: adjustClubsForYear moves
    clubs between tiers by season, and that can push a hand group past CAP.
-   Every season from 1980 to 2060 is checked. Until Round 1022 the only
-   group that went over was Premier League tier 3 (6 hand clubs in every
-   season to 1996, in 2007 to 2009 and in 2017, 7 in 2018 to 2021). Round
-   1022 labelled West Ham and Wolves "Championship" (their 2026-27 league),
-   which takes two clubs out of that group in every season, and since then no
-   hand group goes over the cap in any season: every hand club is exactly
-   1/n of its tier's draws. Pinned exactly, so a new era rule or label that
-   pushes a group over the cap goes red here and has to be stated. */
-const HAND_OVER_CAP = {};
+   Every season from 1980 to 2060 is checked. The only group that goes over
+   is Premier League tier 3, which holds 6 hand clubs in every season to
+   1996, in 2007 to 2009 and in 2017, and 7 in 2018 to 2021 (Brighton and
+   Wolves come up through their era rules). In those seasons each of those
+   clubs keeps 5/6 or 5/7 of its share of the draws for that group, and
+   every other club gains a little. Pinned exactly, so a new era rule that
+   pushes another group over the cap goes red here and has to be stated. */
+const HAND_OVER_CAP = { 'Premier League|3': Object.fromEntries([
+  ...Array.from({ length: 17 }, (_, i) => [1980 + i, 6]),
+  [2007, 6], [2008, 6], [2009, 6], [2017, 6], [2018, 7], [2019, 7], [2020, 7], [2021, 7],
+]) };
 const overCap = {};
 let yearsNeutral = 0;
 for (let y = 1980; y <= 2060; y++) {
@@ -429,7 +421,7 @@ for (const key of pinKeys) {
   const want = JSON.stringify(HAND_OVER_CAP[key] || {});
   ok(got === want, `hand group ${key} off 1/n in seasons ${got}, pinned ${want}: restate the cap's effect on the old pool`);
 }
-console.log(`  HAND_CLUBS by season 1980 to 2060: ${yearsNeutral} seasons every club exactly 1/n; hand groups over the cap: ${Object.keys(overCap).join(', ') || 'none'}, as pinned`);
+console.log(`  HAND_CLUBS by season 1980 to 2060: ${yearsNeutral} seasons every club exactly 1/n; Premier League tier 3 over the cap in ${Object.keys(overCap['Premier League|3'] || {}).length} seasons, as pinned`);
 const t4 = POOL.filter(c => c.tier === 4);
 const g4 = engine.leagueDrawGroups(t4);
 const W4 = g4.reduce((s, g) => s + g.weight, 0);

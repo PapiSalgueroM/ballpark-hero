@@ -2416,11 +2416,10 @@ const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
    tier), weighted by its club count capped at LEAGUE_DRAW_CAP, then a club
    inside it. 5 is the largest league group in any tier of the raw hand
    list, so on that list every club keeps exactly its old chance. It is not
-   neutral everywhere, and simCareerClubPool pins where it is not. (Until
-   Round 1022 the Premier League's tier 3 held 6 or 7 hand clubs in some
-   seasons after era rules; with West Ham and Wolves labelled Championship,
-   their 2026-27 league, no hand group passes the cap in any season.) On
-   the full pool every hand tier 4
+   neutral everywhere, and simCareerClubPool pins where it is not: after
+   era rules the Premier League's tier 3 holds 6 or 7 hand clubs in some
+   seasons (to 1996, 2007 to 2009, 2017 to 2021), and those clubs keep 5/6
+   or 5/7 of that group's old share. On the full pool every hand tier 4
    club outside the four leagues goes from 1/87 to 1/100 of tier 4 draws,
    and the hand clubs inside them now share their league's 5 with the new
    clubs (Norwich 1/440, Brentford and Palace 1/160, Betis and Celta 1/260,
@@ -3463,14 +3462,18 @@ export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "
    removed or reordered (saves and the academy lookups read clubs by name).
    FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
    every hand row keeps its index.
-   Round 1022: a row's league is the league it plays in for 2026-27 (2026 for
-   calendar year leagues), read from two sources in
-   scripts/data/soccerCareerFacts.json; the labels nobody has read twice yet
-   are listed there as unverified, and scripts/simCareerFacts.mjs holds both
-   lists to this table. Seven moved: West Ham and Wolves (Championship),
+   Round 1022: every row's league is checked against two sources for 2026-27
+   (2026 for calendar year leagues) in scripts/data/soccerCareerFacts.json,
+   and scripts/simCareerFacts.mjs holds this table to that file. A label
+   serves every era from 1990 on (nothing here moves a club by year), so the
+   seven clubs whose 2026-27 league differs from the one they played in for
+   most of those years keep their old label, held in the file with the
+   verified 2026-27 league beside it until the league by year round lands
+   (the lead's option (a) of 2026-10-05): West Ham and Wolves (Championship),
    Girona (Segunda Division), Hertha Berlin (2. Bundesliga), Nantes (Ligue 2),
-   River Plate Asuncion (Primera B Paraguay) and Persija Jakarta (the top
-   flight's new name). Tiers are balance, not fact, and did not move. */
+   River Plate Asuncion (Primera B) and Persija Jakarta (the top flight's
+   name since 2025). Labels nobody has read twice yet are listed there as
+   unverified. Tiers are balance, not fact. */
 export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
@@ -3517,7 +3520,7 @@ export const HAND_CLUBS: ClubData[] = [
   // Tier 3, solid domestic clubs
   { id: "fb-41", name: "Real Sociedad", country: "Spain", tier: 3, color: "#0067B1", league: "La Liga" },
   { id: "fb-42", name: "Villarreal", country: "Spain", tier: 3, color: "#FFE667", league: "La Liga" },
-  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Championship" },
+  { id: "fb-43", name: "West Ham", country: "England", tier: 3, color: "#7A263A", league: "Premier League" },
   { id: "fb-44", name: "Aston Villa", country: "England", tier: 3, color: "#670E36", league: "Premier League" },
   { id: "fb-45", name: "Everton", country: "England", tier: 3, color: "#003399", league: "Premier League" },
   { id: "fb-46", name: "Leverkusen", country: "Germany", tier: 3, color: "#E32221", league: "Bundesliga" },
@@ -3541,11 +3544,11 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-63", name: "Crystal Palace", country: "England", tier: 4, color: "#1B458F", league: "Premier League" },
   { id: "fb-64", name: "Brentford", country: "England", tier: 4, color: "#D20000", league: "Premier League" },
   { id: "fb-65", name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship" },
-  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga" },
+  { id: "fb-66", name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga" },
   { id: "fb-67", name: "Werder Bremen", country: "Germany", tier: 4, color: "#1D9053", league: "Bundesliga" },
   { id: "fb-68", name: "Torino", country: "Italy", tier: 4, color: "#881B1E", league: "Serie A" },
   { id: "fb-69", name: "Bologna", country: "Italy", tier: 4, color: "#A61C2E", league: "Serie A" },
-  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 2" },
+  { id: "fb-70", name: "Nantes", country: "France", tier: 4, color: "#FCE300", league: "Ligue 1" },
   { id: "fb-71", name: "Strasbourg", country: "France", tier: 4, color: "#0072BB", league: "Ligue 1" },
   { id: "fb-72", name: "Utrecht", country: "Netherlands", tier: 4, color: "#D2122E", league: "Eredivisie" },
   { id: "fb-73", name: "Braga", country: "Portugal", tier: 4, color: "#DA020E", league: "Primeira Liga" },
@@ -3571,10 +3574,10 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-90", name: "Brighton", country: "England", tier: 2, color: "#0057B8", league: "Premier League" },
   { id: "fb-91", name: "Stuttgart", country: "Germany", tier: 2, color: "#E32219", league: "Bundesliga" },
   { id: "fb-92", name: "LAFC", country: "USA", tier: 2, color: "#C39E6D", league: "MLS" },
-  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera B Paraguay" },
+  { id: "fb-93", name: "River Plate Asuncion", country: "Paraguay", tier: 4, color: "#CE1126", league: "Primera Division Paraguay" },
   { id: "fb-94", name: "Racing Club", country: "Argentina", tier: 2, color: "#75AADB", league: "Liga Profesional" },
   { id: "fb-95", name: "Zenit", country: "Russia", tier: 2, color: "#009FDF", league: "Russian Premier League" },
-  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "Segunda Division" },
+  { id: "fb-96", name: "Girona", country: "Spain", tier: 2, color: "#CD2534", league: "La Liga" },
   // Tier 3, strong clubs across Europe, Asia, Africa and the Americas.
   { id: "fb-97", name: "PAOK", country: "Greece", tier: 3, color: "#2B2B2B", league: "Super League Greece" },
   { id: "fb-98", name: "Panathinaikos", country: "Greece", tier: 3, color: "#00743F", league: "Super League Greece" },
@@ -3585,7 +3588,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-103", name: "Besiktas", country: "Turkey", tier: 3, color: "#2B2B2B", league: "Super Lig" },
   { id: "fb-104", name: "Trabzonspor", country: "Turkey", tier: 3, color: "#5C1F33", league: "Super Lig" },
   { id: "fb-105", name: "Nice", country: "France", tier: 3, color: "#CC0000", league: "Ligue 1" },
-  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Championship" },
+  { id: "fb-106", name: "Wolves", country: "England", tier: 3, color: "#FDB913", league: "Premier League" },
   { id: "fb-107", name: "Fulham", country: "England", tier: 3, color: "#111111", league: "Premier League" },
   { id: "fb-108", name: "Gremio", country: "Brazil", tier: 3, color: "#0D80BF", league: "Brasileirao" },
   { id: "fb-109", name: "Atletico Nacional", country: "Colombia", tier: 3, color: "#00A650", league: "Liga BetPlay" },
@@ -3617,7 +3620,7 @@ export const HAND_CLUBS: ClubData[] = [
   { id: "fb-134", name: "Pakhtakor", country: "Uzbekistan", tier: 4, color: "#0056A3", league: "Uzbekistan Super League" },
   { id: "fb-135", name: "Mumbai City", country: "India", tier: 4, color: "#57A8E2", league: "Indian Super League" },
   { id: "fb-136", name: "Buriram United", country: "Thailand", tier: 4, color: "#0C2E5C", league: "Thai League 1" },
-  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Super League Indonesia" },
+  { id: "fb-137", name: "Persija Jakarta", country: "Indonesia", tier: 4, color: "#D6202B", league: "Liga 1 Indonesia" },
   { id: "fb-138", name: "Hanoi FC", country: "Vietnam", tier: 4, color: "#5C2D91", league: "V.League 1" },
   { id: "fb-139", name: "Johor Darul Tazim", country: "Malaysia", tier: 4, color: "#0C2E5C", league: "Malaysia Super League" },
   { id: "fb-140", name: "Melbourne Victory", country: "Australia", tier: 4, color: "#0C2E5C", league: "A-League" },
@@ -5453,8 +5456,6 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  awardAllTimeTopScorer(s, thisYear);
-
   // Fair Play Award, good conduct season (low cards, high rating)
   if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
     const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
@@ -5511,6 +5512,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      World Cup and the continental championships crown a winner across a whole
      career even if you never get a cap. */
   runTournamentSummer(s, season, thisYear);
+  /* Round 1022: the scoring record is checked after the summer, so goals at a
+     World Cup or a continental final count the season they are scored (a man
+     who passes it at his last tournament still gets it) and the line's total
+     is the one his screen shows. No draws, so the move changed none. */
+  awardAllTimeTopScorer(s, thisYear);
 
   /* ─── Round 130: the rest of the football world has a season too ───
      Runs BEFORE the Ballon d'Or on purpose. It decides who won each league,

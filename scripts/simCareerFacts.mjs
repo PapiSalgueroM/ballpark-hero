@@ -27,14 +27,32 @@
                 to be passed) and record plus one (award, once, with the line
                 naming the nation and the goals). A nation without a row gets
                 nothing at 999 goals. No international career, no award.
-   3 WIRING     the season really calls awardAllTimeTopScorer, the award is
-                pushed nowhere else, and no fallback number survives.
-   4 LABELS     every HAND_CLUBS row (by id and name) is in the file, either
-                verified (its label equals the file's, and the file's evidence
-                group has two sources on two hosts that list the club for the
-                season named) or in clubLeaguesUnverified, a ratchet: its count
-                may only fall (UNVERIFIED_MAX below) and its labels must still
-                equal the engine's, so nothing changes unseen.
+   3 WIRING     the season really calls awardAllTimeTopScorer, after the
+                summer tournament, the award is pushed nowhere else, and no
+                fallback number survives.
+   4 LABELS     every HAND_CLUBS row (by id and name) is in the file, in
+                exactly one of three lists. Verified: its label equals the
+                file's, and the file's evidence group has two sources on two
+                hosts that list the club for the current season (2026-27, or
+                2026 for a calendar year league; an older season is stale).
+                Pinned (clubLeaguesPinned): the engine keeps the old label the
+                file names, because a label serves every era and the club
+                changed league inside that span (the lead's option (a) of
+                2026-10-05, until the league by year round); the verified
+                2026-27 league sits beside it with its evidence, and the list
+                may only shrink (PINNED_MAX). Unverified: a ratchet, its count
+                may only fall (UNVERIFIED_MAX) and its labels must still equal
+                the engine's, so nothing changes unseen.
+   5 PLAYED     seeded careers played step by step through the real screens'
+                calls, for nations with low and high records and players who
+                move abroad. At the end of every season that runs the award
+                (marked from the outside, see below), a man past HIS nation's
+                record holds the award, granted that season, with the line's
+                total equal to the goals on his screen; the award never lands
+                in any other step or below the record. This is what catches a
+                call moved above the season's goals or the tournament, or a
+                record looked up by the wrong key, which sections 2 and 3
+                cannot see.
 
    Negative controls, SIM_CAREER_FACTS_CONTROL=<name>. Each asserts the
    source string it rewrites exists (in memory, never on disk) and the run
@@ -43,10 +61,17 @@
      default    the old `?? 40` default for unlisted nations         -> 2
      equal      the award at the record instead of past it (>=)      -> 2
      unwired    the season stops calling awardAllTimeTopScorer       -> 3
-     label      Hertha Berlin back to "Bundesliga"                   -> 4
+     label      Norwich City (verified Championship) relabelled
+                "Premier League"                                     -> 4
+     relabel    Hertha Berlin (pinned) given its 2026-27 label
+                "2. Bundesliga" in every era                         -> 4
+     early      the award call back above the summer tournament      -> 5
+     early2     the award call above the season's own int goals      -> 5
+     wrongkey   the record looked up by the club's country first     -> 5
      onesource  the file keeps one source for Spain's record         -> 1
-     unverify   the file moves Hertha Berlin to the unverified list  -> 4
-   (the last two rewrite the loaded file in memory, never on disk)
+     unverify   the file moves Norwich City to the unverified list   -> 4
+     stale      the file dates the Premier League evidence 2024-25   -> 4
+   (the last three rewrite the loaded file in memory, never on disk)
 
    Run: node scripts/simCareerFacts.mjs
    No network and no database: the engine is bundled from this tree. */
@@ -62,6 +87,14 @@ const CONTROL = process.env.SIM_CAREER_FACTS_CONTROL || '';
    sources). It may only fall; a row that gets verified moves to clubLeagues
    and this number comes down with it. */
 const UNVERIFIED_MAX = 56;
+/* The pinned labels: 7 on 2026-10-06 (West Ham, Wolves, Girona, Hertha
+   Berlin, Nantes, River Plate Asuncion, Persija Jakarta). It may only fall,
+   and falls to 0 when the league by year round lands. */
+const PINNED_MAX = 7;
+/* The season a label is true for. A calendar year league's 2026 season and a
+   split season league's 2026-27 are both the current one; anything older is
+   evidence about a league the club may have left. */
+const CURRENT_SEASONS = ['2026-27', '2026'];
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const tmpDir = fs.mkdtempSync(path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), 'simfacts-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
@@ -82,18 +115,27 @@ const CONTROLS = {
   default: ['2', swap('const record = INT_SCORING_RECORDS[s.nationality];', 'const record = INT_SCORING_RECORDS[s.nationality] ?? 40;')],
   equal: ['2', swap('if (intGoals <= record ||', 'if (intGoals < record ||')],
   unwired: ['3', swap('  awardAllTimeTopScorer(s, thisYear);\n', '\n')],
-  label: ['4', swap('name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga"', 'name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga"')],
+  label: ['4', swap('name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Championship"', 'name: "Norwich City", country: "England", tier: 4, color: "#FFF200", league: "Premier League"')],
+  relabel: ['4', swap('name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "Bundesliga"', 'name: "Hertha Berlin", country: "Germany", tier: 4, color: "#004C9E", league: "2. Bundesliga"')],
+  early: ['5', s => swap('  // Fair Play Award', '  awardAllTimeTopScorer(s, thisYear);\n  // Fair Play Award')(swap('  awardAllTimeTopScorer(s, thisYear);\n', '')(s))],
+  early2: ['5', s => swap('  const intSeason = generateIntSeasonStats(s, thisYear);\n', '  awardAllTimeTopScorer(s, thisYear);\n  const intSeason = generateIntSeasonStats(s, thisYear);\n')(swap('  awardAllTimeTopScorer(s, thisYear);\n', '')(s))],
+  wrongkey: ['5', swap('const record = INT_SCORING_RECORDS[s.nationality];', 'const record = INT_SCORING_RECORDS[s.currentClubCountry] ?? INT_SCORING_RECORDS[s.nationality];')],
   onesource: ['1', s => s, f => {
     if (!(f.intRecords.Spain && f.intRecords.Spain.sources.length === 2)) { console.error('control onesource: Spain has no two sources to cut'); process.exit(2); }
     f.intRecords.Spain.sources = f.intRecords.Spain.sources.slice(0, 1);
   }],
   unverify: ['4', s => s, f => {
-    const row = f.clubLeagues['fb-66'];
-    if (!(row && row.name === 'Hertha Berlin')) { console.error('control unverify: fb-66 Hertha Berlin is not a verified row'); process.exit(2); }
-    delete f.clubLeagues['fb-66'];
-    f.clubLeaguesUnverified['fb-66'] = { name: row.name, league: row.league, reason: 'control: moved back to unverified' };
+    const row = f.clubLeagues['fb-65'];
+    if (!(row && row.name === 'Norwich City')) { console.error('control unverify: fb-65 Norwich City is not a verified row'); process.exit(2); }
+    delete f.clubLeagues['fb-65'];
+    f.clubLeaguesUnverified['fb-65'] = { name: row.name, league: row.league, reason: 'control: moved back to unverified' };
     f.leagueEvidence[row.evidence].clubs = f.leagueEvidence[row.evidence].clubs.filter(c => c !== row.name);
     if (!f.leagueEvidence[row.evidence].clubs.length) delete f.leagueEvidence[row.evidence];
+  }],
+  stale: ['4', s => s, f => {
+    const ev = f.leagueEvidence['Premier League 2026-27'];
+    if (!(ev && ev.season === '2026-27')) { console.error('control stale: no Premier League 2026-27 evidence to date back'); process.exit(2); }
+    ev.season = '2024-25';
   }],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -226,6 +268,8 @@ head('3', 'WIRING: the season calls the award, nothing else grants it, no fallba
 const code = stripComments(engineCode);
 const calls = code.split('awardAllTimeTopScorer(s, thisYear);').length - 1;
 ok(calls === 1, `the season calls awardAllTimeTopScorer(s, thisYear) ${calls} times, 1 expected`);
+const summerAt = code.indexOf('runTournamentSummer(s, season, thisYear);');
+ok(summerAt > 0 && code.indexOf('awardAllTimeTopScorer(s, thisYear);') > summerAt, 'the award is checked before the summer tournament, so tournament goals count a season late');
 const grants = code.split('name: "All Time Top Scorer"').length - 1;
 ok(grants === 1, `"All Time Top Scorer" is granted at ${grants} places in the engine, only awardAllTimeTopScorer may grant it`);
 const a = code.indexOf('export function awardAllTimeTopScorer(');
@@ -233,45 +277,61 @@ const body = a < 0 ? '' : code.slice(a, code.indexOf('\n}\n', a));
 ok(body.includes('name: "All Time Top Scorer"'), 'the grant is not inside awardAllTimeTopScorer');
 ok(!/\?\?\s*\d|\|\|\s*\d/.test(body), 'awardAllTimeTopScorer falls back to a number for a nation with no record');
 ok(!/\bINT_RECORDS\b/.test(code), 'the old INT_RECORDS table is back');
-console.log(`  1 call from the season, 1 grant, inside awardAllTimeTopScorer, no fallback`);
+console.log(`  1 call from the season, after the summer tournament, 1 grant, inside awardAllTimeTopScorer, no fallback`);
 
 /* ─── 4. LABELS ─── */
-head('4', 'LABELS: every HAND_CLUBS league label verified, or listed as unverified');
+head('4', 'LABELS: every HAND_CLUBS league label verified, pinned or listed as unverified');
 const hand = E.HAND_CLUBS;
 ok(Array.isArray(hand) && hand.length === 190, `HAND_CLUBS has ${hand && hand.length} rows, 190 expected`);
 const evidence = facts.leagueEvidence || {};
 const verified = facts.clubLeagues || {};
+const pinned = facts.clubLeaguesPinned || {};
 const unverified = facts.clubLeaguesUnverified || {};
 for (const [key, ev] of Object.entries(evidence)) {
-  ok(typeof ev.league === 'string' && ev.league && /^20\d\d(-\d\d)?$/.test(ev.season || ''), `evidence ${key}: no league or season`);
+  ok(typeof ev.league === 'string' && ev.league.length > 0, `evidence ${key}: no league`);
+  ok(CURRENT_SEASONS.includes(ev.season), `evidence ${key}: season "${ev.season}" is not the current one (${CURRENT_SEASONS.join(' or ')}), so it says nothing about where the club plays now`);
   twoSources(ev.sources, `evidence ${key}`);
   ok(Array.isArray(ev.clubs) && ev.clubs.length > 0, `evidence ${key}: names no club`);
 }
-let nVer = 0; let nUnv = 0;
+/* A verified or pinned row's 2026-27 league must come from an evidence group
+   for that league that lists the club. */
+const backed = (name, league, key) => {
+  const ev = evidence[key];
+  if (!ok(!!ev, `${name}: evidence group "${key}" does not exist`)) return;
+  ok(ev.league === league, `${name}: "${league}" rests on evidence for "${ev.league}"`);
+  ok(ev.clubs.includes(name), `${name}: evidence group "${key}" does not list it`);
+};
+let nVer = 0; let nPin = 0; let nUnv = 0;
 const seen = new Set();
 for (const row of hand) {
   const v = verified[row.id];
+  const p = pinned[row.id];
   const u = unverified[row.id];
-  if (!ok(!!v !== !!u, `${row.id} ${row.name}: must be in exactly one of clubLeagues and clubLeaguesUnverified`)) continue;
-  const f = v || u;
+  if (!ok([v, p, u].filter(Boolean).length === 1, `${row.id} ${row.name}: must be in exactly one of clubLeagues, clubLeaguesPinned and clubLeaguesUnverified`)) continue;
+  const f = v || p || u;
   seen.add(row.id);
   ok(f.name === row.name, `${row.id}: the file names ${f.name}, the engine ${row.name}`);
-  ok(f.league === row.league, `${row.name}: the engine labels it "${row.league}", the file says "${f.league}"`);
+  ok(f.league === row.league, `${row.name}: the engine labels it "${row.league}", the file says "${f.league}"${p ? ' (pinned: a label serves every era, so its 2026-27 league waits for the league by year round)' : ''}`);
   if (v) {
     nVer += 1;
-    const ev = evidence[v.evidence];
-    if (!ok(!!ev, `${row.name}: evidence group "${v.evidence}" does not exist`)) continue;
-    ok(ev.league === v.league, `${row.name}: labelled "${v.league}" on evidence for "${ev.league}"`);
-    ok(ev.clubs.includes(row.name), `${row.name}: evidence group "${v.evidence}" does not list it`);
+    backed(row.name, v.league, v.evidence);
+  } else if (p) {
+    nPin += 1;
+    ok(typeof p.league2026 === 'string' && p.league2026.length > 0 && p.league2026 !== p.league, `${row.name}: pinned with no 2026-27 league that differs from its label`);
+    backed(row.name, p.league2026, p.evidence);
+    ok(typeof p.reason === 'string' && p.reason.length > 10, `${row.name}: pinned with no reason given`);
   } else {
     nUnv += 1;
     ok(typeof u.reason === 'string' && u.reason.length > 10, `${row.name}: unverified with no reason given`);
   }
 }
-for (const id of [...Object.keys(verified), ...Object.keys(unverified)]) ok(seen.has(id), `${id}: in the file but not a HAND_CLUBS row`);
+for (const id of [...Object.keys(verified), ...Object.keys(pinned), ...Object.keys(unverified)]) ok(seen.has(id), `${id}: in the file but not a HAND_CLUBS row`);
+const users = [...Object.values(verified), ...Object.values(pinned)];
 for (const [key, ev] of Object.entries(evidence)) {
-  for (const name of ev.clubs) ok(Object.values(verified).some(v => v.name === name && v.evidence === key), `evidence ${key} lists ${name}, which no verified row uses`);
+  for (const name of ev.clubs) ok(users.some(v => v.name === name && v.evidence === key), `evidence ${key} lists ${name}, which no verified or pinned row uses`);
 }
+ok(Number.isInteger(PINNED_MAX) && nPin <= PINNED_MAX, `${nPin} labels pinned, the ratchet allows ${PINNED_MAX}: a new pin is a lead's decision, never a quiet add`);
 ok(Number.isInteger(UNVERIFIED_MAX) && nUnv <= UNVERIFIED_MAX, `${nUnv} labels unverified, the ratchet allows ${UNVERIFIED_MAX}: verify them, never add`);
-console.log(`  ${nVer} labels verified across ${Object.keys(evidence).length} evidence groups, ${nUnv} unverified (ratchet ${UNVERIFIED_MAX})`);
+console.log(`  ${nVer} labels verified across ${Object.keys(evidence).length} evidence groups (all ${CURRENT_SEASONS.join(' or ')}), ${nPin} pinned to their old label (ratchet ${PINNED_MAX}), ${nUnv} unverified (ratchet ${UNVERIFIED_MAX})`);
+
 finish();
