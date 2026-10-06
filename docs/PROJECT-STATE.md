@@ -1,45 +1,77 @@
-## Round1067 accepted and merged, live publication pending
+## Round1067 LIVE: Cage strike motion, 2026-10-06 19:12:51 UTC
+
+Cage Clash at https://douknowball.com/cage-clash now draws windup, contact
+and recovery poses for standing punches/kicks, clinch strikes/knees and
+top/bottom ground punches. Reduced motion keeps a readable contact pose
+steady and suppresses incidental cycles. The help, guide and What's New
+explain the motion. Combat, Practice, Circuit and score/input engine sources
+are unchanged. No save, route, real-data or database change.
 
 PR154 merged at f35218628611060f1c728c9f6b834e167565714d. Its tree
-962e75e24c77bef3285345cc11537c507d3f5265 exactly matches accepted
+962e75e24c77bef3285345cc11537c507d3f5265 equals accepted
 8d2d79cc06ad6e2feaed59259564c7b45b9617f8 and the tested synthetic merge.
-Main9bf04e5a, Claude's guide handshake and prior PR152/153 are preserved.
+Claude's9bf04e5a guide claims, prior PR152/153 and AG remain preserved.
+PR155's docs recovery merged at2aab7f8c1f59cc0d457c163f2615dbfb65e92e59;
+only PROJECT-STATE and WORKBOARD changed, with the runtime byte-identical.
 
-Cage strikes now have windup, contact and recovery poses for standing
-punches/kicks, clinch strikes/knees and top/bottom ground punches. Reduced
-motion keeps readable contact poses steady. Combat/mode/score/input engine
-sources are unchanged. No save, route, data or database changes.
+Authenticated IAB now shows imports154/155. The latest155 is Previewing;
+Shift-Refresh restarted the preview and Publish changes completed with
+Your website was updated. LIVE entry index-DUMSIznJ.js. The public canvas
+exposes paint tick0/player action idle/action ticks0 at Quick setup.
+Reopened help has the full pixel pose and reduced motion rule. The guide
+has the motion rule, and What's New has Put some snap in your strikes.
+with Step into the cage -> /cage-clash. Circuit, Fight stats and Claude's
+207-lineup Missing XI update are intact. Cage/news each have exactly one
+canonical/description and no noindex. No production fight was completed.
+The game tab stays at Quick setup; the owner's existing news tab is untouched.
+
+Host trap: file contents and an In sync Git status were insufficient. The
+first publish still served index-BLmSHduv.js while chat/history ended at9bf.
+The docs-only155 receipt refreshed the import, after which154/155 appeared.
+Only the later public renderer metadata, help and news proof is accepted LIVE.
+Do not credit a successful publish toast alone.
+
+Live screenshots:
+C:/Users/antho/.codex/artifact-inspection/cage-strike-motion-live-news-1067.png
+C:/Users/antho/.codex/artifact-inspection/cage-strike-motion-live-help-1067.png
 
 Final remote runs37510443427 (Cage),37510443465 (MMA),37510443540 (entry)
-all passed actual type/build gates. Saved artifacts inspected and accepted:
-Cage61/105 outcomes/effective controls,33 named harnesses; MMA20/23,32;
-entry8/18,19, including six effective guide controls. Every source copy changed
-one intended anchor, failed only its mapped assertion and kept its baseline
-green. All sixteen built readers passed, including search.
+passed actual app type/build gates. All saved artifacts inspected and accepted:
+Cage61/105 outcomes/effective controls and33 named harnesses; MMA20/23
+and32; entry8/18 and19, including six effective guide controls. Each source
+copy changes its intended anchor, fails only the mapped assertion and keeps
+an independent baseline green. Motion7/14 copies match accepted preparation,
+85 older copies match1066 and six Board copies match the current source.
+All sixteen built readers, search and guide/source anchors passed.
 
-Native Cage: four profiles,927 real inputs,159 measured screenshots,12
-strike frames and12 recaps. All recaps match raw counters. Circuit averages
-[67,71,66] ->68 and [80,74,67] ->74; all eight completion requests were
-intercepted. No forwarded write, save mutation or error. Reduced phase
-differences are all zero; normal Jab549/456/366 and Kick585/603/447.
-Action samples read paint ticks6/4/2 from the exact drawn canvas.
-All32 fonts,1,272 stage font checks,216 table cells, five effective geometry
-controls and seven combat states passed. Phone screenshots inspected.
+Native Cage: four profiles,927 inputs,159 measured screenshots,12 strike
+frames,12 recaps/60 stat rows/120 values/216 measured table cells. Recaps
+match raw hits, rounded damage, blocks, takedowns and50ms control time.
+Circuit [67,71,66] averages68; [80,74,67] averages74. All eight starts have
+full health/gas and zero counters. Exactly eight intercepted completions:
+keyboard65/68/0,320touch70/74/0,390touch67,mouse65. No extra award, forwarded
+write, save mutation or error. All32 fonts and1,272 stage font checks passed,
+controls at least44px, table cells11px with no overflow, five effective
+geometry controls and seven combat states. Phone screenshots inspected.
+
+Twelve strike samples read action ticks6/4/2 from the exact painted canvas.
+Normal Jab channel differences549/456/366 and Kick585/603/447 match prep.
+Reduced differences are all zero; stable poses equal normal contact.
+Preparation37505322005 on2081b28d and all five manifest hashes were accepted
+before/after copy. Temporary prep workflow removed. Only Cage/news text and
+ledger hashes changed, dates stayed October6; search was regenerated.
 
 SHA256 receipts:
 Cage11435803840:41463eafd61f478c4a66045a651959cc635391eaf27df6f3a862c3d1fe62a80e
 MMA11434357818:98a43572bb5b0b8a84c4d6a57ca0ffe52fe8d0c905dead1299baebeb85dbc82a
 Entry11435012098:102f1dcce37faf9a728625d0af6f653c2c03ae982eea36104eda3178fddeaf1c
+Prep11431748948:c4baff422a8da419f48c1bafe500e05d1f5d711415ccc200c51a98aab956a4ed
 
-Publication remains pending. Lovable Git reports in sync and Code shows the
-new renderer, but history still ends at9bf04e5a. First Publish changes said
-Your website was updated, yet both the ordinary and fresh public document
-serve index-BLmSHduv.js without new paint metadata or the motion news line.
-That publish is not accepted as1067 LIVE. This docs receipt refreshes the
-host import without changing the accepted runtime. Codex keeps the narrow
-publish window until live proof and closure; AH can keep integrating.
-Root drafts/seven stashes are protected. No local app runtime, production DB
-call, paid AI or indexing submission. Next1068 remains unclaimed.
+Main/publish returns to AH with this docs receipt. Preserve PR152/153/154/155
+and this receipt in AH. Claude retains soccer/GM and the committed soccer2.ts
+and US career guide hunks for1032/1038/1039. Root drafts/seven stashes stay
+protected. No local app runtime, direct production DB call/probe, paid AI or
+indexing submission. Next1068 is unclaimed.
 
 ## Round1066 LIVE: Cage Clash Fight stats, 2026-10-06 17:21:33 UTC
 
