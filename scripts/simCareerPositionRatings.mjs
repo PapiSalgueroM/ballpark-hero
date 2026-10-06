@@ -34,7 +34,40 @@
    4. old saves: careers played on the rule before, loaded with repairCareer
       and played on, keep every stored season rating.
 
-   HEADER_NUMBERS_GO_HERE
+   Before the round, measured on origin/main 37ce6d5e (2026-10-05) with a
+   probe of this fleet, 200 careers a position at each of 5 seed offsets
+   (10,000 careers): poor and elite share, pooled over the offsets
+     ST 15.3 / 47.4   LW 13.7 / 48.7   RW 13.3 / 49.0   CAM 12.1 / 49.4
+     CM 12.1 / 46.9   CDM 19.0 / 33.9  CB 24.1 / 27.9   LB 22.8 / 29.8
+     RB 21.8 / 29.4   GK 3.3 / 67.9
+   Ballon d'Or: 0 in 4,000 defender careers, 0.6 to 2.0 per 100 attackers.
+   (A first probe with flat stats read CB 31 / 23: a flat build rates a centre
+   back as a bad fit for his own position, which is why the fleet now builds
+   players the way the creation screen does.)
+
+   After, this harness at seed offsets 0 to 4 (PER 60, about 190 s a run on a
+   loaded machine), poor / elite:
+     attacking band   poor 12.5-15.4, 12.0-15.0, 11.4-15.1, 12.4-16.5, 12.7-16.5
+                      elite 46.8-49.4, 44.6-48.1, 46.4-48.8, 49.1-51.1, 46.4-49.1
+     CB   13.5/48.1  15.0/46.1  15.7/44.7  14.1/46.7  13.3/46.4
+     LB   12.1/50.2  13.9/45.9  13.4/45.5  11.4/48.3  11.5/47.4  (RB the same:
+          the two full backs share every rule, and the seeds are shared)
+     CDM  11.6/48.9  11.8/47.1  12.0/45.8  11.2/48.5  13.0/47.7
+     CM   13.1/46.8  12.1/46.0  12.6/45.9  12.4/48.5  12.7/45.5  (untouched)
+     GK   4.1/66.6   3.9/65.1   4.6/63.6   4.0/66.1   3.5/67.2   (untouched)
+   The furthest any share sat outside its band: poor 1.2 points, elite 2.4
+   (CB at offset 3). MARGIN is about twice that, 3 and 5. The rule before
+   this round sits 12 to 21 points under the elite band at every defending
+   position on every offset, so the margin cannot hide it.
+   Section 2, defenders before and after, same seeds:
+     peak overall moved +0.47 +0.51 +0.32 +0.66 +0.65
+     trophies a career  +0.28 +0.25 +0.18 +0.35 +0.20
+     released share     +0.63 -0.63 -0.21 -0.83 -1.04 points
+     Ballon d'Or per 100 defenders 0 on all five (attackers 0 to 4.2)
+   and 120 of 120 untouched careers byte identical every time. Defenders end
+   up level with the attackers on peak overall (0.44 under to 0.12 over, the
+   rule before had them 0.36 to 0.84 under).
+   DELTA_AND_CONTROLS_GO_HERE
 
    Run: node scripts/simCareerPositionRatings.mjs [seedOffset] [careersPerPositionAndEra] */
 import { build } from 'esbuild';
