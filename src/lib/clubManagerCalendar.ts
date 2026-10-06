@@ -45,7 +45,7 @@ import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobH
    here unchanged, so every import from this module keeps working; the
    fixture scripts/data/calDateFixture946.json, recorded before the move,
    proves the calendar built on them did not move a day. */
-import { addDays, dateKey, dayOfWeek, daysInMonth, shortDate } from '@/lib/calDate';
+import { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, shortDate } from '@/lib/calDate';
 import type { CalDate } from '@/lib/calDate';
 export { addDays, dateKey, dayOfWeek, daysBetween, daysInMonth, MONTH_NAMES, shortDate } from '@/lib/calDate';
 export type { CalDate } from '@/lib/calDate';
