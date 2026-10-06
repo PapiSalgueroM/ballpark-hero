@@ -37,6 +37,7 @@ export default function CageClash() {
               <li>Use Pause any time. Switching away, opening these rules or losing focus pauses the fight. Resume clears held inputs. Refresh starts over.</li>
               <li>Choose Practice before starting to learn four skills with an untimed partner: land three shots and recover gas, earn a takedown, finish a submission, or regain guard and stand up. Only the moves for that drill are active. Retry as often as you like.</li>
               <li>Choose Circuit to face a balanced fighter, a striker and a grappler. Win to advance with Next opponent. A loss or draw ends the run. Every fight starts with fresh health and gas; each has up to three 45 second rounds.</li>
+              <li>After a Quick fight or a Circuit fight, open Fight stats to compare shots landed, damage, blocks, takedowns and time on top. Back returns to your result. Damage is rounded and top control is shown in seconds.</li>
               <li>Keyboard: arrows or A/D to move, Space to guard, J/K/L for the upper action row and U/I/O for the lower row. P or Escape pauses.</li>
             </ul>
             <p className="text-sm"><strong>Try this:</strong> move into punching range, block a shot, then clinch. Use Takedown, pass from guard and hold Submission when you have stamina. If the opponent gets on top, defend and try a sweep or stand up.</p>

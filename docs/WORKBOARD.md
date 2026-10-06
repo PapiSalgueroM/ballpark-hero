@@ -1,3 +1,67 @@
+## Round1066 LIVE: Cage Clash Fight stats, 2026-10-06 17:21:33 UTC
+
+Fight stats is live at https://douknowball.com/cage-clash after a Quick
+fight or every completed Circuit fight. Compare You/CPU shots landed,
+rounded damage, blocks, takedowns and seconds of top control. Back preserves
+the result and restores focus; Rematch/Next opponent/New circuit stay in
+the result view. Practice and unfinished fights have no recap.
+
+PR152 merged at43e4f25224edd597bdf15116e2ce06faf145e56e. Its tree
+580fff44a9bfa16a76202b8ff8aa7b0d8e57d347 exactly equals accepted
+cacdbe562fd56841a5743cdd9f68481922cebd94. AG6f0f4343, its receipt
+b812ceea, A-League claim821a97c2 and PR150/151 remain preserved.
+Combat/Practice/Circuit engines and useCageClash are byte-identical to84469b10.
+No score, input, save, route, data, schema or production DB change.
+
+Authenticated IAB imported merge152. Update preview selected it as Previewing;
+Publish changes finished with Your website was updated. Live entry
+index-BLmSHduv.js. The new runtime exposes data-cage-tick-ms50 and the
+re-openable help has the new recap rule. The live guide has all five fields,
+rounding/seconds rules and the literal12/8 worked example. What's New has
+See what won the fight. and Check your corner -> /cage-clash, with Circuit
+and Claude's207lineup Missing XI update intact. Cage/news each have exactly
+one canonical/description and no noindex. No production fight was completed.
+Live proof: C:/Users/antho/.codex/artifact-inspection/cage-fight-stats-live-news-1066.png.
+Game tab stays ready at Quick setup; the owner's existing news tab is untouched.
+
+Final remote CI all passed atcacdbe56: Cage37498445388 (32 named harnesses),
+MMA37498445535 (32) and entry37498445378 (19). All saved reports inspected.
+Combat22/28, Practice14/22, Circuit11/22, Stats7/19 outcomes/effective controls.
+All54 Cage outcomes and91 mutation copies accepted; each copy changed actual
+source, failed only its mapped AssertionError and kept its independent
+baseline green. MMA20/23 plus four native journeys and entry8/18 plus16
+native journeys passed, including six effective guide failures.
+
+Final native Cage evidence: four completed Quick fights (three wins, one
+loss), eight Practice lessons, two Circuit clears on first attempts at65
+and72, plus two passive first-fight stops at0. Every one of12recaps matches
+the actual raw counters,60rows/120numeric values. Exactly8 intercepted
+completion scores: keyboard15/65/0,320touch65/72/0,390touch80,mouse70.
+The winning averages independently match [65,65,65]/3 and [77,65,74]/3.
+All8Circuit starts have fresh health/gas100 and zero counters. No
+intermediate/practice/quit/recap award, save mutation, forwarded write or error.
+149 saved geometry stages/screenshots,1932native inputs, eight loaded font
+faces at every stage and five effective geometry controls. All216 measured
+table cells are11px, no text overflow; every211px recap fits its224px arena.
+320dark and390light phone stats screenshots inspected, Back targets44px high.
+
+SHA256 receipts:
+Cage11430066296: e88f0fde8ebdb6df55df1430cf854903f75043061db3ee485312a547407ac10b
+MMA11428853294: 6bdd65255dd5bd03f9745354f86fc712bec8230ad8233becdb2e177a9d5d65cd
+Entry11428567832: 1a81e050adf89803ba5d96facdd1343d65fcec66c84e3cab119a0c3e45cc4aae
+Preparation37494754689 at9127bbd5, artifact11428137239:
+5b041fad6fb6a3e7fe6850d45af174db81e79dc4cb2921de98d241724c8fb0e9.
+Only the five manifest payloads were accepted, with hashes checked before/
+after copy. Cage/news snapshot text and two ledger hashes changed; the
+search generator's global term weighting also moved four existing lists.
+The temporary preparation workflow is gone; permanent gates all remain.
+
+Main/publish slot released to AH. Merge/preserve PR152 and this receipt in AH.
+Claude retains soccer/GM,1032/1035 and soccer2.ts guide ownership. Next1067
+unclaimed. No local app runtime, direct production DB call/probe, paid AI,
+indexing submission or root held draft/stash changes. Docs receipt only,
+the published runtime needs no second deploy.
+
 ## Round1065 LIVE: Cage Clash Circuit, 2026-10-06 15:23:14 UTC
 
 Circuit is live at https://douknowball.com/cage-clash. Choose Mode: Circuit.
