@@ -13,7 +13,9 @@
  *   2  over ten seeded seasons, every user man whose deal runs out has a
  *      recorded decision, and what happened to him is what it says: a kept
  *      man is still here (or retired), a man let go is gone, a man whose
- *      sheet was let go is at the club that tabled it on its terms. A first
+ *      sheet was let go is at the club that tabled it on its terms, the one
+ *      written down on his decision, even on a copy where the draft filled
+ *      every rival roster before the summer. A first
  *      round pick drafted with the desk on comes up after exactly the rookie
  *      scale's four seasons, a second rounder after the engine's three, and
  *      every one of them comes up restricted, with any sheet inside the
@@ -38,7 +40,9 @@
  *      point an end, and the growth reaching the engine's own summer. And
  *      through the engine that consumes them, at every step: the user's
  *      wins over ten seasons of simRound, the rounds out simRound announces
- *      for his injured men, his wins in runNbaPlayoffs
+ *      for his injured men, his wins in runNbaPlayoffs. And day one: for every club, a desk
+ *      opened on a new franchise with nobody hired plays the regular season
+ *      and the playoffs exactly as no desk (the edge is what the GM hires)
  *   6  migration keeps every marker, a corrupt block resets alone, the
  *      package salary rule is the engine's nbaSalaryFits for one man each
  *      way, and over the first apron a package must send out what it takes
@@ -61,6 +65,8 @@
  *   nomirror    an old path's pick move never reaches the ledger              (4)
  *   nostepien   an old path's pick skips the two drafts running rule          (4)
  *   noruleblock the trade finder's accept skips the pick rules                (3)
+ *   dayonestature day one hands your club the staff its size attracts         (5)
+ *   sheetrepick the summer picks a let go sheet's club again, after the draft  (2)
  * Recording the fixture: SIM_NBA_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nbaGmDeskFixture.json from that engine.
  *
@@ -101,6 +107,21 @@
  * 5, noedgepo 9 in 5, noinjhook 9 in 5, nomirror 60 in 4, nostepien 2 in 4,
  * noruleblock 1 in 3; noguard (its anchor now carries pickRuleBlock) still 1
  * in 3, and coinflip still 73 in 2 with the walk in the board's order.
+ * Remeasured 2026-10-06 by the closing fix (day one opens at level 1 in every
+ * chair, a let go sheet's club is written down when it is taken), sets
+ * 1..10 / 11..20 / 21..30:
+ *   expiring men decided   408 / 435 / 417   (by the GM 224 / 242 / 233, by the staff's rule 184 / 193 / 184)
+ *   draftees come up       first rounders 60 / 59 / 60, second rounders 68 / 64 / 63
+ *   restricted cases       128 / 123 / 123, sheets 66 / 49 / 67 (matched 46 / 33 / 48, gone to
+ *                          the club written down on its terms 20 / 16 / 19)
+ *   full draft copies      every let go sheet still reached its club with every rival roster
+ *                          filled first: 20 / 16 / 19
+ *   deals before deadline  239 / 229 / 224, moving a pick the same; old paths 60 each
+ *   day one                90 of 90 clubs (three leagues of 30) play the season as no desk,
+ *                          total opening edge 0.00; with the size anchored staff of before,
+ *                          1 of 90 (opening edge 118.00 over the 90)
+ * minSheets, minSheetGone and minSheetFull moved to 70 percent of the new lowest
+ * set (49, 16, 16); every other floor was already under it.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -135,8 +156,8 @@ const SEASONS = Number(process.env.SIM_NBA_GM_DESK_SEASONS || 10);
 /* Floors: the measured size of each walk, see MEASURED in the header. */
 const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
-  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 41, minSheetGone: 12,
-  minOldDeals: 42, minSheetFull: 1,
+  minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 34, minSheetGone: 11,
+  minOldDeals: 42, minSheetFull: 11,
 };
 
 function modulesDir() {
