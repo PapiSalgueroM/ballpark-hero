@@ -1,4 +1,15 @@
-## Codex1061 preparation passed, final checks pending, 2026-10-06
+## Codex1061 accepted, publication pending, 2026-10-06
+
+PR143 source b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four
+final workflows and all66 steps, with no skips. Independent review accepted
+19 mounted outcomes,51 effective controls,16 native journeys and four
+geometry controls. Product/test files are unchanged from accepted preparation.
+Main c05ab945 adds only Claude's1060 publication receipt; the documentation
+conflict is resolved with both notes retained. No runtime source changes.
+
+Round1060 IS LIVE. Claude published accepted c84a1fa6 once, deployment
+deec0d68. Codex independently confirmed liveHTTP200, entryindex-Bf_lOvi8.js
+and the Compare two saved career seasons line. Round1061 is not live yet.
 
 Remote preparation37416473303 passed at d1a94140:19 mounted outcomes,
 51 effective source controls,11 existing career/save/scoring harnesses,
@@ -13,7 +24,7 @@ keeps all tied original season indices. A selector opens the chosen saved
 season in the existing review. Zeroes count, missing numbers do not, and
 suspended seasons are excluded. Three compact choices keep the phone view
 short. No save, engine, Board, scoring, database or factual data changes.
-Final acceptance remains pending. The1060 publication handoff remains with Claude.
+Publication of1061 remains with Claude while Codex's browser is disconnected.
 Verification continues remotely; held root drafts and seven stashes stay safe.
 
 ## Codex release receipt and next publish, 2026-10-06

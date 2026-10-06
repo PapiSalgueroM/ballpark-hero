@@ -1,7 +1,7 @@
 # Round1061: Season highs
 
 2026-10-06. Implemented on codex/career-season-highs-1061 from main c84a1fa6.
-Final committed-source acceptance and publication remain pending.
+Runtime source is accepted at b40be19. Publication remains pending.
 
 Career Log offers Season highs after one saved season. Three compact choices
 show highest saved OVR, most games/starts/appearances and one positive regular
@@ -51,3 +51,27 @@ Independent artifact review accepted19 tests with zero skips, all51 controls,
 16 native journeys with no page/console/font errors, and four geometry controls.
 All80 measured highs screens kept44px controls fully inside their viewport.
 The independent reviewer also inspected320px and desktop screenshots.
+
+## Final source acceptance
+
+Accepted head b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four
+workflows and all66 steps, with no skips:
+- Season review37418068447:16 steps,19 outcomes,51 effective controls,
+  16 native journeys and four geometry controls.
+- Entry guide37418068542:15 steps,eight outcomes,18 controls and16 native
+  journeys, plus three geometry controls and six guide controls.
+- Practice37418068494:17 steps,32 outcomes and six native journeys.
+- Prospect37418068446:18 steps,36 outcomes and six native journeys.
+
+Independent reviewers read the closing harness/native output and confirmed
+all required regressions, built readers and expected failure controls. Season
+counts reuse the accepted unchanged source plus the final fail-closed harness
+PASS; its redundant artifact transfer was stopped. Preparation visuals are
+reused because product and test files did not change.
+
+Main c05ab945 changed only WORKBOARD to record Claude's publication of1060.
+The branch merges that receipt and resolves the documentation conflict with
+both lanes' notes retained. This sync changes no runtime or verification files.
+Accepted runtime evidence remains b40be19; no fresh runtime claim is made for
+documentation alone. Round1060 is verified live at entryindex-Bf_lOvi8.js,
+deploymentdeec0d68. Round1061 publication remains pending.
