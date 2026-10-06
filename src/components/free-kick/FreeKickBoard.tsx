@@ -640,7 +640,7 @@ export default function FreeKickBoard() {
             ) : (
               <p className="text-xs text-muted-foreground">Come back tomorrow for ten new kicks.</p>
             )}
-            {mode !== 'practice' && mode !== 'lab' && <ShareButtons
+            {mode !== 'practice' && <ShareButtons
               gameName="Free Kick"
               gamePath="/free-kick"
               score={`${goals}/${ROUNDS_PER_RUN} free kicks for ${score} points`}

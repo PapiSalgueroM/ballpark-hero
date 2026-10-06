@@ -31,7 +31,7 @@ const controls = {
     ["if (completedDaily) {\n      savedRef.current = true;", "if (completedDaily) {\n      savedRef.current = true;\n      markRestoredFinish(SLUG);", 1],
   ], failure: restored },
   seed: { changes: [["const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;", "const seed = m === 'daily' ? daySeed(todayStr) : 1;", 1]], failure: delayed },
-  share: { changes: [["{mode !== 'practice' && mode !== 'lab' && <ShareButtons", '{<ShareButtons', 1]], failure: isolated },
+  share: { changes: [["{mode !== 'practice' && <ShareButtons", '{<ShareButtons', 1]], failure: isolated },
   daily: { changes: [["const completedDaily = m === 'daily' ? completedDailyRef.current : null;", "const completedDaily = m === 'daily' ? restored : null;", 1]], failure: /keeps a newly finished daily booked across practice and unlimited/ },
   booked: { changes: [["const completedDaily = m === 'daily' ? completedDailyRef.current : null;\n    setBookedDaily(completedDaily !== null);", "const completedDaily = m === 'daily' ? completedDailyRef.current : null;\n    setBookedDaily(false);", 1]], failure: /keeps a newly finished daily in memory when private storage refuses its write/ },
 };
