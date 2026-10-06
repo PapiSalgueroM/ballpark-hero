@@ -52,7 +52,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       { q: 'Can I grapple and submit an opponent?', a: 'Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it.' },
       { q: 'What are the keyboard controls?', a: 'Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position.' },
       { q: 'Does a fight keep running when I switch tabs?', a: 'No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too.' },
-      { q: 'Does my fight save if I refresh?', a: 'These are quick fights, so refreshing starts over. A completed fight records its earned score through the normal site scoring system. Quitting does not award a score.' },
+      { q: 'Does my fight save if I refresh?', a: 'Refreshing starts over in every mode. Quick fight records its score after a completed fight. Circuit records one score when the run ends; Practice earns no points. Quitting an unfinished fight or circuit earns no score.' },
     ],
   },
   '/f1-driver': {

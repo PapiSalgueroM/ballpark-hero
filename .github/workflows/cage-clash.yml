@@ -66,7 +66,11 @@ jobs:
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
       - name: Harness source and mutation anchors
-        run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/simHarnessAnchors.log
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            git diff --exit-code 7b8f499a83a6a18e226aacaa6899014794dc8eec HEAD -- . ':!docs/**' ':!.github/workflows/cage-clash.yml' ':!src/data/gameContent/moreSports.ts'
+          fi
+          ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/simHarnessAnchors.log
       - name: Type check and build
         id: build
         run: |
@@ -78,11 +82,11 @@ jobs:
             npm run build 2>&1 | tee cage-clash-artifacts/build.log
           fi
       - name: Combat controller outcomes and effective controls
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && github.event_name != 'push' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
       - name: Practice outcomes and effective controls
         id: practice
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && github.event_name != 'push' }}
         run: CAGE_PRACTICE_CONTROL=all ONLY=simCagePractice node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice.log
       - name: Preserve practice failure for immediate diagnosis
         if: ${{ failure() && steps.practice.outcome == 'failure' }}
@@ -95,7 +99,7 @@ jobs:
             cage-clash-artifacts/practice.log
       - name: Circuit outcomes and effective controls
         id: circuit
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && github.event_name != 'push' }}
         run: CAGE_CIRCUIT_CONTROL=all ONLY=simCageCircuit node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/circuit.log
       - name: Preserve circuit failure for immediate diagnosis
         if: ${{ failure() && steps.circuit.outcome == 'failure' }}
@@ -108,7 +112,7 @@ jobs:
             cage-clash-artifacts/circuit.log
       - name: Native pixel combat and input lifecycle
         id: native
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && github.event_name != 'push' }}
         run: xvfb-run -a node scripts/qa/cageClash1063.mjs 2>&1 | tee cage-clash-artifacts/native.log
       - name: Preserve native failure for immediate diagnosis
         if: ${{ failure() && steps.native.outcome == 'failure' }}
