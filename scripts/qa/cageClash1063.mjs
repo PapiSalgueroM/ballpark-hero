@@ -31,6 +31,7 @@ const ready = new Promise((resolve, reject) => {
   server.stdout.on('data', chunk => { if (String(chunk).includes('host-like server:')) { clearTimeout(timeout); resolve(); } });
 });
 const keys = { left: 'ArrowLeft', right: 'ArrowRight', guard: 'Space', jab: 'j', power: 'k', kick: 'l', grapple: 'u', submit: 'i', escape: 'o' };
+const fightStats = [['hits', 'Shots landed'], ['damageDealt', 'Damage dealt'], ['blocked', 'Blocks'], ['takedowns', 'Takedowns'], ['controlTicks', 'Top control']];
 const root = page => page.locator('[data-cage-screen]');
 async function useNativeFocus(page) {
   assert.equal(typeof page._connection?.toImpl, 'function', 'Native focus requires the in-process browser connection');
@@ -40,8 +41,8 @@ async function useNativeFocus(page) {
 }
 async function hud(page) {
   return root(page).evaluate(el => {
-    const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? Object.fromEntries(['x', 'health', 'stamina', 'submission'].map(k => [k, Number(node.dataset[k])])) : null; };
-    return { phase: el.dataset.cagePhase, tick: Number(el.dataset.cageTick), position: el.dataset.cagePosition, top: el.dataset.cageTop,
+    const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? Object.fromEntries(['x', 'health', 'stamina', 'submission', 'hits', 'damageDealt', 'blocked', 'takedowns', 'controlTicks'].map(k => [k, Number(node.dataset[k])])) : null; };
+    return { phase: el.dataset.cagePhase, tick: Number(el.dataset.cageTick), tickMs: Number(el.dataset.cageTickMs), position: el.dataset.cagePosition, top: el.dataset.cageTop,
       drill: el.dataset.cageDrill, practiceComplete: el.dataset.cagePracticeComplete === 'true',
       circuitStage: el.dataset.cageCircuitStage, circuitComplete: el.dataset.cageCircuitComplete === 'true',
       fightScore: Number(el.dataset.cageFightScore), winner: el.dataset.cageWinner, circuitScore: Number(el.dataset.cageCircuitScore),
@@ -53,7 +54,9 @@ async function measure(page) {
     const area = document.querySelector('[role="dialog"]') || document.querySelector('[data-cage-screen]');
     const box = el => { const r = el.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height, right: r.right, bottom: r.bottom, text: el.textContent }; };
     const canvas = document.querySelector('[data-cage-screen] canvas');
+    const stats = document.querySelector('[data-cage-fight-stats]');
     return { scrollY, scrollWidth: document.documentElement.scrollWidth, area: box(area), canvas: canvas ? box(canvas) : null,
+      stats: stats ? { area: box(stats), arena: box(canvas.parentElement), rows: [...stats.querySelectorAll('tr')].map(el => ({ ...box(el), cells: [...el.children].map(cell => ({ ...box(cell), scrollWidth: cell.scrollWidth, clientWidth: cell.clientWidth, fontSize: parseFloat(getComputedStyle(cell).fontSize) })) })) } : null,
       fonts: ['Inter', 'Space Grotesk'].flatMap(family => [400, 500, 600, 700].map(weight => ({ family, weight, loaded: document.fonts.check(`${weight} 16px "${family}"`, 'Cage Clash') }))),
       controls: [...area.querySelectorAll('button,select,input')].filter(el => el.getBoundingClientRect().height > 0).map(box) };
   });
@@ -65,6 +68,20 @@ function geometry(value, profile, stage) {
   const inside = r => r.x >= -2 && r.y >= -2 && r.right <= profile.width + 2 && r.bottom <= profile.height + 2;
   assert(inside(value.area), `${stage}: complete game region clipped ${JSON.stringify(value.area)}`);
   for (const box of value.controls) { assert(box.width >= 44 && box.height >= 44, `${stage}: action below44px ${JSON.stringify(box)}`); assert(inside(box), `${stage}: action clipped ${JSON.stringify(box)}`); }
+  if (value.stats) {
+    assert(value.canvas, `${stage}: recap keeps the actual arena`);
+    const contained = r => inside(r) && r.x >= value.stats.arena.x - .5 && r.right <= value.stats.arena.right + .5 && r.y >= value.stats.arena.y - .5 && r.bottom <= value.stats.arena.bottom + .5;
+    assert(contained(value.stats.area), `${stage}: stats recap clipped ${JSON.stringify(value.stats.area)}`);
+    for (const [index, row] of value.stats.rows.entries()) {
+      assert(contained(row), `${stage}: stats row clipped ${JSON.stringify(row)}`);
+      if (index) assert(value.stats.rows[index - 1].bottom <= row.y + .5, `${stage}: stats rows overlap`);
+      for (const [column, cell] of row.cells.entries()) {
+        assert(contained(cell) && cell.scrollWidth <= cell.clientWidth + 1, `${stage}: stats cell clipped ${JSON.stringify(cell)}`);
+        assert(cell.fontSize >= 10, `${stage}: stats text below10px`);
+        if (column) assert(row.cells[column - 1].right <= cell.x + .5, `${stage}: stats cells overlap`);
+      }
+    }
+  }
 }
 async function visibleFocus(locator) {
   const value = await locator.evaluate(el => { const style = getComputedStyle(el); return { active: el === document.activeElement, visible: el.matches(':focus-visible'), outline: style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0, shadow: style.boxShadow !== 'none' }; });
@@ -86,7 +103,7 @@ try {
   await ready; browser = await chromium.launch({ headless: false });
   for (const profile of profiles) {
     const id = `${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
-    const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0 };
+    const row = { id, steps: [], screenshots: [], errors: [], assetErrors: [], blockedWrites: [], blockedDatabase: [], fonts: [], inputs: 0, fightStats: [] };
     report.cases.push(row); const fontAssets = new Set();
     const context = await browser.newContext({ viewport: { width: profile.width, height: profile.height }, hasTouch: profile.input === 'touch', isMobile: profile.input === 'touch',
       colorScheme: profile.theme, reducedMotion: profile.reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
@@ -146,8 +163,48 @@ try {
     const inspect = async stage => {
       const value = await measure(page); geometry(value, profile, stage);
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' });
-      row.screenshots.push(file); row.steps.push({ stage, ...value, hud: await hud(page) }); return value;
+      const state = await hud(page);
+      if (state.phase !== 'finished' || state.drill !== 'none') {
+        assert.equal(await button('Fight stats').count(), 0, `${stage}: only a completed scored fight offers stats`);
+        assert.equal(await page.locator('[data-cage-fight-stats]').count(), 0, `${stage}: no recap outside a completed scored fight`);
+      }
+      row.screenshots.push(file); row.steps.push({ stage, ...value, hud: state }); return value;
     };
+    async function inspectFightStats(stage) {
+      const before = await hud(page), writes = structuredClone(row.blockedWrites);
+      const storage = () => page.evaluate(() => ({ local: Object.entries(localStorage).sort(), session: Object.entries(sessionStorage).sort() }));
+      const saved = await storage(), stats = page.locator('[data-cage-fight-stats]');
+      assert.equal(before.phase, 'finished'); assert.equal(before.drill, 'none'); assert(before.tickMs > 0);
+      for (const side of ['player', 'cpu']) for (const [key] of fightStats) assert(Number.isFinite(before[side][key]) && before[side][key] >= 0, `${stage}: real ${side} ${key} counter is exposed`);
+      assert(['player', 'cpu'].some(side => fightStats.some(([key]) => before[side][key] > 0)), `${stage}: the earned fight changed real counters`);
+      await activate(button('Fight stats'), profile); await stats.waitFor(); await page.clock.runFor(112);
+      const recap = await stats.evaluate(el => ({ headers: [...el.querySelectorAll('thead th')].map(cell => cell.textContent.trim()), rows: [...el.querySelectorAll('[data-cage-stat]')].map(row => ({ key: row.dataset.cageStat, cells: [...row.children].map(cell => cell.textContent.trim()) })) }));
+      assert.deepEqual(recap.headers.slice(-2), ['You', 'CPU']); assert.equal(recap.rows.length, 5);
+      assert.deepEqual(recap.rows, fightStats.map(([key, label]) => ({ key, cells: [label, ...['player', 'cpu'].map(side => key === 'controlTicks' ? `${(before[side][key] * before.tickMs / 1000).toFixed(1)}s` : String(key === 'damageDealt' ? Math.round(before[side][key]) : before[side][key]))] })), `${stage}: visible recap matches both actual fighter counters`);
+      for (const name of ['Fight stats', 'Rematch', 'Next opponent', 'New circuit']) assert.equal(await button(name).count(), 0, `${stage}: recap replaces result actions`);
+      await inspect(`${stage}-stats`);
+      const back = stats.getByRole('button', { name: 'Back', exact: true });
+      if (profile.input === 'keyboard') await visibleFocus(back);
+      if (!report.controls.includes('stats-clipping')) {
+        const table = stats.locator('table'), original = await table.getAttribute('style'), prior = await table.boundingBox(); assert(prior);
+        await table.evaluate((el, height) => { el.style.setProperty('transition', 'none', 'important'); el.style.transform = `translateY(${-2 * height}px)`; }, profile.height);
+        await page.clock.runFor(112);
+        const moved = await table.boundingBox(), clipped = await measure(page); assert(moved && moved.y + moved.height < 0 && moved.y < prior.y - prior.height, 'The recap control moves the real table outside its arena');
+        assert.throws(() => geometry(clipped, profile, 'control-stats-clipping'), /stats row clipped/);
+        await table.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), original);
+        await page.clock.runFor(112);
+        assert.equal(await table.getAttribute('style'), original); geometry(await measure(page), profile, 'stats-control-restored'); report.controls.push('stats-clipping');
+      }
+      const combat = ({ text, ...state }) => state;
+      await page.clock.runFor(1000); assert.deepEqual(combat(await hud(page)), combat(before), `${stage}: reading stats never advances or changes the earned result`);
+      await activate(back, profile); await page.clock.runFor(112); assert.equal(await stats.count(), 0);
+      if (profile.input === 'keyboard') await visibleFocus(button('Fight stats'));
+      assert.deepEqual(await hud(page), before, `${stage}: Back restores the same result`);
+      assert.deepEqual(row.blockedWrites, writes, `${stage}: opening and closing stats changes no awards or write attempts`);
+      assert.deepEqual(await storage(), saved, `${stage}: recap navigation changes no local or session saves`);
+      row.fightStats.push({ stage, counters: { player: before.player, cpu: before.cpu }, recap });
+      await inspect(`${stage}-back`);
+    }
     try {
       await page.clock.install();
       await page.goto(`${BASE}/cage-clash`, { waitUntil: 'domcontentloaded' }); await root(page).waitFor();
@@ -342,6 +399,7 @@ try {
       }
       assert.equal((await hud(page)).phase, 'finished', 'A whole real fight completes with actual controls');
       assert.match(row.result, /(?:KO|Submission|Decision).*\/100/); const terminal = await hud(page); await page.clock.runFor(1500); assert.deepEqual(await hud(page), terminal, 'Finished combat does not step or pay twice');
+      await inspectFightStats('quick-result');
       assert(seen.has('clinch') && [...seen].some(s => s.startsWith('ground-')), 'Real inputs reach both clinch and ground');
       if (profile.width === 390) {
         await activate(button('Rematch'), profile); await choose(page.getByLabel('Your style', { exact: true }), 'striker', profile); await choose(page.getByLabel('Opponent style', { exact: true }), 'grappler', profile); await activate(button('Fight'), profile);
@@ -390,6 +448,7 @@ try {
             assert.equal(initial.circuitStage, String(stage)); assert.equal(initial.circuitComplete, false); assert.equal(initial.phase, 'fight');
             assert.equal(initial.player.health, 100); assert.equal(initial.cpu.health, 100);
             assert.equal(initial.player.stamina, 100); assert.equal(initial.cpu.stamina, 100, 'Each opponent starts with fresh health and gas');
+            for (const side of ['player', 'cpu']) for (const [key] of fightStats) assert.equal(initial[side][key], 0, `${prefix}: the next opponent starts with fresh ${side} ${key}`);
             assert.match(await page.locator('[data-cage-fighter="cpu"]').textContent(), new RegExp(['balanced', 'striker', 'grappler'][stage]), 'Actual opponents follow the displayed circuit order');
             assert(await page.locator('canvas').evaluate(el => el === document.activeElement), 'Starting or advancing the circuit focuses the arena');
             await inspect(`${prefix}-start`);
@@ -408,6 +467,7 @@ try {
             assert.equal(result.circuitComplete, complete, 'Only three wins, a loss or a draw ends a circuit');
             await inspect(`${prefix}-${complete ? 'final' : 'between'}`);
             const frozen = await hud(page); await page.clock.runFor(1200); assert.deepEqual(await hud(page), frozen, 'A circuit result waits for explicit input');
+            await inspectFightStats(`${prefix}-${complete ? 'final' : 'between'}`);
             if (complete) {
               const expected = Math.round(scores.reduce((sum, score) => sum + score, 0) / 3);
               assert.equal(result.circuitScore, expected, 'Circuit score averages three slots with unplayed fights worth zero');
@@ -443,10 +503,12 @@ try {
     } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
-  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 5); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert(report.cases.every(row => row.fightStats.some(stats => stats.stage === 'quick-result')), 'All four profiles inspect earned Quick fight stats');
+  for (const row of report.cases.filter(row => row.circuit)) assert.equal(row.fightStats.filter(stats => stats.stage.startsWith('circuit-')).length, row.circuit.runs.reduce((sum, run) => sum + run.fights.length, 0), 'Every earned Circuit result gets its own current fight recap');
   assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch complete all four practice drills');
   assert.equal(report.cases.filter(row => row.circuit?.passed && row.circuit.won).length, 2, '320px touch and full-motion desktop complete winning circuits and real early stops');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
-  console.log(`cageClash1063: four complete native fights, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
+  console.log(`cageClash1063: four complete native fights, every earned fight recap, five proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
 } finally { if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); save(); }
