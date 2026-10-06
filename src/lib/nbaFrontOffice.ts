@@ -359,8 +359,11 @@ export function nbaStrength(t: NbaGmTeam): number {
   return fiveAvg * 0.72 + benchAvg * 0.28;
 }
 
-export function nbaWinProb(a: NbaGmTeam, b: NbaGmTeam): number {
-  const gap = nbaStrength(a) - nbaStrength(b);
+/* Round 1018: the two edges are strength points a GM desk adds (a staff's
+   bounded edge, src/lib/nbaGmDesk.ts). Both default to nothing, so every
+   caller that passes none plays exactly as before. */
+export function nbaWinProb(a: NbaGmTeam, b: NbaGmTeam, edgeA = 0, edgeB = 0): number {
+  const gap = (nbaStrength(a) + edgeA) - (nbaStrength(b) + edgeB);
   return 1 / (1 + Math.pow(10, -gap / 12));
 }
 
@@ -370,8 +373,16 @@ export interface RoundReport {
   notes: string[];
 }
 
+/** Round 1018: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
+export interface NbaRoundOptions {
+  /** Strength points added to a club, by abbreviation. */
+  edges?: Record<string, number>;
+  /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
+  injuryRounds?: (abbr: string, p: NbaGmPlayer, rounds: number) => number;
+}
+
 /** Simulate one round: every team plays its GAMES_PER_ROUND booked games. */
-export function simRound(league: NbaLeague, myTeam: string, rng: () => number): RoundReport {
+export function simRound(league: NbaLeague, myTeam: string, rng: () => number, opts?: NbaRoundOptions): RoundReport {
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
   let myW = 0, myL = 0;
@@ -381,6 +392,7 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
       if (p.out > 0) p.out -= 1;
       else if (rng() < 0.02) {
         p.out = 1 + Math.floor(rng() * 3);
+        if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
@@ -393,7 +405,7 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number): 
   foPlayRound(league, abbrs, GAMES_PER_ROUND, rng, (abbr, opp, k) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const p = nbaWinProb(me, them);
+    const p = opts?.edges ? nbaWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : nbaWinProb(me, them);
     /* Round 824: the deciding draw is kept so the box score can be read off
        it. Still exactly one draw, so every result is what it always was. */
     const draw = rng();
@@ -413,8 +425,8 @@ export function nbaStandings(league: NbaLeague, conf?: 'East' | 'West'): NbaGmTe
 
 export interface SeriesResult { name: string; home: string; away: string; homeWins: number; awayWins: number; winner: string }
 
-function playSeries(name: string, home: NbaGmTeam, away: NbaGmTeam, rng: () => number, toWins = 4): SeriesResult {
-  const p = nbaWinProb(home, away);
+function playSeries(name: string, home: NbaGmTeam, away: NbaGmTeam, rng: () => number, toWins = 4, edges?: Record<string, number>): SeriesResult {
+  const p = edges ? nbaWinProb(home, away, edges[home.abbr] ?? 0, edges[away.abbr] ?? 0) : nbaWinProb(home, away);
   let hw = 0, aw = 0;
   while (hw < toWins && aw < toWins) {
     if (rng() < p) hw += 1; else aw += 1;
@@ -422,36 +434,39 @@ function playSeries(name: string, home: NbaGmTeam, away: NbaGmTeam, rng: () => n
   return { name, home: home.abbr, away: away.abbr, homeWins: hw, awayWins: aw, winner: hw === toWins ? home.abbr : away.abbr };
 }
 
-/** Play-in (7-10) then three rounds per conference, then the Finals. */
-export function runNbaPlayoffs(league: NbaLeague, rng: () => number): { series: SeriesResult[]; champion: string } {
+/** Play-in (7-10) then three rounds per conference, then the Finals. Round
+    1018: `edges` are strength points a GM desk adds (src/lib/nbaGmDesk.ts);
+    absent, every series is played exactly as before. */
+export function runNbaPlayoffs(league: NbaLeague, rng: () => number, edges?: Record<string, number>): { series: SeriesResult[]; champion: string } {
+  const playEdged = (name: string, home: NbaGmTeam, away: NbaGmTeam, r: () => number, toWins = 4) => playSeries(name, home, away, r, toWins, edges);
   const series: SeriesResult[] = [];
   const confWinners: string[] = [];
   for (const conf of ['East', 'West'] as const) {
     const table = nbaStandings(league, conf).map(t => t.abbr);
     // play-in: 7v8 (winner = 7 seed), 9v10, loser78 vs winner910 for 8 seed
-    const g78 = playSeries(`${conf} Play-In 7v8`, league.teams[table[6]], league.teams[table[7]], rng, 1);
-    const g910 = playSeries(`${conf} Play-In 9v10`, league.teams[table[8]], league.teams[table[9]], rng, 1);
+    const g78 = playEdged(`${conf} Play-In 7v8`, league.teams[table[6]], league.teams[table[7]], rng, 1);
+    const g910 = playEdged(`${conf} Play-In 9v10`, league.teams[table[8]], league.teams[table[9]], rng, 1);
     const loser78 = g78.winner === table[6] ? table[7] : table[6];
-    const g8 = playSeries(`${conf} Play-In final`, league.teams[loser78], league.teams[g910.winner], rng, 1);
+    const g8 = playEdged(`${conf} Play-In final`, league.teams[loser78], league.teams[g910.winner], rng, 1);
     series.push(g78, g910, g8);
     const seeds = [table[0], table[1], table[2], table[3], table[4], table[5], g78.winner, g8.winner];
     const r1 = [
-      playSeries(`${conf} R1`, league.teams[seeds[0]], league.teams[seeds[7]], rng),
-      playSeries(`${conf} R1`, league.teams[seeds[3]], league.teams[seeds[4]], rng),
-      playSeries(`${conf} R1`, league.teams[seeds[2]], league.teams[seeds[5]], rng),
-      playSeries(`${conf} R1`, league.teams[seeds[1]], league.teams[seeds[6]], rng),
+      playEdged(`${conf} R1`, league.teams[seeds[0]], league.teams[seeds[7]], rng),
+      playEdged(`${conf} R1`, league.teams[seeds[3]], league.teams[seeds[4]], rng),
+      playEdged(`${conf} R1`, league.teams[seeds[2]], league.teams[seeds[5]], rng),
+      playEdged(`${conf} R1`, league.teams[seeds[1]], league.teams[seeds[6]], rng),
     ];
     series.push(...r1);
     const sf = [
-      playSeries(`${conf} Semis`, league.teams[r1[0].winner], league.teams[r1[1].winner], rng),
-      playSeries(`${conf} Semis`, league.teams[r1[2].winner], league.teams[r1[3].winner], rng),
+      playEdged(`${conf} Semis`, league.teams[r1[0].winner], league.teams[r1[1].winner], rng),
+      playEdged(`${conf} Semis`, league.teams[r1[2].winner], league.teams[r1[3].winner], rng),
     ];
     series.push(...sf);
-    const cf = playSeries(`${conf} Finals`, league.teams[sf[0].winner], league.teams[sf[1].winner], rng);
+    const cf = playEdged(`${conf} Finals`, league.teams[sf[0].winner], league.teams[sf[1].winner], rng);
     series.push(cf);
     confWinners.push(cf.winner);
   }
-  const finals = playSeries('NBA Finals', league.teams[confWinners[0]], league.teams[confWinners[1]], rng);
+  const finals = playEdged('NBA Finals', league.teams[confWinners[0]], league.teams[confWinners[1]], rng);
   series.push(finals);
   return { series, champion: finals.winner };
 }
@@ -754,7 +769,13 @@ export function nbaAssessTax(league: NbaLeague): NbaTaxAssessment[] {
  * the tax. Callers that pass no team (the harnesses) get the CPU treatment
  * on every club, which is what they got before.
  */
-export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: string): string[] {
+/** Round 1018: what a GM desk may hand the summer. Absent, it runs exactly as it always has. */
+export interface NbaOffseasonOptions {
+  /** The rating points a young man gains, given the points the engine drew. Draws nothing from rng. */
+  growth?: (abbr: string, p: NbaGmPlayer, step: number) => number;
+}
+
+export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: string, opts?: NbaOffseasonOptions): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -775,8 +796,11 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
     for (const p of t.players) {
       p.age += 1;
       p.out = 0;
-      if (p.age <= 24 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 3));
-      else if (p.age >= 32) p.ovr = Math.max(64, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 36 ? 2 : 0)));
+      if (p.age <= 24 && p.ovr < p.pot) {
+        /* Round 1018: the same one draw; a desk's development coach may stretch the step, never past his ceiling. */
+        const step = 1 + Math.floor(rng() * 3);
+        p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, step) : step));
+      } else if (p.age >= 32) p.ovr = Math.max(64, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 36 ? 2 : 0)));
       if (p.age >= 36 && (p.ovr <= 74 || rng() < 0.35)) { notes.push(`👋 ${p.name} retires.`); continue; }
       p.years -= 1;
       if (p.years <= 0) {

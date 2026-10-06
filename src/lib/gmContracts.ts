@@ -41,6 +41,7 @@ import {
   NBA_BIRD_MAX_YEARS, NBA_BIRD_SEASONS, NBA_EARLY_BIRD_AVERAGE, NBA_EARLY_BIRD_MAX_YEARS, NBA_EARLY_BIRD_MIN_YEARS,
   NBA_EARLY_BIRD_RAISE, NBA_NON_BIRD_MAX_YEARS, NBA_NON_BIRD_RAISE, NFL_OPTION_ROUND, NFL_OPTION_YEARS, NHL_RFA_UNDER_AGE,
   NHL_RFA_UNDER_SEASONS, nbaMaxShare, offerSheetPicks, type BirdTier, type GmSportKey,
+  NBA_RFA_MAX_SERVICE, NBA_ROOKIE_SCALE_ROUND,
 } from '@/lib/gmContractRules';
 
 /* ================================================================== */
@@ -135,6 +136,10 @@ export interface GmDecision {
   salary?: number;
   /** Picks owed to the club because he left, by round. */
   picks?: number[];
+  /** Round 1018: on a take-picks decision, the club whose sheet he signed, fixed
+      when the decision was made so the summer cannot send him somewhere else.
+      Older decisions have none and the summer reads the club the old way. */
+  club?: string;
   /** 'gm' when a person chose it, 'auto' when a policy did. */
   via: 'gm' | 'auto';
 }
@@ -229,6 +234,7 @@ export function isValidLedger(x: unknown): x is GmContractLedger {
     if (!DECISIONS.includes(d.kind) || (d.via !== 'gm' && d.via !== 'auto')) return false;
     if (STAYS.has(d.kind) && (!isNum(d.years) || !isNum(d.salary) || d.years < 1 || d.salary <= 0)) return false;
     if (d.picks != null && (!Array.isArray(d.picks) || d.picks.some(r => !isNum(r)))) return false;
+    if (d.club != null && typeof d.club !== 'string') return false;
   }
   if (l.qualifiedIds != null && (!Array.isArray(l.qualifiedIds) || l.qualifiedIds.some(id => typeof id !== 'string'))) return false;
   if (l.qoOwed != null && (!Array.isArray(l.qoOwed) || l.qoOwed.some(o => !o || typeof o.id !== 'string' || !isNum(o.season) || !isNum(o.round)))) return false;
@@ -277,6 +283,23 @@ export function birdTier(ledger: GmContractLedger, league: GmContractLeague, man
   if (n >= NBA_BIRD_SEASONS.early) return 'early';
   if (n >= NBA_BIRD_SEASONS.non) return 'non';
   return 'none';
+}
+
+/**
+ * Round 1018: an NBA man who can be a restricted free agent this winter. Only
+ * a man this GM drafted, at the end of his first deal (the only service time
+ * the save knows): a first round pick finishing his rookie scale deal, or a
+ * man with three seasons or fewer in the league (gmContractRules). Every man
+ * it lets in has played three seasons here or more, so he holds full Bird
+ * rights, and a matched sheet is always a deal his rights allow; the tier
+ * check says so in code rather than leaving it to the deal lengths.
+ */
+export function nbaRestricted(ledger: GmContractLedger, league: GmContractLeague, man: GmMan): boolean {
+  const rec = ledger.men[man.id];
+  if (rec?.how !== 'draft' || rec.firstDealDone) return false;
+  const service = seasonsHere(ledger, league, man);
+  if (service == null || birdTier(ledger, league, man) !== 'full') return false;
+  return rec.round === NBA_ROOKIE_SCALE_ROUND || service <= NBA_RFA_MAX_SERVICE;
 }
 
 export function contractClass(sport: GmSportKey, ledger: GmContractLedger, league: GmContractLeague, man: GmMan): ContractClass {
@@ -464,7 +487,11 @@ export interface DeskCase {
   /** MLB: the qualifying offer, whether he would take it, and the round of the pick owed if he does not. */
   qualifying?: GmTerms & { accepts: boolean; pick: number };
   /** NHL: the qualifying offer that keeps his rights, and the rival sheet if one is on the table. */
-  restricted?: { qualifying: GmTerms; sheet: (GmTerms & { picks: number[] }) | null };
+  restricted?: {
+    qualifying: GmTerms; sheet: (GmTerms & { picks: number[] }) | null;
+    /** Round 1018: the club that tabled the sheet, read while it is on the desk. Only with a sheet. */
+    club?: string;
+  };
   /** False when a rule takes the negotiation off the table (club control, an offer sheet). */
   canNegotiate: boolean;
 }
@@ -565,6 +592,18 @@ export function deskCase<L extends GmContractLeague>(
          club does not need the exception, so the minimum does not apply. */
       if (cls === 'bird-early' && limit > room) out.minYears = NBA_EARLY_BIRD_MIN_YEARS;
     }
+    /* Round 1018: restricted free agency, beside his Bird rights rather than
+       instead of them (they still price a new deal). The qualifying offer is
+       one season at his last salary; a rival's sheet is the hashed one the
+       NHL desk uses, held to the league's limits: never over his maximum,
+       four seasons at most from another club, and no picks paid back. */
+    if (nbaRestricted(ledger, league, man)) {
+      const club = sheetClubFor(host, league, ledger.team, man.id);
+      const raw = club ? offerSheetFor(league, man, ask, host.nextCap(league)) : null;
+      const sheet = raw ? { years: Math.min(NBA_NON_BIRD_MAX_YEARS, raw.years), salary: Math.min(raw.salary, max), picks: [] as number[] } : null;
+      out.restricted = { qualifying: { years: 1, salary: round1(Math.max(floor, man.salary)) }, sheet, ...(sheet && club ? { club } : {}) };
+      if (sheet) out.canNegotiate = false;
+    }
   }
 
   if (cls === 'pre-arbitration' || cls === 'arbitration') {
@@ -591,8 +630,9 @@ export function deskCase<L extends GmContractLeague>(
 
   if (cls === 'restricted') {
     /* A rival with no roster spot cannot sign him, so with none open there is no sheet. */
-    const sheet = sheetClubFor(host, league, ledger.team, man.id) ? offerSheetFor(league, man, ask, host.nextCap(league)) : null;
-    out.restricted = { qualifying: { years: 1, salary: round1(Math.max(floor, man.salary)) }, sheet };
+    const club = sheetClubFor(host, league, ledger.team, man.id);
+    const sheet = club ? offerSheetFor(league, man, ask, host.nextCap(league)) : null;
+    out.restricted = { qualifying: { years: 1, salary: round1(Math.max(floor, man.salary)) }, sheet, ...(sheet && club ? { club } : {}) };
     /* With a sheet on the table the only choices are to match it or take the picks. */
     if (sheet) out.canNegotiate = false;
   }
@@ -618,7 +658,7 @@ export function decisionFor(ledger: GmContractLedger, season: number, id: string
 
 function record(
   ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, kind: DecisionKind, via: 'gm' | 'auto',
-  terms?: GmTerms, picks?: number[],
+  terms?: GmTerms, picks?: number[], club?: string,
 ): Made {
   /* A walkout is final: his agent ended the call, so nothing signs him after it. */
   const before = decisionFor(ledger, league.season, c.man.id);
@@ -627,6 +667,7 @@ function record(
     season: league.season, id: c.man.id, name: c.man.name, kind, via,
     ...(terms ? { years: terms.years, salary: terms.salary } : {}),
     ...(picks && picks.length ? { picks } : {}),
+    ...(club ? { club } : {}),
   };
   ledger.decisions = ledger.decisions.filter(d => !(d.season === league.season && d.id === c.man.id));
   ledger.decisions.push(decision);
@@ -730,8 +771,9 @@ export function matchSheet(ledger: GmContractLedger, league: GmContractLeague, c
 export function takePicks(ledger: GmContractLedger, league: GmContractLeague, c: DeskCase, via: 'gm' | 'auto' = 'gm'): Made {
   const sheet = c.restricted?.sheet;
   if (!sheet) return { ok: false, reason: 'There is no offer sheet on the table.' };
-  /* The sheet's terms go down with it: he joins the club that tabled it on them. */
-  return record(ledger, league, c, 'take-picks', via, { years: sheet.years, salary: sheet.salary }, sheet.picks);
+  /* The sheet's terms go down with it: he joins the club that tabled it on
+     them, and that club is written down now, while the sheet is on the desk. */
+  return record(ledger, league, c, 'take-picks', via, { years: sheet.years, salary: sheet.salary }, sheet.picks, c.restricted?.club);
 }
 
 /** The men still waiting on a decision this winter. */
@@ -863,8 +905,13 @@ export function runDeskOffseason<L extends GmContractLeague, R>(
          at his rookie price. */
       club.players = club.players.filter(p => p.id !== man.id);
       host.endDeal?.(man);
+      /* Round 1018: the club written down when the sheet was taken, even if the
+         draft has filled its roster since (the engine's own summer waives a
+         club down to its limit). Only a decision from before that has none,
+         and that one reads the club the old way. */
+      const named = d.club != null && d.club !== ledger.team && Object.prototype.hasOwnProperty.call(league.teams, d.club) ? d.club : null;
       const sheetClub = d.kind === 'take-picks' && d.years != null && d.salary != null
-        ? sheetClubFor(host, league, ledger.team, man.id) : null;
+        ? (named ?? sheetClubFor(host, league, ledger.team, man.id)) : null;
       if (sheetClub) {
         /* He signed the rival's sheet, so he goes to that club on its terms. */
         league.teams[sheetClub].players.push({ ...man, years: (d.years ?? 1) + 1, salary: d.salary ?? man.salary });
