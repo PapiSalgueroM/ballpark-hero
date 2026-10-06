@@ -21,6 +21,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.',
       'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
       'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
+      'The action buttons show Ready, Move closer, Recover gas or Recovering using your actual range, gas and cooldown. These are hints: you can keep holding a move through recovery, and an out-of-range shot can still miss and spend gas. Paused and Not in drill explain the current controls.',
       'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
       'Choose Circuit to take on all three styles. A win unlocks Next opponent; a loss or draw ends the run. Every opponent starts a fresh fight with full health and stamina.',
       'Open Fight stats after a Quick fight or any Circuit fight to compare your shots landed, damage dealt, blocks, takedowns and time on top against the CPU. Back returns to the result so you can start another fight or advance.',

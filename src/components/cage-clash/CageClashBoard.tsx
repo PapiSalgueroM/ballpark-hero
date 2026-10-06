@@ -1,5 +1,5 @@
-import { useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
-import { CAGE_TICK_MS, canCageAction, cageActionLabel, type CageAction, type CageFighter, type CageStyle } from '@/lib/cageClash';
+import { useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
+import { CAGE_TICK_MS, canCageAction, cageActionLabel, cageActionReadiness, type CageAction, type CageFighter, type CageStyle } from '@/lib/cageClash';
 import { useCageClash, type CageControl } from '@/hooks/useCageClash';
 import { CAGE_DRILLS, canCagePracticeAction, nextCageDrill, type CageDrill } from '@/lib/cagePractice';
 import { CAGE_CIRCUIT_STYLES, isCageCircuitComplete } from '@/lib/cageCircuit';
@@ -20,6 +20,7 @@ function FighterHud({ fighter, side, practice = false }: { fighter: CageFighter;
 }
 
 export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpOpen: boolean }) {
+  const hintId = useId();
   const boardRef = useRef<HTMLElement>(null);
   const statsOpener = useRef<HTMLButtonElement | null>(null);
   const [statsOpen, setStatsOpen] = useState(false);
@@ -123,7 +124,12 @@ export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpO
           <button type="button" {...controlProps('right')} disabled={!running || fight.position !== 'standing'} className={button} aria-label="Move right"><span>Move</span><span className="mx-1 text-[9px] text-muted-foreground">D</span> ▶</button>
         </div>
         <div className="grid grid-cols-3 gap-1.5">
-          {actions.map(({ action, key }) => <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)}>{cageActionLabel(fight, action)} <span className="text-[9px] text-muted-foreground">{key}</span></button>)}
+          {actions.map(({ action, key }) => {
+            const descriptionId = `${hintId}-${action}-readiness`;
+            const hint = practice && !canCagePracticeAction(practice, action) ? 'Not in drill'
+              : !canCageAction(fight, action) ? 'Unavailable' : paused || helpOpen ? 'Paused' : cageActionReadiness(fight, action);
+            return <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} h-11 leading-3 ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)} aria-describedby={descriptionId}><span className="block">{cageActionLabel(fight, action)} <span className="text-[9px] text-muted-foreground">{key}</span></span><span id={descriptionId} data-cage-readiness={action} className="block whitespace-nowrap text-[10px] font-normal leading-3 text-muted-foreground">{hint}</span></button>;
+          })}
         </div>
         <p className="text-[10px] leading-tight text-muted-foreground">{practice ? 'Only this drill’s moves are active. Release every control to recover gas. P pauses.' : `${tip} Hold buttons or keys. P pauses.`}</p>
       </div>}

@@ -1,3 +1,31 @@
+## Round1069 claimed: Cage move readiness
+
+Codex adds descriptive readiness hints to the six existing Cage action
+buttons: Ready, Move closer, Recover gas, Recovering, Unavailable and the
+existing drill/pause context. Holding buttons remains enabled through
+cooldown and recovery. The actual engine cost/range helpers are shared
+with the hints; extraction must preserve every fight outcome and input.
+
+Design: the player sees why a move may not land in seconds, moves into
+range, uses gas wisely and retries in the existing score-free Practice.
+No new mode, route, data, save, score model, daily rotation or combat rule.
+The current100-point score stays. Compact44px controls, no page jump,
+pre-play rules/example and reopenable help stay. Help/guide/news explain
+the cues. Success means hints match actual execution at cost/range edges,
+effective negative controls and a deterministic comparison with the prior
+engine, plus real320/390 miss/range/cooldown/gas/recovery Practice proof.
+Existing mode, score, animation and native journeys stay.
+
+Branch codex/cage-readiness-1069 from main31a4ec01. Narrow claim: Cage
+engine helper extraction, Board hints, new tests/harness, native QA,
+Cage workflow, help, Cage moreSports.ts paragraph and one news line.
+Claude keeps soccer/GM, soccer2.ts and US career guide grants. AH keeps
+main/publish while Codex builds and verifies; a narrow publish window will
+be coordinated only after final acceptance. Preserve PR152 to158.
+Root drafts/seven stashes stay protected. All runtimes are remote CI only.
+No direct production DB call, production fight completion or paid AI.
+No LIVE claim yet.
+
 ## Round1068 LIVE, publish slot returns to AH
 
 Cage grappling motion is live, verified 2026-10-06 20:22:21 UTC.

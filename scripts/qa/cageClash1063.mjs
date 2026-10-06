@@ -59,6 +59,7 @@ async function measure(page) {
     return { scrollY, scrollWidth: document.documentElement.scrollWidth, area: box(area), canvas: canvas ? box(canvas) : null,
       stats: stats ? { area: box(stats), arena: box(canvas.parentElement), rows: [...stats.querySelectorAll('tr')].map(el => ({ ...box(el), cells: [...el.children].map(cell => ({ ...box(cell), scrollWidth: cell.scrollWidth, clientWidth: cell.clientWidth, fontSize: parseFloat(getComputedStyle(cell).fontSize) })) })) } : null,
       fonts: ['Inter', 'Space Grotesk'].flatMap(family => [400, 500, 600, 700].map(weight => ({ family, weight, loaded: document.fonts.check(`${weight} 16px "${family}"`, 'Cage Clash') }))),
+      hints: [...area.querySelectorAll('[data-cage-readiness]')].map(el => { const target = el.closest('button'); return { ...box(el), action: el.dataset.cageReadiness, fontSize: parseFloat(getComputedStyle(el).fontSize), scrollWidth: el.scrollWidth, clientWidth: el.clientWidth, target: box(target), label: box(target.firstElementChild), described: Boolean(el.id && target.getAttribute('aria-describedby')?.split(/\s+/).includes(el.id) && document.getElementById(el.id) === el) }; }),
       controls: [...area.querySelectorAll('button,select,input')].filter(el => el.getBoundingClientRect().height > 0).map(box) };
   });
 }
@@ -69,6 +70,12 @@ function geometry(value, profile, stage) {
   const inside = r => r.x >= -2 && r.y >= -2 && r.right <= profile.width + 2 && r.bottom <= profile.height + 2;
   assert(inside(value.area), `${stage}: complete game region clipped ${JSON.stringify(value.area)}`);
   for (const box of value.controls) { assert(box.width >= 44 && box.height >= 44, `${stage}: action below44px ${JSON.stringify(box)}`); assert(inside(box), `${stage}: action clipped ${JSON.stringify(box)}`); }
+  if (value.hints.length) assert.equal(value.hints.length, 6, `${stage}: every action has one readiness hint`);
+  for (const hint of value.hints) {
+    assert(hint.fontSize >= 10 && hint.height > 0, `${stage}: readiness text below10px`);
+    assert(hint.described, `${stage}: readiness description link is broken`);
+    assert(inside(hint) && hint.scrollWidth <= hint.clientWidth + 1 && hint.x >= hint.target.x - .5 && hint.right <= hint.target.right + .5 && hint.y >= hint.label.bottom - .5 && hint.bottom <= hint.target.bottom + .5, `${stage}: readiness text clipped or overlapping`);
+  }
   if (value.stats) {
     assert(value.canvas, `${stage}: recap keeps the actual arena`);
     const contained = r => inside(r) && r.x >= value.stats.arena.x - .5 && r.right <= value.stats.arena.right + .5 && r.y >= value.stats.arena.y - .5 && r.bottom <= value.stats.arena.bottom + .5;
@@ -215,6 +222,63 @@ try {
       assert.equal(row.blockedWrites.length, writes, 'Native animation practice sends no completion or write attempt');
       assert.deepEqual(await storage(), saved, 'Native animation practice changes no local or session save');
       console.log(`cageClash1063 ${id}: real Jab and Kick windup/contact/recovery ${profile.reduced ? 'stable reduced' : 'distinct rendered'} crops and zero practice writes passed.`);
+    }
+    async function inspectReadiness() {
+      const storage = () => page.evaluate(() => ({ local: Object.entries(localStorage).sort(), session: Object.entries(sessionStorage).sort() }));
+      const saved = await storage(), writes = row.blockedWrites.length, initial = await hud(page);
+      const hint = action => page.locator(`[data-cage-readiness="${action}"]`);
+      const waitHint = async (action, expected, steps = 20) => {
+        for (let step = 0; step < steps && await hint(action).innerText() !== expected; step++) await page.clock.runFor(100);
+        assert.equal(await hint(action).innerText(), expected, `${action} renders the actual sampled ${expected} hint`);
+        assert(!(await control(action).isDisabled()), `${expected} remains descriptive, not an input lock`);
+      };
+      row.readiness = { states: [] };
+      const capture = async (stage, screenshot = true) => {
+        const value = await measure(page); geometry(value, profile, stage);
+        row.readiness.states.push({ stage, hud: await hud(page), hints: value.hints });
+        if (screenshot) await inspect(`readiness-${stage}`);
+      };
+      assert.equal(initial.player.hits, 0); assert.equal(initial.player.x, 28); assert.equal(initial.cpu.x, 72);
+      await waitHint('jab', 'Move closer'); await waitHint('kick', 'Move closer'); await capture('out-of-range');
+      if (!report.controls.includes('readiness-font')) {
+        const target = hint('jab'), style = await target.getAttribute('style');
+        await target.evaluate(el => { el.style.fontSize = '9px'; });
+        assert.equal(await target.evaluate(el => parseFloat(getComputedStyle(el).fontSize)), 9);
+        const small = await measure(page); assert.throws(() => geometry(small, profile, 'readiness-font'), /below10px/);
+        await target.evaluate((el, original) => original === null ? el.removeAttribute('style') : el.setAttribute('style', original), style);
+        report.controls.push('readiness-font');
+        const described = await control('jab').getAttribute('aria-describedby'); assert(described);
+        await control('jab').evaluate(el => el.removeAttribute('aria-describedby'));
+        assert.equal(await control('jab').getAttribute('aria-describedby'), null);
+        const broken = await measure(page); assert.throws(() => geometry(broken, profile, 'readiness-description'), /description link/);
+        await control('jab').evaluate((el, original) => el.setAttribute('aria-describedby', original), described);
+        geometry(await measure(page), profile, 'readiness-restored'); report.controls.push('readiness-description');
+      }
+      await hold('jab', 80); const miss = await hud(page);
+      assert.equal(miss.cpu.health, initial.cpu.health); assert.equal(miss.player.hits, 0); assert(miss.player.stamina < initial.player.stamina, 'An accepted out-of-range jab still pays gas');
+      await waitHint('jab', 'Recovering'); await capture('miss-recovering', false); await page.clock.runFor(800);
+      for (let move = 0; move < 30 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) > 9; move++) await hold('right', 150);
+      await waitHint('jab', 'Ready'); await capture('in-range');
+      const close = await hud(page); assert(Math.abs(close.player.x - close.cpu.x) <= 10);
+      await hold('jab', 80); await waitHint('jab', 'Recovering');
+      const landed = await hud(page); assert.equal(landed.player.hits, 1); assert(landed.cpu.health < close.cpu.health, 'Ready jab lands through the unchanged touch control'); await capture('landed-recovering');
+      for (let move = 0; move < 20 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) <= 22; move++) await hold('left', 150);
+      await page.clock.runFor(800); await waitHint('kick', 'Move closer');
+      const beforeDrain = await hud(page), box = await control('kick').boundingBox(); assert(box); row.inputs++;
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + box.width / 2, y: box.y + box.height / 2, id: 7 }] });
+      try {
+        await waitHint('kick', 'Recover gas', 180);
+        const depleted = await hud(page); assert(depleted.player.stamina < 16); assert.equal(depleted.cpu.health, beforeDrain.cpu.health); assert.equal(depleted.player.hits, 1);
+        assert.equal(depleted.player.x, beforeDrain.player.x); assert.equal(depleted.cpu.x, beforeDrain.cpu.x);
+        await capture('low-gas');
+      } finally { await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); }
+      await waitHint('kick', 'Move closer', 50); await capture('gas-recovered', false);
+      for (let move = 0; move < 20 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) > 19; move++) await hold('right', 150);
+      await waitHint('kick', 'Ready'); await capture('kick-ready', false);
+      const after = await hud(page); assert.equal(after.player.hits, 1); assert.equal(after.practiceComplete, false);
+      assert.equal(row.blockedWrites.length, writes); assert.deepEqual(await storage(), saved, 'Readiness practice sends no completion or save');
+      row.readiness.passed = true;
+      console.log(`cageClash1063 ${id}: actual range, paid misses, recovery, gas depletion, readable linked hints and unchanged touch input passed.`);
     }
     async function inspectGroundAnimation() {
       const storage = () => page.evaluate(() => ({ local: Object.entries(localStorage).sort(), session: Object.entries(sessionStorage).sort() }));
@@ -383,8 +447,9 @@ try {
             assert.equal((await hud(page)).phase, 'fight', 'Practice remains untimed beyond a normal round');
             assert.equal((await hud(page)).player.health, 100, 'The passive practice partner does not attack');
             assert.equal((await hud(page)).practiceComplete, false, 'Waiting does not complete the lesson');
-            if (profile.width === 320) await inspectStrikeAnimations();
-            await hold('jab', 250); assert.equal((await hud(page)).cpu.health, 100, 'Out-of-range practice strikes really miss');
+            if (profile.width === 320) { await inspectStrikeAnimations(); await inspectReadiness(); }
+            const healthBeforeMiss = (await hud(page)).cpu.health;
+            await hold('jab', 250); assert.equal((await hud(page)).cpu.health, healthBeforeMiss, 'Out-of-range practice strikes really miss');
             await activate(button('How to play Cage Clash'), profile); await page.getByRole('dialog').waitFor(); await page.clock.runFor(300);
             const settled = await page.getByRole('dialog').evaluate(async el => {
               await Promise.all(el.getAnimations().map(animation => animation.finished));
@@ -398,7 +463,7 @@ try {
             await activate(button('Resume drill'), profile); await page.clock.runFor(112);
             for (let move = 0; move < 40 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) > 8; move++) await hold('right', 150);
             assert(Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) <= 8, 'Real movement reaches striking range');
-            for (let shot = 0; shot < 3; shot++) {
+            for (let shot = row.readiness?.passed ? 1 : 0; shot < 3; shot++) {
               const health = (await hud(page)).cpu.health; await hold('jab', 250);
               assert((await hud(page)).cpu.health < health, `Practice shot ${shot + 1} lands`);
               if (shot < 2) assert.equal((await hud(page)).practiceComplete, false, 'Fewer than three landed shots cannot complete striking');
@@ -456,7 +521,7 @@ try {
         await choose(page.getByLabel('Mode', { exact: true }), 'practice', profile);
         await choose(page.getByLabel('Practice drill', { exact: true }), 'striking', profile);
         await activate(button('Start drill'), profile); await page.clock.runFor(112); await inspect('animation-practice');
-        await inspectStrikeAnimations();
+        await inspectStrikeAnimations(); await inspectReadiness();
         await activate(button('Pause'), profile); const paused = await hud(page); await inspect('animation-practice-paused');
         await page.clock.runFor(500); assert.deepEqual(await hud(page), paused, 'The actual animation drill still obeys Pause');
         await activate(button('Leave drill'), profile); await page.clock.runFor(112);
@@ -649,14 +714,15 @@ try {
     } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
-  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 5); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 7); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
   assert(report.cases.every(row => row.fightStats.some(stats => stats.stage === 'quick-result')), 'All four profiles inspect earned Quick fight stats');
   for (const row of report.cases.filter(row => row.circuit)) assert.equal(row.fightStats.filter(stats => stats.stage.startsWith('circuit-')).length, row.circuit.runs.reduce((sum, run) => sum + run.fights.length, 0), 'Every earned Circuit result gets its own current fight recap');
   assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch complete all four practice drills');
   assert.equal(report.cases.filter(row => row.strikeAnimations.length === 2 && row.strikeAnimations.every(animation => animation.frames.length === 3)).length, 2, '320px reduced motion and 390px full motion each capture three real Jab and Kick action windows');
+  assert.equal(report.cases.filter(row => row.readiness?.passed && row.readiness.states.length === 7).length, 2, 'Both phone profiles prove actual descriptive readiness without changing practice writes or saves');
   assert.equal(report.cases.filter(row => row.groundAnimation?.passed && ['levels', 'effort', 'pressure'].every(kind => row.groundAnimation[kind].length === 3)).length, 2, '320px reduced motion and 390px full motion each prove three earned ground positions, grapple frames and actual submission pressure grips');
   assert.equal(report.cases.filter(row => row.circuit?.passed && row.circuit.won).length, 2, '320px touch and full-motion desktop complete winning circuits and real early stops');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
-  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, five proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
+  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, seven proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
 } finally { if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); save(); }
