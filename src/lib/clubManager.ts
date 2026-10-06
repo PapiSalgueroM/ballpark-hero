@@ -2840,6 +2840,40 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   ligue12015: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   premier2005: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring' },
   laliga2005: { nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring' },
+  /* Round 902: the 2005-06 Serie A, Bundesliga and Ligue 1, each fact from
+     two sources read 2026-10-03: RSSSF's season records
+     (https://www.rsssf.org/tablesi/ital06.html, .../tablesd/duit06.html,
+     .../tablesf/fran06.html) and ESPN's final standings with their legend
+     (https://www.espn.com/soccer/standings/_/league/ITA.1/season/2005, and
+     .../GER.1/season/2005 and .../FRA.1/season/2005).
+     - Europe. A qualifying route counts as in, and the places a CUP handed
+       down are not league places, the way premier2005 counts fifth only.
+       Italy: first and second into the Champions League, third and fourth
+       its qualifying, fifth and sixth the UEFA Cup; the seventh place ESPN
+       lists was the Coppa Italia's, handed down because Inter, the cup
+       winners (RSSSF, https://www.rsssf.org/tablesi/italcup06.html), were
+       already in the Champions League. Germany: first and
+       second in, third qualifying, fourth and fifth the UEFA Cup (fourteenth
+       Frankfurt went in as the beaten DFB-Pokal finalists). France: first
+       and second in, third qualifying, fourth the UEFA Cup (ninth PSG and
+       twelfth Nancy went in as the winners of the two cups).
+     - Relegation. Three down in all three. Germany played no relegation
+       playoff that season (RSSSF), so the row needs no simplification.
+       Italy's table was rewritten after the season by the Calciopoli
+       sentences; the game plays its own season, and the row carries only
+       the number that sent clubs down, three, as both sources show.
+     - The cups, one per nation: the Coppa Italia, the DFB-Pokal (Bayern
+       1-0 Frankfurt, RSSSF) and the Coupe de France (PSG 2-1 Marseille,
+       RSSSF). France's Coupe de la Ligue is not modelled.
+     - Level on points. No row claims a rule that was not found in two
+       sources for that season: the Bundesliga and Ligue 1 tables split
+       level clubs on goal difference and then goals scored (Mainz above
+       Hannover, PSG above Monaco on goals), and Serie A's switch from
+       playoffs to head to head is dated by neither source, so all three
+       take the default, goal difference then goals scored. */
+  seriea2005: { nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 6, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  bundesliga2005: { nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 3, uel: 5, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, ladder: 'top', season: 'autumnSpring' },
+  ligue12005: { nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0, uelName: 'UEFA Cup' }, drop: 3, ladder: 'top', season: 'autumnSpring' },
   /* Round 971: the 2020-21 big five, each fact from two sources read
      2026-10-03: RSSSF's season records (https://www.rsssf.org/tablese/eng2021.html,
      tabless/span2021.html, tablesi/ital2021.html, tablesd/duit2021.html,
@@ -3353,6 +3387,30 @@ export const ERA_LEAGUES: Record<string, LeagueDef[]> = {
       id: 'laliga2005', name: 'La Liga',
       clubs: ['Alavés', 'Athletic Club', 'Atlético Madrid', 'Barcelona', 'Cádiz', 'Celta Vigo', 'Deportivo La Coruña', 'Espanyol', 'Getafe', 'Málaga', 'Mallorca', 'Osasuna', 'Racing Santander', 'Real Betis', 'Real Madrid', 'Real Sociedad', 'Sevilla', 'Valencia', 'Villarreal', 'Zaragoza'],
     },
+    /* Round 902: the era becomes a full big five. Membership of all three
+       from two publishers that agree on every club, read 2026-10-03:
+       RSSSF's season records (https://www.rsssf.org/tablesi/ital06.html,
+       .../tablesd/duit06.html, .../tablesf/fran06.html) and ESPN's final
+       standings (https://www.espn.com/soccer/standings/_/league/ITA.1/season/2005,
+       .../GER.1/season/2005, .../FRA.1/season/2005), AND against the market
+       values table itself. Listed alphabetically, like the two leagues above,
+       so no list here reads as a final table (Serie A's was rewritten after
+       the season). Names reuse the 2026 spelling, or the 2015-16 era's,
+       wherever the club exists there, so colours and rivalries carry over.
+       Nancy, Troyes and Treviso, all promoted that summer, are the thin
+       squads and the picker says so. */
+    {
+      id: 'seriea2005', name: 'Serie A',
+      clubs: ['AC Milan', 'Ascoli', 'Cagliari', 'Chievo Verona', 'Empoli', 'Fiorentina', 'Inter Milan', 'Juventus', 'Lazio', 'Lecce', 'Livorno', 'Messina', 'Palermo', 'Parma', 'Reggina', 'Roma', 'Sampdoria', 'Siena', 'Treviso', 'Udinese'],
+    },
+    {
+      id: 'bundesliga2005', name: 'Bundesliga',
+      clubs: ['Arminia Bielefeld', 'Bayer Leverkusen', 'Bayern Munich', 'Borussia Dortmund', 'Duisburg', 'Eintracht Frankfurt', 'Gladbach', 'Hamburg', 'Hannover 96', 'Hertha BSC', 'Kaiserslautern', 'Köln', 'Mainz', 'Nürnberg', 'Schalke 04', 'Stuttgart', 'Werder Bremen', 'Wolfsburg'],
+    },
+    {
+      id: 'ligue12005', name: 'Ligue 1',
+      clubs: ['AC Ajaccio', 'Auxerre', 'Bordeaux', 'Le Mans', 'Lens', 'Lille', 'Lyon', 'Marseille', 'Metz', 'Monaco', 'Nancy', 'Nantes', 'Nice', 'PSG', 'Rennes', 'Saint-Étienne', 'Sochaux', 'Strasbourg', 'Toulouse', 'Troyes'],
+    },
   ].map(leagueFromRow),
   /* Round 971: the 2020-21 season, a full big five from the start. Every
      membership is the final table of that season from two publishers that
@@ -3678,6 +3736,16 @@ const CLUB_COLORS: Record<string, string> = {
   // Round 176: 2005-06 era clubs not covered above.
   'Cádiz': '#ffe100', 'Zaragoza': '#2b5da8', 'Wigan Athletic': '#1d59af',
   'Almería': '#d02128', 'Hércules': '#1d59af',
+  // Round 902: 2005-06 Serie A, Bundesliga and Ligue 1 clubs not covered
+  // above, the same derivation: the club's plain home kit colour from this
+  // file's own palette, no crest art (amaranth Livorno and Reggina, black and
+  // white Ascoli and Siena, Treviso's sky blue, Duisburg's zebra blue,
+  // and the reds of Messina and AC Ajaccio). Nancy and Sochaux, also new to
+  // this era, already carry Round 901's colours just above (one map for all
+  // eras), so they are not repeated here.
+  'Livorno': '#7d1c2a', 'Reggina': '#7d1c2a', 'Ascoli': '#c9c9c9', 'Siena': '#d5d5d5',
+  'Treviso': '#95bfe5', 'Messina': '#d02128', 'Duisburg': '#0060ae',
+  'AC Ajaccio': '#d02128',
   // Round 177: Austrian Bundesliga
   'RB Salzburg': '#d02128', 'Sturm Graz': '#2b2b2b', 'Rapid Wien': '#0a7040',
   'LASK': '#2b2b2b', 'Wolfsberger AC': '#d9d9d9', 'Austria Wien': '#5c2d91',

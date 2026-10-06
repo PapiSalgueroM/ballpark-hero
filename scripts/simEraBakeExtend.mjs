@@ -24,9 +24,11 @@
  *      ERA_PULL and ERA_NEXT), the real 2015-16 bake is rebuilt from the
  *      60 club file it grew from (git show 89d31144) with --check, which must
  *      say byte identical, and since Round 901 the 2010-11 bake the same way
- *      from its 40 club file (git show 06dc0741). Since Round 971 the 2020-21
- *      bake too, which grows from an empty era of its own and reads one pull
- *      (ERA_PULL_2020). Without the pulls this part prints SKIPPED and why;
+ *      from its 40 club file (git show 06dc0741), since Round 902 the 2005-06
+ *      bake from its 40 club file (git show 06dc0741 too, Round 899's head,
+ *      where the 2005-06 file was still Round 176's), and since Round 971 the
+ *      2020-21 bake, which grows from an empty era of its own and reads one
+ *      pull (ERA_PULL_2020). Without the pulls this part prints SKIPPED and why;
  *      A and B do not need them and always run.
  *
  * Round 901 review fix: a name with rows at two clubs of the new leagues is
@@ -36,10 +38,14 @@
  * Negative controls, SIM_ERA_EXTEND_CONTROL=noprove|nostillin|nodupe|nosplit: the
  * harness imports a COPY of the lib with that guard cut out (it first proves
  * the guarded line is in the lib, and refuses with exit 2 if not), and the
- * run must then end red. Nothing on disk outside the temp folder changes.
+ * run must then end red. SIM_ERA_EXTEND_CONTROL=c2drift (Round 902 review
+ * fix) runs C's 2005-06 rebuild on a copy of that bake with one proved
+ * correction cut out, and it must then say the rebuilt file differs (it refuses with exit 2
+ * when the pulls are not here or the line is gone).
  * SIM_ERA_EXTEND_CONTROL=stale2020 (Round 971) leaves the lib alone and runs
  * the 2020-21 rebuild against a copy of the shipped era file with one name
- * edited by hand: part C must go red on it.
+ * edited by hand: part C must go red on it. Nothing on disk outside the
+ * temp folder changes.
  *
  * Run: node scripts/simEraBakeExtend.mjs
  */
@@ -64,13 +70,23 @@ const CONTROLS = {
   nosplit: ['if (undeclaredSplit.length) die(', 'if (false) die('],
 };
 const CONTROL = process.env.SIM_ERA_EXTEND_CONTROL ?? '';
+/* Round 902 review fix: the 2005-06 rebuild (it was its own part C2 before
+   Round 901 lifted C into one loop over the eras) had no control of its own,
+   every control skipped it. c2drift rebuilds the 2005-06 bake from a COPY of
+   bakeEra2005.mjs with one proved correction (Kuranyi, Stuttgart to Schalke)
+   cut out, so the rebuilt file can no longer match the shipped one and that
+   rebuild must go red. A and B run on the real lib; the other eras' rebuilds
+   are skipped. */
+const C2_DRIFT = /^ {2}\{ n: 'Kevin Kuranyi', to: 'Schalke 04',.*\r?\n/m;
 /* Round 971 review fix: the one control aimed at part C rather than the lib.
    It hands the 2020-21 rebuild a copy of the shipped era file with one
    player's name changed, the way a hand edit of the generated file would,
    and the run must end red on that rebuild. */
 const C_CONTROL = CONTROL === 'stale2020';
 let libUrl = pathToFileURL(LIB).href;
-if (CONTROL && !C_CONTROL) {
+if (CONTROL === 'c2drift') {
+  console.log('CONTROL c2drift: the 2005-06 rebuild runs a bake copy without the Kuranyi move');
+} else if (CONTROL && !C_CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
   const src = fs.readFileSync(LIB, 'utf8');
@@ -204,7 +220,9 @@ console.log('B) every guard dies on its own bad correction');
   /* [what it breaks, how, the words its death must carry] */
   const CASES = [
     ['a spelling with no rows', c => { c.newLeagues = [{ ...NEW_LEAGUE, dbToEra: { ...NEW_LEAGUE.dbToEra, 'Ghost FC': 'Ghost' } }]; }, 'the spelling map is wrong'],
-    ['an unmapped position', c => { c.rows = [...ROWS, row('Pat Odd', 'Gamma FC', 'Sweeper', 20, 1e6)]; }, 'unmapped position'],
+    /* Round 902 moved 'Sweeper' into the lib's map (the 2005 bake had always
+       mapped it), so the unmapped position here is one no map knows. */
+    ['an unmapped position', c => { c.rows = [...ROWS, row('Pat Odd', 'Gamma FC', 'Libero', 20, 1e6)]; }, 'unmapped position'],
     ['the extend run twice', c => { c.newLeagues = [{ label: 'Again', dbToEra: { 'Alpha AFC': 'Alpha' } }]; }, 'must not run twice'],
     ['a shipped file holding a name twice', c => { c.file = writeShipped('twice.ts', { players: 7, extraLine: SHIPPED.Alpha[0] }); }, 'twice'],
     ['a META that miscounts', c => { c.file = writeShipped('meta.ts', { players: 9 }); }, 'META says'],
@@ -263,13 +281,34 @@ const PULL_2020 = process.env.ERA_PULL_2020 ?? 'C:/Users/antho/dukb-handoff/data
 const REBUILDS = [
   { label: '2015-16', script: 'bakeEra2015.mjs', base: '89d31144', file: 'clubManagerEra2015.ts', clubs: 60, pulls: [PULL_0515, NEXT_0515] },
   { label: '2010-11', script: 'bakeEra2010.mjs', base: '06dc0741', file: 'clubManagerEra2010.ts', clubs: 40, pulls: [PULL_0515, NEXT_0515] },
+  /* Round 902: base 06dc0741 is Round 899's head, where the 2005-06 file was
+     still Round 176's. drift is the line control c2drift cuts. */
+  { label: '2005-06', script: 'bakeEra2005.mjs', base: '06dc0741', file: 'clubManagerEra2005.ts', clubs: 40, pulls: [PULL_0515, NEXT_0515], drift: C2_DRIFT },
   { label: '2020-21', script: 'bakeEra2020.mjs', base: null, file: 'clubManagerEra2020.ts', clubs: 0, pulls: [PULL_2020] },
 ];
 for (const rb of REBUILDS) {
   console.log(`C) the ${rb.label} bake rebuilds from its ${rb.clubs} club base byte for byte`);
   let skip = null;
-  if (CONTROL && !(C_CONTROL && rb.label === '2020-21')) skip = 'a control run checks A and B only (stale2020 also runs the 2020-21 rebuild)';
+  const drift = CONTROL === 'c2drift' && rb.drift;
+  if (CONTROL && !drift && !(C_CONTROL && rb.label === '2020-21')) skip = 'a control run checks A and B only (c2drift also runs the 2005-06 rebuild, stale2020 the 2020-21 one)';
   else if (!rb.pulls.every(p => fs.existsSync(p))) skip = `the offline pulls are not on this machine (${rb.pulls.join(', ')}); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it`;
+  if (skip && drift) { console.error(`CONTROL c2drift did not apply: ${skip}`); process.exit(2); }
+  /* The bake it runs: the real one, or under c2drift a copy laid out the way
+     the bake expects (scripts/, scripts/lib/, and the shipped era file it
+     compares against under src/data/), all inside the temp folder. */
+  let bake = path.join(ROOT, 'scripts', rb.script);
+  if (!skip && drift) {
+    const src = fs.readFileSync(bake, 'utf8');
+    if (!rb.drift.test(src)) { console.error('CONTROL c2drift did not apply: the bake has no Kuranyi move line'); process.exit(2); }
+    const mirror = path.join(TMP, 'mirror');
+    fs.mkdirSync(path.join(mirror, 'scripts', 'lib'), { recursive: true });
+    fs.mkdirSync(path.join(mirror, 'src', 'data'), { recursive: true });
+    fs.writeFileSync(path.join(mirror, 'scripts', rb.script), src.replace(rb.drift, ''));
+    fs.copyFileSync(LIB, path.join(mirror, 'scripts', 'lib', 'eraBakeExtend.mjs'));
+    fs.copyFileSync(path.join(ROOT, 'src', 'data', rb.file), path.join(mirror, 'src', 'data', rb.file));
+    bake = path.join(mirror, 'scripts', rb.script);
+    console.log('   CONTROL c2drift applied: the bake copy has no Kuranyi move');
+  }
   let base = null;
   if (!skip && rb.base) {
     try {
@@ -293,7 +332,7 @@ for (const rb of REBUILDS) {
   let out = '';
   let code = 0;
   try {
-    out = execFileSync(process.execPath, [path.join(ROOT, 'scripts', rb.script), ...args],
+    out = execFileSync(process.execPath, [bake, ...args],
       { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 });
   } catch (e) { code = e.status ?? 1; out = `${e.stdout ?? ''}${e.stderr ?? ''}`; }
   const verdict = out.split('\n').filter(l => l.startsWith('CHECK:') || l.startsWith('FATAL:')).join(' / ');
