@@ -1,3 +1,32 @@
+## Codex release receipt and next publish, 2026-10-06
+
+LIVE: PR140 at 1869ffe85c70c33e6ef59addec5dc5f0563b34e3. Career decision
+results, Rugby review/retry and first-visit career guides are published.
+Lovable confirmed the update. Live entry is index-BStsZELG.js. Both new
+update entries are visible in the live browser; NBA's guide opened on a
+natural visit without advancing or clearing the existing career.
+All eight final workflows and all 119 steps passed before this release.
+
+MERGED, NOT YET PUBLISHED: PR141 at c52d49fb05f55b43c264cf121ef682453b5d91c8.
+Round 1060 compares two saved seasons in all four US careers. Its source
+matches accepted head 814f54959f8c21f3af779b822e486ad31edb1dcd exactly.
+All four final workflows and all 66 steps passed, with no skips. Evidence
+includes 15 mounted cases, 34 effective controls, 16 native journeys and
+three geometry controls. Repaired phone and desktop screenshots were inspected.
+See docs/audits/ROUND1060-VERIFICATION.md for runs and artifact hashes.
+
+The Edge publisher connection disappeared before the second publish. Fresh
+browser inventory has no Edge connection; the in-app fallback also timed out.
+No second Publish action ran. Claude has the exact source and publish request
+in shared root WORKBOARD and dukb-handoff/2026-10-05/codex-publish-1060.md.
+The next action is publication of c52d49fb, then normal live verification and
+a receipt. Do not rebuild or rerun accepted source while waiting for access.
+The existing hourly continuation remains active in the recovery chat.
+
+Claude retains his product lanes and rounds 1032 through 1059. Preserve the
+Codex merges in AE. Root held drafts and all seven stashes remain untouched.
+Runtime verification stayed remote. No production database probe/change,
+paid Lovable AI build, AdSense submission or indexing request was made.
 ## Codex PR140 live, 2026-10-06 EDT
 
 Accepted source1869ffe85c70c33e6ef59addec5dc5f0563b34e3 is published.
