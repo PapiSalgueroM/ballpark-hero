@@ -8,7 +8,7 @@
  * paged 1,000 at a time ordered by player id then sort_order, and assists left
  * null where the league did not record them (never coerced to 0).
  *
- * 252 players, 3727 season rows, 262 of them with null assists.
+ * 252 players, 3727 season rows, 260 of them with null assists.
  * scripts/simCareerFallback.mjs fails when this file differs from a fresh bake.
  * Regenerate with: node scripts/bakeCareerPlayers.mjs
  */
@@ -18,7 +18,7 @@ export const CAREER_FALLBACK_META = {
   generated: '2026-10-05',
   players: 252,
   seasons: 3727,
-  nullAssists: 262,
+  nullAssists: 260,
 };
 
 export const careerPlayers: CareerPlayer[] = [
@@ -2857,7 +2857,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "PSG", goals: 39, assists: 26, appearances: 46, marketValue: 160 },
       { season: "2022-2023", club: "PSG", goals: 41, assists: 10, appearances: 43, marketValue: 180 },
       { season: "2023-2024", club: "PSG", goals: 44, assists: 10, appearances: 48, marketValue: 180 },
-      { season: "2024-2025", club: "Real Madrid", goals: 44, assists: null, appearances: 59, marketValue: 180 },
+      { season: "2024-2025", club: "Real Madrid", goals: 44, assists: 5, appearances: 59, marketValue: 180 },
       { season: "2025-2026", club: "Real Madrid", goals: 42, assists: 6, appearances: 44, marketValue: 0 },
     ],
   },
@@ -5197,7 +5197,7 @@ export const careerPlayers: CareerPlayer[] = [
       { season: "2021-2022", club: "Napoli", goals: 18, assists: 6, appearances: 32, marketValue: 60 },
       { season: "2022-2023", club: "Napoli", goals: 31, assists: 5, appearances: 39, marketValue: 100 },
       { season: "2023-2024", club: "Napoli", goals: 17, assists: 4, appearances: 32, marketValue: 110 },
-      { season: "2024-2025", club: "Galatasaray", goals: 37, assists: null, appearances: 41, marketValue: 75 },
+      { season: "2024-2025", club: "Galatasaray", goals: 37, assists: 7, appearances: 41, marketValue: 75 },
       { season: "2025-2026", club: "Galatasaray", goals: 22, assists: null, appearances: 33, marketValue: 0 },
     ],
   },

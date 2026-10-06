@@ -27,7 +27,7 @@
     "inserted": "A spell of 2024-2025 the pool never carried (a mid-season move, or the Club World Cup at a new club) is an inserted row, placed directly before or after one existing row named by season and club as it reads once the changed entries are applied.",
     "club": "A 2024-2025 row filed under the wrong club is a changed entry with field club; every changed entry names its row by the club it read before the ledger, and the migration guards the new season and club key as free.",
     "noGames": "A spell without a game gets no row (Raheem Sterling at Chelsea in 2025-2026).",
-    "assists": "Assists two hosts agree on are written; where two disagree a third host may settle it (each shard recorded which); a null a shard wrote stays null, and nobody picks between two disagreeing sources."
+    "assists": "Assists ship when two independent hosts agree; a dissenting third host is recorded as a note (Mbappé and Osimhen 2024-2025, ruled 2026-10-06); when the two primary hosts disagree, a third settles it (each shard recorded which) or the value is null. A null a shard wrote stays null, and nobody picks between two disagreeing sources."
   },
   "sources": {
     "lfchistory": "lfchistory.net season archive pages: appearances, goalscorers and assists per season with League, FA Cup, League Cup, Europe and Other columns (season 134 is 2024-2025, 135 is 2025-2026), read 2026-10-05",
@@ -48,7 +48,7 @@
     "seasons": 3640
   },
   "postBake": {
-    "sha256": "ec3e2b651608f4a4406c5caa308c13e02d6cc6f3a3eb834525c92e71f5e425b5",
+    "sha256": "3a2158802b9fa56ac335515f7644ff1a94f02b3818c454befa9c54447578bb42",
     "players": 252,
     "seasons": 3727,
     "stamp": "2026-10-05"
@@ -2001,8 +2001,8 @@
       "club": "Real Madrid",
       "field": "assists",
       "from": 4,
-      "to": null,
-      "note": "Assists null (n/a), the lead's ruling of 2026-10-06: a third host disagrees with the two that agree, so the value is not settled. footballdatabase.eu reads 5 and besoccer reads 5 (Champions League 1 assist), while us.soccerway.com/player/mbappe-kylian/Wn6E2SED/ (read 2026-10-06) gives Champions League 2024/2025 14 matches 7 goals 2 assists, so its total is 6. The migration still guards the old value 4.",
+      "to": 5,
+      "note": "Two independent hosts agree on 5 (footballdatabase.eu and besoccer, Champions League 1 assist), so the value ships under the assists convention. A dissenting third host, recorded here: us.soccerway.com/player/mbappe-kylian/Wn6E2SED/ (read 2026-10-06) gives Champions League 2024/2025 14 matches 7 goals 2 assists, so its total would be 6.",
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
         { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
@@ -4574,8 +4574,8 @@
       "club": "Galatasaray",
       "field": "assists",
       "from": 5,
-      "to": null,
-      "note": "Assists null (n/a), the lead's ruling of 2026-10-06: a third host disagrees with the two that agree, so the value is not settled. fotmob reads 7 and besoccer reads 7 (Turkish Cup 1 assist), while us.soccerway.com/player/osimhen-victor/23YHG47R/ (read 2026-10-06) prints the 2024/2025 Turkish Cup row as 4 | 5 | 0 | 1 | 0, which in its column order (matches, goals, assists, cards) is 0 assists, so its total is 6. The migration still guards the old value 5.",
+      "to": 7,
+      "note": "Two independent hosts agree on 7 (fotmob and besoccer, Turkish Cup 1 assist), so the value ships under the assists convention. A dissenting third host, recorded here: us.soccerway.com/player/osimhen-victor/23YHG47R/ (read 2026-10-06) prints the 2024/2025 Turkish Cup row as 4 | 5 | 0 | 1 | 0, which in its column order (matches, goals, assists, cards) is 0 assists, so its total would be 6.",
       "sources": [
         { "url": "https://www.fotmob.com/players/687681/victor-osimhen", "fields": [ "club", "assists" ], "reads": "Career history, Galatasaray 2024/2025: Super Lig 30 (26, 5), Turkish Cup 4 (5, 1), Europa League 7 (6, 1): 41 apps 37 goals 7 assists; on loan from Napoli 2024-09-04 to 2025-06-30" },
         { "url": "https://www.besoccer.com/player/career-path/v-osimhen-295520", "fields": [ "club", "assists" ], "reads": "Career path, Galatasaray SK 2024/25: 41 apps 37 goals 7 assists (Super Lig 30, 26, 5; Europa League 7, 6, 1; Turkish Cup 4, 5, 1)", "note": "fotmob and besoccer agree on 7; soccerway reads 6 (no Turkish Cup assist)" }
