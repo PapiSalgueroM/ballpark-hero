@@ -346,7 +346,7 @@
     "opponent": "Paris Saint-Germain",
     "scoreLine": "Barcelona 6-1 Paris Saint-Germain (Barcelona win 6-5 on aggregate)",
     "venue": "Camp Nou, Barcelona",
-    "formationLabel": "3-1-4-2"
+    "formationLabel": ""
    },
    "hints": [
     {
@@ -430,8 +430,8 @@
     {
      "path": "formationLabel",
      "from": "4-3-3",
-     "to": "3-1-4-2",
-     "why": "both hosts have only three defenders (ESPN CD, CD-L, CD-R; UEFA Mascherano, Pique, Umtiti), so a back four is impossible; ESPN states 3-1-4-2, UEFA no label"
+     "to": "",
+     "why": "both hosts refute the old 4-3-3 (three centre-backs on ESPN and in UEFA's coordinates) but they draw different shapes: ESPN states 3-1-4-2 with Messi up front, UEFA's coordinates put Messi behind a line of Rafinha, Suarez and Neymar. UEFA states no label, so no label is shown. Rule 1 lets a field change only when two hosts agree on the new value, and keeping a label both hosts refute would show something known to be false, so the page shows none until two hosts agree"
     },
     {
      "path": "slots[1].name",
@@ -536,7 +536,8 @@
    ],
    "notes": [
     "Date, score, aggregate, venue, stage match both sources.",
-    "Round 1026: the old comment claimed Sergi Roberto started, the super-sub trap the file header warns about; both hosts have him coming on 76'."
+    "Round 1026: the old comment claimed Sergi Roberto started, the super-sub trap the file header warns about; both hosts have him coming on 76'.",
+    "Round 1026 (review fix): the 3-1-4-2 rested on ESPN's label alone (UEFA states none and its coordinates read closer to a 3-4-3 diamond). The label is now empty; the back three and the sides stay, both on two hosts."
    ]
   },
   {

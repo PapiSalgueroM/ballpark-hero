@@ -873,7 +873,7 @@
     "opponent": "Liverpool",
     "scoreLine": "AC Milan 2-1 Liverpool",
     "venue": "Olympic Stadium, Athens",
-    "formationLabel": "4-3-2-1"
+    "formationLabel": ""
    },
    "hints": [
     {
@@ -952,8 +952,8 @@
     {
      "path": "formationLabel",
      "from": "4-3-1-2",
-     "to": "4-3-2-1",
-     "why": "the eleven both hosts publish has one striker, so a front two is impossible; ESPN is the only host stating a shape (4-3-2-1: Pirlo, Ambrosini, Gattuso; Seedorf and Kaka behind Inzaghi)"
+     "to": "",
+     "why": "ESPN alone states a shape (4-3-2-1, Kaka CF-R and Seedorf CF-L behind Inzaghi); UEFA states none and its position listing (Kaka and Inzaghi FORWARD) does not refute the old 4-3-1-2 either. The old label was never sourced and its eleven changed under it (Pirlo for Gilardino), so no label is shown. Rule 1 lets a field change only when two hosts agree on the new value, and keeping a label both hosts refute would show something known to be false, so the page shows none until two hosts agree"
     },
     {
      "path": "slots[1].name",
@@ -1028,7 +1028,8 @@
    ],
    "notes": [
     "The entry's source note ('Gilardino starting over Pippo alone up top') is contradicted by both hosts: Inzaghi started alone and scored both Milan goals (45', 82' per UEFA).",
-    "Round 1026: formation set to ESPN 4-3-2-1 because the two host eleven has one striker; UEFA states no shape. Kaka and Seedorf sides not stated."
+    "Round 1026 (superseded by the review fix below): formation set to ESPN 4-3-2-1 because the two host eleven has one striker; UEFA states no shape. Kaka and Seedorf sides not stated.",
+    "Round 1026 (review fix): the 4-3-2-1 rested on ESPN alone, against rule 1. The label is now empty and the page shows no shape; the tiles keep ESPN's placement (Kaka right and Seedorf left behind Inzaghi, ESPN CF-R and CF-L), which no host contradicts. Open for a second host stating a shape."
    ]
   },
   {
@@ -1354,7 +1355,7 @@
     "opponent": "Germany",
     "scoreLine": "Germany 0-1 Spain",
     "venue": "Ernst Happel Stadion, Vienna",
-    "formationLabel": "4-1-4-1"
+    "formationLabel": "4-5-1"
    },
    "hints": [
     {
@@ -1405,8 +1406,8 @@
     {
      "path": "formationLabel",
      "from": "4-4-2",
-     "to": "4-1-4-1",
-     "why": "both hosts have one forward (ESPN position groups: Torres the only F; UEFA: Torres the only striker), so a front two is impossible; UEFA coordinates draw Senna alone in front of the back four and a line of four"
+     "to": "4-5-1",
+     "why": "both hosts refute two strikers and agree on the lines: UEFA's coordinates draw four defenders, Senna alone, a line of four and Torres (4-1-4-1), and ESPN lists four D, five M and one F (Torres). The label is the four, five and one both state; the finer 4-1-4-1 rests on UEFA alone"
     },
     {
      "path": "slots[6].position",
@@ -1461,7 +1462,8 @@
     "Entry comment (Fabregas, not Xabi Alonso, started) confirmed: Alonso came on 63' for Fabregas.",
     "Blank candidates Marchena, Fabregas, Capdevila all started and stay valid.",
     "Formation not checkable as a diff (no host publishes a label): entry says 4-4-2; Not labelled by either host; UEFA's coordinates show one striker (Torres) with Senna screening a midfield four, a 4-1-4-1 shape, not two strikers.",
-    "Round 1026: 4-1-4-1 and the sides come from UEFA coordinates; ESPN gives position groups only (one forward, five midfielders), which agree."
+    "Round 1026: 4-1-4-1 and the sides come from UEFA coordinates; ESPN gives position groups only (one forward, five midfielders), which agree.",
+    "Round 1026 (review fix): the 4-1-4-1 rested on UEFA's coordinates alone; ESPN gives lines, not a shape. The label is now 4-5-1, the lines both hosts state. Senna's CDM tile and the line of four follow UEFA's coordinates, which ESPN's lines do not contradict."
    ]
   },
   {
@@ -2795,7 +2797,7 @@
     "opponent": "Chelsea",
     "scoreLine": "Liverpool 1-0 Chelsea (Liverpool win 1-0 on aggregate)",
     "venue": "Anfield, Liverpool",
-    "formationLabel": "4-2-3-1"
+    "formationLabel": "4-5-1"
    },
    "hints": [
     {
@@ -2866,8 +2868,8 @@
     {
      "path": "formationLabel",
      "from": "4-4-1-1 diamond",
-     "to": "4-2-3-1",
-     "why": "both hosts have one forward (ESPN position groups, UEFA striker), so two strikers is impossible; UEFA coordinates draw Hamann and Biscan as a pair, Luis Garcia, Gerrard and Riise in a line of three, Baros alone"
+     "to": "4-5-1",
+     "why": "both hosts refute two strikers and agree on the lines: UEFA's coordinates draw four defenders, Hamann and Biscan as a pair, Luis Garcia, Gerrard and Riise, and Baros (4-2-3-1), and ESPN lists four D, five M and one F (Baros). The label is the four, five and one both state; the finer 4-2-3-1 rests on UEFA alone"
     },
     {
      "path": "slots[5].name",
@@ -2920,7 +2922,8 @@
     "The entry's header comment calls this 'AC Milan 0-3 Liverpool'; the entry fields themselves (Liverpool 1-0 Chelsea, Anfield, 2005-05-03) are right.",
     "Blank candidates Traore and Baros started and stay valid.",
     "Formation not checkable as a diff (no host publishes a label): entry says 4-4-1-1 diamond; no label on either host; UEFA's coordinates show one striker with two holding midfielders and three behind him, not a diamond and not two strikers.",
-    "Round 1026: 4-2-3-1 and the sides from UEFA coordinates (re-read 2026-10-06); ESPN position groups (one forward) agree."
+    "Round 1026: 4-2-3-1 and the sides from UEFA coordinates (re-read 2026-10-06); ESPN position groups (one forward) agree.",
+    "Round 1026 (review fix): the 4-2-3-1 rested on UEFA's coordinates alone; ESPN gives lines, not a shape. The label is now 4-5-1, the lines both hosts state; the tiles follow UEFA's coordinates, which ESPN's lines do not contradict."
    ]
   },
   {

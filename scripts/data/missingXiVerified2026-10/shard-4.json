@@ -2190,7 +2190,7 @@
     "opponent": "France",
     "scoreLine": "France 1-0 Belgium",
     "venue": "Saint Petersburg Stadium, Saint Petersburg",
-    "formationLabel": "4-3-3"
+    "formationLabel": ""
    },
    "hints": [
     {
@@ -2282,8 +2282,8 @@
     {
      "path": "formationLabel",
      "from": "3-4-3",
-     "to": "4-3-3",
-     "why": "fifa.com (tactics 4-3-3 and its own pitch grid) and ESPN (4-2-3-1) both have a back four with Chadli at right-back and Vertonghen at left-back, so 3-4-3 is refuted; the hosts split on the midfield, and the label follows the organiser"
+     "to": "",
+     "why": "fifa.com (tactics 4-3-3 and its pitch grid) and ESPN (4-2-3-1) both have a back four with Chadli at right-back and Vertonghen at left-back, so the old 3-4-3 is refuted; they split on the midfield and rule 1 never picks a side, so no label is shown. Rule 1 lets a field change only when two hosts agree on the new value, and keeping a label both hosts refute would show something known to be false, so the page shows none until two hosts agree"
     },
     {
      "path": "slots[3].position",
@@ -2376,7 +2376,8 @@
     "Date 2018-07-10, score France 1-0 Belgium (Umtiti 51') and venue Saint Petersburg Stadium match.",
     "Correct starters already in the entry: Courtois, Alderweireld, Kompany, Vertonghen, Witsel, Fellaini, Hazard, Lukaku (8 of 11).",
     "blankCandidate Witsel is a confirmed starter.",
-    "Round 1026: formation set to the organiser's 4-3-3 (fifa.com label and grid); ESPN states 4-2-3-1. Both refute the old 3-4-3. New blanks De Bruyne and Alderweireld carry clubs read on planetworldcup.com and worldcup.org.uk."
+    "Round 1026 (superseded by the review fix below): formation set to the organiser's 4-3-3 (fifa.com label and grid); ESPN states 4-2-3-1. Both refute the old 3-4-3. New blanks De Bruyne and Alderweireld carry clubs read on planetworldcup.com and worldcup.org.uk.",
+    "Round 1026 (review fix): the label had followed the organiser in a split (fifa.com 4-3-3, ESPN 4-2-3-1), against rule 1. It is now empty; the back four and the tiles both hosts agree on stay."
    ]
   },
   {
@@ -3639,7 +3640,7 @@
     "opponent": "Monaco",
     "scoreLine": "Monaco 0-2 Juventus",
     "venue": "Stade Louis II, Monaco",
-    "formationLabel": "3-4-2-1"
+    "formationLabel": ""
    },
    "hints": [
     {
@@ -3712,8 +3713,8 @@
     {
      "path": "formationLabel",
      "from": "3-5-2",
-     "to": "3-4-2-1",
-     "why": "both hosts have Higuain alone up front with Dybala and Mandzukic behind him, so two strikers is refuted; ESPN states 3-4-2-1 and UEFA states no label"
+     "to": "",
+     "why": "both hosts refute the old 3-5-2 (Higuain alone up front) but disagree on the rest: ESPN states 3-4-2-1, UEFA's coordinates draw a back four (Barzagli and Alex Sandro wide at full-back height) with Alves, Dybala and Mandzukic behind Higuain. UEFA states no label, so no label is shown. Rule 1 lets a field change only when two hosts agree on the new value, and keeping a label both hosts refute would show something known to be false, so the page shows none until two hosts agree"
     },
     {
      "path": "slots[5].name",
@@ -3768,7 +3769,8 @@
     "Date 2017-05-03, scoreLine 'Monaco 0-2 Juventus', venue Stade Louis II and stage (semi-final first leg) match.",
     "Ten of eleven names correct. formationLabel 3-5-2 cannot be confirmed: UEFA gives no coordinates or formation for this match and ESPN's page as fetched gives none. Both list five defenders (Barzagli, Bonucci, Chiellini, Dani Alves, Alex Sandro) and three forwards (Higuaín, Mandžukić, Dybala), which fits a back three with wing-backs. Not counted.",
     "All three blankCandidates (Barzagli, Dani Alves, Mandžukić) are confirmed starters.",
-    "Round 1026: 3-4-2-1 is ESPN's label; UEFA coordinates draw a back four, so the hosts split on the shape but agree Higuain was alone up front."
+    "Round 1026: 3-4-2-1 is ESPN's label; UEFA coordinates draw a back four, so the hosts split on the shape but agree Higuain was alone up front.",
+    "Round 1026 (review fix): the 3-4-2-1 rested on ESPN's label alone, and UEFA's coordinates draw a 4-2-3-1. The label is now empty; the tiles keep the entry's back three, which ESPN states and UEFA does not, recorded as a split."
    ]
   },
   {

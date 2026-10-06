@@ -126,6 +126,7 @@ export interface Lineup {
   /** Final score line, e.g. "Barcelona 3-1 Manchester United". Penalty/AET noted where relevant. */
   scoreLine: string;
   venue: string;
+  /** Empty when the sources split on the shape and the entry's old label is refuted (Round 1026): the page then shows none. */
   formationLabel: string;
   slots: XiSlot[];
   /** 2-3 verified acceptable blanks; the daily/unlimited seed picks one. */
@@ -1628,7 +1629,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Liverpool',
     scoreLine: 'AC Milan 2-1 Liverpool',
     venue: 'Olympic Stadium, Athens',
-    formationLabel: '4-3-2-1',
+    formationLabel: '',
     slots: [
       GK('Dida'),
       { position: 'RB', name: 'Massimo Oddo', x: 84, y: 70 },
@@ -1727,7 +1728,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Germany',
     scoreLine: 'Germany 0-1 Spain',
     venue: 'Ernst Happel Stadion, Vienna',
-    formationLabel: '4-1-4-1',
+    formationLabel: '4-5-1',
     // Fabregas (not Xabi Alonso) started centrally alongside Senna in Spain's first major final of their golden era.
     slots: [
       GK('Iker Casillas'),
@@ -2050,7 +2051,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Chelsea',
     scoreLine: 'Liverpool 1-0 Chelsea (Liverpool win 1-0 on aggregate)',
     venue: 'Anfield, Liverpool',
-    formationLabel: '4-2-3-1',
+    formationLabel: '4-5-1',
     // Widely known as "the ghost goal" semifinal; Garcia's disputed strike sent Liverpool to Istanbul.
     slots: [
       GK('Jerzy Dudek'),
@@ -2534,7 +2535,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Paris Saint-Germain',
     scoreLine: 'Barcelona 6-1 Paris Saint-Germain (Barcelona win 6-5 on aggregate)',
     venue: 'Camp Nou, Barcelona',
-    formationLabel: '3-1-4-2',
+    formationLabel: '',
     slots: [
       GK('Marc-Andre ter Stegen'),
       { position: 'CB', name: 'Samuel Umtiti', x: 32, y: 76 },
@@ -4124,7 +4125,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'France',
     scoreLine: 'France 1-0 Belgium',
     venue: 'Saint Petersburg Stadium, Saint Petersburg',
-    formationLabel: '4-3-3',
+    formationLabel: '',
     slots: [
       GK('Thibaut Courtois'),
       { position: 'CB', name: 'Toby Alderweireld', x: 62, y: 74 },
@@ -4446,7 +4447,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Monaco',
     scoreLine: 'Monaco 0-2 Juventus',
     venue: 'Stade Louis II, Monaco',
-    formationLabel: '3-4-2-1',
+    formationLabel: '',
     slots: [
       GK('Gianluigi Buffon'),
       { position: 'CB', name: 'Giorgio Chiellini', x: 32, y: 76 },
