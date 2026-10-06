@@ -1,0 +1,3147 @@
+{
+  "club": "Adelaide United FC",
+  "slug": "adelaide-united",
+  "shard": "A",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "adelaideunited.com.au",
+      "url": "https://adelaideunited.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Jacob Brazete"
+      ],
+      "outs": [
+        "Stefan Mauk",
+        "Panashe Madanha",
+        "Luka Jovanovic"
+      ],
+      "resignings": []
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [
+    "31 rows, one over the brief's band of 20 to 30: the club's squad page lists 31 players that ESPN or Transfermarkt also carry for 2026-27, and nobody is held out by guesswork. The bake round picks who sits out.",
+    "The offline market row for Panashe Madanha at Adelaide is stale: the league's transfer centre lists him under Adelaide's Outs and Western Sydney's Ins, and he is a row in western-sydney-wanderers.json."
+  ],
+  "count": {
+    "clubPage": 32,
+    "staffSkipped": 0,
+    "rows": 31,
+    "heldOut": 1,
+    "twoHostRows": 31,
+    "birthDateKnown": 29,
+    "groupKnown": 31,
+    "minutesKnown": 26,
+    "marketRows": 0,
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
+  },
+  "rows": [
+    {
+      "name": "Max Vartuli",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2005-01-20",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/338805/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/max-vartuli/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "338805"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1001362"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1352508"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Vartuli",
+          "position": "Goalkeeper",
+          "number": "13"
+        },
+        "espn": {
+          "id": "338805",
+          "name": "Max Vartuli",
+          "position": "Goalkeeper",
+          "birthDate": "2005-01-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1001362",
+          "name": "Max Vartuli",
+          "position": "Goalkeeper",
+          "birthDate": "2005-01-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1352508",
+          "name": "Max Vartuli",
+          "position": "Keeper",
+          "birthDate": "2005-01-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Joshua Smits",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1992-11-06",
+      "minutes2025_26": 2340,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/161822/statistics",
+        "minutes": 2340,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/joshua-smits/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "161822"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "190687"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "279120"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joshua Smits",
+          "position": "Goalkeeper",
+          "number": "22"
+        },
+        "espn": {
+          "id": "161822",
+          "name": "Joshua Smits",
+          "position": "Goalkeeper",
+          "birthDate": "1992-11-06",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "190687",
+          "name": "Joshua Smits",
+          "position": "Goalkeeper",
+          "birthDate": "1992-11-06",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "279120",
+          "name": "Joshua Smits",
+          "position": "Keeper",
+          "birthDate": "1992-11-06",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ethan Cox",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2004-01-07",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328534/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ethan-cox/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328534"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "745416"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1352512"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ethan Cox",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "328534",
+          "name": "Ethan Cox",
+          "position": "Goalkeeper",
+          "birthDate": "2004-01-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "745416",
+          "name": "Ethan Cox",
+          "position": "Goalkeeper",
+          "birthDate": "2004-01-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1352512",
+          "name": "Ethan Cox",
+          "position": "Keeper",
+          "birthDate": "2004-01-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Bart Vriends",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1991-05-09",
+      "minutes2025_26": 1708,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/124962/statistics",
+        "minutes": 1708,
+        "appearances": 20
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/bart-vriends/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "124962"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "129991"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "150589"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Bart Vriends",
+          "position": "Defender",
+          "number": "3"
+        },
+        "espn": {
+          "id": "124962",
+          "name": "Bart Vriends",
+          "position": "Defender",
+          "birthDate": "1991-05-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "129991",
+          "name": "Bart Vriends",
+          "position": "Centre-Back",
+          "birthDate": "1991-05-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "150589",
+          "name": "Bart Vriends",
+          "position": "Defender",
+          "birthDate": "1991-05-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Panagiotis Kikianis",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-03-08",
+      "minutes2025_26": 2043,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/357239/statistics",
+        "minutes": 2043,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/panagiotis-kikianis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "357239"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1099708"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1432502"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Panagiotis Kikianis",
+          "position": "Defender",
+          "number": "4"
+        },
+        "espn": {
+          "id": "357239",
+          "name": "Panagiotis Kikianis",
+          "position": "Defender",
+          "birthDate": "2005-03-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1099708",
+          "name": "Panagiotis Kikianis",
+          "position": "Centre-Back",
+          "birthDate": "2005-03-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1432502",
+          "name": "Panagiotis Kikianis",
+          "position": "Defender",
+          "birthDate": "2005-03-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ryan Kitto",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1994-08-09",
+      "minutes2025_26": 2072,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/195788/statistics",
+        "minutes": 2072,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ryan-kitto/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "195788"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "296454"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "497657"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ryan Kitto",
+          "position": "Defender",
+          "number": "7"
+        },
+        "espn": {
+          "id": "195788",
+          "name": "Ryan Kitto",
+          "position": "Defender",
+          "birthDate": "1994-08-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "296454",
+          "name": "Ryan Kitto",
+          "position": "Left-Back",
+          "birthDate": "1994-08-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "497657",
+          "name": "Ryan Kitto",
+          "position": "Defender",
+          "birthDate": "1994-08-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Israel Mbula-Monga",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2008-07-15",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/israel-mbula-monga/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412221"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1464075"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1823326"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Israel Mbula-Monga",
+          "position": "Defender",
+          "number": "15"
+        },
+        "espn": {
+          "id": "412221",
+          "name": "Israel Mbula-Monga",
+          "position": "Defender",
+          "birthDate": "2008-07-15",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1464075",
+          "name": "Israel Monga",
+          "position": "Centre-Back",
+          "birthDate": "2008-07-15",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1823326",
+          "name": "Israel Mbula-Monga",
+          "position": "Defender",
+          "birthDate": "2008-07-15",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Adelaide United FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Dylan Pierias",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2000-02-20",
+      "minutes2025_26": 631,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/252907/statistics",
+        "minutes": 631,
+        "appearances": 8
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/dylan-pierias/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "252907"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "486972"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "823541"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Dylan Pierias",
+          "position": "Defender",
+          "number": "20"
+        },
+        "espn": {
+          "id": "252907",
+          "name": "Dylan Pierias",
+          "position": "Defender",
+          "birthDate": "2000-02-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "486972",
+          "name": "Dylan Pierias",
+          "position": "Right-Back",
+          "birthDate": "2000-02-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "823541",
+          "name": "Dylan Pierias",
+          "position": "Defender",
+          "birthDate": "2000-02-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Sotirios Phillis",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-08-11",
+      "minutes2025_26": 449,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/401015/statistics",
+        "minutes": 449,
+        "appearances": 6
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/sotirios-phillis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "401015"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1104727"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1724151"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sotirios Phillis",
+          "position": "Defender",
+          "number": "52"
+        },
+        "espn": {
+          "id": "401015",
+          "name": "Sotiri Phillis",
+          "position": "Defender",
+          "birthDate": "2006-08-11",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1104727",
+          "name": "Sotiri Phillis",
+          "position": "Centre-Back",
+          "birthDate": "2006-08-11",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1724151",
+          "name": "Sotirios Phillis",
+          "position": "Defender",
+          "birthDate": "2006-08-11",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Vinko Stanisic",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2007-01-08",
+      "minutes2025_26": 161,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410628/statistics",
+        "minutes": 161,
+        "appearances": 3
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/vinko-stanisic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410628"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1431808"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1823328"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Vinko Stanisic",
+          "position": "Defender",
+          "number": "71"
+        },
+        "espn": {
+          "id": "410628",
+          "name": "Vinko Stanisic",
+          "position": "Defender",
+          "birthDate": "2007-01-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1431808",
+          "name": "Vinko Stanisic",
+          "position": "Centre-Back",
+          "birthDate": "2007-01-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823328",
+          "name": "Vinko Stanisic",
+          "position": "Defender",
+          "birthDate": "2007-01-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Malual Nichola",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2008-05-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/malual-nichola/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392321"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1686108"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Malual Nichola",
+          "position": "Defender",
+          "number": "78"
+        },
+        "espn": {
+          "id": "392321",
+          "name": "Malual Nichola",
+          "position": "Defender",
+          "birthDate": "2008-05-17",
+          "match": "exact"
+        },
+        "tm": null,
+        "fotmob": {
+          "id": "1686108",
+          "name": "Malual Nichola",
+          "position": "Defender",
+          "birthDate": "2008-05-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "no Transfermarkt match, so no minutes source"
+      ]
+    },
+    {
+      "name": "Feyzo Kasumovic",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2008-01-18",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392323/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/feyzo-kasumovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392323"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1293968"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1686110"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Feyzo Kasumovic",
+          "position": "Defender",
+          "number": "79"
+        },
+        "espn": {
+          "id": "392323",
+          "name": "Feyzo Kasumovic",
+          "position": "Defender",
+          "birthDate": "2008-01-18",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1293968",
+          "name": "Feyzo Kasumovic",
+          "position": "Centre-Back",
+          "birthDate": "2008-01-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686110",
+          "name": "Feyzo Kasumovic",
+          "position": "Defender",
+          "birthDate": "2008-01-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Denver Minster",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/denver-minster-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141766"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1594872"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Denver Minster",
+          "position": "Defender",
+          "number": "88"
+        },
+        "espn": {
+          "id": "3141766",
+          "name": "Denver Minster",
+          "position": "Defender",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1594872",
+          "name": "Denver Minster",
+          "position": "Left-Back",
+          "birthDate": "2010-06-09",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (Transfermarkt 2010-06-09), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Jonny Yull",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-03-05",
+      "minutes2025_26": 1823,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/312891/statistics",
+        "minutes": 1821,
+        "appearances": 25
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/jonny-yull/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "312891"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "857060"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1225025"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jonny Yull",
+          "position": "Midfielder",
+          "number": "12"
+        },
+        "espn": {
+          "id": "312891",
+          "name": "Jonny Yull",
+          "position": "Midfielder",
+          "birthDate": "2005-03-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "857060",
+          "name": "Jonny Yull",
+          "position": "Attacking Midfield",
+          "birthDate": "2005-03-05",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1225025",
+          "name": "Jonny Yull",
+          "position": "Attacker",
+          "birthDate": "2005-03-05",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jay Barnett",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-02-14",
+      "minutes2025_26": 1752,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/267312/statistics",
+        "minutes": 1751,
+        "appearances": 21
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/jay-barnett/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "267312"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "647456"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1016844"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jay Barnett",
+          "position": "Midfielder",
+          "number": "14"
+        },
+        "espn": {
+          "id": "267312",
+          "name": "Jay Barnett",
+          "position": "Midfielder",
+          "birthDate": "2001-02-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "647456",
+          "name": "Jay Barnett",
+          "position": "Defensive Midfield",
+          "birthDate": "2001-02-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1016844",
+          "name": "Jay Barnett",
+          "position": "Defender",
+          "birthDate": "2001-02-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Luke Duzel",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2002-02-05",
+      "minutes2025_26": 1289,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/296952/statistics",
+        "minutes": 1287,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/luke-duzel/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "296952"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "703660"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1101267"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Luke Duzel",
+          "position": "Midfielder",
+          "number": "23"
+        },
+        "espn": {
+          "id": "296952",
+          "name": "Luke Duzel",
+          "position": "Midfielder",
+          "birthDate": "2002-02-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "703660",
+          "name": "Luke Duzel",
+          "position": "Defensive Midfield",
+          "birthDate": "2002-02-05",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1101267",
+          "name": "Luke Đuzel",
+          "position": "Midfielder",
+          "birthDate": "2002-02-05",
+          "match": "fuzzy"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ryan White",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-08-16",
+      "minutes2025_26": 1609,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388458/statistics",
+        "minutes": 1608,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ryan-white/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388458"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1241886"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1689513"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ryan White",
+          "position": "Midfielder",
+          "number": "44"
+        },
+        "espn": {
+          "id": "388458",
+          "name": "Ryan White",
+          "position": "Midfielder",
+          "birthDate": "2005-08-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1241886",
+          "name": "Ryan White",
+          "position": "Central Midfield",
+          "birthDate": "2005-08-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1689513",
+          "name": "Ryan White",
+          "position": "Midfielder",
+          "birthDate": "2005-08-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ethan Alagich",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2003-12-18",
+      "minutes2025_26": 1815,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328924/statistics",
+        "minutes": 1815,
+        "appearances": 21
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ethan-alagich/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328924"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "941357"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1409525"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ethan Alagich",
+          "position": "Midfielder",
+          "number": "55"
+        },
+        "espn": {
+          "id": "328924",
+          "name": "Ethan Alagich",
+          "position": "Midfielder",
+          "birthDate": "2003-12-18",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "941357",
+          "name": "Ethan Alagich",
+          "position": "Central Midfield",
+          "birthDate": "2003-12-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1409525",
+          "name": "Ethan Alagich",
+          "position": "Midfielder",
+          "birthDate": "2003-12-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Fabian Talladira",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-02-04",
+      "minutes2025_26": 195,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/361719/statistics",
+        "minutes": 195,
+        "appearances": 8
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/fabian-talladira/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "361719"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1104730"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1686104"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Fabian Talladira",
+          "position": "Midfielder",
+          "number": "62"
+        },
+        "espn": {
+          "id": "361719",
+          "name": "Fabian Talladira",
+          "position": "Midfielder",
+          "birthDate": "2006-02-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1104730",
+          "name": "Fabian Talladira",
+          "position": "Left-Back",
+          "birthDate": "2006-02-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686104",
+          "name": "Fabian Talladira",
+          "position": "Defender",
+          "birthDate": "2006-02-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Joey Garuccio",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-11-08",
+      "minutes2025_26": 107,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392484/statistics",
+        "minutes": 107,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/joey-garuccio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392484"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1321410"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1823327"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joey Garuccio",
+          "position": "Midfielder",
+          "number": "65"
+        },
+        "espn": {
+          "id": "392484",
+          "name": "Joey Garuccio",
+          "position": "Midfielder",
+          "birthDate": "2006-11-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1321410",
+          "name": "Joey Garuccio",
+          "position": "Centre-Forward",
+          "birthDate": "2006-11-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823327",
+          "name": "Joey Garuccio",
+          "position": "Midfielder",
+          "birthDate": "2006-11-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Juan Muñiz",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1992-03-14",
+      "minutes2025_26": 1217,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/147544/statistics",
+        "minutes": 1216,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/juan-muniz/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "147544"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "85357"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "2855"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Juan Muñiz",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": {
+          "id": "147544",
+          "name": "Juan Muñiz",
+          "position": "Midfielder",
+          "birthDate": "1992-03-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "85357",
+          "name": "Juan Muñiz",
+          "position": "Attacking Midfield",
+          "birthDate": "1992-03-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "2855",
+          "name": "Juan Muñiz",
+          "position": "Midfielder",
+          "birthDate": "1992-03-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Anselmo de Moraes",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1989-02-20",
+      "minutes2025_26": 483,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/143959/statistics",
+        "minutes": 483,
+        "appearances": 12
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/anselmo-de-moraes/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "143959"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "114341"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Anselmo de Moraes",
+          "position": "Midfielder",
+          "number": "87"
+        },
+        "espn": {
+          "id": "143959",
+          "name": "Anselmo",
+          "position": "Midfielder",
+          "birthDate": "1989-02-20",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "114341",
+          "name": "Anselmo",
+          "position": "Attacking Midfield",
+          "birthDate": "1989-02-20",
+          "match": "alias"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "identity linked by hand: ESPN and Transfermarkt print the one-word name Anselmo; both give birth date 1989-02-20, so it is the same man"
+      ]
+    },
+    {
+      "name": "Craig Goodwin",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1991-12-16",
+      "minutes2025_26": 1181,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/170754/statistics",
+        "minutes": 1178,
+        "appearances": 16
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/craig-goodwin/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "170754"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "214798"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "305033"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Craig Goodwin",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": {
+          "id": "170754",
+          "name": "Craig Goodwin",
+          "position": "Forward",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "214798",
+          "name": "Craig Goodwin",
+          "position": "Left Winger",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "305033",
+          "name": "Craig Goodwin",
+          "position": "Attacker",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ben Folami",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1999-06-08",
+      "minutes2025_26": 67,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/262510/statistics",
+        "minutes": 67,
+        "appearances": 6
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ben-folami/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "262510"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "532107"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "874601"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ben Folami",
+          "position": "Attacker",
+          "number": "17"
+        },
+        "espn": {
+          "id": "262510",
+          "name": "Ben Folami",
+          "position": "Forward",
+          "birthDate": "1999-06-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "532107",
+          "name": "Ben Folami",
+          "position": "Left Winger",
+          "birthDate": "1999-06-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "874601",
+          "name": "Ben Folami",
+          "position": "Attacker",
+          "birthDate": "1999-06-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jake Najdovski",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2005-03-14",
+      "minutes2025_26": 22,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/332368/statistics",
+        "minutes": 22,
+        "appearances": 2
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/jake-najdovski/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "332368"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1029949"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1409174"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jake Najdovski",
+          "position": "Attacker",
+          "number": "18"
+        },
+        "espn": {
+          "id": "332368",
+          "name": "Jake Najdovski",
+          "position": "Forward",
+          "birthDate": "2005-03-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1029949",
+          "name": "Jake Najdovski",
+          "position": "Centre-Forward",
+          "birthDate": "2005-03-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1409174",
+          "name": "Jake Najdovski",
+          "position": "Attacker",
+          "birthDate": "2005-03-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jacob Brazete",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-01-20",
+      "minutes2025_26": 49,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388448/statistics",
+        "minutes": 49,
+        "appearances": 4
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/jacob-brazete/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388448"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1158287"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1686120"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jacob Brazete",
+          "position": "Attacker",
+          "number": "21"
+        },
+        "espn": {
+          "id": "388448",
+          "name": "Jacob Brazete",
+          "position": "Forward",
+          "birthDate": "2006-01-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1158287",
+          "name": "Jacob Brazete",
+          "position": "Left Winger",
+          "birthDate": "2006-01-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686120",
+          "name": "Jacob Brazete",
+          "position": "Attacker",
+          "birthDate": "2006-01-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Mitchell Smith",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/mitchell-smith-3/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141380"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1594871"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "2333079"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Mitchell Smith",
+          "position": "Attacker",
+          "number": "27"
+        },
+        "espn": {
+          "id": "3141380",
+          "name": "Mitchell Robert Smith",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1594871",
+          "name": "Mitchell Smith",
+          "position": "Striker",
+          "birthDate": "2007-01-01",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "2333079",
+          "name": "Mitchell Smith",
+          "position": "Attacker",
+          "birthDate": "2007-08-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (Transfermarkt 2007-01-01, FotMob 2007-08-28), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Brody Burkitt",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-03-26",
+      "minutes2025_26": 357,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/415818/statistics",
+        "minutes": 360,
+        "appearances": 12
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/brody-burkitt/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "415818"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1403601"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1894010"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Brody Burkitt",
+          "position": "Attacker",
+          "number": "35"
+        },
+        "espn": {
+          "id": "415818",
+          "name": "Brody Burkitt",
+          "position": "Forward",
+          "birthDate": "2006-03-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1403601",
+          "name": "Brody Burkitt",
+          "position": "Centre-Forward",
+          "birthDate": "2006-03-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1894010",
+          "name": "Brody Burkitt",
+          "position": "Attacker",
+          "birthDate": "2006-03-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Harry Crawford",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2007-02-03",
+      "minutes2025_26": 158,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/144554/statistics",
+        "minutes": 158,
+        "appearances": 5
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/harry-crawford-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "144554"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1289687"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1713669"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Harry Crawford",
+          "position": "Attacker",
+          "number": "58"
+        },
+        "espn": {
+          "id": "144554",
+          "name": "Harry Crawford",
+          "position": "Forward",
+          "birthDate": "2007-02-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1289687",
+          "name": "Harry Crawford",
+          "position": "Right-Back",
+          "birthDate": "2007-02-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1713669",
+          "name": "Harry Crawford",
+          "position": "Attacker",
+          "birthDate": "2007-02-03",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Amlani Tatu",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-07-01",
+      "minutes2025_26": 102,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392322/statistics",
+        "minutes": 101,
+        "appearances": 5
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/amlani-tatu/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392322"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1237914"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1686105"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Amlani Tatu",
+          "position": "Attacker",
+          "number": "74"
+        },
+        "espn": {
+          "id": "392322",
+          "name": "Amlani Tatu",
+          "position": "Forward",
+          "birthDate": "2008-07-01",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1237914",
+          "name": "Amlani Tatu",
+          "position": "Left Winger",
+          "birthDate": "2008-07-01",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686105",
+          "name": "Amlani Tatu",
+          "position": "Attacker",
+          "birthDate": "2008-07-01",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ajak Riak",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2000-12-12",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "adelaideunited.com.au",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "adelaideunited.com.au",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "adelaideunited.com.au",
+          "url": "https://adelaideunited.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://adelaideunited.com.au/player/ajak-riak/"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "983840"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8008/squad/adelaide-united",
+          "read": "2026-10-06",
+          "id": "1394949"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ajak Riak",
+          "position": "Attacker",
+          "number": "99"
+        },
+        "espn": null,
+        "tm": {
+          "id": "983840",
+          "name": "Ajak Riak",
+          "position": "Centre-Forward",
+          "birthDate": "2000-12-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1394949",
+          "name": "Ajak Riak",
+          "position": "Attacker",
+          "birthDate": "2000-12-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "2025-26 minutes on one host only: Transfermarkt 149, and ESPN has no 2025-26 regular season record for this row (no ESPN match), so held as null"
+      ]
+    }
+  ],
+  "heldOut": [
+    {
+      "name": "Airton Andrioli",
+      "position": null,
+      "reason": "only the club page lists him, with no position or shirt number printed; none of ESPN, Transfermarkt or FotMob has him in the 2026-27 squad",
+      "seen": {
+        "club": {
+          "name": "Airton Andrioli",
+          "position": null,
+          "number": null
+        },
+        "espn": null,
+        "tm": null,
+        "fotmob": null,
+        "from": "club squad page"
+      }
+    }
+  ],
+  "marketRecheck": [
+    {
+      "id": 128036,
+      "player_name": "Panashe Madanha",
+      "club": "Adelaide United",
+      "position": "Right Midfield",
+      "age": 21,
+      "onClubPage": false,
+      "onEspn": false,
+      "onTm": false,
+      "inTransferCentre": [
+        "outs at Adelaide United",
+        "ins at Western Sydney Wanderers"
+      ],
+      "verdict": "not in the club's 2026-27 squad on the club page, ESPN or Transfermarkt: the dump row is stale"
+    }
+  ],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Luka Blazevic",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Ajak Chol",
+      "position": "Forward",
+      "birthDate": "2000-12-12",
+      "sameBirthDateAsRow": "Ajak Riak"
+    },
+    {
+      "source": "fotmob",
+      "name": "Anselmo",
+      "position": "Attacker",
+      "birthDate": "1989-02-20",
+      "sameBirthDateAsRow": "Anselmo de Moraes"
+    }
+  ],
+  "independentOnly": []
+}

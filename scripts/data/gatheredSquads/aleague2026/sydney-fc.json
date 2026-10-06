@@ -1,0 +1,2915 @@
+{
+  "club": "Sydney FC",
+  "slug": "sydney-fc",
+  "shard": "C",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "sydneyfc.com",
+      "url": "https://sydneyfc.com/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Jake Hollman",
+        "Gabriel Popovic",
+        "Takahiro Sekine",
+        "Oriola Sunday",
+        "James Overy",
+        "Jacob Farrell"
+      ],
+      "outs": [
+        "Joe Lolley",
+        "Joel King",
+        "Patrick Wood",
+        "Ahmet Arslan",
+        "Corey Hollman",
+        "Apostolos Stamatelopoulos",
+        "Piero Quispe",
+        "Alex Grant",
+        "Paul Okon-Engstler",
+        "Zac De Jesus (Loan)",
+        "Akol Akon (departing end of season)"
+      ],
+      "resignings": [
+        "Patrick Kisnorbo (Head Coach)",
+        "Jordan Courtney-Perkins",
+        "Akol Akon",
+        "Ethan Dyer"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [
+    "2 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Miles Milliner (espn, fotmob); Sam Lancaster (espn, fotmob). See independentOnly."
+  ],
+  "count": {
+    "clubPage": 31,
+    "staffSkipped": 13,
+    "rows": 28,
+    "heldOut": 3,
+    "twoHostRows": 28,
+    "birthDateKnown": 27,
+    "groupKnown": 28,
+    "minutesKnown": 20,
+    "marketRows": 1,
+    "perfPagesLoaded": 12,
+    "independentOnly": 2
+  },
+  "rows": [
+    {
+      "name": "Gus Hoefsloot",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2006-03-14",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368557/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/gus-hoefsloot/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368557"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1109829"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1565861"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Gus Hoefsloot",
+          "position": "Goalkeeper",
+          "number": "1"
+        },
+        "espn": {
+          "id": "368557",
+          "name": "Gus Hoefsloot",
+          "position": "Goalkeeper",
+          "birthDate": "2006-03-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1109829",
+          "name": "Gus Hoefsloot",
+          "position": "Goalkeeper",
+          "birthDate": "2006-03-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565861",
+          "name": "Gus Hoefsloot",
+          "position": "Keeper",
+          "birthDate": "2006-03-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date: ESPN 2006-03-14, Transfermarkt 2006-03-13, FotMob 2006-03-14; set to the date two hosts agree on"
+      ]
+    },
+    {
+      "name": "Harrison Devenish-Meares",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1996-10-27",
+      "minutes2025_26": 2340,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386267/statistics",
+        "minutes": 2340,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/harrison-devenish-meares/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386267"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "877833"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1307327"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Harrison Devenish-Meares",
+          "position": "Goalkeeper",
+          "number": "12"
+        },
+        "espn": {
+          "id": "386267",
+          "name": "Harrison Devenish-Meares",
+          "position": "Goalkeeper",
+          "birthDate": "1996-10-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "877833",
+          "name": "Harrison Devenish-Meares",
+          "position": "Goalkeeper",
+          "birthDate": "1996-10-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1307327",
+          "name": "Harrison Devenish-Meares",
+          "position": "Keeper",
+          "birthDate": "1996-10-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Sandy Zaverdinos",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2007-04-06",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410620/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/alexander-zaverdinos/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410620"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1169773"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sandy Zaverdinos",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "410620",
+          "name": "Alexander Zaverdinos",
+          "position": "Goalkeeper",
+          "birthDate": "2007-04-06",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "1169773",
+          "name": "Alexander Zaverdinos",
+          "position": "Goalkeeper",
+          "birthDate": "2007-04-06",
+          "match": "alias"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "identity linked by hand: the club prints Sandy but its own profile address is /player/alexander-zaverdinos/; ESPN and Transfermarkt both print Alexander Zaverdinos, goalkeeper, born 2007-04-06"
+      ]
+    },
+    {
+      "name": "James Overy",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2007-11-09",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/james-overy-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "365482"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1154164"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1648069"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "James Overy",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "365482",
+          "name": "James Overy",
+          "position": "Defender",
+          "birthDate": "2007-11-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1154164",
+          "name": "James Overy",
+          "position": "Right-Back",
+          "birthDate": "2007-11-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1648069",
+          "name": "James Overy",
+          "position": "Defender",
+          "birthDate": "2007-11-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Jordan Courtney-Perkins",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2002-11-06",
+      "minutes2025_26": 445,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/291696/statistics",
+        "minutes": 446,
+        "appearances": 10
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/jordan-courtney-perkins/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "291696"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "691325"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1101031"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jordan Courtney-Perkins",
+          "position": "Defender",
+          "number": "4"
+        },
+        "espn": {
+          "id": "291696",
+          "name": "Jordan Courtney-Perkins",
+          "position": "Defender",
+          "birthDate": "2002-11-06",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "691325",
+          "name": "Jordan Courtney-Perkins",
+          "position": "Centre-Back",
+          "birthDate": "2002-11-06",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1101031",
+          "name": "Jordan Courtney-Perkins",
+          "position": "Defender",
+          "birthDate": "2002-11-06",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jacob Farrell",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2002-11-19",
+      "minutes2025_26": 585,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/329951/statistics",
+        "minutes": 585,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/jacob-farrell-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "329951"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "949477"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1315434"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jacob Farrell",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "329951",
+          "name": "Jacob Farrell",
+          "position": "Defender",
+          "birthDate": "2002-11-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "949477",
+          "name": "Jacob Farrell",
+          "position": "Left-Back",
+          "birthDate": "2002-11-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1315434",
+          "name": "Jacob Farrell",
+          "position": "Defender",
+          "birthDate": "2002-11-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ben Garuccio",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1995-06-15",
+      "minutes2025_26": 1716,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/178990/statistics",
+        "minutes": 1716,
+        "appearances": 20
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/ben-garuccio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "178990"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "187359"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "396259"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ben Garuccio",
+          "position": "Defender",
+          "number": "17"
+        },
+        "espn": {
+          "id": "178990",
+          "name": "Ben Garuccio",
+          "position": "Defender",
+          "birthDate": "1995-06-15",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "187359",
+          "name": "Ben Garuccio",
+          "position": "Left-Back",
+          "birthDate": "1995-06-15",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "396259",
+          "name": "Ben Garuccio",
+          "position": "Defender",
+          "birthDate": "1995-06-15",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Rhyan Grant",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1991-02-26",
+      "minutes2025_26": 2340,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/130119/statistics",
+        "minutes": 2340,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/rhyan-grant/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "130119"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "108108"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "161657"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Rhyan Grant",
+          "position": "Defender",
+          "number": "23"
+        },
+        "espn": {
+          "id": "130119",
+          "name": "Rhyan Grant",
+          "position": "Defender",
+          "birthDate": "1991-02-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "108108",
+          "name": "Rhyan Grant",
+          "position": "Right-Back",
+          "birthDate": "1991-02-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "161657",
+          "name": "Rhyan Grant",
+          "position": "Defender",
+          "birthDate": "1991-02-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ethan Dyer",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2009-06-24",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/ethan-dyer-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "413895"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1291441"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "2108921"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ethan Dyer",
+          "position": "Defender",
+          "number": "28"
+        },
+        "espn": {
+          "id": "413895",
+          "name": "Ethan Dyer",
+          "position": "Defender",
+          "birthDate": "2009-06-24",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1291441",
+          "name": "Ethan Dyer",
+          "position": "Centre-Back",
+          "birthDate": "2009-06-24",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "2108921",
+          "name": "Ethan Dyer",
+          "position": "Defender",
+          "birthDate": "2009-06-24",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Sydney FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Marcel Tisserand",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1993-01-10",
+      "minutes2025_26": 1404,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/191942/statistics",
+        "minutes": 1403,
+        "appearances": 19
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/marcel-tisserand/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "191942"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "170463"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "466357"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Marcel Tisserand",
+          "position": "Defender",
+          "number": "32"
+        },
+        "espn": {
+          "id": "191942",
+          "name": "Marcel Tisserand",
+          "position": "Defender",
+          "birthDate": "1993-01-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "170463",
+          "name": "Marcel Tisserand",
+          "position": "Centre-Back",
+          "birthDate": "1993-01-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "466357",
+          "name": "Marcel Tisserand",
+          "position": "Defender",
+          "birthDate": "1993-01-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tyler Williams",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2007-12-22",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/tyler-williams/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392207"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1226710"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1823246"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tyler Williams",
+          "position": "Defender",
+          "number": "34"
+        },
+        "espn": {
+          "id": "392207",
+          "name": "Tyler Williams",
+          "position": "Defender",
+          "birthDate": "2007-12-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1226710",
+          "name": "Tyler Williams",
+          "position": "Centre-Back",
+          "birthDate": "2007-12-22",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823246",
+          "name": "Tyler Williams",
+          "position": "Defender",
+          "birthDate": "2007-12-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Sydney FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Alexandar Popović",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2002-09-07",
+      "minutes2025_26": 1052,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328536/statistics",
+        "minutes": 1053,
+        "appearances": 18
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/alexandar-popovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328536"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "904309"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1312751"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alexandar Popović",
+          "position": "Defender",
+          "number": "41"
+        },
+        "espn": {
+          "id": "328536",
+          "name": "Alexandar Popovic",
+          "position": "Defender",
+          "birthDate": "2002-09-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "904309",
+          "name": "Alexandar Popovic",
+          "position": "Centre-Back",
+          "birthDate": "2002-09-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1312751",
+          "name": "Alexandar Popovic",
+          "position": "Defender",
+          "birthDate": "2002-09-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Wataru Kamijo",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-04-17",
+      "minutes2025_26": 430,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/374096/statistics",
+        "minutes": 430,
+        "appearances": 11
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/wataru-kamijo/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "374096"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1158288"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1565867"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Wataru Kamijo",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": {
+          "id": "374096",
+          "name": "Wataru Kamijo",
+          "position": "Midfielder",
+          "birthDate": "2006-04-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1158288",
+          "name": "Wataru Kamijo",
+          "position": "Central Midfield",
+          "birthDate": "2006-04-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565867",
+          "name": "Wataru Kamijo",
+          "position": "Midfielder",
+          "birthDate": "2006-04-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Takahiro Sekine",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1995-04-19",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": [
+        {
+          "id": 121616,
+          "player_name": "Takahiro Sekine",
+          "club": "Urawa Red Diamonds",
+          "age": 28
+        },
+        {
+          "id": 125206,
+          "player_name": "Takahiro Sekine",
+          "club": "Urawa Red Diamonds",
+          "age": 29
+        }
+      ],
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/takahiro-sekine/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "218553"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "296787"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "523747"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Takahiro Sekine",
+          "position": "Midfielder",
+          "number": "14"
+        },
+        "espn": {
+          "id": "218553",
+          "name": "Takahiro Sekine",
+          "position": "Midfielder",
+          "birthDate": "1995-04-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "296787",
+          "name": "Takahiro Sekine",
+          "position": "Left Midfield",
+          "birthDate": "1995-04-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "523747",
+          "name": "Takahiro Sekine",
+          "position": "Defender",
+          "birthDate": "1995-04-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Sydney FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Jake Hollman",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-08-26",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/jake-hollman-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "295550"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "811400"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1217249"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jake Hollman",
+          "position": "Midfielder",
+          "number": "15"
+        },
+        "espn": {
+          "id": "295550",
+          "name": "Jake Hollman",
+          "position": "Midfielder",
+          "birthDate": "2001-08-26",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "811400",
+          "name": "Jake Hollman",
+          "position": "Attacking Midfield",
+          "birthDate": "2001-08-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1217249",
+          "name": "Jake Hollman",
+          "position": "Midfielder",
+          "birthDate": "2001-08-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Nickolas Alfaro",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2008-02-02",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/nickolas-alfaro/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388455"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1823245"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nickolas Alfaro",
+          "position": "Midfielder",
+          "number": "26"
+        },
+        "espn": {
+          "id": "388455",
+          "name": "Nickolas Alfaro",
+          "position": "Midfielder",
+          "birthDate": "2008-02-02",
+          "match": "exact"
+        },
+        "tm": null,
+        "fotmob": {
+          "id": "1823245",
+          "name": "Nickolas Alfaro",
+          "position": "Midfielder",
+          "birthDate": "2008-02-02",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "no Transfermarkt match, so no minutes source",
+        "ESPN alone gives 1 2025-26 regular season minutes over 1 appearance; with no second host it is held as null"
+      ]
+    },
+    {
+      "name": "Joe Lacey",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-06-22",
+      "minutes2025_26": 6,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/374882/statistics",
+        "minutes": 6,
+        "appearances": 1
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/joe-lacey/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "374882"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1158702"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1572125"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joe Lacey",
+          "position": "Midfielder",
+          "number": "29"
+        },
+        "espn": {
+          "id": "374882",
+          "name": "Joseph Lacey",
+          "position": "Midfielder",
+          "birthDate": "2007-06-22",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "1158702",
+          "name": "Joseph Lacey",
+          "position": "Central Midfield",
+          "birthDate": "2007-06-22",
+          "match": "alias"
+        },
+        "fotmob": {
+          "id": "1572125",
+          "name": "Joe Lacey",
+          "position": "Midfielder",
+          "birthDate": "2007-06-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "identity linked by hand: ESPN and Transfermarkt both print Joseph Lacey, born 2007-06-22, a midfielder like the club lists; no other Lacey is on any of the three lists"
+      ]
+    },
+    {
+      "name": "Marin France",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-02-01",
+      "minutes2025_26": 11,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/383908/statistics",
+        "minutes": 11,
+        "appearances": 1
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/marin-france/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "383908"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1179902"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1637273"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Marin France",
+          "position": "Midfielder",
+          "number": "33"
+        },
+        "espn": {
+          "id": "383908",
+          "name": "Marin France",
+          "position": "Midfielder",
+          "birthDate": "2007-02-01",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1179902",
+          "name": "Marin France",
+          "position": "Left Winger",
+          "birthDate": "2007-02-01",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1637273",
+          "name": "Marin France",
+          "position": "Midfielder",
+          "birthDate": "2007-02-01",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Rhys Youlley",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-02-13",
+      "minutes2025_26": 1100,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/351687/statistics",
+        "minutes": 1099,
+        "appearances": 19
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/rhys-youlley/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "351687"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1075719"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1417672"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Rhys Youlley",
+          "position": "Midfielder",
+          "number": "36"
+        },
+        "espn": {
+          "id": "351687",
+          "name": "Rhys Youlley",
+          "position": "Midfielder",
+          "birthDate": "2005-02-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1075719",
+          "name": "Rhys Youlley",
+          "position": "Central Midfield",
+          "birthDate": "2005-02-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1417672",
+          "name": "Rhys Youlley",
+          "position": "Midfielder",
+          "birthDate": "2005-02-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Akol Akon",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2009-05-21",
+      "minutes2025_26": 294,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410621/statistics",
+        "minutes": 294,
+        "appearances": 11
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/akol-akon/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410621"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1334905"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1823247"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Akol Akon",
+          "position": "Attacker",
+          "number": "7"
+        },
+        "espn": {
+          "id": "410621",
+          "name": "Akol Akon",
+          "position": "Forward",
+          "birthDate": "2009-05-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1334905",
+          "name": "Akol Akon",
+          "position": "Right Winger",
+          "birthDate": "2009-05-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823247",
+          "name": "Akol Akon",
+          "position": "Attacker",
+          "birthDate": "2009-05-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "the league's 2026-27 transfer centre lists him under both Outs (\"Akol Akon (departing end of season)\") and Re-signings; he stays a row because the club squad page and ESPN, Transfermarkt, FotMob list him for 2026-27, but the conflict is unresolved"
+      ]
+    },
+    {
+      "name": "Oriola Sunday",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2003-04-18",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/oriola-sunday/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3101495"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "957466"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1338845"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oriola Sunday",
+          "position": "Attacker",
+          "number": "9"
+        },
+        "espn": {
+          "id": "3101495",
+          "name": "Oriola Sunday",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "957466",
+          "name": "Oriola Sunday",
+          "position": "Centre-Forward",
+          "birthDate": "2003-04-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1338845",
+          "name": "Oriola Sunday",
+          "position": "Attacker",
+          "birthDate": "2003-04-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Abel Walatee",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2004-02-22",
+      "minutes2025_26": 446,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/383971/statistics",
+        "minutes": 446,
+        "appearances": 14
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/abel-walatee/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "383971"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1146650"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1539120"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Abel Walatee",
+          "position": "Midfielder",
+          "number": "11"
+        },
+        "espn": {
+          "id": "383971",
+          "name": "Abel Walatee",
+          "position": "Midfielder",
+          "birthDate": "2004-02-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1146650",
+          "name": "Abel Walatee",
+          "position": "Left Winger",
+          "birthDate": "2004-02-22",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1539120",
+          "name": "Abel Walatee",
+          "position": "Attacker",
+          "birthDate": "2004-02-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Gabriel Popović",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2003-07-28",
+      "minutes2025_26": 300,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/289968/statistics",
+        "minutes": 300,
+        "appearances": 9
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/gabriel-popovic-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "289968"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "692321"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1069829"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Gabriel Popović",
+          "position": "Attacker",
+          "number": "16"
+        },
+        "espn": {
+          "id": "289968",
+          "name": "Gabriel Popovic",
+          "position": "Forward",
+          "birthDate": "2003-07-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "692321",
+          "name": "Gabriel Popovic",
+          "position": "Centre-Forward",
+          "birthDate": "2003-07-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1069829",
+          "name": "Gabriel Popovic",
+          "position": "Attacker",
+          "birthDate": "2003-07-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Sydney FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Zach Harrison",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/zach-harrison-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3100773"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1575937"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Zach Harrison",
+          "position": "Attacker",
+          "number": "18"
+        },
+        "espn": {
+          "id": "3100773",
+          "name": "Zach Harrison",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1575937",
+          "name": "Zach Harrison",
+          "position": "Striker",
+          "birthDate": "2010-01-05",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (Transfermarkt 2010-01-05), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Tiago Quintal",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-06-16",
+      "minutes2025_26": 1286,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/381512/statistics",
+        "minutes": 1286,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/tiago-quintal/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "381512"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1109205"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1621335"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tiago Quintal",
+          "position": "Attacker",
+          "number": "20"
+        },
+        "espn": {
+          "id": "381512",
+          "name": "Tiago Quintal",
+          "position": "Forward",
+          "birthDate": "2006-06-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1109205",
+          "name": "Tiago Quintal",
+          "position": "Attacking Midfield",
+          "birthDate": "2006-06-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1621335",
+          "name": "Tiago Quintal",
+          "position": "Midfielder",
+          "birthDate": "2006-06-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Mathias Macallister",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2007-04-12",
+      "minutes2025_26": 70,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392208/statistics",
+        "minutes": 70,
+        "appearances": 4
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/mathias-macallister/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392208"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1226712"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1720106"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Mathias Macallister",
+          "position": "Attacker",
+          "number": "22"
+        },
+        "espn": {
+          "id": "392208",
+          "name": "Mathias Macallister",
+          "position": "Forward",
+          "birthDate": "2007-04-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1226712",
+          "name": "Mathias Macallister",
+          "position": "Centre-Forward",
+          "birthDate": "2007-04-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1720106",
+          "name": "Mathias Macallister",
+          "position": "Attacker",
+          "birthDate": "2007-04-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Al Hassan Touré",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2000-05-30",
+      "minutes2025_26": 1099,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/291694/statistics",
+        "minutes": 1099,
+        "appearances": 20
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/al-hassan-toure/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "291694"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "692440"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "1079940"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Al Hassan Touré",
+          "position": "Attacker",
+          "number": "35"
+        },
+        "espn": {
+          "id": "291694",
+          "name": "Al Hassan Toure",
+          "position": "Forward",
+          "birthDate": "2000-05-30",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "692440",
+          "name": "Al Hassan Touré",
+          "position": "Left Winger",
+          "birthDate": "2000-05-30",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1079940",
+          "name": "Al Hassan Touré",
+          "position": "Attacker",
+          "birthDate": "2000-05-30",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Víctor Campuzano",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1997-05-31",
+      "minutes2025_26": 1689,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/284949/statistics",
+        "minutes": 1688,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "sydneyfc.com",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "sydneyfc.com",
+          "url": "https://sydneyfc.com/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://sydneyfc.com/player/victor-campuzano/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5327/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "284949"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/sydney-fc/kader/verein/8054/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "394285"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/10164/squad/sydney-fc",
+          "read": "2026-10-06",
+          "id": "800817"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Víctor Campuzano",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "284949",
+          "name": "Víctor Campuzano",
+          "position": "Forward",
+          "birthDate": "1997-05-31",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "394285",
+          "name": "Víctor Campuzano",
+          "position": "Centre-Forward",
+          "birthDate": "1997-05-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "800817",
+          "name": "Víctor Campuzano",
+          "position": "Attacker",
+          "birthDate": "1997-05-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    }
+  ],
+  "heldOut": [
+    {
+      "name": "Aaron Gurd",
+      "position": "Defender",
+      "reason": "the club squad page lists him under its \"ON LOAN\" heading, not in the first team squad",
+      "seen": {
+        "club": {
+          "name": "Aaron Gurd",
+          "position": "Defender",
+          "number": "3",
+          "section": "ON LOAN"
+        },
+        "espn": {
+          "id": "336925",
+          "name": "Aaron Gurd",
+          "position": "Defender",
+          "birthDate": "2001-09-18",
+          "match": "exact"
+        },
+        "tm": null,
+        "fotmob": {
+          "id": "1394952",
+          "name": "Aaron Gurd",
+          "position": "Defender",
+          "birthDate": "2001-09-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Mitchell Glasson",
+      "position": "Attacker",
+      "reason": "the club squad page lists him under its \"ON LOAN\" heading, not in the first team squad",
+      "seen": {
+        "club": {
+          "name": "Mitchell Glasson",
+          "position": "Attacker",
+          "number": "19",
+          "section": "ON LOAN"
+        },
+        "espn": {
+          "id": "368560",
+          "name": "Mitchell Glasson",
+          "position": "Forward",
+          "birthDate": "2006-05-04",
+          "match": "exact"
+        },
+        "tm": null,
+        "fotmob": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Zac De Jesus",
+      "position": "Defender",
+      "reason": "the club squad page lists him under its \"ON LOAN\" heading, not in the first team squad; the league's 2026-27 transfer centre agrees, listing him under Outs as \"Zac De Jesus (Loan)\"",
+      "seen": {
+        "club": {
+          "name": "Zac De Jesus",
+          "position": "Defender",
+          "number": "21",
+          "section": "ON LOAN"
+        },
+        "espn": null,
+        "tm": null,
+        "fotmob": null,
+        "from": "club squad page"
+      }
+    }
+  ],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Miles Milliner",
+      "position": "Defender",
+      "birthDate": "2009-08-10"
+    },
+    {
+      "source": "espn",
+      "name": "Sam Lancaster",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "fotmob",
+      "name": "Miles Milliner",
+      "position": "Defender",
+      "birthDate": "2009-08-10"
+    },
+    {
+      "source": "fotmob",
+      "name": "Samuel Lancaster",
+      "position": "Midfielder",
+      "birthDate": "2007-01-02"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Miles Milliner",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2009-08-10",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Sam Lancaster",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    }
+  ]
+}
