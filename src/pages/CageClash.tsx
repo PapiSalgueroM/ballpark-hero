@@ -34,6 +34,7 @@ export default function CageClash() {
               <li>Get close and use Clinch. In the clinch, work for a takedown or break away. Your stamina and fighting style affect who gets on top.</li>
               <li>On top, strike, posture up or pass into a better position. From underneath, block, regain guard, sweep or try to stand.</li>
               <li>Hold Submission to build pressure. Your opponent can resist or escape. Low stamina makes both defending and attacking harder.</li>
+              <li>Move hints show Ready, Move closer, Recover gas or Recovering. They are advice: holding a move still works after recovery, and an out-of-range shot can miss and spend gas.</li>
               <li>Use Pause any time. Switching away, opening these rules or losing focus pauses the fight. Resume clears held inputs. Refresh starts over.</li>
               <li>Punches, kicks and ground strikes move through full pixel poses. Your device's reduced motion setting keeps action poses steady.</li>
               <li>Ground poses show guard, half guard and mount. Passing and escaping have effort poses, and submission grips tighten with your actual pressure. Reduced motion keeps effort poses steady.</li>

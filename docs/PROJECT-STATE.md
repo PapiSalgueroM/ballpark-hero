@@ -1,3 +1,63 @@
+## Round1069 prepared: Cage move readiness, remote final checks pending
+
+Cage action buttons now show Ready, Move closer, Recover gas,
+Recovering, Unavailable, Not in drill or Paused using the real engine
+cost, range, cooldown and position rules. Hints stay descriptive, so
+held actions still work through recovery. Help, the guide and What's New
+explain them. Ground power's visible label is Heavy strike so its full
+hint fits a44px phone control; its accessible name stays Heavy ground
+strike. No mode, save, score model, data or animation change.
+
+Prep37531072358 on61306d2a passed actual app type/build, source anchors,
+strike7/14, grapple8/13, readiness10/14 and24 harnesses including all16
+built readers and search. The readiness baseline compared240 trajectories
+and43,200 paired states with main31a4ec01's accepted engine. Every copied
+fault failed its intended assertion with an independent baseline green.
+
+Native prep passed4 profiles and8 effective geometry/accessibility
+controls,1534 real inputs,186 screenshots,14 readiness snapshots on
+320/390 phones, all existing mode/recap/animation journeys and zero
+forwarded writes. A real320px wrapping failure was repaired; an effective
+control now recreates that exact failure and restores a green baseline.
+
+Artifact11444559422 SHA2560e34c0445739dc25dfd92aea82823ea21732bc40d2524195e99ec00a08d32561
+verified before extraction. Only the exact5 manifest payloads were copied
+and rehashed. Cage/news and their ledger hashes changed; the sitemap's
+bytes stayed unchanged. Temporary prep workflow removed.
+
+Final PR/CI, merge, host publication and LIVE proof are still pending.
+AH retains main/publish during final CI; Claude retains the career/GM
+and agreed guide lanes. No LIVE claim, direct DB call or production fight
+completion. Root drafts and seven stashes stay protected.
+
+## Round1069 claimed: Cage move readiness
+
+Codex adds descriptive readiness hints to the six existing Cage action
+buttons: Ready, Move closer, Recover gas, Recovering, Unavailable and the
+existing drill/pause context. Holding buttons remains enabled through
+cooldown and recovery. The actual engine cost/range helpers are shared
+with the hints; extraction must preserve every fight outcome and input.
+
+Design: the player sees why a move may not land in seconds, moves into
+range, uses gas wisely and retries in the existing score-free Practice.
+No new mode, route, data, save, score model, daily rotation or combat rule.
+The current100-point score stays. Compact44px controls, no page jump,
+pre-play rules/example and reopenable help stay. Help/guide/news explain
+the cues. Success means hints match actual execution at cost/range edges,
+effective negative controls and a deterministic comparison with the prior
+engine, plus real320/390 miss/range/cooldown/gas/recovery Practice proof.
+Existing mode, score, animation and native journeys stay.
+
+Branch codex/cage-readiness-1069 from main31a4ec01. Narrow claim: Cage
+engine helper extraction, Board hints, new tests/harness, native QA,
+Cage workflow, help, Cage moreSports.ts paragraph and one news line.
+Claude keeps soccer/GM, soccer2.ts and US career guide grants. AH keeps
+main/publish while Codex builds and verifies; a narrow publish window will
+be coordinated only after final acceptance. Preserve PR152 to158.
+Root drafts/seven stashes stay protected. All runtimes are remote CI only.
+No direct production DB call, production fight completion or paid AI.
+No LIVE claim yet.
+
 ## Round1068 LIVE: Cage grappling motion, 2026-10-06 20:22:21 UTC
 
 Cage Clash at https://douknowball.com/cage-clash now draws distinct guard,
