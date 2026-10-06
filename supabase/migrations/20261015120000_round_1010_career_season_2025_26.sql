@@ -141,7 +141,7 @@ begin
   -- Kylian Mbappé 2024-2025 Real Madrid: 35 apps 18 goals to 59 apps 44 goals (a mid-season snapshot)
   select count(*) into n from public.career_players where id = 'a0000001-0000-0000-0000-000000000005' and player_name = 'Kylian Mbappé';
   if n <> 1 then raise exception 'Kylian Mbappé: expected one career_players row at a0000001-0000-0000-0000-000000000005, found %', n; end if;
-  update public.career_seasons set goals = 44, assists = 5, appearances = 59
+  update public.career_seasons set goals = 44, assists = null::integer, appearances = 59
   where player_id = 'a0000001-0000-0000-0000-000000000005' and season = '2024-2025' and club = 'Real Madrid' and goals = 18 and assists is not distinct from 4 and appearances = 35 and market_value = 180;
   get diagnostics n = row_count;
   if n <> 1 then raise exception 'Kylian Mbappé 2024-2025 Real Madrid: expected one row carrying the old values, updated %', n; end if;
@@ -681,7 +681,7 @@ begin
   -- Victor Osimhen 2024-2025 Galatasaray: 22 apps 14 goals to 41 apps 37 goals (a mid-season snapshot)
   select count(*) into n from public.career_players where id = 'a0000001-0000-0000-0000-000000000057' and player_name = 'Victor Osimhen';
   if n <> 1 then raise exception 'Victor Osimhen: expected one career_players row at a0000001-0000-0000-0000-000000000057, found %', n; end if;
-  update public.career_seasons set goals = 37, assists = 7, appearances = 41
+  update public.career_seasons set goals = 37, assists = null::integer, appearances = 41
   where player_id = 'a0000001-0000-0000-0000-000000000057' and season = '2024-2025' and club = 'Galatasaray' and goals = 14 and assists is not distinct from 5 and appearances = 22 and market_value = 75;
   get diagnostics n = row_count;
   if n <> 1 then raise exception 'Victor Osimhen 2024-2025 Galatasaray: expected one row carrying the old values, updated %', n; end if;

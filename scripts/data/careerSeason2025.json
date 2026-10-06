@@ -20,7 +20,7 @@
     "split": "A new spell at a European or Saudi club is written 2025-2026.",
     "calendar": "A new spell at a calendar league club (MLS, Brazil, Argentina, Japan) is written as the calendar year 2025, after the precedent of Giroud 2025 LAFC.",
     "never": "Nothing is written 2026. Only a plain hyphen joins the years.",
-    "held": "A man whose legacy rows at a calendar league club are split style gets no new row at a calendar league club until a relabel round decides what those rows mean; he is listed under held. A new row at a European or Saudi club is added all the same (the lead's decision 2 of Round 1017 for Endrick at Real Madrid and Lyon; Estêvão at Chelsea is added on the same reading, which the lead still has to accept).",
+    "held": "A man whose legacy rows at a calendar league club are split style gets no new row at a calendar league club until a relabel round decides what those rows mean; he is listed under held. A new row at a European or Saudi club is added all the same (the lead's decision 2 of Round 1017 for Endrick at Real Madrid and Lyon; Estêvão at Chelsea is added on the same reading, which the lead accepted on 2026-10-06 under the Endrick rule, since his new spell is at a European club).",
     "stats": "Appearances and goals are all competitions club totals for the season (league, domestic cups, Europe and the super cup), the convention the bake's completed seasons follow. National team games are never counted.",
     "midSeason": "A mid-season move is two rows with the same season string, appended in date order.",
     "clubWorldCup": "The 2025 FIFA Club World Cup (June to July 2025) counts in season 2024-2025, where footballdatabase.eu, besoccer, soccerbase and Transfermarkt file it. A man who played it for a new club gets a 2024-2025 row at that club, sourced (Trent Alexander-Arnold at Real Madrid).",
@@ -48,7 +48,7 @@
     "seasons": 3640
   },
   "postBake": {
-    "sha256": "3a2158802b9fa56ac335515f7644ff1a94f02b3818c454befa9c54447578bb42",
+    "sha256": "ec3e2b651608f4a4406c5caa308c13e02d6cc6f3a3eb834525c92e71f5e425b5",
     "players": 252,
     "seasons": 3727,
     "stamp": "2026-10-05"
@@ -2001,8 +2001,8 @@
       "club": "Real Madrid",
       "field": "assists",
       "from": 4,
-      "to": 5,
-      "note": "Round 1017 review: a third host dissents. us.soccerway.com/player/mbappe-kylian/Wn6E2SED/ (read 2026-10-06) gives Champions League 2024/2025 14 matches 7 goals 2 assists where footballdatabase.eu and besoccer give 1, so its total would be 6. Two hosts agree on 5 and the assists convention lets them settle it, as Endrick's Lyon 8 and Courtois's 2 were; under brief rule 6 the lead may write null instead.",
+      "to": null,
+      "note": "Assists null (n/a), the lead's ruling of 2026-10-06: a third host disagrees with the two that agree, so the value is not settled. footballdatabase.eu reads 5 and besoccer reads 5 (Champions League 1 assist), while us.soccerway.com/player/mbappe-kylian/Wn6E2SED/ (read 2026-10-06) gives Champions League 2024/2025 14 matches 7 goals 2 assists, so its total is 6. The migration still guards the old value 4.",
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
         { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
@@ -4574,8 +4574,8 @@
       "club": "Galatasaray",
       "field": "assists",
       "from": 5,
-      "to": 7,
-      "note": "Round 1017 review: a third host dissents. us.soccerway.com/player/osimhen-victor/23YHG47R/ (read 2026-10-06) prints the 2024/2025 Turkish Cup row as 4 | 5 | 0 | 1 | 0, which in its column order (matches, goals, assists, cards) is 0 assists where fotmob and besoccer give 1, so its total would be 6. Two hosts agree on 7 and the assists convention lets them settle it; under brief rule 6 the lead may write null instead.",
+      "to": null,
+      "note": "Assists null (n/a), the lead's ruling of 2026-10-06: a third host disagrees with the two that agree, so the value is not settled. fotmob reads 7 and besoccer reads 7 (Turkish Cup 1 assist), while us.soccerway.com/player/osimhen-victor/23YHG47R/ (read 2026-10-06) prints the 2024/2025 Turkish Cup row as 4 | 5 | 0 | 1 | 0, which in its column order (matches, goals, assists, cards) is 0 assists, so its total is 6. The migration still guards the old value 5.",
       "sources": [
         { "url": "https://www.fotmob.com/players/687681/victor-osimhen", "fields": [ "club", "assists" ], "reads": "Career history, Galatasaray 2024/2025: Super Lig 30 (26, 5), Turkish Cup 4 (5, 1), Europa League 7 (6, 1): 41 apps 37 goals 7 assists; on loan from Napoli 2024-09-04 to 2025-06-30" },
         { "url": "https://www.besoccer.com/player/career-path/v-osimhen-295520", "fields": [ "club", "assists" ], "reads": "Career path, Galatasaray SK 2024/25: 41 apps 37 goals 7 assists (Super Lig 30, 26, 5; Europa League 7, 6, 1; Turkish Cup 4, 5, 1)", "note": "fotmob and besoccer agree on 7; soccerway reads 6 (no Turkish Cup assist)" }
