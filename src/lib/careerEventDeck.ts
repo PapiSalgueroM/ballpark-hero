@@ -87,19 +87,17 @@ export function takeFresh<E extends LedgerCard>(
  *  cards), otherwise one uniform pick from the whole deck. With `fresh`
  *  absent the draws, their order and the result are exactly what each
  *  engine's own copy did. With it, the same draws run over the cards `fresh`
- *  accepts, and a list it would empty falls back to the whole list, so an
- *  offseason is never empty. */
+ *  accepts. When every open arc card is resting, the pick goes to the whole
+ *  deck instead (the same one draw), so an arc card never repeats inside its
+ *  cooldown; and when `fresh` would empty the whole deck, the pick falls back
+ *  to every card, so an offseason is never empty. */
 export function pickDeckCard<E>(deck: E[], corrupt: E[], arcOpen: boolean, rng: () => number, fresh?: (e: E) => boolean): E {
-  const within = (list: E[]): E[] => {
-    if (!fresh) return list;
-    const kept = list.filter(fresh);
-    return kept.length > 0 ? kept : list;
-  };
   if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
-    const pool = within(corrupt);
-    return pool[Math.floor(rng() * pool.length)];
+    const pool = fresh ? corrupt.filter(fresh) : corrupt;
+    if (pool.length > 0) return pool[Math.floor(rng() * pool.length)];
   }
-  const pool = within(deck);
+  const kept = fresh ? deck.filter(fresh) : deck;
+  const pool = kept.length > 0 ? kept : deck;
   return pool[Math.floor(rng() * pool.length)];
 }
 

@@ -15,6 +15,7 @@ import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
 import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
 import { recordCompletion } from '@/lib/completions';
 import { seasonHighs } from '@/lib/usCareerSeasonReview';
+import { answerSummerCard, summerCardAt } from '@/lib/usCareerSummer';
 import { makeReviewCareer, reviewFixtures, reviewSave, reviewSports } from '@/test/fixtures/careerSeasonReview1008';
 import type { ReviewFixture } from '@/test/fixtures/careerSeasonReview1008';
 import type { UsCareerCore } from '@/lib/usCareerSport';
@@ -446,16 +447,19 @@ describe('saved career season review', () => {
     expect(Math.random).not.toHaveBeenCalled();
     expect(recordCompletion).not.toHaveBeenCalled();
     const saved = JSON.parse(bytes);
-    const expectedEvent = sport.drawEvent(JSON.parse(bytes).c, () => .37);
-    expect(expectedEvent.id).toBe(eventId);
+    /* Round 1038: the pending choice is card 1 of the summer the save holds,
+       rebuilt from the save. Answering it moves the save to the next card
+       (team quality is rolled only after the last). */
     const expectedCareer = JSON.parse(bytes).c;
+    const expectedEvent = summerCardAt(expectedCareer, sport, 0)!;
+    expect(expectedEvent.id).toBe(eventId);
     const expectedChoiceRng = vi.fn(() => .37);
-    expectedEvent.options[0].apply(expectedCareer, expectedChoiceRng);
-    const expectedQuality = sport.rollTeamQuality(saved.teamQuality, expectedChoiceRng);
+    const { next } = answerSummerCard(expectedCareer, sport, expectedEvent, 0, expectedChoiceRng);
+    const expectedQuality = next ? saved.teamQuality : sport.rollTeamQuality(saved.teamQuality, expectedChoiceRng);
     fireEvent.click(restored!.querySelector('button')!);
     expect(document.querySelector('[data-career-event]')).toBeNull();
     expect(JSON.parse(localStorage.getItem(sport.saveKey)!)).toEqual({
-      ...saved, c: expectedCareer, phase: 'season', teamQuality: expectedQuality,
+      ...saved, c: expectedCareer, phase: next ? 'event' : 'season', teamQuality: expectedQuality,
     });
     expect(expectedCareer.seasons).toHaveLength(4);
     expect(Math.random).toHaveBeenCalledTimes(expectedChoiceRng.mock.calls.length);
