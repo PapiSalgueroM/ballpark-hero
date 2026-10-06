@@ -245,7 +245,7 @@ function ResignTable({
               <button type="button" className={quiet} onClick={() => onTakePicks(c)}>
                 {sheet.picks.length
                   ? `Let him go and take the picks: round ${sheet.picks.join(', round ')}`
-                  : sport === 'nba' ? 'Let him go. In the NBA a sheet pays nothing back' : 'Let him go. A sheet this size pays no picks'}
+                  : sport === 'nba' ? 'Let him go. Nothing comes back for him here' : 'Let him go. A sheet this size pays no picks'}
               </button>
             </>
           )}

@@ -66,7 +66,7 @@ import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import {
   nbaDeadlineRefusal, nbaDeskAfterRound, nbaDeskEdges, nbaDeskOffseason, nbaDeskRoundOptions, nbaMirrorPickMove,
-  nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf, nbaTradeWindow, openNbaDesk, syncNbaPicks, NBA_DESK_KEYS,
+  nbaMirrorPickRefusal, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf, nbaTradeWindow, openNbaDesk, syncNbaPicks, NBA_DESK_KEYS,
 } from '@/lib/nbaGmDesk';
 import { NBA_DESK_PANELS, NBA_RECAP_PANELS, type NbaDeskFacts } from '@/components/nba-front-office/NbaGmDesk';
 
@@ -695,6 +695,14 @@ export default function NbaFrontOfficeBoard() {
     const list = lg.teams[myTeam].picks;
     return moving && list.length ? list[list.length - 1] : null;
   };
+  /* Round 1018: with the desk on, the pick an old path sends answers to the
+     same pick rules as a package (never a first in two drafts running). */
+  const pickRuleBlock = (lg: NbaLeague, partner: string, moving: boolean): boolean => {
+    const round = gm ? lastPickRound(lg, moving) : null;
+    const why = gm && round !== null ? nbaMirrorPickRefusal(nbaPicksOf(gm, lg), myTeam, partner, round, lg.season) : null;
+    if (why) setFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
+    return !!why;
+  };
   const openTradeTalks = (theirPid: string) => {
     if (!tradePartner || !myTradePiece || deadlineBlock()) return;
     const args = talksArgsFor(tradePartner, myTradePiece, theirPid);
@@ -710,6 +718,7 @@ export default function NbaFrontOfficeBoard() {
   const acceptTalks = () => {
     if (!league || !talks || !talks.state.pkg) return;
     if (deadlineBlock()) { setTalks(null); return; }
+    if (pickRuleBlock(league, talks.partner, talks.state.pkg.addPick)) { setTalks(null); return; }
     const pkg = talks.state.pkg;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const pickRound = lastPickRound(lg, pkg.addPick);
@@ -736,7 +745,7 @@ export default function NbaFrontOfficeBoard() {
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
-    if (!league || !myTradePiece || deadlineBlock()) return;
+    if (!league || !myTradePiece || deadlineBlock() || pickRuleBlock(league, o.teamId, o.sweeten)) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const pickRound = lastPickRound(lg, o.sweeten);
     const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap, lg.taxScale);

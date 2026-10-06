@@ -39,7 +39,7 @@ import {
 import { nbaContractHost } from './gmContractsHostNba';
 import {
   type GmPickLedger, type GmPickRules, NBA_PICK_RULES, findPick, migrateLegacyPicks, movePicks, pickKey,
-  picksHeldBy, rollLedger, validateLedger,
+  pickSwapRefusal, picksHeldBy, rollLedger, validateLedger,
 } from './gmPicks';
 import {
   NBA_DEADLINE, type DeadlineStance, deadlineStances, stanceValue, tradeWindow, type TradeWindow,
@@ -244,9 +244,25 @@ export function syncNbaPicks(league: NbaLeague, ledger: GmPickLedger): void {
  * the ledger: the club's own in that round if it still has it.
  */
 export function nbaMirrorPickMove(ledger: GmPickLedger, from: string, to: string, round: number, season: number): GmPickLedger {
+  const key = nbaMirrorPickKey(ledger, from, round, season);
+  return key ? movePicks(ledger, [key], to) : ledger;
+}
+
+/** The ledger pick an old trade path's marker stands for, or null. */
+function nbaMirrorPickKey(ledger: GmPickLedger, from: string, round: number, season: number): string | null {
   const held = picksHeldBy(ledger, from, season).filter(p => p.round === round);
   const p = held.find(x => x.orig === from) ?? held[0];
-  return p ? movePicks(ledger, [pickKey(p)], to) : ledger;
+  return p ? pickKey(p) : null;
+}
+
+/**
+ * Why an old trade path may not send that pick, or null. The same rules the
+ * Trade desk asks of a package (pickSwapRefusal), so a sweetener or a phone
+ * call's pick can never leave the club without a first in two drafts running.
+ */
+export function nbaMirrorPickRefusal(ledger: GmPickLedger, from: string, to: string, round: number, season: number): string | null {
+  const key = nbaMirrorPickKey(ledger, from, round, season);
+  return key ? pickSwapRefusal(ledger, nbaGamePickRules(), season, from, [key], to, []) : null;
 }
 
 /* ------------------------------------------------------------------ */
@@ -521,8 +537,13 @@ export function nbaDeskOffseason(league: NbaLeague, desk: GmDesk, team: string, 
 
 const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
 
-/** The staff box. It pulses when a rival is in for one of yours or a chair is empty. */
-export function nbaStaffTile(desk: GmDesk, league: NbaLeague, team: string): GmTileFace {
+/**
+ * The staff box. It pulses when a rival is in for one of yours or a chair is
+ * empty. On a save without the desk yet (`on` false) no staff is working, so
+ * the box says what opening it brings rather than an edge nobody is getting.
+ */
+export function nbaStaffTile(desk: GmDesk, league: NbaLeague, team: string, on = true): GmTileFace {
+  if (!on) return { icon: '📋', value: 'A staff of five', sub: 'Open it to start the desk: no edge from the bench until then', accent: false };
   const s = nbaStaffOf(desk, league, team);
   const posts = NBA_STAFF_PACK.posts;
   const filled = posts.filter(p => s.block[p.id]).length;
@@ -536,10 +557,17 @@ export function nbaStaffTile(desk: GmDesk, league: NbaLeague, team: string): GmT
   };
 }
 
-/** The re-sign box. It pulses once the deadline has passed and somebody is still waiting on you. */
-export function nbaContractsTile(desk: GmDesk, league: NbaLeague, team: string, seasonOver: boolean): GmTileFace {
-  const ledger = nbaContractsOf(desk, league, team);
+/**
+ * The re-sign box. It pulses once the deadline has passed and somebody is
+ * still waiting on you. Without the desk yet (`on` false) the summer still
+ * decides, so nobody is waiting on the GM and the box says so.
+ */
+export function nbaContractsTile(desk: GmDesk, league: NbaLeague, team: string, seasonOver: boolean, on = true): GmTileFace {
   const up = expiringMen(nbaContractHost, league, team);
+  if (!on) {
+    return { icon: '✍️', value: up.length ? `${plural(up.length, 'deal')} end this summer` : 'Nobody expiring', sub: 'Open it to start the desk: until then the summer decides', accent: false };
+  }
+  const ledger = nbaContractsOf(desk, league, team);
   const waiting = undecided(nbaContractHost, league, ledger).length;
   return {
     icon: '✍️',

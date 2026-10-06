@@ -60,7 +60,7 @@ function StaffPanel({ desk, facts, onDesk }: Props) {
       <p className="text-center text-[11px] text-muted-foreground">
         Ownership gives the staff desk {money(NBA_STAFF_PACK.money.seasonPurse)} each summer for fees and pay offs. Wages are paid outside the cap.
         One strength number covers both ends of the floor here, so a coach's point at either end counts {Math.round(NBA_END_WEIGHT * 100)} percent.
-        The development coach works on your men aged 24 and under with room to grow, every summer.
+        The development coach works every summer on your men with room to grow who are 23 or under today, since everyone turns a year older before the summer's growth.
       </p>
       <GmStaffPanel
         pack={NBA_STAFF_PACK}
@@ -198,7 +198,7 @@ function DealsPanel({ desk, facts }: Props) {
         </select>
       </label>
       <p className="text-center text-[11px] text-muted-foreground">
-        Clubs in a playoff place buy: they rate every veteran higher and every pick and young player lower, theirs and yours alike, so a vet fetches more from them and a pick less. Clubs well out of it sell, the other way round. Salaries have to match the way the league's do, and over the first apron a club takes back no more than it sends.
+        Clubs in a playoff place buy: they rate every veteran higher and every pick and young player lower, theirs and yours alike, so a vet fetches more from them and a pick less. Clubs well out of it sell, the other way round. Salaries have to match under this game's own rule (what comes in fits your room, or is no more than one and a half times what goes out plus $5M), and over the first apron a club takes back no more than it sends.
       </p>
       <GmTradeBuilder
         partnerName={facts.clubName(partner)}
@@ -219,12 +219,12 @@ function DealsPanel({ desk, facts }: Props) {
 
 const STAFF: GmPanelDef<NbaDeskFacts> = {
   key: 'staff', title: 'Staff',
-  tile: ({ desk, facts }) => nbaStaffTile(desk, facts.league, facts.teamId),
+  tile: ({ desk, facts }) => nbaStaffTile(desk, facts.league, facts.teamId, facts.deskOn),
   Panel: StaffPanel,
 };
 const CONTRACTS: GmPanelDef<NbaDeskFacts> = {
   key: 'contracts', title: 'Re-sign desk',
-  tile: ({ desk, facts }) => nbaContractsTile(desk, facts.league, facts.teamId, facts.seasonOver),
+  tile: ({ desk, facts }) => nbaContractsTile(desk, facts.league, facts.teamId, facts.seasonOver, facts.deskOn),
   Panel: ContractsPanel,
 };
 const PICKS: GmPanelDef<NbaDeskFacts> = {
