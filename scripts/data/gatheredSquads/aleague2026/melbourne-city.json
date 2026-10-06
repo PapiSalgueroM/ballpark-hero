@@ -65,7 +65,9 @@
       "read": "2026-10-06"
     }
   },
-  "notes": [],
+  "notes": [
+    "3 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Julio Cascante (espn, transfermarkt, fotmob); Isiah Boston (espn, fotmob); Angus Mackintosh (espn, fotmob). See independentOnly."
+  ],
   "count": {
     "clubPage": 28,
     "staffSkipped": 3,
@@ -76,7 +78,8 @@
     "groupKnown": 28,
     "minutesKnown": 21,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 3
   },
   "rows": [
     {
@@ -2688,6 +2691,39 @@
       "name": "Angus Mackintosh",
       "position": "Midfielder",
       "birthDate": "2007-04-05"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Julio Cascante",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "1993-10-03",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Isiah Boston",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2008-04-14",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Angus Mackintosh",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2007-04-05",
+      "inTransferCentre": [],
+      "outHere": false
     }
   ]
 }

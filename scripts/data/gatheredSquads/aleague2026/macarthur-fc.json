@@ -85,7 +85,8 @@
     "groupKnown": 27,
     "minutesKnown": 19,
     "marketRows": 1,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -188,7 +189,6 @@
       "facts": {
         "name": [
           "macarthurfc.com.au",
-          "site.api.espn.com",
           "transfermarkt.com",
           "fotmob.com"
         ],
@@ -208,12 +208,6 @@
           "url": "https://macarthurfc.com.au/squads/men",
           "read": "2026-10-06",
           "profile": "https://macarthurfc.com.au/player/james-hilton/"
-        },
-        {
-          "host": "site.api.espn.com",
-          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/19340/roster?season=2026",
-          "read": "2026-10-06",
-          "id": "250928"
         },
         {
           "host": "transfermarkt.com",
@@ -239,7 +233,8 @@
           "name": "James Hilton",
           "position": "Forward",
           "birthDate": "1997-11-02",
-          "match": "exact"
+          "match": "exact",
+          "otherMan": true
         },
         "tm": {
           "id": "1128985",
@@ -259,6 +254,7 @@
       },
       "notes": [
         "birth date: ESPN 1997-11-02, Transfermarkt 2002-09-16, FotMob 2002-09-16; set to the date two hosts agree on",
+        "ESPN's record under this name has birth date 1997-11-02 and position Forward, against Transfermarkt 2002-09-16 and FotMob 2002-09-16 and group GK: it is another man, so ESPN is not counted as a source for this row",
         "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
       ]
     },
@@ -1754,7 +1750,6 @@
       "facts": {
         "name": [
           "macarthurfc.com.au",
-          "site.api.espn.com",
           "transfermarkt.com",
           "fotmob.com"
         ],
@@ -1771,12 +1766,6 @@
           "url": "https://macarthurfc.com.au/squads/men",
           "read": "2026-10-06",
           "profile": "https://macarthurfc.com.au/player/ben-gibson/"
-        },
-        {
-          "host": "site.api.espn.com",
-          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/19340/roster?season=2026",
-          "read": "2026-10-06",
-          "id": "147131"
         },
         {
           "host": "transfermarkt.com",
@@ -1802,7 +1791,8 @@
           "name": "Ben Gibson",
           "position": "Defender",
           "birthDate": "1993-01-15",
-          "match": "exact"
+          "match": "exact",
+          "otherMan": true
         },
         "tm": {
           "id": "1109825",
@@ -1822,6 +1812,7 @@
       },
       "notes": [
         "birth date not on two hosts (ESPN 1993-01-15, Transfermarkt 2003-01-03, FotMob 2003-07-14), held as null",
+        "ESPN's record under this name has birth date 1993-01-15 and position Defender, against Transfermarkt 2003-01-03 and FotMob 2003-07-14 and group FWD: it is another man, so ESPN is not counted as a source for this row",
         "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
       ]
     },
@@ -2589,7 +2580,9 @@
       "source": "espn",
       "name": "Jing Lual",
       "position": "Forward",
-      "birthDate": "2003-06-12"
+      "birthDate": "2003-06-12",
+      "sameBirthDateAsRow": "Jing Reec"
     }
-  ]
+  ],
+  "independentOnly": []
 }

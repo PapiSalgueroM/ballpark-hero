@@ -72,7 +72,8 @@
     "groupKnown": 24,
     "minutesKnown": 17,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -2207,5 +2208,6 @@
       "position": "Right Winger",
       "birthDate": "2005-04-02"
     }
-  ]
+  ],
+  "independentOnly": []
 }

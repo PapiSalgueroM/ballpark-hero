@@ -80,7 +80,8 @@
     "groupKnown": 25,
     "minutesKnown": 13,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -2307,5 +2308,6 @@
       "position": "Attacking Midfield",
       "birthDate": "2006-03-26"
     }
-  ]
+  ],
+  "independentOnly": []
 }

@@ -72,7 +72,10 @@
       "read": "2026-10-06"
     }
   },
-  "notes": [],
+  "notes": [
+    "1 player is on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so he is not a row and this squad may be incomplete without him: Scott Wootton (espn, fotmob). See independentOnly.",
+    "Arion Sulemani (espn, transfermarkt, fotmob; transfer centre: outs at Perth Glory): on two or more independent lists for this club, but the transfer centre lists him under this club's Outs, so he is not counted as missing."
+  ],
   "count": {
     "clubPage": 28,
     "staffSkipped": 1,
@@ -83,7 +86,8 @@
     "groupKnown": 28,
     "minutesKnown": 20,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 2
   },
   "rows": [
     {
@@ -2658,6 +2662,31 @@
       "name": "Arion Sulemani",
       "position": "Attacker",
       "birthDate": "2005-03-01"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Scott Wootton",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "1991-09-12",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Arion Sulemani",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2005-03-01",
+      "inTransferCentre": [
+        "outs at Perth Glory"
+      ],
+      "outHere": true
     }
   ]
 }

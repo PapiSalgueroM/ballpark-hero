@@ -76,7 +76,8 @@
     "groupKnown": 21,
     "minutesKnown": 16,
     "marketRows": 1,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -1972,5 +1973,6 @@
       "position": "Defender",
       "birthDate": "1998-08-06"
     }
-  ]
+  ],
+  "independentOnly": []
 }

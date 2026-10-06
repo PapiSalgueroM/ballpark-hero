@@ -61,7 +61,9 @@
       "read": "2026-10-06"
     }
   },
-  "notes": [],
+  "notes": [
+    "2 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Miles Milliner (espn, fotmob); Sam Lancaster (espn, fotmob). See independentOnly."
+  ],
   "count": {
     "clubPage": 31,
     "staffSkipped": 13,
@@ -72,7 +74,8 @@
     "groupKnown": 28,
     "minutesKnown": 20,
     "marketRows": 1,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 2
   },
   "rows": [
     {
@@ -2711,6 +2714,28 @@
       "name": "Samuel Lancaster",
       "position": "Midfielder",
       "birthDate": "2007-01-02"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Miles Milliner",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2009-08-10",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Sam Lancaster",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
     }
   ]
 }

@@ -74,7 +74,8 @@
   "notes": [
     "The club's own squad page still shows the 2025-26 squad: it names Warren Moon as head coach, while the league's transfer centre lists John Hutchinson as the incoming head coach and nine of the page's players under Outs. Those nine are held out.",
     "Rows are the page's remaining players plus the transfer centre's Ins and Re-signings that ESPN or Transfermarkt confirm, so 13 rows rest on the league article rather than the club page.",
-    "Five players carried by both ESPN and Transfermarkt (see notOnClubPage) are named by neither the club page nor the league article, so they are not rows."
+    "Five players carried by both ESPN and Transfermarkt (see notOnClubPage) are named by neither the club page nor the league article, so they are not rows.",
+    "5 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Jai Ajanovic (espn, transfermarkt, fotmob); Chris Donnell (espn, transfermarkt, fotmob); Kristian Popovic (espn, transfermarkt, fotmob; transfer centre: outs at Macarthur FC); Ali Auglah (espn, transfermarkt, fotmob); Noah Hooper (espn, transfermarkt). See independentOnly."
   ],
   "count": {
     "clubPage": 21,
@@ -86,7 +87,8 @@
     "groupKnown": 23,
     "minutesKnown": 13,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 5
   },
   "rows": [
     {
@@ -2482,6 +2484,64 @@
       "name": "Ali Auglah",
       "position": "Midfielder",
       "birthDate": "2002-03-11"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Jai Ajanovic",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2008-08-31",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Chris Donnell",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2004-01-24",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Kristian Popovic",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2001-08-14",
+      "inTransferCentre": [
+        "outs at Macarthur FC"
+      ],
+      "outHere": false
+    },
+    {
+      "name": "Ali Auglah",
+      "listedBy": [
+        "espn",
+        "transfermarkt",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2002-03-11",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Noah Hooper",
+      "listedBy": [
+        "espn",
+        "transfermarkt"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
     }
   ]
 }

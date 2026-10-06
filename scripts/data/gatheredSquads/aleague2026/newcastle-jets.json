@@ -66,7 +66,9 @@
       "read": "2026-10-06"
     }
   },
-  "notes": [],
+  "notes": [
+    "7 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Kaiden Walshe (espn, fotmob); Angus Benjamin Reid (espn, fotmob); Nicholas Paul Badolato (espn, fotmob); Ethan Debono (espn, fotmob); Jake Goodwin (espn, fotmob); Jesse Raymond Hill (espn, fotmob); Callan Thomson Prestwidge (espn, fotmob). See independentOnly."
+  ],
   "count": {
     "clubPage": 24,
     "staffSkipped": 4,
@@ -77,7 +79,8 @@
     "groupKnown": 24,
     "minutesKnown": 22,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 7
   },
   "rows": [
     {
@@ -2416,6 +2419,78 @@
       "name": "Jesse Hill",
       "position": "Attacker",
       "birthDate": "2007-02-11"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Kaiden Walshe",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Angus Benjamin Reid",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Nicholas Paul Badolato",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Ethan Debono",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2005-12-15",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Jake Goodwin",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Jesse Raymond Hill",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Callan Thomson Prestwidge",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
     }
   ]
 }

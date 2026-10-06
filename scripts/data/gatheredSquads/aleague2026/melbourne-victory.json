@@ -66,7 +66,8 @@
     }
   },
   "notes": [
-    "The club's squad page lists only 16 players. Seven more rows come from the league transfer centre's Ins and Re-signings, each confirmed by ESPN or Transfermarkt."
+    "The club's squad page lists only 16 players. Seven more rows come from the league transfer centre's Ins and Re-signings, each confirmed by ESPN or Transfermarkt.",
+    "5 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Oskar Von Schrenk (espn, fotmob); John Radimisis (espn, fotmob); William Kengni (espn, transfermarkt); Malik Olukhale (espn, transfermarkt); Theodore Limberis (espn, fotmob). See independentOnly."
   ],
   "count": {
     "clubPage": 16,
@@ -78,7 +79,8 @@
     "groupKnown": 23,
     "minutesKnown": 19,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 5
   },
   "rows": [
     {
@@ -2288,7 +2290,8 @@
       "source": "fotmob",
       "name": "Clarismario Santos",
       "position": "Attacker",
-      "birthDate": "2001-07-27"
+      "birthDate": "2001-07-27",
+      "sameBirthDateAsRow": "Clerismario Santos Rodrigues"
     },
     {
       "source": "fotmob",
@@ -2300,7 +2303,60 @@
       "source": "fotmob",
       "name": "Michael Ghossaini",
       "position": "Attacker",
-      "birthDate": "2007-08-25"
+      "birthDate": "2007-08-25",
+      "sameBirthDateAsRow": "Mikey Ghossaini"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Oskar Von Schrenk",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2008-06-09",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "John Radimisis",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "William Kengni",
+      "listedBy": [
+        "espn",
+        "transfermarkt"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Malik Olukhale",
+      "listedBy": [
+        "espn",
+        "transfermarkt"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Theodore Limberis",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
     }
   ]
 }

@@ -57,7 +57,8 @@
     "groupKnown": 31,
     "minutesKnown": 27,
     "marketRows": 0,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -2921,13 +2922,16 @@
       "source": "espn",
       "name": "Ajak Chol",
       "position": "Forward",
-      "birthDate": "2000-12-12"
+      "birthDate": "2000-12-12",
+      "sameBirthDateAsRow": "Ajak Riak"
     },
     {
       "source": "fotmob",
       "name": "Anselmo",
       "position": "Attacker",
-      "birthDate": "1989-02-20"
+      "birthDate": "1989-02-20",
+      "sameBirthDateAsRow": "Anselmo de Moraes"
     }
-  ]
+  ],
+  "independentOnly": []
 }

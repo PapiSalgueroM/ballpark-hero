@@ -76,7 +76,8 @@
     "groupKnown": 28,
     "minutesKnown": 22,
     "marketRows": 1,
-    "perfPagesLoaded": 12
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
   },
   "rows": [
     {
@@ -2694,5 +2695,6 @@
       "position": "Left-Back",
       "birthDate": "2007-02-28"
     }
-  ]
+  ],
+  "independentOnly": []
 }
