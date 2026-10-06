@@ -87,7 +87,7 @@ const controls = {
   bank: { source: 'board', changes: [['save({ ...recordRef.current, banked: true });', 'save({ ...recordRef.current, banked: false });', 1]], failure: /completes ten, blocks a daily replay and banks Passing once before the callback/ },
   reduced: { source: 'board', changes: [["reduced && phase === 'playing' ? setup.start : ", '', 1]], failure: /keeps a reduced motion pitch static while the same clock plays the same pass/ },
   edgeclear: { source: 'engine', changes: [['Math.abs(x - crossX) < BLOCK)', 'Math.abs(x - crossX) < BLOCK - 7)', 1]], failure: /cuts out a pass that crosses the line within reach of a defender, and only that pass/ },
-  outwide: { source: 'engine', changes: [["  if (!onPitch(target.x)) return settle('out');\n", '', 1]], failure: /calls a ball off the side of the pitch out of play, wherever it would have stopped/ },
+  outwide: { source: 'engine', changes: [["if (!onPitch(target.x)) return settle('out');", '', 1]], failure: /calls a ball off the side of the pitch out of play, wherever it would have stopped/ },
   held: { source: 'engine', changes: [["outcome === 'offside' && press >= throughBallDeadline(setup) ? HELD_VERDICT : VERDICTS[outcome]", 'VERDICTS[outcome]', 1]], failure: /settles every verdict the rules name, and no round is free/ },
   blindclock: { source: 'board', changes: [["{paused ? 'Paused, press Resume' : `${seconds.toFixed(2)}s · ${aimText}`}", "{paused ? 'Paused, press Resume' : phase === 'playing' && seconds >= setup.hold && seconds <= crossAt ? 'He is going, play it' : `${seconds.toFixed(2)}s · ${aimText}`}", 1]], failure: /keeps the live clock on screen from the hold to the line, reduced motion or not/ },
 };
