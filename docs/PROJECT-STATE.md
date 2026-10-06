@@ -1,3 +1,24 @@
+## Codex claims Round1066: Cage Clash fight stats, 2026-10-06
+
+Codex owns a compact post-fight recap within /cage-clash. Quick fight and
+each finished Circuit fight get Fight stats: You/CPU shots landed, damage
+dealt, blocks, takedowns and seconds of top control. Back restores the
+result button focus; Rematch and Next opponent remain in the result view.
+Existing counters only. No engine, scoring, saves, route, data or DB change.
+
+Branch codex/cage-fight-stats-1066 in the managed career-season-compare-1060
+worktree. Scope: Cage board/new recap component, focused tests/harness,
+native Cage QA, Cage help/guide, What's New and accepted generated pages.
+All runtime/build/generation stays in remote Actions. Check literal unequal
+stats, zeros, rounding and seconds, practice/in-progress exclusion, focus,
+no duplicate awards, phone geometry and effective mutations. Publish only
+after saved artifacts and exact-source final CI are accepted.
+
+Claude owns AH, soccer/GM and the prior soccer2.ts guide hunks. AH keeps the
+publish slot during this work. Preserve PR150/151. No competing guide claim.
+No Codex production calls, local runtimes, paid AI or indexing submissions.
+Root drafts/seven stashes stay untouched. Next1067 unclaimed.
+
 ## Round1065 LIVE: Cage Clash Circuit, 2026-10-06 15:23:14 UTC
 
 Circuit is live at https://douknowball.com/cage-clash. Choose Mode: Circuit.
