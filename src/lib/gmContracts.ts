@@ -41,6 +41,7 @@ import {
   NBA_BIRD_MAX_YEARS, NBA_BIRD_SEASONS, NBA_EARLY_BIRD_AVERAGE, NBA_EARLY_BIRD_MAX_YEARS, NBA_EARLY_BIRD_MIN_YEARS,
   NBA_EARLY_BIRD_RAISE, NBA_NON_BIRD_MAX_YEARS, NBA_NON_BIRD_RAISE, NFL_OPTION_ROUND, NFL_OPTION_YEARS, NHL_RFA_UNDER_AGE,
   NHL_RFA_UNDER_SEASONS, nbaMaxShare, offerSheetPicks, type BirdTier, type GmSportKey,
+  NBA_RFA_MAX_SERVICE, NBA_ROOKIE_SCALE_ROUND,
 } from '@/lib/gmContractRules';
 
 /* ================================================================== */
@@ -277,6 +278,23 @@ export function birdTier(ledger: GmContractLedger, league: GmContractLeague, man
   if (n >= NBA_BIRD_SEASONS.early) return 'early';
   if (n >= NBA_BIRD_SEASONS.non) return 'non';
   return 'none';
+}
+
+/**
+ * Round 1018: an NBA man who can be a restricted free agent this winter. Only
+ * a man this GM drafted, at the end of his first deal (the only service time
+ * the save knows): a first round pick finishing his rookie scale deal, or a
+ * man with three seasons or fewer in the league (gmContractRules). Every man
+ * it lets in has played three seasons here or more, so he holds full Bird
+ * rights, and a matched sheet is always a deal his rights allow; the tier
+ * check says so in code rather than leaving it to the deal lengths.
+ */
+export function nbaRestricted(ledger: GmContractLedger, league: GmContractLeague, man: GmMan): boolean {
+  const rec = ledger.men[man.id];
+  if (rec?.how !== 'draft' || rec.firstDealDone) return false;
+  const service = seasonsHere(ledger, league, man);
+  if (service == null || birdTier(ledger, league, man) !== 'full') return false;
+  return rec.round === NBA_ROOKIE_SCALE_ROUND || service <= NBA_RFA_MAX_SERVICE;
 }
 
 export function contractClass(sport: GmSportKey, ledger: GmContractLedger, league: GmContractLeague, man: GmMan): ContractClass {
@@ -564,6 +582,17 @@ export function deskCase<L extends GmContractLeague>(
       /* An Early Bird deal runs at least two seasons. With room for him the
          club does not need the exception, so the minimum does not apply. */
       if (cls === 'bird-early' && limit > room) out.minYears = NBA_EARLY_BIRD_MIN_YEARS;
+    }
+    /* Round 1018: restricted free agency, beside his Bird rights rather than
+       instead of them (they still price a new deal). The qualifying offer is
+       one season at his last salary; a rival's sheet is the hashed one the
+       NHL desk uses, held to the league's limits: never over his maximum,
+       four seasons at most from another club, and no picks paid back. */
+    if (nbaRestricted(ledger, league, man)) {
+      const raw = sheetClubFor(host, league, ledger.team, man.id) ? offerSheetFor(league, man, ask, host.nextCap(league)) : null;
+      const sheet = raw ? { years: Math.min(NBA_NON_BIRD_MAX_YEARS, raw.years), salary: Math.min(raw.salary, max), picks: [] as number[] } : null;
+      out.restricted = { qualifying: { years: 1, salary: round1(Math.max(floor, man.salary)) }, sheet };
+      if (sheet) out.canNegotiate = false;
     }
   }
 

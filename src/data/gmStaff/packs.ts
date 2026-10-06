@@ -181,14 +181,19 @@ export const NBA_STAFF_PACK: GmStaffPack<NbaStaffPost> = {
   posts: NBA_POSTS,
   rules: rulesFor(NBA_POSTS, proMoney(0.008), { hc: 5, assistant: 2 }, PRO_FROM, 'A video coordinator in the building already'),
   keys: {
-    offEdge: edgeKey('rating points at the offensive end'),
-    defEdge: edgeKey('rating points at the defensive end'),
+    /* Round 1018 bound this pack (src/lib/nbaGmDesk.ts). The engine has one
+       strength number for both ends of the floor, so a point at one end
+       reaches it at half (NBA_END_WEIGHT there), and the words say so. */
+    offEdge: edgeKey('rating points at the offensive end. One strength number covers both ends here, so half of them reach team strength'),
+    defEdge: edgeKey('rating points at the defensive end. One strength number covers both ends here, so half of them reach team strength'),
     growth: GROWTH_KEY,
     scoutSpread: SCOUT_KEY,
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 24, tickWord: 'week', seasonPurse: 9,
+    /* Round 1018: the board ticks the desk once a round over its 20 rounds
+       (NBA_ROUNDS), so the clock and the wages count rounds. */
+    wageUnit: 'k a round', purseUnit: 'm', ticksPerSeason: 20, tickWord: 'round', seasonPurse: 9,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the salary cap.',
   },
 };

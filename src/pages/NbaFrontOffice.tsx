@@ -38,6 +38,7 @@ const NbaFrontOffice = () => {
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',
               "Close each season on its numbers: the league leaders, your club's lines and five awards named by stated rules, all from this save's sim games, never real NBA stats.",
               'Draft, develop, re-sign and go again. Banners are forever.',
+              'Run the GM desk: hire your staff, settle every expiring deal on the re-sign desk under Bird rights, the rookie scale and restricted free agency, and build packages of players and picks until the trade deadline: deals shut once round 13 is played.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
             examples={[
@@ -47,6 +48,7 @@ const NbaFrontOffice = () => {
               'Open a new league on its $226.7M tax line, close the season $10M over it and pay $10.8M (the first $6.859M at 1.00, the rest at 1.25), or $30.8M as a repeater',
               'Carry a strong sixth man behind your best five: off the bench he scores about 13 a game and can take Sixth Man of the Year, because he started fewer than half his games',
               'Build back-to-back champions and chase a dynasty',
+              'Hire a level 6 head coach for +0.83 team strength, put a qualifying offer on your restricted first rounder when no rival sheet comes in, then ship a veteran and a second round pick to a buyer before round 13 is played',
             ]}
           />
           <p className="text-xs text-center mb-6">

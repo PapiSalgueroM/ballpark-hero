@@ -43,6 +43,14 @@ const DECISION_LABEL: Record<GmDecision['kind'], string> = {
   'take-picks': 'Gone to the rival on its sheet, picks coming',
 };
 
+/* Round 1018: the NBA keeps restricted free agency beside a man's Bird
+   rights, so its tile names both; and a sheet that paid nothing says so
+   rather than promising picks. */
+const classLabel = (c: DeskCase): string =>
+  c.restricted && c.cls !== 'restricted' ? `Restricted free agent, ${CLASS_LABEL[c.cls].toLowerCase()}` : CLASS_LABEL[c.cls];
+const decisionLabel = (d: GmDecision): string =>
+  d.kind === 'take-picks' && !d.picks?.length ? 'Gone to the rival on its sheet' : DECISION_LABEL[d.kind];
+
 export interface GmResignDeskProps {
   sport: GmSportKey;
   cases: DeskCase[];
@@ -126,7 +134,7 @@ export function GmResignDesk(props: GmResignDeskProps) {
               <span className="block break-words font-bold text-foreground">{c.man.name}</span>
               <span className="block text-muted-foreground">{c.man.pos} {c.man.ovr} overall, age {c.man.age}</span>
               <span className="block text-foreground">Asks {m(c.ask.salary)} for {yrs(c.ask.years)}</span>
-              <span className="block text-muted-foreground">{d ? DECISION_LABEL[d.kind] : CLASS_LABEL[c.cls]}</span>
+              <span className="block text-muted-foreground">{d ? decisionLabel(d) : classLabel(c)}</span>
             </button>
           );
         })}
@@ -146,7 +154,7 @@ export function GmResignDesk(props: GmResignDeskProps) {
 }
 
 function ResignTable({
-  c, decisions, pushes, offer, setOffer, onBack, help,
+  sport, c, decisions, pushes, offer, setOffer, onBack, help,
   onKeep, onPush, onAcceptFinal, onLetGo, onOption, onTender, onQualify, onMatch, onTakePicks,
 }: GmResignDeskProps & {
   c: DeskCase;
@@ -183,7 +191,7 @@ function ResignTable({
       <div className="text-center">
         <p className="break-words text-sm font-bold text-foreground">{c.man.name}</p>
         <p className="text-[11px] text-muted-foreground">{c.man.pos} {c.man.ovr} overall, age {c.man.age}, on {m(c.man.salary)} now</p>
-        <p className="text-[11px] text-foreground">{CLASS_LABEL[c.cls]}</p>
+        <p className="text-[11px] text-foreground">{classLabel(c)}</p>
         <p className="text-[11px] text-foreground">His agent asks {m(c.ask.salary)} a season for {yrs(c.ask.years)}.</p>
         {capped && (
           <p className="text-[11px] text-muted-foreground">
@@ -194,7 +202,7 @@ function ResignTable({
 
       {d ? (
         <p data-resign-decided className="rounded-lg bg-secondary/40 px-2 py-2 text-center text-[11px] text-foreground">
-          {DECISION_LABEL[d.kind]}{d.salary != null && d.years != null ? `: ${yrs(d.years)} at ${m(d.salary)}` : ''}
+          {decisionLabel(d)}{d.salary != null && d.years != null ? `: ${yrs(d.years)} at ${m(d.salary)}` : ''}
           {d.picks && d.picks.length
             ? `. Picks owed to you: round ${d.picks.join(', round ')}${d.kind === 'qualify-rejected' ? ', once another club signs him' : ''}.`
             : '.'}
@@ -234,7 +242,7 @@ function ResignTable({
               <button type="button" className={quiet} onClick={() => onTakePicks(c)}>
                 {sheet.picks.length
                   ? `Let him go and take the picks: round ${sheet.picks.join(', round ')}`
-                  : 'Let him go. A sheet this size pays no picks'}
+                  : sport === 'nba' ? 'Let him go. In the NBA a sheet pays nothing back' : 'Let him go. A sheet this size pays no picks'}
               </button>
             </>
           )}

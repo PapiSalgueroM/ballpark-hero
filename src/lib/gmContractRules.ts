@@ -59,6 +59,8 @@ export interface ContractRule {
   sources: RuleSource[];
   /** True when part of the rule rests on one publisher. See the note beside it. */
   singleSource?: boolean;
+  /** Round 1018: the day this rule's sources were read, when it is not CONTRACT_RULES_AS_OF. */
+  readOn?: string;
 }
 
 /* ------------------------------------------------------------------ */
@@ -94,6 +96,14 @@ export const NBA_EARLY_BIRD_MIN_YEARS = 2;
 export const NBA_BIRD_MAX_YEARS = 5;
 /** Any deal without full Bird rights (Non-Bird, or a man with no rights signed into room) runs four seasons at most. */
 export const NBA_NON_BIRD_MAX_YEARS = 4;
+
+/* Round 1018, read 2026-10-05: the rookie scale and restricted free agency. See the two rules below. */
+/** Only a first round pick signs on the rookie scale. */
+export const NBA_ROOKIE_SCALE_ROUND = 1;
+/** A rookie scale deal: two guaranteed seasons, then club options on the third and the fourth. */
+export const NBA_ROOKIE_SCALE_YEARS = 4;
+/** Any other man can be restricted when his deal ends with this many seasons in the league or fewer. */
+export const NBA_RFA_MAX_SERVICE = 3;
 
 /** The most a first year salary may be, as a share of the cap, by seasons in the league. */
 export const NBA_MAX_SHARE: { maxService: number; share: number }[] = [
@@ -206,6 +216,31 @@ export const CONTRACT_RULES: ContractRule[] = [
       { url: 'https://www.cbssports.com/nba/news/nba-salary-cap-explained-glossary-for-the-terms-you-need-to-know-ahead-of-basketball-free-agency/', says: '25 percent for most players with four to six years, 30 percent with seven to nine, 35 percent with ten or more.' },
       { url: 'https://www.cbssports.com/nba/news/nba-free-agency-cheat-sheet-everything-you-need-to-know', says: 'Zero to six years: 25 percent of the cap; seven to nine: 30 percent; ten or more: 35 percent.' },
       { url: 'https://www.salaryswish.com/maximum-salary-faq/', says: 'Zero to six years of service: 25 percent of the salary cap; seven to nine: 30 percent; ten or more: 35 percent.' },
+    ],
+  },
+  {
+    id: 'nba-rookie-scale',
+    sport: 'nba',
+    name: 'Rookie scale',
+    plain: 'A first round pick signs a rookie scale deal: two guaranteed seasons, then club options on the third and the fourth. Second round picks are not on the scale and sign whatever deal they agree.',
+    inGame: "With the desk on, a man this GM takes in the first round signs for all four seasons, the two options taken as picked up, because a deal here carries one salary for its whole length and the desk asks when it runs out. His salary is the engine's own figure for his rating, not the league's scale by draft slot. A second round pick keeps the deal the game has always given him.",
+    readOn: '2026-10-05',
+    sources: [
+      { url: 'https://www.hoopsrumors.com/2024/07/hoops-rumors-glossary-rookie-scale-2.html', says: 'Only first round picks are eligible for rookie scale deals: two guaranteed seasons with club options for the third and fourth; second rounders sign through the second round exception, cap room or other exceptions.' },
+      { url: 'https://www.nba.com/news/free-agency-explained', says: "A first round pick's rookie scale contract carries a club option before both the third and the fourth season." },
+    ],
+  },
+  {
+    id: 'nba-restricted-free-agency',
+    sport: 'nba',
+    name: 'Restricted free agency and the qualifying offer',
+    plain: 'A first round pick finishing the fourth season of his rookie scale deal, or any other player with three seasons or fewer in the league, can be a restricted free agent. His club keeps that right by making a qualifying offer, a standing one season offer he may sign. Another club may sign him to an offer sheet of at least two seasons, and his club then gets a short window to match it and keep him on its terms.',
+    inGame: "Applies to a man this GM drafted, at the end of his first deal, because that is the only service time the save knows. The qualifying offer here is one season at his last salary, the game's own figure. Whether a rival tables a sheet is fixed by the player and the season, never a draw; a sheet is never more than his maximum salary or four seasons, and only a club with a roster spot can table one. Let a sheet go and he joins that club on its terms. None of the sources names anything paid back for him, so the game pays nothing. His Bird rights still set what you can pay him on a new deal.",
+    readOn: '2026-10-05',
+    sources: [
+      { url: 'https://www.nba.com/news/free-agency-explained', says: "Restricted after the fourth year of a first round pick's rookie scale deal, or for a veteran with three seasons or fewer; the qualifying offer is a standing one year offer that keeps the right to match; an offer sheet must cover at least two seasons; the club has two days to match." },
+      { url: 'https://www.hoopsrumors.com/2026/08/key-dates-deadlines-for-restricted-free-agents-2.html', says: 'Eligible as a former first round pick finishing the fourth year of his rookie scale deal, or as a former second round pick or undrafted player with no more than three years in the league; the qualifying offer is a one year offer the club must issue to keep the right of first refusal.' },
+      { url: 'https://www.cbssports.com/nba/news/nba-free-agency-cheat-sheet-everything-you-need-to-know', says: 'First round picks who have finished the fourth year of their rookie scale deal, or veterans with three or fewer years; an offer sheet runs up to his maximum salary; his club may match (three days, in 2016 when it was written).' },
     ],
   },
   {
