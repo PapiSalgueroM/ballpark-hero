@@ -550,8 +550,8 @@
       "marketValue": 0,
       "note": "He moved to Liverpool on 2026-08-31 (fotmob spell dates; footballdatabase.eu lists him at Liverpool in 2026/2027), so that move belongs to 2026-2027 and is not written.",
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/406326-bradley-barcola", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 29 (11 goals, 1 assist), Champions League 16 (2, 4), FIFA Intercontinental Cup 1, Trophée des Champions 1 (0, 1), French Cup 1: 49 apps 13 goals 6 assists" },
-        { "url": "https://www.fotmob.com/players/1297165/bradley-barcola", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 29 (11, 1), Trophée des champions 1 (0, 1), Coupe de France 1, Champions League 16 (2, 4), UEFA Super Cup 1, FIFA Intercontinental Cup 1, plus the 2025 Club World Cup 6 (0, 2) filed under 2025/2026 here; without it 49 apps 13 goals 6 assists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/406326-bradley-barcola", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 29 (11 goals, 1 assist), Champions League 16 (2, 4), Intercontinental Cup 1, Trophée des Champions 1 (0, 1), French Cup 1: 49 apps 13 goals 6 assists" },
+        { "url": "https://www.fotmob.com/players/1297165/bradley-barcola", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 29 (11, 1), Trophée des champions 1 (0, 1), Coupe de France 1, Champions League 16 (2, 4), UEFA Super Cup 1, Intercontinental Cup 1, plus the 2025 Club World Cup 6 (0, 2) filed under 2025/2026 here; without it 49 apps 13 goals 6 assists" },
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=145024&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "PSG: European Super Cup 1, French Ligue 1 29 (11), European Cup 16 (2), FIFA Club World Cup 1 (17 December 2025, the Intercontinental Cup final), French Champions Trophy 1, French Cup 1: 49 games 13 goals (France games excluded)" }
       ]
     },
@@ -600,8 +600,8 @@
       "assists": 10,
       "marketValue": 0,
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/336156-khvicha-kvaratskhelia", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 28 (8 goals, 4 assists), Champions League 16 (10, 6), FIFA Intercontinental Cup 1 (1, 0), Trophée des Champions 1, French Cup 1: 48 apps 19 goals 10 assists" },
-        { "url": "https://www.fotmob.com/players/900433/khvicha-kvaratskhelia", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 28 (8, 4), Trophée des champions 1, Coupe de France 1, Champions League 16 (10, 6), UEFA Super Cup 1, FIFA Intercontinental Cup 1 (1, 0), plus the 2025 Club World Cup 7 (1, 2) filed under 2025/2026 here; without it 48 apps 19 goals 10 assists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/336156-khvicha-kvaratskhelia", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 28 (8 goals, 4 assists), Champions League 16 (10, 6), Intercontinental Cup 1 (1, 0), Trophée des Champions 1, French Cup 1: 48 apps 19 goals 10 assists" },
+        { "url": "https://www.fotmob.com/players/900433/khvicha-kvaratskhelia", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 28 (8, 4), Trophée des champions 1, Coupe de France 1, Champions League 16 (10, 6), UEFA Super Cup 1, Intercontinental Cup 1 (1, 0), plus the 2025 Club World Cup 7 (1, 2) filed under 2025/2026 here; without it 48 apps 19 goals 10 assists" },
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=118634&season_id=158", "fields": [ "club", "goals" ], "reads": "PSG: European Super Cup 1, French Ligue 1 28 (8), European Cup 16 (10), FIFA Club World Cup 1 (1) (17 December 2025, the Intercontinental Cup final), French Champions Trophy 1: 47 games 19 goals; the Coupe de France game is not logged on this host" }
       ]
     },
@@ -616,8 +616,8 @@
       "assists": 0,
       "marketValue": 0,
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/168495--marquinhos", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 14, Champions League 15 (2 goals), FIFA Intercontinental Cup 1, Trophée des Champions 1, French Cup 0: 32 apps 2 goals, no assist" },
-        { "url": "https://www.fotmob.com/players/267365/marquinhos", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 14 (0, 0), Trophée des champions 1, Champions League 15 (2, 0), UEFA Super Cup 1, FIFA Intercontinental Cup 1, plus the 2025 Club World Cup 6 (0, 0) filed under 2025/2026 here; without it 32 apps 2 goals 0 assists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/168495--marquinhos", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 14, Champions League 15 (2 goals), Intercontinental Cup 1, Trophée des Champions 1, French Cup 0: 32 apps 2 goals, no assist" },
+        { "url": "https://www.fotmob.com/players/267365/marquinhos", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 14 (0, 0), Trophée des champions 1, Champions League 15 (2, 0), UEFA Super Cup 1, Intercontinental Cup 1, plus the 2025 Club World Cup 6 (0, 0) filed under 2025/2026 here; without it 32 apps 2 goals 0 assists" },
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=66754&season_id=158", "fields": [ "club", "appearances", "goals" ], "reads": "PSG: European Super Cup 1, French Ligue 1 14, European Cup 15 (2), FIFA Club World Cup 1 (17 December 2025, the Intercontinental Cup final), French Champions Trophy 1: 32 games 2 goals (Brazil games excluded)" }
       ]
     },
@@ -632,8 +632,8 @@
       "assists": 11,
       "marketValue": 0,
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/247255-ousmane-dembele", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1 (0 goals, 1 assist), Ligue 1 22 (10, 7), Champions League 13 (8, 2), FIFA Intercontinental Cup 1, French Cup 2 (1, 1), Trophée des Champions 1 (1, 0): 40 apps 20 goals 11 assists" },
-        { "url": "https://www.fotmob.com/players/692984/ousmane-dembele", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 22 (10, 7), Trophée des champions 1 (1, 0), Coupe de France 2 (1, 1), Champions League 13 (8, 2), UEFA Super Cup 1 (0, 1), FIFA Intercontinental Cup 1, plus the 2025 Club World Cup 4 (2, 1) filed under 2025/2026 here; without it 40 apps 20 goals 11 assists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/247255-ousmane-dembele", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1 (0 goals, 1 assist), Ligue 1 22 (10, 7), Champions League 13 (8, 2), Intercontinental Cup 1, French Cup 2 (1, 1), Trophée des Champions 1 (1, 0): 40 apps 20 goals 11 assists" },
+        { "url": "https://www.fotmob.com/players/692984/ousmane-dembele", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 22 (10, 7), Trophée des champions 1 (1, 0), Coupe de France 2 (1, 1), Champions League 13 (8, 2), UEFA Super Cup 1 (0, 1), Intercontinental Cup 1, plus the 2025 Club World Cup 4 (2, 1) filed under 2025/2026 here; without it 40 apps 20 goals 11 assists" },
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=88995&season_id=158", "fields": [ "club" ], "reads": "PSG: European Super Cup 1, French Ligue 1 22 (10), European Cup 13 (8), FIFA Club World Cup 1 (the Intercontinental Cup final), French Champions Trophy 1 (1): 38 games 19 goals; the two Coupe de France games (1 goal) are not logged on this host" }
       ]
     },
@@ -685,8 +685,8 @@
       "assists": 5,
       "marketValue": 0,
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/469172-warren-zaireemery", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 32 (3 goals, 4 assists), Champions League 17 (0, 1), FIFA Intercontinental Cup 1, French Cup 2, Trophée des Champions 1: 54 apps 3 goals 5 assists" },
-        { "url": "https://www.fotmob.com/players/1367615/warren-zaire-emery", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 32 (3, 4), Trophée des champions 1, Coupe de France 2, Champions League 17 (0, 1), UEFA Super Cup 1, FIFA Intercontinental Cup 1, plus the 2025 Club World Cup 7 (0, 0) filed under 2025/2026 here; without it 54 apps 3 goals 5 assists" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/469172-warren-zaireemery", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Paris SG 2025/2026: Super Cup 1, Ligue 1 32 (3 goals, 4 assists), Champions League 17 (0, 1), Intercontinental Cup 1, French Cup 2, Trophée des Champions 1: 54 apps 3 goals 5 assists" },
+        { "url": "https://www.fotmob.com/players/1367615/warren-zaire-emery", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "PSG 2025/2026: Ligue 1 32 (3, 4), Trophée des champions 1, Coupe de France 2, Champions League 17 (0, 1), UEFA Super Cup 1, Intercontinental Cup 1, plus the 2025 Club World Cup 7 (0, 0) filed under 2025/2026 here; without it 54 apps 3 goals 5 assists" },
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=163839&season_id=158", "fields": [ "club", "goals" ], "reads": "PSG: European Super Cup 1, French Ligue 1 32 (3), European Cup 16, FIFA Club World Cup 1 (the Intercontinental Cup final), French Champions Trophy 1: 51 games 3 goals; the two Coupe de France games and one Champions League game are not logged on this host" }
       ]
     },
@@ -1486,10 +1486,10 @@
       "appearances": 44,
       "assists": 14,
       "marketValue": 0,
-      "note": "44 includes one FIFA Intercontinental Cup game (December 2025, inside the season); 43 without it. footballdatabase (https://www.footballdatabase.eu/en/player/details/97374-riyad-mahrez) returned a truncated page twice and was not used.",
+      "note": "44 includes one Intercontinental Cup game (December 2025, inside the season); 43 without it. footballdatabase (https://www.footballdatabase.eu/en/player/details/97374-riyad-mahrez) returned a truncated page twice and was not used.",
       "sources": [
-        { "url": "https://us.soccerway.com/player/mahrez-riyad/AkzHA2kB/", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Al Ahli SC: Saudi Professional League 2025/2026 27 (4, 8), King Cup 2025/2026 3 (0, 1), Super Cup 2025/2026 2 (0, 3), AFC Champions League 2025/2026 11 (4, 2), FIFA Intercontinental Cup 2025 1 (0, 0): 44 apps 8 goals 14 assists" },
-        { "url": "https://www.fotmob.com/players/278343/riyad-mahrez", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Career history, Al Ahli 2025/2026: Saudi Pro League 27 (4, 8), King's Cup 3 (0, 1), Super Cup 2 (0, 3), AFC Champions League Elite 11 (4, 2): 43 apps 8 goals 14 assists; FIFA Intercontinental Cup 2025 listed as its own season: 1 app (44 together); Al Ahli 2023-07-28 to 2026-07-04", "states": { "appearances": 44 },
+        { "url": "https://us.soccerway.com/player/mahrez-riyad/AkzHA2kB/", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Al Ahli SC: Saudi Professional League 2025/2026 27 (4, 8), King Cup 2025/2026 3 (0, 1), Super Cup 2025/2026 2 (0, 3), AFC Champions League 2025/2026 11 (4, 2), Intercontinental Cup 2025 1 (0, 0): 44 apps 8 goals 14 assists" },
+        { "url": "https://www.fotmob.com/players/278343/riyad-mahrez", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Career history, Al Ahli 2025/2026: Saudi Pro League 27 (4, 8), King's Cup 3 (0, 1), Super Cup 2 (0, 3), AFC Champions League Elite 11 (4, 2): 43 apps 8 goals 14 assists; Intercontinental Cup 2025 listed as its own season: 1 app (44 together); Al Ahli 2023-07-28 to 2026-07-04", "states": { "appearances": 44 },
           "note": "states: 43 and the Intercontinental Cup game it lists apart, 44 together as the reading says."
         }
       ]
@@ -1976,7 +1976,7 @@
       "to": 59,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -1990,7 +1990,7 @@
       "to": 44,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -2004,7 +2004,7 @@
       "to": 5,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -2018,7 +2018,7 @@
       "to": 58,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/390683-jude-bellingham", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 31/9/8, Champions League 13/3/3, Intercontinental Cup 1/0/0, Copa del Rey 4/1/1, Supercopa 2/1/0, Club World Cup 6/1/1; sum 58 apps 15 goals 14 assists (52/14/13 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2032,7 +2032,7 @@
       "to": 15,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/390683-jude-bellingham", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 31/9/8, Champions League 13/3/3, Intercontinental Cup 1/0/0, Copa del Rey 4/1/1, Supercopa 2/1/0, Club World Cup 6/1/1; sum 58 apps 15 goals 14 assists (52/14/13 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2046,7 +2046,7 @@
       "to": 14,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/390683-jude-bellingham", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 31/9/8, Champions League 13/3/3, Intercontinental Cup 1/0/0, Copa del Rey 4/1/1, Supercopa 2/1/0, Club World Cup 6/1/1; sum 58 apps 15 goals 14 assists (52/14/13 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/j-bellingham-839567", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 15 goals 14 assists (LaLiga 31/9/8, Champions League 13/3/3, Copa del Rey 4/1/1, Super Cup 2/1/0, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2060,7 +2060,7 @@
       "to": 58,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/320787--vinicius_junior", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 30/11/8, Champions League 12/8/2, Intercontinental Cup 1/1/1, Copa del Rey 6/1/2, Supercopa 2/0/1, Club World Cup 6/1/1; sum 58 apps 22 goals 16 assists (52/21/15 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -2074,7 +2074,7 @@
       "to": 22,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/320787--vinicius_junior", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 30/11/8, Champions League 12/8/2, Intercontinental Cup 1/1/1, Copa del Rey 6/1/2, Supercopa 2/0/1, Club World Cup 6/1/1; sum 58 apps 22 goals 16 assists (52/21/15 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -2088,7 +2088,7 @@
       "to": 16,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/320787--vinicius_junior", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/1, La Liga 30/11/8, Champions League 12/8/2, Intercontinental Cup 1/1/1, Copa del Rey 6/1/2, Supercopa 2/0/1, Club World Cup 6/1/1; sum 58 apps 22 goals 16 assists (52/21/15 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, FIFA Intercontinental Cup 1/1/1)" }
+        { "url": "https://www.besoccer.com/player/career-path/vinicius-junior-358618", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 58 MP 22 goals 16 assists (LaLiga 30/11/8, Champions League 12/8/2, Copa del Rey 6/1/2, Super Cup 2/0/1, UEFA Super Cup 1/0/1, FIFA Club World Cup 6/1/1, Intercontinental Cup 1/1/1)" }
       ]
     },
     {
@@ -2102,7 +2102,7 @@
       "to": 65,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/271802-federico-valverde", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 36/6/4, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/1, Supercopa 2/0/0, Club World Cup 6/2/0; sum 65 apps 11 goals 8 assists (59/9/8 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2116,7 +2116,7 @@
       "to": 11,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/271802-federico-valverde", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 36/6/4, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/1, Supercopa 2/0/0, Club World Cup 6/2/0; sum 65 apps 11 goals 8 assists (59/9/8 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2130,7 +2130,7 @@
       "to": 8,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/271802-federico-valverde", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 36/6/4, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/1, Supercopa 2/0/0, Club World Cup 6/2/0; sum 65 apps 11 goals 8 assists (59/9/8 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/federico-santiago-valverde-dipetta", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 65 MP 11 goals 8 assists (LaLiga 36/6/4, Champions League 14/0/3, Copa del Rey 5/2/1, Super Cup 2/0/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 6/2/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2144,7 +2144,7 @@
       "to": 54,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/340349--rodrygo", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 30/6/5, Champions League 12/5/2, Intercontinental Cup 1/1/0, Copa del Rey 5/0/2, Supercopa 2/2/0, Club World Cup 3/0/1; sum 54 apps 14 goals 10 assists (51/14/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, FIFA Intercontinental Cup 1/1/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, Intercontinental Cup 1/1/0)" }
       ]
     },
     {
@@ -2158,7 +2158,7 @@
       "to": 14,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/340349--rodrygo", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 30/6/5, Champions League 12/5/2, Intercontinental Cup 1/1/0, Copa del Rey 5/0/2, Supercopa 2/2/0, Club World Cup 3/0/1; sum 54 apps 14 goals 10 assists (51/14/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, FIFA Intercontinental Cup 1/1/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, Intercontinental Cup 1/1/0)" }
       ]
     },
     {
@@ -2172,7 +2172,7 @@
       "to": 10,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/340349--rodrygo", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 30/6/5, Champions League 12/5/2, Intercontinental Cup 1/1/0, Copa del Rey 5/0/2, Supercopa 2/2/0, Club World Cup 3/0/1; sum 54 apps 14 goals 10 assists (51/14/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, FIFA Intercontinental Cup 1/1/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/rodrygo-365923", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 54 MP 14 goals 10 assists (LaLiga 30/6/5, Champions League 12/5/2, Copa del Rey 5/0/2, Super Cup 2/2/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 3/0/1, Intercontinental Cup 1/1/0)" }
       ]
     },
     {
@@ -2186,7 +2186,7 @@
       "to": 53,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/65793-thibaut-courtois", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1, La Liga 30, Champions League 12, Intercontinental Cup 1, Supercopa 2, Copa del Rey 1, Club World Cup 6; sum 53 apps 0 goals 0 assists (47 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/t-courtois-69148", "fields": [ "club", "appearances" ], "reads": "Real Madrid 2024/25 total 53 MP (LaLiga 30, Champions League 12, Copa del Rey 1, Super Cup 2, UEFA Super Cup 1, FIFA Club World Cup 6, FIFA Intercontinental Cup 1); goals column is goals conceded for a goalkeeper; shows 1 assist (Champions League)" },
+        { "url": "https://www.besoccer.com/player/career-path/t-courtois-69148", "fields": [ "club", "appearances" ], "reads": "Real Madrid 2024/25 total 53 MP (LaLiga 30, Champions League 12, Copa del Rey 1, Super Cup 2, UEFA Super Cup 1, FIFA Club World Cup 6, Intercontinental Cup 1); goals column is goals conceded for a goalkeeper; shows 1 assist (Champions League)" },
         { "url": "https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/134283/gamelog?season=2024&team=86", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "ESPN game log per competition; appearances counted from each listed match's ESPN lineup (site.api.espn.com soccer summary rosters, starter or subbed in), goals and assists from the game log rows. ESPN files the 2025 Club World Cup under its 2025-26 season, so for a 2024-2025 total its Club World Cup line is taken from the 2025 log. 2024-25 Real Madrid: LALIGA 30, Spanish Supercopa 2, Champions League 12, Copa del Rey 1, Intercontinental Cup 1, UEFA Super Cup 1, all 0 goals 0 assists = 47; Club World Cup 6/0/0 from the 2025 log (https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/134283/gamelog?season=2025&team=86); 53 apps 0 goals 0 assists" }
       ]
     },
@@ -2261,7 +2261,7 @@
       "to": 63,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/14377-luka-modric", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 35/2/6, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/0, Supercopa 1/0/0, Club World Cup 6/0/0; sum 63 apps 4 goals 9 assists (57/4/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2275,7 +2275,7 @@
       "to": 4,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/14377-luka-modric", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 35/2/6, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/0, Supercopa 1/0/0, Club World Cup 6/0/0; sum 63 apps 4 goals 9 assists (57/4/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2289,7 +2289,7 @@
       "to": 9,
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/14377-luka-modric", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/0/0, La Liga 35/2/6, Champions League 14/0/3, Intercontinental Cup 1/0/0, Copa del Rey 5/2/0, Supercopa 1/0/0, Club World Cup 6/0/0; sum 63 apps 4 goals 9 assists (57/4/9 without the Club World Cup)" },
-        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, FIFA Intercontinental Cup 1/0/0)" }
+        { "url": "https://www.besoccer.com/player/career-path/l-modric-26968", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 63 MP 4 goals 9 assists (LaLiga 35/2/6, Champions League 14/0/3, Copa del Rey 5/2/0, Super Cup 1/0/0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/0/0, Intercontinental Cup 1/0/0)" }
       ]
     },
     {
@@ -2302,7 +2302,7 @@
       "from": 28,
       "to": 49,
       "sources": [
-        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, FIFA Intercontinental Cup 1/0/0)" },
+        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, Intercontinental Cup 1/0/0)" },
         { "url": "https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2024&team=86", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "ESPN game log per competition; appearances counted from each listed match's ESPN lineup (site.api.espn.com soccer summary rosters, starter or subbed in), goals and assists from the game log rows. ESPN files the 2025 Club World Cup under its 2025-26 season, so for a 2024-2025 total its Club World Cup line is taken from the 2025 log. 2024-25 Real Madrid: LALIGA 28/3/4, Spanish Supercopa 0 of 2 listed, Champions League 7/0/0, Copa del Rey 6/2/4, Intercontinental Cup 1/0/0, UEFA Super Cup 1/0/0 = 43/5/8; Club World Cup 6/1/2 from the 2025 log (https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2025&team=86); 49 apps 6 goals 10 assists" }
       ]
     },
@@ -2316,7 +2316,7 @@
       "from": 5,
       "to": 6,
       "sources": [
-        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, FIFA Intercontinental Cup 1/0/0)" },
+        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, Intercontinental Cup 1/0/0)" },
         { "url": "https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2024&team=86", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "ESPN game log per competition; appearances counted from each listed match's ESPN lineup (site.api.espn.com soccer summary rosters, starter or subbed in), goals and assists from the game log rows. ESPN files the 2025 Club World Cup under its 2025-26 season, so for a 2024-2025 total its Club World Cup line is taken from the 2025 log. 2024-25 Real Madrid: LALIGA 28/3/4, Spanish Supercopa 0 of 2 listed, Champions League 7/0/0, Copa del Rey 6/2/4, Intercontinental Cup 1/0/0, UEFA Super Cup 1/0/0 = 43/5/8; Club World Cup 6/1/2 from the 2025 log (https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2025&team=86); 49 apps 6 goals 10 assists" }
       ]
     },
@@ -2330,7 +2330,7 @@
       "from": 5,
       "to": 10,
       "sources": [
-        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, FIFA Intercontinental Cup 1/0/0)" },
+        { "url": "https://www.besoccer.com/player/career-path/arda-guler-3144243", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 49 MP 6 goals 10 assists (LaLiga 28/3/4, Champions League 7/0/0, Copa del Rey 6/2/4, Super Cup 0, UEFA Super Cup 1/0/0, FIFA Club World Cup 6/1/2, Intercontinental Cup 1/0/0)" },
         { "url": "https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2024&team=86", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "ESPN game log per competition; appearances counted from each listed match's ESPN lineup (site.api.espn.com soccer summary rosters, starter or subbed in), goals and assists from the game log rows. ESPN files the 2025 Club World Cup under its 2025-26 season, so for a 2024-2025 total its Club World Cup line is taken from the 2025 log. 2024-25 Real Madrid: LALIGA 28/3/4, Spanish Supercopa 0 of 2 listed, Champions League 7/0/0, Copa del Rey 6/2/4, Intercontinental Cup 1/0/0, UEFA Super Cup 1/0/0 = 43/5/8; Club World Cup 6/1/2 from the 2025 log (https://site.web.api.espn.com/apis/common/v3/sports/soccer/athletes/310452/gamelog?season=2025&team=86); 49 apps 6 goals 10 assists" }
       ]
     },
@@ -5265,7 +5265,7 @@
       "s2: Shapes follow scripts/data/careerSeason2025.json on origin/r1010b-career-season-wave1. Each source also carries host and read (the read date) as the task asked. wave is left null for the lead to number.",
       "s2: Primary pair for every value: footballdatabase.eu (per season, per competition club rows; national team rows excluded) and fotmob.com (per season, per tournament stats from the player page data). soccerbase.com match logs are a third read where they are complete; they are NOT complete for the Coupe de France (only the round of 64 is logged for PSG men in 2024-2025) or the Portuguese cups, so a soccerbase total lower than the other two is a gap on that host, recorded but not used to settle anything.",
       "s2: CONVENTION QUESTION FOR THE LEAD (affects every PSG man and Di María at Benfica): the 2025 FIFA Club World Cup (14 June to 13 July 2025) is filed under 2024/2025 by footballdatabase.eu and soccerbase.com, and fotmob files it under 2024/2025 for Benfica and for Donnarumma but under 2025/2026 for the other PSG men. Every per competition count agrees across the hosts; only the season it belongs to differs. The values written here COUNT IT IN 2024-2025 (the two hosts that are consistent about it). Every entry it touches carries clubWorldCup2025 { included, valueWithoutIt } so the lead can switch convention without new research. The ledger convention text (league, domestic cups, Europe and the super cup) does not mention it either way.",
-      "s2: The December 2025 FIFA Intercontinental Cup (PSG v Flamengo, 17 December 2025) is inside 2025-2026 on every host (soccerbase labels it FIFA Club World Cup); it is counted in 2025-2026.",
+      "s2: The December 2025 Intercontinental Cup (PSG v Flamengo, 17 December 2025) is inside 2025-2026 on every host (soccerbase labels it FIFA Club World Cup); it is counted in 2025-2026.",
       "s3: {\"flag\":\"clubWorldCup2025\",\"note\":\"The 2025 FIFA Club World Cup (14 June to 13 July 2025) is filed under 2024-2025 by footballdatabase.eu, soccerbase.com (season_id 157) and besoccer.com alike, so the 2024-2025 'to' values in this shard INCLUDE it for Manchester City men. Each such changed entry gives the figure without it in its reads, so the lead can switch if the ledger's convention (league, domestic cups, Europe, super cup) is meant to leave it out. The same question applies to the Chelsea, Real Madrid, PSG, Bayern, Dortmund, Inter, Juventus, Benfica, Porto, Atletico, Al-Hilal and Inter Miami men in other shards. Note us.soccerway.com and fotmob.com file the same tournament under 2025-2026; the 2025-2026 rows in this shard leave it out, so it is never counted twice.\"}",
       "s3: {\"flag\":\"wrongClub2024-2025\",\"note\":\"Marcus Rashford: the pool's single 2024-2025 row is labelled Aston Villa but carries his Manchester United half (24, 7, 3). See the changed entry with field club and the added Aston Villa 2024-2025 row (17, 4, 5). Barcelona 2025-2026 is a loan; the 2025-2026 club is Barcelona for the whole season (soccerbase lists the loan 23 Jul 2025 to 1 Jun 2026).\"}",
       "s3: {\"flag\":\"zeroAppearanceSpell\",\"note\":\"Raheem Sterling was a Chelsea player from the start of 2025-2026 until the contract was ended by mutual agreement in late January 2026 (soccerbase.com club history: Chelsea to 28 Jan 2026; skysports.com https://www.skysports.com/football/news/11095/13500231/raheem-sterling-leaves-chelsea-after-three-and-a-half-years-ahead-of-january-transfer-deadline: no competitive game since the final day of 2024-2025 on loan at Arsenal). He played 0 games for Chelsea that season, so no Chelsea 2025-2026 row is proposed; the lead decides whether a zero appearance spell gets a row. Feyenoord (8 games from 22 Feb 2026) is in added.\"}",
