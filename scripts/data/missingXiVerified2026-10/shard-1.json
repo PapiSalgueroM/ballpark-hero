@@ -1,0 +1,3080 @@
+{
+ "game": "Missing XI",
+ "round": 1026,
+ "shard": 1,
+ "positions": "1 to 35",
+ "checkedOn": "2026-10-05",
+ "foldedOn": "2026-10-06",
+ "method": "Entry read from origin/main src/lib/missingXi.ts. Organiser data read from the organiser's own data feed behind its match page (UEFA: match.uefa.com/v5 behind uefa.com match pages; FIFA: api.fifa.com/api/v3/live behind fifa.com match centre; Premier League: sdp-prem-prod.premier-league-prod.pulselive.com behind premierleague.com/en/match; LaLiga: apim.laliga.com public-service behind laliga.com match pages). Independent data read from ESPN's site.api.espn.com summary feed behind espn.com/soccer/match pages, and besoccer.com lineup pages where ESPN had no roster. worldfootball.net returned a Cloudflare challenge and was not used; bbc.co.uk and theguardian.com were blocked to the fetch tool. Rules applied: names spelled differently for the same man are notes, not diffs. Formation counts as a diff only when the organiser (stated label or its tactical coordinates) and at least one independent source both disagree with the entry, or when two independent sources agree against the entry while the organiser is silent; a split is recorded as a note. Two CMs (or two CBs, two STs) swapped left and right under the same position label are layout notes, not diffs. clubAtTime and nationality were checked where a source was at hand and are reported as diffs only with two sources.",
+ "skeptic": {
+  "verdict": "fix",
+  "wrong": [
+   {
+    "id": "wc-2010-group-spain",
+    "field": "diffs[0] formationLabel (entry 4-2-3-1 called wrong)",
+    "recorded": "Diff: ESPN 4-3-3 and besoccer 4-3-3 agree against the entry's 4-2-3-1, so the label is wrong",
+    "found": "Two independent non-wiki sources back the entry. RSSSF labels Spain '(4-2-3-1)' for this match: Busquets, Xabi Alonso; Silva, Xavi, Iniesta; Villa. Zonal Marking's 2010 match analysis says 'Spain fielded the anticipated side in a 4-2-3-1 formation', with Busquets and Alonso as the double pivot and Xavi as the central playmaker. At best the sources split, so this belongs in notes. The entry should not change.",
+    "sources": "https://www.rsssf.org/tables/2010full.html ; http://www.zonalmarking.net/2010/06/17/spain-0-1-switzerland-tactics/ (read via the archive.org 2020-11-09 snapshot)"
+   },
+   {
+    "id": "wc-2018-final-france",
+    "field": "diffs[1] formationLabel (entry 4-4-2 called wrong)",
+    "recorded": "Diff: FIFA 4-5-1 (coordinates 4-2-3-1) and besoccer 4-2-3-1 disagree with the entry; ESPN agrees with 4-4-2",
+    "found": "Sources split four ways, and the diff text itself calls it a split. RSSSF labels France '(4-3-3)'. Coaches' Voice says 'France set up in a 4-4-2 shape when defending', and Total Football Analysis describes a 4-4-2 out of possession. ESPN says 4-4-2. Under the shard's own rule ('a split is recorded as a note') this should be a note. The Matuidi clubAtTime diff in the same lineup is correct and stays.",
+    "sources": "https://www.rsssf.org/tables/2018full.html ; https://learning.coachesvoice.com/tactics-france-croatia-mbappe-pogba-griezmann-lloris-perisic/ ; https://totalfootballanalysis.com/match-analysis/fifa-world-cup-final-2018-france-vs-croatia-tactical-analysis"
+   },
+   {
+    "id": "cl-2017-final-real",
+    "field": "diffs[0] venue",
+    "recorded": "Diff: 'Millennium Stadium, Cardiff' is the former name; sources say Principality Stadium / National Stadium of Wales",
+    "found": "Same ground under its non-sponsor name. 'Principality Stadium' is a naming-rights name (Sky Sports uses it), but contemporary press still called it the Millennium Stadium: SI.com's May 2017 final guide says 'Millennium Stadium in Cardiff, Wales'. Elsewhere the shard treats same-ground names as notes, not diffs (Allianz Arena vs Fussball Arena Muenchen, Green Point vs Cape Town Stadium, KCOM vs MKM). This should be a note too. With it gone, the lineup's verdict becomes 'same', and differs drops from 10 to 9.",
+    "sources": "https://www.si.com/planet-futbol/2017/05/10/champions-league-final-date-location-schedule-stadium-time ; https://www.skysports.com/football/juventus-vs-real-madrid/teams/371636"
+   }
+  ],
+  "missing": [
+   "wc-2010-final-spain (open, one source): the shard notes that no source it read confirms the Iniesta RW / Pedro LW sides. RSSSF lists Spain's band of three as 'Pedro Rodriguez, Xavi Hernandez, Andres Iniesta'. That is right-to-left order: the same file's Switzerland line reads 'Silva, Xavi, Iniesta', and ESPN has Silva RF and Iniesta LF for that match. So RSSSF puts Pedro right and Iniesta left, the reverse of the entry. That would make the Pedro blank's '? (LW)' hint wrong. One source only, so a second is needed before changing anything.",
+   "euro-2024-final-spain: the formation is contested beyond what the shard records. soccerway.com gives 'Spagna (4-2-3-1)', which supports the diff, but Coaches' Voice says 'Spain started the game in a 4-3-3 shape', which supports the entry. Worth adding to the notes.",
+   "wc-2014-final-germany / wc-2014-semi-germany: RSSSF labels Germany (4-1-4-1) for both matches, with Schweinsteiger as the single pivot. With ESPN's 4-3-3, that makes two independent sources against the entry's 4-2-3-1, against besoccer's one in favour. The organiser is silent. Under the shard's own rule this may tip from note to diff; worth recording."
+  ],
+  "resolution": [
+   "wc-2010-group-spain: accepted the overturn, formation kept at 4-2-3-1.",
+   "wc-2018-final-france: accepted the overturn of the formation diff; the Matuidi club fix stands and is applied.",
+   "cl-2017-final-real: accepted, the venue is the same ground; kept as a note, lineup verified.",
+   "wc-2010-final-spain sides: one source, recorded as a note, not applied.",
+   "euro-2024-final-spain: the Coaches Voice 4-3-3 read is recorded; formation kept.",
+   "wc-2014 Germany formations: no two sources agree on a new label; recorded as notes."
+  ]
+ },
+ "lineups": [
+  {
+   "position": 1,
+   "id": "cl-2011-final-barca",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Víctor Valdés",
+    "Dani Alves",
+    "Gerard Piqué",
+    "Javier Mascherano",
+    "Éric Abidal",
+    "Sergio Busquets",
+    "Xavi Hernández",
+    "Andrés Iniesta",
+    "Pedro Rodríguez",
+    "Lionel Messi",
+    "David Villa"
+   ],
+   "aka": {
+    "Xavi": "Xavi Hernández",
+    "Pedro": "Pedro Rodríguez"
+   },
+   "substitutes": [
+    "86' Seydou Keita for David Villa",
+    "88' Carles Puyol for Dani Alves",
+    "90+2' Ibrahim Afellay for Pedro Rodríguez"
+   ],
+   "fields": {
+    "matchDate": "2011-05-28",
+    "team": "Barcelona",
+    "opponent": "Manchester United",
+    "scoreLine": "Barcelona 3-1 Manchester United",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Javier Mascherano",
+     "position": "CB",
+     "nationality": "Argentina",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Eric Abidal",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Pedro",
+     "position": "RW",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2003352--barcelona-vs-man-utd/lineups/",
+     "via": "https://match.uefa.com/v5/matches/2003352/lineups and /v5/matches?matchId=2003352",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2011-05-28, Wembley Stadium, London, Barcelona 3-1 Man Utd; Barcelona XI as listed in 'eleven'; subs as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/316520",
+     "via": "site.api.espn.com/apis/site/v2/sports/soccer/uefa.champions/summary?event=316520",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2011-05-28, Wembley Stadium London, Barcelona 3-1 Manchester United, Barcelona 4-3-3: Valdés; Alves, Piqué, Mascherano, Abidal; Busquets, Xavi, Iniesta; Pedro, Messi, Villa. Same subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2011-05-28, Wembley Stadium London, 3-1, Final: all match.",
+    "ESPN formation 4-3-3 matches. ESPN: Pedro RF, Villa LF (matches entry). UEFA's tactical x coordinates put Pedro on the left and Villa on the right; the sources split, entry follows ESPN.",
+    "Piqué and Mascherano both CB; ESPN has Piqué CD-L, entry draws him right of Mascherano. Same label, layout only.",
+    "'Xavi' / 'Xavi Hernández', 'Pedro' / 'Pedro Rodríguez': same men."
+   ]
+  },
+  {
+   "position": 2,
+   "id": "cl-2012-final-chelsea",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Petr Čech",
+    "José Bosingwa",
+    "Gary Cahill",
+    "David Luiz",
+    "Ashley Cole",
+    "John Obi Mikel",
+    "Frank Lampard",
+    "Juan Mata",
+    "Salomon Kalou",
+    "Ryan Bertrand",
+    "Didier Drogba"
+   ],
+   "substitutes": [
+    "73' Florent Malouda for Ryan Bertrand",
+    "84' Fernando Torres for Salomon Kalou"
+   ],
+   "fields": {
+    "matchDate": "2012-05-19",
+    "team": "Chelsea",
+    "opponent": "Bayern Munich",
+    "scoreLine": "Bayern Munich 1-1 Chelsea (Chelsea won 4-3 on penalties)",
+    "venue": "Allianz Arena, Munich",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Jose Bosingwa",
+     "position": "RB",
+     "nationality": "Portugal",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Salomon Kalou",
+     "position": "RW",
+     "nationality": "Cote d'Ivoire",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Ryan Bertrand",
+     "position": "LW",
+     "nationality": "England",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2007693/",
+     "via": "https://match.uefa.com/v5/matches/2007693/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2012-05-19, Fußball Arena München, Bayern 1-1 Chelsea, penalties 3-4; Chelsea XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/341104",
+     "via": "site.api.espn.com summary?event=341104",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Allianz Arena, Bayern Munich 1 (pens 3) - Chelsea 1 (pens 4), Chelsea 4-2-3-1, same eleven, same subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Date 2012-05-19, Munich, 1-1, Chelsea 4-3 on penalties: match. The match went to extra time (ESPN status FT-Pens); the entry's scoreLine omits 'AET' but is not wrong.",
+    "UEFA names the venue 'Fußball Arena München' (its sponsor-neutral name); ESPN 'Allianz Arena'. Same ground as the entry's 'Allianz Arena, Munich'.",
+    "ESPN formation 4-2-3-1 matches; ESPN Kalou AM-R, Bertrand AM-L, Mata AM matches entry."
+   ]
+  },
+  {
+   "position": 3,
+   "id": "cl-2014-final-real",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Iker Casillas",
+    "Dani Carvajal",
+    "Raphaël Varane",
+    "Sergio Ramos",
+    "Fábio Coentrão",
+    "Sami Khedira",
+    "Luka Modrić",
+    "Ángel Di María",
+    "Gareth Bale",
+    "Karim Benzema",
+    "Cristiano Ronaldo"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "59' Marcelo for Fábio Coentrão",
+    "59' Isco for Sami Khedira",
+    "79' Álvaro Morata for Karim Benzema"
+   ],
+   "fields": {
+    "matchDate": "2014-05-24",
+    "team": "Real Madrid",
+    "opponent": "Atletico Madrid",
+    "scoreLine": "Real Madrid 4-1 Atletico Madrid (after extra time)",
+    "venue": "Estadio da Luz, Lisbon",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Fabio Coentrao",
+     "position": "LB",
+     "nationality": "Portugal",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Sami Khedira",
+     "position": "CDM",
+     "nationality": "Germany",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Raphael Varane",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2011883/",
+     "via": "https://match.uefa.com/v5/matches/2011883/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2014-05-24, Lisbon, Real Madrid 4-1 Atleti (1-1 in normal time); XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/392450",
+     "via": "site.api.espn.com summary?event=392450",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Estádio da Luz, Real Madrid 4 - Atlético Madrid 1, AET, 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2014-05-24, Estádio da Luz Lisbon (UEFA: 'Estádio do SL Benfica'), 4-1 after extra time (UEFA regular 1-1, total 4-1; ESPN AET): match.",
+    "ESPN 4-3-3 with Modric RM, Di María LM, Bale RF, Ronaldo LF: matches entry sides."
+   ]
+  },
+  {
+   "position": 4,
+   "id": "cl-2019-final-liverpool",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Alisson Becker",
+    "Trent Alexander-Arnold",
+    "Joël Matip",
+    "Virgil van Dijk",
+    "Andy Robertson",
+    "Fabinho",
+    "Jordan Henderson",
+    "Georginio Wijnaldum",
+    "Mohamed Salah",
+    "Roberto Firmino",
+    "Sadio Mané"
+   ],
+   "aka": {
+    "Alisson": "Alisson Becker",
+    "Andrew Robertson": "Andy Robertson"
+   },
+   "substitutes": [
+    "58' Divock Origi for Roberto Firmino",
+    "62' James Milner for Georginio Wijnaldum",
+    "90' Joe Gomez for Sadio Mané"
+   ],
+   "fields": {
+    "matchDate": "2019-06-01",
+    "team": "Liverpool",
+    "opponent": "Tottenham Hotspur",
+    "scoreLine": "Liverpool 2-0 Tottenham Hotspur",
+    "venue": "Estadio Metropolitano, Madrid",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Joel Matip",
+     "position": "CB",
+     "nationality": "Cameroon",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Georginio Wijnaldum",
+     "position": "CM",
+     "nationality": "Netherlands",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Fabinho",
+     "position": "CDM",
+     "nationality": "Brazil",
+     "clubAtTime": "Liverpool"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2025486/",
+     "via": "https://match.uefa.com/v5/matches/2025486/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2019-06-01, Estadio Metropolitano, Madrid, Tottenham 0-2 Liverpool; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/539938",
+     "via": "site.api.espn.com summary?event=539938",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Tottenham 0 - Liverpool 2, Liverpool 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2019-06-01, Estadio Metropolitano Madrid, Tottenham 0-2 Liverpool: match. ESPN 4-3-3, positions match entry. 'Alisson' / 'Alisson Becker' same man."
+   ]
+  },
+  {
+   "position": 5,
+   "id": "cl-2022-final-real",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Thibaut Courtois",
+    "Dani Carvajal",
+    "Éder Militão",
+    "David Alaba",
+    "Ferland Mendy",
+    "Casemiro",
+    "Toni Kroos",
+    "Luka Modrić",
+    "Federico Valverde",
+    "Karim Benzema",
+    "Vinícius Júnior"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "86' Eduardo Camavinga for Federico Valverde",
+    "90' Dani Ceballos for Luka Modrić",
+    "90+3' Rodrygo for Vinícius Júnior"
+   ],
+   "fields": {
+    "matchDate": "2022-05-28",
+    "team": "Real Madrid",
+    "opponent": "Liverpool",
+    "scoreLine": "Real Madrid 1-0 Liverpool",
+    "venue": "Stade de France, Saint-Denis",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Eder Militao",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Ferland Mendy",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Federico Valverde",
+     "position": "RW",
+     "nationality": "Uruguay",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2034586/",
+     "via": "https://match.uefa.com/v5/matches/2034586/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2022-05-28, Stade de France, Saint-Denis, Liverpool 0-1 Real Madrid; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/634861",
+     "via": "site.api.espn.com summary?event=634861",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Liverpool 0 - Real Madrid 1, Real Madrid 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2022-05-28, Stade de France Saint-Denis, Liverpool 0-1 Real Madrid: match. ESPN 4-3-3 matches.",
+    "Layout only: both sources put Kroos left-centre and Modric right-centre (ESPN Kroos LM, Modric RM; UEFA x Modric 300, Kroos 700 with Carvajal at 200); the entry draws Kroos at x=68 (right) and Modric at x=32 (left). Both carry the CM label."
+   ]
+  },
+  {
+   "position": 6,
+   "id": "cl-2023-final-city",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Ederson",
+    "Manuel Akanji",
+    "Rúben Dias",
+    "Nathan Aké",
+    "John Stones",
+    "Rodri",
+    "Bernardo Silva",
+    "Kevin De Bruyne",
+    "İlkay Gündoğan",
+    "Jack Grealish",
+    "Erling Haaland"
+   ],
+   "substitutes": [
+    "36' Phil Foden for Kevin De Bruyne",
+    "82' Kyle Walker for John Stones"
+   ],
+   "fields": {
+    "matchDate": "2023-06-10",
+    "team": "Manchester City",
+    "opponent": "Inter Milan",
+    "scoreLine": "Manchester City 1-0 Inter Milan",
+    "venue": "Ataturk Olympic Stadium, Istanbul",
+    "formationLabel": "3-2-4-1"
+   },
+   "hints": [
+    {
+     "name": "Manuel Akanji",
+     "position": "RB",
+     "nationality": "Switzerland",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Nathan Ake",
+     "position": "LB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "John Stones",
+     "position": "CM",
+     "nationality": "England",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2037765/",
+     "via": "https://match.uefa.com/v5/matches/2037765/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2023-06-10, Atatürk Olympic Stadium, Istanbul, Man City 1-0 Inter; XI as listed with tactical coordinates quoted in the formation diff."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/668516",
+     "via": "site.api.espn.com summary?event=668516",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Manchester City 1 - Internazionale 0, formation 3-2-4-1: Ederson; Akanji RB, Dias CD, Aké LB; Stones CM-R, Rodri CM-L; Bernardo RM, De Bruyne AM-R, Gündogan AM-L, Grealish LM; Haaland F."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3",
+     "evidence": "ESPN states 3-2-4-1. UEFA's tactical coordinates show the same shape: Akanji (300,223), Dias (500,223), Aké (700,223) on one defensive line; Stones (400,400) and Rodri (600,400) on the next; De Bruyne and Gündoğan (y 600), Bernardo (211,644) and Grealish (807,646) ahead; Haaland (500,800).",
+     "decision": "applied",
+     "reason": "Two sources state 3-2-4-1 (ESPN label, UEFA coordinates); the skeptic agreed."
+    },
+    {
+     "field": "slots[2] John Stones position (also blankCandidates slotIndex 2)",
+     "entry": "CB, drawn in the back four",
+     "evidence": "ESPN CM-R in a 3-2-4-1; UEFA places him on the second line beside Rodri, not with Akanji, Dias and Aké. The '? (CB)' hint for this blank is therefore wrong in shape.",
+     "decision": "applied",
+     "reason": "Stones shown as ? (CM): both sources put him in midfield beside Rodri."
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-3-3",
+     "to": "3-2-4-1",
+     "why": "ESPN states 3-2-4-1; UEFA tactical coordinates draw the same shape; the shard 1 skeptic found inter.it and Coaches Voice agree"
+    },
+    {
+     "path": "slots[2].position",
+     "from": "CB",
+     "to": "CM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree he played beside Rodri in the two man midfield line (ESPN CM-R), not in the back line"
+    },
+    {
+     "path": "slots[6].position",
+     "from": "CM",
+     "to": "RM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree he was the right side of the line of four (ESPN RM)"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "CM",
+     "to": "CAM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree he played in the line of four, right of Gundogan (ESPN AM-R)"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "LW",
+     "to": "LM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree he was the left side of the line of four (ESPN LM)"
+    }
+   ],
+   "notes": [
+    "Names, date 2023-06-10, Atatürk Olympic Stadium Istanbul, Man City 1-0 Inter, Final: all match.",
+    "ESPN labels Akanji RB and Aké LB, which agrees with the entry's labels for those two; Bernardo ESPN RM vs entry CM, Grealish ESPN LM vs entry LW, De Bruyne ESPN AM-R vs entry CM all follow from the formation diff."
+   ]
+  },
+  {
+   "position": 7,
+   "id": "cl-2009-final-barca",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Víctor Valdés",
+    "Carles Puyol",
+    "Gerard Piqué",
+    "Yaya Touré",
+    "Sylvinho",
+    "Sergio Busquets",
+    "Xavi Hernández",
+    "Andrés Iniesta",
+    "Samuel Eto'o",
+    "Lionel Messi",
+    "Thierry Henry"
+   ],
+   "aka": {
+    "Xavi": "Xavi Hernández"
+   },
+   "substitutes": [
+    "72' Seydou Keita for Thierry Henry",
+    "90+2' Pedro Rodríguez for Andrés Iniesta"
+   ],
+   "fields": {
+    "matchDate": "2009-05-27",
+    "team": "Barcelona",
+    "opponent": "Manchester United",
+    "scoreLine": "Barcelona 2-0 Manchester United",
+    "venue": "Stadio Olimpico, Rome",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Yaya Toure",
+     "position": "CB",
+     "nationality": "Cote d'Ivoire",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Sylvinho",
+     "position": "LB",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Thierry Henry",
+     "position": "LW",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/302813--barcelona-vs-man-utd/",
+     "via": "https://match.uefa.com/v5/matches/302813/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2009-05-27, Stadio Olimpico, Rome, Barcelona 2-0 Man Utd; XI as listed (no coordinates)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/266961",
+     "via": "site.api.espn.com summary?event=266961",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Barcelona 2 - Manchester United 0, Barcelona 4-3-3: Valdés; Puyol RB, Piqué, Touré, Sylvinho LB; Busquets, Xavi, Iniesta; Messi RF, Eto'o F, Henry LF; same subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2009-05-27, Stadio Olimpico Rome, 2-0, Final: match. ESPN formation 4-3-3 matches.",
+    "Unresolved, one source only: ESPN lists Messi RF and Eto'o F (central) at kick-off, the entry has Eto'o RW and Messi CF. UEFA publishes no tactical coordinates for this match (all -1). Not counted as a diff; a second source on kick-off positions is needed before changing anything.",
+    "'Sylvinho' / ESPN 'Sylvinho Mendes Campos': same man.",
+    "Round 1026: ESPN alone has Messi RF and Eto'o central at kick-off; single source, entry unchanged."
+   ]
+  },
+  {
+   "position": 8,
+   "id": "cl-2005-final-liverpool",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Jerzy Dudek",
+    "Steve Finnan",
+    "Jamie Carragher",
+    "Sami Hyypiä",
+    "Djimi Traoré",
+    "Xabi Alonso",
+    "Luis García",
+    "John Arne Riise",
+    "Steven Gerrard",
+    "Harry Kewell",
+    "Milan Baroš"
+   ],
+   "substitutes": [
+    "23' Vladimír Šmicer for Harry Kewell",
+    "46' Dietmar Hamann for Steve Finnan",
+    "85' Djibril Cissé for Milan Baroš"
+   ],
+   "fields": {
+    "matchDate": "2005-05-25",
+    "team": "Liverpool",
+    "opponent": "AC Milan",
+    "scoreLine": "Liverpool 3-3 AC Milan, AET (Liverpool won 3-2 on penalties)",
+    "venue": "Ataturk Olympic Stadium, Istanbul",
+    "formationLabel": "4-4-1-1 diamond"
+   },
+   "hints": [
+    {
+     "name": "Djimi Traore",
+     "position": "LB",
+     "nationality": "Mali",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Harry Kewell",
+     "position": "CF",
+     "nationality": "Australia",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Milan Baros",
+     "position": "ST",
+     "nationality": "Czech Republic",
+     "clubAtTime": "Liverpool"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/80813/",
+     "via": "https://match.uefa.com/v5/matches/80813/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2005-05-25, Atatürk Olympic Stadium, Istanbul, Milan 3-3 Liverpool, penalties 2-3; Liverpool XI as listed; Kewell off 23' for Šmicer."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/183634",
+     "via": "site.api.espn.com summary?event=183634",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "AC Milan 3 (pens 2) - Liverpool 3 (pens 3), same eleven, same three subs, no formation given."
+    },
+    {
+     "host": "national-football-teams.com",
+     "url": "https://www.national-football-teams.com/player/8432/Djimi_Traore.html",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Search summary only: Traoré capped by Mali (6 caps). Used for the nationality note only."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "Code comment only (line 398, not a rendered field): it calls the changes 'second-half comeback substitutions' and lists 'Hamann/Smicer/Kewell'. UEFA and ESPN both show Šmicer on for the injured Kewell at 23' (first half) and Hamann on at 46'; Kewell started and went off. The XI is right; the comment wording is loose. Do not 'fix' the XI from it.",
+    "Eleven, date 2005-05-25, Atatürk Olympic Stadium Istanbul, 3-3 AET, Liverpool 3-2 on penalties, Final: all match both sources.",
+    "formationLabel '4-4-1-1 diamond' is UNVERIFIED: UEFA gives no coordinates and ESPN no formation for this match; besoccer shows 3-5-2, which contradicts the back four both other sources' rosters imply, so it was not used. '4-4-1-1 diamond' is also not a standard label (a diamond is 4-1-2-1-2).",
+    "Nationality note: UEFA's player record gives Djimi Traoré countryCode FRA (born Laval, France); the entry says Mali, his senior national team (national-football-teams.com lists 6 Mali caps). The hint is defensible; flagged for the owner, not counted as a diff.",
+    "Round 1026: Traore nationality stays Mali, the senior national team he played for (lead rule 5); UEFA feed prints FRA."
+   ]
+  },
+  {
+   "position": 9,
+   "id": "cl-2015-final-barca",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Marc-André ter Stegen",
+    "Dani Alves",
+    "Gerard Piqué",
+    "Javier Mascherano",
+    "Jordi Alba",
+    "Sergio Busquets",
+    "Ivan Rakitić",
+    "Andrés Iniesta",
+    "Lionel Messi",
+    "Luis Suárez",
+    "Neymar"
+   ],
+   "substitutes": [
+    "78' Xavi Hernández for Andrés Iniesta",
+    "90+1' Jérémy Mathieu for Ivan Rakitić",
+    "90+6' Pedro Rodríguez for Luis Suárez"
+   ],
+   "fields": {
+    "matchDate": "2015-06-06",
+    "team": "Barcelona",
+    "opponent": "Juventus",
+    "scoreLine": "Barcelona 3-1 Juventus",
+    "venue": "Olympiastadion, Berlin",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Ivan Rakitic",
+     "position": "CM",
+     "nationality": "Croatia",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Javier Mascherano",
+     "position": "CB",
+     "nationality": "Argentina",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Jordi Alba",
+     "position": "LB",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2015227/",
+     "via": "https://match.uefa.com/v5/matches/2015227/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2015-06-06, Olympiastadion, Berlin, Juventus 1-3 Barcelona; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/420246",
+     "via": "site.api.espn.com summary?event=420246",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Juventus 1 - Barcelona 3, Barcelona 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2015-06-06, Olympiastadion Berlin, Juventus 1-3 Barcelona: match. ESPN 4-3-3 with Rakitić RM, Iniesta LM, Messi RF, Neymar LF: matches entry. UEFA coordinates put Piqué right-centre and Mascherano left-centre, as the entry draws them."
+   ]
+  },
+  {
+   "position": 10,
+   "id": "cl-2017-final-real",
+   "research": "differs",
+   "verdict": "verified",
+   "eleven": [
+    "Keylor Navas",
+    "Dani Carvajal",
+    "Raphaël Varane",
+    "Sergio Ramos",
+    "Marcelo",
+    "Casemiro",
+    "Toni Kroos",
+    "Luka Modrić",
+    "Isco",
+    "Cristiano Ronaldo",
+    "Karim Benzema"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "77' Gareth Bale for Karim Benzema",
+    "89' Álvaro Morata for Toni Kroos",
+    "Marco Asensio for Isco (ESPN; minute not read. UEFA's event feed lists only the two substitutions above but has Asensio scoring at 90')"
+   ],
+   "fields": {
+    "matchDate": "2017-06-03",
+    "team": "Real Madrid",
+    "opponent": "Juventus",
+    "scoreLine": "Real Madrid 4-1 Juventus",
+    "venue": "Millennium Stadium, Cardiff",
+    "formationLabel": "4-3-1-2"
+   },
+   "hints": [
+    {
+     "name": "Raphael Varane",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Isco",
+     "position": "CAM",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Marcelo",
+     "position": "LB",
+     "nationality": "Brazil",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2019641/",
+     "via": "https://match.uefa.com/v5/matches?matchId=2019641 and /lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2017-06-03, National Stadium of Wales / Principality Stadium, Cardiff, Juventus 1-4 Real Madrid; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/478693",
+     "via": "site.api.espn.com summary?event=478693",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Principality Stadium, Cardiff, Juventus 1 - Real Madrid 4, Real Madrid 4-3-1-2, same eleven; subs Bale for Benzema, Morata for Kroos, Asensio for Isco."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "venue",
+     "entry": "Millennium Stadium, Cardiff",
+     "evidence": "UEFA: official name 'National Stadium of Wales', media name 'Principality Stadium', Cardiff. ESPN: 'Principality Stadium', Cardiff. Same ground, but it had been renamed (Principality Stadium) before this 2017 final; 'Millennium Stadium' is the former name.",
+     "decision": "kept: same ground",
+     "reason": "Millennium Stadium and Principality Stadium (sponsor name since 2016; UEFA uses National Stadium of Wales) are one ground. Contemporary press (SI.com, May 2017) still wrote Millennium Stadium. Lead rule 4 and the shard 1 skeptic: a note, not a correction."
+    }
+   ],
+   "applied": [],
+   "notes": [
+    "Eleven, date 2017-06-03, Juventus 1-4 Real Madrid, Final: match. ESPN formation 4-3-1-2 matches the entry. UEFA coordinates put Kroos right-centre and Modrić left-centre, as the entry draws them.",
+    "Nationality note: UEFA's record gives Marcelo countryCode ESP (he holds Spanish citizenship); the entry's 'Brazil' is his national team. Not a diff."
+   ]
+  },
+  {
+   "position": 11,
+   "id": "cl-2020-final-bayern",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Manuel Neuer",
+    "Joshua Kimmich",
+    "Jérôme Boateng",
+    "David Alaba",
+    "Alphonso Davies",
+    "Thiago Alcántara",
+    "Leon Goretzka",
+    "Serge Gnabry",
+    "Thomas Müller",
+    "Kingsley Coman",
+    "Robert Lewandowski"
+   ],
+   "substitutes": [
+    "25' Niklas Süle for Jérôme Boateng",
+    "68' Ivan Perišić for Kingsley Coman",
+    "68' Philippe Coutinho for Serge Gnabry",
+    "86' Corentin Tolisso for Thiago Alcántara"
+   ],
+   "fields": {
+    "matchDate": "2020-08-23",
+    "team": "Bayern Munich",
+    "opponent": "Paris Saint-Germain",
+    "scoreLine": "Paris Saint-Germain 0-1 Bayern Munich",
+    "venue": "Estadio da Luz, Lisbon",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Jerome Boateng",
+     "position": "CB",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Kingsley Coman",
+     "position": "LW",
+     "nationality": "France",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Leon Goretzka",
+     "position": "CDM",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2030150/",
+     "via": "https://match.uefa.com/v5/matches/2030150/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2020-08-23, Lisbon, Paris 0-1 Bayern München; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/573698",
+     "via": "site.api.espn.com summary?event=573698",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Paris Saint-Germain 0 - Bayern Munich 1, Bayern 4-2-3-1, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2020-08-23, Estádio da Luz Lisbon (UEFA: Estádio do SL Benfica), PSG 0-1 Bayern: match. ESPN 4-2-3-1 matches; Gnabry right, Coman left in both.",
+    "Thiago and Goretzka: the two sources disagree on which side (ESPN Thiago LM; UEFA x puts Thiago right-centre); both are CDM in the entry, layout only."
+   ]
+  },
+  {
+   "position": 12,
+   "id": "cl-2021-final-chelsea",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Edouard Mendy",
+    "César Azpilicueta",
+    "Thiago Silva",
+    "Antonio Rüdiger",
+    "Reece James",
+    "N'Golo Kanté",
+    "Jorginho",
+    "Ben Chilwell",
+    "Mason Mount",
+    "Kai Havertz",
+    "Timo Werner"
+   ],
+   "substitutes": [
+    "39' Andreas Christensen for Thiago Silva",
+    "66' Christian Pulišić for Timo Werner",
+    "80' Mateo Kovačić for Mason Mount"
+   ],
+   "fields": {
+    "matchDate": "2021-05-29",
+    "team": "Chelsea",
+    "opponent": "Manchester City",
+    "scoreLine": "Manchester City 0-1 Chelsea",
+    "venue": "Estadio do Dragao, Porto",
+    "formationLabel": "3-4-2-1"
+   },
+   "hints": [
+    {
+     "name": "Timo Werner",
+     "position": "ST",
+     "nationality": "Germany",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Reece James",
+     "position": "RM",
+     "nationality": "England",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Antonio Rudiger",
+     "position": "CB",
+     "nationality": "Germany",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2029498/",
+     "via": "https://match.uefa.com/v5/matches/2029498/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2021-05-29, Estádio do Dragão, Porto, Man City 0-1 Chelsea; XI as listed; Werner at the top of the shape."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/600626",
+     "via": "site.api.espn.com summary?event=600626",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Manchester City 0 - Chelsea 1, Chelsea 3-4-2-1: Mendy; Azpilicueta, Thiago Silva, Rüdiger; James, Kanté, Jorginho, Chilwell; Havertz CF-R, Mount CF-L; Werner F."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "slots[9] Timo Werner position (also blankCandidates slotIndex 9)",
+     "entry": "CAM (x 38, y 32)",
+     "evidence": "ESPN: Werner F (the centre forward, formation place 9). UEFA tactical coordinates: Werner (502,815), the single most advanced player, labelled STRIKER.",
+     "decision": "applied",
+     "reason": "Werner shown as ? (ST)."
+    },
+    {
+     "field": "slots[10] Kai Havertz position",
+     "entry": "CF (x 50, y 16, the lone striker)",
+     "evidence": "ESPN: Havertz CF-R, one of the two behind Werner. UEFA: Havertz (353,633), level with Mount (641,633), behind Werner.",
+     "decision": "applied",
+     "reason": "Havertz relabelled CAM, behind Werner."
+    }
+   ],
+   "applied": [
+    {
+     "path": "slots[9].position",
+     "from": "CAM",
+     "to": "ST",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree Werner was the centre forward (ESPN F, UEFA STRIKER, the most advanced player)"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "CF",
+     "to": "CAM",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree Havertz played behind Werner, level with Mount (ESPN CF-R)"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2021-05-29, Estádio do Dragão Porto, Man City 0-1 Chelsea, Final, formation 3-4-2-1: all match.",
+    "Kanté and Jorginho: sources disagree on sides (ESPN Kanté CM-R, UEFA x puts Kanté left-centre); both CM in the entry, layout only."
+   ]
+  },
+  {
+   "position": 13,
+   "id": "cl-2024-final-real",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Thibaut Courtois",
+    "Dani Carvajal",
+    "Antonio Rüdiger",
+    "Nacho",
+    "Ferland Mendy",
+    "Eduardo Camavinga",
+    "Federico Valverde",
+    "Toni Kroos",
+    "Jude Bellingham",
+    "Rodrygo",
+    "Vinícius Júnior"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "85' Joselu for Jude Bellingham",
+    "85' Luka Modrić for Toni Kroos",
+    "90+1' Éder Militão for Rodrygo",
+    "90+4' Lucas Vázquez for Vinícius Júnior"
+   ],
+   "fields": {
+    "matchDate": "2024-06-01",
+    "team": "Real Madrid",
+    "opponent": "Borussia Dortmund",
+    "scoreLine": "Real Madrid 2-0 Borussia Dortmund",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "4-3-1-2"
+   },
+   "hints": [
+    {
+     "name": "Eduardo Camavinga",
+     "position": "CDM",
+     "nationality": "France",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Nacho",
+     "position": "CB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Rodrygo",
+     "position": "ST",
+     "nationality": "Brazil",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2039970/",
+     "via": "https://match.uefa.com/v5/matches/2039970/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2024-06-01, Wembley Stadium, London, B. Dortmund 0-2 Real Madrid; XI as listed with the coordinates quoted."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/702410",
+     "via": "site.api.espn.com summary?event=702410",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Borussia Dortmund 0 - Real Madrid 2, Real Madrid 4-3-1-2, same eleven and subs."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3 (Vinícius LW, Rodrygo RW as wingers)",
+     "evidence": "ESPN states 4-3-1-2 (Rodrygo CF-R up front). UEFA tactical coordinates: Camavinga alone (501,449), Valverde (210,511) and Kroos (796,511), Bellingham (501,672), then Rodrygo (335,815) and Vinícius (667,815) as a front two: a 4-3-1-2 / diamond, not a front three.",
+     "decision": "applied",
+     "reason": "4-3-1-2 on both sources; the skeptic agreed."
+    },
+    {
+     "field": "slots[10] Rodrygo position (also blankCandidates slotIndex 10) and slots[9] Vinícius",
+     "entry": "RW and LW",
+     "evidence": "Both sources have them as a front pair of forwards, not wingers (ESPN Rodrygo CF-R; UEFA y=815 on the forward line). Sides agree with the entry (Rodrygo right, Vinícius left).",
+     "decision": "applied",
+     "reason": "Rodrygo shown as ? (ST), Vinicius ST; sides unchanged."
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-3-3",
+     "to": "4-3-1-2",
+     "why": "ESPN states 4-3-1-2; UEFA tactical coordinates draw a diamond with Rodrygo and Vinicius as a front two; the shard 1 skeptic found Coaches Voice and Total Football Analysis agree"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "LW",
+     "to": "ST",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree a front pair of forwards, Vinicius on the left"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "RW",
+     "to": "ST",
+     "why": "UEFA match data (tactical coordinates) and ESPN agree a front pair of forwards, Rodrygo on the right (ESPN CF-R)"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2024-06-01, Wembley Stadium London, Dortmund 0-2 Real Madrid, Final: all match. The entry's comment (no recognised striker; Joselu a late sub) matches both sources."
+   ]
+  },
+  {
+   "position": 14,
+   "id": "cl-2010-final-inter",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Júlio César",
+    "Maicon",
+    "Lúcio",
+    "Walter Samuel",
+    "Cristian Chivu",
+    "Javier Zanetti",
+    "Esteban Cambiasso",
+    "Samuel Eto'o",
+    "Wesley Sneijder",
+    "Goran Pandev",
+    "Diego Milito"
+   ],
+   "substitutes": [
+    "68' Dejan Stanković for Cristian Chivu",
+    "79' Sulley Muntari for Goran Pandev",
+    "90+2' Marco Materazzi for Diego Milito"
+   ],
+   "fields": {
+    "matchDate": "2010-05-22",
+    "team": "Inter Milan",
+    "opponent": "Bayern Munich",
+    "scoreLine": "Bayern Munich 0-2 Inter Milan",
+    "venue": "Santiago Bernabeu, Madrid",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Cristian Chivu",
+     "position": "LB",
+     "nationality": "Romania",
+     "clubAtTime": "Inter Milan"
+    },
+    {
+     "name": "Goran Pandev",
+     "position": "LW",
+     "nationality": "North Macedonia",
+     "clubAtTime": "Inter Milan"
+    },
+    {
+     "name": "Walter Samuel",
+     "position": "CB",
+     "nationality": "Argentina",
+     "clubAtTime": "Inter Milan"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2000488/",
+     "via": "https://match.uefa.com/v5/matches/2000488/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2010-05-22, Estadio Santiago Bernabéu, Madrid, Bayern München 0-2 Inter; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/292088",
+     "via": "site.api.espn.com summary?event=292088",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Bayern Munich 0 - Internazionale 2, Inter 4-2-3-1, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2010-05-22, Santiago Bernabéu Madrid, Bayern 0-2 Inter: match. ESPN 4-2-3-1 matches; Zanetti RM / Cambiasso LM, Eto'o AM-R / Pandev AM-L match entry sides.",
+    "ESPN writes the goalkeeper 'Julio César De León'; UEFA 'Júlio César'. Same man as the entry's 'Julio Cesar'."
+   ]
+  },
+  {
+   "position": 15,
+   "id": "wc-2006-final-italy",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi BUFFON",
+    "Gianluca ZAMBROTTA",
+    "Fabio CANNAVARO",
+    "Marco MATERAZZI",
+    "Fabio GROSSO",
+    "Mauro CAMORANESI",
+    "Gennaro GATTUSO",
+    "Andrea PIRLO",
+    "Simone PERROTTA",
+    "Francesco TOTTI",
+    "Luca TONI"
+   ],
+   "substitutes": [
+    "61' Vincenzo IAQUINTA for Simone PERROTTA",
+    "61' Daniele DE ROSSI for Francesco TOTTI",
+    "86' Alessandro DEL PIERO for Mauro CAMORANESI"
+   ],
+   "fields": {
+    "matchDate": "2006-07-09",
+    "team": "Italy",
+    "opponent": "France",
+    "scoreLine": "Italy 1-1 France, AET (Italy won 5-3 on penalties)",
+    "venue": "Olympiastadion, Berlin",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Marco Materazzi",
+     "position": "CB",
+     "nationality": "Italy",
+     "clubAtTime": "Inter Milan"
+    },
+    {
+     "name": "Simone Perrotta",
+     "position": "LM",
+     "nationality": "Italy",
+     "clubAtTime": "AS Roma"
+    },
+    {
+     "name": "Mauro Camoranesi",
+     "position": "RM",
+     "nationality": "Italy",
+     "clubAtTime": "Juventus"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/9741/10166/97410064",
+     "via": "https://api.fifa.com/api/v3/live/football/17/9741/10166/97410064",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2006-07-09, Olympiastadion Berlin, Italy 1-1 France, penalties 5-3; Italy starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/191983",
+     "via": "site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/summary?event=191983",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Olympiastadion Berlin, Italy 1 - France 1, FT-Pens, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2006-07-09, Olympiastadion Berlin, 1-1, Italy 5-3 on penalties, Final: match. Del Piero came on 86' (entry comment correct)."
+   ]
+  },
+  {
+   "position": 16,
+   "id": "wc-2006-semi-italy",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi BUFFON",
+    "Gianluca ZAMBROTTA",
+    "Fabio CANNAVARO",
+    "Marco MATERAZZI",
+    "Fabio GROSSO",
+    "Mauro CAMORANESI",
+    "Gennaro GATTUSO",
+    "Andrea PIRLO",
+    "Simone PERROTTA",
+    "Francesco TOTTI",
+    "Luca TONI"
+   ],
+   "substitutes": [
+    "74' Alberto GILARDINO for Luca TONI",
+    "91' Vincenzo IAQUINTA for Mauro CAMORANESI",
+    "104' Alessandro DEL PIERO for Simone PERROTTA"
+   ],
+   "fields": {
+    "matchDate": "2006-07-04",
+    "team": "Italy",
+    "opponent": "Germany",
+    "scoreLine": "Germany 0-2 Italy, AET",
+    "venue": "Signal Iduna Park, Dortmund",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Fabio Grosso",
+     "position": "LB",
+     "nationality": "Italy",
+     "clubAtTime": "Palermo"
+    },
+    {
+     "name": "Gennaro Gattuso",
+     "position": "CM",
+     "nationality": "Italy",
+     "clubAtTime": "AC Milan"
+    },
+    {
+     "name": "Luca Toni",
+     "position": "ST",
+     "nationality": "Italy",
+     "clubAtTime": "Fiorentina"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/9741/10164/97410061",
+     "via": "https://api.fifa.com/api/v3/live/football/17/9741/10164/97410061",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Semi-final, 2006-07-04, FIFA World Cup Stadium Dortmund, Germany 0-2 Italy; goals 119' and 120'+1'; Italy starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/191978",
+     "via": "site.api.espn.com fifa.world summary?event=191978",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Signal Iduna Park, Germany 0 - Italy 2, goals 119' and 120'+1', same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2006-07-04, Dortmund, Germany 0-2 Italy after extra time: goals 119' Grosso and 120+1' Del Piero in both sources (ESPN's status line reads FT, its goal clock confirms extra time). Same XI as the final, as the entry says.",
+    "Venue: FIFA uses the tournament name 'FIFA World Cup Stadium, Dortmund'; ESPN 'Signal Iduna Park'. Same ground as the entry."
+   ]
+  },
+  {
+   "position": 17,
+   "id": "wc-2010-final-spain",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Iker CASILLAS",
+    "Sergio RAMOS",
+    "Gerard PIQUE",
+    "Carles PUYOL",
+    "Joan CAPDEVILA",
+    "Sergio BUSQUETS",
+    "Xabi ALONSO",
+    "Xavi HERNANDEZ",
+    "Andres INIESTA",
+    "PEDRO",
+    "David VILLA"
+   ],
+   "aka": {
+    "Xavi": "Xavi HERNANDEZ"
+   },
+   "substitutes": [
+    "59' Jesús NAVAS for PEDRO",
+    "86' Cesc FABREGAS for Xabi ALONSO",
+    "105' Fernando TORRES for David VILLA"
+   ],
+   "fields": {
+    "matchDate": "2010-07-11",
+    "team": "Spain",
+    "opponent": "Netherlands",
+    "scoreLine": "Netherlands 0-1 Spain, AET",
+    "venue": "Soccer City, Johannesburg",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Joan Capdevila",
+     "position": "LB",
+     "nationality": "Spain",
+     "clubAtTime": "Villarreal"
+    },
+    {
+     "name": "Carles Puyol",
+     "position": "CB",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Pedro",
+     "position": "LW",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/249715/249721/300061509",
+     "via": "https://api.fifa.com/api/v3/live/football/17/249715/249721/300061509",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2010-07-11, Soccer City Stadium Johannesburg, Netherlands 0-1 Spain, goal Iniesta 115'; Spain starters as listed."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-holanda/seleccion-espanola/201094287/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "11 JUL 2010, 0-1; Spain 4-3-3: Iker Casillas, C. Puyol, G. Piqué, J. Capdevila, Sergio Ramos, Sergio Busquets, Xabi Alonso, Xavi, Andrés Iniesta, D. Villa, Pedro."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/264123",
+     "via": "site.api.espn.com fifa.world summary?event=264123",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Netherlands 0 - Spain 1, AET, Spain formation 4-2-3-1; no roster entries in the feed."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2010-07-11, Soccer City Johannesburg (ESPN: FNB Stadium, same ground), Netherlands 0-1 Spain AET: match.",
+    "ESPN's feed has no roster for this match, only the formation, so the independent eleven is from besoccer.",
+    "Formation split: ESPN 4-2-3-1 (agrees with entry), besoccer 4-3-3, FIFA silent. Not counted as a diff.",
+    "Iniesta RW / Pedro LW sides are not confirmed by any source read here (FIFA gives no coordinates for 2010).",
+    "Round 1026: the skeptic read RSSSF as Pedro right and Iniesta left, the reverse of the entry (Iniesta RW, Pedro LW). One source; not changed. Open lead for the Pedro blank hint."
+   ]
+  },
+  {
+   "position": 18,
+   "id": "wc-2014-final-germany",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "NEUER Manuel",
+    "Philipp LAHM",
+    "BOATENG Jerome",
+    "Mats Hummels",
+    "Benedikt HOEWEDES",
+    "Bastian SCHWEINSTEIGER",
+    "Christoph Kramer",
+    "Toni Kroos",
+    "MUELLER Thomas",
+    "Mesut OEZIL",
+    "Miroslav KLOSE"
+   ],
+   "substitutes": [
+    "30' Andre SCHUERRLE for Christoph Kramer",
+    "87' Mario GOETZE for Miroslav KLOSE",
+    "119' Per MERTESACKER for Mesut OEZIL"
+   ],
+   "fields": {
+    "matchDate": "2014-07-13",
+    "team": "Germany",
+    "opponent": "Argentina",
+    "scoreLine": "Germany 1-0 Argentina, AET",
+    "venue": "Maracana, Rio de Janeiro",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Benedikt Howedes",
+     "position": "LB",
+     "nationality": "Germany",
+     "clubAtTime": "Schalke 04"
+    },
+    {
+     "name": "Bastian Schweinsteiger",
+     "position": "CDM",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Miroslav Klose",
+     "position": "ST",
+     "nationality": "Germany",
+     "clubAtTime": "Lazio"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/251164/255959/300186501",
+     "via": "https://api.fifa.com/api/v3/live/football/17/251164/255959/300186501",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2014-07-13, Maracanã Rio de Janeiro, Germany 1-0 Argentina; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/383239",
+     "via": "site.api.espn.com fifa.world summary?event=383239",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Germany 1 - Argentina 0, AET, Germany 4-3-3, same eleven and subs."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-alemania/seleccion-argentina/2014192075/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Germany 4-2-3-1, same eleven (third source for the formation split)."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2014-07-13, Maracanã Rio de Janeiro, Germany 1-0 Argentina AET (Götze 112'): match. Kramer off at 30' (entry comment says ~31'), Götze an 87' sub: entry comments correct.",
+    "Formation split: besoccer 4-2-3-1 (agrees with entry), ESPN 4-3-3, FIFA silent. Not counted as a diff.",
+    "FIFA lists Lahm in its MF position group; ESPN has him RB as the entry does.",
+    "Round 1026: formation split. RSSSF 4-1-4-1, ESPN 4-3-3, besoccer 4-2-3-1 (the entry). No two sources agree on a new label, entry keeps 4-2-3-1."
+   ]
+  },
+  {
+   "position": 19,
+   "id": "wc-2014-semi-germany",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "NEUER Manuel",
+    "Philipp LAHM",
+    "BOATENG Jerome",
+    "Mats Hummels",
+    "Benedikt HOEWEDES",
+    "Bastian SCHWEINSTEIGER",
+    "Sami KHEDIRA",
+    "Toni Kroos",
+    "MUELLER Thomas",
+    "Mesut OEZIL",
+    "Miroslav KLOSE"
+   ],
+   "substitutes": [
+    "45' Per MERTESACKER for Mats Hummels",
+    "57' Andre SCHUERRLE for Miroslav KLOSE",
+    "76' Julian Draxler for Sami KHEDIRA"
+   ],
+   "fields": {
+    "matchDate": "2014-07-08",
+    "team": "Germany",
+    "opponent": "Brazil",
+    "scoreLine": "Brazil 1-7 Germany",
+    "venue": "Estadio Mineirao, Belo Horizonte",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Sami Khedira",
+     "position": "CM",
+     "nationality": "Germany",
+     "clubAtTime": "Real Madrid"
+    },
+    {
+     "name": "Mats Hummels",
+     "position": "CB",
+     "nationality": "Germany",
+     "clubAtTime": "Borussia Dortmund"
+    },
+    {
+     "name": "Toni Kroos",
+     "position": "CAM",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/251164/255955/300186474",
+     "via": "https://api.fifa.com/api/v3/live/football/17/251164/255955/300186474",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Semi-final, 2014-07-08, Estadio Mineirão Belo Horizonte, Brazil 1-7 Germany; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/383242",
+     "via": "site.api.espn.com fifa.world summary?event=383242",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Brazil 1 - Germany 7, Germany 4-3-3, same eleven and subs."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-brasil/seleccion-alemania/2014191897/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Germany 4-2-3-1, same eleven."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2014-07-08, Estádio Mineirão Belo Horizonte, Brazil 1-7 Germany, Semi-final: match. Same XI as the final except Khedira for Kramer: confirmed.",
+    "Formation split as for the final: besoccer 4-2-3-1 (agrees), ESPN 4-3-3, FIFA silent.",
+    "Round 1026: formation split. RSSSF 4-1-4-1, ESPN 4-3-3, besoccer 4-2-3-1 (the entry). No two sources agree on a new label, entry keeps 4-2-3-1."
+   ]
+  },
+  {
+   "position": 20,
+   "id": "wc-2018-final-france",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Hugo LLORIS",
+    "Benjamin PAVARD",
+    "Raphael VARANE",
+    "Samuel UMTITI",
+    "Lucas HERNANDEZ",
+    "Ngolo KANTE",
+    "Paul POGBA",
+    "Kylian MBAPPE",
+    "Antoine GRIEZMANN",
+    "Blaise MATUIDI",
+    "Olivier GIROUD"
+   ],
+   "aka": {
+    "N'Golo Kante": "Ngolo KANTE"
+   },
+   "substitutes": [
+    "55' Steven N'Zonzi for N'Golo Kanté",
+    "73' Corentin Tolisso for Blaise Matuidi",
+    "81' Nabil Fekir for Olivier Giroud"
+   ],
+   "fields": {
+    "matchDate": "2018-07-15",
+    "team": "France",
+    "opponent": "Croatia",
+    "scoreLine": "France 4-2 Croatia",
+    "venue": "Luzhniki Stadium, Moscow",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Benjamin Pavard",
+     "position": "RB",
+     "nationality": "France",
+     "clubAtTime": "VfB Stuttgart"
+    },
+    {
+     "name": "Samuel Umtiti",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Blaise Matuidi",
+     "position": "LW",
+     "nationality": "France",
+     "clubAtTime": "Juventus"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/254645/275101/300331552",
+     "via": "https://api.fifa.com/api/v3/live/football/17/254645/275101/300331552",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Final, 2018-07-15, Luzhniki Stadium Moscow, France 4-2 Croatia; France tactics '4-5-1'; starters and coordinates as quoted."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/498139",
+     "via": "site.api.espn.com fifa.world summary?event=498139",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "France 4 - Croatia 2, France 4-4-2: Lloris; Pavard, Varane, Umtiti, Hernández; Mbappé RM, Pogba, Kanté, Matuidi LM; Griezmann, Giroud."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-francia/seleccion-croacia/2018843904/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "France 4-2-3-1, same eleven (third source for the formation split)."
+    },
+    {
+     "host": "juventus.com",
+     "url": "https://www.juventus.com/en/news/articles/matuidi-signs-for-juventus-x1616",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "18 August 2017: 'Juventus can today confirm the arrival of midfielder Blaise Matuidi from Paris Saint-Germain... three-year deal at the club until 30 June 2020.'"
+    },
+    {
+     "host": "skysports.com",
+     "url": "https://www.skysports.com/transfer/news/11095/10994399/blaise-matuidi-seals-juventus-switch-from-paris-saint-germain",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "21 August 2017: Juventus have signed Matuidi from Paris Saint-Germain on a three-year deal."
+    },
+    {
+     "host": "espn.com",
+     "url": "http://www.espn.com/soccer/soccer-transfers/story/3181978/blaise-matuidi-completes-move-to-juventus-from-paris-saint-germain",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "Search listing only (not opened): 'Blaise Matuidi completes move to Juventus from Paris Saint-Germain'."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[2] Blaise Matuidi clubAtTime",
+     "entry": "Paris Saint-Germain",
+     "evidence": "Juventus. juventus.com, 18 August 2017: signed from Paris Saint-Germain on a deal to 30 June 2020. Sky Sports, 21 August 2017: same. So he was a Juventus player at the 15 July 2018 final. This is the club hint shown first for a national-team lineup, so the puzzle's first hint is wrong.",
+     "decision": "applied",
+     "reason": "Matuidi club hint now Juventus."
+    },
+    {
+     "field": "formationLabel",
+     "entry": "4-4-2",
+     "evidence": "Sources split three ways. FIFA (organiser) states 4-5-1, and its tactical coordinates draw a 4-2-3-1 (Kanté 6,6 and Pogba 14,6; Matuidi 5,10, Griezmann 10,10, Mbappé 15,10; Giroud 10,12). besoccer: 4-2-3-1. ESPN: 4-4-2 (agrees with the entry). The organiser does not say 4-4-2.",
+     "decision": "kept: sources split",
+     "reason": "RSSSF 4-3-3, ESPN and Coaches Voice 4-4-2 (the entry), FIFA 4-5-1, besoccer 4-2-3-1. The shard 1 skeptic overturned this diff. Entry keeps 4-4-2."
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Blaise Matuidi].clubAtTime",
+     "from": "Paris Saint-Germain",
+     "to": "Juventus",
+     "why": "juventus.com (18 Aug 2017, signed from PSG) and Sky Sports (21 Aug 2017); the skeptic confirmed on planetworldcup.com and goal.com"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2018-07-15, Luzhniki Stadium Moscow, France 4-2 Croatia, Final: all match.",
+    "Layout only: FIFA and ESPN both put Pogba right-centre and Kanté left-centre (FIFA x Pogba 14, Kanté 6 with Pavard at 18; ESPN Kanté CM-L, Pogba CM-R); the entry draws Kanté at x=60 (right). Both CM.",
+    "Pavard (VfB Stuttgart) and Umtiti (Barcelona) clubAtTime were not re-sourced in this pass."
+   ]
+  },
+  {
+   "position": 21,
+   "id": "wc-2022-final-argentina",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Emiliano MARTINEZ",
+    "Nahuel MOLINA",
+    "Cristian ROMERO",
+    "Nicolas OTAMENDI",
+    "Nicolas TAGLIAFICO",
+    "Rodrigo DE PAUL",
+    "Enzo FERNANDEZ",
+    "Alexis MAC ALLISTER",
+    "Lionel MESSI",
+    "Julian ALVAREZ",
+    "Angel DI MARIA"
+   ],
+   "substitutes": [
+    "64' Marcos ACUNA for Angel DI MARIA",
+    "91' Gonzalo MONTIEL for Nahuel MOLINA",
+    "102' Leandro PAREDES for Rodrigo DE PAUL",
+    "102' Lautaro MARTINEZ for Julian ALVAREZ",
+    "116' German PEZZELLA for Alexis MAC ALLISTER",
+    "120'+1' Paulo DYBALA for Nicolas TAGLIAFICO"
+   ],
+   "fields": {
+    "matchDate": "2022-12-18",
+    "team": "Argentina",
+    "opponent": "France",
+    "scoreLine": "Argentina 3-3 France, AET (Argentina won 4-2 on penalties)",
+    "venue": "Lusail Stadium, Lusail",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Nicolas Tagliafico",
+     "position": "LB",
+     "nationality": "Argentina",
+     "clubAtTime": "Lyon"
+    },
+    {
+     "name": "Alexis Mac Allister",
+     "position": "CM",
+     "nationality": "Argentina",
+     "clubAtTime": "Brighton"
+    },
+    {
+     "name": "Nahuel Molina",
+     "position": "RB",
+     "nationality": "Argentina",
+     "clubAtTime": "Atletico Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/255711/285077/400128145",
+     "via": "https://api.fifa.com/api/v3/live/football/17/255711/285077/400128145",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2022-12-18, Lusail Stadium, Argentina 3-3 France, penalties 4-2, Argentina tactics 4-3-3; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/633850",
+     "via": "site.api.espn.com fifa.world summary?event=633850",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Argentina 3 (pens 4) - France 3 (pens 2), Argentina 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2022-12-18, Lusail Stadium, 3-3 AET, Argentina 4-2 on penalties, Final, 4-3-3: all match (FIFA tactics 4-3-3, ESPN 4-3-3). FIFA gives the stadium's municipality as Al Daayen; ESPN says Lusail. Same ground.",
+    "Layout only: both sources put De Paul right-centre and Mac Allister left-centre (FIFA x De Paul 14, Mac Allister 6; ESPN De Paul RM, Mac Allister LM); the entry draws Mac Allister at x=68 (right) and De Paul at x=32. Both CM."
+   ]
+  },
+  {
+   "position": 22,
+   "id": "wc-2022-semi-argentina",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Emiliano MARTINEZ",
+    "Nahuel MOLINA",
+    "Cristian ROMERO",
+    "Nicolas OTAMENDI",
+    "Nicolas TAGLIAFICO",
+    "Rodrigo DE PAUL",
+    "Leandro PAREDES",
+    "Enzo FERNANDEZ",
+    "Alexis MAC ALLISTER",
+    "Lionel MESSI",
+    "Julian ALVAREZ"
+   ],
+   "substitutes": [
+    "62' Lisandro MARTINEZ for Leandro PAREDES",
+    "74' Exequiel PALACIOS for Rodrigo DE PAUL",
+    "74' Paulo DYBALA for Julian ALVAREZ",
+    "86' Angel CORREA for Alexis MAC ALLISTER",
+    "86' Juan FOYTH for Nahuel MOLINA"
+   ],
+   "fields": {
+    "matchDate": "2022-12-13",
+    "team": "Argentina",
+    "opponent": "Croatia",
+    "scoreLine": "Argentina 3-0 Croatia",
+    "venue": "Lusail Stadium, Lusail",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Leandro Paredes",
+     "position": "CM",
+     "nationality": "Argentina",
+     "clubAtTime": "Juventus"
+    },
+    {
+     "name": "Enzo Fernández",
+     "position": "CM",
+     "nationality": "Argentina",
+     "clubAtTime": "Benfica"
+    },
+    {
+     "name": "Julián Alvarez",
+     "position": "ST",
+     "nationality": "Argentina",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/255711/285075/400128143",
+     "via": "https://api.fifa.com/api/v3/live/football/17/255711/285075/400128143",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Semi-final, 2022-12-13, Lusail Stadium, Argentina 3-0 Croatia, tactics 4-4-2; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/633847",
+     "via": "site.api.espn.com fifa.world summary?event=633847",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Argentina 3 - Croatia 0, Argentina 4-4-2, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2022-12-13, Lusail Stadium, Argentina 3-0 Croatia, Semi-final, 4-4-2 (FIFA and ESPN): all match. Paredes started, Di María did not: confirmed. Sides of Paredes/Enzo and Messi/Álvarez agree with FIFA coordinates."
+   ]
+  },
+  {
+   "position": 23,
+   "id": "wc-2010-semi-netherlands",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Maarten Stekelenburg",
+    "Khalid BOULAHROUZ",
+    "John HEITINGA",
+    "Joris MATHIJSEN",
+    "Giovanni VAN BRONCKHORST",
+    "Mark VAN BOMMEL",
+    "Demy DE ZEEUW",
+    "Arjen ROBBEN",
+    "Wesley SNEIJDER",
+    "Dirk KUYT",
+    "Robin VAN PERSIE"
+   ],
+   "substitutes": [
+    "45' Rafael VAN DER VAART for Demy DE ZEEUW",
+    "88' Eljero ELIA for Arjen ROBBEN"
+   ],
+   "fields": {
+    "matchDate": "2010-07-06",
+    "team": "Netherlands",
+    "opponent": "Uruguay",
+    "scoreLine": "Uruguay 2-3 Netherlands",
+    "venue": "Cape Town Stadium, Cape Town",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Khalid Boulahrouz",
+     "position": "RB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Stuttgart"
+    },
+    {
+     "name": "Demy de Zeeuw",
+     "position": "CM",
+     "nationality": "Netherlands",
+     "clubAtTime": "Ajax"
+    },
+    {
+     "name": "Joris Mathijsen",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Hamburger SV"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/249715/249719/300061512",
+     "via": "https://api.fifa.com/api/v3/live/football/17/249715/249719/300061512",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Semi-final, 2010-07-06, Green Point Stadium Cape Town, Uruguay 2-3 Netherlands; Netherlands starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/264120",
+     "via": "site.api.espn.com fifa.world summary?event=264120",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Uruguay 2 - Netherlands 3, Netherlands 4-2-3-1, same eleven and subs."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/espn/wire?id=5243372&section=soccer",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "2010 World Cup squads (AP): Boulahrouz (Stuttgart), Mathijsen (Hamburg), de Zeeuw (Ajax)."
+    },
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefaeuropaleague/news/01f3-0e78d49a31bd-72aa4be074db-1000--spartak-sign-ajax-midfielder-de-zeeuw/",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "De Zeeuw won the Eredivisie 'in his final campaign at AZ Alkmaar in 2008/09', then Ajax."
+    },
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/news-media/news/01f2-0e78b777a997-2ede6b0a0a8a-1000--malaga-add-mathijsen-and-toulalan-to-summer-spree/",
+     "readOn": "2026-10-05",
+     "xi": false,
+     "says": "17 June 2011: Málaga sign Mathijsen from Hamburger SV after five years there; mentions his 2010 World Cup final."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "blankCandidates[1] Demy de Zeeuw clubAtTime",
+     "entry": "AZ Alkmaar",
+     "evidence": "Ajax. ESPN's AP 2010 World Cup squad list: 'Demy de Zeeuw (Ajax)'. UEFA.com (Spartak signing article): his 'final campaign at AZ Alkmaar' was 2008/09, after which he was an Ajax player. This is the first hint shown for this blank.",
+     "decision": "applied",
+     "reason": "de Zeeuw club hint now Ajax."
+    },
+    {
+     "field": "blankCandidates[2] Joris Mathijsen clubAtTime",
+     "entry": "AZ Alkmaar",
+     "evidence": "Hamburger SV. ESPN's AP 2010 World Cup squad list: 'Joris Mathijsen (Hamburg)'. UEFA.com 17 June 2011 ('Málaga add Mathijsen and Toulalan'): signed from Hamburger SV after 'five successful years at the heart of their defence'.",
+     "decision": "applied",
+     "reason": "Mathijsen club hint now Hamburger SV."
+    }
+   ],
+   "applied": [
+    {
+     "path": "blankCandidates[Demy de Zeeuw].clubAtTime",
+     "from": "AZ Alkmaar",
+     "to": "Ajax",
+     "why": "ESPN's AP 2010 World Cup squad list (Ajax) and UEFA.com (his last AZ season was 2008/09); the skeptic confirmed on planetworldcup.com"
+    },
+    {
+     "path": "blankCandidates[Joris Mathijsen].clubAtTime",
+     "from": "AZ Alkmaar",
+     "to": "Hamburger SV",
+     "why": "ESPN's AP 2010 World Cup squad list (Hamburg) and UEFA.com (signed by Malaga from Hamburger SV in 2011 after five seasons); the skeptic confirmed on planetworldcup.com"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2010-07-06, Uruguay 2-3 Netherlands, Semi-final, ESPN formation 4-2-3-1: all match. Boulahrouz and de Zeeuw starting for the suspended van der Wiel and de Jong: confirmed by both elevens.",
+    "Venue: FIFA and ESPN both say 'Green Point Stadium', Cape Town; the entry's 'Cape Town Stadium' is the same ground's official name. Not counted.",
+    "Boulahrouz clubAtTime 'Stuttgart' agrees with the ESPN AP squad list."
+   ]
+  },
+  {
+   "position": 24,
+   "id": "euro-2021-final-italy",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Gianluigi Donnarumma",
+    "Giovanni Di Lorenzo",
+    "Leonardo Bonucci",
+    "Giorgio Chiellini",
+    "Emerson",
+    "Jorginho",
+    "Nicolò Barella",
+    "Marco Verratti",
+    "Federico Chiesa",
+    "Ciro Immobile",
+    "Lorenzo Insigne"
+   ],
+   "substitutes": [
+    "54' Bryan Cristante for Nicolò Barella",
+    "55' Domenico Berardi for Ciro Immobile",
+    "86' Federico Bernardeschi for Federico Chiesa",
+    "91' Andrea Belotti for Lorenzo Insigne",
+    "96' Manuel Locatelli for Marco Verratti",
+    "118' Alessandro Florenzi for Emerson"
+   ],
+   "fields": {
+    "matchDate": "2021-07-11",
+    "team": "Italy",
+    "opponent": "England",
+    "scoreLine": "Italy 1-1 England, AET (Italy won 3-2 on penalties)",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Emerson",
+     "position": "LB",
+     "nationality": "Italy",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Giovanni Di Lorenzo",
+     "position": "RB",
+     "nationality": "Italy",
+     "clubAtTime": "Napoli"
+    },
+    {
+     "name": "Nicolò Barella",
+     "position": "CM",
+     "nationality": "Italy",
+     "clubAtTime": "Inter Milan"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/euro2020/match/2024491/",
+     "via": "https://match.uefa.com/v5/matches/2024491/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "European Championship Final, 2021-07-11, Wembley Stadium, Italy 1-1 England, penalties 3-2; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/560294",
+     "via": "site.api.espn.com uefa.euro summary?event=560294",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Italy 1 (pens 3) - England 1 (pens 2), Italy 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2021-07-11, Wembley Stadium London, Italy 1-1 England AET, Italy 3-2 on penalties, Final (UEFA season 2020): match. ESPN 4-3-3 with Barella right, Verratti left, Chiesa right, Insigne left: matches entry."
+   ]
+  },
+  {
+   "position": 25,
+   "id": "euro-2024-final-spain",
+   "research": "differs",
+   "verdict": "noted",
+   "eleven": [
+    "Unai Simón",
+    "Dani Carvajal",
+    "Robin Le Normand",
+    "Aymeric Laporte",
+    "Marc Cucurella",
+    "Rodri",
+    "Fabián Ruiz",
+    "Lamine Yamal",
+    "Dani Olmo",
+    "Nico Williams",
+    "Álvaro Morata"
+   ],
+   "aka": {
+    "Daniel Carvajal": "Dani Carvajal"
+   },
+   "substitutes": [
+    "46' Martín Zubimendi for Rodri",
+    "68' Mikel Oyarzabal for Álvaro Morata",
+    "83' Nacho for Robin Le Normand",
+    "89' Mikel Merino for Lamine Yamal"
+   ],
+   "fields": {
+    "matchDate": "2024-07-14",
+    "team": "Spain",
+    "opponent": "England",
+    "scoreLine": "Spain 2-1 England",
+    "venue": "Olympiastadion, Berlin",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Robin Le Normand",
+     "position": "CB",
+     "nationality": "Spain",
+     "clubAtTime": "Real Sociedad"
+    },
+    {
+     "name": "Marc Cucurella",
+     "position": "LB",
+     "nationality": "Spain",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Fabián Ruiz",
+     "position": "CM",
+     "nationality": "Spain",
+     "clubAtTime": "Paris Saint-Germain"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/euro2024/match/2036211/",
+     "via": "https://match.uefa.com/v5/matches/2036211/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "European Championship Final, 2024-07-14, Olympiastadion Berlin, Spain 2-1 England; XI and coordinates as quoted."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/703945",
+     "via": "site.api.espn.com uefa.euro summary?event=703945",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Spain 2 - England 1, Spain 4-2-3-1, same eleven and subs."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-3-3 (Olmo as a third CM)",
+     "evidence": "ESPN states 4-2-3-1 (Olmo AM). UEFA tactical coordinates: Rodri (294,473) and Fabián (704,473) as a pair; Yamal (124,681), Olmo (501,668), Nico Williams (875,681) on one line; Morata (501,864). Both describe 4-2-3-1.",
+     "decision": "kept: sources split",
+     "reason": "UEFA coordinates, ESPN and soccerway.com read 4-2-3-1; Coaches Voice says Spain started in a 4-3-3 (the entry). The skeptic recorded the split. Entry keeps 4-3-3."
+    }
+   ],
+   "applied": [],
+   "notes": [
+    "Eleven, date 2024-07-14, Olympiastadion Berlin, Spain 2-1 England, Final: all match. Rodri right-centre / Fabián left-centre agrees with both sources."
+   ]
+  },
+  {
+   "position": 26,
+   "id": "epl-2012-title-city",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Joe Hart",
+    "Pablo Zabaleta",
+    "Vincent Kompany",
+    "Joleon Lescott",
+    "Gaël Clichy",
+    "Samir Nasri",
+    "Yaya Touré",
+    "Gareth Barry",
+    "David Silva",
+    "Carlos Tevez",
+    "Sergio Agüero"
+   ],
+   "substitutes": [
+    "45' Nigel de Jong for Yaya Touré",
+    "69' Edin Dzeko for Gareth Barry",
+    "76' Mario Balotelli for Carlos Tevez"
+   ],
+   "fields": {
+    "matchDate": "2012-05-13",
+    "team": "Manchester City",
+    "opponent": "Queens Park Rangers",
+    "scoreLine": "Manchester City 3-2 QPR",
+    "venue": "Etihad Stadium, Manchester",
+    "formationLabel": "4-4-1-1"
+   },
+   "hints": [
+    {
+     "name": "Joleon Lescott",
+     "position": "CB",
+     "nationality": "England",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Samir Nasri",
+     "position": "RM",
+     "nationality": "France",
+     "clubAtTime": "Manchester City"
+    },
+    {
+     "name": "Gaël Clichy",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Manchester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/en/match/360841",
+     "via": "sdp-prem-prod.premier-league-prod.pulselive.com/api/v1/matches/360841 and /v3/matches/360841/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2012-05-13 15:00 BST, Etihad Stadium, Manchester City 3-2 QPR; City formation 4-4-1-1; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/318011",
+     "via": "site.api.espn.com eng.1 summary?event=318011",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Manchester City 3 - QPR 2, City 4-4-1-1, same eleven and subs."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-4-2",
+     "evidence": "Premier League: 4-4-1-1. ESPN: 4-4-1-1 (Tevez RCF behind Agüero F).",
+     "decision": "applied",
+     "reason": "4-4-1-1 on premierleague.com and ESPN."
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-4-2",
+     "to": "4-4-1-1",
+     "why": "premierleague.com and ESPN both state 4-4-1-1 (Tevez behind Aguero); no skeptic contradicted it"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2012-05-13, Etihad Stadium Manchester, Manchester City 3-2 QPR, matchweek 38: all match. Džeko and Balotelli were subs: confirmed."
+   ]
+  },
+  {
+   "position": 27,
+   "id": "epl-2016-leicester",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Kasper Schmeichel",
+    "Danny Simpson",
+    "Wes Morgan",
+    "Robert Huth",
+    "Christian Fuchs",
+    "Riyad Mahrez",
+    "Daniel Drinkwater",
+    "N'Golo Kanté",
+    "Marc Albrighton",
+    "Jamie Vardy",
+    "Shinji Okazaki"
+   ],
+   "aka": {
+    "Danny Drinkwater": "Daniel Drinkwater"
+   },
+   "substitutes": [
+    "77' Demarai Gray for Riyad Mahrez",
+    "81' Leonardo Ulloa for Shinji Okazaki",
+    "86' Nathan Dyer for Marc Albrighton"
+   ],
+   "fields": {
+    "matchDate": "2016-02-06",
+    "team": "Leicester City",
+    "opponent": "Manchester City",
+    "scoreLine": "Manchester City 1-3 Leicester City",
+    "venue": "Etihad Stadium, Manchester",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Christian Fuchs",
+     "position": "LB",
+     "nationality": "Austria",
+     "clubAtTime": "Leicester City"
+    },
+    {
+     "name": "Marc Albrighton",
+     "position": "LM",
+     "nationality": "England",
+     "clubAtTime": "Leicester City"
+    },
+    {
+     "name": "Danny Drinkwater",
+     "position": "CM",
+     "nationality": "England",
+     "clubAtTime": "Leicester City"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/en/match/803405",
+     "via": "sdp-prem-prod.premier-league-prod.pulselive.com/api/v3/matches/803405/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2016-02-06 12:45 GMT, Etihad Stadium, Manchester City 1-3 Leicester City; Leicester 4-4-2; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/422418",
+     "via": "site.api.espn.com eng.1 summary?event=422418",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Manchester City 1 - Leicester City 3, Leicester 4-4-2, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2016-02-06, Etihad Stadium, Manchester City 1-3 Leicester City, 4-4-2 (PL and ESPN): all match. 'Daniel Drinkwater' (PL) / 'Danny Drinkwater': same man.",
+    "Vardy/Okazaki sides: ESPN has Vardy CF-L; entry draws Vardy right. Both ST, layout only."
+   ]
+  },
+  {
+   "position": 28,
+   "id": "laliga-2018-clasico-barca",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Ter Stegen",
+    "S. Roberto",
+    "Piqué",
+    "Lenglet",
+    "Jordi Alba",
+    "Sergio",
+    "I. Rakitic",
+    "Arthur",
+    "Rafael",
+    "Suárez",
+    "Coutinho"
+   ],
+   "aka": {
+    "Marc-Andre ter Stegen": "Ter Stegen",
+    "Sergi Roberto": "S. Roberto",
+    "Gerard Pique": "Piqué",
+    "Clément Lenglet": "Lenglet",
+    "Sergio Busquets": "Sergio",
+    "Ivan Rakitic": "I. Rakitic",
+    "Arthur Melo": "Arthur",
+    "Luis Suarez": "Suárez",
+    "Philippe Coutinho": "Coutinho",
+    "Rafinha": "Rafael"
+   },
+   "substitutes": [
+    "Arturo Vidal for Arthur",
+    "Ousmane Dembélé for Philippe Coutinho",
+    "Nélson Semedo for Rafinha (ESPN; LaLiga's lineup feed lists the bench without minutes)"
+   ],
+   "fields": {
+    "matchDate": "2018-10-28",
+    "team": "Barcelona",
+    "opponent": "Real Madrid",
+    "scoreLine": "Barcelona 5-1 Real Madrid",
+    "venue": "Camp Nou, Barcelona",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Clément Lenglet",
+     "position": "CB",
+     "nationality": "France",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Arthur Melo",
+     "position": "CM",
+     "nationality": "Brazil",
+     "clubAtTime": "Barcelona"
+    },
+    {
+     "name": "Sergi Roberto",
+     "position": "RB",
+     "nationality": "Spain",
+     "clubAtTime": "Barcelona"
+    }
+   ],
+   "sources": [
+    {
+     "host": "laliga.com",
+     "url": "https://www.laliga.com/en-GB/match/temporada-2018-2019-laliga-santander-fc-barcelona-real-madrid-10",
+     "via": "apim.laliga.com/public-service/api/v1/matches/temporada-2018-2019-laliga-santander-fc-barcelona-real-madrid-10 and /lineups (the page itself now redirects to a 404 slug; its own backend still serves the match)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2018-10-28 15:15 UTC, Spotify Camp Nou, FC Barcelona 5-1 Real Madrid; starters: Ter Stegen, Lenglet, S. Roberto, Jordi Alba, Piqué, Sergio, I. Rakitic, Arthur, Rafael, Coutinho, Suárez."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/521827",
+     "via": "site.api.espn.com esp.1 summary?event=521827",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Barcelona 5 - Real Madrid 1, Barcelona 4-3-3, same eleven; subs Vidal, Dembélé, Semedo."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2018-10-28, Camp Nou (both sources now use the current name 'Spotify Camp Nou'), Barcelona 5-1 Real Madrid, LaLiga matchday 10: all match. ESPN formation 4-3-3 matches.",
+    "LaLiga writes 'Sergio' for Sergio Busquets and 'Rafael' for Rafinha; same men.",
+    "Layout only: ESPN has Busquets central, Rakitić RM, Arthur LM; the entry draws Rakitić left, Busquets right and Arthur advanced. All three carry CM in the entry."
+   ]
+  },
+  {
+   "position": 29,
+   "id": "epl-2016-chelsea-backthree",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Thibaut Courtois",
+    "César Azpilicueta",
+    "David Luiz",
+    "Gary Cahill",
+    "Victor Moses",
+    "N'Golo Kanté",
+    "Nemanja Matic",
+    "Marcos Alonso",
+    "Willian",
+    "Eden Hazard",
+    "Diego Costa"
+   ],
+   "substitutes": [
+    "81' Oscar for Eden Hazard",
+    "85' Pedro for Victor Moses",
+    "89' Nathaniel Chalobah for Willian"
+   ],
+   "fields": {
+    "matchDate": "2016-10-01",
+    "team": "Chelsea",
+    "opponent": "Hull City",
+    "scoreLine": "Hull City 0-2 Chelsea",
+    "venue": "KCOM Stadium, Hull",
+    "formationLabel": "3-4-3"
+   },
+   "hints": [
+    {
+     "name": "Victor Moses",
+     "position": "RWB",
+     "nationality": "Nigeria",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Marcos Alonso",
+     "position": "LWB",
+     "nationality": "Spain",
+     "clubAtTime": "Chelsea"
+    },
+    {
+     "name": "Nemanja Matić",
+     "position": "CM",
+     "nationality": "Serbia",
+     "clubAtTime": "Chelsea"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/en/match/855234",
+     "via": "sdp-prem-prod.premier-league-prod.pulselive.com/api/v3/matches/855234/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2016-10-01 15:00 BST, Hull City 0-2 Chelsea; Chelsea 3-4-3; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/450940",
+     "via": "site.api.espn.com eng.1 summary?event=450940 (includes the 2016 report text)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Hull City 0 - Chelsea 2, Chelsea 3-4-3, same eleven and subs; report: 'at the KCOM Stadium'."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2016-10-01, Hull City 0-2 Chelsea, 3-4-3 (PL and ESPN): all match.",
+    "Venue: both feeds now show the ground's current name 'The MKM Stadium'; ESPN's own 2016 match report says 'sink Hull 2-0 at the KCOM Stadium', so the entry's 'KCOM Stadium, Hull' is the name at the time. Not a diff.",
+    "Kanté/Matić sides: ESPN Kanté CM-L; entry draws Kanté right. Both CM, layout only."
+   ]
+  },
+  {
+   "position": 30,
+   "id": "epl-2004-arsenal-invincibles",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Jens Lehmann",
+    "Lauren",
+    "Kolo Touré",
+    "Sol Campbell",
+    "Ashley Cole",
+    "Ray Parlour",
+    "Gilberto Silva",
+    "Patrick Vieira",
+    "Robert Pires",
+    "Dennis Bergkamp",
+    "Thierry Henry"
+   ],
+   "substitutes": [
+    "Edu and José Antonio Reyes came on. Premier League: 66' Edu for Bergkamp, 81' Reyes for Parlour. ESPN: Edu for Parlour, Reyes for Bergkamp. The two sources disagree on who each replaced; not an entry field."
+   ],
+   "fields": {
+    "matchDate": "2004-04-25",
+    "team": "Arsenal",
+    "opponent": "Tottenham Hotspur",
+    "scoreLine": "Tottenham Hotspur 2-2 Arsenal (title clinched)",
+    "venue": "White Hart Lane, London",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Kolo Touré",
+     "position": "CB",
+     "nationality": "Cote d'Ivoire",
+     "clubAtTime": "Arsenal"
+    },
+    {
+     "name": "Ray Parlour",
+     "position": "RM",
+     "nationality": "England",
+     "clubAtTime": "Arsenal"
+    },
+    {
+     "name": "Gilberto Silva",
+     "position": "CM",
+     "nationality": "Brazil",
+     "clubAtTime": "Arsenal"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/en/match/3777",
+     "via": "sdp-prem-prod.premier-league-prod.pulselive.com/api/v1/matches/3777 and /v3/matches/3777/lineups (old URL premierleague.com/match/4486 redirects here)",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2004-04-25, White Hart Lane London, Tottenham Hotspur 2-2 Arsenal; Arsenal starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/150154",
+     "via": "site.api.espn.com eng.1 summary?event=150154",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Tottenham Hotspur 2 - Arsenal 2, White Hart Lane, same eleven."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2004-04-25, White Hart Lane, Tottenham 2-2 Arsenal: match. Parlour started: confirmed by both. The PL feed tags Kolo Touré and ESPN tags Lauren and Touré in their profile position groups (MF/M); neither is a match-position statement."
+   ]
+  },
+  {
+   "position": 31,
+   "id": "cl-1999-final-manutd",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Peter Schmeichel",
+    "Gary Neville",
+    "Jaap Stam",
+    "Ronny Johnsen",
+    "Denis Irwin",
+    "Ryan Giggs",
+    "Nicky Butt",
+    "David Beckham",
+    "Jesper Blomqvist",
+    "Andy Cole",
+    "Dwight Yorke"
+   ],
+   "substitutes": [
+    "67' Teddy Sheringham for Jesper Blomqvist",
+    "81' Ole Gunnar Solskjær for Andy Cole"
+   ],
+   "fields": {
+    "matchDate": "1999-05-26",
+    "team": "Manchester United",
+    "opponent": "Bayern Munich",
+    "scoreLine": "Manchester United 2-1 Bayern Munich",
+    "venue": "Camp Nou, Barcelona",
+    "formationLabel": "4-4-2"
+   },
+   "hints": [
+    {
+     "name": "Gary Neville",
+     "position": "RB",
+     "nationality": "England",
+     "clubAtTime": "Manchester United"
+    },
+    {
+     "name": "Jaap Stam",
+     "position": "CB",
+     "nationality": "Netherlands",
+     "clubAtTime": "Manchester United"
+    },
+    {
+     "name": "Ryan Giggs",
+     "position": "RM",
+     "nationality": "Wales",
+     "clubAtTime": "Manchester United"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/56379/",
+     "via": "https://match.uefa.com/v5/matches/56379/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final (season 1998/99), 1999-05-26, Camp Nou, Barcelona, Man Utd 2-1 Bayern München; XI as listed."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/manchester-united-fc/bayern-munchen/199921038/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "26 May 1999, Manchester United 2-1 Bayern München, 4-4-2: Peter Schmeichel, Gary Neville, Denis Irwin, Ronny Johnsen, Jaap Stam, D. Beckham, N. Butt, Andy Cole, R. Giggs, J. Blomqvist, Dwight Yorke; Sheringham 67' for Blomqvist, Solskjær 81' for Cole."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "1999-05-26, Camp Nou Barcelona, Man Utd 2-1 Bayern, Final: match. ESPN's feed has no 1999 match, so besoccer is the independent source; besoccer formation 4-4-2 agrees with the entry (UEFA gives no formation).",
+    "besoccer writes 'D. Beckham', 'N. Butt', 'R. Giggs', 'J. Blomqvist'; same men. Kick-off positions (Giggs right, Beckham central) are not stated by UEFA; not checked."
+   ]
+  },
+  {
+   "position": 32,
+   "id": "cl-2020-qf-bayern",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Manuel Neuer",
+    "Joshua Kimmich",
+    "Jérôme Boateng",
+    "David Alaba",
+    "Alphonso Davies",
+    "Leon Goretzka",
+    "Thiago Alcántara",
+    "Serge Gnabry",
+    "Thomas Müller",
+    "Ivan Perišić",
+    "Robert Lewandowski"
+   ],
+   "substitutes": [
+    "67' Kingsley Coman for Ivan Perišić",
+    "76' Niklas Süle for Jérôme Boateng",
+    "76' Philippe Coutinho for Serge Gnabry",
+    "83' Corentin Tolisso for Leon Goretzka",
+    "83' Lucas Hernández for Alphonso Davies"
+   ],
+   "fields": {
+    "matchDate": "2020-08-14",
+    "team": "Bayern Munich",
+    "opponent": "Barcelona",
+    "scoreLine": "Barcelona 2-8 Bayern Munich",
+    "venue": "Estadio da Luz, Lisbon",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Ivan Perišić",
+     "position": "LW",
+     "nationality": "Croatia",
+     "clubAtTime": "Bayern Munich (loan)"
+    },
+    {
+     "name": "Alphonso Davies",
+     "position": "LB",
+     "nationality": "Canada",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Thiago Alcántara",
+     "position": "CDM",
+     "nationality": "Spain",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2030146/",
+     "via": "https://match.uefa.com/v5/matches/2030146/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Quarter-finals, 2020-08-14, Lisbon, Barcelona 2-8 Bayern München; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/573704",
+     "via": "site.api.espn.com summary?event=573704",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Barcelona 2 - Bayern Munich 8, Bayern 4-2-3-1, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2020-08-14, Estádio da Luz Lisbon, Barcelona 2-8 Bayern, Quarter-final, ESPN 4-2-3-1: all match. Kimmich RB, Perišić left: confirmed.",
+    "Goretzka/Thiago sides: sources disagree with each other; both CDM in the entry, layout only."
+   ]
+  },
+  {
+   "position": 33,
+   "id": "cl-2013-final-bayern",
+   "research": "same",
+   "verdict": "verified",
+   "eleven": [
+    "Manuel Neuer",
+    "Philipp Lahm",
+    "Jérôme Boateng",
+    "Dante",
+    "David Alaba",
+    "Javi Martínez",
+    "Bastian Schweinsteiger",
+    "Arjen Robben",
+    "Thomas Müller",
+    "Franck Ribéry",
+    "Mario Mandžukić"
+   ],
+   "substitutes": [
+    "90+1' Luiz Gustavo for Franck Ribéry",
+    "90+4' Mario Gomez for Mario Mandžukić"
+   ],
+   "fields": {
+    "matchDate": "2013-05-25",
+    "team": "Bayern Munich",
+    "opponent": "Borussia Dortmund",
+    "scoreLine": "Bayern Munich 2-1 Borussia Dortmund",
+    "venue": "Wembley Stadium, London",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "Dante",
+     "position": "CB",
+     "nationality": "Brazil",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Mario Mandžukić",
+     "position": "ST",
+     "nationality": "Croatia",
+     "clubAtTime": "Bayern Munich"
+    },
+    {
+     "name": "Jerome Boateng",
+     "position": "CB",
+     "nationality": "Germany",
+     "clubAtTime": "Bayern Munich"
+    }
+   ],
+   "sources": [
+    {
+     "host": "uefa.com",
+     "url": "https://www.uefa.com/uefachampionsleague/match/2009612/",
+     "via": "https://match.uefa.com/v5/matches/2009612/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Final, 2013-05-25, Wembley Stadium, B. Dortmund 1-2 Bayern München; XI as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/365094",
+     "via": "site.api.espn.com summary?event=365094",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Borussia Dortmund 1 - Bayern Munich 2, Bayern 4-2-3-1, same eleven and subs."
+    }
+   ],
+   "diffs": [],
+   "applied": [],
+   "notes": [
+    "2013-05-25, Wembley Stadium London, Dortmund 1-2 Bayern, Final, ESPN 4-2-3-1: all match.",
+    "Layout only: both sources put Javi Martínez right-centre and Schweinsteiger left-centre (UEFA x Martínez 353, Schweinsteiger 641 with Lahm at 91; ESPN Martínez RM, Schweinsteiger LM); the entry draws Schweinsteiger at x=62 (right). Both CDM."
+   ]
+  },
+  {
+   "position": 34,
+   "id": "epl-2014-liverpool-arsenal",
+   "research": "differs",
+   "verdict": "corrected",
+   "eleven": [
+    "Simon Mignolet",
+    "Jon Flanagan",
+    "Martin Skrtel",
+    "Kolo Touré",
+    "Aly Cissokho",
+    "Steven Gerrard",
+    "Jordan Henderson",
+    "Philippe Coutinho",
+    "Luis Suárez",
+    "Daniel Sturridge",
+    "Raheem Sterling"
+   ],
+   "substitutes": [
+    "66' Joe Allen for Daniel Sturridge",
+    "76' Jordon Ibe for Steven Gerrard",
+    "86' Iago Aspas for Luis Suárez"
+   ],
+   "fields": {
+    "matchDate": "2014-02-08",
+    "team": "Liverpool",
+    "opponent": "Arsenal",
+    "scoreLine": "Liverpool 5-1 Arsenal",
+    "venue": "Anfield, Liverpool",
+    "formationLabel": "4-3-3"
+   },
+   "hints": [
+    {
+     "name": "Jon Flanagan",
+     "position": "RB",
+     "nationality": "England",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Aly Cissokho",
+     "position": "LB",
+     "nationality": "France",
+     "clubAtTime": "Liverpool"
+    },
+    {
+     "name": "Martin Skrtel",
+     "position": "CB",
+     "nationality": "Slovakia",
+     "clubAtTime": "Liverpool"
+    }
+   ],
+   "sources": [
+    {
+     "host": "premierleague.com",
+     "url": "https://www.premierleague.com/en/match/695144",
+     "via": "sdp-prem-prod.premier-league-prod.pulselive.com/api/v3/matches/695144/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "2014-02-08 12:45 GMT, Anfield, Liverpool 5-1 Arsenal; Liverpool formation 4-3-3; starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/367255",
+     "via": "site.api.espn.com eng.1 summary?event=367255",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Liverpool 5 - Arsenal 1, Liverpool 4-3-3, same eleven and subs."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-2-3-1 (Gerrard and Henderson as a pivot, Coutinho CAM)",
+     "evidence": "Premier League: 4-3-3 (lineup rows GK; four defenders; three midfielders incl. Gerrard; three forwards). ESPN: 4-3-3 (Gerrard CM, Henderson RM, Coutinho LM; Suárez RF, Sturridge F, Sterling LF).",
+     "decision": "applied",
+     "reason": "4-3-3 on premierleague.com and ESPN; Coutinho relabelled CM."
+    }
+   ],
+   "applied": [
+    {
+     "path": "formationLabel",
+     "from": "4-2-3-1",
+     "to": "4-3-3",
+     "why": "premierleague.com and ESPN both state 4-3-3; the skeptic found lfchistory.net and tomkinstimes.com support a front three"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CAM",
+     "to": "CM",
+     "why": "premierleague.com lists him in a midfield three, ESPN LM; not a No. 10 behind a front three"
+    },
+    {
+     "path": "comment",
+     "from": "Formation is 4-2-3-1 per match-specific archive.",
+     "to": "Round 1026: formation is 4-3-3 per premierleague.com and ESPN (scripts/data/missingXiVerified2026-10).",
+     "why": "the internal note contradicted the corrected label"
+    }
+   ],
+   "notes": [
+    "Eleven, date 2014-02-08, Anfield, Liverpool 5-1 Arsenal, matchweek 25: all match. The entry's source comment claims 4-2-3-1 'per match-specific archive'; neither the organiser nor ESPN agrees."
+   ]
+  },
+  {
+   "position": 35,
+   "id": "wc-2010-group-spain",
+   "research": "differs",
+   "verdict": "verified",
+   "eleven": [
+    "Iker CASILLAS",
+    "Sergio RAMOS",
+    "Gerard PIQUE",
+    "Carles PUYOL",
+    "Joan CAPDEVILA",
+    "Sergio BUSQUETS",
+    "Xabi ALONSO",
+    "Xavi HERNANDEZ",
+    "David SILVA",
+    "Andres INIESTA",
+    "David VILLA"
+   ],
+   "aka": {
+    "Xavi": "Xavi HERNANDEZ"
+   },
+   "substitutes": [
+    "60' Fernando TORRES for Sergio BUSQUETS",
+    "61' Jesús NAVAS for David SILVA",
+    "76' PEDRO for Andres INIESTA"
+   ],
+   "fields": {
+    "matchDate": "2010-06-16",
+    "team": "Spain",
+    "opponent": "Switzerland",
+    "scoreLine": "Switzerland 1-0 Spain",
+    "venue": "Moses Mabhida Stadium, Durban",
+    "formationLabel": "4-2-3-1"
+   },
+   "hints": [
+    {
+     "name": "David Silva",
+     "position": "RW",
+     "nationality": "Spain",
+     "clubAtTime": "Valencia"
+    },
+    {
+     "name": "Joan Capdevila",
+     "position": "LB",
+     "nationality": "Spain",
+     "clubAtTime": "Villarreal"
+    },
+    {
+     "name": "Xabi Alonso",
+     "position": "CDM",
+     "nationality": "Spain",
+     "clubAtTime": "Real Madrid"
+    }
+   ],
+   "sources": [
+    {
+     "host": "fifa.com",
+     "url": "https://www.fifa.com/en/match-centre/match/17/249715/249722/300111112",
+     "via": "https://api.fifa.com/api/v3/live/football/17/249715/249722/300111112",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "First stage Group H, 2010-06-16, Durban Stadium, Spain 0-1 Switzerland; Spain starters as listed."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/match/_/gameId/264073",
+     "via": "site.api.espn.com fifa.world summary?event=264073",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Moses Mabhida Stadium Durban, Spain 0 - Switzerland 1, Spain 4-3-3, same eleven and subs."
+    },
+    {
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-espanola/seleccion-suiza/201071990/lineups",
+     "readOn": "2026-10-05",
+     "xi": true,
+     "says": "Spain 4-3-3, same eleven."
+    }
+   ],
+   "diffs": [
+    {
+     "field": "formationLabel",
+     "entry": "4-2-3-1",
+     "evidence": "ESPN: 4-3-3 (Busquets CM, Xavi LM, Xabi Alonso RM; Silva RF, Villa F, Iniesta LF). besoccer: 4-3-3. FIFA's feed gives no formation (tactics null), so this rests on two independent sources agreeing against the entry.",
+     "decision": "overturned by the skeptic",
+     "reason": "RSSSF and Zonal Marking state 4-2-3-1 (the entry); ESPN and besoccer state 4-3-3. Sources split, entry keeps 4-2-3-1."
+    }
+   ],
+   "applied": [],
+   "notes": [
+    "Eleven, date 2010-06-16, Durban (FIFA 'Durban Stadium', ESPN 'Moses Mabhida Stadium', same ground), Group H, Switzerland 1-0: all match. FIFA and ESPN list Spain as the home side ('Spain 0-1 Switzerland'); the entry writes 'Switzerland 1-0 Spain', same result.",
+    "clubAtTime: ESPN's AP 2010 squad list gives Silva (Valencia), Capdevila (Villarreal), Xabi Alonso (Real Madrid), agreeing with the entry; one source only."
+   ]
+  }
+ ]
+}
