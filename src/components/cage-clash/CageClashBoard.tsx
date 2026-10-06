@@ -1,5 +1,5 @@
-import { useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
-import { CAGE_TICK_MS, canCageAction, cageActionLabel, type CageAction, type CageFighter, type CageStyle } from '@/lib/cageClash';
+import { useId, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
+import { CAGE_TICK_MS, canCageAction, cageActionLabel, cageActionReadiness, type CageAction, type CageFighter, type CageStyle } from '@/lib/cageClash';
 import { useCageClash, type CageControl } from '@/hooks/useCageClash';
 import { CAGE_DRILLS, canCagePracticeAction, nextCageDrill, type CageDrill } from '@/lib/cagePractice';
 import { CAGE_CIRCUIT_STYLES, isCageCircuitComplete } from '@/lib/cageCircuit';
@@ -12,7 +12,7 @@ const actions: { action: CageAction; key: string }[] = [{ action: 'jab', key: 'J
 function FighterHud({ fighter, side, practice = false }: { fighter: CageFighter; side: 'player' | 'cpu'; practice?: boolean }) {
   const player = side === 'player';
   const label = player ? 'You' : practice ? 'Partner' : 'CPU';
-  return <div data-cage-fighter={side} data-x={fighter.x} data-health={fighter.health} data-stamina={fighter.stamina} data-submission={fighter.submission} data-hits={fighter.hits} data-damage-dealt={fighter.damageDealt} data-blocked={fighter.blocked} data-takedowns={fighter.takedowns} data-control-ticks={fighter.controlTicks} className="min-w-0 space-y-1">
+  return <div data-cage-fighter={side} data-x={fighter.x} data-health={fighter.health} data-stamina={fighter.stamina} data-submission={fighter.submission} data-hits={fighter.hits} data-damage-dealt={fighter.damageDealt} data-blocked={fighter.blocked} data-takedowns={fighter.takedowns} data-control-ticks={fighter.controlTicks} data-action={fighter.action} data-action-ticks={fighter.actionTicks} className="min-w-0 space-y-1">
     <div className="flex justify-between gap-1 text-[10px] font-bold uppercase tracking-wider"><span className={player ? 'text-blue-600 dark:text-blue-300' : 'text-red-600 dark:text-red-300'}>{label} <span className="hidden min-[380px]:inline font-normal text-muted-foreground">{fighter.style}</span></span><span aria-label={`${player ? 'Your' : label} health`}>{Math.ceil(fighter.health)} HP</span></div>
     <div role="meter" aria-label={`${player ? 'Your' : label} health`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fighter.health)} className="h-2.5 overflow-hidden rounded-sm bg-muted"><div className={player ? 'h-full bg-blue-500' : 'h-full bg-red-400'} style={{ width: `${Math.max(0, fighter.health)}%` }} /></div>
     <div className="flex items-center gap-1.5"><span className="text-[9px] font-semibold text-muted-foreground">GAS</span><div role="meter" aria-label={`${player ? 'Your' : label} stamina`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(fighter.stamina)} className="h-1.5 flex-1 overflow-hidden rounded-sm bg-muted"><div className="h-full bg-amber-500" style={{ width: `${Math.max(0, fighter.stamina)}%` }} /></div><span className="w-5 text-right text-[9px] tabular-nums">{Math.floor(fighter.stamina)}</span></div>
@@ -20,6 +20,7 @@ function FighterHud({ fighter, side, practice = false }: { fighter: CageFighter;
 }
 
 export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpOpen: boolean }) {
+  const hintId = useId();
   const boardRef = useRef<HTMLElement>(null);
   const statsOpener = useRef<HTMLButtonElement | null>(null);
   const [statsOpen, setStatsOpen] = useState(false);
@@ -123,7 +124,13 @@ export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpO
           <button type="button" {...controlProps('right')} disabled={!running || fight.position !== 'standing'} className={button} aria-label="Move right"><span>Move</span><span className="mx-1 text-[9px] text-muted-foreground">D</span> ▶</button>
         </div>
         <div className="grid grid-cols-3 gap-1.5">
-          {actions.map(({ action, key }) => <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)}>{cageActionLabel(fight, action)} <span className="text-[9px] text-muted-foreground">{key}</span></button>)}
+          {actions.map(({ action, key }) => {
+            const descriptionId = `${hintId}-${action}-readiness`;
+            const label = fight.position === 'ground' && action === 'power' ? 'Heavy strike' : cageActionLabel(fight, action);
+            const hint = practice && !canCagePracticeAction(practice, action) ? 'Not in drill'
+              : !canCageAction(fight, action) ? 'Unavailable' : paused || helpOpen ? 'Paused' : cageActionReadiness(fight, action);
+            return <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} h-11 leading-3 ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)} aria-describedby={descriptionId}><span className="block">{label} <span className="text-[9px] text-muted-foreground">{key}</span></span><span id={descriptionId} data-cage-readiness={action} className="block whitespace-nowrap text-[10px] font-normal leading-3 text-muted-foreground">{hint}</span></button>;
+          })}
         </div>
         <p className="text-[10px] leading-tight text-muted-foreground">{practice ? 'Only this drill’s moves are active. Release every control to recover gas. P pauses.' : `${tip} Hold buttons or keys. P pauses.`}</p>
       </div>}

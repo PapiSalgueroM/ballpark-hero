@@ -14,10 +14,16 @@ on:
       - src/test/cagePractice.test.tsx
       - src/test/cageCircuit.test.tsx
       - src/test/cageFightStats.test.tsx
+      - src/test/cageStrikeMotion.test.tsx
+      - src/test/cageGrappleMotion.test.tsx
+      - src/test/cageReadiness.test.tsx
       - scripts/simCageClash.mjs
       - scripts/simCagePractice.mjs
       - scripts/simCageCircuit.mjs
       - scripts/simCageFightStats.mjs
+      - scripts/simCageStrikeMotion.mjs
+      - scripts/simCageGrappleMotion.mjs
+      - scripts/simCageReadiness.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -46,6 +52,9 @@ jobs:
       CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
       CAGE_CIRCUIT_ARTIFACTS: cage-clash-artifacts/circuit
       CAGE_FIGHT_STATS_ARTIFACTS: cage-clash-artifacts/stats
+      CAGE_STRIKE_MOTION_ARTIFACTS: cage-clash-artifacts/motion
+      CAGE_GRAPPLE_MOTION_ARTIFACTS: cage-clash-artifacts/grapple
+      CAGE_READINESS_ARTIFACTS: cage-clash-artifacts/readiness
     steps:
       - uses: actions/checkout@v4
         with:
@@ -104,6 +113,15 @@ jobs:
       - name: Fight stats outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_FIGHT_STATS_CONTROL=all ONLY=simCageFightStats node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/stats.log
+      - name: Pixel strike outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_STRIKE_MOTION_CONTROL=all ONLY=simCageStrikeMotion node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/motion.log
+      - name: Pixel grapple outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_GRAPPLE_MOTION_CONTROL=all ONLY=simCageGrappleMotion node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/grapple.log
+      - name: Action readiness outcomes, effective controls and prior engine equivalence
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_READINESS_CONTROL=all ONLY=simCageReadiness node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/readiness.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
