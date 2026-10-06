@@ -397,9 +397,18 @@ console.log('2) Club Manager reads exactly what it read before the lift');
 {
   /* Recorded with --record logic from origin/main's clubManager.ts RIVALS
      before this round moved it (2026-10-05, .tmp-fx recorder, 115 keys, 368
-     clubs), and again after the move. */
+     clubs), and again after the move.
+     BOARD_HASH re-taken at Release AF (2026-10-06), on purpose: the board's
+     rival is the hand mapped one when it plays in the club's league, and
+     otherwise nearestRival's pick by starting XI strength, which reads the
+     rosters. Round 1015 re-baked the modern squads, and 98 of the 368 boards
+     now name a different nearest club. Attribution: the merged tree with
+     only Round 1015's rosters, nationality map and era guard put back gives
+     the old hash, 00922bf91f48, exactly; none of the 98 changed rivals, old
+     or new, is a hand mapped one; and RIVALS_HASH, the lifted table itself,
+     did not move. */
   const RIVALS_HASH = '565e14623c2fe3607eec8864303d001fce77c4308c1a408c6c49114ea9b679d6';
-  const BOARD_HASH = '00922bf91f482461d0919cf7a1a9cea427b5d0ce2697a87abfcfa409403bf975';
+  const BOARD_HASH = 'c9b27c674c4bdebeb2e35428e82275fa8f9d5c23d9a54fd68b2dd9acad7f9f28';
   const h = sha(sortedJson(data.PRIMARY_RIVAL));
   const snap = boardSnapshot();
   const b = sha(sortedJson(snap));
