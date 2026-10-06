@@ -1,0 +1,73 @@
+name: MMA integration page preparation
+
+on:
+  push:
+    branches: [codex/mma-pages-1062]
+
+permissions:
+  contents: read
+concurrency:
+  group: mma-integration-pages-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install preparation dependencies
+        run: |
+          mkdir -p mma-integration-pages-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Prepare search source
+        run: node scripts/genSearchKeywords.mjs 2>&1 | tee mma-integration-pages-artifacts/search-generation.log
+      - name: Type check and build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee mma-integration-pages-artifacts/types.log
+          npm run build 2>&1 | tee mma-integration-pages-artifacts/build.log
+      - name: Prepare scoped generated pages
+        run: |
+          PRERENDER_ONLY=/fight-promoter,/whats-new node scripts/prerender.mjs 2>&1 | tee mma-integration-pages-artifacts/prerender.log
+          node scripts/genSitemap.mjs 2>&1 | tee mma-integration-pages-artifacts/sitemap.log
+          npm run build 2>&1 | tee mma-integration-pages-artifacts/generated-build.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { execFileSync } from 'node:child_process';
+          const allowed = new Set(['public/fight-promoter/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json', 'src/data/seoMetaParts/seoMetaPart29.ts']);
+          const changed = execFileSync('git', ['diff', '--name-only'], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
+          assert(changed.every(file => allowed.has(file)), 'Preparation writes only the seven scoped generated files');
+          console.log('Scoped generated artifacts:', changed.join(', '));
+          NODE
+          files=(public/fight-promoter/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart29.ts)
+          for file in "${files[@]}"; do
+            mkdir -p "mma-integration-pages-artifacts/generated/$(dirname "$file")"
+            cp "$file" "mma-integration-pages-artifacts/generated/$file"
+          done
+          git rev-parse HEAD > mma-integration-pages-artifacts/generated/source-head.txt
+          (cd mma-integration-pages-artifacts/generated && sha256sum "${files[@]}" > SHA256SUMS)
+      - name: Preserve generated pages and preparation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mma-integration-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: mma-integration-pages-artifacts/
