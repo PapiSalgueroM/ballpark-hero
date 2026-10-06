@@ -1,0 +1,2239 @@
+{
+  "club": "Perth Glory FC",
+  "slug": "perth-glory",
+  "shard": "C",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "sources": {
+    "club": {
+      "host": "perthglory.com.au",
+      "url": "https://perthglory.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Matthew Dench",
+        "Lucas Scicluna",
+        "Calem Nieuwenhof (loan)",
+        "Henry Hore",
+        "Lachlan Jackson",
+        "Daniel Solsky",
+        "Cher Deng",
+        "Matt Ellis",
+        "Pieter Jacobsz"
+      ],
+      "outs": [
+        "Josh Risdon (Retired)",
+        "Joel Anasmo",
+        "Mark Birighitti",
+        "Cameron Cook",
+        "Zach Lisolajski",
+        "Kaelan Majekodunmi",
+        "Nicholas Pennington",
+        "Luca Tevere",
+        "Lachie Wales",
+        "Callum Timmins",
+        "Khoa Ngo",
+        "Adam Taggart",
+        "Arion Sulemani"
+      ],
+      "resignings": [
+        "Adam Taggart",
+        "Giovanni De Abreu (2027-28)",
+        "Adam Griffiths (Head Coach)",
+        "Stefan Colakovski",
+        "Sebastian Despotovski",
+        "Tom Lawrence (2027-28)",
+        "Will Freney (2027-28)",
+        "Jaiden Kucharski (2028-29)",
+        "Charbel Shamoon",
+        "Ryan Warner"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    }
+  },
+  "count": {
+    "clubPage": 28,
+    "staffSkipped": 1,
+    "rows": 28,
+    "heldOut": 1,
+    "twoHostRows": 28,
+    "birthDateKnown": 23,
+    "groupKnown": 28,
+    "minutesKnown": 22,
+    "marketRows": 0,
+    "perfPagesLoaded": 12
+  },
+  "rows": [
+    {
+      "name": "Matt Sutton",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2000-03-07",
+      "minutes2025_26": 2303,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/matt-sutton/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "269548"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "561484"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Matt Sutton",
+          "position": "Goalkeeper",
+          "number": "1"
+        },
+        "espn": {
+          "id": "269548",
+          "name": "Matthew Sutton",
+          "position": "Goalkeeper",
+          "birthDate": "2000-03-07",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "561484",
+          "name": "Matt Sutton",
+          "position": "Goalkeeper",
+          "birthDate": "2000-03-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ryan Warner",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": null,
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/ryan-warner-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412864"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1118927"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ryan Warner",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "412864",
+          "name": "Ryan Warner",
+          "position": "Goalkeeper",
+          "birthDate": "2005-01-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1118927",
+          "name": "Ryan Warner",
+          "position": "Goalkeeper",
+          "birthDate": "2005-10-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date disagreement: ESPN 2005-01-27, Transfermarkt 2005-10-27"
+      ]
+    },
+    {
+      "name": "Daniel Solsky",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2003-02-25",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/daniel-solsky/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "394390"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1279262"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Daniel Solsky",
+          "position": "Goalkeeper",
+          "number": "29"
+        },
+        "espn": {
+          "id": "394390",
+          "name": "Daniel Solsky",
+          "position": "Goalkeeper",
+          "birthDate": "2003-02-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1279262",
+          "name": "Daniel Solsky",
+          "position": "Goalkeeper",
+          "birthDate": "2003-02-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Andriano Lebib",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-01-29",
+      "minutes2025_26": 183,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/andriano-lebib/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "358652"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1104722"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Andriano Lebib",
+          "position": "Defender",
+          "number": "24"
+        },
+        "espn": {
+          "id": "358652",
+          "name": "Andriano Lebib",
+          "position": "Defender",
+          "birthDate": "2006-01-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1104722",
+          "name": "Andriano Lebib",
+          "position": "Centre-Back",
+          "birthDate": "2006-01-29",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Sam Sutton",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2001-12-10",
+      "minutes2025_26": 1603,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/sam-sutton/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "272138"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "470986"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sam Sutton",
+          "position": "Defender",
+          "number": "3"
+        },
+        "espn": {
+          "id": "272138",
+          "name": "Sam Sutton",
+          "position": "Defender",
+          "birthDate": "2001-12-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "470986",
+          "name": "Sam Sutton",
+          "position": "Left-Back",
+          "birthDate": "2001-12-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Brian Kaltak",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1993-09-30",
+      "minutes2025_26": 2227,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/brian-kaltak/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "254583"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "185114"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Brian Kaltak",
+          "position": "Defender",
+          "number": "45"
+        },
+        "espn": {
+          "id": "254583",
+          "name": "Brian Kaltack",
+          "position": "Defender",
+          "birthDate": "1993-09-30",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "185114",
+          "name": "Brian Kaltak",
+          "position": "Centre-Back",
+          "birthDate": "1993-09-30",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Charbel Shamoon",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2004-02-10",
+      "minutes2025_26": 2104,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/charbel-shamoon/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "351690"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1112869"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Charbel Shamoon",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "351690",
+          "name": "Charbel Shamoon",
+          "position": "Defender",
+          "birthDate": "2004-02-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1112869",
+          "name": "Charbel Shamoon",
+          "position": "Right-Back",
+          "birthDate": "2004-02-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tadi Kuzamba",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-12-28",
+      "minutes2025_26": 6,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/tadi-kuzamba/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388165"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1285841"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tadi Kuzamba",
+          "position": "Defender",
+          "number": "30"
+        },
+        "espn": {
+          "id": "388165",
+          "name": "Tadiwanashe Kuzamba",
+          "position": "Defender",
+          "birthDate": "2006-12-28",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1285841",
+          "name": "Tadiwanashe Kuzamba",
+          "position": "Right-Back",
+          "birthDate": "2006-12-28",
+          "match": "fuzzy"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Riley Foxe",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-10-10",
+      "minutes2025_26": 9,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/riley-foxe-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412682"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1408382"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Riley Foxe",
+          "position": "Defender",
+          "number": "44"
+        },
+        "espn": {
+          "id": "412682",
+          "name": "Riley Foxe",
+          "position": "Defender",
+          "birthDate": "2006-10-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1408382",
+          "name": "Riley Foxe",
+          "position": "Centre-Back",
+          "birthDate": "2006-10-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Matt Dench",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2003-12-08",
+      "minutes2025_26": 582,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC",
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/matt-dench/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "349436"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "965604"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Matt Dench",
+          "position": "Defender",
+          "number": "12"
+        },
+        "espn": {
+          "id": "349436",
+          "name": "Matt Dench",
+          "position": "Defender",
+          "birthDate": "2003-12-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "965604",
+          "name": "Matt Dench",
+          "position": "Left-Back",
+          "birthDate": "2003-12-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Lachlan Jackson",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1995-03-12",
+      "minutes2025_26": 706,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory",
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/lachlan-jackson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "200373"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "298883"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lachlan Jackson",
+          "position": "Defender",
+          "number": null
+        },
+        "espn": {
+          "id": "200373",
+          "name": "Lachlan Jackson",
+          "position": "Defender",
+          "birthDate": "1995-03-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "298883",
+          "name": "Lachlan Jackson",
+          "position": "Centre-Back",
+          "birthDate": "1995-03-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Cher Deng",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-06-30",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/cher-deng/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "380288"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1233818"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Cher Deng",
+          "position": "Defender",
+          "number": "18"
+        },
+        "espn": {
+          "id": "380288",
+          "name": "Cher Deng",
+          "position": "Defender",
+          "birthDate": "2005-06-30",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1233818",
+          "name": "Cher Deng",
+          "position": "Centre-Back",
+          "birthDate": "2005-06-30",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Brandon O'Neill",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/brandon-oneill/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "200396"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Brandon O'Neill",
+          "position": "Midfielder",
+          "number": "6"
+        },
+        "espn": {
+          "id": "200396",
+          "name": "Brandon O'Neill",
+          "position": "Midfielder",
+          "birthDate": "1994-04-12",
+          "match": "exact"
+        },
+        "tm": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date from one source only (ESPN 1994-04-12), held as null",
+        "no Transfermarkt match, so no minutes source"
+      ]
+    },
+    {
+      "name": "Trent Ostler",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2002-04-03",
+      "minutes2025_26": 896,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/trent-ostler/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "291373"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "692320"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Trent Ostler",
+          "position": "Midfielder",
+          "number": "20"
+        },
+        "espn": {
+          "id": "291373",
+          "name": "Trent Ostler",
+          "position": "Midfielder",
+          "birthDate": "2002-04-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "692320",
+          "name": "Trent Ostler",
+          "position": "Right Winger",
+          "birthDate": "2002-04-03",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "William Freney",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-11-04",
+      "minutes2025_26": 1729,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/william-freney/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386268"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1169749"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "William Freney",
+          "position": "Midfielder",
+          "number": "27"
+        },
+        "espn": {
+          "id": "386268",
+          "name": "William Freney",
+          "position": "Midfielder",
+          "birthDate": "2005-11-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1169749",
+          "name": "William Freney",
+          "position": "Central Midfield",
+          "birthDate": "2005-11-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Sebastian Despotovski",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": 1151,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/sebastian-despotovski/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "403317"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1404854"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sebastian Despotovski",
+          "position": "Attacker",
+          "number": "25"
+        },
+        "espn": {
+          "id": "403317",
+          "name": "Sebastian Despotovski",
+          "position": "Forward",
+          "birthDate": "2005-12-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1404854",
+          "name": "Sebastian Despotovski",
+          "position": "Attacking Midfield",
+          "birthDate": "2005-09-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date disagreement: ESPN 2005-12-17, Transfermarkt 2005-09-09"
+      ]
+    },
+    {
+      "name": "Anthony Didulica",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2008-03-03",
+      "minutes2025_26": 78,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/anthony-didulica/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "415817"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1273793"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Anthony Didulica",
+          "position": "Midfielder",
+          "number": "23"
+        },
+        "espn": {
+          "id": "415817",
+          "name": "Anthony Didulica",
+          "position": "Midfielder",
+          "birthDate": "2008-03-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1273793",
+          "name": "Anthony Didulica",
+          "position": "Right Winger",
+          "birthDate": "2008-03-03",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Henry Hore",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1999-08-17",
+      "minutes2025_26": 1005,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC",
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/henry-hore-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "269471"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "560763"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Henry Hore",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "269471",
+          "name": "Henry Hore",
+          "position": "Midfielder",
+          "birthDate": "1999-08-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "560763",
+          "name": "Henry Hore",
+          "position": "Left Winger",
+          "birthDate": "1999-08-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Giovanni De Abreu",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-04-16",
+      "minutes2025_26": 1179,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/giovanni-de-abreu/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "416410"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1145213"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Giovanni De Abreu",
+          "position": "Midfielder",
+          "number": "39"
+        },
+        "espn": {
+          "id": "416410",
+          "name": "Giovanni De Abreu",
+          "position": "Midfielder",
+          "birthDate": "2007-04-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1145213",
+          "name": "Giovanni De Abreu",
+          "position": "Central Midfield",
+          "birthDate": "2007-04-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Lucas Scicluna",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-11-07",
+      "minutes2025_26": 152,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC",
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/lucas-scicluna/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "364691"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1050131"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lucas Scicluna",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "364691",
+          "name": "Lucas Scicluna",
+          "position": "Midfielder",
+          "birthDate": "2005-11-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1050131",
+          "name": "Lucas Scicluna",
+          "position": "Defensive Midfield",
+          "birthDate": "2005-11-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Calem Nieuwenhof",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2001-02-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/calem-nieuwenhof/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "295546"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "734487"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Calem Nieuwenhof",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "295546",
+          "name": "Calem Nieuwenhof",
+          "position": "Midfielder",
+          "birthDate": "2001-02-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "734487",
+          "name": "Calem Nieuwenhof",
+          "position": "Defensive Midfield",
+          "birthDate": "2001-02-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Jaiden Kucharski",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2002-06-25",
+      "minutes2025_26": 1046,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/jaiden-kucharski/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "336923"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "867754"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jaiden Kucharski",
+          "position": "Attacker",
+          "number": "9"
+        },
+        "espn": {
+          "id": "336923",
+          "name": "Jaiden Kucharski",
+          "position": "Forward",
+          "birthDate": "2002-06-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "867754",
+          "name": "Jaiden Kucharski",
+          "position": "Centre-Forward",
+          "birthDate": "2002-06-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tom Lawrence",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1994-01-13",
+      "minutes2025_26": 1031,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/tom-lawrence/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "196698"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "229970"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tom Lawrence",
+          "position": "Attacker",
+          "number": "34"
+        },
+        "espn": {
+          "id": "196698",
+          "name": "Tom Lawrence",
+          "position": "Forward",
+          "birthDate": "1994-01-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "229970",
+          "name": "Tom Lawrence",
+          "position": "Attacking Midfield",
+          "birthDate": "1994-01-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oliver Evans",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-05-19",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/oliver-evans/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "395887"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1415926"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oliver Evans",
+          "position": "Attacker",
+          "number": "35"
+        },
+        "espn": {
+          "id": "395887",
+          "name": "Oliver Evans",
+          "position": "Forward",
+          "birthDate": "2008-05-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1415926",
+          "name": "Oliver Evans",
+          "position": "Attacking Midfield",
+          "birthDate": "2008-05-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Stefan Colakovski",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2000-04-20",
+      "minutes2025_26": 506,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Perth Glory FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/stefan-colakovski/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "296059"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "714272"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Stefan Colakovski",
+          "position": "Attacker",
+          "number": "67"
+        },
+        "espn": {
+          "id": "296059",
+          "name": "Stefan Colakovski",
+          "position": "Forward",
+          "birthDate": "2000-04-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "714272",
+          "name": "Stefan Colakovski",
+          "position": "Left Winger",
+          "birthDate": "2000-04-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Matt Ellis",
+      "position": "Attacker",
+      "group": "MID",
+      "birthDate": "2001-02-27",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/matt-ellis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "358409"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "724770"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Matt Ellis",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "358409",
+          "name": "Matthew Ellis",
+          "position": "Midfielder",
+          "birthDate": "2001-02-27",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "724770",
+          "name": "Matthew Ellis",
+          "position": "Attacking Midfield",
+          "birthDate": "2001-02-27",
+          "match": "fuzzy"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID); group set to MID, which ESPN and Transfermarkt both support"
+      ]
+    },
+    {
+      "name": "Pieter Jacobsz",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/pieter-jacobsz-3/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141911"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1603333"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Pieter Jacobsz",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "3141911",
+          "name": "Pieter Jacobsz",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1603333",
+          "name": "Pieter Jacobsz",
+          "position": "Centre-Forward",
+          "birthDate": "2001-05-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date from one source only (Transfermarkt 2001-05-31), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Sebastian Kukucka",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "perthglory.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "perthglory.com.au",
+          "url": "https://perthglory.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://perthglory.com.au/player/sebastian-kukucka-3/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141912"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1544725"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sebastian Kukucka",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "3141912",
+          "name": "Sebastian Kukucka",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1544725",
+          "name": "Sebastian Kukucka",
+          "position": "Striker",
+          "birthDate": "2008-06-24",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date from one source only (Transfermarkt 2008-06-24), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    }
+  ],
+  "heldOut": [
+    {
+      "name": "Adam Taggart",
+      "position": null,
+      "reason": "only the league transfer centre lists him; neither ESPN nor Transfermarkt has him in the 2026-27 squad",
+      "seen": {
+        "club": {
+          "name": "Adam Taggart",
+          "position": null,
+          "number": null
+        },
+        "espn": null,
+        "tm": null,
+        "from": "league transfer centre only (not on the club squad page)"
+      }
+    }
+  ],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Scott Wootton",
+      "position": "Defender",
+      "birthDate": "1991-09-12"
+    },
+    {
+      "source": "espn",
+      "name": "Arion Sulemani",
+      "position": "Forward",
+      "birthDate": "2005-03-01"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Arion Sulemani",
+      "position": "Centre-Forward",
+      "birthDate": "2005-03-01"
+    }
+  ]
+}
