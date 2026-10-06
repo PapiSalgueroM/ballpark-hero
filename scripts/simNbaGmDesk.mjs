@@ -123,6 +123,7 @@ const CONTROLS = {
   coinflip: '2', shortscale: '2', norfa: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatgrowth: '5', nodefault: '1', pilefit: '6',
   noedgeround: '5', noedgepo: '5', noinjhook: '5', nomirror: '4', nostepien: '4', noruleblock: '3',
+  sheetrepick: '2', dayonestature: '5',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NBA_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -135,7 +136,7 @@ const SEASONS = Number(process.env.SIM_NBA_GM_DESK_SEASONS || 10);
 const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
   minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 41, minSheetGone: 12,
-  minOldDeals: 42,
+  minOldDeals: 42, minSheetFull: 1,
 };
 
 function modulesDir() {
@@ -201,6 +202,10 @@ const EDITS = {
   nostepien: ['desk', '  return key ? pickSwapRefusal(ledger, nbaGamePickRules(), season, from, [key], to, []) : null;', '  return null;'],
   noruleblock: ['board', '    if (!league || !myTradePiece || deadlineBlock() || pickRuleBlock(league, o.teamId, o.sweeten)) return;',
     '    if (!league || !myTradePiece || deadlineBlock()) return;'],
+  /* The summer picks the sheet's club again, after the draft, instead of the club written down. */
+  /* Day one hands the user's club the staff its size attracts, an edge the other clubs never get. */
+  dayonestature: ['desk', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, { ...nbaStaffCtx(league, team), anchor: () => 1 }),', '  block: gmDefaultStaff(NBA_STAFF_PACK.rules, nbaStaffCtx(league, team)),'],
+  sheetrepick: ['contracts', '        ? (named ?? sheetClubFor(host, league, ledger.team, man.id)) : null;', '        ? sheetClubFor(host, league, ledger.team, man.id) : null;'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -399,7 +404,7 @@ console.log(`   ${idCompared} seasons replayed against ${fixture.recordedFrom}`)
 const stats = {
   decisions: 0, gm: 0, auto: 0, earlyDeals: 0, lateTries: 0, lateDeals: 0, pickMoves: 0,
   pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0, oldDeals: 0, oldRefused: 0,
-  scaleUp: 0, secondUp: 0, restricted: 0, sheets: 0, sheetGone: 0, sheetMatched: 0,
+  scaleUp: 0, secondUp: 0, restricted: 0, sheets: 0, sheetGone: 0, sheetMatched: 0, sheetFull: 0,
 };
 const problems = { s2: [], s3: [], s4: [] };
 const ids = lg => Object.keys(lg.teams);
@@ -535,6 +540,33 @@ function gmDecides(lg, team, desk, where) {
 
 const STAYS = new Set(['keep', 'option', 'tender', 'qualify-accepted', 'match']);
 
+/**
+ * The worst draft night for a sheet the GM let stand: on a copy, every rival
+ * club is filled to the limit before the summer (fillers rated 40, so the
+ * engine's own waiver takes one of them). He still goes to the club written
+ * down on his decision, on its terms. The copy runs on its own rng, so the
+ * walk itself is untouched.
+ */
+function sheetAfterFullDraft(lg, team, desk, where) {
+  const taken = D.nbaContractsOf(desk, lg, team).decisions.filter(d => d.season === lg.season && d.kind === 'take-picks');
+  for (const d of taken) {
+    const c = JSON.parse(J(lg));
+    for (const [k, t] of Object.entries(c.teams)) {
+      if (k === team || !t.players.length) continue;
+      for (let i = 0; t.players.length < E.NBA_ROSTER_MAX; i++) {
+        t.players.push({ ...t.players[0], id: `fill-${k}-${i}`, name: `Filler ${k} ${i}`, age: 30, ovr: 40, pot: 40, years: 3, out: 0 });
+      }
+    }
+    const summer = D.nbaDeskOffseason(c, JSON.parse(J(desk)), team, mulberry32(7000 + c.season));
+    if (!summer.ok) { problems.s2.push(`${where} full draft: the desk summer refused to run`); continue; }
+    if (summer.notes.some(n => n.includes(`${d.name} retires`))) continue;
+    const p = c.teams[d.club]?.players.find(x => x.id === d.id);
+    if (!p) problems.s2.push(`${where} full draft: ${d.name} let ${d.club}'s sheet stand and is not there after the summer`);
+    else if (p.years !== d.years || Math.abs(p.salary - d.salary) > 1e-9) problems.s2.push(`${where} full draft: ${d.name} is at ${d.club} on ${p.years}y at ${p.salary}, the sheet said ${d.years}y at ${d.salary}`);
+    else stats.sheetFull++;
+  }
+}
+
 /** A season with the desk on, in the board's order, and the summer through the desk. */
 function seasonDesk(lg, team, desk, rng, s, where) {
   for (;;) {
@@ -576,6 +608,7 @@ function seasonDesk(lg, team, desk, rng, s, where) {
       draftedIn.delete(id);
     }
   }
+  sheetAfterFullDraft(lg, team, desk, where);
   const summer = D.nbaDeskOffseason(lg, desk, team, rng);
   if (!summer.ok) { problems.s2.push(`${where}: the desk summer refused to run (${summer.lines.join(' ')})`); return desk; }
   desk = summer.desk;
@@ -596,6 +629,8 @@ function seasonDesk(lg, team, desk, rng, s, where) {
       const at = ids(lg).find(k => k !== team && lg.teams[k].players.some(p => p.id === m.id));
       const p = at ? lg.teams[at].players.find(x => x.id === m.id) : null;
       if (!p) problems.s2.push(`${where}: ${m.name} let his sheet stand and is at no rival club`);
+      else if (!d.club) problems.s2.push(`${where}: ${m.name}'s sheet was taken with no club written down`);
+      else if (at !== d.club) problems.s2.push(`${where}: ${m.name} let ${d.club}'s sheet stand and the summer sent him to ${at}`);
       else if (p.years !== d.years || Math.abs(p.salary - d.salary) > 1e-9) problems.s2.push(`${where}: ${m.name} is at ${at} on ${p.years}y at ${p.salary}, the sheet said ${d.years}y at ${d.salary}`);
       else stats.sheetGone++;
       if (d.picks?.length) problems.s2.push(`${where}: an NBA sheet let go was paid with picks ${J(d.picks)}`);
@@ -649,6 +684,8 @@ if (stats.secondUp < T.minSecondUp) fail(`only ${stats.secondUp} second round dr
 if (stats.restricted < T.minRestricted) fail(`only ${stats.restricted} restricted cases, floor ${T.minRestricted}`);
 if (stats.sheets < T.minSheets) fail(`only ${stats.sheets} offer sheets, floor ${T.minSheets}`);
 if (stats.sheetGone < T.minSheetGone) fail(`only ${stats.sheetGone} men left on a sheet and found at the rival, floor ${T.minSheetGone}`);
+if (stats.sheetFull < T.minSheetFull) fail(`only ${stats.sheetFull} sheets let stand reached their club after a draft that filled every roster, floor ${T.minSheetFull}`);
+console.log(`   ${stats.sheetFull} sheets let stand still reached the club written down after a draft that filled every rival roster`);
 console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM, ${stats.auto} by the staff's rule`);
 console.log(`   draftees up: ${stats.scaleUp} first rounders after the rookie scale, ${stats.secondUp} second rounders; ${stats.restricted} restricted cases, ${stats.sheets} sheets (${stats.sheetMatched} matched, ${stats.sheetGone} gone to the rival on its terms)`);
 
@@ -925,6 +962,42 @@ console.log(`   edge ${ladder[0].edge.toFixed(2)} to ${ladder[9].edge.toFixed(2)
   const hc6 = D.nbaStaffEdge({ ...atLevel(1), hc: { ...base.hc, level: 6, potential: Math.max(6, base.hc.potential) } });
   const page = lf(fs.readFileSync(path.join(ROOT, 'src', 'pages', 'NbaFrontOffice.tsx'), 'utf8'));
   if (!page.includes(`level 6 head coach for +${hc6.toFixed(2)} team strength`)) fail(`the page's worked example does not say what a level 6 head coach adds (+${hc6.toFixed(2)})`);
+}
+{
+  /* Day one: only the user's club has a desk, so the staff a club opens with
+     must be worth nothing over the engine, or a big club wins for free (the
+     closing check measured Boston at 5 titles in 40 seeds with no desk and
+     19 with a desk opened on day one and nobody hired). For every club, a
+     desk opened on a new franchise with nobody hired plays the regular
+     season and the playoffs exactly as no desk. The edge is what he hires. */
+  let same = 0, clubs = 0, edgeSum = 0;
+  for (const seed of [1, 2, 3]) {
+    const start = E.initNbaLeague(mulberry32(5000 + seed), NBA_OPENING_RATINGS);
+    for (const abbr of Object.keys(start.teams).sort()) {
+      const play = withDesk => {
+        const lg = JSON.parse(J(start));
+        const rng = mulberry32(6000 + seed);
+        let desk = withDesk ? D.openNbaDesk(lg, abbr) : null;
+        if (desk) edgeSum += D.nbaStaffEdge(D.nbaStaffOf(desk, lg, abbr).block);
+        E.nbaTipOff(lg, rng, abbr);
+        for (;;) {
+          E.simRound(lg, abbr, rng, desk ? D.nbaDeskRoundOptions(desk, lg, abbr) : undefined);
+          if (desk) desk = D.nbaDeskAfterRound(desk, lg, abbr).desk;
+          if (lg.round >= E.NBA_ROUNDS) break;
+          lg.round += 1;
+        }
+        const po = E.runNbaPlayoffs(lg, rng, desk ? D.nbaDeskEdges(desk, lg, abbr) : undefined);
+        /* Tip off mints ids off one counter for the whole process, so the
+           second play's men carry later numbers: ids are compared out,
+           including inside the season stat keys (club|id). */
+        return `${J(lg).replace(/n[0-9a-z]{6,}-\d+/g, 'n')}|${po.champion}|${J(po.series.map(s => s.winner))}`;
+      };
+      clubs++;
+      if (play(false) === play(true)) same++;
+      else fail(`seed ${seed}: ${abbr} opened the desk on day one, hired nobody, and the season played differently from no desk`);
+    }
+  }
+  console.log(`   day one: ${same} of ${clubs} clubs opening the desk on a new franchise and hiring nobody played the season exactly as no desk (total opening edge ${edgeSum.toFixed(2)})`);
 }
 
 /* ================================================================== */

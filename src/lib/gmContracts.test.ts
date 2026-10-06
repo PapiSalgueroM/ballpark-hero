@@ -439,4 +439,24 @@ describe('the second review of 2026-10-02', () => {
     expect(men.every(m => deskCase(full, lg, ledger, m).restricted!.sheet === null)).toBe(true);
     expect(men.some(m => deskCase(open, lg, ledger, m).restricted!.sheet)).toBe(true);
   });
+
+  it('the club a sheet was taken to is written down at the desk, so a draft that fills it later cannot send him to the pool', () => {
+    const men = Array.from({ length: 40 }, (_, i) => man(`d${i}`, 86, 22, 1, 1));
+    const lg = league(men);
+    const ledger = openLedger(lg, 'ME');
+    for (const m of men) noteArrival(ledger, m.id, 2028, 'draft', 1);
+    const h = { ...host('nhl'), rosterMax: () => 131 };
+    const c = men.map(m => deskCase(h, lg, ledger, m)).find(x => x.restricted!.sheet)!;
+    expect(c.restricted!.club).toBe('CPU');
+    const made = takePicks(ledger, lg, c);
+    expect(made.ok && made.decision.club).toBe('CPU');
+    expect(isValidLedger(ledger)).toBe(true);
+    expect(isValidLedger({ ...ledger, decisions: [{ ...ledger.decisions[0], club: 7 }] })).toBe(false);
+    /* Draft night fills the club that tabled it before the summer runs. */
+    lg.teams.CPU.players.push(man('rookie', 60, 19, 3, 1));
+    autoDecide(h, lg, ledger);
+    expect(runDeskOffseason(h, lg, ledger, () => 0.5).ok).toBe(true);
+    expect(lg.teams.CPU.players.find(p => p.id === c.man.id)?.salary).toBe(c.restricted!.sheet!.salary);
+    expect(lg.freeAgents.some(p => p.id === c.man.id)).toBe(false);
+  });
 });

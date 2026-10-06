@@ -38,7 +38,7 @@ const NbaFrontOffice = () => {
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',
               "Close each season on its numbers: the league leaders, your club's lines and five awards named by stated rules, all from this save's sim games, never real NBA stats.",
               'Draft, develop, re-sign and go again. Banners are forever.',
-              'Run the GM desk: hire your staff, settle every expiring deal on the re-sign desk under Bird rights, the rookie scale and restricted free agency, and build packages of players and picks until the trade deadline: deals shut once round 13 is played.',
+              'Run the GM desk: hire your staff (the one you start with is level 1 in every chair, so any edge from the bench is one you hired), settle every expiring deal on the re-sign desk under Bird rights, the rookie scale and restricted free agency, and build packages of players and picks until the trade deadline: deals shut once round 13 is played.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
             examples={[

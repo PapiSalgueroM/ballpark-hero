@@ -116,8 +116,16 @@ const freshPicks = (league: NbaLeague): GmPickLedger =>
      is the year the old list was for, and the later years start whole. */
   migrateLegacyPicks(league.teams, league.season, nbaGamePickRules(), 2).ledger;
 
+/**
+ * Day one: the staff the club already had, so level 1 in every chair, the
+ * job done the way the engine always did it. Only the user's club has a
+ * desk, so a staff anchored to the club's size would hand a big club an edge
+ * nobody else gets for nothing (Boston went from 5 titles in 40 seeds to 19
+ * on the day it opened). The edge is what the GM hires: the shortlist still
+ * reads the club's size (nbaStaffCtx), so a big club attracts better men.
+ */
 const freshStaff = (league: NbaLeague, team: string): NbaStaffState => ({
-  block: gmDefaultStaff(NBA_STAFF_PACK.rules, nbaStaffCtx(league, team)),
+  block: gmDefaultStaff(NBA_STAFF_PACK.rules, { ...nbaStaffCtx(league, team), anchor: () => 1 }),
   purse: NBA_STAFF_PACK.money.seasonPurse,
 });
 
