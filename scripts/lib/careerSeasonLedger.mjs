@@ -24,6 +24,8 @@ import { pathToFileURL } from 'node:url';
 export const LEDGER_FILE = 'scripts/data/careerSeason2025.json';
 export const SPLIT_SEASON = /^\d{4}-\d{4}$/;
 export const CALENDAR_SEASON = /^\d{4}$/;
+/* the season the 2025 Club World Cup (June to July 2025) counts in: the lead's decision 1 of Round 1017 */
+export const CLUB_WORLD_CUP_SEASON = '2024-2025';
 /* hosts that never count as a source: the wikis */
 export const WIKI_HOST = /(^|\.)(wikipedia|wikidata|wikimedia|wikiwand|fandom)\./i;
 /* second level labels under a country code that are not registrable on their own */
@@ -75,19 +77,34 @@ const escapeRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 /**
  * Round 1017: the clauses (split on semicolons) of a reading that can state
  * this row's total. Dates and seasons are taken out, since a year is never a
- * count ("2024/25 Arsenal: 37 matches" read 2024 before). A clause that
- * mentions "without" states the total of another convention (the 2025 Club
- * World Cup left out), and one that gives a "career" number a career total:
- * both are dropped. A reading whose totals need more than this (another
+ * count ("2024/25 Arsenal: 37 matches" read 2024 before). A "without"
+ * leaves the 2025 Club World Cup out, which is the other convention for the
+ * tournament's own season and this row's own total for a later one (see the
+ * body); a clause that gives a "career" number states a career total and is
+ * dropped. A reading whose totals need more than this (another
  * club's spell in the same line, a Club World Cup listed apart with no sum)
  * carries `states`, see readingOf.
  */
-function clausesFor(reads) {
-  return String(reads)
-    .replace(/\b\d{4}-\d{2}-\d{2}\b/g, ' ')
-    .replace(new RegExp(`\\b\\d{1,2} ${MONTH}(?: (?:19|20)\\d{2})?\\b`, 'g'), ' ')
-    .replace(/\b(?:19|20)\d{2}(?:\s*[/-]\s*(?:19|20)?\d{2})?\b/g, ' ')
-    .split(';').filter(c => !/\bwithout\b/i.test(c) && !/\bcareer\s+\d/i.test(c))
+const withoutDates = reads => String(reads)
+  .replace(/\b\d{4}-\d{2}-\d{2}\b/g, ' ')
+  .replace(new RegExp(`\\b\\d{1,2} ${MONTH}(?: (?:19|20)\\d{2})?\\b`, 'g'), ' ')
+  .replace(/\b(?:19|20)\d{2}(?:\s*[/-]\s*(?:19|20)?\d{2})?\b/g, ' ');
+
+function clausesFor(reads, season = null) {
+  const text = withoutDates(reads);
+  /* Round 1017 review: every "without" in the ledger's readings leaves out
+     the 2025 Club World Cup, which counts in CLUB_WORLD_CUP_SEASON. For a row
+     of a LATER season a host that filed the tournament there states this
+     row's own total as "without it 32 apps 3 goals 8 assists", so that clause
+     is read from the number on. For the tournament's own season a bracket
+     "(56/43/5 without the Club World Cup)" is the other convention and goes,
+     so the total beside it is still read. Any other clause naming "without"
+     is dropped, as before. */
+  const later = SPLIT_SEASON.test(String(season)) && Number(String(season).slice(0, 4)) > Number(CLUB_WORLD_CUP_SEASON.slice(0, 4));
+  const LEADING = /^\s*without\s+(?:it|the\b[^\d;()]*?Club World Cup)\s+(?=\d)/i;
+  return (later ? text : text.replace(/\([^()]*\bwithout\b[^()]*\)/gi, ' '))
+    .split(';').map(c => (later && LEADING.test(c) ? c.replace(LEADING, '') : c))
+    .filter(c => !/\bwithout\b/i.test(c) && !/\bcareer\s+\d/i.test(c))
     .join(';').trim();
 }
 
@@ -102,17 +119,18 @@ function clausesFor(reads) {
  *
  * Round 1017 (wave 2's readings, see clausesFor): a source may state its
  * total in `states` ({ appearances: 44 }) where its reading gives it only in
- * words ("1 app (44 together)"), and that wins. A total the reading gives for
+ * words ("1 app (44 together)"), and that wins; readingProblems requires that
+ * number to be one the reading gives. A total the reading gives for
  * the Club World Cup counted ("39, 2, 11 together", "44, 17, 5 with it"; for
  * a one field source also "(49 together)", "13 with it", "with it 44") wins
  * over the labelled ones; the row's club may sit between a number and its
  * label ("49 Barcelona games", "59 club games"); a one field source may close
  * a list with its total ("goals: Premier League 4, Champions League 4: 9").
  */
-export function readingOf(source, field, club = null) {
+export function readingOf(source, field, club = null, season = null) {
   if (!NUMERIC_FIELDS.includes(field)) return null;
   if (Number.isInteger(source?.states?.[field])) return source.states[field];
-  const text = clausesFor(source?.reads ?? "");
+  const text = clausesFor(source?.reads ?? "", season);
   const numeric = (source?.fields ?? []).filter(f => NUMERIC_FIELDS.includes(f));
   const single = numeric.length === 1 && numeric[0] === field;
   const triple = /(\d+), (\d+), (\d+) (?:together|with it)\b/.exec(text);
@@ -143,11 +161,15 @@ export function readingOf(source, field, club = null) {
  * must state it. Returns the problems, empty when the value is what was read.
  * `club` is the row's club (after any club change), see clausesFor.
  */
-export function readingProblems(sources, field, value, club = null) {
-  const read = (sources ?? []).filter(s => Array.isArray(s.fields) && s.fields.includes(field))
-    .map(s => ({ url: s.url, n: readingOf(s, field, club) })).filter(r => r.n !== null);
-  if (!read.length) return [`no source's recorded reading states the ${field} total`];
-  return read.filter(r => r.n !== value).map(r => `${field} ${value}, but ${r.url} reads ${r.n}`);
+export function readingProblems(sources, field, value, club = null, season = null) {
+  const carrying = (sources ?? []).filter(s => Array.isArray(s.fields) && s.fields.includes(field));
+  /* Round 1017 review: a `states` total is a pointer into the reading, never
+     a value of its own, so it must be a number the reading gives */
+  const unstated = carrying.filter(s => Number.isInteger(s.states?.[field]) && !(withoutDates(s.reads).match(/\b\d+\b/g) ?? []).map(Number).includes(s.states[field]))
+    .map(s => `${field}: ${s.url} records states ${s.states[field]}, a number its reading never gives`);
+  const read = carrying.map(s => ({ url: s.url, n: readingOf(s, field, club, season) })).filter(r => r.n !== null);
+  if (!read.length) return [...unstated, `no source's recorded reading states the ${field} total`];
+  return [...unstated, ...read.filter(r => r.n !== value).map(r => `${field} ${value}, but ${r.url} reads ${r.n}`)];
 }
 
 /** The season a club's existing rows are written in: 'split', 'calendar', 'mixed' or 'none'. */

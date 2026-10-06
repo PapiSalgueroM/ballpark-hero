@@ -20,7 +20,7 @@
     "split": "A new spell at a European or Saudi club is written 2025-2026.",
     "calendar": "A new spell at a calendar league club (MLS, Brazil, Argentina, Japan) is written as the calendar year 2025, after the precedent of Giroud 2025 LAFC.",
     "never": "Nothing is written 2026. Only a plain hyphen joins the years.",
-    "held": "A man whose legacy rows at a calendar league club are split style gets no new row until a relabel round decides what those rows mean; he is listed under held.",
+    "held": "A man whose legacy rows at a calendar league club are split style gets no new row at a calendar league club until a relabel round decides what those rows mean; he is listed under held. A new row at a European or Saudi club is added all the same (the lead's decision 2 of Round 1017 for Endrick at Real Madrid and Lyon; Estêvão at Chelsea is added on the same reading, which the lead still has to accept).",
     "stats": "Appearances and goals are all competitions club totals for the season (league, domestic cups, Europe and the super cup), the convention the bake's completed seasons follow. National team games are never counted.",
     "midSeason": "A mid-season move is two rows with the same season string, appended in date order.",
     "clubWorldCup": "The 2025 FIFA Club World Cup (June to July 2025) counts in season 2024-2025, where footballdatabase.eu, besoccer, soccerbase and Transfermarkt file it. A man who played it for a new club gets a 2024-2025 row at that club, sourced (Trent Alexander-Arnold at Real Madrid).",
@@ -2002,6 +2002,7 @@
       "field": "assists",
       "from": 4,
       "to": 5,
+      "note": "Round 1017 review: a third host dissents. us.soccerway.com/player/mbappe-kylian/Wn6E2SED/ (read 2026-10-06) gives Champions League 2024/2025 14 matches 7 goals 2 assists where footballdatabase.eu and besoccer give 1, so its total would be 6. Two hosts agree on 5 and the assists convention lets them settle it, as Endrick's Lyon 8 and Courtois's 2 were; under brief rule 6 the lead may write null instead.",
       "sources": [
         { "url": "https://www.footballdatabase.eu/en/player/details/250043-kylian-mbappe", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/2025 Real Madrid: UEFA Super Cup 1/1/0, La Liga 34/31/3, Champions League 14/7/1, Intercontinental Cup 1/1/1, Copa del Rey 4/2/0, Supercopa 2/1/0, Club World Cup 3/1/0; sum 59 apps 44 goals 5 assists (56/43/5 without the Club World Cup)" },
         { "url": "https://www.besoccer.com/player/career-path/k-mbappe-lottin-234474", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25 total 59 MP 44 goals 5 assists (LaLiga 34/31/3, Champions League 14/7/1, Copa del Rey 4/2/0, Super Cup 2/1/0, UEFA Super Cup 1/1/0, FIFA Club World Cup 3/1/0, Intercontinental Cup 1/1/1)" }
@@ -4411,9 +4412,9 @@
       "from": "Al-Ittihad",
       "to": "Manchester City",
       "sources": [
-        { "url": "https://www.footballdatabase.eu/en/player/details/176866--ederson_moraes", "fields": [ "club" ], "reads": "No Al-Ittihad row in 2024/2025. Man City 2024/2025: Community Shield 1, Premier League 26 (0 goals, 4 assists), Champions League 8, FA Cup 2, Club World Cup 3: 40 apps 0 goals (37 without the June-July 2025 Club World Cup)" },
+        { "url": "https://www.footballdatabase.eu/en/player/details/176866--ederson_moraes", "fields": [ "club", "goals" ], "reads": "No Al-Ittihad row in 2024/2025. Man City 2024/2025: Community Shield 1, Premier League 26 (0 goals, 4 assists), Champions League 8, FA Cup 2, Club World Cup 3: 40 apps 0 goals (37 without the June-July 2025 Club World Cup)" },
         { "url": "https://us.soccerway.com/player/ederson/UDODA71I/", "fields": [ "club" ], "reads": "No Al-Ittihad row. Manchester City: Premier League 2024/2025 26, FA Cup 2024/2025 2, FA Community Shield 2024 1, Champions League 2024/2025 8, FIFA Club World Cup 2025 3: 40 apps (37 without the Club World Cup); goalkeeper columns, no goals or assists shown" },
-        { "url": "https://www.soccerbase.com/players/player.sd?player_id=66557&season_id=157", "fields": [ "club" ], "reads": "Games played by Ederson in 2024/2025, Man City: Community Shield 1, Premier League 26, Champions League 8, FA Cup 2, FIFA Club World Cup 3: 40 games 0 goals (Brazil games excluded); transfer list: Manchester City 8 Jun 2017 to 2 Sep 2025, then Fenerbahce" },
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=66557&season_id=157", "fields": [ "club", "goals" ], "reads": "Games played by Ederson in 2024/2025, Man City: Community Shield 1, Premier League 26, Champions League 8, FA Cup 2, FIFA Club World Cup 3: 40 games 0 goals (Brazil games excluded); transfer list: Manchester City 8 Jun 2017 to 2 Sep 2025, then Fenerbahce" },
         { "url": "https://www.fotmob.com/players/363364/ederson", "fields": [ "club" ], "reads": "Career history: no Al-Ittihad entry; Manchester City 2024/2025: Premier League 26 (0 goals, 4 assists), Community Shield 1, FA Cup 2, Champions League 8, Club World Cup 2025 3: 40 apps 0 goals 4 assists; Manchester City 2017-07-01 to 2025-09-02, then Fenerbahce" }
       ]
     },
@@ -4574,6 +4575,7 @@
       "field": "assists",
       "from": 5,
       "to": 7,
+      "note": "Round 1017 review: a third host dissents. us.soccerway.com/player/osimhen-victor/23YHG47R/ (read 2026-10-06) prints the 2024/2025 Turkish Cup row as 4 | 5 | 0 | 1 | 0, which in its column order (matches, goals, assists, cards) is 0 assists where fotmob and besoccer give 1, so its total would be 6. Two hosts agree on 7 and the assists convention lets them settle it; under brief rule 6 the lead may write null instead.",
       "sources": [
         { "url": "https://www.fotmob.com/players/687681/victor-osimhen", "fields": [ "club", "assists" ], "reads": "Career history, Galatasaray 2024/2025: Super Lig 30 (26, 5), Turkish Cup 4 (5, 1), Europa League 7 (6, 1): 41 apps 37 goals 7 assists; on loan from Napoli 2024-09-04 to 2025-06-30" },
         { "url": "https://www.besoccer.com/player/career-path/v-osimhen-295520", "fields": [ "club", "assists" ], "reads": "Career path, Galatasaray SK 2024/25: 41 apps 37 goals 7 assists (Super Lig 30, 26, 5; Europa League 7, 6, 1; Turkish Cup 4, 5, 1)", "note": "fotmob and besoccer agree on 7; soccerway reads 6 (no Turkish Cup assist)" }
@@ -5028,6 +5030,11 @@
         "season": "2024-2025",
         "club": "Manchester United"
       },
+      "order": {
+        "first": "Manchester United",
+        "then": "Aston Villa",
+        "on": "2025-02-09"
+      },
       "note": "The second 2024-2025 spell (loan from Manchester United, 2 Feb 2025). It goes AFTER the existing 2024-2025 row once that row is relabelled Manchester United (see changed), so the two spells sit in date order.",
       "sources": [
         { "url": "https://www.besoccer.com/player/career-path/marcus-rashford", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "2024/25 Aston Villa: 17 matches 4 goals 5 assists (Premier League 10, 2, 2; Champions League 4, 0, 2; FA Cup 3, 2, 1)" },
@@ -5048,6 +5055,11 @@
       "after": {
         "season": "2024-2025",
         "club": "Galatasaray"
+      },
+      "order": {
+        "first": "Galatasaray",
+        "then": "Al-Duhail",
+        "on": "2025-01-30"
       },
       "note": "The missing second spell of 2024-2025 (from 30 Jan 2025), appended after the Galatasaray row. fotmob counts 12 apps (one Emir Cup game fewer); soccerway and besoccer agree on 13.",
       "sources": [
@@ -5070,6 +5082,11 @@
         "season": "2024-2025",
         "club": "AC Milan"
       },
+      "order": {
+        "first": "Manchester City",
+        "then": "AC Milan",
+        "on": "2025-01-24"
+      },
       "note": "The missing first spell of 2024-2025 (to 24 Jan 2025). It precedes the existing AC Milan row in date order, so it must sit before that row, not after it.",
       "sources": [
         { "url": "https://us.soccerway.com/player/walker-kyle/QeLg6KGD/", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Manchester City: Premier League 2024/2025 15, EFL Cup 2024/2025 1, Champions League 2024/2025 2: 18 apps 0 goals 0 assists; then AC Milan in the same season" },
@@ -5089,6 +5106,11 @@
       "before": {
         "season": "2024-2025",
         "club": "PSG"
+      },
+      "order": {
+        "first": "Napoli",
+        "then": "PSG",
+        "on": "2025-01-17"
       },
       "note": "The first half of 2024-2025 at Napoli (to 2025-01-17); the pool carried only the PSG row.",
       "sources": [
@@ -5111,6 +5133,11 @@
         "season": "2024-2025",
         "club": "Chelsea"
       },
+      "order": {
+        "first": "Manchester United",
+        "then": "Chelsea",
+        "on": "2024-09-14"
+      },
       "note": "One game for Manchester United, the Community Shield on 2024-08-10, before the loan to Chelsea; the pool carried only the Chelsea row.",
       "sources": [
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=105272&season_id=157", "fields": [ "club", "appearances", "goals" ], "reads": "10 Aug 2024, Community Shield v Man City, for Man Utd, 0 goals; then Chelsea from 14 Sep 2024" },
@@ -5131,11 +5158,17 @@
         "season": "2024-2025",
         "club": "Chelsea"
       },
+      "order": {
+        "first": "Chelsea",
+        "then": "AC Milan",
+        "on": "2025-02-03"
+      },
       "note": "On loan at AC Milan from February 2025 (first game 2025-02-05); the pool carried only the Chelsea row.",
       "sources": [
         { "url": "https://www.soccerbase.com/players/player.sd?player_id=114089&season_id=157", "fields": [ "club", "appearances", "goals" ], "reads": "Milan (loan Feb to May 2025): Serie A 15 (2 goals: Roma, Monza), Coppa Italia 4 (1 v Roma), Champions League 2 (0): 21 games 3 goals" },
         { "url": "https://ng.soccerway.com/player/joao-felix/KI3YXMhi/", "fields": [ "club", "appearances", "goals" ], "reads": "2024/2025 AC Milan: Serie A 15 (2), Coppa Italia 4 (1), Champions League 2 (0)" },
-        { "url": "https://www.besoccer.com/player/f-sequeira-j-341347", "fields": [ "club", "appearances", "goals" ], "reads": "2024/25 Milan: 21 matches 3 goals" }
+        { "url": "https://www.besoccer.com/player/f-sequeira-j-341347", "fields": [ "club", "appearances", "goals" ], "reads": "2024/25 Milan: 21 matches 3 goals" },
+        { "url": "https://us.soccerway.com/player/joao-felix/KI3YXMhi/transfers/", "fields": [ "order" ], "reads": "Transfers: Feb 03, 25 (2025-02-03) Chelsea to AC Milan, loan; Jun 30, 25 AC Milan to Chelsea, return from loan" }
       ]
     },
     {
@@ -5152,11 +5185,17 @@
         "season": "2024-2025",
         "club": "Liverpool"
       },
+      "order": {
+        "first": "Liverpool",
+        "then": "Real Madrid",
+        "on": "2025-06-01"
+      },
       "note": "The 2025 FIFA Club World Cup, which this ledger files in 2024-2025: he joined Real Madrid on 2025-06-01 and played five of its games.",
       "sources": [
         { "url": "https://www.besoccer.com/player/career-path/t-arnold-242210", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid 2024/25: 5 apps 0 goals 2 assists (FIFA Club World Cup 5/0/2)" },
         { "url": "https://us.soccerway.com/player/alexander-arnold-trent/CEVJy6Bc/", "fields": [ "club", "appearances", "goals", "assists" ], "reads": "Real Madrid, FIFA Club World Cup 2025: 5 apps 0 goals 2 assists" },
-        { "url": "https://www.soccerbase.com/players/player.sd?player_id=86758&season_id=157", "fields": [ "club", "appearances", "goals" ], "reads": "Real Madrid, FIFA Club World Cup: 18 Jun Al-Hilal, 22 Jun Pachuca, 27 Jun RB Salzburg, 1 Jul Juventus, 5 Jul Borussia Dortmund: 5 games 0 goals" }
+        { "url": "https://www.soccerbase.com/players/player.sd?player_id=86758&season_id=157", "fields": [ "club", "appearances", "goals" ], "reads": "Real Madrid, FIFA Club World Cup: 18 Jun Al-Hilal, 22 Jun Pachuca, 27 Jun RB Salzburg, 1 Jul Juventus, 5 Jul Borussia Dortmund: 5 games 0 goals" },
+        { "url": "https://us.soccerway.com/player/alexander-arnold-trent/CEVJy6Bc/transfers/", "fields": [ "order" ], "reads": "Transfers: Jun 01, 25 (2025-06-01) Liverpool to Real Madrid, transfer" }
       ]
     }
   ],
@@ -5246,7 +5285,7 @@
       "agrees": true
     }
   ],
-  "seenNotFixed": ["Trent Alexander-Arnold: 2024-2025 Liverpool reads 28 apps 2 goals; LFChistory (season 134) gives 44 apps (33 league, 1 FA Cup, 2 League Cup, 8 Europe) and 4 goals. One source only, so it waits for his wave (2025-2026 Real Madrid).", "Darwin Núñez: 2024-2025 Liverpool reads 28 apps 11 goals; LFChistory (season 134) gives 47 apps (30, 2, 6, 9) and 7 goals. One source only, so it waits for his wave (2025-2026 Al-Hilal).", "Alisson (a0000001-0000-0000-0000-000000000040) and the removed Alisson Becker entry disagreed on stats in most seasons (2021-2022 reads 55 apps on the kept entry, 46 on the removed one); only the 2024-2025 row was researched here, the other seasons of the kept entry stand unverified.", "Reus 2026 LA Galaxy carries stats for a season still in progress (brief risk 8); not touched in wave 1.", "Mac Allister, Gakpo and Szoboszlai: their preserved 2025-2026 Liverpool rows match LFChistory exactly (one source, see preservedChecked); the other 24 preserved rows were not re-read in wave 1.", "Alisson (kept entry, a0000001-0000-0000-0000-000000000040), read by the 2026-10-05 review on LFChistory: 2018-2019 Liverpool reads 47 apps, LFChistory season 128 gives 51 (38 league, 13 Europe), which the removed twin carried; 2019-2020 reads 37 and matches season 129, where the twin had 29; 2020-2021 reads 44, season 130 gives 42; Roma 2016-2017 reads 40 here and 37 on the twin. One source each: the kept entry needs a two source correction pass in a later ledger round.", "Virgil van Dijk 2020-2021 Liverpool reads 5 apps 0 goals; the 2026-10-05 review read LFChistory season 130 as 8 apps and 1 goal. One source.", "Andrew Robertson 2017-2018 Liverpool reads 23 apps; the 2026-10-05 review read LFChistory season 127 as 30 (22 league, 1 FA Cup, 1 League Cup, 6 Europe). One source.", "s2: Angel Di María: the pool rows 2021-2022 Juventus and 2022-2023 Benfica are one season off. footballdatabase.eu lists 2021/2022 Paris SG (Ligue 1 26, Champions League 5) and 2022/2023 Juventus (Serie A 26, Champions League and Europa League 10, Coppa Italia 4: 40 apps 8 goals 7 assists); fotmob gives the spells Paris Saint-Germain to 2022-06-17, Juventus 2022-07-08 to 2023-07-05, Benfica from 2023-07-05. So 2021-2022 should be PSG and 2022-2023 Juventus; Benfica 2023-2024 and 2024-2025 stand. Two hosts agree; not fixed here because it is outside this round (it is not a 2024-2025 or 2025-2026 row).", "s2: Angel Di María: 2023-2024 Benfica reads 32 apps 6 goals; footballdatabase.eu gives Supertaça 1, Liga 28, Champions League 5, Europa League 6, Allianz Cup 3, Taça 5 = 48 club apps and 17 goals (summary columns 28+11+9 = 48). One host read; not researched further.", "s2: Pierre-Emerick Aubameyang: 2023-2024 Marseille reads 30 apps 8 goals 3 assists; footballdatabase.eu gives Ligue 1 34 (17, 8), Champions League qualifiers 2 (2, 0), Europa League 13 (10, 3), French Cup 2 (1, 0) = 51 apps 30 goals 11 assists, and fotmob gives his 2023-07-21 to 2024-07-18 Marseille spell as 51 apps 30 goals 11 assists. Two hosts agree; outside this round (not a 2024-2025 row).", "s5: Gavi 2020-2021 Barcelona reads 3 apps 0 goals 1 assist in the pool. besoccer's career path lists his 2020/21 season at Barcelona U19 and his first team debut as the 2-1 home win over Getafe just over three weeks after his 17th birthday (5 August 2021), which is season 2021-2022. One source, outside this shard's 2024-25 scope; a two source check may show the 2020-2021 row should not exist.", "s5: Xavi Simons 2022-2023 PSV reads 43 apps 22 goals in the pool; besoccer's career path gives 48 apps 22 goals. One source, outside scope.", "s5: Pau Cubarsí 2023-2024 Barcelona reads 24 apps 2 goals 1 assist in the pool. besoccer's 2023/24 read gave 24 MP but was internally inconsistent on goals (total 0 G, Copa row 1 G). One unclear source, outside this shard's 2024-25 scope; worth a two source check in a later pass.", "s6: Pierre-Emerick Aubameyang 2023-2024 Marseille reads 30 apps 8 goals 3 assists; soccerway and fotmob both give 51 apps 30 goals 11 assists. Out of this shard scope (2023-2024).", "Round 1017: Estêvão's Palmeiras rows are wrong under either reading (s6): 2023-2024 reads 25 apps 6 goals, 2024-2025 reads 30 apps 13 goals; soccerway and fotmob give the calendar 2023 as 1 app, 2024 as 45 apps 15 goals and 2025 (January to July, the Club World Cup included) as 37 apps 12 goals. Left for the calendar relabel round.", "Round 1017: Tottenham is also spelled Tottenham Hotspur on 9 pool rows (s5); a naming question for a later round."],
+  "seenNotFixed": ["Trent Alexander-Arnold: 2024-2025 Liverpool reads 28 apps 2 goals; LFChistory (season 134) gives 44 apps (33 league, 1 FA Cup, 2 League Cup, 8 Europe) and 4 goals. One source only, so it waits for his wave (2025-2026 Real Madrid).", "Darwin Núñez: 2024-2025 Liverpool reads 28 apps 11 goals; LFChistory (season 134) gives 47 apps (30, 2, 6, 9) and 7 goals. One source only, so it waits for his wave (2025-2026 Al-Hilal).", "Alisson (a0000001-0000-0000-0000-000000000040) and the removed Alisson Becker entry disagreed on stats in most seasons (2021-2022 reads 55 apps on the kept entry, 46 on the removed one); only the 2024-2025 row was researched here, the other seasons of the kept entry stand unverified.", "Reus 2026 LA Galaxy carries stats for a season still in progress (brief risk 8); not touched in wave 1.", "Mac Allister, Gakpo and Szoboszlai: their preserved 2025-2026 Liverpool rows match LFChistory exactly (one source, see preservedChecked); the other 24 preserved rows were not re-read in wave 1.", "Alisson (kept entry, a0000001-0000-0000-0000-000000000040), read by the 2026-10-05 review on LFChistory: 2018-2019 Liverpool reads 47 apps, LFChistory season 128 gives 51 (38 league, 13 Europe), which the removed twin carried; 2019-2020 reads 37 and matches season 129, where the twin had 29; 2020-2021 reads 44, season 130 gives 42; Roma 2016-2017 reads 40 here and 37 on the twin. One source each: the kept entry needs a two source correction pass in a later ledger round.", "Virgil van Dijk 2020-2021 Liverpool reads 5 apps 0 goals; the 2026-10-05 review read LFChistory season 130 as 8 apps and 1 goal. One source.", "Andrew Robertson 2017-2018 Liverpool reads 23 apps; the 2026-10-05 review read LFChistory season 127 as 30 (22 league, 1 FA Cup, 1 League Cup, 6 Europe). One source.", "s2: Angel Di María: the pool rows 2021-2022 Juventus and 2022-2023 Benfica are one season off. footballdatabase.eu lists 2021/2022 Paris SG (Ligue 1 26, Champions League 5) and 2022/2023 Juventus (Serie A 26, Champions League and Europa League 10, Coppa Italia 4: 40 apps 8 goals 7 assists); fotmob gives the spells Paris Saint-Germain to 2022-06-17, Juventus 2022-07-08 to 2023-07-05, Benfica from 2023-07-05. So 2021-2022 should be PSG and 2022-2023 Juventus; Benfica 2023-2024 and 2024-2025 stand. Two hosts agree; not fixed here because it is outside this round (it is not a 2024-2025 or 2025-2026 row).", "s2: Angel Di María: 2023-2024 Benfica reads 32 apps 6 goals; footballdatabase.eu gives Supertaça 1, Liga 28, Champions League 5, Europa League 6, Allianz Cup 3, Taça 5 = 48 club apps and 17 goals (summary columns 28+11+9 = 48). One host read; not researched further.", "s2: Pierre-Emerick Aubameyang: 2023-2024 Marseille reads 30 apps 8 goals 3 assists; footballdatabase.eu gives Ligue 1 34 (17, 8), Champions League qualifiers 2 (2, 0), Europa League 13 (10, 3), French Cup 2 (1, 0) = 51 apps 30 goals 11 assists, and fotmob gives his 2023-07-21 to 2024-07-18 Marseille spell as 51 apps 30 goals 11 assists. Two hosts agree; outside this round (not a 2024-2025 row).", "s5: Gavi 2020-2021 Barcelona reads 3 apps 0 goals 1 assist in the pool. besoccer's career path lists his 2020/21 season at Barcelona U19 and his first team debut as the 2-1 home win over Getafe just over three weeks after his 17th birthday (5 August 2021), which is season 2021-2022. One source, outside this shard's 2024-25 scope; a two source check may show the 2020-2021 row should not exist.", "s5: Xavi Simons 2022-2023 PSV reads 43 apps 22 goals in the pool; besoccer's career path gives 48 apps 22 goals. One source, outside scope.", "s5: Pau Cubarsí 2023-2024 Barcelona reads 24 apps 2 goals 1 assist in the pool. besoccer's 2023/24 read gave 24 MP but was internally inconsistent on goals (total 0 G, Copa row 1 G). One unclear source, outside this shard's 2024-25 scope; worth a two source check in a later pass.", "s6: Pierre-Emerick Aubameyang 2023-2024 Marseille reads 30 apps 8 goals 3 assists; soccerway and fotmob both give 51 apps 30 goals 11 assists. Out of this shard scope (2023-2024).", "Round 1017: Estêvão's Palmeiras rows are wrong under either reading (s6): 2023-2024 reads 25 apps 6 goals, 2024-2025 reads 30 apps 13 goals; soccerway and fotmob give the calendar 2023 as 1 app, 2024 as 45 apps 15 goals and 2025 (January to July, the Club World Cup included) as 37 apps 12 goals. Left for the calendar relabel round.", "Round 1017: Tottenham is also spelled Tottenham Hotspur on 9 pool rows (s5); a naming question for a later round.", "Round 1017 review: Martin Ødegaard's loan rows sit a season off. The pool has 2016-2017 Heerenveen 33 apps 3 goals 7 assists, then Vitesse in both 2017-2018 and 2018-2019; his Heerenveen loan ran from January 2017 through 2017-2018 and he was at Vitesse only in 2018-2019. Not two sourced here; left for a later round.", "Round 1017 review: Kyle Walker's Manchester City appearances read 44 for 2021-2022 and 48 for 2022-2023; the review read soccerway's rows as summing to 31 (Premier League 20, FA Cup 3, EFL Cup 1, Champions League 7) and 39. Not two sourced here; left for a later round.", "Round 1017 review: Kobbie Mainoo's 2023-2024 Manchester United row reads 3 goals; the review read manutd.com counting five goals in 2023/24. Not two sourced here; left for a later round."],
   "wave2Notes": {
     "settledByThirdSource": ["Vinícius Júnior 2025-2026 Real Madrid assists: footballdatabase.eu 10, besoccer.com 11 (Champions League 5 against 6); ESPN reads 10 (Champions League 5), so 10 is written.", "Thibaut Courtois 2025-2026 Real Madrid assists: footballdatabase.eu 2 (Champions League), besoccer.com 0; ESPN reads 2 in the Champions League, so 2 is written.", "Thibaut Courtois 2024-2025 Real Madrid assists: footballdatabase.eu 0, besoccer.com 1 (Champions League); ESPN reads 0, so the pool value 0 stands and no assists change is written.", "Jan Oblak 2025-2026 Atlético Madrid assists: footballdatabase.eu 1 (Champions League), besoccer.com 0; ESPN reads 1 in the Champions League, so 1 is written.", "Jan Oblak 2024-2025 Atlético Madrid appearances: footballdatabase.eu 50 (one Copa del Rey game), besoccer.com 49 (no Copa del Rey game); ESPN lineups show him in none of the six Copa del Rey games, so 49 is written.", "Antoine Griezmann 2024-2025 Atlético Madrid assists: footballdatabase.eu 9, besoccer.com 10 (Champions League 2 against 3); ESPN reads 9 (Champions League 2), so 9 is written.", "Luka Modrić 2025-2026 AC Milan assists: footballdatabase.eu 4, besoccer.com 3 (Serie A 4 against 3); ESPN reads 3, so 3 is written.", "Endrick 2025-2026 Lyon assists: footballdatabase.eu 7, besoccer.com 8 (Coupe de France 0 against 1); ESPN reads 8 (Coupe de France 1), so 8 is written.", "Endrick 2024-2025 Real Madrid appearances: footballdatabase.eu 36 (La Liga 21), besoccer.com 37 (La Liga 22); ESPN lineups give 37 (La Liga 22) and statmuse.com also reads 22 La Liga games, so 37 is written. soccerbase.com lists 22 La Liga and 9 Champions League games but misses the Copa del Rey final."],
     "unresolvedWrittenNull": [

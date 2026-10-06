@@ -86,11 +86,20 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CORRECTION_LEDGERS, correctionProblems, removedNames } from './bakeCareerPlayers.mjs';
 import { BAKE_OUT, MIGRATION_OUT, PLANNED_APPLY, bakeStampOf, expectedBake, generate, identicalKeySets } from './genCareerSeasonAdditions.mjs';
-import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, careerQuizShift, clone, coverage, formatLedger, hostsFor, loadSiteModules, readingProblems } from './lib/careerSeasonLedger.mjs';
+import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, careerQuizShift, clone, coverage, formatLedger, hostsFor, loadSiteModules, readingProblems, registrableHost } from './lib/careerSeasonLedger.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SEASON_ADD_CONTROL || '';
-const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, anchor: 1, uncovered: 2, twin: 5, rehearse: 7, rehearsehint: 7, rehearseclub: 7, rehearseinsert: 7 };
+const OWN = { onesource: 1, dash: 1, calendar: 1, unflagged: 1, reads: 1, anchor: 1, clubspelling: 1, clubreads: 1, swap: 1, states: 1, relabel: 1, without: 1, uncovered: 2, twin: 5, rehearse: 7, rehearsehint: 7, rehearseclub: 7, rehearseinsert: 7 };
+/* Round 1017 review: the finding each newer control must provoke, so a red from some other check of its section is not taken for it */
+const EXPECT = {
+  clubspelling: '"Man City" is a spelling the pool before the ledger never uses',
+  clubreads: 'host(s) name Al-Hilal in their recorded reading',
+  swap: 'so PSG then Napoli, but its recorded order is Napoli then PSG',
+  states: 'records states 45, a number its reading never gives',
+  relabel: 'keeps appearances 17',
+  without: 'reads 33',
+};
 /* what the rehearsal controls rewrite in the migration text, in memory only */
 const REHEARSE_CONTROLS = {
   rehearse: ['update public.career_seasons set goals = 34, assists = 23, appearances = 52', 'update public.career_seasons set goals = 33, assists = 23, appearances = 52'],
@@ -112,15 +121,53 @@ if (CONTROL && !OWN[CONTROL]) { console.error(`SIM_SEASON_ADD_CONTROL=${CONTROL}
  * Endrick (the held rule covers only a new row at a calendar league club).
  */
 const COVERAGE_BASELINE = new Set([]);
+/*
+ * THE NEW CLUBS (section 1, Round 1017 review). A club key is the exact
+ * string: "Man City" beside the pool's "Manchester City" (153 rows) would
+ * split a man's row from every teammate's, and Transfer Path would lose or
+ * gain links, while flagForClub resolves both to the same flag. So every club
+ * a ledger row writes (added, inserted, or a club move's target) is a
+ * spelling the pool before the ledger already uses, or one named here. Frozen
+ * here, not in the ledger, so a regenerated ledger cannot widen it; a club the
+ * pool already spells, or no ledger row uses, must leave the list.
+ */
+const NEW_CLUBS = new Set(['Trabzonspor', 'Rosario Central', 'Paris FC', 'Wydad Casablanca', 'Burnley', 'Al-Qadsiah']);
+/*
+ * A club move's target and a new club must be NAMED in two of the row's
+ * sources' readings, on two hosts, compared without case, accents or
+ * punctuation ("Al Qadsiah" names Al-Qadsiah). A reading may name a club by
+ * one of these short forms; nothing else counts.
+ */
+const READING_SHORT_FORMS = { 'Manchester United': ['Man Utd'], 'Manchester City': ['Man City'] };
 /* the flags of the calendar year leagues the pool writes as one year */
 const CALENDAR_COUNTRIES = new Set(['us', 'ca', 'br', 'ar', 'jp']);
 const failures = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
 let section = 0;
 let notRehearsed = false;
-const fail = m => { failures[section] += 1; if (failures[section] <= 20) console.error('  FAIL: ' + m); };
+const messages = [];
+const fail = m => { failures[section] += 1; messages.push(m); if (failures[section] <= 20) console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 const read = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const norm = s => s.replaceAll('\r\n', '\n');
+
+const plain = s => ` ${String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()} `;
+/** The distinct hosts whose recorded reading names the club (section 1). */
+function hostsNaming(sources, club) {
+  const forms = [club, ...(READING_SHORT_FORMS[club] ?? [])].map(plain);
+  return new Set((sources ?? []).filter(s => forms.some(f => plain(s.reads).includes(f))).map(s => registrableHost(s.url)).filter(Boolean));
+}
+
+/** Every recorded reading of a man's ledger sources (section 1, an inserted row's move date). */
+const readingsOf = (L, player) => ['added', 'inserted', 'changed', 'ended'].flatMap(k => (L[k] ?? []).filter(e => e.player === player)).flatMap(e => (e.sources ?? []).map(s => String(s.reads)));
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+/** A reading gives an ISO date as itself or as "9 Feb 2025" / "17 January 2025". */
+function givesDate(text, iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso));
+  if (!m) return false;
+  return text.includes(iso) || new RegExp(`\\b0?${Number(m[3])} ${MONTHS[Number(m[2]) - 1]}[a-z]* ${m[1]}\\b`).test(text);
+}
+/** A date of a split season: 1 July of its first year to 31 July of its second (the 2025 Club World Cup ended in July). */
+const inSeason = (iso, season) => /^\d{4}-\d{2}-\d{2}$/.test(String(iso)) && iso >= `${season.slice(0, 4)}-07-01` && iso <= `${season.slice(5)}-07-31`;
 
 /** The source rules every new row meets, added or inserted (section 1). */
 function rowSourceChecks(r, who, held) {
@@ -132,7 +179,7 @@ function rowSourceChecks(r, who, held) {
   if (r.assists !== null && hostsFor(r.sources, 'assists').size < 2) fail(`${who}: assists ${r.assists} without two hosts (write null)`);
   if (r.marketValue !== 0 && hostsFor(r.sources, 'marketValue').size < 2) fail(`${who}: market value ${r.marketValue} without two hosts (write 0)`);
   /* each number is the one its sources were read as, not only a sourced field */
-  for (const f of ['goals', 'appearances', ...(r.assists === null ? [] : ['assists'])]) for (const pr of readingProblems(r.sources, f, r[f], r.club)) fail(`${who}: ${pr}`);
+  for (const f of ['goals', 'appearances', ...(r.assists === null ? [] : ['assists'])]) for (const pr of readingProblems(r.sources, f, r[f], r.club, r.season)) fail(`${who}: ${pr}`);
   if (!Number.isInteger(r.goals) || !Number.isInteger(r.appearances) || r.goals < 0 || r.appearances < 1) fail(`${who}: goals and appearances must be real counts`);
 }
 
@@ -173,6 +220,35 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     kv.before = { season: kv.before.season, club: 'Marseille' };
     console.log('   NEGATIVE CONTROL ON: Kvaratskhelia\'s Napoli spell is placed before a 2024-2025 Marseille row he never had');
   }
+  if (CONTROL === 'clubspelling' || CONTROL === 'clubreads') {
+    const [who, was, now] = CONTROL === 'clubspelling' ? ['Ederson', 'Manchester City', 'Man City'] : ['Pierre-Emerick Aubameyang', 'Al-Qadsiah', 'Al-Hilal'];
+    const c = (L.changed ?? []).find(x => x.player === who && x.field === 'club');
+    if (!c || c.to !== was) abort(`${CONTROL} control cannot run: ${who}'s club move does not go to ${was}`);
+    c.to = now;
+    console.log(`   NEGATIVE CONTROL ON: ${who}'s 2024-2025 row moves to ${JSON.stringify(now)}, not ${was}`);
+  }
+  if (CONTROL === 'swap') {
+    const kv = (L.inserted ?? []).find(r => r.player === 'Khvicha Kvaratskhelia' && r.club === 'Napoli');
+    if (!kv || kv.before?.club !== 'PSG' || kv.after) abort('swap control cannot run: no Kvaratskhelia Napoli row inserted before PSG');
+    kv.after = kv.before;
+    delete kv.before;
+    console.log('   NEGATIVE CONTROL ON: Kvaratskhelia\'s Napoli spell is placed after the PSG row, his dates say before');
+  }
+  if (CONTROL === 'states') {
+    const hj = L.added.find(r => r.player === 'Rasmus Højlund' && r.club === 'Napoli');
+    const s = hj?.sources.find(x => x.states?.appearances === 44);
+    if (!hj || hj.appearances !== 44 || !s) abort('states control cannot run: Højlund\'s Napoli row does not carry 44 appearances with a source stating 44');
+    hj.appearances = 45;
+    s.states.appearances = 45;
+    console.log('   NEGATIVE CONTROL ON: Højlund\'s Napoli appearances and the besoccer states total both typed 45, a number that reading never gives');
+  }
+  if (CONTROL === 'without') {
+    const hk = L.added.find(r => r.player === 'Achraf Hakimi' && r.season === '2025-2026');
+    const s = hk?.sources.find(x => String(x.reads).includes('without it 32 apps'));
+    if (!s) abort('without control cannot run: no Hakimi 2025-2026 reading carries "without it 32 apps"');
+    s.reads = s.reads.replace('without it 32 apps', 'without it 33 apps');
+    console.log('   NEGATIVE CONTROL ON: the fotmob reading of Hakimi\'s 2025-2026, which gives his total only "without it" (the Club World Cup), reads 33 apps');
+  }
   if (CONTROL === 'calendar' || CONTROL === 'unflagged') {
     const before = L.added.length;
     L.added.push({ ...clone(first), club: CONTROL === 'calendar' ? 'LAFC' : 'Atlantis FC', season: ledger.season });
@@ -211,6 +287,14 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     const hits = career.filter(s => s.season === a.season && s.club === a.club).length;
     if (hits !== 1) fail(`${who}: ${hits} rows read ${a.season} ${a.club}, the anchor must be exactly one`);
     if (career.some(s => s.season === r.season && s.club === r.club)) fail(`${who}: the pool already carries it`);
+    /* Round 1017 review: the side is the one the dates give. `order` names the
+       club of his earlier spell, the club of his later one, and the date by
+       which he had moved, a date one of his ledger readings gives */
+    const [first, then] = r.before ? [r.club, a.club] : [a.club, r.club];
+    const o = r.order;
+    if (!o || o.first !== first || o.then !== then) fail(`${who}: placed ${r.before ? 'before' : 'after'} ${a.club}, so ${first} then ${then}, but its recorded order is ${o ? `${o.first} then ${o.then}` : 'missing'}`);
+    else if (!inSeason(o.on, r.season)) fail(`${who}: the move date ${JSON.stringify(o.on)} is not a date of ${r.season}`);
+    else if (!readingsOf(L, r.player).some(t => givesDate(t, o.on))) fail(`${who}: no reading of his ledger sources gives the move date ${o.on}`);
     rowSourceChecks(r, who, held);
   }
   /* the migration writes club, goals, assists and appearances, nothing else */
@@ -226,14 +310,65 @@ console.log('1) the ledger shape: seasons, clubs, sources');
     if (c.field === 'club') {
       if (c.from !== c.club) fail(`${who}: a club change names its row by the old club, ${c.from}`);
       if (typeof c.to !== 'string' || !isoOf(c.to)) fail(`${who}: the new club ${JSON.stringify(c.to)} resolves to no flag`);
-    } else if (c.to !== null) for (const pr of readingProblems(c.sources, c.field, c.to, movedTo.get(`${c.player}|${c.season}|${c.club}`) ?? c.club)) fail(`${who}: ${pr}`);
+    } else if (c.to !== null) for (const pr of readingProblems(c.sources, c.field, c.to, movedTo.get(`${c.player}|${c.season}|${c.club}`) ?? c.club, c.season)) fail(`${who}: ${pr}`);
+  }
+  /* Round 1017 review: the numbers a changed row KEEPS are read too, under
+     its final club, against the sources of every entry of that row; a moved
+     row must have each kept number read, since a relabel that kept the old
+     club's figures would pass every other check */
+  if (CONTROL === 'relabel') {
+    const row = changedOnly.find(p => p.name === 'Marcus Rashford')?.career.find(s => s.season === '2024-2025' && s.club === 'Manchester United');
+    if (!row || row.appearances !== 24 || row.goals !== 7 || row.assists !== 3) abort('relabel control cannot run: Rashford has no 2024-2025 Manchester United row of 24, 7, 3');
+    Object.assign(row, { appearances: 17, goals: 4, assists: 5 });
+    console.log('   NEGATIVE CONTROL ON: Rashford\'s relabelled 2024-2025 Manchester United row keeps his Aston Villa figures, 17, 4, 5');
+  }
+  const changedRows = new Map();
+  for (const c of L.changed ?? []) {
+    const k = `${c.player}|${c.season}|${c.club}`;
+    const g = changedRows.get(k) ?? changedRows.set(k, { player: c.player, season: c.season, club: c.club, moved: false, fields: new Set(), sources: [] }).get(k);
+    g.fields.add(c.field);
+    g.sources.push(...(c.sources ?? []));
+    if (c.field === 'club' && typeof c.to === 'string') Object.assign(g, { club: c.to, moved: true });
+  }
+  let keptRead = 0;
+  for (const g of changedRows.values()) {
+    const row = changedOnly.find(p => p.name === g.player)?.career.find(s => s.season === g.season && s.club === g.club);
+    if (!row) { fail(`${g.player} ${g.season} ${g.club}: the changed row is not in the pool`); continue; }
+    for (const f of ['goals', 'appearances', 'assists']) {
+      if (g.fields.has(f) || row[f] === null) continue;
+      const pr = readingProblems(g.sources, f, row[f], g.club, g.season);
+      const unread = pr.some(p => p.startsWith("no source's"));
+      for (const p of pr) if (g.moved || !p.startsWith("no source's")) fail(`${g.player} ${g.season} ${g.club} keeps ${f} ${row[f]}: ${p}`);
+      if (!unread) keptRead += 1;
+    }
+  }
+  /* Round 1017 review: every club a row writes is a spelling the pool uses or on NEW_CLUBS, and a moved or new club is named in two readings */
+  const poolClubs = new Set(pre.flatMap(p => p.career.map(s => s.club)));
+  const newUsed = new Set();
+  const clubUses = [
+    ...L.added.map(r => [r, r.club, `${r.player} ${r.season} ${r.club}`]),
+    ...(L.inserted ?? []).map(r => [r, r.club, `${r.player} ${r.season} ${r.club} (inserted)`]),
+    ...(L.changed ?? []).filter(c => c.field === 'club' && typeof c.to === 'string').map(c => [c, c.to, `${c.player} ${c.season} ${c.club} moved to ${c.to}`]),
+  ];
+  for (const [r, club, who] of clubUses) {
+    const isNew = !poolClubs.has(club);
+    if (isNew && !NEW_CLUBS.has(club)) fail(`${who}: ${JSON.stringify(club)} is a spelling the pool before the ledger never uses and is not on NEW_CLUBS`);
+    if (isNew) newUsed.add(club);
+    if (r.field === 'club' || isNew) {
+      const named = hostsNaming(r.sources, club);
+      if (named.size < 2) fail(`${who}: ${named.size} host(s) name ${club} in their recorded reading, a moved or new club needs two`);
+    }
+  }
+  for (const club of NEW_CLUBS) {
+    if (poolClubs.has(club)) fail(`NEW_CLUBS lists ${club}, a spelling the pool already uses: remove it`);
+    else if (!newUsed.has(club)) fail(`NEW_CLUBS lists ${club}, which no ledger row writes: remove it`);
   }
   for (const e of L.ended ?? []) if (hostsFor(e.sources, 'ended').size < 2) fail(`${e.player}: ended on fewer than two hosts`);
   for (const h of L.held ?? []) if (!h.reason || !pre.some(p => p.name === h.player)) fail(`${h.player}: held without a reason or not in the pool`);
   for (const r of L.removed ?? []) if (!r.keptAs || !r.copy || r.copy.name !== r.player) fail(`${r.player}: removed without the man he is kept as or a copy of his entry`);
   const text = JSON.stringify(L);
   if (/[\u2013\u2014]/.test(text)) fail('the ledger carries a long dash');
-  console.log(`   ${rows} new rows (${L.added.length} added, ${(L.inserted ?? []).length} inserted), ${(L.changed ?? []).length} changed fields (${(L.changed ?? []).filter(c => c.field === 'club').length} club moves), ${(L.ended ?? []).length} ended, ${(L.held ?? []).length} held, ${(L.removed ?? []).length} removed; every season, club and source holds`);
+  console.log(`   ${rows} new rows (${L.added.length} added, ${(L.inserted ?? []).length} inserted), ${(L.changed ?? []).length} changed fields (${(L.changed ?? []).filter(c => c.field === 'club').length} club moves, ${keptRead} kept numbers read), ${(L.ended ?? []).length} ended, ${(L.held ?? []).length} held, ${(L.removed ?? []).length} removed; every season, club and source holds`);
 }
 
 /* the pool after the ledger is the committed bake when that bake is current;
@@ -501,6 +636,7 @@ if (CONTROL) {
   /* the one finding of an unrehearsed migration is not what a control tests, so it is set aside, and said */
   const setAside = notRehearsed && failures[7] === 1 ? 7 : 0;
   const others = Object.entries(failures).filter(([s]) => Number(s) !== own && Number(s) !== setAside).reduce((a, [, n]) => a + n, 0);
+  if (EXPECT[CONTROL] && !messages.some(m => m.includes(EXPECT[CONTROL]))) { console.error(`simCareerSeasonAdditions control (${CONTROL}): RED. Section ${own} never reported ${JSON.stringify(EXPECT[CONTROL])}, so the check this control tests did not fire.`); process.exit(1); }
   if (failures[own] > 0 && others === 0) { console.log(`simCareerSeasonAdditions control (${CONTROL}): green. Section ${own} went red and every other section stayed green${setAside ? ' (section 7 set aside: the migration is not rehearsed here)' : ''}.`); process.exit(0); }
   console.error(`simCareerSeasonAdditions control (${CONTROL}): RED. Expected only section ${own} to fail, got ${JSON.stringify(failures)}.`);
   process.exit(1);
