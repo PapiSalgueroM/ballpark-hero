@@ -8,9 +8,14 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const self = fileURLToPath(import.meta.url);
 const component = 'src/components/us-career/CareerSeasonReview.tsx';
+const comparison = 'src/components/us-career/CareerSeasonComparison.tsx';
 const helper = 'src/lib/usCareerSeasonReview.ts', board = 'src/components/us-career/UsCareerBoard.tsx';
 const testFile = 'src/test/careerSeasonReview.test.tsx';
 const titles = {
+  comparison: 'compares distinct original season indices and returns focus to Compare seasons',
+  positionComparison: 'compares every saved position field in its existing units without postseason prose',
+  rawComparison: 'subtracts raw saved rates before rounding and keeps neutral reversed changes',
+  sparseComparison: 'keeps missing zero and suspended comparison values distinct',
   nba: 'shows the saved NBA regular and postseason values separately',
   nfl: 'shows NFL passing and defensive stats for their saved positions',
   mlb: 'distinguishes MLB batting starts and relief appearances from saved stats',
@@ -24,6 +29,14 @@ const titles = {
   baseline: 'restores existing retirement legacy and exact save bytes without another completion',
 };
 const controls = {
+  compareIndices: { file: comparison, from: 'useState(career.seasons.length - 2)', to: 'useState(career.seasons.length - 1)', test: titles.comparison },
+  compareDelta: { file: comparison, from: 'const change = Number((b - a).toFixed(digits ?? 6));', to: 'const change = Number((a - b).toFixed(digits ?? 6));', test: titles.rawComparison },
+  compareRaw: { file: helper, from: 'numeric: { raw: recorded(value) ? value : undefined, digits },', to: 'numeric: { raw: recorded(value) ? Number(value.toFixed(digits ?? 6)) : undefined, digits },', test: titles.rawComparison },
+  compareMissing: { file: comparison, from: "if (!finite(a) || !finite(b)) return 'Not recorded';", to: "if (!finite(a) || !finite(b)) return '0';", test: titles.sparseComparison },
+  compareSuspended: { file: comparison, from: "const suspended = tab === 'Regular season' && seasons.some(season => season.teamResult === 'SUSPENDED');", to: 'const suspended = false;', test: titles.sparseComparison },
+  compareFocus: { file: component, from: 'compareButton.current?.focus({ preventScroll: true });', to: 'void compareButton.current;', test: titles.comparison },
+  compareWrite: { file: comparison, from: 'onClick={() => setTab(value)}', to: "onClick={() => { setTab(value); localStorage.setItem(sport.saveKey, '{}'); }}", test: titles.live },
+  compareRandom: { file: comparison, from: 'onClick={() => setTab(value)}', to: 'onClick={() => { setTab(value); Math.random(); }}', test: titles.live },
   nbaRegular: { file: helper, from: "number('Points per game', s.ppg)", to: "number('Points per game', s.poPpg)", test: titles.nba },
   nbaPostseason: { file: helper, from: "number('Assists per game', s.poApg)", to: "number('Assists per game', s.apg)", test: titles.nba },
   nflPassing: { file: helper, from: "number('Passing yards', s.passYds)", to: "number('Passing yards', s.ints)", test: titles.nfl },
@@ -50,7 +63,7 @@ const controls = {
     { from: "import { cn } from '@/lib/utils';", to: "import { cn } from '@/lib/utils';\nimport { recordCompletion } from '@/lib/completions';" },
     { from: 'lastSelected.current = index;', to: 'lastSelected.current = index; recordCompletion(sport.gameSlug, 1);' },
   ], test: titles.live },
-  returnFocus: { file: board, from: 'target?.focus({ preventScroll: true });', to: 'target?.blur();', test: titles.live },
+  returnFocus: { file: board, from: "hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current]", to: 'null', test: titles.live },
   pendingEvent: { file: board, from: "phase !== 'coach' && phase !== 'freeagency' && panel === 'log'", to: "phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log'", test: titles.event, message: /Career Log opens while the ordinary choice stays pending/ },
   retiredBack: { file: board, from: "if (phase === 'retired') setRetiredReview(false);", to: "if (phase === 'retired') setRetiredReview(true);", test: titles.retired },
 };
@@ -75,7 +88,7 @@ if (control === 'all') {
   process.exit(0);
 }
 const held = [];
-for (const relative of [component, helper, board, testFile, 'src/test/fixtures/careerSeasonReview1008.ts', ...['nba', 'nfl', 'mlb', 'nhl'].map(s => `src/lib/${s}CareerSport.ts`)]) {
+for (const relative of [component, comparison, helper, board, testFile, 'src/test/fixtures/careerSeasonReview1008.ts', ...['nba', 'nfl', 'mlb', 'nhl'].map(s => `src/lib/${s}CareerSport.ts`)]) {
   const file = path.join(root, relative), bytes = await readFile(file);
   held.push(() => readFile(file).then(current => assert.deepEqual(current, bytes, relative + ' raw bytes held')));
 }

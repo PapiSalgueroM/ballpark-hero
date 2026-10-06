@@ -3,19 +3,20 @@ import type { NbaSeasonLine } from '@/lib/nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
 
-export interface CareerReviewStat { label: string; value: string }
-export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string }
+export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
+export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string; regularValues: CareerReviewStat[] }
 
 const recorded = (value: number | undefined): value is number => typeof value === 'number' && Number.isFinite(value);
 const number = (label: string, value: number | undefined, digits?: number): CareerReviewStat => ({
   label,
   value: recorded(value) ? digits === undefined ? String(value) : value.toFixed(digits) : 'Not recorded',
+  numeric: { raw: recorded(value) ? value : undefined, digits },
 });
 const text = (label: string, value: string | undefined): CareerReviewStat => ({ label, value: typeof value === 'string' && value.trim() ? value : 'Not recorded' });
 const stats = (result: string, regular: CareerReviewStat[], postseason: CareerReviewStat[]): CareerReviewStats =>
   result === 'SUSPENDED'
-    ? { regular: [text('Season', 'Suspended, no season played')], postseason: [text('Postseason', 'Not played during this suspended season')], gamesLabel: 'Games' }
-    : { regular, postseason, gamesLabel: 'Games' };
+    ? { regular: [text('Season', 'Suspended, no season played')], postseason: [text('Postseason', 'Not played during this suspended season')], gamesLabel: 'Games', regularValues: regular }
+    : { regular, postseason, gamesLabel: 'Games', regularValues: regular };
 
 export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStats {
   let regular: CareerReviewStat[];

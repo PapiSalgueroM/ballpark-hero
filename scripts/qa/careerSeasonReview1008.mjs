@@ -12,9 +12,10 @@ import { chromium } from '../lib/playwrightLoader.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
 assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
-const isFontRead = request => {
+const isFontStylesheet = request => request.method() === 'GET' && fontLinks.includes(new URL(request.url()).href);
+const isFontRead = (request, assets) => {
   const url = new URL(request.url());
-  return request.method() === 'GET' && (fontLinks.includes(url.href) || (request.resourceType() === 'font' && url.protocol === 'https:' && url.hostname === 'fonts.gstatic.com' && url.pathname.endsWith('.woff2')));
+  return isFontStylesheet(request) || (request.method() === 'GET' && request.resourceType() === 'font' && assets.has(url.href));
 };
 const OUT = path.resolve(process.env.CAREER_SEASON_REVIEW_NATIVE_ARTIFACTS || path.join(ROOT, 'career-season-review-artifacts/native'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -31,7 +32,7 @@ await build({
 });
 const { reviewFixtures, reviewSports, makeReviewCareer, reviewSave } = createRequire(import.meta.url)(bundle);
 const profiles = [
-  { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true, positions: ['PG', 'QB', 'SP', 'G'] },
+  { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true, positions: ['PG', 'QB', 'CF', 'G'] },
   { width: 390, height: 844, input: 'touch', theme: 'light', reduced: false, positions: ['PG', 'EDGE', 'CF', 'D'] },
   { width: 1280, height: 720, input: 'mouse', theme: 'dark', reduced: false, positions: ['PG', 'QB', 'RP', 'C'] },
   { width: 1280, height: 720, input: 'keyboard', theme: 'light', reduced: true, positions: ['PG', 'EDGE', 'SP', 'G'] },
@@ -82,16 +83,35 @@ async function activate(locator, input, minimum = 44) {
   else if (input === 'mouse') await locator.click();
   else { await locator.focus(); await locator.press('Enter'); }
 }
+async function chooseSeason(locator, value, input) {
+  const box = await locator.boundingBox();
+  assert(box && box.width >= 44 && box.height >= 44, `Small comparison selector: ${JSON.stringify(box)}`);
+  if (input === 'keyboard') {
+    await locator.focus();
+    const indices = await locator.evaluate((el, target) => ({ selected: el.selectedIndex, target: [...el.options].findIndex(option => option.value === target) }), value);
+    assert(indices.target >= 0, 'Comparison target is a native option');
+    const distance = indices.target - indices.selected;
+    for (let step = 0; step < Math.abs(distance); step++) await locator.press(distance > 0 ? 'ArrowDown' : 'ArrowUp');
+    assert.equal(await locator.evaluate(el => el === document.activeElement), true, 'Native selection keeps keyboard focus');
+  } else await locator.selectOption(value);
+  assert.equal(await locator.inputValue(), value, 'Native selection changes the saved season index');
+}
 async function measure(page) {
   return page.evaluate(() => {
     const rect = el => { if (!el) return null; const r = el.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, height: r.height, text: el.textContent }; };
-    const area = document.querySelector('[data-career-season-review]');
+    const comparison = document.querySelector('[data-career-season-comparison]');
+    const area = comparison || document.querySelector('[data-career-season-review]');
     return { scrollY, innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth,
       back: rect(area?.querySelector('button')), heading: rect(area?.querySelector('h2')),
       detail: rect(area?.querySelector('[data-season-review]')),
       stats: [...(area?.querySelectorAll('[data-season-stat]') || [])].map(rect),
       overview: [...(area?.querySelectorAll('[data-season-ovr], [data-season-games], [data-season-age], [data-season-pay], [data-season-result], [data-season-awards]') || [])].map(rect),
-      controls: [...(area?.querySelectorAll('button') || [])].map(rect),
+      comparison: !!comparison,
+      comparisonRows: [...(area?.querySelectorAll('[data-season-compare-stat]') || [])].map(el => ({
+        label: el.getAttribute('data-season-compare-stat'), ...rect(el),
+        cells: [...el.querySelectorAll('[data-compare-first], [data-compare-second], [data-compare-delta]')].map(rect),
+      })),
+      controls: [...(area?.querySelectorAll('button, select') || [])].map(rect),
       focus: document.activeElement?.getAttribute('data-season-tile') ?? document.activeElement?.getAttribute('data-season-tab') ?? document.activeElement?.textContent,
     };
   });
@@ -102,10 +122,21 @@ function checkGeometry(m, viewport, stage) {
   assert(visible(m.back), `${stage}: Back action clipped: ${JSON.stringify(m.back)}`);
   assert(visible(m.heading), `${stage}: season context clipped: ${JSON.stringify(m.heading)}`);
   for (const r of [...m.overview, ...m.stats]) assert(visible(r), `${stage}: saved value clipped: ${JSON.stringify(r)}`);
-  for (const r of m.controls) assert(r.width >= 44 && r.height >= 44, `${stage}: undersized review action ${JSON.stringify(r)}`);
+  for (const r of m.comparisonRows) {
+    assert.equal(r.cells.length, 3, `${stage}: each comparison row has two saved values and a change`);
+    for (const cell of [r, ...r.cells]) assert(visible(cell), `${stage}: comparison value clipped: ${JSON.stringify(cell)}`);
+  }
+  for (const r of m.controls) {
+    assert(r.width >= 44 && r.height >= 44, `${stage}: undersized review action ${JSON.stringify(r)}`);
+    if (m.comparison) assert(visible(r), `${stage}: comparison action clipped: ${JSON.stringify(r)}`);
+  }
 }
 async function stats(page) {
   return page.locator('[data-season-stat]').evaluateAll(elements => Object.fromEntries(elements.map(el => [el.getAttribute('data-season-stat'), el.querySelector('dd')?.textContent])));
+}
+async function comparisonStats(page) {
+  return page.locator('[data-season-compare-stat]').evaluateAll(elements => Object.fromEntries(elements.map(el => [el.getAttribute('data-season-compare-stat'),
+    ['first', 'second', 'delta'].map(side => el.querySelector(`[data-compare-${side}]`)?.textContent)])));
 }
 const protectedState = page => page.evaluate(() => ({ storage: Object.fromEntries(Object.keys(localStorage).sort().map(key => [key, localStorage.getItem(key)])), draws: window.__reviewDraws, writes: [...window.__reviewWrites] }));
 
@@ -118,11 +149,13 @@ try {
     const id = `${slug}-${fixture.pos}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
     const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], fontRequests: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
     let playingEventSeason = false;
+    const fontAssets = new Set();
     report.cases.push(result);
     const context = await browser.newContext({ viewport: result.viewport, isMobile: profile.input === 'touch', hasTouch: profile.input === 'touch', deviceScaleFactor: 1,
       reducedMotion: profile.reduced ? 'reduce' : 'no-preference', colorScheme: profile.theme, serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         { name: sport.saveKey, value: bytes }, { name: 'cookie-consent', value: 'essential' }, { name: 'dukb-theme', value: profile.theme },
+        { name: `rules-gate-seen:${result.route}`, value: '1' },
         { name: 'review-unrelated-save', value: '{"keep":"exact bytes"}' },
       ] }] },
     });
@@ -134,7 +167,7 @@ try {
         Storage.prototype[method] = function (...args) { if (this === localStorage) window.__reviewWrites.push({ method, args }); return original.apply(this, args); };
       }
     });
-    await context.route('**/*', route => {
+    await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
       if (url.origin === BASE) return route.continue();
       result.outbound.push({ method: request.method(), path: url.pathname });
@@ -143,20 +176,46 @@ try {
         if (playingEventSeason) result.eventSetupWrites.push({ ...write, body: request.postDataJSON() });
         else result.scoreWrites.push(write);
       }
-      if (isFontRead(request)) { result.fontRequests.push(request.url()); return route.continue(); }
+      if (isFontRead(request, fontAssets)) {
+        result.fontRequests.push(request.url());
+        try {
+          const response = await route.fetch({ maxRedirects: 0 });
+          assert(response.status() >= 200 && response.status() < 300, 'Actual font requests must succeed without redirects');
+          if (isFontStylesheet(request)) {
+            const css = await response.text();
+            const declared = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(match => new URL(match[2]));
+            assert(declared.length > 0, 'The actual template stylesheet declares font assets');
+            for (const asset of declared) {
+              assert.equal(asset.origin, 'https://fonts.gstatic.com', 'Only the actual stylesheet font host is allowed');
+              fontAssets.add(asset.href);
+            }
+            result.fontAssets = [...fontAssets];
+            return route.fulfill({ response, body: css });
+          }
+          return route.fulfill({ response });
+        } catch (error) {
+          result.fontFailures.push(`${request.url()}: ${error.message}`);
+          return route.abort('blockedbyclient');
+        }
+      }
       const type = request.resourceType();
+      if (type === 'font') {
+        result.fontFailures.push(`Font URL is not declared by the actual template stylesheet: ${request.url()}`);
+        return route.abort('blockedbyclient');
+      }
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : 'application/json', body: type === 'stylesheet' ? '' : '[]' });
     });
+    await context.routeWebSocket('**/*', socket => socket.close());
     const page = await context.newPage(); page.setDefaultTimeout(15000);
     page.on('pageerror', error => result.pageErrors.push(String(error)));
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
     page.on('requestfailed', request => {
       if (request.url().startsWith(BASE)) result.localFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
-      if (isFontRead(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (request.resourceType() === 'font' || isFontStylesheet(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
     });
     page.on('response', response => {
       if (response.url().startsWith(BASE) && response.status() >= 400) result.localFailures.push(`${response.status()} ${response.url()}`);
-      if (isFontRead(response.request()) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+      if ((response.request().resourceType() === 'font' || isFontStylesheet(response.request())) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
     });
     const inspect = async stage => {
       const fonts = await loadedFonts(page);
@@ -184,9 +243,74 @@ try {
       const before = await protectedState(page);
       await activate(opener, profile.input);
       await page.locator('[data-season-tile="2"]').waitFor();
-      await inspect('picker');
+      const pickerGeometry = await inspect('picker');
       assert.equal(await page.locator('[data-season-tile]').count(), 3);
       assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-season-tile')), '2');
+      const compareOpener = button('Compare seasons');
+      assert.equal(await compareOpener.getAttribute('data-season-compare-open'), '');
+      await activate(compareOpener, profile.input);
+      const comparison = page.locator('[data-career-season-comparison]'); await comparison.waitFor();
+      const firstSeason = comparison.getByLabel('First season', { exact: true });
+      const secondSeason = comparison.getByLabel('Second season', { exact: true });
+      assert.equal(await firstSeason.getAttribute('data-season-compare-first'), '');
+      assert.equal(await secondSeason.getAttribute('data-season-compare-second'), '');
+      assert.equal(await firstSeason.evaluate(el => el.tagName), 'SELECT');
+      assert.equal(await secondSeason.evaluate(el => el.tagName), 'SELECT');
+      assert.equal(await firstSeason.inputValue(), '1'); assert.equal(await secondSeason.inputValue(), '2');
+      const optionValues = locator => locator.locator('option').evaluateAll(options => options.map(option => option.value).sort((a, b) => Number(a) - Number(b)));
+      assert.deepEqual(await optionValues(firstSeason), ['0', '1']);
+      assert.deepEqual(await optionValues(secondSeason), ['0', '2']);
+      assert.equal(await comparison.locator('[data-season-compare-title]').evaluate(el => el === document.activeElement), true, 'Comparison opens with its heading focused');
+      assert.deepEqual(await comparison.locator('[data-season-compare-tab]').allTextContents(), ['Overview', 'Regular season']);
+      assert.equal(await comparison.getByRole('button', { name: 'Postseason', exact: true }).count(), 0);
+      const compareOverview = await inspect('compare-overview');
+      assert(Math.abs(compareOverview.scrollY - pickerGeometry.scrollY) <= 2, 'Opening comparison keeps the visible picker position');
+      assert.deepEqual(await comparisonStats(page), {
+        'Season OVR': ['84', '82', '-2'], [fixture.gamesLabel]: [String(fixture.games), String(fixture.games - 1), '-1'],
+        'Age that season': ['25', '26', '+1'], 'Season salary': ['$12.75M', '$14M', '+$1.25M'],
+      });
+      await unchanged(before, 'default comparison');
+      await activate(comparison.getByRole('button', { name: 'Regular season', exact: true }), profile.input);
+      const compareRegular = await inspect('compare-regular');
+      assert(Math.abs(compareRegular.scrollY - compareOverview.scrollY) <= 2, 'Comparison tab changes do not jump the page');
+      const preciseZero = { 'Batting average': '0.000', 'On base percentage': '0.000', ERA: '0.00', 'Save percentage': '0.000' };
+      const expectedRegular = Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label, [value, value, preciseZero[label] || '0']]));
+      assert.deepEqual(await comparisonStats(page), expectedRegular);
+      await chooseSeason(firstSeason, '0', profile.input);
+      assert.deepEqual(await optionValues(secondSeason), ['1', '2']);
+      await chooseSeason(secondSeason, '1', profile.input);
+      assert.deepEqual(await optionValues(firstSeason), ['0', '2']);
+      assert.equal(await comparison.getByRole('button', { name: 'Regular season', exact: true }).getAttribute('aria-pressed'), 'true', 'Changing seasons preserves the selected comparison tab');
+      const selectedRegular = await inspect('compare-selected-regular');
+      assert(Math.abs(selectedRegular.scrollY - compareRegular.scrollY) <= 2, 'Changing compared seasons does not jump the page');
+      assert.deepEqual(await comparisonStats(page), expectedRegular);
+      await activate(comparison.getByRole('button', { name: 'Overview', exact: true }), profile.input);
+      const selectedOverview = await inspect('compare-selected-overview');
+      assert(Math.abs(selectedOverview.scrollY - selectedRegular.scrollY) <= 2, 'Returning to comparison Overview does not jump the page');
+      assert.deepEqual(await comparisonStats(page), {
+        'Season OVR': ['71', '84', '+13'], [fixture.gamesLabel]: [String(fixture.games - 4), String(fixture.games), '+4'],
+        'Age that season': ['23', '25', '+2'], 'Season salary': ['$3.5M', '$12.75M', '+$9.25M'],
+      });
+      if (!report.controls.some(control => control.name === 'comparison-selector-size')) {
+        const heldStyle = await firstSeason.getAttribute('style'), old = await firstSeason.boundingBox();
+        await firstSeason.evaluate(el => { el.style.width = '20px'; el.style.minWidth = '20px'; el.style.maxWidth = '20px'; });
+        const changed = await measure(page), narrow = await firstSeason.boundingBox();
+        assert(narrow && old && narrow.width < 44 && narrow.width < old.width, 'Size control narrows a real comparison selector');
+        assert.throws(() => checkGeometry(changed, result.viewport, 'comparison-size-control'), /undersized review action/);
+        const file = `${id}-compare-size-control.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file);
+        await firstSeason.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), heldStyle);
+        const restored = await measure(page); checkGeometry(restored, result.viewport, 'comparison-size-restored');
+        report.controls.push({ name: 'comparison-selector-size', changed, restored });
+      }
+      await activate(comparison.getByRole('button', { name: 'Regular season', exact: true }), profile.input);
+      await activate(comparison.locator('[data-season-compare-back]'), profile.input); await inspect('compare-returned-picker');
+      assert.equal(await compareOpener.evaluate(el => el === document.activeElement), true, 'Back returns focus to Compare seasons');
+      await unchanged(before, 'comparison return');
+      await activate(compareOpener, profile.input); await comparison.waitFor(); await inspect('compare-reopened-overview');
+      assert.equal(await comparison.getByRole('button', { name: 'Overview', exact: true }).getAttribute('aria-pressed'), 'true', 'Opening comparison resets the tab to Overview');
+      await activate(comparison.locator('[data-season-compare-back]'), profile.input); await settle(page);
+      assert.equal(await compareOpener.evaluate(el => el === document.activeElement), true);
+      await unchanged(before, 'reopened comparison return');
       await activate(page.locator('[data-season-tile="1"]'), profile.input);
       await inspect('overview');
       assert.equal(await page.locator('[data-season-ovr]').textContent(), '84');
@@ -210,7 +334,7 @@ try {
         await page.keyboard.press('Shift+Tab');
         assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-season-tab')), 'Regular season');
       }
-      if (report.controls.length === 0) {
+      if (!report.controls.some(control => control.name === 'back-clipping')) {
         const back = button('Back to seasons'), heldStyle = await back.getAttribute('style');
         const old = await measure(page);
         await back.evaluate(el => { const r = el.getBoundingClientRect(); el.style.transform = `translateY(${innerHeight - r.bottom + 22}px)`; });
@@ -303,9 +427,9 @@ try {
     finally { await context.close(); saveReport(); }
   }
   assert.equal(report.cases.length, profiles.length * 4);
-  assert.equal(report.controls.length, 2);
+  assert.equal(report.controls.length, 3);
   assert(report.cases.every(row => row.passed), 'Every native profile and sport must pass; see report.json');
-  console.log(`careerSeasonReview1008: ${report.cases.length} native sport/profile walks and two effective geometry controls passed.`);
+  console.log(`careerSeasonReview1008: ${report.cases.length} native sport/profile review and comparison walks and three effective geometry controls passed.`);
 } finally {
   if (browser) await browser.close();
   server.kill();

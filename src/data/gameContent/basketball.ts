@@ -2032,6 +2032,8 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         items: [
           "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
           "Handle the offseason event, one big decision per summer.",
+          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
+          "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
         subsections: [
           {
@@ -2113,6 +2115,12 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading an actual capped change",
+        paragraphs: [
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+        ],
+      },
       {
         heading: "A Rookie of the Year season turns sour",
         paragraphs: [
