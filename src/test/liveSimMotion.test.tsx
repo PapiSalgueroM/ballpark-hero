@@ -95,7 +95,10 @@ function findWhistleMaterial() {
   expect(pre, 'the walk reached no Champions League decider').not.toBeNull();
   let due: CareerState | null = null;
   let notDue: CareerState | null = null;
-  for (let k = 0; k < 400 && (!due || !notDue); k++) {
+  /* 3000, not 400: Release AF's re-baked rosters (Round 1015) moved this Real Madrid knockout, and no seed of the
+     first 400 left it level at 90 any more. The search stops at the first of each kind, so this costs nothing when
+     the early seeds already find both, and every assertion below still runs on what it finds. */
+  for (let k = 0; k < 3000 && (!due || !notDue); k++) {
     vi.mocked(Math.random).mockImplementation(seeded(6700000 + k * 7919));
     const r1 = playNextEntry(pre!);
     if (r1.kind !== 'halftime' || !r1.state.live) continue;

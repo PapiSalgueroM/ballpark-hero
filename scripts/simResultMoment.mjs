@@ -158,6 +158,7 @@ const OWN_SURFACE = {
   '/free-kick': 'its own done card in FreeKickBoard, goals out of ten and points',
   '/world-cup-bracket': 'a bracket scored against the real results at the foot of the page, no run end',
   '/fantasy-draft': 'its own draft complete panel in the page, a verdict, a season sim and a vote',
+  '/cage-clash': 'its own fight result overlay in CageClashBoard, the winner and the method over the cage, then a damage line',
   '/buzzer-beater': 'its own done card in BuzzerBeaterBoard, makes out of ten and points',
   '/stat-detective': 'its own done panel in the page, the guess count out of eight',
   '/nba-starting-5': 'its own result panel in the page, the verdict on the five',
