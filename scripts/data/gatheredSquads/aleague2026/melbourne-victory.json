@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "melbournevictory.com.au",
@@ -54,6 +54,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5328/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
@@ -99,6 +104,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/154406/statistics",
+        "minutes": 990,
+        "appearances": 11
       },
       "marketRow": null,
       "facts": {
@@ -194,6 +207,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386314/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -287,6 +308,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328546/statistics",
+        "minutes": 1350,
+        "appearances": 15
       },
       "marketRow": null,
       "facts": {
@@ -382,6 +411,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/143791/statistics",
+        "minutes": 1951,
+        "appearances": 23
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -475,6 +512,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/150380/statistics",
+        "minutes": 1,
+        "appearances": 1
       },
       "marketRow": null,
       "facts": {
@@ -570,6 +615,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/362165/statistics",
+        "minutes": 769,
+        "appearances": 11
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -663,6 +716,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/366386/statistics",
+        "minutes": 438,
+        "appearances": 5
       },
       "marketRow": null,
       "facts": {
@@ -758,6 +819,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/334866/statistics",
+        "minutes": 1828,
+        "appearances": 23
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -851,6 +920,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/240957/statistics",
+        "minutes": 1773,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -946,6 +1023,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/269578/statistics",
+        "minutes": 970,
+        "appearances": 16
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1039,6 +1124,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412860/statistics",
+        "minutes": 64,
+        "appearances": 7
       },
       "marketRow": null,
       "facts": {
@@ -1134,6 +1227,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/409326/statistics",
+        "minutes": 305,
+        "appearances": 9
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1227,6 +1328,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/363862/statistics",
+        "minutes": 1242,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1307,6 +1416,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368565/statistics",
+        "minutes": 980,
+        "appearances": 26
       },
       "marketRow": null,
       "facts": {
@@ -1401,6 +1518,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/297813/statistics",
+        "minutes": 1286,
+        "appearances": 26
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1493,6 +1618,14 @@
         "clubs": [
           "Melbourne Victory"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/418068/statistics",
+        "minutes": 788,
+        "appearances": 12
       },
       "marketRow": null,
       "facts": {
@@ -1587,6 +1720,14 @@
         "clubs": [
           "Melbourne City FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368568/statistics",
+        "minutes": 505,
+        "appearances": 13
       },
       "marketRow": null,
       "facts": {
@@ -1684,6 +1825,14 @@
           "Macarthur FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/251930/statistics",
+        "minutes": 1092,
+        "appearances": 26
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1770,6 +1919,7 @@
       "birthDate": "1993-03-14",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1857,6 +2007,7 @@
       "birthDate": "1994-12-03",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1954,6 +2105,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/235848/statistics",
+        "minutes": 1358,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2039,6 +2198,7 @@
       "birthDate": "2007-08-25",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2112,6 +2272,7 @@
       "birthDate": "2006-10-17",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [

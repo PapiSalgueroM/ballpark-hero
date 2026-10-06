@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "perthglory.com.au",
@@ -61,6 +61,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
@@ -84,7 +89,7 @@
     "twoHostRows": 28,
     "birthDateKnown": 26,
     "groupKnown": 28,
-    "minutesKnown": 20,
+    "minutesKnown": 18,
     "marketRows": 0,
     "perfPagesLoaded": 12,
     "independentOnly": 2
@@ -95,18 +100,9 @@
       "position": "Goalkeeper",
       "group": "GK",
       "birthDate": "2000-03-07",
-      "minutes2025_26": 2303,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Perth Glory FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -182,7 +178,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "2025-26 minutes disagree: Transfermarkt 2303, ESPN 2340 over 26 appearances, more than a minute an appearance apart, so held as null"
+      ]
     },
     {
       "name": "Ryan Warner",
@@ -200,6 +198,14 @@
         "clubs": [
           "Perth Glory FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412864/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -286,6 +292,7 @@
       "birthDate": "2003-02-25",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -382,6 +389,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/358652/statistics",
+        "minutes": 183,
+        "appearances": 8
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -464,18 +479,9 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "2001-12-10",
-      "minutes2025_26": 1603,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/perth-glory/leistungsdaten/verein/970/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Perth Glory FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -551,7 +557,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "2025-26 minutes disagree: Transfermarkt 1603, ESPN 1566 over 19 appearances, more than a minute an appearance apart, so held as null"
+      ]
     },
     {
       "name": "Brian Kaltak",
@@ -569,6 +577,14 @@
         "clubs": [
           "Perth Glory FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/254583/statistics",
+        "minutes": 2227,
+        "appearances": 25
       },
       "marketRow": null,
       "facts": {
@@ -664,6 +680,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/351690/statistics",
+        "minutes": 2104,
+        "appearances": 25
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -757,6 +781,14 @@
         "clubs": [
           "Perth Glory FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388165/statistics",
+        "minutes": 6,
+        "appearances": 1
       },
       "marketRow": null,
       "facts": {
@@ -852,6 +884,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412682/statistics",
+        "minutes": 9,
+        "appearances": 4
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -945,6 +985,14 @@
         "clubs": [
           "Brisbane Roar FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/349436/statistics",
+        "minutes": 581,
+        "appearances": 12
       },
       "marketRow": null,
       "facts": {
@@ -1042,6 +1090,14 @@
           "Melbourne Victory"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/200373/statistics",
+        "minutes": 706,
+        "appearances": 10
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1128,6 +1184,7 @@
       "birthDate": "2005-06-30",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1214,6 +1271,7 @@
       "birthDate": "1994-04-12",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1275,7 +1333,8 @@
         "from": "club squad page"
       },
       "notes": [
-        "no Transfermarkt match, so no minutes source"
+        "no Transfermarkt match, so no minutes source",
+        "ESPN alone gives 125 2025-26 regular season minutes over 4 appearances; with no second host it is held as null"
       ]
     },
     {
@@ -1294,6 +1353,14 @@
         "clubs": [
           "Perth Glory FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/291373/statistics",
+        "minutes": 896,
+        "appearances": 19
       },
       "marketRow": null,
       "facts": {
@@ -1386,6 +1453,14 @@
         "clubs": [
           "Perth Glory FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386268/statistics",
+        "minutes": 1727,
+        "appearances": 23
       },
       "marketRow": null,
       "facts": {
@@ -1481,6 +1556,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/403317/statistics",
+        "minutes": 1151,
+        "appearances": 18
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1574,6 +1657,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/415817/statistics",
+        "minutes": 78,
+        "appearances": 5
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1666,6 +1757,14 @@
         "clubs": [
           "Brisbane Roar FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/269471/statistics",
+        "minutes": 1004,
+        "appearances": 16
       },
       "marketRow": null,
       "facts": {
@@ -1761,6 +1860,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/416410/statistics",
+        "minutes": 1178,
+        "appearances": 17
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1855,6 +1962,14 @@
           "Newcastle Jets FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/364691/statistics",
+        "minutes": 152,
+        "appearances": 10
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1941,6 +2056,7 @@
       "birthDate": "2001-02-17",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2037,6 +2153,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/336923/statistics",
+        "minutes": 1044,
+        "appearances": 19
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2131,6 +2255,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/196698/statistics",
+        "minutes": 1031,
+        "appearances": 13
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2214,6 +2346,7 @@
       "birthDate": "2008-05-19",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2310,6 +2443,14 @@
           "Perth Glory FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/296059/statistics",
+        "minutes": 506,
+        "appearances": 13
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2394,6 +2535,7 @@
       "birthDate": "2001-02-27",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2481,6 +2623,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2550,6 +2693,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [

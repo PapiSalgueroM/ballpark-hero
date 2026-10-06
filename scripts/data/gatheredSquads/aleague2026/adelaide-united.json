@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "adelaideunited.com.au",
@@ -32,6 +32,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5321/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/adelaide-united/kader/verein/875/saison_id/2026/plus/1",
@@ -55,7 +60,7 @@
     "twoHostRows": 31,
     "birthDateKnown": 29,
     "groupKnown": 31,
-    "minutesKnown": 27,
+    "minutesKnown": 26,
     "marketRows": 0,
     "perfPagesLoaded": 12,
     "independentOnly": 0
@@ -77,6 +82,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/338805/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -172,6 +185,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/161822/statistics",
+        "minutes": 2340,
+        "appearances": 26
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -265,6 +286,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328534/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -360,6 +389,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/124962/statistics",
+        "minutes": 1708,
+        "appearances": 20
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -453,6 +490,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/357239/statistics",
+        "minutes": 2043,
+        "appearances": 23
       },
       "marketRow": null,
       "facts": {
@@ -548,6 +593,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/195788/statistics",
+        "minutes": 2072,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -632,6 +685,7 @@
       "birthDate": "2008-07-15",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -729,6 +783,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/252907/statistics",
+        "minutes": 631,
+        "appearances": 8
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -822,6 +884,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/401015/statistics",
+        "minutes": 449,
+        "appearances": 6
       },
       "marketRow": null,
       "facts": {
@@ -917,6 +987,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410628/statistics",
+        "minutes": 161,
+        "appearances": 3
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1001,6 +1079,7 @@
       "birthDate": "2008-05-17",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1081,6 +1160,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392323/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -1166,6 +1253,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1244,6 +1332,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/312891/statistics",
+        "minutes": 1821,
+        "appearances": 25
       },
       "marketRow": null,
       "facts": {
@@ -1338,6 +1434,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/267312/statistics",
+        "minutes": 1751,
+        "appearances": 21
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1430,6 +1534,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/296952/statistics",
+        "minutes": 1287,
+        "appearances": 23
       },
       "marketRow": null,
       "facts": {
@@ -1525,6 +1637,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388458/statistics",
+        "minutes": 1608,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1618,6 +1738,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328924/statistics",
+        "minutes": 1815,
+        "appearances": 21
       },
       "marketRow": null,
       "facts": {
@@ -1713,6 +1841,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/361719/statistics",
+        "minutes": 195,
+        "appearances": 8
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1804,6 +1940,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392484/statistics",
+        "minutes": 107,
+        "appearances": 7
       },
       "marketRow": null,
       "facts": {
@@ -1897,6 +2041,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/147544/statistics",
+        "minutes": 1216,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -1992,6 +2144,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/143959/statistics",
+        "minutes": 483,
+        "appearances": 12
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2072,6 +2232,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/170754/statistics",
+        "minutes": 1178,
+        "appearances": 16
       },
       "marketRow": null,
       "facts": {
@@ -2167,6 +2335,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/262510/statistics",
+        "minutes": 67,
+        "appearances": 6
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2260,6 +2436,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/332368/statistics",
+        "minutes": 22,
+        "appearances": 2
       },
       "marketRow": null,
       "facts": {
@@ -2355,6 +2539,14 @@
           "Brisbane Roar FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388448/statistics",
+        "minutes": 49,
+        "appearances": 4
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2439,6 +2631,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2531,6 +2724,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/415818/statistics",
+        "minutes": 360,
+        "appearances": 12
       },
       "marketRow": null,
       "facts": {
@@ -2626,6 +2827,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/144554/statistics",
+        "minutes": 158,
+        "appearances": 5
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2719,6 +2928,14 @@
           "Adelaide United FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392322/statistics",
+        "minutes": 101,
+        "appearances": 5
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2801,18 +3018,9 @@
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "2000-12-12",
-      "minutes2025_26": 149,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Adelaide United FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2873,7 +3081,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "2025-26 minutes on one host only: Transfermarkt 149, and ESPN has no 2025-26 regular season record for this row (no ESPN match), so held as null"
+      ]
     }
   ],
   "heldOut": [

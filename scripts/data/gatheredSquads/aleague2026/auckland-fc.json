@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "aucklandfc.co.nz",
@@ -50,6 +50,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
@@ -92,6 +97,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/228288/statistics",
+        "minutes": 2091,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -187,6 +200,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/194728/statistics",
+        "minutes": 69,
+        "appearances": 1
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -271,6 +292,7 @@
       "birthDate": "2004-11-02",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -368,6 +390,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/157692/statistics",
+        "minutes": 1176,
+        "appearances": 18
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -461,6 +491,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/288469/statistics",
+        "minutes": 719,
+        "appearances": 13
       },
       "marketRow": null,
       "facts": {
@@ -556,6 +594,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/254441/statistics",
+        "minutes": 1979,
+        "appearances": 22
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -650,6 +696,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/282239/statistics",
+        "minutes": 1406,
+        "appearances": 23
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -734,6 +788,7 @@
       "birthDate": "2001-05-28",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -816,6 +871,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392461/statistics",
+        "minutes": 133,
+        "appearances": 3
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -885,6 +948,7 @@
       "birthDate": "1996-01-12",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -982,6 +1046,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/159466/statistics",
+        "minutes": 770,
+        "appearances": 21
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1075,6 +1147,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/176886/statistics",
+        "minutes": 1360,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -1170,6 +1250,14 @@
           "Newcastle Jets FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/351369/statistics",
+        "minutes": 1644,
+        "appearances": 25
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1256,6 +1344,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1326,6 +1415,7 @@
       "birthDate": "2006-11-08",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1406,6 +1496,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386309/statistics",
+        "minutes": 7,
+        "appearances": 1
       },
       "marketRow": null,
       "facts": {
@@ -1501,6 +1599,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/228412/statistics",
+        "minutes": 707,
+        "appearances": 15
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1595,6 +1701,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/214938/statistics",
+        "minutes": 1942,
+        "appearances": 25
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1679,6 +1793,7 @@
       "birthDate": "2005-07-12",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1750,6 +1865,7 @@
       "birthDate": "2008-07-05",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1847,6 +1963,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/228281/statistics",
+        "minutes": 1174,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1940,6 +2064,14 @@
           "Auckland FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386310/statistics",
+        "minutes": 112,
+        "appearances": 10
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2018,6 +2150,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/413897/statistics",
+        "minutes": 48,
+        "appearances": 2
       },
       "marketRow": null,
       "facts": {
@@ -2098,6 +2238,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/249186/statistics",
+        "minutes": 1783,
+        "appearances": 26
       },
       "marketRow": null,
       "facts": {

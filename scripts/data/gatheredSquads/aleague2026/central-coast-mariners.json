@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "ccmariners.com.au",
@@ -60,6 +60,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
@@ -107,6 +112,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/107530/statistics",
+        "minutes": 2340,
+        "appearances": 26
       },
       "marketRow": null,
       "facts": {
@@ -202,6 +215,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368564/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -286,6 +307,7 @@
       "birthDate": "1992-01-05",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -383,6 +405,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/304407/statistics",
+        "minutes": 2312,
+        "appearances": 26
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -476,6 +506,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/155999/statistics",
+        "minutes": 2022,
+        "appearances": 25
       },
       "marketRow": null,
       "facts": {
@@ -571,6 +609,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/349933/statistics",
+        "minutes": 238,
+        "appearances": 6
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -664,6 +710,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412890/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -759,6 +813,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386269/statistics",
+        "minutes": 880,
+        "appearances": 16
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -852,6 +914,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/330822/statistics",
+        "minutes": 1013,
+        "appearances": 20
       },
       "marketRow": null,
       "facts": {
@@ -947,6 +1017,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/390498/statistics",
+        "minutes": 365,
+        "appearances": 13
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1039,6 +1117,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/251749/statistics",
+        "minutes": 1,
+        "appearances": 1
       },
       "marketRow": null,
       "facts": {
@@ -1134,6 +1220,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368562/statistics",
+        "minutes": 1118,
+        "appearances": 23
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1218,6 +1312,7 @@
       "birthDate": "2009-05-16",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1290,6 +1385,7 @@
       "birthDate": "2005-09-01",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1377,6 +1473,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1446,6 +1543,7 @@
       "birthDate": "2009-05-04",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1533,6 +1631,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1600,6 +1699,7 @@
       "birthDate": "2009-08-27",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1686,6 +1786,7 @@
       "birthDate": "2003-03-04",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1771,6 +1872,7 @@
       "birthDate": "2008-10-18",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1856,6 +1958,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1923,6 +2026,7 @@
       "birthDate": "2008-01-05",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2003,6 +2107,14 @@
         "clubs": [
           "Central Coast Mariners FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368573/statistics",
+        "minutes": 971,
+        "appearances": 14
       },
       "marketRow": null,
       "facts": {
@@ -2099,6 +2211,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/421582/statistics",
+        "minutes": 237,
+        "appearances": 4
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2184,6 +2304,7 @@
       "birthDate": null,
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [

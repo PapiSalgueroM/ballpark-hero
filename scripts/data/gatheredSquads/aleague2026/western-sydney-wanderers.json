@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
   "sources": {
     "club": {
       "host": "wswanderersfc.com.au",
@@ -52,6 +52,11 @@
       "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
       "read": "2026-10-06"
     },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
     "transfermarkt": {
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
@@ -96,6 +101,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/156929/statistics",
+        "minutes": 2160,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -191,6 +204,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/236338/statistics",
+        "minutes": 180,
+        "appearances": 2
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -284,6 +305,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388456/statistics",
+        "minutes": 0,
+        "appearances": 0
       },
       "marketRow": null,
       "facts": {
@@ -379,6 +408,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/207260/statistics",
+        "minutes": 1696,
+        "appearances": 22
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -472,6 +509,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/367294/statistics",
+        "minutes": 2244,
+        "appearances": 26
       },
       "marketRow": null,
       "facts": {
@@ -567,6 +612,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/381542/statistics",
+        "minutes": 293,
+        "appearances": 6
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -651,6 +704,7 @@
       "birthDate": "2007-03-23",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -748,6 +802,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/291377/statistics",
+        "minutes": 623,
+        "appearances": 18
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -830,6 +892,7 @@
       "birthDate": "2009-07-17",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -910,6 +973,14 @@
         "clubs": [
           "Adelaide United FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/346464/statistics",
+        "minutes": 325,
+        "appearances": 14
       },
       "marketRow": [
         {
@@ -1002,6 +1073,7 @@
       "birthDate": "2009-03-21",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1097,6 +1169,14 @@
         "clubs": [
           "Melbourne City FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/195333/statistics",
+        "minutes": 2224,
+        "appearances": 25
       },
       "marketRow": null,
       "facts": {
@@ -1194,6 +1274,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/346808/statistics",
+        "minutes": 1355,
+        "appearances": 24
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1287,6 +1375,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/232294/statistics",
+        "minutes": 1492,
+        "appearances": 24
       },
       "marketRow": null,
       "facts": {
@@ -1382,6 +1478,14 @@
           "Central Coast Mariners FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/350388/statistics",
+        "minutes": 1388,
+        "appearances": 19
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1476,6 +1580,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/421291/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1561,6 +1673,7 @@
       "birthDate": "2008-02-25",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1656,6 +1769,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/269138/statistics",
+        "minutes": 2297,
+        "appearances": 26
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1749,6 +1870,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/130493/statistics",
+        "minutes": 139,
+        "appearances": 8
       },
       "marketRow": null,
       "facts": {
@@ -1844,6 +1973,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/351363/statistics",
+        "minutes": 823,
+        "appearances": 19
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -1936,6 +2073,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/194906/statistics",
+        "minutes": 1556,
+        "appearances": 22
       },
       "marketRow": null,
       "facts": {
@@ -2031,6 +2176,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/400286/statistics",
+        "minutes": 6,
+        "appearances": 2
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2125,6 +2278,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388454/statistics",
+        "minutes": 93,
+        "appearances": 12
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2209,6 +2370,7 @@
       "birthDate": "2001-11-14",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2304,6 +2466,14 @@
         "clubs": [
           "Auckland FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/358410/statistics",
+        "minutes": 97,
+        "appearances": 5
       },
       "marketRow": null,
       "facts": {
@@ -2401,6 +2571,14 @@
           "Western Sydney Wanderers FC"
         ]
       },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/416547/statistics",
+        "minutes": 333,
+        "appearances": 9
+      },
       "marketRow": null,
       "facts": {
         "name": [
@@ -2484,6 +2662,7 @@
       "birthDate": "2009-03-03",
       "minutes2025_26": null,
       "minutesSource": null,
+      "minutesSecondSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2580,6 +2759,14 @@
         "clubs": [
           "Western Sydney Wanderers FC"
         ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410947/statistics",
+        "minutes": 111,
+        "appearances": 3
       },
       "marketRow": null,
       "facts": {
