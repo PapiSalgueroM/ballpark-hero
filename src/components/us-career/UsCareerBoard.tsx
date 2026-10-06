@@ -66,6 +66,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
 import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';
 import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
+import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn } from '@/lib/usCareerSummer';
 
 const UsCareerPractice = lazy(() => import('@/components/us-career/UsCareerPractice'));
 const CareerSeasonReview = lazy(() => import('@/components/us-career/CareerSeasonReview'));
@@ -143,6 +144,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
   const [pendingEvent, setPendingEvent] = useState<CareerEvent | null>(null);
   const [decisionOutcome, setDecisionOutcome] = useState<CareerDecisionOutcomeData | null>(null);
   const consumedEvent = useRef<CareerEvent | null>(null);
+  /* Round 1038: the summer slot ('year:at') the last answer spent, so a
+     double tap can never apply two cards of one summer. */
+  const consumedSlot = useRef<string | null>(null);
   const decisionReturn = useRef(false);
   useEffect(() => {
     if (phase !== 'season') {
@@ -247,7 +251,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
          were charged every year against income that was never banked, so a
          negative number here is the defect and never a debt the player chose.
          A healthy save is returned untouched. */
-      setCareer(sport.repairNetWorth(s.c));
+      const loaded = sport.repairNetWorth(s.c);
+      /* Round 1038: the summer, the ledger and the salt are each checked
+         alone, and a broken one is dropped alone. Old saves have none. */
+      repairSummerOnLoad(loaded);
+      setCareer(loaded);
       setTeamQuality(s.teamQuality);
       /* Round 126, house pattern from ensureContracts and ensureAcademy in
          clubManager.ts: repair whatever is on disk instead of trusting it. A
@@ -258,6 +266,22 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       setCoach(co);
       const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
       if (restoredPhase !== 'season') markRestoredFinish(sport.gameSlug);
+      /* Round 1038: a save in the middle of a summer opens on the card it
+         left, rebuilt from the save by the same computation that first showed
+         it. A summer whose cards have all moved past ends here, and the team
+         quality roll its last answer would have made is made now. */
+      if (restoredPhase === 'season' && loaded.summer) {
+        const card = seekSummerCard(loaded, sport);
+        if (card) {
+          consumedSlot.current = null;
+          setPendingEvent(card);
+          setPhase('event');
+          return;
+        }
+        const tq = sport.rollTeamQuality(s.teamQuality, Math.random);
+        setTeamQuality(tq);
+        persist(loaded, 'season', tq);
+      }
       setPhase(restoredPhase);
     } catch { /* fresh */ }
   }, [sport]);
@@ -321,6 +345,8 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       { ...outcome, pot: state.pot, health: outcome.devSeasons.length ? 100 : state.health, prospect: state });
     const tq = sport.rollTeamQuality(null, rng);
     const roleNote = sport.assignRole(c, tq, rng);
+    /* Round 1038: the summer's salt, last off this career's own stream. */
+    if (summerOn(sport.summer)) c.summerSalt = newSummerSalt(rng);
     if (c.draftPick > 0 && outcome.devSeasons.length === 0) sport.draftNightInbox(c);
     const team = sport.teamLabelOf(c.team, c.eraId);
     setFeed([
@@ -346,6 +372,9 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     /* Round 796: draft night's text lands before a down is played, drawn
        from the inbox's own keyed stream. */
     sport.draftNightInbox(c);
+    /* Round 1038: the summer's salt, drawn after everything else the day
+       you arrive draws. The one card knob draws nothing here. */
+    if (summerOn(sport.summer)) c.summerSalt = newSummerSalt(Math.random);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, sport.firstRoundEnd);
@@ -439,8 +468,22 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       persist(c, 'retired', teamQuality);
       return;
     }
-    const ev = sport.drawEvent(c, Math.random);
+    /* Round 1038: the summer. On the one card knob this is exactly the old
+       sport.drawEvent(c, Math.random) and writes nothing onto c. */
+    const ev = startSummer(c, sport, Math.random);
+    if (!ev) {
+      /* Only a summer can deal nothing (every card it dealt has already moved
+         past); the offseason then ends as an answered one does. */
+      const tq = sport.rollTeamQuality(teamQuality, Math.random);
+      setTeamQuality(tq);
+      setCareer(c);
+      setFeed(newFeed);
+      setPhase('season');
+      persist(c, 'season', tq);
+      return;
+    }
     consumedEvent.current = null;
+    consumedSlot.current = null;
     setPendingEvent(ev);
     setCareer(c);
     setFeed(newFeed);
@@ -448,8 +491,49 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     persist(c, 'event', teamQuality);
   };
 
+  /* Round 1038: an answer inside a summer. The card applies (card 1 on the
+     season's stream, later cards on their own), the save moves to the next
+     card, and the outcome screen shows; its Continue opens that card. Team
+     quality is rolled once, after the last card. */
+  const chooseSummerOption = (idx: number) => {
+    if (!career?.summer || !pendingEvent) return;
+    const slot = `${career.summer.year}:${career.summer.at}`;
+    if (consumedSlot.current === slot) return;
+    consumedSlot.current = slot;
+    consumedEvent.current = pendingEvent;
+    const c: CareerState = JSON.parse(JSON.stringify(career));
+    const { line, next } = answerSummerCard(c, sport, pendingEvent, idx, Math.random);
+    const tq = next ? teamQuality : sport.rollTeamQuality(teamQuality, Math.random);
+    setTeamQuality(tq);
+    setCareer(c);
+    setDecisionOutcome(buildCareerDecisionOutcome({
+      title: pendingEvent.title, choice: pendingEvent.options[idx].label,
+      before: career, after: c, teamLabel: sport.teamLabelOf,
+    }));
+    setFeed(f => [line, ...f].slice(0, 6));
+    setPendingEvent(null);
+    if (next) {
+      persist(c, 'event', tq);
+      return;
+    }
+    setPhase('season');
+    persist(c, 'season', tq);
+  };
+
+  /* Round 1038: Continue on an outcome inside a summer opens the card the
+     save already stands on, rebuilt from the save. */
+  const openNextSummerCard = () => {
+    if (!career?.summer) return;
+    const c: CareerState = JSON.parse(JSON.stringify(career));
+    const card = seekSummerCard(c, sport);
+    if (!card) return;
+    consumedEvent.current = null;
+    setPendingEvent(card);
+  };
+
   const chooseOption = (idx: number) => {
     if (!career || !pendingEvent || phase !== 'event' || consumedEvent.current === pendingEvent || !pendingEvent.options[idx]) return;
+    if (career.summer) { chooseSummerOption(idx); return; }
     consumedEvent.current = pendingEvent;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const outcome = pendingEvent.options[idx].apply(c, Math.random);
@@ -763,6 +847,14 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     return <CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
       decisionReturn.current = true;
       setDecisionOutcome(null);
+    }} />;
+  }
+  /* Round 1038: the same outcome between two cards of one summer; its
+     Continue opens the next card. */
+  if (decisionOutcome && phase === 'event' && career.summer) {
+    return <CareerDecisionOutcome outcome={decisionOutcome} onContinue={() => {
+      setDecisionOutcome(null);
+      openNextSummerCard();
     }} />;
   }
 
@@ -1121,7 +1213,20 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} />
         </div>
       ) : phase === 'event' && pendingEvent ? (
-        <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className="rounded-2xl border border-gold/40 bg-card p-4">
+        <div ref={revealRef} data-career-event={pendingEvent.id} data-career-decision-event={pendingEvent.id} className={career.summer ? 'cm-rise rounded-2xl border border-gold/40 bg-card p-4' : 'rounded-2xl border border-gold/40 bg-card p-4'}>
+          {/* Round 1038: where you are in the summer. Drawn only on a summer,
+              so the one card knob's markup is exactly what it was. */}
+          {career.summer && (
+            <div data-career-summer-step={career.summer.at + 1} className="mb-2 flex items-center justify-center gap-2">
+              <CelebrationStyles />
+              <span className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">Offseason, card {career.summer.at + 1} of {career.summer.ids.length}</span>
+              <span className="flex gap-1" aria-hidden="true">
+                {career.summer.ids.map((id, i) => (
+                  <span key={id} className={cn('h-1.5 w-1.5 rounded-full', i < career.summer!.at ? 'bg-gold' : i === career.summer!.at ? 'bg-gold/50' : 'bg-border')} />
+                ))}
+              </span>
+            </div>
+          )}
           <p className="text-center text-sm font-bold text-foreground"><Sparkles className="mr-1 inline h-4 w-4 text-gold" />{pendingEvent.title}</p>
           <p className="mt-1 text-center text-xs text-muted-foreground">{pendingEvent.body}</p>
           <div className="mt-3 grid gap-1.5">

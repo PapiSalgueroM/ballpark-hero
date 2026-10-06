@@ -29,6 +29,7 @@ import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
+import { pickDeckCard } from './careerEventDeck';
 /* Round 469: the money app, the same engine Soccer Career's bank and market
    run on (careerMoney.ts), bound to dollars in nflCareerMoney.ts. That file
    imports this one for the CareerState type only, so there is no cycle at
@@ -304,6 +305,9 @@ export interface CareerEvent {
   category?: import('./nflCareerLifeTags').NflLifeCategory;
   cooldown?: number;
   story?: string;
+  /** Round 1038: set on the press room's card only. Press moments react to
+      the season, so the summer's cooldowns never hold them out. */
+  press?: 'big' | 'small';
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
 }
 
@@ -914,8 +918,24 @@ export function nflExtPushArgs(c: CareerState, rng: () => number = Math.random):
   return { ovr: c.ovr, age: c.age, accolades: c.allPros, cliffAge: POS_CLIFF_AGE[c.pos] ?? 31, rng };
 }
 
-/** Between-season decision deck. One event is drawn per offseason. */
-export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
+/** Round 1038: the between-season deck, every card in it, built exactly as
+    drawEvent builds it (the same rng draws in the same order). A big press
+    moment is in it too, first, marked press 'big'; drawEvent hands that one
+    out on its own. src/lib/usCareerSummer.ts deals the summer from here. */
+export function nflEventDeck(c: CareerState, rng: () => number): CareerEvent[] {
+  return buildNflDeck(c, rng, false).deck;
+}
+
+/** Between-season decision deck: one card. Round 1038: `fresh`, when given,
+    keeps the pick to the cards it accepts (the summer's cooldown filter);
+    absent, every draw is what it always was. */
+export function drawEvent(c: CareerState, rng: () => number, fresh?: (e: CareerEvent) => boolean): CareerEvent {
+  const { big, deck, corrupt, arcOpen } = buildNflDeck(c, rng, true);
+  if (big) return big;
+  return pickDeckCard(deck, corrupt, arcOpen, rng, fresh);
+}
+
+function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { big: CareerEvent | null; deck: CareerEvent[]; corrupt: CareerEvent[]; arcOpen: boolean } {
   const deck: CareerEvent[] = [];
 
   /* Round 179: the 'contract' card left this deck. Contract summers are now
@@ -926,15 +946,19 @@ export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
      accountability scrum takes the floor outright; the smaller questions
      join the deck and take their chances. */
   const press = buildPressMoment('nfl', pressFactsFrom(c, teamLabelOf(c.team, c.eraId)), rng);
+  let big: CareerEvent | null = null;
   if (press) {
     const ev: CareerEvent = {
-      id: press.id, title: press.title, body: press.body,
+      id: press.id, title: press.title, body: press.body, press: press.big ? 'big' : 'small',
       options: press.options.map(o => ({
         label: o.label, effect: o.effectLine,
         apply: (cc: CareerState, r: () => number) => applyPressChoice(cc, o, r),
       })),
     };
-    if (press.big) return ev;
+    if (press.big) {
+      big = ev;
+      if (stopAtBig) return { big, deck, corrupt: [], arcOpen: false };
+    }
     deck.push(ev);
   }
 
@@ -994,11 +1018,7 @@ export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
   const corrupt = getNflCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['book', 'bounty', 'peds', 'agentSkim', 'wash'].includes(k));
-  if (arcOpen && corrupt.length > 0 && rng() < 0.45) {
-    return corrupt[Math.floor(rng() * corrupt.length)];
-  }
-
-  return deck[Math.floor(rng() * deck.length)];
+  return { big, deck, corrupt, arcOpen };
 }
 
 export function shouldRetire(c: CareerState): boolean {

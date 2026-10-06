@@ -87,6 +87,30 @@ export interface UsCareerCore {
   karma?: number;
   pendingRivalryEvent?: RivalryEvent | null;
   pendingRivalryChoice?: RivalryChoiceCard | null;
+  /** Round 1038: the offseason being dealt (src/lib/usCareerSummer.ts), so a
+   *  reload opens on the card it left. Optional: old saves have none. */
+  summer?: UsCareerSummer;
+  /** Round 1038: the season each card (or story) last fired, the flagship's
+   *  format ('story:' plus the story, or the card id). Optional. */
+  eventLastFired?: Record<string, number>;
+  /** Round 1038: drawn once when a career starts, so two careers with the
+   *  same name, position, pick and first year are dealt different summers. */
+  summerSalt?: string;
+}
+
+/** Round 1038: one offseason's cards, as ids, and how many are answered. */
+export interface UsCareerSummer { year: number; ids: string[]; at: number }
+
+/** Round 1038: how a sport deals its offseason. cards 1 with cooldowns off
+ *  is the one-card offseason every US career had before this round, draw for
+ *  draw (the parity replay mounts each binding that way). */
+export interface UsSummerKnob {
+  /** Most cards one offseason deals. */
+  cards: number;
+  /** Whether a card sits out its cooldown after it fires. */
+  cooldowns: boolean;
+  /** Seasons an untagged card (the base and corruption cards) rests. */
+  fallbackCooldown: number;
 }
 
 export interface UsCareerArchetype { id: string; label: string; desc: string }
@@ -99,6 +123,12 @@ export interface UsCareerEvent<C> {
   title: string;
   body: string;
   options: { label: string; effect: string; apply: (c: C, rng: () => number) => string }[];
+  /** Round 1038: the tags the life decks carry (Rounds 917 to 920), read by
+   *  the summer's cooldown ledger, and the press room's mark. All optional. */
+  category?: string;
+  cooldown?: number;
+  story?: string;
+  press?: 'big' | 'small';
 }
 
 /** One thing in the shop. The seven aisles are the same in every sport. */
@@ -173,7 +203,14 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
   simSeason(c: C, teamQuality: number, rng: () => number): { line: L; notes: string[] };
   progress(c: C, rng: () => number): string[];
-  drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
+  /** One card. `fresh` (Round 1038) keeps the pick to the cards it accepts;
+   *  absent, the draw is what it always was. */
+  drawEvent(c: C, rng: () => number, fresh?: (e: UsCareerEvent<C>) => boolean): UsCareerEvent<C>;
+  /** Round 1038: every card drawEvent could have picked, built with the same
+   *  draws, so a dealt card can be found again by id. */
+  eventDeck(c: C, rng: () => number): UsCareerEvent<C>[];
+  /** Round 1038: how this sport deals its offseason. */
+  summer: UsSummerKnob;
   shouldRetire(c: C): boolean;
   legacyOf(c: C): UsCareerLegacy;
   teamLabelOf(abbr: string, eraId?: string): string;

@@ -9,6 +9,7 @@ import { nhlPreDraftDescriptor } from '@/lib/nhlCareerPreDraft';
  */
 import {
   NHL_ARCHETYPES, NHL_ERAS, startNhlCareer, simNhlSeason, nhlProgress, drawNhlEvent,
+  nhlEventDeck,
   NHL_SPEND_ITEMS, buyNhlItem, getNhlSpendItem, repairNetWorth,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf,
   buildNhlFaWindow, nhlFaPushArgs, buildNhlExtension, nhlExtPushArgs,
@@ -66,6 +67,9 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = {
   simSeason: simNhlSeason,
   progress: nhlProgress,
   drawEvent: drawNhlEvent,
+  eventDeck: nhlEventDeck,
+  /* Round 1038: up to three cards an offseason, each resting after it fires. */
+  summer: { cards: 3, cooldowns: true, fallbackCooldown: 1 },
   shouldRetire: nhlShouldRetire,
   legacyOf: nhlLegacyOf,
   teamLabelOf: nhlTeamLabelOf,

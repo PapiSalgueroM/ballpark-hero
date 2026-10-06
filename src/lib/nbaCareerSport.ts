@@ -9,6 +9,7 @@ import { nbaPreDraftDescriptor } from '@/lib/nbaCareerPreDraft';
  */
 import {
   NBA_ERAS, NBA_ARCHETYPES, startNbaCareer, simNbaSeason, nbaProgress, drawNbaEvent,
+  nbaEventDeck,
   NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem, repairNetWorth,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
   buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
@@ -67,6 +68,9 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = {
   simSeason: simNbaSeason,
   progress: nbaProgress,
   drawEvent: drawNbaEvent,
+  eventDeck: nbaEventDeck,
+  /* Round 1038: up to three cards an offseason, each resting after it fires. */
+  summer: { cards: 3, cooldowns: true, fallbackCooldown: 1 },
   shouldRetire: nbaShouldRetire,
   legacyOf: nbaLegacyOf,
   teamLabelOf: nbaTeamLabelOf,

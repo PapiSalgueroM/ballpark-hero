@@ -8,7 +8,7 @@ import { nflPreDraftDescriptor } from '@/lib/nflCareerPreDraft';
  * this file is the only place the NFL route reaches the NFL engine from.
  */
 import {
-  NFL_ERAS, ARCHETYPES, startCareer, simSeason, progress, drawEvent,
+  NFL_ERAS, ARCHETYPES, startCareer, simSeason, progress, drawEvent, nflEventDeck,
   shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf,
   NFL_SPEND_ITEMS, buyNflItem, getNflSpendItem, repairNetWorth,
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
@@ -67,6 +67,9 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = {
   simSeason,
   progress,
   drawEvent,
+  eventDeck: nflEventDeck,
+  /* Round 1038: up to three cards an offseason, each resting after it fires. */
+  summer: { cards: 3, cooldowns: true, fallbackCooldown: 1 },
   shouldRetire,
   legacyOf,
   teamLabelOf,
