@@ -104,6 +104,39 @@
       "start" and "whole" only; table, results, world, cup, europe,
       trophies, objectives and every next season view held, so the games
       played are the same and what moved is the inbox and its message ids.
+      Round 1015 rewrote modern, eras and pure for the roster fold (the six
+      adjudication shards folded into the ledger and the modern rosters
+      re-baked from the 2026-10-02 dump), after attribution in three trees:
+      main's src at 37ce6d5e (a git archive, CM_RULES_ROOT) matched the old
+      baseline exactly; main's src with only the re-baked
+      clubManagerRosters.ts moved 55 entries (all 22 modern saves, 13 of 15
+      era saves, in "whole" and "start" with laliga2005 deeper, and the day
+      one objectives of 20 modern leagues, the board reading the re-baked
+      squads), and the baseline was written from that tree; the round's whole
+      tree, which adds its nationality changes, then matched it 22/0, 15/0
+      and 38/0, so the nationality map moved nothing there.
+      WHY A MODERN ROSTER MOVES AN ERA SAVE. The first account here blamed the
+      era filler's real name guard, and the review disproved it: no name that
+      left the rosters is one the filler can build. The real path, found by
+      starting the same seeded era career on this tree and on one with only
+      main's roster file swapped in and diffing the two states: the AI
+      transfers of an era save (generateHeadlines in clubManager.ts) pick
+      their buyer from REAL_LEAGUES through playableClubs, the MODERN leagues
+      with budgets from the modern rosters' squad values, in an era save too.
+      So a re-bake changes which clubs can afford a player ("Ipswich Town
+      sign Marquinhos" against "West Ham" at the start of a 2015 Serie A
+      save), and where that empties the local pool, how many random draws
+      follow, which is how laliga2005 went deeper. That a 2015 save quotes
+      2026 clubs and budgets is its own bug, left for its own round; this
+      harness only records that the era digests follow the modern roster.
+      The Round 1015 review then withheld 31 pending men (and listed Rafa
+      Soares in ALSO_REAL_ELSEWHERE, the one of them the era filler could
+      build) and rewrote modern, eras and pure again, after attribution:
+      the pre-review head's src with only the new roster and that guard line
+      swapped in was written as the baseline (the commit lists the clubs that
+      moved), and the whole tree, which also removes those 31 men from the
+      nationality map and corrects three era flags, matched it 22/0, 15/0
+      and 38/0.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

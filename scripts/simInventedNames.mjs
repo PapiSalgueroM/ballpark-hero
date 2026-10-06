@@ -107,6 +107,40 @@ const real = new Set();
     }
   };
   walk(path.join(ROOT, 'src/data'));
+  /* Round 1015: the roster ledger names every man the 2026 adjudication
+     checked, and a man the fold took out of every squad is still a real man,
+     so a generator that could build his name must still be caught after his
+     row leaves src/data. */
+  const shipped = new Set(real);
+  const ledger = JSON.parse(read('scripts/data/rosterConfirmation2026.json'));
+  /* NEGATIVE CONTROL: INVENTED_LEDGER_CONTROL=renamed renames the ledger's
+     notCurrent key in memory, the way a later edit to the ledger could, and
+     this block must go red rather than quietly harvest nothing from it. The
+     run stops here with the verdict. */
+  const LEDGER_CONTROL = process.env.INVENTED_LEDGER_CONTROL || '';
+  if (LEDGER_CONTROL && LEDGER_CONTROL !== 'renamed') { console.error(`INVENTED_LEDGER_CONTROL=${LEDGER_CONTROL} is not a control this harness knows`); process.exit(1); }
+  if (LEDGER_CONTROL) {
+    if (!Array.isArray(ledger.notCurrent) || !ledger.notCurrent.length) { console.error('control refuses to run: the ledger has no notCurrent rows to hide'); process.exit(1); }
+    ledger.notCurrentRenamed = ledger.notCurrent;
+    delete ledger.notCurrent;
+    console.log('   NEGATIVE CONTROL ON: the ledger\'s notCurrent key renamed, this block must go red');
+  }
+  const ledgerFailsBefore = failures;
+  let ledgerRows = 0;
+  for (const k of ['confirmedStill', 'movedTo', 'removedClubNotModelled', 'notCurrent', 'pending']) {
+    if (!Array.isArray(ledger[k])) { fail(`the roster ledger has no ${k} array, so the harvest would read nothing from it`); continue; }
+    for (const r of ledger[k]) if (r.name) { real.add(r.name); ledgerRows += 1; }
+  }
+  /* Every row of the ledger, not a floor picked by eye: the five statuses add
+     up to the population the ledger records (simRosterAdjudication section 6
+     holds the ledger to that), so a lost key or a lost row shows here. */
+  if (ledgerRows !== ledger.population) fail(`harvested ${ledgerRows} ledger rows, but the ledger's population is ${ledger.population}`);
+  console.log(`   ${ledgerRows} ledger rows harvested; ${real.size - shipped.size} of the ledger's men are known to the harvest only through the ledger`);
+  if (LEDGER_CONTROL) {
+    const hit = failures > ledgerFailsBefore;
+    console.log(hit ? '   CONTROL FIRED: renamed caught by the ledger harvest' : '   CONTROL DID NOT FIRE: the ledger harvest stayed green');
+    process.exit(hit ? 0 : 1);
+  }
   /* Plus the baked Club Manager worlds, through the bundler, because their
      nationality map is the canonical list of real footballers here. */
   const ENTRY = path.join(os.tmpdir(), 'invEntry.mjs');
@@ -194,7 +228,12 @@ export { makeGeneratedName } from '${ROOT.replaceAll('\\', '/')}/src/lib/clubMan
   const eraSrc = read('src/lib/clubManagerEras.ts');
   const eraFirst = bankOf(eraSrc, 'GEN_FIRST') ?? [];
   const eraLast = bankOf(eraSrc, 'GEN_LAST') ?? [];
-  const listed = new Set([...(eraSrc.match(/const ALSO_REAL_ELSEWHERE[^=]*=\s*\[([\s\S]*?)\];/) ?? [,''])[1].matchAll(/'([^']+)'/g)].map(m => m[1]));
+  /* Round 1015: the list's comments are stripped before its names are read.
+     An apostrophe in a comment ("the guard's set") paired with the next
+     name's opening quote and swallowed Kian Hansen, and then Rafa Soares. */
+  const listBody = (eraSrc.match(/const ALSO_REAL_ELSEWHERE[^=]*=\s*\[([\s\S]*?)\];/) ?? [,''])[1]
+    .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, ' ');
+  const listed = new Set([...listBody.matchAll(/'([^']+)'/g)].map(m => m[1]));
   const cmWorlds = new Set();
   {
     const { NATIONALITY_BY_WORLD } = await import(pathToFileURL(BUNDLE_WORLDS).href);

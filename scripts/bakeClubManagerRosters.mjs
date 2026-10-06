@@ -281,7 +281,18 @@ for (const m of adjudication.movedTo) {
 for (const r of [...adjudication.removedClubNotModelled, ...adjudication.notCurrent]) {
   if (byPlayer.delete(r.name)) adjRemoved += 1;
 }
-console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${adjudication.pending.length} still pending a second source`);
+/* Round 1015: a pending row marked withheld (scripts/foldRosterAdjudication.mjs)
+   is one whose 2026-27 squad list leaves him out of the club recorded here,
+   so he ships in no squad until two families say where he is. Every withheld
+   man must be found, or the run fails: a name that silently stays is the
+   exact bug this step exists for. */
+let adjWithheld = 0;
+for (const r of adjudication.pending.filter(p => p.withheld)) {
+  const k = byPlayer.get(`${r.name}\u0000${r.club}`) ? `${r.name}\u0000${r.club}` : r.name;
+  if (byPlayer.get(k)?.club === r.club && byPlayer.delete(k)) adjWithheld += 1;
+  else errors.push(`ADJUDICATION: withheld ${r.name} is not in the dataset at ${r.club}`);
+}
+console.log(`Adjudication applied: ${adjMoved} moved, ${adjRemoved} removed, ${adjWithheld} withheld, ${adjudication.pending.length - adjWithheld} still pending a second source at their recorded club`);
 
 /* ------------------------------------------------------------------ */
 /* Group by club + validate                                           */
