@@ -1,0 +1,2351 @@
+{
+  "club": "Western Sydney Wanderers FC",
+  "slug": "western-sydney-wanderers",
+  "shard": "C",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "sources": {
+    "club": {
+      "host": "wswanderersfc.com.au",
+      "url": "https://wswanderersfc.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Ufuk Talay (Head Coach)",
+        "Atiya Waraga",
+        "Miguel Di Pizio",
+        "Liam Gillion",
+        "Panashe Madanha",
+        "German Ferreyra",
+        "Nicolas Milanovic"
+      ],
+      "outs": [
+        "Aidan Simmons",
+        "Josh Brillante",
+        "Kosta Barbarouses",
+        "Bozhidar Kraev",
+        "Phillip Cancar",
+        "Jacob Farrell",
+        "Ruon Tongyik",
+        "Alou Kuol"
+      ],
+      "resignings": [
+        "Georgio Hassarati",
+        "Josh Cetinic",
+        "Emile Katrib",
+        "Aydan Hammond",
+        "Oscar Morrison",
+        "Jarrod Carluccio",
+        "Tristan Vidackovic",
+        "Marcus Savic"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    }
+  },
+  "count": {
+    "clubPage": 29,
+    "staffSkipped": 1,
+    "rows": 29,
+    "heldOut": 0,
+    "twoHostRows": 29,
+    "birthDateKnown": 27,
+    "groupKnown": 29,
+    "minutesKnown": 25,
+    "marketRows": 1,
+    "perfPagesLoaded": 12
+  },
+  "rows": [
+    {
+      "name": "Lawrence Thomas",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1992-05-09",
+      "minutes2025_26": 2160,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/lawrence-thomas/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "156929"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "181337"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lawrence Thomas",
+          "position": "Goalkeeper",
+          "number": "20"
+        },
+        "espn": {
+          "id": "156929",
+          "name": "Lawrence Thomas",
+          "position": "Goalkeeper",
+          "birthDate": "1992-05-09",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "181337",
+          "name": "Lawrence Thomas",
+          "position": "Goalkeeper",
+          "birthDate": "1992-05-09",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jordan Holmes",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1997-05-08",
+      "minutes2025_26": 180,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/jordan-holmes/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "236338"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "399158"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jordan Holmes",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "236338",
+          "name": "Jordan Holmes",
+          "position": "Goalkeeper",
+          "birthDate": "1997-05-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "399158",
+          "name": "Jordan Holmes",
+          "position": "Goalkeeper",
+          "birthDate": "1997-05-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tristan Vidackovic",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2003-03-31",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/tristan-vidackovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388456"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1077355"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tristan Vidackovic",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "388456",
+          "name": "Tristan Vidackovic",
+          "position": "Goalkeeper",
+          "birthDate": "2003-03-31",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1077355",
+          "name": "Tristan Vidackovic",
+          "position": "Goalkeeper",
+          "birthDate": "2003-03-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Gersbach",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1997-05-08",
+      "minutes2025_26": 1696,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/alex-gersbach/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "207260"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "331017"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Gersbach",
+          "position": "Defender",
+          "number": "3"
+        },
+        "espn": {
+          "id": "207260",
+          "name": "Alex Gersbach",
+          "position": "Defender",
+          "birthDate": "1997-05-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "331017",
+          "name": "Alex Gersbach",
+          "position": "Left-Back",
+          "birthDate": "1997-05-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Anthony Pantazopoulos",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2003-04-22",
+      "minutes2025_26": 2243,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/anthony-pantazopoulos/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "367294"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "873755"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Anthony Pantazopoulos",
+          "position": "Defender",
+          "number": "22"
+        },
+        "espn": {
+          "id": "367294",
+          "name": "Anthony Pantazopoulos",
+          "position": "Defender",
+          "birthDate": "2003-04-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "873755",
+          "name": "Anthony Pantazopoulos",
+          "position": "Centre-Back",
+          "birthDate": "2003-04-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Nathan Barrie",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-05-29",
+      "minutes2025_26": 294,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/nathan-barrie/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "381542"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1145212"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nathan Barrie",
+          "position": "Defender",
+          "number": "24"
+        },
+        "espn": {
+          "id": "381542",
+          "name": "Nathan Barrie",
+          "position": "Defender",
+          "birthDate": "2006-05-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1145212",
+          "name": "Nathan Barrie",
+          "position": "Centre-Back",
+          "birthDate": "2006-05-29",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Ricky Fransen",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2007-03-23",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/ricky-fransen/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388457"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1278592"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ricky Fransen",
+          "position": "Defender",
+          "number": "34"
+        },
+        "espn": {
+          "id": "388457",
+          "name": "Ricky Fransen",
+          "position": "Defender",
+          "birthDate": "2007-03-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1278592",
+          "name": "Ricky Fransen",
+          "position": "Centre-Back",
+          "birthDate": "2007-03-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jarrod Carluccio",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-02-08",
+      "minutes2025_26": 623,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/jarrod-carluccio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "291377"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "749273"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jarrod Carluccio",
+          "position": "Attacker",
+          "number": "17"
+        },
+        "espn": {
+          "id": "291377",
+          "name": "Jarrod Carluccio",
+          "position": "Forward",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "749273",
+          "name": "Jarrod Carluccio",
+          "position": "Right-Back",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Emile Katrib",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2009-07-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/emile-katrib/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422394"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1484876"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Emile Katrib",
+          "position": "Defender",
+          "number": null
+        },
+        "espn": {
+          "id": "422394",
+          "name": "Emile Katrib",
+          "position": "Defender",
+          "birthDate": "2009-07-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1484876",
+          "name": "Emile Katrib",
+          "position": "Defender",
+          "birthDate": "2009-07-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Panashe Madanha",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2004-08-05",
+      "minutes2025_26": 326,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Adelaide United FC",
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": [
+        {
+          "id": 128036,
+          "player_name": "Panashe Madanha",
+          "club": "Adelaide United",
+          "age": 21
+        }
+      ],
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/panashe-madanha/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "346464"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1038443"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Panashe Madanha",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "346464",
+          "name": "Panashe Madanha",
+          "position": "Forward",
+          "birthDate": "2004-08-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1038443",
+          "name": "Panashe Madanha",
+          "position": "Right-Back",
+          "birthDate": "2004-08-05",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Marcus Savic",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2009-03-21",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/marcus-savic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422344"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1413350"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Marcus Savic",
+          "position": "Defender",
+          "number": null
+        },
+        "espn": {
+          "id": "422344",
+          "name": "Marcus Savic",
+          "position": "Defender",
+          "birthDate": "2009-03-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1413350",
+          "name": "Marcus Savic",
+          "position": "Centre-Back",
+          "birthDate": "2009-03-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Germán Ferreyra",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1996-01-13",
+      "minutes2025_26": 2224,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne City FC",
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/german-ferreyra/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "195333"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "294857"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Germán Ferreyra",
+          "position": "Defender",
+          "number": null
+        },
+        "espn": {
+          "id": "195333",
+          "name": "German Ferreyra",
+          "position": "Defender",
+          "birthDate": "1996-01-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "294857",
+          "name": "Germán Ferreyra",
+          "position": "Centre-Back",
+          "birthDate": "1996-01-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Dylan Scicluna",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2004-06-10",
+      "minutes2025_26": 1354,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/dylan-scicluna/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "346808"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "576346"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Dylan Scicluna",
+          "position": "Midfielder",
+          "number": "5"
+        },
+        "espn": {
+          "id": "346808",
+          "name": "Dylan Scicluna",
+          "position": "Midfielder",
+          "birthDate": "2004-06-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "576346",
+          "name": "Dylan Scicluna",
+          "position": "Central Midfield",
+          "birthDate": "2004-06-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Steven Ugarkovic",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1994-08-19",
+      "minutes2025_26": 1494,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/steven-ugarkovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "232294"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "262971"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Steven Ugarkovic",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": {
+          "id": "232294",
+          "name": "Steven Ugarkovic",
+          "position": "Midfielder",
+          "birthDate": "1994-08-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "262971",
+          "name": "Steven Ugarkovic",
+          "position": "Defensive Midfield",
+          "birthDate": "1994-08-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Miguel Di Pizio",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-01-04",
+      "minutes2025_26": 1391,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC",
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/miguel-di-pizio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "350388"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1109206"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Miguel Di Pizio",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "350388",
+          "name": "Miguel Di Pizio",
+          "position": "Midfielder",
+          "birthDate": "2006-01-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1109206",
+          "name": "Miguel Di Pizio",
+          "position": "Right Winger",
+          "birthDate": "2006-01-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oscar Morrison",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": null,
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/oscar-morrison/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "421291"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1419331"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oscar Morrison",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "421291",
+          "name": "Oscar Morrison",
+          "position": "Midfielder",
+          "birthDate": "2003-07-21",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1419331",
+          "name": "Oscar Morrison",
+          "position": "Midfielder",
+          "birthDate": "2007-02-02",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date disagreement: ESPN 2003-07-21, Transfermarkt 2007-02-02"
+      ]
+    },
+    {
+      "name": "Joshua Cetinic",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/joshua-cetinic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3111388"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1387679"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joshua Cetinic",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "3111388",
+          "name": "Joshua Cetinic",
+          "position": "Midfielder",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1387679",
+          "name": "Joshua Cetinic",
+          "position": "Central Midfield",
+          "birthDate": "2008-02-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date from one source only (Transfermarkt 2008-02-25), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Angus Thurgate",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2000-02-08",
+      "minutes2025_26": 2298,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/angus-thurgate/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "269138"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "559464"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Angus Thurgate",
+          "position": "Midfielder",
+          "number": "32"
+        },
+        "espn": {
+          "id": "269138",
+          "name": "Angus Thurgate",
+          "position": "Midfielder",
+          "birthDate": "2000-02-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "559464",
+          "name": "Angus Thurgate",
+          "position": "Central Midfield",
+          "birthDate": "2000-02-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Hiroshi Ibusuki",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1991-02-27",
+      "minutes2025_26": 139,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/hiroshi-ibusuki/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "130493"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "98074"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Hiroshi Ibusuki",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": {
+          "id": "130493",
+          "name": "Hiroshi Ibusuki",
+          "position": "Forward",
+          "birthDate": "1991-02-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "98074",
+          "name": "Hiroshi Ibusuki",
+          "position": "Centre-Forward",
+          "birthDate": "1991-02-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jarrod Carluccio",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-02-08",
+      "minutes2025_26": 623,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/jarrod-carluccio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "291377"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "749273"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jarrod Carluccio",
+          "position": "Attacker",
+          "number": "17"
+        },
+        "espn": {
+          "id": "291377",
+          "name": "Jarrod Carluccio",
+          "position": "Forward",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "749273",
+          "name": "Jarrod Carluccio",
+          "position": "Right-Back",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Aydan Hammond",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2003-12-23",
+      "minutes2025_26": 824,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/aydan-hammond/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "351363"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1121750"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Aydan Hammond",
+          "position": "Attacker",
+          "number": "21"
+        },
+        "espn": {
+          "id": "351363",
+          "name": "Aydan Hammond",
+          "position": "Forward",
+          "birthDate": "2003-12-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1121750",
+          "name": "Aydan Hammond",
+          "position": "Right Winger",
+          "birthDate": "2003-12-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Brandon Borrello",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1995-07-25",
+      "minutes2025_26": 1549,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/brandon-borrello/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "194906"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "293592"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Brandon Borrello",
+          "position": "Attacker",
+          "number": "26"
+        },
+        "espn": {
+          "id": "194906",
+          "name": "Brandon Borrello",
+          "position": "Forward",
+          "birthDate": "1995-07-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "293592",
+          "name": "Brandon Borrello",
+          "position": "Centre-Forward",
+          "birthDate": "1995-07-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alaat Abdul-Rahman",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2007-04-04",
+      "minutes2025_26": 6,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/alaat-abdul-rahman/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "400286"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1373100"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alaat Abdul-Rahman",
+          "position": "Attacker",
+          "number": "37"
+        },
+        "espn": {
+          "id": "400286",
+          "name": "Alaat Abdul-Rahman",
+          "position": "Forward",
+          "birthDate": "2007-04-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1373100",
+          "name": "Alaat Abdul-Rahman",
+          "position": "Centre-Forward",
+          "birthDate": "2007-04-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Awan Lual",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-12-16",
+      "minutes2025_26": 93,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/awan-lual/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388454"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1179908"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Awan Lual",
+          "position": "Attacker",
+          "number": "39"
+        },
+        "espn": {
+          "id": "388454",
+          "name": "Awan Lual",
+          "position": "Forward",
+          "birthDate": "2006-12-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1179908",
+          "name": "Awan Lual",
+          "position": "Centre-Forward",
+          "birthDate": "2006-12-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Nicolas Milanovic",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-11-14",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/nicolas-milanovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "304671"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "794777"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nicolas Milanovic",
+          "position": "Attacker",
+          "number": "14"
+        },
+        "espn": {
+          "id": "304671",
+          "name": "Nicolas Milanovic",
+          "position": "Forward",
+          "birthDate": "2001-11-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "794777",
+          "name": "Nicolas Milanovic",
+          "position": "Right Winger",
+          "birthDate": "2001-11-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Liam Gillion",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2002-10-17",
+      "minutes2025_26": 97,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC",
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/liam-gillion/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "358410"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "878242"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Liam Gillion",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "358410",
+          "name": "William Gillion",
+          "position": "Forward",
+          "birthDate": "2002-10-17",
+          "match": "alias"
+        },
+        "tm": {
+          "id": "878242",
+          "name": "Liam Gillion",
+          "position": "Left Winger",
+          "birthDate": "2002-10-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "identity linked by hand: ESPN prints William Gillion; ESPN and Transfermarkt both give birth date 2002-10-17, so it is the same man"
+      ]
+    },
+    {
+      "name": "Jai Rose",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-12-22",
+      "minutes2025_26": 333,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/jai-rose/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "416547"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1226709"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jai Rose",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "416547",
+          "name": "Jai Rose",
+          "position": "Midfielder",
+          "birthDate": "2007-12-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1226709",
+          "name": "Jai Rose",
+          "position": "Left Winger",
+          "birthDate": "2007-12-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Georgio Hassarati",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2009-03-03",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/georgio-hassarati/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422346"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1413326"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Georgio Hassarati",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "422346",
+          "name": "Georgio Hassarati",
+          "position": "Forward",
+          "birthDate": "2009-03-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1413326",
+          "name": "Georgio Hassarati",
+          "position": "Centre-Forward",
+          "birthDate": "2009-03-03",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Atiya Waraga",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-12-24",
+      "minutes2025_26": 111,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Western Sydney Wanderers FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "wswanderersfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "wswanderersfc.com.au",
+          "url": "https://wswanderersfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://wswanderersfc.com.au/player/atiya-waraga/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410947"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1361979"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Atiya Waraga",
+          "position": "Attacker",
+          "number": null
+        },
+        "espn": {
+          "id": "410947",
+          "name": "Atiya Waraga",
+          "position": "Forward",
+          "birthDate": "2006-12-24",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1361979",
+          "name": "Atiya Waraga",
+          "position": "Centre-Forward",
+          "birthDate": "2006-12-24",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [
+    {
+      "id": 99091,
+      "player_name": "Ryan Fraser",
+      "club": "Western Sydney Wanderers",
+      "position": "Left Winger",
+      "age": 31,
+      "onClubPage": false,
+      "onEspn": false,
+      "onTm": false,
+      "inTransferCentre": [
+        "ins at Macarthur FC"
+      ],
+      "verdict": "not in the club's 2026-27 squad on the club page, ESPN or Transfermarkt: the dump row is stale"
+    },
+    {
+      "id": 121587,
+      "player_name": "Jorrit Hendrix",
+      "club": "Western Sydney Wanderers",
+      "position": "Left Midfield",
+      "age": 28,
+      "onClubPage": false,
+      "onEspn": false,
+      "onTm": false,
+      "inTransferCentre": [],
+      "verdict": "not in the club's 2026-27 squad on the club page, ESPN or Transfermarkt: the dump row is stale"
+    }
+  ],
+  "notOnClubPage": [
+    {
+      "source": "transfermarkt",
+      "name": "Ben Mewett",
+      "position": "Left-Back",
+      "birthDate": "2007-02-28"
+    }
+  ]
+}
