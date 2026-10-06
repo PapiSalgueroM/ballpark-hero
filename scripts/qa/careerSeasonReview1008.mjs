@@ -100,13 +100,16 @@ async function measure(page) {
   return page.evaluate(() => {
     const rect = el => { if (!el) return null; const r = el.getBoundingClientRect(); return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, width: r.width, height: r.height, text: el.textContent }; };
     const comparison = document.querySelector('[data-career-season-comparison]');
-    const area = comparison || document.querySelector('[data-career-season-review]');
+    const highs = document.querySelector('[data-career-season-highs]');
+    const area = highs || comparison || document.querySelector('[data-career-season-review]');
     return { scrollY, innerWidth, innerHeight, scrollWidth: document.documentElement.scrollWidth,
       back: rect(area?.querySelector('button')), heading: rect(area?.querySelector('h2')),
       detail: rect(area?.querySelector('[data-season-review]')),
       stats: [...(area?.querySelectorAll('[data-season-stat]') || [])].map(rect),
       overview: [...(area?.querySelectorAll('[data-season-ovr], [data-season-games], [data-season-age], [data-season-pay], [data-season-result], [data-season-awards]') || [])].map(rect),
       comparison: !!comparison,
+      highs: !!highs,
+      highValues: [...(highs?.querySelectorAll('[data-season-highs-value], h3') || [])].map(rect),
       comparisonRows: [...(area?.querySelectorAll('[data-season-compare-stat]') || [])].map(el => ({
         label: el.getAttribute('data-season-compare-stat'), ...rect(el),
         cells: [...el.querySelectorAll('[data-compare-first], [data-compare-second], [data-compare-delta]')].map(rect),
@@ -122,13 +125,14 @@ function checkGeometry(m, viewport, stage) {
   assert(visible(m.back), `${stage}: Back action clipped: ${JSON.stringify(m.back)}`);
   assert(visible(m.heading), `${stage}: season context clipped: ${JSON.stringify(m.heading)}`);
   for (const r of [...m.overview, ...m.stats]) assert(visible(r), `${stage}: saved value clipped: ${JSON.stringify(r)}`);
+  for (const r of m.highValues) assert(visible(r), `${stage}: season high clipped: ${JSON.stringify(r)}`);
   for (const r of m.comparisonRows) {
     assert.equal(r.cells.length, 3, `${stage}: each comparison row has two saved values and a change`);
     for (const cell of [r, ...r.cells]) assert(visible(cell), `${stage}: comparison value clipped: ${JSON.stringify(cell)}`);
   }
   for (const r of m.controls) {
     assert(r.width >= 44 && r.height >= 44, `${stage}: undersized review action ${JSON.stringify(r)}`);
-    if (m.comparison) assert(visible(r), `${stage}: comparison action clipped: ${JSON.stringify(r)}`);
+    if (m.comparison || m.highs) assert(visible(r), `${stage}: saved-season action clipped: ${JSON.stringify(r)}`);
   }
 }
 async function stats(page) {
@@ -311,6 +315,64 @@ try {
       await activate(comparison.locator('[data-season-compare-back]'), profile.input); await settle(page);
       assert.equal(await compareOpener.evaluate(el => el === document.activeElement), true);
       await unchanged(before, 'reopened comparison return');
+      const highsOpener = button('Season highs');
+      assert.equal(await highsOpener.getAttribute('data-season-highs-open'), '');
+      const beforeHighsGeometry = await measure(page);
+      await activate(highsOpener, profile.input);
+      const highs = page.locator('[data-career-season-highs]'); await highs.waitFor();
+      const highSeason = highs.getByLabel('High season', { exact: true });
+      const positionHigh = slug === 'nba' ? 'Points per game'
+        : slug === 'nfl' ? fixture.pos === 'QB' ? 'Passing yards' : 'Sacks'
+          : slug === 'mlb' ? fixture.pos === 'SP' ? 'Wins' : fixture.pos === 'RP' ? 'Saves' : 'Home runs'
+            : fixture.pos === 'G' ? 'Wins' : 'Points';
+      assert.deepEqual(await highs.locator('[data-season-highs-stat]').evaluateAll(elements => elements.map(el => el.getAttribute('data-season-highs-stat'))), ['Season OVR', fixture.gamesLabel, positionHigh]);
+      assert.equal(await highs.getByRole('heading', { name: 'Season highs', exact: true }).evaluate(el => el === document.activeElement), true, 'Season highs opens with its heading focused');
+      assert.equal(await highs.locator('[data-season-highs-value]').textContent(), '84');
+      assert.equal(await highSeason.inputValue(), '1');
+      const highOverview = await inspect('highs-overview');
+      assert(Math.abs(highOverview.scrollY - beforeHighsGeometry.scrollY) <= 2, 'Opening season highs does not jump the page');
+      await activate(highs.locator(`[data-season-highs-stat="${fixture.gamesLabel}"]`), profile.input);
+      assert.equal(await highs.locator('[data-season-highs-value]').textContent(), String(fixture.games));
+      assert.equal(await highSeason.inputValue(), '1');
+      const highGames = await inspect('highs-games');
+      assert(Math.abs(highGames.scrollY - highOverview.scrollY) <= 2, 'Changing the high metric does not jump the page');
+      await activate(highs.locator(`[data-season-highs-stat="${positionHigh}"]`), profile.input);
+      assert.equal(await highs.locator('[data-season-highs-value]').textContent(), fixture.regular[positionHigh]);
+      assert.equal(await highs.locator(`[data-season-highs-stat="${positionHigh}"]`).getAttribute('aria-pressed'), 'true');
+      assert.deepEqual(await highSeason.locator('option').evaluateAll(options => options.map(option => ({ value: option.value, text: option.textContent }))), [
+        { value: '2', text: '2033 (#3)' }, { value: '1', text: '2032 (#2)' }, { value: '0', text: '2030 (#1)' },
+      ]);
+      assert.equal(await highSeason.inputValue(), '2', 'A tied high defaults to its latest original season');
+      const highTies = await inspect('highs-ties');
+      assert(Math.abs(highTies.scrollY - highGames.scrollY) <= 2, 'Opening tied high seasons does not jump the page');
+      await chooseSeason(highSeason, '0', profile.input);
+      const highSelected = await inspect('highs-selected');
+      assert(Math.abs(highSelected.scrollY - highTies.scrollY) <= 2, 'Selecting a tied high season does not jump the page');
+      if (!report.controls.some(control => control.name === 'highs-value-clipping')) {
+        const value = highs.locator('[data-season-highs-value]'), heldStyle = await value.getAttribute('style');
+        const old = await value.boundingBox();
+        await value.evaluate(el => { const r = el.getBoundingClientRect(); el.style.transform = `translateY(${innerHeight - r.bottom + 22}px)`; });
+        const changed = await measure(page), moved = await value.boundingBox();
+        assert(old && moved && moved.y > old.y && moved.y + moved.height > result.viewport.height + 20, 'Highs control moves a real saved value below the viewport');
+        assert.throws(() => checkGeometry(changed, result.viewport, 'highs-value-control'), /season high clipped/);
+        await value.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), heldStyle);
+        const restored = await measure(page); checkGeometry(restored, result.viewport, 'highs-value-restored');
+        report.controls.push({ name: 'highs-value-clipping', changed: changed.highValues, restored: restored.highValues });
+      }
+      await unchanged(before, 'season highs and selected tie');
+      await activate(highs.locator('[data-season-highs-review]'), profile.input);
+      const highReview = await inspect('highs-opened-season');
+      assert(Math.abs(highReview.scrollY - highSelected.scrollY) <= 2, 'Opening the high season keeps its visible context');
+      assert.equal(await page.locator('[data-season-review]').getAttribute('data-season-review'), '0');
+      assert.equal(await page.locator('[data-season-ovr]').textContent(), '71');
+      assert.equal(await highs.count(), 0, 'Opening a season exits highs');
+      await activate(button('Back to seasons'), profile.input); await inspect('highs-returned-picker');
+      assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-season-tile')), '0', 'Review returns focus to the original season tile');
+      await activate(highsOpener, profile.input); await highs.waitFor(); await inspect('highs-reopened');
+      assert.equal(await highs.locator('[data-season-highs-stat="Season OVR"]').getAttribute('aria-pressed'), 'true', 'Reopening highs resets the selected metric');
+      await activate(highs.locator('[data-season-highs-back]'), profile.input); await inspect('highs-back');
+      assert.equal(await highsOpener.evaluate(el => el === document.activeElement), true, 'Back returns focus to Season highs');
+      await unchanged(before, 'season highs return');
       await activate(page.locator('[data-season-tile="1"]'), profile.input);
       await inspect('overview');
       assert.equal(await page.locator('[data-season-ovr]').textContent(), '84');
@@ -427,9 +489,9 @@ try {
     finally { await context.close(); saveReport(); }
   }
   assert.equal(report.cases.length, profiles.length * 4);
-  assert.equal(report.controls.length, 3);
+  assert.equal(report.controls.length, 4);
   assert(report.cases.every(row => row.passed), 'Every native profile and sport must pass; see report.json');
-  console.log(`careerSeasonReview1008: ${report.cases.length} native sport/profile review and comparison walks and three effective geometry controls passed.`);
+  console.log(`careerSeasonReview1008: ${report.cases.length} native sport/profile review, comparison and highs walks and four effective geometry controls passed.`);
 } finally {
   if (browser) await browser.close();
   server.kill();
