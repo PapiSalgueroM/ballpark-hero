@@ -62,8 +62,12 @@
  *                          .618; in the engine's own summer, 98 rating points of growth at level 1 and 108
  *                          at level 10 over five leagues of 21 year olds
  * Every floor in T sits near 70 percent of the lowest set. Every control was
- * run on seeds 1..10 and fired in its own check; the failure counts are in
- * CONTROL RUNS below.
+ * run on seeds 1..10 on 2026-10-05 and fired in its own check, failures
+ * counted: coinflip 73 in 2, shortscale 70 in 2, norfa 128 in 2, latetrade
+ * 700 in 3, noguard 1 in 3, droppick 123 in 4, flatstaff 46 in 5, flatgrowth
+ * 19 in 5, nodefault 8 in 1 and 5 (check 5 compares a level 1 staff against
+ * the engine with no desk, so a default edge shows there too), pilefit 3 in 6.
+ * Each red only in its own check otherwise.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
