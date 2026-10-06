@@ -1508,18 +1508,27 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
 
   '/fight-promoter': {
     intro: [
-      "Fight Promoter is a free boxing matchmaking sim. You book the room, decide who fights whom, set the ticket price and pay the purses. Everything else in the building is somebody else's problem.",
+      "Fight Promoter is a free MMA and boxing management sim. Run a fictional MMA organization with contracts, division rankings and championship belts, or play the original boxing matchmaking game. Each mode has its own save.",
       "There are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
-      "So the money says feed him and your name says make the fight. Measured in the game's own engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in it is invented.",
+      "In boxing mode, the money says feed him and your name says make the fight. Measured in that engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in both modes is invented.",
     ],
     headings: {
-      howToPlay: "How to play Fight Promoter, a free boxing matchmaking sim",
-      rules: "Fight Promoter rules for purses, names and the room",
-      example: "Fight Promoter walkthrough: from a leisure centre to the arena",
+      howToPlay: "How to play Fight Promoter, MMA and boxing management",
+      rules: "Fight Promoter rules for contracts, belts and purses",
+      example: "Fight Promoter walkthroughs for MMA and boxing events",
       tips: "Fight Promoter tips for pricing tickets and protecting your draw",
       faq: "Fight Promoter FAQ: fighters, purses and your promotion's name",
     },
     howToPlaySections: [
+      {
+        heading: "Running your MMA organization",
+        items: [
+          "Choose MMA and name your promotion. You start with $120,000, twelve signed fighters and three divisions. Every fighter and result is fictional.",
+          "Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
+          "Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
+          "Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
+        ],
+      },
       {
         heading: "Naming your promotion",
         items: ["Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
@@ -1548,6 +1557,15 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
     ],
     ruleSections: [
+      {
+        heading: "MMA recovery, rankings and championship belts",
+        items: [
+          "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
+          "A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
+          "Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+          "The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
+        ],
+      },
       {
         heading: "Paying purses and covering the room",
         items: [
@@ -1585,6 +1603,10 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Booking a vacant MMA title",
+        paragraphs: ["Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card."],
+      },
       {
         heading: "Filling a leisure centre on a name",
         paragraphs: ["Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
@@ -1624,11 +1646,13 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
+      { q: "Can I run an MMA organization?", a: "Yes. Choose MMA to sign fighters, build three bout cards, run division title fights and manage the business across twelve events. Boxing has its own separate save." },
+      { q: "Are there submissions in MMA mode?", a: "Yes. Grappling creates takedowns, control and submission attempts, while striking can produce a knockout. Saved results come from the fight engine." },
       { q: "Why did a sold out show still lose money?", a: "The guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
       { q: "Why is my name not growing?", a: "Your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
       { q: "Where did my best fighter go?", a: "He left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
       { q: "Are the fighters real?", a: "No. Every fighter is generated. No real boxer is matched, paid, beaten or promoted anywhere in this game, and no real venue is named." },
-      { q: "Is this the same as Fight Career and Fight Gym?", a: "Same fighters and the same bouts, a third chair. In the career you take the damage, in the gym you answer for it, and here you sell tickets on it." },
+      { q: "Is this the same as Fight Career and Fight Gym?", a: "Boxing mode uses the same fighters and bouts from those games. MMA mode has its own generated roster, grappling engine, contracts and belts." },
     ],
   },
   '/fight-gym': {

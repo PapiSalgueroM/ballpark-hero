@@ -3,14 +3,14 @@ import { GameHelp } from '@/components/game/GameHelp';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import FightPromoterBoard from '@/components/fight-promoter/FightPromoterBoard';
+import FightPromoterModes from '@/components/fight-promoter/FightPromoterModes';
 
 const FightPromoter = () => {
   return (
     <>
       <PageSeo
         title="Fight Promoter - Make the Fights, Sell the Room | DoUKnowBall"
-        description="Book the room, make the fights and pay the purses. Feeding a name sells tickets tonight. Making the fight people actually want is what gets you a bigger building."
+        description="Run a fictional MMA or boxing promotion. Sign fighters, book matchups, crown champions, sell tickets and build your organization."
         path="/fight-promoter"
       />
       <div className="min-h-screen bg-background text-foreground">
@@ -20,14 +20,14 @@ const FightPromoter = () => {
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">Fight Promoter</h1>
             <p className="text-xs text-muted-foreground mt-1">
-              Sells tonight, or builds your name. Rarely both.
+              Your organization. Your roster. Your fight night.
             </p>
           </div>
-          <FightPromoterBoard />
+          <FightPromoterModes />
           <GameSeoContent
             pageHasOwnH1
-            title="Fight Promoter: the Boxing Matchmaking Sim"
-            description="Run a boxing promotion from a leisure centre to a national stadium. You pick the room, set the ticket price, and decide who fights whom. The two ways to fill a building pull against each other, and that is the whole game."
+            title="Fight Promoter: MMA and Boxing Management"
+            description="Run your own fictional fight organization. MMA adds contracts, recovery, division rankings and championship belts. Boxing keeps its original room and matchmaking game. Choose a mode, then make the fights."
             howToPlay={[
               'Name the promotion. You start with a small room, a little money and ten fighters who will take your calls.',
               'Pick the venue you can afford and that will have you, then set your ticket price.',

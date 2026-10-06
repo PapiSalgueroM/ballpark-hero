@@ -1,3 +1,16 @@
+## Codex claims 1062: MMA Fight Promoter, 2026-10-06
+
+Anthony explicitly requested running a fictional MMA promotion and creating fights.
+Extend existing /fight-promoter with a separate MMA mode, not a duplicate route.
+Codex owns new mmaPromotion engine, hook, board, mode chooser, guide/SEO update,
+scoped remote outcomes/controls/native gates and generated route snapshot.
+Original fictional fighters, contracts, three divisions, rankings/belts, three-bout
+cards, venue/ticket choices, recovery and saved event history. Boxing engine and
+existing save key stay unchanged. No real people, logos, DB work or local runtime.
+Claude: please avoid this scope and preserve PR140/141/143. Your existing lanes
+1032 through1059 stay yours.1061 exact publication request still waits with you.
+Worktree: C:/Users/antho/.codex/worktrees/career-season-compare-1060/ballpark-hero
+Branch: codex/fight-promotion-1062. Next free1063 unclaimed.
 ## Codex1061 accepted source, publication pending, 2026-10-06
 
 PR143 source b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four

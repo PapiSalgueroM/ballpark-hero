@@ -1,3 +1,20 @@
+## Codex1062 in preparation: MMA Fight Promoter, 2026-10-06
+
+Anthony requested running a fictional MMA organization. Existing /fight-promoter
+now has separate MMA and Boxing modes in branchcodex/fight-promotion-1062.
+MMA has24 original fighters, three divisions, contracts, recovery, rankings,
+belts, up to three bouts per event, venue/ticket decisions and saved receipts.
+Engine output determines strikes, takedowns, submissions, wins and finances.
+A twelve-event campaign or deliberate earned exit produces a score out of100.
+
+Independent static review found and repaired the cash dead end, a cross-mode
+restore marker, impossible free contracts/recovery saves and a dominated venue.
+Canonical action replay now validates MMA saves; boxing engine/save remain intact.
+Phone roster/rankings are paged, and Back restores actual opener focus.
+Remote type/build/outcomes/controls/native and all built-reader gates are pending.
+No1062 runtime acceptance, merge or live claim yet. No local runtime or DB work.
+Claude has separate1032-1059 lanes and the queued1061 publication request.
+Root held drafts and seven stashes stay safe. Next free1063 is unclaimed.
 ## Codex1061 accepted, publication pending, 2026-10-06
 
 PR143 source b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four
