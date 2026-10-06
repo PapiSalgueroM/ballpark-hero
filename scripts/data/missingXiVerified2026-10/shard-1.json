@@ -572,7 +572,7 @@
      "path": "slots[7].side",
      "from": "centre",
      "to": "left",
-     "why": "layout: Gundogan left of De Bruyne (ESPN AM-L)"
+     "why": "Gundogan left of De Bruyne: ESPN AM-L and UEFA's coordinates (x 600 against De Bruyne 400; small x is the right) agree"
     },
     {
      "path": "slots[8].side",
@@ -3035,13 +3035,13 @@
      "path": "slots[5].side",
      "from": "right",
      "to": "centre",
-     "why": "layout: Gerrard the deepest of the three (tomkinstimes 4-1-2-3)"
+     "why": "Gerrard the deepest of the three (tomkinstimes 4-1-2-3). Forced, not chosen: the 4-3-3 premierleague.com and ESPN both state needs a middle man, and Gerrard is the deepest of the three (the skeptic's tomkinstimes 4-1-2-3)"
     },
     {
      "path": "slots[6].side",
      "from": "left",
      "to": "right",
-     "why": "layout: Henderson on the right of the three (ESPN RM)"
+     "why": "Henderson on the right of the three (ESPN RM). Forced, not chosen: with Gerrard central, Henderson takes the right as ESPN states (RM); one host on the order"
     },
     {
      "path": "slots[7].side",

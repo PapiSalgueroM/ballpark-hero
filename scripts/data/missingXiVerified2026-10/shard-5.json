@@ -2050,7 +2050,7 @@
      "path": "slots[5].side",
      "from": "right",
      "to": "left",
-     "why": "layout: UEFA puts Schweinsteiger left of Lahm"
+     "why": "UEFA puts Schweinsteiger left of Lahm. Forced, not chosen: Lahm is on the right of the pair on two hosts (UEFA x 331, ESPN RM), which leaves Schweinsteiger the left; the hosts split on his exact role (ESPN AM, UEFA beside Lahm)"
     },
     {
      "path": "slots[6].side",

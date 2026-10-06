@@ -585,18 +585,6 @@
      "why": "ESPN (RM) and BeSoccer: Ignacio Fernandez started; Scocco was not in the eleven (out injured per conmebol.com)"
     },
     {
-     "path": "slots[6].side",
-     "from": "right",
-     "to": "left",
-     "why": "layout: ESPN CM-L"
-    },
-    {
-     "path": "slots[7].side",
-     "from": "left",
-     "to": "right",
-     "why": "layout: ESPN CM-R"
-    },
-    {
      "path": "slots[8].side",
      "from": "right",
      "to": "left",
@@ -614,7 +602,8 @@
     "Ten of the eleven names match (Jonatan Maidana is written 'Jonathan Maidana' by ESPN and 'J. Maidana' by BeSoccer, same man; 'Pity' Martínez is Gonzalo Martínez).",
     "All three blankCandidates (Armani, Montiel, Palacios) are confirmed starters.",
     "BeSoccer's line-up list printed ten names; the summary dropped Ponzio, who BeSoccer's own sub list shows going off at 58'. ESPN lists Ponzio in the XI.",
-    "No CONMEBOL match sheet could be read (see Boca entry)."
+    "No CONMEBOL match sheet could be read (see Boca entry).",
+    "Round 1026 (review fix): Palacios and Perez had swapped sides on ESPN alone (CM-L, CM-R); BeSoccer gives no sides. Withdrawn: the entry keeps Palacios right and Perez left until a second host states it."
    ]
   },
   {
@@ -1804,6 +1793,13 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Italy XI: Buffon (c), Abate, Barzagli, Bonucci, Chiellini, Pirlo, Marchisio, Montolivo, De Rossi, Balotelli, Cassano. Subs: Balzaretti 21' for Chiellini, Di Natale 46' for Cassano, Motta 56' for Montolivo. Sunday 1 July 2012, Olympic Stadium (Kiev), Spain 4-0 Italy."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=346764",
+     "xi": true,
+     "says": "ESPN summary feed: Italy 4-1-2-1-2. Buffon G; Abate RB, Barzagli CD-R, Bonucci CD-L, Chiellini LB; Pirlo DM; Marchisio RM, De Rossi LM; Montolivo AM; Balotelli CF-R, Cassano CF-L."
     }
    ],
    "diffs": [
@@ -1901,25 +1897,25 @@
      "path": "slots[2].side",
      "from": "right",
      "to": "left",
-     "why": "UEFA coordinates put Chiellini at left-back, mirroring Abate, with Barzagli and Bonucci the centre-backs; with Bonucci in the two host eleven there is no other left-back (Balzaretti came on for Chiellini 21')"
+     "why": "Chiellini at left-back (ESPN LB): UEFA's coordinates and ESPN's summary feed (re-read 2026-10-06) agree"
     },
     {
      "path": "slots[3].side",
      "from": "left",
      "to": "right",
-     "why": "layout: UEFA right-centre"
+     "why": "Barzagli right of centre (ESPN CD-R): UEFA's coordinates and ESPN's summary feed (re-read 2026-10-06) agree"
     },
     {
      "path": "slots[5].side",
      "from": "right",
      "to": "left",
-     "why": "layout: UEFA puts De Rossi on the left of the midfield line"
+     "why": "De Rossi on the left (ESPN LM): UEFA's coordinates and ESPN's summary feed (re-read 2026-10-06) agree"
     },
     {
      "path": "slots[6].side",
      "from": "left",
      "to": "centre",
-     "why": "layout: UEFA puts Pirlo deepest, alone"
+     "why": "Pirlo deepest and central (ESPN DM): UEFA's coordinates and ESPN's summary feed (re-read 2026-10-06) agree"
     },
     {
      "path": "slots[7].side",
@@ -3596,7 +3592,7 @@
      "path": "slots[6].side",
      "from": "right",
      "to": "left",
-     "why": "layout: ESPN LM"
+     "why": "ESPN LM. Forced, not chosen: Henderson, who replaced Milner, goes where ESPN puts him (right of the three) and no host contradicts, which leaves Wijnaldum the left"
     },
     {
      "path": "slots[7].side",

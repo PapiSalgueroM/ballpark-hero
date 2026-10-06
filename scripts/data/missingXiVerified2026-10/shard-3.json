@@ -1035,7 +1035,7 @@
      "path": "slots[6].side",
      "from": "left",
      "to": "right",
-     "why": "layout: ESPN CM-R"
+     "why": "ESPN CM-R. Forced, not chosen: Sensi, who replaced Eriksen, goes where ESPN puts him (CM-L) with Brozovic central (ESPN AM), which leaves Barella the right"
     },
     {
      "path": "slots[8].side",
@@ -2397,7 +2397,7 @@
      "path": "slots[9].side",
      "from": "right",
      "to": "left",
-     "why": "layout: ESPN CF-L"
+     "why": "ESPN CF-L. Forced, not chosen: Ulloa, who replaced Okazaki, goes where ESPN puts him (right of the two) and no host contradicts, which leaves Vardy the left"
     },
     {
      "path": "slots[10].side",
@@ -3441,7 +3441,7 @@
      "path": "slots[7].side",
      "from": "left",
      "to": "right",
-     "why": "layout: ESPN RM"
+     "why": "ESPN RM. Forced, not chosen: Ceballos, who replaced Kroos, goes where ESPN puts him (left of the three) and no host contradicts, which leaves Modric the right"
     }
    ],
    "notes": [
@@ -4529,7 +4529,7 @@
      "path": "slots[5].side",
      "from": "centre",
      "to": "left",
-     "why": "layout: ESPN CM-L"
+     "why": "Rodri left of Stones: ESPN CM-L and UEFA's coordinates (x 660 against Stones 331; small x is the right) agree"
     },
     {
      "path": "slots[7].side",
