@@ -32,7 +32,7 @@ const NflMyCareer = () => {
               'Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K) and an archetype, then get drafted by a real team.',
               'Pick your league first: today\'s NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis.',
               'Play each season for a realistic stat line driven by your rating, your health and your team.',
-              'Between seasons, one big decision arrives: contracts, trade requests, surgeries, podcasts, training focus.',
+              'Between seasons, up to three decisions land, one card at a time: contracts, trade requests, surgeries, podcasts, training focus. A card you just saw rests for a while.',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the locker room card school and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 25 badges, lit off the facts of your career.',
               'Running backs fall off a cliff early, field surgeons age like wine. Plan the career, not the season.',

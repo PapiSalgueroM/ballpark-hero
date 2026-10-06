@@ -62,6 +62,24 @@ export function summerApplyRng(c: UsCareerCore, slug: string, year: number, i: n
   return keyedRng(`summer-apply:${slug}:${summerCareerKey(c)}:${year}:${i}`);
 }
 
+/** Whether any answer to the card can move the rating or its ceiling. Each
+ *  answer is tried on copies of the career with three keyed streams, never
+ *  on the career itself and never on Math.random. */
+export function movesRating<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): boolean {
+  for (let k = 0; k < e.options.length; k += 1) {
+    for (let s = 0; s < 3; s += 1) {
+      const probe = JSON.parse(snapshot) as C;
+      try {
+        e.options[k].apply(probe, keyedRng(`rating-probe:${e.id}:${k}:${s}`));
+      } catch {
+        return true;
+      }
+      if (probe.ovr !== c.ovr || probe.pot !== c.pot) return true;
+    }
+  }
+  return false;
+}
+
 /** Deal the summer onto the career: the ids, and every dealt card stamped in
  *  the ledger (press moments never are). Mutates c, which is always the
  *  board's own working copy. */
@@ -76,10 +94,23 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
   const first = sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);
   const picked: UsCareerEvent<C>[] = [first];
   const taken = new Set<string>([ledgerKey(first)]);
+  const snapshot = JSON.stringify(c);
   for (let i = 1; i < knob.cards; i += 1) {
     const r = slotStream(c, sport.slug, year, i);
     const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big');
-    const [e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, taken, r, outsideLedger);
+    /* Card 1 is the summer's one call that can move the rating. A card any of
+       whose answers moves it is passed over in the later slots, so three
+       cards a summer never mean three rating raises a summer, and every
+       button still does exactly what it says (scripts/simUsCareerSummer.mjs,
+       section 6, measured the careers without this: peak OVR 4 to 7 points
+       higher and the Hall share doubled). */
+    const passed = new Set<string>(taken);
+    let e: UsCareerEvent<C> | undefined;
+    for (;;) {
+      [e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);
+      if (!e || !movesRating(c, e, snapshot)) break;
+      passed.add(ledgerKey(e));
+    }
     /* A slot that finds nothing ends the deal, so ids[i] was always dealt
        from slot i's stream and can be rebuilt from it. */
     if (!e) break;

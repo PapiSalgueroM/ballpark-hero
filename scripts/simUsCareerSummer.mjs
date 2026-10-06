@@ -113,7 +113,7 @@ const CONTROLS = {
     section: '6', note: 'the Offseason focus card in every slot',
     edits: [
       { file: SUMMER, from: 'const first = sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);', to: "const first = sport.eventDeck(c, slotStream(c, sport.slug, year, 0)).find(x => x.id === 'training') ?? sport.drawEvent(c, slotStream(c, sport.slug, year, 0), fresh);" },
-      { file: SUMMER, from: 'const [e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, taken, r, outsideLedger);', to: "const e = deck.find(x => x.id === 'training');" },
+      { file: SUMMER, from: '[e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);', to: "e = deck.find(x => x.id === 'training'); break;" },
     ],
   },
   drift: { section: '8', note: 'the shared ledger compares with < where soccer uses <=', edits: [{ file: LEDGER, from: '  return season - last <= cooldownOf(e, fallback);', to: '  return season - last < cooldownOf(e, fallback);' }] },

@@ -318,12 +318,17 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
     for (const s of strings(c)) if (DASH.test(s)) f.push(`${route}: a dash in "${s.slice(0, 70)}..."`);
     if (!fixture.routes[route]) f.push(`${route}: converted with no frozen original in scripts/data/guideHeadingsFrozen.json, so nothing proves no sentence was cut; freeze before converting`);
   }
+  /* Round 1038: a career route refreshed after the additions landed already
+     carries them in its own frozen list (--refresh reads the whole guide),
+     and may have reworded them for a verified change (the NFL summer did),
+     so the additions are added only to routes frozen before them. */
+  const carriesAdditions = frozen => PARTS.some(p => (frozen[p] ?? []).includes(CAREER_GUIDE_ADDITIONS.howToPlay[1]));
   for (const [route, frozen] of Object.entries(fixture.routes)) {
     const c = content.get(route);
     if (!c) { f.push(`${route}: frozen in the fixture but no game with a guide lives there any more`); continue; }
     const flat = flatGuide(c);
     for (const p of PARTS) {
-      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
+      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) && !carriesAdditions(frozen) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
       const now = flat[p] ?? [];
       for (const s of was) {
         sentences += 1;

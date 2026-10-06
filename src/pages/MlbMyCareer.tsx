@@ -32,7 +32,7 @@ const MlbMyCareer = () => {
               'Create your player: name, one of 11 positions from starting pitcher to designated hitter, and an archetype.',
               'Pick your league first: today\'s MLB, or the 2004 throwback with the Expos in Montreal and the Anaheim Angels.',
               'Play each season for a realistic stat line driven by rating, health and team quality.',
-              'One big decision arrives every offseason: contracts, trades, surgeries, fame.',
+              'Up to three decisions land every offseason, one card at a time: contracts, trades, surgeries, fame. A card you just saw rests for a while.',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the clubhouse card school and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 26 badges, lit off the facts of your career.',
               'Stack awards and rings, fight the aging curve, and retire to the verdict.',

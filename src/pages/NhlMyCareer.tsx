@@ -32,7 +32,7 @@ const NhlMyCareer = () => {
               'Create your player: name, one of 5 positions (C, LW, RW, D, G) and archetype.',
               'Pick your league first: today\'s NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix.',
               'Play each season for a realistic stat line driven by rating, health and team quality.',
-              'One big decision arrives every offseason: contracts, trades, surgeries, fame.',
+              'Up to three decisions land every offseason, one card at a time: contracts, trades, surgeries, fame. A card you just saw rests for a while.',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the card school at the back of the plane and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 23 badges, lit off the facts of your career.',
               'Stack awards and rings, fight the aging curve, and retire to the verdict.',
