@@ -17,15 +17,24 @@
  * fewer than two independent sources carries a `thin` note saying what is
  * missing and is listed in GM_CALENDAR_PARTIAL, the same honesty rule as
  * Club Manager's CM_PARTIAL; the panel draws it as "expected", never as fact.
+ * Wikipedia never counts toward the two (the owner's rule: Wikipedia is for
+ * spot verification only). It stays cited where it was read, as a spot check,
+ * but a phase or a season span is two sourced only when two sources other
+ * than Wikipedia date it (validateLeagueYear). The fixer pass of 2026-10-05
+ * found a press or league page beside every Wikipedia date the panel showed
+ * as fact, and lifted the NFL draft and free agency and the MLB lottery and
+ * draft out of thin the same way.
  * A phase no source dates at all (a window derived from two other dates, a
  * playoff start the league has not announced) also carries `estimate`, and
  * the panel says "estimate" for it. Nothing is dated by a guess dressed as a
  * fact: the fixer pass of 2026-10-05 replaced seven such guesses with the dates
  * the press reports (three of them had been wrong by days).
- * Sources were read on 2026-10-03, and on 2026-10-05 the named press pages
- * (NFL.com, ESPN, Yahoo Sports, raiders.com, FOX Sports, NBC Sports, NBC Los
- * Angeles, Daily Faceoff, Sports Illustrated, The Hockey News, PuckPedia,
- * The Sportscast) each quoted in the phase it dates:
+ * Sources were read on 2026-10-03, and on 2026-10-05 the named press and
+ * league pages (NFL.com, NFL Football Operations, steelers.com, ESPN, Yahoo
+ * Sports, raiders.com, FOX Sports, NBC Sports, NBC Sports Boston, NBC Los
+ * Angeles, CBS Sports, CBS Philadelphia, MLB.com, Just Baseball, Daily
+ * Faceoff, Sports Illustrated, The Hockey News, PuckPedia, The Sportscast)
+ * each quoted in the phase it dates:
  *   ESPN    ESPN's public scoreboard feed (site.api.espn.com), the season
  *           calendar and the games on a date. The feed the site already reads.
  *   WIKI    the English Wikipedia season, draft and lottery articles, read as
@@ -95,6 +104,16 @@ const ESPN = 'ESPN scoreboard feed';
 const WIKI = 'Wikipedia (raw wikitext)';
 const NBACOM = 'nba.com key dates';
 const NHLCOM = 'nhl.com';
+const NFLOPS = 'NFL Football Operations';
+const NFL_SCHEDULE = `${NFLOPS}, 2026 NFL Schedule Announced (14 May 2026)`;
+const STEELERS_KEY_DATES = 'steelers.com, 2026 NFL Key Dates (21 February 2026)';
+const CBS_MLB_PLAYOFFS = 'CBS Sports, 2026 MLB playoff schedule (23 September 2026)';
+const YAHOO_MLB_OPENING = 'Yahoo Sports, stream MLB Opening Night 2026 (23 March 2026)';
+
+/** True for a Wikipedia citation: a spot check that never counts toward the two sources. */
+export const isWikipediaSource = (s: string): boolean => s.startsWith(WIKI);
+/** How many of these sources are not Wikipedia. */
+export const independentSourceCount = (sources: string[]): number => sources.filter(s => !isWikipediaSource(s)).length;
 
 /* ================================================================== */
 /* The four league years                                              */
@@ -103,30 +122,28 @@ const NHLCOM = 'nhl.com';
 const NFL_2026: GmLeagueYearDef = {
   sport: 'nfl', label: '2026-27', season: 2026,
   regularStart: '2026-09-09', regularEnd: '2027-01-10',
-  regularSources: [`${WIKI}: 2026 NFL season, began September 9 and ends January 10, 2027`, `${ESPN}: New England at Seattle on 9 September (00:20 UTC on the 10th), 16 Week 18 games on 10 January 2027`],
+  regularSources: [`${NFL_SCHEDULE}: kicks off Wednesday night, September 9, in Seattle; Week 18 on Saturday, January 9, and Sunday, January 10`, `${WIKI}: 2026 NFL season, began September 9 and ends January 10, 2027`, `${ESPN}: New England at Seattle on 9 September (00:20 UTC on the 10th), 16 Week 18 games on 10 January 2027`],
   periods: 17, periodName: 'Week', gamesPerPeriod: 1, gameDay: 'sunday',
   phases: [
     { id: 'resign', label: 'Options and tenders', start: '2026-03-09', end: '2026-03-10', halts: true,
       sources: [`${WIKI}: 2026 NFL season, from March 9 clubs exercise options and tender their restricted and exclusive rights free agents`],
       thin: 'One source (Wikipedia, citing the league calendar). The two days of options and tenders before the new league year.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2026-03-11', end: '2026-03-11', halts: true,
-      sources: [`${WIKI}: 2026 NFL season, the league year and free agency began March 11`],
-      thin: 'One source (Wikipedia, citing the league calendar).' },
+      sources: [`${NFLOPS}, 2026 NFL Free Agency Questions and Answers (6 March 2026): the league year and the signing period begin at 4 p.m. ET on Wednesday, March 11`, `${STEELERS_KEY_DATES}: March 11, the 2026 League Year and free agency signing period begin at 4 p.m. New York time`, `${WIKI}: 2026 NFL season, the league year and free agency began March 11`] },
     { id: 'draft', label: 'The draft', start: '2026-04-23', end: '2026-04-25', halts: true,
-      sources: [`${WIKI}: 2026 NFL season, the draft was April 23 to 25 in Pittsburgh`],
-      thin: 'One source (Wikipedia).' },
+      sources: ['NFL.com, 2026 NFL Draft dates, times, location: Round 1 Thursday, April 23, Rounds 2 and 3 Friday, April 24, Rounds 4 to 7 Saturday, April 25, at Acrisure Stadium', `${STEELERS_KEY_DATES}: April 23 to 25, 2026 NFL Draft, Pittsburgh`, `${WIKI}: 2026 NFL season, the draft was April 23 to 25 in Pittsburgh`] },
     { id: 'camp', label: 'Camp and preseason', start: '2026-08-06', end: '2026-08-29', halts: false,
       sources: [`${WIKI}: 2026 NFL season, Hall of Fame Game on August 6`, `${ESPN}: the preseason calendar opens with Hall of Fame weekend on 6 August`],
       thin: 'The start is the first preseason game (two sources); clubs open camp earlier in July on dates of their own. The end is the eve of cut down day.' },
     { id: 'cutDown', label: 'Cut down day', start: '2026-08-30', end: '2026-08-30', halts: true,
       sources: ['Yahoo Sports, NFL sets 2026 trade deadline, roster cutdown and 2027 free agency dates: rosters down to 53 by 6 p.m. New York time on Aug. 30', 'raiders.com, NFL sets 53-man roster cutdown deadline: active rosters to 53 by 3 p.m. PT on Sunday, Aug. 30'] },
     { id: 'opening', label: 'Opening day', start: '2026-09-09', end: '2026-09-09', halts: false,
-      sources: [`${WIKI}: 2026 NFL season, the Kickoff Game on September 9`, `${ESPN}: New England at Seattle, 9 September`] },
+      sources: [`${NFL_SCHEDULE}: the defending champion Seahawks host New England at Lumen Field on Wednesday, September 9`, `${ESPN}: New England at Seattle, 9 September`, `${WIKI}: 2026 NFL season, the Kickoff Game on September 9`] },
     { id: 'deadline', label: 'Trade deadline', start: '2026-11-10', end: '2026-11-10', halts: true,
       sources: ['NFL.com, trade grades ahead of the 2026 deadline: the deadline set for Nov. 10', 'ESPN, 2026 trade deadline updates: Nov. 10 at 4 p.m. ET', 'Yahoo Sports, NFL sets 2026 trade deadline: Nov. 10 at 4 p.m. New York time'],
       thin: 'Three sources say 10 November, but the Raiders\' own cut down article (raiders.com) lists the deadline as 3 November, so it stays expected until it passes.' },
     { id: 'playoffs', label: 'Playoffs', start: '2027-01-16', end: '2027-02-14', halts: false,
-      sources: [`${WIKI}: 2026 NFL season, playoffs begin January 16, Super Bowl LXI on February 14 at SoFi Stadium`, `${ESPN}: Wild Card games on 16 January 2027, the Super Bowl on 14 February 2027`] },
+      sources: [`${NFL_SCHEDULE}: Wild Card weekend from Saturday, January 16, Super Bowl LXI on Sunday, February 14, at SoFi Stadium`, `${ESPN}: Wild Card games on 16 January 2027, the Super Bowl on 14 February 2027`, `${WIKI}: 2026 NFL season, playoffs begin January 16, Super Bowl LXI on February 14 at SoFi Stadium`] },
   ],
 };
 
@@ -137,14 +154,14 @@ const NBA_2026: GmLeagueYearDef = {
   periods: 20, periodName: 'Round', gamesPerPeriod: 4,
   phases: [
     { id: 'lottery', label: 'Draft lottery', start: '2026-05-10', end: '2026-05-10', halts: false,
-      sources: [`${NBACOM}: 2026 Draft Lottery May 10`, `${WIKI}: 2026 NBA draft, the lottery was held on May 10`] },
+      sources: [`${NBACOM}: 2026 Draft Lottery May 10`, 'CBS Sports, 2026 NBA Draft Lottery winners and losers (10 May 2026): Washington won the No. 1 pick in Sunday\'s lottery', `${WIKI}: 2026 NBA draft, the lottery was held on May 10`] },
     { id: 'draft', label: 'The draft', start: '2026-06-23', end: '2026-06-24', halts: true,
-      sources: [`${NBACOM}: 2026 NBA Draft June 23 to 24`, `${WIKI}: 2026 NBA draft, first round June 23, second round June 24, Barclays Center`] },
+      sources: [`${NBACOM}: 2026 NBA Draft June 23 to 24`, 'NBC Sports, 2026 NBA Draft complete list of every pick (24 June 2026): the draft took place at Barclays Center on June 23 to 24', `${WIKI}: 2026 NBA draft, first round June 23, second round June 24, Barclays Center`] },
     { id: 'resign', label: 'Re-sign window', start: '2026-06-25', end: '2026-06-29', halts: true, estimate: true,
       sources: [],
       thin: 'Derived, not a dated league event: the days between the draft and the market opening, when a club can still only deal with its own free agents.' },
     { id: 'freeAgency', label: 'Free agency opens', start: '2026-06-30', end: '2026-06-30', halts: true,
-      sources: [`${NBACOM}: June 30, teams may begin negotiating with all other free agents`, `${WIKI}: 2026-27 NBA season, free agency negotiations began June 30 at 6 p.m. ET`] },
+      sources: [`${NBACOM}: June 30, teams may begin negotiating with all other free agents`, 'Yahoo Sports, when does NBA free agency begin in 2026 (22 June 2026): free agency officially begins on Tuesday, June 30, at 6 p.m. ET', `${WIKI}: 2026-27 NBA season, free agency negotiations began June 30 at 6 p.m. ET`] },
     { id: 'camp', label: 'Training camp', start: '2026-09-29', end: '2026-10-18', halts: false,
       sources: [`${NBACOM}: Sept. 29, NBA training camps open; preseason games begin Oct. 3`],
       thin: 'One source for the opening day of camp (nba.com); ESPN agrees the preseason starts 3 October.' },
@@ -169,9 +186,9 @@ const NHL_2026: GmLeagueYearDef = {
   periods: 20, periodName: 'Round', gamesPerPeriod: 4,
   phases: [
     { id: 'lottery', label: 'Draft lottery', start: '2026-05-05', end: '2026-05-05', halts: false,
-      sources: [`${WIKI}: 2026 NHL entry draft, the two lotteries were held on May 5, 2026`, `${NHLCOM}: Toronto won the Draft Lottery on Tuesday (article of 6 May 2026)`] },
+      sources: [`${NHLCOM}: Toronto won the Draft Lottery on Tuesday (article of 6 May 2026)`, 'NBC Sports Boston, 2026 NHL Draft Lottery live updates (5 May 2026): Toronto won the lottery on Tuesday night with an 8.5 percent chance', `${WIKI}: 2026 NHL entry draft, the two lotteries were held on May 5, 2026`] },
     { id: 'draft', label: 'The draft', start: '2026-06-26', end: '2026-06-27', halts: true,
-      sources: [`${WIKI}: 2026 NHL entry draft, June 26 to 27 at KeyBank Center, Buffalo`, `${NHLCOM}: first round June 26, rounds 2 to 7 June 27, Buffalo`] },
+      sources: [`${NHLCOM}: first round June 26, rounds 2 to 7 June 27, Buffalo`, 'ESPN, 2026 NHL draft order, picks 1 to 224 (24 June 2026): at KeyBank Center in Buffalo on June 26 (Round 1) and June 27 (Rounds 2 to 7)', `${WIKI}: 2026 NHL entry draft, June 26 to 27 at KeyBank Center, Buffalo`] },
     { id: 'resign', label: 'Re-sign window', start: '2026-06-28', end: '2026-06-30', halts: true, estimate: true,
       sources: [],
       thin: 'Derived, not a dated league event: the days between the draft and the market opening.' },
@@ -195,7 +212,7 @@ const NHL_2026: GmLeagueYearDef = {
 const MLB_2026: GmLeagueYearDef = {
   sport: 'mlb', label: '2026', season: 2026,
   regularStart: '2026-03-25', regularEnd: '2026-09-27',
-  regularSources: [`${WIKI}: 2026 MLB season, started March 25 with the Giants hosting the Yankees, the full Opening Day slate on March 26, the regular season ending September 27`, `${ESPN}: New York at San Francisco on 25 March (00:05 UTC on the 26th), the last regular season games on 27 September and none on the 28th`],
+  regularSources: [`${YAHOO_MLB_OPENING}: Yankees at Giants on Wednesday, March 25, the traditional Opening Day on Thursday, March 26`, `${CBS_MLB_PLAYOFFS}: the regular season wraps up on Sunday, Sept. 27`, `${WIKI}: 2026 MLB season, started March 25 with the Giants hosting the Yankees, the full Opening Day slate on March 26, the regular season ending September 27`, `${ESPN}: New York at San Francisco on 25 March (00:05 UTC on the 26th), the last regular season games on 27 September and none on the 28th`],
   periods: 27, periodName: 'Round', gamesPerPeriod: 6,
   phases: [
     { id: 'resign', label: 'Re-sign window', start: '2025-11-02', end: '2025-11-05', halts: true,
@@ -204,8 +221,7 @@ const MLB_2026: GmLeagueYearDef = {
     { id: 'freeAgency', label: 'Free agency opens', start: '2025-11-06', end: '2025-11-06', halts: true,
       sources: ['FOX Sports, when does 2025 MLB free agency start: players cannot sign with a new team until 5 p.m. ET five days after the World Series, Thursday, November 6', 'NBC Sports, 2025 MLB free agency guide: players may not sign with a new team until five days after the World Series concludes (it ended November 1)'] },
     { id: 'lottery', label: 'Draft lottery', start: '2025-12-09', end: '2025-12-09', halts: false,
-      sources: [`${WIKI}: 2026 MLB draft, the lottery was held on December 9, 2025 in Orlando at the Winter Meetings`],
-      thin: 'One source (Wikipedia).' },
+      sources: ['MLB.com, MLB Draft Lottery results 2026 (9 December 2025): the White Sox won the No. 1 pick on Tuesday night at the Winter Meetings', 'Just Baseball, 2026 MLB Draft Lottery winners and losers (10 December 2025): the lottery held on Tuesday, the White Sox on the clock', `${WIKI}: 2026 MLB draft, the lottery was held on December 9, 2025 in Orlando at the Winter Meetings`] },
     { id: 'camp', label: 'Spring training', start: '2026-02-20', end: '2026-03-23', halts: false,
       sources: [`${ESPN}: the first spring games on 20 February 2026 (none on the 19th)`],
       thin: 'One source (ESPN) for the first spring game; pitchers and catchers report earlier on dates of their own.' },
@@ -213,14 +229,13 @@ const MLB_2026: GmLeagueYearDef = {
       sources: [],
       thin: 'No league wide date read. One club release (Texas) says rosters were due at 10:30 a.m. CT on 25 March, opening day itself, so the stop is placed on the eve to come before the first pitch.' },
     { id: 'opening', label: 'Opening day', start: '2026-03-25', end: '2026-03-25', halts: false,
-      sources: [`${WIKI}: 2026 MLB season, the regular season started March 25`, `${ESPN}: New York at San Francisco, 25 March`] },
+      sources: [`${YAHOO_MLB_OPENING}: Opening Night is Wednesday, March 25, Yankees at Giants at Oracle Park`, `${ESPN}: New York at San Francisco, 25 March`, `${WIKI}: 2026 MLB season, the regular season started March 25`] },
     { id: 'draft', label: 'The draft', start: '2026-07-11', end: '2026-07-12', halts: true,
-      sources: [`${WIKI}: 2026 MLB draft, July 11 to 12 in Philadelphia`],
-      thin: 'One source (Wikipedia).' },
+      sources: ['MLB.com, what you need to know about the 2026 MLB Draft (11 July 2026): the draft takes place on Saturday and Sunday in Philadelphia', 'CBS Philadelphia, the 2026 All-Star Week schedule (8 July 2026): the draft opens on Saturday, July 11 at 1:30 p.m. at the Pennsylvania Convention Center', `${WIKI}: 2026 MLB draft, July 11 to 12 in Philadelphia`] },
     { id: 'deadline', label: 'Trade deadline', start: '2026-08-03', end: '2026-08-03', halts: true,
       sources: ['FOX Sports, 2026 MLB trade deadline: Monday, Aug. 3, at 6 p.m. ET', 'NBC Los Angeles, MLB trade deadline preview 2026: Monday, Aug. 3, at 6 p.m. ET'] },
     { id: 'playoffs', label: 'Postseason', start: '2026-09-29', end: '2026-10-31', halts: false,
-      sources: [`${WIKI}: 2026 MLB season, the postseason began on September 29, the World Series begins October 23 and ends with Game 7 (if necessary) on October 31`, `${ESPN}: Philadelphia at Atlanta and Chicago at Houston on 29 September; the schedule lists World Series Game 7, if necessary, on 31 October and nothing after it`] },
+      sources: [`${CBS_MLB_PLAYOFFS}: four Wild Card Series open Sept. 29, the World Series starts Friday, Oct. 23, a potential Game 7 on Saturday, Oct. 31`, `${ESPN}: Philadelphia at Atlanta and Chicago at Houston on 29 September; the schedule lists World Series Game 7, if necessary, on 31 October and nothing after it`, `${WIKI}: 2026 MLB season, the postseason began on September 29, the World Series begins October 23 and ends with Game 7 (if necessary) on October 31`] },
   ],
 };
 
@@ -594,10 +609,12 @@ export function validateLeagueYear(def: GmLeagueYearDef): string[] {
   let year: GmLeagueYear;
   try { year = resolveLeagueYear(def); } catch (e) { return [tag(String((e as Error).message))]; }
 
-  /* Every phase is one range, sourced twice or marked thin; a phase no source dates is an estimate, and says how it was placed. */
+  /* Every phase is one range, sourced twice (Wikipedia never counts toward the two) or marked thin; a phase no source dates is an estimate, and says how it was placed. */
+  if (independentSourceCount(def.regularSources) < 2) problems.push(tag(`the regular season span has ${independentSourceCount(def.regularSources)} source(s) other than Wikipedia`));
   for (const p of year.phases) {
     if (dateKey(p.end) < dateKey(p.start)) problems.push(tag(`${p.id} ends before it starts`));
     if (p.sources.length < 2 && !(p.thin && p.thin.trim())) problems.push(tag(`${p.id} has ${p.sources.length} source(s) and no thin note`));
+    else if (independentSourceCount(p.sources) < 2 && !(p.thin && p.thin.trim())) problems.push(tag(`${p.id} has ${independentSourceCount(p.sources)} source(s) other than Wikipedia and no thin note`));
     if (p.sources.length === 0 && !p.estimate) problems.push(tag(`${p.id} has no source and is not marked estimate`));
     if (p.estimate && !(p.thin && p.thin.trim())) problems.push(tag(`${p.id} is an estimate with no thin note saying how it was placed`));
   }

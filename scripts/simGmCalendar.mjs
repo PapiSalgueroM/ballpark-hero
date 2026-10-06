@@ -12,7 +12,10 @@
  *      replay identically on this tree.
  *   2) Every league year keeps its rules (validateLeagueYear): every phase is
  *      one date range, two sourced or carrying a thin note and listed in
- *      GM_CALENDAR_PARTIAL, a phase with no source marked estimate; the
+ *      GM_CALENDAR_PARTIAL, a phase with no source marked estimate; Wikipedia
+ *      never counts toward the two (the owner's rule: spot checks only), for
+ *      a phase or a regular season span, checked by the module's validator
+ *      and again by a literal rule here; the
  *      deadline inside the regular season; every engine period one range,
  *      back to back, first day to last; and every sport stops for the six
  *      things the brief names (re-sign, draft, free agency, cut down day, the
@@ -44,8 +47,10 @@
  *      of every year (the second day of the draft is still the draft).
  *
  * Measured on this tree (2026-10-05, after the fixer pass sourced seven
- * guessed dates and cut the MLB postseason to 31 October): 35 phases, 18 of
- * them thin and 4 estimates; section 4 plans 301,302 pairs of days over the
+ * guessed dates and cut the MLB postseason to 31 October, and the next one
+ * put a second source other than Wikipedia beside every Wikipedia date):
+ * 35 phases, 14 of them thin and 4 estimates, 22 two sourced without
+ * Wikipedia and 19 citing it as a spot check; section 4 plans 301,302 pairs of days over the
  * four years; the chained walk with four host stops a year, seeds 1 to 5,
  * halts 10 times a year (a host stop on a calendar stop's day is a stop of
  * its own) and plays 17, 20, 27 and 20 periods; the mid run walk raises 15
@@ -60,7 +65,10 @@
  * Negative controls (GM_CALENDAR_CONTROL=<name>), each must turn its section red:
  *   fixture   dayOfWeek in a scratch copy of calDate.ts is off by one day (1)
  *   deadline  the NBA deadline dated 12 April 2027, after the last regular season day (2)
- *   thin      the NFL draft loses its thin note while it has one source (2)
+ *   thin      the NBA rosters day loses its thin note while it has one source (2)
+ *   wiki      the NBA lottery's CBS Sports source becomes a Wikipedia one, so
+ *             it rests on nba.com plus Wikipedia with no thin note (2)
+ *   wikispan  the NFL season span's league source becomes a Wikipedia one (2)
  *   periods   the period cut leaves a one day gap between ranges (2, 6)
  *   engine    the NBA year claims 21 rounds (3)
  *   halt      the sim plan ignores its stops and runs to the target (4)
@@ -74,9 +82,10 @@
  *   grid      the month grid drops the host stops (6)
  *   steps     opening day counts as an offseason step (7)
  *   nextstep  nextStep skips a phase already running (7)
- * Measured 2026-10-05, failures per control: fixture 16, deadline 2, thin 2,
- * periods 174, engine 2, halt 68, order 4, nohalt 3, estimate 2, haltday 24,
- * midrun 49, openstop 20, dlperiod 6, grid 16, steps 4, nextstep 4.
+ * Measured 2026-10-05, failures per control: fixture 16, deadline 2, thin 3,
+ * wiki 2, wikispan 2, periods 174, engine 2, halt 68, order 4, nohalt 3,
+ * estimate 2, haltday 24, midrun 49, openstop 20, dlperiod 6, grid 16,
+ * steps 4, nextstep 4.
  */
 import { build } from 'esbuild';
 import fs from 'node:fs';
@@ -110,9 +119,21 @@ const CONTROLS = {
   },
   thin: {
     file: 'src/lib/gmCalendar.ts',
-    fixed: "sources: [`${WIKI}: 2026 NFL season, the draft was April 23 to 25 in Pittsburgh`],\n      thin: 'One source (Wikipedia).' },",
-    broken: "sources: [`${WIKI}: 2026 NFL season, the draft was April 23 to 25 in Pittsburgh`] },",
-    say: 'CONTROL thin: the NFL draft has one source and no thin note, section 2 must go red',
+    fixed: "sources: [`${NBACOM}: Oct. 19, rosters set for opening day (5 p.m. ET)`],\n      thin: 'One source (nba.com).' },",
+    broken: "sources: [`${NBACOM}: Oct. 19, rosters set for opening day (5 p.m. ET)`] },",
+    say: 'CONTROL thin: the NBA rosters day has one source and no thin note, section 2 must go red',
+  },
+  wiki: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: "'CBS Sports, 2026 NBA Draft Lottery winners and losers",
+    broken: "'Wikipedia (raw wikitext): CBS Sports, 2026 NBA Draft Lottery winners and losers",
+    say: 'CONTROL wiki: the NBA lottery rests on nba.com plus Wikipedia with no thin note, section 2 must go red',
+  },
+  wikispan: {
+    file: 'src/lib/gmCalendar.ts',
+    fixed: 'regularSources: [`${NFL_SCHEDULE}: kicks off',
+    broken: 'regularSources: [`${WIKI}: kicks off',
+    say: 'CONTROL wikispan: the NFL season span rests on ESPN plus Wikipedia, section 2 must go red',
   },
   periods: {
     file: 'src/lib/gmCalendar.ts',
@@ -266,14 +287,20 @@ const WANT_DEADLINE_PERIOD = { nfl: 8, nba: 13, mlb: 19, nhl: 15 };
 /* ---------- 2. Every league year keeps its rules ---------- */
 console.log('2) Every phase one range, two sourced or marked thin; the deadline inside the season; periods back to back');
 {
-  let phases = 0, thin = 0;
+  let phases = 0, thin = 0, firm = 0, wikiSpot = 0;
+  /* The owner's rule, written here and not read from the module: Wikipedia is a spot check and never one of the two sources. */
+  const independent = list => list.filter(x => !x.startsWith('Wikipedia')).length;
   for (const s of SPORTS) {
     const def = G.GM_LEAGUE_YEARS[s];
     for (const p of G.validateLeagueYear(def)) fail(p);
+    if (independent(def.regularSources) < 2) fail(`${s}: the regular season span rests on ${independent(def.regularSources)} source(s) other than Wikipedia`);
     for (const p of def.phases) {
       phases += 1;
       if (p.thin) thin += 1;
+      if (p.sources.some(x => x.startsWith('Wikipedia'))) wikiSpot += 1;
+      if (independent(p.sources) >= 2) firm += 1;
       if (p.sources.length < 2 && !G.GM_CALENDAR_PARTIAL.includes(`${s}.${p.id}`)) fail(`${s}.${p.id} has ${p.sources.length} source(s) and is not in GM_CALENDAR_PARTIAL`);
+      if (independent(p.sources) < 2 && !G.GM_CALENDAR_PARTIAL.includes(`${s}.${p.id}`)) fail(`${s}.${p.id} has ${independent(p.sources)} source(s) other than Wikipedia and is not in GM_CALENDAR_PARTIAL`);
       if (p.sources.length === 0 && !G.GM_CALENDAR_ESTIMATE.includes(`${s}.${p.id}`)) fail(`${s}.${p.id} has no source and is not in GM_CALENDAR_ESTIMATE`);
     }
     /* The stops the brief names, written here and not read from the module: a
@@ -282,6 +309,7 @@ console.log('2) Every phase one range, two sourced or marked thin; the deadline 
     if (kinds !== WANT_HALTS) fail(`${s}: the calendar stops for ${kinds}, it must stop for ${WANT_HALTS}`);
   }
   console.log(`   ${phases} phases over four years, ${thin} thin (listed partial), ${G.GM_CALENDAR_PARTIAL.length} in GM_CALENDAR_PARTIAL, ${G.GM_CALENDAR_ESTIMATE.length} estimates (no source); every sport stops for ${WANT_HALTS}`);
+  console.log(`   ${firm} phases two sourced without Wikipedia, ${wikiSpot} cite Wikipedia as a spot check; every regular season span two sourced without it`);
 }
 
 /* ---------- 3. The engine periods are the engines' own ---------- */

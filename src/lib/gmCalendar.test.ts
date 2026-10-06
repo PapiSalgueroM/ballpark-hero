@@ -10,7 +10,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   GM_LEAGUE_YEARS, GM_PHASE_ORDER, GM_CALENDAR_PARTIAL, gmLeagueYear, validateLeagueYear, planSimToDay,
-  calendarHalts, offseasonSteps, gmMonthGrid, monthsOf, deadlinePeriod, periodOn, nextStep, phaseById, runSimPlan,
+  calendarHalts, offseasonSteps, gmMonthGrid, monthsOf, deadlinePeriod, periodOn, nextStep, phaseById, runSimPlan, isWikipediaSource,
   type GmSport, type GmLeagueYearDef, type GmHostHalt,
 } from './gmCalendar';
 import { addDays, dateKey, daysBetween } from './calDate';
@@ -30,10 +30,10 @@ describe('the four league years', () => {
     expect(GM_LEAGUE_YEARS[sport].phases.map(p => p.id)).toEqual(GM_PHASE_ORDER[sport]);
   });
 
-  it('every phase is two sourced or listed as partial', () => {
+  it('every phase is two sourced (Wikipedia aside) or listed as partial', () => {
     for (const sport of SPORTS) {
       for (const p of GM_LEAGUE_YEARS[sport].phases) {
-        if (p.sources.length < 2) expect(GM_CALENDAR_PARTIAL).toContain(`${sport}.${p.id}`);
+        if (p.sources.filter(s => !s.startsWith('Wikipedia')).length < 2) expect(GM_CALENDAR_PARTIAL).toContain(`${sport}.${p.id}`);
       }
     }
   });
@@ -50,8 +50,16 @@ describe('the rules can fail', () => {
     expect(validateLeagueYear(bad).some(p => p.includes("league's order"))).toBe(true);
   });
   it('a phase with one source and no note fails', () => {
-    const bad = withPhase(GM_LEAGUE_YEARS.nfl, 'draft', { thin: undefined });
+    const bad = withPhase(GM_LEAGUE_YEARS.nfl, 'resign', { thin: undefined });
     expect(validateLeagueYear(bad).some(p => p.includes('no thin note'))).toBe(true);
+  });
+  it('Wikipedia never counts as one of the two sources', () => {
+    const lottery = phaseById(gmLeagueYear('nba'), 'lottery')!;
+    expect(lottery.sources.filter(isWikipediaSource)).toHaveLength(1);
+    const bad = withPhase(GM_LEAGUE_YEARS.nba, 'lottery', { sources: lottery.sources.filter(s => s.startsWith('nba.com') || isWikipediaSource(s)) });
+    expect(validateLeagueYear(bad).some(p => p.includes('lottery has 1 source(s) other than Wikipedia'))).toBe(true);
+    const span = { ...GM_LEAGUE_YEARS.nfl, regularSources: GM_LEAGUE_YEARS.nfl.regularSources.filter(s => !s.startsWith('ESPN')) };
+    expect(validateLeagueYear(span).some(p => p.includes('regular season span has 1 source(s) other than Wikipedia'))).toBe(true);
   });
   it('a decision phase that does not stop the sim fails', () => {
     const bad = withPhase(GM_LEAGUE_YEARS.nba, 'deadline', { halts: false });
