@@ -139,6 +139,9 @@
  *   noerabake  a historic founder priced by his uplifted rating       -> section 1
  *   stickycap  the summer moves the whole cap, founders' room and all -> section 5
  *   noresale   the repricing leaves bids, clauses and options behind  -> section 4
+ *   youthdraw  a youth pad's seeded draw moved by one                 -> section 3 (the
+ *              careers played on both engines; canon keeps the draw.
+ *              Measured 2026-10-06, seed base 0: 17 of 30 careers differ)
  *
  * What the checks that set the engine against itself can and cannot catch,
  * said where they are: the creation value against customFounderValue, the
@@ -163,7 +166,7 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CUSTOM_VALUE_CONTROL || '';
 const KNOWN = ['rawcurve', 'noload', 'realtoo', 'nosalecap', 'capall', 'tightcap',
-  'halfcap', 'stingycap', 'overprice', 'noerabake', 'stickycap', 'noresale'];
+  'halfcap', 'stingycap', 'overprice', 'noerabake', 'stickycap', 'noresale', 'youthdraw'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${KNOWN.join(', ')})`);
   process.exit(1);
@@ -245,6 +248,13 @@ if (CONTROL === 'noerabake') {
 if (CONTROL === 'stickycap') live = rewrite(live, ROLLOVER_CAP, OLD_ROLLOVER_CAP, 'control stickycap');
 /* The repricing moves the founders but leaves bids, clauses and loan options on the old money. */
 if (CONTROL === 'noresale') live = rewrite(live, FOUNDER_RESCALE, '  };\n  for (const p of state.squad ?? []) reprice(p);\n', 'control noresale');
+/* A youth pad's seeded draw moved by one, the random stream untouched: canon
+   drops an id's clock and counter and must keep this part, bare or carried
+   inside a desk appeal id, or two different boys would compare as one. */
+const YOUTH_ID_LINE = '    id: `youth-${Date.now().toString(36)}-${youthSeq}-${ri(100, 999)}`,\n';
+if (CONTROL === 'youthdraw') {
+  live = rewrite(live, YOUTH_ID_LINE, '    id: `youth-${Date.now().toString(36)}-${youthSeq}-${ri(100, 999) + 1}`,\n', 'control youthdraw');
+}
 if (CONTROL) console.log(`   [control ${CONTROL} applied to an in memory copy of the engine]`);
 /* The engine as it stood before Round 640: the full curve at creation, no
    repricing on load, no version mark on a new created club, no founder sale
@@ -343,13 +353,29 @@ function firstDiff(a, b, at = '') {
    has generated, Round 632's finding), and the clock and counter in a youth
    pad's, a scout report's and a prospect's id (Date.now and youthSeq, so two
    copies making the same boy a millisecond apart name him differently). The
-   seeded draw in each id stays, and nothing else is normalised. */
+   seeded draw in each id stays, and nothing else is normalised. Those three
+   player ids are also dropped where another id carries one after a hyphen:
+   Round 979's desk appeal is desk-<season>-<week>-appeal-<player id>, and a
+   sent off academy boy put his clock into it (Las Palmas, era2015). */
 const canon = (x) => JSON.stringify(x, (k, v) => (v && typeof v === 'object' && !Array.isArray(v)
   ? Object.fromEntries(Object.keys(v).sort().map(key => [key, v[key]])) : v))
   .replace(/"(pq|msg)-(\d+)-(\d+)-\d+"/g, '"$1-$2-$3"')
-  .replace(/"youth-[0-9a-z]+-\d+-(\d+)/g, '"youth-$1')
-  .replace(/"sc-[0-9a-z]+-(\d+)/g, '"sc-$1')
-  .replace(/"pr-[0-9a-z]+-(\d+)-(\d+)/g, '"pr-$1-$2');
+  .replace(/(["-])youth-[0-9a-z]+-\d+-(\d+)/g, '$1youth-$2')
+  .replace(/(["-])sc-[0-9a-z]+-(\d+)/g, '$1sc-$2')
+  .replace(/(["-])pr-[0-9a-z]+-(\d+)-(\d+)/g, '$1pr-$2-$3');
+/* The normalising above is held to the case that needed it, both ways: the
+   same boy appealed from two engine copies reads the same, and a different
+   seeded draw still reads different. Fails closed before any section runs. */
+{
+  const appeal = (id) => canon({ decisions: [{ id: `desk-1-8-appeal-${id}` }] });
+  const same = appeal('youth-muwub4k2-3374-368') === appeal('youth-muwub4kt-49-368');
+  const apart = appeal('youth-muwub4k2-3374-368') !== appeal('youth-muwub4k2-3374-369');
+  const bare = canon({ id: 'youth-muwub4k2-3374-368' }) === canon({ id: 'youth-muwub4kt-49-368' });
+  if (!same || !apart || !bare) {
+    console.log(`   FAIL canon self test: embedded same ${same}, draw apart ${apart}, bare same ${bare}`);
+    process.exit(1);
+  }
+}
 const ERAS = ['now', 'era2015', 'era2010', 'era2005'];
 const leaguesOf = (era) => (era === 'now' ? cm.REAL_LEAGUES : cm.ERA_LEAGUES[era]);
 const clubsOf = (era, lg) => (era === 'now' ? cm.playableClubs(lg).map(c => c.name) : cm.eraPlayableClubs(era, lg).map(c => c.name));

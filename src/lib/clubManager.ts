@@ -44,6 +44,7 @@ import { players as RAW_POOL } from '@/data/players';
 // from the Transfermarkt style market value data in Supabase. The bake file
 // imports nothing but types, so reading it at module scope is safe.
 import { CM_ROSTERS, CM_ROSTER_META, CM_PARTIAL } from '@/data/clubManagerRosters';
+import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
@@ -6191,9 +6192,11 @@ export interface FreeAgent {
   founderSaleRatio?: number;
   /** Season he became available, so the pool can age and clear. */
   since: number;
-  /** 'unattached' is a made up journeyman the pool is topped up with (see
-      topUpFreeAgents), so a new save has somebody in it. Never a real player:
-      taking a real footballer off his real club would be inventing a transfer. */
+  /** 'unattached' is a man with no club: a made up journeyman the pool is
+      topped up with (see topUpFreeAgents, flagged generated), or since Round
+      1033 a real footballer two sources said had no club when the round was
+      built (seedRealFreeAgents). Never a real player taken off his real club:
+      that would be inventing a transfer. */
   reason: 'released' | 'expired' | 'unattached';
   /** Set only when I was the one who let him go. */
   fromMyClub?: true;
@@ -6371,7 +6374,9 @@ const JOURNEYMAN_GROUPS: PosGroup[] = ['GK', 'DEF', 'MID', 'ATT', 'DEF', 'MID'];
  */
 export function topUpFreeAgents(state: CareerState): void {
   const pool = Array.isArray(state.freeAgents) ? state.freeAgents : [];
-  let have = pool.filter(f => f.reason === 'unattached').length;
+  /* Round 1033: journeymen only. A real free agent is extra, not one of the
+     six, so a modern day one still has six made up men beside the real ones. */
+  let have = pool.filter(f => f.reason === 'unattached' && f.generated).length;
   if (have >= FREE_AGENT_POOL_TARGET) return;
   const level = freeAgentClubLevel(state);
   const used = new Set<string>([
@@ -6408,6 +6413,34 @@ export function topUpFreeAgents(state: CareerState): void {
     have += 1;
   }
   state.freeAgents = out;
+}
+
+/**
+ * Round 1033: real footballers with no club, on day one of a modern career.
+ *
+ * The men in CM_REAL_FREE_AGENTS were without a club on the day the round was
+ * built, each on two sources (scripts/data/cmFreeAgents2026.json), so listing
+ * them moves nobody off a real club. They are rated and valued off the same
+ * curve as the squads and ask what freeAgentTerms prices off that value, like
+ * anybody else in the pool. Not generated, so the card shows no MADE UP tag.
+ *
+ * startCareer calls this once, for a brand new career in today's world: never
+ * an era save (those men had clubs in 2010), never a later season (by then the
+ * claim is a year old), never an old save loading, never a job move. Anyone
+ * already in the squad, the pool or the market is skipped, so a later re-bake
+ * that gives one of them a club cannot list him twice.
+ */
+export function seedRealFreeAgents(state: CareerState): void {
+  const pool = Array.isArray(state.freeAgents) ? state.freeAgents : [];
+  const taken = new Set<string>([
+    ...state.squad.map(p => p.name),
+    ...pool.map(f => f.name),
+    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+  ]);
+  const real: FreeAgent[] = CM_REAL_FREE_AGENTS
+    .filter(r => !taken.has(r.name))
+    .map(r => ({ name: r.name, position: r.position, age: r.age, rating: r.rating, value: r.value, since: state.season, reason: 'unattached' as const }));
+  state.freeAgents = [...pool, ...real];
 }
 
 /**
@@ -6571,8 +6604,29 @@ export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
      the pool ever holds, that made it a free rack holding your whole squad at
      full rating rather than the weak bin the contract describes. A man good
      enough to walk into your first team does not sign for you for nothing; he
-     goes somewhere better. */
-  return fa.rating <= mine - 6;
+     goes somewhere better.
+     Round 1033: and never above your eleventh best man. Six under the
+     average was enough while the pool held only journeymen 20 to 26 under
+     it, but a real free agent is rated off his value like anybody else, and
+     at a club with a wide squad six under the average can still be better
+     than the eleventh man. Measured over 53 clubs and three seeds: before
+     this round none of 954 signable men raised a best eleven; with the eight
+     real men in and no such line, 12 of 681 signable real ones did; with it,
+     none of 669. The pool is cover.
+     Round 1033 review: not for your own ex-players. A man whose deal ran out
+     with you comes back after his season away under the Round 619 rule alone,
+     as he always has; the line was measured on strangers and is for them.
+     Applied to everyone it refused 21 of the 33 ex-players the level rule
+     lets back in season three (27 clubs, contracts left to run out). */
+  return fa.rating <= mine - 6 && (fa.fromMyClub === true || fa.rating <= eleventhBestRating(career.squad));
+}
+
+/** Round 1033: the rating a man must beat to get into the best eleven,
+    the way squadXIAvg counts it (a short squad is padded with 60s). */
+export function eleventhBestRating(squad: CMPlayer[]): number {
+  const rs = squad.map(p => p.rating).sort((a, b) => b - a).slice(0, 11);
+  while (rs.length < 11) rs.push(60);
+  return rs[10];
 }
 
 /**
@@ -6609,7 +6663,12 @@ export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fe
      he asked before Round 632 (wageFor prices a pad off the curve). */
   const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ name: fa.name, rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
   const years = fa.age >= 31 ? 2 : 3;
-  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);
+  /* Round 1033: a real man with no club knows what he is worth, so he never
+     signs on for less than his value. Without this he was a free asset: over
+     ten clubs and two seeds, signing every real free agent and selling him on
+     made 0.16m and 0.22m a sale (a man worth 1.5m came for 0.5m). */
+  const floor = fa.reason === 'unattached' && !fa.generated ? Math.max(FREE_AGENT_MIN_FEE, fa.value ?? 0) : FREE_AGENT_MIN_FEE;
+  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);
   return { wage, years, fee };
 }
 
@@ -16767,6 +16826,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   }
   ensureContracts(state);
   ensureFreeAgents(state);
+  /* Round 1033: today's real free agents, once, on day one of a brand new
+     career in today's world. A job move passes a world and gets none. */
+  if (!world && !historic && startYearsOn === 0) seedRealFreeAgents(state);
   ensureAcademy(state);
   ensureRoles(state);
   ensurePress(state);
