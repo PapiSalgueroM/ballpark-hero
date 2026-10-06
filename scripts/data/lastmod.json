@@ -13,7 +13,7 @@
     "date": "2026-10-02"
   },
   "/afl-higher-lower": {
-    "hash": "bf2af38a2473df2d",
+    "hash": "fc854d1cd1cd050e",
     "date": "2026-10-06"
   },
   "/alphabet-sprint": {
@@ -89,7 +89,7 @@
     "date": "2026-10-06"
   },
   "/club-manager": {
-    "hash": "d2121577fa39d46a",
+    "hash": "70ae147ab38582f8",
     "date": "2026-10-06"
   },
   "/clue-auction": {
@@ -165,8 +165,8 @@
     "date": "2026-09-30"
   },
   "/fight-career": {
-    "hash": "18293a6db3d25871",
-    "date": "2026-10-03"
+    "hash": "afdb114bbb758d83",
+    "date": "2026-10-06"
   },
   "/fight-gym": {
     "hash": "c1c2babb4159ff95",
@@ -193,8 +193,8 @@
     "date": "2026-10-01"
   },
   "/front-office": {
-    "hash": "a32c693cd78401d9",
-    "date": "2026-10-02"
+    "hash": "55c7e97af55dd76a",
+    "date": "2026-10-06"
   },
   "/gauntlet-draft": {
     "hash": "36beece8c33d7f2d",
@@ -205,12 +205,12 @@
     "date": "2026-10-06"
   },
   "/guess-cbb-team": {
-    "hash": "94f3539b28989a10",
-    "date": "2026-09-30"
+    "hash": "9598e629323813ba",
+    "date": "2026-10-06"
   },
   "/guess-nascar-driver": {
-    "hash": "f2a125ec6716ec89",
-    "date": "2026-09-19"
+    "hash": "64cc2385428555b1",
+    "date": "2026-10-06"
   },
   "/guess-tennis-player": {
     "hash": "aecd10e67b1592a2",
@@ -237,8 +237,8 @@
     "date": "2026-09-19"
   },
   "/higher-lower": {
-    "hash": "1e69afd0eca73f39",
-    "date": "2026-09-30"
+    "hash": "16d46f9a9a513f6e",
+    "date": "2026-10-06"
   },
   "/hockey": {
     "hash": "e95afff5cfe55b92",
@@ -337,8 +337,8 @@
     "date": "2026-09-19"
   },
   "/nascar-chain": {
-    "hash": "4159aaf964471c76",
-    "date": "2026-09-19"
+    "hash": "5778e2429ea707a9",
+    "date": "2026-10-06"
   },
   "/nba-career": {
     "hash": "e8ff3cf6da0d6fea",
@@ -597,8 +597,8 @@
     "date": "2026-10-02"
   },
   "/soccer-conquest": {
-    "hash": "c229fdbbf5d7eba4",
-    "date": "2026-09-30"
+    "hash": "c2c02b2757b166c2",
+    "date": "2026-10-06"
   },
   "/soccer-grid": {
     "hash": "e7a7b846f7e42bf7",
@@ -645,15 +645,15 @@
     "date": "2026-09-30"
   },
   "/ufc": {
-    "hash": "d4e4bda265a5d8c6",
-    "date": "2026-09-29"
+    "hash": "812724021a654018",
+    "date": "2026-10-06"
   },
   "/ufc-chain": {
-    "hash": "c3ecb8d96fe33426",
-    "date": "2026-09-19"
+    "hash": "63afc031637fedc8",
+    "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "c068cb2307149ec7",
+    "hash": "ca204fdf5eaffe0d",
     "date": "2026-10-06"
   },
   "/who-am-i": {
