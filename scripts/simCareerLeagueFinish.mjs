@@ -198,8 +198,13 @@ const DIGEST_SEEDS = 16;
    green on origin/main 47197830 with the old digests: the round appends 51
    clubs to FALLBACK_CLUBS and the market draws a league before a club (two
    Math.random calls where pick made one), so every seeded career signs
-   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch. */
-const BASELINE = ['a792f71cce86f4d9', 'db43ec1b04769114', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'a4728affe6a4f65a', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch.
+   Re-recorded by Round 1024 (twice, identical) after proving this harness
+   green with the 1013 digests on a clean export of 4c9eaba0 (main plus
+   1013): the round adds one star to the 2025-2029 Ballon d'Or field and
+   moves three 2020-2024 clubs, so every 2020 career draws more on its
+   first awards night. Sections 1, 2, 3 and 5 stayed green. */
+const BASELINE = ['92fc4515353b2388', '630cdc534404d432', 'ad3c936792765bb4', 'b6c3253176006039', '3334adb4805c6d61', '79d633375da25489', '3ac5d32949594594', 'cda2ecc4ead96786', 'cb004302fcf15857', 'bd8ece5eda9691dd', '14e379e4c658b202', '296bcfbd7b89f453', '09e1b3de0308c24f', '2dcb138641a5170d', 'c4ed6008e14ac75b', 'cd52002e53b9c802'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
