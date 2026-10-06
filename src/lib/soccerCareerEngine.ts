@@ -5119,7 +5119,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
    "Became X's All Time Top International Scorer" line. Every row is two source
    verified in scripts/data/soccerCareerFacts.json (holder, sources, the date
    read) and scripts/simCareerFacts.mjs holds this table to that file. Snapshot
-   of 2026-10-06: Argentina Messi, Belgium Lukaku, Brazil Neymar (FIFA count),
+   of 2026-10-06: Argentina Messi, Belgium Lukaku, Brazil Neymar (full internationals only),
    Colombia Falcao, Croatia Suker, Egypt Hossam Hassan, England Kane, France
    Mbappe, Germany Klose, Italy Riva, Japan Kamamoto, Netherlands Depay,
    Nigeria Yekini, Norway Haaland, Portugal Ronaldo, South Korea Son, Spain
