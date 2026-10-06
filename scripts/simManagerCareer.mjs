@@ -39,8 +39,40 @@
  *   words      a market club's look alike names are no longer dropped: Red
  *              Bull Salzburg in the RB Salzburg table and field
  *   ofsize     "of N" is printed for every league: 18206 lines wrong
+ *              (after the review fixes a named league of unknown size prints
+ *              no position at all, so this fires on the club nothing names:
+ *              all 6 of its probe seasons)
  *   field10    the unverified field shrinks from 20 to 10 clubs: 9 of the
  *              10 rates leave the band (t1 title .2810)
+ * Review fixes (2026-10-06), on every season of the same loop:
+ *   e) the table is the league this harness tracked for him: his job's
+ *      league in the list's spelling (the market's "EFL Championship" is the
+ *      list's Championship), moved only by the table (Premier League bottom
+ *      three down to the Championship, Championship top two up) or by a
+ *      poaching club's own league; the field names every club the list
+ *      knows of it when they fit, and a field of unknown size is 20 or one
+ *      more than it knows; a named league of unknown size prints no position
+ *      and no points; "Promoted" and "Relegated" appear only where the
+ *      league changes, and always there;
+ *   f) four jobs through acceptManagerOffer (Nacional in Portugal, a Super
+ *      Lig club under the market's accented spelling, West Ham United in the
+ *      EFL Championship, Braunschweig in the 2. Bundesliga) and an old save
+ *      at a market club with no league saved, which the market gives back;
+ *      plus a club nothing names, which prints no "of N".
+ *   The fixed branch measured 29518 seasons, 1478 market jobs (1195 in a
+ *   league the list spells another way), 635 promotions to the Premier
+ *   League, 164 relegations to the Championship, 14956 seasons of unknown
+ *   size; rates t1 .1042 / .1145, t2 .0947 / .1657 / .1149, t3 .0908 /
+ *   .1598 / .0606, t4 .0695 / .1293, all inside main's band.
+ *   Their controls, each measured red: nomove (no league ever moves): 1622
+ *   seasons in the wrong league, 1102 wrong lines; listfirst (the list's row
+ *   beats the job's league): 1766 seasons, and Nacional plays the Primera
+ *   Division Uruguay; zones (positions everywhere): 14956 lines; size (one
+ *   known club dropped from a field of unknown size): 1124 tables; noaccept
+ *   (acceptManagerOffer forgets the league): 5309 seasons and three probes;
+ *   nofold (no accent folding): 125 seasons and the Super Lig probe;
+ *   nomarket (no recovery from the market): the old save loses Serie A;
+ *   wording ("Promoted" out of a top flight): 2710 lines.
  * Run: node scripts/simManagerCareer.mjs
  */
 import { build } from 'esbuild';
@@ -56,7 +88,7 @@ const CONTROLS = {
     from: 'managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random)',
     to: '{ league: null, size: 20, sizeVerified: false, named: [...clubs.filter(c => c.tier === ms.clubTier && c.name !== ms.club), ...clubs.filter(c => Math.abs(c.tier - ms.clubTier) === 1 && c.name !== ms.club)].slice(0, 19).map(c => c.name) }' },
   canon: { file: 'soccerCareerLeague.ts', from: 'foldName(SC_CLUB_CANON[name] ?? name)', to: 'foldName(name)' },
-  words: { file: 'soccerCareerLeague.ts', from: ' && !nameWords(c.name).some(w => myWords.includes(w))', to: '' },
+  words: { file: 'soccerCareerLeague.ts', from: '(inLeague || !nameWords(c.name).some(w => myWords.includes(w)))', to: 'true' },
   ofsize: { file: 'soccerCareerEngine.ts', from: 'const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";', to: 'const ofSize = ` of ${leagueSize}`;' },
   field10: { file: 'soccerCareerLeague.ts', from: 'export const MANAGER_FIELD = 20;', to: 'export const MANAGER_FIELD = 10;' },
   /* the review fixes' controls (single line strings, so a CRLF checkout matches too) */
@@ -433,6 +465,13 @@ const probe = (club, tier, league, check) => {
   });
   console.log(`   an RB Salzburg job named ${salzburg.length ? salzburg.join(', ') : 'nobody'}`);
   if (salzburg.includes('Red Bull Salzburg')) fail('an RB Salzburg job meets Red Bull Salzburg in its own table');
+  /* a club nothing names (no list row, no job league): no league, nobody
+     named, and no "of N", as the field's 20 is the dugout's own */
+  const nowhere = probe('Unknown FC', 3, undefined, row => {
+    if (row.league || row.knownRivals !== 0 || / of \d+/.test(row.result)) fail(`a club nothing names played ${row.league}: "${row.result.slice(0, 50)}"`);
+  });
+  console.log(`   a club nothing names met ${nowhere.length} named clubs`);
+  if (nowhere.length) fail('a club nothing names met named rivals');
   /* the stored table is a five row window, so a club can hide below it:
      ask the field itself, whole, for the same three jobs */
   seedRandom(0x1029);
