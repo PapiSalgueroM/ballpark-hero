@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawLeagueFinish, eliteInYear, finishBand, leagueSizeFor, leagueWithArticle, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -144,9 +144,36 @@ describe("managerLeagueField (Round 1029)", () => {
   });
 
   it("finds his club under the other game's spelling and never names it twice", () => {
-    const f = managerLeagueField({ clubs: CLUBS, club: "Manchester City", league: "EFL Championship", year: 2030 }, seq(0.5));
+    const f = managerLeagueField({ clubs: CLUBS, club: "Manchester City", league: "Premier League", year: 2030 }, seq(0.5));
     expect(f.league).toBe("Premier League");
     expect(f.named).not.toContain("Man City");
+    expect(f.named).toHaveLength(19);
+    const old = managerLeagueField({ clubs: CLUBS, club: "Manchester City", year: 2030 }, seq(0.5));
+    expect(old.league).toBe("Premier League");
+    expect(old.named).not.toContain("Man City");
+  });
+
+  it("plays the league the job came with, in the list's spelling, over the list's own row", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "Manchester City", league: "EFL Championship", year: 2030 }, seq(0.5));
+    expect(f.league).toBe("Championship");
+    expect(f.named).toEqual(["Norwich City", "Swansea City"]);
+    const more = [...CLUBS, row("Nacional", "Primera Division Uruguay", "Uruguay"), row("Penarol", "Primera Division Uruguay", "Uruguay"),
+      row("Benfica", "Primeira Liga", "Portugal"), row("Toronto FC", "MLS", "Canada"), row("Hajduk Split", "HNL", "Croatia")];
+    const nacional = managerLeagueField({ clubs: more, club: "Nacional", league: "Primeira Liga", year: 2030 }, seq(0.5));
+    expect(nacional.league).toBe("Primeira Liga");
+    expect(nacional.named).toEqual(["Benfica"]);
+    expect(managerLeagueField({ clubs: more, club: "Inter Miami", league: "MLS Eastern Conference", year: 2030 }, seq(0.5)).named).toEqual(["Toronto FC"]);
+    expect(managerLeagueField({ clubs: more, club: "Rijeka", league: "SuperSport HNL", year: 2030 }, seq(0.5)).league).toBe("HNL");
+    expect(listLeague(more, "Brasileirão Série A")).toBe("Brasileirao");
+    expect(listLeague(more, "2. Bundesliga")).toBeNull();
+  });
+
+  it("plays every club it knows of a league without a verified size, plus his own", () => {
+    const big = [...CLUBS, ...Array.from({ length: 22 }, (_, i) => row(`BR ${i}`, "Brasileirao", "Brazil"))];
+    const f = managerLeagueField({ clubs: big, club: "BR 0", year: 2030 }, seq(0.5));
+    expect(f.sizeVerified).toBe(false);
+    expect(f.named).toHaveLength(22);
+    expect(f.size).toBe(23);
   });
 
   it("keeps a market job's league and drops any name that could be his own club", () => {
@@ -161,6 +188,30 @@ describe("managerLeagueField (Round 1029)", () => {
     const f = managerLeagueField({ clubs: CLUBS, club: "Swansea City", year: 2030 }, seq(0.5));
     expect(f.league).toBe("Championship");
     expect(f.named).toEqual(["Norwich City"]);
+    expect([f.size, f.sizeVerified]).toEqual([24, true]);
+  });
+
+  it("knows the Championship's size for the dugout only, from 2004", () => {
+    expect(leagueSizeFor("Championship", 2030)).toBeNull();
+    expect(leagueSizeFor("Championship", 2003, true)).toBeNull();
+    expect(leagueSizeFor("Championship", 2004, true)).toBe(24);
+    expect(leagueSizeFor("Premier League", 2030, true)).toBe(20);
+  });
+
+  it("moves division only between the Premier League and the Championship", () => {
+    const pl = Array.from({ length: 20 }, (_, i) => divisionMove("Premier League", i + 1, 20)?.to ?? null);
+    expect(pl).toEqual([...Array(17).fill(null), "Championship", "Championship", "Championship"]);
+    const ch = Array.from({ length: 24 }, (_, i) => divisionMove("Championship", i + 1, 24)?.to ?? null);
+    expect(ch).toEqual(["Premier League", "Premier League", ...Array(22).fill(null)]);
+    expect(divisionMove("Championship", 1, 24)?.up).toBe(true);
+    expect(divisionMove("Premier League", 20, 20)?.up).toBe(false);
+    expect([divisionMove("La Liga", 20, 20), divisionMove("La Liga", 1, 20), divisionMove(null, 20, 20)]).toEqual([null, null, null]);
+  });
+
+  it("says where he finished without a position, at every place of a 20 field", () => {
+    const zones = Array.from({ length: 20 }, (_, i) => finishZone(i + 1, 20));
+    expect(zones).toEqual(["top of the table", "second", ...Array(8).fill("in the top half"),
+      ...Array(7).fill("in the bottom half"), ...Array(3).fill("in the bottom three")]);
   });
 
   it("walks the verified size into a manager's table, step by step", () => {

@@ -49,6 +49,13 @@ import type { ClubData } from "./soccerCareerEngine";
      fran03.html, fran2023.html, fran2024.html;
      statscrew.com/worldfootball/l-FRALG1/y-1990, 1991, 1996, 1997, 2001, 2002,
      2022, 2023.
+   Championship (Round 1029 fix, the manager's table only, DUGOUT_SIZES
+     below): 24 from 2004/05, the season the second tier took that name, so
+     no size is claimed before it.
+     statscrew.com/worldfootball/l-ENGCHA/y-2004 ("24 teams competed"),
+     y-2023; rsssf.org/engpaul/FLA/2004-05.html and rsssf.org/tablese/
+     eng2024.html (24 rows each); espn.com/soccer/standings/_/league/eng.2/
+     season/2023 (24 teams). Read 2026-10-06.
    Seasons after the latest one read keep the latest size: the game's future
    is its own, and the format it plays is the one in force today. */
 interface SizeWindow { from: number; to?: number; size: number }
@@ -59,11 +66,17 @@ const LEAGUE_SIZES: Record<string, SizeWindow[]> = {
   "Serie A": [{ from: 1990, to: 2003, size: 18 }, { from: 2004, size: 20 }],
   "Ligue 1": [{ from: 1990, to: 1996, size: 20 }, { from: 1997, to: 2001, size: 18 }, { from: 2002, to: 2022, size: 20 }, { from: 2023, size: 18 }],
 };
+/* The Championship is the dugout's alone: a playing season's finish is drawn
+   from a band set by the club's tier, and every Championship club is tier 4,
+   so the playing finish keeps the top flights only. */
+const DUGOUT_SIZES: Record<string, SizeWindow[]> = {
+  "Championship": [{ from: 2004, size: 24 }],
+};
 
 /** Clubs in that league's top flight in the season starting in `year`, or
  *  null when the size is not verified for that league and season. */
-export function leagueSizeFor(league: string, year: number): number | null {
-  const windows = LEAGUE_SIZES[league];
+export function leagueSizeFor(league: string, year: number, dugout = false): number | null {
+  const windows = LEAGUE_SIZES[league] ?? (dugout ? DUGOUT_SIZES[league] : undefined);
   if (!windows) return null;
   for (const w of windows) {
     if (year >= w.from && (w.to === undefined || year <= w.to)) return w.size;
@@ -188,17 +201,23 @@ export function ordinal(n: number): string {
    row names, and a league is matched by its name, so Monaco sits in Ligue 1
    and Swansea in the Championship):
 
-   - his club is found in the career's club list by its name, or by the
-     spelling the shared rivalry table holds for it (a job offer names
-     Manchester City, the career's list says Man City), accents folded;
-   - a club the list does not carry (a job from the wider market) keeps the
-     league its offer named, and any club whose name shares a word with his
-     is left out of the names, so the same club under another spelling (RB
-     Salzburg, Red Bull Salzburg) can never sit in his table twice;
-   - the table has the league's verified size where soccerCareerLeague knows
-     it, and otherwise the field the dugout always played (20), or more when
-     the game knows more clubs than that. Only a verified size is ever
-     printed;
+   - the league he plays in is the one his job came with (the offer card
+     showed it, so the table must agree with it), put in the list's own
+     spelling ("EFL Championship" is the list's "Championship"); a job
+     without one (a save from before this round) finds his club in the list
+     by its name, or by the spelling the shared rivalry table holds for it
+     (an offer names Manchester City, the list says Man City), accents
+     folded. A Nacional job in Portugal therefore plays the Primeira Liga,
+     never the Uruguayan Nacional's league;
+   - when his club is not in that league in the list, any club whose name
+     shares a word with his is left out of the names, so the same club under
+     another spelling (RB Salzburg, Red Bull Salzburg) can never sit in his
+     table twice;
+   - the table has the league's verified size where this module knows it,
+     and otherwise the field the dugout always played (20), or more when the
+     game knows more clubs than that. Only a verified size is ever printed,
+     and in a league without one the season prints no position at all (see
+     finishZone);
    - every position is counted, but only clubs the game knows in that league
      are named. When the game knows more of them than the table has room for,
      the season draws which ones played that year. */
@@ -209,11 +228,66 @@ const clubKey = (name: string) => foldName(SC_CLUB_CANON[name] ?? name);
 const PLAIN_WORDS = new Set(["city", "united", "club", "real", "sporting", "athletic", "atletico", "town", "county", "rovers", "football"]);
 const nameWords = (name: string) => foldName(name).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !PLAIN_WORDS.has(w));
 
+/* The job market names some leagues by Club Manager's labels, which the
+   career's list spells its own way (keys folded). */
+const LEAGUE_ALIASES: Record<string, string> = {
+  "efl championship": "Championship",
+  "brasileirao serie a": "Brasileirao",
+  "supersport hnl": "HNL",
+  "mls eastern conference": "MLS",
+  "mls western conference": "MLS",
+};
+
+/** A league label in the career list's own spelling, or null when no club
+ *  of the list plays in that league. */
+export function listLeague(clubs: readonly ClubData[], label: string): string | null {
+  const f = foldName(label);
+  const want = LEAGUE_ALIASES[f];
+  const hit = clubs.find(c => (want ? c.league === want : foldName(c.league) === f));
+  return hit ? hit.league : null;
+}
+
+/* ─── Changing division ───
+   The club's tier is its standing, a grade the job market and the board
+   read; a division is where it plays. Only where the game knows both sides
+   of a move does a season change the league: the Premier League's bottom
+   three go down to the Championship and the Championship's top two go up
+   automatically (a third club goes up through the play-offs, which the
+   dugout does not play). Read 2026-10-06: rsssf.org/engpaul/FLA/2004-05.html
+   (Sunderland and Wigan up, 18th to 20th down) and rsssf.org/tablese/
+   eng2024.html (Leicester and Ipswich up, Luton, Burnley and Sheffield
+   United 18th to 20th down); ESPN's 2023-24 tables (espn.com/soccer/
+   standings/_/league/eng.1/season/2023, "Positions 18, 19, 20: Relegation";
+   .../eng.2/season/2023, "Positions 1, 2: Promotion"). Anywhere else the
+   club stays in its league, and the season says so in tiers, never in
+   divisions. */
+const DIVISION_UP: Record<string, string> = { "Championship": "Premier League" };
+const DIVISION_DOWN: Record<string, string> = { "Premier League": "Championship" };
+
+/** The league a finish moves his club to, or null when it stays put. */
+export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null {
+  if (league === null) return null;
+  if (DIVISION_UP[league] && pos <= 2) return { to: DIVISION_UP[league], up: true };
+  if (DIVISION_DOWN[league] && pos >= size - 2) return { to: DIVISION_DOWN[league], up: false };
+  return null;
+}
+
+/** Where he finished, in words true of a league of any size, for a league
+ *  whose size the game does not know: a position would claim a place that
+ *  league may not have (18th of an Allsvenskan of 16). */
+export function finishZone(pos: number, size: number): string {
+  if (pos === 1) return "top of the table";
+  if (pos === 2) return "second";
+  if (pos >= size - 2) return "in the bottom three";
+  return pos * 2 <= size ? "in the top half" : "in the bottom half";
+}
+
 export interface ManagerLeagueInput {
   clubs: readonly ClubData[];
   /** The club he manages, as the save holds it. */
   club: string;
-  /** The league the job came with, for a club the list does not carry. */
+  /** The league he plays in: the one his job came with, or the one a
+   *  promotion or relegation took him to. Absent on saves from before 1029. */
   league?: string;
   /** The season's start year. */
   year: number;
@@ -234,25 +308,21 @@ export interface ManagerLeagueField {
 export function managerLeagueField(input: ManagerLeagueInput, rng: () => number): ManagerLeagueField {
   const world = adjustClubsForYear([...input.clubs], input.year);
   const mine = clubKey(input.club);
-  const home = world.find(c => clubKey(c.name) === mine);
-  let league: string | null = null;
-  let rivals: ClubData[] = [];
-  if (home) {
-    league = home.league;
-    rivals = world.filter(c => c.league === league && clubKey(c.name) !== mine);
-  } else if (input.league) {
-    const label = world.find(c => foldName(c.league) === foldName(input.league!))?.league;
-    league = label ?? input.league;
-    const myWords = nameWords(input.club);
-    rivals = label ? world.filter(c => c.league === label && clubKey(c.name) !== mine && !nameWords(c.name).some(w => myWords.includes(w))) : [];
-  }
+  /* the job's league first: the card showed it, so the table agrees with it */
+  const league = input.league
+    ? listLeague(input.clubs, input.league) ?? input.league
+    : input.clubs.find(c => clubKey(c.name) === mine)?.league ?? null;
+  const inLeague = league !== null && world.some(c => c.league === league && clubKey(c.name) === mine);
+  const myWords = nameWords(input.club);
+  const rivals = league === null ? [] : world.filter(c => c.league === league && clubKey(c.name) !== mine
+    && (inLeague || !nameWords(c.name).some(w => myWords.includes(w))));
   const names: string[] = [];
   const seen = new Set<string>();
   for (const c of rivals) {
     const k = clubKey(c.name);
     if (!seen.has(k)) { seen.add(k); names.push(c.name); }
   }
-  const verified = league ? leagueSizeFor(league, input.year) : null;
+  const verified = league ? leagueSizeFor(league, input.year, true) : null;
   const size = verified ?? Math.max(MANAGER_FIELD, names.length + 1);
   if (names.length > size - 1) {
     for (let i = names.length - 1; i > 0; i -= 1) {
