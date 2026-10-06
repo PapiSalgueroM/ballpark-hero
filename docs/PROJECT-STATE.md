@@ -1,3 +1,81 @@
+## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
+
+Cage Clash at https://douknowball.com/cage-clash now shows Ready, Move
+closer, Recover gas, Recovering, Unavailable, Not in drill and Paused on
+its existing action buttons. Hints follow the actual engine costs,
+ranges, cooldowns and positions. They remain descriptive, so holding a
+move still works after recovery. Help, the guide and the new What's New
+entry explain them. Heavy strike fits the 44px ground control while its
+accessible name remains Heavy ground strike. No new mode, data, save,
+score model, combat outcome or animation change.
+
+PR159 merged as 06eb9d512ad831ee74018a858f458ab4c9e76233. Accepted head
+2da139133670bb5e99b2ab26f83b2e305dddb2fc, tested synthetic
+3ca1b2107b7313095bbf5e5e41494b484694413b and actual merge share tree
+a987c75952b7d782f602ed92e55e5d19a2745b49. Parent 31a4ec01 and PR152 to
+158, including Claude's guide grants, are preserved.
+
+The host imported PR159 as Previewing. Shift-Refresh restarted that
+preview. Publish changes completed with Your website was updated.
+Actual LIVE Cage and news entry is index-E3MW3bN9.js. Reopened help and
+the guide have the new hint rules; news has Know when to throw. and
+Find your range -> /cage-clash. Claude's 207-lineup entry remains.
+Score-free Practice visibly showed six hints, all linked through
+aria-describedby, each 10px inside a 44px control. Three strikes said
+Move closer and three restricted moves said Not in drill; Pause changed
+legal hints to Paused. Shots stayed 0 and gas 100. No production fight
+was completed. Both pages have one canonical and description, no noindex.
+Screenshot: C:/Users/antho/.codex/artifact-inspection/cage-readiness-live-controls-1069.png.
+
+Final remote checks on accepted head:
+- Cage run 37534479901, artifact 11447760134, SHA256
+  4ad2a5075aa04ce891a1e69c312772f3a1e6cb44005a4d050e82bbbe1267509f.
+  79 actual outcomes and 132 effective copied faults passed. Every fault
+  had its intended sole AssertionError and independent green baseline;
+  exact skips, runtime output and source immutability were audited.
+  The readiness baseline compared 240 trajectories and 43,200 paired
+  states against the accepted prior engine. An effective cost fault
+  proved that comparison can fail.
+- Native Cage: 4 profiles, 8 effective controls, 3,032 inputs, 228
+  screenshots, 14 readiness states, 834 hint samples, 15 recaps with
+  150 actual counter values and 10 intercepted terminal completions.
+  All existing lessons, Quick/Circuit journeys and animation anchors
+  passed. The 12 strike anchors and ground position/pressure anchors
+  match prep. Effort anchors follow their genuinely earned ground levels;
+  reduced motion is stable and normal motion changes at each same level.
+  No Practice score/save, forwarded write, fit/scroll failure, browser
+  error or missing asset.
+- MMA run 37534479943, artifact 11446421482, SHA256
+  957b5e209b89cbaab7060674b94435253025bb463c1ad97938292a8d3a02db92.
+  20 outcomes/23 effective controls, 72 campaigns/864 events and native
+  4 cases/66 panels/355 valid targets passed. Reload/history/legacy
+  boxing RNG/save checks and source immutability remain intact.
+- Entry run 37534479833, artifact 11445777181, SHA256
+  f96b84cb6feab1a93d803a1b19ef428ca72b8a2b39aa3fc0019a3b683efe8abd.
+  8 outcomes/18 effective controls, six precise guide controls and native
+  16 cases/80 targets/640 loaded-font checks/3 geometry controls passed.
+  Setup requests were locally intercepted; none were forwarded.
+All three downloaded artifacts matched their API SHA256 before
+extraction and were independently audited. Actual app type/build and
+all 16 built readers, including search, passed. Cage had 35 closing
+harnesses, MMA 32 and Entry 19.
+
+Prep run 37531072358 on 61306d2a, artifact 11444559422, SHA256
+0e34c0445739dc25dfd92aea82823ea21732bc40d2524195e99ec00a08d32561,
+passed before the exact five manifest payloads were copied and rehashed.
+Cage/news and their ledger hashes changed; sitemap bytes did not.
+Temporary prep workflow was removed. A real 320px long ground-label
+wrapping failure was repaired and an effective control reproduces it,
+then restores the green baseline. Unsupported test locator options
+were removed after the actual type gate rejected them.
+
+Practice, Circuit and useCageClash remain byte-identical to 84469b10.
+All runtimes stayed in remote CI. No direct production DB calls, paid AI
+or production fight completions. Protected root drafts and seven stashes
+remain untouched. This closing branch changes only PROJECT-STATE and
+WORKBOARD. AH's main/publish slot releases after this receipt merges;
+Claude retains the career/GM and agreed guide lanes. Next round unclaimed.
+
 ## Round1069 prepared: Cage move readiness, remote final checks pending
 
 Cage action buttons now show Ready, Move closer, Recover gas,
