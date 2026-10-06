@@ -214,8 +214,14 @@ const DIGEST_SEEDS = 16;
    Re-recorded at Release AD (2026-10-05, twice, identical): careers 1, 2 and 8 move
    because Round 972 draws continental opponents from FALLBACK_CLUBS and Round
    1013 appends 51 clubs to it. Proven on a tree of 1013 plus 972 alone (13 of
-   16 matched, the same three moved); each round alone was green on its branch. */
-const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   16 matched, the same three moved); each round alone was green on its branch.
+   Re-recorded by Round 1016 (2026-10-06, twice, identical): the back line and
+   holding midfielders get a defensive credit in calcSeasonRating, and the
+   rating feeds development, offers and the title boost, so careers 2, 6, 7,
+   10, 14 and 15 (CB, RB and CDM) move. Attribution: the same tree with the
+   rule's one line taken out records 16 of 16 equal to the digests before
+   this one, and the ten careers at other positions never moved. */
+const BASELINE = ['6d58659a6c7b6b19', 'aeb46de6a01c7638', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', '8b2a5b9827e5cb15', '31122cd3142a6723', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', '307e58839c18ee06', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', '85d8989eb443664b', '223df3e4fe6941df', '3e5b99f018877dbe'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
