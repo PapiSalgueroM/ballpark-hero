@@ -25,3 +25,17 @@ Main37ce6d5e adds Claude's AD live receipt and released publication slot.
 Its documentation is retained. Codex owns this next publication while final
 committed-source checks run. No live claim is made for this candidate yet.
 Runtime stayed remote; no production database probe or change was made.
+
+## Final checks and live receipt
+
+All eight final PR140 workflows passed on
+f263e453186b6685baea8442e33698a07019a33f. All 119 steps succeeded with no
+skips. PR140 merged as 1869ffe85c70c33e6ef59addec5dc5f0563b34e3 with an
+identical tree. Parent PR132, PR136 and PR138 were automatically marked merged.
+
+Published through Lovable's authenticated UI on October 6, 2026. The UI
+confirmed "Your website was updated". Live root served index-BStsZELG.js,
+and /whats-new returned 200 with both new entries. Browser verification found
+both entries visible and the NBA How to play dialog opening on natural
+navigation. An existing career was viewed without playing a season or clearing
+its save. No paid Lovable AI or production database work was used.
