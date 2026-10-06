@@ -20,7 +20,10 @@
  *      `earned`; a watched win, draw and loss pay 3, 1 and 0, a title 20 and a
  *      runner-up 6 on top, an away win 1, and a replayed full time 0
  *   S8 scouting unchanged: 500 scout finds are byte identical to the baseline
- *      committed before this round (scripts/data/academyScoutBaseline.json)
+ *      committed before this round (scripts/data/academyScoutBaseline.json).
+ *      A generated name later found to be a real man is renamed in that file
+ *      only by genAcademyScoutBaseline.mjs --rename, which lists it under
+ *      `renamed` (Round 899's Lamine Gassama, 2 finds); every other byte holds
  *   S9 rollback: an academy save with pack kids loads in the frozen V1 loader
  *   S10 fences: one writer of the ledger key, no `.earned =` outside the ledger,
  *      no Math.random in the ledger, no timer or confetti on the panel, and none
@@ -46,7 +49,7 @@
  *   reload, 11 dismissal waits for its save, 12 opening waits for a durable debit
  *
  * CONTROLS: skew, nopity, late, leak, reroll, scoutdrift, words, oddsliteral,
- * twowriters, panelodds, freeprice, tiercard, gemtap, wavedaway, seqreuse,
+ * earnedleak, twowriters, panelodds, freeprice, tiercard, gemtap, wavedaway, seqreuse,
  * sameseed, forgetful, dear, rawkid, unsaveddelivery, unsaveddismiss, unsaveddebit. The review before this round shipped found the
  * shared seed, the kid lost to "Welcome him in" and the missing controls; S12, S13,
  * S15 and the last eight controls are its cases. Control copies go to
@@ -269,7 +272,12 @@ function sections({ W, R, V1, T, panelSource, sources, baseline }) {
   /* S10 */
   const writers = sources.filter(s => s.rel !== 'src/lib/tycoonRewards.ts' && /tycoonRewardsV1|REWARDS_KEY/.test(stripComments(s.code)));
   for (const w of writers) out.S10.push(`${w.rel} names the ledger key, and only src/lib/tycoonRewards.ts may touch it`);
-  const earners = sources.filter(s => s.rel !== 'src/lib/tycoonRewards.ts' && /\.earned\s*(?:[+\-*/]?=)(?!=)/.test(stripComments(s.code)));
+  /* Release AD: only a file in the tycoon economy can hold its ledger, so .earned is fenced in tycoon and stadium
+     files and in any file that names tycoonRewards. Round 988's US career deck engine (src/lib/usCareerDeckC.ts)
+     assigns its own career money field, m.earned (millions a card paid), which is not the gem ledger and turned this
+     section red for that reason alone. The earnedleak control proves a direct ledger credit is still caught. */
+  const tycoonish = s => /tycoon|stadium/i.test(s.rel) || /tycoonRewards/.test(stripComments(s.code));
+  const earners = sources.filter(s => s.rel !== 'src/lib/tycoonRewards.ts' && tycoonish(s) && /\.earned\s*(?:[+\-*/]?=)(?!=)/.test(stripComments(s.code)));
   for (const w of earners) out.S10.push(`${w.rel} assigns .earned`);
   const rewardsCode = stripComments(sources.find(s => s.rel === 'src/lib/tycoonRewards.ts')?.code ?? '');
   const seedFn = /export function freshSeed\(\)[^{]*\{[\s\S]*?\n\}/.exec(rewardsCode);
@@ -478,6 +486,8 @@ const CONTROLS = [
     panel: t => mustReplace(t, 'Welcome him in', 'You got lucky', 'PacksPanel.tsx') },
   { name: 'oddsliteral', why: 'the panel types a 9% of its own', red: ['S1'],
     panel: t => mustReplace(t, '<div className="text-[10px] uppercase tracking-wider text-muted-foreground">The odds</div>', '<div className="text-[10px] uppercase tracking-wider text-muted-foreground">The odds (Star 9%)</div>', 'PacksPanel.tsx') },
+  { name: 'earnedleak', why: 'a tycoon file credits the ledger directly', red: ['S10'],
+    sources: list => [...list, { rel: 'src/components/tycoon/GemLeak.tsx', code: "import { openPack } from '@/lib/tycoonRewards';\nexport function leak(l: { earned: number }) { l.earned += 5; return openPack; }" }] },
   { name: 'twowriters', why: 'a second file writes the ledger key', red: ['S10'],
     sources: list => [...list, { rel: 'src/components/tycoon/GemCheat.tsx', code: "localStorage.setItem('tycoonRewardsV1', '{}');" }] },
   { name: 'panelodds', why: 'the panel prints each odd one point higher than the table', red: [], vRed: [1], vitest: 'TYCOON_PACKS_PANEL',

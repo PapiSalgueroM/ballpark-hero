@@ -21,6 +21,7 @@ import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 import { getNflLifeEventsA } from './nflCareerLifeA';
 import { getNflLifeEventsB } from './nflCareerLifeB';
+import { getNflLifeEventsC } from './nflCareerLifeC';
 import { getNflCorruptionEvents } from './nflCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
@@ -297,6 +298,12 @@ export interface CareerEvent {
   id: string;
   title: string;
   body: string;
+  /** Round 917: the deck section a card sits under, the seasons it rests
+      after it fires, and a key shared by cards that tell one story. All
+      optional and read by nothing yet (nflCareerLifeTags.ts). */
+  category?: import('./nflCareerLifeTags').NflLifeCategory;
+  cooldown?: number;
+  story?: string;
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
 }
 
@@ -983,6 +990,7 @@ export function drawEvent(c: CareerState, rng: () => number): CareerEvent {
   // other cards.
   deck.push(...getNflLifeEventsA(c, rng));
   deck.push(...getNflLifeEventsB(c, rng));
+  deck.push(...getNflLifeEventsC(c, rng)); /* Round 917: 36 cards, position, age, role and roster rules */
   const corrupt = getNflCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['book', 'bounty', 'peds', 'agentSkim', 'wash'].includes(k));

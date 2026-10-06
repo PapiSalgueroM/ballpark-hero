@@ -5,6 +5,9 @@ import {
   CLUB_FACILITY_INFO, FACILITY_IDS, FACILITY_MAX, facilitiesOf, facilityEffectLine, facilityLevel, facilityUpgradeCost, upgradeFacility,
 } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { useDeskCue } from '@/components/club-manager/deskCue';
+import type { DeskCueRead } from '@/components/club-manager/deskCue';
 
 /**
  * Round 963: the training ground's line, plus the men its lift would be cut
@@ -34,6 +37,18 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
   const f = facilitiesOf(career);
+  /* Round 982: an upgrade used to move one digit. Now the pip it lit pulses
+     once and the Now line ticks in with what the level does, both only once
+     the save really holds the new level, and a screen reader hears it said. */
+  const { cue, press } = useDeskCue<FacilityId, CareerState>(career);
+  const upgradeRead = (id: FacilityId): DeskCueRead<CareerState> | null => {
+    const next = upgradeFacility(career, id);
+    if (!next) return null;
+    const want = facilitiesOf(next)[id];
+    return after => (facilitiesOf(after)[id] === want && after.budget === next.budget
+      ? `${CLUB_FACILITY_INFO[id].label} is level ${want} of ${FACILITY_MAX} now. ${effectLine(after, id)}`
+      : null);
+  };
   return (
     <div className="space-y-2" data-facilities-desk>
       <div className="bg-card border border-border rounded-xl p-3">
@@ -47,6 +62,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
             const info = CLUB_FACILITY_INFO[id];
             const canBuy = cost !== null && career.budget >= cost;
             const next = canBuy ? upgradeFacility(career, id) : null;
+            const lit = cue?.key === id ? cue : null;
             return (
               <div key={id} data-facility={id} data-facility-level={level}>
                 <div className="flex items-center justify-between gap-2">
@@ -54,7 +70,7 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                   <span className="flex items-center gap-2 shrink-0">
                     <span className="text-xs font-bold tabular-nums text-foreground">{level}/{FACILITY_MAX}</span>
                     <button
-                      onClick={() => onUpgrade(id)}
+                      onClick={() => press(id, upgradeRead(id), () => onUpgrade(id))}
                       disabled={!canBuy}
                       className="min-h-[44px] text-[11px] font-bold rounded-xl px-3 py-2 border border-gold/50 text-gold hover:bg-gold/10 disabled:opacity-50 disabled:hover:bg-transparent transition-colors"
                     >
@@ -63,11 +79,28 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
                   </span>
                 </div>
                 <div className="flex gap-0.5 mt-1" aria-hidden>
-                  {Array.from({ length: FACILITY_MAX }, (_, i) => (
-                    <span key={i} className={cn('h-1.5 flex-1 rounded-sm', i < level ? 'bg-primary/80' : 'bg-secondary')} />
-                  ))}
+                  {/* Round 982: the pip the upgrade lit is keyed by the cue,
+                      so a second upgrade in a row pulses again. The pulse is
+                      a shadow, so the row keeps its size. */}
+                  {Array.from({ length: FACILITY_MAX }, (_, i) => {
+                    const fresh = lit !== null && i === level - 1;
+                    return (
+                      <span
+                        key={fresh ? `lit-${lit.id}` : i}
+                        data-facility-pip-fresh={fresh ? 'yes' : undefined}
+                        className={cn('h-1.5 flex-1 rounded-sm', i < level ? 'bg-primary/80' : 'bg-secondary', fresh && 'cm-win-pulse')}
+                      />
+                    );
+                  })}
                 </div>
-                <p data-facility-current className="text-[11px] text-muted-foreground mt-1">Now: {effectLine(career, id)}</p>
+                <p
+                  key={lit ? `now-${lit.id}` : 'now'}
+                  data-facility-current
+                  data-facility-fresh={lit ? 'yes' : undefined}
+                  className={cn('text-[11px] text-muted-foreground mt-1', lit && 'cm-tick-in')}
+                >
+                  Now: {effectLine(career, id)}
+                </p>
                 {next ? (
                   <div data-facility-preview className="mt-1 rounded-lg border border-primary/25 bg-primary/5 px-2 py-1.5 text-[11px]">
                     <p className="text-foreground">Next, level {facilitiesOf(next)[id]}: {effectLine(next, id)}</p>
@@ -86,6 +119,13 @@ export function FacilitiesScreen({ career, onUpgrade }: FacilitiesScreenProps) {
           Paid from the transfer kitty. Big clubs start high and small clubs near the bottom, and every level is a lift on the game you already play: at level 1 a facility does nothing at all. They belong to the club, so a new job starts on the new club's.
         </p>
       </div>
+      {/* Round 982: the pip and the Now line are the moment for the eye; this
+          says it for a screen reader, out of the flow. The region is in the
+          page from the start and only its words change, the shape a screen
+          reader announces (see DeskCueLine), and it is no role=status, so a
+          desk where nothing happened has no status element at all. */}
+      <p aria-live="polite" aria-atomic="true" data-desk-cue-live="cm-facilities-cue" data-testid="cm-facilities-cue" className="sr-only !mt-0">{cue?.text ?? ''}</p>
+      <CelebrationStyles />
     </div>
   );
 }

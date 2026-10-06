@@ -206,6 +206,15 @@ function digest(s) {
 const DIGEST_SEEDS = 16;
 /* Recorded with --record on the untouched tree at origin/main 5f2622fd, before
    any line of this round existed, and twice to prove the digest is stable.
+   Re-recorded by Round 1013 (twice, identical) after proving this harness
+   green on origin/main 47197830 with the old digests: the round appends 51
+   clubs to FALLBACK_CLUBS and the market draws a league before a club (two
+   Math.random calls where pick made one), so every seeded career signs
+   somewhere else. Sections 1, 2, 3 and 5 stayed green on the branch.
+   Re-recorded at Release AD (2026-10-05, twice, identical): careers 1, 2 and 8 move
+   because Round 972 draws continental opponents from FALLBACK_CLUBS and Round
+   1013 appends 51 clubs to it. Proven on a tree of 1013 plus 972 alone (13 of
+   16 matched, the same three moved); each round alone was green on its branch.
    RE-RECORDED by Round 1012 (club derbies in Soccer Career), on purpose. The
    derby swing moves popularity and morale, which gate events and dilemmas, so
    the stream after a derby season legitimately moves. What was measured first
@@ -226,7 +235,7 @@ const DIGEST_SEEDS = 16;
    '4ebd88d3d4b6a6a0', '48ca4ba73be9e9fe', '74d8b0a22eed6238',
    'de756b5070df2302', '197b2357e2742487', '2dc97ee74f43440b',
    '6009b15056656286']. The stream control below still turns section 4 red. */
-const BASELINE = ['28d4d1a0ac175409', '8cc9d65204580d31', 'da4789abe4543321', '179482f89c80f08d', '954c6270437d8639', '84fe9f772b83a2bb', '288a292a53ec033d', '96d019d0eaa13a3b', '7b5e3a9a5308d3b9', '65e33253ea25162e', '80051cac00e627a6', '74d8b0a22eed6238', '933ce4efc0b06960', '50a412d6e4bb19aa', '4e674089f1ecbc38', '71e21dfef610d69c'];
+const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
