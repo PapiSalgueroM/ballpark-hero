@@ -209,11 +209,15 @@ try {
       assert.deepEqual(await page.getByRole('button', { name: /^Round \d+$/ }).allTextContents(), bout.rounds.map(item => `Round ${item.round}`), 'Only actually recorded rounds are offered, including early finishes');
       if (!report.recapControls.length) {
         const target = page.locator(`[data-mma-stat="${asymmetric}"][data-mma-side="a"]`), other = reading.cells.find(cell => cell.stat === asymmetric && cell.side === 'b').value;
-        const original = await target.evaluate(el => ({ html: el.innerHTML, value: el.getAttribute('data-value') }));
-        await target.evaluate((el, value) => { el.textContent = value + (el.dataset.mmaStat === 'control' ? ' units' : ''); el.setAttribute('data-value', value); }, other);
+        const numericNode = await target.evaluateHandle(el => el.firstChild);
+        const original = await target.evaluate(el => ({ text: el.firstChild?.nodeValue, nodeType: el.firstChild?.nodeType, value: el.getAttribute('data-value') }));
+        assert.equal(original.nodeType, 3, 'Corner control targets an existing numeric text node'); assert.equal(original.text, original.value);
+        await target.evaluate((el, value) => { el.firstChild.nodeValue = value; el.setAttribute('data-value', value); }, other);
         assert.notEqual(await target.getAttribute('data-value'), original.value, 'Corner control changes the actual numeric cell');
+        assert.equal(await target.evaluate(el => el.firstChild.nodeValue), other, 'Corner control changes the existing visible numeric text');
         const swapped = await recapReading(page); assert.throws(() => recapOutcome(swapped, event, bout, 'total'), /equals actual saved rounds/);
-        await target.evaluate((el, held) => { el.innerHTML = held.html; el.setAttribute('data-value', held.value); }, original);
+        await target.evaluate((el, held) => { el.firstChild.nodeValue = held.text; el.setAttribute('data-value', held.value); }, original);
+        assert(await target.evaluate((el, node) => el.firstChild === node, numericNode), 'Corner control preserves the renderer-owned numeric node'); await numericNode.dispose();
         recapOutcome(await recapReading(page), event, bout, 'total');
         report.recapControls.push({ name: 'corner-value', stat: asymmetric, before: original.value, fault: other, restored: true });
         const style = await target.getAttribute('style'); await target.evaluate(el => { el.style.fontSize = '11px'; });
@@ -230,7 +234,7 @@ try {
       }
       for (const round of bout.rounds) {
         await activate(button(`Round ${round.round}`), profile); await inspect(`${stage}-round-${round.round}`);
-        reading = await recapReading(page); recapOutcome(reading, event, bout, round.round); recapGeometry(reading, profile); entry.readings.push(reading);
+        reading = await recapReading(page); entry.readings.push(reading); recapOutcome(reading, event, bout, round.round); recapGeometry(reading, profile);
         assert.equal(await readSave(), bytes, 'Selecting rounds cannot save, pay or rerun the event');
       }
       await activate(button('All rounds'), profile); recapOutcome(await recapReading(page), event, bout, 'total');
