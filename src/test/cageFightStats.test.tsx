@@ -48,7 +48,7 @@ function fixture() {
   return fight;
 }
 function click(name: string) {
-  const button = screen.queryByRole('button', { name, exact: true }); expect(button).not.toBeNull(); fireEvent.click(button!);
+  const button = screen.queryByRole('button', { name }); expect(button).not.toBeNull(); fireEvent.click(button!);
 }
 function combatInput(fight: CageFight): CageInput {
   if (fight.player.stamina < 22) return blank;
@@ -72,7 +72,7 @@ function finishUi(start: CageFight, active = false) {
   const keys = { jab: 'j', power: 'k', kick: 'l', grapple: 'u', submit: 'i', escape: 'o' };
   for (let tick = 0; tick < 2900 && expected.phase !== 'finished'; tick++) {
     if (expected.phase === 'break') {
-      expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull();
       for (const key of held) fireEvent.keyUp(document.body, { key }); held = new Set();
       click('Next round'); expected = continueCageRound(expected); act(() => frame());
     }
@@ -95,20 +95,20 @@ function inspectResult(fight: CageFight, action: string) {
   const priorCalls = vi.mocked(recordCompletion).mock.calls.length;
   const board = screen.getByRole('region', { name: 'Cage Clash game' });
   const prior = ['data-cage-tick', 'data-cage-winner', 'data-cage-fight-score', 'data-cage-circuit-score'].map(key => board.getAttribute(key));
-  click('Fight stats'); expect(screen.queryByRole('button', { name: action, exact: true })).toBeNull();
+  click('Fight stats'); expect(screen.queryByRole('button', { name: action })).toBeNull();
   expect(matrix()).toEqual([
     ['Stat', 'You', 'CPU'], ['Shots landed', String(fight.player.hits), String(fight.cpu.hits)],
     ['Damage dealt', String(Math.round(fight.player.damageDealt)), String(Math.round(fight.cpu.damageDealt))],
     ['Blocks', String(fight.player.blocked), String(fight.cpu.blocked)], ['Takedowns', String(fight.player.takedowns), String(fight.cpu.takedowns)],
     ['Top control', `${(fight.player.controlTicks / 20).toFixed(1)}s`, `${(fight.cpu.controlTicks / 20).toFixed(1)}s`],
   ]);
-  expect(screen.queryByRole('button', { name: 'Back', exact: true })).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Back' })).toHaveFocus();
   act(() => { for (let i = 0; i < 8; i++) frame(50); });
   expect(['data-cage-tick', 'data-cage-winner', 'data-cage-fight-score', 'data-cage-circuit-score'].map(key => board.getAttribute(key))).toEqual(prior);
   expect(recordCompletion).toHaveBeenCalledTimes(priorCalls);
   click('Back'); act(() => frame());
-  expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toHaveFocus();
-  expect(screen.queryByRole('button', { name: action, exact: true })).not.toBeNull(); expect(recordCompletion).toHaveBeenCalledTimes(priorCalls);
+  expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats' })).toHaveFocus();
+  expect(screen.queryByRole('button', { name: action })).not.toBeNull(); expect(recordCompletion).toHaveBeenCalledTimes(priorCalls);
 }
 
 describe('Cage Fight Stats display', () => {
@@ -136,7 +136,7 @@ describe('Cage Fight Stats display', () => {
 
   it('focuses Back and calls its callback once without editing the supplied fight', () => {
     const fight = fixture(), prior = copy(fight), back = vi.fn(); render(<CageFightStats fight={fight} onBack={back} />);
-    expect(screen.queryByRole('button', { name: 'Back', exact: true })).toHaveFocus(); click('Back');
+    expect(screen.queryByRole('button', { name: 'Back' })).toHaveFocus(); click('Back');
     expect(back).toHaveBeenCalledTimes(1); expect(fight).toEqual(prior); expect(recordCompletion).not.toHaveBeenCalled();
   });
 });
@@ -144,9 +144,9 @@ describe('Cage Fight Stats display', () => {
 describe('Cage Fight Stats actual board controls', () => {
   it('excludes setup live combat and a completed unscored practice lesson', () => {
     render(<CageClashBoard onHelp={() => {}} helpOpen={false} />);
-    expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull(); expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull(); expect(screen.queryByRole('table')).toBeNull();
     click('Fight'); act(() => { frame(); frame(50); });
-    expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull(); expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull(); expect(screen.queryByRole('table')).toBeNull();
     click('Pause'); click('Leave fight');
     fireEvent.change(screen.getByRole('combobox', { name: 'Mode' }), { target: { value: 'practice' } });
     fireEvent.change(screen.getByRole('combobox', { name: 'Your style' }), { target: { value: 'grappler' } });
@@ -156,7 +156,7 @@ describe('Cage Fight Stats actual board controls', () => {
     for (let tick = 0; tick < 60 && !expected.complete; tick++) { expected = stepCagePractice(expected, { ...blank, action: 'submit' }); act(() => frame(50)); }
     fireEvent.keyUp(document.body, { key: 'i' }); expect(expected.complete).toBe(true);
     expect(screen.queryByText('Drill complete', { exact: true })).not.toBeNull();
-    expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull(); expect(screen.queryByRole('table')).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
+    expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull(); expect(screen.queryByRole('table')).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();
   });
 
   it('opens and closes actual quick results with restored focus and no new writes or awards', () => {
@@ -168,7 +168,7 @@ describe('Cage Fight Stats actual board controls', () => {
     for (let repeat = 0; repeat < 3; repeat++) inspectResult(fight, 'Rematch');
     expect(writes).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled();
     expect(JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage } })).toBe(prior);
-    click('Rematch'); expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull();
+    click('Rematch'); expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull();
   });
 
   it('shows each actual circuit fight separately and keeps next opponents and the one final award intact', () => {
@@ -176,13 +176,13 @@ describe('Cage Fight Stats actual board controls', () => {
     fireEvent.change(screen.getByRole('combobox', { name: 'Mode' }), { target: { value: 'circuit' } }); click('Start circuit');
     const scores: number[] = [];
     for (const [stage, style] of (['balanced', 'striker', 'grappler'] as const).entries()) {
-      expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull();
       const fight = finishUi(createCageFight('balanced', style, seed + stage), true); expect(fight.result?.winner).toBe('player'); scores.push(fight.result!.score);
       expect(recordCompletion).toHaveBeenCalledTimes(stage === 2 ? 1 : 0); inspectResult(fight, stage === 2 ? 'New circuit' : 'Next opponent');
       if (stage < 2) click('Next opponent');
     }
     expect(vi.mocked(recordCompletion).mock.calls[0].slice(0, 2)).toEqual(['/cage-clash', Math.round(scores.reduce((sum, value) => sum + value, 0) / 3)]);
-    click('New circuit'); expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats', exact: true })).toBeNull();
+    click('New circuit'); expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats' })).toBeNull();
     expect(recordCompletion).toHaveBeenCalledTimes(1);
   }, 30000);
 
