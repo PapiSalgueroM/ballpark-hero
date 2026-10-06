@@ -1056,7 +1056,7 @@
     "Naby Keita 84' for Sadio Mane"
    ],
    "fields": {
-    "dateLabel": "2019-20 Premier League Title Decider",
+    "dateLabel": "2019-20 Premier League Title Run-in",
     "competition": "Premier League",
     "matchDate": "2020-06-24",
     "team": "Liverpool",
@@ -1141,12 +1141,19 @@
      "from": "Wikipedia match report + Liverpool FC official archive + Sky Sports lineup graphic, unanimous on the starting XI for Liverpool's first home game as champions.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Eleven confirmed; the match was on 24 June, the night before the title was sealed.",
      "why": "the internal note had the date story wrong"
+    },
+    {
+     "path": "dateLabel",
+     "from": "2019-20 Premier League Title Decider",
+     "to": "2019-20 Premier League Title Run-in",
+     "why": "the scoreLine this round applied (Liverpool 4-0 Crystal Palace, on two hosts) says the title was sealed the next night by another result, so the label no longer calls this match the decider"
     }
    ],
    "notes": [
     "Starting XI matches both sources exactly; formation 4-3-3 matches both. Venue Anfield correct. Andrew Robertson is listed as 'Andy Robertson' by the sources (same man).",
     "The in-file comment ('the title was actually confirmed the night before via Chelsea's win ... this match came after the title was already mathematically won ... first home match played as champions') is also wrong for the same reason, and so is the source string's 'first home game as champions'. The first Anfield game as champions was later (Liverpool 2-1 Aston Villa on 5 July 2020 per general knowledge; not checked here).",
-    "Blank candidates Gomez, Wijnaldum, Fabinho all started."
+    "Blank candidates Gomez, Wijnaldum, Fabinho all started.",
+    "Round 1026 (review fix): dateLabel moved from Title Decider to Title Run-in to agree with the corrected match."
    ]
   },
   {

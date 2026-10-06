@@ -2622,10 +2622,10 @@ export const LINEUPS: Lineup[] = [
     source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Rodrygo and Hazard started; Valverde and Vinicius came on.',
   },
 
-  // 77. 2020-21 Serie A title decider - Inter win at Crotone, the Scudetto confirmed a day later
+  // 77. 2020-21 Serie A title run-in - Inter win at Crotone, the Scudetto confirmed a day later
   {
     id: 'seriea-2021-inter-title',
-    dateLabel: '2020-21 Serie A Title Decider',
+    dateLabel: '2020-21 Serie A Title Run-in',
     competition: 'Serie A',
     matchDate: '2021-05-01',
     team: 'Inter Milan',
@@ -4918,10 +4918,10 @@ export const LINEUPS: Lineup[] = [
     source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. Isco and Jese started; Casemiro and Benzema were not in the squad.',
   },
 
-  // 150. 2019-20 Premier League Title Decider - Liverpool clinch a first title in 30 years
+  // 150. 2019-20 Premier League title run-in - Liverpool beat Palace and the first title in 30 years was sealed the next night
   {
     id: 'epl-2020-liverpool-title',
-    dateLabel: '2019-20 Premier League Title Decider',
+    dateLabel: '2019-20 Premier League Title Run-in',
     competition: 'Premier League',
     matchDate: '2020-06-24',
     team: 'Liverpool',

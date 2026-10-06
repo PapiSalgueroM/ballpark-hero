@@ -863,7 +863,7 @@
     "Ivan Perišić 66' for Matteo Darmian"
    ],
    "fields": {
-    "dateLabel": "2020-21 Serie A Title Decider",
+    "dateLabel": "2020-21 Serie A Title Run-in",
     "competition": "Serie A",
     "matchDate": "2021-05-01",
     "team": "Inter Milan",
@@ -1054,12 +1054,19 @@
      "from": "centre",
      "to": "left",
      "why": "ESPN (CM-L), Sky Sports and inter.it: Sensi started; Eriksen came on 65' and scored"
+    },
+    {
+     "path": "dateLabel",
+     "from": "2020-21 Serie A Title Decider",
+     "to": "2020-21 Serie A Title Run-in",
+     "why": "the scoreLine this round applied (Crotone 0-2 Inter, on two hosts) is not the match that decided the title: the Scudetto was confirmed the next day by another result, so the label no longer calls it the decider"
     }
    ],
    "notes": [
     "Bastoni and Hakimi (the other two blank candidates) did start.",
     "Organiser page not readable: legaseriea.it redirects to an app shell (en.legaseriea.it) with no server-rendered match data. Sources used: ESPN and Sky Sports (independent) plus inter.it (club official). inter.it's review is dated 2 May (its publication date); its match facts agree with ESPN and Sky.",
-    "Round 1026: ESPN labels Brozovic AM; single source, his CM label stays."
+    "Round 1026: ESPN labels Brozovic AM; single source, his CM label stays.",
+    "Round 1026 (review fix): dateLabel moved from Title Decider to Title Run-in to agree with the corrected match."
    ]
   },
   {
@@ -5630,7 +5637,8 @@
     "All eleven names, date, score (AET), venue and stage match fifa.com and BBC. ESPN's summary for this match (event 264123) has no rosters, so BBC Sport was used as the independent source.",
     "Kuyt and Sneijder clubs (Liverpool, Inter) confirmed by the same squad lists.",
     "BBC lists the midfield line right to left as Kuyt, van Bommel, Sneijder, de Jong, Robben, which agrees with the entry's Kuyt right, Robben left; fifa.com gives no sides.",
-    "Round 1026: the skeptic notes Transfermarkt puts Robben right and Kuyt left, the reverse of the entry, and that BBC publishes an order, not sides. Single source each way; not changed."
+    "Round 1026: the skeptic notes Transfermarkt puts Robben right and Kuyt left, the reverse of the entry, and that BBC publishes an order, not sides. Single source each way; not changed.",
+    "Round 1026 (review fix): checked again for a second host on the wings. fifa.com's feed gives no pitch coordinates for 2010 and ESPN's feed for the final (event 264123) states only a 4-2-3-1 with no roster; two match analyses read on 2026-10-06 (jmftbl.substack.com, Bleacher Report) name no sides. Still one source each way, so Kuyt keeps RW and Robben LW under rule 1, and the reveal still says RW for Kuyt. Open for a second host."
    ]
   },
   {
