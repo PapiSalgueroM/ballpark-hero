@@ -20,8 +20,10 @@
  *   3. PARTIAL MARKS. A club reads "(partial data)" exactly when isPartialClub
  *      says so, the line explaining the mark is there, and every club with an
  *      empty baked squad is marked (it is all youth players).
- *   4. THE DATE. Exactly one "Squads as of X." line, and X is
- *      CM_ROSTER_META.asOf, the roster bake's own date. Never the clock.
+ *   4. THE DATE. Exactly one "Squads as of X; A-League Men squads as of Y."
+ *      line, X CM_ROSTER_META.asOf, the roster bake's own date, and Y
+ *      CM_ALEAGUE_META.read, the A-League ledgers' read date (Round 1035).
+ *      Never the clock.
  *   5. NO OTHER ERA. No club that exists only in a past season's world
  *      (ERA_LEAGUES) appears anywhere in the block.
  *   6. WIRING. ClubManager.tsx passes the list into GameSeoContent (read from
@@ -98,6 +100,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import GameSeoContent from '${ROOT_URL}/src/components/seo/GameSeoContent.tsx';
 import { ClubManagerClubList } from '${ROOT_URL}/src/components/club-manager/ClubManagerClubList.tsx';
 export { REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS } from '${ROOT_URL}/src/lib/clubManager.ts';
+export { CM_ALEAGUE_META } from '${ROOT_URL}/src/data/clubManagerALeague2026.ts';
 export const render = () => renderToStaticMarkup(
   React.createElement(HelmetProvider, { context: {} },
     React.createElement(MemoryRouter, { initialEntries: ['/club-manager'] },
@@ -120,8 +123,11 @@ esbuild.buildSync({
    render of the data, with no save and no promotions registered. */
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const {
-  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS, render: renderRaw,
+  REAL_LEAGUES, ERA_LEAGUES, isPartialClub, playableClubs, CM_ROSTER_META, CM_ROSTERS, CM_ALEAGUE_META, render: renderRaw,
 } = require(BUNDLE);
+/* Round 1035: the A-League Men squads carry their own read date, so the one
+   date line names both, each from its own data file, never the clock. */
+const DATE_LINE = `Squads as of ${CM_ROSTER_META.asOf}; A-League Men squads as of ${CM_ALEAGUE_META.read}.`;
 const renderHtml = (() => {
   const error = console.error;
   console.error = (...a) => { if (!String(a[0]).includes('useLayoutEffect does nothing on the server')) error(...a); };
@@ -234,7 +240,7 @@ if (CONTROL === 'unmark') {
 }
 if (CONTROL === 'clockdate') {
   needSaved(CONTROL);
-  const line = blockTokenHtml('p', `Squads as of ${CM_ROSTER_META.asOf}.`);
+  const line = blockTokenHtml('p', DATE_LINE);
   if (!line) abort('control clockdate: the saved block has no date line');
   const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   swap(CONTROL, line, line.replace(CM_ROSTER_META.asOf, today));
@@ -306,7 +312,7 @@ for (const doc of docs) {
 
   /* 4. the date */
   const dated = tokens.filter(t => /^Squads as of /.test(t.text));
-  const wantDate = `Squads as of ${CM_ROSTER_META.asOf}.`;
+  const wantDate = DATE_LINE;
   if (dated.length !== 1) findings[4].push(`${doc.label}: ${dated.length} "Squads as of" lines, not one`);
   for (const d of dated) if (d.text !== wantDate) findings[4].push(`${doc.label}: "${d.text}" is not the roster bake's own date, "${wantDate}"`);
 

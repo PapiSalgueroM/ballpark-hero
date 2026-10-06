@@ -2820,6 +2820,13 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
   },
   /* Round 1035: the A-League Men 2026-27. Each fact read 2026-10-06:
      - 12 clubs, no promotion or relegation (drop 0, the playoffs ladder).
+       The clubs are _membership.json's twelve. No relegation: ESPN
+       (https://www.espn.com.au/football/story/_/id/43800726/everything-need-know-australian-championship,
+       12 February 2025: the Australian Championship and the A-League are
+       separate competitions "with no promotion and relegation between the
+       two") and The Roar
+       (https://www.theroar.com.au/2025/02/17/the-australian-championship-is-not-really-a-second-division-but-its-a-decent-start/,
+       17 February 2025), both read 2026-10-06.
      - 26 games a club, the full home and away 22 plus four third meetings,
        over 28 matchweeks from Friday 16 October 2026, Grand Final on the
        weekend of 3 to 6 June 2027: the league's own fixture release
@@ -2834,8 +2841,10 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        (https://football360.com.au/a-league-elimination-finals-preview-auckland-fc-melbourne-city-melbourne-victory-sydney-fc-kisnorbo-reunion/).
        THIN for 2026-27: those two describe the 2025-26 season; neither
        fixture release above restates the cut, and only an encyclopedia's
-       2026-27 page (a spot check) says the top six again. The cut is the
-       board's rung only, since the finals are not played here.
+       2026-27 page (a spot check) says the top six again. So the copy (this
+       row's simplified, the guide, What's New) states it only as last
+       season's format, which is two sourced. The cut is the board's rung
+       only, since the finals are not played here.
      - The Australia Cup is for Australian clubs only from the 2026 edition,
        so Auckland FC and Wellington Phoenix do not enter it: Football
        Australia (https://footballaustralia.com.au/news/football-australia-announces-refined-competitions-structure-2026,
@@ -2854,7 +2863,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'australia', flag: 'Australia', cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],
     europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
-    simplified: 'The real season is 26 games (home and away plus four third meetings) and ends in a top six finals series; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
+    simplified: 'The real season is 26 games (home and away plus four third meetings), and last season\'s finals series took the top six; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3608,6 +3617,17 @@ export function clubEntersCup(leagueId: string, clubName: string): boolean {
  *  club gets the def back untouched. */
 function withClubCup(league: LeagueDef, clubName: string): LeagueDef {
   return league.cupName !== null && !clubEntersCup(league.id, clubName) ? { ...league, cupName: null } : league;
+}
+
+/** The cup this career's club sits out: its league plays one but the club is
+ *  in cupExcluded (Auckland FC in the Australia Cup's league). Null for every
+ *  other career, a cupless league included, so the cupless copy can say "your
+ *  club does not enter it" rather than "the league has no cup". */
+export function cupSatOutBy(career: Pick<CareerState, 'clubName' | 'eraId'> & { customClub?: CustomClubSpec }): string | null {
+  const lg = careerLeagueOf(career);
+  if (lg.cupName !== null) return null;
+  const cup = leagueRulesOf(lg.id).cup;
+  return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;
 }
 
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */

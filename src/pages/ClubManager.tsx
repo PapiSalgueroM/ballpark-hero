@@ -15,7 +15,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf, cupSatOutBy,
 } from '@/lib/clubManager';
 // Round 1035: the A-League Men's squads come from their own generated file.
 import { CM_ALEAGUE_META } from '@/data/clubManagerALeague2026';
@@ -901,6 +901,9 @@ const ClubManager = () => {
   /* Round 832: null in a league with no domestic cup; every cup line below
      then says there is none rather than "Knocked out". */
   const cupName = careerLeagueOf(c).cupName;
+  /* Round 1035: the cup a club of a cup league sits out (Auckland FC and the
+     Australia Cup), so the cupless lines name it instead of denying it exists. */
+  const cupSatOut = cupSatOutBy(c);
   const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
 
@@ -1145,7 +1148,7 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
-                value={cupName === null ? 'No domestic cup' : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                value={cupName === null ? (cupSatOut ? 'Not entered' : 'No domestic cup') : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
                 sub={uclAlive ? (cupName === null ? 'UCL alive' : 'UCL alive too') : (cupName ?? careerLeagueOf(c).name)}
                 onClick={() => setHubPanel('cups')}
               />
@@ -1379,7 +1382,9 @@ const ClubManager = () => {
                       shows no bracket. */}
                   {cupName === null ? (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
-                      🏅 There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.
+                      🏅 {cupSatOut
+                        ? <>{c.clubName} do not enter the {cupSatOut}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>
+                        : <>There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.</>}
                     </div>
                   ) : (<>
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">

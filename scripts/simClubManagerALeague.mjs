@@ -91,7 +91,7 @@ const DIR = path.join(ROOT, 'scripts/data/gatheredSquads/aleague2026');
 const SEEDS = Number(process.env.SIM_SEEDS || 10);
 const SEED_SET = process.env.SIM_SEED || '';
 const CONTROL = process.env.SIM_ALEAGUE_CONTROL || '';
-const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount'];
+const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount', 'nodedupe', 'samebye', 'satout'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_ALEAGUE_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 const LEAGUE = 'aleague';
@@ -126,7 +126,14 @@ function mutateOnce(src, from, to, label) {
 function transformEngine(src) {
   if (CONTROL === 'excluded') src = mutateOnce(src, "cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],", "cup: 'Australia Cup',", 'excluded');
   if (CONTROL === 'nobyes') src = mutateOnce(src, 'const short = ordered.length > 8 && ordered.length < 16;', 'const short = false;', 'nobyes');
+  if (CONTROL === 'samebye') src = mutateOnce(src, 'if (i < byes.length) merged.push(byes[i]);', 'if (i < byes.length) merged.push(byes[0]);', 'samebye');
+  if (CONTROL === 'satout') src = mutateOnce(src, 'return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;', 'return null;', 'satout');
   return `${src}\nexport { relegationSpots as __relegationSpots };\n`;
+}
+
+function transformWorld(src) {
+  if (CONTROL === 'nodedupe') src = mutateOnce(src, 'if (list) out[club] = list.filter(p => p.n !== name);', 'if (list) out[club] = list;', 'nodedupe');
+  return src;
 }
 
 function transformALeague(src) {
@@ -146,6 +153,7 @@ async function bundleEngine() {
   fs.writeFileSync(entry, [
     `export * from '${ROOT_FWD}/src/lib/clubManager.ts';`,
     `export * as al from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';`,
+    `export * as baked from '${ROOT_FWD}/src/data/clubManagerRosters.ts';`,
     `export { nationalityOf } from '${ROOT_FWD}/src/data/playerNationalities.ts';`,
     `export { FLAG_CODES } from '${ROOT_FWD}/src/components/FlagImg.tsx';`,
     '',
@@ -159,6 +167,7 @@ async function bundleEngine() {
         b.onResolve({ filter: /integrations\/supabase\/client/ }, () => ({ path: 'sb', namespace: 'sb' }));
         b.onLoad({ filter: /.*/, namespace: 'sb' }, () => ({ contents: 'export const supabase = new Proxy({}, { get() { throw new Error("offline harness"); } }); export const SUPABASE_URL = "http://offline.invalid"; export const SUPABASE_PUBLISHABLE_KEY = "x";', loader: 'js' }));
         b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManager\.ts$/ }, a => ({ contents: transformEngine(fs.readFileSync(a.path, 'utf8').replaceAll('\r\n', '\n')), loader: 'ts', resolveDir: path.dirname(a.path) }));
+        b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerWorldRosters\.ts$/ }, a => ({ contents: transformWorld(fs.readFileSync(a.path, 'utf8').replaceAll('\r\n', '\n')), loader: 'ts', resolveDir: path.dirname(a.path) }));
         b.onLoad({ filter: /[\\/]src[\\/]data[\\/]clubManagerALeague2026\.ts$/ }, a => ({ contents: transformALeague(fs.readFileSync(a.path, 'utf8').replaceAll('\r\n', '\n')), loader: 'ts', resolveDir: path.dirname(a.path) }));
       },
     }],
@@ -190,6 +199,26 @@ function partLedger(cm, membership) {
   const clubs = Object.keys(rosters).sort();
   if (JSON.stringify(clubs) !== JSON.stringify([...(lg?.clubs ?? [])].sort())) fail(`the generated clubs (${clubs.length}) are not the league's clubs`);
   console.log(`   ${rows} ledger rows with a group, ${shipped.size} shipped, ${skipped} without a group held back`);
+
+  /* The join the engine plays (CM_ROSTERS, the baked world plus these
+     squads): every man the generator proved is a stale baked row is gone
+     from that baked club, and no A-League name sits in two joined squads.
+     The generator's collision check guards the files; this guards the join. */
+  const world = cm.CM_ROSTERS;
+  const sup = Object.entries(cm.al.CM_ALEAGUE_SUPERSEDES);
+  if (!sup.length) fail('CM_ALEAGUE_SUPERSEDES is empty, so the stale row check reads nothing');
+  for (const [name, club] of sup) {
+    if (!(cm.baked.CM_ROSTERS[club] ?? []).some(p => p.n === name)) fail(`${name} is no longer in the baked ${club} squad: the SUPERSEDES line is stale`);
+    if ((world[club] ?? []).some(p => p.n === name)) fail(`${name} is still in the joined ${club} squad: the stale baked row was not dropped`);
+  }
+  const clubsOf = new Map();
+  for (const [club, list] of Object.entries(world)) for (const p of list) { if (!clubsOf.has(p.n)) clubsOf.set(p.n, new Set()); clubsOf.get(p.n).add(club); }
+  let twice = 0;
+  for (const list of Object.values(rosters)) for (const p of list) {
+    const at = clubsOf.get(p.n) ?? new Set();
+    if (at.size !== 1) { twice += 1; fail(`${p.n} is in ${at.size} joined squads (${[...at].join(', ')}), not one`); }
+  }
+  console.log(`   joined world: ${sup.length} stale baked row(s) dropped, ${twice} A-League names in two squads`);
 }
 
 /* B. Values: one page a club, one curve for everybody. */
@@ -284,6 +313,37 @@ function playSeason(cm, state) {
   return { state: s, stuck: true };
 }
 
+/* The bracket's shape, whatever the field: the round of 16 and the byes are
+   one field with nobody twice, no club meets itself, nobody is in two ties
+   of a round, and each round is exactly the winners of the round before
+   (the quarter-finals also take every bye, once). Returns the number of
+   faults so a caller can count the brackets read. */
+const NEXT_OF = { R16: 'QF', QF: 'SF', SF: 'F' };
+const TIES_OF = { QF: 4, SF: 2, F: 1 };
+function checkBracket(bracket, byes, label) {
+  let faults = 0;
+  const bad = m => { faults += 1; fail(`${label}: ${m}`); };
+  const byRound = r => bracket.filter(t => t.round === r);
+  const r16 = byRound('R16');
+  const field = [...r16.flatMap(t => [t.home, t.away]), ...byes];
+  if (new Set(field).size !== field.length) bad(`the round of 16 and the byes name a club twice (${field.length} entries, ${new Set(field).size} clubs)`);
+  if (field.length > 8 && field.length < 16 && r16.length !== field.length - 8) bad(`a field of ${field.length} plays ${r16.length} round of 16 ties, not ${field.length - 8}`);
+  for (const r of ['R16', 'QF', 'SF', 'F']) {
+    const ties = byRound(r);
+    const names = ties.flatMap(t => [t.home, t.away]);
+    if (ties.some(t => t.home === t.away)) bad(`a ${r} tie has a club playing itself`);
+    if (new Set(names).size !== names.length) bad(`a club is in two ${r} ties`);
+    if (TIES_OF[r] && ties.length !== TIES_OF[r]) bad(`${ties.length} ${r} ties, not ${TIES_OF[r]}`);
+    for (const t of ties) if (t.winner !== t.home && t.winner !== t.away) bad(`a ${r} tie (${t.home} v ${t.away}) has no winner from the tie`);
+    const next = NEXT_OF[r];
+    if (!next) continue;
+    const fed = [...ties.map(t => t.winner), ...(r === 'R16' ? byes : [])].sort();
+    const into = byRound(next).flatMap(t => [t.home, t.away]).sort();
+    if (JSON.stringify(fed) !== JSON.stringify(into)) bad(`the ${next} is not the ${r} winners${r === 'R16' && byes.length ? ' plus the byes' : ''}`);
+  }
+  return faults;
+}
+
 const LADDER = { 'Win the A-League Men': 1, 'Make the finals': 6, 'Finish mid-table or better': 9 };
 
 /* D. The league plays the way its rules row says, and its cup leaves the two
@@ -308,7 +368,7 @@ function partSeasons(cm) {
   if (asks['Win the A-League Men'] !== 2 || asks['Make the finals'] !== 5 || asks['Finish mid-table or better'] !== 5) fail(`the boards split ${JSON.stringify(asks)}, not 2 title, 5 finals (ranks 3 to 7), 5 mid-table`);
   console.log(`   boards: ${JSON.stringify(asks)}`);
 
-  let ended = 0, sacked = 0, finals = 0, k = 0;
+  let ended = 0, sacked = 0, finals = 0, k = 0, brackets = 0, bracketFaults = 0;
   const winners = {};
   for (; ended < SEEDS && k < 3 * SEEDS; k++) {
     const club = MANAGED[k % MANAGED.length];
@@ -337,6 +397,9 @@ function partSeasons(cm) {
     for (const x of EXCLUDED) if (everyone.includes(x)) fail(`seed ${k}: ${x} was drawn into the Australia Cup`);
     const fin = (s.cupBracket ?? []).find(t => t.round === 'F');
     if (fin?.winner) { finals += 1; winners[fin.winner] = (winners[fin.winner] ?? 0) + 1; } else fail(`seed ${k}: the Australia Cup has no final winner`);
+    bracketFaults += checkBracket(s.cupBracket ?? [], s.cupByes ?? [], `seed ${k} Australia Cup`);
+    brackets += 1;
+    if (cm.cupSatOutBy(s) !== null) fail(`seed ${k} at ${club}: the career is told it sits out the ${cm.cupSatOutBy(s)}`);
     const next = cm.startNextSeason(cm.finishSeason(s).state);
     const nextLg = cm.careerLeagueOf(next);
     if (nextLg.id !== LEAGUE || nextLg.clubs.length !== 12 || lg.clubs.some(c => !nextLg.clubs.includes(c))) fail(`seed ${k}: the summer changed the league (${nextLg.id}, ${nextLg.clubs.length} clubs)`);
@@ -351,6 +414,9 @@ function partSeasons(cm) {
     const cupWeeks = start.calendar.filter(e => e.type === 'cup').length;
     if (cupWeeks) fail(`${club} schedules ${cupWeeks} cup weeks`);
     if (cm.careerLeagueOf(start).cupName !== null) fail(`${club}'s career names a cup: ${cm.careerLeagueOf(start).cupName}`);
+    /* The cups panel and hub tile read this: the club sits out a cup its
+       league plays, which is not the same as a league with no cup. */
+    if (cm.cupSatOutBy(start) !== 'Australia Cup') fail(`${club} is not told it sits out the Australia Cup (cupSatOutBy ${cm.cupSatOutBy(start)}), so the page says the league has no cup`);
     if (start.cupRound !== 'out') fail(`${club} starts in the cup (${start.cupRound})`);
     if (start.cupByes) fail(`${club} starts with cup byes`);
     if ((start.boardObjectives ?? []).some(o => /cup/i.test(o.label))) fail(`${club}'s board sets a cup objective`);
@@ -390,11 +456,21 @@ function partSeasons(cm) {
     if (played.sacked || played.stuck) { fail(`${l.id} (${club}): six seeds in a row never finished a season`); Math.random = REAL_RANDOM; continue; }
     const fin = (played.state.cupBracket ?? []).find(x => x.round === 'F');
     if (!fin?.winner) fail(`${l.id} (${club}): the ${l.cupName} has no final winner (field ${size})`);
+    bracketFaults += checkBracket(played.state.cupBracket ?? [], played.state.cupByes ?? [], `${l.id} ${l.cupName}`);
+    brackets += 1;
     fields.push(`${l.id} ${size}`);
     Math.random = REAL_RANDOM;
   }
   if (!fields.some(x => x.startsWith('aleague '))) fail('the A-League cup was not among the short fields checked');
   console.log(`   every short cup crowned a winner: ${fields.join(', ')}; full fields of sixteen: ${full.length}`);
+  /* A cupless league is not a cup the club sits out. */
+  Math.random = seeded(hashKey(`aleague${SEED_SET}|cupless`));
+  const mx = cm.REAL_LEAGUES.find(l => l.id === 'ligamx');
+  if (!mx || cm.leagueRulesOf('ligamx').cup !== null) fail('Liga MX is no longer the cupless league this check reads');
+  else if (cm.cupSatOutBy(cm.startCareer(mx.clubs[0], 'now')) !== null) fail(`${mx.clubs[0]} (Liga MX, no cup) is told it sits out a cup`);
+  Math.random = REAL_RANDOM;
+  if (brackets < SEEDS) fail(`only ${brackets} brackets had their shape read`);
+  console.log(`   ${brackets} played brackets read for shape (round sizes, nobody twice, no self ties, each round fed by the last plus the byes): ${bracketFaults} faults`);
 }
 
 /* E. The numbers written in the copy are the numbers the engine plays. */
