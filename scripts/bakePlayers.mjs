@@ -331,6 +331,13 @@ export function matchSeed(names, rows, normalizeName) {
 /* ------------------------------------------------------------------ */
 /* Row -> Player                                                      */
 /* ------------------------------------------------------------------ */
+export function invalidPlayerCounts(player) {
+  const invalid = [];
+  if (player.goals !== null && (!Number.isInteger(player.goals) || player.goals < 0)) invalid.push('goals');
+  if (player.assists !== null && (!Number.isInteger(player.assists) || player.assists < 0)) invalid.push('assists');
+  return invalid;
+}
+
 export function rowToPlayer(row, app, resolveLeague) {
   const position = app.POSITION_NORMALIZE[row.position ?? ''];
   if (!position) return { player: null, reason: `position "${row.position}" is not in POSITION_NORMALIZE` };
@@ -340,8 +347,8 @@ export function rowToPlayer(row, app, resolveLeague) {
   if (!Number.isInteger(age) || age < AGE_MIN || age > AGE_MAX) return { player: null, reason: `age ${row.age} is outside ${AGE_MIN}..${AGE_MAX}` };
   const usd = Number(row.market_value_usd);
   if (!(usd > 0)) return { player: null, reason: `market value ${row.market_value_usd} is not above zero` };
-  if (!Number.isInteger(row.goals) || !Number.isInteger(row.assists) || row.goals < 0 || row.assists < 0) {
-    return { player: null, reason: `goals ${row.goals} / assists ${row.assists} are not whole non negative counts` };
+  if (invalidPlayerCounts(row).length > 0) {
+    return { player: null, reason: `goals ${row.goals} / assists ${row.assists} must be null or whole non negative counts` };
   }
   if (!row.nationality || !String(row.nationality).trim()) return { player: null, reason: 'no nationality on the row' };
   return {
