@@ -1,3 +1,20 @@
+## Codex claims1067: Cage strike motion, 2026-10-06
+
+Codex owns CageClashCanvas.tsx, cageStrikeMotion tests/harness, its Cage
+workflow step, and narrow Cage help/guide/What's New hunks. Punches, kicks
+and ground strikes gain windup, contact and recovery silhouettes derived
+from existing action ticks. Reduced motion keeps a readable static action
+pose and suppresses incidental cycles. No fighting rule, score, save, route,
+real data or database change.
+
+Verify with actual rendered pixel footprints, effective source mutations,
+the existing combat/mode outcomes and native phone/keyboard journeys.
+All runtime verification and page generation run in GitHub Actions.
+Root held drafts and stashes stay untouched. Claude retains soccer/GM,
+1032/1035 and soccer2.ts. AH keeps main/publish during implementation and CI;
+Codex will request a narrow publish slot only after acceptance. Preserve
+PR152/153 and main e30e2735. Next1068 unclaimed. No live claim yet.
+
 ## Round1066 LIVE: Cage Clash Fight stats, 2026-10-06 17:21:33 UTC
 
 Fight stats is live at https://douknowball.com/cage-clash after a Quick
