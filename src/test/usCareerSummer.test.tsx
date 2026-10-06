@@ -56,7 +56,7 @@ const copy = <T,>(v: T): T => JSON.parse(JSON.stringify(v)) as T;
 /** A career three seasons in, played by the real engine, standing at the end
  *  of its last season with nothing else waiting on the board. */
 function playedCareer(sport: UsCareerSport, seed: number): { c: UsCareerCore; tq: number } {
-  for (let s = seed; s < seed + 50; s += 1) {
+  for (let s = seed; s < seed + 300; s += 1) {
     const rng = mulberry32(s);
     const pos = sport.create.defaultPos;
     const c = sport.startCareer(`Summer ${sport.label} ${s}`, pos, sport.create.archetypes[pos][0], rng, defaultAppearance(), 'now');
@@ -73,13 +73,13 @@ function playedCareer(sport: UsCareerSport, seed: number): { c: UsCareerCore; tq
     c.pendingRivalryChoice = null;
     c.contractYears = Math.max(c.contractYears, 2);
     if (sport.shouldRetire(c) || (c.suspendedSeasons ?? 0) > 0) continue;
-    /* The summer must deal three cards for the walk to have somewhere to go. */
+    /* The summer must deal at least two cards for the walk to have somewhere to go. */
     const probe = copy(c);
     dealSummer(probe, sport);
-    if ((probe.summer?.ids.length ?? 0) < 3) continue;
+    if ((probe.summer?.ids.length ?? 0) < 2) continue;
     return { c, tq };
   }
-  throw new Error(`${sport.label}: no fixture career dealt a three card summer in 50 seeds`);
+  throw new Error(`${sport.label}: no fixture career dealt a two card summer in 300 seeds`);
 }
 
 const save = (sport: UsCareerSport, c: UsCareerCore, tq: number, phase = 'event') =>
@@ -103,11 +103,17 @@ afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 describe.each(SPORTS)('%s summer on the board', (_slug, getSport) => {
   it('a mid-summer save opens on ids[at] and shows its place in the summer', () => {
     const sport = getSport();
-    const { c, tq } = playedCareer(sport, 11);
-    dealSummer(c, sport);
-    const first = summerCardAt(c, sport, 0)!;
-    answerSummerCard(c, sport, first, 0, mulberry32(5));
-    expect(c.summer, 'the summer is still open after card 1').toBeTruthy();
+    /* A career whose card 2 is still there after card 1 is answered (an
+       answer can move the career past it, which the skip test covers). */
+    let found: { c: UsCareerCore; tq: number } | null = null;
+    for (let seed = 11; seed < 400 && !found; seed += 7) {
+      const { c, tq } = playedCareer(sport, seed);
+      dealSummer(c, sport);
+      answerSummerCard(c, sport, summerCardAt(c, sport, 0)!, 0, mulberry32(5));
+      if (c.summer) found = { c, tq };
+    }
+    expect(found, 'some career keeps its summer open after card 1').not.toBeNull();
+    const { c, tq } = found!;
     save(sport, c, tq);
     mount(sport);
     expect(shownCard()?.getAttribute('data-career-event')).toBe(c.summer!.ids[c.summer!.at]);
@@ -174,11 +180,11 @@ describe.each(SPORTS)('%s summer on the board', (_slug, getSport) => {
     const { c, tq } = playedCareer(sport, 41);
     dealSummer(c, sport);
     const ids = [...c.summer!.ids];
-    c.summer = { year: c.summer!.year, ids: [ids[0], 'card_that_left_the_deck', ids[2]], at: 1 };
+    c.summer = { year: c.summer!.year, ids: ['card_that_left_the_deck', ids[1]], at: 0 };
     save(sport, c, tq);
     mount(sport);
-    expect(shownCard()?.getAttribute('data-career-event')).toBe(ids[2]);
-    expect(summerStep()).toBe('3');
+    expect(shownCard()?.getAttribute('data-career-event')).toBe(ids[1]);
+    expect(summerStep()).toBe('2');
   });
 });
 

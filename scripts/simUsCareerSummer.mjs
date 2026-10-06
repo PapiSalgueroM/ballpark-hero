@@ -178,7 +178,8 @@ await build({
 const B = await import(pathToFileURL(OUT).href);
 const { startSummer, answerSummerCard, summerOn, newSummerSalt } = B.summer;
 const { keyedRng } = B.keyed;
-const SPORTS = { nfl: B.nfl, nba: B.nba, mlb: B.mlb, nhl: B.nhl };
+const ONLY_SPORTS = (process.env.SIM_SPORTS || '').split(',').map(s => s.trim()).filter(Boolean);
+const SPORTS = Object.fromEntries(Object.entries({ nfl: B.nfl, nba: B.nba, mlb: B.mlb, nhl: B.nhl }).filter(([slug]) => !ONLY_SPORTS.length || ONLY_SPORTS.includes(slug)));
 const OFF = { cards: 1, cooldowns: false, fallbackCooldown: 1 };
 const clone = v => JSON.parse(JSON.stringify(v));
 const lastYear = c => c.seasons[c.seasons.length - 1]?.year ?? 0;
@@ -422,7 +423,7 @@ if (want('5')) {
 
 /* ─── 6. balance: an equivalence bound ──────────────────────────────────── */
 const TOL = { peak: 1.0, legacyRel: 0.075, hofPts: 3, headlineRel: 0.15 };
-const BAL_CAREERS = Number(process.env.SIM_BALANCE_CAREERS || 1000);
+const BAL_CAREERS = Number(process.env.SIM_BALANCE_CAREERS || 2000);
 const BAL_SEEDS = 3;
 function bootstrap(a, b, stat, n = 300) {
   let s = 0x2545f491;
@@ -433,7 +434,33 @@ function bootstrap(a, b, stat, n = 300) {
   out.sort((x, y) => x - y);
   return [out[Math.floor(n * 0.025)], out[Math.ceil(n * 0.975) - 1]];
 }
-if (want('6')) {
+/* Section 6 is most of this harness's time, so with more than one sport it
+   runs one child per sport at once, each with its own temp folder, and reads
+   their reports. A child exits 1 when its section 6 is red (or, under a
+   control, when the control fired), which is red here. */
+const balanceInChildren = want('6') && Object.keys(SPORTS).length > 1 && !process.env.SIM_CHILD;
+if (balanceInChildren) {
+  console.log(`6) balance: one child per sport, ${BAL_CAREERS} careers a sport a seed, ${BAL_SEEDS} seeds`);
+  const t6 = Date.now();
+  const { spawn } = await import('node:child_process');
+  const runs = Object.keys(SPORTS).map(slug => new Promise(resolve => {
+    const tmp = fs.mkdtempSync(path.join(TMP, `child-${slug}-`));
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], {
+      cwd: ROOT, env: { ...process.env, SIM_CHILD: '1', SIM_SPORTS: slug, SIM_SECTIONS: '6', TEMP: tmp, TMP: tmp, TMPDIR: tmp },
+    });
+    let text = '';
+    child.stdout.on('data', d => { text += d; });
+    child.stderr.on('data', d => { text += d; });
+    child.on('close', code => resolve({ slug, code, text }));
+  }));
+  for (const r of await Promise.all(runs)) {
+    const keep = r.text.split('\n').filter(l => /^\s{3}|FAIL|CONTROL/.test(l));
+    for (const l of keep) console.log(l);
+    if (r.code !== 0) fail('6', `${r.slug}: the balance child exited ${r.code}`);
+  }
+  console.log(`   balance ran in ${((Date.now() - t6) / 1000).toFixed(1)} s`);
+}
+if (want('6') && !balanceInChildren) {
   console.log(`6) balance: on against off, ${BAL_CAREERS} careers a sport a seed, ${BAL_SEEDS} seeds`);
   const t6 = Date.now();
   for (const [slug, sport] of Object.entries(SPORTS)) {

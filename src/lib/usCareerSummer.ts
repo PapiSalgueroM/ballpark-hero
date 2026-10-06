@@ -16,7 +16,13 @@
      champion always gets his podium, and a big press moment is always card 1;
    - every card is dealt from a stream keyed to the career, the year and the
      slot, and the ids are saved, so a reload rebuilds the same card from the
-     same save. First show and reload are the same computation.
+     same save. First show and reload are the same computation;
+   - card 1 is the old one card draw (on that keyed stream), so it keeps the
+     old game's share of rating cards, arc cards and press moments. The later
+     cards are the life around it: never a card that can move the rating,
+     never the corruption deck, never one whose answers lift morale on
+     average. Without those three rules the summer made careers far better
+     than the one card game did (scripts/simUsCareerSummer.mjs, section 6).
 
    The knob path (cards 1, cooldowns off) is the old offseason, draw for draw:
    startSummer hands back sport.drawEvent(c, Math.random) and writes nothing
@@ -75,34 +81,44 @@ const probeStream = (key: string, first: number | null): (() => number) => {
   };
 };
 
-/** What the card's answers do, tried on copies of the career (never the
- *  career itself, never Math.random): each answer once with the first draw at
- *  the bottom of the range, once at the top and once on a keyed stream, so a
- *  raise behind a coin flip (mlbA_shoulder_scare's 40 percent) is still found.
- *  `rating` is whether any try moved the rating or its ceiling; `morale` is
- *  the average morale change over every try. A try that throws counts as a
- *  rating move, so a card that cannot be read is never dealt late. */
-export function probeCard<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): { rating: boolean; morale: number } {
-  let morale = 0, tries = 0;
-  for (let k = 0; k < e.options.length; k += 1) {
-    for (const first of [0, 0.9999, null]) {
-      const probe = JSON.parse(snapshot) as C;
-      try {
-        e.options[k].apply(probe, probeStream(`rating-probe:${e.id}:${k}:${first}`, first));
-      } catch {
-        return { rating: true, morale: 0 };
-      }
-      if (probe.ovr !== c.ovr || probe.pot !== c.pot) return { rating: true, morale: 0 };
-      morale += probe.morale - c.morale;
-      tries += 1;
-    }
+/** One answer tried on a copy of the career (never the career itself, never
+ *  Math.random). Returns the copy, or null when the answer throws. */
+function tryAnswer<C extends UsCareerCore>(e: UsCareerEvent<C>, k: number, snapshot: string, first: number | null): C | null {
+  const probe = JSON.parse(snapshot) as C;
+  try {
+    e.options[k].apply(probe, probeStream(`rating-probe:${e.id}:${k}:${first}`, first));
+  } catch {
+    return null;
   }
-  return { rating: false, morale: tries ? morale / tries : 0 };
+  return probe;
 }
 
-/** Whether any answer to the card can move the rating or its ceiling. */
+/** Whether any answer to the card can move the rating or its ceiling. Each
+ *  answer is tried with the first draw at the bottom of the range, at the top
+ *  and on a keyed stream, so a raise behind a coin flip (mlbA_shoulder_scare's
+ *  40 percent) is still found. An answer that throws counts as a move, so a
+ *  card that cannot be read is never dealt late. */
 export function movesRating<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): boolean {
-  return probeCard(c, e, snapshot).rating;
+  for (let k = 0; k < e.options.length; k += 1) {
+    for (const first of [null, 0, 0.9999]) {
+      const probe = tryAnswer(e, k, snapshot, first);
+      if (!probe || probe.ovr !== c.ovr || probe.pot !== c.pot) return true;
+    }
+  }
+  return false;
+}
+
+/** The average morale change over the card's answers, each tried once on the
+ *  keyed stream. An answer that throws reads as an unlimited lift. */
+export function moraleLiftOf<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): number {
+  if (!e.options.length) return 0;
+  let sum = 0;
+  for (let k = 0; k < e.options.length; k += 1) {
+    const probe = tryAnswer(e, k, snapshot, null);
+    if (!probe) return Infinity;
+    sum += probe.morale - c.morale;
+  }
+  return sum / e.options.length;
 }
 
 /** A later card whose answers lift morale on average (by more than this) is
@@ -168,8 +184,8 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
     for (;;) {
       [e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);
       if (!e) break;
-      const fx = probeCard(c, e, snapshot);
-      if (!fx.rating && fx.morale <= LATER_CARD_MORALE_LIFT) break;
+      /* The cheap read first: most cards that fail, fail on morale. */
+      if (moraleLiftOf(c, e, snapshot) <= LATER_CARD_MORALE_LIFT && !movesRating(c, e, snapshot)) break;
       passed.add(ledgerKey(e));
     }
     /* A slot that finds nothing ends the deal, so ids[i] was always dealt
