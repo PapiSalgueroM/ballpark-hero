@@ -123,6 +123,27 @@ export const NHL_TRADE_RULES: GmTradeRules = {
    traded man's salary with cash, which this game does not model yet. */
 export const MLB_TRADE_RULES: GmTradeRules = { sport: 'mlb', maxAssetsPerSide: 5, prospects: true, retention: null };
 
+/* Round 1020: cash in an MLB trade, for the MLB GM desk (src/lib/mlbGmDesk.ts),
+   which trades under MLB_TRADE_RULES with this as its retention. Additive:
+   MLB_TRADE_RULES above is unchanged, so every other caller still refuses it.
+   The mechanism, read 2026-10-05 on two publishers: an MLB club may send cash
+   in a trade to pay part of a traded man's salary, and the league sets no
+   share it may not go past.
+     https://sports.yahoo.com/articles/mlb-trade-deadline-cash-considerations-205340594.html
+       (30 July 2026: the league "could not prohibit" a club eating $2 million
+       or $20 million of a deal; Minnesota paid part of what was left on Carlos
+       Correa's deal when it traded him to Houston in July 2025)
+     https://africa.espn.com/mlb/news/story?id=1735937
+       (15 February 2004: Texas paid $67 million of the $179 million left on
+       Alex Rodriguez's deal in the trade to New York, approved by the commissioner)
+   THE NUMBERS ARE THE GAME'S OWN, not the league's: half a salary, three such
+   deals a club at a time, twice on one contract, the NHL desk's shape so the
+   two sports read alike. The money is the game's own figures too. A cap of
+   $100,000 on cash for a man designated for assignment (the first page) and a
+   commissioner's approval above a dollar figure (one source only) are NOT
+   modelled. */
+export const MLB_CASH_RETENTION: GmRetentionRules = { maxShare: 0.5, maxDealsPerClub: 3, maxTimesPerContract: 2 };
+
 export const GM_TRADE_RULES: Record<GmSportId, GmTradeRules> = {
   nfl: NFL_TRADE_RULES, nba: NBA_TRADE_RULES, nhl: NHL_TRADE_RULES, mlb: MLB_TRADE_RULES,
 };

@@ -238,7 +238,9 @@ export const MLB_STAFF_PACK: GmStaffPack<MlbStaffPost> = {
     injuryWeeks: INJURY_KEY,
   },
   money: {
-    wageUnit: 'k a week', purseUnit: 'm', ticksPerSeason: 26, tickWord: 'week', seasonPurse: 11,
+    /* Round 1020: the board ticks the desk once a round over its 27 rounds
+       (MLB_ROUNDS), so the clock and the wages count rounds. */
+    wageUnit: 'k a round', purseUnit: 'm', ticksPerSeason: 27, tickWord: 'round', seasonPurse: 11,
     purseNote: 'The staff budget ownership opens the desk with, in the game\'s own millions. Staff are paid outside the payroll the tax line reads.',
   },
 };
