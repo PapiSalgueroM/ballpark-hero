@@ -4,6 +4,7 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE, type F1DriverState } from '@/types/f1Driver';
 import feedbackStyles from './F1DriverFeedback.module.css';
@@ -33,6 +34,9 @@ export function F1DriverBoard() {
     const timer = window.setTimeout(() => setFeedback(null), 600);
     return () => window.clearTimeout(timer);
   }, [feedback]);
+
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.puzzle.id}` : null, gameState ? gameState.gameStatus !== 'playing' : false);
 
   const handleHint = () => {
     revealHint();
@@ -204,9 +208,9 @@ export function F1DriverBoard() {
         {/* Game over */}
         {isOver && (
           <div data-f1-driver-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-red-500/20 bg-zinc-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
+            <ClueFinishMoment won={gameStatus === 'won'} gamePath="/f1-driver" score={score} live={liveFinish} />
             {gameStatus === 'won' ? (
               <>
-                <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-red-400">
                   {puzzle.driverName}
                 </p>
@@ -216,7 +220,6 @@ export function F1DriverBoard() {
               </>
             ) : (
               <>
-                <p className="text-3xl">😤</p>
                 <p className="text-xl font-bold text-red-400">
                   It was {puzzle.driverName}
                 </p>

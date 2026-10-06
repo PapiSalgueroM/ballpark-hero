@@ -44,6 +44,17 @@ export function revealAfter(count: number, start = 0.6, step = 0.22): number {
 }
 
 /**
+ * A stable confetti seed from a game's name or path, so its fall pattern is
+ * the same on every render rather than reshuffling. Round 149 wrote it inside
+ * ResultScreen; Round 953's guess finish shares it from here.
+ */
+export function confettiSeedOf(text: string): number {
+  let seed = 1;
+  for (let i = 0; i < text.length; i++) seed = (seed * 31 + text.charCodeAt(i)) >>> 0;
+  return seed % 997;
+}
+
+/**
  * A one-shot confetti burst that fills its nearest positioned ancestor.
  * Give it a changing `seed` to re-fire; same seed, same fall, every render.
  */
