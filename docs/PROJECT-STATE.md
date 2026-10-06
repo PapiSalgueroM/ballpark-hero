@@ -1,3 +1,35 @@
+## Round1069 prepared: Cage move readiness, remote final checks pending
+
+Cage action buttons now show Ready, Move closer, Recover gas,
+Recovering, Unavailable, Not in drill or Paused using the real engine
+cost, range, cooldown and position rules. Hints stay descriptive, so
+held actions still work through recovery. Help, the guide and What's New
+explain them. Ground power's visible label is Heavy strike so its full
+hint fits a44px phone control; its accessible name stays Heavy ground
+strike. No mode, save, score model, data or animation change.
+
+Prep37531072358 on61306d2a passed actual app type/build, source anchors,
+strike7/14, grapple8/13, readiness10/14 and24 harnesses including all16
+built readers and search. The readiness baseline compared240 trajectories
+and43,200 paired states with main31a4ec01's accepted engine. Every copied
+fault failed its intended assertion with an independent baseline green.
+
+Native prep passed4 profiles and8 effective geometry/accessibility
+controls,1534 real inputs,186 screenshots,14 readiness snapshots on
+320/390 phones, all existing mode/recap/animation journeys and zero
+forwarded writes. A real320px wrapping failure was repaired; an effective
+control now recreates that exact failure and restores a green baseline.
+
+Artifact11444559422 SHA2560e34c0445739dc25dfd92aea82823ea21732bc40d2524195e99ec00a08d32561
+verified before extraction. Only the exact5 manifest payloads were copied
+and rehashed. Cage/news and their ledger hashes changed; the sitemap's
+bytes stayed unchanged. Temporary prep workflow removed.
+
+Final PR/CI, merge, host publication and LIVE proof are still pending.
+AH retains main/publish during final CI; Claude retains the career/GM
+and agreed guide lanes. No LIVE claim, direct DB call or production fight
+completion. Root drafts and seven stashes stay protected.
+
 ## Round1069 claimed: Cage move readiness
 
 Codex adds descriptive readiness hints to the six existing Cage action
