@@ -64,7 +64,7 @@ import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import {
   nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
-  nflMirrorPickMove, nflNoteArrivals, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
+  nflMirrorPickMove, nflNoteArrivals, nflPackageCapCheck, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
   nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
 } from '@/lib/nflGmDesk';
 /* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
@@ -752,6 +752,17 @@ export default function FrontOfficeBoard() {
     if (why) setNewsFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
     return !!why;
   };
+  /* Round 1019: with the desk on, a man traded away leaves dead money, so an
+     older trade path is checked against the cap the way a package is (the
+     dead money counted) before the engine runs it. With the desk off nothing
+     is added and the engine's own check stands alone, as before. */
+  const deskCapRefusal = (lg: LeagueState, partner: string, sentId: string, arrivedId: string): string | null =>
+    gm ? nflPackageCapCheck(lg, { from: myTeam, to: partner, give: [{ kind: 'player', id: sentId }], get: [{ kind: 'player', id: arrivedId }] }) : null;
+  const deskCapBlock = (lg: LeagueState, partner: string, sentId: string, arrivedId: string): boolean => {
+    const why = deskCapRefusal(lg, partner, sentId, arrivedId);
+    if (why) setNewsFeed(f => [`❌ ${why} The dead money he leaves counts.`, ...f].slice(0, 6));
+    return !!why;
+  };
   /* Round 1019: an older trade path with the desk on. The pick it moved (the
      last on the list) moves in the ledger too, each man leaves his dead money
      on the club he left (the NFL's rule, gmContractRules), and the man who
@@ -794,6 +805,7 @@ export default function FrontOfficeBoard() {
     const pkg = talks.state.pkg;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const pickRound = lastPickRound(lg, pkg.addPick);
+    if (deskCapBlock(lg, talks.partner, talks.myPieceId, pkg.theirPlayerId)) { setTalks(null); return; }
     const res = executeTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
     if (res === 'done') {
       const deskNow = deskAfterTrade(lg, talks.partner, talks.myPieceId, pkg.theirPlayerId, pickRound);
@@ -816,13 +828,15 @@ export default function FrontOfficeBoard() {
   const doShop = () => {
     if (!league || !myTradePiece || deadlineBlock()) return;
     /* Round 828: the cheap probe copy, so fifty men a club does not freeze the button */
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, proposeTrade, tradeValue, { cloneTeam: tradeProbeCopy });
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, proposeTrade, tradeValue, { cloneTeam: tradeProbeCopy })
+      .filter(o => !deskCapRefusal(league, o.teamId, myTradePiece, o.playerId));
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
     if (!league || !myTradePiece || deadlineBlock()) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
     const pickRound = lastPickRound(lg, o.sweeten);
+    if (deskCapBlock(lg, o.teamId, myTradePiece, o.playerId)) { setShopOffers([]); setShopTried(false); return; }
     const res = proposeTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
     if (res === 'accepted') {
       const deskNow = deskAfterTrade(lg, o.teamId, myTradePiece, o.playerId, pickRound);

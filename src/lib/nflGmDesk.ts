@@ -54,7 +54,7 @@ import { deadMoneyFor, tradeRefusal } from './frontOfficeCuts';
 import { NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 import { NFL_STAFF_PACK, type NflStaffPost } from '@/data/gmStaff/packs';
 import {
-  DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, teamStrength, tradeValue,
+  DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, teamStrength, tradeValue,
   type GmPlayer, type GmTeamState, type LeagueState, type OffseasonNews, type Prospect,
 } from './frontOffice';
 
@@ -268,12 +268,19 @@ export function nflDeadlineRefusal(league: LeagueState): string | null {
 /** Playoff places a conference: seven, the real format and the bracket the engine plays. */
 export const NFL_PLAYOFF_SPOTS = 7;
 
-/** Buyers and sellers by the standings: seven playoff places a conference. */
+/** The clubs holding a playoff seed today: the bracket the engine plays
+    (conferenceSeeds, division winners then wild cards), seven a conference. */
+export function nflPlacedClubs(league: LeagueState): Set<string> {
+  return new Set([...conferenceSeeds(league.teams, 'AFC'), ...conferenceSeeds(league.teams, 'NFC')]);
+}
+
+/** Buyers and sellers by the standings: a club holding one of the seven seeds
+    in its conference buys, as the hub's mandate box counts a playoff place. */
 export function nflStances(league: LeagueState): Record<string, DeadlineStance> {
   const rows = Object.values(league.teams).map(t => ({
     id: t.abbr, wins: t.wins, losses: t.losses, group: conferenceOf(t.abbr),
   }));
-  return deadlineStances(rows, NFL_PLAYOFF_SPOTS).stance;
+  return deadlineStances(rows, NFL_PLAYOFF_SPOTS, nflPlacedClubs(league)).stance;
 }
 
 /* ------------------------------------------------------------------ */
@@ -543,9 +550,12 @@ export function nflDeskOffseason(league: LeagueState, desk: GmDesk, team: string
 const plural = (n: number, one: string, many = `${one}s`): string => `${n} ${n === 1 ? one : many}`;
 
 /** The staff box. It pulses when a rival is in for one of yours or a chair is empty. */
-export function nflStaffTile(desk: GmDesk, league: LeagueState, team: string): GmTileFace {
-  const s = nflStaffOf(desk, league, team);
+export function nflStaffTile(desk: GmDesk, league: LeagueState, team: string, on = true): GmTileFace {
   const posts = NFL_STAFF_PACK.posts;
+  /* A save without the desk yet plays no staff edge (playWeek hands edges
+     only with the desk on), so the box never claims one. */
+  if (!on) return { icon: '📋', value: `${posts.length} jobs to fill`, sub: 'Open it to start the desk: no coaching edge until you do', accent: false };
+  const s = nflStaffOf(desk, league, team);
   const filled = posts.filter(p => s.block[p.id]).length;
   const poach = s.block.poach;
   const edge = Math.round(nflStaffEdge(s.block) * 100) / 100;
@@ -558,9 +568,19 @@ export function nflStaffTile(desk: GmDesk, league: LeagueState, team: string): G
 }
 
 /** The re-sign box. It pulses once the deadline has passed and somebody is still waiting on you. */
-export function nflContractsTile(desk: GmDesk, league: LeagueState, team: string, seasonOver: boolean): GmTileFace {
-  const ledger = nflContractsOf(desk, league, team);
+export function nflContractsTile(desk: GmDesk, league: LeagueState, team: string, seasonOver: boolean, on = true): GmTileFace {
   const up = expiringMen(nflContractHost, league, team);
+  /* Without the desk the summer still runs the engine's own offseason, so
+     nobody is waiting on the GM until he opens it. */
+  if (!on) {
+    return {
+      icon: '✍️',
+      value: up.length ? `${plural(up.length, 'deal')} end this spring` : 'Nobody expiring',
+      sub: 'Open it to start the desk: until then the old offseason decides who stays',
+      accent: false,
+    };
+  }
+  const ledger = nflContractsOf(desk, league, team);
   const waiting = undecided(nflContractHost, league, ledger).length;
   return {
     icon: '✍️',
