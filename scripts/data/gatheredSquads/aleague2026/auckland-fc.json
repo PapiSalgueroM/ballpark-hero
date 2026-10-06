@@ -1033,7 +1033,8 @@
         ],
         "group": [
           "aucklandfc.co.nz",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
@@ -1777,7 +1778,7 @@
     {
       "name": "Van Fitzharris",
       "position": "Attacker",
-      "group": "FWD",
+      "group": "MID",
       "birthDate": "2008-01-23",
       "minutes2025_26": 48,
       "minutesSource": {
@@ -1799,7 +1800,7 @@
           "transfermarkt.com"
         ],
         "group": [
-          "aucklandfc.co.nz",
+          "site.api.espn.com",
           "transfermarkt.com"
         ],
         "birthDate": [
@@ -1849,7 +1850,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID); group set to MID, which ESPN and Transfermarkt both support"
+      ]
     },
     {
       "name": "Lachlan Brook",

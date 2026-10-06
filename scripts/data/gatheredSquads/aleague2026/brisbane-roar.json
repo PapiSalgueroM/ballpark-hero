@@ -914,7 +914,8 @@
         ],
         "group": [
           "brisbaneroar.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
@@ -1061,7 +1062,8 @@
         ],
         "group": [
           "brisbaneroar.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
