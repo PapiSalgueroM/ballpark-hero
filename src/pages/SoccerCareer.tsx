@@ -34,7 +34,7 @@ import {
   dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
-  applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
+  giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
   advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
@@ -89,8 +89,8 @@ import {
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
 import { Confetti } from "@/components/soccer-career/CareerFx";
-import { AwardsNightCard, SpeechChoices } from "@/components/career/AwardsNightCard";
-import { availableSpeeches } from "@/lib/careerAwardsNight";
+import { AwardsNightCard, SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
+import { availableSpeeches, givenSpeechOf } from "@/lib/careerAwardsNight";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
@@ -1041,9 +1041,11 @@ export default function SoccerCareer() {
     setCareer(dismissDebut(career, clubs));
   };
 
+  /* Round 1023: the tournament speech is given on the card and the card stays
+     up to show what it did; Continue is handleDismissWorldCup. */
   const handleWorldCupSpeech = (choice: WorldCupSpeechChoice) => {
     if (!career) return;
-    setCareer(applyWorldCupSpeech(career, choice, clubs));
+    setCareer(giveWorldCupSpeech(career, choice));
   };
 
   const handleDismissWorldCup = () => {
@@ -2460,6 +2462,7 @@ export function InternationalDebutCard({ career, onDismiss }: { career: CareerSt
 /* ─── World Cup Result Screen ─── */
 function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: WorldCupSpeechChoice) => void }) {
   const isWinner = wc.result === "Winner";
+  const given = givenSpeechOf(wc);
   const didNotQualify = wc.result === "Did Not Qualify";
   const borderColor = isWinner ? "border-amber-400/60" : didNotQualify ? "border-red-500/40" : "border-blue-500/40";
   const bgGrad = isWinner ? "from-amber-500/15 to-transparent" : didNotQualify ? "from-red-500/10 to-transparent" : "from-blue-500/10 to-transparent";
@@ -2517,12 +2520,15 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
           )}
         </>
       )}
-      {isWinner ? (
+      {/* Round 1023: once given, the speech stays on the card with what it
+          really moved, and Continue moves on. */}
+      {isWinner && given && <SpokenSpeech speech={given} />}
+      {isWinner && !given ? (
         /* Round 834: the buttons come from the shared speech options, the
            same list the tournament card draws. */
         <SpeechChoices prompt="The microphone is yours. The speech:" fadeIn roomy options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
       ) : (
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
+        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
           Continue →
         </Button>
       )}

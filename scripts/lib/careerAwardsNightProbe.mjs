@@ -157,8 +157,10 @@ function trySpeech(fn, s, choice, clubs, seed) {
  * @param opts.onNight (save, night) called on every ceremony as it comes up,
  *   before anything is chosen; it must not touch the save and adds nothing to
  *   the output, so a recording does not depend on it.
+ * @param opts.onTournament (save, won) Round 1023: the same, on every tournament
+ *   screen as it comes up, before anything is chosen.
  */
-export function probeAwardsNight({ soccer, appearance, cards }, { onNight } = {}) {
+export function probeAwardsNight({ soccer, appearance, cards }, { onNight, onTournament } = {}) {
   const clubs = soccer.FALLBACK_CLUBS;
   const careers = [];
   const nights = [];
@@ -240,6 +242,7 @@ export function probeAwardsNight({ soccer, appearance, cards }, { onNight } = {}
           case 'world_cup': {
             const t = s.pendingTournament;
             const won = t ? t.myResult === 'Winner' : s.pendingWorldCup?.result === 'Winner';
+            onTournament?.(s, won);
             const entry = { c, year: t?.year ?? s.pendingWorldCup?.year ?? null, name: t?.name ?? 'World Cup', result: t?.myResult ?? s.pendingWorldCup?.result ?? null };
             if (c < 12 && cards && t) entry.ui = hashOf(cards.tournament(t));
             if (won) {

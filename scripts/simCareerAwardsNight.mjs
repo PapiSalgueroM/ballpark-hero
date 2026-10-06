@@ -65,6 +65,35 @@
  *      Measured on the review's tree: 25 of 30 real wins cut short of
  *      Popularity +20 by the cap; 98 speeches given, 94 cut by a cap, the
  *      log line's own number untrue on 18 (the card no longer shows it).
+ *   7. Round 1023: a won tournament's speech stays on the card. On every real
+ *      won tournament the replay reaches, every speech is given with the
+ *      card's own call (giveWorldCupSpeech): the career stays on the screen,
+ *      the speech is kept once, the card then shows its words and what it
+ *      measurably moved with Continue and no speech left, a reload shows the
+ *      same, Continue leaves; a lost tournament, a speech off the screen and
+ *      a pre Round 124 World Cup save are checked too.
+ *
+ * ROUND 1023 changed three things this file holds. (a) The speech log line:
+ * the two gambles printed their coin's number ("Popularity +8") whatever the
+ * cap let land; Soccer now gives every speech through speakSoccer, which adds
+ * the coin's meters as measured. Section 3 drives speakSoccer and adds a cap
+ * case (both sides of both gambles at popularity 0, 95, 100, rivalry 50 and
+ * 95: 24 lines, 15 coin steps cut, 0 untrue); section 6 now requires the log
+ * line true on every real winner (measured on main 1aaba4d5: untrue on 19 of
+ * 98 speeches given; on the branch 0 of 98, 19 of them a gamble the cap cut)
+ * and still needs a cut gamble to exist.
+ * (b) The tournament speech card (section 7): measured 74 real won
+ * tournaments, 296 speeches, 262 cut short by a cap, 0 problems. (c) The
+ * fixture was re-recorded from the branch, with the move attributed: main
+ * 1aaba4d5 recorded from a git archive replayed the old fixture on every key;
+ * the branch with only the Ballon d'Or judging change taken out (the field
+ * sliced at 10 again) recorded the same file as the whole branch, so that
+ * change moves nothing here (simBallonDorFairness holds it); and main against
+ * the branch differs only where a speech's log line changed: 11 careers part
+ * at a speech step (bs or ws), the 32 won nights' speech lines, 38 won
+ * tournaments' speech lines, 49 direct speeches (35 greatest_ever, 5
+ * call_out_doubters, 9 others sampled from a career that had already
+ * parted), no meter move and no night's place changed.
  *
  * The probe hashes a save with the night's measured `moved` taken out (the
  * one field the review added; no tree before it writes one), so the fixture
@@ -76,17 +105,48 @@
  *   speechleak    a gamble's hit also lands its miss steps       -> sections 2 and 3
  *   legacyreal    a second file declares real era stars          -> section 4
  *   secondcopy    an inline wider ranking reappears in the engine -> section 5
+ *   speechcopy    a second spoken speech block in the tournament card -> section 5
  *   cardtext      the winner line goes back to "Legacy +20, ..."  -> section 6
  *   effectonly    the night drops the winner's first step only    -> section 6
  *   speechtwice   the card's speech loses its once-only guard     -> section 6
  *   nominalnight  the night records its steps, not what landed    -> section 6
  *   nominalmoved  the speech reports its steps, not what landed   -> section 6
  *   numberedline  the card's speech line keeps the log's number   -> section 6
+ *   numberback    a gamble's line prints its asked number again   -> section 3
+ *   wcleaves      the tournament speech clears the card at once   -> section 7
+ *   wctwice       the tournament speech loses its once-only guard -> section 7
+ *   wcnominal     the tournament card reports the steps, not what landed -> section 7
+ *   wccardmute    the tournament card stops showing the speech    -> section 7
+ *   followersbare a follower move prints as a bare "+3" again    -> section 7
  * Each patch is refused unless the exact text it replaces is present, so a
  * control can never pass by changing nothing. Measured on the round's tree:
  * every control turns its own section red (winnernottop also breaks sections
  * 1 and 6, speechleak sections 1 and 3, effectonly sections 1 and 2,
  * nominalnight section 2).
+ * Round 1023, measured on its branch: numberback turns 1, 3 and 6 red;
+ * wcleaves, wctwice, wcnominal and wccardmute turn 7 red. Two old controls
+ * went quiet once the log line's number became the measured move, and the
+ * checks were tightened rather than the controls dropped: speechleak's line
+ * now describes its leaked move truly, so section 3 also requires every meter
+ * to move by exactly its steps away from the caps (red again: 1, 2 and 3);
+ * numberedline's card line now carries a true number, so sections 6 and 7
+ * require the card's line to be words only, the numbers once in the moved
+ * line beside it (red again: 6).
+ * Round 1023's review: the tournament card printed "Followers +3" for a move
+ * of three million followers (the save counts them in millions), and the
+ * claims parser dropped units, so nothing saw it. The followers meter now
+ * shows "+3M", the parser keeps the unit and requires each meter's own
+ * (market value and followers in millions, the rest plain points), and
+ * section 7 requires some card to name a follower move so the unit check
+ * cannot pass by never running. Control followersbare takes the unit off.
+ * The same review lifted the kept speech (GivenSpeech, keepSpeech,
+ * givenSpeechOf, giveSpeechOnce in careerAwardsNight.ts, SpokenSpeech in
+ * AwardsNightCard.tsx) out of the soccer files, so wcleaves, wctwice,
+ * wcnominal, nominalmoved, numberedline and speechtwice now patch the
+ * shared helper's call sites (numberedline the helper itself, which turns 6
+ * and 7 red); section 5 requires both soccer speeches to give through
+ * giveSpeechOnce and both tournament cards to draw SpokenSpeech, with
+ * control speechcopy. Measured: all nine of those controls fire.
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
@@ -129,8 +189,64 @@ const CONTROLS = {
       to: 'applyMeterSteps(sport.meters, s, hit ? [...option.risk.hit, ...option.risk.miss] : option.risk.miss);',
     }],
   },
+  /* Round 1023: a gamble's line prints its asked number again. */
+  numberback: {
+    section: 3,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: `      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed.',`,
+      to: `      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.',`,
+    }],
+  },
+  /* Round 1023: the tournament speech clears the card in the same tap again. */
+  wcleaves: {
+    section: 7,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: '      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n    },',
+      to: '      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n      Object.assign(s, dismissWorldCup(s, FALLBACK_CLUBS));\n    },',
+    }],
+  },
+  /* Round 1023: the tournament speech loses its once-only guard. */
+  wctwice: {
+    section: 7,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: '    open: worldCupSpeechOpen,',
+      to: '    open: () => true,',
+    }],
+  },
+  /* Round 1023: the tournament card reports the speech's steps, not what landed. */
+  wcnominal: {
+    section: 7,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: '    speak: s => speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!,',
+      to: '    speak: s => ({ ...speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!, moved: SOCCER_WORLD_CUP_SPEECHES.find(o => o.id === choice)!.effect }),',
+    }],
+  },
+  /* Round 1023: the tournament card stops showing the speech it was given. */
+  wccardmute: {
+    section: 7,
+    patches: [{
+      file: 'src/components/soccer-career/InternationalPanel.tsx',
+      from: '      {isWinner && given && <SpokenSpeech speech={given} />}',
+      to: '      {null}',
+    }],
+  },
+  /* Round 1023 review: a follower move prints as a bare number again
+     ("Followers +3" for three million). */
+  followersbare: {
+    section: 7,
+    patches: [{
+      file: 'src/lib/soccerCareerEngine.ts',
+      from: 'read: s => s.socialMediaFollowers, show: d =>',
+      to: 'read: s => s.socialMediaFollowers, unshown: d =>',
+    }],
+  },
   legacyreal: { section: 4, patches: [] },
   secondcopy: { section: 5, patches: [] },
+  speechcopy: { section: 5, patches: [] },
   cardtext: {
     section: 6,
     patches: [{
@@ -159,24 +275,24 @@ const CONTROLS = {
     section: 6,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: 'moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };',
-      to: 'moved: describeSteps(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES.find(o => o.id === choice)!.effect) } };',
+      from: '    speak: s => speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!,',
+      to: '    speak: s => ({ ...speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!, moved: SOCCER_BDOR_SPEECHES.find(o => o.id === choice)!.effect }),',
     }],
   },
   numberedline: {
     section: 6,
     patches: [{
-      file: 'src/lib/soccerCareerEngine.ts',
-      from: 'speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved:',
-      to: 'speech: { id: choice, line, moved:',
+      file: 'src/lib/careerAwardsNight.ts',
+      from: '  return { id, line: narrativeOf(meters, line), moved: describeSteps(meters, moved) };',
+      to: '  return { id, line, moved: describeSteps(meters, moved) };',
     }],
   },
   speechtwice: {
     section: 6,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: '  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
-      to: '  if (!SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
+      from: '    open: bdorSpeechOpen,',
+      to: '    open: () => true,',
     }],
   },
 };
@@ -203,6 +319,7 @@ const { soccer, awards: A } = B;
    real won save on its ceremony (taken without a draw, so the replay is not
    disturbed) for section 6 to give speeches on. */
 const liveNights = { won: 0, offered: 0, wrong: 0, measured: 0, measuredWrong: 0, winsCut: 0, wins: [] };
+const liveTournaments = [];
 
 /* ---------- 1. Soccer unchanged ---------- */
 section = 1;
@@ -221,6 +338,9 @@ console.log('1) Soccer Career replays the pre-lift fixture byte for byte');
         liveNights.wins.push(JSON.parse(JSON.stringify(s)));
       }
     },
+    /* Round 1023: every real won tournament screen, copied without a draw,
+       for section 7 to give speeches on. */
+    onTournament: (s, won) => { if (won) liveTournaments.push(JSON.parse(JSON.stringify(s))); },
   })));
   /* Round 834 part 2 changed the winner's and the podium's ceremony cards on
      purpose (the speech is offered, the lines say what the night does), so
@@ -462,7 +582,9 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
         const before = { ...s };
         let hit = null;
         const coin = () => { const v = r(); hit = v < opt.risk.chance; return v; };
-        const line = A.applySpeech(soccer.SOCCER_BALLON_DOR, list, s, opt.id, opt.risk ? coin : () => { throw new Error('drew without a risk'); });
+        /* Round 1023: through speakSoccer, the one way Soccer gives a speech,
+           which builds the log line's number from the measured move. */
+        const line = soccer.speakSoccer(s, list, opt.id, opt.risk ? coin : () => { throw new Error('drew without a risk'); }).line;
         draws += 1;
         if (hit) hits += 1;
         const steps = [...opt.effect, ...(opt.risk ? (hit ? opt.risk.hit : opt.risk.miss) : [])];
@@ -470,6 +592,11 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
         for (const st of steps) want[st.meter] = Math.round(((want[st.meter] ?? 0) + st.delta) * 100) / 100;
         const moved = ids.filter(k => s[k] !== before[k]);
         if (moved.sort().join() !== Object.keys(want).sort().join()) bad.keys += 1;
+        /* Round 1023: the line's number is measured now, so a speech that
+           moved the wrong amount would describe itself truly; away from the
+           caps (every meter here sits mid range) each meter must move by
+           exactly its steps. */
+        else if (moved.some(k => Math.round((s[k] - before[k]) * 100) / 100 !== want[k])) bad.keys += 1;
         for (const m of line.matchAll(labelRe)) {
           mentions += 1;
           const id = labelToId[m[1]];
@@ -480,7 +607,7 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
       }
       const note = opt.risk ? `, came up ${hits} of 250 on a stated ${Math.round(opt.risk.chance * 100)}%` : '';
       console.log(`   ${kind.padEnd(11)} ${opt.id.padEnd(18)} moves ${[...new Set([...opt.effect, ...(opt.risk ? [...opt.risk.hit, ...opt.risk.miss] : [])].map(x => x.meter))].join(', ')}${note}`);
-      check(bad.keys === 0, `${opt.id}: ${bad.keys} of 250 moved a meter it does not name, or missed one it does`);
+      check(bad.keys === 0, `${opt.id}: ${bad.keys} of 250 moved a meter it does not name, missed one it does, or moved one by other than its steps`);
       check(bad.words === 0, `${opt.id}: ${bad.words} of 250 printed a number it did not do, or no single log line`);
       if (opt.risk) {
         /* Seeded, so this is the same count every run. 250 draws put one
@@ -494,6 +621,45 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
   console.log(`   ${draws} speeches, ${mentions} numbers in the lines checked against what the speech did`);
   check(draws === 2000, `ran ${draws} speeches, not 2,000`);
   check(mentions >= 500, 'too few numbers in the lines to prove the words match the moves');
+  /* Round 1023: at the caps. The two gambles used to print the number their
+     coin asked for ("Popularity +8", "-10", "+10", "-8") whatever landed, so
+     at popularity 100 a "+8" moved nothing. Both sides of both gambles, at
+     popularity 0, 95 and 100 and rivalry 50 and 95: every number a line prints
+     must be what moved, every meter the coin moved must be named, and the
+     cases must include ones the cap cut (or this proves nothing). */
+  {
+    let capCut = 0, capLines = 0;
+    const capBad = [];
+    for (const list of [soccer.SOCCER_BDOR_SPEECHES, soccer.SOCCER_WORLD_CUP_SPEECHES]) {
+      for (const opt of list.filter(o => o.risk)) {
+        for (const popularity of [0, 95, 100]) {
+          for (const rivalryIntensity of [50, 95]) {
+            for (const side of ['hit', 'miss']) {
+              const s = { ...base, popularity, rivalryIntensity, events: [...base.events], rival: { name: 'Generated Rival', retired: false } };
+              const before = { ...s };
+              const line = soccer.speakSoccer(s, list, opt.id, () => (side === 'hit' ? 0 : 0.999)).line;
+              capLines += 1;
+              const did = id => Math.round((s[id] - before[id]) * 100) / 100;
+              for (const st of opt.risk[side]) {
+                if (did(st.meter) !== st.delta) capCut += 1;
+                const named = new RegExp(`${METERS[st.meter].label} [+-]`).test(line);
+                if (did(st.meter) !== 0 && !named) capBad.push(`${opt.id} ${side} at popularity ${popularity}: moved ${st.meter} ${did(st.meter)} and the line does not say so`);
+              }
+              for (const m of line.matchAll(labelRe)) {
+                const id = labelToId[m[1]];
+                if (did(id) !== Number(m[2])) capBad.push(`${opt.id} ${side} at popularity ${popularity}, rivalry ${rivalryIntensity}: says ${m[1]} ${m[2]}, moved ${did(id)}`);
+              }
+              if (s.events[s.events.length - 1] !== line) capBad.push(`${opt.id} ${side}: the log line is not the line returned`);
+            }
+          }
+        }
+      }
+    }
+    console.log(`   at the caps: ${capLines} gamble lines, ${capCut} coin steps cut by a cap, ${capBad.length} lines untrue`);
+    check(capCut >= 8, `only ${capCut} coin steps were cut by a cap, so the cap case is not tested`);
+    for (const b of capBad.slice(0, 5)) fail(b);
+    if (capBad.length > 5) fail(`and ${capBad.length - 5} more`);
+  }
   const gate = (s, id) => A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, s).some(o => o.id === id);
   const fam = n => ({ ...base.family, children: n });
   check(!gate({ ...base, rival: null, family: fam(0) }, 'thank_rival') && !gate({ ...base, rival: { name: 'R', retired: true }, family: fam(0) }, 'thank_rival')
@@ -530,23 +696,37 @@ console.log('\n5) One awards night: no second copy beside the shared one');
   let engine = read('src/lib/soccerCareerEngine.ts');
   if (CONTROL === 'secondcopy') engine += '\nconst extendedRank = Math.max(11, better + 1);\n';
   const page = read('src/pages/SoccerCareer.tsx');
-  const intl = read('src/components/soccer-career/InternationalPanel.tsx');
+  let intl = read('src/components/soccer-career/InternationalPanel.tsx');
+  /* Round 1023's review: a second spoken speech block beside the shared one. */
+  if (CONTROL === 'speechcopy') intl += '\nconst Spoken = ({ speech }) => <div data-spoken-speech={speech.id}>{speech.line}</div>;\n';
   const banned = [
     ['src/lib/soccerCareerEngine.ts', engine, /\bextendedRank\b|\btopNPCs\b|const top10 = /, 'an inline shortlist or wider ranking'],
     ['src/lib/soccerCareerEngine.ts', engine, /case "greatest_ever"|case "call_out_doubters"/, 'a hand written speech switch'],
     ['src/pages/SoccerCareer.tsx', page, /\brankEmoji\b|BALLON D'OR WINNER!/, 'an inline ceremony card'],
     ['src/pages/SoccerCareer.tsx', page, /onSpeech\("for_the_country"\)/, 'hand written speech buttons'],
     ['src/components/soccer-career/InternationalPanel.tsx', intl, /onSpeech\("for_the_country"\)/, 'hand written speech buttons'],
+    /* Round 1023's review: the kept speech's shape, its validator and the
+       block that shows it live once, in the shared module and card. */
+    ['src/lib/soccerCareerEngine.ts', engine, /interface StagedSpeech|function stagedSpeechOf|narrativeOf\(SOCCER_AWARDS_METERS/, 'its own kept speech shape'],
+    ['src/components/soccer-career/InternationalPanel.tsx', intl, /data-spoken-speech/, 'its own spoken speech block'],
+    ['src/pages/SoccerCareer.tsx', page, /data-spoken-speech/, 'its own spoken speech block'],
   ];
   for (const [rel, text, re, what] of banned) check(!re.test(text), `${rel} carries ${what} again`);
   const needed = [
     ['src/lib/soccerCareerEngine.ts', engine, /runAwardsNight</, 'the shared night'],
     ['src/lib/soccerCareerEngine.ts', engine, /settleAwardsNight\(SOCCER_BALLON_DOR/, 'the shared settle'],
-    ['src/lib/soccerCareerEngine.ts', engine, /applySpeech\(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES/, 'the shared Ballon d\'Or speech'],
-    ['src/lib/soccerCareerEngine.ts', engine, /applySpeech\(SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES/, 'the shared tournament speech'],
+    /* Round 1023: Soccer gives every speech through speakSoccer, which runs
+       the shared applySpeech and builds the log line from what it measured. */
+    ['src/lib/soccerCareerEngine.ts', engine, /applySpeech\(hush, options, s, id, rng\)/, 'the shared speech'],
+    ['src/lib/soccerCareerEngine.ts', engine, /speakSoccer\(s, SOCCER_BDOR_SPEECHES, choice\)/, 'the shared Ballon d\'Or speech'],
+    ['src/lib/soccerCareerEngine.ts', engine, /speakSoccer\(s, SOCCER_WORLD_CUP_SPEECHES, choice\)/, 'the shared tournament speech'],
     ['src/pages/SoccerCareer.tsx', page, /<AwardsNightCard/, 'the shared ceremony card'],
     ['src/pages/SoccerCareer.tsx', page, /<SpeechChoices[^>]*SOCCER_WORLD_CUP_SPEECHES/, 'the shared speech buttons'],
     ['src/components/soccer-career/InternationalPanel.tsx', intl, /<SpeechChoices[^>]*SOCCER_WORLD_CUP_SPEECHES/, 'the shared speech buttons'],
+    ['src/lib/soccerCareerEngine.ts', engine, /giveSpeechOnce\(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES,/, 'the shared give once for the Ballon d\'Or speech'],
+    ['src/lib/soccerCareerEngine.ts', engine, /giveSpeechOnce\(SOCCER_AWARDS_METERS, SOCCER_WORLD_CUP_SPEECHES,/, 'the shared give once for the tournament speech'],
+    ['src/components/soccer-career/InternationalPanel.tsx', intl, /<SpokenSpeech speech=\{given\} \/>/, 'the shared spoken speech block'],
+    ['src/pages/SoccerCareer.tsx', page, /<SpokenSpeech speech=\{given\} \/>/, 'the shared spoken speech block'],
   ];
   for (const [rel, text, re, what] of needed) check(re.test(text), `${rel} no longer uses ${what}`);
   console.log(`   ${banned.length} old copies absent, ${needed.length} shared calls present`);
@@ -576,9 +756,20 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
   const ids = Object.keys(METERS);
   const labels = new Set(ids.map(k => METERS[k].label));
   const labelToId = Object.fromEntries(ids.map(k => [METERS[k].label, k]));
-  /* Every "Word +N" or "Word +€NM" a line prints, whatever the word. */
-  const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])€?(\d+(?:\.\d+)?)M?/g)]
-    .map(m => ({ label: m[1], delta: Number(m[2] + m[3]) }));
+  /* Every "Word +N", "Word +€NM", "Word +NM" or "Word +Nk" a line prints,
+     whatever the word, with the unit it printed and its value in the unit the
+     save keeps ("+500k" is 0.5 of a million). Round 1023's review: the parser
+     used to drop the unit, so "Followers +3" passed for a move of three
+     MILLION followers. */
+  const claims = text => [...text.matchAll(/([A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)*) ([+-])(€?)(\d+(?:\.\d+)?)([Mk]?)/g)]
+    .map(m => ({ label: m[1], said: `${m[2]}${m[3]}${m[4]}${m[5]}`, unit: m[3] + m[5],
+      delta: Math.round(Number(m[2] + m[4]) * (m[5] === 'k' ? 0.001 : 1) * 1000) / 1000 }));
+  /* The units a card may print each meter in, read from how the save keeps it
+     (not from the engine's own show(), which is what this checks): market
+     value and followers are counted in millions (formatFollowers), the rest
+     are plain points. */
+  const UNITS = { marketValue: ['€M'], socialMediaFollowers: ['M', 'k'] };
+  const unitsOf = id => UNITS[id] ?? [''];
   /* What changed on every meter between two saves, unmoved ones left out. */
   const movedBetween = (before, after) => Object.fromEntries(ids
     .map(k => [k, Math.round(((after[k] ?? 0) - (before[k] ?? 0)) * 100) / 100]).filter(([, v]) => v !== 0));
@@ -588,6 +779,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
     const bad = [];
     for (const c of claims(text)) {
       if (!labels.has(c.label)) bad.push(`says "${c.label} ${c.delta}" and there is no such meter`);
+      else if (!unitsOf(labelToId[c.label]).includes(c.unit)) bad.push(`says "${c.label} ${c.said}", and ${c.label} is counted in ${unitsOf(labelToId[c.label]).map(u => u || 'plain points').join(' or ')}`);
       else if (did[labelToId[c.label]] !== c.delta) bad.push(`says ${c.label} ${c.delta}, it moved ${did[labelToId[c.label]] ?? 0}`);
     }
     const namedClaims = claims(named);
@@ -705,7 +897,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
      name only what really moved; the log line keeps its own number, and on a
      capped winner that number is often not what happened, which is exactly
      why the card does not show it. */
-  let given = 0, cut = 0, logLies = 0;
+  let given = 0, cut = 0, logLies = 0, coinCut = 0;
   const speechLies = [];
   liveNights.wins.forEach((real, k) => {
     for (const opt of A.availableSpeeches(soccer.SOCCER_BDOR_SPEECHES, real)) {
@@ -718,21 +910,109 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       if (!sp) { speechLies.push(`${opt.id} on real win ${k} was not given`); continue; }
       const did = movedBetween(real, out);
       const logged = out.events[out.events.length - 1];
-      const outcome = !opt.risk ? 'sure' : logged === opt.line(out, 'hit') ? 'hit' : 'miss';
+      /* Round 1023: the log line is the option's words plus what the coin
+         measurably moved, so it starts with the words. */
+      const outcome = !opt.risk ? 'sure' : logged.startsWith(opt.line(out, 'hit')) ? 'hit' : 'miss';
       const asked = {};
       for (const st of [...opt.effect, ...(opt.risk ? opt.risk[outcome] : [])]) asked[st.meter] = (asked[st.meter] ?? 0) + st.delta;
-      if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) cut += 1;
+      if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) {
+        cut += 1;
+        /* the number the line used to print, the coin's step, would be untrue here */
+        if (opt.risk && opt.risk[outcome].some(st => (did[st.meter] ?? 0) !== st.delta)) coinCut += 1;
+      }
       if (claims(logged).some(c => did[labelToId[c.label]] !== c.delta)) logLies += 1;
       for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card ${b}`);
+      /* Round 1023: the log line's number is true now, but the card keeps
+         its words and its numbers apart: the line is words, the moved line
+         beside it carries every number once. */
+      if (claims(sp.line).length) speechLies.push(`${opt.id} on real win ${k}: the card's line prints a number beside the moved line`);
       const shown = strip(B.cards.bdor(out.pendingBallonDor, out));
       if (!shown.includes(sp.line) || !shown.includes(sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card does not show the line and what it moved`);
     }
   });
-  console.log(`   real winners: ${given} speeches given, ${cut} cut short by a cap, the log line's own number untrue on ${logLies}; the card untrue on ${speechLies.length}`);
+  console.log(`   real winners: ${given} speeches given, ${cut} cut short by a cap (${coinCut} of them a gamble's coin step), the log line's own number untrue on ${logLies}; the card untrue on ${speechLies.length}`);
   check(given >= 2 * liveNights.won, `only ${given} speeches given on ${liveNights.won} real wins`);
-  check(cut > 0 && logLies > 0, 'no real winner\'s speech was cut by a cap, so this cannot tell a measured card from one that prints the steps');
+  check(cut > 0, 'no real winner\'s speech was cut by a cap, so this cannot tell a measured card from one that prints the steps');
+  /* Round 1023: the log line's number is built from the measured move now,
+     so it is true on every real winner, including the ones whose coin step
+     the cap cut (Round 834's review measured 18 untrue before). */
+  check(coinCut > 0, 'no real gamble was cut by a cap, so this cannot tell a measured log line from one that prints the coin\'s step');
+  check(logLies === 0, `the log line prints a number the speech did not do on ${logLies} real winners`);
   for (const b of speechLies.slice(0, 5)) fail(b);
   if (speechLies.length > 5) fail(`and ${speechLies.length - 5} more`);
+
+  /* ---------- 7. The tournament speech stays on the card (Round 1023) ----------
+     Inside section 6's block for its helpers. On every real won tournament the
+     replay reaches, every speech is given on a copy of the save with the card's
+     own call (giveWorldCupSpeech): the career stays on the tournament screen,
+     the speech is kept on the tournament once, what the card shows after it
+     names only what really moved, a second speech does nothing, the card then
+     offers Continue and no speech, a reload shows the same, and Continue
+     leaves. Then a lost tournament and a pre Round 124 World Cup save. */
+  section = 7;
+  console.log('\n7) A won tournament: the speech is given on the card, once, and the card shows what it did');
+  const WC = soccer.SOCCER_WORLD_CUP_SPEECHES;
+  let wcGiven = 0, wcCut = 0, wcFollowers = 0;
+  const wcBad = [];
+  liveTournaments.forEach((real, k) => {
+    if (!soccer.worldCupSpeechOpen(real)) { wcBad.push(`real won tournament ${k} offers no speech`); return; }
+    const before = strip(B.cards.tournament(real.pendingTournament));
+    if (!WC.every(o => before.includes(o.label)) || /Continue/.test(before)) wcBad.push(`real won tournament ${k}: the card does not offer the four speeches in place of Continue`);
+    for (const opt of WC) {
+      const keepRandom = Math.random;
+      Math.random = mulberry32(1023000 + k * 37 + opt.id.length);
+      let out;
+      try { out = soccer.giveWorldCupSpeech(JSON.parse(JSON.stringify(real)), opt.id); } finally { Math.random = keepRandom; }
+      wcGiven += 1;
+      const sp = out.pendingTournament?.speech;
+      const tag = `${opt.id} on real won tournament ${k}`;
+      if (out.phase !== 'world_cup' || !out.pendingTournament) { wcBad.push(`${tag}: the career left the tournament screen`); continue; }
+      if (!sp || sp.id !== opt.id) { wcBad.push(`${tag}: the speech is not kept on the tournament`); continue; }
+      if (out.events.length !== real.events.length + 1) wcBad.push(`${tag}: wrote ${out.events.length - real.events.length} log lines`);
+      const did = movedBetween(real, out);
+      const asked = {};
+      const logged = out.events[out.events.length - 1];
+      const outcome = !opt.risk ? 'sure' : logged.startsWith(opt.line(out, 'hit')) ? 'hit' : 'miss';
+      for (const st of [...opt.effect, ...(opt.risk ? opt.risk[outcome] : [])]) asked[st.meter] = (asked[st.meter] ?? 0) + st.delta;
+      if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) wcCut += 1;
+      for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) wcBad.push(`${tag}: the card ${b}`);
+      if (claims(sp.moved).some(c => c.label === 'Followers')) wcFollowers += 1;
+      if (claims(sp.line).length) wcBad.push(`${tag}: the card's line prints a number beside the moved line`);
+      for (const b of lies(logged, did, logged).filter(x => !x.includes('never says so'))) wcBad.push(`${tag}: the log line ${b}`);
+      if (soccer.worldCupSpeechOpen(out)) wcBad.push(`${tag}: still offers a speech after one`);
+      const other = WC.find(o => o.id !== opt.id).id;
+      if (soccer.giveWorldCupSpeech(out, other) !== out) wcBad.push(`${tag}: a second speech was given`);
+      const shown = strip(B.cards.tournament(out.pendingTournament));
+      if (!shown.includes(sp.line) || !shown.includes(sp.moved) || !/Continue/.test(shown) || WC.some(o => shown.includes(o.label))) {
+        wcBad.push(`${tag}: the card does not show the line and what it moved with Continue and no speech left`);
+      }
+      const reloaded = JSON.parse(JSON.stringify(out));
+      if (soccer.worldCupSpeechOpen(reloaded) || !strip(B.cards.tournament(reloaded.pendingTournament)).includes(sp.moved)) wcBad.push(`${tag}: the save does not load as it was`);
+      const next = soccer.dismissWorldCup(out, soccer.FALLBACK_CLUBS);
+      if (next.pendingTournament || next.phase === 'world_cup' || next.popularity !== out.popularity) wcBad.push(`${tag}: Continue does not leave the tournament as it was`);
+    }
+  });
+  console.log(`   ${liveTournaments.length} real won tournaments, ${wcGiven} speeches given on the card, ${wcCut} cut short by a cap, ${wcFollowers} naming a follower move; ${wcBad.length} problems`);
+  check(liveTournaments.length >= 10, `only ${liveTournaments.length} real won tournaments in the replay`);
+  check(wcGiven === 4 * liveTournaments.length, 'not every speech was given on every real won tournament');
+  check(wcCut > 0, 'no real tournament speech was cut by a cap, so this cannot tell a measured card from one that prints the steps');
+  check(wcFollowers > 0, 'no card named a follower move, so the unit check never ran');
+  for (const b of wcBad.slice(0, 5)) fail(b);
+  if (wcBad.length > 5) fail(`and ${wcBad.length - 5} more`);
+  if (liveTournaments.length) {
+    const real = liveTournaments[0];
+    const lost = { ...real, pendingTournament: { ...real.pendingTournament, myResult: 'Runner-up' } };
+    check(!soccer.worldCupSpeechOpen(lost) && soccer.giveWorldCupSpeech(lost, 'quiet_lap') === lost, 'a lost tournament offers a speech');
+    const offScreen = { ...real, phase: 'playing' };
+    check(!soccer.worldCupSpeechOpen(offScreen) && soccer.giveWorldCupSpeech(offScreen, 'quiet_lap') === offScreen, 'a speech can be given off the tournament screen');
+    const t = real.pendingTournament;
+    const legacy = { ...real, pendingTournament: null, pendingWorldCup: { year: t.year, nation: t.nation, matches: [], playerApps: 7, playerGoals: 4, playerAssists: 2, playerAvgRating: 7.9, result: 'Winner', bestPlayer: false } };
+    const legacyOut = soccer.giveWorldCupSpeech(legacy, 'quiet_lap');
+    const legacyText = legacyOut.pendingWorldCup ? strip(B.cards.worldCup(legacyOut.pendingWorldCup, legacyOut)) : '';
+    check(legacyOut.phase === 'world_cup' && legacyOut.pendingWorldCup?.speech?.id === 'quiet_lap' && soccer.giveWorldCupSpeech(legacyOut, 'tears') === legacyOut
+      && legacyText.includes(legacyOut.pendingWorldCup.speech.moved) && /Continue/.test(legacyText) && WC.every(o => !legacyText.includes(o.label)),
+      'a pre Round 124 World Cup save does not keep its speech on the card the same way');
+  }
 }
 
 console.log('');

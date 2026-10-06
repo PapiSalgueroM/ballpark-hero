@@ -73,12 +73,17 @@ export interface AwardsNight<C extends AwardsCandidate = AwardsCandidate> {
    *  a winning or podium night; absent on any other night and on a night a
    *  save staged before Round 834's review. */
   moved?: string;
-  /** The winner's speech once given on the card: which one, its line as the
-   *  card shows it (the log line without the numbers it prints, since `moved`
-   *  carries the measured ones), and what it actually moved. Absent on a night
-   *  with no speech yet. */
-  speech?: { id: string; line: string; moved: string };
+  /** The winner's speech once given on the card. Absent on a night with no
+   *  speech yet. */
+  speech?: GivenSpeech;
 }
+
+/** A winner's speech once given on a card: which one, its line as the card
+ *  shows it (the log line without the numbers it prints, since `moved`
+ *  carries the measured ones), and what it actually moved. Round 1023's
+ *  review: one shape for every card that keeps a speech, the awards night and
+ *  Soccer Career's tournament card alike, so a fix to one reaches both. */
+export interface GivenSpeech { id: string; line: string; moved: string }
 
 /** Where the field's names come from. See RIVAL NAMES above. */
 export type AwardsRivalNames = "generated" | "legacy-real-era-stars";
@@ -261,6 +266,42 @@ export function narrativeOf<S, M extends string>(meters: Record<M, AwardsMeter<S
   const labels = Object.values<AwardsMeter<S>>(meters).map(m => m.label.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   const at = line.search(new RegExp(`(?:${labels.join("|")}) [+-]`));
   return at > 0 ? line.slice(0, at).trimEnd() : line;
+}
+
+/** What a card keeps once a speech is given: the line without the number the
+ *  log prints, and what the speech measurably moved, in words. */
+export function keepSpeech<S, M extends string>(meters: Record<M, AwardsMeter<S>>, id: string, line: string, moved: MeterStep<M>[]): GivenSpeech {
+  return { id, line: narrativeOf(meters, line), moved: describeSteps(meters, moved) };
+}
+
+/** The speech a card holds, or null when there is none or it is not the
+ *  GivenSpeech shape: a corrupt block reads as no speech, and nothing else
+ *  resets. */
+export function givenSpeechOf(holder: { speech?: unknown } | null | undefined): GivenSpeech | null {
+  const sp = holder?.speech as Partial<GivenSpeech> | null | undefined;
+  return sp && typeof sp === "object" && typeof sp.id === "string" && typeof sp.line === "string" && typeof sp.moved === "string"
+    ? { id: sp.id, line: sp.line, moved: sp.moved } : null;
+}
+
+/** Round 1023's review: gives a speech on a card, once. Nothing happens
+ *  unless the card is `open` on `prev` and `id` is one of the options (the
+ *  same save comes back); otherwise the speech is given on a copy (`speak`
+ *  returns its log line and what it measurably moved) and the card keeps it
+ *  (`keep`). The card says when it is open and where it keeps the speech;
+ *  the rest of the shape lives here, so a second card does not copy it. */
+export function giveSpeechOnce<S extends object, M extends string, Id extends string>(
+  meters: Record<M, AwardsMeter<S>>, options: SpeechOption<S, M, Id>[], prev: S, id: Id,
+  card: {
+    open: (s: S) => boolean;
+    speak: (s: S) => { line: string; moved: MeterStep<M>[] };
+    keep: (s: S, speech: GivenSpeech) => void;
+  },
+): S {
+  if (!card.open(prev) || !options.some(o => o.id === id)) return prev;
+  const s = { ...prev };
+  const { line, moved } = card.speak(s);
+  card.keep(s, keepSpeech(meters, id, line, moved));
+  return s;
 }
 
 /** What the night writes on the save: the place on the season record, the
