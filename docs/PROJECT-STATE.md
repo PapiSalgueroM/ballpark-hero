@@ -1,3 +1,17 @@
+**2026-10-06 03:36 EDT, desktop Claude lane: Release AE IS LIVE**, main `2f81e797`, deployment `c14c0587`, entry `index-Bj0du-Y6.js`. Ten rounds of this lane, each built, reviewed twice, fixed and closed, plus the other lane's 1060 (Compare seasons, already live) and PR140 as they stood on main.
+
+What a player sees:
+- **Aussie Rules Manager, a full season (1014):** eighteen fictional clubs, a 23 round home and away season, the finals in the AFL's format (two source verified), Grand Final day and a draft into season two. Australia is the site's third country; a player asked for this on 2026-09-30.
+- **Club Manager, 2020-21 as a full big five (971):** the fourth past season, merged with 2005-06 (902) so all four past eras and the present play. The eras footnote now names all four.
+- **NBA Career Path verified (925):** 20 players to 50, every line on two sources (and the US Virgin Islands flag for Tim Duncan).
+- **Clue guessers and chains end on the shared result moment (953), and a broken save never traps a long game (958).**
+- Groundwork for the GM desks: books and facilities (943), the development tier and waivers (944), one lineup engine (945), the league year calendar (946), coach's calls (947).
+
+**Gate** (gate clone, branch release-ae, scripts `gate-ae.sh` then `gate-ae2.sh` after merging main): pass 1 type gate 0, build:seo 0, 52 fences, one browser sweep (182 routes, 364 checks, 0 findings), /club-manager and /aussie-rules-manager played clean, playEra2020 and playCorruptSaves green, 15 test files 261 of 261. Pass 2 on the merged tree (main with the other lane's PR140 and PR141): type gate 0, build:seo 0 (every route redrawn), the 24 standing rule fences (`gate-rule-fences.txt`, new this release), the other lane's four new harnesses and test files (48 of 48), simFaqSchema green on rerun, sweepWeight green.
+**Fixed in the release:** simGmStaff's fixture re-recorded (971's fourth era moved its club pick; the desk code is unchanged; also red on main since Release AD because 902's clubs moved it); simLiveScores green again (Rounds 944 and 972 named espn.com outside a url field: both citations moved into url fields, same runtime values, the citedespn control still fires); simLeaderboardCaps green again (the shared US career and college dynasty boards send their completion key from the sport descriptor; the fence now reads descriptor fields, control memberblind proves the six keys come back red without it; red on main since those boards were unified); ten weight budgets from fresh measurements.
+**Reds that are not this release's:** simNationalities (the modern names: Round 1015 has them baked from one production read, in Release AF); simSeoMetaSplit section 4 (red by design until 1014's new title is on main, which this release does); playCareerHub and playSeasonReveal (the other lane's Career Log back button reads "Back to career" while its walks look for "Hub"; flagged on the board).
+**Proof:** x-deployment-id carries c14c0587 at 03:36 EDT, the home page serves index-Bj0du-Y6.js, /whats-new carries the Aussie Rules full season, 2020-21 and NBA Career Path lines, and in a real browser the live /aussie-rules-manager offers eighteen fictional clubs, 23 rounds, a wildcard week for 7th to 10th, the final eight, a Grand Final and a draft.
+
 ## Codex1061 accepted, publication pending, 2026-10-06
 
 PR143 source b40be19bb2ebc8a5f22fa435eb89782e52e213fe passed all four

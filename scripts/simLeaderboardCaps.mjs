@@ -49,7 +49,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CAPS_CONTROL || '';
-if (CONTROL && CONTROL !== 'stalelist') {
+if (CONTROL && CONTROL !== 'stalelist' && CONTROL !== 'memberblind') {
   console.error(`CAPS_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -144,6 +144,33 @@ function sourceKeys() {
     }
   };
   walk(path.join(ROOT, 'src'));
+  /* RELEASE AE WIDENED THIS A THIRD TIME. The four US careers became one board
+     (UsCareerBoard calls useGameCompletion(sport.gameSlug)) and the two college
+     dynasties one board (CollegeDynastyBoard calls useGameCompletion(
+     sport.completionId)), so their keys live in the sport descriptors, not at
+     the call. Section 6 then called six real games keys no code can send. A
+     member call teaches the field name; its literal values are read from the
+     descriptor files only (a *Sport.ts or *Board.tsx), so a daily hook's
+     storage key named gameSlug never counts as a completion. The control
+     memberblind turns this off and the six must come back red. */
+  if (CONTROL !== 'memberblind') {
+    const fields = new Set();
+    const files = [];
+    const walk2 = dir => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const p = path.join(dir, e.name);
+        if (e.isDirectory()) walk2(p);
+        else if (/\.tsx?$/.test(e.name)) files.push(p);
+      }
+    };
+    walk2(path.join(ROOT, 'src'));
+    for (const p of files) for (const m of fs.readFileSync(p, 'utf8').matchAll(/useGameCompletion\(\s*[A-Za-z_$][\w$]*\.([A-Za-z_$][\w$]*)\s*[,)]/g)) fields.add(m[1]);
+    for (const p of files) {
+      if (!/(Sport\.ts|Board\.tsx)$/.test(p)) continue;
+      const src = fs.readFileSync(p, 'utf8');
+      for (const f of fields) for (const m of src.matchAll(new RegExp(`\\b${f}:\\s*['"]([a-z0-9-]+)['"]`, 'g'))) found.add(m[1]);
+    }
+  }
   return found;
 }
 
