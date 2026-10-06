@@ -23,6 +23,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
       'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
       'Choose Circuit to take on all three styles. A win unlocks Next opponent; a loss or draw ends the run. Every opponent starts a fresh fight with full health and stamina.',
+      'Open Fight stats after a Quick fight or any Circuit fight to compare your shots landed, damage dealt, blocks, takedowns and time on top against the CPU. Back returns to the result so you can start another fight or advance.',
     ],
     rules: [
       'A fight has up to three 45 second arcade rounds. Between rounds, the clock waits for you to continue.',
@@ -35,12 +36,14 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Practice uses the same range, stamina and ground rules with an untimed partner. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
       'Circuit records one completion for the run. Add the earned fight scores, divide by three and round to the nearest whole point. Unplayed fights contribute zero. Quitting or refreshing an unfinished circuit earns no points.',
       'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
+      'Fight stats describe only the fight you just finished. Damage is rounded to a whole number. Top control is time spent on top, shown in seconds. Opening or closing the recap does not change your score.',
     ],
     example: [
       'You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.',
       'Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.',
       'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
       'A Circuit run with fight scores of 80, 90 and 85 earns 85/100. If the first fight ends in a loss with 30 earned points, the run ends at 10/100 because the two unplayed fights count as zero.',
+      'If you landed 12 shots and the CPU landed 8, the Shots landed row shows 12 under You and 8 under CPU. More shots alone do not decide a fight: check the damage, takedowns and top control too.',
     ],
     tips: [
       'Distance is a defense. Step out of punching range when you need a moment to recover.',

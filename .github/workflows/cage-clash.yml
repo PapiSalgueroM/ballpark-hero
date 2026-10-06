@@ -13,9 +13,11 @@ on:
       - src/test/cageClash.test.tsx
       - src/test/cagePractice.test.tsx
       - src/test/cageCircuit.test.tsx
+      - src/test/cageFightStats.test.tsx
       - scripts/simCageClash.mjs
       - scripts/simCagePractice.mjs
       - scripts/simCageCircuit.mjs
+      - scripts/simCageFightStats.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -43,6 +45,7 @@ jobs:
       SEO_SPLIT_BASE_REF: HEAD
       CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
       CAGE_CIRCUIT_ARTIFACTS: cage-clash-artifacts/circuit
+      CAGE_FIGHT_STATS_ARTIFACTS: cage-clash-artifacts/stats
     steps:
       - uses: actions/checkout@v4
         with:
@@ -98,6 +101,9 @@ jobs:
           path: |
             cage-clash-artifacts/circuit/
             cage-clash-artifacts/circuit.log
+      - name: Fight stats outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_FIGHT_STATS_CONTROL=all ONLY=simCageFightStats node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/stats.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
