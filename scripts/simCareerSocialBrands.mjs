@@ -24,7 +24,8 @@
  *      output must equal scripts/data/soccerBrandFixture835.json, recorded
  *      from a main with none of the lift on it (first origin/main 3fb92eea,
  *      then again from origin/main 6d29f561 once Rounds 819, 834 and 850 had
- *      changed Soccer Career there; the file's recordedFrom header carries
+ *      changed Soccer Career there, and again from origin/main e30e2735 at
+ *      Release AH once Rounds 899 to 1024 had; the file's recordedFrom header carries
  *      the sha). Soccer calls Math.random
  *      in a fixed order, so a lift that moves one draw shows up here. The
  *      section also requires the fixture to have exercised what it claims
@@ -209,9 +210,10 @@ if (SECTIONS.includes('1')) {
      and the words this tree ships. The fixture must hold the first, or the
      entry is stale and fails; the tree must produce the second, or the
      comparison fails. The fixture file is never edited to match. */
-  const COPY_CHANGES = [
-    { post: 'troll_rival', field: 'extraEffect', from: 'Rivalry intensity increases', to: 'All talk: just the followers, nothing else moves' },
-  ];
+  /* Release AH: the troll_rival words ("All talk: just the followers,
+     nothing else moves") are main's own since the e30e2735 recording, so
+     that entry is spent and no copy change is pending. */
+  const COPY_CHANGES = [];
   for (const c of COPY_CHANGES) {
     const def = rec.units.defs.posts.find(p => p.id === c.post);
     check(Boolean(def) && def[c.field] === c.from, `the fixture holds main's words for the ${c.post} card (${c.field})`);
