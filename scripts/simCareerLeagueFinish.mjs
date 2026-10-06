@@ -239,8 +239,14 @@ const DIGEST_SEEDS = 16;
    '3e5b99f018877dbe'], 16 of 16, and bundle B (derbies resolved, swing off)
    equals it 16 of 16. With Round 1013's clubs the 16 careers play 160
    derby seasons between them and all 16 digests move, only through the
-   swing. The stream control below still turns section 4 red. */
-const BASELINE = ['9f88c7e2a3533c92', '09487908f21e5673', '137be606bdb3965f', '9d1002a558de6175', 'a339f65db70dab9a', '025d489afaadc84c', '7bf99192ff899949', '06f3cb2054fcf302', 'fd6e3b6921c0fc9a', '8223eadb342cff94', 'd3fc4fd71ea0964a', 'bf55ea038d4784eb', 'dad30a730ee92571', 'c8f760fd4b26c677', 'eafed0733348923f', '09c0ce4d94320c9f'];
+   swing. The stream control below still turns section 4 red.
+   Re-recorded by Round 1024 on its merge with main 37ce6d5e (twice,
+   identical) after proving main's digests green on a clean export of that
+   main: the round adds one star to the 2025-2029 Ballon d'Or field and
+   moves three 2020-2024 clubs, so every 2020 career draws more on its
+   first awards night. Sections 1, 2, 3 and 5 stayed green.
+   RELEASE AF OWES A RE-RECORD on the merged tree (1012 and 1024 together): the array below is 1024s alone. */
+const BASELINE = ['a31a6e10338f3099', '03f1ce749be95340', 'ad3c936792765bb4', 'b6c3253176006039', '3334adb4805c6d61', '79d633375da25489', '3ac5d32949594594', '57454985480f47d8', 'cb004302fcf15857', 'bd8ece5eda9691dd', '14e379e4c658b202', '296bcfbd7b89f453', '09e1b3de0308c24f', '2dcb138641a5170d', 'c4ed6008e14ac75b', 'cd52002e53b9c802'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
