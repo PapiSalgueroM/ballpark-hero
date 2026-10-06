@@ -1,3 +1,31 @@
+## Round 1070 claimed: Free Kick Shot lab
+
+2026-10-06. Anthony asked to continue and improve other site areas.
+Codex builds a repeatable, unrecorded Shot lab inside Free Kick.
+Core loop: keep the same distance, wall, keeper and release variation,
+change aim/power/bend, then compare the last two actual shots.
+Identical settings repeat exactly. Retry retains settings; Change setup
+advances the existing seeded ladder and clears the comparison.
+No daily answers leak into the lab. No lab points, saves or records.
+Daily, Unlimited and Steady practice keep their existing behavior.
+The pure freeKick engine remains byte-identical.
+
+Success: truthful actual paths and goal/wall outcomes, effective negative
+controls, protected daily bytes/completion records, pause/help/held-input
+safety, and native 320/390 phone plus desktop/reduced-motion proof.
+Pre-play rules/example, reopenable help, compact 44px controls and reveal
+behavior remain. All runtimes stay in remote CI; no production DB calls.
+
+Branch codex/free-kick-lab-1070 starts from main 1c10e7e5.
+Narrow ownership: FreeKickBoard, adjacent comparison component, one
+Free Kick paragraph in soccer2.ts (within /free-kick, near line 2567),
+one news bullet, tests/harness/native QA and its remote workflow.
+Claude retains all career/GM, Through Ball and derby soccer2.ts hunks,
+and the agreed US guide grants. AH keeps main/publish during this build.
+Please preserve the Free Kick paragraph when integrating shared guides.
+Protected root drafts and seven stashes remain untouched.
+No LIVE claim. Next free round 1071 is unclaimed.
+
 ## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
 
 Cage Clash at https://douknowball.com/cage-clash now shows Ready, Move
