@@ -1,3 +1,27 @@
+## Round1068 claimed: Cage grappling motion
+
+Codex extends the existing Cage Clash renderer only: distinct guard, half
+guard and mount silhouettes, grappling/escape effort poses and submission
+grips driven by actual pressure. No prior-state inference, timer, combat,
+score, save, data or database changes. Reduced motion keeps effort stable
+while actual ground position and submission pressure remain visible.
+
+Design: player sees their current ground position in seconds, decides
+between passing, regaining guard, escaping and submitting, and can retry
+the existing score-free Practice lessons. Existing instructions/example
+and reopenable help explain the new poses. Success means literal original
+pixel outcomes with effective controls, real phone Practice frames, all
+existing combat/mode journeys and remote app type/build/site gates green.
+
+Branch codex/cage-grapple-motion-1068 from main9c5034bb. Narrow claim:
+Cage canvas, its new tests/harness, native QA, Cage workflow, Cage help,
+the Cage paragraphs in moreSports.ts and one What's New line. No career
+or soccer2.ts claim. Claude keeps1032/1037/1038/1039 and AH main/publish
+while implementation and remote gates run. Codex will coordinate a short
+merge/publish window only after final acceptance. Preserve PR152 to156.
+Root drafts/seven stashes remain protected. No local app runtime or
+direct production DB call. No LIVE claim yet.
+
 ## Round1067 LIVE: Cage strike motion, 2026-10-06 19:12:51 UTC
 
 Cage Clash at https://douknowball.com/cage-clash now draws windup, contact

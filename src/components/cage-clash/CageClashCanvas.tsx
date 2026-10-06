@@ -72,6 +72,8 @@ export function paintCageArena(ctx: CanvasRenderingContext2D, state: CageFight |
     const shade = player ? '#915b46' : '#b78264';
     const active = !!f && f.actionTicks > 0;
     const strikeStage = reduced ? 1 : (f?.actionTicks ?? 0) >= 5 ? 0 : (f?.actionTicks ?? 0) >= 3 ? 1 : 2;
+    const effortStage = reduced || !active ? 1 : pose === 'escape' ? f.actionTicks >= 9 ? 0 : f.actionTicks >= 5 ? 1 : 2 : strikeStage;
+    const pressure = (f?.submission ?? 0) >= 65 ? 2 : (f?.submission ?? 0) >= 25 ? 1 : 0;
     const bob = !reduced && !active && state?.phase === 'fight' ? Math.floor(state.tick / 6) % 2 : 0;
     const limb = (ax: number, ay: number, bx: number, by: number, thickness: number, color: string) => {
       const steps = Math.max(Math.abs(bx - ax), Math.abs(by - ay));
@@ -80,9 +82,10 @@ export function paintCageArena(ctx: CanvasRenderingContext2D, state: CageFight |
     ctx.save(); ctx.translate(Math.round(x), 136); ctx.scale(facing, 1);
     rect(-15, -1, 32, 4, '#b7b18f');
     if (grounded) {
-      const y = top ? f?.posture ? -26 : pose === 'grapple' ? -15 : -19 : -5;
+      const level = state?.groundLevel ?? 0;
+      const y = top ? f?.posture ? -26 : pose === 'grapple' ? [-18, -13, -16][effortStage] : -19 : pose === 'grapple' || pose === 'escape' ? [-5, -10, -7][effortStage] : -5;
       if (top) {
-        rect(-12, y + 7, 9, 8, shadow); limb(-9, y + 12, -15, -1, 5, skin);
+        rect(-12, y + 7, 9, 8, shadow); limb(-9, y + 12, [-15, -18, -20][level], -1, 5, skin);
         rect(-8, y - 2, 12, 12, skin); rect(-7, y + 7, 13, 5, color);
         rect(-4, y - 13, 10, 11, shade); rect(-3, y - 13, 10, 8, skin); rect(-4, y - 14, 10, 3, ink);
         if (pose === 'power') {
@@ -91,27 +94,38 @@ export function paintCageArena(ctx: CanvasRenderingContext2D, state: CageFight |
         } else if (pose === 'jab') {
           const [handX, handY] = [[5, y - 8], [12, y + 12], [7, y + 3]][strikeStage];
           limb(2, y + 2, handX + 2, handY + 1, 4, skin); rect(handX, handY, 6, 6, color);
+        } else if (pose === 'grapple' || pose === 'escape') {
+          const [handX, handY] = (pose === 'grapple' ? [[14, y + 5], [19, y + 11], [11, y + 8]] : [[4, y - 10], [20, y + 13], [9, y - 5]])[effortStage];
+          limb(0, y + 1, handX + 1, handY + 2, 4, skin); rect(handX, handY, 6, 6, color);
         } else if (pose === 'posture' || (f?.posture && pose !== 'submit')) {
           limb(0, y, 8, y - 16, 4, skin); rect(6, y - 20, 6, 6, color);
         } else if (pose === 'submit') {
-          limb(0, y + 1, 13, y + 5, 4, skin); limb(13, y + 5, 8, y + 12, 4, skin); rect(7, y + 10, 6, 5, color);
+          const [handX, handY] = [[16, y + 6], [10, y + 10], [5, y + 7]][pressure];
+          limb(0, y + 1, 18, y + 2, 4, skin); limb(18, y + 2, handX + 1, handY + 2, 4, skin); rect(handX, handY, 6, 5, color);
         } else { limb(1, y + 2, 11, y + 8, 4, skin); rect(10, y + 8, 5, 5, color); }
-        limb(-4, y + 12, 6, -2, 5, skin); rect(5, -2, 10, 3, shade);
+        const footX = [6, 11, 16][level];
+        limb(-4, y + 12, footX, -2, 5, skin); rect(footX - 1, -2, 10, 3, shade);
       } else {
         rect(-12, y - 4, 19, 7, skin); rect(-14, y - 4, 7, 7, color);
         rect(9, y - 6, 10, 9, skin); rect(17, y - 5, 3, 7, ink);
-        limb(-12, y, -21, y - 9, 4, shade); limb(-21, y - 9, -12, y - 16, 4, skin);
+        const [kneeX, kneeY, heelX, heelY] = [[-21, y - 9, -12, y - 16], [-23, y - 5, -17, y - 10], [-25, y, -31, y + 1]][level];
+        limb(-12, y, kneeX, kneeY, 4, shade); limb(kneeX, kneeY, heelX, heelY, 4, skin);
         if (pose === 'jab') {
           const [handX, handY] = [[4, y - 8], [12, y - 22], [9, y - 14]][strikeStage];
           limb(2, y - 3, handX + 1, handY + 2, 4, skin); rect(handX, handY, 6, 5, color);
+        } else if (pose === 'grapple' || pose === 'escape') {
+          const [handX, handY] = (pose === 'grapple' ? [[-6, y - 16], [10, y - 23], [2, y - 17]] : [[1, y - 12], [17, y - 18], [8, y - 10]])[effortStage];
+          limb(2, y - 3, handX + 1, handY + 2, 4, skin); rect(handX, handY, 6, 5, color);
+        } else if (pose === 'submit') {
+          const [handX, handY] = [[12, y - 22], [3, y - 25], [-8, y - 22]][pressure];
+          limb(2, y - 3, 16, y - 18, 4, skin); limb(16, y - 18, handX + 1, handY + 2, 4, skin); rect(handX, handY, 6, 5, color);
         } else {
-          const reach = pose === 'submit' ? -23 : pose === 'escape' || pose === 'grapple' || pose === 'guard' ? -17 : -9;
+          const reach = pose === 'guard' ? -17 : -9;
           limb(2, y - 3, 3, y + reach, 4, skin); rect(1, y + reach - 2, 6, 5, color);
-          if (pose === 'submit') { limb(3, y + reach, -7, y + reach, 4, skin); rect(-9, y + reach, 6, 5, color); }
         }
       }
     } else {
-      const duck = pose === 'grapple' || pose === 'escape' ? 8 : 0;
+      const duck = pose === 'grapple' ? [5, 11, 8][effortStage] : pose === 'escape' ? [10, 4, 0][effortStage] : 0;
       const y = bob + duck;
       // Outlined trunks, feet, shaded torso and close-cut fictional face.
       if (pose === 'kick') {
@@ -138,7 +152,10 @@ export function paintCageArena(ctx: CanvasRenderingContext2D, state: CageFight |
         limb(4, -36 + y, handX - 2, handY + y + 3, 5, skin); rect(handX, handY + y, 8, 7, color); rect(handX + 6, handY + y + 1, 2, 5, sand);
       } else if (pose === 'guard') {
         limb(5, -34 + y, 10, -44 + y, 5, skin); rect(6, -49 + y, 8, 9, color); rect(-2, -46 + y, 6, 8, shadow);
-      } else if (pose === 'grapple' || pose === 'submit') {
+      } else if (pose === 'grapple' || pose === 'escape') {
+        const [handX, handY] = (pose === 'grapple' ? [[13, -29], [25, -35], [18, -32]] : [[7, -36], [27, -29], [11, -39]])[effortStage];
+        limb(5, -35 + y, handX + 1, handY + y + 2, 5, skin); rect(handX, handY + y, 6, 7, color);
+      } else if (pose === 'submit') {
         limb(5, -35 + y, 21, -31 + y, 5, skin); rect(20, -33 + y, 6, 7, color);
       } else { limb(5, -35 + y, 11, -39 + y, 5, skin); rect(9, -43 + y, 7, 7, color); }
     }
@@ -147,7 +164,7 @@ export function paintCageArena(ctx: CanvasRenderingContext2D, state: CageFight |
   const px = state ? 28 + state.player.x * 2.64 : 117;
   const cx = state ? 28 + state.cpu.x * 2.64 : 203;
   const direction = px <= cx ? 1 : -1;
-  const pose = (f: CageFighter | undefined) => state?.position === 'clinch' && !['jab', 'power', 'kick'].includes(f?.action ?? 'idle') ? 'grapple' : f?.action ?? 'idle';
+  const pose = (f: CageFighter | undefined) => state?.position === 'clinch' && !['jab', 'power', 'kick', 'escape', 'guard'].includes(f?.action ?? 'idle') ? 'grapple' : f?.action ?? 'idle';
   if (state?.position === 'ground') {
     const middle = (px + cx) / 2;
     const playerTop = state.top === 'player';
@@ -178,6 +195,11 @@ export function CageClashCanvas({ fightRef, drawRef }: Props) {
       canvas.dataset.paintTick = String(fight?.tick ?? 0);
       canvas.dataset.playerAction = fight?.player.action ?? 'idle';
       canvas.dataset.playerActionTicks = String(fight?.player.actionTicks ?? 0);
+      canvas.dataset.position = fight?.position ?? 'standing';
+      canvas.dataset.top = fight?.top ?? 'none';
+      canvas.dataset.groundLevel = String(fight?.groundLevel ?? 0);
+      canvas.dataset.playerSubmission = String(fight?.player.submission ?? 0);
+      canvas.dataset.cpuSubmission = String(fight?.cpu.submission ?? 0);
     };
     drawRef.current = paint;
     paint(fightRef.current);

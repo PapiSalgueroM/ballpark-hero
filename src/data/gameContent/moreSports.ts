@@ -37,6 +37,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Circuit records one completion for the run. Add the earned fight scores, divide by three and round to the nearest whole point. Unplayed fights contribute zero. Quitting or refreshing an unfinished circuit earns no points.',
       'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
       'Punches, kicks and ground strikes have moving pixel poses. With reduced motion enabled on your device, action poses stay steady and the crowd stays still. The same fighting rules apply.',
+      'The ground poses show guard, half guard and mount. Passing and escaping have effort poses, and submission grips tighten as your actual pressure builds. Reduced motion keeps effort poses steady while still showing your current position and submission pressure.',
       'Fight stats describe only the fight you just finished. Damage is rounded to a whole number. Top control is time spent on top, shown in seconds. Opening or closing the recap does not change your score.',
     ],
     example: [
