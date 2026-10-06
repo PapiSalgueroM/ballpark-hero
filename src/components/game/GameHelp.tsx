@@ -25,28 +25,50 @@ interface GameHelpProps {
   side?: 'left' | 'right';
   inline?: boolean;
   className?: string;
+  /** Show the loaded guide until this route's first dismissal is remembered. */
+  firstVisit?: boolean;
 }
 
-export function GameHelp({ side = 'left', inline = false, className }: GameHelpProps = {}) {
+export function GameHelp({ side = 'left', inline = false, className, firstVisit = false }: GameHelpProps = {}) {
   const pathname = useRoutePath();
   const [content, setContent] = useState<GameContent | null>(null);
+  const [open, setOpen] = useState(false);
+  const localStorageKey = `rules-gate-seen:${pathname}`;
+  const prerender = typeof window !== 'undefined' && !!(window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
 
   useEffect(() => {
     let cancelled = false;
     setContent(null);
+    setOpen(false);
     loadGameContent(pathname).then(c => {
-      if (!cancelled) setContent(c);
+      if (cancelled) return;
+      setContent(c);
+      if (!firstVisit || prerender || !c || flatGuide(c).howToPlay.length === 0) return;
+      try {
+        setOpen(localStorage.getItem(localStorageKey) !== '1');
+      } catch {
+        setOpen(true);
+      }
     });
     return () => { cancelled = true; };
-  }, [pathname]);
+  }, [pathname, firstVisit, localStorageKey, prerender]);
 
   /* Round 638: a converted guide keeps its sentences in sections, so read the
      flat lists through the accessor. */
   const guide = content ? flatGuide(content) : null;
   if (!guide || guide.howToPlay.length === 0) return null;
 
+  const changeOpen = (nextOpen: boolean) => {
+    if (prerender) return;
+    if (open && !nextOpen) {
+      try { localStorage.setItem(localStorageKey, '1'); } catch { /* The guide still closes when storage is blocked. */ }
+    }
+    setOpen(nextOpen);
+  };
+
   return (
-    <HowToPlayPopover title="How to play" triggerSide={side} floatingTrigger={!inline} className={className}>
+    <HowToPlayPopover title="How to play" triggerSide={side} floatingTrigger={!inline} className={className}
+      open={firstVisit ? open : undefined} onOpenChange={firstVisit ? changeOpen : undefined}>
       <div>
         <h3 className="font-bold text-foreground mb-2">The steps</h3>
         <ol className="list-decimal list-inside space-y-1.5 text-muted-foreground">

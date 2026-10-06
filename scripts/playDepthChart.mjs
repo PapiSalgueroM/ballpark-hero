@@ -27,6 +27,7 @@ const say = (ok, what) => {
 const browser = await chromium.launch();
 
 async function createCareer(page, path) {
+  await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), path);
   await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('input[placeholder*="name"]').first().fill('Depth Probe');
