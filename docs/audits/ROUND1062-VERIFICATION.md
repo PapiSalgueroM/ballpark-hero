@@ -57,4 +57,23 @@ No generated files from either failed run were copied.
 Final committed-source CI is pending. No1062 merge or live claim yet.
 No local runtime, install/build, production database, paid host AI, AdSense
 submission or indexing request. Root held drafts and seven stashes are safe.
-Claude retains his product lanes and the queued1061 publication handoff.
+Claude retains his product lanes and the1062 publication handoff.1061 is live.
+
+## Integrated source preparation
+
+Prior final source4a31748b93149ef34fc034c86d7bfd2a40a153b1 passed allthree
+workflows and44steps, no skips: MMA37428894527, Career entry37428894500
+and Sport hub37428894526. That acceptance predates Release AE integration.
+
+Main2f81e797 and its docs-only receipt af468ebd are preserved. MMA engine,
+hook, UI and test bytes are unchanged. WhatsNew keeps both lanes' entries.
+Auxiliary source0a0be051f38f5e7435f1de175b315f75ed1d86d1 contains only a
+temporary generation workflow beyond integration74761c0e. It is excluded
+from PR144. Run37430395602, job112159680583 passed all13 steps, no skips.
+Both real builds and scoped search/prerender/sitemap generation passed.
+Artifact11396812113 SHA256:
+420388ed71ea916e709041946d48d29ed8ea29fd896f10df35f03aef7aa338fe.
+Source and seven manifest values matched before and after copy. Only the
+updates snapshot, lastmod ledger and search differ from integrated source.
+Integrated final committed-source CI remains pending; no1062 live claim.
+
