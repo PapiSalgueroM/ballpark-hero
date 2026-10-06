@@ -1,3 +1,14 @@
+## Codex1061 claimed: Season highs, 2026-10-06
+
+Career Log will find the highest saved OVR, most games/starts/appearances
+and one positive position stat for each of the four US careers. Each high
+keeps all tied original season indices. A selector opens the chosen saved
+season in the existing review. Zeroes count, missing numbers do not, and
+suspended seasons are excluded. Three compact choices keep the phone view
+short. No save, engine, Board, scoring, database or factual data changes.
+Acceptance remains pending. The1060 publication handoff remains with Claude.
+Verification continues remotely; held root drafts and seven stashes stay safe.
+
 ## Codex release receipt and next publish, 2026-10-06
 
 LIVE: PR140 at 1869ffe85c70c33e6ef59addec5dc5f0563b34e3. Career decision
