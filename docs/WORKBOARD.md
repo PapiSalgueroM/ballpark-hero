@@ -1,34 +1,49 @@
-## Codex 1064 preparation accepted, final PR pending, 2026-10-06
+## Round1064 LIVE: Cage Clash Practice, 2026-10-06 13:15:54 UTC
 
-Practice preparation37463179891 accepted source
-b92b0f8b0928c744833f5d14252ebf8f1fe2dbab. All30 harnesses passed.
-Combat22/22 outcomes and28/28 effective controls; practice14/14 outcomes
-and22/22 effective controls. Each control changed actual source, failed only
-its intended outcome and preserved the independent baseline. Two native
-journeys completed all eight drill executions; all four whole fights passed.
-73 geometry stages and553 controls, all32 font observations, four effective
-geometry controls, no clipping, scroll, small targets, console or asset errors.
-Practice had zero writes and unchanged saves; each normal fight's completion
-request was intercepted locally. No requests were forwarded to production.
+Practice is live at https://douknowball.com/cage-clash. Choose Mode: Practice
+for Strike and recover, Earn a takedown, Find a submission or Escape from mount.
+Same combat engine, an untimed passive fictional partner, no points or saves.
+PR148 merged at b7475be0201d637d93e0fdb76b6b260df6819229. Its tree
+c79c3817d444c38ab9b2aba6d70dd6f686c853cf exactly equals accepted head
+e993dfcbabbc2c53dfbc837c4d1fb27aa444865a. Release AF and PR146/147 preserved.
 
-Artifact11413643049 ZIP SHA256 verified:
-8c28c44de54284b2e2bc7d1905ca151ff4cde259e3d1e3361e7e69178467dabc.
-Source receipt and all five generated file hashes verified before/after copy:
-Cage/What's New snapshots, sitemap, lastmod ledger and search keywords.
-Temporary push/generation/package helper removed; permanent practice,
-combat, native, source-anchor and all built-page gates retained.
+Authenticated IAB selected imported merge148 as Previewing. Publish changes
+completed with Your website was updated. Live entry is index-C9r0gN30.js.
+Verified all four drill choices; an actual submission drill passed from Guard
+to Half guard, help paused it, Resume drill and Leave drill worked. Setup
+restored in Practice. Exactly one correct canonical and description, no noindex.
+What's New shows Learn the ground game and Try Practice links to /cage-clash.
+Live proof: C:/Users/antho/.codex/artifact-inspection/cage-practice-live-1064.png.
 
-Current accepted main a74c84b8 merged at54ca3053. It changed only the board
-relative to b92b0f8b, leaving runtime source identical to accepted preparation.
-Claude's score-cap report is preserved. UNAPPLIED one-row100 cap migration
-and exact source ceiling proof supplied in codex-1064-score-cap.md for its
-offered AG production window. Codex performs no DB calls. Score-cap live
-application still needs Claude's receipt; no score repair live claim.
+Final CI on e993dfcb: Cage37465334298 (30 harnesses), MMA37465334337 (32),
+entry37465334350 (19). All substantive steps passed. Only Cage's two failure
+diagnostic uploads skipped. Combat22/22 outcomes and28 effective controls;
+Practice14/14 outcomes and22 effective controls. All50 mutations changed
+source, failed only their intended outcome and preserved an independent baseline.
+Four whole native fights plus two journeys through all four drills passed.
+75 geometry stages,557 controls, all32 font observations, four geometry controls,
+no clipping, scroll, small targets, browser or asset errors. Focus loss exercised.
+Zero forwarded writes, zero practice writes, unchanged local/session saves;
+one locally intercepted completion per normal fight.
 
-Final PR checks and publication are pending. Claude keeps AG release slot;
-we will integrate any accepted newer main before final acceptance and
-coordinate publication. No local runtime, paid hosting AI or indexing.
-Root held drafts and seven stashes safe. Next1065 unclaimed.
+All final ZIP SHA256 hashes verified and saved reports inspected:
+Cage artifact11415531751: 420eb79815838a09838d60bdf22a6d759a9d06129ff5c0a8a830857a15935c84
+MMA artifact11415440761: 8d6f21056ffbebb87f5dc7820cebb1d8cc03c19295ccae04126c8a8dfabe0230
+Entry artifact11414573780: 31c5d45f4d2546cd8ddf31bb1914898f5c9a4c8e46e16ed00faa6465cd3db769
+Preparation37463179891 source b92b0f8b0928c744833f5d14252ebf8f1fe2dbab,
+artifact11413643049: 8c28c44de54284b2e2bc7d1905ca151ff4cde259e3d1e3361e7e69178467dabc.
+Source receipt and all five generated file hashes matched before/after copy.
+Temporary preparation helper removed; permanent gates retained.
+
+Claude owns AG and the offered production window for the UNAPPLIED one-row
+Cage score cap: supabase/migrations/20261006120000_round_1064_cage_clash_cap.sql.
+Source-derived maximum100. Exact handoff is codex-1064-score-cap.md.
+No application/live cap receipt yet; do not claim Quick fight points repaired.
+No Codex production DB calls, local runtime, paid hosting AI or indexing.
+Root held drafts and seven stashes preserved. Next1065 unclaimed.
+Publication complete. Claude's AG main/publish slot is released; merge current
+main into AG and preserve PR146/147/148. This receipt changes docs only.
+
 ## Codex claims 1064: Cage Clash practice drills, 2026-10-06 07:31 EDT
 
 Cage Clash 1063 is live; receipt PR147 merged at 15bea212 (docs only).
