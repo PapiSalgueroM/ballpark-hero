@@ -309,6 +309,22 @@ export interface WorldCupResult {
   playerAvgRating: number;
   result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
   bestPlayer: boolean;
+  /** Round 1023: the winner's speech once given on the card. Optional, so an
+      old save loads unchanged. */
+  speech?: StagedSpeech;
+}
+
+/** Round 1023: a winner's speech as the card keeps it once given: which one,
+ *  its words without the log's number, and what it measurably moved. The same
+ *  shape a Ballon d'Or night keeps (careerAwardsNight.ts). */
+export interface StagedSpeech { id: string; line: string; moved: string }
+
+/** The speech a card holds, or null when there is none or it is not the
+ *  shape above: a corrupt block reads as no speech, and nothing else resets. */
+export function stagedSpeechOf(holder: { speech?: unknown } | null | undefined): StagedSpeech | null {
+  const sp = holder?.speech as Partial<StagedSpeech> | null | undefined;
+  return sp && typeof sp === "object" && typeof sp.id === "string" && typeof sp.line === "string" && typeof sp.moved === "string"
+    ? { id: sp.id, line: sp.line, moved: sp.moved } : null;
 }
 
 /* ─── Ballon d'Or System ───
@@ -879,8 +895,9 @@ export interface CareerState {
   /** Legacy field, kept so a save made before Round 124 still renders its
       half finished World Cup screen instead of throwing. Nothing sets it now. */
   pendingWorldCup: WorldCupResult | null;
-  /** Round 124: the tournament waiting on the "world_cup" screen. */
-  pendingTournament?: IntlTournament | null;
+  /** Round 124: the tournament waiting on the "world_cup" screen. Round 1023:
+      it also keeps the winner's speech once given (optional). */
+  pendingTournament?: (IntlTournament & { speech?: StagedSpeech }) | null;
   /** The most recent tournament, kept in full so the bracket stays readable
       from the International tile all season. */
   lastTournament?: IntlTournament | null;
@@ -6916,7 +6933,17 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
      consistent: 43 goals, 14 assists and a title finished third behind a
      treble, because of a forward who was not on the shortlist. The harness
      and the engine now judge the same ten. */
-  const visibleField = allNomineeData.slice(0, 10);
+  /* Round 1023: nine, not ten. A season this rule calls dominant is always on
+     the ballot, and the shared night (careerAwardsNight.ts) then seats one
+     rival fewer, so only nine rivals ever stand beside him on the card. Judged
+     against ten, a tenth man nobody sees could still cost a must win season:
+     measured on main by simBallonDorFairness, 35 goals and a major against a
+     card whose best rival had 28, finished third. The field already holds no
+     repeated name and never the player, so these nine are exactly the nine the
+     card seats. A season that is not dominant against these nine is not
+     dominant against ten either, so a player left off the ballot loses
+     nothing by it. */
+  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
   const fieldBest = visibleField.reduce(
     (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
     0,
@@ -7153,15 +7180,42 @@ export const SOCCER_BDOR_SPEECHES: SpeechOption<CareerState, SoccerAwardsMeter, 
       hit: [{ meter: "popularity", delta: -10 }, { meter: "rivalryIntensity", delta: 10 }],
       miss: [{ meter: "popularity", delta: 8 }],
     },
+    /* Round 1023: words only. speakSoccer adds what the coin really moved. */
     line: (_s, outcome) => outcome === "hit"
-      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks. Popularity -10, but you meant every word.'
-      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed. Popularity +8.',
+      ? '🐐 "I am the greatest to ever do this." Half the room gasped, the pundits fed on it for weeks, but you meant every word.'
+      : '🐐 "I am the greatest to ever do this." Delivered with such calm that people just... agreed.',
   },
 ];
 
+/* Round 1023: a speech's log line says what the speech really did. The two
+   gambles (greatest_ever here, call_out_doubters below) used to print the
+   number their coin asked for ("Popularity +8", "-10", "+10", "-8") whatever
+   the cap let land, so a winner already at popularity 100 read "+8" in his
+   log while nothing moved. Their lines are words only now, and this adds the
+   meters the coin can move as measured after the clamps ("Popularity -7,
+   Rivalry +10."), or nothing when the cap swallowed the whole move. Every
+   soccer speech goes through here, on a card and in one step alike, so there
+   is one rule for the log line. Returns the line and every measured move, or
+   null for an id the list does not carry (nothing moves, nothing is said).
+   The draws are applySpeech's own, in its order. */
+export function speakSoccer<Id extends string>(
+  s: CareerState, options: SpeechOption<CareerState, SoccerAwardsMeter, Id>[], id: Id, rng?: () => number,
+): { line: string; moved: MeterStep<SoccerAwardsMeter>[] } | null {
+  const option = options.find(o => o.id === id);
+  if (!option) return null;
+  const said: string[] = [];
+  const hush = { meters: SOCCER_AWARDS_METERS, say: (_s: CareerState, l: string) => { said.push(l); } };
+  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { applySpeech(hush, options, s, id, rng); });
+  const coin = new Set((option.risk ? [...option.risk.hit, ...option.risk.miss] : []).map(st => st.meter));
+  const told = moved.filter(st => coin.has(st.meter));
+  const line = told.length ? `${said[0]} ${describeSteps(SOCCER_AWARDS_METERS, told)}.` : said[0];
+  SOCCER_BALLON_DOR.say(s, line);
+  return { line, moved };
+}
+
 export function applyBdorSpeech(prev: CareerState, choice: BdorSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice);
+  speakSoccer(s, SOCCER_BDOR_SPEECHES, choice);
   s.pendingBallonDor = null;
   return advanceToNextPhase(s, clubs);
 }
@@ -7192,8 +7246,7 @@ export function bdorSpeechOpen(s: CareerState): boolean {
 export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
   if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
   const s = { ...prev };
-  let line = "";
-  const moved = measureMoves(SOCCER_AWARDS_METERS, s, () => { line = applySpeech(SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, s, choice)!; });
+  const { line, moved } = speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!;
   s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
   return s;
 }
@@ -7250,9 +7303,10 @@ export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMe
       hit: [{ meter: "popularity", delta: -8 }],
       miss: [{ meter: "popularity", delta: 10 }],
     },
+    /* Round 1023: words only. speakSoccer adds what the coin really moved. */
     line: (_s, outcome) => outcome === "hit"
-      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade. Popularity -8.'
-      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered. Popularity +10.',
+      ? '📢 "Where are they now?" Named three pundits live on air. Iconic, petty, and replayed for a decade.'
+      : '📢 "Where are they now?" Named three pundits live on air and the whole country cheered.',
   },
   {
     id: "quiet_lap", emoji: "🚶", label: "Say nothing. Walk one slow lap with the trophy", tone: "quiet",
@@ -7261,12 +7315,50 @@ export const SOCCER_WORLD_CUP_SPEECHES: SpeechOption<CareerState, SoccerAwardsMe
   },
 ];
 
+/** The one step speech: given, then the tournament screen is cleared and the
+ *  career moves on. The card uses the two below instead; the harnesses still
+ *  drive this one. */
 export function applyWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice, clubs: ClubData[]): CareerState {
   const s = { ...prev };
-  applySpeech(SOCCER_BALLON_DOR, SOCCER_WORLD_CUP_SPEECHES, s, choice);
+  speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice);
   s.pendingWorldCup = null;
   s.pendingTournament = null;
   return advanceToNextPhase(s, clubs);
+}
+
+/* Round 1023: the title winner's speech stays on the card, the Ballon d'Or
+   speech's shape (giveBdorSpeech). Picking a speech used to call the one step
+   above, which cleared the card and moved on in the same tap, so the player
+   never saw what his speech did. Now the speech is given on the card, the card
+   shows its line and what it measurably moved, and Continue is the ordinary
+   dismissWorldCup. The card on screen is the tournament when there is one,
+   else the pre Round 124 World Cup result, the same order the page draws. */
+
+/** The result the tournament screen is showing, if any. */
+function tournamentOnScreen(s: CareerState): { speech?: unknown; won: boolean } | null {
+  if (s.pendingTournament) return { speech: s.pendingTournament.speech, won: s.pendingTournament.myResult === "Winner" };
+  if (s.pendingWorldCup) return { speech: s.pendingWorldCup.speech, won: s.pendingWorldCup.result === "Winner" };
+  return null;
+}
+
+/** May the tournament card still offer the winner's speech? Only on the
+ *  tournament screen, only on a title, and only once. */
+export function worldCupSpeechOpen(s: CareerState): boolean {
+  const t = s.phase === "world_cup" ? tournamentOnScreen(s) : null;
+  return !!t && t.won && !stagedSpeechOf(t);
+}
+
+/** Gives the speech on the card. Applied once: the tournament keeps which
+ *  speech it was, its words and what it measurably moved, and a second call
+ *  does nothing. */
+export function giveWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice): CareerState {
+  if (!worldCupSpeechOpen(prev) || !SOCCER_WORLD_CUP_SPEECHES.some(o => o.id === choice)) return prev;
+  const s = { ...prev };
+  const { line, moved } = speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!;
+  const speech: StagedSpeech = { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) };
+  if (prev.pendingTournament) s.pendingTournament = { ...prev.pendingTournament, speech };
+  else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };
+  return s;
 }
 
 /* ─── Retire from international football ─── */

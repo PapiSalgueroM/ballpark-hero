@@ -8,7 +8,7 @@ import { revealDelay } from "@/components/club-manager/Celebration";
 import { SpeechChoices } from "@/components/career/AwardsNightCard";
 import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
 import type {
-  IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry,
+  IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry, StagedSpeech,
 } from "@/lib/soccerCareerEngine";
 
 /* ─── Round 124: the international screens ───
@@ -127,15 +127,31 @@ function ordinal(n: number): string {
   return `${n}${s}`;
 }
 
+/** Round 1023: a winner's speech once given, as the card keeps showing it: the
+ *  words, then what it really moved. The same block the Ballon d'Or card shows
+ *  (AwardsNightCard). */
+export function SpokenSpeech({ speech }: { speech: StagedSpeech }) {
+  return (
+    <div data-spoken-speech={speech.id} className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 space-y-1 text-center animate-fade-in">
+      <p className="text-xs">{speech.line}</p>
+      {speech.moved && <p className="text-[11px] font-bold text-amber-300">{speech.moved}</p>}
+    </div>
+  );
+}
+
 /**
  * The tournament screen. Headline, then tiles. Each tile is its own screen.
  */
 export function TournamentCard({
-  t, onDismiss, onSpeech,
+  t, onDismiss, onSpeech, speech,
 }: {
   t: IntlTournament;
   onDismiss: () => void;
   onSpeech: (choice: "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap") => void;
+  /** Round 1023: while `open` a title offers the speeches in place of
+   *  Continue; once `given`, the card shows what it did above Continue. Left
+   *  out, a title offers the speeches as it always did. */
+  speech?: { open: boolean; given: StagedSpeech | null };
 }) {
   const [screen, setScreen] = useState<Screen>("home");
   /* Round 257: which table the first tile is showing. Defaults to the one he
@@ -158,6 +174,8 @@ export function TournamentCard({
     watchRef(el);
   }, [revealRef, watchRef]);
   const isWinner = t.myResult === "Winner";
+  const given = speech?.given ?? null;
+  const speechOpen = speech?.open ?? true;
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
      all, and a nation that never qualified has an empty one, so the group
@@ -470,7 +488,10 @@ export function TournamentCard({
         ))}
       </div>
 
-      {isWinner ? (
+      {/* Round 1023: once given, the speech stays on the card with what it
+          really moved, above Continue. */}
+      {isWinner && given && <SpokenSpeech speech={given} />}
+      {isWinner && speechOpen ? (
         /* Round 834: the shared speech buttons, from the same options the
            engine applies (SOCCER_WORLD_CUP_SPEECHES). Round 926: on the
            night itself they land last and cannot be pressed before they show
@@ -479,7 +500,7 @@ export function TournamentCard({
           <SpeechChoices prompt="The microphone is yours" options={SOCCER_WORLD_CUP_SPEECHES} onChoose={onSpeech} />
         </div>
       ) : (
-        <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold text-black bg-emerald-600 hover:bg-emerald-500">
+        <Button onClick={onDismiss} className={`w-full h-10 text-sm font-bold text-black ${isWinner ? "bg-amber-600 hover:bg-amber-500" : "bg-emerald-600 hover:bg-emerald-500"}`}>
           Continue →
         </Button>
       )}
