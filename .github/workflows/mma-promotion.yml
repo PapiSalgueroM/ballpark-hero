@@ -13,6 +13,7 @@ on:
       - src/lib/mmaPromotion.ts
       - src/test/mmaPromotion.test.tsx
       - scripts/simMmaPromotion.mjs
+      - scripts/simInventedNames.mjs
       - scripts/qa/mmaPromotion1062.mjs
       - public/fight-promoter/index.html
       - public/whats-new/index.html

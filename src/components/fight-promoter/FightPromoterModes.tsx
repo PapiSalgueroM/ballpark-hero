@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import FightPromoterBoard from './FightPromoterBoard';
-import MmaPromotionBoard from './MmaPromotionBoard';
+import FightPromoterBoard from '@/components/fight-promoter/FightPromoterBoard';
+import MmaPromotionBoard from '@/components/fight-promoter/MmaPromotionBoard';
 
 type Mode = 'mma' | 'boxing' | null;
 const MODE_KEY = 'fight-promoter-mode-v1';

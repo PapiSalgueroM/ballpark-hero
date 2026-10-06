@@ -92,23 +92,23 @@ export default function MmaPromotionBoard() {
   return <div data-mma-screen={active} className="space-y-3" ref={reveal}>
     <div className="rounded-xl border bg-card p-3">
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0"><p className="truncate font-display font-bold">{state.name}</p><p className="text-xs text-muted-foreground">MMA, month {state.month}, event {Math.min(state.event, 12)} of 12</p></div>
+        <div className="min-w-0"><p className="truncate font-display font-bold">{state.name}</p><p className="text-xs text-muted-foreground">Month {state.month}, event {Math.min(state.event, 12)}/12</p></div>
         <div className="shrink-0 text-right"><p data-mma-cash="" className="font-bold tabular-nums">{dollars(state.cash)}</p><p className="text-xs text-muted-foreground">Reputation {state.reputation}/100</p></div>
       </div>
     </div>
     <div className="flex items-center justify-between gap-2">
+      {active !== 'dashboard' && active !== 'closed' && <button aria-label={active === 'matchup' ? 'Back to card' : 'Back to dashboard'} className={`${action} shrink-0`} onClick={active === 'matchup' ? () => setPanel('card') : back}>Back</button>}
       <h2 ref={heading} tabIndex={-1} className="text-lg font-display font-bold outline-none">{titleLabel}</h2>{rules}
     </div>
-    {active !== 'dashboard' && active !== 'closed' && <button className={action} onClick={active === 'matchup' ? () => setPanel('card') : back}>{active === 'matchup' ? 'Back to card' : 'Back to dashboard'}</button>}
     {feedback}
 
     {active === 'dashboard' && <>
       <div className="grid grid-cols-2 gap-2">
         {([['card', 'Book card', `${plan.bookings.length} of 3 bouts booked`], ['fighters', 'Fighters', 'Sign, renew and check recovery'], ['rankings', 'Rankings', 'Pick your next title challenger'], ['history', 'Event history', `${state.history.length} saved receipts`]] as const).map(([next, label, detail]) => <button key={next} ref={node => { tiles.current[next] = node; }} aria-label={label} className={`${action} min-h-[88px] bg-card text-left`} onClick={() => open(next)}><span className="block font-display font-bold">{label}</span><span className="mt-1 block text-xs text-muted-foreground">{detail}</span></button>)}
       </div>
-      <p className="text-xs text-muted-foreground">A good matchup builds your name. A famous fighter can sell seats, but every booked fighter needs a purse and time to recover.</p>
+      <p className="text-xs text-muted-foreground">Close fights build reputation. Known fighters sell seats.</p>
       <button className={`${action} w-full`} onClick={game.rest}>Rest a month ({dollars(MMA_REST_COST)})</button>
-      <p className="text-xs text-muted-foreground">Resting advances recovery. Your booked card stays saved; check eligibility before running it.</p>
+      <p className="text-xs text-muted-foreground">A month off heals your roster. Booked bouts stay saved.</p>
     </>}
 
     {active === 'card' && <>
@@ -117,11 +117,11 @@ export default function MmaPromotionBoard() {
         <label className="text-sm">Ticket price<select aria-label="Ticket price" className={`${field} mt-1`} value={plan.ticketPrice} onChange={e => game.setPlan({ ...plan, ticketPrice: Number(e.target.value) })}>{[25, 50, 80].map(price => <option key={price} value={price}>{dollars(price)}</option>)}</select></label>
       </div>
       <div className="space-y-2">
-        {plan.bookings.map((b, i) => <div key={`${b.aId}:${b.bId}`} data-mma-booking="" className="flex items-center justify-between gap-2 rounded-lg border bg-card p-2"><div className="min-w-0 text-sm"><p className="truncate font-semibold">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p className="text-xs text-muted-foreground">{b.title ? 'Title fight, 5 rounds' : '3 rounds'}{i === 0 ? ', main event' : ''}</p></div><button aria-label={`Remove bout ${i + 1}`} className={`${action} shrink-0`} onClick={() => game.removeBout(i)}>Remove</button></div>)}
+        {plan.bookings.map((b, i) => <div key={`${b.aId}:${b.bId}`} data-mma-booking="" className="flex items-center justify-between gap-2 rounded-lg border bg-card px-2 py-1"><div className="min-w-0 text-sm"><p className="truncate font-semibold">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p className="text-xs text-muted-foreground">{b.title ? 'Title fight, 5 rounds' : '3 rounds'}{i === 0 ? ', main event' : ''}</p></div><button aria-label={`Remove bout ${i + 1}`} className={`${action} shrink-0`} onClick={() => game.removeBout(i)}>Remove</button></div>)}
         {plan.bookings.length === 0 && <p className="rounded-lg border p-3 text-sm text-muted-foreground">Choose two fighters to start your card.</p>}
       </div>
-      <button className={`${action} w-full`} disabled={plan.bookings.length >= 3} onClick={() => { setAId(''); setBId(''); setTitle(false); setPanel('matchup'); }}>Choose fighters</button>
-      {projection && <div className="rounded-lg border bg-muted/30 p-3 text-xs" aria-label="Event estimate"><p>{projection.attendance} expected seats, gate {dollars(projection.gate)}</p><p>Purses {dollars(projection.purses)}, venue {dollars(projection.rent)}</p><p className="mt-1 font-semibold">Estimated {projection.profit >= 0 ? 'profit' : 'loss'} {dollars(Math.abs(projection.profit))}</p><p className="mt-1 text-muted-foreground">Attendance is an estimate. You must cover the venue and guaranteed purses from cash.</p></div>}
+      {plan.bookings.length < 3 && <button className={`${action} w-full`} onClick={() => { setAId(''); setBId(''); setTitle(false); setPanel('matchup'); }}>Choose fighters</button>}
+      {projection && <div className="rounded-lg border bg-muted/30 p-3 text-xs" aria-label="Event estimate"><p>{projection.attendance} expected seats, gate {dollars(projection.gate)}</p><p>Purses {dollars(projection.purses)}, venue {dollars(projection.rent)}</p><p className="mt-1 font-semibold">Estimated {projection.profit >= 0 ? 'profit' : 'loss'} {dollars(Math.abs(projection.profit))}</p></div>}
       {planError && <p className="text-xs text-muted-foreground">{planError}</p>}
       <button className={`${primary} w-full`} disabled={!!planError} onClick={game.runEvent}>Run event</button>
     </>}
@@ -151,7 +151,7 @@ export default function MmaPromotionBoard() {
         <button className={`${action} w-full`} onClick={() => setFighterId(null)}>Back to fighters</button>
       </div> : <>
         <div className="grid grid-cols-2 gap-2"><button className={action} aria-pressed={!market} onClick={() => { setMarket(false); setListPage(0); }}>Signed fighters</button><button className={action} aria-pressed={market} onClick={() => { setMarket(true); setListPage(0); }}>Free agents</button></div>
-        {roster.slice(listPage * 4, listPage * 4 + 4).map(f => <button key={f.id} data-mma-fighter={f.id} className={`${action} w-full bg-card text-left`} onClick={() => setFighterId(f.id)}>{fighterSummary(f)}<span className="block text-xs text-muted-foreground">{f.contract > 0 ? `${f.contract} fights left` : `Sign for ${dollars(f.signingBonus)}`}{f.recoveryUntil > state.month ? ', recovering' : ''}</span></button>)}
+        <div className="grid grid-cols-2 gap-2">{roster.slice(listPage * 4, listPage * 4 + 4).map(f => <button key={f.id} data-mma-fighter={f.id} className={`${action} w-full min-w-0 bg-card text-left`} onClick={() => setFighterId(f.id)}>{fighterSummary(f)}<span className="block text-xs text-muted-foreground">{f.contract > 0 ? `${f.contract} fights left` : `Sign for ${dollars(f.signingBonus)}`}{f.recoveryUntil > state.month ? ', recovering' : ''}</span></button>)}</div>
         {pages(roster.length)}
         {!state.fighters.some(f => f.division === division && (market ? f.contract === 0 : f.contract > 0)) && <p className="text-sm text-muted-foreground">Nobody in this list. Check the other roster tab.</p>}
       </>}
@@ -173,7 +173,7 @@ export default function MmaPromotionBoard() {
 
     {active === 'result' && result && <div data-mma-receipt={result.event} className="space-y-2">
       <div className="rounded-xl border bg-card p-3 text-sm"><p className="font-semibold">Event {result.event}, {result.attendance} seats</p><p>Gate <span data-mma-receipt-value="gate" data-value={result.gate}>{dollars(result.gate)}</span>, purses <span data-mma-receipt-value="purses" data-value={result.purses}>{dollars(result.purses)}</span>, venue <span data-mma-receipt-value="rent" data-value={result.rent}>{dollars(result.rent)}</span></p><p className="mt-1 font-bold">{result.profit >= 0 ? 'Profit' : 'Loss'} <span data-mma-receipt-value="profit" data-value={result.profit}>{dollars(Math.abs(result.profit))}</span></p><p className="text-xs text-muted-foreground">Reputation {result.repDelta >= 0 ? '+' : ''}{result.repDelta}</p></div>
-      {result.bouts.map(b => <div key={`${b.aId}:${b.bId}`} data-mma-bout-winner={b.winnerId} className="rounded-lg border bg-card p-3 text-sm"><p className="font-semibold">{fighterName(b.winnerId)} wins</p><p className="text-xs text-muted-foreground">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p>{b.method}, round {b.round} of {b.scheduledRounds}{b.title ? ', championship bout' : ''}</p></div>)}
+      {result.bouts.map(b => <div key={`${b.aId}:${b.bId}`} data-mma-bout-winner={b.winnerId} className="rounded-lg border bg-card p-3 text-sm"><p className="font-semibold">{fighterName(b.winnerId)} wins</p><p className="text-xs text-muted-foreground">{fighterName(b.aId)} vs {fighterName(b.bId)}</p><p>{b.method}, round {b.round}/{b.scheduledRounds}{b.title ? ', title fight' : ''}</p></div>)}
       <button className={`${primary} w-full`} onClick={back}>{state.closed ? 'See legacy score' : 'Plan next event'}</button>
     </div>}
 
@@ -184,7 +184,9 @@ export default function MmaPromotionBoard() {
       <ShareButtons gameName="MMA Fight Promoter" gamePath="/fight-promoter" score={`${mmaPromotionScore(state)}/100`} />
       <button className={`${action} w-full`} onClick={() => game.openResult(state.history.length - 1)} disabled={!state.history.length}>Review last event</button>
     </div>}
-    {active === 'dashboard' && (state.history.length > 0 || state.cash < MMA_VENUES[0].rent) && (confirmEnd ? <div className="space-y-2 rounded-lg border p-3"><p className="text-sm">Close the organization and take your current legacy score?</p><div className="flex gap-2"><button className={`${action} flex-1`} onClick={() => { game.endPromotion(); setConfirmEnd(false); }}>Yes, close promotion</button><button className={`${action} flex-1`} onClick={() => setConfirmEnd(false)}>Keep running</button></div></div> : <button className={`${action} w-full`} onClick={() => setConfirmEnd(true)}>End promotion</button>)}
-    {active === 'dashboard' || active === 'closed' ? confirmReset ? <div role="alertdialog" aria-label="Start a new MMA promotion" className="space-y-2 rounded-lg border border-destructive/50 p-3"><p className="text-sm">Start a new MMA promotion? This replaces this mode's save.</p><div className="flex gap-2"><button className={`${action} flex-1`} onClick={() => { game.reset(); setPanel('dashboard'); setConfirmReset(false); setConfirmEnd(false); }}>Yes, start over</button><button className={`${action} flex-1`} onClick={() => setConfirmReset(false)}>Keep promotion</button></div></div> : <button className={`${action} w-full text-muted-foreground`} onClick={() => setConfirmReset(true)}>Start over</button> : null}
+    {(active === 'dashboard' || active === 'closed') && <div className="grid grid-cols-2 gap-2">
+      {active === 'dashboard' && (state.history.length > 0 || state.cash < MMA_VENUES[0].rent) && (confirmEnd ? <div className="col-span-2 space-y-2 rounded-lg border p-3"><p className="text-sm">Close the organization and take your current legacy score?</p><div className="flex gap-2"><button className={`${action} flex-1`} onClick={() => { game.endPromotion(); setConfirmEnd(false); }}>Yes, close promotion</button><button className={`${action} flex-1`} onClick={() => setConfirmEnd(false)}>Keep running</button></div></div> : <button className={action} onClick={() => setConfirmEnd(true)}>End promotion</button>)}
+      {confirmReset ? <div role="alertdialog" aria-label="Start a new MMA promotion" className="col-span-2 space-y-2 rounded-lg border border-destructive/50 p-3"><p className="text-sm">Start a new MMA promotion? This replaces this mode's save.</p><div className="flex gap-2"><button className={`${action} flex-1`} onClick={() => { game.reset(); setPanel('dashboard'); setConfirmReset(false); setConfirmEnd(false); }}>Yes, start over</button><button className={`${action} flex-1`} onClick={() => setConfirmReset(false)}>Keep promotion</button></div></div> : <button className={`${action} text-muted-foreground`} onClick={() => setConfirmReset(true)}>Start over</button>}
+    </div>}
   </div>;
 }

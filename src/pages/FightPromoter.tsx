@@ -16,8 +16,8 @@ const FightPromoter = () => {
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
         <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
-        <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
-          <div className="text-center mb-4">
+        <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-3 pb-20">
+          <div className="text-center mb-2">
             <h1 className="text-2xl font-display font-bold text-primary">Fight Promoter</h1>
             <p className="text-xs text-muted-foreground mt-1">
               Your organization. Your roster. Your fight night.
