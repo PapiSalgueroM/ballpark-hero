@@ -2,6 +2,54 @@ import type { GameContentMap } from './types';
 
 // F1, tennis, golf, NASCAR and combat sports game guides. Casual human tone, no em dashes anywhere.
 export const MORE_SPORTS_CONTENT: GameContentMap = {
+  '/cage-clash': {
+    intro: [
+      'Cage Clash puts you in control of an original pixel fighter. Move around the cage, find a gap in the guard and decide whether to keep trading shots or take the fight to the ground. Every hit, takedown and submission comes from what happens in the fight.',
+      'Pick a balanced fighter, a striker or a grappler, then choose the style you want to face. Each fight lasts up to three short arcade rounds. Play with the touch controls or use the keyboard. No account or download needed.',
+    ],
+    headings: {
+      howToPlay: 'How to play Cage Clash on phone or keyboard',
+      rules: 'Cage Clash rules for strikes and grappling',
+      example: 'Cage Clash example: from clinch to submission',
+      tips: 'Cage Clash tips for stamina and ground control',
+      faq: 'Cage Clash FAQ: controls, scoring and pauses',
+    },
+    howToPlay: [
+      'Choose your fighting style and the CPU style, read the controls and start a fight.',
+      'Hold the movement buttons to get in range. Hold Guard to block. Use Punch, Heavy or Kick when you have an opening and enough stamina.',
+      'Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.',
+      'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
+      'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
+      'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
+    ],
+    rules: [
+      'A fight has up to three 45 second arcade rounds. Between rounds, the clock waits for you to continue.',
+      'Strikes need the correct range. Attacks spend stamina and have a cooldown. Holding a button does not create free attacks.',
+      'Guard reduces incoming strike damage and costs stamina. Low stamina weakens your attacks and your defense.',
+      'A clinch starts at close range. Takedowns decide who lands on top. Position, style and stamina matter on the ground.',
+      'Health reaching zero ends the fight by knockout. Full submission progress ends it by submission. Otherwise, earned round points decide the result.',
+      'Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.',
+      'Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.',
+      'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
+    ],
+    example: [
+      'You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.',
+      'Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.',
+      'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
+    ],
+    tips: [
+      'Distance is a defense. Step out of punching range when you need a moment to recover.',
+      'Mix your strikes. Kicks reach farther, while the closer attacks work when the opponent lets you inside.',
+      'Read the position label and button names after a takedown. A button that passed on top becomes a sweep underneath.',
+      'Try the same style against different opponents. The CPU uses the same range, stamina and legal action rules you do.',
+    ],
+    faqs: [
+      { q: 'Can I grapple and submit an opponent?', a: 'Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it.' },
+      { q: 'What are the keyboard controls?', a: 'Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position.' },
+      { q: 'Does a fight keep running when I switch tabs?', a: 'No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too.' },
+      { q: 'Does my fight save if I refresh?', a: 'These are quick fights, so refreshing starts over. A completed fight records its earned score through the normal site scoring system. Quitting does not award a score.' },
+    ],
+  },
   '/f1-driver': {
     intro: [
       "Somewhere in Formula 1 history sits a driver, and the game knows exactly who. Guess The F1 Driver hides one of 20 grand prix greats behind six clues that unlock one at a time.",

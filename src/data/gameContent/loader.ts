@@ -92,6 +92,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/perfect-season-nhl': 'hockey',
   '/puck-detective': 'hockey',
   /* moreSports */
+  '/cage-clash': 'moreSports',
   '/afl-higher-lower': 'moreSports',
   '/fight-career': 'moreSports',
   '/fight-gym': 'moreSports',
