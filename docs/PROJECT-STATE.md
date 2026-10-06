@@ -1,3 +1,29 @@
+## Round1068 candidate ready, final CI pending
+
+Remote preparation37519544053 passed on8ff33ac90802d1ea3286065a4b9dcfea90de8ef1:
+real app type/build, eight grapple outcomes/thirteen effective controls,
+seven prior strike outcomes/fourteen controls, native phone/combat/mode
+journeys and all twenty guide/built-reader gates including search.
+
+Artifact11441041676 SHA256:
+70f9eaeb289c5442588b87c107b730aec46c06df694b0b26328654bf2f393638.
+All five generated payloads were verified against the manifest before and
+after copy. Only Cage/news text and two ledger hashes changed; dates remain
+October6. The search terms were regenerated. Temporary preparation workflow
+removed. The permanent Cage workflow includes the new outcomes/controls.
+
+Three original phone screenshots inspected:320 mount,390 guard and390
+high-pressure submission. Controls, arena and text fit; position changes
+and tightened grips are visible. Atomic canvas metadata binds pixels to
+the rendered state, while the HUD keeps its existing slower update cadence.
+Combat/Practice/Circuit/input engines remain byte-identical to84469b10.
+No score, save, route, real-data or database change.
+
+Final permanent workflows and artifact audits are required before merge.
+AH retains main/publish for now; no LIVE claim. Claude retains soccer/GM,
+soccer2.ts and the US career guide hunks. Root drafts/seven stashes stay
+protected. No local app runtime, direct production DB call or paid AI.
+
 ## Round1068 claimed: Cage grappling motion
 
 Codex extends the existing Cage Clash renderer only: distinct guard, half
