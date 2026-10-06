@@ -10,7 +10,11 @@
  *   2. a job whose league the game barely knows (RB Salzburg) shows the
  *      sentence, with no table rows;
  *   3. a season saved before this round (no league, no unnamed rows) still
- *      draws its table exactly as it did.
+ *      draws its table exactly as it did;
+ *   4. (review fix) a verified league whose five kept rows name nobody still
+ *      draws the table, as the game knew clubs elsewhere in it;
+ *   5. (review fix) a named league whose size is not verified shows the
+ *      order only, with no position, points or record.
  * The mocks are careerStory.test.tsx's, so nothing reaches the network.
  */
 import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
@@ -63,6 +67,7 @@ vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
+import { finishZone } from '@/lib/soccerCareerLeague';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const SAVE_KEY = 'soccerCareerSave';
@@ -91,7 +96,7 @@ function dugout(club: string, tier: number, league?: string): CareerState {
     while (s.phase === 'youth') s = E.advanceYouthYear(s, clubs);
     s = E.acceptOffer(s, { club: clubs.find(c => c.tier === 2) ?? clubs[0], contractYears: 3, wage: 90000, transferFee: 0 });
     s = E.choosePostRetirement({ ...s, retired: true, phase: 'post_retirement' }, 'manager', clubs);
-    s = { ...s, managerState: { ...s.managerState!, club, clubTier: tier, ...(league ? { league } : {}) } };
+    s = { ...s, managerState: { ...s.managerState!, club, clubTier: tier, league } };
     return E.advanceManagerSeason(s, clubs);
   } finally {
     Math.random = real;
@@ -124,7 +129,7 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
       expect(leagueOf.get(name), name).toBe('Premier League');
     }
     expect(t.rows).toContain('Arsenal');
-    expect(t.text).not.toMatch(/Boca|Flamengo/);
+    expect(t.text.split('Cup run')[0]).not.toMatch(/Boca|Flamengo/);
   });
 
   it('a league the game barely knows says where he finished instead of drawing rows', async () => {
@@ -134,8 +139,35 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     expect(t.label).toBe('Final table · Austrian Bundesliga');
     expect(t.rows).toEqual([]);
     expect(t.text).toContain("We don't know enough Austrian Bundesliga clubs by name to draw the table.");
-    expect(t.text).toContain(`You finished ${row.playerPos}`);
-    expect(t.text).not.toMatch(/ of \d+ on/);
+    /* the Austrian Bundesliga's size is not verified, so no position at all */
+    expect(t.text).toContain(`You finished ${finishZone(row.playerPos!, row.leagueSize!)}.`);
+    expect(t.text.split('Cup run')[0]).not.toMatch(/\d(st|nd|rd|th)\b| points|\d+W \d+D/);
+  });
+
+  it('a verified league whose five rows happen to name nobody still draws its table', async () => {
+    const s = dugout('Bayern Munich', 1);
+    const ms = s.managerState!;
+    const last = ms.seasonResults[ms.seasonResults.length - 1];
+    const blank = (pos: number, pts: number) => ({ club: '', pts, pos, unnamed: true });
+    const row = { ...last, league: 'Bundesliga', sizeVerified: true, leagueSize: 18, knownRivals: 7, playerPos: 9, playerPts: 50,
+      table: [blank(1, 80), blank(2, 75), blank(3, 70), blank(4, 66), { club: 'Bayern Munich', pts: 50, pos: 9, you: true }] };
+    const t = await finalTable({ ...s, managerState: { ...ms, seasonResults: [...ms.seasonResults.slice(0, -1), row] } });
+    expect(t.text).not.toContain("We don't know enough");
+    expect(t.rows).toEqual(['another club', 'another club', 'another club', 'another club', 'Bayern Munich']);
+  });
+
+  it('a named league of unknown size shows the order only, never a place or a points total', async () => {
+    const s = dugout('Atlanta United', 3);
+    const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
+    expect(last.league).toBe('MLS');
+    expect(last.sizeVerified).toBeFalsy();
+    expect(last.knownRivals).toBeGreaterThan(0);
+    const t = await finalTable(s);
+    expect(t.label).toBe('Final table · MLS');
+    expect(t.rows.length).toBe(5);
+    expect(t.text).toContain("The order only: we don't know how many clubs the MLS has.");
+    expect(t.text.split('Cup run')[0]).not.toMatch(/\d+ pts|\d+W \d+D/);
+    expect(last.result).not.toMatch(/\d(st|nd|rd|th)\b|points/);
   });
 
   it('a season saved before this round still draws its table', async () => {

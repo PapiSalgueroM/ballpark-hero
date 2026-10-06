@@ -72,7 +72,7 @@ import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRati
 import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
-import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
+import { finishZone, ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
 import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
 import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
@@ -3133,17 +3133,31 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
            and a table with no rival we can name says where he finished. */
         const league = typeof last.league === "string" && last.league ? last.league : null;
         const me = last.table.find(r => r.you);
-        const named = last.table.some(r => !r.you && !r.unnamed && r.club);
+        /* whether the game could name anyone in the whole table, not just in
+           the five rows kept (an older row only has those five to go on) */
+        const named = typeof last.knownRivals === "number"
+          ? last.knownRivals > 0
+          : last.table.some(r => !r.you && !r.unnamed && r.club);
+        /* a named league whose size the game does not know: the order only,
+           no position, points or record, which could claim places or games
+           that league does not have */
+        const sizeUnknown = league !== null && !last.sizeVerified;
+        const size = last.leagueSize ?? last.table.length;
         return (
           <div className="rounded-xl border border-border bg-muted/10 p-3 space-y-1.5">
             <div className="flex items-center justify-between gap-2">
               <span className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Final table{league ? ` · ${league}` : ""}</span>
-              {last.record && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
+              {last.record && !sizeUnknown && <span className="shrink-0 text-[10px] text-muted-foreground">{last.record}</span>}
             </div>
             {!named && me && (
               <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>
-                We don't know enough {league ? `${league} clubs` : "clubs in this league"} by name to draw the table. You finished {ordinal(me.pos)}{last.sizeVerified && last.leagueSize ? ` of ${last.leagueSize}` : ""} on {me.pts} points.
+                We don't know enough {league ? `${league} clubs` : "clubs in this league"} by name to draw the table. You finished {sizeUnknown
+                  ? `${finishZone(me.pos, size)}.`
+                  : `${ordinal(me.pos)}${last.sizeVerified && last.leagueSize ? ` of ${last.leagueSize}` : ""} on ${me.pts} points.`}
               </p>
+            )}
+            {named && sizeUnknown && (
+              <p className="text-[10px] text-muted-foreground">The order only: we don't know how many clubs the {league} has.</p>
             )}
             {named && last.table.map((row, i) => (
               <div
@@ -3152,12 +3166,14 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
                 style={{ animationDelay: revealDelay(afterResults + i) }}
               >
                 <span className="flex items-center gap-2 min-w-0">
-                  <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>
+                  {!sizeUnknown && <span className="w-5 shrink-0 text-right text-muted-foreground">{row.pos}</span>}
+                  {/* with no numbers, mark the clubs between the leaders and him */}
+                  {sizeUnknown && i > 0 && row.pos > last.table[i - 1].pos + 1 && <span className="shrink-0 text-muted-foreground">…</span>}
                   {row.unnamed || !row.club
                     ? <span className="truncate italic text-muted-foreground">another club</span>
                     : <span className="truncate">{row.club}</span>}
                 </span>
-                <span className="shrink-0 tabular-nums">{row.pts} pts</span>
+                {!sizeUnknown && <span className="shrink-0 tabular-nums">{row.pts} pts</span>}
               </div>
             ))}
             {last.cup && (
