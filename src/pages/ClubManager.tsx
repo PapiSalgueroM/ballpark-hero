@@ -469,8 +469,8 @@ const ClubManager = () => {
                 (nobody knows the future). Round 146 delivered the first real
                 past season from real historical records. */}
             <p className="text-[9px] text-muted-foreground text-center mt-2.5 leading-snug max-w-lg mx-auto">
-              No future eras, ever: nobody knows the future and we will not pretend to. The 2015-16, 2010-11 and 2005-06
-              seasons are built from real market data records, real squads with their real ages and values from those
+              No future eras, ever: nobody knows the future and we will not pretend to. The 2020-21, 2015-16, 2010-11 and
+              2005-06 seasons are built from real market data records, real squads with their real ages and values from those
               years, not recreations. 2005-06 is as far back as the records honestly reach, so there is no 2000 era and
               there will not be an invented one. No made up name ever appears on a teamsheet unmarked.
             </p>
