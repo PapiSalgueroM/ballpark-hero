@@ -1,0 +1,65 @@
+{
+  "about": "Round 1022. The two fact tables in src/lib/soccerCareerEngine.ts that a Soccer Career player sees as real: INT_SCORING_RECORDS (each nation's men's all time international scoring record, which decides the All Time Top Scorer award and its line) and the league label on every one of the 190 HAND_CLUBS rows. Every value here was read on the date beside it from two independent sources that agree, none of them Wikipedia. Where two sources disagreed a third settled it, and where nothing settled it the value is left out (intRecordsHeld): a nation with no verified row gets no award at all, there is no default. scripts/simCareerFacts.mjs holds the engine to this file and fails if either side moves. Records held by active players move with every international window, so each row carries asOf, the last date both sources were read; refresh them together, never one side.",
+  "checked": "2026-10-06",
+  "intRecords": {
+    "Argentina": { "holder": "Lionel Messi", "goals": 125, "asOf": "2026-10-06", "note": "Active. Farewell match against Benin was scheduled for the evening of 2026-10-06, after this read.", "sources": [
+      { "url": "https://www.infobae.com/deportes/2026/10/06/los-impactantes-numeros-de-lionel-andres-messi-en-la-seleccion-argentina/", "read": "2026-10-06", "says": "125 goals in 207 matches" },
+      { "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/", "read": "2026-10-06", "says": "published 2026-10-03: Messi 125 for Argentina" } ] },
+    "Belgium": { "holder": "Romelu Lukaku", "goals": 94, "asOf": "2026-10-06", "note": "Active. 94th goal against Turkey in the October 2026 Nations League window.", "sources": [
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Romelu Lukaku (Belgium) 94 in 135" },
+      { "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/", "read": "2026-10-06", "says": "published 2026-10-03: 94 goals in 134 matches" } ] },
+    "Brazil": { "holder": "Neymar", "goals": 80, "asOf": "2026-10-06", "note": "Final. FIFA recognised matches (Pele 77 on that count). Neymar retired from the national team on 2026-07-29.", "sources": [
+      { "url": "https://www.band.com.br/esportes/futebol/copa-do-mundo/noticias/neymar-chega-a-80-gols-pela-selecao-brasileira-e-amplia-recorde-veja-lista-202607051914", "read": "2026-10-06", "says": "published 2026-07-05: Neymar reaches 80 goals for Brazil (search listing; the page answers 403 to a direct fetch)" },
+      { "url": "https://www.futemais.com.br/post/quantos-gols-neymar-marcou-pela-selecao-brasileira-uma-analise-completa", "read": "2026-10-06", "says": "published 2026-08-10: 80 goals in 130 matches, retired 2026-07-29" } ] },
+    "Colombia": { "holder": "Radamel Falcao", "goals": 36, "asOf": "2026-10-06", "note": "James Rodriguez retired from the national team in 2026 on 31 (rsssf counts 32), short of it.", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/col-recintlp.html", "read": "2026-10-06", "says": "updated 2026-01-21: Falcao 36 goals, 104 caps" },
+      { "url": "https://www.pulzo.com/deportes/futbol/cuantos-goles-hizo-james-rodriguez-seleccion-colombia-anuncio-su-retiro-PP5303435", "read": "2026-10-06", "says": "published 2026-09-15: James 31 in 131, second behind Falcao's 36" } ] },
+    "Croatia": { "holder": "Davor Suker", "goals": 45, "asOf": "2026-10-06", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/kroa-recintlp.html", "read": "2026-10-06", "says": "updated 2026-10-04: Suker 45 goals, 69 caps; Perisic 39" },
+      { "url": "https://www.novilist.hr/sport/nogomet/perisic-sve-blize-sukeru-po-golovima-modriceve-brojke-su-nestvarne/", "read": "2026-10-06", "says": "published 2026-07-03: Suker 45, Perisic 39" } ] },
+    "Egypt": { "holder": "Hossam Hassan", "goals": 69, "asOf": "2026-10-06", "note": "Mohamed Salah is on 68 and still active.", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/egy-recintlp.html", "read": "2026-10-06", "says": "updated 2026-10-06: Hossam Hassan 69 goals, 177 caps; Salah 68" },
+      { "url": "https://www.masrawy.com/sports/sports-arab-international/details/2026/6/22/3006544/", "read": "2026-10-06", "says": "published 2026-06-22: Salah on 68, one short of Hossam Hassan's 69" } ] },
+    "England": { "holder": "Harry Kane", "goals": 89, "asOf": "2026-10-06", "note": "Active. Two against Croatia on 2026-10-03.", "sources": [
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Harry Kane (England) 89 in 124" },
+      { "url": "https://www.aljazeera.com/sports/2026/10/3/england-trounce-croatia-7-0-in-nations-league-as-kane-goal-run-continues", "read": "2026-10-06", "says": "published 2026-10-03: Kane's double extended his record tally to 89" } ] },
+    "France": { "holder": "Kylian Mbappe", "goals": 67, "asOf": "2026-10-06", "note": "Active. Passed Olivier Giroud's 57 at the 2026 World Cup.", "sources": [
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Kylian Mbappe (France) 67 in 107" },
+      { "url": "https://www.equipe-france.fr/football/masculin/classement-des-buteurs", "read": "2026-10-06", "says": "Mbappe 67 goals in 107 matches, Giroud 57 in 136" } ] },
+    "Germany": { "holder": "Miroslav Klose", "goals": 71, "asOf": "2026-10-06", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/duit-recintlp.html", "read": "2026-10-06", "says": "updated 2026-09-03: Klose 71 goals, 137 caps" },
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Miroslav Klose (Germany) 71 in 137" } ] },
+    "Italy": { "holder": "Luigi Riva", "goals": 35, "asOf": "2026-10-06", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/ital-recintlp.html", "read": "2026-10-06", "says": "updated 2026-06-25: Riva 35 goals, 42 caps" },
+      { "url": "https://www.ilpost.it/2023/10/18/record-gol-nazionale-gigi-riva/", "read": "2026-10-06", "says": "Riva's 35 goals, nobody close" } ] },
+    "Japan": { "holder": "Kunishige Kamamoto", "goals": 75, "asOf": "2026-10-06", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/jap-recintlp.html", "read": "2026-10-06", "says": "updated 2026-10-03: Kamamoto 75 goals, 76 caps; Miura 55" },
+      { "url": "https://spaia.jp/column/soccer/japan/32855", "read": "2026-10-06", "says": "Kamamoto's 75 still the record, Miura second on 55" } ] },
+    "Netherlands": { "holder": "Memphis Depay", "goals": 55, "asOf": "2026-10-06", "note": "Active.", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/ned-recintlp.html", "read": "2026-10-06", "says": "last match included 2025-11-17: Depay 55 goals, 108 caps" },
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Memphis Depay (Netherlands) 55 in 112" } ] },
+    "Nigeria": { "holder": "Rashidi Yekini", "goals": 37, "asOf": "2026-10-06", "note": "Victor Osimhen is on 35 and still active.", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/nig-recintlp.html", "read": "2026-10-06", "says": "updated 2026-10-06: Yekini 37 goals, 62 caps; Osimhen 35" },
+      { "url": "https://allafrica.com/stories/202601140297.html", "read": "2026-10-06", "says": "published 2026-01-13: Yekini 37, Osimhen two short on 35" } ] },
+    "Norway": { "holder": "Erling Haaland", "goals": 65, "asOf": "2026-10-06", "note": "Active.", "sources": [
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Erling Haaland (Norway) 65 in 59" },
+      { "url": "https://es-us.noticias.yahoo.com/deportes/erling-haaland-marc%C3%B3-portugal-gol-201500459.html", "read": "2026-10-06", "says": "published 2026-09-27: 65th goal for Norway, against Portugal" } ] },
+    "Portugal": { "holder": "Cristiano Ronaldo", "goals": 146, "asOf": "2026-10-06", "note": "Active.", "sources": [
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "Cristiano Ronaldo (Portugal) 146 in 234" },
+      { "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/", "read": "2026-10-06", "says": "published 2026-10-03: Ronaldo 146 for Portugal" } ] },
+    "South Korea": { "holder": "Son Heung-min", "goals": 59, "asOf": "2026-10-06", "note": "Active. Passed Cha Bum-kun's 58 with a free kick against Uzbekistan on 2026-10-06, his 151st cap. rsssf (updated 2026-10-03) still had him on 56, behind both goals since.", "sources": [
+      { "url": "https://fnnews.com/news/202610062204257279", "read": "2026-10-06", "says": "published 2026-10-06: 59th goal in his 151st A match, past Cha Bum-kun's 58 in 136" },
+      { "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1008785548", "read": "2026-10-06", "says": "published 2026-10-06: Son's 59th A match goal, new Korean record past Cha Bum-kun" } ] },
+    "Spain": { "holder": "David Villa", "goals": 59, "asOf": "2026-10-06", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/span-recintlp.html", "read": "2026-10-06", "says": "updated 2026-03-14: Villa 59 goals, 98 caps" },
+      { "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/", "read": "2026-10-06", "says": "David Villa (Spain) 59 in 98" } ] },
+    "Uruguay": { "holder": "Luis Suarez", "goals": 69, "asOf": "2026-10-06", "note": "Final, retired from the national team in 2024. rsssf has 68 because its list stops at 2023-11-21 and misses his goal against Canada at the 2024 Copa America (the CONMEBOL piece of 2024-01-23 also says 68, before that match).", "sources": [
+      { "url": "https://www.espn.com.pe/futbol/mundial/nota/_/id/14119216/detalle-todos-goles-luis-suarez-seleccion-uruguaya-estadisticas-rivales-repaso", "read": "2026-10-06", "says": "published 2026-04-08: 69 goals for Uruguay, 2007 to 2024, last on 2024-07-13" },
+      { "url": "https://futdados.com/cl/maximos-goleadores-seleccion-uruguay/", "read": "2026-10-06", "says": "Suarez 69 goals in 143 matches, Cavani 58" } ] }
+  },
+  "intRecordsHeld": {
+    "Senegal": { "reason": "Sadio Mane holds it, but no two current sources agree on the number: rsssf (updated 2026-10-04) 56 in 134, a World Cup preview 54, and record.sn documents that Senegal's own counters disagree by more than ten goals. Left out, so a Senegal career gets no All Time Top Scorer award until two sources agree.", "sources": [
+      { "url": "https://www.rsssf.org/miscellaneous/sene-recintlp.html", "read": "2026-10-06", "says": "updated 2026-10-04: Mane 56 goals, 134 caps" },
+      { "url": "https://www.record.sn/Stats-de-sadio-mane-a-quels-chiffres-se-fier-65", "read": "2026-10-06", "says": "search listing: counts for Mane differ by source" } ] }
+  }
+}
