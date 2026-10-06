@@ -84,9 +84,13 @@
  *                          coordinator to .473, the defensive coordinator to .433
  * Every floor in T100 sits near 70 percent of the lowest set. Every control
  * was run on seeds 1 and 2 (twenty seasons, floors scaled) and fired in its
- * own check, failures counted: coinflip 121 in 2, shortrookie 43 in 2,
- * latetrade 140 in 3, noguard 1 in 3, droppick 84 in 4, flatstaff 63 in 5,
- * flatstep 2 in 5, onepost 27 in 5, nodead 137 in 6, nodefault 10 in 1 and 5.
+ * own check, failures counted (rerun 2026-10-06 on the fixed tree):
+ * coinflip 108 in 2, shortrookie 43 in 2, latetrade 140 in 3, noguard 1 in 3,
+ * droppick 83 in 4, flatstaff 63 in 5, flatstep 2 in 5, onepost 27 in 5,
+ * nodead 136 in 6, nodefault 10 in 1 and 5, boardsummer 1 in 2, boarddraftee
+ * 1 in 2, boardedges 1 in 5, stancespots 1 in 3 (the built weak division
+ * leader), stanceswap 2 in 3, nocapguard 1 in 3, reliefnodead 1 in 6,
+ * staletiles 1 in 7. Each new control printed only the failure it is for.
  * nodefault reads half a strength point by default: at a hundredth of one,
  * the measured first draft of the control, no game of the nine replayed
  * seasons changed hands, so the replay cannot see an edge that small, and
