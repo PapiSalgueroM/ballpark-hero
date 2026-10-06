@@ -760,7 +760,7 @@ export default function FrontOfficeBoard() {
     gm ? nflPackageCapCheck(lg, { from: myTeam, to: partner, give: [{ kind: 'player', id: sentId }], get: [{ kind: 'player', id: arrivedId }] }) : null;
   const deskCapBlock = (lg: LeagueState, partner: string, sentId: string, arrivedId: string): boolean => {
     const why = deskCapRefusal(lg, partner, sentId, arrivedId);
-    if (why) setNewsFeed(f => [`❌ ${why} The dead money he leaves counts.`, ...f].slice(0, 6));
+    if (why) setNewsFeed(f => [`❌ ${why}${why.includes('over the cap') ? ' The dead money he leaves counts.' : ''}`, ...f].slice(0, 6));
     return !!why;
   };
   /* Round 1019: an older trade path with the desk on. The pick it moved (the
