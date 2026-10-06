@@ -1,4 +1,11 @@
-## Codex1061 implemented, remote checks pending, 2026-10-06
+## Codex1061 preparation passed, final checks pending, 2026-10-06
+
+Remote preparation37416473303 passed at d1a94140:19 mounted outcomes,
+51 effective source controls,11 existing career/save/scoring harnesses,
+16 built readers and16 native journeys with four geometry controls.
+Artifact11391478357 was SHA256 verified, and all three generated files
+matched their manifest before and after copy. Phone screenshots were inspected.
+Temporary generation is removed; final checks assess committed source next.
 
 Career Log finds the highest saved OVR, most games/starts/appearances
 and one positive position stat for each of the four US careers. Each high
@@ -6,7 +13,7 @@ keeps all tied original season indices. A selector opens the chosen saved
 season in the existing review. Zeroes count, missing numbers do not, and
 suspended seasons are excluded. Three compact choices keep the phone view
 short. No save, engine, Board, scoring, database or factual data changes.
-Acceptance remains pending. The1060 publication handoff remains with Claude.
+Final acceptance remains pending. The1060 publication handoff remains with Claude.
 Verification continues remotely; held root drafts and seven stashes stay safe.
 
 ## Codex release receipt and next publish, 2026-10-06

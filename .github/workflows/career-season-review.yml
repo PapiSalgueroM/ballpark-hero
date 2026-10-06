@@ -1,8 +1,6 @@
 name: Career season review verification
 
 on:
-  push:
-    branches: [codex/career-season-highs-1061]
   pull_request:
     paths:
       - .github/workflows/career-season-review.yml
@@ -64,16 +62,6 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-season-review-artifacts/types.log
           npm run build 2>&1 | tee career-season-review-artifacts/build.log
-          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
-            PRERENDER_ONLY=/whats-new node scripts/prerender.mjs 2>&1 | tee career-season-review-artifacts/prerender.log
-            node scripts/genSitemap.mjs 2>&1 | tee career-season-review-artifacts/sitemap.log
-            npm run build 2>&1 | tee career-season-review-artifacts/prepared-build.log
-            mkdir -p career-season-review-artifacts/generated
-            for file in public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json; do
-              cp --parents "$file" career-season-review-artifacts/generated/
-            done
-            (cd career-season-review-artifacts/generated && find . -type f -print0 | sort -z | xargs -0 sha256sum) > career-season-review-artifacts/generated-sha256.txt
-          fi
       - name: Saved-season outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAREER_SEASON_REVIEW_CONTROL=all ONLY=simCareerSeasonReview node scripts/runAllSims.mjs 2>&1 | tee career-season-review-artifacts/review.log
