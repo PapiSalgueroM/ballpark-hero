@@ -1,26 +1,37 @@
-## Codex1063 Cage Clash release candidate, 2026-10-06
+## Round1063 LIVE: Cage Clash, 2026-10-06
 
-Cage Clash adds original pixel MMA at /cage-clash: strikes, clinches, takedowns,
-top and bottom control, posture, escapes and resisted submissions. Fictional
-styles, three45s rounds, touch/mouse/keyboard, reopenable help, explicit pause
-and resume, and existing completion scoring. Leaving earns nothing.
+Cage Clash is live at https://douknowball.com/cage-clash.
+PR146 merged at34c23468f22416811c63fa739aaf0f4a1a165264; its tree
+52e925e3cb16672989d0f49006b74a6479271355 exactly equals accepted PR head
+2b7dda2951fb9b63e76a2af66970cb682f312105. Release AF is preserved.
 
-Combined sourcefa7297de7aaa8b5a739dae87485dd56170ef7d5d preserves Release AF
-4a3644b8. Remote preparation37450761171 passed type/build,22 outcomes,
-28 effective controls,12 regressions and16 built readers. Four complete native
-fights passed all7 combat states,4 effective geometry controls,8 real font faces
-and zero forwarded writes. Actual keyboard tab loss/pause/cleared input/resume
-passed. No local runtime or production DB.
+Publication: authenticated IAB imported PR146 and selected it as Previewing.
+Preview was out of date; Publish changes completed with Your website was updated.
+Live verification: new entryindex-CLB9VBVd.js, Cage title, exactly1 canonical to
+/cage-clash and1 description, no robots noindex. A real live fight advanced
+45to13 seconds and health100to15; Pause and Leave fight worked, then setup
+was restored without a completion score. What's New carries Get in the cage
+and its actual /cage-clash link. Live proof:
+C:/Users/antho/.codex/artifact-inspection/cage-live-1063.jpg.
+MMA Fight Promoter's separate MMA/boxing choices are also verified live.
 
-Artifact11406329586 ZIP SHA256:
-2619cf5733cd2ddcf85d37226952b29a196d25c4352accfa384966e61335ebef.
-Source and all8 generated hashes verified before and after copying. AF's
-snapshots, keyword changes and ledger preserved. Temporary generation/push
-workflow removed; permanent PR gates retained. PR146 is open; final CI follows the docs merge.
-Cage is not on main/live yet. Public route remains404 onindex-Bj0du-Y6.js.
-AF is live at deployment9b491698, entryindex-OHWcrYTY.js (Claude receipt).
-Main5ccddf0c records AF and releases its publication slot. Codex owns1063
-publication after the final PR gates pass. Root held drafts/seven stashes safe. Next1064 unclaimed.
+Final CI on2b7dda29: Cage37452824318 (29 harnesses), MMA37452824313
+(32), entry37452824418 (19), hubs37452824473 (18). All four green, no
+substantive skipped gates. Cage22/22 outcomes,28/28 effective controls,
+4/4 whole native fights,7 states,4 geometry controls,8 fonts per profile,
+zero forwarded writes. Entry saved report:16/16 cases,80 geometry checks,
+640 font observations,3 restored controls; setup POSTs locally fulfilled.
+Final Cage artifact11409645078 ZIP SHA256 verified:
+face0a1541d7726143306f659966e4123da6adec9fa370d000b9398264f97b92.
+Generated sourcefa7297de, preparation37450761171/artifact11406329586;
+ZIP2619cf5733cd2ddcf85d37226952b29a196d25c4352accfa384966e61335ebef
+and all8 generated file hashes verified before/after copy. Temporary helper
+workflow removed; permanent gates retained. No local runtime or DB probes.
+
+1063 publishing is complete; AG main/publish hold is released to Claude.
+Preserve PR146 in later releases. Root drafts/seven stashes safe.
+Next1064 unclaimed. The soccer2 guide paragraph handoff remains released
+to Claude in codex-soccer2-release.md; preserve the held root draft.
 **2026-10-06 06:49 EDT, desktop Claude lane: Release AF IS LIVE**, main `4a3644b8`, deployment `9b491698`, entry `index-OHWcrYTY.js`. Eleven rounds of this lane, each built, reviewed twice, fixed and closed, integrated on branch release-af-int by an agent with every re-record attributed, plus the other lane's 1061 (Season highs), 1062 and 1063 as they stood on main (1061 published here, as the other lane asked).
 
 What a player sees:
