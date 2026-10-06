@@ -3754,6 +3754,20 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Juventus 4-3-3: Szczęsny; Bonucci, De Ligt, Alex Sandro, Danilo; Pjanić, Matuidi, Rabiot; Ronaldo, Dybala, Cuadrado. Changes include Bernardeschi 29', Higuaín 40' for Dybala, Rugani 78' for De Ligt, Bentancur 78' for Pjanić. 26 Jul 2020, round 36, 2-0."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "tuttosport.com",
+     "url": "https://www.tuttosport.com/news/calcio/serie-a/2020/07/26-72188554/juve-sampdoria_2-0_il_tabellino",
+     "xi": true,
+     "says": "Tabellino: JUVE (4-3-3): Szczesny; Danilo (29' Bernardeschi), Bonucci, De Ligt (77' Rugani), Alex Sandro; Rabiot, Pjanic, Matuidi; Cuadrado, Dybala (40' Higuain), Ronaldo."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=554230",
+     "xi": true,
+     "says": "ESPN summary feed: Juventus 4-3-3. Szczesny G; Danilo RB, De Ligt CD-R, Bonucci CD-L, Alex Sandro LB; Rabiot RM, Pjanic CM, Matuidi LM; Cuadrado RF, Dybala F, Ronaldo LF."
     }
    ],
    "diffs": [
@@ -3821,7 +3835,7 @@
      "path": "slots[10].name",
      "from": "Douglas Costa",
      "to": "Paulo Dybala",
-     "why": "ESPN and BeSoccer: Dybala started (off injured 40'); Douglas Costa was not in the eleven. Only ESPN states roles (Dybala F, Ronaldo LF), so the tile keeps the slot label"
+     "why": "ESPN and BeSoccer: Dybala started (off injured 40'); Douglas Costa was not in the eleven"
     },
     {
      "path": "blankCandidates[Rodrigo Bentancur]",
@@ -3860,6 +3874,42 @@
      "from": "Wikipedia match report + Football Italia archive + Juventus official site, unanimous on the title-clinching starting XI.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 4. Danilo, Rabiot and Dybala started, Cuadrado in the front three; Bernardeschi and Bentancur came on.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "CF",
+     "why": "Dybala, the middle of the front three: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "centre",
+     "why": "Dybala: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "CF",
+     "to": "LW",
+     "why": "Ronaldo, left of the front three: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "centre",
+     "to": "left",
+     "why": "Ronaldo: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "Matuidi: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "Rabiot: ESPN summary feed (Rabiot RM, Matuidi LM, Cuadrado RF, Dybala F, Ronaldo LF) and Tuttosport's tabellino (4-3-3, each line printed right to left: Rabiot, Pjanic, Matuidi; Cuadrado, Dybala, Ronaldo) agree"
     }
    ],
    "notes": [
@@ -3867,7 +3917,7 @@
     "Seven of eleven names in the entry started, but one of those (Cuadrado) is in the wrong role. blankCandidate De Ligt is a confirmed starter.",
     "The minute of Bernardeschi's entry differs between sources (29' BeSoccer and Italian match sheets, 67' ESPN, which appears to have conflated it with his goal); the entry carries no sub minutes.",
     "Organiser page not readable: legaseriea.it's old match URL (legaseriea.it/it/match/juventus-sampdoria-132394) now 301-redirects to the home page and the new site is a script-rendered app the fetch tool cannot read. ESPN and BeSoccer agree on the XI, and the Italian match-sheet extracts returned by search (Corriere dello Sport, Calciomagazine) give the same XI.",
-    "Round 1026: no host states a role for Dybala; the tile keeps the label of the slot he took. Open for a role source. ESPN alone has Dybala central and Ronaldo left."
+    "Round 1026 (review fix): Dybala played through the middle with Ronaldo on the left (ESPN's feed, and Tuttosport's 4-3-3 tabellino line Cuadrado, Dybala, Ronaldo), so the tiles now read CF Dybala and LW Ronaldo, and Rabiot and Matuidi swap sides on the same two hosts. The centre-backs are not moved: ESPN has De Ligt right and Bonucci left, Tuttosport prints Bonucci first, so the hosts split and the entry keeps its placement."
    ]
   },
   {

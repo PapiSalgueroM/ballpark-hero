@@ -571,7 +571,7 @@
     },
     {
      "name": "Raphinha",
-     "position": "LW",
+     "position": "RW",
      "nationality": "Brazil",
      "clubAtTime": "Barcelona"
     }
@@ -590,6 +590,20 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "May 14, 2023, Espanyol 2-4 Barcelona, Barcelona 4-3-3: ter Stegen; Araujo, Christensen, Kounde, Balde; Busquets, Pedri, De Jong; Lewandowski, Raphinha, Gavi. Subs Alba 62', Dembele 62', Alonso 74', Fati 74', Kessie 89'."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "goal.com",
+     "url": "https://www.goal.com/es/noticias/derbi-espanyol-vs-barcelona-en-directo-resultado-alineaciones-polemicas-reacciones-y-ruedas-de-prensa-del-partido-de-la-liga-2022-2023/blt24c374cba4660ae3",
+     "xi": true,
+     "says": "Barcelona XI, printed right to left by line: Ter Stegen; Kounde, Araujo, Christensen, Alex Balde; Pedri, Busquets, De Jong; Raphinha, Lewandowski y Gavi. 4-3-3, Raphinha on the right and Gavi on the left. Espanyol 2-4 Barcelona, title clinched."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=644108",
+     "xi": true,
+     "says": "ESPN summary feed: Barcelona 4-3-3. Ter Stegen G; Kounde RB, Araujo CD-R, Christensen CD-L, Balde LB; Pedri RM, Busquets CM, De Jong LM; Raphinha RF, Lewandowski F, Gavi LF."
     }
    ],
    "diffs": [
@@ -638,13 +652,61 @@
      "path": "slots[8].name",
      "from": "Ousmane Dembele",
      "to": "Gavi",
-     "why": "Sky Sports (P Paez Gaviria) and ESPN: Gavi started; Dembele came on 62' for Raphinha. Only ESPN states sides (Gavi left, Raphinha right), so the tile keeps the slot label"
+     "why": "Sky Sports (P Paez Gaviria) and ESPN: Gavi started; Dembele came on 62' for Raphinha"
     },
     {
      "path": "source",
      "from": "Wikipedia match report + FC Barcelona official archive + Marca, unanimous on the title-clinching starting XI.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 5. At Espanyol: Kounde and Gavi started; Sergi Roberto and Dembele did not.",
      "why": "the internal note vouched for the wrong eleven and venue"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "LW",
+     "why": "Gavi: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "Gavi: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "RW",
+     "why": "Raphinha: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
+     "why": "Raphinha: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[6].side",
+     "from": "right",
+     "to": "left",
+     "why": "De Jong: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[7].side",
+     "from": "left",
+     "to": "right",
+     "why": "Pedri: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[2].side",
+     "from": "right",
+     "to": "left",
+     "why": "Christensen: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "right",
+     "why": "Araujo: goal.com (lines printed right to left, Raphinha right and Gavi left) and ESPN summary feed (Gavi LF, Raphinha RF, Pedri RM, De Jong LM, Araujo CD-R, Christensen CD-L) agree"
     }
    ],
    "notes": [
@@ -652,7 +714,7 @@
     "Sources disagree on who Fati and Alonso replaced at 74' (Sky: Fati for Christensen, Alonso for Gavi; ESPN: Alonso for Christensen, Fati for Gavi). Not an entry field.",
     "Blank candidates Balde, Christensen, Raphinha all started: fine.",
     "Organiser page: laliga.com match URLs for this fixture redirect to a 404 (temporada-2022-2023-laliga-santander-rcd-espanyol-de-barcelona-fc-barcelona-34 -> the current-season LaLiga slug slug, 404). Two independent hosts used.",
-    "Round 1026: no host states a role for Gavi; the tile keeps the label of the slot he took. Open for a role source. ESPN alone puts Gavi left and Raphinha right; ESPN alone has Christensen left and Araujo right."
+    "Round 1026 (review fix): goal.com prints the eleven line by line from right to left and says Raphinha played right and Gavi left, which is what ESPN's feed states, so the wings, the midfield sides and the centre-back sides now rest on two hosts. The reveal now says RW for Raphinha."
    ]
   },
   {
