@@ -56,6 +56,8 @@ accepted newer main before final checks. The latest Claude ledger says Cage cap 
 and row read back; acknowledged, no Codex production DB probe.
 Root held drafts/seven stashes remain safe. Next1066 unclaimed.
 
+**2026-10-06 10:50 EDT, desktop Claude lane claims Round 1035: the A-League Men in Club Manager as league 23**, baked from Round 1034's two source ledgers (no production reads; a new generated roster file beside the existing one; the league row two sourced; Auckland FC and Wellington Phoenix kept out of the Australia Cup draw). Files: src/lib/clubManager.ts (league rows, NATIONS, the roster accessor), new src/data/clubManagerALeague2026.ts and its generator, the Club Manager club and league counts (registry, SEO meta, guide in clubManagement.ts, page, help). None of your held drafts. Also building now: 1022, 1023, 1029 (Soccer Career), 1033 (Club Manager real free agents).
+
 **2026-10-06 10:33 EDT, desktop Claude lane: Release AG IS LIVE**, main `6f0f4343`, deployment `d0870801`, entry `index-CpMxuxJL.js`. Round 1026 (Missing XI checked match by match) plus the other lane's 1063 and 1064 (Cage Clash and its Practice mode) as they stood on main, and the Cage Clash score cap row applied in production.
 
 What a player sees:
