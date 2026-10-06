@@ -24,6 +24,20 @@
    letters only. Neither touches the network; simMissingXiReach is the live
    half and checks every alias against the table.
 
+   Round 1026 added section 6, which widens the one pinned eleven to all
+   207. The record is scripts/data/missingXiVerified2026-10: one row per
+   lineup, read from the organiser and an independent host and folded by
+   hand (convention.json says how). 117 lineups needed corrections, many of
+   them a blank answer who never started, so the file is checked against
+   that record, never against itself: 6a one row per lineup in
+   LINEUPS order (the daily pick indexes that array), 6b two distinct
+   non-wiki hosts vouch for each eleven, 6c the eleven on the pitch is the
+   eleven both hosts publish, 6d every blank answer started, 6e every change
+   the ledger applied is in the file, 6f the entry equals the ledger on date,
+   teams, score, venue, formation and every blank's hint. Two rows are held
+   under the lead's rule 6 and skip 6c and 6d only. Measured 2026-10-06:
+   207 rows, 205 elevens matched, 790 applied changes in place, 2 held.
+
    Negative controls (house rule: prove each check can fail):
      SIM_MISSINGXI_CONTROL=wrongxi    swaps the pinned Vinicius entry for the
                                       super-sub; section 2 must FAIL.
@@ -31,6 +45,14 @@
                                       check; section 4 must FAIL.
      SIM_MISSINGXI_CONTROL=nosurname  drops Park Ji-sung's surname field;
                                       section 5's pin must FAIL.
+     SIM_MISSINGXI_CONTROL=subswap    puts the substitute Serginho in place
+                                      of the starter Pirlo (2003 final);
+                                      section 6 must FAIL.
+     SIM_MISSINGXI_CONTROL=revert     puts Matuidi's 2018 club hint back to
+                                      Paris Saint-Germain; section 6 must FAIL.
+     SIM_MISSINGXI_CONTROL=onehost    drops espn.com from the 2011 final's
+                                      ledger row; section 6 must FAIL.
+   The three section 6 controls are judged on section 6 alone.
    Each control asserts it actually changed something before running, so a
    stale pin or a drifted file cannot green a control.
 
@@ -215,7 +237,107 @@ console.log('5) The surname hint names the family name and counts its letters on
   console.log(`   surname hints checked on every candidate, ${pinned} pinned`);
 }
 
+console.log('6) Every lineup equals its two host ledger (scripts/data/missingXiVerified2026-10)');
+const ledgerFailuresBefore = failures;
+{
+  /* Round 1026. The ledger is the independent record: every row was read
+     from the organiser and an independent host and folded by hand, so the
+     file is checked against it rather than against itself. Held rows (lead
+     rule 6) keep their entry unchanged and are exempt from 6c and 6d only. */
+  const dir = path.join(ROOT, 'scripts', 'data', 'missingXiVerified2026-10');
+  const rows = fs.readdirSync(dir).filter(f => /^shard-\d+\.json$/.test(f))
+    .sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]))
+    .flatMap(f => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).lineups);
+  const lineups = JSON.parse(JSON.stringify(LINEUPS));
+  const byId = new Map(lineups.map(l => [l.id, l]));
+  const rowById = new Map(rows.map(r => [r.id, r]));
+  const anchor = (ok, what) => { if (!ok) { console.error(`control cannot run: ${what}`); process.exit(1); } };
+  if (CONTROL === 'subswap') {
+    const lu = byId.get('cl-2003-final-milan'); const row = rowById.get('cl-2003-final-milan');
+    anchor(lu && lu.slots.filter(s => s.name === 'Andrea Pirlo').length === 1, 'Andrea Pirlo is not a starter of cl-2003-final-milan');
+    anchor(row && row.substitutes.some(s => s.includes('Serginho')), 'Serginho is not a ledger substitute of cl-2003-final-milan');
+    lu.slots.find(s => s.name === 'Andrea Pirlo').name = 'Serginho';
+  }
+  if (CONTROL === 'revert') {
+    const c = byId.get('wc-2018-final-france')?.blankCandidates.find(x => x.name === 'Blaise Matuidi');
+    anchor(c && c.clubAtTime === 'Juventus', 'the Matuidi club hint is not Juventus');
+    anchor(rowById.get('wc-2018-final-france')?.applied.some(a => a.path === 'blankCandidates[Blaise Matuidi].clubAtTime' && a.to === 'Juventus'), 'the ledger has no Matuidi club change');
+    c.clubAtTime = 'Paris Saint-Germain';
+  }
+  if (CONTROL === 'onehost') {
+    const row = rowById.get('cl-2011-final-barca');
+    anchor(row && row.sources.filter(s => s.host === 'espn.com').length === 1, 'cl-2011-final-barca has no single espn.com source to drop');
+    row.sources = row.sources.filter(s => s.host !== 'espn.com');
+  }
+  const fold = s => normalizeName(s).replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+  const loose = s => fold(s).replace(/oe/g, 'o').replace(/ue/g, 'u').replace(/ae/g, 'a').split(' ').sort().join(' ');
+  const sameMan = (entryName, pubName, aka) => fold(entryName) === fold(pubName) || loose(entryName) === loose(pubName) || (aka && aka[entryName] === pubName);
+  const side = x => (x < 45 ? 'left' : x > 55 ? 'right' : 'centre');
+  const FIELDS = ['matchDate', 'team', 'opponent', 'scoreLine', 'venue', 'formationLabel', 'dateLabel'];
+  // 6a: one row per lineup, in LINEUPS order (the daily pick indexes this array, so order is part of the record)
+  if (rows.length !== lineups.length) fail(`ledger has ${rows.length} rows, LINEUPS has ${lineups.length}`);
+  rows.forEach((r, k) => { if (!lineups[k] || lineups[k].id !== r.id || r.position !== k + 1) fail(`ledger row ${k + 1} is ${r.id} (position ${r.position}), LINEUPS has ${lineups[k] && lineups[k].id}`); });
+  let held = 0, applied = 0, xiChecked = 0;
+  for (const r of rows) {
+    const lu = byId.get(r.id);
+    if (!lu) { fail(`${r.id}: in the ledger but not in LINEUPS`); continue; }
+    // 6b: two distinct non-wiki hosts vouch for the eleven
+    const hosts = new Set(r.sources.map(s => s.host));
+    if ([...hosts].some(h => /wiki/i.test(h))) fail(`${r.id}: a wiki host is cited`);
+    const full = new Set(r.sources.filter(s => s.xi === true).map(s => s.host));
+    const partial = new Set(r.sources.filter(s => s.xi === 'partial').map(s => s.host));
+    const partialOk = full.size === 1 && partial.size >= 1 && [...partial].some(h => !full.has(h)) && r.notes.some(n => /alone/.test(n));
+    if (full.size < 2 && !partialOk) fail(`${r.id}: ${full.size} host(s) vouch for the eleven (${[...hosts].join(', ')})`);
+    if (r.verdict === 'held') {
+      held += 1;
+      if (!r.hold || !r.hold.why || !r.hold.rule) fail(`${r.id}: held without a recorded reason`);
+    } else {
+      // 6c: the eleven on the pitch is the eleven both hosts publish
+      if (r.eleven.length !== 11) fail(`${r.id}: ledger eleven has ${r.eleven.length} names`);
+      const used = new Set();
+      for (const s of lu.slots) {
+        const hit = r.eleven.filter(p => sameMan(s.name, p, r.aka));
+        if (hit.length !== 1) { fail(`${r.id}: starter "${s.name}" is ${hit.length ? 'ambiguous' : 'not'} in the two host eleven`); continue; }
+        if (used.has(hit[0])) fail(`${r.id}: "${hit[0]}" is matched twice`);
+        used.add(hit[0]);
+      }
+      // 6d: every blank answer started on both hosts
+      for (const c of lu.blankCandidates) if (!r.eleven.some(p => sameMan(c.name, p, r.aka))) fail(`${r.id}: blank "${c.name}" did not start on the two hosts`);
+      xiChecked += 1;
+    }
+    // 6e: every applied change is in the file
+    for (const a of r.applied) {
+      if (a.path === 'source' || a.path === 'comment') continue;
+      applied += 1;
+      let m;
+      if (FIELDS.includes(a.path)) { if (lu[a.path] !== a.to) fail(`${r.id}: ${a.path} is "${lu[a.path]}", the ledger applied "${a.to}"`); }
+      else if ((m = a.path.match(/^slots\[(\d+)\]\.(name|position|side)$/))) {
+        const s = lu.slots[Number(m[1])]; const v = m[2] === 'side' ? side(s.x) : s[m[2]];
+        if (v !== a.to) fail(`${r.id}: ${a.path} is "${v}", the ledger applied "${a.to}"`);
+      } else if ((m = a.path.match(/^blankCandidates\[(.+)\](?:\.(\w+))?$/))) {
+        const c = lu.blankCandidates.find(x => x.name === m[1]);
+        if (!m[2]) {
+          if (a.to === null && c) fail(`${r.id}: ${m[1]} is still a blank; the ledger dropped him`);
+          if (a.to !== null && (!c || c.slotIndex !== a.to.slotIndex || c.nationality !== a.to.nationality || c.clubAtTime !== a.to.clubAtTime)) fail(`${r.id}: blank ${m[1]} differs from the ledger`);
+        } else if (!c) fail(`${r.id}: blank ${m[1]} is missing`);
+        else if ((c[m[2]] ?? null) !== a.to) fail(`${r.id}: ${a.path} is "${c[m[2]]}", the ledger applied "${a.to}"`);
+      } else fail(`${r.id}: applied path "${a.path}" is not one this check knows`);
+    }
+    // 6f: the entry equals the ledger on every field and hint it records
+    for (const k of Object.keys(r.fields)) if (lu[k] !== r.fields[k]) fail(`${r.id}: ${k} is "${lu[k]}", the ledger has "${r.fields[k]}"`);
+    const hints = lu.blankCandidates.map(c => `${c.name}|${lu.slots[c.slotIndex].position}|${c.nationality}|${c.clubAtTime}`).sort().join(' ; ');
+    const want = r.hints.map(h => `${h.name}|${h.position}|${h.nationality}|${h.clubAtTime}`).sort().join(' ; ');
+    if (hints !== want) fail(`${r.id}: blank hints drifted from the ledger.\n    ledger: ${want}\n    file:   ${hints}`);
+  }
+  console.log(`   ${rows.length} ledger rows: ${xiChecked} elevens matched, ${applied} applied changes in place, ${held} held under rule 6`);
+}
+const ledgerFailures = failures - ledgerFailuresBefore;
+
 if (CONTROL) {
+  if (['subswap', 'revert', 'onehost'].includes(CONTROL) && ledgerFailures === 0) {
+    console.error(`\ncontrol "${CONTROL}": section 6 did not fire, the check is dead`);
+    process.exit(1);
+  }
   if (failures > 0) {
     console.log(`\ncontrol "${CONTROL}": ${failures} failure(s) fired as expected, the check works`);
     process.exit(0);

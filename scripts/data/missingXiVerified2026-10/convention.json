@@ -1,0 +1,26 @@
+{
+  "game": "Missing XI",
+  "round": 1026,
+  "checkedOn": "2026-10-05",
+  "foldedOn": "2026-10-06",
+  "evidence": "Six research shards (207 lineups, positions 1 to 207 of LINEUPS in src/lib/missingXi.ts) read on 2026-10-05 from the organiser's match data (UEFA, FIFA, Premier League, LaLiga, bundesliga.com, CONMEBOL pages) and an independent report (ESPN, Sky Sports, BeSoccer, RSSSF and others), each re-checked by a skeptic on other hosts. No wiki was used. Round 1026 re-read ESPN's summary feed, UEFA's lineup feed, FIFA's live feed and a few squad lists on 2026-10-06 where a decision needed it; those reads are named in the row that used them.",
+  "files": "shard-1.json to shard-6.json, one row per lineup in LINEUPS order. Each row: position, id, research verdict, verdict (verified, corrected, noted, held), eleven (the starters both XI hosts publish), aka (entry spelling to published spelling where the accent fold does not match), substitutes, fields and hints (the entry's values after this round), sources (host, url, readOn, xi, says), diffs (each research diff with its decision and reason), applied (path, from, to, why) and notes.",
+  "rules": [
+    "1. A field changes only when two independent non-wiki sources agree on the new value and no skeptic contradicted it. Where sources split the entry keeps its value and the row records the split.",
+    "2. Priority is what a player sees: the hint fields on blanks (club at the time, position label, nationality), then the starting eleven, then score, date and venue, then formation labels.",
+    "3. A skeptic's missed diff is a lead. It is applied only when this round re-read at least one of its hosts and found the same, and no host contradicts it; otherwise it is a note.",
+    "4. A venue renamed since (Millennium Stadium and Principality Stadium) is the same ground; that is a note, not a correction.",
+    "5. A nationality hint follows the senior national team the man played for, not a passport line in a feed.",
+    "6. A lineup the research could not put on two hosts is kept only if its eleven matches a reachable source and nothing contradicts it; otherwise it is held (verdict held, with the reason, the measured cost of removing it from the daily rotation and a rebuild proposal) and the entry is not changed."
+  ],
+  "conventions": [
+    "Eleven: a row's eleven is vouched for by at least two distinct hosts whose source carries xi true. One row (bundesliga-2018-bayern-title) has a second host marked xi partial: bundesliga.com names nine of the eleven and all three substitutions, and the note says which two starters rest on ESPN alone.",
+    "Names: the entry and the published eleven match when normalizeName (the game's own fold) agrees, after a German oe, ue, ae fold and a word-order fold, or through the row's explicit aka.",
+    "Wrong starter: the man the two hosts list takes the slot of the man who did not start. His tile label is the role a host states for him; where no host states one, the slot's label is carried and the row says so (open for a role source).",
+    "Formation: changes when two hosts agree, counting an organiser's pitch coordinates as a statement of shape. When the two host eleven makes the old label impossible (two strikers named where one started) the label stated by a host is used; when both hosts refute the old label but state different ones, the organiser's is used and the split is recorded.",
+    "Sides: a tile moves left or right only when two hosts agree on the side; applied records it as slots[i].side.",
+    "Blanks: a candidate who did not start is dropped. A lineup left with fewer than two gets a replacement who started on both hosts, spelled as an earlier verified blank where possible; on national-team lineups a new blank's club comes from two squad lists. Every starter is offered to the guess box through XI_ROSTER_NAMES, and simMissingXiReach (live, run by the lead at release) sweeps every blank against player_market_values.",
+    "Facts: a reveal-screen fact that the hosts contradict is removed, never rewritten from memory. The filler 'Started that night for <club>' is false on national-team lineups and was removed there.",
+    "Comments and the internal source field: where they vouched for the wrong eleven, score or venue they now say what changed and point here."
+  ]
+}
