@@ -45,8 +45,8 @@ export interface MmaPromotion {
 
 const FIRST = ['Dario', 'Emil', 'Tomas', 'Nico', 'Rafi', 'Ivo', 'Bruno', 'Luca', 'Ciro', 'Omar', 'Leon', 'Hugo',
   'Enzo', 'Arlo', 'Mateo', 'Zane', 'Remy', 'Felix', 'Milo', 'Jonas', 'Nolan', 'Soren', 'Ezra', 'Kian'];
-const LAST = ['Vale', 'Mercer', 'Rowan', 'Voss', 'Calder', 'Solis', 'Arden', 'Vega', 'Marlow', 'Costa', 'Rook', 'Linden',
-  'Navarro', 'Keene', 'Mora', 'Hale', 'Carver', 'Silva', 'Brenner', 'Duran', 'Fenn', 'Alder', 'Reed', 'Varela'];
+const LAST = ['Vale', 'Mercer', 'Rowan', 'Voss', 'Calder', 'Solis', 'Arden', 'Vega', 'Marlow', 'Cairn', 'Rook', 'Linden',
+  'Navarro', 'Keene', 'Mora', 'Hale', 'Carver', 'Silva', 'Brenner', 'Duran', 'Fenn', 'Alder', 'Reed', 'Wren'];
 
 function makeFighters(seed: number): MmaFighter[] {
   const rng = rngFrom(seed);

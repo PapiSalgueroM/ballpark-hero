@@ -16,7 +16,8 @@ assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build dist before the
 const bundle = path.join(OUT, 'engines.cjs');
 await build({ stdin: { contents: "export * as mma from './src/lib/mmaPromotion.ts'; export * as boxing from './src/lib/fightPromoter.ts';", resolveDir: ROOT, loader: 'ts' }, outfile: bundle,
   bundle: true, platform: 'node', format: 'cjs', logLevel: 'silent', alias: { '@': path.join(ROOT, 'src') } });
-const { mma, boxing } = createRequire(import.meta.url)(bundle);
+const requireEngine = createRequire(import.meta.url);
+const { mma, boxing } = requireEngine(bundle);
 const MMA_KEY = 'dukb-mma-promoter-v1', BOXING_KEY = 'fight-promoter-save-v1';
 const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
 assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
@@ -247,7 +248,10 @@ try {
       assert.equal(await page.evaluate(key => localStorage.getItem(key), BOXING_KEY), boxingBytes, 'Switching modes restores the old boxing bytes');
       const aButton = page.getByRole('button').filter({ has: page.getByText(boxingOld.a.name, { exact: true }) }); await aButton.click();
       const bButton = page.getByRole('button').filter({ has: page.getByText(boxingOld.b.name, { exact: true }) }); await bButton.click();
-      const expectedBox = boxing.runShow(boxingOld.state, { venueId: 'hall', ticketPrice: .00022, bookings: [{ aId: boxingOld.a.id, bId: boxingOld.b.id, rounds: 8, title: false }] });
+      // Restored browser contexts start with fresh module IDs and the original saved RNG tick.
+      delete requireEngine.cache[requireEngine.resolve(bundle)];
+      const freshBoxing = requireEngine(bundle).boxing;
+      const expectedBox = freshBoxing.runShow(JSON.parse(boxingBytes).st, { venueId: 'hall', ticketPrice: .00022, bookings: [{ aId: boxingOld.a.id, bId: boxingOld.b.id, rounds: 8, title: false }] });
       assert(expectedBox, 'The original boxing fixture books a real legal bout'); await button('Put the show on').click();
       await button('Plan the next show').waitFor(); const oldSaved = JSON.parse(await page.evaluate(key => localStorage.getItem(key), BOXING_KEY));
       assert.deepEqual(oldSaved.st, expectedBox.state, 'The old boxing save plays through the unchanged engine');

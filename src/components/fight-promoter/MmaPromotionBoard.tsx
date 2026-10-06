@@ -17,7 +17,7 @@ function MmaRulesText() {
     <p>Run twelve events. Sign fighters for three fights, book up to three bouts per card, choose your venue and set your ticket price.</p>
     <p>Both fighters need a contract, the same division and enough recovery. A fighter can appear only once per card. Regular bouts last up to three rounds, title fights up to five.</p>
     <p>A title fight needs two of your division's top four. If there is a champion, they must defend. A champion without a contract leaves a vacant belt.</p>
-    <p>A month off restores availability but costs {dollars(MMA_REST_COST)}. The event estimate shows your expected gate and all costs before you commit.</p>
+    <p>A month off moves recovery forward and costs {dollars(MMA_REST_COST)}. The event estimate shows your expected gate and all costs before you commit.</p>
     <p>Your score out of 100 comes from reputation (50), profitable events (30) and held belts (20). Every fighter, record and result is fictional.</p>
     <p className="rounded-lg border bg-muted/30 p-3"><strong className="text-foreground">Example:</strong> two healthy light division fighters with contracts can contest the vacant title. The winner gets the belt, both use one contract fight, and recovery may stop an immediate rematch. Sign another contender or rest before booking again.</p>
   </div>;

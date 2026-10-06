@@ -10,7 +10,9 @@ is needed under Anthony's standing full-autonomy instruction.
 Build a promotion across12 events: sign or renew original fighters, select a venue
 and ticket price, book up to three bouts, run the card, then use actual results,
 cash, recovery, rankings and belts to choose the next card. A month off heals
-fighters but costs overhead. Finish on a0 to100 legacy score after12 events.
+fighters but costs $2,000. Finish on a0 to100 legacy score after12 events, or
+close deliberately after an event. A promotion with less than $6,000 can close
+before its first event without earning a completion award.
 
 ## State and engine contract
 
@@ -20,12 +22,14 @@ fighters per division initially, three fight contracts. Every fighter has stable
 id/name/division/style, striking/grappling/cardio, fanbase, wins/losses,
 rankingPoints, recoveryUntil, contract, purse, signingBonus. All names and records
 are fictional. State holds seed/tick, month/event, cash/reputation, fighters,
-champions per division, bounded event history and closed flag.
+champions per division, bounded event history, closed flag and canonical actions.
+The next-event counter spans1 through13; at13 all twelve events are complete.
 
-An event plan has venueId, ticketPrice and up to3 {aId,bId,title} bouts. Engine
+An event plan has venueId, ticketPrice and bookings of up to3 {aId,bId,title} bouts. Engine
 rejects self/duplicate/cross-division/uncontracted/unrecovered fighters, invalid
 venues/prices and unaffordable guarantees. Title requires both top4 and, for an
-occupied belt, the champion participating. Regular bouts3 rounds, title bouts5.
+occupied belt, the champion participating. Rankings include signed fighters only.
+Regular bouts3 rounds, title bouts5.
 Finishes are KO/TKO, Submission or Decision, based on generated attributes and
 seeded per-round output. Preserve winner id, method, round, quality for every bout.
 Each result applies exactly once, updates records/ranks, decrements contracts,
@@ -37,14 +41,22 @@ API: newMmaPromotion(name, seedLabel?), ratingOfMma(f), mmaRankings(state,divisi
 legalMmaBout(state,bout): string|null, validateMmaPlan(state,plan): string|null,
 projectMmaEvent(state,plan), signMmaFighter(state,id): state|null,
 runMmaEvent(state,plan): {state,result}|null, advanceMmaMonth(state): state,
-mmaPromotionScore(state): number, loadMmaPromotion(unknown): state|null.
+closeMmaPromotion(state): state|null, mmaPromotionScore(state): number,
+loadMmaPromotion(unknown): state|null.
 Export DIVISIONS and MMA_VENUES and types MmaFighter, MmaPromotion, MmaPlan,
 MmaBooking, MmaBoutResult, MmaEventResult. Values use dollars, not millions.
 
 Hook owns separate storage, current plan, screen/result restore, state ref against
 double actions and blocked-storage notice. Start, sign, book, remove, plan edit,
-run, rest, back, reset. Never consume/rewrite boxing storage. Unknown/malformed
+run, rest, back, endPromotion and reset. The envelope is
+{version,state,plan,view,resultIndex}. Never consume/rewrite boxing storage. Unknown/malformed
 MMA saves offer a fresh world with a visible explanation, no crash.
+
+The action ledger records sign, rest, event and close, at most500 actions with
+the last slot reserved for closing. Loading reconstructs the same seeded world,
+replays the actual engine functions and requires exact equality to the saved
+state. Fabricated contracts, recovery or cash cannot be restored. A completed
+save restores in the hook initializer without setting a global finish marker.
 
 ## UI and help
 
@@ -60,7 +72,8 @@ matchup corners as the single distinctive visual device. No photos or logos.
 ## Score and verification
 
 Score derives from reputation50%, profitable event count30%, filled belts20%,
-capped0 to100. This is a long save simulation, no daily answer or daily mode.
+capped0 to100. An early close keeps the twelve-event profitable-event denominator.
+This is a long save simulation, no daily answer or daily mode.
 Scoped remote workflow only: real app type check, build, engine + mounted
 outcomes, effective copied-source controls, seeded strategy distributions,
 boxing/gym/career/regression fences, all built-site readers after snapshots,

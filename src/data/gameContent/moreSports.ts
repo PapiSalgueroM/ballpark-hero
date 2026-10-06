@@ -1509,7 +1509,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
   '/fight-promoter': {
     intro: [
       "Fight Promoter is a free MMA and boxing management sim. Run a fictional MMA organization with contracts, division rankings and championship belts, or play the original boxing matchmaking game. Each mode has its own save.",
-      "There are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
+      "In boxing mode, there are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
       "In boxing mode, the money says feed him and your name says make the fight. Measured in that engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in both modes is invented.",
     ],
     headings: {
@@ -1524,36 +1524,36 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         heading: "Running your MMA organization",
         items: [
           "Choose MMA and name your promotion. You start with $120,000, twelve signed fighters and three divisions. Every fighter and result is fictional.",
-          "Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
-          "Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
-          "Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
+          "MMA: Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
+          "MMA: Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
+          "MMA: Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
         ],
       },
       {
         heading: "Naming your promotion",
-        items: ["Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
+        items: ["Boxing: Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
       },
       {
         heading: "Picking a room for the show",
-        items: ["Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you."],
+        items: ["Boxing: Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you."],
         subsections: [
           {
             heading: "Setting the ticket price",
-            items: ["Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away."],
+            items: ["Boxing: Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away."],
           },
         ],
       },
       {
         heading: "Building the card at matching weights",
-        items: ["Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight."],
+        items: ["Boxing: Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight."],
       },
       {
         heading: "Weighing the appeal before committing",
-        items: ["Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match."],
+        items: ["Boxing: Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match."],
       },
       {
         heading: "Reading the room after the show",
-        items: ["Put the show on, then read the room. A one sided beating earns you nothing at all."],
+        items: ["Boxing: Put the show on, then read the room. A one sided beating earns you nothing at all."],
       },
     ],
     ruleSections: [
@@ -1561,43 +1561,43 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         heading: "MMA recovery, rankings and championship belts",
         items: [
           "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
-          "A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
-          "Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
-          "The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
+          "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
+          "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+          "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
         ],
       },
       {
         heading: "Paying purses and covering the room",
         items: [
-          "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
-          "The room costs its hire fee whether anybody turns up or not.",
+          "Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+          "Boxing: The room costs its hire fee whether anybody turns up or not.",
         ],
       },
       {
         heading: "Growing your name on bigger buildings",
         items: [
-          "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
-          "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+          "Boxing: Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+          "Boxing: Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
         ],
         subsections: [
           {
             heading: "Judging quality by how close a fight was",
-            items: ["Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it."],
+            items: ["Boxing: Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it."],
           },
         ],
       },
       {
         heading: "Protecting a record and losing your card",
         items: [
-          "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
-          "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+          "Boxing: A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+          "Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
         ],
       },
       {
         heading: "Retirement, going broke and no betting",
         items: [
-          "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
-          "Go below zero after a show and you are out of the business.",
+          "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+          "Boxing: Go below zero after a show and you are out of the business.",
           "There is no betting anywhere in this game.",
         ],
       },
@@ -1605,52 +1605,52 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     exampleSections: [
       {
         heading: "Booking a vacant MMA title",
-        paragraphs: ["Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card."],
+        paragraphs: ["MMA: Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card."],
       },
       {
         heading: "Filling a leisure centre on a name",
-        paragraphs: ["Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
+        paragraphs: ["Boxing: Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
       },
       {
         heading: "Making the fight instead of feeding him",
-        paragraphs: ["Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight."],
+        paragraphs: ["Boxing: Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight."],
       },
       {
         heading: "A close loss that grows your name",
-        paragraphs: ["He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call."],
+        paragraphs: ["Boxing: He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call."],
       },
       {
         heading: "Reaching the arena twenty shows on",
-        paragraphs: ["Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."],
+        paragraphs: ["Boxing: Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."],
       },
     ],
     tipSections: [
       {
         heading: "Feeding somebody in the early shows",
-        items: ["Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you."],
+        items: ["Boxing: Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you."],
       },
       {
         heading: "Watching the projected house move",
-        items: ["The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it."],
+        items: ["Boxing: The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it."],
       },
       {
         heading: "Matching close fighters and spending your draw",
         items: [
-          "Two men at the same weight with ratings within about ten points is the fight worth making.",
-          "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+          "Boxing: Two men at the same weight with ratings within about ten points is the fight worth making.",
+          "Boxing: Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
         ],
       },
       {
         heading: "Why a damaged veteran still sells",
-        items: ["A damaged veteran still sells. That is exactly why he is still on your books."],
+        items: ["Boxing: A damaged veteran still sells. That is exactly why he is still on your books."],
       },
     ],
     faqs: [
       { q: "Can I run an MMA organization?", a: "Yes. Choose MMA to sign fighters, build three bout cards, run division title fights and manage the business across twelve events. Boxing has its own separate save." },
       { q: "Are there submissions in MMA mode?", a: "Yes. Grappling creates takedowns, control and submission attempts, while striking can produce a knockout. Saved results come from the fight engine." },
-      { q: "Why did a sold out show still lose money?", a: "The guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
-      { q: "Why is my name not growing?", a: "Your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
-      { q: "Where did my best fighter go?", a: "He left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
+      { q: "Why did a sold out show still lose money?", a: "In boxing mode, the guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
+      { q: "Why is my name not growing?", a: "In boxing mode, your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
+      { q: "Where did my best fighter go?", a: "In boxing mode, he left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
       { q: "Are the fighters real?", a: "No. Every fighter is generated. No real boxer is matched, paid, beaten or promoted anywhere in this game, and no real venue is named." },
       { q: "Is this the same as Fight Career and Fight Gym?", a: "Boxing mode uses the same fighters and bouts from those games. MMA mode has its own generated roster, grappling engine, contracts and belts." },
     ],

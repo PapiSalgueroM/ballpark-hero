@@ -1,3 +1,22 @@
+## Codex 1062 measured repairs, 2026-10-06
+
+Repair source 8b70d1a4 passed types/build, 20 mounted outcomes, 23 effective
+source controls, 864 campaign events, 480 attribute/method bouts and all
+16 built readers. Scoring traversal now passes. The fictional-name guard
+found Bruno Varela, and all four native profiles reached the boxing save
+comparison. Every MMA geometry journey passed, including eight signed
+fighters, ranking pagination and a full three-bout card and receipt at390px.
+Four geometry/focus negative controls all changed the DOM and failed correctly.
+
+Artifact11394858623 SHA256271a9e73037bec339bd8579a021ba19267b4218b96470e3f2f4f39b633f50457
+was hash verified and phone screenshots inspected. No generated files copied.
+Native boxing comparison reused a fixture that runShow mutates and a Node
+module whose fighter ID counter had already advanced. A fresh parsed fixture
+and fresh unchanged engine instance will match each browser lifecycle while
+retaining exact whole-state comparison. Two new surnames are changed to avoid
+shipped real names. Global help labels each mode; recovery wording is accurate.
+Final repair preparation and acceptance remain pending. No1062 merge/live claim.
+
 ## Codex1062 in preparation: MMA Fight Promoter, 2026-10-06
 
 Anthony requested running a fictional MMA organization. Existing /fight-promoter
