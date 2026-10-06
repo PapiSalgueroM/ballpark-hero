@@ -245,8 +245,27 @@ const DIGEST_SEEDS = 16;
    main: the round adds one star to the 2025-2029 Ballon d'Or field and
    moves three 2020-2024 clubs, so every 2020 career draws more on its
    first awards night. Sections 1, 2, 3 and 5 stayed green.
-   RELEASE AF OWES A RE-RECORD on the merged tree (1012 and 1024 together): the array below is 1024s alone. */
-const BASELINE = ['a31a6e10338f3099', '03f1ce749be95340', 'ad3c936792765bb4', 'b6c3253176006039', '3334adb4805c6d61', '79d633375da25489', '3ac5d32949594594', '57454985480f47d8', 'cb004302fcf15857', 'bd8ece5eda9691dd', '14e379e4c658b202', '296bcfbd7b89f453', '09e1b3de0308c24f', '2dcb138641a5170d', 'c4ed6008e14ac75b', 'cd52002e53b9c802'];
+   Re-recorded by Round 1016 (2026-10-06, twice, identical): the back line and
+   holding midfielders get a defensive credit in calcSeasonRating, and the
+   rating feeds development, offers and the title boost, so careers 2, 6, 7,
+   10, 14 and 15 (CB, RB and CDM) move. Attribution: the same tree with the
+   rule's one line taken out records 16 of 16 equal to the digests before
+   this one, and the ten careers at other positions never moved.
+   Re-recorded at Release AF (2026-10-06, twice, identical) on the merged
+   tree of Rounds 1012, 1024 and 1016, which also carries Round 1027 (World
+   Cups and continental cups play the format their year had), a fourth cause
+   that no list before this one recorded. Attribution, each in a throwaway
+   copy of the merged tree with the other rounds taken back out (1012 as
+   simCareerDerbies bundle A: no derby detected and the swing off; 1016 its
+   one credit line; 1024 the era stars fold of f0802b27 reversed; 1027
+   soccerInternational.ts as at 37ce6d5e; Round 1015's rosters and
+   nationality map and the continental cup citation fix as before them):
+   with all of them out the tree records Release AD's list 16 of 16; with
+   only 1012 in, 1012's own list 16 of 16; only 1024, 1024's 16 of 16;
+   only 1016, 1016's 16 of 16 (careers 2, 6, 7, 10, 14 and 15 moved); only
+   1015 or only the citation fix, Release AD's list unchanged; only 1027,
+   all 16 moved. So nothing else in the release moves a digest. */
+const BASELINE = ['a7c772c3784e216a', '759bf037c867971d', '74e7fc332f6821fb', 'fafb27882724df58', 'cc6fa1f296a3bde8', 'b829c5dd07cfb3af', 'f539f12f1794c921', 'a5de9a434ad21895', '52e3772cb77b5986', '120dd615a6cd5dc1', '5372f38d44597423', 'f810d1daa7ffd030', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '55bf134cb33eacee'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));

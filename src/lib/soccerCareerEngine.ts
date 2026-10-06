@@ -3913,6 +3913,29 @@ function calcAssists(position: string, apps: number, overall?: number, mult = 1)
 }
 
 /* ─── Season rating 1-10 ─── */
+/* Round 1016: a defender is rated on his defending. A player wrote in on
+   2026-10-05 that as a CB or CDM goals should not matter as much, and the
+   engine agreed with him the wrong way: only the keeper's clean sheets reached
+   the rating, so centre backs had the most poor seasons on the pitch and the
+   fewest elite ones. Measured over 10,000 seeded careers before this round
+   (creation screen builds, both eras): CB 24% poor and 28% elite, the
+   strikers, wingers and number tens 12 to 15% poor and 47 to 49% elite
+   (scripts/simCareerPositionRatings.mjs has the numbers).
+   Back line: each clean sheet he kept, the number already drawn for the
+   season and shown in his history. Holding midfielder: nothing defensive is
+   drawn for him, so the honest proxy is the team's EXPECTED clean sheets in
+   the games he played, his appearances times 0.325, the middle of the 20 to
+   45 percent share the back line draws in generateSeasonStats. It is a pure
+   function of numbers already drawn, so it adds no Math.random call and is
+   never shown as a stat. */
+const DEFENSIVE_SHEET_CREDIT = 0.035;
+const CDM_EXPECTED_SHEET_SHARE = 0.325;
+const CDM_CREDIT_SHARE = 0.75;
+export function defensiveRatingCredit(position: string, apps: number, cleanSheets: number): number {
+  if (position === "CB" || position === "LB" || position === "RB") return cleanSheets * DEFENSIVE_SHEET_CREDIT;
+  if (position === "CDM") return apps * CDM_EXPECTED_SHEET_SHARE * DEFENSIVE_SHEET_CREDIT * CDM_CREDIT_SHARE;
+  return 0;
+}
 function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
@@ -3920,6 +3943,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
   if (position === "GK") { base += cleanSheets * 0.08; }
   else if (["ST", "LW", "RW", "CAM"].includes(position)) { base += goals * 0.04 + assists * 0.03; }
   else { base += goals * 0.06 + assists * 0.04; }
+  base += defensiveRatingCredit(position, apps, cleanSheets);
   if (apps >= 30) base += 0.3;
   else if (apps < 15) base -= 0.4;
   /* Round 131: a build that suits the job reads better in the ratings than a
