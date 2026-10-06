@@ -906,6 +906,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
           "Face one big offseason decision each year: training, trade requests, media noise.",
+          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
+          "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
           "When the deal expires, hit July 1 for real: competing offers from named clubs with their own money, length and roster quality, and one push for more on any of them.",
           "Age, decline, retire, then read the legacy verdict.",
         ],
@@ -961,6 +963,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading an actual capped change",
+        paragraphs: [
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+        ],
+      },
       {
         heading: "A Sniper winger breaks out at 23",
         paragraphs: [
