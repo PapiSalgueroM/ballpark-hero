@@ -42,6 +42,7 @@ async function hud(page) {
   return root(page).evaluate(el => {
     const f = side => { const node = el.querySelector(`[data-cage-fighter="${side}"]`); return node ? Object.fromEntries(['x', 'health', 'stamina', 'submission'].map(k => [k, Number(node.dataset[k])])) : null; };
     return { phase: el.dataset.cagePhase, tick: Number(el.dataset.cageTick), position: el.dataset.cagePosition, top: el.dataset.cageTop,
+      drill: el.dataset.cageDrill, practiceComplete: el.dataset.cagePracticeComplete === 'true',
       paused: el.dataset.cagePaused === 'true', player: f('player'), cpu: f('cpu'), status: el.querySelector('[data-cage-status]')?.textContent, text: el.textContent };
   });
 }
@@ -166,6 +167,89 @@ try {
         await target.evaluate(el => { el.style.outline = 'none'; el.style.boxShadow = 'none'; }); await assert.rejects(() => visibleFocus(target), /visibly marked/); await restore(); report.controls.push('keyboard-focus');
         geometry(await measure(page), profile, 'controls-restored');
       }
+      assert.equal(await page.getByLabel('Mode', { exact: true }).inputValue(), 'quick', 'A fresh visit still defaults to a quick fight');
+      if (profile.input === 'keyboard' || profile.width === 320) {
+        const storage = () => page.evaluate(() => ({ local: Object.entries(localStorage).sort(), session: Object.entries(sessionStorage).sort() }));
+        const beforePractice = await storage(), writesBeforePractice = row.blockedWrites.length;
+        const originalStyle = await page.getByLabel('Your style', { exact: true }).inputValue();
+        row.practice = { drills: [] };
+        await choose(page.getByLabel('Mode', { exact: true }), 'practice', profile);
+        await choose(page.getByLabel('Practice drill', { exact: true }), 'striking', profile);
+        await inspect('practice-setup'); await activate(button('Start drill'), profile); await page.clock.runFor(112);
+        for (const drill of ['striking', 'takedown', 'submission', 'escape']) {
+          const initial = await hud(page); assert.equal(initial.drill, drill); assert.equal(initial.practiceComplete, false);
+          await inspect(`practice-${drill}`);
+          if (drill === 'striking') {
+            assert(Math.abs(initial.player.x - initial.cpu.x) > 20, 'Striking starts outside every attack range');
+            await page.clock.runFor(46000);
+            assert.equal((await hud(page)).phase, 'fight', 'Practice remains untimed beyond a normal round');
+            assert.equal((await hud(page)).player.health, 100, 'The passive practice partner does not attack');
+            assert.equal((await hud(page)).practiceComplete, false, 'Waiting does not complete the lesson');
+            await hold('jab', 250); assert.equal((await hud(page)).cpu.health, 100, 'Out-of-range practice strikes really miss');
+            await activate(button('How to play Cage Clash'), profile); await page.getByRole('dialog').waitFor(); await page.clock.runFor(300);
+            const settled = await page.getByRole('dialog').evaluate(async el => {
+              await Promise.all(el.getAnimations().map(animation => animation.finished));
+              const style = getComputedStyle(el), matrix = new DOMMatrixReadOnly(style.transform);
+              return [matrix.a, matrix.b, matrix.c, matrix.d, Number(style.opacity)];
+            });
+            assert.deepEqual(settled, [1, 0, 0, 1, 1]); await inspect('practice-help');
+            const frozen = await hud(page); await page.clock.runFor(500); assert.deepEqual(await hud(page), frozen, 'Help freezes the real drill');
+            await activate(page.getByRole('dialog').getByRole('button', { name: /close/i }), profile); await page.clock.runFor(300);
+            assert.deepEqual(await hud(page), frozen, 'Closing practice help still requires resume');
+            await activate(button('Resume drill'), profile); await page.clock.runFor(112);
+            for (let move = 0; move < 40 && Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) > 8; move++) await hold('right', 150);
+            assert(Math.abs((await hud(page)).player.x - (await hud(page)).cpu.x) <= 8, 'Real movement reaches striking range');
+            for (let shot = 0; shot < 3; shot++) {
+              const health = (await hud(page)).cpu.health; await hold('jab', 250);
+              assert((await hud(page)).cpu.health < health, `Practice shot ${shot + 1} lands`);
+              if (shot < 2) assert.equal((await hud(page)).practiceComplete, false, 'Fewer than three landed shots cannot complete striking');
+              await page.clock.runFor(600);
+            }
+            for (let rest = 0; rest < 80 && !(await hud(page)).practiceComplete; rest++) await page.clock.runFor(250);
+            assert((await hud(page)).player.stamina >= 90, 'Striking completes only after gas recovery');
+          } else if (drill === 'takedown') {
+            assert.equal(initial.position, 'standing'); await hold('grapple', 250); assert.equal((await hud(page)).position, 'clinch', 'First grapple earns a real clinch');
+            for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) {
+              if ((await hud(page)).player.stamina < 30) await page.clock.runFor(1500); else await hold('grapple', 1200);
+            }
+            assert.equal((await hud(page)).position, 'ground'); assert.equal((await hud(page)).top, 'player', 'A real takedown earns top position');
+          } else if (drill === 'submission') {
+            assert.equal(initial.position, 'ground'); assert.equal(initial.top, 'player'); assert.match(initial.status, /· Guard$/);
+            await hold('submit', 250); assert((await hud(page)).player.submission > 0, 'Holding Submit builds real progress');
+            assert.equal((await hud(page)).practiceComplete, false, 'Partial submission is not a completed lesson');
+            await inspect('practice-submission-progress'); await hold('submit', 2500);
+            assert.equal((await hud(page)).player.submission, 100, 'The actual submission reaches its finish');
+          } else {
+            assert.equal(initial.position, 'ground'); assert.equal(initial.top, 'cpu'); assert.match(initial.status, /· Mount$/);
+            assert(await control('escape').isDisabled(), 'Mount must be escaped through recovered guard');
+            for (let attempt = 0; attempt < 30 && !/· Guard$/.test((await hud(page)).status); attempt++) { await hold('kick', 250); await page.clock.runFor(1000); }
+            assert.match((await hud(page)).status, /· Guard$/); assert.equal((await hud(page)).top, 'cpu'); await inspect('practice-guard-recovered');
+            for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) { await hold('escape', 250); await page.clock.runFor(1100); }
+            assert.equal((await hud(page)).position, 'standing', 'Actual escape input returns to the feet');
+          }
+          assert.equal((await hud(page)).practiceComplete, true, `${drill} finishes through actual controls`);
+          await inspect(`practice-${drill}-complete`); const completed = await hud(page); await page.clock.runFor(1200);
+          assert.deepEqual(await hud(page), completed, 'A completed drill stops advancing'); row.practice.drills.push(drill);
+          assert.equal(row.blockedWrites.length, writesBeforePractice, 'Practice completion sends no score or completion attempt');
+          if (drill !== 'escape') { await activate(button('Next drill'), profile); await page.clock.runFor(112); }
+        }
+        await activate(button('Retry drill'), profile); await page.clock.runFor(112);
+        assert.equal((await hud(page)).drill, 'escape'); assert.equal((await hud(page)).practiceComplete, false);
+        assert.equal((await hud(page)).top, 'cpu'); assert.match((await hud(page)).status, /· Mount$/); assert.equal((await hud(page)).player.stamina, 100, 'Retry resets the actual drill');
+        await activate(button('Pause'), profile); await inspect('practice-paused'); const paused = await hud(page);
+        await page.clock.runFor(500); assert.deepEqual(await hud(page), paused); await activate(button('Leave drill'), profile); await page.clock.runFor(112);
+        assert.equal((await hud(page)).phase, 'setup'); assert.equal(row.blockedWrites.length, writesBeforePractice, 'Leaving a drill sends no completion attempt');
+        await choose(page.getByLabel('Practice drill', { exact: true }), 'escape', profile); await activate(button('Start drill'), profile); await page.clock.runFor(112);
+        for (let attempt = 0; attempt < 30 && !/· Guard$/.test((await hud(page)).status); attempt++) { await hold('kick', 250); await page.clock.runFor(1000); }
+        assert.match((await hud(page)).status, /· Guard$/);
+        for (let attempt = 0; attempt < 30 && !(await hud(page)).practiceComplete; attempt++) { await hold('escape', 250); await page.clock.runFor(1100); }
+        assert.equal((await hud(page)).practiceComplete, true); await activate(button('Start a fight'), profile); await page.clock.runFor(112);
+        assert.equal((await hud(page)).phase, 'setup'); assert.equal(await page.getByLabel('Mode', { exact: true }).inputValue(), 'quick');
+        assert.equal(await page.getByLabel('Your style', { exact: true }).inputValue(), originalStyle); assert.equal(await page.getByLabel('Opponent style', { exact: true }).inputValue(), 'balanced');
+        assert.equal(row.blockedWrites.length, writesBeforePractice); assert.deepEqual(await storage(), beforePractice, 'Drills, retry and leaving do not write local or session saves');
+        await inspect('quick-after-practice'); row.practice.passed = true;
+        console.log(`cageClash1063 ${id}: four real practice drills, help/pause, retry/leave, quick setup and zero practice writes passed.`);
+      }
       await choose(page.getByLabel('Your style', { exact: true }), 'grappler', profile);
       await choose(page.getByLabel('Opponent style', { exact: true }), 'striker', profile);
       await activate(button('Fight'), profile); await page.clock.runFor(112); await inspect('standing');
@@ -270,6 +354,7 @@ try {
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
   assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 4); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch complete all four practice drills');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
   console.log(`cageClash1063: four complete native fights, seven actual combat states, input lifecycle and zero forwarded writes passed.`);

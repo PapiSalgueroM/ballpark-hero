@@ -1,6 +1,9 @@
 name: Cage Clash verification
 
 on:
+  push:
+    branches:
+      - codex/cage-practice-1064
   pull_request:
     paths:
       - .github/workflows/cage-clash.yml
@@ -8,8 +11,11 @@ on:
       - src/components/cage-clash/**
       - src/hooks/useCageClash.ts
       - src/lib/cageClash.ts
+      - src/lib/cagePractice.ts
       - src/test/cageClash.test.tsx
+      - src/test/cagePractice.test.tsx
       - scripts/simCageClash.mjs
+      - scripts/simCagePractice.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -39,6 +45,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -57,10 +64,18 @@ jobs:
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee cage-clash-artifacts/types.log
-          npm run build 2>&1 | tee cage-clash-artifacts/build.log
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            node scripts/genSearchKeywords.mjs 2>&1 | tee cage-clash-artifacts/search.log
+            PRERENDER_ONLY=/cage-clash,/whats-new npm run build:seo 2>&1 | tee cage-clash-artifacts/build.log
+          else
+            npm run build 2>&1 | tee cage-clash-artifacts/build.log
+          fi
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
+      - name: Practice outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_PRACTICE_CONTROL=all ONLY=simCagePractice node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -90,6 +105,24 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cage-clash-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Package accepted page candidates
+        if: ${{ success() && github.event_name == 'push' }}
+        run: |
+          git rev-parse HEAD > cage-clash-artifacts/source-head.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const files = ['public/cage-clash/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const manifest = [];
+          for (const file of files) {
+            const target = path.join('cage-clash-artifacts/generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            fs.copyFileSync(file, target);
+            manifest.push({ file, sha256: crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex') });
+          }
+          fs.writeFileSync('cage-clash-artifacts/generated-manifest.json', JSON.stringify(manifest, null, 2));
+          JS
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -220,14 +220,15 @@ function roundCard(state: CageFight) {
   } else { state.phase = 'break'; state.cpuInput = blankInput(); state.message = `Round ${state.round} scored ${card.player} to ${card.cpu}. Continue when ready.`; }
 }
 
-export function stepCageFight(state: CageFight, input: CageInput): CageFight {
+export function stepCageFight(state: CageFight, input: CageInput, cpuOverride?: CageInput): CageFight {
   if (state.phase !== 'fight') return state;
   const next: CageFight = { ...state, tick: state.tick + 1, remainingTicks: Math.max(0, state.remainingTicks - 1), player: { ...state.player }, cpu: { ...state.cpu } };
   if (next.player.health === 0 || next.cpu.health === 0) {
     finish(next, next.player.health === next.cpu.health ? 'draw' : next.cpu.health === 0 ? 'player' : 'cpu', 'KO'); return next;
   }
   const rng = random(next.seed + next.tick * 7919);
-  if (state.tick % 8 === 0) next.cpuInput = cpuIntent(next, input, rng);
+  if (cpuOverride) next.cpuInput = cpuOverride;
+  else if (state.tick % 8 === 0) next.cpuInput = cpuIntent(next, input, rng);
   const cpu = next.cpuInput;
   recover(next.player, input, next.position); recover(next.cpu, cpu, next.position);
   if (next.position === 'standing') {

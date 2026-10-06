@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CAGE_TICK_MS, cageClashScore, continueCageRound, createCageFight, stepCageFight, type CageAction, type CageFight, type CageInput, type CageStyle } from '@/lib/cageClash';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { createCagePractice, nextCageDrill, stepCagePractice, type CageDrill, type CagePractice } from '@/lib/cagePractice';
 
 export type CageControl = 'left' | 'right' | 'guard' | CageAction;
 const keyControls: Record<string, CageControl> = { ArrowLeft: 'left', ArrowRight: 'right', a: 'left', d: 'right', ' ': 'guard', j: 'jab', k: 'power', l: 'kick', u: 'grapple', i: 'submit', o: 'escape' };
@@ -8,6 +9,8 @@ const keyControls: Record<string, CageControl> = { ArrowLeft: 'left', ArrowRight
 export function useCageClash(helpOpen = false) {
   const [fight, setFight] = useState<CageFight | null>(null);
   const [paused, setPaused] = useState(false);
+  const [practice, setPractice] = useState<CagePractice | null>(null);
+  const practiceRef = useRef<CagePractice | null>(null);
   const fightRef = useRef<CageFight | null>(null);
   const pausedRef = useRef(false);
   const helpRef = useRef(helpOpen);
@@ -38,6 +41,8 @@ export function useCageClash(helpOpen = false) {
   }, [clearInput]);
   const start = useCallback((style: CageStyle, opponent: CageStyle) => {
     clearInput();
+    practiceRef.current = null;
+    setPractice(null);
     const next = createCageFight(style, opponent, crypto.getRandomValues(new Uint32Array(1))[0]);
     fightRef.current = next;
     pausedRef.current = false;
@@ -45,8 +50,27 @@ export function useCageClash(helpOpen = false) {
     setFight(next);
     drawRef.current(next);
   }, [clearInput]);
+  const startPractice = useCallback((drill: CageDrill, style: CageStyle) => {
+    clearInput();
+    const lesson = createCagePractice(drill, style, crypto.getRandomValues(new Uint32Array(1))[0]);
+    practiceRef.current = lesson;
+    fightRef.current = lesson.fight;
+    pausedRef.current = false;
+    setPractice(lesson);
+    setPaused(false);
+    setFight(lesson.fight);
+    drawRef.current(lesson.fight);
+  }, [clearInput]);
+  const nextDrill = useCallback(() => {
+    const lesson = practiceRef.current;
+    if (!lesson?.complete) return;
+    const next = nextCageDrill(lesson.drill);
+    if (next) startPractice(next, lesson.fight.player.style);
+  }, [startPractice]);
   const reset = useCallback(() => {
     clearInput();
+    practiceRef.current = null;
+    setPractice(null);
     fightRef.current = null;
     pausedRef.current = false;
     setPaused(false);
@@ -54,20 +78,20 @@ export function useCageClash(helpOpen = false) {
     drawRef.current(null);
   }, [clearInput]);
   const nextRound = useCallback(() => {
-    if (!fightRef.current || fightRef.current.phase !== 'break') return;
+    if (practiceRef.current || !fightRef.current || fightRef.current.phase !== 'break') return;
     clearInput();
     fightRef.current = continueCageRound(fightRef.current);
     setFight(fightRef.current);
     drawRef.current(fightRef.current);
   }, [clearInput]);
   const press = useCallback((source: string, control: CageControl) => {
-    if (pausedRef.current || helpRef.current || fightRef.current?.phase !== 'fight') return;
+    if (practiceRef.current?.complete || pausedRef.current || helpRef.current || fightRef.current?.phase !== 'fight') return;
     if (!controls.current.has(source) && control !== 'left' && control !== 'right' && control !== 'guard') tapRef.current = control;
     controls.current.set(source, control);
   }, []);
   const release = useCallback((source: string) => { controls.current.delete(source); }, []);
   const tap = useCallback((action: CageAction) => {
-    if (!pausedRef.current && !helpRef.current && fightRef.current?.phase === 'fight') tapRef.current = action;
+    if (!practiceRef.current?.complete && !pausedRef.current && !helpRef.current && fightRef.current?.phase === 'fight') tapRef.current = action;
   }, []);
 
   useEffect(() => { if (helpOpen) pause(); }, [helpOpen, pause]);
@@ -76,25 +100,30 @@ export function useCageClash(helpOpen = false) {
     const frame = (now: number) => {
       const clock = clockRef.current;
       const current = fightRef.current;
-      if (!pausedRef.current && !helpRef.current && !document.hidden && current?.phase === 'fight') {
+      if (!practiceRef.current?.complete && !pausedRef.current && !helpRef.current && !document.hidden && current?.phase === 'fight') {
         // A delayed frame is discarded rather than replaying unseen combat.
         const elapsed = clock.last ? now - clock.last : 0;
         clock.debt += elapsed > 150 ? 0 : elapsed;
         clock.last = now;
         let next = current;
-        while (clock.debt >= CAGE_TICK_MS && next.phase === 'fight') {
+        while (clock.debt >= CAGE_TICK_MS && next.phase === 'fight' && !practiceRef.current?.complete) {
           const held = Array.from(controls.current.values());
           const action = tapRef.current ?? [...held].reverse().find(value => value !== 'left' && value !== 'right' && value !== 'guard') as CageAction | null | undefined;
           const input: CageInput = { move: (Number(held.includes('right')) - Number(held.includes('left'))) as -1 | 0 | 1, guard: held.includes('guard'), action: action ?? null };
           tapRef.current = null;
-          next = stepCageFight(next, input);
+          if (practiceRef.current) {
+            const lesson = stepCagePractice(practiceRef.current, input);
+            practiceRef.current = lesson;
+            next = lesson.fight;
+          } else next = stepCageFight(next, input);
           clock.debt -= CAGE_TICK_MS;
         }
         fightRef.current = next;
-        if (next.phase !== 'fight') clearInput();
-        if (now - clock.hud >= 100 || next.phase !== current.phase) {
+        if (next.phase !== 'fight' || practiceRef.current?.complete) clearInput();
+        if (now - clock.hud >= 100 || next.phase !== current.phase || practiceRef.current?.complete) {
           clock.hud = now;
           setFight(next);
+          setPractice(practiceRef.current);
         }
       } else { clock.last = 0; clock.debt = 0; }
       drawRef.current(fightRef.current);
@@ -140,8 +169,8 @@ export function useCageClash(helpOpen = false) {
     };
   }, [clearInput, pause, press, release, resume]);
 
-  const isComplete = fight?.phase === 'finished';
-  const finalScore = fight ? cageClashScore(fight) : 0;
+  const isComplete = !practice && fight?.phase === 'finished';
+  const finalScore = !practice && fight ? cageClashScore(fight) : 0;
   useGameCompletion('cage-clash', isComplete, finalScore);
-  return { fight, fightRef, drawRef, paused, start, reset, pause, resume, nextRound, press, release, tap, finalScore };
+  return { fight, fightRef, drawRef, practice, paused, start, startPractice, nextDrill, reset, pause, resume, nextRound, press, release, tap, finalScore };
 }
