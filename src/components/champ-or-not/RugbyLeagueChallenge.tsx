@@ -6,7 +6,7 @@ import type { ChampRow, ChampRound } from '@/lib/champOrNot';
 import { buildRugbyLeagueRun, fetchRugbyLeagueRows, RUGBY_ROUNDS } from '@/lib/rugbyLeagueChallenge';
 import { cn } from '@/lib/utils';
 
-type Phase = 'loading' | 'error' | 'intro' | 'question' | 'reveal' | 'done';
+type Phase = 'loading' | 'error' | 'intro' | 'question' | 'reveal' | 'done' | 'review' | 'retry-question' | 'retry-reveal' | 'retry-done';
 
 export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onExit: () => void }) {
   const [phase, setPhase] = useState<Phase>('loading');
@@ -16,17 +16,29 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<boolean[]>([]);
   const [lastPick, setLastPick] = useState<boolean | null>(null);
+  const [reviewIndex, setReviewIndex] = useState(0);
+  const [retryIndex, setRetryIndex] = useState(0);
+  const [retryAnswers, setRetryAnswers] = useState<boolean[]>([]);
+  const [retryStarted, setRetryStarted] = useState(false);
+  const returnFocus = useRef<'review' | 'retry' | null>(null);
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [helpOpen, setHelpOpen] = useState(false);
   const runNumber = useRef(0);
   const panel = useRef<HTMLElement>(null);
   const wasActive = useRef(false);
   const actionButton = useRef<HTMLButtonElement>(null);
-  const actionArea = useRevealScroll<HTMLDivElement>(`${phase}:${index}`, { enabled: active && !helpOpen, skipFirst: false });
+  const actionArea = useRevealScroll<HTMLDivElement>(`${phase}:${index}:${reviewIndex}:${retryIndex}`, { enabled: active && !helpOpen, skipFirst: false });
   const current = rounds[index];
   const score = answers.filter(Boolean).length;
   const lastCorrect = phase === 'reveal' && current ? lastPick === current.isTrue : null;
   const example = rounds.find(round => round.compKey === 'nrl');
+  const missed = answers.flatMap((correct, at) => correct ? [] : [at]);
+  const reviewed = rounds[reviewIndex];
+  const reviewedPick = reviewed ? answers[reviewIndex] ? reviewed.isTrue : !reviewed.isTrue : null;
+  const retryCurrent = rounds[missed[retryIndex]];
+  const retryCorrect = retryAnswers[retryIndex];
+  const retryPick = retryCurrent && retryCorrect !== undefined ? retryCorrect ? retryCurrent.isTrue : !retryCurrent.isTrue : null;
+  const corrected = retryAnswers.filter(Boolean).length;
 
   const moveTo = (next: Phase) => {
     phaseRef.current = next;
@@ -39,6 +51,11 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
     setIndex(0);
     setAnswers([]);
     setLastPick(null);
+    setReviewIndex(0);
+    setRetryIndex(0);
+    setRetryAnswers([]);
+    setRetryStarted(false);
+    returnFocus.current = null;
     return true;
   };
 
@@ -70,9 +87,28 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
     if (helpOpen) return;
     const owner = document.activeElement;
     if (entered || owner === document.body || !owner?.isConnected || panel.current?.contains(owner)) {
-      (actionButton.current ?? panel.current)?.focus({ preventScroll: true });
+      const returning = phase === 'done' && returnFocus.current
+        ? panel.current?.querySelector<HTMLButtonElement>(`[data-rugby-open-${returnFocus.current}]`) : null;
+      (returning ?? actionButton.current ?? panel.current)?.focus({ preventScroll: true });
+      returnFocus.current = null;
     }
-  }, [active, phase, index]);
+  }, [active, phase, index, retryIndex]);
+
+  useEffect(() => {
+    if (!active || helpOpen || !['review', 'retry-question', 'retry-reveal'].includes(phase)) return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => {
+        const area = actionArea.current;
+        if (!area) return;
+        const box = area.getBoundingClientRect();
+        if (box.top >= 0 && box.height <= window.innerHeight - 24 && box.bottom > window.innerHeight - 12) {
+          area.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+        }
+      });
+    });
+    return () => { cancelAnimationFrame(first); cancelAnimationFrame(second); };
+  }, [active, phase, reviewIndex, retryIndex]);
 
   const choose = (pick: boolean) => {
     if (!active || helpOpen || phaseRef.current !== 'question' || !current) return;
@@ -89,12 +125,38 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
       setLastPick(null);
     }
   };
+  const openReview = () => {
+    if (!active || helpOpen || phaseRef.current !== 'done' || answers.length !== RUGBY_ROUNDS) return;
+    setReviewIndex(0);
+    moveTo('review');
+  };
+  const openRetry = () => {
+    if (!active || helpOpen || phaseRef.current !== 'done' || answers.length !== RUGBY_ROUNDS || missed.length === 0) return;
+    setRetryStarted(true);
+    moveTo(retryIndex >= missed.length ? 'retry-done' : retryAnswers.length > retryIndex ? 'retry-reveal' : 'retry-question');
+  };
+  const chooseRetry = (pick: boolean) => {
+    if (!active || helpOpen || phaseRef.current !== 'retry-question' || !retryCurrent) return;
+    moveTo('retry-reveal');
+    setRetryAnswers(previous => [...previous, pick === retryCurrent.isTrue]);
+  };
+  const advanceRetry = () => {
+    if (!active || helpOpen || phaseRef.current !== 'retry-reveal') return;
+    moveTo(retryIndex + 1 === missed.length ? 'retry-done' : 'retry-question');
+    setRetryIndex(previous => previous + 1);
+  };
+  const backToResults = () => {
+    if (!active || helpOpen || !['review', 'retry-question', 'retry-reveal', 'retry-done'].includes(phaseRef.current)) return;
+    returnFocus.current = phaseRef.current === 'review' ? 'review' : 'retry';
+    moveTo('done');
+  };
   const categoryScore = (key: string) => answers.filter((correct, i) => correct && rounds[i].compKey === key).length;
   const primary = 'w-full min-h-[44px] rounded-xl bg-primary px-3 py-3 font-semibold text-primary-foreground hover:opacity-90';
   const rules = <div className="space-y-3 text-sm text-muted-foreground">
     <p>Call ten Rugby League claims: five Australian premiers and five Dally M medallists, from records through 2025.</p>
     <p>Choose <strong className="text-foreground">CHAMP</strong> when the named winner matches the year, or <strong className="text-foreground">NOT</strong> when it does not. Every name is a real winner in that category. A false claim puts them in the wrong year.</p>
     <p>Each correct call earns one point. Read the real winner or shared winners after every answer, then move on at your own pace.</p>
+    <p>After ten calls, review any claim and your original choice. Retry missed calls offers only the ones you got wrong, once each. Its corrected total is separate: a 7/10 original run stays 7/10 even if you correct all three misses. Back to original results keeps a retry ready to resume.</p>
     {example && <p><strong className="text-foreground">Worked example: </strong>“{example.realTeams[0]} won the top grade rugby league premiership in {example.year}.” Choose CHAMP: {example.realTeams[0]} is listed as a premier that year.</p>}
     <p>This is an unranked run. You can switch modes and return to your place, but reloading starts over. Daily scores stay separate.</p>
   </div>;
@@ -166,21 +228,79 @@ export function RugbyLeagueChallenge({ active, onExit }: { active: boolean; onEx
         </ol>
       </div>}
 
-      {phase === 'done' && <div ref={actionArea} data-rugby-result="" className="rounded-2xl border border-primary/30 bg-card p-5 text-center">
-        <p className="text-3xl" aria-hidden="true">🏉</p>
-        <h3 className="mt-2 text-xl font-bold">Ten calls complete</h3>
-        <p data-rugby-score="total" className="my-3 font-display text-5xl tabular-nums text-primary">{score} / {RUGBY_ROUNDS}</p>
-        <p className="text-sm text-muted-foreground">{score === RUGBY_ROUNDS ? 'Every year, every winner. Perfect run.' : 'The real winners are in. Ready for another set?'}</p>
-        <div className="my-4 grid grid-cols-2 gap-3 text-sm">
-          <p className="rounded-xl border border-border p-3">Premiers <strong data-rugby-score="nrl" className="block text-xl">{categoryScore('nrl')} / 5</strong></p>
-          <p className="rounded-xl border border-border p-3">Dally M <strong data-rugby-score="dallym" className="block text-xl">{categoryScore('dallym')} / 5</strong></p>
+      {phase === 'done' && <div ref={actionArea} data-rugby-result="" className="rounded-2xl border border-primary/30 bg-card p-4 text-center">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-left text-lg font-bold">Ten calls complete</h3>
+          <p data-rugby-score="total" className="shrink-0 font-display text-4xl tabular-nums text-primary">{score} / {RUGBY_ROUNDS}</p>
         </div>
-        <button ref={actionButton} className={primary} onClick={() => {
+        <p className="mt-2 text-xs text-muted-foreground">{score === RUGBY_ROUNDS ? 'Every year, every winner. Perfect run.' : 'The real winners are in. Ready for another set?'}</p>
+        <div className="my-2 grid grid-cols-2 gap-2 text-sm">
+          <p className="rounded-xl border border-border p-2">Premiers <strong data-rugby-score="nrl" className="block text-xl">{categoryScore('nrl')} / 5</strong></p>
+          <p className="rounded-xl border border-border p-2">Dally M <strong data-rugby-score="dallym" className="block text-xl">{categoryScore('dallym')} / 5</strong></p>
+        </div>
+        <button data-rugby-open-review="" onClick={openReview} className={cn(primary, 'py-2')}>Review ten calls</button>
+        {missed.length > 0 && <button data-rugby-open-retry="" onClick={openRetry} className="mt-2 min-h-[44px] w-full rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 font-semibold text-primary">
+          {!retryStarted ? `Retry ${missed.length} missed ${missed.length === 1 ? 'call' : 'calls'}` : retryIndex >= missed.length ? 'View retry result' : 'Resume missed calls'}
+        </button>}
+        <button ref={actionButton} className={cn(primary, 'mt-2 py-2')} onClick={() => {
           if (!active || helpOpen || phaseRef.current !== 'done' || !rows) return;
           if (prepareRun(rows)) moveTo('question');
           else moveTo('error');
         }}>Play another ten</button>
         <p className="mt-2 text-xs text-muted-foreground">Unranked run. Your Daily score is separate.</p>
+      </div>}
+
+      {phase === 'review' && reviewed && <div ref={actionArea} data-rugby-review="" data-rugby-review-index={reviewIndex + 1} className="scroll-mt-3">
+        <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-base font-bold">Review ten calls</h3><p className="text-sm text-muted-foreground" data-rugby-original-score="">Original: {score} / {RUGBY_ROUNDS}</p></div>
+        <div role="group" aria-label="Choose a completed claim" className="mb-2 grid grid-cols-5 gap-1.5">
+          {rounds.map((_, at) => <button key={at} ref={at === reviewIndex ? actionButton : null} aria-label={`Review claim ${at + 1}: ${answers[at] ? 'correct' : 'incorrect'}`} aria-pressed={at === reviewIndex}
+            onClick={() => { if (active && !helpOpen && phaseRef.current === 'review') setReviewIndex(at); }}
+            className={cn('min-h-[44px] rounded-lg border px-1 py-2 text-sm font-semibold', at === reviewIndex ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-secondary text-foreground')}>
+            {at + 1}<span aria-hidden="true" className="ml-1">{answers[at] ? '✓' : '×'}</span>
+          </button>)}
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-3" role="region" aria-label={`Original claim ${reviewIndex + 1}`}>
+          <p className="text-sm font-semibold text-primary">{reviewed.compKey === 'nrl' ? 'Premiers' : 'Dally M Medal'} · {reviewed.year}</p>
+          <p data-rugby-review-statement="" className="mt-2 text-base font-semibold leading-snug">{reviewed.statement}</p>
+          <p data-rugby-review-pick="" className="mt-2 text-sm">Your original call: <strong>{reviewedPick ? 'CHAMP' : 'NOT'}</strong>. {answers[reviewIndex] ? 'Right call.' : 'Not this time.'}</p>
+          <p data-rugby-review-truth="" className="mt-1 text-sm text-muted-foreground">The claim is {reviewed.isTrue ? 'true' : 'false'}.</p>
+          <p data-rugby-review-winners="" className="mt-1 text-sm"><strong>{reviewed.year} {reviewed.compKey === 'nrl' ? 'premiers' : 'Dally M'}: </strong>{reviewed.realTeams.join(' and ')}.</p>
+          <button onClick={backToResults} className={cn(primary, 'mt-3 py-2')}>Back to original results</button>
+        </div>
+      </div>}
+
+      {(phase === 'retry-question' || phase === 'retry-reveal') && retryCurrent && <div ref={actionArea} data-rugby-retry="" data-rugby-retry-phase={phase === 'retry-question' ? 'question' : 'reveal'} data-rugby-retry-original={missed[retryIndex] + 1} className="scroll-mt-3">
+        <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2"><h3 className="text-lg font-bold">Retry {retryIndex + 1} / {missed.length}</h3><p className="text-sm text-muted-foreground" data-rugby-original-score="">Original: {score} / {RUGBY_ROUNDS}</p></div>
+        <div className={cn('rounded-2xl border bg-card p-4', phase === 'retry-reveal' ? retryCorrect ? 'border-correct' : 'border-destructive' : 'border-primary/40')}>
+          <p className="text-sm font-semibold text-primary">Original claim {missed[retryIndex] + 1} · {retryCurrent.compKey === 'nrl' ? 'Premiers' : 'Dally M Medal'} · {retryCurrent.year}</p>
+          <p data-rugby-retry-statement="" className="mt-2 text-lg font-semibold leading-snug">{retryCurrent.statement}</p>
+          {phase === 'retry-question' ? <div className="mt-4 grid grid-cols-2 gap-3">
+            <button ref={actionButton} onClick={() => chooseRetry(true)} className={primary}>CHAMP</button>
+            <button onClick={() => chooseRetry(false)} className="min-h-[44px] rounded-xl border border-border bg-secondary px-3 py-3 font-semibold">NOT</button>
+          </div> : <div className="mt-3">
+            <div role="status" data-rugby-retry-feedback="" className="rounded-xl bg-secondary/50 p-3">
+              <p className={cn('font-bold', retryCorrect ? 'text-correct' : 'text-destructive')}>{retryCorrect ? 'Corrected!' : 'Still one to learn.'}</p>
+              <p data-rugby-retry-pick="" className="mt-1 text-sm text-muted-foreground">You chose {retryPick ? 'CHAMP' : 'NOT'}. The claim is {retryCurrent.isTrue ? 'true' : 'false'}.</p>
+              <p data-rugby-retry-winners="" className="mt-2 text-sm"><strong>{retryCurrent.year} {retryCurrent.compKey === 'nrl' ? 'premiers' : 'Dally M'}: </strong>{retryCurrent.realTeams.join(' and ')}.</p>
+            </div>
+            <button ref={actionButton} onClick={advanceRetry} className={cn(primary, 'mt-3')}>{retryIndex + 1 === missed.length ? 'View retry result' : 'Next missed call'}</button>
+          </div>}
+        </div>
+        <button onClick={backToResults} className="mt-3 min-h-[44px] w-full rounded-xl border border-border px-3 py-2 text-sm font-semibold">Back to original results</button>
+      </div>}
+
+      {phase === 'retry-done' && <div ref={actionArea} data-rugby-retry="" data-rugby-retry-phase="done" className="rounded-2xl border border-primary/30 bg-card p-5 text-center">
+        <h3 className="text-xl font-bold">Missed calls revisited</h3>
+        <p className="my-3 font-display text-4xl text-primary" data-rugby-retry-score="">{corrected} / {missed.length} corrected</p>
+        <p data-rugby-original-score="" className="text-sm font-semibold">Original: {score} / {RUGBY_ROUNDS}, unchanged.</p>
+        <p className="mt-2 text-sm text-muted-foreground">These are practice corrections, not extra points.</p>
+        <button ref={actionButton} onClick={backToResults} className={cn(primary, 'mt-4')}>Back to original results</button>
+        <button onClick={() => {
+          if (!active || helpOpen || phaseRef.current !== 'retry-done' || missed.length === 0) return;
+          setRetryIndex(0);
+          setRetryAnswers([]);
+          moveTo('retry-question');
+        }} className="mt-2 min-h-[44px] w-full rounded-xl border border-border px-3 py-3 text-sm font-semibold">Try missed calls again</button>
       </div>}
 
       <button onClick={onExit} className="mt-3 min-h-[44px] w-full rounded-xl border border-border px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground">Back to Champ or Not</button>

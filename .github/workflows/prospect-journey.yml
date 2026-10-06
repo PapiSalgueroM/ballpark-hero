@@ -6,6 +6,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/prospect-journey.yml
+      - src/components/game/GameHelp.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
       - scripts/qa/career993.mjs
       - scripts/simUsCareerProspect.mjs
       - scripts/simCareerPreDraft.mjs
