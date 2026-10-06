@@ -53,27 +53,19 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { POS_MAP as CURVE_POS_MAP, ratingOf as curveRatingOf, gbpM as curveGbpM } from './cmValueCurve.mjs';
 
-/* Same curves as bakeClubManagerRosters.mjs, verbatim, so an era value and a
- * 2026 value mean the same thing on the rating scale. 'Sweeper' came over
- * from scripts/bakeEra2005.mjs in Round 902 when that bake started reading
- * this map: no year 2005, 2010 or 2015 row in the pull carries it, so no
- * output moves, and the 2005 path keeps the map it always had. */
-export const POS_MAP = {
-  'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
-  'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
-  'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF', 'Sweeper': 'CB',
-};
-export function ratingOf(usd) {
-  if (!usd || usd <= 0) return 48;
-  const r = Math.round(-13.106 + 12.851 * Math.log10(usd));
-  return Math.max(48, Math.min(94, r));
-}
-export function gbpM(usd) {
-  const m = (usd * 0.75) / 1e6;
-  return Math.round(m * 10) / 10;
-}
+/* The same curves as bakeClubManagerRosters.mjs, so an era value and a 2026
+ * value mean the same thing on the rating scale. Since Round 1035 they are
+ * imported from scripts/lib/cmValueCurve.mjs, the one copy the bake and the
+ * A-League generator read too, rather than written out here a second time.
+ * 'Sweeper' came over from scripts/bakeEra2005.mjs in Round 902 when that
+ * bake started reading this map: no year 2005, 2010 or 2015 row in the pull
+ * carries it, so no output moves, and the 2005 path keeps the map it always
+ * had. gbpM stays at one decimal whatever a caller passes after the value. */
+export const POS_MAP = { ...CURVE_POS_MAP, 'Sweeper': 'CB' };
+export const ratingOf = usd => curveRatingOf(usd);
+export const gbpM = usd => curveGbpM(usd);
 
 const esc = s => s.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 const unesc = s => s.replace(/\\(.)/g, '$1');

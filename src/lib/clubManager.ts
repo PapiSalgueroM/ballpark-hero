@@ -2640,6 +2640,12 @@ export interface LeagueRules {
    *  New Zealand clubs of the A-League Men). They are never drawn, and a
    *  career at one plays no cup at all, as a cupless league does. */
   cupExcluded?: string[];
+  /** Round 1035: a club of this league from another country, keyed by club
+   *  name, the country spelled as nationalityOf spells it (the A-League's
+   *  Auckland FC and Wellington Phoenix are New Zealand clubs). Read where a
+   *  club's own country matters (the board's home players ask); every other
+   *  club takes its league's flag. */
+  clubCountry?: Record<string, string>;
   /** The UEFA places the table hands out, or null outside UEFA's
    *  competitions in this game (no Champions League from this league). */
   europe: EuroSlots | null;
@@ -2853,6 +2859,8 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        (https://football360.com.au/australia-cup-wellington-auckland-new-zealand-teams-omitted/,
        27 January 2026) and RNZ (https://www.rnz.co.nz/news/sport/585350, 29
        January 2026). The ten Australian clubs enter at the round of 32.
+       The same three call the two New Zealand clubs, so clubCountry gives
+       them New Zealand and their board's home players ask reads it.
      - No continental row: the Asian places explained in print
        (https://football360.com.au/a-league-afc-champions-league-elite-acl-two-explained-who-has-qualified/,
        26 April 2026) are the 2025-26 table's, nothing yet says what the
@@ -2861,6 +2869,7 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
      - Clubs level on points: no order verified, so the gdGfOnly default. */
   aleague: {
     nationId: 'australia', flag: 'Australia', cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],
+    clubCountry: { 'Auckland FC': 'New Zealand', 'Wellington Phoenix': 'New Zealand' },
     europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
     simplified: 'The real season is 26 games (home and away plus four third meetings), and last season\'s finals series took the top six; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
@@ -5056,6 +5065,28 @@ const CUSTOM_SLOTS: { pos: Position; off: number }[] = [
   { pos: 'RW', off: -7 }, { pos: 'ST', off: -6 },
 ];
 
+/** Round 1035: how far under its league's best real XI the small tier's
+ *  squad is anchored, at most. The tier anchors are absolute (62, 68, 74) and
+ *  were set against leagues whose best sides sit well above 62; the A-League
+ *  Men's best XI is 60.9, so a shoestring club founded there topped the table
+ *  and its board asked for the title. Measured 2026-10-06 over all 43 era and
+ *  league pairs, the cap binds only in the A-League (anchor 55, a best XI of
+ *  58.1, bottom of the table): the next lowest best XI, Croatia's 68.0, caps
+ *  at 63, a point above the small tier's 62. Mid and big money is left alone, since
+ *  money can buy a contender in a weak league, and the quality slider always
+ *  wins over any anchor. */
+const SMALL_BELOW_BEST = 5;
+
+function leagueFitAnchor(spec: CustomClubSpec, anchor: number, eraId?: string): number {
+  if (spec.budgetTier !== 'small') return anchor;
+  const league = customLeagueDef(spec, eraId);
+  if (!league) return anchor;
+  const xiOf = xiChainFor(eraId && isHistoricEra(eraId) ? eraId : undefined);
+  let best = 0;
+  for (const c of league.clubs) if (c !== spec.replacedClub && c !== spec.name) best = Math.max(best, xiOf(c));
+  return best > 0 ? Math.min(anchor, Math.floor(best) - SMALL_BELOW_BEST) : anchor;
+}
+
 /**
  * The day-one squad of a custom club: every player generated, every player
  * tagged as generated, no real footballer anywhere near it. Deterministic
@@ -5072,7 +5103,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
      genuinely produces starters in the low 90s (his ask: "a team full of 90
      overalls"). The board reads the squad either way, so a slider superteam
      gets told to win it all, honestly. */
-  const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
+  const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : leagueFitAnchor(spec, t.anchor, eraId);
   /* Round 640: the squad quality the tier's money buys. A squad founded above
      it carries a sale ratio on every man; at or under it, none at all. */
   const ceiling = customQualityCap(spec.budgetTier, eraId);

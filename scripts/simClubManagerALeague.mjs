@@ -11,7 +11,10 @@
    A. LEDGER (hard). Every ledger row with a position group is in the
       generated file exactly once, under its own club; nobody in the
       generated file is missing from the ledgers (the invented player check);
-      the two group-less rows are not shipped.
+      the two group-less rows are not shipped. And the join the engine plays
+      (CM_ROSTERS): every man in CM_ALEAGUE_SUPERSEDES is gone from the
+      baked club he was superseded at (and still in that baked file, or the
+      line is stale), and no A-League name sits in two joined squads.
    B. VALUES (hard). Every club's Transfermarkt page in _values.json is that
       club's 26/27 squad page (its id from _membership.json, season 2026),
       every shipped player's value row cites it, every rating is the shared
@@ -32,8 +35,16 @@
       target of 9th, nobody asked to stay up), the Australia Cup draws
       neither excluded club (bracket and byes), reaches a final with a
       winner, and a career at Auckland FC or Wellington Phoenix schedules no
-      cup week, draws no bracket and names no cup. And every other modern
-      league with a cup still crowns a cup winner (the byes fix is shared).
+      cup week, draws no bracket and names no cup, is told it sits out the
+      Australia Cup (cupSatOutBy, which the cups panel and hub tile read;
+      an entrant and a cupless league get null), and its board's home
+      players ask is for New Zealand players (an Australian club's is for
+      Australian ones). And every other modern league with a cup still
+      crowns a cup winner (the byes fix is shared), and every played short
+      bracket has its shape read: the round of 16 plays field minus eight
+      ties, nobody is drawn twice or against himself, each round has its
+      size and is exactly the last round's winners, plus every bye once in
+      the quarter-finals.
    E. COUNTS (hard). The club, league and country counts written in the
       copy (the Club Manager guide, the help, the registry, the search
       description and its generated part, the page) agree with REAL_LEAGUES,
@@ -57,6 +68,12 @@
    of the league (strength ordering the table) is held by
    scripts/simClubManagerNewLeagues.mjs. Controls measured: invented 3
    failures, offcurve 1, onehost 2, excluded 22, nobyes 11, stalecount 1.
+   The review fix's checks, same day, SIM_SEED unset: the join dropped 1
+   stale baked row (Ryan Fraser at Southampton) and holds 0 A-League names
+   twice; 17 played brackets read for shape, 0 faults; 10 home players asks
+   at Australian clubs, all for Australia, and both New Zealand clubs asked
+   for New Zealand. Controls: nodedupe 2 failures, samebye 79, satout 2,
+   nzcountry 2.
 
    NEGATIVE CONTROLS (each must turn the run red, and each refuses to run if
    the text it mutates is missing):
@@ -74,6 +91,14 @@
                                     short cups lose their final, part D red
      SIM_ALEAGUE_CONTROL=stalecount the guide says 368 clubs again: part E
                                     goes red
+     SIM_ALEAGUE_CONTROL=nodedupe   the join keeps superseded baked rows:
+                                    part A red (Ryan Fraser in two squads)
+     SIM_ALEAGUE_CONTROL=samebye    every R16 winner meets the first bye in
+                                    the quarter-finals: part D red (bracket)
+     SIM_ALEAGUE_CONTROL=satout     cupSatOutBy always answers null: part D
+                                    red (the excluded clubs)
+     SIM_ALEAGUE_CONTROL=nzcountry  the rules row loses clubCountry: part D
+                                    red (Auckland asked for Australians)
 
    Run: node scripts/simClubManagerALeague.mjs   (SIM_SEEDS=n, default 10)
 */
@@ -91,7 +116,7 @@ const DIR = path.join(ROOT, 'scripts/data/gatheredSquads/aleague2026');
 const SEEDS = Number(process.env.SIM_SEEDS || 10);
 const SEED_SET = process.env.SIM_SEED || '';
 const CONTROL = process.env.SIM_ALEAGUE_CONTROL || '';
-const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount', 'nodedupe', 'samebye', 'satout'];
+const CONTROLS = ['invented', 'offcurve', 'onehost', 'excluded', 'nobyes', 'stalecount', 'nodedupe', 'samebye', 'satout', 'nzcountry'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_ALEAGUE_CONTROL=${CONTROL} is not one of ${CONTROLS.join(', ')}`); process.exit(1); }
 
 const LEAGUE = 'aleague';
@@ -127,6 +152,7 @@ function transformEngine(src) {
   if (CONTROL === 'excluded') src = mutateOnce(src, "cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],", "cup: 'Australia Cup',", 'excluded');
   if (CONTROL === 'nobyes') src = mutateOnce(src, 'const short = ordered.length > 8 && ordered.length < 16;', 'const short = false;', 'nobyes');
   if (CONTROL === 'samebye') src = mutateOnce(src, 'if (i < byes.length) merged.push(byes[i]);', 'if (i < byes.length) merged.push(byes[0]);', 'samebye');
+  if (CONTROL === 'nzcountry') src = mutateOnce(src, "    clubCountry: { 'Auckland FC': 'New Zealand', 'Wellington Phoenix': 'New Zealand' },\n", '', 'nzcountry');
   if (CONTROL === 'satout') src = mutateOnce(src, 'return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;', 'return null;', 'satout');
   return `${src}\nexport { relegationSpots as __relegationSpots };\n`;
 }
@@ -154,6 +180,7 @@ async function bundleEngine() {
     `export * from '${ROOT_FWD}/src/lib/clubManager.ts';`,
     `export * as al from '${ROOT_FWD}/src/data/clubManagerALeague2026.ts';`,
     `export * as baked from '${ROOT_FWD}/src/data/clubManagerRosters.ts';`,
+    `export * as asks from '${ROOT_FWD}/src/lib/clubManagerBoardAsks.ts';`,
     `export { nationalityOf } from '${ROOT_FWD}/src/data/playerNationalities.ts';`,
     `export { FLAG_CODES } from '${ROOT_FWD}/src/components/FlagImg.tsx';`,
     '',
@@ -368,7 +395,7 @@ function partSeasons(cm) {
   if (asks['Win the A-League Men'] !== 2 || asks['Make the finals'] !== 5 || asks['Finish mid-table or better'] !== 5) fail(`the boards split ${JSON.stringify(asks)}, not 2 title, 5 finals (ranks 3 to 7), 5 mid-table`);
   console.log(`   boards: ${JSON.stringify(asks)}`);
 
-  let ended = 0, sacked = 0, finals = 0, k = 0, brackets = 0, bracketFaults = 0;
+  let ended = 0, sacked = 0, finals = 0, k = 0, brackets = 0, bracketFaults = 0, natAsks = 0;
   const winners = {};
   for (; ended < SEEDS && k < 3 * SEEDS; k++) {
     const club = MANAGED[k % MANAGED.length];
@@ -376,6 +403,8 @@ function partSeasons(cm) {
     const start = cm.startCareer(club, 'now');
     if (start.calendar.filter(e => e.type === 'cup').length !== 4) fail(`seed ${k} at ${club}: ${start.calendar.filter(e => e.type === 'cup').length} cup weeks, not 4`);
     if (cm.careerLeagueOf(start).cupName !== 'Australia Cup') fail(`seed ${k} at ${club}: the career names cup ${cm.careerLeagueOf(start).cupName}`);
+    const natAsk = cm.asks.askCandidates(start).find(x => x.objective.id === 'natQuota');
+    if (natAsk) { natAsks += 1; if (natAsk.objective.country !== 'Australia') fail(`seed ${k} at ${club}: the board asks for players from ${natAsk.objective.country}, not Australia`); }
     const drawn = [...(start.cupBracket ?? []).flatMap(t => [t.home, t.away]), ...(start.cupByes ?? [])];
     if (drawn.length !== 10) fail(`seed ${k}: the Australia Cup field is ${drawn.length} clubs, not the ten Australian ones`);
     if ((start.cupBracket ?? []).length !== 2 || (start.cupByes ?? []).length !== 6) fail(`seed ${k}: ${(start.cupBracket ?? []).length} round of 16 ties and ${(start.cupByes ?? []).length} byes, not 2 and 6`);
@@ -406,6 +435,8 @@ function partSeasons(cm) {
     Math.random = REAL_RANDOM;
   }
   if (ended < SEEDS) fail(`only ${ended} of ${SEEDS} seasons reached the end in ${k} tries`);
+  if (!natAsks) fail('no Australian club was offered a home players ask, so the country check read nothing');
+  console.log(`   ${natAsks} home players asks read at Australian clubs, every one for Australia`);
   console.log(`   ${ended} seasons ended, ${sacked} sacked, ${finals} Australia Cup finals with a winner (${Object.entries(winners).map(([c, n]) => `${c} ${n}`).join(', ')})`);
 
   for (const club of EXCLUDED) {
@@ -417,6 +448,10 @@ function partSeasons(cm) {
     /* The cups panel and hub tile read this: the club sits out a cup its
        league plays, which is not the same as a league with no cup. */
     if (cm.cupSatOutBy(start) !== 'Australia Cup') fail(`${club} is not told it sits out the Australia Cup (cupSatOutBy ${cm.cupSatOutBy(start)}), so the page says the league has no cup`);
+    /* A New Zealand club's board asks for New Zealand players, not Australian. */
+    const nat = cm.asks.askCandidates(start).find(x => x.objective.id === 'natQuota');
+    if (!nat) fail(`${club}: the board has no home players ask to read (measured: one is always on offer)`);
+    else if (nat.objective.country !== 'New Zealand') fail(`${club}'s board asks for players from ${nat.objective.country}, not New Zealand`);
     if (start.cupRound !== 'out') fail(`${club} starts in the cup (${start.cupRound})`);
     if (start.cupByes) fail(`${club} starts with cup byes`);
     if ((start.boardObjectives ?? []).some(o => /cup/i.test(o.label))) fail(`${club}'s board sets a cup objective`);
@@ -429,7 +464,7 @@ function partSeasons(cm) {
       const next = cm.startNextSeason(cm.finishSeason(s).state);
       if (next.calendar.filter(e => e.type === 'cup').length || cm.careerLeagueOf(next).cupName !== null) fail(`${club}: the second season has a cup`);
     }
-    console.log(`   ${club}: ${cupWeeks} cup weeks, cup ${cm.careerLeagueOf(start).cupName}, season ${played.stuck ? 'STUCK' : played.sacked ? 'sacked' : 'ended'}`);
+    console.log(`   ${club}: ${cupWeeks} cup weeks, cup ${cm.careerLeagueOf(start).cupName}, sits out the ${cm.cupSatOutBy(start)}, home players ask for ${nat?.objective.country ?? 'nobody'}, season ${played.stuck ? 'STUCK' : played.sacked ? 'sacked' : 'ended'}`);
     Math.random = REAL_RANDOM;
   }
 
