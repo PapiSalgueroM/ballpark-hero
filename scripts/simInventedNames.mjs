@@ -105,6 +105,14 @@ const real = new Set();
     }
   };
   walk(path.join(ROOT, 'src/data'));
+  /* Round 1015: the roster ledger names every man the 2026 adjudication
+     checked, and a man the fold took out of every squad is still a real man,
+     so a generator that could build his name must still be caught after his
+     row leaves src/data. */
+  const shipped = new Set(real);
+  const ledger = JSON.parse(read('scripts/data/rosterConfirmation2026.json'));
+  for (const k of ['confirmedStill', 'movedTo', 'removedClubNotModelled', 'notCurrent', 'pending']) for (const r of ledger[k] ?? []) real.add(r.name);
+  console.log(`   ${real.size - shipped.size} of the ledger's men are known to the harvest only through the ledger`);
   /* Plus the baked Club Manager worlds, through the bundler, because their
      nationality map is the canonical list of real footballers here. */
   const ENTRY = path.join(os.tmpdir(), 'invEntry.mjs');
