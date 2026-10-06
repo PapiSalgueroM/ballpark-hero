@@ -306,7 +306,7 @@ const MissingXi = () => {
                 );
               })()}
               <p className="text-xs text-muted-foreground">
-                {puzzle.lineup.venue} · {puzzle.lineup.formationLabel} · Showing {puzzle.lineup.team}'s XI
+                {puzzle.lineup.venue} · {puzzle.lineup.formationLabel ? `${puzzle.lineup.formationLabel} · ` : ''}Showing {puzzle.lineup.team}'s XI
               </p>
             </div>
 
