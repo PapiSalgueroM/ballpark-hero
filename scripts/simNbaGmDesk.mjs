@@ -2,8 +2,10 @@
  *
  * The second bind of the shared GM modules to a real engine, shaped on
  * scripts/simNhlGmDesk.mjs. This harness drives the NBA engine and the desk
- * exactly the way the board calls them (NbaFrontOfficeBoard.tsx), with seeded
- * draws, and checks:
+ * in the board's own call order (NbaFrontOfficeBoard.tsx: the re-sign desk
+ * before draft night, the summer straight after the last pick), with seeded
+ * draws. It replays the board's calls in its own copy; the board itself is
+ * played by src/components/nba-front-office/NbaGmDeskBoard.test.tsx. Checks:
  *   1  a save from before the desk plays to the identical league, season
  *      after season, as the engine did before this round (a fixture recorded
  *      from the pre-round engine), and opening the desk changes nothing in
@@ -19,15 +21,24 @@
  *   3  no trade lands after the deadline, and deals do land before it; the
  *      window shuts once round 13 is played (what the guide says), the older
  *      trade paths' refusal (nbaDeadlineRefusal) agrees with it every round,
- *      and each of the board's four old trade handlers asks it first
+ *      and each of the board's four old trade handlers asks it first; the two
+ *      that can send a pick ask the pick rules (pickRuleBlock) first too
  *   4  picks are conserved league wide: every club's pick in every round of
  *      every year carried exists exactly once, after every deal and summer,
- *      and every engine list is the ledger's
+ *      and every engine list is the ledger's. Once a season the trade
+ *      finder's sweetened deal is played the way acceptShopOffer and
+ *      deskAfterTrade play it, and the ledger must follow the engine's own
+ *      pick move (a mirror that misses is undone by the sync and would pass
+ *      the census); a sweetener that would leave the club without a first in
+ *      two drafts running is refused exactly as the Trade desk refuses it
  *   5  the staff's effects change their consumer at every level step: the
  *      win probability, the scouting miss, the rounds an injury costs, the
  *      summer growth of a young man, for the whole staff and for each post
  *      on its own, each edge post reaching the strength by exactly half a
- *      point an end, and the growth reaching the engine's own summer
+ *      point an end, and the growth reaching the engine's own summer. And
+ *      through the engine that consumes them, at every step: the user's
+ *      wins over ten seasons of simRound, the rounds out simRound announces
+ *      for his injured men, his wins in runNbaPlayoffs
  *   6  migration keeps every marker, a corrupt block resets alone, the
  *      package salary rule is the engine's nbaSalaryFits for one man each
  *      way, and over the first apron a package must send out what it takes
@@ -44,6 +55,12 @@
  *   flatgrowth  the development coach's level changes nothing                 (5)
  *   nodefault   the engine's win probability reads an edge by default        (1)
  *   pilefit     the package salary rule forgets the apron                     (6)
+ *   noedgeround simRound stops reading the staff's edge                       (5)
+ *   noedgepo    the playoffs stop reading the staff's edge                    (5)
+ *   noinjhook   simRound stops asking the trainer                             (5)
+ *   nomirror    an old path's pick move never reaches the ledger              (4)
+ *   nostepien   an old path's pick skips the two drafts running rule          (4)
+ *   noruleblock the trade finder's accept skips the pick rules                (3)
  * Recording the fixture: SIM_NBA_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nbaGmDeskFixture.json from that engine.
  *
@@ -61,6 +78,18 @@
  *                          2.199; alone, the head coach and the lead assistant each take the win .548 to
  *                          .618; in the engine's own summer, 98 rating points of growth at level 1 and 108
  *                          at level 10 over five leagues of 21 year olds
+ * Remeasured 2026-10-06 by the review fix, with the walk in the board's order
+ * (the re-sign calls before draft night): every number above came back the
+ * same on seeds 1..10. Added then:
+ *   old trade paths        sweetened trade finder deals mirrored 60 / 60 on seeds 1..10 and 11..20, refused 0
+ *                          (three seasons a seed, two tries a season; every try found an offer)
+ *   through the engine     (fixed seeds) your wins over ten seasons of simRound 504, 512, 519,
+ *                          526, 535, 547, 558, 572, 582, 596 at levels 1 to 10 (504 with no desk);
+ *                          your playoff wins over 2000 runs 17561 rising to 26384, the smallest
+ *                          step 830; the trainer over 1144 injuries in 4000 rounds announced 2286
+ *                          rounds out at level 1 and 1839 at level 10, the smallest step 37 (the
+ *                          rolls hash the man's id, which carries a per process epoch, so these
+ *                          move run to run; 1000 rounds once gave a first step of 5, hence 4000)
  * Every floor in T sits near 70 percent of the lowest set. Every control was
  * run on seeds 1..10 on 2026-10-05 and fired in its own check, failures
  * counted: coinflip 73 in 2, shortscale 70 in 2, norfa 128 in 2, latetrade
@@ -89,6 +118,7 @@ const RECORD = process.env.SIM_NBA_GM_DESK_RECORD || '';
 const CONTROLS = {
   coinflip: '2', shortscale: '2', norfa: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatgrowth: '5', nodefault: '1', pilefit: '6',
+  noedgeround: '5', noedgepo: '5', noinjhook: '5', nomirror: '4', nostepien: '4', noruleblock: '3',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NBA_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -101,6 +131,7 @@ const SEASONS = Number(process.env.SIM_NBA_GM_DESK_SEASONS || 10);
 const T = {
   minDecisions: 288, minGm: 160, minAuto: 126, minEarlyDeals: 163, minLateTries: 490, minPickMoves: 162,
   minScaleUp: 42, minSecondUp: 44, minRestricted: 86, minSheets: 41, minSheetGone: 12,
+  minOldDeals: 42,
 };
 
 function modulesDir() {
@@ -143,8 +174,8 @@ const EDITS = {
   norfa: ['contracts', '  return rec.round === NBA_ROOKIE_SCALE_ROUND || service <= NBA_RFA_MAX_SERVICE;', '  return false;'],
   latetrade: ['desk', 'periodsPlayed: nbaPeriodsPlayed(league), seasonClosed: false },', 'periodsPlayed: 0, seasonClosed: false },'],
   /* The trade finder's accept skips the deadline. */
-  noguard: ['board', '    if (!league || !myTradePiece || deadlineBlock()) return;\n    const lg: NbaLeague = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);',
-    '    if (!league || !myTradePiece) return;\n    const lg: NbaLeague = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);'],
+  noguard: ['board', '    if (!league || !myTradePiece || deadlineBlock() || pickRuleBlock(league, o.teamId, o.sweeten)) return;\n    const lg: NbaLeague = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);',
+    '    if (!league || !myTradePiece || pickRuleBlock(league, o.teamId, o.sweeten)) return;\n    const lg: NbaLeague = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);'],
   droppick: ['desk', '  const next = withGmBlock(desk, NBA_DESK_KEYS.picks, out.ledger);',
     "  const next = withGmBlock(desk, NBA_DESK_KEYS.picks, { v: 1, picks: out.ledger.picks.filter(p => !pkg.give.some(a => a.kind === 'pick' && a.key === pickKey(p))) });"],
   flatstaff: ['desk', "  return (e('offEdge') + e('defEdge')) * NBA_END_WEIGHT;", "  return 0 * (e('offEdge') + e('defEdge')) * NBA_END_WEIGHT;"],
@@ -155,6 +186,17 @@ const EDITS = {
   /* The package salary rule forgets the first apron. */
   pilefit: ['desk', '  if (league.taxScale != null && after > nbaFirstApron(league.cap, league.taxScale)) return inSalary <= outSalary;',
     '  if (false) return inSalary <= outSalary;'],
+  /* The engine stops reading the staff: the round's edge, the playoffs' edge, the trainer. */
+  noedgeround: ['engine', '    const p = opts?.edges ? nbaWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : nbaWinProb(me, them);',
+    '    const p = nbaWinProb(me, them);'],
+  noedgepo: ['engine', '  const p = edges ? nbaWinProb(home, away, edges[home.abbr] ?? 0, edges[away.abbr] ?? 0) : nbaWinProb(home, away);',
+    '  const p = nbaWinProb(home, away);'],
+  noinjhook: ['engine', '        if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);', '        /* the trainer is not read */'],
+  /* The old trade paths: the ledger misses the engine's pick move, the pick rules are not asked, the board skips them. */
+  nomirror: ['desk', '  return key ? movePicks(ledger, [key], to) : ledger;', '  return ledger;'],
+  nostepien: ['desk', '  return key ? pickSwapRefusal(ledger, nbaGamePickRules(), season, from, [key], to, []) : null;', '  return null;'],
+  noruleblock: ['board', '    if (!league || !myTradePiece || deadlineBlock() || pickRuleBlock(league, o.teamId, o.sweeten)) return;',
+    '    if (!league || !myTradePiece || deadlineBlock()) return;'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -188,6 +230,7 @@ export * as C from '${ROOT_URL}/src/lib/gmContracts.ts';
 export * as P from '${ROOT_URL}/src/lib/gmPicks.ts';
 export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
 export * as G from '${ROOT_URL}/src/lib/gmDesk.ts';
+export * as F from '${ROOT_URL}/src/lib/tradeFinder.ts';
 export { nbaCloseSeasonStats } from '${ROOT_URL}/src/lib/nbaSeasonStats.ts';
 export { NBA_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
 export { nbaContractHost } from '${ROOT_URL}/src/lib/gmContractsHostNba.ts';
@@ -221,7 +264,7 @@ await esbuild.build({
   }
 }
 const M = createRequire(import.meta.url)(BUNDLE);
-const { E, D, C, P, S, G, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
+const { E, D, C, P, S, G, F, NBA_STAFF_PACK, nbaContractHost: HOST, leagueNames, NBA_OPENING_RATINGS, nbaCloseSeasonStats } = M;
 
 /* ---- seeded draws and the board's own call order ---- */
 function mulberry32(seed) {
@@ -351,7 +394,7 @@ console.log(`   ${idCompared} seasons replayed against ${fixture.recordedFrom}`)
 /* Sections 2, 3 and 4 share one walk: ten seasons a seed with the desk on. */
 const stats = {
   decisions: 0, gm: 0, auto: 0, earlyDeals: 0, lateTries: 0, lateDeals: 0, pickMoves: 0,
-  pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0,
+  pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0, oldDeals: 0, oldRefused: 0,
   scaleUp: 0, secondUp: 0, restricted: 0, sheets: 0, sheetGone: 0, sheetMatched: 0,
 };
 const problems = { s2: [], s3: [], s4: [] };
@@ -415,6 +458,49 @@ function tryDeal(lg, team, desk, s, where) {
   return res.desk;
 }
 
+/** Round one picks a club holds in each year the ledger carries. */
+const firstsByYear = (ledger, club, season) => P.ledgerYears(season, rules()).map(y => P.picksHeldBy(ledger, club, y).filter(p => p.round === 1).length);
+
+/** The trade finder's sweetened deal with the desk on, in the board's order
+    (acceptShopOffer then deskAfterTrade): shop the weakest men until an offer
+    costs a pick, ask the pick rules (pickRuleBlock), let the engine trade, then
+    mirror the pick it moved into the ledger and sync every engine list. The
+    sync must leave the engine's own move standing: a mirror that misses would
+    hand the pick straight back to the user at the sync and pass every census. */
+function oldPathDeal(lg, team, desk, where) {
+  if (D.nbaDeadlineRefusal(lg)) return desk;
+  for (const piece of byValue(lg.teams[team].players).slice(0, 4)) {
+    const offers = F.findTrades(lg.teams, team, piece.id, lg.cap, (m, t, a, b, s, c) => E.nbaTrade(m, t, a, b, s, c, lg.taxScale), E.nbaTradeValue);
+    const o = offers.find(x => x.sweeten);
+    if (!o) continue;
+    const list = lg.teams[team].picks;
+    const round = list[list.length - 1];
+    const ledger = D.nbaPicksOf(desk, lg);
+    const why = D.nbaMirrorPickRefusal(ledger, team, o.teamId, round, lg.season);
+    if (why) { stats.oldRefused++; return desk; }
+    const before = firstsByYear(ledger, team, lg.season);
+    if (E.nbaTrade(lg.teams[team], lg.teams[o.teamId], piece.id, o.playerId, true, lg.cap, lg.taxScale) !== 'accepted') {
+      problems.s4.push(`${where}: the finder's offer for ${piece.name} was not accepted by the engine`);
+      return desk;
+    }
+    const engineMove = J(Object.fromEntries(Object.entries(lg.teams).map(([k, t]) => [k, [...t.picks].sort((a, b) => a - b)])));
+    const moved = D.nbaMirrorPickMove(ledger, team, o.teamId, round, lg.season);
+    let d = G.withGmBlock(desk, D.NBA_DESK_KEYS.picks, moved);
+    D.syncNbaPicks(lg, moved);
+    d = D.nbaNoteArrivals(d, lg, team, [o.playerId], 'trade');
+    stats.oldDeals++;
+    const synced = J(Object.fromEntries(Object.entries(lg.teams).map(([k, t]) => [k, [...t.picks].sort((a, b) => a - b)])));
+    if (synced !== engineMove) problems.s4.push(`${where}: the sweetener's round ${round} pick went to ${o.teamId} in the engine, but the ledger did not follow and the sync undid it`);
+    const after = firstsByYear(moved, team, lg.season);
+    for (let i = 0; i + 1 < after.length; i++) {
+      if (after[i] + after[i + 1] === 0 && before[i] + before[i + 1] > 0) problems.s4.push(`${where}: the sweetener left ${team} without a first round pick in two drafts running`);
+    }
+    checkPicks(lg, d, `${where} old path`);
+    return d;
+  }
+  return desk;
+}
+
 /** The GM takes every other case himself, and leaves the rest open for the staff's rule. An offer sheet he
     matches one time and lets go the next. Every case is read for what the rules owe it first. */
 let sheetTurn = 0;
@@ -462,8 +548,11 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     lg.round += 1;
   }
   closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, team));
-  desk = draftNight(lg, team, rng, desk);
+  /* The board's order: the re-sign desk is offered in the season and on the
+     recap, before draft night, and finishDraft runs the summer straight after
+     the last pick. So the GM decides first and the clubs draft after him. */
   desk = gmDecides(lg, team, desk, where);
+  desk = draftNight(lg, team, rng, desk);
   const closed = lg.season;
   const up = C.expiringMen(HOST, lg, team).map(m => ({ id: m.id, name: m.name }));
   /* A man drafted with the desk on comes up when his first deal has run: the
@@ -519,6 +608,32 @@ for (const seed of SEEDS) {
   checkPicks(lg, desk, `seed ${seed} open`);
   for (let s = 0; s < SEASONS; s++) desk = seasonDesk(lg, TEAM, desk, rng, s, `seed ${seed} season ${s + 1}`);
 }
+/* The old trade paths on a walk of their own (three seasons a seed, a
+   sweetened trade finder deal at rounds 2 and 9), so the sweeteners, nearly
+   always the last marker and so the second rounder, leave the draftees the
+   walk above counts alone. Checked in section 4. */
+for (const seed of SEEDS) {
+  const rng = mulberry32(3000 + seed);
+  const lg = E.initNbaLeague(rng, NBA_OPENING_RATINGS);
+  let desk = D.openNbaDesk(lg, TEAM);
+  for (let s = 0; s < 3; s++) {
+    const where = `old paths seed ${seed} season ${s + 1}`;
+    for (;;) {
+      if (lg.round === 1) { trimForTipOff(lg, TEAM); E.nbaTipOff(lg, rng, TEAM); }
+      if (lg.round === 2 || lg.round === 9) desk = oldPathDeal(lg, TEAM, desk, where);
+      E.simRound(lg, TEAM, rng, D.nbaDeskRoundOptions(desk, lg, TEAM));
+      desk = D.nbaDeskAfterRound(desk, lg, TEAM).desk;
+      if (lg.round >= E.NBA_ROUNDS) break;
+      lg.round += 1;
+    }
+    closeSeason(lg, rng, D.nbaDeskEdges(desk, lg, TEAM));
+    desk = draftNight(lg, TEAM, rng, desk);
+    const summer = D.nbaDeskOffseason(lg, desk, TEAM, rng);
+    if (!summer.ok) { problems.s4.push(`${where}: the desk summer refused to run (${summer.lines.join(' ')})`); break; }
+    desk = summer.desk;
+    checkPicks(lg, desk, `${where} summer`);
+  }
+}
 
 begin('2', 'over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written');
 for (const p of problems.s2) fail(p);
@@ -565,13 +680,45 @@ console.log(`   ${stats.earlyDeals} deals before the deadline, ${stats.lateTries
     else if (g < 0 || g > t) fail(`${name} reaches ${engineCall} without asking deadlineBlock() first`);
     else guarded++;
   }
-  console.log(`   ${stats.refusalChecks} rounds where the trade paths' refusal matched the window; ${guarded} of 4 board trade handlers ask the deadline first`);
+  /* The two handlers that can send a pick ask the pick rules too (the walk
+     in check 4 holds nbaMirrorPickRefusal to them). */
+  const rule = body('pickRuleBlock');
+  if (!rule || !rule.includes('nbaMirrorPickRefusal(')) fail('pickRuleBlock no longer asks nbaMirrorPickRefusal');
+  let ruled = 0;
+  for (const [name, engineCall] of [['acceptTalks', 'nbaExecuteTalksTrade('], ['acceptShopOffer', 'nbaTrade(']]) {
+    const b = body(name) ?? '';
+    const g = b.indexOf('pickRuleBlock('), t = b.indexOf(engineCall);
+    if (g < 0 || t < 0 || g > t) fail(`${name} reaches ${engineCall} without asking pickRuleBlock() first`);
+    else ruled++;
+  }
+  console.log(`   ${stats.refusalChecks} rounds where the trade paths' refusal matched the window; ${guarded} of 4 board trade handlers ask the deadline first, ${ruled} of 2 that send a pick ask the pick rules`);
 }
 
 begin('4', 'picks are conserved league wide after every deal and every summer');
 for (const p of problems.s4) fail(p);
 if (stats.pickMoves < T.minPickMoves) fail(`only ${stats.pickMoves} deals moved a pick, floor ${T.minPickMoves}`);
-console.log(`   ${stats.pickChecks} ledger checks, ${stats.pickMoves} deals with a pick in them`);
+if (stats.oldDeals < T.minOldDeals) fail(`only ${stats.oldDeals} sweetened trade finder deals landed, floor ${T.minOldDeals}`);
+console.log(`   ${stats.pickChecks} ledger checks, ${stats.pickMoves} deals with a pick in them; ${stats.oldDeals} sweetened trade finder deals mirrored into the ledger, ${stats.oldRefused} refused by the pick rules`);
+{
+  /* The two drafts running rule on the old paths, set up on purpose: next
+     season's first already gone and this season's second too, so the
+     sweetener's marker is this season's first. The old path must refuse it
+     the way the Trade desk refuses a package, and a pick it may send must
+     still be allowed. */
+  const lg = E.initNbaLeague(mulberry32(31), NBA_OPENING_RATINGS);
+  lg.round = 3;
+  const S0 = lg.season, other = ids(lg).find(k => k !== TEAM);
+  let ledger = D.nbaPicksOf(D.openNbaDesk(lg, TEAM), lg);
+  const own = (y, r) => P.picksHeldBy(ledger, TEAM, y).find(p => p.round === r && p.orig === TEAM);
+  if (D.nbaMirrorPickRefusal(ledger, TEAM, other, 2, S0) !== null) fail('the old path refuses a plain second round sweetener');
+  ledger = P.movePicks(ledger, [P.pickKey(own(S0 + 1, 1)), P.pickKey(own(S0, 2))], other);
+  D.syncNbaPicks(lg, ledger);
+  if (J(lg.teams[TEAM].picks) !== J([1])) fail(`the set up left ${J(lg.teams[TEAM].picks)} on the engine list, not this season's first alone`);
+  const why = D.nbaMirrorPickRefusal(ledger, TEAM, other, 1, S0);
+  if (!why || !why.includes('two drafts running')) fail(`the old path would send this season's first with next season's gone: refusal ${J(why)}`);
+  const pkg = P.pickSwapRefusal(ledger, rules(), S0, TEAM, [P.pickKey(own(S0, 1))], other, []);
+  if (why !== pkg) fail(`the old path's refusal ${J(why)} is not the Trade desk's ${J(pkg)}`);
+}
 
 /* ================================================================== */
 begin('5', "the staff's effects change their consumer at every level step");
@@ -638,6 +785,106 @@ for (const post of NBA_STAFF_PACK.posts) {
   postLines.push(`${post.id} ${consumer} ${vals[0].toFixed(3)} to ${vals[9].toFixed(3)}`);
 }
 console.log(`   each post alone: ${postLines.join('; ')}`);
+{
+  /* The ladders above read the helpers. These read the engine that consumes
+     them, so an edge or a trainer the engine stops reading goes red here.
+     Each walk plays the same seeded draws at every level:
+       the regular season through simRound, the trainer held at level 1 so
+         every level draws the same injuries and only the win probability
+         moves (the user's wins can only rise with the edge, and must rise at
+         every step);
+       one round through simRound for the trainer, from a league nobody is
+         out of, so every level draws the same injuries and only the rounds
+         out differ (the announced rounds can only fall, and must at every step);
+       the playoffs through runNbaPlayoffs on one finished season. */
+  const deskWith = block => G.withGmBlock(D.openNbaDesk(L5, TEAM), D.NBA_DESK_KEYS.staff, { block, purse: 9 });
+  const withPost = (block, id, level) => ({ ...block, [id]: { ...base[id], level, potential: Math.max(level, base[id].potential) } });
+  const snapOf = seed => {
+    const rng = mulberry32(seed);
+    const lg = E.initNbaLeague(rng, NBA_OPENING_RATINGS);
+    E.nbaTipOff(lg, rng, TEAM);
+    return J(lg);
+  };
+  const playSeason = (snap, seed, opts) => {
+    const lg = JSON.parse(snap);
+    const rng = mulberry32(seed * 31 + 1);
+    for (;;) {
+      E.simRound(lg, TEAM, rng, opts ? opts(lg) : undefined);
+      if (lg.round >= E.NBA_ROUNDS) break;
+      lg.round += 1;
+    }
+    return lg;
+  };
+  const SEASON_SEEDS = [71, 72, 73, 74, 75, 76, 77, 78, 79, 80];
+  const seasonSnaps = SEASON_SEEDS.map(snapOf);
+  let plainWins = 0;
+  seasonSnaps.forEach((snap, i) => { plainWins += playSeason(snap, SEASON_SEEDS[i]).teams[TEAM].wins; });
+  const wins = [];
+  for (let level = 1; level <= 10; level++) {
+    const desk = deskWith(withPost(atLevel(level), 'medical', 1));
+    let w = 0;
+    seasonSnaps.forEach((snap, i) => { w += playSeason(snap, SEASON_SEEDS[i], lg => D.nbaDeskRoundOptions(desk, lg, TEAM)).teams[TEAM].wins; });
+    wins.push(w);
+  }
+  if (wins[0] !== plainWins) fail(`through simRound a level 1 staff moves the season: ${wins[0]} wins against ${plainWins} with no desk`);
+  for (let i = 1; i < wins.length; i++) {
+    if (!(wins[i] > wins[i - 1])) fail(`through simRound, level ${i} to ${i + 1}: the user's wins over ${SEASON_SEEDS.length} seasons did not rise (${wins[i - 1]} to ${wins[i]})`);
+  }
+  console.log(`   through simRound: your wins over ${SEASON_SEEDS.length} seasons ${wins.join(', ')} at levels 1 to 10 (${plainWins} with no desk)`);
+
+  const injSnap = snapOf(81);
+  /* The trainer's hash reads the man's id, and ids carry a per process
+     epoch, so the rolls differ run to run: 1000 rounds gave a first step of
+     only 5 announced rounds, so the walk is four times that. One league a
+     level, everybody back to fit before each round, so every level plays the
+     same rounds on the same draws. */
+  const INJ_SAMPLES = 4000;
+  const outs = [];
+  let injuries = 0;
+  for (let level = 1; level <= 10; level++) {
+    const desk = deskWith(withPost(atLevel(1), 'medical', level));
+    const lg = JSON.parse(injSnap);
+    /* Every round booked with no games: simRound still rolls every man's
+       injury and asks the trainer, and four thousand rounds of games (most
+       of the cost, and nothing the trainer touches) are skipped. */
+    delete lg.stats;
+    lg.schedule = Array.from({ length: E.NBA_ROUNDS }, () => []);
+    let rounds = 0, n = 0;
+    for (let k = 0; k < INJ_SAMPLES; k++) {
+      for (const t of Object.values(lg.teams)) for (const p of t.players) p.out = 0;
+      lg.round = 1 + (k % E.NBA_ROUNDS);
+      const rep = E.simRound(lg, TEAM, mulberry32(7000 + k), D.nbaDeskRoundOptions(desk, lg, TEAM));
+      for (const note of rep.notes) {
+        const m = /is out (\d+) round/.exec(note);
+        if (m) { rounds += Number(m[1]); n++; }
+      }
+    }
+    outs.push(rounds);
+    if (level === 1) injuries = n;
+  }
+  if (injuries < 700) fail(`only ${injuries} injuries to the user's men in ${INJ_SAMPLES} rounds, too few to read the trainer`);
+  for (let i = 1; i < outs.length; i++) {
+    if (!(outs[i] < outs[i - 1])) fail(`through simRound, trainer level ${i} to ${i + 1}: the announced rounds out over ${injuries} injuries did not fall (${outs[i - 1]} to ${outs[i]})`);
+  }
+  console.log(`   through simRound: ${injuries} injuries to your men announced ${outs.join(', ')} rounds out at trainer levels 1 to 10`);
+
+  const post = JSON.parse(J(playSeason(snapOf(91), 91)));
+  const PO_SAMPLES = 2000;
+  const mineIn = s => (s.home === TEAM ? s.homeWins : s.away === TEAM ? s.awayWins : 0);
+  const poWins = [];
+  for (let level = 1; level <= 10; level++) {
+    const desk = deskWith(withPost(atLevel(level), 'medical', 1));
+    const edges = D.nbaDeskEdges(desk, post, TEAM);
+    let w = 0;
+    for (let k = 0; k < PO_SAMPLES; k++) w += E.runNbaPlayoffs(post, mulberry32(9000 + k), edges).series.reduce((s, x) => s + mineIn(x), 0);
+    poWins.push(w);
+  }
+  if (poWins[0] === 0) fail('the user\'s club won no playoff game at level 1, so the playoff walk reads nothing');
+  for (let i = 1; i < poWins.length; i++) {
+    if (!(poWins[i] > poWins[i - 1])) fail(`through runNbaPlayoffs, level ${i} to ${i + 1}: the user's playoff wins over ${PO_SAMPLES} runs did not rise (${poWins[i - 1]} to ${poWins[i]})`);
+  }
+  console.log(`   through runNbaPlayoffs: your playoff wins over ${PO_SAMPLES} runs ${poWins.join(', ')} at levels 1 to 10`);
+}
 {
   /* The other clubs never feel the user's staff, and the development coach
      reaches the engine's own summer: at level 1 the summer is the engine's
@@ -759,6 +1006,13 @@ begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every 
   const late = { ...facts, league: { ...lg, round: 15 } };
   if (deals.tile({ desk, facts: late }).value !== 'Deadline passed') fail(`with the desk on, the deal box at round 15 reads ${J(deals.tile({ desk, facts: late }).value)}`);
   if (deals.tile({ desk, facts: { ...late, deskOn: false } }).value === 'Deadline passed') fail('a save without the desk reads Deadline passed while its phone and trade finder still deal');
+  /* Without the desk no staff works and the summer still decides: the staff
+     and re-sign boxes must not claim an edge or men waiting on the GM. */
+  const staffBox = NBA_DESK_PANELS.find(p => p.key === 'staff').tile({ desk, facts: { ...facts, deskOn: false } });
+  if (/team strength|jobs filled/.test(`${staffBox.value} ${staffBox.sub}`)) fail(`a save without the desk shows a working staff: ${J(staffBox)}`);
+  if (!/team strength/.test(NBA_DESK_PANELS.find(p => p.key === 'staff').tile({ desk, facts }).sub)) fail('with the desk on, the staff box no longer shows its edge');
+  const resignBox = NBA_DESK_PANELS.find(p => p.key === 'contracts').tile({ desk, facts: { ...facts, deskOn: false } });
+  if (/waiting on you|Every call is made/.test(resignBox.sub)) fail(`a save without the desk says ${J(resignBox.sub)} while the summer still decides`);
   console.log(`   4 panels drawn, ${tiles} re-sign tiles for ${cases} expiring men`);
 }
 

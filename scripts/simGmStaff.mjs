@@ -48,7 +48,7 @@
         a full level 10 desk, a middling owner's day one desk, a level 1 desk,
         the dearest name on every shortlist at the top, the pay offs to clear
         a level 10 desk):
-          nfl 59/34/13/48/30  nba 64/36/14/39/24  mlb 62/34/13/35/22
+          nfl 59/34/13/48/30  nba 53/30/11/39/24  mlb 62/34/13/35/22
           nhl 72/38/15/43/27  cfb 23/15/6/13/23   cbb 26/13/7/15/26
           fightGym 30/15/6/8/5  afl 54/33/12/42/27
         Ceilings 85, 60, (floor 3), 60, 60. Deterministic arithmetic. The fees
@@ -65,12 +65,15 @@
         man it is for, the block stays valid, hires moves by one; Club
         Manager's own sackStaff is held to the same for all four coaches.
         Every approach left unanswered ends with the man gone, at a tick or
-        at the summer (measured left and walked: nfl 428, nba 447, mlb 530,
+        at the summer (measured left and walked: nfl 428, nba 381, mlb 530,
         nhl 499, cfb 47, cbb 38, all of the college ones at the summer).
         Approaches a season with everybody on level 8, measured over the
         three owner sets:
-          nfl 1.30 to 1.40  nba 1.35 to 1.42  mlb 1.57 to 1.75  nhl 1.48 to 1.53
+          nfl 1.30 to 1.40  nba 1.24 to 1.33  mlb 1.57 to 1.75  nhl 1.48 to 1.53
           cfb 0.31 to 0.35  cbb 0.29 to 0.33  fightGym 1.47 to 1.60  afl 1.40 to 1.45
+        The NBA figures were remeasured on 2026-10-05 when Round 1018 moved
+        the NBA pack from 24 ticks a season to 20 (the round clock of its
+        desk); they were 64/36/14, 447 and 1.35 to 1.42 before.
         Band: half the lowest to one and a half times the highest. And a
         level 8 desk draws at least 1.3 times what the day one desk draws
         (measured 1.85 at the lowest).
@@ -884,7 +887,7 @@ const RATES = {};
      between owner sets (about ten percent) does not. The nopoach control
      reads 0 everywhere. */
   /* Remeasured by the review fix round (walk at the summer, a medical chair on the NBA, MLB and NHL desks, the AFL desk on ten rounds). */
-  const STRONG_MEASURED = { nfl: [1.30, 1.40], nba: [1.35, 1.42], mlb: [1.57, 1.75], nhl: [1.48, 1.53], cfb: [0.31, 0.35], cbb: [0.29, 0.33], fightGym: [1.47, 1.60], afl: [1.40, 1.45] };
+  const STRONG_MEASURED = { nfl: [1.30, 1.40], nba: [1.24, 1.33], mlb: [1.57, 1.75], nhl: [1.48, 1.53], cfb: [0.31, 0.35], cbb: [0.29, 0.33], fightGym: [1.47, 1.60], afl: [1.40, 1.45] };
   for (const pack of PACKS) {
     const [lo, hi] = STRONG_MEASURED[pack.id] ?? [NaN, NaN];
     for (const salt of ['a', 'b', 'c']) {

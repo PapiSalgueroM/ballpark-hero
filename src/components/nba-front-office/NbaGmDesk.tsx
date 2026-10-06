@@ -198,7 +198,7 @@ function DealsPanel({ desk, facts }: Props) {
         </select>
       </label>
       <p className="text-center text-[11px] text-muted-foreground">
-        Clubs in a playoff place buy: they rate every veteran higher and every pick and young player lower, theirs and yours alike, so a vet fetches more from them and a pick less. Clubs well out of it sell, the other way round. Salaries have to match under this game's own rule (what comes in fits your room, or is no more than one and a half times what goes out plus $5M), and over the first apron a club takes back no more than it sends.
+        Clubs in a playoff place buy: they rate every veteran higher and every pick and young player lower, theirs and yours alike, so a vet fetches more from them and a pick less. Clubs well out of it sell, the other way round. Salaries have to match under this game's own rule (what comes in fits your cap room plus what goes out, or is no more than one and a half times what goes out plus $5M), and over the first apron a club takes back no more than it sends.
       </p>
       <GmTradeBuilder
         partnerName={facts.clubName(partner)}
