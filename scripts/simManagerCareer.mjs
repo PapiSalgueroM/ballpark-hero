@@ -87,8 +87,12 @@
  *   .1167, t2 .0868 / .1529 / .1242, t3 .0852 / .1515 / .0611, t4 .0632 /
  *   .1219, all inside main's band (the pair now stays put before 2004, so
  *   some fields are 20 rather than 24 and the stream moves).
- *   Their controls: pastnames (a past season names the 2026-27 list again)
- *   and era2004 (the pair moves in any year); results in the next lines.
+ *   Their controls, each measured red: pastnames (a past season names the
+ *   2026-27 list again): 16117 past names or flags, La Liga 1997 naming
+ *   Sevilla; era2004 (the pair moves in any year): 3 failures, a 2000
+ *   season "Relegated to the Championship"; poolyear (the pool header moved
+ *   on to 2027-28): the fence fails. nomove now mutates the four argument
+ *   signature (4 failures). The thirteen older controls all still go red.
  * Run: node scripts/simManagerCareer.mjs
  */
 import { build } from 'esbuild';
