@@ -334,6 +334,12 @@
    "hosts": {"2025-26":"sm nft","2026-27":"sm nft"},
    "club":"Man City","nationality":"Italy","position":"GK (nft)","status":"corrected",
    "note": "Man City since the start of 2025-26; PSG is his 2021-22 to 2024-25 club.",
-   "sources": ["https://www.statmuse.com/fc/ask/gianluigi-donnarumma-career-stats-by-season","https://www.national-football-teams.com/player/65011/Gianluigi_Donnarumma.html"]}
+   "sources": ["https://www.statmuse.com/fc/ask/gianluigi-donnarumma-career-stats-by-season","https://www.national-football-teams.com/player/65011/Gianluigi_Donnarumma.html"]},
+  {"window":"2025-2029","name":"Ousmane Dembélé","game":null,
+   "seasons": {"2025-26":"PSG","2026-27":"PSG","2027-28":null,"2028-29":null,"2029-30":null},
+   "hosts": {"2025-26":"sm nft","2026-27":"sm nft"},
+   "club":"PSG","nationality":"France","position":"LW (nft)","status":"added",
+   "note": "The reigning Ballon d'Or winner (2025, at PSG: scripts/data/ballonDorVerified2026-09.json, checked against uefa.com) was missing from the pool; added with this row as its proof.",
+   "sources": ["https://www.statmuse.com/fc/ask/ousmane-dembele-career-stats-by-season","https://www.national-football-teams.com/player/65010/Ousmane_Dembele.html","scripts/data/ballonDorVerified2026-09.json"]}
  ]
 }
