@@ -1,8 +1,20 @@
 /**
  * Round 947: college football's coach's calls, as data for src/lib/coachCalls.ts.
  * Every number here (odds, swings in points, the counter matrix, the one
- * score cap) is a game rule. No rule book value is stated in the copy: the
- * plays are named (go for two) but never priced.
+ * score cap) is a game rule built on the real scoring values: a touchdown 6,
+ * a field goal 3, and a try worth 1 by kick or 2 by scoring a touchdown on
+ * it. So a touchdown and its kick is 7, one score is a touchdown and a two
+ * point try (8), and going for two instead of kicking is 1 more or 1 less.
+ * Two sources, both read 2026-10-05:
+ *   NCAA Football Rule 8-1-1 (value of scores), as reproduced by the San
+ *   Diego County Football Officials Association:
+ *   https://www.sdcfoa.org/ncaa/rule-8-scoring
+ *   NFL Football Operations, terms glossary (touchdown, field goal, extra
+ *   point, two point conversion):
+ *   https://operations.nfl.com/learn-the-game/nfl-basics/terms-glossary/
+ * No rule book value is stated in the copy: the plays are named (go for two)
+ * but never priced. Overtime here is a game rule (a seeded field goal), not
+ * the real overtime format.
  */
 import type { CoachCallsPack } from '@/lib/coachCalls';
 

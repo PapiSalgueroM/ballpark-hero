@@ -1,7 +1,16 @@
 /**
  * Round 947: college basketball's coach's calls, as data for src/lib/coachCalls.ts.
  * Every number here (odds, swings in points, the counter matrix, the one
- * score cap) is a game rule. No rule book value is stated in the copy.
+ * score cap) is a game rule built on the real scoring values: a field goal
+ * from beyond the three point line 3, any other field goal 2, a free throw 1.
+ * So one score is a three, a layup or a steal for a basket is 2, and a missed
+ * free throw is 1. Two sources, both read 2026-10-05:
+ *   NCAA 2024-25 Men's Basketball Rules, Rule 5 Section 1, Articles 3, 4 and 13:
+ *   https://nbcsports.brightspotcdn.com/15/c2/e15320424538aa0c375182350c65/ncaa-2024-25-mens-rules.pdf
+ *   NBA Official Rules, Rule No. 5 Section I (scoring):
+ *   https://official.nba.com/rule-no-5-scoring-and-timing/
+ * No rule book value is stated in the copy. Overtime here is a game rule (a
+ * seeded three point edge), not the real overtime period.
  */
 import type { CoachCallsPack } from '@/lib/coachCalls';
 
