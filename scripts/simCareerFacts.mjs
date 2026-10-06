@@ -95,6 +95,12 @@ const PINNED_MAX = 7;
    split season league's 2026-27 are both the current one; anything older is
    evidence about a league the club may have left. */
 const CURRENT_SEASONS = ['2026-27', '2026'];
+/* Section 5 floors. Measured on 2026-10-06 over SIM_CAREER_FACTS_SEED 1 to 8
+   (48 careers each): 1104 to 1128 full seasons, 40 to 47 careers winning the
+   award, 22 to 24 of those awards won while playing abroad, 24 to 36 in a
+   tournament season. Each floor sits well under the lowest seed, so it only
+   catches a run that saw too little to mean anything, never a healthy one. */
+const PLAY_FLOOR = { seasons: 900, granted: 25, abroad: 12 };
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {}, clear: () => {} };
 const tmpDir = fs.mkdtempSync(path.join(process.env.TEMP || process.env.TMP || os.tmpdir(), 'simfacts-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
@@ -159,6 +165,14 @@ const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`
 const engineRel = 'src/lib/soccerCareerEngine.ts';
 const engineSrc = fs.readFileSync(path.join(ROOT, engineRel), 'utf8').replaceAll('\r\n', '\n');
 const engineCode = CONTROL ? CONTROLS[CONTROL][1](engineSrc) : engineSrc;
+/* Section 5 marks, from the outside, a step that ran the whole season: one
+   line after `s.pendingSummary = season;` (the full season's own line, which
+   the severe injury and year out paths never reach) writes the season's year
+   to a global. In memory only and in the bundle only; sections 1 to 4 read
+   engineCode, never this. */
+const MARK_AT = '  s.pendingSummary = season;\n';
+const markCount = engineCode.split(MARK_AT).length - 1;
+const bundledCode = engineCode.replace(MARK_AT, `${MARK_AT}  globalThis.__careerFactsSeason = season.year;\n`);
 
 async function bundleEngine() {
   const fwd = ROOT.replaceAll('\\', '/');
@@ -174,7 +188,7 @@ async function bundleEngine() {
       setup(b) {
         b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
           if (path.resolve(args.path) !== enginePath) return undefined;
-          return { contents: engineCode, loader: 'ts', resolveDir: path.dirname(args.path) };
+          return { contents: bundledCode, loader: 'ts', resolveDir: path.dirname(args.path) };
         });
       },
     }],
@@ -333,5 +347,98 @@ for (const [key, ev] of Object.entries(evidence)) {
 ok(Number.isInteger(PINNED_MAX) && nPin <= PINNED_MAX, `${nPin} labels pinned, the ratchet allows ${PINNED_MAX}: a new pin is a lead's decision, never a quiet add`);
 ok(Number.isInteger(UNVERIFIED_MAX) && nUnv <= UNVERIFIED_MAX, `${nUnv} labels unverified, the ratchet allows ${UNVERIFIED_MAX}: verify them, never add`);
 console.log(`  ${nVer} labels verified across ${Object.keys(evidence).length} evidence groups (all ${CURRENT_SEASONS.join(' or ')}), ${nPin} pinned to their old label (ratchet ${PINNED_MAX}), ${nUnv} unverified (ratchet ${UNVERIFIED_MAX})`);
+
+/* ─── 5. PLAYED ─── */
+head('5', "PLAYED: seeded careers, the award the season his goals pass HIS nation's record");
+const SEED = Number(process.env.SIM_CAREER_FACTS_SEED || 1);
+/* Low, middle and high records, nations whose players often move abroad. */
+const PLAY_NATIONS = ['Italy', 'Colombia', 'Nigeria', 'Croatia', 'Spain', 'South Korea', 'Norway', 'Brazil'];
+const PER_NATION = 6;
+const mulberry32 = a => () => {
+  a |= 0; a = (a + 0x6D2B79F5) | 0;
+  let t = Math.imul(a ^ (a >>> 15), 1 | a);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+/* One answer per screen, the way the page calls the engine. */
+const stepCareer = (s, clubs) => {
+  switch (s.phase) {
+    case 'youth': return E.advanceYouthYear(s, clubs);
+    case 'playing': return E.advanceProSeason(s, clubs);
+    case 'contract_offer': { const o = s.pendingOffers || []; return o.length ? E.acceptOffer(s, o[0]) : { ...s, phase: 'playing' }; }
+    case 'rehab_choice': return E.applyRehabChoice(s, 1);
+    case 'newspaper': return E.dismissNewspaper(s);
+    case 'season_summary': return E.dismissSummary(s, clubs);
+    case 'random_events': return s.pendingEvents?.[0] ? E.applyEventChoice(s, 0, clubs) : { ...s, pendingEvents: [], phase: 'playing' };
+    case 'moral_dilemma': return s.pendingMoralDilemma ? E.applyMoralDilemmaChoice(s, 1) : E.dismissMoralDilemma(s, clubs);
+    case 'social_media_action': return s.pendingCoverAthleteEvent ? E.handleCoverAthleteDecision(s, false) : E.dismissSocialMediaPhase(s, clubs);
+    case 'red_card_appeal_result': return E.dismissAppealResult(s, clubs);
+    case 'international_debut': return E.dismissDebut(s, clubs);
+    case 'world_cup': return E.dismissWorldCup(s, clubs);
+    case 'rivalry_event': return E.dismissRivalryEvent(s, clubs);
+    case 'ballon_dor': return E.dismissBallonDor(s, clubs);
+    case 'transfer_window': return s.transferSituation?.type === 'contract_expiry' ? E.signExtension(s) : E.stayAtClub(s);
+    case 'retirement_suggestion': return E.declineRetirementSuggestion(s, clubs);
+    default: return null;
+  }
+};
+const LINE = "All Time Top International Scorer";
+let played = 0; let fullSeasons = 0; let granted = 0; let summerGrants = 0; let abroadGrants = 0; let stuck = 0;
+if (!ok(markCount === 1, `the season marker anchor ${JSON.stringify(MARK_AT)} is in the engine ${markCount} times, 1 expected; move the marker, never drop the section`)) finish();
+const realRandom = Math.random;
+try {
+  const clubs = E.FALLBACK_CLUBS;
+  for (const nation of PLAY_NATIONS) {
+    if (!ok(Number.isInteger(E.INT_SCORING_RECORDS[nation]), `${nation}: no record in the engine to play against`)) continue;
+    for (let k = 0; k < PER_NATION; k++) {
+      const seed = SEED * 100003 + PLAY_NATIONS.indexOf(nation) * 1009 + k * 7919;
+      Math.random = mulberry32(seed);
+      const o = 64 + (k % 6);
+      const st = { pace: o, shooting: o + 4, passing: o, dribbling: o, defending: o - 20, physical: o, reflexes: o - 30 };
+      let s = E.initCareer(`Facts ${seed}`, nation, 'ST', '2020s', st, o, 2020, clubs, null, 90);
+      played += 1;
+      let steps = 0;
+      for (; steps < 900 && !s.retired; steps++) {
+        const had = s.awards.some(a => a.name === 'All Time Top Scorer');
+        globalThis.__careerFactsSeason = null;
+        const phase = s.phase;
+        const n = stepCareer(s, clubs);
+        if (!n) { ok(false, `${nation} seed ${seed}: no answer for the phase "${phase}"`); break; }
+        const full = globalThis.__careerFactsSeason;
+        /* His nation now: a two flags switch (random event 452) can move it, and
+           the record that counts is the one of the flag he plays for. */
+        const nat = n.nationality;
+        const rec = E.INT_SCORING_RECORDS[nat];
+        const won = n.awards.filter(a => a.name === 'All Time Top Scorer');
+        ok(won.length <= 1, `${nation} seed ${seed}: the award ${won.length} times`);
+        if (full !== null) fullSeasons += 1;
+        if (!had && won.length) {
+          granted += 1;
+          const at = n.intStats.goals;
+          ok(full !== null, `${nation} seed ${seed}: the award landed in a "${phase}" step that played no season`);
+          ok(won[0].year === full, `${nation} seed ${seed}: the award is dated ${won[0].year}, the season that granted it is ${full}`);
+          ok(rec !== undefined && at > rec, `${nation} seed ${seed}: the award at ${at} goals for ${nat}, whose record is ${rec}`);
+          const line = n.events.find(e => e.includes(LINE));
+          ok(!!line && line.includes(`Became ${nat}'s ${LINE} with ${at} goals`), `${nation} seed ${seed}: the screen says ${at} goals, the line reads "${line}"`);
+          if (n.seasons.at(-1)?.tournamentResult) summerGrants += 1;
+          if (n.currentClubCountry && n.currentClubCountry !== nat) abroadGrants += 1;
+        } else if (!had && full !== null && rec !== undefined && n.internationalCareer && n.intStats.goals > rec) {
+          ok(false, `${nation} seed ${seed}: the season ${full} ended on ${n.intStats.goals} goals, past ${nat}'s record of ${rec}, with no award`);
+        }
+        s = n;
+      }
+      if (!s.retired) stuck += 1;
+    }
+  }
+} finally {
+  Math.random = realRandom;
+}
+ok(stuck === 0, `${stuck} careers did not reach retirement in 900 steps`);
+/* Floors from measured headroom, written in the header: an empty run must
+   never pass for a green one. */
+ok(fullSeasons >= PLAY_FLOOR.seasons, `only ${fullSeasons} full seasons played, ${PLAY_FLOOR.seasons} expected at least`);
+ok(granted >= PLAY_FLOOR.granted, `only ${granted} careers won the award, ${PLAY_FLOOR.granted} expected at least, so the checks above saw too little`);
+ok(abroadGrants >= PLAY_FLOOR.abroad, `only ${abroadGrants} awards went to a man playing abroad, ${PLAY_FLOOR.abroad} expected at least (the wrong key check needs them)`);
+console.log(`  ${played} careers (seed ${SEED}), ${fullSeasons} full seasons, ${granted} awards, every one the season his goals passed his own record (${abroadGrants} while abroad, ${summerGrants} in a tournament season)`);
 
 finish();
