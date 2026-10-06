@@ -1,0 +1,2234 @@
+{
+  "about": "Round 1022. The two fact tables in src/lib/soccerCareerEngine.ts that a Soccer Career player sees as real: INT_SCORING_RECORDS (each nation's men's all time international scoring record, which decides the All Time Top Scorer award and its line) and the league label on every one of the 190 HAND_CLUBS rows (181 verified for the current season, 7 pinned to their old label until the league by year round, 2 with no current table online yet). Every value here was read on the date beside it from two independent sources that agree, none of them Wikipedia. Where two sources disagreed a third settled it, and where nothing settled it the value is left out (intRecordsHeld): a nation with no verified row gets no award at all, there is no default. scripts/simCareerFacts.mjs holds the engine to this file and fails if either side moves. Records held by active players move with every international window, so each row carries asOf, the last date both sources were read; refresh them together, never one side.",
+  "checked": "2026-10-06",
+  "intRecords": {
+    "Argentina": {
+      "holder": "Lionel Messi",
+      "goals": 125,
+      "asOf": "2026-10-06",
+      "note": "Active. Farewell match against Benin was scheduled for the evening of 2026-10-06, after this read.",
+      "sources": [
+        {
+          "url": "https://www.infobae.com/deportes/2026/10/06/los-impactantes-numeros-de-lionel-andres-messi-en-la-seleccion-argentina/",
+          "read": "2026-10-06",
+          "says": "125 goals in 207 matches"
+        },
+        {
+          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
+          "read": "2026-10-06",
+          "says": "published 2026-10-03: Messi 125 for Argentina"
+        }
+      ]
+    },
+    "Belgium": {
+      "holder": "Romelu Lukaku",
+      "goals": 94,
+      "asOf": "2026-10-06",
+      "note": "Active. 94th goal against Turkey in the October 2026 Nations League window.",
+      "sources": [
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Romelu Lukaku (Belgium) 94 in 135"
+        },
+        {
+          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
+          "read": "2026-10-06",
+          "says": "published 2026-10-03: 94 goals in 134 matches"
+        }
+      ]
+    },
+    "Brazil": {
+      "holder": "Neymar",
+      "goals": 80,
+      "asOf": "2026-10-06",
+      "note": "Final. Official matches between national teams only, the count on which Pele has 77. The CBF's own count, which takes in matches against clubs and select sides, gives Pele 95 in 113 (futemais above), so the line 'Became Brazil's All Time Top International Scorer' holds on the official count. Neymar retired from the national team on 2026-07-29.",
+      "sources": [
+        {
+          "url": "https://www.terra.com.br/esportes/futebol/nao-quero-mais-neymar-se-aposenta-da-selecao-com-recordes-e-frustracoes-veja-10-feitos-do-craque-com-a-camisa-10,b43fb6000097f3565e15186cdae7c582sarakshk.html",
+          "read": "2026-10-06",
+          "says": "published 2026-07-29, the day he retired from the national team: 80 goals in 130 official matches, past Pele, who has 77"
+        },
+        {
+          "url": "https://www.futemais.com.br/post/quantos-gols-neymar-marcou-pela-selecao-brasileira-uma-analise-completa",
+          "read": "2026-10-06",
+          "says": "published 2026-08-10: 80 goals in 130 matches, retired 2026-07-29"
+        }
+      ]
+    },
+    "Colombia": {
+      "holder": "Radamel Falcao",
+      "goals": 36,
+      "asOf": "2026-10-06",
+      "note": "James Rodriguez retired from the national team in 2026 on 31 (rsssf counts 32), short of it.",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/col-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-01-21: Falcao 36 goals, 104 caps"
+        },
+        {
+          "url": "https://www.pulzo.com/deportes/futbol/cuantos-goles-hizo-james-rodriguez-seleccion-colombia-anuncio-su-retiro-PP5303435",
+          "read": "2026-10-06",
+          "says": "published 2026-09-15: James 31 in 131, second behind Falcao's 36"
+        }
+      ]
+    },
+    "Croatia": {
+      "holder": "Davor Suker",
+      "goals": 45,
+      "asOf": "2026-10-06",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/kroa-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-10-04: Suker 45 goals, 69 caps; Perisic 39"
+        },
+        {
+          "url": "https://www.novilist.hr/sport/nogomet/perisic-sve-blize-sukeru-po-golovima-modriceve-brojke-su-nestvarne/",
+          "read": "2026-10-06",
+          "says": "published 2026-07-03: Suker 45, Perisic 39"
+        }
+      ]
+    },
+    "Egypt": {
+      "holder": "Hossam Hassan",
+      "goals": 69,
+      "asOf": "2026-10-06",
+      "note": "Mohamed Salah is on 68 and still active.",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/egy-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-10-06: Hossam Hassan 69 goals, 177 caps; Salah 68"
+        },
+        {
+          "url": "https://www.masrawy.com/sports/sports-arab-international/details/2026/6/22/3006544/",
+          "read": "2026-10-06",
+          "says": "published 2026-06-22: Salah on 68, one short of Hossam Hassan's 69"
+        }
+      ]
+    },
+    "England": {
+      "holder": "Harry Kane",
+      "goals": 89,
+      "asOf": "2026-10-06",
+      "note": "Active. Two against Croatia on 2026-10-03.",
+      "sources": [
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Harry Kane (England) 89 in 124"
+        },
+        {
+          "url": "https://www.aljazeera.com/sports/2026/10/3/england-trounce-croatia-7-0-in-nations-league-as-kane-goal-run-continues",
+          "read": "2026-10-06",
+          "says": "published 2026-10-03: Kane's double extended his record tally to 89"
+        }
+      ]
+    },
+    "France": {
+      "holder": "Kylian Mbappe",
+      "goals": 67,
+      "asOf": "2026-10-06",
+      "note": "Active. Passed Olivier Giroud's 57 at the 2026 World Cup.",
+      "sources": [
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Kylian Mbappe (France) 67 in 107"
+        },
+        {
+          "url": "https://www.equipe-france.fr/football/masculin/classement-des-buteurs",
+          "read": "2026-10-06",
+          "says": "Mbappe 67 goals in 107 matches, Giroud 57 in 136"
+        }
+      ]
+    },
+    "Germany": {
+      "holder": "Miroslav Klose",
+      "goals": 71,
+      "asOf": "2026-10-06",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/duit-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-09-03: Klose 71 goals, 137 caps"
+        },
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Miroslav Klose (Germany) 71 in 137"
+        }
+      ]
+    },
+    "Italy": {
+      "holder": "Luigi Riva",
+      "goals": 35,
+      "asOf": "2026-10-06",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/ital-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-06-25: Riva 35 goals, 42 caps"
+        },
+        {
+          "url": "https://www.ilpost.it/2023/10/18/record-gol-nazionale-gigi-riva/",
+          "read": "2026-10-06",
+          "says": "Riva's 35 goals, nobody close"
+        }
+      ]
+    },
+    "Japan": {
+      "holder": "Kunishige Kamamoto",
+      "goals": 75,
+      "asOf": "2026-10-06",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/jap-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-10-03: Kamamoto 75 goals, 76 caps; Miura 55"
+        },
+        {
+          "url": "https://spaia.jp/column/soccer/japan/32855",
+          "read": "2026-10-06",
+          "says": "Kamamoto's 75 still the record, Miura second on 55"
+        }
+      ]
+    },
+    "Netherlands": {
+      "holder": "Memphis Depay",
+      "goals": 55,
+      "asOf": "2026-10-06",
+      "note": "Active.",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/ned-recintlp.html",
+          "read": "2026-10-06",
+          "says": "last match included 2025-11-17: Depay 55 goals, 108 caps"
+        },
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Memphis Depay (Netherlands) 55 in 112"
+        }
+      ]
+    },
+    "Nigeria": {
+      "holder": "Rashidi Yekini",
+      "goals": 37,
+      "asOf": "2026-10-06",
+      "note": "Victor Osimhen is on 35 and still active.",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/nig-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-10-06: Yekini 37 goals, 62 caps; Osimhen 35"
+        },
+        {
+          "url": "https://allafrica.com/stories/202601140297.html",
+          "read": "2026-10-06",
+          "says": "published 2026-01-13: Yekini 37, Osimhen two short on 35"
+        }
+      ]
+    },
+    "Norway": {
+      "holder": "Erling Haaland",
+      "goals": 65,
+      "asOf": "2026-10-06",
+      "note": "Active.",
+      "sources": [
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Erling Haaland (Norway) 65 in 59"
+        },
+        {
+          "url": "https://es-us.noticias.yahoo.com/deportes/erling-haaland-marc%C3%B3-portugal-gol-201500459.html",
+          "read": "2026-10-06",
+          "says": "published 2026-09-27: 65th goal for Norway, against Portugal"
+        }
+      ]
+    },
+    "Portugal": {
+      "holder": "Cristiano Ronaldo",
+      "goals": 146,
+      "asOf": "2026-10-06",
+      "note": "Active.",
+      "sources": [
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "Cristiano Ronaldo (Portugal) 146 in 234"
+        },
+        {
+          "url": "https://voetbalfocus.be/lukaku-nadert-chhetri-na-treffer-rode-duivels/",
+          "read": "2026-10-06",
+          "says": "published 2026-10-03: Ronaldo 146 for Portugal"
+        }
+      ]
+    },
+    "South Korea": {
+      "holder": "Son Heung-min",
+      "goals": 59,
+      "asOf": "2026-10-06",
+      "note": "Active. Passed Cha Bum-kun's 58 with a free kick against Uzbekistan on 2026-10-06, his 151st cap. rsssf (updated 2026-10-03) still had him on 56, behind both goals since.",
+      "sources": [
+        {
+          "url": "https://fnnews.com/news/202610062204257279",
+          "read": "2026-10-06",
+          "says": "published 2026-10-06: 59th goal in his 151st A match, past Cha Bum-kun's 58 in 136"
+        },
+        {
+          "url": "https://news.sbs.co.kr/news/endPage.do?news_id=N1008785548",
+          "read": "2026-10-06",
+          "says": "published 2026-10-06: Son's 59th A match goal, new Korean record past Cha Bum-kun"
+        }
+      ]
+    },
+    "Spain": {
+      "holder": "David Villa",
+      "goals": 59,
+      "asOf": "2026-10-06",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/span-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-03-14: Villa 59 goals, 98 caps"
+        },
+        {
+          "url": "https://www.uefa.com/european-qualifiers/news/0253-0d81f47dfe05-e92503acfb7d-1000--europe-s-top-international-scorers-cristiano-ronaldo-out/",
+          "read": "2026-10-06",
+          "says": "David Villa (Spain) 59 in 98"
+        }
+      ]
+    },
+    "Uruguay": {
+      "holder": "Luis Suarez",
+      "goals": 69,
+      "asOf": "2026-10-06",
+      "note": "Final, retired from the national team in 2024. rsssf has 68 because its list stops at 2023-11-21 and misses his goal against Canada at the 2024 Copa America (the CONMEBOL piece of 2024-01-23 also says 68, before that match).",
+      "sources": [
+        {
+          "url": "https://www.espn.com.pe/futbol/mundial/nota/_/id/14119216/detalle-todos-goles-luis-suarez-seleccion-uruguaya-estadisticas-rivales-repaso",
+          "read": "2026-10-06",
+          "says": "published 2026-04-08: 69 goals for Uruguay, 2007 to 2024, last on 2024-07-13"
+        },
+        {
+          "url": "https://futdados.com/cl/maximos-goleadores-seleccion-uruguay/",
+          "read": "2026-10-06",
+          "says": "Suarez 69 goals in 143 matches, Cavani 58"
+        }
+      ]
+    }
+  },
+  "intRecordsHeld": {
+    "Senegal": {
+      "reason": "Sadio Mane holds it, but no two current sources agree on the number: rsssf (updated 2026-10-04) 56 in 134, a World Cup preview 54, and record.sn documents that Senegal's own counters disagree by more than ten goals. Left out, so a Senegal career gets no All Time Top Scorer award until two sources agree.",
+      "sources": [
+        {
+          "url": "https://www.rsssf.org/miscellaneous/sene-recintlp.html",
+          "read": "2026-10-06",
+          "says": "updated 2026-10-04: Mane 56 goals, 134 caps"
+        },
+        {
+          "url": "https://www.record.sn/Stats-de-sadio-mane-a-quels-chiffres-se-fier-65",
+          "read": "2026-10-06",
+          "says": "search listing: counts for Mane differ by source"
+        }
+      ]
+    }
+  },
+  "leagueEvidence": {
+    "Premier League 2026-27": {
+      "league": "Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Man City",
+        "Liverpool",
+        "Man United",
+        "Arsenal",
+        "Chelsea",
+        "Tottenham",
+        "Newcastle",
+        "Aston Villa",
+        "Everton",
+        "Crystal Palace",
+        "Brentford",
+        "Brighton",
+        "Fulham"
+      ],
+      "sources": [
+        {
+          "url": "https://www.skysports.com/premier-league-table",
+          "read": "2026-10-06",
+          "says": "last updated 30 September: the 20, with Leeds, Hull, Ipswich, Coventry, Sunderland; no West Ham, no Wolves"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/premier_league/2027",
+          "read": "2026-10-06",
+          "says": "Premier League 2026/27: the same 20"
+        }
+      ]
+    },
+    "Championship 2026-27": {
+      "league": "Championship",
+      "season": "2026-27",
+      "clubs": [
+        "Norwich City",
+        "West Ham",
+        "Wolves"
+      ],
+      "sources": [
+        {
+          "url": "https://www.skysports.com/championship-table",
+          "read": "2026-10-06",
+          "says": "last updated 2 October: the 24, West Ham United 2nd, Wolverhampton Wanderers 4th, Norwich City 17th"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/championship/2027",
+          "read": "2026-10-06",
+          "says": "Championship 2026/27: the same 24, West Ham, Wolves and Norwich City among them"
+        }
+      ]
+    },
+    "La Liga 2026-27": {
+      "league": "La Liga",
+      "season": "2026-27",
+      "clubs": [
+        "Real Madrid",
+        "Barcelona",
+        "Atletico Madrid",
+        "Sevilla",
+        "Real Sociedad",
+        "Villarreal",
+        "Real Betis",
+        "Celta Vigo",
+        "Athletic Bilbao"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/esp.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 20, Athletic Club among them; no Girona"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/primera_division/2027",
+          "read": "2026-10-06",
+          "says": "LaLiga first division 2026/27, matchday 8: the same 20"
+        }
+      ]
+    },
+    "Segunda 2026-27": {
+      "league": "Segunda Division",
+      "season": "2026-27",
+      "clubs": [
+        "Girona"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/esp.2",
+          "read": "2026-10-06",
+          "says": "2026-2027 Segunda: Girona among the 22"
+        },
+        {
+          "url": "https://www.laliga.com/en-GB/laliga-hypermotion/standing",
+          "read": "2026-10-06",
+          "says": "LALIGA HYPERMOTION 2026/27: Girona FC among the 22"
+        }
+      ]
+    },
+    "Brasileirao 2026": {
+      "league": "Brasileirao",
+      "season": "2026",
+      "clubs": [
+        "Flamengo",
+        "Sao Paulo",
+        "Palmeiras",
+        "Santos",
+        "Corinthians",
+        "Gremio",
+        "Botafogo",
+        "Cruzeiro"
+      ],
+      "sources": [
+        {
+          "url": "https://www.besoccer.com/competition/table/serie_a_brazil/2026",
+          "read": "2026-10-06",
+          "says": "Brasileirao Betano (BeSoccer labels the 2026 season 2025/26): the 20, all eight here"
+        },
+        {
+          "url": "https://www.cbf.com.br/futebol-brasileiro/tabelas/campeonato-brasileiro/serie-a/2026",
+          "read": "2026-10-05",
+          "says": "CBF Serie A 2026, the same 20. Read by Round 1013 (scripts/genCareerClubPool.mjs header, ESPN bra.1 agreeing); the CBF page reset the connection on 2026-10-06"
+        }
+      ]
+    },
+    "Bundesliga 2026-27": {
+      "league": "Bundesliga",
+      "season": "2026-27",
+      "clubs": [
+        "Bayern Munich",
+        "Dortmund",
+        "Leipzig",
+        "Leverkusen",
+        "Frankfurt",
+        "Werder Bremen",
+        "Stuttgart"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/ger.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 18, no Hertha"
+        },
+        {
+          "url": "https://www.bundesliga.com/en/bundesliga/table",
+          "read": "2026-10-06",
+          "says": "Bundesliga table 2026/27, the same 18"
+        }
+      ]
+    },
+    "2. Bundesliga 2026-27": {
+      "league": "2. Bundesliga",
+      "season": "2026-27",
+      "clubs": [
+        "Hertha Berlin"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/ger.2",
+          "read": "2026-10-06",
+          "says": "2026-2027: Hertha Berlin top of the 18"
+        },
+        {
+          "url": "https://www.bundesliga.com/en/2bundesliga/table",
+          "read": "2026-10-06",
+          "says": "2. Bundesliga 2026/27: Hertha Berlin among the 18"
+        }
+      ]
+    },
+    "Serie A 2026-27": {
+      "league": "Serie A",
+      "season": "2026-27",
+      "clubs": [
+        "Juventus",
+        "Inter Milan",
+        "AC Milan",
+        "Napoli",
+        "Roma",
+        "Atalanta",
+        "Fiorentina",
+        "Torino",
+        "Bologna"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/ita.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 20, all nine here"
+        },
+        {
+          "url": "https://www.skysports.com/serie-a-table",
+          "read": "2026-10-06",
+          "says": "the same 20 in the same order (Como, Frosinone, Monza, Venezia among them)"
+        }
+      ]
+    },
+    "Ligue 1 2026-27": {
+      "league": "Ligue 1",
+      "season": "2026-27",
+      "clubs": [
+        "PSG",
+        "Marseille",
+        "Lyon",
+        "Lille",
+        "Monaco",
+        "Strasbourg",
+        "Nice"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/fra.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 18, no Nantes"
+        },
+        {
+          "url": "https://www.skysports.com/ligue-1-table",
+          "read": "2026-10-06",
+          "says": "the same 18 (Paris FC, Le Mans, Troyes among them)"
+        }
+      ]
+    },
+    "Ligue 2 2026-27": {
+      "league": "Ligue 2",
+      "season": "2026-27",
+      "clubs": [
+        "Nantes"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/fra.2",
+          "read": "2026-10-06",
+          "says": "2026-27: Nantes among the 18"
+        },
+        {
+          "url": "https://ligue1.com/fr/competitions/ligue2bkt/standings",
+          "read": "2026-10-06",
+          "says": "LFP's Ligue 2 standings: FC Nantes among the 18"
+        }
+      ]
+    },
+    "Eredivisie 2026-27": {
+      "league": "Eredivisie",
+      "season": "2026-27",
+      "clubs": [
+        "Ajax",
+        "Feyenoord",
+        "PSV",
+        "Utrecht",
+        "AZ Alkmaar",
+        "Twente"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/ned.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 18, all six here"
+        },
+        {
+          "url": "https://eredivisie.nl/competitie/stand/",
+          "read": "2026-10-06",
+          "says": "the league's own standings, the same 18"
+        }
+      ]
+    },
+    "Primeira Liga 2026-27": {
+      "league": "Primeira Liga",
+      "season": "2026-27",
+      "clubs": [
+        "Benfica",
+        "Porto",
+        "Sporting CP",
+        "Braga",
+        "Vitoria Guimaraes"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/por.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 18, all five here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/primeira_liga",
+          "read": "2026-10-06",
+          "says": "Primeira Liga Betclic 2026/27, the same 18"
+        }
+      ]
+    },
+    "Scottish Premiership 2026-27": {
+      "league": "Scottish Premiership",
+      "season": "2026-27",
+      "clubs": [
+        "Celtic",
+        "Rangers",
+        "Aberdeen",
+        "Hearts",
+        "Hibernian"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/sco.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 12, all five here"
+        },
+        {
+          "url": "https://spfl.co.uk/league/premiership/table",
+          "read": "2026-10-06",
+          "says": "SPFL table updated 2026-10-01, the same 12"
+        }
+      ]
+    },
+    "Super Lig 2026-27": {
+      "league": "Super Lig",
+      "season": "2026-27",
+      "clubs": [
+        "Fenerbahce",
+        "Galatasaray",
+        "Besiktas",
+        "Trabzonspor"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/tur.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: the 18, all four here"
+        },
+        {
+          "url": "https://www.tff.org/default.aspx?pageID=198",
+          "read": "2026-10-06",
+          "says": "TFF, Trendyol Super Lig 2026-2027, the same 18"
+        }
+      ]
+    },
+    "Saudi Pro League 2026-27": {
+      "league": "Saudi Pro League",
+      "season": "2026-27",
+      "clubs": [
+        "Al Hilal",
+        "Al Nassr",
+        "Al Ittihad",
+        "Al Ahli",
+        "Al Shabab"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/ksa.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 18, all five here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/pro_league_saudi_arabia/2027",
+          "read": "2026-10-06",
+          "says": "Saudi Pro League 2026-27, the same 18"
+        }
+      ]
+    },
+    "MLS 2026": {
+      "league": "MLS",
+      "season": "2026",
+      "clubs": [
+        "LA Galaxy",
+        "Inter Miami",
+        "Seattle Sounders",
+        "LAFC",
+        "Toronto FC",
+        "Vancouver Whitecaps",
+        "Columbus Crew",
+        "Atlanta United"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/usa.1",
+          "read": "2026-10-06",
+          "says": "MLS Table 2026: both conferences, all eight here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/mls/2026",
+          "read": "2026-10-06",
+          "says": "the same 30 clubs (BeSoccer labels the 2026 season 2025/26)"
+        }
+      ]
+    },
+    "Liga MX Apertura 2026": {
+      "league": "Liga MX",
+      "season": "2026-27",
+      "clubs": [
+        "Cruz Azul",
+        "Club America",
+        "Monterrey",
+        "Tigres UANL",
+        "Chivas",
+        "Pumas"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/mex.1",
+          "read": "2026-10-06",
+          "says": "2026-27 Torneo Apertura: the 18, America, Guadalajara and Pumas UNAM among them"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/liga_mx_apertura/2027",
+          "read": "2026-10-06",
+          "says": "Liga MX Apertura 2026/27, the same 18"
+        }
+      ]
+    },
+    "Liga Profesional 2026": {
+      "league": "Liga Profesional",
+      "season": "2026",
+      "clubs": [
+        "Boca Juniors",
+        "River Plate",
+        "Racing Club"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/arg.1",
+          "read": "2026-10-06",
+          "says": "2026: the 30, all three here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/argentina_clausura/2026",
+          "read": "2026-10-06",
+          "says": "Clausura 2026 (labelled 2025/26), the same 30 in two zones"
+        }
+      ]
+    },
+    "Belgian Pro League 2026-27": {
+      "league": "Belgian Pro League",
+      "season": "2026-27",
+      "clubs": [
+        "Genk",
+        "Anderlecht",
+        "Club Brugge"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/bel.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 18, all three here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/pro_league_belgium/2027",
+          "read": "2026-10-06",
+          "says": "Jupiler Pro League 2026/27, the same 18"
+        }
+      ]
+    },
+    "Danish Superliga 2026-27": {
+      "league": "Danish Superliga",
+      "season": "2026-27",
+      "clubs": [
+        "FC Copenhagen"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/den.1",
+          "read": "2026-10-06",
+          "says": "2026-27: F.C. Kobenhavn among the 12"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/superliga_denmark/2027",
+          "read": "2026-10-06",
+          "says": "Superliga 2026/27, the same 12"
+        }
+      ]
+    },
+    "Allsvenskan 2026": {
+      "league": "Allsvenskan",
+      "season": "2026",
+      "clubs": [
+        "Malmo FF"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/swe.1",
+          "read": "2026-10-06",
+          "says": "2026: Malmo FF among the 16"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/allsvenskan/2026",
+          "read": "2026-10-06",
+          "says": "the same 16 (labelled 2025/26)"
+        }
+      ]
+    },
+    "Austrian Bundesliga 2026-27": {
+      "league": "Austrian Bundesliga",
+      "season": "2026-27",
+      "clubs": [
+        "Red Bull Salzburg"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/aut.1",
+          "read": "2026-10-06",
+          "says": "2026-27: RB Salzburg among the 12"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/bundesliga_austria/2027",
+          "read": "2026-10-06",
+          "says": "Bundesliga 2026/27, the same 12"
+        }
+      ]
+    },
+    "Super League Greece 2026-27": {
+      "league": "Super League Greece",
+      "season": "2026-27",
+      "clubs": [
+        "Olympiacos",
+        "PAOK",
+        "Panathinaikos"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/gre.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 14, all three here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/super_league_greece/2027",
+          "read": "2026-10-06",
+          "says": "Greece Super League 2026/27, the same 14"
+        }
+      ]
+    },
+    "Russian Premier League 2026-27": {
+      "league": "Russian Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Zenit"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/rus.1",
+          "read": "2026-10-06",
+          "says": "2026-2027: Zenit St Petersburg among the 16"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/premier_league_russia/2027",
+          "read": "2026-10-06",
+          "says": "Russian Premier League 2026/27, the same 16"
+        }
+      ]
+    },
+    "Paraguay Primera 2026": {
+      "league": "Primera Division Paraguay",
+      "season": "2026",
+      "clubs": [
+        "Olimpia"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/par.1",
+          "read": "2026-10-06",
+          "says": "Clausura 2026: the 12, Club Olimpia here, River Plate not"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/paraguay_clausura/2026",
+          "read": "2026-10-06",
+          "says": "Clausura Paraguay (labelled 2025/26), the same 12"
+        }
+      ]
+    },
+    "Paraguay Primera B 2026": {
+      "league": "Primera B Paraguay",
+      "season": "2026",
+      "clubs": [
+        "River Plate Asuncion"
+      ],
+      "sources": [
+        {
+          "url": "https://www.apf.org.py/galerias/primera-b-2026-fecha-6-river-plate-vs-sport-colombia-72177720333591596",
+          "read": "2026-10-06",
+          "says": "APF official: Primera B 2026, matchday 6, River Plate v Sport Colombia"
+        },
+        {
+          "url": "https://1000noticias.com.py/2026/09/15/primera-b-12-de-octubre-de-itaugua-se-consolida-en-la-cima-y-river-es-nuevo-escolta/",
+          "read": "2026-10-06",
+          "says": "published 2026-09-15: River Plate second in the Primera B on 49 points, home win at Los Jardines del Kelito"
+        }
+      ]
+    },
+    "Chile Primera 2026": {
+      "league": "Primera Division",
+      "season": "2026",
+      "clubs": [
+        "Colo-Colo",
+        "Universidad de Chile"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/chi.1",
+          "read": "2026-10-06",
+          "says": "2026: the 16, Colo Colo and Universidad de Chile here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/primera_chile_one_league/2026",
+          "read": "2026-10-06",
+          "says": "Liga de Primera (labelled 2025/26), the same 16"
+        }
+      ]
+    },
+    "PSL 2026-27": {
+      "league": "PSL",
+      "season": "2026-27",
+      "clubs": [
+        "Kaizer Chiefs",
+        "Mamelodi Sundowns",
+        "Orlando Pirates"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/rsa.1",
+          "read": "2026-10-06",
+          "says": "2026-27 South African Premiership: the 16, all three here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/psl/2027",
+          "read": "2026-10-06",
+          "says": "Betway Premiership 2026/27 (the Premier Soccer League's top flight), the same 16"
+        }
+      ]
+    },
+    "J1 League 2026-27": {
+      "league": "J1 League",
+      "season": "2026-27",
+      "clubs": [
+        "Yokohama F. Marinos",
+        "Urawa Red Diamonds",
+        "Kawasaki Frontale"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/jpn.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 20, all three here"
+        },
+        {
+          "url": "https://www.jleague.jp/en/j1/standings/",
+          "read": "2026-10-06",
+          "says": "J.League's own J1 standings (updated 2026-09-20), the same 20"
+        }
+      ]
+    },
+    "Liga BetPlay Clausura 2026": {
+      "league": "Liga BetPlay",
+      "season": "2026",
+      "clubs": [
+        "Atletico Nacional",
+        "Millonarios"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/col.1",
+          "read": "2026-10-06",
+          "says": "Clausura: the 20, both here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/colombia_clausura/2026",
+          "read": "2026-10-06",
+          "says": "Liga Betplay Clausura (labelled 2025/26), the same 20"
+        }
+      ]
+    },
+    "Uruguay Primera 2026": {
+      "league": "Primera Division Uruguay",
+      "season": "2026",
+      "clubs": [
+        "Penarol",
+        "Nacional"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/uru.1",
+          "read": "2026-10-06",
+          "says": "2026 Clausura: the 16, both here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/uruguay_clausura/2026",
+          "read": "2026-10-06",
+          "says": "Clausura Uruguay (labelled 2025/26), the same 16"
+        }
+      ]
+    },
+    "Chinese Super League 2026": {
+      "league": "Chinese Super League",
+      "season": "2026",
+      "clubs": [
+        "Shanghai Port",
+        "Beijing Guoan"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/chn.1",
+          "read": "2026-10-06",
+          "says": "2026: the 16, both here"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/csl/2026",
+          "read": "2026-10-06",
+          "says": "Super League (labelled 2025/26), the same 16"
+        }
+      ]
+    },
+    "A-League 2026-27": {
+      "league": "A-League",
+      "season": "2026-27",
+      "clubs": [
+        "Melbourne Victory",
+        "Auckland FC",
+        "Wellington Phoenix"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/aus.1",
+          "read": "2026-10-06",
+          "says": "2026-27: the 12, all three here"
+        },
+        {
+          "url": "https://aleagues.com.au/ladders/",
+          "read": "2026-10-06",
+          "says": "A-League Men 2026/2027 ladder, the same 12"
+        }
+      ]
+    },
+    "Liga 1 Peru 2026": {
+      "league": "Liga 1 Peru",
+      "season": "2026",
+      "clubs": [
+        "Alianza Lima"
+      ],
+      "sources": [
+        {
+          "url": "https://www.espn.com/soccer/standings/_/league/per.1",
+          "read": "2026-10-06",
+          "says": "Clausura: Alianza Lima among the 18"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/peru_clausura/2026",
+          "read": "2026-10-06",
+          "says": "Clausura Peru (labelled 2025/26), the same 18"
+        }
+      ]
+    },
+    "Ekstraklasa 2026-27": {
+      "league": "Ekstraklasa",
+      "season": "2026-27",
+      "clubs": [
+        "Legia Warsaw"
+      ],
+      "sources": [
+        {
+          "url": "https://www.besoccer.com/competition/table/ekstraklasa/2027",
+          "read": "2026-10-06",
+          "says": "Ekstraklasa 2026/27: Legia Warszawa among the 18"
+        },
+        {
+          "url": "https://www.ekstraklasa.org/tabela",
+          "read": "2026-10-06",
+          "says": "the league's own table, 2026/2027 (current), the same 18"
+        }
+      ]
+    },
+    "Super League Indonesia 2026-27": {
+      "league": "Super League Indonesia",
+      "season": "2026-27",
+      "clubs": [
+        "Persija Jakarta"
+      ],
+      "sources": [
+        {
+          "url": "https://ileague.id/table/index/",
+          "read": "2026-10-06",
+          "says": "the operator's table, BRI SUPER LEAGUE 2026-27: Persija Jakarta 3rd of 18"
+        },
+        {
+          "url": "https://www.detik.com/sulsel/sepakbola/d-8660999/klasemen-liga-1-2026-2027-pekan-ke-2-bali-united-di-puncak-persija-ketiga",
+          "read": "2026-10-06",
+          "says": "published 2026-09-13: the top flight is officially BRI Super League 2026/2027 (still called Liga 1 in passing), Persija third"
+        }
+      ]
+    },
+    "Indian Super League 2026-27": {
+      "league": "Indian Super League",
+      "season": "2026-27",
+      "clubs": [
+        "Mumbai City"
+      ],
+      "sources": [
+        {
+          "url": "https://www.goal.com/en-in/competition/super-league/table/3oa9e03e7w9nr8kqwqc3tlqz9",
+          "read": "2026-10-06",
+          "says": "Super League 2026/2027: Mumbai City FC among the 13"
+        },
+        {
+          "url": "https://www.espn.co.uk/football/table/_/league/ind.1",
+          "read": "2026-10-06",
+          "says": "2026/27 ISL: the same 13"
+        }
+      ]
+    },
+    "Swiss Super League 2026-27": {
+      "league": "Swiss Super League",
+      "season": "2026-27",
+      "clubs": [
+        "Basel"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/switzerland/super-league/standings/",
+          "read": "2026-10-06",
+          "says": "Switzerland Super League 2026/2027 standings page; its fixtures and results feed (2026-07-25 to 2027-02-07, 12 clubs) has Basel"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/brack-super-league-2026-2027/80252",
+          "read": "2026-10-06",
+          "says": "Switzerland - Brack Super League 2026/2027 standings and fixtures (round of 2026-09-19 to 2026-09-20) list Basel"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/super_league_switzerland/2027",
+          "read": "2026-10-06",
+          "says": "Table Super League 2026/27: the 12, Basel 4th on 13 from 9"
+        }
+      ]
+    },
+    "Egyptian Premier League 2026-27": {
+      "league": "Egyptian Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Al Ahly",
+        "Zamalek"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/egypt/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Egypt Premier League 2026/2027 standings page; its fixtures and results feed (2026-08-21 to 2027-01-31, 20 clubs) has Al Ahly, Zamalek"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/premier_league_egypt/2027",
+          "read": "2026-10-06",
+          "says": "Table Premier League Egypt 2026/27: the 20, Zamalek 2nd and Al Ahly SC 3rd"
+        }
+      ]
+    },
+    "Ukrainian Premier League 2026-27": {
+      "league": "Ukrainian Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Shakhtar Donetsk"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/ukraine/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Ukraine Premier League 2026/2027 standings page; its fixtures and results feed (2026-07-31 to 2027-04-03, 16 clubs) has Shakhtar Donetsk"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/premier-league-ukraine/2027",
+          "read": "2026-10-06",
+          "says": "Table Premier League Ukraine 2026/27: the 16, Shakhtar Donetsk 2nd on 18 from 7"
+        }
+      ]
+    },
+    "HNL 2026-27": {
+      "league": "HNL",
+      "season": "2026-27",
+      "clubs": [
+        "Dinamo Zagreb",
+        "Hajduk Split"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/croatia/hnl/standings/",
+          "read": "2026-10-06",
+          "says": "Croatia HNL 2026/2027 standings page; its fixtures and results feed (2026-07-31 to 2027-04-10, 10 clubs) has Din. Zagreb, Hajduk Split"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/supersport-hnl-2026-2027/80332",
+          "read": "2026-10-06",
+          "says": "Croatia - Supersport HNL 2026/2027 standings and fixtures (round of 2026-09-18 to 2026-09-20) list Dinamo Zagreb, Hajduk Split"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/1_hnl/2027",
+          "read": "2026-10-06",
+          "says": "Table Croatian League HNL 2026/27: the 10, Dinamo Zagreb 1st and HNK Hajduk Split 2nd after 8"
+        }
+      ]
+    },
+    "Serbian SuperLiga 2026-27": {
+      "league": "Serbian SuperLiga",
+      "season": "2026-27",
+      "clubs": [
+        "Red Star Belgrade",
+        "Partizan"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/serbia/mozzart-bet-super-liga/standings/",
+          "read": "2026-10-06",
+          "says": "Serbia Mozzart Bet Super Liga 2026/2027 standings page; its fixtures and results feed (2026-07-17 to 2027-04-03, 14 clubs) has Crvena zvezda, Partizan"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/mozzart-super-liga-2026-2027/80374",
+          "read": "2026-10-06",
+          "says": "Serbia - Mozzart Super Liga 2026/2027 standings and fixtures (round of 2026-10-10 to 2026-10-12) list Red Star Belgrade, Partizan"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/super_liga_serbia/2027",
+          "read": "2026-10-06",
+          "says": "Mozzart Bet Super Liga 2026/27 table at matchday 11: the 14, Crvena Zvezda 1st, Partizan Belgrade 11th"
+        }
+      ]
+    },
+    "Czech First League 2026-27": {
+      "league": "Czech First League",
+      "season": "2026-27",
+      "clubs": [
+        "Slavia Prague",
+        "Sparta Prague"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/czech-republic/chance-liga/standings/",
+          "read": "2026-10-06",
+          "says": "Czech Republic Chance Liga 2026/2027 standings page; its fixtures and results feed (2026-07-25 to 2027-02-27, 16 clubs) has Slavia Prague, Sparta Prague"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/chance-liga-2026-2027/80293",
+          "read": "2026-10-06",
+          "says": "Czechia - Chance Liga 2026/2027 standings and fixtures (round of 2026-09-19 to 2026-09-20) list Slavia Prague, Sparta Prague"
+        }
+      ]
+    },
+    "K League 1 2026": {
+      "league": "K League 1",
+      "season": "2026",
+      "clubs": [
+        "Jeonbuk Motors",
+        "Ulsan HD",
+        "FC Seoul",
+        "Pohang Steelers"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/south-korea/k-league-1/standings/",
+          "read": "2026-10-06",
+          "says": "South Korea K League 1 2026 standings page; its fixtures and results feed (2026-05-10 to 2026-10-24, 12 clubs) has Jeonbuk, Ulsan HD, Seoul, Pohang"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/k_league_classic/2026",
+          "read": "2026-10-06",
+          "says": "K League 1 table after 30 rounds (the 2026 season, with Incheon United and Bucheon FC 1995): FC Seoul 1st, Ulsan HD 2nd, Jeonbuk Hyundai Motors 4th, Pohang Steelers 7th"
+        },
+        {
+          "url": "https://haeseol.com/standings/k-league-1",
+          "read": "2026-10-06",
+          "says": "K League 1 2026 season table as of 2026-10-06: FC Seoul 1st on 62 from 30, Ulsan HD 2nd, Jeonbuk 4th on 44, Pohang 7th on 40"
+        }
+      ]
+    },
+    "Qatar Stars League 2026-27": {
+      "league": "Qatar Stars League",
+      "season": "2026-27",
+      "clubs": [
+        "Al Sadd",
+        "Al Duhail"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/qatar/qsl/standings/",
+          "read": "2026-10-06",
+          "says": "Qatar QSL 2026/2027 standings page; its fixtures and results feed (2026-08-20 to 2026-12-05, 12 clubs) has Al Sadd, Al Duhail"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/doha-bank-stars-league-2026-2027/81052",
+          "read": "2026-10-06",
+          "says": "Qatar - Doha Bank Stars League 2026/2027 standings and fixtures (round of 2026-10-08 to 2026-10-10) list Al Sadd, Al Duhail"
+        }
+      ]
+    },
+    "Persian Gulf Pro League 2026-27": {
+      "league": "Persian Gulf Pro League",
+      "season": "2026-27",
+      "clubs": [
+        "Persepolis"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/iran/persian-gulf-pro-league/standings/",
+          "read": "2026-10-06",
+          "says": "Iran Persian Gulf Pro League 2026/2027 standings page; its fixtures and results feed (2026-08-14 to 2026-11-08, 18 clubs) has Persepolis"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/persian-gulf-pro-league-2026-2027/81296",
+          "read": "2026-10-06",
+          "says": "IR Iran - Persian Gulf Pro League 2026/2027 standings and fixtures (round of 2026-10-08 to 2026-10-10) list Persepolis"
+        }
+      ]
+    },
+    "Botola Pro 2026-27": {
+      "league": "Botola Pro",
+      "season": "2026-27",
+      "clubs": [
+        "Wydad Casablanca",
+        "Raja Casablanca"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/morocco/botola-pro/standings/",
+          "read": "2026-10-06",
+          "says": "Morocco Botola Pro 2026/2027 standings page; its fixtures and results feed (2026-09-24 to 2026-10-18, 16 clubs) has Wydad AC, Raja Casablanca"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/botola-pro-inwi-1-2026-2027/81599",
+          "read": "2026-10-06",
+          "says": "Morocco - Botola Pro Inwi 1 2026/2027 standings and fixtures (round of 2026-10-02 to 2026-10-04) list Wydad Casablanca, Raja Casablanca"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/botola_pro/2027",
+          "read": "2026-10-06",
+          "says": "Table Botola Pro 2026/27 after matchday 2: the 16, Raja Casablanca 6th, Wydad Casablanca 9th"
+        }
+      ]
+    },
+    "Ligue 1 Tunisia 2026-27": {
+      "league": "Ligue 1 Tunisia",
+      "season": "2026-27",
+      "clubs": [
+        "Esperance"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/tunisia/ligue-professionnelle-1/standings/",
+          "read": "2026-10-06",
+          "says": "Tunisia Ligue Professionnelle 1 2026/2027 standings page; its fixtures and results feed (2026-08-22 to 2027-01-02, 16 clubs) has Esperance Tunis"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ligue-professionnelle-1-2026-2027/81302",
+          "read": "2026-10-06",
+          "says": "Tunisia - Ligue Professionnelle 1 2026/2027 standings and fixtures (round of 2026-10-10 to 2026-10-11) list Esperance"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/ligue_1_tunisia/2027",
+          "read": "2026-10-06",
+          "says": "Table League 1 Tunisia 2026/27: the 16, ES Tunis 2nd on 9 from 4"
+        }
+      ]
+    },
+    "NB I 2026-27": {
+      "league": "NB I",
+      "season": "2026-27",
+      "clubs": [
+        "Ferencvaros"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/hungary/nb-i/standings/",
+          "read": "2026-10-06",
+          "says": "Hungary NB I. 2026/2027 standings page; its fixtures and results feed (2026-07-24 to 2027-03-20, 12 clubs) has Ferencvaros"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/fizz-liga-2026-2027/80255",
+          "read": "2026-10-06",
+          "says": "Hungary - Fizz Liga 2026/2027 standings and fixtures (round of 2026-09-18 to 2026-09-20) list Ferencvaros"
+        }
+      ]
+    },
+    "Veikkausliiga 2026": {
+      "league": "Veikkausliiga",
+      "season": "2026",
+      "clubs": [
+        "HJK Helsinki"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/finland/veikkausliiga/standings/",
+          "read": "2026-10-06",
+          "says": "Finland Veikkausliiga 2026 standings page; its fixtures and results feed (2026-05-20 to 2026-11-08, 12 clubs) has HJK"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/veikkausliiga-2026/78648",
+          "read": "2026-10-06",
+          "says": "Finland - Veikkausliiga 2026 standings and fixtures (round of 2026-04-04 to 2026-09-19) list HJK Helsinki"
+        }
+      ]
+    },
+    "Besta deild 2026": {
+      "league": "Besta deild",
+      "season": "2026",
+      "clubs": [
+        "Breidablik"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/iceland/besta-deild-karla/standings/",
+          "read": "2026-10-06",
+          "says": "Iceland Besta deild karla 2026 standings page; its fixtures and results feed (2026-05-17 to 2026-10-24, 12 clubs) has Breidablik"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/besta-deildin-2026/78609",
+          "read": "2026-10-06",
+          "says": "Iceland - Besta Deildin 2026 standings and fixtures (round of 2026-04-10 to 2026-10-11) list Breidablik"
+        }
+      ]
+    },
+    "Slovak First League 2026-27": {
+      "league": "Slovak First League",
+      "season": "2026-27",
+      "clubs": [
+        "Slovan Bratislava"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/slovakia/nike-liga/standings/",
+          "read": "2026-10-06",
+          "says": "Slovakia Nike liga 2026/2027 standings page; its fixtures and results feed (2026-07-25 to 2027-02-27, 12 clubs) has Slovan Bratislava"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/nike-liga-2026-2027/80247",
+          "read": "2026-10-06",
+          "says": "Slovakia - Niké Liga 2026/2027 standings and fixtures (round of 2026-09-19 to 2026-09-20) list Slovan Bratislava"
+        }
+      ]
+    },
+    "First League Bulgaria 2026-27": {
+      "league": "First League Bulgaria",
+      "season": "2026-27",
+      "clubs": [
+        "Ludogorets"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/bulgaria/efbet-league/standings/",
+          "read": "2026-10-06",
+          "says": "Bulgaria efbet League 2026/2027 standings page; its fixtures and results feed (2026-07-17 to 2027-04-17, 14 clubs) has Ludogorets"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/efbet-liga-2026-2027/80420",
+          "read": "2026-10-06",
+          "says": "Bulgaria - efbet Liga 2026/2027 standings and fixtures (round of 2026-09-18 to 2026-09-20) list Ludogorets"
+        }
+      ]
+    },
+    "Super Liga Moldova 2026-27": {
+      "league": "Super Liga Moldova",
+      "season": "2026-27",
+      "clubs": [
+        "Sheriff Tiraspol"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/moldova/super-liga/standings/",
+          "read": "2026-10-06",
+          "says": "Moldova Super Liga 2026/2027 standings page; its fixtures and results feed (2026-06-27 to 2026-12-05, 8 clubs) has Sheriff Tiraspol"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/divizia_nationala/2027",
+          "read": "2026-10-06",
+          "says": "Super Liga 2026/27 table at matchday 14: the 8, Sheriff 1st on 28 from 13"
+        }
+      ]
+    },
+    "Erovnuli Liga 2026": {
+      "league": "Erovnuli Liga",
+      "season": "2026",
+      "clubs": [
+        "Dinamo Tbilisi"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/georgia/crystalbet-erovnuli-liga/standings/",
+          "read": "2026-10-06",
+          "says": "Georgia Crystalbet Erovnuli Liga 2026 standings page; its fixtures and results feed (2026-04-17 to 2026-12-05, 10 clubs) has Dinamo Tbilisi"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/crystalbet-erovnuli-liga-2026/78622",
+          "read": "2026-10-06",
+          "says": "Georgia - Crystalbet Erovnuli Liga 2026 standings and fixtures (round of 2026-08-21 to 2026-10-04) list Dinamo Tbilisi"
+        }
+      ]
+    },
+    "Armenian Premier League 2026-27": {
+      "league": "Armenian Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Pyunik"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/armenia/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Armenia Premier League 2026/2027 standings page; its fixtures and results feed (2026-07-31 to 2027-04-21, 12 clubs) has Pyunik Yerevan"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/fastex-premier-league-2026-2027/80389",
+          "read": "2026-10-06",
+          "says": "Armenia - Fastex Premier League 2026/2027 standings and fixtures (round of 2026-10-10 to 2026-10-12) list Pyunik"
+        }
+      ]
+    },
+    "Azerbaijan Premier League 2026-27": {
+      "league": "Azerbaijan Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Qarabag"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/azerbaijan/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Azerbaijan Premier League 2026/2027 standings page; its fixtures and results feed (2026-08-14 to 2027-03-13, 12 clubs) has Qarabag"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/misli-premyer-liqasi-2026-2027/80343",
+          "read": "2026-10-06",
+          "says": "Azerbaijan - Misli Premyer Liqası 2026/2027 standings and fixtures (round of 2026-10-09 to 2026-10-11) list Qarabag"
+        }
+      ]
+    },
+    "Kazakhstan Premier League 2026": {
+      "league": "Kazakhstan Premier League",
+      "season": "2026",
+      "clubs": [
+        "Kairat Almaty"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/kazakhstan/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Kazakhstan Premier League 2026 standings page; its fixtures and results feed (2026-06-14 to 2026-10-31, 16 clubs) has Kairat Almaty"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/kazakhstan-premier-league-2026/78511",
+          "read": "2026-10-06",
+          "says": "Kazakhstan - Kazakhstan Premier League 2026 standings and fixtures (round of 2026-09-17 to 2026-09-18) list Kairat Almaty"
+        }
+      ]
+    },
+    "Uzbekistan Super League 2026": {
+      "league": "Uzbekistan Super League",
+      "season": "2026",
+      "clubs": [
+        "Pakhtakor"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/uzbekistan/super-league/standings/",
+          "read": "2026-10-06",
+          "says": "Uzbekistan Super League 2026 standings page; its fixtures and results feed (2026-04-27 to 2026-12-02, 16 clubs) has Pakhtakor"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ozbekiston-superligasi-2026/78987",
+          "read": "2026-10-06",
+          "says": "Uzbekistan - O‘zbekiston Superligasi 2026 standings and fixtures (round of 2026-10-07 to 2026-10-11) list Pakhtakor"
+        }
+      ]
+    },
+    "Thai League 1 2026-27": {
+      "league": "Thai League 1",
+      "season": "2026-27",
+      "clubs": [
+        "Buriram United"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/thailand/thai-league-1/standings/",
+          "read": "2026-10-06",
+          "says": "Thailand Thai League 1 2026/2027 standings page; its fixtures and results feed (2026-09-04 to 2027-02-07, 16 clubs) has Buriram"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/premier_league_thai/2027",
+          "read": "2026-10-06",
+          "says": "Table Thai League 1 2026/27: the 16, Buriram United 1st on 7 from 3"
+        }
+      ]
+    },
+    "V.League 1 2026-27": {
+      "league": "V.League 1",
+      "season": "2026-27",
+      "clubs": [
+        "Hanoi FC"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/vietnam/v-league-1/standings/",
+          "read": "2026-10-06",
+          "says": "Vietnam V.League 1 2026/2027 standings page; its fixtures and results feed (2026-09-04 to 2026-12-25, 14 clubs) has Hanoi FC"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/lpbank-vleague-1-2026-2027/80977",
+          "read": "2026-10-06",
+          "says": "Vietnam - LPBank V.League 1 2026/2027 standings and fixtures (round of 2026-09-20 to 2026-10-11) list Hanoi FC"
+        }
+      ]
+    },
+    "Malaysia Super League 2026-27": {
+      "league": "Malaysia Super League",
+      "season": "2026-27",
+      "clubs": [
+        "Johor Darul Tazim"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/malaysia/super-league/standings/",
+          "read": "2026-10-06",
+          "says": "Malaysia Super League 2026/2027 standings page; its fixtures and results feed (2026-08-22 to 2027-05-20, 12 clubs) has Johor DT"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/liga-super-malaysia-2026-2027/80290",
+          "read": "2026-10-06",
+          "says": "Malaysia - Liga Super Malaysia 2026/2027 standings and fixtures (round of 2026-09-11 to 2026-09-13) list Johor Darul Tazim"
+        }
+      ]
+    },
+    "Linafoot 2026-27": {
+      "league": "Linafoot",
+      "season": "2026-27",
+      "clubs": [
+        "TP Mazembe"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/dr-congo/ligue-1/standings/",
+          "read": "2026-10-06",
+          "says": "DR Congo Ligue 1 2026/2027 standings page; its fixtures and results feed (2026-10-20 to 2026-12-05, 25 clubs) has Mazembe"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/super_league_congo/2027",
+          "read": "2026-10-06",
+          "says": "Table Ligue 1 2026/27: two groups of 13 and 12, TP Mazembe in group A"
+        }
+      ]
+    },
+    "NPFL 2026-27": {
+      "league": "NPFL",
+      "season": "2026-27",
+      "clubs": [
+        "Enyimba"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/nigeria/npfl/standings/",
+          "read": "2026-10-06",
+          "says": "Nigeria NPFL 2026/2027 standings page; its fixtures and results feed (2026-08-28 to 2026-12-20, 20 clubs) has Enyimba"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/nigeria-premier-football-league-2026-2027/81511",
+          "read": "2026-10-06",
+          "says": "Nigeria - Nigeria Premier Football League 2026/2027 standings and fixtures (round of 2026-09-12 to 2026-10-07) list Enyimba"
+        }
+      ]
+    },
+    "Ghana Premier League 2026-27": {
+      "league": "Ghana Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Asante Kotoko"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/ghana/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Ghana Premier League 2026/2027 standings page; its fixtures and results feed (2026-09-05 to 2027-01-03, 18 clubs) has Asante Kotoko"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ghana-premier-league-2026-2027/81049",
+          "read": "2026-10-06",
+          "says": "Ghana - Ghana Premier League 2026/2027 standings and fixtures (round of 2026-10-01 to 2026-10-04) list Asante Kotoko"
+        }
+      ]
+    },
+    "Kenyan Premier League 2026-27": {
+      "league": "Kenyan Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Gor Mahia"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/kenya/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Kenya Premier League 2026/2027 standings page; its fixtures and results feed (2026-10-09 to 2027-01-09, 18 clubs) has Gor Mahia"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/sportpesa-league-2026-2027/81586",
+          "read": "2026-10-06",
+          "says": "Kenya - SportPesa League 2026/2027 standings and fixtures (round of 2026-10-01 to 2026-10-11) list Gor Mahia"
+        }
+      ]
+    },
+    "Ethiopian Premier League 2026-27": {
+      "league": "Ethiopian Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Saint George"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/ethiopia/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Ethiopia Premier League 2026/2027 standings page; its fixtures and results feed (2026-10-09 to 2026-12-19, 18 clubs) has St. George"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ethiopian-premier-league-2026-2027/81723",
+          "read": "2026-10-06",
+          "says": "Ethiopia - Ethiopian Premier League 2026/2027 standings and fixtures (round of 2026-10-09 to 2026-10-11) list Saint George"
+        }
+      ]
+    },
+    "NBC Premier League 2026-27": {
+      "league": "NBC Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Young Africans"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/tanzania/ligi-kuu-bara/standings/",
+          "read": "2026-10-06",
+          "says": "Tanzania Ligi Kuu Bara 2026/2027 standings page; its fixtures and results feed (2026-08-14 to 2027-02-04, 16 clubs) has Young Africans"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/nbc-premier-league-2026-2027/81048",
+          "read": "2026-10-06",
+          "says": "Tanzania - NBC Premier League 2026/2027 standings and fixtures (round of 2026-10-08 to 2026-10-10) list Young Africans"
+        }
+      ]
+    },
+    "Girabola 2026-27": {
+      "league": "Girabola",
+      "season": "2026-27",
+      "clubs": [
+        "Atletico Petroleos"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/angola/girabola/standings/",
+          "read": "2026-10-06",
+          "says": "Angola Girabola 2026/2027 standings page; its fixtures and results feed (2026-08-21 to 2027-02-20, 16 clubs) has Petro Atletico"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/liga-unitel-girabola-2026-2027/81370",
+          "read": "2026-10-06",
+          "says": "Angola - Liga Unitel Girabola 2026/2027 standings and fixtures (round of 2026-08-26 to 2026-10-07) list Atletico Petroleos"
+        }
+      ]
+    },
+    "LigaPro 2026": {
+      "league": "LigaPro",
+      "season": "2026",
+      "clubs": [
+        "LDU Quito"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/ecuador/liga-pro/standings/",
+          "read": "2026-10-06",
+          "says": "Ecuador Liga Pro 2026 standings page; its fixtures and results feed (2026-07-12 to 2026-12-13, 16 clubs) has LDU Quito"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ligapro-ecuabet-serie-a-2026/78171",
+          "read": "2026-10-06",
+          "says": "Ecuador - LigaPro Ecuabet Serie A 2026 standings and fixtures (round of 2026-02-21 to 2026-10-11) list LDU Quito"
+        }
+      ]
+    },
+    "Liga FUTVE 2026": {
+      "league": "Liga FUTVE",
+      "season": "2026",
+      "clubs": [
+        "Caracas FC"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/venezuela/liga-futve/standings/",
+          "read": "2026-10-06",
+          "says": "Venezuela Liga FUTVE 2026 standings page; its fixtures and results feed (2026-04-26 to 2026-10-11, 14 clubs) has Caracas"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/liga-futve-bdv-2026/78184",
+          "read": "2026-10-06",
+          "says": "Venezuela - Liga FutVe BDV 2026 standings and fixtures (round of 2026-01-29 to 2026-10-12) list Caracas FC"
+        }
+      ]
+    },
+    "Division Profesional 2026": {
+      "league": "Division Profesional",
+      "season": "2026",
+      "clubs": [
+        "Bolivar"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/bolivia/division-profesional/standings/",
+          "read": "2026-10-06",
+          "says": "Bolivia Division Profesional 2026 standings page; its fixtures and results feed (2026-05-31 to 2026-10-18, 16 clubs) has Bolivar"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/division-profesional-2026/78156",
+          "read": "2026-10-06",
+          "says": "Bolivia - División Profesional 2026 standings and fixtures (round of 2026-09-15 to 2026-09-19) list Bolivar"
+        }
+      ]
+    },
+    "Liga FPD 2026-27": {
+      "league": "Liga FPD",
+      "season": "2026-27",
+      "clubs": [
+        "Saprissa"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/costa-rica/primera-division/standings/",
+          "read": "2026-10-06",
+          "says": "Costa Rica Primera Division 2026/2027 standings page; its fixtures and results feed (2026-07-24 to 2026-11-29, 10 clubs) has Saprissa"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/liga-promerica-2026-2027/80251",
+          "read": "2026-10-06",
+          "says": "Costa Rica - Liga Promérica 2026/2027 standings and fixtures (round of 2026-09-19 to 2026-09-21) list Saprissa"
+        }
+      ]
+    },
+    "Liga Nacional Honduras 2026-27": {
+      "league": "Liga Nacional Honduras",
+      "season": "2026-27",
+      "clubs": [
+        "Olimpia Tegucigalpa"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/honduras/liga-nacional/standings/",
+          "read": "2026-10-06",
+          "says": "Honduras Liga Nacional 2026/2027 standings page; its fixtures and results feed (2026-08-01 to 2026-11-23, 12 clubs) has Olimpia"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/honduras_apertura/2027",
+          "read": "2026-10-06",
+          "says": "Table Liga Nacional 2026/27: the 12, CD Olimpia 2nd on 17 from 8"
+        }
+      ]
+    },
+    "Primera Division El Salvador 2026-27": {
+      "league": "Primera Division El Salvador",
+      "season": "2026-27",
+      "clubs": [
+        "Alianza FC"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/el-salvador/primera-division/standings/",
+          "read": "2026-10-06",
+          "says": "El Salvador Primera Division 2026/2027 standings page; its fixtures and results feed (2026-07-25 to 2026-11-21, 12 clubs) has Alianza FC"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/liga-pepsi-primera-division-2026-2027/80363",
+          "read": "2026-10-06",
+          "says": "El Salvador - Liga Pepsi Primera División 2026/2027 standings and fixtures (round of 2026-10-03 to 2026-10-05) list Alianza FC"
+        }
+      ]
+    },
+    "Liga Nacional Guatemala 2026-27": {
+      "league": "Liga Nacional Guatemala",
+      "season": "2026-27",
+      "clubs": [
+        "Comunicaciones"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/guatemala/liga-nacional/standings/",
+          "read": "2026-10-06",
+          "says": "Guatemala Liga Nacional 2026/2027 standings page; its fixtures and results feed (2026-07-25 to 2026-11-28, 12 clubs) has Comunicaciones"
+        },
+        {
+          "url": "https://www.besoccer.com/competition/table/guatemala_apertura/2027",
+          "read": "2026-10-06",
+          "says": "Table Liga Nacional 2026/27: the 12, Comunicaciones 8th on 14 from 12"
+        }
+      ]
+    },
+    "Jamaica Premier League 2026-27": {
+      "league": "Jamaica Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Waterhouse FC"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/jamaica/premier-league/standings/",
+          "read": "2026-10-06",
+          "says": "Jamaica Premier League 2026/2027 standings page; its fixtures and results feed (2026-09-13 to 2026-10-06, 14 clubs) has Waterhouse"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/wray--nephew-jamaica-premier-league-2026-2027/81510",
+          "read": "2026-10-06",
+          "says": "Jamaica - Wray & Nephew Jamaica Premier League 2026/2027 standings and fixtures (round of 2026-10-04 to 2026-10-06) list Waterhouse FC"
+        }
+      ]
+    },
+    "UAE Pro League 2026-27": {
+      "league": "UAE Pro League",
+      "season": "2026-27",
+      "clubs": [
+        "Al Ain"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/united-arab-emirates/uae-league/standings/",
+          "read": "2026-10-06",
+          "says": "United Arab Emirates UAE League 2026/2027 standings page; its fixtures and results feed (2026-08-14 to 2026-12-30, 14 clubs) has Al Ain"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/adnoc-pro-league-2026-2027/81054",
+          "read": "2026-10-06",
+          "says": "United Arab Emirates - ADNOC Pro League 2026/2027 standings and fixtures (round of 2026-10-16 to 2026-10-18) list Al Ain"
+        }
+      ]
+    },
+    "Israeli Premier League 2026-27": {
+      "league": "Israeli Premier League",
+      "season": "2026-27",
+      "clubs": [
+        "Maccabi Tel Aviv"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/israel/ligat-ha-al/standings/",
+          "read": "2026-10-06",
+          "says": "Israel Ligat ha'Al 2026/2027 standings page; its fixtures and results feed (2026-08-22 to 2027-01-30, 14 clubs) has Maccabi Tel Aviv"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/ligat-toto-winner-2026-2027/80377",
+          "read": "2026-10-06",
+          "says": "Israel - Ligat TOTO Winner 2026/2027 standings and fixtures (round of 2026-10-10 to 2026-10-12) list Maccabi Tel Aviv"
+        }
+      ]
+    },
+    "Cypriot First Division 2026-27": {
+      "league": "Cypriot First Division",
+      "season": "2026-27",
+      "clubs": [
+        "APOEL"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/cyprus/cyprus-league/standings/",
+          "read": "2026-10-06",
+          "says": "Cyprus Cyprus League 2026/2027 standings page; its fixtures and results feed (2026-08-28 to 2027-01-23, 14 clubs) has APOEL"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/cyprus-league-stoiximan-2026-2027/80509",
+          "read": "2026-10-06",
+          "says": "Cyprus - Cyprus League Stoiximan 2026/2027 standings and fixtures (round of 2026-10-09 to 2026-10-12) list APOEL"
+        }
+      ]
+    },
+    "Meistriliiga 2026": {
+      "league": "Meistriliiga",
+      "season": "2026",
+      "clubs": [
+        "Flora Tallinn"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/estonia/meistriliiga/standings/",
+          "read": "2026-10-06",
+          "says": "Estonia Meistriliiga 2026 standings page; its fixtures and results feed (2026-04-25 to 2026-11-07, 10 clubs) has Flora"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/a-le-coq-premium-liiga-2026/78515",
+          "read": "2026-10-06",
+          "says": "Estonia - A. Le Coq Premium Liiga 2026 standings and fixtures (round of 2026-10-10 to 2026-10-11) list Flora Tallinn"
+        }
+      ]
+    },
+    "A Lyga 2026": {
+      "league": "A Lyga",
+      "season": "2026",
+      "clubs": [
+        "Zalgiris Vilnius"
+      ],
+      "sources": [
+        {
+          "url": "https://www.soccerway.com/lithuania/a-lyga/standings/",
+          "read": "2026-10-06",
+          "says": "Lithuania TOPLYGA 2026 standings page; its fixtures and results feed (2026-04-17 to 2026-11-08, 10 clubs) has Zalgiris"
+        },
+        {
+          "url": "https://globalsportsarchive.com/en/soccer/competition/topsport-a-lyga-2026/78526",
+          "read": "2026-10-06",
+          "says": "Lithuania - Topsport A Lyga 2026 standings and fixtures (round of 2026-07-18 to 2026-09-20) list Zalgiris Vilnius"
+        }
+      ]
+    }
+  },
+  "clubLeagues": {
+    "fb-1": { "name": "Real Madrid", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-2": { "name": "Barcelona", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-3": { "name": "Man City", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-4": { "name": "Liverpool", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-5": { "name": "Bayern Munich", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-6": { "name": "PSG", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-7": { "name": "Juventus", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-8": { "name": "Inter Milan", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-9": { "name": "Man United", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-10": { "name": "Arsenal", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-11": { "name": "Chelsea", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-12": { "name": "Ajax", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-13": { "name": "Benfica", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
+    "fb-14": { "name": "Porto", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
+    "fb-15": { "name": "Boca Juniors", "league": "Liga Profesional", "evidence": "Liga Profesional 2026" },
+    "fb-16": { "name": "River Plate", "league": "Liga Profesional", "evidence": "Liga Profesional 2026" },
+    "fb-17": { "name": "Flamengo", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-18": { "name": "Sao Paulo", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-19": { "name": "Atletico Madrid", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-20": { "name": "Sevilla", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-21": { "name": "Tottenham", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-22": { "name": "Newcastle", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-23": { "name": "Dortmund", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-24": { "name": "Leipzig", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-25": { "name": "AC Milan", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-26": { "name": "Napoli", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-27": { "name": "Roma", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-28": { "name": "Marseille", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-29": { "name": "Lyon", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-30": { "name": "Feyenoord", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-31": { "name": "PSV", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-32": { "name": "Sporting CP", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
+    "fb-33": { "name": "Fenerbahce", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
+    "fb-34": { "name": "Galatasaray", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
+    "fb-35": { "name": "Al Hilal", "league": "Saudi Pro League", "evidence": "Saudi Pro League 2026-27" },
+    "fb-36": { "name": "Celtic", "league": "Scottish Premiership", "evidence": "Scottish Premiership 2026-27" },
+    "fb-37": { "name": "Rangers", "league": "Scottish Premiership", "evidence": "Scottish Premiership 2026-27" },
+    "fb-38": { "name": "Palmeiras", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-39": { "name": "LA Galaxy", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-40": { "name": "Inter Miami", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-41": { "name": "Real Sociedad", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-42": { "name": "Villarreal", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-44": { "name": "Aston Villa", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-45": { "name": "Everton", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-46": { "name": "Leverkusen", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-47": { "name": "Frankfurt", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-48": { "name": "Atalanta", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-49": { "name": "Fiorentina", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-50": { "name": "Lille", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-51": { "name": "Monaco", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-52": { "name": "Genk", "league": "Belgian Pro League", "evidence": "Belgian Pro League 2026-27" },
+    "fb-53": { "name": "Anderlecht", "league": "Belgian Pro League", "evidence": "Belgian Pro League 2026-27" },
+    "fb-54": { "name": "FC Copenhagen", "league": "Danish Superliga", "evidence": "Danish Superliga 2026-27" },
+    "fb-55": { "name": "Malmo FF", "league": "Allsvenskan", "evidence": "Allsvenskan 2026" },
+    "fb-56": { "name": "Red Bull Salzburg", "league": "Austrian Bundesliga", "evidence": "Austrian Bundesliga 2026-27" },
+    "fb-57": { "name": "Basel", "league": "Swiss Super League", "evidence": "Swiss Super League 2026-27" },
+    "fb-58": { "name": "Al Nassr", "league": "Saudi Pro League", "evidence": "Saudi Pro League 2026-27" },
+    "fb-59": { "name": "Cruz Azul", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-60": { "name": "Club America", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-61": { "name": "Real Betis", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-62": { "name": "Celta Vigo", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-63": { "name": "Crystal Palace", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-64": { "name": "Brentford", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-65": { "name": "Norwich City", "league": "Championship", "evidence": "Championship 2026-27" },
+    "fb-67": { "name": "Werder Bremen", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-68": { "name": "Torino", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-69": { "name": "Bologna", "league": "Serie A", "evidence": "Serie A 2026-27" },
+    "fb-71": { "name": "Strasbourg", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-72": { "name": "Utrecht", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-73": { "name": "Braga", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
+    "fb-74": { "name": "Aberdeen", "league": "Scottish Premiership", "evidence": "Scottish Premiership 2026-27" },
+    "fb-75": { "name": "Santos", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-76": { "name": "Colo-Colo", "league": "Primera Division", "evidence": "Chile Primera 2026" },
+    "fb-77": { "name": "Al Ahly", "league": "Egyptian Premier League", "evidence": "Egyptian Premier League 2026-27" },
+    "fb-78": { "name": "Kaizer Chiefs", "league": "PSL", "evidence": "PSL 2026-27" },
+    "fb-79": { "name": "Yokohama F. Marinos", "league": "J1 League", "evidence": "J1 League 2026-27" },
+    "fb-80": { "name": "Urawa Red Diamonds", "league": "J1 League", "evidence": "J1 League 2026-27" },
+    "fb-81": { "name": "Seattle Sounders", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-82": { "name": "Al Ittihad", "league": "Saudi Pro League", "evidence": "Saudi Pro League 2026-27" },
+    "fb-83": { "name": "Club Brugge", "league": "Belgian Pro League", "evidence": "Belgian Pro League 2026-27" },
+    "fb-84": { "name": "Olympiacos", "league": "Super League Greece", "evidence": "Super League Greece 2026-27" },
+    "fb-85": { "name": "Shakhtar Donetsk", "league": "Ukrainian Premier League", "evidence": "Ukrainian Premier League 2026-27" },
+    "fb-86": { "name": "Corinthians", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-87": { "name": "Monterrey", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-88": { "name": "Tigres UANL", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-89": { "name": "Athletic Bilbao", "league": "La Liga", "evidence": "La Liga 2026-27" },
+    "fb-90": { "name": "Brighton", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-91": { "name": "Stuttgart", "league": "Bundesliga", "evidence": "Bundesliga 2026-27" },
+    "fb-92": { "name": "LAFC", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-94": { "name": "Racing Club", "league": "Liga Profesional", "evidence": "Liga Profesional 2026" },
+    "fb-95": { "name": "Zenit", "league": "Russian Premier League", "evidence": "Russian Premier League 2026-27" },
+    "fb-97": { "name": "PAOK", "league": "Super League Greece", "evidence": "Super League Greece 2026-27" },
+    "fb-98": { "name": "Panathinaikos", "league": "Super League Greece", "evidence": "Super League Greece 2026-27" },
+    "fb-99": { "name": "Dinamo Zagreb", "league": "HNL", "evidence": "HNL 2026-27" },
+    "fb-100": { "name": "Red Star Belgrade", "league": "Serbian SuperLiga", "evidence": "Serbian SuperLiga 2026-27" },
+    "fb-101": { "name": "Legia Warsaw", "league": "Ekstraklasa", "evidence": "Ekstraklasa 2026-27" },
+    "fb-102": { "name": "Slavia Prague", "league": "Czech First League", "evidence": "Czech First League 2026-27" },
+    "fb-103": { "name": "Besiktas", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
+    "fb-104": { "name": "Trabzonspor", "league": "Super Lig", "evidence": "Super Lig 2026-27" },
+    "fb-105": { "name": "Nice", "league": "Ligue 1", "evidence": "Ligue 1 2026-27" },
+    "fb-107": { "name": "Fulham", "league": "Premier League", "evidence": "Premier League 2026-27" },
+    "fb-108": { "name": "Gremio", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-109": { "name": "Atletico Nacional", "league": "Liga BetPlay", "evidence": "Liga BetPlay Clausura 2026" },
+    "fb-110": { "name": "Penarol", "league": "Primera Division Uruguay", "evidence": "Uruguay Primera 2026" },
+    "fb-111": { "name": "Kawasaki Frontale", "league": "J1 League", "evidence": "J1 League 2026-27" },
+    "fb-112": { "name": "Jeonbuk Motors", "league": "K League 1", "evidence": "K League 1 2026" },
+    "fb-113": { "name": "Al Sadd", "league": "Qatar Stars League", "evidence": "Qatar Stars League 2026-27" },
+    "fb-114": { "name": "Persepolis", "league": "Persian Gulf Pro League", "evidence": "Persian Gulf Pro League 2026-27" },
+    "fb-115": { "name": "Shanghai Port", "league": "Chinese Super League", "evidence": "Chinese Super League 2026" },
+    "fb-116": { "name": "Zamalek", "league": "Egyptian Premier League", "evidence": "Egyptian Premier League 2026-27" },
+    "fb-117": { "name": "Wydad Casablanca", "league": "Botola Pro", "evidence": "Botola Pro 2026-27" },
+    "fb-118": { "name": "Esperance", "league": "Ligue 1 Tunisia", "evidence": "Ligue 1 Tunisia 2026-27" },
+    "fb-119": { "name": "Mamelodi Sundowns", "league": "PSL", "evidence": "PSL 2026-27" },
+    "fb-120": { "name": "Toronto FC", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-121": { "name": "Sparta Prague", "league": "Czech First League", "evidence": "Czech First League 2026-27" },
+    "fb-122": { "name": "Partizan", "league": "Serbian SuperLiga", "evidence": "Serbian SuperLiga 2026-27" },
+    "fb-123": { "name": "Ferencvaros", "league": "NB I", "evidence": "NB I 2026-27" },
+    "fb-124": { "name": "Hajduk Split", "league": "HNL", "evidence": "HNL 2026-27" },
+    "fb-125": { "name": "HJK Helsinki", "league": "Veikkausliiga", "evidence": "Veikkausliiga 2026" },
+    "fb-126": { "name": "Breidablik", "league": "Besta deild", "evidence": "Besta deild 2026" },
+    "fb-127": { "name": "Slovan Bratislava", "league": "Slovak First League", "evidence": "Slovak First League 2026-27" },
+    "fb-128": { "name": "Ludogorets", "league": "First League Bulgaria", "evidence": "First League Bulgaria 2026-27" },
+    "fb-129": { "name": "Sheriff Tiraspol", "league": "Super Liga Moldova", "evidence": "Super Liga Moldova 2026-27" },
+    "fb-130": { "name": "Dinamo Tbilisi", "league": "Erovnuli Liga", "evidence": "Erovnuli Liga 2026" },
+    "fb-131": { "name": "Pyunik", "league": "Armenian Premier League", "evidence": "Armenian Premier League 2026-27" },
+    "fb-132": { "name": "Qarabag", "league": "Azerbaijan Premier League", "evidence": "Azerbaijan Premier League 2026-27" },
+    "fb-133": { "name": "Kairat Almaty", "league": "Kazakhstan Premier League", "evidence": "Kazakhstan Premier League 2026" },
+    "fb-134": { "name": "Pakhtakor", "league": "Uzbekistan Super League", "evidence": "Uzbekistan Super League 2026" },
+    "fb-135": { "name": "Mumbai City", "league": "Indian Super League", "evidence": "Indian Super League 2026-27" },
+    "fb-136": { "name": "Buriram United", "league": "Thai League 1", "evidence": "Thai League 1 2026-27" },
+    "fb-138": { "name": "Hanoi FC", "league": "V.League 1", "evidence": "V.League 1 2026-27" },
+    "fb-139": { "name": "Johor Darul Tazim", "league": "Malaysia Super League", "evidence": "Malaysia Super League 2026-27" },
+    "fb-140": { "name": "Melbourne Victory", "league": "A-League", "evidence": "A-League 2026-27" },
+    "fb-141": { "name": "Auckland FC", "league": "A-League", "evidence": "A-League 2026-27" },
+    "fb-142": { "name": "Wellington Phoenix", "league": "A-League", "evidence": "A-League 2026-27" },
+    "fb-143": { "name": "Raja Casablanca", "league": "Botola Pro", "evidence": "Botola Pro 2026-27" },
+    "fb-144": { "name": "TP Mazembe", "league": "Linafoot", "evidence": "Linafoot 2026-27" },
+    "fb-145": { "name": "Enyimba", "league": "NPFL", "evidence": "NPFL 2026-27" },
+    "fb-146": { "name": "Asante Kotoko", "league": "Ghana Premier League", "evidence": "Ghana Premier League 2026-27" },
+    "fb-147": { "name": "Gor Mahia", "league": "Kenyan Premier League", "evidence": "Kenyan Premier League 2026-27" },
+    "fb-148": { "name": "Orlando Pirates", "league": "PSL", "evidence": "PSL 2026-27" },
+    "fb-149": { "name": "Saint George", "league": "Ethiopian Premier League", "evidence": "Ethiopian Premier League 2026-27" },
+    "fb-150": { "name": "Young Africans", "league": "NBC Premier League", "evidence": "NBC Premier League 2026-27" },
+    "fb-151": { "name": "Atletico Petroleos", "league": "Girabola", "evidence": "Girabola 2026-27" },
+    "fb-152": { "name": "Nacional", "league": "Primera Division Uruguay", "evidence": "Uruguay Primera 2026" },
+    "fb-153": { "name": "Universidad de Chile", "league": "Primera Division", "evidence": "Chile Primera 2026" },
+    "fb-154": { "name": "Millonarios", "league": "Liga BetPlay", "evidence": "Liga BetPlay Clausura 2026" },
+    "fb-155": { "name": "LDU Quito", "league": "LigaPro", "evidence": "LigaPro 2026" },
+    "fb-156": { "name": "Alianza Lima", "league": "Liga 1 Peru", "evidence": "Liga 1 Peru 2026" },
+    "fb-157": { "name": "Olimpia", "league": "Primera Division Paraguay", "evidence": "Paraguay Primera 2026" },
+    "fb-158": { "name": "Caracas FC", "league": "Liga FUTVE", "evidence": "Liga FUTVE 2026" },
+    "fb-159": { "name": "Bolivar", "league": "Division Profesional", "evidence": "Division Profesional 2026" },
+    "fb-160": { "name": "Saprissa", "league": "Liga FPD", "evidence": "Liga FPD 2026-27" },
+    "fb-161": { "name": "Olimpia Tegucigalpa", "league": "Liga Nacional Honduras", "evidence": "Liga Nacional Honduras 2026-27" },
+    "fb-162": { "name": "Alianza FC", "league": "Primera Division El Salvador", "evidence": "Primera Division El Salvador 2026-27" },
+    "fb-163": { "name": "Comunicaciones", "league": "Liga Nacional Guatemala", "evidence": "Liga Nacional Guatemala 2026-27" },
+    "fb-165": { "name": "Waterhouse FC", "league": "Jamaica Premier League", "evidence": "Jamaica Premier League 2026-27" },
+    "fb-167": { "name": "Vancouver Whitecaps", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-168": { "name": "Chivas", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-169": { "name": "Pumas", "league": "Liga MX", "evidence": "Liga MX Apertura 2026" },
+    "fb-170": { "name": "Al Duhail", "league": "Qatar Stars League", "evidence": "Qatar Stars League 2026-27" },
+    "fb-171": { "name": "Al Ain", "league": "UAE Pro League", "evidence": "UAE Pro League 2026-27" },
+    "fb-172": { "name": "Beijing Guoan", "league": "Chinese Super League", "evidence": "Chinese Super League 2026" },
+    "fb-173": { "name": "Maccabi Tel Aviv", "league": "Israeli Premier League", "evidence": "Israeli Premier League 2026-27" },
+    "fb-174": { "name": "APOEL", "league": "Cypriot First Division", "evidence": "Cypriot First Division 2026-27" },
+    "fb-175": { "name": "Flora Tallinn", "league": "Meistriliiga", "evidence": "Meistriliiga 2026" },
+    "fb-176": { "name": "Zalgiris Vilnius", "league": "A Lyga", "evidence": "A Lyga 2026" },
+    "fb-177": { "name": "AZ Alkmaar", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-178": { "name": "Twente", "league": "Eredivisie", "evidence": "Eredivisie 2026-27" },
+    "fb-179": { "name": "Vitoria Guimaraes", "league": "Primeira Liga", "evidence": "Primeira Liga 2026-27" },
+    "fb-180": { "name": "Hearts", "league": "Scottish Premiership", "evidence": "Scottish Premiership 2026-27" },
+    "fb-181": { "name": "Hibernian", "league": "Scottish Premiership", "evidence": "Scottish Premiership 2026-27" },
+    "fb-182": { "name": "Columbus Crew", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-183": { "name": "Atlanta United", "league": "MLS", "evidence": "MLS 2026" },
+    "fb-184": { "name": "Al Ahli", "league": "Saudi Pro League", "evidence": "Saudi Pro League 2026-27" },
+    "fb-185": { "name": "Al Shabab", "league": "Saudi Pro League", "evidence": "Saudi Pro League 2026-27" },
+    "fb-186": { "name": "Ulsan HD", "league": "K League 1", "evidence": "K League 1 2026" },
+    "fb-187": { "name": "FC Seoul", "league": "K League 1", "evidence": "K League 1 2026" },
+    "fb-188": { "name": "Pohang Steelers", "league": "K League 1", "evidence": "K League 1 2026" },
+    "fb-189": { "name": "Botafogo", "league": "Brasileirao", "evidence": "Brasileirao 2026" },
+    "fb-190": { "name": "Cruzeiro", "league": "Brasileirao", "evidence": "Brasileirao 2026" }
+  },
+  "clubLeaguesPinned": {
+    "fb-43": { "name": "West Ham", "league": "Premier League", "league2026": "Championship", "evidence": "Championship 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-66": { "name": "Hertha Berlin", "league": "Bundesliga", "league2026": "2. Bundesliga", "evidence": "2. Bundesliga 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-70": { "name": "Nantes", "league": "Ligue 1", "league2026": "Ligue 2", "evidence": "Ligue 2 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-93": { "name": "River Plate Asuncion", "league": "Primera Division Paraguay", "league2026": "Primera B Paraguay", "evidence": "Paraguay Primera B 2026", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-96": { "name": "Girona", "league": "La Liga", "league2026": "Segunda Division", "evidence": "Segunda 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-106": { "name": "Wolves", "league": "Premier League", "league2026": "Championship", "evidence": "Championship 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): a label serves every season the game plays, from 1990 on, so writing league2026 here would rewrite every past season with it. The league by year round moves it and takes league2026 from here." },
+    "fb-137": { "name": "Persija Jakarta", "league": "Liga 1 Indonesia", "league2026": "Super League Indonesia", "evidence": "Super League Indonesia 2026-27", "reason": "Held at its old label (the lead's option (a), 2026-10-05): its top flight is officially the BRI Super League for 2026-27 (the detik source still calls it Liga 1 in passing), and a label serves every season the game plays, from 1990 on. The league by year round moves it and takes league2026 from here." }
+  },
+  "clubLeaguesUnverified": {
+    "fb-164": { "name": "Violette AC", "league": "Ligue Haitienne", "reason": "Read 2026-10-06: the newest season soccerway carries for Haiti's championnat is 2025 (March to June), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." },
+    "fb-166": { "name": "Defence Force FC", "league": "TT Premier League", "reason": "Read 2026-10-06: the newest TT Premier League season soccerway carries is 2025/2026 (November 2025 to April 2026), and no 2026-27 table was found to read twice. The label is the one the table already carried; never a guess." }
+  }
+}

@@ -3466,7 +3466,19 @@ export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "
    Round 1013: these 190 hand rows are HAND_CLUBS and are never renamed,
    removed or reordered (saves and the academy lookups read clubs by name).
    FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
-   every hand row keeps its index. */
+   every hand row keeps its index.
+   Round 1022: every row's league is checked against two sources for 2026-27
+   (2026 for calendar year leagues) in scripts/data/soccerCareerFacts.json,
+   and scripts/simCareerFacts.mjs holds this table to that file. A label
+   serves every era from 1990 on (nothing here moves a club by year), so the
+   seven clubs whose 2026-27 league differs from the one they played in for
+   most of those years keep their old label, held in the file with the
+   verified 2026-27 league beside it until the league by year round lands
+   (the lead's option (a) of 2026-10-05): West Ham and Wolves (Championship),
+   Girona (Segunda Division), Hertha Berlin (2. Bundesliga), Nantes (Ligue 2),
+   River Plate Asuncion (Primera B) and Persija Jakarta (the top flight's
+   name since 2025). Labels nobody has read twice yet are listed there as
+   unverified. Tiers are balance, not fact. */
 export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
@@ -5110,6 +5122,38 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   return playPendingProSeason(s, clubs);
 }
 
+/* Round 1022: each nation's men's all time international scoring record, the
+   number a career has to pass for the All Time Top Scorer award and its
+   "Became X's All Time Top International Scorer" line. Every row is two source
+   verified in scripts/data/soccerCareerFacts.json (holder, sources, the date
+   read) and scripts/simCareerFacts.mjs holds this table to that file. Snapshot
+   of 2026-10-06: Argentina Messi, Belgium Lukaku, Brazil Neymar (full internationals only),
+   Colombia Falcao, Croatia Suker, Egypt Hossam Hassan, England Kane, France
+   Mbappe, Germany Klose, Italy Riva, Japan Kamamoto, Netherlands Depay,
+   Nigeria Yekini, Norway Haaland, Portugal Ronaldo, South Korea Son, Spain
+   Villa, Uruguay Suarez. Records held by active players move; refresh the
+   file and this table together. A nation with no verified row gets no award:
+   the old `|| 40` default made one up for every other nation, and the old
+   rows (Spain 29, Belgium 68, Uruguay 36 and more) were far below the truth.
+   Senegal is left out until two current sources agree on Mane's count. */
+export const INT_SCORING_RECORDS: Readonly<Record<string, number>> = {
+  Argentina: 125, Belgium: 94, Brazil: 80, Colombia: 36, Croatia: 45, Egypt: 69,
+  England: 89, France: 67, Germany: 71, Italy: 35, Japan: 75, Netherlands: 55,
+  Nigeria: 37, Norway: 65, Portugal: 146, "South Korea": 59, Spain: 59, Uruguay: 69,
+};
+
+/* The award, once per career, when his international goals pass his nation's
+   verified record. No draws, so lifting it out of the season moved nothing. */
+export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
+  if (!s.internationalCareer) return;
+  const record = INT_SCORING_RECORDS[s.nationality];
+  if (record === undefined) return;
+  const intGoals = s.intStats.goals;
+  if (intGoals <= record || s.awards.some(a => a.name === "All Time Top Scorer")) return;
+  s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
+  s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
+}
+
 /* Round 850: the season itself, split off the start of the year above so the
    retirement talk can sit between the two. Everything above is the year
    beginning (the birthday, bans, the heat, the drug test, forced retirement);
@@ -5417,22 +5461,6 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     s.popularity = clamp(s.popularity + 15, 0, 100);
   }
 
-  // All Time Top Scorer for country, international goals record
-  const INT_RECORDS: Record<string, number> = {
-    Brazil: 77, France: 57, Argentina: 106, Germany: 71, Spain: 29, England: 66,
-    Portugal: 135, Netherlands: 50, Italy: 35, Belgium: 68, Croatia: 35, Uruguay: 36,
-    Norway: 33, Egypt: 51, Colombia: 25, Nigeria: 28, Senegal: 35, Japan: 55, "South Korea": 36,
-  };
-  if (s.internationalCareer) {
-    const intGoals = s.intStats.goals;
-    const record = INT_RECORDS[s.nationality] || 40;
-    const alreadyTopScorer = s.awards.some(a => a.name === "All Time Top Scorer");
-    if (!alreadyTopScorer && intGoals > record) {
-      s.awards = [...s.awards, { year: thisYear, name: "All Time Top Scorer", emoji: "👑" }];
-      s.events.push(`👑 Became ${s.nationality}'s All Time Top International Scorer with ${intGoals} goals!`);
-    }
-  }
-
   // Fair Play Award, good conduct season (low cards, high rating)
   if (season.yellowCards <= 1 && season.redCards === 0 && season.rating >= 7.5 && season.apps >= 25 && Math.random() < 0.1) {
     const alreadyFairPlayThisYear = s.awards.some(a => a.name === "Fair Play Award" && a.year === thisYear);
@@ -5489,6 +5517,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      World Cup and the continental championships crown a winner across a whole
      career even if you never get a cap. */
   runTournamentSummer(s, season, thisYear);
+  /* Round 1022: the scoring record is checked after the summer, so goals at a
+     World Cup or a continental final count the season they are scored (a man
+     who passes it at his last tournament still gets it) and the line's total
+     is the one his screen shows. No draws, so the move changed none. */
+  awardAllTimeTopScorer(s, thisYear);
 
   /* ─── Round 130: the rest of the football world has a season too ───
      Runs BEFORE the Ballon d'Or on purpose. It decides who won each league,
