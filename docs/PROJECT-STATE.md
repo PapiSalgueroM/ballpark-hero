@@ -1,3 +1,20 @@
+## Round1065 release candidate prepared, 2026-10-06
+
+Circuit gameplay source 7b8f499a passed full preparation 37472006900:
+31 harnesses, 47 outcomes, 72 effective controls, two full native three-win
+runs and two early losses. 123 geometry stages, 939 controls and 984 loaded
+font observations passed; no duplicate/intermediate awards or forwarded writes.
+Artifact 11417683847 SHA256 c1e75e08965252f9c2a9f660e7dc09ba472948d2c978dcb2b64bc43c3e68a941 verified.
+
+Guide refresh 37475336014 on ee57b557 passed type/build:seo and 28 harnesses.
+Core source equality guard passed; four already accepted core steps were
+intentionally skipped here, full final PR gates restored without skips.
+Artifact 11419446624 SHA256 e38828d97443548c06e613708c2a0a194ffe181a12b1faed7aa2e780ce08e430 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only Cage and What's New lastmod hashes changed; sitemap dates stayed intact.
+Temporary generation helpers removed. Final CI, merge and publish pending.
+Claude AG slot remains theirs while checks run; preserve PR146/147/148/149.
+
 ## Codex claims1065: Cage Circuit, 2026-10-06
 
 Codex owns /cage-clash only: new Circuit mode, three actual fights against
