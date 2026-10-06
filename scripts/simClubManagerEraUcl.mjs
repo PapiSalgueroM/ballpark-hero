@@ -90,6 +90,24 @@
         with clubs level on points, how many of those the head to head puts
         in a different order from goal difference, and how many change who
         tops the group and therefore who hosts the deciding leg.
+     7) NO 2026 MAN ON AN ERA NIGHT (Round 1028). A historic era's foreign
+        Champions League clubs have no era roster, and the scorer draw used to
+        fall back to the static pool, which is today's squads, so a 2005-06
+        night at AC Milan could name a 2026 Milan scorer. For every era in
+        ERA_UCL_FIELDS, a Barcelona career is played to its first group night
+        and that night is then played at EVERY other club of the era's field
+        (PLAYS_PER_CLUB times each, on clones of the one state): every
+        opposition scorer is a man of that club's own era roster, or, for a
+        club with none, the neutral "<club> No. N" line (N 7 to 11); and no
+        man the static pool lists at that club, unless the era's own world
+        has him too, appears anywhere in the report (line ups, ratings,
+        timeline, events). The two Round 899 long names an old 2015 save can
+        still hold (Paris Saint-Germain, Borussia Mönchengladbach) are played
+        too and must field the 2015 squad they map to. THE TWIN: a modern
+        Real Madrid season is played twice from one local seed, once on the
+        engine and once on a copy with both Round 1028 edits taken out, and
+        the two digests (every report and the final table) must be equal, so
+        today's world is provably untouched.
 
    Negative controls (house rule: prove the checks can fail, and refuse to
    run if the rewrite finds nothing to rewrite; CRLF normalised first):
@@ -115,6 +133,17 @@
        Section 6 must go red (measured: 129 findings, one for every group
        night whose level clubs the head to head had put the other way round,
        plus both measurement floors falling to zero).
+     CM_UCL_CONTROL=poolnames bundles a copy of the engine whose scorer draw
+       falls back to the static pool in every era again, the pre-1028 draw.
+       Section 7 must go red (measured: 135 findings, today's scorers at all
+       six exposed field clubs, Milan, Inter, Bayern and Panathinaikos in
+       2005-06, Panathinaikos in 2010-11, Galatasaray in 2015-16).
+     CM_UCL_CONTROL=oldname bundles a copy of the engine whose roster lookup
+       ignores the Round 899 long names again. Section 7 must go red
+       (measured: 21 findings, the long name nights scoring with shirt
+       numbers instead of the 2015 squad).
+     Main's own engine before Round 1028, run through section 7: 176
+       findings (both regressions at once).
 
    Sample floors are measured counts with headroom, set after the first runs
    and recorded beside each check.
@@ -127,6 +156,7 @@ import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import os from 'node:os';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -134,12 +164,12 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_UCL_CONTROL || '';
-if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent'].includes(CONTROL)) {
+if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent', 'poolnames', 'oldname'].includes(CONTROL)) {
   console.error(`CM_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
-const buckets = { format: [], draw: [], render: [], h2h: [], migrate: [], groups: [] };
+const buckets = { format: [], draw: [], render: [], h2h: [], migrate: [], groups: [], eranames: [] };
 const note = (bucket, m) => buckets[bucket].push(m);
 const lf = s => s.replaceAll('\r\n', '\n');
 
@@ -208,6 +238,39 @@ if (CONTROL === 'uclgd') {
     'clubManagerEraUcl.uclgd.ts', 'the group sorter');
   console.log('NEGATIVE CONTROL ON: every Champions League group sorts on goal difference then goals scored again, the pre-478 order; section 6 must go red');
 }
+/* Round 1028: the two edits that keep a historic era off today's squads. A
+   control takes one of them back out; the section 7 twin takes both out, so
+   the modern digest is compared against the engine as it was before them. */
+const POOL_GUARD = [
+  '  const oppPool = isHistoricEra(eraId) ? [] : getPool().filter(p =>\n',
+  '  const oppPool = getPool().filter(p =>\n',
+];
+const OLD_NAME_MAP = [
+  '  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));\n',
+  '  return projectedRoster(club, yearsOnNow, eraId).filter(p => !exclude.has(p.n));\n',
+];
+function rewriteEngine(pairs, outName, what) {
+  let src = lf(fs.readFileSync(ENGINE, 'utf8'));
+  for (const [from, to] of pairs) {
+    if (!src.includes(from)) {
+      console.error(`cannot run: ${what} is not in the shape this harness rewrites`);
+      process.exit(1);
+    }
+    src = src.replace(from, to);
+  }
+  const out = `${TMP}/${outName}`;
+  fs.writeFileSync(out, src);
+  return out;
+}
+if (CONTROL === 'poolnames') {
+  enginePath = rewriteEngine([POOL_GUARD], 'clubManagerEraUcl.poolnames.ts', 'the era guard on the scorer pool');
+  console.log('NEGATIVE CONTROL ON: an era club with no era roster scores with today\'s squads again, the pre-1028 draw; section 7 must go red');
+}
+if (CONTROL === 'oldname') {
+  enginePath = rewriteEngine([OLD_NAME_MAP], 'clubManagerEraUcl.oldname.ts', 'the long name roster lookup');
+  console.log('NEGATIVE CONTROL ON: the Round 899 long names find no 2015 roster again; section 7 must go red');
+}
+const PRE1028_ENGINE = rewriteEngine([POOL_GUARD, OLD_NAME_MAP], 'clubManagerEraUcl.pre1028.ts', 'the Round 1028 edits');
 
 /* The engine and the two real cards in one CommonJS bundle (the
    simClubManagerEraMidSeason recipe). A rewritten card still imports the
@@ -226,14 +289,27 @@ import { MemoryRouter } from 'react-router-dom';
    has no Router by default, which crashes useContext inside Link. A router
    with no navigation ever taken changes nothing about what the card renders. */
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(MemoryRouter, null, React.createElement(Component, props)));
+/* Round 1028: the static pool (today's squads) and the era rosters, for section 7. */
+export { players as staticPool } from '${ROOT_URL}/src/data/players.ts';
+export { eraRosters } from '${ROOT_URL}/src/lib/clubManagerEras.ts';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic${groupsAlias} --alias:@=${ROOT_URL}/src --outfile="${BUNDLE}" --log-level=error`, {
   stdio: 'inherit',
   env: { ...process.env, NODE_PATH: `${ROOT}/node_modules` },
 });
+/* Round 1028: the twin, the engine with both Round 1028 edits taken out, for
+   the section 7 modern digest. Its own bundle, so its caches are its own. */
+const TWIN_ENTRY = `${TMP}/clubManagerEraUcl.twin.entry.mjs`;
+const TWIN_BUNDLE = `${TMP}/clubManagerEraUcl.twin.bundle.cjs`;
+fs.writeFileSync(TWIN_ENTRY, `export * as cm from '${PRE1028_ENGINE}';\n`);
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${TWIN_ENTRY}" --bundle --format=cjs --platform=node --jsx=automatic --alias:@=${ROOT_URL}/src --outfile="${TWIN_BUNDLE}" --log-level=error`, {
+  stdio: 'inherit',
+  env: { ...process.env, NODE_PATH: `${ROOT}/node_modules` },
+});
 const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
-const { cm, UclGroupsCard, UclBracketCard, render } = createRequire(import.meta.url)(BUNDLE);
+const { cm, UclGroupsCard, UclBracketCard, render, staticPool, eraRosters } = createRequire(import.meta.url)(BUNDLE);
+const twinCm = createRequire(import.meta.url)(TWIN_BUNDLE).cm;
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
 const {
@@ -1069,6 +1145,8 @@ const tally = {
   /* Round 478 */
   groupTables: 0, finalGroups: 0, groupsLevel: 0, groupsTurned: 0, winnerChanged: 0,
   seededGroups: 0, crafted: 0, migratedGroups: 0, groupNights: 0,
+  /* Round 1028 */
+  eraNights: 0, eraGoals: 0, rosterGoals: 0, numberGoals: 0, exposedGoals: 0, longNameGoals: 0, exposedClubs: [], previews: 0, dangerMen: 0,
 };
 function runCareer(tag, club, eraId) {
   const isEra = !!eraId;
@@ -1151,6 +1229,147 @@ checkGroupRule(tally);
 checkGroupPaths();
 checkGroupMigration(tally);
 
+/* ---------- 7. Round 1028: no 2026 man on an era night ---------- */
+/* Run after sections 1 to 6, so their seeded samples are the ones their
+   floors were measured on. */
+const PLAYS_PER_CLUB = 12;
+/* The Round 899 long names an old 2015 save can hold, and the roster each
+   maps to. Read against the engine's own map below, so a rename cannot leave
+   this check playing nobody. */
+const LONG_NAMES = { era2015: { 'Paris Saint-Germain': 'PSG', 'Borussia Mönchengladbach': 'Gladbach' } };
+{
+  const src = lf(fs.readFileSync(ENGINE, 'utf8'));
+  for (const [long, short] of Object.entries(LONG_NAMES.era2015)) {
+    if (!src.includes(`    '${long}': '${short}',\n`)) {
+      console.error(`cannot find the long name ${long} in the engine's ERA_EURO_OLD_NAMES`);
+      process.exit(1);
+    }
+  }
+}
+const isLetter = ch => !!ch && /\p{L}/u.test(ch);
+/** The name as a whole name in the text, never as part of a longer one. */
+function containsName(text, name) {
+  let at = text.indexOf(name);
+  while (at !== -1) {
+    if (!isLetter(text[at - 1]) && !isLetter(text[at + name.length])) return true;
+    at = text.indexOf(name, at + 1);
+  }
+  return false;
+}
+const attOrMid = pos => ['ATT', 'MID'].includes(cm.groupOf(pos));
+function checkEraNights(tally) {
+  for (const eraId of Object.keys(ERA_UCL_FIELDS)) {
+    const world = eraRosters(eraId);
+    const worldNames = new Set(Object.values(world).flat().map(p => p.n));
+    let s = startCareer('Barcelona', eraId);
+    let guard = 0;
+    while (guard++ < 80 && s.calendar[s.week]?.type !== 'uclGroup') s = playNextEntry(s, { skipHalftime: true }).state;
+    const entry = s.calendar[s.week];
+    if (entry?.type !== 'uclGroup' || !s.uclGroup) {
+      note('eranames', `${eraId}: the Barcelona career never reached a group night`);
+      continue;
+    }
+    const idx = entry.round % 3;
+    const targets = [
+      ...ERA_UCL_FIELDS[eraId].filter(e => e.name !== s.clubName).map(e => [e.name, e.name]),
+      ...Object.entries(LONG_NAMES[eraId] ?? {}),
+    ];
+    for (const [opp, rosterKey] of targets) {
+      const roster = new Set((world[rosterKey] ?? []).map(p => p.n));
+      /* Today's men at this club the era's own world does not have: none of
+         them may appear anywhere in a report of this night. */
+      const forbidden = staticPool.filter(p => p.club === opp && !worldNames.has(p.name)).map(p => p.name);
+      /* The clubs the pre-1028 draw handed today's scorers: no era roster,
+         and attackers or midfielders in the static pool. */
+      const exposed = !(world[opp]?.length) && staticPool.some(p => p.club === opp && attOrMid(p.position));
+      if (exposed) tally.exposedClubs.push(`${eraId} ${opp}`);
+      /* The Match Centre's preview of the same night: its danger men read
+         the same opponent, so they answer to the same two rules. matchFacts
+         draws nothing, so the stream the plays below walk is untouched. */
+      const pre = clone(s);
+      pre.uclGroup.opponents[idx] = opp;
+      const facts = cm.matchFacts(pre);
+      if (facts?.opponent !== opp) note('eranames', `${eraId}: the Match Centre preview of the night at ${opp} names ${facts?.opponent ?? 'nobody'}`);
+      else {
+        tally.previews += 1;
+        for (const n of facts.oppDanger ?? []) {
+          tally.dangerMen += 1;
+          if (!roster.has(n)) note('eranames', `${eraId} at ${opp}: the preview's danger man ${n} is not in the ${eraId} ${rosterKey} roster`);
+        }
+        const factsText = JSON.stringify(facts);
+        for (const n of forbidden) {
+          if (containsName(factsText, n)) note('eranames', `${eraId} at ${opp}: the Match Centre preview names ${n}, a man of today's ${opp} the ${eraId} world does not have`);
+        }
+      }
+      for (let k = 0; k < PLAYS_PER_CLUB; k++) {
+        const c = clone(s);
+        c.uclGroup.opponents[idx] = opp;
+        const r = playNextEntry(c, { skipHalftime: true });
+        const rep = r.report;
+        if (r.kind !== 'match' || !rep || (rep.home !== opp && rep.away !== opp)) {
+          note('eranames', `${eraId}: the night at ${opp} was not played (${r.kind})`);
+          break;
+        }
+        tally.eraNights += 1;
+        for (const sc of rep.oppScorers) {
+          tally.eraGoals += 1;
+          if (exposed) tally.exposedGoals += 1;
+          if (rosterKey !== opp) tally.longNameGoals += 1;
+          if (roster.size) {
+            if (roster.has(sc.name)) tally.rosterGoals += 1;
+            else note('eranames', `${eraId} at ${opp}: ${sc.name} scored, and he is not in the ${eraId} ${rosterKey} roster`);
+          } else if (sc.name.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(sc.name.slice(opp.length + 5)))) {
+            tally.numberGoals += 1;
+          } else {
+            note('eranames', `${eraId} at ${opp}: ${sc.name} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
+          }
+        }
+        const text = JSON.stringify(rep);
+        for (const n of forbidden) {
+          if (containsName(text, n)) note('eranames', `${eraId} at ${opp}: the report names ${n}, a man of today's ${opp} the ${eraId} world does not have`);
+        }
+      }
+    }
+  }
+}
+
+/* THE TWIN. A modern Real Madrid season from one local seed, on the engine
+   and on the copy with both Round 1028 edits taken out. The harness stream is
+   put aside and handed back after, so nothing above or below moves. */
+function mulberry(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function modernDigest(engine) {
+  const saved = Math.random;
+  Math.random = mulberry(1028);
+  try {
+    let s = engine.startCareer('Real Madrid');
+    const parts = [];
+    let guard = 0;
+    while (guard++ < 200) {
+      const r = engine.playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      if (r.report) parts.push(JSON.stringify(r.report));
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    const reports = parts.length;
+    parts.push(JSON.stringify(s.table));
+    return { reports, hash: createHash('sha1').update(parts.join('\n')).digest('hex').slice(0, 12) };
+  } finally {
+    Math.random = saved;
+  }
+}
+checkEraNights(tally);
+const twinBefore = modernDigest(twinCm);
+const twinNow = modernDigest(cm);
+
 /* ---------- the report ---------- */
 let failures = 0;
 function section(title, bucket, lines, extra) {
@@ -1205,7 +1424,36 @@ section('6) A Champions League group is sorted by the Champions League rule, and
   if (tally.winnerChanged < 3) note('groups', `the head to head changed the group winner in only ${tally.winnerChanged} groups (floor 3, measured 7 to 16), which is the outcome this round exists for`);
 });
 
+section('7) An era European night names only men of that era, at every club of every era\'s field', 'eranames', [
+  `${tally.eraNights} era nights played across ${Object.keys(ERA_UCL_FIELDS).length} eras (${PLAYS_PER_CLUB} at each club of each field, plus the long names); ${tally.eraGoals} opposition goals: ${tally.rosterGoals} by men of the club's own era roster, ${tally.numberGoals} on the neutral shirt number line`,
+  `${tally.previews} Match Centre previews of the same nights read, ${tally.dangerMen} danger men named, every one from the club's era roster`,
+  `${tally.exposedGoals} of those goals were at the ${tally.exposedClubs.length} clubs the pre-1028 draw handed today's scorers (${tally.exposedClubs.join(', ')}); ${tally.longNameGoals} at the Round 899 long names`,
+  `THE TWIN: a modern Real Madrid season, ${twinNow.reports} reports, digest ${twinNow.hash} on the engine and ${twinBefore.hash} before Round 1028`,
+], () => {
+  if (twinNow.hash !== twinBefore.hash) note('eranames', `the modern season changed: digest ${twinNow.hash} on the engine, ${twinBefore.hash} with the Round 1028 edits taken out`);
+  if (twinNow.reports < 30) note('eranames', `the twin played only ${twinNow.reports} reports (floor 30)`);
+  if (tally.exposedClubs.length < 1) note('eranames', 'no era club is exposed to the static pool any more, so the check reads nothing: retire it or point it somewhere real');
+  /* Every night is played (a count, not a sample): each era's field less my
+     club, plus the long names, PLAYS_PER_CLUB times, and one preview each. */
+  const targets = Object.entries(ERA_UCL_FIELDS).reduce((n, [eraId, f]) => n + f.length - 1 + Object.keys(LONG_NAMES[eraId] ?? {}).length, 0);
+  if (tally.eraNights !== targets * PLAYS_PER_CLUB) note('eranames', `${tally.eraNights} era nights played where ${targets * PLAYS_PER_CLUB} were due`);
+  if (tally.previews !== targets) note('eranames', `${tally.previews} Match Centre previews read where ${targets} were due`);
+  /* Floors from the measured spread. Over its own seed and SIM_SEED 1 to 5
+     (Round 1028, three eras): 911 to 1088 opposition goals, 82 to 95 of them
+     at the exposed clubs, 15 to 24 at the long names, and 80 danger men every
+     run (two at each of the 40 clubs with an era roster). The exposed and long
+     name floors are what keep the two controls able to fire: below them the
+     check is reading too few goals at the clubs it exists for. */
+  if (tally.exposedGoals < 40) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 40, measured 82 to 95)`);
+  if (tally.longNameGoals < 6) note('eranames', `only ${tally.longNameGoals} goals at the long names (floor 6, measured 15 to 24)`);
+  if (tally.dangerMen < 40) note('eranames', `only ${tally.dangerMen} danger men read (floor 40, measured 80)`);
+});
+
 console.log('');
+if (CONTROL === 'poolnames' || CONTROL === 'oldname') {
+  if (buckets.eranames.length > 0) { console.log(`simClubManagerEraUcl control: green. The ${CONTROL} regression was reported (${buckets.eranames.length} findings in section 7).`); process.exit(0); }
+  console.error(`simClubManagerEraUcl control: RED. The ${CONTROL} regression went unreported in section 7.`); process.exit(1);
+}
 if (CONTROL === 'nor16') {
   const hit = buckets.format.length + buckets.draw.length + buckets.migrate.length;
   if (hit > 0 && buckets.render.length === 0) { console.log(`simClubManagerEraUcl control: green. The pre-462 competition was reported (${hit} findings across sections 1, 2 and 5).`); process.exit(0); }
@@ -1224,4 +1472,4 @@ if (CONTROL === 'uclgd') {
   console.error('simClubManagerEraUcl control: RED. Every Champions League group sorted on goal difference again and section 6 said nothing.'); process.exit(1);
 }
 if (failures > 0) { console.error(`\nsimClubManagerEraUcl: ${failures} FAILURE(S)`); process.exit(1); }
-console.log('simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, and Spain and Italy split level points on head to head.');
+console.log('simClubManagerEraUcl: PASS. The era Champions League plays its round of 16, the group tables stay up, Spain and Italy split level points on head to head, and an era night names only men of its era.');
