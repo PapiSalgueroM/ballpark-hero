@@ -29,8 +29,8 @@
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "3c25ca9e3a4944f9",
-    "date": "2026-10-01"
+    "hash": "e018e8f3b90cbcd8",
+    "date": "2026-10-06"
   },
   "/baseball-career": {
     "hash": "d8f91e9c040fe714",
@@ -49,8 +49,8 @@
     "date": "2026-10-02"
   },
   "/buzzer-beater": {
-    "hash": "391f8d0e350d3f66",
-    "date": "2026-10-01"
+    "hash": "795163b07ed4406f",
+    "date": "2026-10-06"
   },
   "/career": {
     "hash": "082418ed69282829",
@@ -89,16 +89,16 @@
     "date": "2026-09-19"
   },
   "/club-manager": {
-    "hash": "3f14eb500dcdd75b",
-    "date": "2026-10-03"
+    "hash": "1e9eeb7810d94f93",
+    "date": "2026-10-06"
   },
   "/clue-auction": {
     "hash": "eb595f5de269d4aa",
     "date": "2026-10-01"
   },
   "/college": {
-    "hash": "32423354f70acd4e",
-    "date": "2026-10-01"
+    "hash": "0e092b3e0d3484d0",
+    "date": "2026-10-06"
   },
   "/college-grid": {
     "hash": "b2ac0349630f7aae",
@@ -185,8 +185,8 @@
     "date": "2026-09-30"
   },
   "/footle": {
-    "hash": "58751d7b86be4193",
-    "date": "2026-09-30"
+    "hash": "0b2e5df2148e12dc",
+    "date": "2026-10-06"
   },
   "/free-kick": {
     "hash": "61f0f7a9b7dff659",
@@ -241,8 +241,8 @@
     "date": "2026-09-30"
   },
   "/hockey": {
-    "hash": "eccb0381977136a3",
-    "date": "2026-10-01"
+    "hash": "e95afff5cfe55b92",
+    "date": "2026-10-06"
   },
   "/hockey-career": {
     "hash": "2e7f387b81915795",
@@ -325,8 +325,8 @@
     "date": "2026-09-30"
   },
   "/mlb-my-career": {
-    "hash": "36d1c6de46af01bc",
-    "date": "2026-10-01"
+    "hash": "803bcbab7e68ba5a",
+    "date": "2026-10-06"
   },
   "/mlb-postseason-format-history": {
     "hash": "8fde967fbb75bc2f",
@@ -377,8 +377,8 @@
     "date": "2026-09-30"
   },
   "/nba-my-career": {
-    "hash": "47abffbd460c1556",
-    "date": "2026-10-01"
+    "hash": "4073f9e61c90ce20",
+    "date": "2026-10-06"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -413,8 +413,8 @@
     "date": "2026-09-30"
   },
   "/nfl-my-career": {
-    "hash": "8a42c9220d032791",
-    "date": "2026-10-01"
+    "hash": "2a983ad5ef5a1078",
+    "date": "2026-10-06"
   },
   "/nfl-playoff-format-history": {
     "hash": "88c1e478862c9261",
@@ -437,8 +437,8 @@
     "date": "2026-10-01"
   },
   "/nhl-my-career": {
-    "hash": "cdb5dda331095416",
-    "date": "2026-10-01"
+    "hash": "3d192f8093d6992f",
+    "date": "2026-10-06"
   },
   "/nhl-playoff-format-history": {
     "hash": "f53f338375aff255",
@@ -489,12 +489,12 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "125bf0bbac94bbfa",
-    "date": "2026-10-01"
+    "hash": "442114160c5d5786",
+    "date": "2026-10-06"
   },
   "/pro-football": {
-    "hash": "51cee2d646aeb336",
-    "date": "2026-09-30"
+    "hash": "86f51c9e55538ea0",
+    "date": "2026-10-06"
   },
   "/puck-detective": {
     "hash": "72f2b740fb4e773c",
@@ -589,8 +589,8 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "baa15566bfbc3370",
-    "date": "2026-10-02"
+    "hash": "976c140cdd0f5873",
+    "date": "2026-10-06"
   },
   "/soccer-career": {
     "hash": "5e389f42e5faf63b",
@@ -653,8 +653,8 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "aeb5a111d0b656b0",
-    "date": "2026-10-05"
+    "hash": "cadffac0f5fd626d",
+    "date": "2026-10-06"
   },
   "/who-am-i": {
     "hash": "d0ec820f2cd7c871",
