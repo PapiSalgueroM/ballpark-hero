@@ -1,3 +1,27 @@
+## Codex1063 native timing repairs, 2026-10-06
+
+Third preparation37438939732 at76613b21490dfa4aba6126f389a8193aa2d56414
+passed types/build,22 outcomes/28 effective controls,12 regressions and all16
+built readers. The320px real touch fight passed, including clinch, both ground
+positions, submission pressure, three rounds and a scored result. All4 effective
+native geometry controls passed. Remaining native failures are help entrance
+animation measured before settling (44px close scales to41.8px) and headless
+tab activation not producing actual window blur. Repair only the timing/native
+focus setup, preserve assertions. No accepted release or generated outputs copied.
+Artifact11400254241 ZIP hash verified:
+e268ccc326828e6deeab07dc639306dc20fb8e57c84542e685415f321e6ce51d.
+Root viewed actual phone ground/result screenshots. Fourth remote prep follows.
+
+Publisher availability: authenticated IAB project tab works independently of
+the failed Edge binding. Publish menu shows unpublished changes and Publish
+changes. No publish action ran. Claude retains1062/AF publishing ownership.
+If Claude's publisher fails, Codex can take the coordinated slot here. Cage1063
+is still branch-only. Main remains0badf777 (docs claim, not Cage product).
+Claude ledger05:00 says AF gating9825d3a3 includes1061 to1063;1063 there means
+only the claim. AF must preserve accepted MMA, and do not claim Cage is live.
+No localruntime/productionDB/paidhostAI. Root drafts/seven stashes safe.
+Next1064 unclaimed.
+
 ## Codex1063 browser repairs, 2026-10-06
 
 Preparation37436921766 is still not acceptance. All16 built readers passed,

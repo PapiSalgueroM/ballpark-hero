@@ -164,7 +164,15 @@ try {
       assert.equal(art.width, 320); assert.equal(art.height, 180); assert.equal(art.rendering, 'pixelated'); assert(art.colors > 8, 'Canvas contains actual rendered pixel art');
       await hold('left', 180, true); const released = await hud(page); await page.clock.runFor(220); const afterRelease = await hud(page);
       assert.equal(afterRelease.player.x, released.player.x, 'Release or touch cancel clears movement');
-      await activate(button('How to play Cage Clash'), profile); await page.getByRole('dialog').waitFor(); await inspect('help');
+      await activate(button('How to play Cage Clash'), profile); await page.getByRole('dialog').waitFor();
+      await page.clock.runFor(300);
+      row.helpTransform = await page.getByRole('dialog').evaluate(async el => {
+        await Promise.all(el.getAnimations().map(animation => animation.finished));
+        const style = getComputedStyle(el), matrix = new DOMMatrixReadOnly(style.transform);
+        return { scaleX: matrix.a, scaleY: matrix.d, skewX: matrix.b, skewY: matrix.c, opacity: Number(style.opacity) };
+      });
+      assert.deepEqual(row.helpTransform, { scaleX: 1, scaleY: 1, skewX: 0, skewY: 0, opacity: 1 }, 'The real help entrance animation finishes before geometry');
+      await inspect('help');
       const helpTick = (await hud(page)).tick; await page.clock.runFor(1000); assert.equal((await hud(page)).tick, helpTick, 'Help freezes actual combat');
       await activate(page.getByRole('dialog').getByRole('button', { name: /close/i }), profile);
       await page.clock.runFor(300); assert.equal((await hud(page)).tick, helpTick, 'Closing help still waits for explicit resume');
@@ -184,10 +192,26 @@ try {
         await inspect('keyboard-guard'); await page.keyboard.up('Space'); await page.clock.runFor(112);
         assert.notDeepEqual(await glove(), [99, 139, 255, 255], 'Release returns the actual pixel pose to idle');
         await page.keyboard.down('ArrowLeft'); await page.clock.runFor(150);
-        const other = await context.newPage(); await other.bringToFront(); await page.clock.runFor(250);
-        assert((await hud(page)).paused, 'Losing actual browser focus pauses the fight'); await page.keyboard.up('ArrowLeft'); await other.close(); await page.bringToFront();
+        assert(await page.evaluate(() => document.hasFocus()), 'The arena begins with actual browser focus');
+        const other = await context.newPage();
+        try {
+          await other.bringToFront();
+          // Playwright enables focus emulation on every page. Remove it to expose native focus loss.
+          await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: false });
+          await page.waitForFunction(() => !document.hasFocus(), null, { polling: 100, timeout: 3000 });
+          row.focusLost = await page.evaluate(() => ({ focused: document.hasFocus(), hidden: document.hidden }));
+          assert.equal(row.focusLost.focused, false); await page.clock.runFor(250);
+          const frozen = await hud(page); assert(frozen.paused, 'Losing actual browser focus pauses the fight');
+          await page.clock.runFor(250); assert.deepEqual(await hud(page), frozen, 'Unfocused combat stays frozen');
+        } finally {
+          await page.keyboard.up('ArrowLeft'); await other.close(); await page.bringToFront();
+          await cdp.send('Emulation.setFocusEmulationEnabled', { enabled: true });
+        }
+        assert(await page.evaluate(() => document.hasFocus()), 'Browser focus is restored before explicit resume');
+        const returned = await hud(page); assert(returned.paused, 'Restoring browser focus does not resume the fight');
         await activate(button('Resume fight'), profile); const x = (await hud(page)).player.x; await page.clock.runFor(180);
         assert.equal((await hud(page)).player.x, x, 'Blur clears the held key before resume');
+        assert((await hud(page)).tick > returned.tick, 'Explicit resume advances real combat after focus returns');
       }
       const writesBeforeQuit = row.blockedWrites.length;
       await activate(button('Pause'), profile); await inspect('paused'); await activate(button('Leave fight'), profile);
