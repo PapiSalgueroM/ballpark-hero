@@ -120,6 +120,8 @@ const AflHigherLower = () => {
           <div className="mt-4 flex justify-center">
             <ResultScreen
               won={correctCount >= 5}
+              score={totalScore}
+              scoreLabel="points"
               outcomeEmoji={correctCount >= 8 ? '🏆' : correctCount >= 5 ? '🏉' : '😅'}
               headline={`${correctCount}/${totalRounds} Correct!`}
               statLine={<>Total Score: <span className="font-bold text-gold">{totalScore}</span></>}

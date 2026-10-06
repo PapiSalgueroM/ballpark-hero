@@ -107,6 +107,47 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
       { label: "Thumbs up emoji", reply: "👍", karma: -2 },
     ],
   },
+  /* Round 920: five more for draft day, the thinnest beats getting the most. */
+  {
+    id: "draft_billet_mom", from: "Billet mom", emoji: "🏠", phase: "any", beat: "draft",
+    text: "We watched the draft in the living room and I cried when they said your name. Your room is still here if you ever need it.",
+    choices: [
+      { label: "Call her right now", reply: "Calling you in five. I couldn't have done any of this without you guys", karma: 8, morale: 4 },
+      { label: "Heart emoji", reply: "❤️", karma: 1 },
+    ],
+  },
+  {
+    id: "draft_junior_coach", from: "Junior coach", emoji: "📣", phase: "any", beat: "draft",
+    text: "Told you that shot would get you drafted. Now go show them. And call your mom before you call anybody else.",
+    choices: [
+      { label: "Already called her", reply: "Called her first. You're second, coach", karma: 5, morale: 2 },
+      { label: "Thanks coach", reply: "Thanks for everything coach", karma: 3, morale: 1 },
+    ],
+  },
+  {
+    id: "draft_equipment", from: "Equipment manager", emoji: "🧺", phase: "any", beat: "draft",
+    text: "Welcome aboard. Need your stick specs: curve, lie, flex. And how you like your skates sharpened. Don't tell me you don't know.",
+    choices: [
+      { label: "Send the full list", reply: "Sending the whole list tonight, down to the tape", karma: 4, morale: 1 },
+      { label: "Whatever you think", reply: "Honestly whatever you think is best", karma: -2 },
+    ],
+  },
+  {
+    id: "draft_captain", from: "Captain", emoji: "©️", phase: "any", beat: "draft",
+    text: "Welcome to the team. Development camp is next week. Come early, stay late, and don't step on the logo in the room.",
+    choices: [
+      { label: "See you early", reply: "I'll be there before the trainers", karma: 5, morale: 2 },
+      { label: "Ask what else he'd tell a rookie", reply: "Anything else I should know before I walk in?", karma: 4, morale: 3 },
+    ],
+  },
+  {
+    id: "draft_hometown_paper", from: "Hometown paper", emoji: "🗞️", phase: "any", beat: "draft",
+    text: "Half the town watched you get drafted on the big screen at the rink. Five minutes for tomorrow's front page?",
+    choices: [
+      { label: "Of course", reply: "Anything for home. Call me tonight", karma: 5, popularity: 2 },
+      { label: "Maybe next week", reply: "Can we do it next week? It's been a crazy day", karma: -2 },
+    ],
+  },
 
   /* ── training camp ── */
   {
@@ -151,6 +192,47 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
       { label: "No phones is rough", reply: "I'll go but I'm not happy about the phone thing", karma: -1, morale: 1 },
     ],
   },
+  /* Round 920: five more for camp. */
+  {
+    id: "camp_video", from: "Video coach", emoji: "📼", phase: "any", beat: "camp",
+    text: "Cut every one of your preseason shifts. Forty minutes of it. Want it tonight or after the first game?",
+    choices: [
+      { label: "Tonight", reply: "Send it tonight. I'll watch it twice", karma: 4, morale: 2 },
+      { label: "After the first game", reply: "After the opener. I want to play free first", karma: -1, morale: 1 },
+    ],
+  },
+  {
+    id: "camp_trainer", from: "Head trainer", emoji: "🩹", phase: "any", beat: "camp",
+    text: "Your groin looked tight in the scrimmage. I can hold you out of tomorrow's skate and nobody needs to know. Your call.",
+    choices: [
+      { label: "Hold me out", reply: "Hold me out. Better a day now than a month later", karma: 3, morale: 1 },
+      { label: "I'm skating", reply: "I'm fine. Tape it up and I'll go", karma: -2, morale: 2, popularity: 1 },
+    ],
+  },
+  {
+    id: "camp_cut_roommate", from: "Camp roommate", emoji: "🧳", phase: "any", maxAge: 28, beat: "camp",
+    text: "They sent me down this morning. Packing now. It was good rooming with you, man.",
+    choices: [
+      { label: "Drive him to the airport", reply: "I'm driving you. You'll be back up before Christmas", karma: 8, morale: -1 },
+      { label: "Text him good luck", reply: "Good luck man. Keep grinding", karma: 2 },
+    ],
+  },
+  {
+    id: "camp_new_stick", from: "Equipment manager", emoji: "🧺", phase: "any", beat: "camp",
+    text: "The stick company sent a new model. Try it in camp, or keep the old one all season like you always do?",
+    choices: [
+      { label: "Try the new one", reply: "Give me a dozen. I'll know by the second scrimmage", karma: 1, morale: 1 },
+      { label: "No changes", reply: "Same stick, same curve, same tape. Thanks though", karma: 2, morale: 2 },
+    ],
+  },
+  {
+    id: "camp_season_ticket", from: "Season ticket holder", emoji: "🎟️", phase: "any", beat: "camp",
+    text: "Thirty years in the same seat. Saw you at the open practice. Any chance you sign my program at the next one?",
+    choices: [
+      { label: "Meet him at the glass", reply: "Come down to the glass at the next skate. Bring a pen", karma: 7, popularity: 2 },
+      { label: "Camp is crazy right now", reply: "Can't promise, camp is a lot right now", karma: -3 },
+    ],
+  },
 
   /* ── the World Juniors ── */
   {
@@ -175,6 +257,31 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Book them, I'll cover it", reply: "Book them both. I've got the flights", karma: 7, morale: 4, cash: -0.03 },
       { label: "Watch it at home", reply: "It's a long trip mom, watch it at home with everybody", karma: -1 },
+    ],
+  },
+  /* Round 920: three more for the World Juniors. */
+  {
+    id: "juniors_old_coach", from: "Old junior coach", emoji: "🏒", phase: "any", beat: "juniors",
+    text: "Saw your name on the World Juniors list. Half that team played against you in junior. Make them remember why they hated it.",
+    choices: [
+      { label: "They'll remember", reply: "They'll remember. Thanks for everything coach", karma: 5, morale: 3 },
+      { label: "Just trying to make it", reply: "Still have to make the team first coach", karma: 2, morale: 1 },
+    ],
+  },
+  {
+    id: "juniors_roommate", from: "Junior teammate", emoji: "🎒", phase: "any", beat: "juniors",
+    text: "We're roommates at the World Juniors camp apparently. I'm bringing the card game. You're bringing snacks.",
+    choices: [
+      { label: "Deal", reply: "Deal. I'll bring enough for the whole floor", karma: 5, morale: 3 },
+      { label: "I need sleep", reply: "Lights out at ten for me, sorry man", karma: -1, morale: 1 },
+    ],
+  },
+  {
+    id: "juniors_equipment", from: "Equipment manager", emoji: "🧺", phase: "any", beat: "juniors",
+    text: "The national team sent over your gear list and spelled your name wrong on the nameplate. Want me to call them, or keep it for the trophy case?",
+    choices: [
+      { label: "Keep it, it's funny", reply: "Keep it. That's going on the wall", karma: 4, morale: 2, popularity: 1 },
+      { label: "Get it fixed", reply: "Call them please. My grandma will be watching", karma: 1 },
     ],
   },
 
@@ -529,6 +636,47 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Make a plan", reply: "Let's sit down this week. Real plan", karma: 3, morale: 2, cash: -0.05 },
       { label: "Later", reply: "After the season. One thing at a time", karma: 0 },
+    ],
+  },
+  /* Round 920: five more for the summer before a contract year. */
+  {
+    id: "contract_partner", from: "Partner", emoji: "💛", phase: "any", minAge: 22, beat: "contract",
+    text: "Your agent called the house looking for you. Everything okay? Are we moving?",
+    choices: [
+      { label: "Nobody's moving yet", reply: "Nobody's moving. He just wants to plan ahead", karma: 4, morale: 2 },
+      { label: "Let's talk tonight", reply: "Maybe. Let's talk about it tonight, all of it", karma: 3, morale: -1 },
+    ],
+  },
+  {
+    id: "contract_captain", from: "Captain", emoji: "©️", phase: "any", beat: "contract",
+    text: "Heard your deal is up after this year. For what it's worth, the room wants you back. I told the GM that myself.",
+    choices: [
+      { label: "That means a lot", reply: "That means a lot. I want to be here", karma: 6, morale: 4 },
+      { label: "Business is business", reply: "Appreciate it. It's a business though, you know that", karma: 0, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_writer", from: "Beat writer", emoji: "📰", phase: "any", beat: "contract",
+    text: "Hearing the two sides are far apart on an extension. Want to comment, or do I just run no comment?",
+    choices: [
+      { label: "No comment", reply: "No comment. Nice try though", karma: 2 },
+      { label: "Say you're close", reply: "We're closer than people think. You can print that", karma: -2, popularity: 2, morale: 1 },
+    ],
+  },
+  {
+    id: "contract_accountant", from: "Accountant", emoji: "🧾", phase: "any", beat: "contract",
+    text: "Before you sign anything long term, let's sit down. Where you live and where you get paid changes what you keep.",
+    choices: [
+      { label: "Set up a meeting", reply: "Set it up this week. Bring the spreadsheets", karma: 3, morale: 1, cash: -0.1 },
+      { label: "My agent handles it", reply: "Run it by my agent, he handles that", karma: -1 },
+    ],
+  },
+  {
+    id: "contract_dad", from: "Dad", emoji: "👨", phase: "any", beat: "contract",
+    text: "Your mother says the contract stuff has you stressed. Want to go fishing Sunday and not talk about it once?",
+    choices: [
+      { label: "Sunday, no contract talk", reply: "Sunday. Not one word about money", karma: 6, morale: 4 },
+      { label: "Can't, need the ice", reply: "Can't this week dad, I need the ice time", karma: -2, morale: -1 },
     ],
   },
 ];

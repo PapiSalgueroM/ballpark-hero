@@ -40,6 +40,8 @@ export const NAME_FAMILIES: NameFamily[] = [
        and matched a real player. The pools are ordinary names on purpose,
        and this is exactly the catch they exist for. */
     lasts: ['Arrieta', 'Bengoechea', 'Cardozo', 'Duarte', 'Escalante', 'Gorosito', 'Lombardero', 'Maldonado', 'Ocampo', 'Quiroga', 'Urribarri', 'Vergara'],
+    /* 'Quiroga' paired with Facundo is a real man of the 2005-06 Bundesliga:
+       see REAL_PAIR_SWAPS below for why only that one pairing changed. */
   },
   {
     id: 'iberian',
@@ -70,6 +72,8 @@ export const NAME_FAMILIES: NameFamily[] = [
     id: 'germanic',
     firsts: ['Andreas', 'Bastian', 'Dominik', 'Fabian', 'Hendrik', 'Jannik', 'Konstantin', 'Lennart', 'Marius', 'Nico', 'Simon', 'Til'],
     lasts: ['Achenbach', 'Bergmiller', 'Dettmar', 'Ehrensberger', 'Gundlach', 'Hollerbach', 'Kirchgässner', 'Lindenau', 'Osterkamp', 'Reinhardt', 'Steinbrück', 'Wittgenstein'],
+    /* 'Reinhardt' paired with Bastian or with Dominik is a real man of the
+       2005-06 Bundesliga: see REAL_PAIR_SWAPS below. */
   },
   {
     id: 'nordic',
@@ -287,6 +291,28 @@ export function familyFor(nation: string): NameFamily {
 }
 
 /**
+ * Round 902: pairings the pools can build that belong to real men, each
+ * rewritten to an invented name. The 2005-06 era gained the Bundesliga with
+ * Facundo Quiroga (Wolfsburg), Bastian Reinhardt (Hamburg) and Dominik
+ * Reinhardt (Nurnberg). Renaming the whole surname would also have renamed
+ * the 21 other Quirogas and Reinhardts a save can already show (the
+ * national team eleven is redrawn from the save, not stored), and it
+ * changed the generated careers simCareerAwardsNight replays and the scout
+ * finds simTycoonPacks compares, so only the three real pairings move. Both intlName and allIntlNames go through pairName, so the
+ * collision harnesses check exactly what a screen can show.
+ */
+const REAL_PAIR_SWAPS: Record<string, string> = {
+  'Facundo Quiroga': 'Facundo Quiroga-Leiva',
+  'Bastian Reinhardt': 'Bastian Reinhardtsberg',
+  'Dominik Reinhardt': 'Dominik Reinhardtsberg',
+};
+
+function pairName(first: string, last: string): string {
+  const name = `${first} ${last}`;
+  return REAL_PAIR_SWAPS[name] ?? name;
+}
+
+/**
  * A stable invented name for slot `i` of `nation`. Deterministic in the
  * inputs so the same eleven renders the same way every time it is drawn
  * from a save, and spread across the pools so an eleven has eleven
@@ -302,14 +328,14 @@ export function intlName(nation: string, i: number): string {
   h >>>= 0;
   const first = fam.firsts[(h + i * 5) % fam.firsts.length];
   const last = fam.lasts[(Math.floor(h / 7) + i * 7) % fam.lasts.length];
-  return `${first} ${last}`;
+  return pairName(first, last);
 }
 
 /** Every name this file can ever produce, for the collision harness. */
 export function allIntlNames(): string[] {
   const out: string[] = [];
   for (const fam of NAME_FAMILIES) {
-    for (const f of fam.firsts) for (const l of fam.lasts) out.push(`${f} ${l}`);
+    for (const f of fam.firsts) for (const l of fam.lasts) out.push(pairName(f, l));
   }
   return out;
 }

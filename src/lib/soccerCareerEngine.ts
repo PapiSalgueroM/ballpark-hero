@@ -7,6 +7,17 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';
 /* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 972: the first stage before the knockouts, and the cup a club outside
+   Europe plays instead of the Champions League. Never imports this engine. */
+import {
+  uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,
+  CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,
+  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,
+  type ClubCupId, type FirstStageResult,
+} from './soccerCareerContinental';
+/* Round 1013: the clubs generated from Club Manager's four leagues. The file
+   imports nothing, so Club Manager never enters this page's bundle. */
+import { CAREER_CLUB_POOL } from '@/data/soccerCareerClubPool';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -169,6 +180,11 @@ export interface SeasonRecord {
   yellowCards: number;
   redCards: number;
   rating: number;
+  /** Round 1011: the overall this season was played at, the number
+      calcSeasonRating rated. Same meaning as SeasonLine.ovr in the four US
+      My Careers. Absent on rows from before that round and on rows with no
+      season played (bans, prison, retirement, academy), so nothing is guessed. */
+  ovr?: number;
   injury?: string | null;
   injuryWeeks?: number;
   injurySevere?: boolean;
@@ -199,6 +215,10 @@ export interface SeasonRecord {
   /** Round 124: won your continental championship this summer. Kept separate
       from worldCup so the cabinet does not pretend a Euros is a World Cup. */
   continentalCup?: boolean;
+  /** Round 972: the continental CLUB cup won outside UEFA, by its name that
+      season ("Copa Libertadores"). championsLeague stays the UEFA cup alone,
+      so a Libertadores is never counted as a Champions League. */
+  clubCupTitle?: string;
 }
 
 export interface ContractOffer {
@@ -332,10 +352,25 @@ export interface UCLKnockoutMatch {
 
 export interface UCLResult {
   qualified: boolean;
+  /** The knockout ties only; the first stage's nights are in firstStage. */
   matches: UCLKnockoutMatch[];
-  result: string; // "Winner", "Final", "Semi-final", "Quarter-final", "R16", "Group Stage", "N/A"
+  /** "Winner", "Final", "Semi-final", "Quarter-final", "R16", "Play-off",
+   *  "League Phase", "Group Stage", "N/A". */
+  result: string;
+  /** Every goal of the campaign, first stage included. */
   playerGoals: number;
   isTopScorer: boolean;
+  /** Round 972: the competition's name that season ("Champions League",
+   *  "European Cup", "Copa Libertadores"...). Absent on results from before,
+   *  which were all the Champions League. */
+  competition?: string;
+  /** Round 972: which cup it was; absent means the Champions League. */
+  cup?: ClubCupId;
+  /** Round 972: the group stage or league phase played before the knockouts. */
+  firstStage?: FirstStageResult;
+  /** Round 972: what this game plays differently from the real cup, shown on
+   *  the card. Set for every cup outside UEFA. */
+  simplified?: string;
 }
 
 /* ─── Individual Awards ─── */
@@ -2367,6 +2402,42 @@ export function getFlag(country: string): string { return FLAG_MAP[country] || "
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
 const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
+/* Round 1013: the market's draw rule. Club Manager filled four leagues to
+   their full lineups, which put 50 new clubs into tier 4 at once. A plain
+   pick would hand those four leagues 42% of every tier 4 offer and crowd out
+   the rest of the world, so the market first draws a league (within the
+   tier), weighted by its club count capped at LEAGUE_DRAW_CAP, then a club
+   inside it. 5 is the largest league group in any tier of the raw hand
+   list, so on that list every club keeps exactly its old chance. It is not
+   neutral everywhere, and simCareerClubPool pins where it is not: after
+   era rules the Premier League's tier 3 holds 6 or 7 hand clubs in some
+   seasons (to 1996, 2007 to 2009, 2017 to 2021), and those clubs keep 5/6
+   or 5/7 of that group's old share. On the full pool every hand tier 4
+   club outside the four leagues goes from 1/87 to 1/100 of tier 4 draws,
+   and the hand clubs inside them now share their league's 5 with the new
+   clubs (Norwich 1/440, Brentford and Palace 1/160, Betis and Celta 1/260,
+   Cruzeiro and Santos 1/280). Always two Math.random calls. */
+export const LEAGUE_DRAW_CAP = 5;
+export function leagueDrawGroups(candidates: ClubData[]): { key: string; clubs: ClubData[]; weight: number }[] {
+  const groups = new Map<string, ClubData[]>();
+  for (const club of candidates) {
+    const key = `${club.league}|${club.tier}`;
+    const list = groups.get(key);
+    if (list) list.push(club); else groups.set(key, [club]);
+  }
+  return [...groups].map(([key, clubs]) => ({ key, clubs, weight: Math.min(clubs.length, LEAGUE_DRAW_CAP) }));
+}
+export function pickAcrossLeagues(candidates: ClubData[]): ClubData {
+  const groups = leagueDrawGroups(candidates);
+  if (!groups.length) return candidates[0];
+  let r = Math.random() * groups.reduce((s, g) => s + g.weight, 0);
+  let chosen = groups[groups.length - 1];
+  for (const g of groups) {
+    if (r < g.weight) { chosen = g; break; }
+    r -= g.weight;
+  }
+  return chosen.clubs[Math.floor(Math.random() * chosen.clubs.length)];
+}
 const pickN = <T,>(arr: T[], n: number): T[] => {
   const shuffled = [...arr].sort(() => Math.random() - 0.5);
   return shuffled.slice(0, n);
@@ -2388,38 +2459,38 @@ export function getYouthAcademyClub(clubs: ClubData[], nationality: string, over
     if (anyT1Home.length > 0) return pick(anyT1Home);
     const anyElite = clubs.filter(c => ELITE_CLUBS.includes(c.name));
     if (anyElite.length > 0) return pick(anyElite);
-    return pick(getClubsByTier(clubs, 1));
+    return pickAcrossLeagues(getClubsByTier(clubs, 1));
   }
   if (ovr >= 66) {
     // Good club academy (Tier 1-2)
     const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 1 || c.tier === 2));
     if (homeTiers.length > 0) return pick(homeTiers);
     const anyT1T2 = clubs.filter(c => c.tier === 1 || c.tier === 2);
-    if (anyT1T2.length > 0) return pick(anyT1T2);
-    return pick(getClubsByTier(clubs, 2));
+    if (anyT1T2.length > 0) return pickAcrossLeagues(anyT1T2);
+    return pickAcrossLeagues(getClubsByTier(clubs, 2));
   }
   if (ovr >= 55) {
     // Mid league academy (Tier 2-3)
     const homeTiers = clubs.filter(c => c.country === nationality && (c.tier === 2 || c.tier === 3));
     if (homeTiers.length > 0) return pick(homeTiers);
     const anyT2T3 = clubs.filter(c => c.tier === 2 || c.tier === 3);
-    if (anyT2T3.length > 0) return pick(anyT2T3);
-    return pick(getClubsByTier(clubs, 3));
+    if (anyT2T3.length > 0) return pickAcrossLeagues(anyT2T3);
+    return pickAcrossLeagues(getClubsByTier(clubs, 3));
   }
   if (ovr >= 40) {
     // Lower league (Tier 3-4)
     const homeClubs = clubs.filter(c => c.country === nationality && c.tier >= 3);
     if (homeClubs.length > 0) return pick(homeClubs);
     const anyT3T4 = clubs.filter(c => c.tier >= 3);
-    if (anyT3T4.length > 0) return pick(anyT3T4);
-    return pick(getClubsByTier(clubs, 4));
+    if (anyT3T4.length > 0) return pickAcrossLeagues(anyT3T4);
+    return pickAcrossLeagues(getClubsByTier(clubs, 4));
   }
   // 25-39: Tiny non-league (Tier 4)
   const homeT4 = clubs.filter(c => c.country === nationality && c.tier === 4);
   if (homeT4.length > 0) return pick(homeT4);
   const t4 = getClubsByTier(clubs, 4);
-  if (t4.length > 0) return pick(t4);
-  return pick(getClubsByTier(clubs, 3));
+  if (t4.length > 0) return pickAcrossLeagues(t4);
+  return pickAcrossLeagues(getClubsByTier(clubs, 3));
 }
 
 export function calcOverall(s: { pace: number; shooting: number; passing: number; dribbling: number; defending: number; physical: number; reflexes: number }, position: string): number {
@@ -2586,6 +2657,29 @@ export function repairCareer<T extends CareerState>(state: T): T {
   /* Round 257: no verdict has ever been passed on a save from before it. */
   if (s.frozenOut === undefined) s.frozenOut = 0;
   if (s.badSeasonStreak === undefined) s.badSeasonStreak = 0;
+  /* Round 972: the cup card reads three new optional fields of the last
+     result and every season may carry clubCupTitle. A corrupt one is dropped
+     on its own, on a copy, and everything else in the save is kept. */
+  if (s.lastUCLResult && typeof s.lastUCLResult === "object") {
+    const u = s.lastUCLResult;
+    const badStage = u.firstStage !== undefined && !isFirstStageResult(u.firstStage);
+    const badName = u.competition !== undefined && typeof u.competition !== "string";
+    const badNote = u.simplified !== undefined && typeof u.simplified !== "string";
+    if (badStage || badName || badNote) {
+      const fixed = { ...u };
+      if (badStage) delete fixed.firstStage;
+      if (badName) delete fixed.competition;
+      if (badNote) delete fixed.simplified;
+      s.lastUCLResult = fixed;
+    }
+  }
+  if (Array.isArray(s.seasons) && s.seasons.some(x => x && x.clubCupTitle !== undefined && typeof x.clubCupTitle !== "string")) {
+    s.seasons = s.seasons.map(x => {
+      if (!x || x.clubCupTitle === undefined || typeof x.clubCupTitle === "string") return x;
+      const { clubCupTitle: _dropped, ...rest } = x;
+      return rest;
+    });
+  }
   /* Round 974: a save from before the story starts it from the season it
      loads; a damaged story resets alone and never costs the career. */
   s.story = cleanCareerStory(s.story);
@@ -3354,8 +3448,12 @@ const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelo
 
 /* ─── Fallback club roster ───
    Used when the soccer_career_clubs table is unreachable or empty, so the game
-   can always start instead of hanging on a blank/failed fetch. */
-export const FALLBACK_CLUBS: ClubData[] = [
+   can always start instead of hanging on a blank/failed fetch.
+   Round 1013: these 190 hand rows are HAND_CLUBS and are never renamed,
+   removed or reordered (saves and the academy lookups read clubs by name).
+   FALLBACK_CLUBS appends the clubs generated from Club Manager after them, so
+   every hand row keeps its index. */
+export const HAND_CLUBS: ClubData[] = [
   // Tier 1, elite
   { id: "fb-1", name: "Real Madrid", country: "Spain", tier: 1, color: "#FEBE10", league: "La Liga" },
   { id: "fb-2", name: "Barcelona", country: "Spain", tier: 1, color: "#A50044", league: "La Liga" },
@@ -3561,6 +3659,11 @@ export const FALLBACK_CLUBS: ClubData[] = [
   { id: "fb-189", name: "Botafogo", country: "Brazil", tier: 3, color: "#1A1A1A", league: "Brasileirao" },
   { id: "fb-190", name: "Cruzeiro", country: "Brazil", tier: 4, color: "#0033A0", league: "Brasileirao" },
 ];
+/* Round 1013: Club Manager's Premier League, Championship, La Liga and
+   Brasileirao, filled to their full lineups. Generated by
+   scripts/genCareerClubPool.mjs; rerun it after any change to those four
+   REAL_LEAGUES rows, and scripts/simCareerClubPool.mjs fails while it is stale. */
+export const FALLBACK_CLUBS: ClubData[] = [...HAND_CLUBS, ...CAREER_CLUB_POOL];
 
 /* ─── Appearances, league + UCL + cups for realistic totals ─── */
 /* Round 217: the league appearance band, pulled out of calcAppearances so
@@ -3877,6 +3980,7 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    ovr: overall,
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, ...finish, domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
@@ -3946,7 +4050,7 @@ export function generateContractOffers(clubs: ClubData[], overall: number, age: 
   for (const tier of targetTiers) {
     const candidates = getClubsByTier(clubs, tier).filter(c => !usedNames.has(c.name));
     if (candidates.length === 0) continue;
-    const club = pick(candidates);
+    const club = pickAcrossLeagues(candidates);
     usedNames.add(club.name);
     offers.push({ club, contractYears: rand(2, 4), wage: wageForTier(tier, overall), transferFee: 0 });
   }
@@ -4079,7 +4183,7 @@ export function determineLoanOffers(state: CareerState, clubs: ClubData[]): Cont
       !exclude.has(c.name) && projectLeagueApps(state.overall, c.tier, c.name, 0).min >= 20,
     );
     if (candidates.length === 0) continue;
-    const club = pick(candidates);
+    const club = pickAcrossLeagues(candidates);
     exclude.add(club.name);
     /* wage unchanged: the parent club keeps paying the contract */
     offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
@@ -4115,7 +4219,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
 function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, isDream = false): ContractOffer | null {
   const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
-  const club = pick(candidates);
+  const club = pickAcrossLeagues(candidates);
   exclude.add(club.name);
   let wage = wageForTier(tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
@@ -4241,7 +4345,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
       for (let tier = currentClubTier + 1; tier <= 4 && offers.length < 2; tier++) {
         const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
         if (!candidates.length) continue;
-        const club = pick(candidates);
+        const club = pickAcrossLeagues(candidates);
         exclude.add(club.name);
         offers.push({ club, contractYears: 1, wage: state.weeklyWage, transferFee: 0, isLoan: true });
       }
@@ -5122,12 +5226,24 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   const uclResult = simulateUCL(s, season);
   s.lastUCLResult = uclResult;
   if (uclResult.qualified) {
-    season.championsLeague = uclResult.result === "Winner";
-    if (season.championsLeague) s.events.push(`⭐ Won the Champions League!`);
-    else if (uclResult.result === "Final") s.events.push(`⭐ Reached the Champions League Final`);
+    /* Round 972: the cup is named by the club's confederation, and only the
+       UEFA one is a Champions League. Any other is kept under its own name in
+       clubCupTitle, so the cabinet, the Ballon d'Or and the legacy score never
+       count a Copa Libertadores as a Champions League. */
+    const isUcl = (uclResult.cup ?? "ucl") === "ucl";
+    const cupName = uclResult.competition ?? "Champions League";
+    const wonCup = uclResult.result === "Winner";
+    season.championsLeague = isUcl && wonCup;
+    if (wonCup && !isUcl) season.clubCupTitle = cupName;
+    if (wonCup) s.events.push(`⭐ Won the ${cupName}!`);
+    else if (uclResult.result === "Final") s.events.push(`⭐ Reached the ${cupName} Final`);
+    else if (uclResult.result === "Group Stage" || uclResult.result === "League Phase") {
+      const where = uclResult.result === "League Phase" ? "league phase" : "group stage";
+      s.events.push(`😓 Out of the ${cupName} in the ${where}`);
+    }
     if (uclResult.isTopScorer) {
-      s.awards = [...s.awards, { year: thisYear, name: "UCL Top Scorer", emoji: "⚽" }];
-      s.events.push(`⚽ Won the Champions League Golden Boot!`);
+      s.awards = [...s.awards, { year: thisYear, name: isUcl ? "UCL Top Scorer" : `${cupName} Top Scorer`, emoji: "⚽" }];
+      s.events.push(`⚽ Won the ${cupName} Golden Boot!`);
     }
   }
 
@@ -5406,6 +5522,8 @@ function pushCeiling(s: CareerState, season: SeasonRecord): void {
   const decorated = !!(season.championsLeague || season.worldCup || season.ballonDor)
     || (topLevel && (
       !!season.leagueTitle
+      // Round 972: a continental club cup outside UEFA is only ever won in the top two tiers.
+      || !!season.clubCupTitle
       || (season.goals ?? 0) >= 30
       || (season.rating ?? 0) >= 8.2
     ));
@@ -5468,9 +5586,9 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
       gen: () => ({ newspaper: pick(NEWSPAPERS), type: "positive",
         headline: `${name} Voted Fan Favourite At ${club}`,
         body: `After ${seasonsAtClub} seasons of dedication, the ${club} faithful have spoken: ${name} is their Player of the Year. The bond between player and fans has become something truly special.` }) },
-    { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague),
+    { weight: 1, check: () => s.isLeader && (season.leagueTitle || season.domesticCup || season.championsLeague || !!season.clubCupTitle),
       gen: () => {
-        const trophy = season.championsLeague ? "Champions League" : season.leagueTitle ? "League Title" : "Domestic Cup";
+        const trophy = season.championsLeague ? "Champions League" : season.clubCupTitle ? season.clubCupTitle : season.leagueTitle ? "League Title" : "Domestic Cup";
         return { newspaper: pick(NEWSPAPERS), type: "positive",
           headline: `CAPTAIN FANTASTIC: ${name} Leads ${club} To ${trophy} Glory`,
           body: `Wearing the armband with pride, ${name} delivered when it mattered most. A season that will live long in the memory of every ${club} supporter.` };
@@ -6180,82 +6298,79 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
  * mechanism must not quietly rebalance a career.
  */
 
-/**
- * The inverse normal CDF (Acklam's rational approximation), used to turn the
- * win probability this game already had into a goal EXPECTATION that produces
- * it. That is the whole trick to replacing a coin flip without rebalancing a
- * career: rather than inventing a strength scale and hoping the rates land,
- * solve for the scale that reproduces the old rate exactly.
- */
-function uclProbit(p: number): number {
-  const a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.3577518672690, -30.66479806614716, 2.506628277459239];
-  const b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
-  const c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
-  const d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
-  const pl = 0.02425;
-  const q = Math.min(Math.max(p, 1e-9), 1 - 1e-9);
-  if (q < pl) {
-    const x = Math.sqrt(-2 * Math.log(q));
-    return (((((c[0] * x + c[1]) * x + c[2]) * x + c[3]) * x + c[4]) * x + c[5]) / ((((d[0] * x + d[1]) * x + d[2]) * x + d[3]) * x + 1);
-  }
-  if (q > 1 - pl) {
-    const x = Math.sqrt(-2 * Math.log(1 - q));
-    return -(((((c[0] * x + c[1]) * x + c[2]) * x + c[3]) * x + c[4]) * x + c[5]) / ((((d[0] * x + d[1]) * x + d[2]) * x + d[3]) * x + 1);
-  }
-  const x = q - 0.5;
-  const r = x * x;
-  return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * x /
-         (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
-}
+/* The inverse normal CDF (uclProbit), the goal expectation of a level match
+ * (UCL_BASE_LAMBDA), what a home leg is worth (UCL_HOME_EDGE) and the Poisson
+ * draw itself now live in src/lib/soccerCareerContinental.ts, Round 972, so
+ * the first stage, these ties and the first stage's calibration read one
+ * copy. The probit is still the whole trick: rather than inventing a strength
+ * scale and hoping the rates land, solve for the scale that reproduces the
+ * old rate exactly. */
 
-/** Goals a side is expected to score in a level Champions League leg. */
-const UCL_BASE_LAMBDA = 1.32;
-/** How much a home leg is worth, added to mine and taken off theirs. It swaps
- *  with the leg, so across a two legged tie it cancels. */
-const UCL_HOME_EDGE = 0.18;
-
-/** One leg's goals for a side, drawn from its expectation. */
+/** One leg's goals for a side, drawn from its expectation, on the shared
+ *  Math.random stream the rest of this engine uses (the same draws as the
+ *  Round 546 function this wraps). */
 function uclLegGoals(lambda: number): number {
-  /* Knuth, which is fine at these lambdas and keeps the draw on the shared
-     Math.random stream the rest of this engine uses. */
-  const L = Math.exp(-Math.max(0.05, lambda));
-  let k = 0;
-  let p = 1;
-  do { k += 1; p *= Math.random(); } while (p > L && k < 12);
-  return k - 1;
+  return poissonGoals(lambda, Math.random);
 }
 
 /* Exported for scripts/simSoccerCareerUcl.mjs, which measures this against the
    model it replaced and fails if the balance moved. */
 export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult {
   const tier = state.currentClubTier;
+  const notIn: UCLResult = { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
   // Only T1-T2 clubs qualify
-  if (tier > 2) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
-  // Qualification chance
-  const qualChance = tier === 1 ? 0.85 : 0.35;
-  if (Math.random() > qualChance) return { qualified: false, matches: [], result: "N/A", playerGoals: 0, isTopScorer: false };
-
+  if (tier > 2) return notIn;
   const uclYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year + 1 : 2024;
+  /* Round 972: the club's confederation picks the cup. Before this round the
+     gate read the tier alone, so a tier 1 or 2 club anywhere in the world
+     played the Champions League, and Boca Juniors or LA Galaxy could win it.
+     A club with no cup this game models (no such club is above tier 4 today)
+     plays none. */
+  const cupFor = clubCupFor(state.currentClubCountry ?? "", uclYear);
+  if (!cupFor) return notIn;
+  const isUcl = cupFor.cup === "ucl";
   const period = periodFor(uclYear);
-  /* The ladder the competition really ran that season. Before 2003 there was no
-     round of 16, and the old code played one anyway.
-     A null koLegs is not "unknown, assume two": it is the 1991 and 1992 shape,
-     where the two group winners met in the final and there were no semi finals
-     at all, which uclFormatHistory says in those periods' own words. A Soccer
-     Career can start in 1990, so those seasons are reachable and were being
-     played as a full quarter final ladder that never existed. */
-  const noKnockoutLadder = period.koLegs === null;
-  const rounds = noKnockoutLadder
-    ? ["Final"]
-    : period.roundOf16 ? ["R16", "QF", "SF", "Final"] : ["QF", "SF", "Final"];
-  const tieLegs = period.koLegs ?? 1;
-  const awayGoalsApply = uclYear >= UCL_AWAY_GOALS.introduced && uclYear <= UCL_AWAY_GOALS.lastSeason;
+  const competition = isUcl ? period.name : cupFor.period!.name;
+  const isEliteUCL = ELITE_CLUBS.includes(state.currentClub);
+  const eliteBonus = isEliteUCL ? 0.15 : (tier === 1 ? 0.08 : 0);
+  /* The probability this game has always given this player at this club in
+     the knockout round at this index. It is the TARGET, not a coin to flip:
+     the goal expectations below are solved to reproduce it. */
+  const targetAt = (roundIndex: number) =>
+    clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundIndex * 0.04, 0.15, 0.75);
+  /* Round 972: the old qualification rate (85 percent at tier 1, 35 at tier 2)
+     always meant "in the knockout rounds", because nothing came before them,
+     and it keeps meaning that. A first stage is now played in front of them,
+     solved to the pass rate firstStageTarget gives, and the chance of being in
+     the competition at all is the old rate over that pass rate. So the same
+     player at the same club reaches the knockouts, and wins the cup, as often
+     as before; what is new is the group nights, and going out in them. */
+  const reachKnockout = tier === 1 ? 0.85 : 0.35;
+  const shape = isUcl ? firstStageShape(uclYear) : null;
+  const hasFirstStage = shape !== null && shape.kind !== "none";
+  const passTarget = hasFirstStage ? firstStageTarget(targetAt(0), reachKnockout) : 1;
+  const qualChance = reachKnockout / passTarget;
+  if (Math.random() > qualChance) return notIn;
 
-  const opponents = getEraUclOpponents(uclYear).filter(o => o !== state.currentClub);
+  /* The ladder the competition really ran that season. Round 546 read it off
+     uclFormatHistory; since Round 972 soccerCareerContinental.ts derives it
+     from how many clubs came through the first stage, which gives the same
+     ladder in every period but 1993-94 (groups straight into one off semi
+     finals, where a quarter final that never existed used to be played). The
+     1991 and 1992 shape is still the two group winners meeting in the final
+     with no semi finals at all. Every cup outside UEFA plays the one
+     simplified ladder its card describes. */
+  const rounds: string[] = shape ? [...shape.ladder] : [...CONTINENTAL_LADDER];
+  const tieLegs = isUcl ? (period.koLegs ?? 1) : 2;
+  const finalLegs = isUcl ? 1 : cupFor.period!.finalLegs;
+  const awayGoalsApply = isUcl && uclYear >= UCL_AWAY_GOALS.introduced && uclYear <= UCL_AWAY_GOALS.lastSeason;
+
+  const opponents = isUcl
+    ? getEraUclOpponents(uclYear).filter(o => o !== state.currentClub)
+    : continentalOpponents(FALLBACK_CLUBS, cupFor.confederation, uclYear, state.currentClub);
   const matches: UCLKnockoutMatch[] = [];
   let totalPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
-  const isEliteUCL = ELITE_CLUBS.includes(state.currentClub);
   const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
 
   /* The player's goals per LEG are half the old per-match chance, so a two
@@ -6268,6 +6383,37 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     return Math.random() < 0.1 * share ? 1 : 0;
   };
 
+  /* Round 972: the first stage. Its opponents come from the same era pool as
+     the knockout's and are not met again in it; the club's strength is solved
+     from the measured pass curve so it gets through at passTarget; a group
+     night is one match, so the player's chance per night is a leg's. */
+  let firstStage: FirstStageResult | undefined;
+  let stageGames = 0;
+  if (hasFirstStage && shape) {
+    const named: string[] = [];
+    for (let i = 0; i < firstStageOpponentCount(shape); i++) {
+      const available = opponents.filter(o => !usedOpponents.has(o));
+      const o = available.length > 0 ? pick(available) : `Unknown FC ${i + 1}`;
+      usedOpponents.add(o);
+      named.push(o);
+    }
+    const strength = solveStageStrength(shape.curve!, passTarget, targetAt(0));
+    firstStage = playFirstStage(shape, state.currentClub, strength, named, Math.random, () => legPlayerGoals(2));
+    for (const st of firstStage.stages) {
+      for (const g of st.games) { totalPlayerGoals += g.playerGoals; stageGames += 1; }
+    }
+    if (!firstStage.through && !firstStage.playoff) {
+      return {
+        qualified: true, matches, result: shape.kind === "leaguePhase" ? "League Phase" : "Group Stage",
+        playerGoals: totalPlayerGoals, isTopScorer: false, competition, cup: cupFor.cup, firstStage,
+      };
+    }
+    /* Ninth to 24th: a two legged play-off for the round of 16 (the format
+       table's league phase path), at the first knockout tie's target. */
+    if (firstStage.playoff) rounds.unshift("PO");
+  }
+  const ladder = rounds.filter(r => r !== "PO");
+
   let out = false;
   for (const round of rounds) {
     if (out) break;
@@ -6275,13 +6421,8 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     const opponent = available.length > 0 ? pick(available) : "Unknown FC";
     usedOpponents.add(opponent);
 
-    const roundDifficulty = rounds.indexOf(round) * 0.04;
-    const eliteBonus = isEliteUCL ? 0.15 : (tier === 1 ? 0.08 : 0);
-    const legs = round === "Final" ? 1 : tieLegs;
-    /* The probability this game has always given this player at this club in
-       this round. It is the TARGET, not a coin to flip: the goal expectations
-       below are solved to reproduce it. */
-    const target = clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundDifficulty, 0.15, 0.75);
+    const legs = round === "Final" ? finalLegs : round === "PO" ? 2 : tieLegs;
+    const target = targetAt(round === "PO" ? 0 : ladder.indexOf(round));
     /* Aggregate goal difference over N legs is the difference of two Poissons,
        so its mean is 2*N*edge and its variance about 2*N*UCL_BASE_LAMBDA. The
        probability of finishing ahead is therefore about
@@ -6375,13 +6516,40 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   const result = last.won && last.round === "Final" ? "Winner" :
                  last.round === "Final" ? "Final" :
                  last.round === "SF" ? "Semi-final" :
-                 last.round === "QF" ? "Quarter-final" : "R16";
+                 last.round === "QF" ? "Quarter-final" :
+                 last.round === "PO" ? "Play-off" : "R16";
 
-  // Top scorer if 6+ goals
-  const isTopScorer = totalPlayerGoals >= 6 && Math.random() < 0.5;
+  /* Top scorer at 6+ goals, as it always was when the knockout was the whole
+     campaign. Round 972 puts the first stage's nights in front of it, so the
+     bar rises with them (TOP_SCORER_BAR_PER_STAGE_GAME). The bar is whole
+     goals, and the nearest bar that never makes the award more common than
+     it was makes it RARER: measured 2026-10-03 (simSoccerCareerUcl section
+     8) at 0.25%, 0.21% and 0.12% of knockout runs at Real Madrid, Ajax and
+     Sevilla against main's 0.43%, 0.31% and 0.22%, so about 55 to 70 percent
+     as common as before. One goal lower (0.3 a night) overshoots, at 0.67%,
+     0.56% and 0.33%. */
+  const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
+  const isTopScorer = totalPlayerGoals >= topScorerBar && Math.random() < 0.5;
 
-  return { qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer };
+  return {
+    qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer, competition, cup: cupFor.cup,
+    ...(firstStage ? { firstStage } : {}),
+    ...(isUcl ? {} : { simplified: CONTINENTAL_SIMPLIFIED }),
+  };
 }
+
+/** Round 972: how far each first stage night lifts the top scorer bar. An
+ *  attacker averages about 0.22 goals a first stage night (a leg's chance,
+ *  capped at what the team scored), but a mean lift leaves the tail fatter,
+ *  so the bar was read off the measured distribution instead. Per campaign
+ *  that reached the knockouts, measured 2026-10-03 over 154,596 of them: six
+ *  knockout goals had been reached 0.63% of the time with no first stage;
+ *  after six group nights 8 total goals is reached 1.05% and 9 is 0.39%;
+ *  after eight league nights 9 is 1.09% and 10 is 0.48%; after twelve
+ *  nights (1999 to 2002) 11 is 0.60% and 12 is 0.23%. 0.4 a night, rounded
+ *  up, gives 9, 10 and 11: the nearest bar in each case that does not make
+ *  the award more common than it was. */
+const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
 
 /* ─── Round 834: the awards night, bound for Soccer ───
    The night itself (shortlist, seating, ranking, wider ranking, what the save
@@ -6549,6 +6717,9 @@ function calcBdorPoints(goals: number, assists: number, overall: number, clubTie
   pts += Math.min(assists * 0.3, 8);
   // Trophies
   if (trophies.includes("UCL")) pts += 25;
+  /* Round 972: a continental club cup outside UEFA, under its own name. Worth
+     a third of a Champions League here: it used to be counted as one. */
+  if (trophies.includes("ClubCup")) pts += 8;
   if (trophies.includes("World Cup")) pts += 30;
   if (trophies.includes("League")) pts += 12;
   if (trophies.includes("Cup")) pts += 3;
@@ -6618,6 +6789,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Round 124: winning the Euros or the Copa in the summer is a real Ballon
   // d'Or argument, worth less than a World Cup but a long way above nothing.
   if (season.continentalCup) playerTrophies.push("Continental");
+  if (season.clubCupTitle) playerTrophies.push("ClubCup");
 
   let playerPoints = 0;
   if (playerCanContend) {
@@ -6711,6 +6883,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (trophies.includes("World Cup")) p += 22;
     if (trophies.includes("Continental")) p += 11;
     if (trophies.includes("UCL")) p += 18;
+    if (trophies.includes("ClubCup")) p += 6;
     if (trophies.includes("League")) p += 9;
     if (trophies.includes("Cup")) p += 3;
     return p;
@@ -6739,7 +6912,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // Outscored every single nominee, the plainest version of "best stats".
   const fieldTopGoals = visibleField.reduce((mx, n) => Math.max(mx, n.goals), 0);
   const outscoredEveryone = season.goals > fieldTopGoals;
-  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup;
+  const wonMajor = season.leagueTitle || season.championsLeague || season.worldCup || !!season.continentalCup || !!season.clubCupTitle;
   // Led the world on production, or outscored the entire field while winning a
   // major, or posted a monster line and at least matched the best of the field,
   // or won a domestic treble while staying in touch.
@@ -7518,7 +7691,9 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 124: continental championships are counted, and counted separately
     // so a Euros never quietly reads as a World Cup in the cabinet.
     continentalCups: t.continentalCups + (s.continentalCup ? 1 : 0),
-  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0 });
+    // Round 972: a continental club cup outside UEFA, never a Champions League.
+    clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
+  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0 });
 }
 
 /* ─── Legacy Calculation ─── */
@@ -7579,6 +7754,16 @@ export function calculateLegacy(state: CareerState): LegacyResult {
   const uclPoints = Math.min(20, totals.championsLeagues * 8);
   breakdown.push({ label: "Champions League", points: Math.round(uclPoints) });
   score += uclPoints;
+
+  /* Round 972: a continental club cup outside UEFA (a Copa Libertadores, a
+     CONCACAF, Asian or African cup) has its own line at half the weight, and
+     only for a career that won one. Before this round it counted as a
+     Champions League. */
+  if (totals.clubCups > 0) {
+    const clubCupPoints = Math.min(10, totals.clubCups * 4);
+    breakdown.push({ label: "Continental Club Cups", points: Math.round(clubCupPoints) });
+    score += clubCupPoints;
+  }
 
   const leaguePoints = Math.min(10, totals.leagueTitles * 3);
   breakdown.push({ label: "League Titles", points: Math.round(leaguePoints) });
@@ -8258,6 +8443,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.clubCups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

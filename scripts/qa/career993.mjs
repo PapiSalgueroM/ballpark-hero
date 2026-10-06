@@ -100,6 +100,7 @@ try {
       reducedMotion: reduced ? 'reduce' : 'no-preference', serviceWorkers: 'block',
       storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [
         ...fixtures.filter(f => f.key !== sport.saveKey).map(f => ({ name: f.key, value: f.value })),
+        { name: `rules-gate-seen:${result.route}`, value: '1' },
         { name: 'cookie-consent', value: 'essential' }, { name: 'unrelated-prospect-save', value: 'keep this save' },
       ] }] },
     });
