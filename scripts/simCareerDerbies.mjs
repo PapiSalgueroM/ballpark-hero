@@ -466,7 +466,7 @@ const FORCED_CASES = [
   ['Corinthians', 2003, ['Palmeiras', 'Sao Paulo', 'Santos'], 'the first double round robin Brasileirao'],
   ['Newcastle', 2020, ['Sunderland'], 'the Tyne-Wear derby, woken by Round 1013 adding Sunderland'],
   ['Celta Vigo', 2020, ['Deportivo'], 'the Galician derby, Round 1013 Deportivo through the alias map'],
-  ['West Ham', 2020, ['Tottenham'], 'Millwall plays in another league in the game, so the Dockers derby is dormant'],
+  ['West Ham', 2020, [], 'Round 1022 labels West Ham by its 2026-27 league, the Championship, which has no verified cadence'],
   ['Roma', 2020, ['Napoli'], 'Lazio is not a Soccer Career club, so the Derby della Capitale is dormant'],
   ['PSG', 2018, ['Marseille'], 'the last full Ligue 1 season before the held one'],
   ['PSG', 2019, [], 'Ligue 1 2019/20 was abandoned, held'],
@@ -535,19 +535,24 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
      active count is fixed. A pair that changes status fails until it is moved
      on purpose: Round 1013 adds clubs and must move the pairs it wakes. */
   const REF_YEAR = 2020;
-  const ACTIVE_2020 = 51;
+  const ACTIVE_2020 = 48;
   /* Recorded 2026-10-05 from the round's tree: 40 active and 24 dormant
      before the merge, 51 and 13 after Round 1013 (merged from main) added
      Sunderland, Leeds, Espanyol, Deportivo, Levante, Fluminense, Vasco da
      Gama, Internacional and Atletico Mineiro, which woke eleven pairs (moved
      here on purpose). Dormant means the other club is not a Soccer Career
      club, or plays in another league in the game, or the league has no
-     verified cadence (Argentina). */
+     verified cadence (Argentina, the Championship, the Segunda). Round 1022
+     (2026-10-06) labelled West Ham and Wolves by their 2026-27 league, the
+     Championship, and Girona by the Segunda (two source verified, see
+     scripts/data/soccerCareerFacts.json); a label serves every era until the
+     league by year round, so three pairs went dormant on purpose: 48 and 16. */
   const DORMANT_2020 = [
+    'Aston Villa and Wolves', 'Barcelona and Girona',
     'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
     'Köln and Gladbach', 'Lille and Lens', 'Nantes and Rennes', 'Norwich City and Ipswich Town',
     'Roma and Lazio', 'Stuttgart and Karlsruhe', 'Werder Bremen and Hamburg', 'West Ham and Millwall',
-    'Wolves and West Brom',
+    'West Ham and Tottenham', 'Wolves and West Brom',
   ];
   const world2020 = eras.adjustClubsForYear(clubs, REF_YEAR);
   const status = { active: [], dormant: [] };

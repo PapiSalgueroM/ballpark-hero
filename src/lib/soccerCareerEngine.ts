@@ -2416,10 +2416,11 @@ const pick = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
    tier), weighted by its club count capped at LEAGUE_DRAW_CAP, then a club
    inside it. 5 is the largest league group in any tier of the raw hand
    list, so on that list every club keeps exactly its old chance. It is not
-   neutral everywhere, and simCareerClubPool pins where it is not: after
-   era rules the Premier League's tier 3 holds 6 or 7 hand clubs in some
-   seasons (to 1996, 2007 to 2009, 2017 to 2021), and those clubs keep 5/6
-   or 5/7 of that group's old share. On the full pool every hand tier 4
+   neutral everywhere, and simCareerClubPool pins where it is not. (Until
+   Round 1022 the Premier League's tier 3 held 6 or 7 hand clubs in some
+   seasons after era rules; with West Ham and Wolves labelled Championship,
+   their 2026-27 league, no hand group passes the cap in any season.) On
+   the full pool every hand tier 4
    club outside the four leagues goes from 1/87 to 1/100 of tier 4 draws,
    and the hand clubs inside them now share their league's 5 with the new
    clubs (Norwich 1/440, Brentford and Palace 1/160, Betis and Celta 1/260,
