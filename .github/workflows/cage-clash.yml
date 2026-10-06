@@ -1,6 +1,9 @@
 name: Cage Clash verification
 
 on:
+  push:
+    branches:
+      - codex/cage-circuit-1065
   pull_request:
     paths:
       - .github/workflows/cage-clash.yml
@@ -9,10 +12,13 @@ on:
       - src/hooks/useCageClash.ts
       - src/lib/cageClash.ts
       - src/lib/cagePractice.ts
+      - src/lib/cageCircuit.ts
       - src/test/cageClash.test.tsx
       - src/test/cagePractice.test.tsx
+      - src/test/cageCircuit.test.tsx
       - scripts/simCageClash.mjs
       - scripts/simCagePractice.mjs
+      - scripts/simCageCircuit.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -39,6 +45,7 @@ jobs:
       VITEST_MIN_FORKS: 1
       SEO_SPLIT_BASE_REF: HEAD
       CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
+      CAGE_CIRCUIT_ARTIFACTS: cage-clash-artifacts/circuit
     steps:
       - uses: actions/checkout@v4
         with:
@@ -64,7 +71,12 @@ jobs:
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee cage-clash-artifacts/types.log
-          npm run build 2>&1 | tee cage-clash-artifacts/build.log
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            node scripts/genSearchKeywords.mjs 2>&1 | tee cage-clash-artifacts/search.log
+            PRERENDER_ONLY=/cage-clash,/whats-new npm run build:seo 2>&1 | tee cage-clash-artifacts/build.log
+          else
+            npm run build 2>&1 | tee cage-clash-artifacts/build.log
+          fi
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
@@ -81,6 +93,19 @@ jobs:
           path: |
             cage-clash-artifacts/practice/
             cage-clash-artifacts/practice.log
+      - name: Circuit outcomes and effective controls
+        id: circuit
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_CIRCUIT_CONTROL=all ONLY=simCageCircuit node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/circuit.log
+      - name: Preserve circuit failure for immediate diagnosis
+        if: ${{ failure() && steps.circuit.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-circuit-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/circuit/
+            cage-clash-artifacts/circuit.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -110,6 +135,24 @@ jobs:
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cage-clash-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
+      - name: Package accepted page candidates
+        if: ${{ success() && github.event_name == 'push' }}
+        run: |
+          git rev-parse HEAD > cage-clash-artifacts/source-head.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const files = ['public/cage-clash/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const manifest = [];
+          for (const file of files) {
+            const target = path.join('cage-clash-artifacts/generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            fs.copyFileSync(file, target);
+            manifest.push({ file, sha256: crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex') });
+          }
+          fs.writeFileSync('cage-clash-artifacts/generated-manifest.json', JSON.stringify(manifest, null, 2));
+          JS
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
