@@ -66,7 +66,8 @@
  * run on seeds 1..10 and fired in its own check, failures counted: coinflip
  * 142 in 2 (and 4: no qualifying offer, no extra pick), latetrade 800 in 3,
  * refusaldrift 100 in 3, droppick 1617 in 4, pickmoves 154 in 4, nocomp 145
- * in 4.
+ * in 4, flatstaff 63 in 5, onepost 27 in 5, nofarm 1 in 5, nodefault 2 in 1
+ * (and 5: a level 1 staff moves the game), retaintwice 1 in 6, noguard 1 in 3.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';

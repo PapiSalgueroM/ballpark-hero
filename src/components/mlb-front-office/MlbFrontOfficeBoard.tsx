@@ -49,6 +49,17 @@ import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import { mlbLeagueSeeds } from '@/lib/mlbFrontOffice';
 import tradeRosterStyles from './MlbTradeRoster.module.css';
+/* Round 1020: the GM desk (staff, the re-sign desk, the pick ledger, packages
+   and the deadline), the shape Round 987 gave the NHL. One optional `gm`
+   field on the save; absent, the board plays exactly as before. */
+import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
+import { type GmDesk, gmPanelFor, readGmDesk } from '@/lib/gmDesk';
+import { gmStaffLevel } from '@/lib/gmStaff';
+import {
+  MLB_NO_PICK_TRADES, mlbDeadlineRefusal, mlbDeskAfterRound, mlbDeskEdges, mlbDeskFinderTrade, mlbDeskOffseason,
+  mlbDeskRoundOptions, mlbNoteArrivals, mlbPicksOf, mlbScoutRead, mlbStaffOf, mlbTradeWindow, openMlbDesk, syncMlbPicks,
+} from '@/lib/mlbGmDesk';
+import { MLB_DESK_PANELS, MLB_RECAP_PANELS, MlbDeskHelp, type MlbDeskFacts } from '@/components/mlb-front-office/MlbGmDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -76,6 +87,10 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 1020: the GM desk (src/lib/gmDesk.ts). Absent on every save written
+     before it, and on those the board plays exactly as it did until the GM
+     opens a desk box. Each block inside is validated alone. */
+  gm?: unknown;
 }
 
 export default function MlbFrontOfficeBoard() {
@@ -128,6 +143,13 @@ export default function MlbFrontOfficeBoard() {
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
+  /* Round 1020: the GM desk. null is a save the desk has never been opened on. */
+  const [gm, setGmState] = useState<GmDesk | null>(null);
+  /* Every save reads the desk from here, so a handler that has just changed
+     it saves the new one without waiting for a render (Round 987's ref). */
+  const gmLive = useRef<GmDesk | null>(null);
+  const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
+  const [gmOpen, setGmOpen] = useState<string | null>(null);
 
   useGameCompletion('mlb-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
 
@@ -170,6 +192,8 @@ export default function MlbFrontOfficeBoard() {
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
       setSeasonTradeLine(s.seasonTradeLine ?? null);
+      /* Round 1020: no `gm` on the save means the desk stays off until it is opened. */
+      setGm(s.gm === undefined ? null : readGmDesk(s.gm));
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          round and no postseason, this effect mapped it back to 'hub', the
@@ -195,7 +219,8 @@ export default function MlbFrontOfficeBoard() {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
+        postseason: champion ? { series, champion, gradeLine } : null,
+        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
@@ -221,7 +246,11 @@ export default function MlbFrontOfficeBoard() {
       gradeResult: null, tradeLine: null, seasonsPlayed: 0,
     }));
     setPressTilt(0); setSeasonTradeLine(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    /* Round 1020: a new front office opens with the desk on. Only a save from
+       before it waits for the GM to open a desk box. */
+    const desk = openMlbDesk(lg, abbr);
+    setGm(desk); setGmOpen(null);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, gm: desk }, lg, abbr);
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -260,6 +289,13 @@ export default function MlbFrontOfficeBoard() {
   };
 
   const my = league?.teams[myTeam];
+  /* Round 1020: with the desk on, the grade the draft board shows is your
+     scouting director's read (his level sets the miss); the CPU clubs keep
+     the engine's own. */
+  const scoutLevel = gm && league ? gmStaffLevel(mlbStaffOf(gm, league, myTeam).block, 'scouting') : null;
+  const gradeOf = (pr: MlbProspect): number => scoutLevel !== null && league
+    ? mlbScoutRead(pr, myTeam, league.season, scoutLevel)
+    : pr.grade;
 
   const playRound = () => {
     if (!league || !my) return;
@@ -276,14 +312,25 @@ export default function MlbFrontOfficeBoard() {
        before it plays, through the same two tap DFA as any other cut. */
     if (mlbOverLimit(my) > 0) return;
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
-    const report = simMlbRound(lg, myTeam, Math.random);
+    /* Round 1020: with the desk on, the staff's edge and the trainer ride on
+       the round; with it off the round is called exactly as before. */
+    const report = simMlbRound(lg, myTeam, Math.random, gm ? mlbDeskRoundOptions(gm, lg, myTeam) : undefined);
     mlbAiMoves(lg, myTeam, Math.random);
+    let nextGm = gm;
+    const deskLines: string[] = [];
+    if (gm) {
+      const tick = mlbDeskAfterRound(gm, lg, myTeam);
+      nextGm = tick.desk;
+      if (tick.line) deskLines.push(tick.line);
+    }
     const newFeed = [
       `Round ${lg.round}: you went ${report.myWins}-${report.myLosses}.`,
+      ...deskLines,
       ...report.notes,
     ];
+    if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
-      const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random);
+      const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random, nextGm ? mlbDeskEdges(nextGm, lg, myTeam) : undefined);
       lg.champions.push({ season: lg.season, team: champ });
       setSeries(sr);
       setChampion(champ);
@@ -319,6 +366,8 @@ export default function MlbFrontOfficeBoard() {
       return;
     }
     lg.round += 1;
+    /* Round 1020: the round the deadline shuts says so in the feed. */
+    if (nextGm && mlbTradeWindow(league).open && !mlbTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
     setLeague(lg);
     setFeed(newFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -354,9 +403,15 @@ export default function MlbFrontOfficeBoard() {
     if (!pr) return;
     const mine = lg.teams[myTeam];
     if (draftBatchesLeft === null && mine.picks.length > picksLeft) mine.picks = mine.picks.slice(-picksLeft);
+    const pickRound = mine.picks[0];
     if (!mlbConsumeDraftPick(mine)) return;
     draftAction.current = true;
-    lg.teams[myTeam].players.push(mlbProspectToPlayer(pr, Math.random));
+    const drafted = mlbProspectToPlayer(pr, Math.random);
+    lg.teams[myTeam].players.push(drafted);
+    /* Round 1020: the re-sign desk learns he is a draft pick, so his club
+       control is counted from tonight. */
+    const deskNow = gm ? mlbNoteArrivals(gm, lg, myTeam, [drafted.id], 'draft', pickRound) : null;
+    if (deskNow) setGm(deskNow);
     let nextClass = draftClass.filter(p => p.id !== id);
     /* Round 515: the rival picks were applied and thrown away, so real
        decisions the engine made happened where nobody could see them.
@@ -367,8 +422,11 @@ export default function MlbFrontOfficeBoard() {
     const batches = nextPicks <= 0 ? beforeBatches : Math.min(1, beforeBatches);
     for (let i = 0; i < batches; i++) {
       const order = mlbStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
+      const byName = new Map(nextClass.map(p => [p.name, p]));
       const resolved = mlbAiDraftPicks(lg, nextClass, order, Math.random);
-      nextClass = resolved.remaining; rivalPicks.push(...resolved.picks);
+      nextClass = resolved.remaining;
+      /* Round 1020: with the desk on, the card shows your scout's read of every pick. */
+      rivalPicks.push(...resolved.picks.map(r => { const at = byName.get(r.playerName); return at ? { ...r, grade: gradeOf(at) } : r; }));
     }
     /* Round 530: every pick builds its reveal, the last one included. Round
        519 had named the final pick as not narrated: it left for the hub in
@@ -377,23 +435,31 @@ export default function MlbFrontOfficeBoard() {
        when the player presses Continue under the card. The offseason still
        runs right here, in the same order, drawing the same randomness. */
     setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: pr.grade },
+      { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) },
       rivalPicks,
     ));
     setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftBatchesLeft(beforeBatches - batches);
-    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
+    setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      finishDraft(lg);
+      finishDraft(lg, undefined, deskNow);
       return;
     }
     setLeague(lg);
     persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batches }, lg, myTeam);
   };
 
-  const finishDraft = (lg: MlbLeague, draftNote?: string) => {
+  const finishDraft = (lg: MlbLeague, draftNote?: string, deskNow: GmDesk | null = gmLive.current) => {
       /* Round 829 review: every CPU club is cut down to 28 in here; yours is
-         your own call, on the roster box, before Round 1. */
-      const notes = mlbOffseason(lg, Math.random, myTeam);
+         your own call, on the roster box, before Round 1.
+         Round 1020: with the desk on, the winter runs through the re-sign
+         desk: nobody of yours leaves on the engine's coin flip. */
+      let notes: string[];
+      if (deskNow) {
+        const summer = mlbDeskOffseason(lg, deskNow, myTeam, Math.random);
+        if (!summer.ok) { setFeed(f => [...summer.lines, ...f].slice(0, 6)); return; }
+        notes = [...summer.lines, ...summer.notes];
+        setGm(summer.desk);
+      } else notes = mlbOffseason(lg, Math.random, myTeam);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
@@ -470,6 +536,8 @@ export default function MlbFrontOfficeBoard() {
          say what the engine did. */
       const signed = lg.teams[myTeam].players.find(p => p.id === pid);
       if (signed) slamFeed(`✍️ ${signed.name} (${signed.pos}) signs, $${signed.salary}M a year.`);
+      const deskNow = gm ? mlbNoteArrivals(gm, lg, myTeam, [pid], 'signing') : null;
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({}, lg, myTeam);
     }
   };
@@ -485,13 +553,24 @@ export default function MlbFrontOfficeBoard() {
     if (!mine || !want) return null;
     return {
       mine, want, theirRoster: their.players,
-      myPickCount: mySide.picks.length, pickValue: 13, value: mlbTradeValue,
+      /* Round 1020: with the desk on, MLB's own rule: no pick goes into a deal. */
+      myPickCount: gm ? 0 : mySide.picks.length, pickValue: 13, value: mlbTradeValue,
       theirCoverAtMyPos: their.players.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
       openPremium: 1.07,
     };
   };
+  /* Round 1020: with the desk on, every trade path asks the deadline first. */
+  const deadlineBlock = (): boolean => {
+    const why = gm && league ? mlbDeadlineRefusal(league) : null;
+    if (why) setFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
+    return !!why;
+  };
+  /* Round 1020: an old trade path with the desk on. The man who came in is
+     written down as a trade (so no qualifying offer for him this winter). */
+  const deskAfterTrade = (lg: MlbLeague, arrivedId: string): GmDesk | null =>
+    gm ? mlbNoteArrivals(gm, lg, myTeam, [arrivedId], 'trade') : null;
   const openTradeTalks = (theirPid: string) => {
-    if (!tradePartner || !myTradePiece) return;
+    if (!tradePartner || !myTradePiece || deadlineBlock()) return;
     const args = talksArgsFor(tradePartner, myTradePiece, theirPid);
     if (!args) return;
     setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
@@ -504,7 +583,9 @@ export default function MlbFrontOfficeBoard() {
   };
   const acceptTalks = () => {
     if (!league || !talks || !talks.state.pkg) return;
+    if (deadlineBlock()) { setTalks(null); return; }
     const pkg = talks.state.pkg;
+    if (gm && pkg.addPick) { setFeed(f => [`❌ ${MLB_NO_PICK_TRADES}`, ...f].slice(0, 6)); setTalks(null); return; }
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     const res = mlbExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
     if (res === 'done') {
@@ -513,6 +594,8 @@ export default function MlbFrontOfficeBoard() {
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${pkg.theirPlayerName} in`;
       setSeasonTradeLine(line);
+      const deskNow = deskAfterTrade(lg, pkg.theirPlayerId);
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ The agreed deal no longer fits (payroll or roster rules).', ...f].slice(0, 6));
@@ -522,20 +605,23 @@ export default function MlbFrontOfficeBoard() {
 
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
-    if (!league || !myTradePiece) return;
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, mlbTrade, mlbTradeValue);
+    if (!league || !myTradePiece || deadlineBlock()) return;
+    /* Round 1020: with the desk on, a sweetened offer is off the table (MLB picks cannot be traded). */
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, gm ? mlbDeskFinderTrade : mlbTrade, mlbTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
-    if (!league || !myTradePiece) return;
+    if (!league || !myTradePiece || deadlineBlock()) return;
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
-    const res = mlbTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
+    const res = (gm ? mlbDeskFinderTrade : mlbTrade)(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
     if (res === 'accepted') {
       slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${o.playerName} in`;
       setSeasonTradeLine(line);
+      const deskNow = deskAfterTrade(lg, o.playerId);
+      if (deskNow) setGm(deskNow);
       setLeague(lg); persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
       setFeed(f => ['❌ That offer went stale, shop him again.', ...f].slice(0, 6));
@@ -549,7 +635,35 @@ export default function MlbFrontOfficeBoard() {
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
     setDraftClass(null); setPicksLeft(0); setDraftBatchesLeft(null); setDraftCompleted(false); setDraftSaveError(false); draftAction.current = false;
+    setGm(null); setGmOpen(null);
   };
+
+  /* Round 1020: the desk boxes. The first tap on one, on a save from before
+     the desk, switches it on: the ledgers are opened from the league as it
+     stands (every pick on the old lists kept) and saved with it. */
+  const openDesk = (key: string | null) => {
+    if (key !== null && !gm && league) {
+      const desk = openMlbDesk(league, myTeam);
+      const lg: MlbLeague = JSON.parse(JSON.stringify(league));
+      syncMlbPicks(lg, mlbPicksOf(desk, lg));
+      setGm(desk); setLeague(lg);
+      persist({}, lg, myTeam);
+    }
+    setGmOpen(key);
+  };
+  const changeDesk = (next: GmDesk) => {
+    setGm(next);
+    persist({}, league, myTeam);
+  };
+  const deskFacts = (hub: MlbDeskFacts['hub']): MlbDeskFacts | null => league ? {
+    teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
+    seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
+    say: line => setFeed(f => [line, ...f].slice(0, 6)),
+    commit: (lg, desk, line) => {
+      setGm(desk); setLeague(lg); slamFeed(line);
+      persist({}, lg, myTeam);
+    },
+  } : null;
 
   if (draftSaveError) return (
     <div role="alert" className="rounded-2xl border border-border bg-card p-4 text-center space-y-3">
@@ -604,6 +718,39 @@ export default function MlbFrontOfficeBoard() {
     );
   }
 
+  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
+     the wording is harnessed rather than eyeballed. Six of each league
+     reach October under the current format, three division winners and
+     three wildcards, so six is the cut the table box warns about. Round
+     1020: built here, above the recap, because the recap mounts the
+     re-sign desk too. */
+  const myLeagueName = AL.includes(myTeam) ? 'AL' : 'NL';
+  const confTable = mlbStandings(league, AL.includes(myTeam) ? AL : NL);
+  const hubFacts: MlbDeskFacts['hub'] = {
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    /* Round 829: a full roster club's ceiling is 28, an older save's 16. */
+    rosterMax: mlbRosterMax(my),
+    wins: my.wins,
+    losses: my.losses,
+    period: league.round,
+    periods: MLB_ROUNDS,
+    playWord: 'Play',
+    periodWord: 'round',
+    /* A round here is a stretch of the whole league, not one fixture. */
+    hasFixtures: false,
+    nextOpponent: null,
+    lastResult: null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 6,
+    tableName: myLeagueName,
+    tradeLine: seasonTradeLine,
+    titles,
+  };
+
   if (phase === 'recap') {
     const ws = series.find(s => s.name === 'World Series');
     const myLeague = AL.includes(myTeam) ? 'AL' : 'NL';
@@ -613,6 +760,17 @@ export default function MlbFrontOfficeBoard() {
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone. */
     const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 1020: the season is over and the winter runs after the draft, so
+       the re-sign desk is a box here, under the verdict. Open, it takes the
+       screen, with a back button to the recap. */
+    const recapDesk = gm && !fired ? deskFacts(hubFacts) : null;
+    if (gm && recapDesk && gmPanelFor(MLB_RECAP_PANELS, gmOpen)) {
+      return (
+        <div className="space-y-4">
+          <GmDeskMount sport="mlb" desk={gm} facts={recapDesk} panels={MLB_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        </div>
+      );
+    }
     return (
       <div className="space-y-4">
         <div
@@ -683,6 +841,9 @@ export default function MlbFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {gm && recapDesk && (
+          <GmDeskMount sport="mlb" desk={gm} facts={recapDesk} panels={MLB_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        )}
       </div>
     );
   }
@@ -706,7 +867,7 @@ export default function MlbFrontOfficeBoard() {
             </p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. Scout grades carry error.
+              You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. {gm ? "Grades are your scouting director's read, and a better one misses by less." : 'Scout grades carry error.'}
               {/* Round 829 review: said before the pick, not after it. */}
               {my?.depth ? ` The roster limit is ${mlbRosterMax(my)}: if your picks take you over it, you DFA down before Round 1, dead money and all.` : ''}
             </p>
@@ -723,13 +884,14 @@ export default function MlbFrontOfficeBoard() {
           <button type="button" onClick={replaceDraftBoard} className="min-h-[44px] w-full rounded-full bg-primary px-4 py-2 text-sm font-bold text-primary-foreground">Replace remaining draft board</button>
         </div>}
         {!draftDone && picksLeft > 0 && ownedPicks > 0 && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
-          {draftClass.slice(0, 14).map(pr => (
+          {/* Round 1020: with the desk on, the board is your scout's, in his order. */}
+          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 14).map(pr => (
             <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
               <span>
                 <span className="block text-sm font-bold text-foreground">{pr.name}</span>
                 <span className="block text-[10px] text-muted-foreground">{pr.pos} · age {pr.age}</span>
               </span>
-              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{pr.grade}</span>
+              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{gradeOf(pr)}</span>
             </button>
           ))}
         </div>}
@@ -746,37 +908,11 @@ export default function MlbFrontOfficeBoard() {
 
   const t = MLB_TEAM_MAP.get(myTeam)!;
 
-  /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
-     the wording is harnessed rather than eyeballed. Six of each league
-     reach October under the current format, three division winners and
-     three wildcards, so six is the cut the table box warns about. */
-  const myLeagueName = AL.includes(myTeam) ? 'AL' : 'NL';
-  const confTable = mlbStandings(league, AL.includes(myTeam) ? AL : NL);
-  const tiles = foHubTiles({
-    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    capRoom: room,
-    /* Round 631: the box offers only men the sign path would take. */
-    ledger: my,
-    /* Round 829: a full roster club's ceiling is 28, an older save's 16. */
-    rosterMax: mlbRosterMax(my),
-    wins: my.wins,
-    losses: my.losses,
-    period: league.round,
-    periods: MLB_ROUNDS,
-    playWord: 'Play',
-    periodWord: 'round',
-    /* A round here is a stretch of the whole league, not one fixture. */
-    hasFixtures: false,
-    nextOpponent: null,
-    lastResult: null,
-    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
-    cut: 6,
-    tableName: myLeagueName,
-    tradeLine: seasonTradeLine,
-    titles,
-  });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'round' : key); };
+  const tiles = foHubTiles(hubFacts);
+  /* Round 1020: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
+  const hubDesk = deskFacts(hubFacts);
+  const deskPanelOpen = gmPanelFor(MLB_DESK_PANELS, gmOpen) !== null;
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setGmOpen(null); setTab(key === 'play' ? 'round' : key); };
   /* Round 631: dead money on the payroll line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every DFA waits, at its ceiling every Sign does, and both say why. */
@@ -833,8 +969,13 @@ export default function MlbFrontOfficeBoard() {
       {/* Round 204: boxes, not pills. Each one already tells you the thing
           you used to have to tap to find out. */}
       {tab === null
-        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
+      {tab === null && hubDesk && !deskPanelOpen && <MlbDeskHelp league={league} />}
+      {tab === null && hubDesk && (
+        <GmDeskMount sport="mlb" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={MLB_DESK_PANELS}
+          open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+      )}
 
       {feed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -973,7 +1114,7 @@ export default function MlbFrontOfficeBoard() {
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2" data-mlb-trade-roster="finder">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
-            <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked.</p>
+            <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked.{gm ? ' No pick sweeteners: MLB clubs cannot trade draft picks.' : ''}</p>
             <p tabIndex={-1} data-mlb-trade-count className="text-center text-[10px] text-muted-foreground">Showing {Math.min(tradeOwnVisible, tradeOwnPlayers.length)} of {tradeOwnPlayers.length} players</p>
             <div className={cn(tradeRosterStyles.list, 'grid grid-cols-2 gap-1')} data-mlb-trade-list="finder">
               {tradeOwnPlayers.slice(0, tradeOwnVisible).map(p => (
@@ -1023,7 +1164,7 @@ export default function MlbFrontOfficeBoard() {
           })()}
           {tradePartner && !talks && (
             <>
-              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
+              <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: {gm ? 'a lesser man instead, or the dial tone. MLB clubs cannot trade draft picks, so none goes in.' : 'a pick to close the gap, a lesser man instead, or the dial tone.'}{gm ? ` Deals shut once round ${mlbTradeWindow(league).deadlineAfter + 1} is played.` : ''}</p>
               <div className="grid grid-cols-2 gap-2">
                 <div className="min-w-0 space-y-1" data-mlb-trade-roster="send">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
