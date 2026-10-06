@@ -4,8 +4,15 @@ on:
   pull_request:
     paths:
       - .github/workflows/career-season-review.yml
+      - src/components/game/GameHelp.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
       - src/components/us-career/UsCareerBoard.tsx
       - src/components/us-career/CareerSeasonReview.tsx
+      - src/components/us-career/CareerSeasonComparison.tsx
+      - src/components/us-career/CareerSeasonHighs.tsx
       - src/lib/usCareerSeasonReview.ts
       - src/lib/usCareerSport.ts
       - src/lib/*CareerSport.ts
@@ -40,12 +47,16 @@ jobs:
         with:
           node-version: 24
           cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Install verification dependencies
         run: |
           mkdir -p career-season-review-artifacts
           npm ci
           npm install --no-save playwright
           npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
       - name: Type check and build
         id: build
         run: |
@@ -60,6 +71,14 @@ jobs:
           failed=0
           for harness in simNbaCareer simNflCareer simMlbCareer simNhlCareer simUsCareerRecovery simUsCareerPractice simUsCareerActionConfirm simUsCareerWeight simCareerInbox simNoDoubleRecord simHarnessAnchors; do
             ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "career-season-review-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Built pages and search
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-season-review-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
       - name: Unapproved inbox cap copy still fails

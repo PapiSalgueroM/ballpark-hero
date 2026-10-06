@@ -81,6 +81,7 @@ for (const game of GAMES) {
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
+  await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), game.path);
   await page.goto(`${BASE}${game.path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1100);
   const consent = page.locator('button:has-text("Essential only")');
