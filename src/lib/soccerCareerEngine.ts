@@ -3918,11 +3918,12 @@ function calcAssists(position: string, apps: number, overall?: number, mult = 1)
    45 percent share the back line draws in generateSeasonStats. It is a pure
    function of numbers already drawn, so it adds no Math.random call and is
    never shown as a stat. */
-const DEFENSIVE_SHEET_CREDIT = 0.04;
+const DEFENSIVE_SHEET_CREDIT = 0.035;
 const CDM_EXPECTED_SHEET_SHARE = 0.325;
+const CDM_CREDIT_SHARE = 0.75;
 export function defensiveRatingCredit(position: string, apps: number, cleanSheets: number): number {
   if (position === "CB" || position === "LB" || position === "RB") return cleanSheets * DEFENSIVE_SHEET_CREDIT;
-  if (position === "CDM") return apps * CDM_EXPECTED_SHEET_SHARE * DEFENSIVE_SHEET_CREDIT;
+  if (position === "CDM") return apps * CDM_EXPECTED_SHEET_SHARE * DEFENSIVE_SHEET_CREDIT * CDM_CREDIT_SHARE;
   return 0;
 }
 function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
