@@ -121,10 +121,37 @@ export function clubStyle(players, club) {
 /* Apply and undo                                                      */
 /* ------------------------------------------------------------------ */
 
+/** The season row a ledger entry writes. */
+export const rowOf = r => ({ season: r.season, club: r.club, goals: r.goals, assists: r.assists, appearances: r.appearances, marketValue: r.marketValue });
+
+/**
+ * Wave 2 (Round 1017): an inserted row is a spell of an earlier season the
+ * pool never carried (a mid-season move, or the 2025 Club World Cup at a new
+ * club), placed directly `before` or `after` one existing row, its anchor,
+ * named by season and club as that row reads once the changed entries are
+ * applied (Rashford's Aston Villa spell goes after the row relabelled
+ * Manchester United). The anchor must be exactly one row of his career.
+ */
+export function anchorOf(r) {
+  const a = r.before ?? r.after;
+  if (!a || (r.before && r.after)) throw new Error(`inserted ${r.player} ${r.season} ${r.club}: name exactly one of before and after`);
+  return { ...a, side: r.before ? 'before' : 'after' };
+}
+
+function anchorIndex(career, r) {
+  const a = anchorOf(r);
+  const at = career.flatMap((s, i) => (s.season === a.season && s.club === a.club ? [i] : []));
+  if (at.length !== 1) throw new Error(`inserted ${r.player} ${r.season} ${r.club}: ${at.length} rows read ${a.season} ${a.club}, the anchor must be exactly one`);
+  return at[0];
+}
+
 /**
  * The pool after the ledger, from the pool before it. Throws on anything the
  * ledger expects and the pool does not carry (a missing man, an old value that
  * differs, a row that already exists), so a stale ledger cannot apply quietly.
+ * Order: changed (every entry names its row as it read BEFORE the ledger, so
+ * a club change and the stats changes of the same row all find it), then
+ * inserted (in ledger order), then added (appended); removed men go last.
  */
 export function applyLedger(before, ledger) {
   const players = clone(before);
@@ -135,11 +162,21 @@ export function applyLedger(before, ledger) {
     if (!byName.has(r.keptAs)) throw new Error(`removed ${r.player} is kept as ${r.keptAs}, who is not in the pool`);
     removed.add(r.player);
   }
-  for (const c of ledger.changed ?? []) {
+  const targets = (ledger.changed ?? []).map(c => {
     const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === c.club);
     if (!row) throw new Error(`changed ${c.player} ${c.season} ${c.club}: no such row`);
+    return [c, row];
+  });
+  for (const [c, row] of targets) {
     if (row[c.field] !== c.from) throw new Error(`changed ${c.player} ${c.season} ${c.club}: ${c.field} reads ${row[c.field]}, the ledger expects ${c.from}`);
     row[c.field] = c.to;
+  }
+  for (const r of ledger.inserted ?? []) {
+    const p = byName.get(r.player);
+    if (!p) throw new Error(`inserted ${r.player} is not in the pool`);
+    if (p.career.some(s => s.season === r.season && s.club === r.club)) throw new Error(`inserted ${r.player} ${r.season} ${r.club} is already there`);
+    const at = anchorIndex(p.career, r);
+    p.career.splice(anchorOf(r).side === 'before' ? at : at + 1, 0, rowOf(r));
   }
   for (const a of ledger.added ?? []) {
     const p = byName.get(a.player);
@@ -152,7 +189,8 @@ export function applyLedger(before, ledger) {
 
 /**
  * The pool before the ledger, from the pool after it: the added rows dropped
- * from the end of each career, every changed field put back, and each removed
+ * from the end of each career, each inserted row taken out from beside its
+ * anchor, every changed field put back, and each removed
  * man re-inserted from the copy the ledger keeps of him, directly after the
  * man he was kept as (his sorted position). The caller proves the result with
  * bakeHash against ledger.preBake.sha256.
@@ -166,8 +204,22 @@ export function undoLedger(after, ledger, { appendRemoved = false } = {}) {
     if (!last || last.season !== a.season || last.club !== a.club) throw new Error(`undo: ${a.player} does not end at the added ${a.season} ${a.club}`);
     p.career.pop();
   }
-  for (const c of ledger.changed ?? []) {
-    const row = byName.get(c.player)?.career.find(s => s.season === c.season && s.club === c.club);
+  for (const r of [...(ledger.inserted ?? [])].reverse()) {
+    const career = byName.get(r.player)?.career ?? [];
+    const at = career.flatMap((s, i) => (s.season === r.season && s.club === r.club ? [i] : []));
+    if (at.length !== 1) throw new Error(`undo: ${r.player} carries ${at.length} rows ${r.season} ${r.club}, the inserted row must be exactly one`);
+    const a = anchorOf(r), next = career[a.side === 'before' ? at[0] + 1 : at[0] - 1];
+    if (!next || next.season !== a.season || next.club !== a.club) throw new Error(`undo: ${r.player} ${r.season} ${r.club} no longer sits ${a.side} ${a.season} ${a.club}`);
+    career.splice(at[0], 1);
+  }
+  /* each changed entry names its row as it read before the ledger; after it,
+     a row whose club was changed reads the new club */
+  const clubAfter = new Map((ledger.changed ?? []).filter(c => c.field === 'club').map(c => [`${c.player}|${c.season}|${c.club}`, c.to]));
+  const undoTargets = (ledger.changed ?? []).map(c => {
+    const club = clubAfter.get(`${c.player}|${c.season}|${c.club}`) ?? c.club;
+    return [c, byName.get(c.player)?.career.find(s => s.season === c.season && s.club === club)];
+  });
+  for (const [c, row] of undoTargets) {
     if (!row || row[c.field] !== c.to) throw new Error(`undo: ${c.player} ${c.season} ${c.club} ${c.field} is not the corrected ${c.to}`);
     row[c.field] = c.from;
   }

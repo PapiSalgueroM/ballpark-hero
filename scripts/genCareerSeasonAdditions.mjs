@@ -29,14 +29,19 @@
  * --check writes nothing and exits 1 when any output on disk differs from
  * what the ledger produces now. It reads no network and no database.
  *
- * WAVE 1 ONLY, AS WRITTEN (the 2026-10-05 review). The migration path
- * (MIGRATION_OUT), its opening comment, ledger.preBake.commit and the live
- * baseline (liveAfter784) are wave 1's. Before a second wave is appended,
- * this script must learn to write each wave to its own migration from the
- * pool after the waves before it (preBake at the commit that carries wave 1's
- * applied bake) and to take the live values after the previous wave as its
- * baseline, and simTransferPathHints section 8 must follow; regenerating
- * with two waves in the ledger as it is would rewrite wave 1's migration.
+ * ONE MIGRATION FOR EVERY WAVE (Round 1017, the lead's decision). Wave 1's
+ * migration was never applied, so wave 2 regenerates the same file from the
+ * same baseline (ledger.preBake.commit and liveAfter784): wave 1's statements
+ * come out byte for byte, followed by wave 2's. This holds only while the
+ * file is unapplied. Once it is applied, a later wave must be written to its
+ * own migration from the pool after the waves before it (preBake at the
+ * commit that carries the applied bake) with the live values after it as its
+ * baseline, and simTransferPathHints section 8 must follow.
+ *
+ * Wave 2 also brought two entry kinds: a changed entry whose field is `club`
+ * (the row was filed under the wrong club; every change names the row by its
+ * club before the ledger) and `inserted`, a spell of the previous season the
+ * pool never carried, placed before or after one existing row.
  */
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -44,7 +49,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { poolProblems, renderCareerPlayersModule } from './bakeCareerPlayers.mjs';
 import { ROUND_784_MIGRATION, buildGraph, deriveHint, parseActiveRefreshMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleProblems } from './lib/transferPathHints.mjs';
-import { LEDGER_FILE, applyLedger, bakeHash, careerQuizShift, clone, coverage, loadSiteModules } from './lib/careerSeasonLedger.mjs';
+import { LEDGER_FILE, anchorOf, applyLedger, bakeHash, careerQuizShift, clone, coverage, loadSiteModules } from './lib/careerSeasonLedger.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const COMPANION = 'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql';
@@ -194,35 +199,59 @@ const m = s => String(s).replace(/'/g, "''").replace(/%/g, '%%');
 const qn = (v, type) => (v === null || v === undefined ? `null::${type}` : type === 'text' ? q(v) : String(v));
 const pad = '  ';
 
-/** Every career row the ledger changes, grouped per row: [{ player, playerId, season, club, before, after }] */
+/**
+ * Every career row the ledger changes, grouped per row: [{ player, playerId,
+ * season, club, before, after }]. Each entry names its row by its club before
+ * the ledger; `after` is that row with every change applied, and must be
+ * exactly one row of the pool after the ledger (by its new club when the club
+ * itself changed).
+ */
 export function changedRows(pre, post, ledger) {
   const rows = new Map();
   for (const c of ledger.changed ?? []) {
     const key = `${c.player}|${c.season}|${c.club}`;
     if (!rows.has(key)) {
       const before = pre.find(p => p.name === c.player).career.filter(s => s.season === c.season && s.club === c.club);
-      const after = post.find(p => p.name === c.player).career.filter(s => s.season === c.season && s.club === c.club);
-      if (before.length !== 1 || after.length !== 1) throw new Error(`${key}: expected exactly one row before and after, found ${before.length} and ${after.length}`);
-      rows.set(key, { player: c.player, playerId: c.playerId, season: c.season, club: c.club, before: before[0], after: after[0] });
+      if (before.length !== 1) throw new Error(`${key}: expected exactly one row before, found ${before.length}`);
+      rows.set(key, { player: c.player, playerId: c.playerId, season: c.season, club: c.club, before: before[0], after: { ...before[0] } });
     }
+    rows.get(key).after[c.field] = c.to;
+  }
+  for (const r of rows.values()) {
+    const after = post.find(p => p.name === r.player)?.career.filter(s => s.season === r.season && s.club === r.after.club) ?? [];
+    if (after.length !== 1 || JSON.stringify(after[0]) !== JSON.stringify(r.after)) throw new Error(`${r.player}|${r.season}|${r.club}: the pool after the ledger does not carry the changed row exactly once`);
   }
   return [...rows.values()];
+}
+
+/**
+ * The pool part way through the migration: every change and every inserted
+ * row written, nothing added and nobody removed yet. The added block guards
+ * each man's row count and last row against this state.
+ */
+export function midPool(pre, ledger) {
+  return applyLedger(pre, { ...ledger, added: [], removed: [] });
 }
 
 /** The whole migration text for one ledger, deterministic. */
 export function renderMigration({ ledger, pre, post, renames, rewrites, quiz, cover }) {
   const removed = ledger.removed ?? [];
   const added = ledger.added ?? [];
+  const inserted = ledger.inserted ?? [];
   const changed = changedRows(pre, post, ledger);
+  const relabelled = changed.filter(c => c.after.club !== c.before.club).length;
   const preSeasons = seasonCount(pre), postSeasons = seasonCount(post);
   const removedRows = removed.reduce((n, r) => n + r.copy.career.length, 0);
-  if (preSeasons - removedRows + added.length !== postSeasons) throw new Error('season arithmetic does not add up');
+  if (preSeasons - removedRows + added.length + inserted.length !== postSeasons) throw new Error('season arithmetic does not add up');
   const activeBefore = [...liveAfter784().values()].filter(p => p.active).length;
   const activeAfter = activeBefore + rewrites.filter(r => r.rule === 'active').reduce((n, r) => n + (r.next ? 1 : 0) - (r.old ? 1 : 0), 0);
   const byRule = rule => rewrites.filter(r => r.rule === rule).length;
   const L = [];
-  L.push(`-- Round 1010b, wave 1: the 2025-2026 season for the Liverpool men of the`);
-  L.push(`-- career pool, their 2024-2025 rows corrected, and the Alisson twin removed.`);
+  L.push(`-- Round 1010b and Round 1017, waves ${ledger.waves.map(w => w.wave).join(' and ')} of one ledger: the 2025-2026 season`);
+  L.push(`-- for the career pool (wave 1 the Liverpool men, wave 2 every other man the`);
+  L.push(`-- research reached), the 2024-2025 rows set to their final totals, the spells`);
+  L.push(`-- the pool never carried, and the Alisson twin removed. One migration for both`);
+  L.push(`-- waves, because neither was applied before the second was written.`);
   L.push(`--`);
   L.push(`-- GENERATED by scripts/genCareerSeasonAdditions.mjs from ${LEDGER_FILE},`);
   L.push(`-- which carries every row below with its sources. Do not edit by hand.`);
@@ -234,6 +263,8 @@ export function renderMigration({ ledger, pre, post, renames, rewrites, quiz, co
   L.push(`--`);
   L.push(`--   added: ${added.length} rows for ${ledger.season}, assists only where two sources agree, market value 0 (n/a)`);
   L.push(`--   changed: ${changed.length} rows of ${ledger.previousSeason} set to their final all competitions totals, each guarded by its old values`);
+  if (relabelled) L.push(`--     (${relabelled} of them also moved to the club the man really played for)`);
+  if (inserted.length) L.push(`--   inserted: ${inserted.length} rows of ${ledger.previousSeason} the pool never carried, each placed beside the row it follows or precedes`);
   for (const r of removed) L.push(`--   removed: ${r.player} (${r.playerId}), kept as ${r.keptAs}; his ${r.copy.career.length} season rows go with him (ON DELETE CASCADE)`);
   L.push(`--   Transfer Path: ${renames.length} puzzles renamed, ${rewrites.length} entries rewritten (${byRule('classic')} classic, ${byRule('europe')} Europe, ${byRule('active')} active),`);
   L.push(`--   each guarded by the value it replaces and each the search's own on the pool after this migration`);
@@ -246,6 +277,7 @@ export function renderMigration({ ledger, pre, post, renames, rewrites, quiz, co
   L.push('declare');
   L.push(`${pad}n integer;`);
   L.push(`${pad}next_order integer;`);
+  if (inserted.length) L.push(`${pad}anchor_order integer;`);
   L.push(`${pad}desired record;`);
   L.push(`${pad}updated_this_row integer;`);
   L.push(`${pad}updated_rows integer := 0;`);
@@ -292,20 +324,48 @@ function renderCareerBlock(L, { ledger, pre, post, changed, preSeasons, postSeas
     const guard = `player_id = ${q(c.playerId)} and season = ${q(c.season)} and club = ${q(c.club)} and goals = ${b.goals} and assists is not distinct from ${qn(b.assists, 'integer')} and appearances = ${b.appearances} and market_value = ${b.marketValue}`;
     L.push('');
     /* fewer games than the final count is a snapshot; a row that went down was simply wrong */
-    const why = a.appearances > b.appearances ? 'a mid-season snapshot' : 'wrong, corrected to the final totals';
+    const why = a.club !== b.club ? `the wrong club, he played that season for ${a.club}` : a.appearances > b.appearances ? 'a mid-season snapshot' : 'wrong, corrected to the final totals';
     L.push(`${pad}-- ${c.player} ${c.season} ${c.club}: ${b.appearances} apps ${b.goals} goals to ${a.appearances} apps ${a.goals} goals (${why})`);
     L.push(`${pad}select count(*) into n from public.career_players where id = ${q(c.playerId)} and player_name = ${q(c.player)};`);
     L.push(`${pad}if n <> 1 then raise exception '${m(c.player)}: expected one career_players row at ${c.playerId}, found %', n; end if;`);
-    L.push(`${pad}update public.career_seasons set goals = ${a.goals}, assists = ${qn(a.assists, 'integer')}, appearances = ${a.appearances}`);
+    /* a relabelled row must not land on a season and club he already has */
+    if (a.club !== b.club) {
+      L.push(`${pad}select count(*) into n from public.career_seasons where player_id = ${q(c.playerId)} and season = ${q(c.season)} and club = ${q(a.club)};`);
+      L.push(`${pad}if n <> 0 then raise exception '${m(c.player)}: ${m(c.season)} ${m(a.club)} is already there'; end if;`);
+    }
+    L.push(`${pad}update public.career_seasons set ${a.club !== b.club ? `club = ${q(a.club)}, ` : ''}goals = ${a.goals}, assists = ${qn(a.assists, 'integer')}, appearances = ${a.appearances}`);
     L.push(`${pad}where ${guard};`);
     L.push(`${pad}get diagnostics n = row_count;`);
     L.push(`${pad}if n <> 1 then raise exception '${m(c.player)} ${m(c.season)} ${m(c.club)}: expected one row carrying the old values, updated %', n; end if;`);
   }
+  /* each inserted row: shift the rows from its place on by one, then write it there */
+  const counts = new Map(pre.map(p => [p.name, p.career.length]));
+  for (const r of ledger.inserted ?? []) {
+    const a = anchorOf(r);
+    const at = a.side === 'before' ? 'anchor_order' : 'anchor_order + 1';
+    L.push('');
+    L.push(`${pad}-- ${r.player}: ${r.season} ${r.club} inserted ${a.side} ${a.season} ${a.club}`);
+    L.push(`${pad}select count(*) into n from public.career_players where id = ${q(r.playerId)} and player_name = ${q(r.player)};`);
+    L.push(`${pad}if n <> 1 then raise exception '${m(r.player)}: expected one career_players row at ${r.playerId}, found %', n; end if;`);
+    L.push(`${pad}select count(*) into n from public.career_seasons where player_id = ${q(r.playerId)};`);
+    L.push(`${pad}if n <> ${counts.get(r.player)} then raise exception '${m(r.player)}: expected ${counts.get(r.player)} season rows, found %', n; end if;`);
+    L.push(`${pad}select count(*) into n from public.career_seasons where player_id = ${q(r.playerId)} and season = ${q(r.season)} and club = ${q(r.club)};`);
+    L.push(`${pad}if n <> 0 then raise exception '${m(r.player)}: ${m(r.season)} ${m(r.club)} is already there'; end if;`);
+    L.push(`${pad}select count(*), min(sort_order) into n, anchor_order from public.career_seasons where player_id = ${q(r.playerId)} and season = ${q(a.season)} and club = ${q(a.club)};`);
+    L.push(`${pad}if n <> 1 then raise exception '${m(r.player)}: expected one ${m(a.season)} ${m(a.club)} row to insert ${a.side}, found %', n; end if;`);
+    L.push(`${pad}select count(*) into n from public.career_seasons where player_id = ${q(r.playerId)} and sort_order = anchor_order;`);
+    L.push(`${pad}if n <> 1 then raise exception '${m(r.player)}: % rows share the sort order of ${m(a.season)} ${m(a.club)}', n; end if;`);
+    L.push(`${pad}update public.career_seasons set sort_order = sort_order + 1 where player_id = ${q(r.playerId)} and sort_order ${a.side === 'before' ? '>=' : '>'} anchor_order;`);
+    L.push(`${pad}insert into public.career_seasons (player_id, season, club, goals, assists, appearances, market_value, sort_order) values`);
+    L.push(`${pad}${pad}(${q(r.playerId)}, ${q(r.season)}, ${q(r.club)}, ${r.goals}, ${qn(r.assists, 'integer')}, ${r.appearances}, ${r.marketValue}, ${at});`);
+    counts.set(r.player, counts.get(r.player) + 1);
+  }
+  const mid = midPool(pre, ledger);
   const addedBy = new Map();
   for (const r of ledger.added ?? []) (addedBy.get(r.player) ?? addedBy.set(r.player, []).get(r.player)).push(r);
   for (const [player, rows] of addedBy) {
     const id = rows[0].playerId;
-    const before = pre.find(p => p.name === player).career;
+    const before = mid.find(p => p.name === player).career;
     const last = before[before.length - 1];
     L.push('');
     L.push(`${pad}-- ${player}: ${rows.map(r => `${r.season} ${r.club}`).join(', ')} after ${last.season} ${last.club}`);
