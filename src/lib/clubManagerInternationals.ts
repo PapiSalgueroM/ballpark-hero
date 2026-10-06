@@ -416,7 +416,7 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
   /* Round 1021: a season that started late (2020-21) can meet its first
      window before a ball is kicked, so the men went from preseason. */
   const when = brk.atWeek === 0
-    ? 'and it comes before your first game of the season, so they went from preseason'
+    ? 'and it starts before your first game of the season, so they went from preseason'
     : 'and your fixtures do not stop for it, so they went straight after your last game';
   const back = brk.backOpponent ? `the ${brk.backOpponent} game` : 'the next game';
   const hurtLine = hurt.length

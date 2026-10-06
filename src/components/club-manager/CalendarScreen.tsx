@@ -4,8 +4,8 @@ import { CalendarDays, ChevronLeft, ChevronRight, FastForward } from 'lucide-rea
 import { INTENSITY_INFO } from '@/lib/clubManager';
 import type { CareerState, TrainingPlan, TrainingIntensity } from '@/lib/clubManager';
 import {
-  seasonDays, monthGrid, fastForwardTargets, targetWeekForDate, dayEmoji, clubTag, shortDate,
-  MONTH_NAMES, WINDOW_MATCH_WEEKS,
+  seasonDays, monthGrid, fastForwardTargets, targetWeekForDate, dayEmoji, clubTag, shortDate, windowOpenLine,
+  MONTH_NAMES,
 } from '@/lib/clubManagerCalendar';
 import type { CalendarDay, FastForward as FastForwardTarget } from '@/lib/clubManagerCalendar';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -134,14 +134,12 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
       return k >= openKey && k <= closeKey;
     });
     if (!span) return null;
-    const close = span.deadlineWeek !== null ? days.entryDates[span.deadlineWeek] : null;
     if (selected.deadline) {
       return `Deadline day for the ${WINDOW_NAME[selected.deadline]} window: the market shuts at the final whistle.`;
     }
-    return close
-      ? `The ${WINDOW_NAME[span.kind]} window is open. Deadline day is ${shortDate(close)}, your ${span.kind === 'summer' ? WINDOW_MATCH_WEEKS.summer : WINDOW_MATCH_WEEKS.january}${span.kind === 'summer' ? 'th' : 'rd'} match${span.kind === 'january' ? ' after it opens' : ' of the season'}.`
-      : `The ${WINDOW_NAME[span.kind]} window is open.`;
-  }, [selected, days]);
+    /* Round 1021 review: the match number is counted off the deadline's own match weeks (a 2020-21 summer runs 5 to 9). */
+    return windowOpenLine(c, span, days.entryDates);
+  }, [selected, days, c]);
 
   /* Month stepping, bounded to the season's span. */
   const monthKey = (y: number, m: number) => y * 100 + m;

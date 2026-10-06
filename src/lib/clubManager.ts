@@ -2679,18 +2679,31 @@ const CONFERENCE_LEAGUE_UNPLAYED = 'The Conference League place this table reall
                      on 12 September", and Sky Sports 11927589).
      La Liga         Saturday 12 September 2020, Eibar 0-0 Celta first.
      Serie A         Saturday 19 September 2020, Fiorentina 1-0 Torino first.
-     Bundesliga      Friday 18 September 2020 (Bayern against Schalke), the
-                     rest on Saturday 19 September, which is the day drawn.
-     Ligue 1         Friday 21 August 2020 (Bordeaux 0-0 Nantes), the rest
-                     on Saturday 22 August, which is the day drawn.
-   The summer window shut at 23:00 on Monday 5 October 2020
+     Bundesliga      Friday 18 September 2020 (Bayern 8-0 Schalke), six
+                     more on Saturday 19 September, which is the day drawn,
+                     and two on the Sunday (Leipzig 3-1 Mainz, Wolfsburg 0-0
+                     Leverkusen).
+     Ligue 1         Friday 21 August 2020 (Bordeaux 0-0 Nantes), two more on
+                     Saturday 22 August, which is the day drawn, four on the
+                     Sunday and the round's last three in mid September.
+   (Round 1021 review, 2026-10-06: the round's spread over the weekend, which
+   this comment first got wrong, rechecked in football-data.co.uk's D1 and F1
+   files, with RSSSF's duit2021 and fran2021 and ESPN's fixture lists agreeing.)
+   The summer window shut at 23:00 on Monday 5 October 2020 in England
    (premierleague.com news 1725887, "Dates for summer 2020 transfer window
    agreed": "starting on 27 July and ending on 5 October"; BBC Sport 53417773;
-   Sky Sports 11927589, "will close on Monday October 5 at 11pm"), and the
-   other four leagues shut the same day (dated 5 October 2020 deals into
-   Italy, Germany and France in Maxifoot's summer 2020 tables, the records
-   scripts/bakeEra2020.mjs cites as MF-IT, MF-DE and MF-FR). All five ended
-   on the weekend of 22 and 23 May 2021 (the same two sources). */
+   Sky Sports 11927589, "will close on Monday October 5 at 11pm").
+   THIN, NOT TWO SOURCED: that the other four leagues shut the same day.
+   It rests on one publisher, by inference: Maxifoot's summer 2020 tables
+   (the records scripts/bakeEra2020.mjs cites as MF-IT, MF-DE and MF-FR)
+   date deals into Italy, Germany and France on 5 October, but they also
+   date a few on 6 and 7 October (free agents and paperwork can land after a
+   window), so the tables cannot fix the day alone, and nothing here is
+   cited for Spain. Wikipedia's German and Italian summer 2020 transfer lists
+   also say 5 October (a spot check only, read 2026-10-06). The four leagues
+   use 5 October until two independent sources are read for each.
+   All five ended on the weekend of 22 and 23 May 2021 (RSSSF and
+   football-data.co.uk, as above). */
 const SUMMER_2020_CLOSE = { y: 2020, m: 10, d: 5 };
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
@@ -16840,6 +16853,14 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
   }
   generateHeadlines(state);
+  /* Round 1021 review: a late season can meet its first international window
+     before a ball is kicked (2020-21's September window opened five days
+     before the Premier League did). Its note goes out with the save, so it
+     waits in the inbox before the opener; left to the first play, it was
+     posted in the same play that kicked the opener off, and nobody could
+     answer it. Only a late season can have a window before its opener, so
+     every other save draws exactly what it did. */
+  if (lateWeeks !== null) for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
   return state;
 }
 

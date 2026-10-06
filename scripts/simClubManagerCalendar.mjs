@@ -97,6 +97,7 @@
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -159,6 +160,30 @@ const CONTROLS = {
     fixed: '  return drawEntries(plan.kickoff, worldYear, calendar, midweek);',
     broken: '  return plain;',
     say: 'NEGATIVE CONTROL ON: the late season plays no league round in midweek, so January drifts',
+  },
+  /* Round 1021 review: one round fewer crammed than the window is late, so
+     the Premier League, La Liga and Ligue 1 open January on the 9th. The 10
+     day fence in section 3 lets that through (8 days); section 6's pinned
+     January dates must go red. */
+  undercram: {
+    fixed: '  for (let i = windowIdx - 1; i > 0 && midweek.size < late; i--) {',
+    broken: '  for (let i = windowIdx - 1; i > 0 && midweek.size < late - 1; i--) {',
+    say: 'NEGATIVE CONTROL ON: the late season crams one round fewer than the window is late',
+  },
+  /* Round 1021 review: a mid-season join in a later season of the 2020-21
+     era keeps 2020-21's late window again. Section 6's join check must go red. */
+  joinlate: {
+    fixed: '  if (fresh.summerWindow && worldYearOf(fresh) !== worldYearOf(career)) {',
+    broken: '  if (false && fresh.summerWindow && worldYearOf(fresh) !== worldYearOf(career)) {',
+    say: 'NEGATIVE CONTROL ON: a mid-season join in a later season keeps 2020-21\'s late summer window',
+  },
+  /* Round 1021 review: the strip's match number back to the constant it
+     shipped with (4th for the summer, 3rd for January), which is false for
+     every 2020-21 save. Section 3's strip check must go red on those. */
+  fourth: {
+    fixed: '  const n = myMatchWeeks(state).filter(w => w >= from && w <= deadline).length;',
+    broken: '  const n = span.kind === \'summer\' ? WINDOW_MATCH_WEEKS.summer : WINDOW_MATCH_WEEKS.january;',
+    say: 'NEGATIVE CONTROL ON: the window strip names the 4th match for every summer deadline again',
   },
   latejan: {
     fixed: '      out.push(next);',
@@ -236,6 +261,7 @@ const {
   windowSpans, dateOfEntries, worldYearOf, dateKey, addDays, daysBetween, daysInMonth, clubTag, potentialEntry,
   WINDOW_MATCH_WEEKS, REAL_WINDOWS,
   entryDatesOf, kickoffOf, seasonPlanOf, summerWindowWeeksOf, lateSummerWindowWeeks, dayOfWeek,
+  windowOpenLine, shortDate,
 } = cal;
 const { startCareer, playNextEntry, fixtureFor, entryInvolvesMe } = cm;
 
@@ -373,7 +399,9 @@ console.log('2) Fast forwards: each button equals the tap on its day, save for s
 /* ---------- 3. The windows on the grid are the engine's ---------- */
 console.log('3) Windows: the grid\'s deadline day is the entry the engine shut the market on, January is drawn in January, and both sit near the real dates');
 {
-  let predicted = 0, augustHeld = 0;
+  let predicted = 0, augustHeld = 0, linesChecked = 0;
+  /* Written here a second time, so the module's own ordinal is checked against a copy. */
+  const nth = n => `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' })[n % 10] ?? 'th'}`;
   const gaps = { summer: [], janOpen: [], janOpenBig: [], janClose: [] };
   const janOpenMonths = [];
   SAVES.forEach((pick, i) => {
@@ -385,7 +413,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
        re-run on the next seed rather than read as a red. Same shape as the
        Round 471 and 474 gate fixes. */
     let attempt = 0;
-    let s, spans0, summer0, jan0, days0, dates, st, summerShut, janShut, janOpened, janLive;
+    let s, spans0, summer0, jan0, days0, dates, st, summerShut, janShut, janOpened, janLive, janOpenState, janLiveSpan;
     while (true) {
     s = fresh(pick, 3000 + i + 1000 * attempt);
     /* Round 1021: a late season's window is as many matches as reach the
@@ -417,7 +445,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     if (openDays < 14 || openDays > 45) fail(`${pick[0]}: ${openDays} days drawn open for the summer window, expected 14 to 45`);
 
     // Run the engine and note the entry on which each window actually shut.
-    st = s; summerShut = null; janShut = null; janOpened = null; janLive = null;
+    st = s; summerShut = null; janShut = null; janOpened = null; janLive = null; janOpenState = null; janLiveSpan = null;
     for (let k = 0; k < 80 && st.week < st.calendar.length && !st.sacked; k++) {
       const before = st.transferWindow;
       const res = playNextEntry(st, { skipHalftime: true });
@@ -429,6 +457,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
         const live = windowSpans(st).find(w => w.kind === 'january');
         if (!live || !live.live) fail(`${pick[0]}: inside the window the grid does not show January as live`);
         janLive = live ? live.deadlineWeek : null;
+        janOpenState = st; janLiveSpan = live ?? null;
       }
       if (before === 'january' && st.transferWindow === null && janShut === null) { janShut = st.week - 1; break; }
     }
@@ -447,6 +476,24 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     const later = windowSpans(st);
     if (later.find(w => w.kind === 'summer')?.deadlineWeek !== summerShut) fail(`${pick[0]}: after the fact the grid moved the summer deadline`);
     if (janShut !== null && later.find(w => w.kind === 'january')?.deadlineWeek !== janShut) fail(`${pick[0]}: after the fact the grid moved the January deadline`);
+    /* Round 1021 review: the strip under a tapped day inside an open window
+       says "Deadline day is <date>, your <n>th match". Both must be the
+       engine's: the date it shut the market on, and how many matches of mine
+       the engine had played by then (from kickoff for the summer, after the
+       window entry for January). The line used to print the constant 4th,
+       which a 2020-21 save's five to nine match summer made false. */
+    const playedWeeks = [...new Set((st.resultLog ?? []).map(r => r.week))];
+    const lineCheck = (label, state, span, shut, from) => {
+      if (!span || shut === null) return;
+      const line = windowOpenLine(state, span, dates);
+      const n = playedWeeks.filter(w => w >= from && w <= shut).length;
+      const want = `Deadline day is ${shortDate(dates[shut])}, your ${nth(n)} match`;
+      linesChecked += 1;
+      if (!line.includes(want)) fail(`${pick[0]} ${pick[1]}: the ${label} strip reads "${line}", the engine shut the market on ${shortDate(dates[shut])}, my ${nth(n)} match`);
+      else if (pick[1] === 'era2020' || label === 'summer' && i === 0) console.log(`   ${pick[0]} ${pick[1]} ${label} strip: "${line}"`);
+    };
+    lineCheck('summer', s, summer0, summerShut, 0);
+    lineCheck('January', janOpenState, janLiveSpan, janShut, (janOpened ?? 0) + 1);
 
     const real = REAL_WINDOWS[pick[1]];
     if (!real) { fail(`no real window dates recorded for ${pick[1]}`); return; }
@@ -459,6 +506,8 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
   const max = a => (a.length ? Math.max(...a) : 0);
   console.log(`   ${predicted} of ${SAVES.length * 2} deadline days matched the engine (${augustHeld} of ${SAVES.length} August projections of January held); gaps to the real windows: summer up to ${max(gaps.summer)} days, January open up to ${max(gaps.janOpen)} (Championship ${max(gaps.janOpenBig)}), January deadline up to ${max(gaps.janClose)}`);
   if (predicted < SAVES.length * 2) fail(`only ${predicted} of ${SAVES.length * 2} deadline days matched the engine`);
+  console.log(`   ${linesChecked} window strips checked against the engine's deadline day and match count`);
+  if (linesChecked !== SAVES.length * 2) fail(`only ${linesChecked} of ${SAVES.length * 2} window strips were checked`);
   if (max(gaps.summer) > 21) fail(`the summer deadline drifts ${max(gaps.summer)} days from the real one`);
   if (max(gaps.janOpen) > 10) fail(`the January window opens ${max(gaps.janOpen)} days from the real 1 January`);
   /*
@@ -594,17 +643,25 @@ console.log('6) Late season: 2020-21 opens on each league\'s real Saturday, cram
      table is checked against a copy rather than against itself: each
      league's opening Saturday, and the Saturday of the final weekend (22 May
      2021, the same for all five). Sources at the 2020 rows of LEAGUE_RULES (RSSSF and
-     football-data.co.uk, which agree on every date). */
+     football-data.co.uk, which agree on every date).
+     Round 1021 review: the fourth column is the day the January window
+     entry is drawn on. The cram's whole promise is that it brings January
+     back to its first Saturday (2 January 2021) wherever the season has
+     enough league rounds that can move; Serie A and the Bundesliga, a week
+     later to start, have one too few and open on the 9th. These are
+     deterministic (the league's calendar and its kickoff, no draw), so they
+     are pinned exactly: the 10 day fence in section 3 lets a round fewer
+     crammed through (measured: 8 days), and this does not. Control
+     undercram crams one round fewer than the window is late. */
   const REAL_2020 = [
-    ['Liverpool', 'premier2020', '2020-09-12'], ['Barcelona', 'laliga2020', '2020-09-12'],
-    ['Juventus', 'seriea2020', '2020-09-19'], ['Bayern Munich', 'bundesliga2020', '2020-09-19'],
-    ['Lille', 'ligue12020', '2020-08-22'],
+    ['Liverpool', 'premier2020', '2020-09-12', '2021-01-02'], ['Barcelona', 'laliga2020', '2020-09-12', '2021-01-02'],
+    ['Juventus', 'seriea2020', '2020-09-19', '2021-01-09'], ['Bayern Munich', 'bundesliga2020', '2020-09-19', '2021-01-09'],
+    ['Lille', 'ligue12020', '2020-08-22', '2021-01-02'],
   ];
   const FINAL_SATURDAY = { y: 2021, m: 5, d: 22 };
   const SUMMER_CLOSE_2020 = { y: 2020, m: 10, d: 5 };
-  const endGaps = [], fourGaps = [];
-  let crammed = 0;
-  REAL_2020.forEach(([club, leagueId, open], i) => {
+  let crammed = 0, fourOutside = 0;
+  REAL_2020.forEach(([club, leagueId, open, january], i) => {
     const s = fresh([club, 'era2020'], 6000 + i);
     const dates = entryDatesOf(s);
     if (cm.careerLeagueOf(s).id !== leagueId) fail(`${club}: plays ${cm.careerLeagueOf(s).id}, the check expects ${leagueId}`);
@@ -628,17 +685,26 @@ console.log('6) Late season: 2020-21 opens on each league\'s real Saturday, cram
     const fourDeadline = dates[mine[WINDOW_MATCH_WEEKS.summer - 1]];
     const lateGap = daysBetween(lateDeadline, SUMMER_CLOSE_2020), fourGap = daysBetween(fourDeadline, SUMMER_CLOSE_2020);
     if (lateGap < 0 || lateGap > 21) fail(`${club}: the late summer window shuts on ${fmt(lateDeadline)}, ${lateGap} days before the real 5 October`);
-    fourGaps.push(fourGap);
+    /* Every league's real deadline came after the usual four matches
+       (measured deterministic: the four match deadline 5 to 26 days early,
+       the late window 5 to 9 matches long). */
+    if (s.windowWeeksLeft <= WINDOW_MATCH_WEEKS.summer) fail(`${club}: the late summer window is ${s.windowWeeksLeft} matches, no longer than the usual ${WINDOW_MATCH_WEEKS.summer}`);
+    if (fourGap > 21) fourOutside += 1;
+    const windowAt = dates[s.calendar.findIndex(e => e.type === 'window')];
+    if (fmt(windowAt) !== january) fail(`${club}: the January window entry is drawn on ${fmt(windowAt)}, the cram brings it to ${january}`);
     const end = dates[leagueWeeks[leagueWeeks.length - 1]];
     const gap = daysBetween(end, FINAL_SATURDAY);
+    /* Measured, deterministic: 0 to 14 days before the real final weekend. */
     if (gap < 0) fail(`${club}: the last league round is drawn on ${fmt(end)}, after the real final weekend`);
-    endGaps.push(gap);
-    console.log(`   ${club} (${leagueId}): opens ${fmt(dates[0])}, ${midweek.length} league rounds in midweek (${midweek.map(w => fmt(dates[w])).join(", ") || "none"}), January window ${fmt(dates[s.calendar.findIndex(e => e.type === 'window')])}, last league round ${fmt(end)} (${gap} days before the real final weekend), summer window ${s.windowWeeksLeft} matches to ${fmt(lateDeadline)} (four would shut it on ${fmt(fourDeadline)}, ${fourGap} days early)`);
+    else if (gap > 21) fail(`${club}: the last league round is drawn on ${fmt(end)}, ${gap} days before the real final weekend (fence 21)`);
+    console.log(`   ${club} (${leagueId}): opens ${fmt(dates[0])}, ${midweek.length} league rounds in midweek (${midweek.map(w => fmt(dates[w])).join(", ") || "none"}), January window ${fmt(windowAt)}, last league round ${fmt(end)} (${gap} days before the real final weekend), summer window ${s.windowWeeksLeft} matches to ${fmt(lateDeadline)} (four would shut it on ${fmt(fourDeadline)}, ${fourGap} days early)`);
   });
-  /* The baseline: with the usual four matches at least one league's window would shut more than 21 days early (Lille's August start, measured 26), so the late window is what keeps 2020-21 inside the fence. */
-  if (Math.max(...fourGaps) <= 21) fail(`a four match window would already shut within 21 days of 5 October in every league (${fourGaps.join(', ')}), so the late window proved nothing`);
+  /* The baseline: with the usual four matches at least one league's window
+     would shut more than 21 days early (Lille's August start, measured 26),
+     so the late window is what keeps 2020-21 inside section 3's fence.
+     Counted, not read off a maximum. */
+  if (fourOutside === 0) fail('a four match window would already shut within 21 days of 5 October in every league, so the late window proved nothing');
   if (crammed === 0) fail('no late season crammed a single round into midweek, so the January check above proved nothing about it');
-  if (Math.max(...endGaps) > 21) fail(`a late season's last league round sits ${Math.max(...endGaps)} days before the real final weekend (fence 21)`);
 
   /* No other season moves a day. Every other save draws exactly the dates
      the plain rule gives (the rule every season used before this round),
@@ -664,6 +730,59 @@ console.log('6) Late season: 2020-21 opens on each league\'s real Saturday, cram
   checkUntouched('Liverpool era2020, season two', { ...late, season: 2 });
   checkUntouched('Barcelona era2015, season six (world year 2020)', { ...fresh(['Barcelona', 'era2015'], 6301), season: 6 });
   console.log(`   ${untouched} seasons outside 2020-21 checked: every one draws the plain rule's dates and a four match window`);
+
+  /* Round 1021 review: the check above proves those seasons take the plain
+     rule, but it compares the module with itself, so it cannot see the plain
+     rule move. This pins the rule's own output. Four real calendar shapes
+     (fresh saves of 2026-10-06: L a league round, W the window entry, M any
+     other night; the 18, 20 and 24 club modern leagues and a past era's 20),
+     each drawn by dateOfEntries for every world year 2004 to 2031, hashed.
+     The digest was taken from the module as it stood BEFORE this round
+     (564d604e) and from this round's, and the two agree byte for byte, so
+     "no other season moves a day" is held against the old rule itself. The
+     shapes are typed here rather than read off fresh saves so a change to how
+     the engine builds a season cannot move them. Control december (the
+     window entry loses its new year clamp) changes the plain rule and must
+     turn this red too. */
+  const PLAIN_SHAPES = [
+    'LLLMLLLMLMLLMLLMLLMLLMLMLLLWLLLLMLMLLLMLLLMLMLLLMLLMLL',
+    'LLLMLLLLMLMLLLMLLMLLLMLLMLMLLLLWLLLLLMLMLLLMLLLLMLLMLLLMLLMLLL',
+    'LLLMLLMLMLLMLLMLLMLLMMLLLWLLLLMLMLLMLLLMLMLLLMLMLL',
+    'LLLMLLLMLMLLMLLMLLMLLMLMLLLWLMLMLLMLMLLLMLLLMLMLLLMLLMLL',
+  ];
+  const PLAIN_DIGEST = '61af451194fa4e13';
+  const typeOf = c => (c === 'L' ? 'league' : c === 'W' ? 'window' : 'cup');
+  let plainText = '';
+  for (const shape of PLAIN_SHAPES) {
+    for (let y = 2004; y <= 2031; y++) plainText += dateOfEntries(y, [...shape].map(c => ({ type: typeOf(c) }))).map(fmt).join(',') + ';';
+  }
+  const plainDigest = createHash('sha256').update(plainText).digest('hex').slice(0, 16);
+  console.log(`   the plain rule over ${PLAIN_SHAPES.length} calendar shapes and 28 world years: digest ${plainDigest} (pinned ${PLAIN_DIGEST}, taken before this round)`);
+  if (plainDigest !== PLAIN_DIGEST) fail(`the plain rule's dates changed: digest ${plainDigest}, before this round ${PLAIN_DIGEST}, so some season of some era moved`);
+
+  /* Round 1021 review: walking into a new job mid-season (joinClubNow) opens
+     the new club's season as a fresh season one save, which in this era is
+     2020-21 with its late window, whatever year the career is in. A join in
+     2020-21 keeps the late window; a join in a later season (here the save
+     is read as its second, 2021-22, an August start) gets the usual four.
+     The application is accepted by hand: what is checked is the join, not
+     the job hunt (simCmApplications plays that). Control joinlate drops
+     the guard and must go red on the later season. */
+  const joinIn = season => {
+    let st = fresh(['Liverpool', 'era2020'], 6500 + season);
+    for (let k = 0; k < 2; k++) st = playNextEntry(st, { skipHalftime: true }).state;
+    const open = { club: 'Arsenal', league: 'premier2020', tier: 1, season, week: st.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+    return cal.joinClubNow({ ...st, season, jobHunt: { open, cooldowns: [], sentSeason: season, sent: 1, summerMove: null } });
+  };
+  const join2020 = joinIn(1), join2021 = joinIn(2);
+  if (!join2020 || !join2021) fail('joinClubNow refused the hand accepted move to Arsenal');
+  else {
+    if (join2020.clubName !== 'Arsenal' || join2021.clubName !== 'Arsenal') fail(`the joins landed at ${join2020.clubName} and ${join2021.clubName}`);
+    if (summerWindowWeeksOf(join2020) <= WINDOW_MATCH_WEEKS.summer) fail(`a join in 2020-21 lost the late window (${summerWindowWeeksOf(join2020)} matches)`);
+    if (summerWindowWeeksOf(join2021) !== WINDOW_MATCH_WEEKS.summer) fail(`a join in 2021-22 reads a ${summerWindowWeeksOf(join2021)} match summer window`);
+    if (join2021.transferWindow === 'summer' && join2021.windowWeeksLeft > WINDOW_MATCH_WEEKS.summer) fail(`a join in 2021-22 carries 2020-21's late window: ${join2021.windowWeeksLeft} matches left of an August four`);
+    console.log(`   joining Arsenal two entries in: in 2020-21 the summer window runs ${summerWindowWeeksOf(join2020)} matches (${join2020.windowWeeksLeft} left), in 2021-22 ${summerWindowWeeksOf(join2021)} (${join2021.windowWeeksLeft} left, window ${join2021.transferWindow ?? 'shut'})`);
+  }
 
   /* A 2020-21 save started BEFORE this round is migrated, not frozen. Its
      dates were never stored (the grid draws them from the season and the

@@ -204,8 +204,13 @@ export function kickoffOf(state: Pick<CareerState, 'startYear' | 'season' | 'era
  * December, or 6 January where the window is a week late) and the others
  * fall early: rounds 2 and 5 on 16 and 30
  * September for the Premier League and La Liga, 23 September and 7 October
- * for Serie A (the real leagues played some September midweeks too:
- * football-data.co.uk has 6 such La Liga matches, 4 Ligue 1 and 3 Serie A).
+ * for Serie A. That is earlier than the real squeeze, which came mostly in
+ * December: in September 2020 football-data.co.uk has 6 such La Liga
+ * matches, 4 Ligue 1 and 3 Serie A, and none at all in England or Germany
+ * (Round 1021 review, recounted 2026-10-06), so the Premier League's two
+ * September Wednesdays here have no real twin. Moving them later would
+ * need a round that sits between two league rounds, and the engine's cup
+ * and European nights leave none closer to December.
  * Where there are too few such rounds the window stays a week late:
  * Serie A and the Bundesliga, opening on 19 September, have one too few and
  * open January on the 9th (measured in scripts/simClubManagerCalendar.mjs).
@@ -333,6 +338,30 @@ export function windowSpans(state: CareerState): WindowSpan[] {
     spans.push({ kind: 'january', openWeek: windowEntry, deadlineWeek: januaryDeadline, live: liveKind === 'january' });
   }
   return spans;
+}
+
+/** 1st, 2nd, 3rd, 4th, 11th, 22nd. */
+function ordinal(n: number): string {
+  const teen = n % 100 >= 11 && n % 100 <= 13;
+  const suffix = teen ? 'th' : n % 10 === 1 ? 'st' : n % 10 === 2 ? 'nd' : n % 10 === 3 ? 'rd' : 'th';
+  return `${n}${suffix}`;
+}
+
+/**
+ * The calendar strip's line for a day inside an open window: deadline day,
+ * and which match of mine that is. Round 1021 review: the match is counted
+ * off the very match weeks the deadline day is placed on (from kickoff for
+ * the summer, from the window entry for January), so the number can never
+ * contradict the date beside it. A 2020-21 save's summer deadline is its 5th
+ * to 9th match, where every other season's is the 4th.
+ */
+export function windowOpenLine(state: CareerState, span: WindowSpan, entryDates: CalDate[]): string {
+  const name = span.kind === 'summer' ? 'summer' : 'January';
+  const deadline = span.deadlineWeek;
+  if (deadline === null) return `The ${name} window is open.`;
+  const from = span.kind === 'summer' ? 0 : span.openWeek + 1;
+  const n = myMatchWeeks(state).filter(w => w >= from && w <= deadline).length;
+  return `The ${name} window is open. Deadline day is ${shortDate(entryDates[deadline])}, your ${ordinal(n)} match ${span.kind === 'january' ? 'after it opens' : 'of the season'}.`;
 }
 
 /* ================================================================== */
@@ -732,16 +761,21 @@ export function fastForwardTargets(state: CareerState, days: SeasonDays): FastFo
  *           summer 2005 list's note on the re-opening; Bleacher Report, the
  *           January window's history, England's window 1 to 31 January).
  *  2020-21 (Round 1021, read 2026-10-05): summer closed 23:00 BST Monday 5
- *           October 2020 (premierleague.com news 1725887; BBC Sport
- *           53417773; Sky Sports 11927589, cited at the 2020 rules rows); January
- *           closed 23:00 GMT Monday 1 February 2021 (BBC Sport's deadline
- *           day reports 55897363 and 55894098, published 1 February 2021;
- *           Maxifoot's winter 2020-21 English table, whose deadline deals are
- *           dated 1 February 2021). The OPENING day of that January window is
- *           not two sourced here: nothing read for this round dates it, so
- *           the row uses 1 January, the day every other row opens on, as a
- *           measuring point only. The fence it feeds is ten days wide, so a
- *           day either way cannot change a verdict.
+ *           October 2020 in England (premierleague.com news 1725887; BBC
+ *           Sport 53417773; Sky Sports 11927589, cited at the 2020 rules
+ *           rows; the other four leagues' same day is THIN, see there).
+ *           January closed 23:00 GMT Monday 1 February 2021: THIN, one
+ *           publisher, BBC Sport's deadline day reports 55897363 and
+ *           55894098, both published 1 February 2021. (Round 1021 review,
+ *           2026-10-06: Maxifoot's winter 2020-21 English table, first cited
+ *           here as a second source, dates its deadline deals, Minamino,
+ *           Willock and Maitland-Niles, 2 February, so it does not confirm
+ *           the day and is not counted.) The OPENING day of that January
+ *           window is not sourced at all: nothing read for this round dates
+ *           it, so the row uses 1 January, the day every other row opens on,
+ *           as a measuring point only. The fence it feeds is ten days wide,
+ *           so a day either way cannot change a verdict, and the January
+ *           window's own day is pinned by section 6 of the harness anyway.
  */
 export const REAL_WINDOWS: Record<string, { summerClose: CalDate; januaryOpen: CalDate; januaryClose: CalDate }> = {
   now: { summerClose: { y: 2026, m: 9, d: 1 }, januaryOpen: { y: 2027, m: 1, d: 1 }, januaryClose: { y: 2027, m: 2, d: 1 } },
@@ -901,6 +935,14 @@ export function joinClubNow(career: CareerState): CareerState | null {
     return null;
   }
   if (fresh.clubName !== club) return null;
+  /* Round 1021 review: fresh is a season one save, so in the 2020-21 era it
+     is dealt that season's late summer window whatever year the career is
+     in. Every later season opened in August with the usual four matches,
+     so a join in one of those gets four, the same as everywhere else. */
+  if (fresh.summerWindow && worldYearOf(fresh) !== worldYearOf(career)) {
+    fresh.windowWeeksLeft = WINDOW_MATCH_WEEKS.summer;
+    delete fresh.summerWindow;
+  }
   /* The same point of the season, by share of the calendar: the two leagues
      need not be the same length. Never the very end, the Round 549 rule. */
   const total = fresh.calendar.length;
