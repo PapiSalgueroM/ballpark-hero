@@ -1335,6 +1335,21 @@ export function runInternationalSummer(
   return simulateTournament(nation, fmt, year, qualifying, squad, form);
 }
 
+/** Round 1027: Club Manager hands runManagerSummer its season counter (1, 2,
+ *  3 and on, clubManager.ts creates a career at season 1), not a calendar
+ *  year. Before the format history only year % 4 mattered, so the counter was
+ *  fine; read as a year now it would land before every row of the history and
+ *  play the oldest shape of each competition (an 8 team Euros, so an England
+ *  manager would have to win his qualifying group or be sacked). A counter is
+ *  read as the first year from 2025 on with the same place in the four year
+ *  cycle, which plays exactly the shapes Club Manager always played. A real
+ *  calendar year is read as itself. simIntlFormatHistory section 8 holds the
+ *  counter path to main's literal engine. */
+export function managerFormatYear(year: number): number {
+  if (year >= 1900) return year;
+  return 2025 + ((((year - 2025) % 4) + 4) % 4);
+}
+
 /**
  * Round 202: the same summer, run for a MANAGER rather than a player.
  *
@@ -1349,7 +1364,7 @@ export function runInternationalSummer(
 export function runManagerSummer(
   nation: string, year: number, lift: number,
 ): IntlTournament | null {
-  const fmt = tournamentForYear(nation, year);
+  const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
   const bump = clamp(lift, 0, 6);
   /* The lift is applied by temporarily reading this nation as a stronger
