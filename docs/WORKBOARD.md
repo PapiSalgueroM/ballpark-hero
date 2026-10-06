@@ -1,6 +1,7 @@
 ## Codex claims1067: Cage strike motion, 2026-10-06
 
-Codex owns CageClashCanvas.tsx, cageStrikeMotion tests/harness, its Cage
+Codex owns CageClashCanvas.tsx, two read-only action HUD attributes,
+cageStrikeMotion tests/harness, its Cage
 workflow step, and narrow Cage help/guide/What's New hunks. Punches, kicks
 and ground strikes gain windup, contact and recovery silhouettes derived
 from existing action ticks. Reduced motion keeps a readable static action
