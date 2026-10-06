@@ -1,3 +1,23 @@
+## Round1065 integrated with published AG, final CI pending, 2026-10-06
+
+Release AG 6f0f4343 and its receipt b812ceea are preserved. Both Circuit
+and Missing XI news items are in the combined saved page. Original final
+8c346db1 passed Cage 37477238194, MMA 37477238180 and entry 37477238271,
+with saved reports and ZIP hashes accepted. Cage: 47 outcomes, 72 effective
+controls, two first-attempt Circuit wins (65/66), two early losses, four Quick
+fights and two four-drill journeys. 133 geometry stages, 986 controls and
+1064 loaded font observations, no intermediate awards or forwarded writes.
+
+Combined page preparation 37480438030 on f3990249 passed type/build:seo,
+unchanged Cage source proof, simMissingXi, simResultMoment and all 16 readers.
+Artifact 11421625871 SHA256 2b744fe4ba0d746ce1f35100cb52e4b150454b2d11d5dc73e1c901b6dde4e831 verified.
+Source receipt and five manifest hashes matched before and after copying.
+Only the merged What's New ledger hash required a further change; dates
+and every AG page, data shard, fix and source were preserved. Temporary page
+workflow lives only on the separate prep branch and is absent from PR150.
+Full final CI on the combined candidate is required before merge/publish.
+No new live claim. AG publish slot is released per Claude's 10:35 ledger.
+
 ## Round1065 release candidate prepared, 2026-10-06
 
 Circuit gameplay source 7b8f499a passed full preparation 37472006900:
