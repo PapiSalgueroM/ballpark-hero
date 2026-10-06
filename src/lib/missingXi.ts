@@ -3450,7 +3450,7 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Valencia',
     scoreLine: 'Bayern Munich 1-1 Valencia, AET (Bayern won 5-4 on penalties)',
     venue: 'San Siro, Milan',
-    formationLabel: '3-5-2',
+    formationLabel: '3-4-3',
     slots: [
       GK('Oliver Kahn'),
       { position: 'CB', name: 'Samuel Kuffour', x: 68, y: 76 },
@@ -3460,16 +3460,16 @@ export const LINEUPS: Lineup[] = [
       { position: 'MF', name: 'Owen Hargreaves', x: 62, y: 56 },
       { position: 'CM', name: 'Stefan Effenberg', x: 38, y: 56 },
       { position: 'LWB', name: 'Bixente Lizarazu', x: 14, y: 52 },
-      { position: 'CAM', name: 'Mehmet Scholl', x: 50, y: 36 },
-      { position: 'ST', name: 'Giovane Elber', x: 60, y: 16 },
-      { position: 'ST', name: 'Hasan Salihamidzic', x: 40, y: 16 },
+      { position: 'FW', name: 'Mehmet Scholl', x: 68, y: 26 },
+      { position: 'ST', name: 'Giovane Elber', x: 50, y: 16 },
+      { position: 'FW', name: 'Hasan Salihamidzic', x: 32, y: 26 },
     ],
     blankCandidates: [
       { name: 'Willy Sagnol', slotIndex: 4, nationality: 'France', clubAtTime: 'Bayern Munich' },
       { name: 'Giovane Elber', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
       { name: 'Mehmet Scholl', slotIndex: 8, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
     ],
-    source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Hargreaves, Lizarazu and Salihamidzic started; Jancker came on. No host publishes the shape.',
+    source: 'Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Hargreaves, Lizarazu and Salihamidzic started; Jancker came on. The 3-4-3 and the front three (Elber in the middle, Scholl and Salihamidzic wide) are on three hosts; which wing each took splits, so both read FW.',
   },
 
   // 103. 2002 World Cup Final - the LOSING side, Germany 0-2 Brazil

@@ -5296,7 +5296,7 @@
     "opponent": "Valencia",
     "scoreLine": "Bayern Munich 1-1 Valencia, AET (Bayern won 5-4 on penalties)",
     "venue": "San Siro, Milan",
-    "formationLabel": "3-5-2"
+    "formationLabel": "3-4-3"
    },
    "hints": [
     {
@@ -5313,7 +5313,7 @@
     },
     {
      "name": "Mehmet Scholl",
-     "position": "CAM",
+     "position": "FW",
      "nationality": "Germany",
      "clubAtTime": "Bayern Munich"
     }
@@ -5332,6 +5332,27 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Final (Giuseppe Meazza, San Siro, Milano, May 23; att 74000): Bayern München 1-1 Valencia CF aet, Bayern win 5-4 on penalties. Bayern: Kahn, Kuffour, Andersson, Linke, Sagnol (Jancker 46), Hargreaves, Effenberg, Lizarazu, Scholl (Paulo Sérgio 108), Élber (Zickler 100), Salihamidzic."
+    },
+    {
+     "host": "goal.com",
+     "url": "https://www.goal.com/it/notizie/kahn-canizares-la-sfida-allultimo-rigore-e-labbraccio/x98c7cajn39q16leccgsz7wzo",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Goal Italy retrospective of the final (published 2020-05-23). Hitzfeld played a 3-4-3 that became a 5-4-1 without the ball: Kuffour, Andersson and Linke the three centre backs in front of Kahn, Hargreaves the holding midfielder with Effenberg beside him, Sagnol and Lizarazu the wide men, Elber the centre forward with Scholl on the right and Salihamidzic on the left as wide attackers. All eleven named."
+    },
+    {
+     "host": "orf.at",
+     "url": "https://sportv2.orf.at/stories/2236056/2236058/",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "ORF match box, lines separated by dashes: Kahn; Kuffour, Andersson, Linke; Sagnol (46. Jancker), Effenberg, Hargreaves, Lizarazu; Salihamidzic, Elber (100. Zickler), Scholl (108. Sergio). A 3-4-3 by its lines. Every match fact in the box (eleven, subs and minutes, 3. Mendieta and 50. Effenberg penalties, referee Jol, Meazza, 74,000, the shootout) matches UEFA and RSSSF; the box heading wrongly reads 1998/99 and 26 May 1999 (the story is the 2001 final, two years after the 1999 loss)."
+    },
+    {
+     "host": "srf.ch",
+     "url": "https://www.srf.ch/sport/fussball/champions-league/champions-league-bayern-triumph-2001-17-penaltys-und-ein-titan",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "SRF Telegramm, lines separated by semicolons: Kahn; Kuffour, Andersson, Linke; Sagnol (46. Jancker), Effenberg, Hargreaves, Lizarazu; Salihamidzic, Elber (100. Zickler), Scholl (108. Sergio). Same 3-4-3 lines and the same order as ORF, so the two may share an agency feed: they count as one line listing for placement."
     }
    ],
    "diffs": [
@@ -5366,6 +5387,30 @@
      "severity": "major",
      "decision": "applied",
      "reason": "two hosts agree; see applied for each change and its sources"
+    },
+    {
+     "field": "formationLabel",
+     "entry": "3-5-2",
+     "evidence": "goal.com states a 3-4-3; ORF and SRF print the lines 3-4-3. No host states 3-5-2.",
+     "severity": "minor",
+     "decision": "applied",
+     "reason": "two independent hosts agree on the new value and no skeptic contradicted it"
+    },
+    {
+     "field": "slots[8] (CAM) Mehmet Scholl",
+     "entry": "CAM behind the strikers",
+     "evidence": "goal.com: Scholl a wide attacker on the right of a front three; ORF and SRF: Scholl in the front line of three. No host puts him behind the forwards.",
+     "severity": "major",
+     "decision": "applied",
+     "reason": "a blank hint: two hosts put him in the front line; they split on the wing, so the label is the line (FW)"
+    },
+    {
+     "field": "slots[10] (ST) Hasan Salihamidzic",
+     "entry": "ST, the slot carried from Jancker",
+     "evidence": "goal.com: Salihamidzic a wide attacker on the left of a front three; ORF and SRF: Salihamidzic in the front line of three with Elber in the middle.",
+     "severity": "minor",
+     "decision": "applied",
+     "reason": "two hosts put him in the front line, not at centre forward; they split on the wing, so the label is the line (FW)"
     }
    ],
    "applied": [
@@ -5390,20 +5435,50 @@
     {
      "path": "source",
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI and the penalty shootout win.",
-     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Hargreaves, Lizarazu and Salihamidzic started; Jancker came on. No host publishes the shape.",
+     "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Hargreaves, Lizarazu and Salihamidzic started; Jancker came on. The 3-4-3 and the front three (Elber in the middle, Scholl and Salihamidzic wide) are on three hosts; which wing each took splits, so both read FW.",
      "why": "the internal note vouched for the wrong eleven"
     },
     {
      "path": "slots[5].position",
      "from": "CM",
      "to": "MF",
-     "why": "Hargreaves: UEFA (MIDFIELDER); RSSSF gives no positions lists him in that line and no host says otherwise; one host, so the row marks it open"
+     "why": "Hargreaves: goal.com (the holding midfielder beside Effenberg), ORF and SRF (the midfield line of four) put him in midfield; only goal.com says holding, so the label is the line (MF). UEFA lists him MIDFIELDER."
+    },
+    {
+     "path": "formationLabel",
+     "from": "3-5-2",
+     "to": "3-4-3",
+     "why": "goal.com states 3-4-3; ORF and SRF print 3-4-3 lines. The old label was never sourced and no host states it."
+    },
+    {
+     "path": "slots[10].position",
+     "from": "ST",
+     "to": "FW",
+     "why": "goal.com (wide attacker in the front three) and ORF and SRF (front line of three, Elber in the middle): a forward, not the centre forward. The hosts split on his wing, so FW, not LW or RW."
+    },
+    {
+     "path": "slots[8].position",
+     "from": "CAM",
+     "to": "FW",
+     "why": "goal.com (wide attacker in the front three) and ORF and SRF (front line of three): a forward, not a CAM. The hosts split on his wing, so FW, not LW or RW."
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "centre",
+     "why": "goal.com (centre forward) and ORF and SRF (the middle of the front three): Elber led the line alone"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "centre",
+     "to": "right",
+     "why": "Forced, not chosen: two hosts put Scholl in the front three with Elber central, and Salihamidzic keeps the entry's left half under rule 1 (the wings split, see notes), so Scholl takes the other wing. goal.com says right; the ORF and SRF order read right to left would say left."
     }
    ],
    "notes": [
     "Date, score, penalties, venue and competition match. All three blank candidates (Sagnol, Elber, Scholl) did start.",
     "ESPN's API has no event for this match (scoreboard for 2001-05-22..24 returns an error), so the independent source is RSSSF. Sky Sports' teams page (skysports.com/football/bayern-munich-vs-valencia/teams/119179) and BeSoccer's lineup page were also tried: Sky lists only ten Bayern starters (no Elber) and gives the venue as the Olympic Stadium, Athens; BeSoccer lists ten starters and shows Sagnol as a 46' substitute. Both are visibly corrupt and were not used.",
-    "Round 1026 (review fix): Hargreaves reads MF on UEFA's listing (one host). Salihamidzic still shows Jancker's ST: UEFA gives him no position, RSSSF none, and no ESPN record of this final was found, so no host states a line for him either way. This is the one replacement still open with no role source."
+    "Round 1026 (closing check fix): Salihamidzic no longer carries Jancker's ST. goal.com (a 3-4-3, Elber centre forward, Scholl right and Salihamidzic left as wide attackers) and the ORF and SRF match boxes (lines Kahn; Kuffour, Andersson, Linke; Sagnol, Effenberg, Hargreaves, Lizarazu; Salihamidzic, Elber, Scholl) agree on the 3-4-3 and on the front three, so formationLabel is 3-4-3, Elber is ST in the middle, and Scholl (a blank, whose CAM hint no host supports) and Salihamidzic read FW. The wings split: goal.com puts Salihamidzic left and Scholl right, while the ORF and SRF order, if read right to left as their midfield line is (Sagnol first, Lizarazu last), puts them the other way round. Under rule 1 Salihamidzic keeps the entry's left half and Scholl takes the right, forced, and neither label names a wing. kicker.de and fussballdaten.de (bot walls), sport.de (402) and fcbayern.com (timed out) could not be read from this machine."
    ]
   },
   {
