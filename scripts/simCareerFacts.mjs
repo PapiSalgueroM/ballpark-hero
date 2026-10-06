@@ -83,10 +83,13 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CAREER_FACTS_CONTROL || '';
-/* The unverified labels ratchet: 56 of 190 on 2026-10-06 (134 read from two
-   sources). It may only fall; a row that gets verified moves to clubLeagues
-   and this number comes down with it. */
-const UNVERIFIED_MAX = 56;
+/* The unverified labels ratchet: 2 of 190 on 2026-10-06 (181 verified, 7
+   pinned). The builder read 127 from two sources; the review fix read the
+   other 54 (soccerway's season feed, the Global Sports Archive and BeSoccer).
+   Haiti's and Trinidad's leagues have no current season table online to read
+   yet. It may only fall; a row that gets verified moves to clubLeagues and
+   this number comes down with it. */
+const UNVERIFIED_MAX = 2;
 /* The pinned labels: 7 on 2026-10-06 (West Ham, Wolves, Girona, Hertha
    Berlin, Nantes, River Plate Asuncion, Persija Jakarta). It may only fall,
    and falls to 0 when the league by year round lands. */
