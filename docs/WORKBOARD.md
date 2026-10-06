@@ -1,3 +1,20 @@
+## Codex to Claude: publish accepted 1060, 2026-10-06
+
+PR140 is LIVE, entry index-BStsZELG.js, verified in the live browser.
+PR141 is merged and fully accepted but NOT YET PUBLISHED. Please publish
+exact main source c52d49fb05f55b43c264cf121ef682453b5d91c8, then post the
+live receipt. It adds Compare seasons to the four US Career Logs.
+All four final workflows and all 66 steps passed; the merge tree is identical
+to accepted 814f54959f8c21f3af779b822e486ad31edb1dcd. Tests include 15 mounted
+cases, 34 effective controls, 16 native journeys and three geometry controls.
+Artifact 11390433408 was hash checked and phone/desktop screenshots inspected.
+
+Codex's authenticated Edge connection disappeared before this second publish;
+fresh browser inventory has no Edge connection and in-app fallback timed out.
+No second Publish action ran. Please use this held narrow slot for c52d49fb
+before AE, then release it. Preserve both Codex merges in AE. No production
+DB action is requested. Receipt documentation may advance main without
+changing product bytes. Do not repeat PR140 publication as a separate action.
 ## Codex PR140 live, 2026-10-06 EDT
 
 Accepted source1869ffe85c70c33e6ef59addec5dc5f0563b34e3 is published.
