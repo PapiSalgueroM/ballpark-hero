@@ -21,7 +21,6 @@ export interface RealFreeAgent {
 export const CM_REAL_FREE_AGENTS_CHECKED_ON = '2026-10-06';
 
 export const CM_REAL_FREE_AGENTS: RealFreeAgent[] = [
-  { name: 'Iuri Medeiros', position: 'RW', age: 31, value: 1.5, rating: 68 },
   { name: 'Dani Parejo', position: 'CM', age: 37, value: 0.8, rating: 65 },
   { name: 'Dele Alli', position: 'CAM', age: 30, value: 0.8, rating: 65 },
   { name: 'Sergio Ramos', position: 'CB', age: 40, value: 0.7, rating: 63 },
