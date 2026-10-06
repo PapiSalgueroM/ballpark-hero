@@ -14,6 +14,7 @@ import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
 import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
 import { recordCompletion } from '@/lib/completions';
+import { seasonHighs } from '@/lib/usCareerSeasonReview';
 import { makeReviewCareer, reviewFixtures, reviewSave, reviewSports } from '@/test/fixtures/careerSeasonReview1008';
 import type { ReviewFixture } from '@/test/fixtures/careerSeasonReview1008';
 import type { UsCareerCore } from '@/lib/usCareerSport';
@@ -26,6 +27,11 @@ const comparisons = () => Object.fromEntries([...document.querySelectorAll('[dat
 function click(name: string | RegExp) {
   const button = screen.queryByRole('button', { name });
   expect(button, `button ${name} exists`).not.toBeNull();
+  fireEvent.click(button!);
+}
+function clickHigh(label: string) {
+  const button = document.querySelector(`[data-season-highs-stat="${label}"]`);
+  expect(button, `season high ${label} exists`).not.toBeNull();
   fireEvent.click(button!);
 }
 function choose(index: number) {
@@ -59,6 +65,123 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('saved career season review', () => {
+  it('finds saved season highs from the correct positive field for every position', () => {
+    const cases: [string, string[], string, string, number, string][] = [
+      ['nba', ['PG', 'SG', 'SF', 'PF', 'C'], 'Points per game', 'ppg', 28.4, 'Games'],
+      ['nfl', ['QB'], 'Passing yards', 'passYds', 4312, 'Games'],
+      ['nfl', ['RB'], 'Rushing yards', 'rushYds', 1281, 'Games'],
+      ['nfl', ['WR', 'TE'], 'Receiving yards', 'recYds', 1142, 'Games'],
+      ['nfl', ['LB'], 'Tackles', 'tackles', 118, 'Games'],
+      ['nfl', ['CB'], 'Interceptions', 'picks', 7, 'Games'],
+      ['nfl', ['EDGE'], 'Sacks', 'sacks', 16.5, 'Games'],
+      ['nfl', ['K'], 'Field goals made', 'fgMade', 33, 'Games'],
+      ['mlb', ['SP'], 'Wins', 'wins', 19, 'Starts'],
+      ['mlb', ['RP'], 'Saves', 'saves', 38, 'Appearances'],
+      ['mlb', ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], 'Home runs', 'hr', 41, 'Games'],
+      ['nhl', ['G'], 'Wins', 'wins', 39, 'Games'],
+      ['nhl', ['C', 'LW', 'RW', 'D'], 'Points', 'points', 91, 'Games'],
+    ];
+    for (const [slug, positions, label, key, value, gamesLabel] of cases) for (const pos of positions) {
+      const fixture = { ...(reviewFixtures.find(row => row.slug === slug && row.pos === pos) ?? reviewFixtures.find(row => row.slug === slug))!, pos }, career = makeReviewCareer(fixture);
+      career.seasons.forEach((season, index) => Object.assign(season, { [key]: [value - 2, value, value - 1][index] }));
+      const before = JSON.stringify(career);
+      expect(seasonHighs(career, reviewSports[slug]), `${slug} ${pos} saved highs`).toEqual([
+        { label: 'Season OVR', value: '84', indices: [1] },
+        { label: gamesLabel, value: String(fixture.games), indices: [1] },
+        { label, value: String(value), indices: [1] },
+      ]);
+      expect(JSON.stringify(career)).toBe(before);
+    }
+  });
+  it('keeps every tied original index latest first and compares raw high values before formatting', () => {
+    const fixture = reviewFixtures[0], career = makeReviewCareer(fixture), sport = reviewSports.nba;
+    career.seasons.forEach(season => Object.assign(season, { year: 2032, ovr: 84, games: 76, ppg: 24.61 }));
+    expect(seasonHighs(career, sport)).toEqual([
+      { label: 'Season OVR', value: '84', indices: [2, 1, 0] },
+      { label: 'Games', value: '76', indices: [2, 1, 0] },
+      { label: 'Points per game', value: '24.61', indices: [2, 1, 0] },
+    ]);
+    Object.assign(career.seasons[1], { ppg: 24.64 });
+    const roundedSport = { ...sport, reviewStats: (...args: Parameters<typeof sport.reviewStats>) => {
+      const detail = sport.reviewStats(...args);
+      return { ...detail, regularValues: detail.regularValues.map(stat => stat.label === 'Points per game'
+        ? { ...stat, value: stat.numeric!.raw!.toFixed(1) } : stat) };
+    } };
+    expect(seasonHighs(career, roundedSport)[2]).toEqual({ label: 'Points per game', value: '24.6', indices: [1] });
+  });
+  it('keeps zero highs while excluding missing nonfinite and suspended seasons', () => {
+    const fixture = reviewFixtures[0], career = makeReviewCareer(fixture), sport = reviewSports.nba;
+    Object.assign(career.seasons[0], { ovr: 99, games: 99, ppg: 99, teamResult: 'SUSPENDED' });
+    Object.assign(career.seasons[1], { ovr: 0, games: undefined, ppg: 0 });
+    Object.assign(career.seasons[2], { ovr: NaN, games: Infinity, ppg: undefined });
+    expect(seasonHighs(career, sport)).toEqual([
+      { label: 'Season OVR', value: '0', indices: [1] },
+      { label: 'Games', value: 'Not recorded', indices: [] },
+      { label: 'Points per game', value: '0', indices: [1] },
+    ]);
+    let view = mountReview(fixture, career); click('Season highs');
+    clickHigh('Games');
+    expect(document.querySelector('[data-season-highs-value]')?.textContent).toBe('Not recorded');
+    expect(screen.queryByRole('combobox', { name: 'High season' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Open season' })).toBeNull();
+    clickHigh('Points per game');
+    expect(document.querySelector('[data-season-highs-value]')?.textContent).toBe('0');
+    expect((screen.getByRole('combobox', { name: 'High season' }) as HTMLSelectElement).value).toBe('1');
+    view.unmount();
+    career.seasons.forEach(season => { season.teamResult = 'SUSPENDED'; });
+    expect(seasonHighs(career, sport)).toEqual([
+      { label: 'Season OVR', value: 'Not recorded', indices: [] },
+      { label: 'Games', value: 'Not recorded', indices: [] },
+      { label: 'Points per game', value: 'Not recorded', indices: [] },
+    ]);
+    view = mountReview(fixture, career); click('Season highs');
+    expect(document.querySelector('[data-season-highs-value]')?.textContent).toBe('Not recorded');
+    expect(screen.queryByRole('combobox', { name: 'High season' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Open season' })).toBeNull();
+    view.unmount();
+  });
+  it('opens the original tied high season and restores each navigation focus', () => {
+    const fixture = reviewFixtures[0], career = makeReviewCareer(fixture);
+    career.seasons[2].year = career.seasons[1].year;
+    const bytes = JSON.stringify(career), view = mountReview(fixture, career);
+    click('Season highs');
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Season highs' }));
+    expect([...document.querySelectorAll('[data-season-highs-stat]')].map(el => el.getAttribute('data-season-highs-stat'))).toEqual(['Season OVR', 'Games', 'Points per game']);
+    expect(document.querySelector('[data-season-highs-stat="Season OVR"]')?.getAttribute('aria-pressed')).toBe('true');
+    expect(document.querySelector('[data-season-highs-value]')?.textContent).toBe('84');
+    expect((screen.getByRole('combobox', { name: 'High season' }) as HTMLSelectElement).value).toBe('1');
+    clickHigh('Points per game');
+    const select = screen.getByRole('combobox', { name: 'High season' }) as HTMLSelectElement;
+    expect([...select.options].map(option => [option.value, option.textContent])).toEqual([
+      ['2', '2032 (#3)'], ['1', '2032 (#2)'], ['0', '2030 (#1)'],
+    ]);
+    expect(select.value).toBe('2');
+    fireEvent.change(select, { target: { value: '0' } });
+    click('Open season');
+    expect(document.querySelector('[data-career-season-highs]')).toBeNull();
+    expect(document.querySelector('[data-season-review]')?.getAttribute('data-season-review')).toBe('0');
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: '2030 season' }));
+    expect(field('ovr')).toBe('71');
+    click('Back to seasons');
+    expect(document.activeElement?.getAttribute('data-season-tile')).toBe('0');
+    click('Season highs'); clickHigh('Games'); click('Back to seasons');
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Season highs' }));
+    click('Season highs');
+    expect(document.querySelector('[data-season-highs-stat="Season OVR"]')?.getAttribute('aria-pressed')).toBe('true');
+    expect(JSON.stringify(career)).toBe(bytes); view.unmount();
+    for (const count of [0, 1]) {
+      const shortCareer = makeReviewCareer(fixture); shortCareer.seasons = shortCareer.seasons.slice(0, count);
+      const shortView = mountReview(fixture, shortCareer);
+      expect(screen.queryByRole('button', { name: 'Season highs' }) !== null).toBe(count === 1);
+      if (count === 1) {
+        click('Season highs');
+        expect((screen.getByRole('combobox', { name: 'High season' }) as HTMLSelectElement).value).toBe('0');
+        click('Open season');
+        expect(document.querySelector('[data-season-review]')?.getAttribute('data-season-review')).toBe('0');
+      }
+      shortView.unmount();
+    }
+  });
   it('compares distinct original season indices and returns focus to Compare seasons', () => {
     const fixture = reviewFixtures[0], career = makeReviewCareer(fixture);
     career.seasons[2].year = career.seasons[1].year;
@@ -247,6 +370,17 @@ describe('saved career season review', () => {
       click(/Career Log/);
       await screen.findByRole('group', { name: 'Choose a season' }, { timeout: 20000 });
       expect(document.querySelector('[data-career-season-review]')).not.toBeNull();
+      click('Season highs');
+      expect(document.querySelector('[data-season-highs-value]')?.textContent).toBe('84');
+      const highMetric = document.querySelectorAll('[data-season-highs-stat]')[2];
+      expect(highMetric).toBeTruthy(); fireEvent.click(highMetric);
+      fireEvent.change(screen.getByRole('combobox', { name: 'High season' }), { target: { value: '0' } });
+      click('Open season');
+      expect(field('ovr')).toBe('71');
+      click('Back to seasons');
+      expect(document.activeElement?.getAttribute('data-season-tile')).toBe('0');
+      click('Season highs'); click('Back to seasons');
+      expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Season highs' }));
       click('Compare seasons');
       expect(comparisons()['Season OVR']).toEqual(['84', '82', '-2']);
       click('Regular season');
