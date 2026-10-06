@@ -19,7 +19,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Hold the movement buttons to get in range. Hold Guard to block. Use Punch, Heavy or Kick when you have an opening and enough stamina.',
       'Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.',
       'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
-      'Hold Submission to build pressure. Watch your stamina and the progress bar. The other fighter can resist or escape.',
+      'Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.',
       'Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.',
     ],
     rules: [
@@ -35,7 +35,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     example: [
       'You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.',
       'Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.',
-      'The submission bar shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
+      'Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.',
     ],
     tips: [
       'Distance is a defense. Step out of punching range when you need a moment to recover.',
