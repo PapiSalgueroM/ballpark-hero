@@ -135,7 +135,7 @@ describe('Cage action readiness outcomes', () => {
     expect(actions.map(action => hint(action).textContent)).toEqual(['Move closer', 'Move closer', 'Move closer', 'Move closer', 'Unavailable', 'Ready']);
     const ids = new Set<string>();
     for (const [index, action] of actions.entries()) {
-      const button = screen.queryByRole('button', { name: names[index], exact: true }); expect(button).not.toBeNull();
+      const button = screen.queryByRole('button', { name: names[index] }); expect(button).not.toBeNull();
       const span = hint(action); expect(button!.getAttribute('aria-describedby')).toBe(span.id); expect(document.getElementById(span.id)).toBe(span);
       expect(span.classList.contains('text-[10px]')).toBe(true); ids.add(span.id);
     }
@@ -143,7 +143,7 @@ describe('Cage action readiness outcomes', () => {
   });
 
   it('keeps a held button active through recovering hints and lands the next actual strike', () => {
-    board(true); approach(); const jab = screen.getByRole('button', { name: 'Jab', exact: true }) as HTMLButtonElement;
+    board(true); approach(); const jab = screen.getByRole('button', { name: 'Jab' }) as HTMLButtonElement;
     expect(hint('jab').textContent).toBe('Ready'); fireEvent.keyDown(jab, { key: 'Enter' }); advance(2);
     expect(hud('hits')).toBe(1); expect(hint('jab').textContent).toBe('Recovering'); expect(jab.disabled).toBe(false);
     advance(10); expect(hud('hits')).toBe(2); expect(jab.disabled).toBe(false);
