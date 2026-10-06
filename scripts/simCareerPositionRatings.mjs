@@ -30,7 +30,10 @@
       bands, with a ceiling on their Ballon d'Or rate;
    3. the rule is pure: calcSeasonRating over a 19,440 cell grid with
       Math.random held to one value makes exactly one draw, repeats itself,
-      leaves untouched positions alone and moves a defender by his credit;
+      leaves untouched positions alone and moves a defender by his credit,
+      and that credit is still the tuning every band here was measured with
+      (TUNED: section 1's outcome bands cannot see an under-credit of about
+      a third, so a retune has to re-measure this header);
    4. old saves: careers played on the rule before, loaded with repairCareer
       and played on, keep every stored season rating.
 
@@ -44,33 +47,79 @@
    (A first probe with flat stats read CB 31 / 23: a flat build rates a centre
    back as a bad fit for his own position, which is why the fleet now builds
    players the way the creation screen does.)
+   The same rule seed by seed: this harness at offsets 0 to 11, 120 careers a
+   position each (the rule before is its old engine; the positions the rule
+   does not touch read the same on both), the mean of the twelve and the
+   range, poor / elite:
+     ST   15.7 (13.4-17.3) / 46.8 (44.6-49.3)
+     LW   13.9 (11.5-16.0) / 48.7 (46.4-51.1)   (RW the same)
+     CAM  12.3 (10.1-14.3) / 49.2 (48.0-50.7)
+     CM   12.8 (10.6-14.8) / 46.6 (44.6-48.5)
+     CB   25.0 (23.5-26.6) / 27.6 (23.8-29.6)
+     LB   23.2 (21.6-24.8) / 29.2 (25.5-32.7)   (RB the same)
+     CDM  19.6 (17.5-22.1) / 32.6 (30.2-35.0)
+     GK    4.0 (3.1-4.9)   / 66.6 (63.6-70.7)
+   By era, offsets 0, 1, 2, 6 and 11 (60 careers a position and era each),
+   the range over the five, poor / elite:
+                         2020 start              1990 start
+     ST                 11.9-16.5 / 48.0-50.2   14.5-19.3 / 40.6-48.5
+     LW (and RW)        10.2-14.5 / 47.7-52.6   13.9-17.7 / 43.5-49.0
+     CAM                 8.9-13.2 / 47.8-53.4   12.4-16.1 / 44.2-50.9
+     CM                  9.3-14.0 / 47.1-50.0   12.5-17.2 / 42.4-47.1
+     GK                  2.5-5.3  / 63.3-71.3    2.8-5.8  / 61.0-70.2
+     CB   before        19.4-24.8 / 26.1-29.5   23.6-31.2 / 21.4-30.6
+          after         11.4-14.7 / 46.0-50.9   12.3-18.1 / 43.1-51.4
+     LB   before        18.1-24.0 / 27.6-32.9   21.8-29.5 / 22.7-32.5
+     (and RB) after     10.0-13.0 / 47.8-52.1   10.4-17.4 / 43.2-51.0
+     CDM  before        14.8-19.7 / 31.0-35.5   18.9-24.2 / 30.4-33.8
+          after          8.9-12.9 / 46.2-52.7   10.8-16.5 / 41.4-49.4
+   The 1990 start has more poor seasons at every position, attackers too;
+   the rule closes the defenders' gap in both eras. Section 1 prints these
+   two lines on every run and asserts on the pooled shares only.
 
-   After, this harness at seed offsets 0 to 4 (PER 60, about 190 s a run on a
-   loaded machine), poor / elite:
-     attacking band   poor 12.5-15.4, 12.0-15.0, 11.4-15.1, 12.4-16.5, 12.7-16.5
-                      elite 46.8-49.4, 44.6-48.1, 46.4-48.8, 49.1-51.1, 46.4-49.1
-     CB   13.5/48.1  15.0/46.1  15.7/44.7  14.1/46.7  13.3/46.4
-     LB   12.1/50.2  13.9/45.9  13.4/45.5  11.4/48.3  11.5/47.4  (RB the same:
-          the two full backs share every rule, and the seeds are shared)
-     CDM  11.6/48.9  11.8/47.1  12.0/45.8  11.2/48.5  13.0/47.7
-     CM   13.1/46.8  12.1/46.0  12.6/45.9  12.4/48.5  12.7/45.5  (untouched)
-     GK   4.1/66.6   3.9/65.1   4.6/63.6   4.0/66.1   3.5/67.2   (untouched)
-   The furthest any share sat outside its band: poor 1.2 points, elite 2.4
-   (CB at offset 3). MARGIN is about twice that, 3 and 5. The rule before
-   this round sits 12 to 21 points under the elite band at every defending
-   position on every offset, so the margin cannot hide it.
-   Section 2, defenders before and after, same seeds:
-     peak overall moved +0.47 +0.51 +0.32 +0.66 +0.65
-     trophies a career  +0.28 +0.25 +0.18 +0.35 +0.20
-     released share     +0.63 -0.63 -0.21 -0.83 -1.04 points
-     Ballon d'Or per 100 defenders 0 on all five (attackers 0 to 4.2)
+   After, this harness at seed offsets 0 to 11 (PER 60, 120 to 230 s a run
+   with the machine's load; 0 to 4 run by the builder, 5 to 11 by the
+   review), poor / elite, the mean of the twelve and their range:
+     attacking band  poor  12.2 (10.1-14.3) to 15.7 (13.4-17.3)
+                     elite 46.8 (44.6-49.3) to 49.3 (48.1-51.1)
+     CB   poor 13.7 (11.8-15.7)   elite 47.2 (44.7-50.9)
+     LB   poor 12.3 (10.9-13.9)   elite 48.3 (45.5-51.5)   (RB is the same, and
+          RW is LW: those pairs share every rule, and the seeds are shared)
+     CDM  poor 12.1 (10.6-14.5)   elite 47.4 (45.3-49.5)
+     CM and GK are untouched, so their numbers above hold on both rules.
+   MARGIN comes from the attackers themselves. With RW a copy of LW there are
+   three independent attacking positions, and how far each one sits outside
+   the span of the other two, 36 cases over the twelve offsets, averaged 1.1
+   points poor and 0.9 elite with standard deviations of 0.9 and 1.0: three
+   standard deviations above is 3.9 and 3.7, so MARGIN is 4 and 4. On this
+   rule the furthest a defending share sat outside the attacking band was 1.8
+   points poor (LB, offset 6) and 2.4 elite (CB, offset 3), and CB's elite
+   share runs near the band's low edge (47.2 against 46.8 on average). The
+   rule before this round sits 12 to 21 points under the elite band at every
+   defending position on every offset, so the margin cannot hide it. What it
+   can hide is an under-credit of about a third (the review ran 0.025 a clean
+   sheet, and a holding midfielder on half a share, and both stayed inside),
+   which is why section 3 holds TUNED.
+   Section 2, defenders before and after, same seeds, offsets 0 to 11:
+     peak overall moved  +0.47 +0.51 +0.32 +0.66 +0.65 +0.47 +0.43 +0.46
+                         +0.52 +0.49 +0.38 +0.40          mean 0.48, sd 0.10
+     trophies a career   +0.28 +0.25 +0.18 +0.35 +0.20 +0.16 +0.05 +0.32
+                         +0.09 +0.08 +0.21 +0.03          mean 0.18, sd 0.11
+     released share      +0.63 -0.63 -0.21 -0.83 -1.04 -0.21 -1.67  0.00
+                         -0.42 +0.21 -1.04 -0.21   mean -0.45, sd 0.63 points
+     Ballon d'Or per 100 defenders 0 on all twelve (attackers 0 to 4.2)
    and 120 of 120 untouched careers byte identical every time. Defenders end
    up level with the attackers on peak overall (0.44 under to 0.12 over, the
    rule before had them 0.36 to 0.84 under).
-   DELTA bands, about three standard deviations of those five around their
-   mean: peak 0.15 to 0.95, trophies 0.05 to 0.45, released -3 to +3 points.
-   Ballon d'Or ceiling for defenders 1 per 100 careers, under half the
-   attackers' measured rate; real defenders almost never win it.
+   DELTA bands are the mean plus and minus 3.5 standard deviations of the
+   twelve: peak 0.13 to 0.83, trophies -0.19 to 0.55, released -2.65 to
+   +1.75 points. The first cut took about three from offsets 0 to 4 alone,
+   and its trophies floor of 0.05 went red on healthy code at offsets 6 and
+   11. Peak's floor is what says the rule moved something; the trophies
+   floor only says it must not cost defenders trophies.
+   Ballon d'Or ceiling for defenders 1 per 100 careers: none of the 5,760
+   defender careers above won it, against 0 to 4.2 per 100 attackers, and
+   the brief asks that defenders not start winning it at a silly rate.
    The keeper stays the outlier the other way (65 to 67 percent elite). The
    brief said measure it and leave it unless this same rule fixed it, and it
    does not: his rule is untouched.
@@ -80,15 +129,32 @@
    oldrule     the rule's line is taken out (the keeper's clean sheets are the
                only defensive credit again)              expected red {1, 2, 3}
                (2: nothing moved; 3: every defender cell is off its credit)
-   overcredit  the credit is multiplied by four           expected red {1, 2}
-               measured at offset 0: CB 4.3 / 83.9, CDM 3.2 / 78.5, peak
-               +0.84 and trophies +0.59 (over the 0.45 ceiling)
+   overcredit  the credit is multiplied by four        expected red {1, 2, 3}
+               measured at offset 0: CB 4.3 / 83.9, CDM 3.2 / 78.5; 3 is
+               TUNED. Section 2 is the thin part: peak +0.84 and trophies
+               +0.59 clear their ceilings by 0.01 and 0.04, because a four
+               times credit moves those two only about four of their own
+               standard deviations. Run at offsets 6 and 11 it went red
+               through other numbers (released -3.54 at 6, peak +1.07 at
+               11), so section 2 caught it at all three offsets tried, but
+               never by much; a change to the random stream can leave this
+               control WRONG on section 2 without the rule being wrong.
    stream      the credit line draws one Math.random      expected red {2, 3}
                (2: the untouched careers move too, which is the point of
                checking them)
-   Exit 1 only when the red set equals the expected set; exit 2 when the
-   anchor is missing or doubled, the name is unknown, or the red set is any
-   other set.
+   retune      the holding midfielder's share is 0.5, the value the builder
+               tried and rejected                         expected red {3}
+               measured at offset 0: CDM 13.0 / 44.1, inside section 1's
+               band, which is why TUNED exists
+   rerate      repairCareer, which runs on every load, re-rates each stored
+               season with the credit                     expected red {4}
+               measured at offset 0: 16 of 16 old saves rewritten
+   The last two leave sections 1 and 2 out of the verdict: retune sits near
+   section 1's edge, and repairCareer also runs at every season turn, so
+   rerate moves the fleets as well (it takes section 1 red).
+   Exit 1 only when every expected section is red and nothing else is
+   (sections left out are not judged); exit 2 when the anchor is missing or
+   doubled, the name is unknown, or the red set is wrong.
 
    Run: node scripts/simCareerPositionRatings.mjs [seedOffset] [careersPerPositionAndEra] */
 import { build } from 'esbuild';
