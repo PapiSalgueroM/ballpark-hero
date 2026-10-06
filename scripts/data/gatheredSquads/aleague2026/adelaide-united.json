@@ -5,12 +5,27 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "adelaideunited.com.au",
       "url": "https://adelaideunited.com.au/squads/men",
       "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Jacob Brazete"
+      ],
+      "outs": [
+        "Stefan Mauk",
+        "Panashe Madanha",
+        "Luka Jovanovic"
+      ],
+      "resignings": []
     },
     "espn": {
       "host": "site.api.espn.com",
@@ -109,7 +124,8 @@
           "position": "Goalkeeper",
           "birthDate": "2005-01-20",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -186,7 +202,8 @@
           "position": "Goalkeeper",
           "birthDate": "1992-11-06",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -263,7 +280,8 @@
           "position": "Goalkeeper",
           "birthDate": "2004-01-07",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -340,7 +358,8 @@
           "position": "Centre-Back",
           "birthDate": "1991-05-09",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -417,7 +436,8 @@
           "position": "Centre-Back",
           "birthDate": "2005-03-08",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -494,7 +514,8 @@
           "position": "Left-Back",
           "birthDate": "1994-08-09",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -571,7 +592,8 @@
           "position": "Centre-Back",
           "birthDate": "2008-07-15",
           "match": "fuzzy"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -648,7 +670,8 @@
           "position": "Right-Back",
           "birthDate": "2000-02-20",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -725,7 +748,8 @@
           "position": "Centre-Back",
           "birthDate": "2006-08-11",
           "match": "fuzzy"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -802,7 +826,8 @@
           "position": "Centre-Back",
           "birthDate": "2007-01-08",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -852,7 +877,8 @@
           "birthDate": "2008-05-17",
           "match": "exact"
         },
-        "tm": null
+        "tm": null,
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (ESPN 2008-05-17), held as null",
@@ -932,7 +958,8 @@
           "position": "Centre-Back",
           "birthDate": "2008-01-18",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -996,7 +1023,8 @@
           "position": "Left-Back",
           "birthDate": "2010-06-09",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (Transfermarkt 2010-06-09), held as null",
@@ -1075,7 +1103,8 @@
           "position": "Attacking Midfield",
           "birthDate": "2005-03-05",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1151,7 +1180,8 @@
           "position": "Defensive Midfield",
           "birthDate": "2001-02-14",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1227,7 +1257,8 @@
           "position": "Defensive Midfield",
           "birthDate": "2002-02-05",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1304,7 +1335,8 @@
           "position": "Central Midfield",
           "birthDate": "2005-08-16",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1381,7 +1413,8 @@
           "position": "Central Midfield",
           "birthDate": "2003-12-18",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1457,7 +1490,8 @@
           "position": "Left-Back",
           "birthDate": "2006-02-04",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1533,7 +1567,8 @@
           "position": "Centre-Forward",
           "birthDate": "2006-11-08",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1609,7 +1644,8 @@
           "position": "Attacking Midfield",
           "birthDate": "1992-03-14",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1685,7 +1721,8 @@
           "position": "Attacking Midfield",
           "birthDate": "1989-02-20",
           "match": "fuzzy"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1762,7 +1799,8 @@
           "position": "Left Winger",
           "birthDate": "1991-12-16",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1839,7 +1877,8 @@
           "position": "Left Winger",
           "birthDate": "1999-06-08",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1916,7 +1955,8 @@
           "position": "Centre-Forward",
           "birthDate": "2005-03-14",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1993,7 +2033,8 @@
           "position": "Left Winger",
           "birthDate": "2006-01-20",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -2057,7 +2098,8 @@
           "position": "Striker",
           "birthDate": "2007-01-01",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (Transfermarkt 2007-01-01), held as null",
@@ -2137,7 +2179,8 @@
           "position": "Centre-Forward",
           "birthDate": "2006-03-26",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -2213,7 +2256,8 @@
           "position": "Right-Back",
           "birthDate": "2007-02-03",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -2290,7 +2334,8 @@
           "position": "Left Winger",
           "birthDate": "2008-07-01",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -2350,7 +2395,8 @@
           "position": "Centre-Forward",
           "birthDate": "2000-12-12",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (Transfermarkt 2000-12-12), held as null"
@@ -2369,7 +2415,8 @@
           "number": null
         },
         "espn": null,
-        "tm": null
+        "tm": null,
+        "from": "club squad page"
       }
     }
   ],

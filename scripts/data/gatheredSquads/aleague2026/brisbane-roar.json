@@ -5,12 +5,53 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "brisbaneroar.com.au",
       "url": "https://brisbaneroar.com.au/squads/men",
       "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Marko Ilic",
+        "Joel King",
+        "Sabit Ngor",
+        "Tate Russell",
+        "Jacob Nasso",
+        "Nam Tae-hee",
+        "Emin Durakovic",
+        "Dimitri Valkanis",
+        "Tom Aldred",
+        "Virgiliu Postolachi",
+        "Tyrese Francois"
+      ],
+      "outs": [
+        "Ben Warland",
+        "Austin Ludwik",
+        "Antonee Burke-Gilroy",
+        "Michael Ruhs",
+        "Ben Halloran",
+        "Chris Long",
+        "Quinn MacNicol and Jacob Brazete",
+        "Marius Lode",
+        "Youstin Salas",
+        "Nick D’Agostino",
+        "Giorgios Vrakas",
+        "Sam Klein",
+        "(St Pauli)",
+        "Henry Hore",
+        "Macklin Freke",
+        "Matthew Dench",
+        "Jay O'Shea"
+      ],
+      "resignings": [
+        "Noah Maieroni"
+      ]
     },
     "espn": {
       "host": "site.api.espn.com",
@@ -109,7 +150,8 @@
           "position": "Goalkeeper",
           "birthDate": "1990-10-02",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -183,7 +225,8 @@
           "position": "Goalkeeper",
           "birthDate": "2006-04-26",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date disagreement: ESPN 2007-01-01, Transfermarkt 2006-04-26"
@@ -249,7 +292,8 @@
           "position": "Goalkeeper",
           "birthDate": "2007-12-27",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (Transfermarkt 2007-12-27), held as null",
@@ -329,7 +373,8 @@
           "position": "Right-Back",
           "birthDate": "2006-07-25",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -406,7 +451,8 @@
           "position": "Centre-Back",
           "birthDate": "2005-10-18",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -473,7 +519,8 @@
           "position": "Centre-Back",
           "birthDate": "1990-09-11",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -542,7 +589,8 @@
           "position": "Right-Back",
           "birthDate": "1999-08-24",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -621,7 +669,8 @@
           "position": "Centre-Back",
           "birthDate": "2001-05-10",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -698,7 +747,8 @@
           "position": "Left-Back",
           "birthDate": "2000-10-30",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -764,7 +814,8 @@
           "position": "Left-Back",
           "birthDate": "2009-05-06",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -842,7 +893,8 @@
           "position": "Defensive Midfield",
           "birthDate": "2005-08-10",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -908,7 +960,8 @@
           "position": "Attacking Midfield",
           "birthDate": "1991-07-03",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -987,7 +1040,8 @@
           "position": "Central Midfield",
           "birthDate": "2005-07-28",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1053,7 +1107,8 @@
           "position": "Attacking Midfield",
           "birthDate": "2009-01-16",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -1132,7 +1187,8 @@
           "position": "Central Midfield",
           "birthDate": "2009-04-03",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1209,7 +1265,8 @@
           "position": "Central Midfield",
           "birthDate": "2003-04-01",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1285,7 +1342,8 @@
           "position": "Defensive Midfield",
           "birthDate": "2002-02-07",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1352,7 +1410,8 @@
           "position": "Central Midfield",
           "birthDate": "2000-07-16",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -1417,7 +1476,8 @@
           "position": "Striker",
           "birthDate": "2009-05-19",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date from one source only (Transfermarkt 2009-05-19), held as null",
@@ -1487,7 +1547,8 @@
           "position": "Centre-Forward",
           "birthDate": "2000-03-17",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "not on any 2025-26 A-League Men club page on Transfermarkt"
@@ -1553,7 +1614,8 @@
           "position": "Left Winger",
           "birthDate": "1999-05-31",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": [
         "birth date disagreement: ESPN 1998-02-03, Transfermarkt 1999-05-31",
@@ -1633,7 +1695,8 @@
           "position": "Centre-Forward",
           "birthDate": "2004-04-29",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1710,7 +1773,8 @@
           "position": "Right Winger",
           "birthDate": "2001-01-05",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1787,7 +1851,8 @@
           "position": "Right Winger",
           "birthDate": "2006-01-23",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     },
@@ -1863,7 +1928,8 @@
           "position": "Right Winger",
           "birthDate": "2006-08-10",
           "match": "exact"
-        }
+        },
+        "from": "club squad page"
       },
       "notes": []
     }

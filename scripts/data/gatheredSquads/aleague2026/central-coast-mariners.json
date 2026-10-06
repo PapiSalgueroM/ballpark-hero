@@ -1,0 +1,2161 @@
+{
+  "club": "Central Coast Mariners FC",
+  "slug": "central-coast-mariners",
+  "shard": "A",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "sources": {
+    "club": {
+      "host": "ccmariners.com.au",
+      "url": "https://ccmariners.com.au/squads/men/",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "John Hutchinson (Head Coach)",
+        "Oliver O'Carroll",
+        "Noah McCann",
+        "Max Naylor",
+        "Luke Becvinovski",
+        "Alex Bolton",
+        "Stevan Rujak",
+        "Presley Ortiz",
+        "Gabriel Tilo",
+        "Daniel Scarlett",
+        "Rufai Abubakar"
+      ],
+      "outs": [
+        "Brad Tapp",
+        "Nathan Paull",
+        "Miguel Di Pizio",
+        "Christian Theoharous",
+        "James Donachie",
+        "Sabit Ngor",
+        "Nathanael Blair",
+        "Will Kennedy",
+        "Logan Sambrook",
+        "Kaito Taniguchi",
+        "Seth Clark",
+        "Jacob Nasso",
+        "Alfie McCalmont"
+      ],
+      "resignings": [
+        "Diesel Herrington",
+        "Storm Roux",
+        "Haine Eames",
+        "Oli Lavale",
+        "Shumba Mutokoyi",
+        "Jesse Mantell",
+        "Callum McCaskey"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    }
+  },
+  "count": {
+    "clubPage": 21,
+    "staffSkipped": 2,
+    "rows": 25,
+    "heldOut": 9,
+    "twoHostRows": 25,
+    "birthDateKnown": 19,
+    "groupKnown": 23,
+    "minutesKnown": 17,
+    "marketRows": 0,
+    "perfPagesLoaded": 12
+  },
+  "rows": [
+    {
+      "name": "Andrew Redmayne",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1989-01-13",
+      "minutes2025_26": 2340,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/andrew-redmayne/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "107530"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "51975"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Andrew Redmayne",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "107530",
+          "name": "Andrew Redmayne",
+          "position": "Goalkeeper",
+          "birthDate": "1989-01-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "51975",
+          "name": "Andrew Redmayne",
+          "position": "Goalkeeper",
+          "birthDate": "1989-01-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Dylan Peraic-Cullen",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2006-07-25",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/dylan-peraic-cullen/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368564"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1110879"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Dylan Peraic-Cullen",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "368564",
+          "name": "Dylan Peraic-Cullen",
+          "position": "Goalkeeper",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1110879",
+          "name": "Dylan Peraić-Cullen",
+          "position": "Goalkeeper",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Trent Sainsbury",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1992-01-05",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/trent-sainsbury/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "150680"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "145840"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Trent Sainsbury",
+          "position": "Defender",
+          "number": "4"
+        },
+        "espn": {
+          "id": "150680",
+          "name": "Trent Sainsbury",
+          "position": "Defender",
+          "birthDate": "1992-01-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "145840",
+          "name": "Trent Sainsbury",
+          "position": "Centre-Back",
+          "birthDate": "1992-01-05",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Lucas Mauragis",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2001-09-04",
+      "minutes2025_26": 2313,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/lucas-mauragis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "304407"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "795253"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lucas Mauragis",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "304407",
+          "name": "Lucas Mauragis",
+          "position": "Defender",
+          "birthDate": "2001-09-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "795253",
+          "name": "Lucas Mauragis",
+          "position": "Left-Back",
+          "birthDate": "2001-09-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Storm Roux",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1993-01-13",
+      "minutes2025_26": 2024,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/storm-roux/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "155999"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "175699"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Storm Roux",
+          "position": "Defender",
+          "number": "15"
+        },
+        "espn": {
+          "id": "155999",
+          "name": "Storm Roux",
+          "position": "Defender",
+          "birthDate": "1993-01-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "175699",
+          "name": "Storm Roux",
+          "position": "Right-Back",
+          "birthDate": "1993-01-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Diesel Herrington",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2004-08-04",
+      "minutes2025_26": 238,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/diesel-herrington/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "349933"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1043709"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Diesel Herrington",
+          "position": "Defender",
+          "number": "24"
+        },
+        "espn": {
+          "id": "349933",
+          "name": "Diesel Herrington",
+          "position": "Defender",
+          "birthDate": "2004-08-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1043709",
+          "name": "Diesel Herrington",
+          "position": "Centre-Back",
+          "birthDate": "2004-08-04",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Shumba Mutokoyi",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2008-08-13",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/shumba-mutokoyi/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412890"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1385159"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Shumba Mutokoyi",
+          "position": "Defender",
+          "number": "41"
+        },
+        "espn": {
+          "id": "412890",
+          "name": "Shumba Mutokoyi",
+          "position": "Defender",
+          "birthDate": "2008-08-13",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1385159",
+          "name": "Shumba Mutokoyi",
+          "position": "Centre-Back",
+          "birthDate": "2008-08-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Haine Eames",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2008-02-27",
+      "minutes2025_26": 882,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/haine-eames/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386269"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1271537"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Haine Eames",
+          "position": "Midfielder",
+          "number": "6"
+        },
+        "espn": {
+          "id": "386269",
+          "name": "Haine Eames",
+          "position": "Midfielder",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1271537",
+          "name": "Haine Eames",
+          "position": "Attacking Midfield",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Harrison Steele",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2002-10-12",
+      "minutes2025_26": 1014,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/harrison-steele/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "330822"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "959614"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Harrison Steele",
+          "position": "Midfielder",
+          "number": "16"
+        },
+        "espn": {
+          "id": "330822",
+          "name": "Harrison Steele",
+          "position": "Midfielder",
+          "birthDate": "2002-10-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "959614",
+          "name": "Harrison Steele",
+          "position": "Defensive Midfield",
+          "birthDate": "2002-10-12",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Arthur De Lima",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-06-11",
+      "minutes2025_26": 365,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/arthur-de-lima/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "390498"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1238281"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Arthur De Lima",
+          "position": "Midfielder",
+          "number": "22"
+        },
+        "espn": {
+          "id": "390498",
+          "name": "Arthur De Lima",
+          "position": "Midfielder",
+          "birthDate": "2007-06-11",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1238281",
+          "name": "Arthur De Lima",
+          "position": "Right Winger",
+          "birthDate": "2007-06-11",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Laurence Taylor",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2008-02-27",
+      "minutes2025_26": 1,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/laurence-taylor/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "251749"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1373016"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Laurence Taylor",
+          "position": "Midfielder",
+          "number": "42"
+        },
+        "espn": {
+          "id": "251749",
+          "name": "Laurence Taylor",
+          "position": "Midfielder",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1373016",
+          "name": "Laurence Taylor",
+          "position": "Central Midfield",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Bailey Brandtman",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2005-06-28",
+      "minutes2025_26": 1119,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "ccmariners.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "ccmariners.com.au",
+          "url": "https://ccmariners.com.au/squads/men/",
+          "read": "2026-10-06",
+          "profile": "https://ccmariners.com.au/player/bailey-brandtman/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368562"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1110715"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Bailey Brandtman",
+          "position": "Attacker",
+          "number": "37"
+        },
+        "espn": {
+          "id": "368562",
+          "name": "Bailey Brandtman",
+          "position": "Forward",
+          "birthDate": "2005-06-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1110715",
+          "name": "Bailey Brandtman",
+          "position": "Left Winger",
+          "birthDate": "2005-06-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oliver O'Carroll",
+      "position": null,
+      "group": "MID",
+      "birthDate": "2009-05-16",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422347"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1413345"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oliver O'Carroll",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "422347",
+          "name": "Oliver O'Carroll",
+          "position": "Midfielder",
+          "birthDate": "2009-05-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1413345",
+          "name": "Oliver O'Carroll",
+          "position": "Central Midfield",
+          "birthDate": "2009-05-16",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Noah McCann",
+      "position": null,
+      "group": "DEF",
+      "birthDate": "2005-09-01",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "408757"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1089414"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Noah McCann",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "408757",
+          "name": "Noah Mccann",
+          "position": "Defender",
+          "birthDate": "2005-09-01",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1089414",
+          "name": "Noah McCann",
+          "position": "Centre-Back",
+          "birthDate": "2005-09-01",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Max Naylor",
+      "position": null,
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3104103"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1329719"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Naylor",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3104103",
+          "name": "Max Hamish Naylor",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1329719",
+          "name": "Max Naylor",
+          "position": "Centre-Forward",
+          "birthDate": "2008-02-25",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2008-02-25), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Luke Becvinovski",
+      "position": null,
+      "group": "FWD",
+      "birthDate": "2009-05-04",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410796"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1413330"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Luke Becvinovski",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "410796",
+          "name": "Luke Becvinovski",
+          "position": "Forward",
+          "birthDate": "2009-05-04",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1413330",
+          "name": "Luke Becvinovski",
+          "position": "Centre-Forward",
+          "birthDate": "2009-05-04",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Alex Bolton",
+      "position": null,
+      "group": null,
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141854"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1273794"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Bolton",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3141854",
+          "name": "Alexander Jesse Bolton",
+          "position": "Defender",
+          "birthDate": null,
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1273794",
+          "name": "Alex Bolton",
+          "position": "Midfielder",
+          "birthDate": "2008-05-12",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "position group not settled: ESPN Defender (DEF), Transfermarkt Midfielder (MID)",
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2008-05-12), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Stevan Rujak",
+      "position": null,
+      "group": "DEF",
+      "birthDate": "2009-08-27",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422417"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1533960"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Stevan Rujak",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "422417",
+          "name": "Stevan Rujak",
+          "position": "Defender",
+          "birthDate": "2009-08-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1533960",
+          "name": "Stevan Rujak",
+          "position": "Left-Back",
+          "birthDate": "2009-08-27",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Presley Ortiz",
+      "position": null,
+      "group": "FWD",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141853"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "732867"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Presley Ortiz",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3141853",
+          "name": "Presley Lucien Ortiz",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "732867",
+          "name": "Presley Ortiz",
+          "position": "Centre-Forward",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2003-03-04), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Gabriel Tilo",
+      "position": null,
+      "group": "DEF",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141856"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1435608"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Gabriel Tilo",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3141856",
+          "name": "Gabriel Tilo",
+          "position": "Defender",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1435608",
+          "name": "Gabriel Tilo",
+          "position": "Right-Back",
+          "birthDate": "2008-10-18",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2008-10-18), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Daniel Scarlett",
+      "position": null,
+      "group": null,
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3141841"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1510203"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Daniel Scarlett",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3141841",
+          "name": "Daniel Scarlet",
+          "position": "Defender",
+          "birthDate": null,
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1510203",
+          "name": "Daniel Scarlett",
+          "position": "Striker",
+          "birthDate": "2007-11-24",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "position group not settled: ESPN Defender (DEF), Transfermarkt Striker (FWD)",
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2007-11-24), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Rufai Abubakar",
+      "position": null,
+      "group": "GK",
+      "birthDate": "2008-01-05",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "404724"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1400027"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Rufai Abubakar",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "404724",
+          "name": "Rufai Abubakar",
+          "position": "Goalkeeper",
+          "birthDate": "2008-01-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1400027",
+          "name": "Abubakar Rufai",
+          "position": "Goalkeeper",
+          "birthDate": "2008-01-05",
+          "match": "fuzzy"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Oli Lavale",
+      "position": null,
+      "group": "FWD",
+      "birthDate": "2005-04-05",
+      "minutes2025_26": 971,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368573"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1176547"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oli Lavale",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "368573",
+          "name": "Oliver Lavale",
+          "position": "Forward",
+          "birthDate": "2005-04-05",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1176547",
+          "name": "Oliver Lavale",
+          "position": "Centre-Forward",
+          "birthDate": "2005-04-05",
+          "match": "fuzzy"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Jesse Mantell",
+      "position": null,
+      "group": "MID",
+      "birthDate": "2007-10-10",
+      "minutes2025_26": 237,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "421582"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1373017"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jesse Mantell",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "421582",
+          "name": "Jesse Mantell",
+          "position": "Midfielder",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1373017",
+          "name": "Jesse Mantell",
+          "position": "Central Midfield",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
+      ]
+    },
+    {
+      "name": "Callum McCaskey",
+      "position": null,
+      "group": "DEF",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aleagues.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aleagues.com.au",
+          "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+          "read": "2026-10-06",
+          "note": "league transfer centre dated 21 September 2026, Ins or Re-signings"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5325/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3100779"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1407158"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Callum McCaskey",
+          "position": null,
+          "number": null
+        },
+        "espn": {
+          "id": "3100779",
+          "name": "Callum Mccaskey",
+          "position": "Defender",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1407158",
+          "name": "Callum McCaskey",
+          "position": "Centre-Back",
+          "birthDate": "2009-01-01",
+          "match": "exact"
+        },
+        "from": "league transfer centre only (not on the club squad page)"
+      },
+      "notes": [
+        "not on the club squad page; named for 2026-27 by the league's transfer centre",
+        "birth date from one source only (Transfermarkt 2009-01-01), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    }
+  ],
+  "heldOut": [
+    {
+      "name": "James Donachie",
+      "position": "Defender",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "James Donachie",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Nathan Paull",
+      "position": "Defender",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Nathan Paull",
+          "position": "Defender",
+          "number": "3"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Will Kennedy",
+      "position": "Defender",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Will Kennedy",
+          "position": "Defender",
+          "number": "20"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Alfie McCalmont",
+      "position": "Midfielder",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Alfie McCalmont",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Miguel Di Pizio",
+      "position": "Midfielder",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Miguel Di Pizio",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Bradley Anthony Tapp",
+      "position": "Midfielder",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Bradley Anthony Tapp",
+          "position": "Midfielder",
+          "number": "26"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Christian Theoharous",
+      "position": "Attacker",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Christian Theoharous",
+          "position": "Attacker",
+          "number": "7"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Sabit Ngor",
+      "position": "Attacker",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Sabit Ngor",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    },
+    {
+      "name": "Logan Sambrook",
+      "position": "Attacker",
+      "reason": "on the club squad page, but the league's 2026-27 transfer centre lists him under Outs, so the page is stale for him",
+      "seen": {
+        "club": {
+          "name": "Logan Sambrook",
+          "position": "Attacker",
+          "number": "39"
+        },
+        "espn": null,
+        "tm": null,
+        "from": "club squad page"
+      }
+    }
+  ],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Jai Ajanovic",
+      "position": "Goalkeeper",
+      "birthDate": "2008-08-31"
+    },
+    {
+      "source": "espn",
+      "name": "Chris Donnell",
+      "position": "Midfielder",
+      "birthDate": "2004-01-24"
+    },
+    {
+      "source": "espn",
+      "name": "Kristian Popovic",
+      "position": "Midfielder",
+      "birthDate": "2001-08-14"
+    },
+    {
+      "source": "espn",
+      "name": "Aston Reid",
+      "position": "Midfielder",
+      "birthDate": "2009-04-02"
+    },
+    {
+      "source": "espn",
+      "name": "Ali Auglah",
+      "position": "Forward",
+      "birthDate": "2002-03-11"
+    },
+    {
+      "source": "espn",
+      "name": "Noah Hooper",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Jai Ajanovic",
+      "position": "Goalkeeper",
+      "birthDate": "2008-08-31"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Kristian Popovic",
+      "position": "Defensive Midfield",
+      "birthDate": "2001-08-14"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Chris Donnell",
+      "position": "Central Midfield",
+      "birthDate": "2004-01-24"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Ali Auglah",
+      "position": "Attacking Midfield",
+      "birthDate": "2002-03-11"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Noah Hooper",
+      "position": "Left Winger",
+      "birthDate": "2010-01-01"
+    }
+  ]
+}
