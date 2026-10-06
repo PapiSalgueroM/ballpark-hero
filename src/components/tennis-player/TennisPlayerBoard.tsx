@@ -4,6 +4,7 @@ import { useTennisPlayer } from '@/hooks/useTennisPlayer';
 import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 import feedbackStyles from './TennisPlayerFeedback.module.css';
@@ -35,6 +36,9 @@ export function TennisPlayerBoard() {
     const timer = window.setTimeout(() => setFeedback(null), 600);
     return () => window.clearTimeout(timer);
   }, [feedback]);
+
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.puzzle.id}` : null, gameState ? gameState.gameStatus !== 'playing' : false);
 
   const handleHint = () => {
     revealHint();
@@ -213,9 +217,9 @@ export function TennisPlayerBoard() {
 
         {isOver && (
           <div data-tennis-player-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-purple-500/20 bg-green-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
+            <ClueFinishMoment won={gameStatus === 'won'} gamePath="/guess-tennis-player" score={score} live={liveFinish} />
             {gameStatus === 'won' ? (
               <>
-                <p className="text-3xl">🏆</p>
                 <p className="text-xl font-bold text-purple-400">{puzzle.player_name}</p>
                 <p className="text-green-400">
                   Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-purple-400 font-bold">{score} pts</span>
@@ -223,7 +227,6 @@ export function TennisPlayerBoard() {
               </>
             ) : (
               <>
-                <p className="text-3xl">😤</p>
                 <p className="text-xl font-bold text-purple-400">It was {puzzle.player_name}</p>
                 <p className="text-green-400">Better luck next time!</p>
               </>

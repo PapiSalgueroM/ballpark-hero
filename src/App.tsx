@@ -6,6 +6,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
+import BrokenSaveRestore from "@/components/BrokenSaveRestore";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { Header } from "@/components/layout/Header";
 import { LiveTicker } from "@/components/layout/LiveTicker";
@@ -538,6 +539,10 @@ const AppContent = () => {
         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      {/* Round 958: the way back from a fresh start. On a long game's page,
+          while a save it set aside exists, offers to put it back. Inside the
+          boundary, so a throw here costs the page and not the site. */}
+      <BrokenSaveRestore pathname={pathname} />
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.

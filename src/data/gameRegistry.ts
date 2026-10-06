@@ -269,7 +269,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Aussie Rules',
     emoji: '🏉',
     games: [
-      { path: '/aussie-rules-manager', label: 'Aussie Rules Manager', emoji: '🏉', description: 'Pick a fictional club, manage the squad and call the quarters through a ten-round league', addedOn: '2026-10-01' },
+      { path: '/aussie-rules-manager', label: 'Aussie Rules Manager', emoji: '🏉', description: 'Run one of 18 fictional clubs through 23 rounds, the finals and a draft into next season', addedOn: '2026-10-01' },
       { path: '/afl-higher-lower', label: 'AFL Higher or Lower', emoji: '📊', description: 'Which legend kicked more career goals?', daily: true, addedOn: '2026-03-08' },
     ],
   },
@@ -286,7 +286,7 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🥊',
     games: [
       { path: '/fight-career', label: 'Fight Career', emoji: '👊', description: 'Turn pro, pick your fights and climb to a world title. The damage never heals.', addedOn: '2026-09-16' },
-      { path: '/fight-promoter', label: 'Fight Promoter', emoji: '🎟️', description: 'Book the room, make the fights, pay the purses. Selling tonight and building a name pull against each other.', addedOn: '2026-09-16' },
+      { path: '/fight-promoter', label: 'Fight Promoter', emoji: '🎟️', description: 'Run an MMA or boxing promotion. Sign fighters, build cards and crown champions.', addedOn: '2026-09-16' },
       { path: '/fight-gym', label: 'Fight Gym', emoji: '🥊', description: 'Sign fighters, pick their nights, take your cut, and decide when a man is finished.', addedOn: '2026-09-16' },
       { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter', addedOn: '2026-02-10' },
       { path: '/ufc-chain', label: 'Combat Chain', emoji: '🔗', description: 'Build a chain of fighters who beat each other', addedOn: '2026-03-09' },

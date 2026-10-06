@@ -5,6 +5,7 @@ import { NascarChainSearch } from './NascarChainSearch';
 import { NascarChainTimeline } from './NascarChainTimeline';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ChainFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { getNascarChainMultiplier } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -24,6 +25,8 @@ export function NascarChainBoard() {
   const [playerRank, setPlayerRank] = useState<number | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [saving, setSaving] = useState(false);
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.chain[0]?.driverName ?? ''}` : null, gameState?.gameStatus === 'ended');
 
   const fetchLeaderboard = async () => {
     const { data } = await supabase
@@ -175,22 +178,21 @@ export function NascarChainBoard() {
         ) : (
           <div className="text-center">
             <div className="bg-neutral-900 rounded-xl p-8 border border-red-600 max-w-lg mx-auto mb-6">
-              <h2 className="text-2xl font-bold text-red-400 mb-4">Game Over!</h2>
-              <p className="text-neutral-300 mb-4">{gameState.gameOverReason}</p>
+              <ChainFinishMoment
+                chainLength={chainLength}
+                badge={gameState.earnedBadge}
+                reason={gameState.gameOverReason}
+                gamePath="/nascar-chain"
+                live={liveFinish}
+                className="mb-6"
+              />
 
-              {gameState.earnedBadge && (
-                <div className="mb-6 p-4 bg-gradient-to-r from-red-900/50 to-neutral-900/50 rounded-lg border border-red-600">
-                  <div className="text-3xl mb-2">{gameState.earnedBadge.emoji}</div>
-                  <div className="text-xl font-bold text-red-400">{gameState.earnedBadge.name}</div>
-                  <div className="text-sm text-neutral-400">Chain of {chainLength}!</div>
-                </div>
-              )}
-
-              <div className="text-xl text-red-400 font-bold mb-2">Final Score: {gameState.score}</div>
-              {multiplier > 1 && (
-                <div className="text-sm text-red-300 mb-4">Includes x{multiplier} chain bonus!</div>
-              )}
-              <div className="text-lg text-neutral-300 mb-6">Chain Length: {chainLength}</div>
+              <div className="mb-6">
+                <div className="text-xl text-red-400 font-bold">Final Score: {gameState.score}</div>
+                {multiplier > 1 && (
+                  <div className="mt-2 text-sm text-red-300">Includes x{multiplier} chain bonus!</div>
+                )}
+              </div>
 
               {!scoreSubmitted ? (
                 <div className="mb-6">

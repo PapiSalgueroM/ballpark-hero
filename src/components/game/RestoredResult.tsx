@@ -13,13 +13,22 @@ import { useEffect, useState, type ReactNode } from 'react';
  * saw it finish. A finish restored from storage is already finished on its
  * first ready render, so it never counts. Pass ready=false while the board is
  * still loading its questions, so the loading render cannot pass for play.
+ *
+ * Round 953: gameKey is for a board that goes back to a mode menu with the
+ * page still mounted and can open another game there. It names the game on
+ * screen, or is null while there is none (the menu, a load). Play counts only
+ * for the game it was seen in, and the menu forgets it, so an old result
+ * reopened from the menu stays settled. A board with one game per mount
+ * leaves it out.
  */
-export function useFreshFinish(ready: boolean, finished: boolean): boolean {
-  const [sawPlay, setSawPlay] = useState(false);
+export function useFreshFinish(ready: boolean, finished: boolean, gameKey: string | null = ''): boolean {
+  const [playedKey, setPlayedKey] = useState<string | null>(null);
   useEffect(() => {
-    if (ready && !finished && !sawPlay) setSawPlay(true);
-  }, [ready, finished, sawPlay]);
-  return finished && sawPlay;
+    if (gameKey === null) {
+      if (playedKey !== null) setPlayedKey(null);
+    } else if (ready && !finished && playedKey !== gameKey) setPlayedKey(gameKey);
+  }, [ready, finished, gameKey, playedKey]);
+  return finished && gameKey !== null && playedKey === gameKey;
 }
 
 /* The moment's entrance pieces (ResultMoment's rm-*, the celebration kit's

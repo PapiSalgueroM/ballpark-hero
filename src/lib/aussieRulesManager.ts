@@ -47,8 +47,8 @@ export const PREPARATIONS: { id: Preparation; label: string; description: string
   { id: 'train', label: 'Train', description: 'Add 8 match preparation and 8 fatigue to every player.' },
   { id: 'rest', label: 'Rest', description: 'Remove 30 fatigue from every player, with no preparation boost.' },
 ];
-const ROLE_COUNTS: Record<Role, number> = { defender: 6, midfielder: 5, ruck: 1, forward: 6 };
-const ROLES: Role[] = ['defender', 'midfielder', 'ruck', 'forward'];
+export const ROLE_COUNTS: Record<Role, number> = { defender: 6, midfielder: 5, ruck: 1, forward: 6 };
+export const ROLES: Role[] = ['defender', 'midfielder', 'ruck', 'forward'];
 const FIRST = ['Valen', 'Renwick', 'Tavren', 'Ellorin', 'Kelren', 'Marven', 'Orlin', 'Sovren', 'Calven', 'Darven', 'Lioren', 'Nerwick', 'Averin', 'Brevren', 'Dorren', 'Evrin', 'Felren', 'Galven'];
 const LAST = ['Mosswick', 'Tressvale', 'Kelworth', 'Caldermere', 'Fernwick', 'Westmere', 'Brindlefern', 'Hollowmere', 'Tarnwick', 'Alderfen', 'Verrendale', 'Cresswick', 'Bellmere', 'Darnwick', 'Elverfern', 'Fallmere', 'Glenwick', 'Haverfen'];
 const CLUB_PLACES = ['Caldermere', 'Mosswick', 'Tarnwick', 'Alderfen', 'Verrendale', 'Cresswick'];
@@ -81,7 +81,7 @@ export function createWorld(seed: number): Club[] {
   }));
 }
 
-export function clubById(state: ManagerState, id: string): Club | undefined { return state.clubs.find(club => club.id === id); }
+export function clubById(state: Pick<ManagerState, 'clubs'>, id: string): Club | undefined { return state.clubs.find(club => club.id === id); }
 export function playerById(state: ManagerState, id: string): Player | undefined { return state.clubs.flatMap(club => club.players).find(player => player.id === id); }
 export function effectiveSkill(player: Player): number { return player.skill * (1 - player.fatigue * 0.0045) + player.prep; }
 export function automaticLineup(club: Club, order: 'best' | 'worst' = 'best'): { starters: string[]; bench: string[] } {
@@ -101,7 +101,7 @@ export function fixturesForRound(round: number): { homeId: string; awayId: strin
     return { homeId: `club-${order[reverse ? 5 - index : index]}`, awayId: `club-${order[reverse ? index : 5 - index]}` };
   });
 }
-function emptyMatch(round: number, homeId: string, awayId: string): Match {
+export function emptyMatch(round: number, homeId: string, awayId: string): Match {
   return { round, homeId, awayId, quarter: 0, homeScore: { goals: 0, behinds: 0, total: 0 }, awayScore: { goals: 0, behinds: 0, total: 0 }, events: [], homeSquad: [], awaySquad: [] };
 }
 function ownFixture(state: Pick<ManagerState, 'round' | 'clubId'>): Match {
@@ -118,7 +118,7 @@ export function opponentTactic(state: ManagerState): Tactic {
   const other = state.match?.homeId === state.clubId ? state.match.awayId : state.match?.homeId;
   return state.clubs.find(club => club.id === other)?.style ?? 'control';
 }
-function validLineup(state: ManagerState, starters: unknown, bench: unknown): starters is string[] {
+export function validLineup(state: Pick<ManagerState, 'clubs' | 'clubId'>, starters: unknown, bench: unknown): starters is string[] {
   if (!Array.isArray(starters) || !Array.isArray(bench) || starters.length !== 18 || bench.length !== 5) return false;
   const ids = [...starters, ...bench];
   const club = clubById(state, state.clubId)!;
@@ -145,14 +145,16 @@ function scoreFor(events: ScoringEvent[], clubId: string): Score {
   const behinds = events.filter(event => event.clubId === clubId && event.kind === 'behind').length;
   return { goals, behinds, total: goals * 6 + behinds };
 }
-function quarter(clubs: Club[], match: Match, seed: number, homeIds: string[], awayIds: string[], homeTactic: Tactic, awayTactic: Tactic): { clubs: Club[]; match: Match } {
+// Round 1014: shared with the full season (aussieRulesLeague.ts). minutes is a trailing
+// default so v1 replays bit for bit; an extra time period charges one quarter's fatigue.
+export function quarter<C extends Club>(clubs: C[], match: Match, seed: number, homeIds: string[], awayIds: string[], homeTactic: Tactic, awayTactic: Tactic, minutes = 20): { clubs: C[]; match: Match } {
   const home = clubs.find(club => club.id === match.homeId)!;
   const away = clubs.find(club => club.id === match.awayId)!;
   const homeStrength = strength(home, homeIds) + tacticEdge(homeTactic, awayTactic);
   const awayStrength = strength(away, awayIds) + tacticEdge(awayTactic, homeTactic);
   const rng = rngFrom(hashLabel(`${seed}|${match.round}|${match.homeId}|${match.awayId}|${match.quarter}`));
   const events = [...match.events];
-  for (let minute = 1; minute <= 20; minute += 1) {
+  for (let minute = 1; minute <= minutes; minute += 1) {
     // Always consume the same four dice, so choices face the same seeded chances.
     const possession = rng(), shot = rng(), accuracy = rng(), scorer = rng();
     const attackingHome = possession < clamp(0.5 + (homeStrength - awayStrength) * 0.006, 0.15, 0.85);
@@ -176,7 +178,7 @@ function quarter(clubs: Club[], match: Match, seed: number, homeIds: string[], a
   });
   return { clubs: nextClubs, match: { ...match, quarter: match.quarter + 1, events, homeScore: scoreFor(events, home.id), awayScore: scoreFor(events, away.id) } };
 }
-function simulateOtherMatch(state: ManagerState, homeId: string, awayId: string): { clubs: Club[]; match: Match } {
+export function simulateOtherMatch<C extends Club>(state: Pick<ManagerState, 'seed' | 'round'> & { clubs: C[] }, homeId: string, awayId: string): { clubs: C[]; match: Match } {
   const homeOpening = automaticLineup(clubById(state, homeId)!);
   const awayOpening = automaticLineup(clubById(state, awayId)!);
   let result = { clubs: state.clubs, match: { ...emptyMatch(state.round, homeId, awayId), homeSquad: [...homeOpening.starters, ...homeOpening.bench], awaySquad: [...awayOpening.starters, ...awayOpening.bench] } };
@@ -187,6 +189,13 @@ function simulateOtherMatch(state: ManagerState, homeId: string, awayId: string)
   }
   return result;
 }
+// Round 1014: lifted verbatim from the prepare branch so both seasons share it.
+export function prepareClubs<C extends Club>(clubs: C[], ownId: string, ownChoice: Preparation, round: number): C[] {
+  return clubs.map(club => {
+    const choice = club.id === ownId ? ownChoice : round % 2 === 0 ? 'train' : 'rest';
+    return { ...club, players: club.players.map(player => ({ ...player, prep: choice === 'train' ? 8 : 0, fatigue: clamp(player.fatigue + (choice === 'train' ? 8 : -30), 0, 100) })) };
+  });
+}
 export function reduceManager(state: ManagerState, action: ManagerAction): ManagerState {
   if (state.phase === 'complete' || !isManagerAction(action)) return state;
   if (action.type === 'lineup') {
@@ -195,10 +204,7 @@ export function reduceManager(state: ManagerState, action: ManagerAction): Manag
   }
   if (action.type === 'prepare') {
     if (state.phase !== 'prepare') return state;
-    const clubs = state.clubs.map(club => {
-      const choice = club.id === state.clubId ? action.choice : state.round % 2 === 0 ? 'train' : 'rest';
-      return { ...club, players: club.players.map(player => ({ ...player, prep: choice === 'train' ? 8 : 0, fatigue: clamp(player.fatigue + (choice === 'train' ? 8 : -30), 0, 100) })) };
-    });
+    const clubs = prepareClubs(state.clubs, state.clubId, action.choice, state.round);
     const opponent = state.match!.homeId === state.clubId ? state.match!.awayId : state.match!.homeId;
     const other = automaticLineup(clubs.find(club => club.id === opponent)!);
     const ownSquad = [...state.starters, ...state.bench];
@@ -234,7 +240,7 @@ export function reduceManager(state: ManagerState, action: ManagerAction): Manag
   }
   return { ...state, ...result, results, phase: 'report', swapsThisBreak: 0 };
 }
-export function ladderFor(state: ManagerState): LadderRow[] {
+export function ladderFor(state: Pick<ManagerState, 'clubs' | 'results'>): LadderRow[] {
   const rows = state.clubs.map(club => ({ clubId: club.id, played: 0, wins: 0, draws: 0, losses: 0, points: 0, pointsFor: 0, pointsAgainst: 0, percentage: 0 }));
   for (const match of state.results) {
     const home = rows.find(row => row.clubId === match.homeId)!;
