@@ -27,9 +27,13 @@ interface GameHelpProps {
   className?: string;
   /** Show the loaded guide until this route's first dismissal is remembered. */
   firstVisit?: boolean;
+  /** Round 1012: rules a page adds after its guide's own (Soccer Career's
+   *  derbies, while its guide is held). One the guide already carries word
+   *  for word is skipped, so a rule moved into the guide shows once. */
+  extraRules?: readonly string[];
 }
 
-export function GameHelp({ side = 'left', inline = false, className, firstVisit = false }: GameHelpProps = {}) {
+export function GameHelp({ side = 'left', inline = false, className, firstVisit = false, extraRules }: GameHelpProps = {}) {
   const pathname = useRoutePath();
   const [content, setContent] = useState<GameContent | null>(null);
   const [open, setOpen] = useState(false);
@@ -57,6 +61,7 @@ export function GameHelp({ side = 'left', inline = false, className, firstVisit 
      flat lists through the accessor. */
   const guide = content ? flatGuide(content) : null;
   if (!guide || guide.howToPlay.length === 0) return null;
+  const rules = [...guide.rules, ...(extraRules ?? []).filter(r => !guide.rules.includes(r))];
 
   const changeOpen = (nextOpen: boolean) => {
     if (prerender) return;
@@ -77,11 +82,11 @@ export function GameHelp({ side = 'left', inline = false, className, firstVisit 
           ))}
         </ol>
       </div>
-      {guide.rules.length > 0 && (
+      {rules.length > 0 && (
         <div>
           <h3 className="font-bold text-foreground mb-2">The rules</h3>
           <ul className="list-disc list-inside space-y-1.5 text-muted-foreground">
-            {guide.rules.map((rule, i) => (
+            {rules.map((rule, i) => (
               <li key={i}>{rule}</li>
             ))}
           </ul>

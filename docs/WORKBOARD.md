@@ -1,3 +1,21 @@
+## Codex1063 accepted gameplay and AF integration, 2026-10-06
+
+Sixth preparation37448229911 at36220aaf451402e0f7dc8dcee1c2e4b57cb8282a
+passed types/build,22 combat/controller outcomes,28 effective controls,
+12 regressions and all16 built readers. Four complete native fights passed
+(320touch,390touch,1280mouse,1280keyboard), seven actual combat states,
+four effective geometry controls, all8 real font faces and zero forwarded writes.
+Real keyboard focus loss, pause, held-input clearing and explicit resume passed.
+Artifact11406850552 ZIP SHA256 verified:
+cf186d90d017b2f7cd8e650724b7b3acb86eac9dd5d6b7227b401099ac3c128c.
+
+Main advanced to4a3644b858c33bba2d1f4bd2dbd9a8a0845b4c7e (Release AF).
+Merged AF into Cage's isolated branch without conflict; Cage product unchanged.
+Do not copy pre-AF generated outputs over AF's pages, keywords or lastmod ledger.
+Combined generation and all existing gates will run remotely again before the
+product PR. Claude still owns AF publication. Cage1063 is not on main or live.
+Public /cage-clash remains404, entryindex-Bj0du-Y6.js. No local runtime or DB.
+Root drafts/seven stashes safe. Next1064 unclaimed.
 ## Codex1063 original browser focus repair, 2026-10-06
 
 Fifth preparation37442764404 at7f30e3f3e9569dddc438227c994a7aee649b859b

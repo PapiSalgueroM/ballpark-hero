@@ -239,9 +239,12 @@ export function mlbStrength(t: MlbGmTeam): number {
   return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
 }
 
-/** Baseball is the high-variance sport: even great teams sit near .600. */
-export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam): number {
-  const gap = mlbStrength(a) - mlbStrength(b);
+/** Baseball is the high-variance sport: even great teams sit near .600.
+    Round 1020: the two edges are strength points a GM desk adds (a staff's
+    bounded edge, src/lib/mlbGmDesk.ts). Both default to nothing, so every
+    caller that passes none plays exactly as before. */
+export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam, edgeA = 0, edgeB = 0): number {
+  const gap = (mlbStrength(a) + edgeA) - (mlbStrength(b) + edgeB);
   return 1 / (1 + Math.pow(10, -gap / 25));
 }
 
@@ -249,6 +252,20 @@ export interface MlbRoundReport {
   myWins: number;
   myLosses: number;
   notes: string[];
+}
+
+/** Round 1020: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
+export interface MlbRoundOptions {
+  /** Strength points added to a club, by abbreviation. */
+  edges?: Record<string, number>;
+  /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
+  injuryRounds?: (abbr: string, p: MlbGmPlayer, rounds: number) => number;
+}
+
+/** Round 1020: what a GM desk may hand the offseason. Absent, it runs exactly as it always has. */
+export interface MlbOffseasonOptions {
+  /** The rating points a young man really gains, given the points the engine drew. Draws nothing from rng. */
+  growth?: (abbr: string, p: MlbGmPlayer, gain: number) => number;
 }
 
 /* Round 829: a number in [0, 1) from a round's draw, a man's name and a salt,
@@ -272,31 +289,33 @@ function unitHash(seed: number, key: string, salt: number): number {
    man's roll comes from that draw and his own name. Same odds as before
    (2.5 percent a round, out 1 to 4 rounds). Saves from before this round
    keep the old pass, so they play exactly as they did. */
-function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[]): void {
+function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[], opts?: MlbRoundOptions): void {
   const roundSeed = Math.floor(rng() * 4294967296);
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
       if (unitHash(roundSeed, p.name, 1) < 0.025) {
         p.out = 1 + Math.floor(unitHash(roundSeed, p.name, 2) * 4);
+        if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
   }
 }
 
-export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number): MlbRoundReport {
+export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number, opts?: MlbRoundOptions): MlbRoundReport {
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
   let myW = 0, myL = 0;
   const deep = Object.values(league.teams).some(t => !!t.depth);
-  if (deep) rollDepthInjuries(league, myTeam, rng, notes);
+  if (deep) rollDepthInjuries(league, myTeam, rng, notes, opts);
   else {
     for (const t of Object.values(league.teams)) {
       for (const p of t.players) {
         if (p.out > 0) p.out -= 1;
         else if (rng() < 0.025) {
           p.out = 1 + Math.floor(rng() * 4);
+          if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
           if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
         }
       }
@@ -307,7 +326,7 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const p = mlbWinProb(me, them);
+    const p = opts?.edges ? mlbWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : mlbWinProb(me, them);
     if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
     else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
   }, () => mlbBookSeason(league, rng));
@@ -334,8 +353,8 @@ export function mlbLeagueSeeds(league: MlbLeague, al: boolean): string[] {
 
 export interface MlbSeriesResult { name: string; home: string; away: string; homeWins: number; awayWins: number; winner: string }
 
-function playMlbSeries(name: string, home: MlbGmTeam, away: MlbGmTeam, rng: () => number, toWins: number): MlbSeriesResult {
-  const p = mlbWinProb(home, away);
+function playMlbSeries(name: string, home: MlbGmTeam, away: MlbGmTeam, rng: () => number, toWins: number, edges?: Record<string, number>): MlbSeriesResult {
+  const p = edges ? mlbWinProb(home, away, edges[home.abbr] ?? 0, edges[away.abbr] ?? 0) : mlbWinProb(home, away);
   let hw = 0, aw = 0;
   while (hw < toWins && aw < toWins) {
     if (rng() < p) hw += 1; else aw += 1;
@@ -343,25 +362,26 @@ function playMlbSeries(name: string, home: MlbGmTeam, away: MlbGmTeam, rng: () =
   return { name, home: home.abbr, away: away.abbr, homeWins: hw, awayWins: aw, winner: hw === toWins ? home.abbr : away.abbr };
 }
 
-/** Wild Card (Bo3) with byes for 1-2, LDS (Bo5), LCS (Bo7), World Series (Bo7). */
-export function runMlbPlayoffs(league: MlbLeague, rng: () => number): { series: MlbSeriesResult[]; champion: string } {
+/** Wild Card (Bo3) with byes for 1-2, LDS (Bo5), LCS (Bo7), World Series (Bo7).
+    Round 1020: `edges` as simMlbRound's; absent, every series plays as before. */
+export function runMlbPlayoffs(league: MlbLeague, rng: () => number, edges?: Record<string, number>): { series: MlbSeriesResult[]; champion: string } {
   const series: MlbSeriesResult[] = [];
   const pennants: string[] = [];
   for (const al of [true, false]) {
     const tag = al ? 'AL' : 'NL';
     const s = mlbLeagueSeeds(league, al);
     const T = (i: number) => league.teams[s[i]];
-    const wc1 = playMlbSeries(`${tag} Wild Card 3v6`, T(2), T(5), rng, 2);
-    const wc2 = playMlbSeries(`${tag} Wild Card 4v5`, T(3), T(4), rng, 2);
+    const wc1 = playMlbSeries(`${tag} Wild Card 3v6`, T(2), T(5), rng, 2, edges);
+    const wc2 = playMlbSeries(`${tag} Wild Card 4v5`, T(3), T(4), rng, 2, edges);
     series.push(wc1, wc2);
-    const lds1 = playMlbSeries(`${tag}DS`, T(0), league.teams[wc2.winner], rng, 3);
-    const lds2 = playMlbSeries(`${tag}DS`, T(1), league.teams[wc1.winner], rng, 3);
+    const lds1 = playMlbSeries(`${tag}DS`, T(0), league.teams[wc2.winner], rng, 3, edges);
+    const lds2 = playMlbSeries(`${tag}DS`, T(1), league.teams[wc1.winner], rng, 3, edges);
     series.push(lds1, lds2);
-    const lcs = playMlbSeries(`${tag}CS`, league.teams[lds1.winner], league.teams[lds2.winner], rng, 4);
+    const lcs = playMlbSeries(`${tag}CS`, league.teams[lds1.winner], league.teams[lds2.winner], rng, 4, edges);
     series.push(lcs);
     pennants.push(lcs.winner);
   }
-  const ws = playMlbSeries('World Series', league.teams[pennants[0]], league.teams[pennants[1]], rng, 4);
+  const ws = playMlbSeries('World Series', league.teams[pennants[0]], league.teams[pennants[1]], rng, 4, edges);
   series.push(ws);
   return { series, champion: ws.winner };
 }
@@ -550,7 +570,10 @@ export function mlbOverLimit(t: MlbGmTeam): number {
 
 /* userTeam: the club whose cut down is the GM's own. The board passes it and
    holds Play until he has DFA'd to 28 himself; every other club is cut here. */
-export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string): string[] {
+/* Round 1020: opts carries a GM desk's farm director (src/lib/mlbGmDesk.ts).
+   It reads the points the engine drew and draws nothing itself, so without
+   it, or with it, the stream of draws is the same. */
+export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string, opts?: MlbOffseasonOptions): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -560,8 +583,10 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
     for (const p of t.players) {
       p.age += 1;
       p.out = 0;
-      if (p.age <= 25 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 3));
-      else if (p.age >= 33) p.ovr = Math.max(63, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0)));
+      if (p.age <= 25 && p.ovr < p.pot) {
+        const gain = 1 + Math.floor(rng() * 3);
+        p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, gain) : gain));
+      } else if (p.age >= 33) p.ovr = Math.max(63, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0)));
       if (p.age >= 38 && (p.ovr <= 74 || rng() < 0.4)) { notes.push(`👋 ${p.name} retires.`); continue; }
       p.years -= 1;
       if (p.years <= 0) {

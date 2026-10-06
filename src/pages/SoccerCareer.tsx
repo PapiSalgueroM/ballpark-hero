@@ -73,6 +73,8 @@ import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/ca
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
+import { SeasonDerbyLines, DerbyChip, CareerDerbyTotals } from "@/components/soccer-career/DerbyLines";
+import { derbyHeroSeasons, DERBY_HELP_RULES } from "@/lib/soccerCareerDerby";
 import type { WorldSeason } from "@/lib/soccerPhone";
 /* Round 131: height, weight and the specifics under each family. */
 import {
@@ -489,6 +491,8 @@ function TimelineEntry({ season, position, isCurrent, isLast }: { season: Season
                 {ordinal(finish.finish)}
               </span>
             )}
+            {/* Round 1012: your derby record that season, nothing on old saves. */}
+            <DerbyChip season={season} />
             {trophies.length > 0 && <span className="text-[11px]">{trophies.join("")}</span>}
           </div>
         )}
@@ -673,6 +677,9 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, league, w
         </span>
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
+
+      {/* Round 1012: how each derby went, at most three lines, nothing on old saves. */}
+      <SeasonDerbyLines season={season} />
 
       {season.injury && (
         /* Round 530: one shake as it lands, nothing more. */
@@ -1257,7 +1264,7 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveError && !career && (
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
@@ -4209,6 +4216,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 </div>
               ))}
             </div>
+            {/* Round 1012: the career's derby record, summed from the seasons. */}
+            <CareerDerbyTotals seasons={career.seasons} />
           </div>
 
           {/* Trophies */}
@@ -4247,10 +4256,16 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 { name: "All Time Top Scorer", emoji: "👑" },
                 { name: "Fair Play Award", emoji: "🤝" },
               ];
-              const awardItems = individualAwards.map(a => ({
-                ...a,
-                count: career.awards.filter(ca => ca.name === a.name).length,
-              })).filter(a => a.count > 0);
+              /* Round 1012: Derby Hero is counted from the seasons, never kept in
+                 the awards list, so the Hall of Fame ballot and the trophy the
+                 vote broker arc takes back read the list exactly as before. */
+              const awardItems = [
+                ...individualAwards.map(a => ({
+                  ...a,
+                  count: career.awards.filter(ca => ca.name === a.name).length,
+                })),
+                { name: "Derby Hero", emoji: "🔥", count: derbyHeroSeasons(career.seasons) },
+              ].filter(a => a.count > 0);
               if (awardItems.length === 0) return null;
               return (
                 <div className="grid grid-cols-3 gap-1.5 mt-2">
@@ -4340,7 +4355,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
 
           {/* Awards */}
-          {career.awards.length > 0 && (
+          {(career.awards.length > 0 || derbyHeroSeasons(career.seasons) > 0) && (
             <div className="bg-card border border-border rounded-xl p-4 space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">🏆 Awards</span>
               <div className="flex flex-wrap gap-1.5">
@@ -4351,6 +4366,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                     if (!awardCounts[a.name]) awardCounts[a.name] = { emoji: a.emoji, count: 0 };
                     awardCounts[a.name].count += 1;
                   });
+                  /* Round 1012: Derby Hero seasons, derived from the seasons. */
+                  const heroes = derbyHeroSeasons(career.seasons);
+                  if (heroes > 0) awardCounts["Derby Hero"] = { emoji: "🔥", count: heroes };
                   return Object.entries(awardCounts).map(([name, { emoji, count }]) => (
                     <span key={name} className="text-[10px] px-2 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 font-semibold">
                       {emoji} {name} {count > 1 ? `×${count}` : ""}

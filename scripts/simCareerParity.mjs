@@ -775,6 +775,12 @@ for (const sport of ALL) {
     for (const standing of [10, 30, 50, 70, 90]) {
       for (const line of social.fanComments(sport, { pos, standing, followers: '1.2M' })) checkLine(sport, pos, line, `fans at ${standing}`);
       checkLine(sport, pos, social.askForMore(sport, pos), 'ask');
+      /* Round 1012: the three derby lines (only wins, only losses, one each)
+         go through the same rule, in every sport, though only the flagship
+         passes a derby today. */
+      for (const derby of [{ won: 2, lost: 0, rival: 'Tottenham' }, { won: 0, lost: 2, rival: 'Tottenham' }, { won: 1, lost: 1, rival: 'Tottenham' }]) {
+        for (const line of social.fanComments(sport, { pos, standing, followers: '1.2M', derby })) checkLine(sport, pos, line, `derby fans at ${standing}`);
+      }
     }
   }
 }

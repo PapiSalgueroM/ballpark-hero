@@ -48,6 +48,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
+/* Round 1012: the real rivals table moved to a shared leaf module so Soccer
+   Career reads the same data. Imported back under its old name, unchanged. */
+import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
 // Round 132: the world clock. Everything about ageing, retirement, eras and
 // the projected future world lives in clubManagerEras, which imports nothing
 // from this file, so there is no cycle.
@@ -99,6 +102,10 @@ import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoard
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlDuty } from '@/lib/clubManagerInternationals';
+/* Round 1021: the late 2020-21 start's summer window. Called inside
+   startCareer only, never at module scope: the calendar module imports this
+   one, the same loop the internationals module already closes. */
+import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -224,7 +231,12 @@ const RACE_SECOND_SHARE = 0.26;
  * changes only through the men available to it.
  */
 function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>): ProjectedPlayer[] {
-  return projectedRoster(club, yearsOnNow, eraId).filter(p => !exclude.has(p.n));
+  /* Round 1028: a 2015 save from before Round 899 can still meet Paris
+     Saint-Germain or Borussia Mönchengladbach under the long name its group
+     was drawn with. The strength and the association already read that as the
+     club it always was (eraEuroName); the roster now does too, so its line up
+     and its scorers are the 2015 squad rather than nobody. */
+  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));
 }
 const NO_NAMES: ReadonlySet<string> = new Set();
 
@@ -2030,6 +2042,11 @@ export interface CareerState {
    *  through early season fixtures, so listing a man and waiting for offers
    *  is now an actual strategy instead of a single-screen gamble. */
   windowWeeksLeft?: number;
+  /** Round 1021: a late season's summer window length in my matches (the
+   *  2020-21 start, see seasonPlanOf in clubManagerCalendar.ts), kept so the
+   *  calendar can place the deadline after the window has shut. Absent on
+   *  every other season, which runs the usual four. */
+  summerWindow?: { season: number; matchWeeks: number };
   /** Round 619: men with no club, carried across weeks and seasons. */
   freeAgents?: FreeAgent[];
   /** Round 619: what ending a contract early still costs after he has gone. */
@@ -2637,6 +2654,12 @@ export interface LeagueRules {
    *  August to May calendar, which a calendar year league shares by
    *  simplification (MLS since Round 72). */
   season: 'autumnSpring' | 'calendarYear';
+  /** Round 1021: a season that really started late, drawn on its real dates
+   *  in the one world year it was played (kickoff.y): the Saturday of the
+   *  opening weekend and the day the summer window shut. Every other season
+   *  of the league opens on the usual August Saturday. See seasonPlanOf in
+   *  clubManagerCalendar.ts. */
+  lateStart?: { kickoff: { y: number; m: number; d: number }; summerClose: { y: number; m: number; d: number } };
   /** What the engine plays more simply than the real league, in words,
    *  where the verified notes on the league say so. */
   simplified?: string;
@@ -2652,6 +2675,44 @@ const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through th
 /* Round 971: the 2020-21 tables fed the first Conference League (2021-22),
    which a historic era's Europe does not play. */
 const CONFERENCE_LEAGUE_UNPLAYED = 'The Conference League place this table really earned (the competition began the season after) is not played.';
+/* Round 1021: 2020-21 started late. The pandemic pushed the end of 2019-20
+   into August, so the big five opened between late August and mid September
+   and the summer window ran to 5 October. Each 2020 row's lateStart is that
+   league's opening Saturday, two sources each, read 2026-10-05: RSSSF's
+   season pages (tablese/eng2021, tabless/span2021, tablesi/ital2021,
+   tablesd/duit2021, tablesf/fran2021) and football-data.co.uk's 2020-21
+   match files (mmz4281/2021: E0, SP1, I1, D1, F1), which agree on every date.
+     Premier League  Saturday 12 September 2020, Fulham 0-3 Arsenal first
+                     (also BBC Sport 53530479, 24 July 2020, "seasons to start
+                     on 12 September", and Sky Sports 11927589).
+     La Liga         Saturday 12 September 2020, Eibar 0-0 Celta first.
+     Serie A         Saturday 19 September 2020, Fiorentina 1-0 Torino first.
+     Bundesliga      Friday 18 September 2020 (Bayern 8-0 Schalke), six
+                     more on Saturday 19 September, which is the day drawn,
+                     and two on the Sunday (Leipzig 3-1 Mainz, Wolfsburg 0-0
+                     Leverkusen).
+     Ligue 1         Friday 21 August 2020 (Bordeaux 0-0 Nantes), two more on
+                     Saturday 22 August, which is the day drawn, four on the
+                     Sunday and the round's last three in mid September.
+   (Round 1021 review, 2026-10-06: the round's spread over the weekend, which
+   this comment first got wrong, rechecked in football-data.co.uk's D1 and F1
+   files, with RSSSF's duit2021 and fran2021 and ESPN's fixture lists agreeing.)
+   The summer window shut at 23:00 on Monday 5 October 2020 in England
+   (premierleague.com news 1725887, "Dates for summer 2020 transfer window
+   agreed": "starting on 27 July and ending on 5 October"; BBC Sport 53417773;
+   Sky Sports 11927589, "will close on Monday October 5 at 11pm").
+   THIN, NOT TWO SOURCED: that the other four leagues shut the same day.
+   It rests on one publisher, by inference: Maxifoot's summer 2020 tables
+   (the records scripts/bakeEra2020.mjs cites as MF-IT, MF-DE and MF-FR)
+   date deals into Italy, Germany and France on 5 October, but they also
+   date a few on 6 and 7 October (free agents and paperwork can land after a
+   window), so the tables cannot fix the day alone, and nothing here is
+   cited for Spain. Wikipedia's German and Italian summer 2020 transfer lists
+   also say 5 October (a spot check only, read 2026-10-06). The four leagues
+   use 5 October until two independent sources are read for each.
+   All five ended on the weekend of 22 and 23 May 2021 (RSSSF and
+   football-data.co.uk, as above). */
+const SUMMER_2020_CLOSE = { y: 2020, m: 10, d: 5 };
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
@@ -2926,21 +2987,26 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        rows claim none. */
   premier2020: {
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 12 }, summerClose: SUMMER_2020_CLOSE },
     simplified: CONFERENCE_LEAGUE_UNPLAYED,
   },
   laliga2020: {
     nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 12 }, summerClose: SUMMER_2020_CLOSE },
   },
   seriea2020: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 19 }, summerClose: SUMMER_2020_CLOSE },
     simplified: CONFERENCE_LEAGUE_UNPLAYED,
   },
   bundesliga2020: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 19 }, summerClose: SUMMER_2020_CLOSE },
     simplified: `The real relegation playoff (sixteenth against the 2. Bundesliga's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
   },
   ligue12020: {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 8, d: 22 }, summerClose: SUMMER_2020_CLOSE },
     simplified: `The real relegation playoff (eighteenth against Ligue 2's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
   },
 };
@@ -3792,69 +3858,6 @@ const CLUB_COLORS: Record<string, string> = {
   'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
   'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
   'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
-};
-
-/**
- * Real rivalries for the "finish above them" board objective. One direction
- * per club; clubs without a famous league rival get the nearest-strength
- * club instead (see buildBoardObjectives).
- */
-const RIVALS: Record<string, string> = {
-  // England
-  'Arsenal': 'Tottenham', 'Tottenham': 'Arsenal', 'Manchester United': 'Liverpool',
-  'Liverpool': 'Everton', 'Everton': 'Liverpool', 'Manchester City': 'Manchester United',
-  'Chelsea': 'Arsenal', 'Newcastle': 'Sunderland', 'Sunderland': 'Newcastle',
-  'Crystal Palace': 'Brighton',
-  'Brighton': 'Crystal Palace', 'Fulham': 'Chelsea',
-  'Brentford': 'Fulham', 'Leeds United': 'Manchester United', 'Nottingham Forest': 'Leeds United',
-  // Spain
-  'Real Madrid': 'Barcelona', 'Barcelona': 'Real Madrid', 'Atlético Madrid': 'Real Madrid',
-  'Sevilla': 'Real Betis', 'Real Betis': 'Sevilla', 'Athletic Club': 'Real Sociedad',
-  'Real Sociedad': 'Athletic Club', 'Espanyol': 'Barcelona', 'Girona': 'Barcelona',
-  'Valencia': 'Levante', 'Levante': 'Valencia', 'Villarreal': 'Valencia',
-  'Alavés': 'Athletic Club', 'Getafe': 'Rayo Vallecano', 'Rayo Vallecano': 'Atlético Madrid',
-  // Italy
-  'Inter Milan': 'AC Milan', 'AC Milan': 'Inter Milan', 'Juventus': 'Inter Milan',
-  'Torino': 'Juventus', 'Roma': 'Lazio', 'Lazio': 'Roma', 'Napoli': 'Juventus',
-  'Fiorentina': 'Juventus', 'Pisa': 'Fiorentina', 'Bologna': 'Fiorentina',
-  // Germany
-  'Bayern Munich': 'Borussia Dortmund', 'Borussia Dortmund': 'Bayern Munich',
-  'Gladbach': 'Köln', 'Köln': 'Gladbach', 'Hamburg': 'Werder Bremen', 'Werder Bremen': 'Hamburg',
-  'St. Pauli': 'Hamburg', 'Eintracht Frankfurt': 'Mainz', 'Mainz': 'Eintracht Frankfurt',
-  'Bayer Leverkusen': 'Köln', 'Freiburg': 'Stuttgart', 'Stuttgart': 'Freiburg',
-  'Union Berlin': 'RB Leipzig',
-  // France
-  'PSG': 'Marseille', 'Marseille': 'PSG', 'Lyon': 'Marseille', 'Nice': 'Monaco',
-  'Monaco': 'Nice', 'Lens': 'Lille', 'Lille': 'Lens', 'Rennes': 'Nantes', 'Nantes': 'Rennes',
-  'Brest': 'Lorient', 'Lorient': 'Brest', 'Strasbourg': 'Metz', 'Metz': 'Strasbourg',
-  'Paris FC': 'PSG',
-  // Round 72: new-league rivalries
-  'Hull City': 'Leeds United',
-  'Wolves': 'West Brom', 'West Brom': 'Wolves', 'Cardiff City': 'Swansea City',
-  'Swansea City': 'Cardiff City', 'Portsmouth': 'Southampton', 'Southampton': 'Portsmouth',
-  'West Ham': 'Millwall', 'Millwall': 'West Ham', 'Blackburn Rovers': 'Burnley',
-  'Burnley': 'Blackburn Rovers', 'Preston North End': 'Blackburn Rovers',
-  'Bristol City': 'Cardiff City',
-  'Al-Hilal': 'Al-Nassr', 'Al-Nassr': 'Al-Hilal', 'Al-Ittihad': 'Al-Ahli', 'Al-Ahli': 'Al-Ittihad',
-  'Al-Shabab': 'Al-Hilal',
-  'LA Galaxy': 'LAFC', 'LAFC': 'LA Galaxy', 'Inter Miami': 'Orlando City',
-  'Orlando City': 'Inter Miami', 'New York City FC': 'New York Red Bulls',
-  'New York Red Bulls': 'New York City FC', 'Seattle Sounders': 'Portland Timbers',
-  'Portland Timbers': 'Seattle Sounders', 'Vancouver Whitecaps': 'Seattle Sounders',
-  'FC Dallas': 'Houston Dynamo', 'Houston Dynamo': 'FC Dallas',
-  'Columbus Crew': 'FC Cincinnati', 'FC Cincinnati': 'Columbus Crew',
-  'D.C. United': 'New York Red Bulls', 'Toronto FC': 'CF Montréal', 'CF Montréal': 'Toronto FC',
-  'Ajax': 'Feyenoord', 'Feyenoord': 'Ajax', 'PSV': 'Ajax', 'Sparta Rotterdam': 'Feyenoord',
-  'Groningen': 'Heerenveen', 'Heerenveen': 'Groningen', 'ADO Den Haag': 'Ajax',
-  // Round 883: Liga MX, only the five clasicos two sources both name
-  // (Mediotiempo, "Que antiguedad tiene cada clasico del futbol mexicano",
-  // and Goal, "En Mexico, cuantos clasicos de futbol existen"): Nacional
-  // (America and Guadalajara), Joven (America and Cruz Azul), Capitalino
-  // (Pumas and America), Tapatio (Guadalajara and Atlas), Regio (Monterrey
-  // and Tigres). One direction per club, so America point at Guadalajara.
-  'América': 'Guadalajara', 'Guadalajara': 'América', 'Cruz Azul': 'América',
-  'Pumas UNAM': 'América', 'Atlas': 'Guadalajara',
-  'Monterrey': 'Tigres UANL', 'Tigres UANL': 'Monterrey',
 };
 
 /**
@@ -12899,7 +12902,13 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
   // against me for them. See oppRosterFor.
   const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
-  const oppPool = getPool().filter(p =>
+  /* Round 1028: the static pool is today's squads, so it only ever backs up
+     today's world. A historic era's foreign Champions League club (AC Milan in
+     2005-06, Panathinaikos in 2010-11, Galatasaray in 2015-16) has no era
+     roster, and this fallback used to hand a 2010 report a 2026 scorer. In an
+     era that club gets the shirt number line below instead. One draw either
+     way (pick and ri), so the seeded stream is the same. */
+  const oppPool = isHistoricEra(eraId) ? [] : getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
   const lines: ScorerLine[] = [];
   for (let g = 0; g < goals; g++) {
@@ -16787,7 +16796,22 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureSetPieces(state);
   /* Round 978: this season's international windows. */
   state.intl = freshIntl(state);
+  /* Round 1021: a season that started late keeps its summer window open to
+     the real deadline (5 October 2020), however many matches that is. */
+  const lateWeeks = lateSummerWindowWeeks(state);
+  if (lateWeeks !== null) {
+    state.windowWeeksLeft = lateWeeks;
+    state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
+  }
   generateHeadlines(state);
+  /* Round 1021 review: a late season can meet its first international window
+     before a ball is kicked (2020-21's September window opened five days
+     before the Premier League did). Its note goes out with the save, so it
+     waits in the inbox before the opener; left to the first play, it was
+     posted in the same play that kicked the opener off, and nobody could
+     answer it. Only a late season can have a window before its opener, so
+     every other save draws exactly what it did. */
+  if (lateWeeks !== null) for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
   return state;
 }
 

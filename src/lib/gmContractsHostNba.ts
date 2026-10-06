@@ -3,7 +3,7 @@
  * imported and never edited. Its tax and its aprons are untouched and still
  * bill whatever payroll the desk leaves behind.
  */
-import { nbaMinContract, nbaNextCap, nbaOffseason, nbaSalaryFor, type NbaLeague } from '@/lib/nbaFrontOffice';
+import { NBA_ROSTER_MAX, nbaMinContract, nbaNextCap, nbaOffseason, nbaSalaryFor, type NbaLeague } from '@/lib/nbaFrontOffice';
 import { type CutLedger, deadCapUsed, rollDeadCap } from '@/lib/frontOfficeCuts';
 import type { GmContractHost } from '@/lib/gmContracts';
 
@@ -14,6 +14,9 @@ export const nbaContractHost: GmContractHost<NbaLeague, string[]> = {
   nextCap: league => nbaNextCap(league.cap),
   runOffseason: (league, rng, team) => nbaOffseason(league, rng, team),
   minSalary: league => nbaMinContract(nbaNextCap(league.cap)),
+  /* Round 1018: the engine's roster ceiling. Read only for an offer sheet
+     (restricted free agency): a rival with no spot cannot table one. */
+  rosterMax: () => NBA_ROSTER_MAX,
   /* The engine's room is the cap less salaries, dead money and the tax cheque
      written at the last season close (nbaCapRoom). Next season's dead money is
      this season's rolled forward by the engine's own rollDeadCap, run on a

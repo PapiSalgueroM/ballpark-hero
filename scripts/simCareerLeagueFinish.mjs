@@ -214,8 +214,58 @@ const DIGEST_SEEDS = 16;
    Re-recorded at Release AD (2026-10-05, twice, identical): careers 1, 2 and 8 move
    because Round 972 draws continental opponents from FALLBACK_CLUBS and Round
    1013 appends 51 clubs to it. Proven on a tree of 1013 plus 972 alone (13 of
-   16 matched, the same three moved); each round alone was green on its branch. */
-const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   16 matched, the same three moved); each round alone was green on its branch.
+   RE-RECORDED by Round 1012 (club derbies in Soccer Career), on purpose. The
+   derby swing moves popularity and morale, which gate events and dilemmas, so
+   the stream after a derby season legitimately moves. What was measured first
+   (2026-10-05, on the Round 1012 tree):
+   - the round's three rewords alone (event 1 "Late Winner!", tunnel_brawl and
+     ultras_tattoo no longer say derby), in a build with the derbies switched
+     off, give 16 of these 16 old digests unchanged;
+   - scripts/simCareerDerbies.mjs section 5 runs these same 16 careers in a
+     build with no derbies and a build that resolves them with the swing off:
+     16 of 16 equal once the derbies key is dropped, with 140 derby seasons
+     played, so detecting and resolving a derby draws nothing from
+     Math.random; only the bounded swing moves the stream.
+   Round 1012 then merged Release AD (origin/main 37ce6d5e, Rounds 1011,
+   1013 and 972) and was re-recorded once more on the merged tree
+   (2026-10-06, twice, identical). On that tree simCareerDerbies section 5's
+   bundle A (no derbies, rewords in) prints exactly Release AD's list,
+   ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad',
+   'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a',
+   '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1',
+   'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce',
+   '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684',
+   '3e5b99f018877dbe'], 16 of 16, and bundle B (derbies resolved, swing off)
+   equals it 16 of 16. With Round 1013's clubs the 16 careers play 160
+   derby seasons between them and all 16 digests move, only through the
+   swing. The stream control below still turns section 4 red.
+   Re-recorded by Round 1024 on its merge with main 37ce6d5e (twice,
+   identical) after proving main's digests green on a clean export of that
+   main: the round adds one star to the 2025-2029 Ballon d'Or field and
+   moves three 2020-2024 clubs, so every 2020 career draws more on its
+   first awards night. Sections 1, 2, 3 and 5 stayed green.
+   Re-recorded by Round 1016 (2026-10-06, twice, identical): the back line and
+   holding midfielders get a defensive credit in calcSeasonRating, and the
+   rating feeds development, offers and the title boost, so careers 2, 6, 7,
+   10, 14 and 15 (CB, RB and CDM) move. Attribution: the same tree with the
+   rule's one line taken out records 16 of 16 equal to the digests before
+   this one, and the ten careers at other positions never moved.
+   Re-recorded at Release AF (2026-10-06, twice, identical) on the merged
+   tree of Rounds 1012, 1024 and 1016, which also carries Round 1027 (World
+   Cups and continental cups play the format their year had), a fourth cause
+   that no list before this one recorded. Attribution, each in a throwaway
+   copy of the merged tree with the other rounds taken back out (1012 as
+   simCareerDerbies bundle A: no derby detected and the swing off; 1016 its
+   one credit line; 1024 the era stars fold of f0802b27 reversed; 1027
+   soccerInternational.ts as at 37ce6d5e; Round 1015's rosters and
+   nationality map and the continental cup citation fix as before them):
+   with all of them out the tree records Release AD's list 16 of 16; with
+   only 1012 in, 1012's own list 16 of 16; only 1024, 1024's 16 of 16;
+   only 1016, 1016's 16 of 16 (careers 2, 6, 7, 10, 14 and 15 moved); only
+   1015 or only the citation fix, Release AD's list unchanged; only 1027,
+   all 16 moved. So nothing else in the release moves a digest. */
+const BASELINE = ['a7c772c3784e216a', '759bf037c867971d', '74e7fc332f6821fb', 'fafb27882724df58', 'cc6fa1f296a3bde8', 'b829c5dd07cfb3af', 'f539f12f1794c921', 'a5de9a434ad21895', '52e3772cb77b5986', '120dd615a6cd5dc1', '5372f38d44597423', 'f810d1daa7ffd030', 'f47e78ff107bf228', 'e3e83a57c9b96439', '8ae2cceb487c0598', '55bf134cb33eacee'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));

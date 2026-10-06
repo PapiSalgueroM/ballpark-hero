@@ -88,6 +88,78 @@
       (6443f857), so what moved them is the three extra 2005-06 saves that
       now run before them in the same process. The path is the one Round
       899 met and this harness does not isolate.
+      Round 1021 (2020-21 starts late) re-took the eras entries for the five
+      era2020 leagues only, on purpose: a 2020-21 save's summer window now
+      runs to the real 5 October deadline (five to nine of its matches, not
+      four), so every era2020 digest moves from "start" on. Compared first on
+      the round's tree: modern 22 of 22 and the other 15 era entries matched
+      untouched, pure 43 of 43 (the lateStart field on the five rules rows
+      is in no view), and only the five era2020 rows differed.
+      Round 1021 review re-took four of them: a late season whose first
+      international window starts before its opener now sends the
+      assistant's note with the save (startCareer), so it can be answered
+      before the first match. That is the Premier League, La Liga, Serie A
+      and the Bundesliga of 2020-21 (Ligue 1 opened in August, before any
+      window). Measured 2026-10-06: exactly those four rows moved, in
+      "start" and "whole" only; table, results, world, cup, europe,
+      trophies, objectives and every next season view held, so the games
+      played are the same and what moved is the inbox and its message ids.
+      Round 1015 rewrote modern, eras and pure for the roster fold (the six
+      adjudication shards folded into the ledger and the modern rosters
+      re-baked from the 2026-10-02 dump), after attribution in three trees:
+      main's src at 37ce6d5e (a git archive, CM_RULES_ROOT) matched the old
+      baseline exactly; main's src with only the re-baked
+      clubManagerRosters.ts moved 55 entries (all 22 modern saves, 13 of 15
+      era saves, in "whole" and "start" with laliga2005 deeper, and the day
+      one objectives of 20 modern leagues, the board reading the re-baked
+      squads), and the baseline was written from that tree; the round's whole
+      tree, which adds its nationality changes, then matched it 22/0, 15/0
+      and 38/0, so the nationality map moved nothing there.
+      WHY A MODERN ROSTER MOVES AN ERA SAVE. The first account here blamed the
+      era filler's real name guard, and the review disproved it: no name that
+      left the rosters is one the filler can build. The real path, found by
+      starting the same seeded era career on this tree and on one with only
+      main's roster file swapped in and diffing the two states: the AI
+      transfers of an era save (generateHeadlines in clubManager.ts) pick
+      their buyer from REAL_LEAGUES through playableClubs, the MODERN leagues
+      with budgets from the modern rosters' squad values, in an era save too.
+      So a re-bake changes which clubs can afford a player ("Ipswich Town
+      sign Marquinhos" against "West Ham" at the start of a 2015 Serie A
+      save), and where that empties the local pool, how many random draws
+      follow, which is how laliga2005 went deeper. That a 2015 save quotes
+      2026 clubs and budgets is its own bug, left for its own round; this
+      harness only records that the era digests follow the modern roster.
+      The Round 1015 review then withheld 31 pending men (and listed Rafa
+      Soares in ALSO_REAL_ELSEWHERE, the one of them the era filler could
+      build) and rewrote modern, eras and pure again, after attribution:
+      the pre-review head's src with only the new roster and that guard line
+      swapped in was written as the baseline (the commit lists the clubs that
+      moved), and the whole tree, which also removes those 31 men from the
+      nationality map and corrects three era flags, matched it 22/0, 15/0
+      and 38/0.
+      Release AF (2026-10-06) merged Round 1015 onto Rounds 971 and 1021 and
+      re-took modern, eras and pure on the merged tree, after attribution in
+      four trees (CM_RULES_ROOT, digests written into throwaway copies):
+      Release AF's src before the merge reproduced its own baseline 22/0,
+      20/0 and 43/0; Round 1015's head with its nationality map from before
+      the lead's read (a8ac195c) reproduced 1015's baseline 22/0, 15/0 and
+      38/0; Round 1015's head as pushed (ff942a5b, the 720 modern
+      nationalities added) moved 16 of the 22 modern saves and nothing else,
+      because the internationals and the board's nationality asks read that
+      map, and that commit never re-took the digest; and the merged tree
+      matched that head 22/0 in modern and every older era and pure entry,
+      the rest being exactly the 2020-21 footprint of Rounds 971 and 1021
+      (its five eras rows, its five pure rows and the views leagueNations,
+      euroSlots, eraIds and historic). Against Release AF's baseline the
+      merged tree differs in all 22 modern saves, the 13 older era saves
+      1015 moved, the 20 modern day one objectives, and the five 2020-21
+      era saves in "start" and "whole" (bundesliga2020 in "cup" too), whose
+      pure rows did not move. The merged tree differs from Release AF's src
+      only in 1015's roster, nationality map and era guard line, so those
+      five rows moved with 1015's data, not with the 2020-21 code (the path
+      the review found for the older eras, AI buyers drawn from the modern
+      clubs, applies to a 2020-21 save the same way; it was not isolated
+      again here).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
