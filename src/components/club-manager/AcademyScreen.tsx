@@ -7,6 +7,9 @@ import {
 } from '@/lib/clubManager';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { DeskCueLine, useDeskCue } from '@/components/club-manager/deskCue';
+import type { DeskCueRead } from '@/components/club-manager/deskCue';
 
 interface AcademyScreenProps {
   career: CareerState;
@@ -116,6 +119,28 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
   const [positionFilter, setPositionFilter] = useState('');
   const [ageFilter, setAgeFilter] = useState('');
   const assignRef = useRevealScroll<HTMLDivElement>(`scout:${picking ?? ''}`, { skipFirst: true });
+  /* Round 982: signing a kid used to make his row vanish and nothing else.
+     The line names him and the deal he signed, read off the save, and only
+     once the save really holds him in the first team squad. */
+  const { cue, press } = useDeskCue<string, CareerState>(career);
+  /* The promotion's whole footprint, checked on the save itself rather than
+     on a second run of the engine (which deep copies the career): he is off
+     the books, an academy graduate of his name is new in the squad, and the
+     kitty is down by exactly his fee. */
+  const promoteRead = (prospectId: string): DeskCueRead<CareerState> | null => {
+    const kid = a?.prospects.find(x => x.id === prospectId);
+    if (!kid) return null;
+    const had = new Set(career.squad.map(x => x.id));
+    const budgetAfter = Math.round((career.budget - kid.fee) * 10) / 10;
+    return after => {
+      const got = after.squad.find(x => !had.has(x.id) && x.name === kid.name && x.academyGrad);
+      if (!got || (after.academy?.prospects ?? []).some(x => x.id === prospectId) || after.budget !== budgetAfter) return null;
+      /* What he cost, off the two saves, worded the way his row prices him. */
+      const fee = Math.round((career.budget - after.budget) * 10) / 10;
+      return `${got.name} has joined the first team. ${got.contractYears ?? 0} years at ${got.wage ?? 0}k a week, ${fee > 0 ? `${money(fee)} to sign` : 'free to sign'}.`;
+    };
+  };
+  const promote = (prospectId: string) => press(prospectId, promoteRead(prospectId), () => onPromote(prospectId));
 
   if (!a) {
     return <p className="text-xs text-muted-foreground text-center py-6">Your academy opens the first time you play a match.</p>;
@@ -292,11 +317,15 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
           <ProspectRow
             fmt={money}
             key={p.id} p={p} budget={career.budget} squadFull={squadFull}
-            onPromote={onPromote} onRelease={onRelease}
+            onPromote={promote} onRelease={onRelease}
           />
         ))}
         {a.preview && <p className="text-[9px] text-muted-foreground mt-1.5 italic">{a.preview}</p>}
+        {/* Round 982: the card is not a spaced stack, so the zero height
+            anchor adds nothing to it and the line is drawn over its foot. */}
+        <DeskCueLine cue={cue} testId="cm-academy-cue" />
       </div>
+      <CelebrationStyles />
     </div>
   );
 }

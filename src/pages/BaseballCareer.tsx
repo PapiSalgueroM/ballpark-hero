@@ -216,7 +216,7 @@ const BaseballCareer = () => {
               statLine={player!.position}
               funFact={
                 <>
-                  💡 Did you know? {player!.name} suited up for {player!.teams.length} {player!.teams.length === 1 ? 'team' : 'teams'}{player!.awards.length ? `, including ${player!.awards[0]}` : ''}.
+                  💡 Did you know? {player!.name} suited up for {player!.franchiseCount} {player!.franchiseCount === 1 ? 'franchise' : 'franchises'}{player!.awards.length ? `, including ${player!.awards[0]}` : ''}.
                 </>
               }
               statRow={status === 'guessed' ? [{ label: 'Score', value: <span className="inline-flex items-center gap-1"><Trophy className="w-4 h-4" />{score}</span> }] : undefined}

@@ -451,6 +451,7 @@ const RIVAL_NAME_COLLISIONS = new Set([
   "Thiago Fernández",
   // Round 883: Liga MX brought a real Iván Moreno and Sergio Hernández into Club Manager.
   "Iván Moreno", "Sergio Hernández",
+  // Round 902: the 2005-06 era's Ligue 1 brought a real Eduardo Costa (at Espanyol after that summer).
   // Round 901: the 2010-11 big five brought a real Ricardo Costa (Valencia) and Eduardo Costa (Monaco).
   "Ricardo Costa", "Eduardo Costa",
 ]);

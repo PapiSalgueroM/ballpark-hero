@@ -280,6 +280,8 @@ const FaceOff = () => {
           <div className="max-w-md mx-auto">
             <ResultScreen
               won={g.outcome === 'draw' || versus ? undefined : g.outcome === 'win'}
+              score={`${g.totals.you} to ${g.totals.rival}`}
+              scoreLabel={versus ? 'points, Player 1 to Player 2' : `points, you to ${rival.label}`}
               outcomeEmoji={g.outcome === 'win' ? (versus ? '🟢' : '🏆') : g.outcome === 'loss' ? otherEmoji : '🤝'}
               headline={versus
                 ? (g.outcome === 'win' ? 'Player 1 wins it' : g.outcome === 'loss' ? 'Player 2 wins it' : 'All square')

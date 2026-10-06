@@ -1,5 +1,13 @@
 {
  "captured": "Round 585, before makeProspect took a band and a random source",
+ "renamed": [
+  {
+   "from": "Lamine Gassama",
+   "to": "Lamine Gassama-Ndoye",
+   "finds": 2,
+   "why": "Round 899 renamed the generated surname Gassama to Gassama-Ndoye in src/lib/intlNames.ts, because Lamine Gassama is a real man (Lorient, 2015-16) whom Round 899 added to the 2015-16 era"
+  }
+ ],
  "finds": [
   "{\"id\":1,\"name\":\"Facundo Vergara\",\"nation\":\"Uruguay\",\"pos\":\"MF\",\"age\":16,\"ageClock\":8.977288397494704,\"rating\":44.01867424242424,\"potential\":73}",
   "{\"id\":2,\"name\":\"Anders Grøndahl\",\"nation\":\"Norway\",\"pos\":\"MF\",\"age\":18,\"ageClock\":72.10766700422391,\"rating\":41.02036458333333,\"potential\":64}",
@@ -9,7 +17,7 @@
   "{\"id\":6,\"name\":\"Birger Fredheim\",\"nation\":\"Sweden\",\"pos\":\"DF\",\"age\":18,\"ageClock\":127.55245318962261,\"rating\":45.018214285714286,\"potential\":75}",
   "{\"id\":7,\"name\":\"Nahuel Vergara\",\"nation\":\"Argentina\",\"pos\":\"MF\",\"age\":15,\"ageClock\":9.298351610545069,\"rating\":51.01370967741936,\"potential\":71}",
   "{\"id\":8,\"name\":\"Khalil Khelifi\",\"nation\":\"Morocco\",\"pos\":\"MF\",\"age\":17,\"ageClock\":61.6086526713334,\"rating\":54.01099137931035,\"potential\":69}",
-  "{\"id\":9,\"name\":\"Lamine Gassama\",\"nation\":\"Senegal\",\"pos\":\"MF\",\"age\":15,\"ageClock\":89.73805152904242,\"rating\":40.02125,\"potential\":59}",
+  "{\"id\":9,\"name\":\"Lamine Gassama-Ndoye\",\"nation\":\"Senegal\",\"pos\":\"MF\",\"age\":15,\"ageClock\":89.73805152904242,\"rating\":40.02125,\"potential\":59}",
   "{\"id\":10,\"name\":\"Oriol Puigdemont\",\"nation\":\"Spain\",\"pos\":\"MF\",\"age\":18,\"ageClock\":34.67210148787126,\"rating\":55.00607142857143,\"potential\":61}",
   "{\"id\":11,\"name\":\"Damián Quiroga\",\"nation\":\"Mexico\",\"pos\":\"FW\",\"age\":15,\"ageClock\":124.6651356164366,\"rating\":56.00910714285714,\"potential\":68}",
   "{\"id\":12,\"name\":\"Grant Hollis\",\"nation\":\"England\",\"pos\":\"FW\",\"age\":15,\"ageClock\":88.3005008273758,\"rating\":46.0159375,\"potential\":64}",
@@ -343,7 +351,7 @@
   "{\"id\":15,\"name\":\"Jesper Aasheim\",\"nation\":\"Sweden\",\"pos\":\"MF\",\"age\":18,\"ageClock\":92.5253079328686,\"rating\":53.01173,\"potential\":65}",
   "{\"id\":16,\"name\":\"Dominik Wittgenstein\",\"nation\":\"Switzerland\",\"pos\":\"FW\",\"age\":16,\"ageClock\":15.029666217509657,\"rating\":45.02036458333333,\"potential\":70}",
   "{\"id\":17,\"name\":\"Andrej Kraljević\",\"nation\":\"Croatia\",\"pos\":\"MF\",\"age\":15,\"ageClock\":56.190129002556205,\"rating\":44.02186513157895,\"potential\":78}",
-  "{\"id\":18,\"name\":\"Lamine Gassama\",\"nation\":\"Senegal\",\"pos\":\"FW\",\"age\":15,\"ageClock\":43.21550318831578,\"rating\":54.01303333333333,\"potential\":70}",
+  "{\"id\":18,\"name\":\"Lamine Gassama-Ndoye\",\"nation\":\"Senegal\",\"pos\":\"FW\",\"age\":15,\"ageClock\":43.21550318831578,\"rating\":54.01303333333333,\"potential\":70}",
   "{\"id\":19,\"name\":\"Tomás Bengoechea\",\"nation\":\"Mexico\",\"pos\":\"DF\",\"age\":17,\"ageClock\":28.020418219733983,\"rating\":47.017595,\"potential\":65}",
   "{\"id\":20,\"name\":\"Tomás Gorosito\",\"nation\":\"Uruguay\",\"pos\":\"DF\",\"age\":15,\"ageClock\":41.91052105138078,\"rating\":45.0213828125,\"potential\":80}",
   "{\"id\":21,\"name\":\"Mees Rijkaard-Veen\",\"nation\":\"Belgium\",\"pos\":\"MF\",\"age\":18,\"ageClock\":39.15789228025824,\"rating\":49.01597836538461,\"potential\":66}",

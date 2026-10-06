@@ -209,6 +209,8 @@ const SilverwareSort = () => {
           <div className="max-w-md mx-auto">
             <ResultScreen
               won={score >= 11}
+              score={`${score}/${maxScore}`}
+              scoreLabel="rungs right"
               outcomeEmoji={score === maxScore ? '🥇' : score >= 11 ? '👏' : '😅'}
               headline={`${score}/${maxScore} Rungs Right!`}
               statLine={<>{perfects === results.length && perfects > 0 ? 'Every board first try. You know the cabinets cold.' : perfects > 0 ? `${perfects} board${perfects === 1 ? '' : 's'} nailed first try.` : 'The cabinets keep their secrets... for now.'}</>}

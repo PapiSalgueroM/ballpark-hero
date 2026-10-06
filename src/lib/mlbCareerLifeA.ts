@@ -78,6 +78,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs === 0) {
     deck.push({
       id: 'mlbA_bus_league',
+      category: 'callup', cooldown: 99,
       title: 'Nine hours to Bowling Green',
       body: 'Low A is a 3am bus, a per diem that does not cover breakfast, and a motel with one working ice machine. Two guys from your draft class quit in June.',
       options: [
@@ -100,6 +101,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs === 0) {
     deck.push({
       id: 'mlbA_september_callup',
+      category: 'callup', cooldown: 99, story: 'septemberCallup',
       title: 'They said your name in September',
       body: `Rosters expand and the Triple A manager asks you to stay behind after batting practice. Ninety minutes later you are on a flight to ${mlbTeamLabelOf(c.team)}.`,
       options: [
@@ -122,6 +124,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs <= 1) {
     deck.push({
       id: 'mlbA_debut',
+      category: 'callup', cooldown: 99,
       title: isSp ? 'First big league start' : 'First big league at bat',
       body: isSp
         ? 'Fifty thousand people, a mound that feels three feet higher than the one in Toledo, and a leadoff hitter with 1,900 career hits digging in.'
@@ -150,6 +153,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && yrs <= 3 && c.ovr < 78) {
     deck.push({
       id: 'mlbA_optioned_back',
+      category: 'callup', cooldown: 2, story: 'options',
       title: 'Optioned. Again.',
       body: 'They needed a fresh bullpen arm so you are the roster move, for the third time this season. Triple A is four hours by bus and one hamstring away.',
       options: [
@@ -175,6 +179,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && yrs <= 6 && c.age <= 28) {
     deck.push({
       id: 'mlbA_old_head',
+      category: 'callup', cooldown: 99,
       title: 'The 38 year old adopts you',
       body: `A ${posNoun(c)} at the very end of the line started saving you the seat next to him on every flight. He wants you in the cage at 1pm for a 7:05 game. He has never once been late.`,
       options: [
@@ -197,6 +202,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && yrs <= 4 && c.ovr < 80) {
     deck.push({
       id: 'mlbA_forty_man',
+      category: 'callup', cooldown: 2, story: 'fortyMan',
       title: 'The 40 man squeeze',
       body: 'They need your roster spot for a reliever with options left. Your agent says the words designated for assignment out loud, to you, for the first time.',
       options: [
@@ -220,6 +226,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs <= 1) {
     deck.push({
       id: 'mlbA_rookie_hazing',
+      category: 'clubhouse', cooldown: 99,
       title: 'The dress up flight',
       body: 'Last road trip of the year, and your locker contains a costume selected by eleven veterans specifically to end you. There is always a photographer at the gate.',
       options: [
@@ -242,6 +249,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_kangaroo_court',
+      category: 'clubhouse', cooldown: 2,
       title: 'Kangaroo court',
       body: 'The clubhouse has a judge, a gavel from a thrift store, and a fine schedule taped inside a locker. Missing a sign is 50. Getting quoted in the paper is 200.',
       options: [
@@ -267,6 +275,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_catcher_shakeoff',
+      category: 'clubhouse', cooldown: 2,
       title: 'He keeps putting down two',
       body: 'Your catcher has called the same breaking ball in the same count for three straight starts and the league is sitting on it. He has caught 1,200 big league games. You have made nine starts.',
       options: [
@@ -292,6 +301,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_manager_analytics',
+      category: 'clubhouse', cooldown: 2,
       title: 'The manager who hates the iPad',
       body: 'Your manager calls the analytics department the laptop guys, and says it in a tone. They have a 14 page plan for you. He has a gut feeling and a lineup card.',
       options: [
@@ -317,6 +327,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2) {
     deck.push({
       id: 'mlbA_slumping_teammate',
+      category: 'clubhouse', cooldown: 2,
       title: '0 for 34',
       body: 'Your closest friend on the team has not had a hit in twelve days. He has started taking his bag to the far tunnel so nobody sees his face after.',
       options: [
@@ -339,6 +350,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_aux_cord',
+      category: 'clubhouse', cooldown: 2,
       title: 'The aux cord war',
       body: 'Two grown men with violently different taste in music are one more song away from a real problem. Somebody handed you the aux and left the room immediately.',
       options: [
@@ -364,6 +376,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_flight_cards',
+      category: 'clubhouse', cooldown: 2,
       title: 'The card game on the charter',
       body: 'The stakes on the back of the plane have quietly climbed from a hundred dollars to a used car. A rookie just lost his entire month of per diem on one hand.',
       options: [
@@ -391,6 +404,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_bat_flip',
+      category: 'media', cooldown: 1,
       title: 'The bat flip heard in two dugouts',
       body: 'You hit it 442 feet and let the bat go roughly as high as it will go. The other dugout emptied its opinions instantly. Their closer throws 101 and has a long memory.',
       options: [
@@ -413,6 +427,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_radio_hit',
+      category: 'media', cooldown: 1,
       title: 'The 7am radio hit',
       body: 'You did a phone interview half asleep and used the phrase this city expects way too much. By noon it was a graphic on every local show.',
       options: [
@@ -434,6 +449,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_dugout_viral',
+    category: 'media', cooldown: 1,
     title: 'The dugout camera caught it',
     body: 'A slow motion clip of your face reacting to either a called strike or a sunflower seed has 40 million views and a caption you did not write.',
     options: [
@@ -455,6 +471,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && c.fanbase >= 40) {
     deck.push({
       id: 'mlbA_doc_crew',
+      category: 'media', cooldown: 99,
       title: 'The documentary crew',
       body: 'A streaming service wants a camera on you for a full season, including the training room, the tunnel and the drive home. The check is real and so is the access.',
       options: [
@@ -477,6 +494,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && c.ovr >= 79 && c.allStars === 0) {
     deck.push({
       id: 'mlbA_allstar_snub',
+      category: 'media', cooldown: 2, story: 'allStarSnub',
       title: 'Left off the All Star team',
       body: 'You are top five in the league in every number that matters. The reserve list came out without your name on it. A beat writer shows you the roster on his phone at your locker.',
       options: [
@@ -499,6 +517,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && c.fanbase >= 38) {
     deck.push({
       id: 'mlbA_miked_up',
+      category: 'media', cooldown: 1,
       title: 'Wired for Sunday night',
       body: `National TV wants a microphone in your jersey for three hours. Everything you say to the ${isSp ? 'catcher' : 'shortstop'} goes out to four million people live.`,
       options: [
@@ -525,6 +544,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (c.fanbase >= 48) {
     deck.push({
       id: 'mlbA_bobblehead',
+      category: 'media', cooldown: 99, story: 'bobblehead',
       title: 'Bobblehead night',
       body: 'Twenty thousand small ceramic versions of you with a head that will not stop moving and a face that is legally not your face. The club wants you at the gate.',
       options: [
@@ -549,6 +569,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (isSp) {
     deck.push({
       id: 'mlbA_elbow_soreness',
+      category: 'body', cooldown: 2, story: 'elbow',
       title: 'The elbow talks in August',
       body: 'Not pain exactly. A tightness in the forearm on your slider that goes away after a dozen pitches, which is the exact sentence that comes before every surgery in this sport.',
       options: [
@@ -571,9 +592,17 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
     });
   }
 
-  if (yrs >= 1) {
+  /* Round 919: the big leagues had no pitch clock until the 2023 season
+     (espn.com/mlb/story/_/id/35631564 ; cbssports.com, "MLB new rules: pitch
+     clock, shift ban and new bases all in play on Opening Day 2023", both
+     read 2026-10-02). c.year is the season ahead and this card looks back
+     on violations already called, so it waits for c.year 2024, the winter
+     after the first season with a clock (review fix: at 2023 it looked back
+     on 2022, which had none). A 2026 career is unchanged. */
+  if (yrs >= 1 && c.year >= 2024) {
     deck.push({
       id: 'mlbA_pitch_clock',
+      category: 'body', cooldown: 2,
       title: 'The clock is beating you',
       body: isSp
         ? 'Two clock violations in a month, both in the seventh, both with the tying run on. The umpire is not sorry.'
@@ -602,6 +631,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_swing_overhaul',
+      category: 'body', cooldown: 3,
       title: 'They want to rebuild your swing',
       body: 'A hitting coordinator with a laptop wants a new load, a new hand path and eight months of feeling completely wrong, in exchange for four degrees of launch angle.',
       options: [
@@ -626,6 +656,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_sleep_program',
+    category: 'body', cooldown: 2,
     title: 'The sleep guy',
     body: 'The club hired a sleep specialist who wants blackout curtains, no phone after ten, and no beer on getaway days. Half the clubhouse is convinced he reports to the GM.',
     options: [
@@ -646,6 +677,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_nutritionist',
+    category: 'body', cooldown: 2,
     title: 'The 11pm spread problem',
     body: 'The postgame food is fried chicken at eleven at night, 81 times a year. A private nutritionist has offered to build every meal and travel with you, for a real fee.',
     options: [
@@ -667,6 +699,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 || c.health < 85) {
     deck.push({
       id: 'mlbA_shoulder_scare',
+      category: 'body', cooldown: 2,
       title: 'The MRI you did not want',
       body: `The ${soreSpot(c)} barked, and then the shoulder did too. The imaging shows fraying, and the two doctors you trust most use two completely different words about it.`,
       options: [
@@ -693,6 +726,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_oblique',
+      category: 'body', cooldown: 2,
       title: 'The oblique',
       body: 'You felt it on a check swing in the sixth. Every person in baseball knows an oblique is four weeks minimum, and every one of them has seen somebody turn it into ten by lying.',
       options: [
@@ -721,6 +755,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_one_sixty_two',
+      category: 'grind', cooldown: 2,
       title: '162 games in 187 days',
       body: 'No other sport does this to a person. No week off, no Tuesday to heal, just another 7:05 and another arm you have never seen throwing 98.',
       options: [
@@ -743,6 +778,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_west_coast',
+      category: 'grind', cooldown: 2,
       title: 'Eleven games, three time zones',
       body: 'Seattle, then Oakland, then Anaheim, with a body clock convinced every first pitch is at 2am. The charter lands at 4:40am on the third night.',
       options: [
@@ -764,6 +800,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_doubleheader',
+    category: 'grind', cooldown: 2,
     title: 'Rain delay, then two of them',
     body: 'Three hour delay, then a doubleheader on a field that is still basically soup. It is 11:50pm and there is a bottom of the ninth left to play.',
     options: [
@@ -784,6 +821,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_august_heat',
+    category: 'grind', cooldown: 2,
     title: 'August, 104 degrees, day game',
     body: 'Turf temperature is 130. Two guys have already gone into the tunnel to lie flat on the floor. There are 41 games left after this one.',
     options: [
@@ -805,6 +843,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2) {
     deck.push({
       id: 'mlbA_pennant_race',
+      category: 'grind', cooldown: 2,
       title: 'One game up with nine to play',
       body: `Scoreboard watching is a full time job now. Every at bat is being graded by an entire city and ${mlbTeamLabelOf(c.team)} have not been here in eleven years.`,
       options: [
@@ -834,6 +873,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2) {
     deck.push({
       id: 'mlbA_getaway_day',
+      category: 'grind', cooldown: 2,
       title: '4am, terminal C',
       body: 'Getaway day is a day game, a bus, a charter and a hotel key at four in the morning in a city you cannot name yet. Your daughter learned to walk on a video somebody texted you.',
       options: [
@@ -858,6 +898,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_superstition',
+      category: 'weird', cooldown: 3,
       title: 'The socks',
       body: 'You have not washed them in 23 games because you are hitting .380 in them. The clubhouse manager now handles them with gloves. Two teammates have complained in writing.',
       options: [
@@ -880,6 +921,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_walkup_song',
+      category: 'weird', cooldown: 2,
       title: 'The walk up song problem',
       body: 'You picked a song your six year old loves and the stadium plays it at full volume 600 times a year. The internet has decided it is either the best or the worst thing in the sport.',
       options: [
@@ -901,6 +943,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_bench_clearing',
+    category: 'weird', cooldown: 2, story: 'benchesClear',
     title: 'Both benches, right now',
     body: 'A fastball went behind somebody and 52 grown men are jogging toward each other with absolutely no plan. You are the closest player to the mound.',
     options: [
@@ -922,6 +965,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (!isSp && yrs >= 2) {
     deck.push({
       id: 'mlbA_hidden_ball',
+      category: 'weird', cooldown: 99,
       title: 'The hidden ball trick',
       body: 'The runner on second has not looked at you once. The ball is in your glove. Your pitcher is standing off the rubber exactly the way you asked him to in the dugout.',
       options: [
@@ -946,6 +990,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
 
   deck.push({
     id: 'mlbA_rally_animal',
+    category: 'weird', cooldown: 3,
     title: 'The rally cockroach',
     body: 'Somebody found a plastic bug in the visiting dugout in Detroit and the team has won nine straight since. It has a name, a locker, and an account run by the bullpen.',
     options: [
@@ -967,6 +1012,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (isSp && yrs >= 1) {
     deck.push({
       id: 'mlbA_no_hitter_dugout',
+      category: 'weird', cooldown: 3,
       title: 'Nobody will sit next to you',
       body: 'Twenty one outs, no hits, and the entire dugout has physically moved four feet away from you. You are at 104 pitches. The pitching coach will not make eye contact.',
       options: [
@@ -998,6 +1044,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1) {
     deck.push({
       id: 'mlbA_glove_deal',
+      category: 'money', cooldown: 2,
       title: isSp ? 'The glove meeting' : 'The bat and glove meeting',
       body: 'A small Japanese maker offers real money and an 18 month lead time on custom orders. A giant offers less cash, a wall with your name on it, and gear tomorrow.',
       options: [
@@ -1020,6 +1067,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (c.fanbase >= 40) {
     deck.push({
       id: 'mlbA_card_show',
+      category: 'money', cooldown: 2,
       title: 'Four hours, one folding chair',
       body: 'A convention center in January, 900 autographs, 70,000 dollars, and one man who very sincerely wants you to sign a photograph of somebody else.',
       options: [
@@ -1042,6 +1090,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (c.fanbase >= 35) {
     deck.push({
       id: 'mlbA_local_ad',
+      category: 'money', cooldown: 2,
       title: 'The mattress commercial',
       body: 'A furniture warehouse out on the interstate wants 30 seconds of you saying a slogan about sleeping like a champion. It runs 300 times a week between innings.',
       options: [
@@ -1068,6 +1117,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (worth >= 2 || c.earnings >= 6) {
     deck.push({
       id: 'mlbA_mom_house',
+      category: 'money', cooldown: 99, story: 'familyHouse',
       title: 'The house for your mother',
       body: 'She still works doubles and still says she is fine. You have the money now. She has very strong opinions about the neighborhood and none at all about the kitchen.',
       options: [
@@ -1090,6 +1140,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 2 && (worth >= 1 || c.earnings >= 4)) {
     deck.push({
       id: 'mlbA_teammate_loan',
+      category: 'money', cooldown: 3,
       title: 'The 40,000 dollar ask',
       body: 'A guy you rode buses with in Double A is out of the game and needs money for something he will not fully explain. He has never asked you for anything in nine years.',
       options: [
@@ -1116,6 +1167,7 @@ export function getMlbLifeEventsA(c: MlbCareerState, rng: () => number): MlbCare
   if (yrs >= 1 && c.age <= 30) {
     deck.push({
       id: 'mlbA_winter_ball',
+      category: 'money', cooldown: 2, story: 'winterBall',
       title: 'Winter ball money',
       body: 'A club in the Dominican winter league wants six weeks, real at bats and a real check, in front of the loudest crowds you will ever hear. Your body wanted December off.',
       options: [

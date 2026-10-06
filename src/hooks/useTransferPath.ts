@@ -5,7 +5,15 @@ import { careerPlayers as fallbackPlayers } from '@/data/careerPlayers';
 import type { CareerPlayer } from '@/types/career';
 import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
-import { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '@/lib/transferPathGraph';
+import {
+  buildSeasonIndex,
+  clubSeasonsOf,
+  doorsFrom,
+  linkedFrom,
+  moreHelpLines,
+  shareClub,
+  type TransferPathDoors,
+} from '@/lib/transferPathGraph';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isTransferPathLog } from '@/lib/dailySaveShapes';
@@ -67,6 +75,10 @@ export interface TransferPathState {
   hint: string;
   /** No route left from the head to the target without reusing a name already played. */
   stranded: boolean;
+  /** Round 1010a, the "More help" tier: door counts out of the head and into
+   *  the target on the rule graph, and the two lines the board shows. Null
+   *  unless the chain is building and the head still has a route. */
+  moreHelp: { doors: TransferPathDoors; lines: string[] } | null;
   addPlayer: (name: string) => { ok: boolean; club: string | null; reason?: TransferPathRefusal };
   /** Owner 2026-08-05: players can surrender and see a real connecting path. */
   giveUp: () => void;
@@ -372,6 +384,18 @@ export function useTransferPath(): TransferPathState {
     return `From ${head} it takes ${fromHere.steps - 1} more men at least. The first was at ${fromHere.first} with him, the last at ${fromHere.last} with ${puzzle.playerB}.`;
   }, [fromHere, chain, puzzle, inForce]);
 
+  /* Round 1010a: the second hint tier. Counts, never names, on the same rule
+     graph and with the same played names left out as the hint above, so it
+     cannot point at a refusal or a duplicate. Derived, never stored, no score
+     change. Open at the start too, where the stored hint is still showing. */
+  const moreHelp = useMemo(() => {
+    if (status !== 'building' || stranded) return null;
+    const head = chain[chain.length - 1];
+    const doors = doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain);
+    if (!doors) return null;
+    return { doors, lines: moreHelpLines(doors, head, puzzle.playerB) };
+  }, [status, stranded, chain, puzzle, seasonIndex, playerToClubSeasons]);
+
   // ── useGameCompletion ──────────────────────────────────────────────────────
   // A surrendered daily still counts as "played today" (score 0, no win).
   /* Round 643 review: the daily status alone, with the daily's own score,
@@ -501,6 +525,7 @@ export function useTransferPath(): TransferPathState {
     optimal,
     hint,
     stranded,
+    moreHelp,
     addPlayer,
     giveUp,
     revealPath,

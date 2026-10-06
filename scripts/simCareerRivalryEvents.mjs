@@ -28,7 +28,7 @@
  *      advanceProSeason for enough years to draft a rival and roll beats,
  *      through the real dismissRivalryEvent, proving the pending slot, the
  *      no-repeat rule and the forced retirement beat are all still wired.
- *   4. The NFL binding: every one of the seventeen beats reachable and
+ *   4. The NFL binding: every one of the twenty three beats reachable and
  *      correct against constructed fixtures (a badge-style coverage proof,
  *      since natural play cannot be trusted to roll every gate on its own),
  *      plus real simulated careers proving the tick actually fires and the
@@ -50,6 +50,8 @@
  *      524's review made to section 4 below.
  *   7. The NBA binding, Round 525's slice: same proof shape as section 6.
  *   8. The NHL binding, Round 525's slice: same proof shape as section 6.
+ *   9. Round 988: the 24 beats Rounds 917 to 920 added, words against
+ *      effects, run from each sport's section (see beatWords).
  *
  * NEGATIVE CONTROLS, RIVALRY_CONTROL=...
  *
@@ -62,6 +64,10 @@
  *              "Brady" spliced into LAST, a real collision by construction
  *              (Tom Brady, src/data/nflCareerPlayers.ts). Section 5 must
  *              name it.
+ *   beatlie    (Round 988) NFL beat 223 takes morale -5 under "Morale -2":
+ *              section 9, the new beats' words, must name it.
+ *   beatheat   (Round 988) NHL beat 319 heats the rivalry while its line
+ *              says nothing of it: section 9 must name it.
  *
  *   Each control asserts the text it rewrites is present first, so a
  *   control that rewrites a string the file does not contain cannot pass
@@ -79,7 +85,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
-const CONTROLS = ['deaf', 'collision'];
+const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`RIVALRY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -90,6 +96,76 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const norm = s => s.split('\r\n').join('\n');
 const readSrc = rel => norm(fs.readFileSync(path.join(ROOT, rel), 'utf8'));
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+/* ─── Round 988: the 24 beats of Rounds 917 to 920, words against effects ──
+   Sections 4, 6, 7 and 8 prove each beat is reachable and moves something;
+   they never compared what the player reads with what moved. Each of the
+   new beats (six a sport) is applied from its own gate fixture, mid range,
+   at rolls 0.25, 0.4999, 0.5001 and 0.75, rated above the rival and below
+   wherever its gate still holds that way (its own fixture as built when it
+   holds neither way). What the player reads is the line the beat pushes
+   when it pushes one, else its consequence: the numbers must equal the move,
+   "intensifies" or "heats up" must raise the rivalry, "softens" lower it,
+   no such word means no change, nothing it does not name may move, and a
+   "50/50" beat must land its two ends either side of 0.5. This check lived
+   in simNflCareer (the NFL six) and simNbaCareer R2 (the NBA six); the MLB
+   and NHL six had none. Measured 2026-10-03: 160 applies (deterministic),
+   the floor is 150.
+   Controls: beatlie (NFL 223 takes morale -5 under "Morale -2") and beatheat
+   (NHL 319 heats the rivalry without saying so). Called from each sport's
+   section before its own gate loop, which mutates the fixtures it applies. */
+const NEW_BEATS = {
+  NFL: [218, 219, 220, 221, 222, 223], MLB: [218, 219, 220, 221, 222, 223],
+  NBA: [318, 319, 320, 321, 322, 323], NHL: [318, 319, 320, 321, 322, 323],
+};
+const BEAT_APPLIES_MIN = 150;
+let beatApplies = 0;
+const jclone = o => JSON.parse(JSON.stringify(o));
+function beatNumbers(text) {
+  const out = { morale: 0, fanbase: 0, health: 0, rating: 0, netWorth: 0 };
+  for (const m of text.matchAll(/\b(morale|fanbase|health|rating) ([+-]\d+)\b/gi)) out[m[1].toLowerCase()] += Number(m[2]);
+  for (const m of text.matchAll(/\bnet worth ([+-]?\d+(?:\.\d+)?)M/gi)) out.netWorth += Number(m[1]);
+  out.netWorth = Math.round(out.netWorth * 100) / 100;
+  return out;
+}
+const beatKey = v => ['morale', 'fanbase', 'health', 'rating', 'netWorth'].map(f => `${f}:${v[f]}`).join('|');
+function beatWords(label, defs, gates) {
+  for (const id of NEW_BEATS[label]) {
+    const def = defs.find(d => d.id === id);
+    if (!def) { fail(`${label} beat ${id} is missing from its table`); continue; }
+    const [p0, r0] = gates[id] ?? [];
+    if (!p0) { fail(`${label} beat ${id} has no gate fixture for the words check`); continue; }
+    const mid = { morale: 50, fanbase: 60, health: 60, rivalryIntensity: 50 };
+    let homes = [true, false]
+      .map(above => [{ ...jclone(p0), ...mid, ovr: above ? 86 : 80 }, { ...jclone(r0), ovr: above ? 80 : 86 }])
+      .filter(([p, r]) => def.when(p, r));
+    if (!homes.length) homes = [[{ ...jclone(p0), ...mid }, jclone(r0)]];
+    let applies = 0;
+    for (const [p1, r1] of homes) {
+      const ends = [];
+      for (const roll of [0.25, 0.4999, 0.5001, 0.75]) {
+        const s = jclone(p1), before = jclone(p1);
+        const lines = [];
+        def.apply(s, jclone(r1), () => roll, l => lines.push(l));
+        beatApplies++; applies++;
+        const read = lines.length ? lines.join(' ') : String(def.consequence);
+        const moved = {
+          morale: s.morale - before.morale, fanbase: s.fanbase - before.fanbase, health: s.health - before.health,
+          rating: s.ovr - before.ovr, netWorth: Math.round(((s.netWorth ?? 0) - (before.netWorth ?? 0)) * 100) / 100,
+        };
+        if (beatKey(beatNumbers(read)) !== beatKey(moved)) fail(`${label} beat ${id}: the player reads "${read}" and the save moved [${beatKey(moved)}]`);
+        const heat = (s.rivalryIntensity ?? 0) - (before.rivalryIntensity ?? 0);
+        const heatWord = /intensif|heats up/i.test(def.consequence) ? 1 : /soften/i.test(def.consequence) ? -1 : 0;
+        if (Math.sign(heat) !== heatWord) fail(`${label} beat ${id}: "${def.consequence}" and the rivalry moved ${heat}`);
+        const others = o => { const x = { ...o }; for (const k of ['morale', 'fanbase', 'health', 'ovr', 'netWorth', 'rivalryIntensity']) delete x[k]; return JSON.stringify(x); };
+        if (others(s) !== others(before)) fail(`${label} beat ${id}: moved something its words do not name`);
+        ends.push(beatKey(moved));
+      }
+      if (/50\/50/.test(def.consequence) && ends[1] === ends[2]) fail(`${label} beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+    }
+    if (applies < 4) fail(`${label} beat ${id}: only ${applies} applies made`);
+  }
+}
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'careerrivalry-'));
 process.on('exit', () => { try { fs.rmSync(tmpDir, { recursive: true, force: true }); } catch { /* best effort */ } });
@@ -139,12 +215,41 @@ if (CONTROL === 'collision') {
     .replace(firstFrom, "const FIRST = [\n  'Tom', 'Marcus'")
     .replace(lastFrom, "const LAST = [\n  'Brady', 'Whitaker'");
 }
+/* Round 988: two controls for the new beats' words check, each patching the
+   content esbuild loads for one sport's beat table (the file keeps its own
+   relative imports). */
+const BEAT_CONTROLS = {
+  beatlie: { /* NFL 223 takes morale -5 under "Morale -2" */
+    file: 'src/lib/nflCareerRivalryEvents.ts',
+    from: '      s.morale = clamp(s.morale - 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
+    to: '      s.morale = clamp(s.morale - 5, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
+  },
+  beatheat: { /* NHL 319 heats the rivalry and its line says nothing of it */
+    file: 'src/lib/nhlCareerRivalryEvents.ts',
+    from: '      s.morale = clamp(s.morale - 4, 0, 100);\n      s.fanbase = clamp(s.fanbase + 2, 0, 100);\n    },\n  },\n  {\n    id: 320,',
+    to: '      s.morale = clamp(s.morale - 4, 0, 100);\n      s.fanbase = clamp(s.fanbase + 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 5, 0, 100);\n    },\n  },\n  {\n    id: 320,',
+  },
+};
+let beatPatch = null;
+if (BEAT_CONTROLS[CONTROL]) {
+  const ctl = BEAT_CONTROLS[CONTROL];
+  const raw = readSrc(ctl.file);
+  if (raw.split(ctl.from).length !== 2) {
+    console.error(`control ${CONTROL}: ${ctl.file} does not contain its string exactly once, so this control would prove nothing`);
+    process.exit(1);
+  }
+  beatPatch = { path: path.join(ROOT, ctl.file), contents: raw.replace(ctl.from, ctl.to) };
+}
 if (CONTROL) console.log(`   NEGATIVE CONTROL ON: ${CONTROL}`);
 
 const redirectPlugin = {
   name: 'rivalry-control',
   setup(b) {
     b.onResolve({ filter: /careerRivalryEvents(\.ts)?$/ }, () => (redirects.careerRivalryEvents ? { path: redirects.careerRivalryEvents } : undefined));
+    b.onLoad({ filter: /(nfl|nhl)CareerRivalryEvents\.ts$/ }, args => {
+      if (!beatPatch || path.resolve(args.path) !== path.resolve(beatPatch.path)) return undefined;
+      return { contents: beatPatch.contents, loader: 'ts', resolveDir: path.dirname(args.path) };
+    });
     b.onLoad({ filter: /careerRival\.ts$/ }, args => {
       if (!collisionContents || args.path !== CAREER_RIVAL_PATH) return undefined;
       return { contents: collisionContents, loader: 'ts', resolveDir: path.dirname(args.path) };
@@ -456,7 +561,24 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     215: [nflFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     216: [nflFixture({ age: 30 }), rivalFixture()],
     217: [nflFixture({ age: 34 }), rivalFixture()],
+    /* Round 917: the six NFL beats added with the content pack. */
+    218: [nflFixture({ team: 'DAL', fanbase: 60 }), rivalFixture()],
+    219: [nflFixture({ team: 'DAL' }), rivalFixture()],
+    220: [nflFixture(), rivalFixture({ ovr: 88 })],
+    221: [nflFixture({ team: 'DAL', ovr: 85 }), rivalFixture({ ovr: 85 })],
+    222: [nflFixture(), rivalFixture()],
+    223: [nflFixture({ team: 'DAL' }), rivalFixture({ age: 27 })],
   };
+  /* Round 917 review: the rival is drafted onto the player's own team, so a
+     beat that puts the two on opposite sides must stay shut while they are
+     teammates. Same fixture, the player moved onto the rival's team. */
+  for (const id of [218, 219, 221, 223]) {
+    const def = nflRivalry.NFL_RIVALRY_EVENTS.find(d => d.id === id);
+    const [p, r] = gates[id];
+    if (!def) fail(`beat ${id} is missing from the NFL table`);
+    else if (def.when({ ...p, team: r.team }, r)) fail(`beat ${id} (${def.title}) fires while the rival is your teammate`);
+  }
+  beatWords('NFL', nflRivalry.NFL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
   let reachable = 0, correct = 0;
   const total = nflRivalry.NFL_RIVALRY_EVENTS.length;
   for (const def of nflRivalry.NFL_RIVALRY_EVENTS) {
@@ -652,7 +774,15 @@ console.log('6) The MLB binding: every beat reachable and correct, and the tick 
     215: [mlbFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     216: [mlbFixture({ age: 30 }), rivalFixture()],
     217: [mlbFixture({ age: 34 }), rivalFixture()],
+    /* Round 919: the six new MLB beats. */
+    218: [mlbFixture({ pos: 'SS' }), rivalFixture({ pos: 'SS' })],
+    219: [mlbFixture({ pos: 'SS' }), rivalFixture({ pos: 'SP' })],
+    220: [mlbFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
+    221: [mlbFixture({ age: 24 }), rivalFixture({ age: 24 })],
+    222: [mlbFixture({ team: 'BOS' }), rivalFixture({ team: 'NYY' })],
+    223: [mlbFixture({ age: 34 }), rivalFixture({ age: 35 })],
   };
+  beatWords('MLB', mlbRivalry.MLB_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
   let reachable = 0, correct = 0;
   const total = mlbRivalry.MLB_RIVALRY_EVENTS.length;
   for (const def of mlbRivalry.MLB_RIVALRY_EVENTS) {
@@ -753,7 +883,15 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
     315: [nbaFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     316: [nbaFixture({ age: 30 }), rivalFixture()],
     317: [nbaFixture({ age: 34 }), rivalFixture()],
+    /* Round 918: the six new NBA beats. */
+    318: [nbaFixture({ pos: 'PG', team: 'BOS' }), rivalFixture({ pos: 'PG', team: 'LAL' })],
+    319: [nbaFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
+    320: [nbaFixture({ team: 'BOS' }), rivalFixture({ team: 'LAL', ovr: 85 })],
+    321: [nbaFixture({ age: 24 }), rivalFixture()],
+    322: [nbaFixture({ age: 27 }), rivalFixture()],
+    323: [nbaFixture({ rings: 1 }), rivalFixture({ rings: 1 })],
   };
+  beatWords('NBA', nbaRivalry.NBA_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
   let reachable = 0, correct = 0;
   const total = nbaRivalry.NBA_RIVALRY_EVENTS.length;
   for (const def of nbaRivalry.NBA_RIVALRY_EVENTS) {
@@ -859,7 +997,15 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
     315: [nhlFixture({ ovr: 90 }), rivalFixture({ ovr: 90 })],
     316: [nhlFixture({ age: 30 }), rivalFixture()],
     317: [nhlFixture({ age: 34 }), rivalFixture()],
+    /* Round 920: the six new NHL beats. */
+    318: [nhlFixture({ pos: 'C' }), rivalFixture({ pos: 'C' })],
+    319: [nhlFixture({ ovr: 80 }), rivalFixture({ ovr: 84 })],
+    320: [nhlFixture(), rivalFixture({ ovr: 85 })],
+    321: [nhlFixture({ age: 24 }), rivalFixture()],
+    322: [nhlFixture({ age: 28 }), rivalFixture()],
+    323: [nhlFixture({ cups: 1 }), rivalFixture({ rings: 1 })],
   };
+  beatWords('NHL', nhlRivalry.NHL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
   let reachable = 0, correct = 0;
   const total = nhlRivalry.NHL_RIVALRY_EVENTS.length;
   for (const def of nhlRivalry.NHL_RIVALRY_EVENTS) {
@@ -925,6 +1071,9 @@ console.log('8) The NHL binding: every beat reachable and correct, and the tick 
   if (rate < 0.30) fail(`the NHL pending-beat rate is ${rate.toFixed(3)} per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should`);
   if (dismissedOk === 0) fail('not one NHL dismiss actually cleared the pending slot');
 }
+
+console.log(`9) The 24 new beats, words against effects: ${beatApplies} applies over NFL and MLB 218 to 223, NBA and NHL 318 to 323`);
+if (beatApplies < BEAT_APPLIES_MIN) fail(`only ${beatApplies} new beat applies made, the floor is ${BEAT_APPLIES_MIN}`);
 
 console.log('');
 if (failures > 0) {
