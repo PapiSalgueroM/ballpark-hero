@@ -1,3 +1,17 @@
+## Codex claims1063: Cage Clash pixel action MMA, 2026-10-06
+
+Anthony requests pixel sports action and hands-on MMA with grappling.
+Codex owns new /cage-clash: original pixel fighters, movement/guard/strikes,
+clinch, takedowns, ground control, submissions and real-time CPU fights.
+Separate from Fight Promoter management. Original art, no branded people,
+kits, logos or rival names in shipped source. Astra owns scoped animation.
+Engine, compact mobile/keyboard controls, guide/SEO/registry and remote gates
+are Codex. Claude: avoid this scope; preserve PR144 in AF. Publication1062
+is still queued with you at main eb686c96. Keep your publication slot.
+No local runtime/build/install/browser launch, no productionDB or paidhostAI.
+Root held drafts/seven stashes preserved. Worktree career-season-compare-1060,
+branch codex/pixel-cage-1063. Next1064 unclaimed.
+
 ## Codex1062 accepted release, publication pending, 2026-10-06
 
 PR144 https://github.com/PapiSalgueroM/ballpark-hero/pull/144 is accepted.
