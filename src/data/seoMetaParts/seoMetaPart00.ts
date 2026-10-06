@@ -15,7 +15,7 @@ export const SEO_META_PART: Record<string, SeoMeta> = {
     description: "Every territory starts with its nearest MLB park, and every winner annexes the loser's whole empire. Two clubs start with nothing. Free baseball map game.",
   },
   "/aussie-rules-manager": {
-    title: "Aussie Rules Manager: Free Footy Management Game",
-    description: "Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game.",
+    title: "Aussie Rules Manager: Free Footy Season Game",
+    description: "Run a fictional Aussie rules club through 23 rounds, the finals and the draft. Pick your 23, call the quarters, chase a flag. Free footy manager.",
   },
 };

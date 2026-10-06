@@ -474,10 +474,10 @@ console.log('4) A save written before this round opens and is repaired');
 console.log('5) The inbox: five new senders, and nobody real is quoted');
 /* ================================================================== */
 {
-  /* Every real name the four bakes can put on a teamsheet. A message may
+  /* Every real name the five bakes can put on a teamsheet. A message may
      narrate any of them; none of them may be made to speak. */
   const realNames = new Set();
-  for (const f of ['clubManagerRosters', 'clubManagerEra2005', 'clubManagerEra2010', 'clubManagerEra2015']) {
+  for (const f of ['clubManagerRosters', 'clubManagerEra2005', 'clubManagerEra2010', 'clubManagerEra2015', 'clubManagerEra2020']) {
     const src = lf(fs.readFileSync(path.join(ROOT, 'src', 'data', `${f}.ts`), 'utf8'));
     for (const m of src.matchAll(/\{\s*n:\s*'((?:[^'\\]|\\.)*)'/g)) {
       realNames.add(m[1].replace(/\\'/g, "'"));

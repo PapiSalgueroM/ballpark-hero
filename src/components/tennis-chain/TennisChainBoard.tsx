@@ -5,6 +5,7 @@ import { TennisChainSearch } from './TennisChainSearch';
 import { TennisChainTimeline } from './TennisChainTimeline';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ChainFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { getTennisChainMultiplier } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -24,6 +25,8 @@ export function TennisChainBoard() {
   const [playerRank, setPlayerRank] = useState<number | null>(null);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [saving, setSaving] = useState(false);
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.chain[0]?.playerName ?? ''}` : null, gameState?.gameStatus === 'ended');
 
   const fetchLeaderboard = async () => {
     const { data } = await supabase
@@ -171,22 +174,21 @@ export function TennisChainBoard() {
         ) : (
           <div className="text-center">
             <div className="bg-gray-900 rounded-xl p-8 border border-emerald-600 max-w-lg mx-auto mb-6">
-              <h2 className="text-2xl font-bold text-emerald-400 mb-4">Game Over!</h2>
-              <p className="text-gray-300 mb-4">{gameState.gameOverReason}</p>
+              <ChainFinishMoment
+                chainLength={chainLength}
+                badge={gameState.earnedBadge}
+                reason={gameState.gameOverReason}
+                gamePath="/tennis-chain"
+                live={liveFinish}
+                className="mb-6"
+              />
 
-              {gameState.earnedBadge && (
-                <div className="mb-6 p-4 bg-gradient-to-r from-emerald-900/50 to-purple-900/50 rounded-lg border border-purple-600">
-                  <div className="text-3xl mb-2">{gameState.earnedBadge.emoji}</div>
-                  <div className="text-xl font-bold text-purple-400">{gameState.earnedBadge.name}</div>
-                  <div className="text-sm text-gray-400">Chain of {chainLength}!</div>
-                </div>
-              )}
-
-              <div className="text-xl text-emerald-400 font-bold mb-2">Final Score: {gameState.score}</div>
-              {multiplier > 1 && (
-                <div className="text-sm text-purple-400 mb-4">Includes x{multiplier} chain bonus!</div>
-              )}
-              <div className="text-lg text-emerald-300 mb-6">Chain Length: {chainLength}</div>
+              <div className="mb-6">
+                <div className="text-xl text-emerald-400 font-bold">Final Score: {gameState.score}</div>
+                {multiplier > 1 && (
+                  <div className="mt-2 text-sm text-purple-400">Includes x{multiplier} chain bonus!</div>
+                )}
+              </div>
 
               {!scoreSubmitted ? (
                 <div className="mb-6">

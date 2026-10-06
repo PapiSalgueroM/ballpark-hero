@@ -4,7 +4,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
   '/club-manager': {
     intro: [
       "Club Manager is the site's big one: a full management sim in your browser. 368 real clubs across 22 leagues in 19 countries, from the Premier League to the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, Brazil's Serie A and Liga MX, over 4,300 real players with their real August 2026 ages and market values, and a board that talks like a board.",
-      "Pick when you start too: today's game, or one of three real past seasons. 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All three past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
+      "Pick when you start too: today's game, or one of four real past seasons. 2020-21 is Haaland and Bellingham at Dortmund, Mbappé and Neymar at PSG and Bruno Fernandes at United, with that summer's big moves already made (Havertz and Werner at Chelsea, Thiago at Liverpool, Suárez at Atlético). 2015-16 is the year Leicester won it at 5000 to 1, with Vardy and Mahrez at their real pre-title values and MSN at Barcelona. 2010-11 is prime Messi and Rooney, and now Klopp's young Dortmund, Ibrahimovic's Milan and Lille's double too. 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi, Mourinho's back to back Chelsea and Henry's Arsenal. All four past seasons hold all 98 clubs of their year's big five, the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 (in 2015-16 Juventus mid five-in-a-row, Lewandowski at Bayern, Ibrahimovic and Di Maria at PSG; in 2005-06 the Juventus of Buffon, Cannavaro, Nedved and Ibrahimovic, Ballack's Bayern and Juninho's Lyon); every one carries hundreds of real players at their real ages and values from that year. Or found a club of your own: name it, design the crest, name the stadium, choose the money, and build it up by signing real players.",
     ],
     headings: {
       howToPlay: "How to play Club Manager, a free online football management game",
@@ -17,7 +17,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: "Pick an era, a nation and a real club",
         items: [
-          "Pick your era (today, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
+          "Pick your era (today, 2020-21, 2015-16, 2010-11 or 2005-06), then your nation, your league, and your club. Every tile quotes what that board will actually demand.",
         ],
         subsections: [
           {
@@ -92,7 +92,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "Each past season is a sealed world",
             items: [
-              "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
+              "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06. Money in 2020-21 was close to today's, so its stars rate about where they would now, Mbappé level with the best of 2026. Leicester still start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
             ],
           },
           {

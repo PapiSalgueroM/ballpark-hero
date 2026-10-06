@@ -39,6 +39,8 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const WORLD_FILES = {
   now: 'src/data/clubManagerRosters.ts',
+  // Round 971 review fix: the 2020-21 world's block was written by its bake and read by nobody.
+  era2020: 'src/data/clubManagerEra2020.ts',
   era2015: 'src/data/clubManagerEra2015.ts',
   era2010: 'src/data/clubManagerEra2010.ts',
   era2005: 'src/data/clubManagerEra2005.ts',

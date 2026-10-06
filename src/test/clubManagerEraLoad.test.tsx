@@ -149,6 +149,6 @@ describe('Club Manager: an era save waits for its era', () => {
     render(<Harness />);
     await waitFor(() => expect(api.phase).toBe('resume'), { timeout: 20000 });
     expect(api.career.clubName).toBe('Arsenal');
-    for (const id of ['era2005', 'era2010', 'era2015']) expect(eras.eraRostersLoaded(id)).toBe(false);
+    for (const id of ['era2005', 'era2010', 'era2015', 'era2020']) expect(eras.eraRostersLoaded(id)).toBe(false);
   }, 60000);
 });

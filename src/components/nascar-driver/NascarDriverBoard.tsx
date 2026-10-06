@@ -4,6 +4,7 @@ import { useNascarDriver } from '@/hooks/useNascarDriver';
 import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ClueFinishMoment, useLiveFinish } from '@/components/guess-finish/GuessFinish';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES, POINTS_BY_CLUE, type NascarDriverState } from '@/types/nascarDriver';
 import feedbackStyles from './NascarDriverFeedback.module.css';
@@ -41,6 +42,9 @@ export function NascarDriverBoard() {
     const timer = window.setTimeout(() => setFeedback(null), 600);
     return () => window.clearTimeout(timer);
   }, [feedback]);
+
+  /* Round 953: the result moment plays only for a finish this mount watched happen. */
+  const liveFinish = useLiveFinish(gameState ? `${gameState.mode}:${gameState.puzzle.id}` : null, gameState ? gameState.gameStatus !== 'playing' : false);
 
   const handleHint = () => {
     revealHint();
@@ -216,9 +220,9 @@ export function NascarDriverBoard() {
 
         {isOver && (
           <div data-nascar-driver-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-red-500/20 bg-neutral-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
+            <ClueFinishMoment won={gameStatus === 'won'} gamePath="/guess-nascar-driver" score={score} live={liveFinish} />
             {gameStatus === 'won' ? (
               <>
-                <p className="text-3xl">🏆</p>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-red-400`}>{puzzle.driver_name}</p>
                 <p className="text-neutral-400">
                   Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
@@ -226,7 +230,6 @@ export function NascarDriverBoard() {
               </>
             ) : (
               <>
-                <p className="text-3xl">😤</p>
                 <p className={`${feedbackStyles.guessName} text-xl font-bold text-red-400`}>It was {puzzle.driver_name}</p>
                 <p className="text-neutral-400">Better luck next time!</p>
               </>

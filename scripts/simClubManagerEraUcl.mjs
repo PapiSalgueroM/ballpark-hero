@@ -816,7 +816,10 @@ function checkGroupOrder(tag, s, tally, final) {
      scored inside the head to head block and reapplies it; 2005-06 and
      2010-11 go from goal difference to away goals and no further. */
   const wantRule = !eraUclHasR16Local(s) ? 'leaguePhase'
-    : (s.eraId === 'era2015' ? 'h2hFull' : 'h2hAway');
+    : (['era2015', 'era2020'].includes(s.eraId) ? 'h2hFull' : 'h2hAway');
+  /* Round 971: a 2020-21 save reads the 2015-16 order too; its regulations
+     kept it (away goals went the summer after), as src/lib/clubManagerUclGroups.ts
+     records for any era from 2015-16 to 2020-21. */
   if (rule !== wantRule) note('groups', `${tag}: a ${s.eraId ?? 'modern'} save sorts its groups on the ${rule} order rather than ${wantRule}`);
   const all = groupsOf(s);
   const md = s.uclGroup.matchday;
@@ -900,6 +903,7 @@ function eraUclHasR16Local(s) {
 function checkGroupRule(tally) {
   const old = { eraId: 'era2005', pairResults: {} };   // and era2010: h2hAway
   const now15 = { eraId: 'era2015', pairResults: {} }; // h2hFull
+  const now20 = { eraId: 'era2020', pairResults: {} }; // h2hFull, Round 971
   const modern = { eraId: undefined, pairResults: {} };
   const mk = (club, w, d, l, gf, ga, pts) => ({ club, w, d, l, gf, ga, pts });
   const order = (state, rows, pairs) => sortedUclGroup({ ...state, pairResults: { [GROUP_LEDGER]: pairs } }, rows).map(r => r.club).join(',');
@@ -916,6 +920,8 @@ function checkGroupRule(tally) {
     if (order(st, two, met) !== 'Red,Blue,Green') note('groups', `the ${what} group stage: Red won both games and still sits below Blue (${order(st, two, met)}) (the reported gap)`);
   }
   if (order(modern, two, met) !== 'Blue,Red,Green') note('groups', `the league phase: goal difference should come first with no head to head step (${order(modern, two, met)})`);
+  /* Round 971: the 2020-21 world sorts a level run exactly as 2015-16 does. */
+  if (order(now20, two, met) !== order(now15, two, met)) note('groups', `the 2020-21 group stage orders the met pair ${order(now20, two, met)}, 2015-16 orders it ${order(now15, two, met)}`);
   /* Met once only: the rule is not readable yet and the fall back is goal
      difference, the same convention the league tables use. */
   if (order(old, two, { 'Red|Blue': [2, 0] }) !== 'Blue,Red,Green') note('groups', `the group stage with one game played: should fall back to goal difference (${order(old, two, { 'Red|Blue': [2, 0] })})`);
@@ -1129,6 +1135,12 @@ const ERA_CAREERS = [
   ['Barcelona 2015 career 2', 'Barcelona', 'era2015'],
   ['Juventus 2015 career 3', 'Juventus', 'era2015'],
   ['Arsenal 2015 career 2', 'Arsenal', 'era2015'],
+  /* Round 971: the 2020-21 era, the last season with away goals, four
+     careers so its draw, its tables and its group order are measured too. */
+  ['Chelsea 2020', 'Chelsea', 'era2020'],
+  ['Juventus 2020', 'Juventus', 'era2020'],
+  ['Bayern Munich 2020', 'Bayern Munich', 'era2020'],
+  ['PSG 2020', 'PSG', 'era2020'],
 ];
 for (const [tag, club, era] of ERA_CAREERS) runCareer(tag, club, era);
 runCareer('Real Madrid (modern control)', 'Real Madrid');

@@ -7,7 +7,7 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
  * this screen now celebrates a win the same way. It keeps its club-manager
  * home so Round 147's package stays byte-stable; a future tidy round can
  * move the file without changing a single behavior. */
-import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
+import { ConfettiBurst, CelebrationStyles, confettiSeedOf, revealDelay } from '@/components/club-manager/Celebration';
 import { ResultMoment, type ResultOutcome } from '@/components/game/ResultMoment';
 
 interface ResultScreenStat {
@@ -120,8 +120,7 @@ export function ResultScreen({
   const state: ResultOutcome = outcome ?? (won === true ? 'win' : won === false ? 'loss' : 'close');
   /* Round 149: a stable per-game confetti seed, so the fall pattern is
      deterministic for a given game rather than reshuffling every render. */
-  let seed = 1;
-  for (let i = 0; i < share.gameName.length; i++) seed = (seed * 31 + share.gameName.charCodeAt(i)) >>> 0;
+  const confettiSeed = confettiSeedOf(share.gameName);
 
   return (
     <div
@@ -137,7 +136,7 @@ export function ResultScreen({
       <CelebrationStyles />
       {/* Round 149: wins rain, everywhere, and only wins. A loss stays
           quiet, because 56 games shaking at you gets old in an afternoon. */}
-      {state === 'win' && <ConfettiBurst seed={seed % 997} count={28} />}
+      {state === 'win' && <ConfettiBurst seed={confettiSeed} count={28} />}
 
       {/* 1 and 2. Round 710: the shared result moment, the sport's ink and
           drawn mark, the score revealed, and the game's own emoji and

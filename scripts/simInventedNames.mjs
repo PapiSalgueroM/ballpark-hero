@@ -47,6 +47,8 @@ const GENERATORS = [
   { file: 'src/lib/cfbDynasty.ts', first: 'FIRST', last: 'LAST', what: 'college football recruits' },
   { file: 'src/lib/cbbDynasty.ts', first: 'FIRST', last: 'LAST', what: 'college basketball recruits' },
   { file: 'src/lib/aussieRulesManager.ts', first: 'FIRST', last: 'LAST', what: 'fictional Aussie rules seniors' },
+  /* Round 1014: the full season's own 60 x 60 banks, for its 648 players and every draft class. */
+  { file: 'src/lib/aussieRulesLeague.ts', first: 'FIRST', last: 'LAST', what: 'fictional Aussie rules full season players and draftees' },
   { file: 'src/lib/frontOffice.ts', first: 'FIRST', last: 'LAST', what: 'GM game draft classes' },
   { file: 'src/lib/careerRival.ts', first: 'FIRST', last: 'LAST', what: 'career rivals' },
   { file: 'src/lib/clubManager.ts', first: 'YOUTH_FIRST', last: 'YOUTH_LAST', what: 'academy kids' },
@@ -120,7 +122,15 @@ export { allIntlNames } from '${ROOT.replaceAll('\\', '/')}/src/lib/intlNames.ts
   for (const world of Object.values(NATIONALITY_BY_WORLD)) for (const n of Object.keys(world)) real.add(n);
   globalThis.__intl = allIntlNames();
   if (real.size < 8000) fail(`only ${real.size} real names harvested, the check is not checking much`);
-  console.log(`   ${real.size} real names, from src/data and the four sealed worlds`);
+  /* Round 971: every sealed world feeds the guard, the 2020-21 one included
+     (its bake writes its block), so the filler cannot hand a padded 2020
+     squad a real 2020 footballer's name. Named, so a world that loses its
+     block goes red here rather than quietly shrinking the list. */
+  const worlds = Object.keys(NATIONALITY_BY_WORLD);
+  for (const w of ['now', 'era2020', 'era2015', 'era2010', 'era2005']) {
+    if (!Object.keys(NATIONALITY_BY_WORLD[w] ?? {}).length) fail(`the ${w} world gives the guard no names`);
+  }
+  console.log(`   ${real.size} real names, from src/data and the ${worlds.length} sealed worlds (${worlds.join(', ')})`);
 }
 
 /* ---------- 2. Every generator, every combination ---------- */
