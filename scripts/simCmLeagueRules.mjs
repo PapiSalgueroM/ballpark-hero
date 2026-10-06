@@ -137,6 +137,29 @@
       moved), and the whole tree, which also removes those 31 men from the
       nationality map and corrects three era flags, matched it 22/0, 15/0
       and 38/0.
+      Release AF (2026-10-06) merged Round 1015 onto Rounds 971 and 1021 and
+      re-took modern, eras and pure on the merged tree, after attribution in
+      four trees (CM_RULES_ROOT, digests written into throwaway copies):
+      Release AF's src before the merge reproduced its own baseline 22/0,
+      20/0 and 43/0; Round 1015's head with its nationality map from before
+      the lead's read (a8ac195c) reproduced 1015's baseline 22/0, 15/0 and
+      38/0; Round 1015's head as pushed (ff942a5b, the 720 modern
+      nationalities added) moved 16 of the 22 modern saves and nothing else,
+      because the internationals and the board's nationality asks read that
+      map, and that commit never re-took the digest; and the merged tree
+      matched that head 22/0 in modern and every older era and pure entry,
+      the rest being exactly the 2020-21 footprint of Rounds 971 and 1021
+      (its five eras rows, its five pure rows and the views leagueNations,
+      euroSlots, eraIds and historic). Against Release AF's baseline the
+      merged tree differs in all 22 modern saves, the 13 older era saves
+      1015 moved, the 20 modern day one objectives, and the five 2020-21
+      era saves in "start" and "whole" (bundesliga2020 in "cup" too), whose
+      pure rows did not move. The merged tree differs from Release AF's src
+      only in 1015's roster, nationality map and era guard line, so those
+      five rows moved with 1015's data, not with the 2020-21 code (the path
+      the review found for the older eras, AI buyers drawn from the modern
+      clubs, applies to a 2020-21 save the same way; it was not isolated
+      again here).
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
