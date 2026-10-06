@@ -12,6 +12,7 @@ on:
       - src/components/us-career/UsCareerBoard.tsx
       - src/components/us-career/CareerSeasonReview.tsx
       - src/components/us-career/CareerSeasonComparison.tsx
+      - src/components/us-career/CareerSeasonHighs.tsx
       - src/lib/usCareerSeasonReview.ts
       - src/lib/usCareerSport.ts
       - src/lib/*CareerSport.ts
