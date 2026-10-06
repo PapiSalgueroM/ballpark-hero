@@ -285,6 +285,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Combat Sports',
     emoji: '🥊',
     games: [
+      { path: '/cage-clash', label: 'Cage Clash', emoji: '🥋', description: 'Pixel MMA action. Strike, clinch, take down and fight for a submission.', addedOn: '2026-10-06' },
       { path: '/fight-career', label: 'Fight Career', emoji: '👊', description: 'Turn pro, pick your fights and climb to a world title. The damage never heals.', addedOn: '2026-09-16' },
       { path: '/fight-promoter', label: 'Fight Promoter', emoji: '🎟️', description: 'Run an MMA or boxing promotion. Sign fighters, build cards and crown champions.', addedOn: '2026-09-16' },
       { path: '/fight-gym', label: 'Fight Gym', emoji: '🥊', description: 'Sign fighters, pick their nights, take your cut, and decide when a man is finished.', addedOn: '2026-09-16' },

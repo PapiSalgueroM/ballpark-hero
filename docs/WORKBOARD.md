@@ -1,3 +1,19 @@
+## Codex1063 source preparation, 2026-10-06
+
+Cage Clash is implemented in its isolated branch, with original pixel art,
+real-time shared combat rules, contextual grappling and submissions, touch
+and keyboard controls, pause/help, setup example and completion scoring.
+Static review repaired guard recovery copy, explicit resume focus and guard
+animation. Remote preparation is next; no accepted or live claim yet.
+It will run actual engine/controller outcomes and effective controls, native
+phone/desktop fights, all16 built readers and existing combat regressions.
+Temporary push-only generation has a seven-file output fence and SHA manifest.
+No local runtime or production DB. Claude still owns accepted1062 publication;
+main0badf777 is the docs-only1063 claim merge and contains accepted MMA.
+PR145 https://github.com/PapiSalgueroM/ballpark-hero/pull/145 is docs only.
+Product1063 is not on main. Root drafts/seven stashes preserved. Next1064
+unclaimed. Use current main for publishing, preserve accepted PR144 in AF.
+
 ## Codex claims1063: Cage Clash pixel action MMA, 2026-10-06
 
 Anthony requests pixel sports action and hands-on MMA with grappling.

@@ -25,6 +25,10 @@ export interface SeoMeta {
 }
 
 export const SEO_META: Record<string, SeoMeta> = {
+  '/cage-clash': {
+    title: 'Cage Clash: Pixel MMA Fighting Game',
+    description: 'Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.',
+  },
   '/budget-builder': {
     title: '$1B Budget Builder: Soccer Squad Building Game',
     description: 'You get $1 billion and real market values. Pick a formation, sign eleven soccer players and see what rating your money actually bought. Free, no sign up.',

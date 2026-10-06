@@ -28,8 +28,8 @@ CageStyle='balanced'|'striker'|'grappler'.
 CageAction='jab'|'power'|'kick'|'grapple'|'submit'|'escape'.
 CageInput={move:-1|0|1,guard:boolean,action:CageAction|null}.
 CageFighter={x,health,stamina,style,action,actionTicks,hits,takedowns,
-damageDealt,blocked,controlTicks,submission}, all numeric where obvious.
-CageFight={seed,tick,phase:'fight'|'break'|'finished',
+damageDealt,blocked,controlTicks,submission,cooldown,posture}, numeric except style/action/posture.
+CageFight={seed,tick,cpuInput:CageInput,groundLevel:0|1|2,roundStart:{player:number,cpu:number},phase:'fight'|'break'|'finished',
 position:'standing'|'clinch'|'ground',top:'player'|'cpu'|null,
 round:1|2|3,remainingTicks,player:CageFighter,cpu:CageFighter,
 roundCards:{player:number,cpu:number}[],message:string,
@@ -40,7 +40,7 @@ stepCageFight(state,input): CageFight, pure one50ms step, CPU included.
 continueCageRound(state): CageFight, valid only at break.
 cageClashScore(state): number, terminal score bounded0..100.
 CAGE_TICK_MS=50, CAGE_ROUND_TICKS=900.
-If interface additions are needed, message root and Astra before changes.
+canCageAction(state,action,side): boolean and cageActionLabel(state,action,side): string are exported for contextual UI. Pose action also accepts idle/move/guard. Ground top jab=strike, power=postured heavy, kick=posture, grapple=pass, submit=hold, escape=stand. Bottom jab=strike, power disabled, kick=regain guard, grapple=sweep, submit=guard submission, escape=stand. If interface additions are needed, message root and Astra before changes.
 No premature fixed module-scope evaluation of imported engine values.
 
 Mechanics: bounded distance/collision, guard reduces strike damage/costs stamina,
@@ -50,6 +50,8 @@ Ground top/bottom and positional advantage matter. Submission builds real
 progress while applying a held action and can be resisted/escaped. Posture,
 ground strike/pass/sweep/escape are contextual actions, no automatic free win.
 CPU uses actual same legal inputs/costs, responds to range/guard/style.
+Positions use normalized0..100 coordinates, bounded10..90 with a minimum6
+separation. CPU intent lasts8 ticks so held guarding is visible and consistent.
 Deterministic seeded randomness, finite rounds, no duplicate terminal actions.
 
 Score: earned0..100. Win50, winning finish15, damage contribution up to20,
