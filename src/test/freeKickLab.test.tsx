@@ -147,8 +147,8 @@ describe('Free Kick Shot lab actual mounted outcomes', () => {
   it('changes and wraps the actual setup ladder with fresh comparison and attempt counts', () => {
     reducedMotion(); const view = enterLab();
     for (let index = 0; index <= 10; index++) {
-      expect(board(view)).toHaveAttribute('data-lab-setup', String(index % 10 + 1));
-      expect(board(view)).toHaveAttribute('data-lab-attempt', '0');
+      expect(board(view).getAttribute('data-lab-setup')).toBe(String(index % 10 + 1));
+      expect(board(view).getAttribute('data-lab-attempt')).toBe('0');
       expect(view.container.querySelectorAll('[data-lab-shot], [data-lab-path]')).toHaveLength(0);
       const result = shoot(); expect(result).toEqual(expected(DEFAULT, index % 10)); settle(view);
       expectDrawn(view, 'current', DEFAULT, result, 1);
@@ -159,7 +159,7 @@ describe('Free Kick Shot lab actual mounted outcomes', () => {
   it('stops wall traces at real contact and omits imaginary goal crossing readings', () => {
     reducedMotion(); const view = enterLab(); shoot(); fireEvent.click(button('Change setup'));
     const setup = buildRun(SEED)[1]; const wall = wallSpan(setup)!;
-    const blockedAim: Aim = { x: wall.hi > 0 ? .25 : -.25, y: .125, power: .7, curve: 0 };
+    const blockedAim: Aim = { x: wall.hi > 0 ? .25 : -.25, y: .25, power: .7, curve: 0 };
     const blocked = expected(blockedAim, 1); expect(blocked.hitWall).toBe(true); expect(blocked.path).toHaveLength(25);
     setAim(view, blockedAim); expect(shoot()).toEqual(blocked); settle(view);
     expectDrawn(view, 'current', blockedAim, blocked, 1);

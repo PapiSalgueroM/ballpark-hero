@@ -151,6 +151,13 @@ try {
     page.on('response', response => { if (response.url().startsWith(BASE) && response.status() >= 400) row.assetErrors.push(response.url() + ': ' + response.status()); });
     const board = page.locator('[data-free-kick-lab]'), button = name => board.getByRole('button', { name, exact: true });
     const pitch = () => board.locator('svg[role="img"]');
+    const dialogReady = async dialog => {
+      await dialog.waitFor({ state: 'visible' });
+      await page.waitForFunction(el => el.getAnimations({ subtree: true }).every(animation => !animation.pending && animation.playState !== 'running'), await dialog.elementHandle(), { timeout: 2000 });
+    };
+    const focusReady = async control => {
+      await page.waitForFunction(el => document.activeElement === el, await control.elementHandle(), { timeout: 2000 });
+    };
     const activate = async control => {
       const box = await control.boundingBox(); assert(box && box.width >= 43.5 && box.height >= 43.5, 'Action target at least 44px'); row.inputs++;
       if (profile.touch) await control.tap(); else { await control.focus(); await control.press('Enter'); }
@@ -167,7 +174,7 @@ try {
       if (profile.touch) await field.tap({ position }); else await field.click({ position }); row.inputs++;
       assert.equal(await board.getAttribute('data-arcade-phase'), 'aiming', 'Pitch input only aims');
     };
-    const inspect = async stage => { const value = await measure(page); geometry(value); row.layouts.push({ stage, ...value }); };
+    const inspect = async stage => { const value = await measure(page); row.layouts.push({ stage, ...value }); geometry(value); };
     const screenshot = async stage => { const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); row.screenshots.push(file); };
     const settings = () => Promise.all([POWER, BEND].map(name => board.getByRole('slider', { name, exact: true }).inputValue()));
     const settled = async attempt => {
@@ -188,23 +195,25 @@ try {
       });
       assert(row.fonts.length === 8 && row.fonts.every(face => face.loaded), 'Eight actual font faces loaded');
       const before = await protectedState(page);
-      await activate(entry); const dialog = page.getByRole('dialog', { name: 'Shot lab rules', exact: true }); await dialog.waitFor();
+      await activate(entry); const dialog = page.getByRole('dialog', { name: 'Shot lab rules', exact: true }); await dialogReady(dialog);
       assert(/example/i.test(await dialog.innerText()), 'Worked example appears before play');
       await inspect('preplay'); await screenshot('preplay');
-      await activate(dialog.getByRole('button', { name: 'Start Shot lab', exact: true })); await board.waitFor();
+      await activate(dialog.getByRole('button', { name: 'Start Shot lab', exact: true })); await dialog.waitFor({ state: 'hidden' }); await board.waitFor();
       assert.equal(await board.getAttribute('data-lab-setup'), '1');
       const power = board.getByRole('slider', { name: POWER, exact: true });
+      await focusReady(button('Kick'));
       assert(await button('Kick').evaluate(el => document.activeElement === el), 'Entry focuses Kick');
       await aim(-0.7, 0.7); await range(POWER, 0.6); await range(BEND, 0);
       const originalSettings = await settings();
       await power.press('Space'); row.inputs++;
       assert.equal(await board.getAttribute('data-arcade-phase'), 'aiming', 'Slider Space never kicks');
-      await activate(button('Shot lab rules')); await dialog.waitFor();
+      await activate(button('Shot lab rules')); await dialogReady(dialog);
       assert.equal(await board.getAttribute('data-arcade-paused'), 'true');
       await dialog.press('Space'); row.inputs++;
       assert.equal(await board.getAttribute('data-arcade-phase'), 'aiming', 'Modal Space never kicks');
       await inspect('reopened-rules'); await screenshot('rules');
       await dialog.press('Escape'); row.inputs++; await dialog.waitFor({ state: 'hidden' });
+      await focusReady(button('Shot lab rules'));
       assert(await button('Shot lab rules').evaluate(el => document.activeElement === el), 'Rules return focus to opener');
       await activate(button('Resume')); assert.deepEqual(await settings(), originalSettings);
       await inspect('aiming'); await screenshot('aiming');
@@ -302,7 +311,9 @@ try {
       assert.deepEqual(await page.evaluate(() => window.__labWrites), [], 'Reload does not write protected progress');
       await screenshot('daily-restored'); assert.deepEqual(row.errors, []); assert.deepEqual(row.assetErrors, []);
       row.passed = true; console.log(`${id}: repeat, Bend, wall, weak, pause, rules, held input, geometry and daily isolation passed.`);
-    } catch (error) { row.passed = false; row.error = String(error.stack || error); await screenshot('failure').catch(() => {}); console.error(`${id}: ${row.error}`); }
+    } catch (error) { row.passed = false; row.error = String(error.stack || error);
+      row.failureFocus = await page.evaluate(() => ({ tag: document.activeElement?.tagName, label: document.activeElement?.getAttribute('aria-label'), text: document.activeElement?.textContent, dialogs: [...document.querySelectorAll('[role="dialog"]')].map(el => el.getAttribute('data-state')) })).catch(() => null);
+      await screenshot('failure').catch(() => {}); console.error(`${id}: ${row.error}`); }
     finally { await context.close(); save(); }
   }
   assert.equal(report.controls.length, 3, 'Three effective restored DOM controls');
