@@ -39,7 +39,7 @@
       ],
       "resignings": [
         "Ben Mazzeo",
-        "Aurelio Vidmar (Head Coach – 2027-28)",
+        "Aurelio Vidmar (Head Coach: 2027-28)",
         "Harrison Delbridge",
         "Ryan Kalms",
         "Roland Ballah",
@@ -60,6 +60,7 @@
       "read": "2026-10-06"
     }
   },
+  "notes": [],
   "count": {
     "clubPage": 28,
     "staffSkipped": 3,

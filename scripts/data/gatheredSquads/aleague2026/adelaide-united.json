@@ -38,6 +38,10 @@
       "read": "2026-10-06"
     }
   },
+  "notes": [
+    "31 rows, one over the brief's band of 20 to 30: the club's squad page lists 31 players that ESPN or Transfermarkt also carry for 2026-27, and nobody is held out by guesswork. The bake round picks who sits out.",
+    "The offline market row for Panashe Madanha at Adelaide is stale: the league's transfer centre lists him under Adelaide's Outs and Western Sydney's Ins, and he is a row in western-sydney-wanderers.json."
+  ],
   "count": {
     "clubPage": 32,
     "staffSkipped": 0,

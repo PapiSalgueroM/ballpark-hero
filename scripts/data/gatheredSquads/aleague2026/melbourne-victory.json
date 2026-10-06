@@ -60,6 +60,9 @@
       "read": "2026-10-06"
     }
   },
+  "notes": [
+    "The club's squad page lists only 16 players. Seven more rows come from the league transfer centre's Ins and Re-signings, each confirmed by ESPN or Transfermarkt."
+  ],
   "count": {
     "clubPage": 16,
     "staffSkipped": 1,

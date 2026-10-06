@@ -58,15 +58,18 @@
       "read": "2026-10-06"
     }
   },
+  "notes": [
+    "The club page prints Jarrod Carluccio's card twice; he is one row."
+  ],
   "count": {
-    "clubPage": 29,
+    "clubPage": 28,
     "staffSkipped": 1,
-    "rows": 29,
+    "rows": 28,
     "heldOut": 0,
-    "twoHostRows": 29,
-    "birthDateKnown": 27,
-    "groupKnown": 29,
-    "minutesKnown": 25,
+    "twoHostRows": 28,
+    "birthDateKnown": 26,
+    "groupKnown": 28,
+    "minutesKnown": 24,
     "marketRows": 1,
     "perfPagesLoaded": 12
   },
@@ -1530,83 +1533,6 @@
           "name": "Hiroshi Ibusuki",
           "position": "Centre-Forward",
           "birthDate": "1991-02-27",
-          "match": "exact"
-        },
-        "from": "club squad page"
-      },
-      "notes": []
-    },
-    {
-      "name": "Jarrod Carluccio",
-      "position": "Attacker",
-      "group": "FWD",
-      "birthDate": "2001-02-08",
-      "minutes2025_26": 623,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Western Sydney Wanderers FC"
-        ]
-      },
-      "marketRow": null,
-      "facts": {
-        "name": [
-          "wswanderersfc.com.au",
-          "site.api.espn.com",
-          "transfermarkt.com"
-        ],
-        "group": [
-          "wswanderersfc.com.au",
-          "site.api.espn.com"
-        ],
-        "birthDate": [
-          "site.api.espn.com",
-          "transfermarkt.com"
-        ]
-      },
-      "sources": [
-        {
-          "host": "wswanderersfc.com.au",
-          "url": "https://wswanderersfc.com.au/squads/men",
-          "read": "2026-10-06",
-          "profile": "https://wswanderersfc.com.au/player/jarrod-carluccio/"
-        },
-        {
-          "host": "site.api.espn.com",
-          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/13696/roster?season=2026",
-          "read": "2026-10-06",
-          "id": "291377"
-        },
-        {
-          "host": "transfermarkt.com",
-          "url": "https://www.transfermarkt.com/western-sydney-wanderers/kader/verein/36100/saison_id/2026/plus/1",
-          "read": "2026-10-06",
-          "id": "749273"
-        }
-      ],
-      "seen": {
-        "club": {
-          "name": "Jarrod Carluccio",
-          "position": "Attacker",
-          "number": "17"
-        },
-        "espn": {
-          "id": "291377",
-          "name": "Jarrod Carluccio",
-          "position": "Forward",
-          "birthDate": "2001-02-08",
-          "match": "exact"
-        },
-        "tm": {
-          "id": "749273",
-          "name": "Jarrod Carluccio",
-          "position": "Right-Back",
-          "birthDate": "2001-02-08",
           "match": "exact"
         },
         "from": "club squad page"

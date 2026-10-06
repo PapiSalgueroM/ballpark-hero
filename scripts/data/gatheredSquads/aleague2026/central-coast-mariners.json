@@ -66,6 +66,11 @@
       "read": "2026-10-06"
     }
   },
+  "notes": [
+    "The club's own squad page still shows the 2025-26 squad: it names Warren Moon as head coach, while the league's transfer centre lists John Hutchinson as the incoming head coach and nine of the page's players under Outs. Those nine are held out.",
+    "Rows are the page's remaining players plus the transfer centre's Ins and Re-signings that ESPN or Transfermarkt confirm, so 13 rows rest on the league article rather than the club page.",
+    "Five players carried by both ESPN and Transfermarkt (see notOnClubPage) are named by neither the club page nor the league article, so they are not rows."
+  ],
   "count": {
     "clubPage": 21,
     "staffSkipped": 2,
