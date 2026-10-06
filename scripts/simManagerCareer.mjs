@@ -3,25 +3,98 @@
  * Before this, being sacked hired you again on the very same line, at a
  * random club, instantly. A sack with no consequence makes the whole job
  * free. This measures the new behaviour over many simulated manager careers.
+ *
+ * Round 1029 adds section 5: the dugout's final table is the manager's own
+ * league. It used to be every club in the world at his tier, so an Arsenal
+ * manager finished behind Boca and Flamengo. Over 8 pooled seeds (120
+ * careers a tier, 8 seasons each, a market job taken after every sack):
+ *   a) every named row of every table is a club of his league (the club his
+ *      save names, found by name or by the shared rivalry spelling, or the
+ *      league a market job came with), and no row is his own club again;
+ *   b) "of N" is printed exactly when N is the league's verified size;
+ *   c) direct probes: Arsenal names only Premier League clubs, a Manchester
+ *      City job (the market's spelling) never meets Man City, an RB Salzburg
+ *      job never meets Red Bull Salzburg;
+ *   d) the title, promotion and sack rates per tier stay inside main's band.
+ *      Main (1aaba4d5) measured with this exact loop, seeds 1 to 8, pooled
+ *      rate and the spread of one seed's rate (SD over the 8):
+ *        t1 title .1050 (sd .0119)  sack .1147 (.0109)
+ *        t2 title .0942 (.0111)  promo .1657 (.0133)  sack .1197 (.0141)
+ *        t3 title .0843 (.0093)  promo .1516 (.0123)  sack .0637 (.0075)
+ *        t4 title .0729 (.0079)  promo .1317 (.0088)
+ *      The band is main's pooled rate plus or minus 1.5 seed SDs, which is
+ *      about three standard errors of the gap between two 8 seed pools.
+ *      This branch measured: t1 .0981 / .1125; t2 .0871 / .1630 / .1200;
+ *      t3 .0855 / .1509 / .0592; t4 .0737 / .1312, the closest to an edge
+ *      being t1 title (.0110 of its .0179 room left) and t3 sack (.0068 of
+ *      .0113).
+ * Negative controls, SIM_MANAGER_CONTROL=<name>, each asserting the string
+ * it mutates exists first (exit 2 otherwise), each measured red:
+ *   tierfield  the old field (every club at his tier, topped up) is back
+ *   canon      his club is matched by its exact spelling only
+ *   words      a market club's look alike names are no longer dropped
+ *   ofsize     "of N" is printed for every league
+ *   field10    the unverified field shrinks from 20 to 10 clubs
  * Run: node scripts/simManagerCareer.mjs
  */
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-fs.writeFileSync(path.join(os.tmpdir(), 'mcEntry.mjs'), `
+const fwd = ROOT.replaceAll('\\', '/');
+const CONTROL = process.env.SIM_MANAGER_CONTROL ?? '';
+const CONTROLS = {
+  tierfield: { file: 'soccerCareerEngine.ts',
+    from: 'managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random)',
+    to: '{ league: null, size: 20, sizeVerified: false, named: [...clubs.filter(c => c.tier === ms.clubTier && c.name !== ms.club), ...clubs.filter(c => Math.abs(c.tier - ms.clubTier) === 1 && c.name !== ms.club)].slice(0, 19).map(c => c.name) }' },
+  canon: { file: 'soccerCareerLeague.ts', from: 'foldName(SC_CLUB_CANON[name] ?? name)', to: 'foldName(name)' },
+  words: { file: 'soccerCareerLeague.ts', from: ' && !nameWords(c.name).some(w => myWords.includes(w))', to: '' },
+  ofsize: { file: 'soccerCareerEngine.ts', from: 'const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";', to: 'const ofSize = ` of ${leagueSize}`;' },
+  field10: { file: 'soccerCareerLeague.ts', from: 'export const MANAGER_FIELD = 20;', to: 'export const MANAGER_FIELD = 10;' },
+};
+if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+let applied = false;
+const controlPlugin = { name: 'control', setup(b) {
+  b.onLoad({ filter: /soccerCareer(Engine|League)\.ts$/ }, args => {
+    let src = fs.readFileSync(args.path, 'utf8');
+    const c = CONTROLS[CONTROL];
+    if (c && args.path.replaceAll('\\', '/').endsWith(`/src/lib/${c.file}`)) {
+      if (!src.includes(c.from)) { console.error(`control ${CONTROL}: the string it mutates is not in ${c.file}`); process.exit(2); }
+      src = src.replace(c.from, c.to);
+      applied = true;
+    }
+    return { contents: src, loader: 'ts' };
+  });
+} };
+const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'simManagerCareer-'));
+process.on('exit', () => { try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ } });
+fs.writeFileSync(path.join(tmp, 'entry.mjs'), `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const e = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
-export const cm = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+export const e = await import('${fwd}/src/lib/soccerCareerEngine.ts');
+export const cm = await import('${fwd}/src/lib/clubManager.ts');
+export const lg = await import('${fwd}/src/lib/soccerCareerLeague.ts');
+export const rv = await import('${fwd}/src/data/clubRivalries.ts');
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${path.join(os.tmpdir(), 'mcEntry.mjs')}" --bundle --format=esm --platform=node --outfile="${path.join(os.tmpdir(), 'mc.mjs')}" --log-level=error`, { stdio:'inherit' });
-const { e, cm } = await import(pathToFileURL(path.join(os.tmpdir(), 'mc.mjs')).href);
+await build({ entryPoints: [path.join(tmp, 'entry.mjs')], bundle: true, format: 'esm', platform: 'node',
+  outfile: path.join(tmp, 'mc.mjs'), logLevel: 'error', alias: { '@': `${fwd}/src` }, plugins: [controlPlugin] });
+if (CONTROL && !applied) { console.error(`control ${CONTROL} never reached its file`); process.exit(2); }
+if (CONTROL) console.log(`CONTROL ${CONTROL} applied: this run is meant to go red`);
+const { e, cm, lg, rv } = await import(pathToFileURL(path.join(tmp, 'mc.mjs')).href);
 let failures = 0; const fail = s => { failures += 1; console.error('  FAIL: ' + s); };
+/** mulberry32, the same stream the Round 1029 bands were measured on. */
+function seedRandom(seed) {
+  let a = seed >>> 0;
+  Math.random = () => {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
 
 const CLUBS = cm.REAL_LEAGUES.flatMap(l => cm.playableClubs(l.id).map(c => ({ name:c.name, tier:c.tier })));
-
 /* Round 273. The job market is a separate download now, because a static
    import of it was putting the whole Club Manager engine in front of every
    Soccer Career player before the first screen. Two things follow, and this
@@ -151,6 +224,164 @@ console.log('4) Copy check');
   let bad=0;
   t.split('\n').forEach((l,i)=>{ if(/Round 111/.test(l) && /[–—]/.test(l)) { bad++; fail(`line ${i+1} has a dash`); } });
   if(!bad) console.log('   clean');
+}
+
+console.log('5) Round 1029: the final table is his own league');
+const FB = e.FALLBACK_CLUBS;
+const foldName = s => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
+const keyOf = n => foldName(rv.SC_CLUB_CANON[n] ?? n);
+const byName = new Map(FB.map(c => [c.name, c]));
+/** The league his table must be, worked out here and not by the engine: his
+ *  club found in the career's list by name or by the shared spelling, else
+ *  the list's league whose name matches the one his job came with. */
+function expectedLeague(club, jobLeague) {
+  const home = FB.find(c => keyOf(c.name) === keyOf(club));
+  if (home) return home.league;
+  if (!jobLeague) return null;
+  return FB.find(c => foldName(c.league) === foldName(jobLeague))?.league ?? null;
+}
+function seasonRow(year, tier) {
+  return { year, age: 28, club: 'Club', clubCountry: 'England', clubTier: tier, apps: 34, goals: 10,
+    assists: 5, cleanSheets: 0, yellowCards: 2, redCards: 0, rating: 7.1, leagueTitle: false, domesticCup: false,
+    championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: 'playing',
+    intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
+}
+function dugout(club, tier, lastYear, league) {
+  return { nationality: 'England', peakOverall: 80, intStats: { caps: 10 },
+    seasons: Array.from({ length: 12 }, (_, i) => seasonRow(lastYear - 11 + i, 2)), events: [], awards: [],
+    phase: 'manager_season', overall: 80, age: 40,
+    managerState: { club, clubTier: tier, season: 0, trophies: 0, promotions: 0, seasonResults: [],
+      nationalTeamOffer: false, managingNationalTeam: false, ...(league ? { league } : {}) } };
+}
+const cover = { seasons: 0, home: 0, market: 0, verified: 0, thin: 0, named: 0, unnamed: 0 };
+const bad = { league: 0, self: 0, ofN: 0, size: 0 };
+const firstBad = [];
+/** Every check of a) and b) on one employed season. */
+function checkSeason(s, club0, league0, lastYear) {
+  const ms = s.managerState;
+  const row = ms.seasonResults[ms.seasonResults.length - 1];
+  const want = expectedLeague(club0, league0);
+  const calYear = lastYear + ms.season;
+  cover.seasons += 1;
+  if (FB.some(c => keyOf(c.name) === keyOf(club0))) cover.home += 1; else cover.market += 1;
+  if (row.sizeVerified) cover.verified += 1;
+  const rivals = (row.table ?? []).filter(r => !r.you);
+  if (!rivals.some(r => !r.unnamed)) cover.thin += 1;
+  for (const r of rivals) {
+    if (r.unnamed) { cover.unnamed += 1; if (r.club) { bad.league += 1; firstBad.push(`unnamed row carries a name ${r.club}`); } continue; }
+    cover.named += 1;
+    const got = byName.get(r.club)?.league ?? '(not a club of the list)';
+    if (got !== want) { bad.league += 1; if (firstBad.length < 6) firstBad.push(`${club0} (${want}) S${ms.season}: ${r.club} is ${got}`); }
+    if (keyOf(r.club) === keyOf(club0)) { bad.self += 1; if (firstBad.length < 6) firstBad.push(`${club0} meets himself as ${r.club}`); }
+  }
+  const printsOf = / of \d+/.test(row.result);
+  if (printsOf !== !!row.sizeVerified) { bad.ofN += 1; if (firstBad.length < 6) firstBad.push(`${club0}: "${row.result.slice(0, 40)}" with sizeVerified ${row.sizeVerified}`); }
+  const real = row.league ? lg.leagueSizeFor(row.league, calYear) : null;
+  if (row.sizeVerified ? row.leagueSize !== real : real !== null) { bad.size += 1; if (firstBad.length < 6) firstBad.push(`${row.league} ${calYear}: size ${row.leagueSize}, verified ${real}`); }
+  return row;
+}
+const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8], CAREERS_PER_TIER = 120, SEASONS = 8;
+const stat = {};
+const bump = (t, k) => { stat[t] ??= { seasons: 0, title: 0, promo: 0, sack: 0 }; stat[t][k] += 1; };
+for (const seed of SEEDS) {
+  seedRandom(0x1029a + seed * 7919);
+  for (const tier of [1, 2, 3, 4]) {
+    const pool = FB.filter(c => c.tier === tier);
+    for (let k = 0; k < CAREERS_PER_TIER; k++) {
+      const lastYear = k % 4 === 0 ? 1996 : 2030;
+      let s = dugout(pool[k % pool.length].name, tier, lastYear);
+      for (let y = 0; y < SEASONS; y++) {
+        if (s.managerState.unemployed) {
+          if ((s.managerState.offers ?? []).length) s = e.acceptManagerOffer(s, 0);
+          else { s = e.advanceManagerSeason(s, FB); continue; }
+        }
+        const t0 = s.managerState.clubTier, c0 = s.managerState.club, l0 = s.managerState.league;
+        s = e.advanceManagerSeason(s, FB);
+        const row = checkSeason(s, c0, l0, lastYear);
+        const ms = s.managerState;
+        const tk = Math.max(1, Math.min(5, t0));
+        bump(tk, 'seasons');
+        if (row.playerPos === 1) bump(tk, 'title');
+        if (ms.unemployed) bump(tk, 'sack');
+        else if (ms.club === c0 && ms.clubTier === t0 - 1) bump(tk, 'promo');
+      }
+    }
+  }
+}
+console.log(`   ${cover.seasons} seasons: ${cover.home} at a club of the list, ${cover.market} at a market club, ${cover.verified} with a verified size, ${cover.thin} with no rival to name`);
+console.log(`   ${cover.named} named rows checked, ${cover.unnamed} unnamed; wrong league ${bad.league}, himself twice ${bad.self}, "of N" wrong ${bad.ofN}, size wrong ${bad.size}`);
+for (const f of firstBad.slice(0, 6)) console.log(`     e.g. ${f}`);
+/* coverage floors, about half of what this branch measured (29311 seasons:
+   28814 at a club of the list, 497 at a market club, 9471 with a verified
+   size, 8340 with no rival to name, 63756 named rows); a run that skips a
+   path proves nothing about it */
+if (cover.home < 14000 || cover.market < 250 || cover.verified < 4500 || cover.thin < 4000 || cover.named < 30000) {
+  fail(`a path went unexercised: ${JSON.stringify(cover)}`);
+}
+if (bad.league) fail(`${bad.league} named rows are not clubs of the manager's league`);
+if (bad.self) fail(`${bad.self} tables name the manager's own club as a rival`);
+if (bad.ofN) fail(`${bad.ofN} result lines print "of N" when the size is not verified, or leave it out when it is`);
+if (bad.size) fail(`${bad.size} tables disagree with the verified league size`);
+/* c) the three cases the round was written for, each six seasons */
+const probe = (club, tier, league, check) => {
+  seedRandom(0x1029);
+  let s = dugout(club, tier, 2030, league);
+  const seen = new Set();
+  for (let y = 0; y < 6; y++) {
+    if (s.managerState.unemployed) break;
+    s = e.advanceManagerSeason(s, FB);
+    const row = s.managerState.seasonResults[s.managerState.seasonResults.length - 1];
+    for (const r of row.table ?? []) if (!r.you && !r.unnamed) seen.add(r.club);
+    check(row);
+  }
+  return [...seen];
+};
+{
+  const arsenal = probe('Arsenal', 1, undefined, row => {
+    if (row.league !== 'Premier League' || !row.sizeVerified || row.leagueSize !== 20) fail(`Arsenal played in ${row.league} of ${row.leagueSize}`);
+  });
+  const stray = arsenal.filter(n => byName.get(n)?.league !== 'Premier League');
+  console.log(`   Arsenal met ${arsenal.length} named clubs, ${stray.length} from outside the Premier League${stray.length ? ': ' + stray.slice(0, 4).join(', ') : ''}`);
+  if (!arsenal.length || stray.length) fail('an Arsenal table names a club from outside the Premier League');
+  const city = probe('Manchester City', 1, 'Premier League', () => {});
+  console.log(`   a Manchester City job met ${city.length} named clubs; Man City among them: ${city.includes('Man City')}`);
+  if (!city.length || city.includes('Man City')) fail('a Manchester City job meets Man City in its own table');
+  const salzburg = probe('RB Salzburg', 3, 'Austrian Bundesliga', row => {
+    if (row.league !== 'Austrian Bundesliga') fail(`an RB Salzburg job played in ${row.league}`);
+  });
+  console.log(`   an RB Salzburg job named ${salzburg.length ? salzburg.join(', ') : 'nobody'}`);
+  if (salzburg.includes('Red Bull Salzburg')) fail('an RB Salzburg job meets Red Bull Salzburg in its own table');
+}
+/* d) rates per tier against main's band (numbers in the header) */
+{
+  const MAIN = {
+    '1.title': [0.1050, 0.0119], '1.sack': [0.1147, 0.0109],
+    '2.title': [0.0942, 0.0111], '2.promo': [0.1657, 0.0133], '2.sack': [0.1197, 0.0141],
+    '3.title': [0.0843, 0.0093], '3.promo': [0.1516, 0.0123], '3.sack': [0.0637, 0.0075],
+    '4.title': [0.0729, 0.0079], '4.promo': [0.1317, 0.0088],
+  };
+  const out = [];
+  for (const [key, [mean, sd]] of Object.entries(MAIN)) {
+    const [t, k] = key.split('.');
+    const v = stat[t] ? stat[t][k] / stat[t].seasons : NaN;
+    const lo = mean - 1.5 * sd, hi = mean + 1.5 * sd;
+    out.push(`t${key} ${v.toFixed(4)}`);
+    if (!(v >= lo && v <= hi)) fail(`tier ${t} ${k} rate ${v.toFixed(4)} left main's band ${lo.toFixed(4)} to ${hi.toFixed(4)}`);
+  }
+  console.log(`   rates: ${out.join(', ')}`);
+}
+/* the dash rule on this round's own lines */
+{
+  const dash = new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`);
+  for (const f of ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeague.ts', 'src/pages/SoccerCareer.tsx']) {
+    const lines = fs.readFileSync(path.join(ROOT, f), 'utf8').split('\n');
+    let inRound = false;
+    lines.forEach((l, i) => {
+      if (/Round 1029/.test(l)) inRound = true;
+      else if (/Round \d+/.test(l)) inRound = false;
+      if (inRound && dash.test(l)) fail(`${f}:${i + 1} has a dash`);
+    });
+  }
 }
 console.log(failures===0 ? '\nALL MANAGER CAREER CHECKS PASSED' : `\n${failures} FAILURES`);
 process.exit(failures===0?0:1);
