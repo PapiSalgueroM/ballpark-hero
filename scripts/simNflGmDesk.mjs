@@ -14,23 +14,33 @@
  *      man is still here (or retired), a man let go is gone; a man drafted
  *      with the desk on comes up after exactly four seasons, a first rounder
  *      with the fifth year option on his case; a man the GM tags never
- *      reaches the desk and plays the year on the tag (Round 723 kept)
+ *      reaches the desk and plays the year on the tag (Round 723 kept); and
+ *      the board itself (read, not replayed) runs the summer and the draft
+ *      through the desk
  *   3  no trade lands after the deadline, and deals do land before it; the
  *      window shuts once Week 10 is played (what the guide says), the older
  *      trade paths' refusal agrees with it every week, and each of the
- *      board's four old trade handlers asks it first
+ *      board's four old trade handlers asks it first; the two that complete
+ *      a deal check the cap with the dead money counted first; every club
+ *      holding one of the seven seeds a conference buys (a weak division
+ *      leader too, on built standings), and a package is priced off the
+ *      partner's stance, both sides of it
  *   4  picks are conserved league wide: every club's pick in every round of
  *      every year carried exists exactly once, after every deal and summer,
  *      and every engine list is the ledger's
  *   5  the staff's effects change their consumer at every level step: the
  *      win probability, the scouting miss, the weeks an injury costs, for
  *      the whole staff and for each post on its own, each edge post reaching
- *      the strength by exactly the engine's own weight for its side of the ball
+ *      the strength by exactly the engine's own weight for its side of the
+ *      ball; and the board hands the staff to every game, injury and playoff
  *   6  migration keeps every marker, a corrupt block resets alone, a traded
  *      man's contract moves whole and his old club keeps the dead money the
- *      rule sets (nothing for a tagged man), kept salary is refused in the
- *      NFL's own words, and the dead money is gone after the summer
- *   7  every desk panel draws (server rendered), and the re-sign desk draws a
+ *      rule sets (nothing for a tagged man, on a trade that must land), kept
+ *      salary is refused in the NFL's own words, the dead money is gone after
+ *      the summer, and the package cap check counts it (a built case either
+ *      side of the line)
+ *   7  every desk panel draws (server rendered), an old save's Staff and
+ *      Re-sign boxes claim nothing the game is not doing, and the re-sign desk draws a
  *      tile for every expiring man; the deal box says shut only with the desk on
  * Negative controls (SIM_NFL_GM_DESK_CONTROL), each must go red in its check:
  *   coinflip   the summer runs the engine's own offseason, coin flip and all  (2)
@@ -43,6 +53,14 @@
  *   onepost    the defense key misspelt, so that coordinator does nothing   (5)
  *   nodefault  the engine's win probability reads an edge by default        (1)
  *   nodead     a trade leaves no dead money behind                          (6)
+ *   boardsummer  the board's finishDraft never runs the desk summer         (2)
+ *   boarddraftee the board's draftProspect skips the rookie deal            (2)
+ *   boardedges   the board's playWeek drops the staff edge from the games   (5)
+ *   stancespots  buyers are the top seven by record, not the seeds held      (3)
+ *   stanceswap   a package is priced off the user's stance, not the partner's (3)
+ *   nocapguard   the trade finder's accept skips the dead money cap check    (3)
+ *   reliefnodead the package cap check forgets the dead money a leaver keeps (6)
+ *   staletiles   an old save's Staff box claims an edge no game applies      (7)
  * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nflGmDeskFixture.json from that engine.
  *
@@ -90,6 +108,8 @@ const RECORD = process.env.SIM_NFL_GM_DESK_RECORD || '';
 const CONTROLS = {
   coinflip: '2', shortrookie: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatstep: '5', onepost: '5', nodefault: '1', nodead: '6',
+  boardsummer: '2', boarddraftee: '2', boardedges: '5', stancespots: '3', stanceswap: '3', nocapguard: '3', reliefnodead: '6',
+  staletiles: '7',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NFL_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -152,6 +172,16 @@ const EDITS = {
   nodefault: ['engine', 'export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0): number {',
     'export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0.5, edgeAway = 0): number {'],
   nodead: ['desk', '    if (amount <= 0) continue;', '    if (amount <= 0 || amount > 0) continue;'],
+  /* The board's own wiring: the walk replays the board's calls, so only a read of the board can see it drop one. */
+  boardsummer: ['board', '      const summer = deskNow ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;',
+    '      const summer = deskNow && false ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;'],
+  boarddraftee: ['board', '      if (pl && gm) nflSignDraftee(pl);\n', ''],
+  boardedges: ['board', 'simGame(g, lg.teams, Math.random, deskWeek.edges)', 'simGame(g, lg.teams, Math.random)'],
+  stancespots: ['desk', 'deadlineStances(rows, NFL_PLAYOFF_SPOTS, nflPlacedClubs(league))', 'deadlineStances(rows, NFL_PLAYOFF_SPOTS)'],
+  stanceswap: ['desk', "  const stance = nflStances(league)[partner] ?? 'holding';", "  const stance = nflStances(league)[team] ?? 'holding';"],
+  nocapguard: ['board', '    if (deskCapBlock(lg, o.teamId, myTradePiece, o.playerId)) { setShopOffers([]); setShopTried(false); return; }\n', ''],
+  reliefnodead: ['desk', 'if (p) outRelief += p.salary - nflTradeDeadMoney(p);', 'if (p) outRelief += p.salary;'],
+  staletiles: ['desk', "  if (!on) return { icon: '📋',", "  if (on && !on) return { icon: '📋',"],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -185,6 +215,7 @@ export * as C from '${ROOT_URL}/src/lib/gmContracts.ts';
 export * as P from '${ROOT_URL}/src/lib/gmPicks.ts';
 export * as S from '${ROOT_URL}/src/lib/gmStaff.ts';
 export * as G from '${ROOT_URL}/src/lib/gmDesk.ts';
+export * as DL from '${ROOT_URL}/src/lib/gmDeadline.ts';
 export { deadMoneyFor } from '${ROOT_URL}/src/lib/frontOfficeCuts.ts';
 export { NFL_STAFF_PACK } from '${ROOT_URL}/src/data/gmStaff/packs.ts';
 export { nflContractHost } from '${ROOT_URL}/src/lib/gmContractsHostNfl.ts';
@@ -218,7 +249,19 @@ await esbuild.build({
   }
 }
 const M = createRequire(import.meta.url)(BUNDLE);
-const { E, D, C, P, S, G, NFL_STAFF_PACK, nflContractHost: HOST, leagueNames, FO_DEPTH, deadMoneyFor } = M;
+const { E, D, C, P, S, G, DL, NFL_STAFF_PACK, nflContractHost: HOST, leagueNames, FO_DEPTH, deadMoneyFor } = M;
+
+/* The board's code (a control's rewrite when one is on), every comment
+   stripped so prose about a call can never stand in for the call, and one
+   handler's body by name: from its `const name = (` to the next handler. */
+const boardCode = (overrides.get(path.resolve(FILES.board).toLowerCase()) ?? lf(fs.readFileSync(FILES.board, 'utf8')))
+  .replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+const boardBody = name => {
+  const at = boardCode.indexOf(`  const ${name} = (`);
+  if (at < 0) return null;
+  const end = boardCode.indexOf('\n  const ', at + 10);
+  return boardCode.slice(at, end < 0 ? undefined : end);
+};
 
 /* ---- seeded draws and the board's own call order ---- */
 function mulberry32(seed) {
@@ -349,6 +392,7 @@ console.log(`   ${idCompared} seasons replayed against ${fixture.recordedFrom}`)
 const stats = {
   decisions: 0, gm: 0, auto: 0, earlyDeals: 0, lateTries: 0, lateDeals: 0, pickMoves: 0, deadDeals: 0,
   pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, drafteesUp: 0, options: 0, tagged: 0, refusalChecks: 0,
+  seedChecks: 0, recordMisses: 0,
 };
 const problems = { s2: [], s3: [], s4: [], s6: [] };
 const ids = lg => Object.keys(lg.teams);
@@ -441,9 +485,25 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     lg.schedule[lg.week - 1].map(g => E.simGame(g, lg.teams, rng, opts.edges));
     desk = D.nflDeskAfterWeek(desk, lg, team).desk;
     if (lg.week === D.nflTradeWindow(lg).deadlineAfter) {
-      const st = Object.values(D.nflStances(lg));
+      const stances = D.nflStances(lg);
+      const st = Object.values(stances);
       stats.buyers += st.filter(x => x === 'buyer').length;
       stats.sellers += st.filter(x => x === 'seller').length;
+      /* Every club holding a seed in the bracket the engine plays is a buyer
+         (what the Trade desk says), seven a conference. */
+      const placed = D.nflPlacedClubs(lg);
+      for (const conf of ['AFC', 'NFC']) {
+        const n = [...placed].filter(k => E.conferenceOf(k) === conf).length;
+        if (n !== D.NFL_PLAYOFF_SPOTS) problems.s3.push(`${where}: ${n} ${conf} clubs hold a seed, the bracket has ${D.NFL_PLAYOFF_SPOTS}`);
+      }
+      for (const k of placed) {
+        stats.seedChecks++;
+        if (stances[k] !== 'buyer') problems.s3.push(`${where}: ${k} holds a playoff seed at the deadline and is ${stances[k]}, not a buyer`);
+      }
+      /* How often a cut by record alone would have missed a seed holder. */
+      const rows = Object.values(lg.teams).map(t => ({ id: t.abbr, wins: t.wins, losses: t.losses, group: E.conferenceOf(t.abbr) }));
+      const byRecord = DL.deadlineStances(rows, D.NFL_PLAYOFF_SPOTS).stance;
+      stats.recordMisses += [...placed].filter(k => byRecord[k] !== 'buyer').length;
     }
     if (lg.week >= E.REGULAR_WEEKS) break;
     lg.week += 1;
@@ -534,6 +594,22 @@ if (stats.drafteesUp < T.minDrafteesUp) fail(`only ${stats.drafteesUp} draftees 
 if (stats.options < T.minOptions) fail(`only ${stats.options} first rounders came up with the option, floor ${T.minOptions}`);
 if (stats.tagged < T.minTagged) fail(`only ${stats.tagged} tags walked, floor ${T.minTagged}`);
 console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM, ${stats.auto} by the staff's rule; ${stats.drafteesUp} draftees came up after exactly four seasons, ${stats.options} with the option; ${stats.tagged} tagged men held by the tag`);
+{
+  /* The walk replays the board's call order, so it cannot see the board drop
+     a call. Read the board itself: with the desk on, the summer runs through
+     the desk and the engine's own offseason only without it; a draftee signs
+     the rules' rookie deal and the desk learns his round, read before the
+     pick is spent; and the last pick hands the summer the desk. */
+  const fin = boardBody('finishDraft') ?? '', dp = boardBody('draftProspect') ?? '';
+  if (!fin.includes('const summer = deskNow ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;')) fail('the board\'s finishDraft no longer runs the summer through nflDeskOffseason whenever the desk is on');
+  if (!fin.includes('summer?.news ?? runOffseason(')) fail('the board\'s finishDraft runs the engine\'s own offseason when the desk summer ran');
+  const iRound = dp.indexOf('const pickRound = mine.picks[0];'), iSpend = dp.indexOf('consumeDraftPick(mine)');
+  if (iRound < 0 || iSpend < 0 || iRound > iSpend) fail('the board\'s draftProspect does not read the pick\'s round before it spends the pick');
+  if (!dp.includes('if (pl && gm) nflSignDraftee(pl);')) fail('the board\'s draftProspect no longer signs a draftee to the rules\' four year rookie deal with the desk on');
+  if (!dp.includes("nflNoteArrivals(gm, lg, myTeam, [pl.id], 'draft', pickRound)")) fail('the board\'s draftProspect no longer tells the re-sign desk the draftee\'s round');
+  if (!dp.includes('finishDraft(lg, note, deskNow ?? gm)')) fail('the board\'s last pick hands the summer no desk');
+  console.log('   the board runs the summer and the draft through the desk (read from FrontOfficeBoard.tsx)');
+}
 
 begin('3', 'no trade lands after the deadline, and deals do land before it');
 for (const p of problems.s3) fail(p);
@@ -541,20 +617,54 @@ if (stats.earlyDeals < T.minEarlyDeals) fail(`only ${stats.earlyDeals} deals bef
 if (stats.lateTries < T.minLateTries) fail(`only ${stats.lateTries} tries after the deadline, floor ${T.minLateTries}`);
 if (!(stats.buyers > 0 && stats.sellers > 0)) fail(`the deadline split nobody: ${stats.buyers} buyers, ${stats.sellers} sellers`);
 console.log(`   ${stats.earlyDeals} deals before the deadline, ${stats.lateTries} tries after it, ${stats.lateDeals} landed; ${stats.buyers} buyer and ${stats.sellers} seller places at the deadline`);
+if (stats.seedChecks !== 14 * SEEDS.length * SEASONS) fail(`${stats.seedChecks} seed holders checked at the deadline, wanted 14 a season`);
+console.log(`   ${stats.seedChecks} seed holders at the deadline, every one a buyer; a cut by record alone would have missed ${stats.recordMisses}`);
+{
+  /* Built standings, so the pricing never waits on the walk to meet a case.
+     (a) A weak division leader: every club 6-3 except one AFC division,
+     whose leader is 4-5 and the rest 3-6. He holds a seed, so he buys,
+     though a cut by record alone puts him behind twelve 6-3 clubs. */
+  const lw = newLeague(mulberry32(33));
+  lw.week = 10;
+  const afc = Object.keys(lw.teams).filter(k => E.conferenceOf(k) === 'AFC').sort();
+  const weak = afc.filter(k => E.divisionOf(k) === E.divisionOf(afc[0]));
+  for (const t of Object.values(lw.teams)) { t.wins = 6; t.losses = 3; }
+  weak.forEach((k, i) => { lw.teams[k].wins = i === 0 ? 4 : 3; lw.teams[k].losses = i === 0 ? 5 : 6; });
+  const lead = weak[0];
+  if (!D.nflPlacedClubs(lw).has(lead)) fail(`built standings: ${lead} leads its division at 4-5 and holds no seed`);
+  else if (D.nflStances(lw)[lead] !== 'buyer') fail(`built standings: ${lead} leads its division at 4-5, holds a seed and is ${D.nflStances(lw)[lead]}, not a buyer`);
+  /* (b) The partner's stance prices the deal, both sides of it: a 9-0 club
+     buys and a 0-9 club sells while you sit 4-5 with everyone else, so a
+     price off your own stance reads the same for both and fails one. */
+  const lp = newLeague(mulberry32(34));
+  lp.week = 10;
+  for (const t of Object.values(lp.teams)) { t.wins = 4; t.losses = 5; }
+  const others = Object.keys(lp.teams).filter(k => k !== TEAM).sort();
+  const hot = others.find(k => E.conferenceOf(k) === 'AFC'), cold = others.find(k => E.conferenceOf(k) === 'NFC');
+  lp.teams[hot].wins = 9; lp.teams[hot].losses = 0;
+  lp.teams[cold].wins = 0; lp.teams[cold].losses = 9;
+  const dp = D.openNflDesk(lp, TEAM);
+  const myVet = lp.teams[TEAM].players.find(p => p.age >= DL.VETERAN_AGE);
+  for (const [partner, want] of [[hot, 'buyer'], [cold, 'seller']]) {
+    const st = D.nflStances(lp)[partner];
+    if (st !== want) { fail(`built standings: ${partner} is ${st}, wanted ${want}`); continue; }
+    const ctx = D.nflPackageContext(lp, dp, TEAM, partner);
+    const theirVet = lp.teams[partner].players.find(p => p.age >= DL.VETERAN_AGE);
+    for (const vet of [theirVet, myVet]) {
+      if (!vet) { fail(`no veteran to price on ${partner} or ${TEAM}`); continue; }
+      const got = ctx.valueOf({ kind: 'player', id: vet.id });
+      const wantV = DL.stanceValue(want, E.tradeValue(vet), vet.age);
+      if (Math.abs(got - wantV) > 1e-9) fail(`a package to a ${want} (${partner}) prices ${vet.name} at ${got.toFixed(2)}, the ${want}'s weight makes ${wantV.toFixed(2)}`);
+    }
+  }
+}
 {
   /* The board's older trade paths are guarded in the board itself, so read
      it: the code, with every comment stripped, so prose about the guard can
      never stand in for the guard. Each handler that opens or closes a deal
      asks deadlineBlock() before it touches the trade engine, and
      deadlineBlock asks nflDeadlineRefusal, the refusal checked above. */
-  const raw = overrides.get(path.resolve(FILES.board).toLowerCase()) ?? lf(fs.readFileSync(FILES.board, 'utf8'));
-  const code = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
-  const body = name => {
-    const at = code.indexOf(`  const ${name} = (`);
-    if (at < 0) return null;
-    const end = code.indexOf('\n  const ', at + 10);
-    return code.slice(at, end < 0 ? undefined : end);
-  };
+  const body = boardBody;
   const guard = body('deadlineBlock');
   if (!guard || !guard.includes('nflDeadlineRefusal(league)')) fail('deadlineBlock no longer asks nflDeadlineRefusal');
   const paths = { openTradeTalks: 'openTalks(', acceptTalks: 'executeTalksTrade(', doShop: 'findTrades(', acceptShopOffer: 'proposeTrade(' };
@@ -574,6 +684,18 @@ console.log(`   ${stats.earlyDeals} deals before the deadline, ${stats.lateTries
   }
   const after = body('deskAfterTrade');
   if (!after || !after.includes('nflApplyTradeDeadMoney(') || !after.includes('nflMirrorPickMove(')) fail('deskAfterTrade no longer leaves dead money or mirrors the pick');
+  /* And they check the cap with the dead money counted (the package's own
+     nflPackageCapCheck) before the engine runs them, so an older path can
+     never leave a club over the cap that a package would have refused; the
+     trade finder lists only deals that pass it. */
+  const capGuard = body('deskCapRefusal');
+  if (!capGuard || !capGuard.includes('nflPackageCapCheck(')) fail('deskCapRefusal no longer asks nflPackageCapCheck');
+  for (const [name, engineCall] of [['acceptTalks', 'executeTalksTrade('], ['acceptShopOffer', 'proposeTrade(']]) {
+    const b = body(name) ?? '';
+    const g = b.indexOf('deskCapBlock('), t = b.indexOf(engineCall);
+    if (g < 0 || t < 0 || g > t) fail(`${name} reaches ${engineCall} without the dead money cap check (deskCapBlock) first`);
+  }
+  if (!(body('doShop') ?? '').includes('deskCapRefusal(')) fail('the trade finder lists deals the dead money cap check would refuse');
   console.log(`   ${stats.refusalChecks} weeks where the trade paths' refusal matched the window; ${guarded} of 4 board trade handlers ask the deadline first`);
 }
 
@@ -658,6 +780,16 @@ console.log(`   each post alone: ${postLines.join('; ')}`);
   if (Object.keys(opts.edges).join() !== TEAM) fail(`the desk hands an edge to ${J(Object.keys(opts.edges))}`);
   if (opts.weeksFor('BUF', { id: 'x' }, 3) !== 3) fail('the user trainer shortened a rival injury');
 }
+{
+  /* The ladder above is the desk's; the board is what hands it to the
+     games. Read it: with the desk on, every game of the week, the injury
+     pass and the playoffs get the staff. */
+  const pw = boardBody('playWeek') ?? '';
+  if (!pw.includes('const deskWeek = gm ? nflDeskWeekOptions(gm, lg, myTeam) : null;')) fail('the board\'s playWeek no longer asks the desk for the week');
+  if (!pw.includes('simGame(g, lg.teams, Math.random, deskWeek.edges)')) fail('the board\'s playWeek plays the week without the staff edge');
+  if (!pw.includes('injuryPass(lg.teams, Math.random, deskWeek.weeksFor)')) fail('the board\'s playWeek runs injuries without the trainer');
+  if (!pw.includes('runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined)')) fail('the board\'s playoffs run without the staff edge');
+}
 console.log(`   edge ${ladder[0].edge.toFixed(2)} to ${ladder[9].edge.toFixed(2)}, win ${ladder[0].win.toFixed(3)} to ${ladder[9].win.toFixed(3)}, miss ${ladder[0].miss.toFixed(2)} to ${ladder[9].miss.toFixed(2)}, weeks out ${ladder[0].out.toFixed(2)} to ${ladder[9].out.toFixed(2)}`);
 
 /* ================================================================== */
@@ -690,7 +822,7 @@ console.log(`   ${stats.deadDeals} walk deals left dead money on your cap, every
   let desk = D.openNflDesk(lg, TEAM);
   const me = lg.teams[TEAM];
   const share = D.NFL_TRADE_BONUS_SHARE;
-  const ruleDead = p => Math.min(deadMoneyFor(p).now, Math.round(p.salary * share * Math.min(5, Math.max(1, p.years)) * 10) / 10);
+  const ruleDead = p => Math.min(deadMoneyFor(p).now, Math.round(p.salary * share * Math.max(1, p.years) * 10) / 10);
   const pick = filter => [...me.players].filter(filter).sort((a, b) => E.tradeValue(b) - E.tradeValue(a))[0];
   const send = pick(p => p.years >= 2 && !p.guaranteed && p.salary >= 3 && p.salary <= 15);
   if (!send) fail('no man on the user club to walk the trade rule with');
@@ -727,10 +859,41 @@ console.log(`   ${stats.deadDeals} walk deals left dead money on your cap, every
   else {
     E.applyFranchiseTag(lt, mt, tagMe.id);
     if (D.nflTradeDeadMoney(tagMe) !== 0) fail(`a tagged man leaves ${D.nflTradeDeadMoney(tagMe)} of dead money`);
-    const back = byValue(lt.teams.LV.players)[0];
-    const r = D.nflProposePackage(lt, dt, TEAM, { from: TEAM, to: 'LV', give: [{ kind: 'player', id: tagMe.id }], get: [{ kind: 'player', id: back.id }] });
-    if (r.verdict.verdict === 'accepted' && (mt.deadCap ?? []).some(x => x.playerId === tagMe.id)) fail('trading a tagged man left dead money behind');
+    /* To the club with the most cap room, for its last third rounder, so the
+       tag's salary fits and the price is met: a refusal would leave the
+       check below unasked. */
+    const room = abbr => lt.cap - E.capUsed(lt.teams[abbr]);
+    const to = Object.keys(lt.teams).filter(k => k !== TEAM).sort((a, b) => room(b) - room(a) || a.localeCompare(b))[0];
+    const third = P.picksHeldBy(D.nflPicksOf(dt, lt), to).filter(p => p.round === 3).pop();
+    const r = D.nflProposePackage(lt, dt, TEAM, { from: TEAM, to, give: [{ kind: 'player', id: tagMe.id }], get: third ? [{ kind: 'pick', key: P.pickKey(third) }] : [] });
+    if (r.verdict.verdict !== 'accepted') fail(`a tagged man for ${to}'s third rounder was refused, so the tag's dead money went unchecked: ${J(r.verdict)}`);
+    else if ((mt.deadCap ?? []).some(x => x.playerId === tagMe.id)) fail('trading a tagged man left dead money behind');
   }
+}
+{
+  /* The package cap check counts the dead money a leaver keeps. A 10M man
+     with three years left keeps 4.5M behind, so sending him frees 5.5M, not
+     10M. For a 20M man coming back, the engine's matching rule then wants
+     20 > 5.5 x 1.5 + 5, which holds, and with the cap set 12M above the
+     payroll the club ends 2.5M over it: refused. Forget the dead money and
+     the matching rule wants 20 > 10 x 1.5 + 5, which does not hold, so it
+     would pass. With the cap 15M above, the deal fits: passed. */
+  const lc = newLeague(mulberry32(69));
+  const me = lc.teams[TEAM];
+  const out = byValue(me.players).find(p => !p.guaranteed);
+  const to = Object.keys(lc.teams).filter(k => k !== TEAM).sort()[0];
+  const inc = byValue(lc.teams[to].players).find(p => !p.guaranteed);
+  out.salary = 10; out.years = 3;
+  inc.salary = 20; inc.years = 1;
+  const pkg = { from: TEAM, to, give: [{ kind: 'player', id: out.id }], get: [{ kind: 'player', id: inc.id }] };
+  if (D.nflTradeDeadMoney(out) !== 4.5) fail(`a 10M man with three years left keeps ${D.nflTradeDeadMoney(out)} behind, the rule makes 4.5`);
+  lc.cap = Math.round((E.capUsed(me) + 12) * 10) / 10;
+  const over = D.nflPackageCapCheck(lc, pkg);
+  if (!over || !over.includes('over the cap')) fail(`a deal that leaves ${TEAM} 2.5M over the cap once the dead money is counted passed the package cap check: ${J(over)}`);
+  lc.cap = Math.round((E.capUsed(me) + 15) * 10) / 10;
+  const fits = D.nflPackageCapCheck(lc, pkg);
+  if (fits !== null) fail(`a deal that fits under the cap with the dead money counted was refused: ${J(fits)}`);
+  console.log(`   the package cap check counts a leaver's dead money: 12M of room refused (${over ? 'refused' : 'passed'}), 15M passed (${fits === null ? 'passed' : 'refused'})`);
 }
 
 /* ================================================================== */
@@ -764,6 +927,13 @@ begin('7', 'every desk panel draws, and the re-sign desk shows a tile for every 
   const late = { ...facts, league: { ...lg, week: 12 } };
   if (deals.tile({ desk, facts: late }).value !== 'Deadline passed') fail(`with the desk on, the deal box at Week 12 reads ${J(deals.tile({ desk, facts: late }).value)}`);
   if (deals.tile({ desk, facts: { ...late, deskOn: false } }).value === 'Deadline passed') fail('a save without the desk reads Deadline passed while its phone and trade finder still deal');
+  /* On a save without the desk, no game gets a staff edge and the engine's
+     own offseason decides the expiring men, so neither box may claim otherwise. */
+  const off = { ...facts, deskOn: false };
+  const staffOff = NFL_DESK_PANELS.find(p => p.key === 'staff').tile({ desk, facts: off });
+  if (/team strength/.test(staffOff.sub) || staffOff.value.includes(' of ')) fail(`a save without the desk shows a staff at work: ${J(staffOff)}`);
+  const resignOff = NFL_DESK_PANELS.find(p => p.key === 'contracts').tile({ desk, facts: off });
+  if (/waiting on you|Every call is made/.test(resignOff.sub) || resignOff.accent) fail(`a save without the desk shows men waiting on the re-sign desk: ${J(resignOff)}`);
   console.log(`   4 panels drawn, ${tiles} re-sign tiles for ${cases} expiring men`);
 }
 
