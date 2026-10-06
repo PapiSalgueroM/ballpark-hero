@@ -65,7 +65,11 @@ import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
 /** Same position vocabulary FORMATIONS in squadDeal.ts uses, so pitch layout logic can be shared. */
 export type XiPosition =
   | 'GK' | 'CB' | 'RB' | 'LB' | 'RWB' | 'LWB'
-  | 'CDM' | 'CM' | 'CAM' | 'RM' | 'LM' | 'RW' | 'LW' | 'ST' | 'CF';
+  | 'CDM' | 'CM' | 'CAM' | 'RM' | 'LM' | 'RW' | 'LW' | 'ST' | 'CF'
+  /* Round 1026: the line alone (defence, midfield, attack), for a starter
+     whose exact role no two sources state but whose line two do. Better a
+     plain "MF" than a role he never played. */
+  | 'DF' | 'MF' | 'FW';
 
 export interface XiSlot {
   /** Position label shown on the tile, e.g. "CB". */
@@ -4092,15 +4096,15 @@ export const LINEUPS: Lineup[] = [
     slots: [
       GK('Dominik Livakovic'),
       { position: 'RB', name: 'Josip Juranovic', x: 84, y: 70 },
-      { position: 'CB', name: 'Josko Gvardiol', x: 62, y: 74 },
-      { position: 'CB', name: 'Dejan Lovren', x: 38, y: 74 },
+      { position: 'CB', name: 'Josko Gvardiol', x: 38, y: 74 },
+      { position: 'CB', name: 'Dejan Lovren', x: 62, y: 74 },
       { position: 'LB', name: 'Borna Sosa', x: 16, y: 70 },
       { position: 'CDM', name: 'Marcelo Brozovic', x: 50, y: 58 },
       { position: 'CM', name: 'Luka Modric', x: 68, y: 50 },
       { position: 'CM', name: 'Mateo Kovacic', x: 32, y: 50 },
-      { position: 'RW', name: 'Ivan Perišić', x: 80, y: 24 },
+      { position: 'LW', name: 'Ivan Perišić', x: 20, y: 24 },
       { position: 'CF', name: 'Andrej Kramaric', x: 50, y: 18 },
-      { position: 'LW', name: 'Mario Pasalic', x: 20, y: 24 },
+      { position: 'RW', name: 'Mario Pasalic', x: 80, y: 24 },
     ],
     blankCandidates: [
       { name: 'Dejan Lovren', slotIndex: 3, nationality: 'Croatia', clubAtTime: 'Zenit Saint Petersburg' },
@@ -4602,19 +4606,19 @@ export const LINEUPS: Lineup[] = [
     opponent: 'Aston Villa',
     scoreLine: 'Manchester United 3-0 Aston Villa (title clinched)',
     venue: 'Old Trafford, Manchester',
-    formationLabel: '4-4-2',
+    formationLabel: '4-5-1',
     slots: [
       GK('David de Gea'),
       { position: 'RB', name: 'Rafael', x: 84, y: 70 },
       { position: 'CB', name: 'Phil Jones', x: 62, y: 74 },
       { position: 'CB', name: 'Jonny Evans', x: 38, y: 74 },
       { position: 'LB', name: 'Patrice Evra', x: 16, y: 70 },
-      { position: 'RM', name: 'Antonio Valencia', x: 82, y: 48 },
-      { position: 'CM', name: 'Michael Carrick', x: 60, y: 52 },
-      { position: 'CM', name: 'Ryan Giggs', x: 40, y: 52 },
+      { position: 'RM', name: 'Antonio Valencia', x: 80, y: 34 },
+      { position: 'CM', name: 'Michael Carrick', x: 62, y: 56 },
+      { position: 'CM', name: 'Ryan Giggs', x: 20, y: 34 },
       { position: 'CAM', name: 'Shinji Kagawa', x: 50, y: 34 },
-      { position: 'ST', name: 'Robin van Persie', x: 60, y: 18 },
-      { position: 'ST', name: 'Wayne Rooney', x: 40, y: 18 },
+      { position: 'ST', name: 'Robin van Persie', x: 50, y: 16 },
+      { position: 'MF', name: 'Wayne Rooney', x: 38, y: 56 },
     ],
     blankCandidates: [
       { name: 'Jonny Evans', slotIndex: 3, nationality: 'Northern Ireland', clubAtTime: 'Manchester United' },

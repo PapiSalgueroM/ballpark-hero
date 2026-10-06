@@ -2040,7 +2040,7 @@
     },
     {
      "name": "Ivan Perišić",
-     "position": "RW",
+     "position": "LW",
      "nationality": "Croatia",
      "clubAtTime": "Tottenham Hotspur"
     }
@@ -2059,6 +2059,13 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Croatia 4-3-3: Livakovic; Juranovic, Lovren, Gvardiol, Sosa; Modric, Kovacic, Brozovic; Pasalic, Perisic, Kramaric. Livaja a substitute, on 72' for Kramaric."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=633847",
+     "xi": true,
+     "says": "Croatia 4-3-3: Livakovic G; Juranovic RB, Lovren CD-R, Gvardiol CD-L, Sosa LB; Modric RM, Brozovic CM, Kovacic LM; Pasalic RF, Kramaric F, Perisic LF."
     }
    ],
    "diffs": [
@@ -2076,14 +2083,50 @@
      "path": "slots[10].name",
      "from": "Marko Livaja",
      "to": "Mario Pasalic",
-     "why": "fifa.com and ESPN: Pasalic started; Livaja came on 72' for Kramaric. Only ESPN states wings (Pasalic RF, Perisic LF), so the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Pasalic started; Livaja came on 72' for Kramaric"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "RW",
+     "why": "Pasalic: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "left",
+     "to": "right",
+     "why": "Pasalic: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "LW",
+     "why": "Perisic: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "left",
+     "why": "Perisic: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
+    },
+    {
+     "path": "slots[2].side",
+     "from": "right",
+     "to": "left",
+     "why": "Gvardiol: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "right",
+     "why": "Lovren: fifa.com live feed (pitch coordinates: Pasalic with Juranovic on the right, Perisic with Sosa on the left, Lovren with Modric on the right) and ESPN summary feed (Pasalic RF, Perisic LF, Lovren CD-R, Gvardiol CD-L) agree"
     }
    ],
    "notes": [
     "Date 2022-12-13, score Argentina 3-0 Croatia, venue Lusail Stadium and formation 4-3-3 (fifa.com and ESPN) match.",
     "Ten of eleven names correct. Which wing Perišić and Pašalić played is not stated by either source.",
     "All three blankCandidates (Lovren, Kramarić, Perišić) are confirmed starters.",
-    "Round 1026: no host states a role for Pasalic; the tile keeps the label of the slot he took. Open for a role source. ESPN alone puts Pasalic right and Perisic left."
+    "Round 1026 (review fix): the fifa.com feed carries pitch coordinates for this match, so the wings and the centre-back sides now rest on two hosts. Perisic was on the left and Pasalic on the right; the reveal now says LW for Perisic."
    ]
   },
   {
@@ -4380,7 +4423,7 @@
     "opponent": "Aston Villa",
     "scoreLine": "Manchester United 3-0 Aston Villa (title clinched)",
     "venue": "Old Trafford, Manchester",
-    "formationLabel": "4-4-2"
+    "formationLabel": "4-5-1"
    },
    "hints": [
     {
@@ -4397,7 +4440,7 @@
     },
     {
      "name": "Wayne Rooney",
-     "position": "ST",
+     "position": "MF",
      "nationality": "England",
      "clubAtTime": "Manchester United"
     }
@@ -4416,6 +4459,20 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Manchester United 3-0 Aston Villa, April 22, 2013, Manchester. XI: De Gea; Rafael, Jones, Evans, Evra; Valencia, Carrick, Kagawa, Giggs; Rooney; Van Persie. Welbeck 72' for Rooney. Ferdinand, Nani and Javier Hernández unused substitutes."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "premierleague.com",
+     "url": "https://footballapi.pulselive.com/football/fixtures/8200?altIds=true",
+     "xi": true,
+     "says": "Re-read in the review fix: each starter's matchPosition for this match. D: Rafael, Jones, Evans, Evra. M: Carrick, Valencia, Rooney, Kagawa, Giggs. F: Van Persie. (Rooney's profile line says second striker; his matchPosition here is M.)"
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=345560",
+     "xi": true,
+     "says": "ESPN summary feed: Manchester United 4-2-3-1. De Gea G; Rafael RB, Jones CD-R, Evans CD-L, Evra LB; Carrick RM and Rooney LM (the two behind); Valencia AM-R, Kagawa AM, Giggs AM-L; Van Persie F."
     }
    ],
    "diffs": [
@@ -4475,7 +4532,7 @@
      "path": "slots[10].name",
      "from": "Javier Hernandez",
      "to": "Wayne Rooney",
-     "why": "premierleague.com (second striker) and ESPN: Rooney started; Hernandez was an unused substitute. The hosts split on his role (ESPN LM), so the tile keeps the slot label"
+     "why": "premierleague.com and ESPN: Rooney started; Hernandez was an unused substitute"
     },
     {
      "path": "blankCandidates[Nani]",
@@ -4520,6 +4577,24 @@
      "from": "left",
      "to": "centre",
      "why": "premierleague.com (attacking midfielder) and ESPN (AM): Kagawa started; Nani was an unused substitute"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "ST",
+     "to": "MF",
+     "why": "premierleague.com (matchPosition M, the PL feed's line for this match) and ESPN (LM of the two behind the attacking three in a 4-2-3-1) both put Rooney in midfield; only ESPN gives the exact role, so the tile names the line"
+    },
+    {
+     "path": "formationLabel",
+     "from": "4-4-2",
+     "to": "4-5-1",
+     "why": "both hosts refute two strikers: premierleague.com lines this eleven up four, five and one (one F), and ESPN states 4-2-3-1, which is the same four, five and one. The label is the shape both hosts state; ESPN's finer 4-2-3-1 rests on ESPN alone"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "right",
+     "to": "centre",
+     "why": "Van Persie was the only forward on both hosts"
     }
    ],
    "notes": [
@@ -4527,7 +4602,7 @@
     "Eight of eleven names correct. formationLabel 4-4-2 is not confirmed: ESPN's fetched page suggests 4-3-3 from the listed roles and the Premier League gives roles only (Rooney 'second striker', Kagawa 'attacking midfielder', Valencia listed as a right full back code). Not counted.",
     "The Premier League feed lists Valencia with a defender code (right full back) and ESPN lists him RW; the entry's RM is between the two, not counted.",
     "blankCandidate Jonny Evans is a confirmed starter. The 'Chicharito' alias on the Hernández candidate matches the Premier League's spelling.",
-    "Round 1026: Kagawa shows CAM (both hosts: attacking midfielder). Rooney's role splits (premierleague.com second striker, ESPN LM); slot label carried. The Chicharito alias went with the Hernandez blank."
+    "Round 1026 (review fix): Kagawa shows CAM (both hosts: attacking midfielder). Rooney started in midfield on both hosts (premierleague.com matchPosition M, ESPN LM beside Carrick), not up front, so his tile reads MF. The tiles follow ESPN's 4-2-3-1 placement, which premierleague.com's lines do not contradict; Giggs keeps his CM label (ESPN AM-L, premierleague.com M: no two hosts give a new one). The Chicharito alias went with the Hernandez blank."
    ]
   },
   {
