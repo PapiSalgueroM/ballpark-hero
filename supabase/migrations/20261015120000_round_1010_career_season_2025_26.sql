@@ -10,7 +10,9 @@
 -- Round 531 active refresh (20260911190000_refresh_verified_active_transfer_path_hints.sql): this block refuses
 -- to run on any other active state. After applying, node scripts/bakeCareerPlayers.mjs
 -- must leave src/data/careerPlayers.ts unchanged except its date stamp, then run
--- node scripts/genCareerLadderRoster.mjs (expect an x line for the removed id).
+-- node scripts/genCareerLadderRoster.mjs and commit the roster. simCareerSeasonAdditions
+-- section 6 prints the lines it should append (an x line for the removed id, an h or e
+-- line for each man this ledger makes eligible), measured on the roster as it stands.
 --
 --   added: 93 rows for 2025-2026, assists only where two sources agree, market value 0 (n/a)
 --   changed: 87 rows of 2024-2025 set to their final all competitions totals, each guarded by its old values

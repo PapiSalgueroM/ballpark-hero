@@ -21,7 +21,16 @@
  *      the added rows' source rules; a changed entry may move a row to another
  *      club, named by its old club, the new club flagged and on two hosts;
  *      only club, goals, appearances and assists may change (the migration
- *      writes nothing else).
+ *      writes nothing else). Round 1017 review: every club a row writes
+ *      (added, inserted, a move's target) is a spelling the pool before the
+ *      ledger uses or one on NEW_CLUBS below, and a moved or new club is
+ *      named in two hosts' readings; an inserted row's recorded order (first
+ *      club, then club, the move date one of his readings gives) matches the
+ *      side it is placed on; the numbers a changed row keeps are read under
+ *      its final club (a club move must have each one read); a `states`
+ *      total is a number its reading gives. Measured 2026-10-06: 8 kept
+ *      numbers read, 0 problems; 17 of 467 row fields meet one reading only
+ *      (50 before "without" was read by season).
  *   2. COVERAGE, the outcome that would have caught the tpa-762 report: the
  *      men whose last row is still the season before, neither ended nor held,
  *      are exactly COVERAGE_BASELINE, a list frozen in this file by name (a
@@ -45,6 +54,11 @@
  *   6. CAREER QUIZ: the shift the ledger records for the removal is the shift
  *      measured now (each of the next 60 days from the planned apply changes;
  *      42 of those answers were dealt in the 90 days before; 0 without it).
+ *      Round 1017 review: it also prints, never records, the Career Ladder
+ *      lines the ledger brings on the committed roster (other rounds append
+ *      to it). Measured 2026-10-06: h Garnacho, h Endrick, e Yamal,
+ *      e Zaire-Emery, e Xavi Simons, x for the removed twin; eligible men 244
+ *      to 248; 88 careers change, 80 of them men the roster deals.
  *   7. REHEARSAL in PGlite, never on production: the pool before the ledger
  *      and the puzzles live after Round 784 are loaded, the migration runs,
  *      the tables read back equal to the pool after the ledger, and a second
@@ -71,6 +85,18 @@
  *   rehearsehint  tpa-762's active entry written as 3 steps  (section 7)
  *   anchor        Kvaratskhelia's Napoli spell placed before a
  *                 2024-2025 Marseille row he never had        (section 1)
+ *   clubspelling  Ederson's move written "Man City", the pool
+ *                 spells it Manchester City                   (section 1)
+ *   clubreads     Aubameyang's move written Al-Hilal, which no
+ *                 reading names                               (section 1)
+ *   swap          Kvaratskhelia's Napoli spell placed after
+ *                 PSG, his dates say before                   (section 1)
+ *   states        Højlund's Napoli appearances and a states
+ *                 total both typed 45                         (section 1)
+ *   relabel       Rashford's relabelled United row keeps his
+ *                 Aston Villa figures                         (section 1)
+ *   without       Hakimi's fotmob "without it" total typed 33  (section 1)
+ *   (each of these six must also print the finding it tests, EXPECT)
  *   rehearseclub  Aubameyang's move to Al-Qadsiah guarded by
  *                 7 old goals where the table holds 6         (section 7)
  *   rehearseinsert  Kvaratskhelia's Napoli spell written one
@@ -85,6 +111,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { CORRECTION_LEDGERS, correctionProblems, removedNames } from './bakeCareerPlayers.mjs';
+import { planAppends, readRoster, rosterState } from './lib/careerLadderRoster.mjs';
 import { BAKE_OUT, MIGRATION_OUT, PLANNED_APPLY, bakeStampOf, expectedBake, generate, identicalKeySets } from './genCareerSeasonAdditions.mjs';
 import { CALENDAR_SEASON, LEDGER_FILE, SPLIT_SEASON, applyLedger, bakeHash, careerQuizShift, clone, coverage, formatLedger, hostsFor, loadSiteModules, readingProblems, registrableHost } from './lib/careerSeasonLedger.mjs';
 
@@ -502,7 +529,7 @@ console.log('5) identity: no two players carry the same club and season keys');
 }
 
 section = 6;
-console.log('6) the Career Quiz shift the ledger records is the one measured now');
+console.log('6) the Career Quiz shift the ledger records is the one measured now, and the Career Ladder lines it brings');
 {
   const q = careerQuizShift(pre.map(p => p.name), bake.map(p => p.name), PLANNED_APPLY);
   const rec = ledger.careerQuiz ?? {};
@@ -512,6 +539,26 @@ console.log('6) the Career Quiz shift the ledger records is the one measured now
     ['daysRepeatingAManFromTheirOwnLast90Days', q.reDealt], ['daysRepeatingWithoutTheChange', q.reDealtWithoutChange],
   ];
   for (const [k, v] of pairs) if (rec[k] !== v) fail(`the ledger records ${k} ${rec[k]}, measured ${v}`);
+  /* Round 1017 review (brief item 4): the Career Ladder effect, measured on
+     the committed roster and printed for the lead's apply day, never recorded
+     (other rounds append to the roster, so a recorded list would go stale):
+     the lines genCareerLadderRoster would append on the pool after the
+     ledger and would not on the pool before it, counting from the planned
+     apply date plus the 30 days new lines wait */
+  const roster = readRoster(ROOT);
+  const state = rosterState(roster);
+  const idByName = new Map([...state].map(([id, s]) => [s.name, id]));
+  for (const l of [ledger.added, ledger.inserted, ledger.changed, ledger.removed]) for (const r of l ?? []) if (r.playerId) idByName.set(r.player, r.playerId);
+  const since = new Date(Date.parse(`${PLANNED_APPLY}T12:00:00Z`) + 30 * 864e5).toISOString().slice(0, 10);
+  const plan = pool => planAppends({ live: pool.map(p => ({ id: idByName.get(p.name) ?? `name:${p.name}`, name: p.name, seasons: p.career })), entries: roster, since, minStints: site.MIN_STINTS, splitValue: site.ROTATION_SPLIT_VALUE, peakValue: site.peakValue });
+  const lineKey = e => `${e[0]}|${e[1]}`;
+  const planned = new Set(plan(pre).map(lineKey));
+  const appends = plan(bake).filter(e => !planned.has(lineKey(e)));
+  const eligible = pool => pool.filter(p => p.career.length >= site.MIN_STINTS).length;
+  const dealt = new Set([...state.values()].filter(s => s.isIn).map(s => s.name));
+  const preByName = new Map(pre.map(p => [p.name, JSON.stringify(p.career)]));
+  const changedMen = bake.filter(p => preByName.has(p.name) && preByName.get(p.name) !== JSON.stringify(p.career));
+  console.log(`   Career Ladder, lines counting from ${since}: ${appends.length} the ledger brings (${appends.map(e => `${e[1]} ${e[3]}`).join(', ') || 'none'}); eligible men ${eligible(pre)} to ${eligible(bake)}; ${changedMen.length} careers change, ${changedMen.filter(p => dealt.has(p.name)).length} of them men the roster deals now`);
   console.log(`   from ${q.start}: ${q.changedDays} of ${q.days} days change (${q.firstDay.before} becomes ${q.firstDay.after}); ${q.reDealtFromLastWindow} answers were dealt in the ${q.window} days before (${q.reDealtFromLastWindowWithoutChange} without the change); ${q.reDealt} days repeat a man from their own last ${q.window} days`);
 }
 

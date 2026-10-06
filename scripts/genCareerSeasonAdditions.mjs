@@ -259,7 +259,9 @@ export function renderMigration({ ledger, pre, post, renames, rewrites, quiz, co
   L.push(`-- Round 531 active refresh (${path.basename(ACTIVE_REFRESH)}): this block refuses`);
   L.push(`-- to run on any other active state. After applying, node scripts/bakeCareerPlayers.mjs`);
   L.push(`-- must leave ${BAKE_OUT} unchanged except its date stamp, then run`);
-  L.push(`-- node scripts/genCareerLadderRoster.mjs (expect an x line for the removed id).`);
+  L.push(`-- node scripts/genCareerLadderRoster.mjs and commit the roster. simCareerSeasonAdditions`);
+  L.push(`-- section 6 prints the lines it should append (an x line for the removed id, an h or e`);
+  L.push(`-- line for each man this ledger makes eligible), measured on the roster as it stands.`);
   L.push(`--`);
   L.push(`--   added: ${added.length} rows for ${ledger.season}, assists only where two sources agree, market value 0 (n/a)`);
   L.push(`--   changed: ${changed.length} rows of ${ledger.previousSeason} set to their final all competitions totals, each guarded by its old values`);

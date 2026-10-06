@@ -5342,7 +5342,7 @@
     }
   },
   "rehearsal": {
-    "migrationSha256": "0f04e316bb9ae8a2ed83e02df34625f8da4412324f2c305c3dce2482d8f4b5dc",
+    "migrationSha256": "8c34612a61addcb3838cabd85e01ac87b08b01de7bbe0a733aec5a95d6812548",
     "with": "@electric-sql/pglite, PostgreSQL 18.3 (PGlite 0.5.8)",
     "on": "2026-10-06"
   }

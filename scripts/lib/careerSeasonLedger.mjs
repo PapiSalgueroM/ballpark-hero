@@ -402,7 +402,7 @@ export async function loadSiteModules(root, { bakeText = null } = {}) {
   fs.writeFileSync(entry, [
     `export { careerPlayers, CAREER_FALLBACK_META } from '${bake}';`,
     `export { playersUnderRule, seasonSpan, isEuropeanClub } from '${src}/lib/transferPathModes.ts';`,
-    `export { flagForClub } from '${src}/lib/careerLadder.ts';`,
+    `export { flagForClub, peakValue, MIN_STINTS, ROTATION_SPLIT_VALUE } from '${src}/lib/careerLadder.ts';`,
     `export { flagEmojiToIso } from '${src}/lib/flagUtils.ts';`,
   ].join('\n'));
   globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
