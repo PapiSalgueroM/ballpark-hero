@@ -208,6 +208,70 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 25, 0, 100);
     },
   },
+  /* Round 918: six more beats, the same rules as the seventeen above. Gated
+     only on fields the save and the rival already carry, narrated rather
+     than quoted, and every consequence line says exactly what apply moves
+     (the rivalry meter is flavor and is named without a number). */
+  {
+    id: 318, emoji: "🪞", title: "Same Spot, Same Night",
+    description: (_s, r) => `${r.name} plays your position, and the schedule has the two of you guarding each other on opening night.`,
+    consequence: "Morale +4, the rivalry heats up",
+    /* Guarding each other needs two teams: the rival is drafted onto your
+       own team and keeps it, so without the team check this beat mostly
+       told a player to guard his own teammate (simNbaCareer R1). */
+    when: (s, r) => !r.retired && r.pos === s.pos && r.team !== s.team,
+    apply: s => {
+      s.morale = clamp(s.morale + 4, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 319, emoji: "💰", title: "The Bigger Number",
+    description: (_s, r) => `${r.name} signs an extension, and every comment section has already decided it is bigger than yours.`,
+    consequence: "Morale -4, Fanbase +2",
+    when: (s, r) => !r.retired && r.ovr >= s.ovr,
+    apply: s => {
+      s.morale = clamp(s.morale - 4, 0, 100);
+      s.fanbase = clamp(s.fanbase + 2, 0, 100);
+    },
+  },
+  {
+    id: 320, emoji: "📞", title: "The Deadline Rumor",
+    description: (_s, r) => `The rumor at the deadline was that your team tried to trade for ${r.name}, and your contract was the salary going the other way.`,
+    consequence: "Morale -6, the rivalry heats up",
+    when: (s, r) => !r.retired && r.team !== s.team && r.ovr >= 82,
+    apply: s => {
+      s.morale = clamp(s.morale - 6, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 321, emoji: "☀️", title: "Summer Pickup",
+    description: (_s, r) => `${r.name} turns up at the summer pickup run you have played in for years. Neither of you leaves until the gym closes.`,
+    consequence: "Morale +3, the rivalry heats up",
+    when: (s, r) => !r.retired && s.age <= 30,
+    apply: s => {
+      s.morale = clamp(s.morale + 3, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 322, emoji: "👕", title: "Wrong Jersey",
+    description: (_s, r) => `A kid at your youth camp shows up in a ${r.name} jersey. You sign it anyway, right under his number.`,
+    consequence: "Fanbase +6",
+    when: s => s.age >= 26,
+    apply: s => { s.fanbase = clamp(s.fanbase + 6, 0, 100); },
+  },
+  {
+    id: 323, emoji: "💍", title: "Count the Rings",
+    description: (_s, r) => `You and ${r.name} both have rings now, so the argument has moved on to who has more.`,
+    consequence: "Fanbase +4, the rivalry heats up",
+    when: (s, r) => s.rings >= 1 && r.rings >= 1,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 4, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
 ];
 
 /**

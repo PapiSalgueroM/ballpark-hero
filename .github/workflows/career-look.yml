@@ -4,6 +4,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/career-look.yml
+      - src/components/game/GameHelp.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
       - scripts/qa/careerLook996.mjs
       - src/components/soccer-career/AppearanceBuilder.tsx
       - src/components/us-career/UsCareerBoard.tsx

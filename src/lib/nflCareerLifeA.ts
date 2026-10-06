@@ -17,6 +17,10 @@
 */
 import type { CareerState, CareerEvent } from './nflMyCareer';
 import { teamLabelOf, marketSalary, nflEraById } from './nflMyCareer';
+/* Round 917: every card below carries a category (its section header), a
+   cooldown and, where two cards tell one story, a story key. Nothing reads
+   them yet; nflCareerLifeTags.ts says what they are for. */
+import { NFL_LIFE_COOLDOWN as CD, NFL_LIFE_STORY as STORY } from './nflCareerLifeTags';
 
 /* Round 56 optional fields. Declared locally so this file compiles against
    old and new versions of CareerState alike, and so every read guards with
@@ -87,6 +91,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs <= 2) {
     deck.push({
       id: 'lifeA_rookie_dinner',
+      category: 'lockerRoom', cooldown: CD.once,
       title: 'The rookie dinner tab',
       body: 'The vets took twelve of you to a steakhouse and ordered like the bill was a rumor. It lands face down in front of you. Your agent warned you about this exact night.',
       options: [
@@ -109,6 +114,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs <= 1) {
     deck.push({
       id: 'lifeA_rookie_hazing',
+      category: 'lockerRoom', cooldown: CD.once,
       title: 'Pads, donuts, and the haircut',
       body: 'Until the new draft class walks in you are still the rookie. That means carrying veteran pads, a Friday donut run for 53 people, and a haircut somebody keeps promising to give you in your sleep.',
       options: [
@@ -131,6 +137,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && yrs <= 5 && c.age <= 27) {
     deck.push({
       id: 'lifeA_vet_mentor',
+      category: 'lockerRoom', cooldown: CD.lockerRoom,
       title: 'The old head adopts you',
       body: `A 34 year old ${posNoun(c)} at the end of his career started saving you a seat in the meeting room. He wants you there at 6am on Tuesdays. He has never once been late.`,
       options: [
@@ -153,6 +160,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && c.ovr < 86) {
     deck.push({
       id: 'lifeA_position_battle',
+      category: 'lockerRoom', cooldown: CD.lockerRoom,
       title: 'They signed a guy for your exact job',
       body: `${teamLabelOf(c.team)} brought in a veteran on a one year deal who plays your position and your role. The coaches keep saying the word competition. Everyone in the building hears the actual message.`,
       options: [
@@ -183,6 +191,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && flag(c, 'captain') === 0) {
     deck.push({
       id: 'lifeA_captain_vote',
+      category: 'lockerRoom', cooldown: CD.once,
       title: 'The C on the jersey',
       body: 'Captain votes are Wednesday morning. Two guys have already told you they are voting for you. One of them is the guy you would be taking it from.',
       options: [
@@ -211,6 +220,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.morale < 74) {
     deck.push({
       id: 'lifeA_coach_grudge',
+      category: 'lockerRoom', cooldown: CD.lockerRoom,
       title: 'The coach who does not like you',
       body: 'Your position coach has a favorite and it is not you. He corrects your footwork louder than anyone else in the building and never once in private.',
       options: [
@@ -236,6 +246,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.ovr <= 88) {
     deck.push({
       id: 'lifeA_practice_squad_kid',
+      category: 'lockerRoom', cooldown: CD.lockerRoom, story: STORY.practiceSquad,
       title: 'The practice squad kid is dusting you',
       body: 'An undrafted rookie from a school you had to look up has beaten you in one on ones for three straight weeks. Coaches have started saying his name a lot in meetings.',
       options: [
@@ -264,6 +275,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_micd_up',
+      category: 'media', cooldown: CD.media,
       title: "Mic'd up goes nuclear",
       body: `The league mic'd you up against ${foilOf(c)} who had been talking all week. What you said back was on a t-shirt within 40 minutes and on a billboard by Thursday.`,
       options: [
@@ -286,6 +298,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2) {
     deck.push({
       id: 'lifeA_podcast_take',
+      category: 'media', cooldown: CD.media,
       title: 'You said the quiet part on a podcast',
       body: 'Three hours of easy vibes and one sentence about your offensive line. That sentence is now a graphic on every show in America and a printout in a real locker room.',
       options: [
@@ -308,6 +321,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 45 || c.morale < 60) {
     deck.push({
       id: 'lifeA_hit_piece',
+      category: 'media', cooldown: CD.media,
       title: 'The hit piece',
       body: 'A national writer spent two months on 4,000 words about how you are the reason the locker room is broken. Two anonymous teammates are quoted. You have theories about both.',
       options: [
@@ -333,6 +347,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 55 && yrs >= 2) {
     deck.push({
       id: 'lifeA_doc_crew',
+      category: 'media', cooldown: CD.media,
       title: 'The documentary crew wants your whole season',
       body: 'A streaming service wants cameras in your kitchen, your rehab table and your worst days. The check is real. So is the part where a stranger films you crying.',
       options: [
@@ -355,6 +370,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (reachedSb) {
     deck.push({
       id: 'lifeA_media_day',
+      category: 'media', cooldown: CD.media,
       title: 'Media day is a circus',
       body: 'Five thousand credentials, a man in a wedding dress proposing on live television, and a nine year old with better questions than anyone in the room. Kickoff is six days away.',
       options: [
@@ -377,6 +393,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && rng() < 0.85) {
     deck.push({
       id: 'lifeA_trash_talk_feud',
+      category: 'media', cooldown: CD.media, story: STORY.trashTalk,
       title: 'The feud',
       body: `${foilOf(c)} has said your name in four separate interviews this offseason and none of them were nice. You play him twice a year. Possibly forever.`,
       options: [
@@ -399,6 +416,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 40) {
     deck.push({
       id: 'lifeA_burner_account',
+      category: 'media', cooldown: CD.media,
       title: 'The burner account',
       body: 'Somebody found an account with 41 followers that exists only to defend you and argue with a blogger about your third down numbers. It is, obviously, not yours.',
       options: [
@@ -423,6 +441,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (missedPlayoffs || c.fanbase < 55) {
     deck.push({
       id: 'lifeA_booed_home',
+      category: 'city', cooldown: CD.city,
       title: 'Booed at home',
       body: 'Not scattered booing. Organized, 60,000 strong, loud enough to get its own segment on the local news. Your family was sitting in section 118 for all of it.',
       options: [
@@ -445,6 +464,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 62) {
     deck.push({
       id: 'lifeA_fan_mural',
+      category: 'city', cooldown: CD.city,
       title: 'They painted you on a wall',
       body: 'Three stories tall on the side of a bakery two blocks from the stadium. The artist wants you at the unveiling. The bakery wants to name a donut after you.',
       options: [
@@ -466,6 +486,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
 
   deck.push({
     id: 'lifeA_hospital_visit',
+    category: 'city', cooldown: CD.city,
     title: 'Room 412',
     body: 'The team does a childrens hospital visit every December. In room 412 there is a kid with your poster on the wall, your number on his cast, and a very rough month ahead of him.',
     options: [
@@ -491,6 +512,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (COLD_TOWNS.includes(c.team)) {
     deck.push({
       id: 'lifeA_snow_game',
+      category: 'city', cooldown: CD.city,
       title: 'The snow game',
       body: `Eighteen inches on the field, no visible yard lines, and ${teamLabelOf(c.team)} fans getting paid by the hour to shovel out their own stadium. The league asks if you want it moved to a dome three states away.`,
       options: [
@@ -513,6 +535,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 65 && yrs >= 4) {
     deck.push({
       id: 'lifeA_bar_named',
+      category: 'city', cooldown: CD.once,
       title: 'A bar wants your name on it',
       body: 'A place four blocks from the stadium wants to rename itself after your nickname and hang your rookie jersey behind the bar. They are offering a small piece of the business.',
       options: [
@@ -539,6 +562,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_cause_cleats',
+      category: 'city', cooldown: CD.city,
       title: 'The cleats with a cause',
       body: 'One week a year the league lets you paint anything you want on your feet. A designer sends three options. The league sends a rules sheet with eleven bullet points.',
       options: [
@@ -563,6 +587,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.health < 94) {
     deck.push({
       id: 'lifeA_nagging_injury',
+      category: 'body', cooldown: CD.body,
       title: 'The thing you have not told the trainers',
       body: `Something in your ${soreSpot(c)} has been wrong since October. It loosens up by the second quarter. That is the exact part that worries the doctors.`,
       options: [
@@ -585,6 +610,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.age <= 30) {
     deck.push({
       id: 'lifeA_motion_rebuild',
+      category: 'body', cooldown: CD.body,
       title: `The guru who wants to rebuild your ${craftNoun(c)}`,
       body: `A man in Arizona with nine cameras and a lot of opinions says your ${craftNoun(c)} is costing you years and yards. The rebuild takes a full offseason and feels awful for the first two months.`,
       options: [
@@ -611,6 +637,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2) {
     deck.push({
       id: 'lifeA_sleep_clinic',
+      category: 'body', cooldown: CD.body,
       title: 'The sleep guy',
       body: 'A specialist watched you sleep for three nights and used the phrase structurally alarming. You are averaging five hours and 20 minutes on a body that hits people for a living.',
       options: [
@@ -633,6 +660,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_nutritionist',
+      category: 'body', cooldown: CD.body,
       title: 'The chef your agent hired',
       body: 'One hundred and eighty thousand a year for a man who weighs your breakfast and has strong opinions about orange juice. Your mother is offended on a spiritual level.',
       options: [
@@ -655,6 +683,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_concussion_protocol',
+      category: 'body', cooldown: CD.body,
       title: 'The hit you do not remember',
       body: 'You got up fast and told everyone you were fine. You genuinely cannot remember the drive before it. The independent spotter is already walking toward you.',
       options: [
@@ -677,6 +706,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.health < 82 || c.age >= 29) {
     deck.push({
       id: 'lifeA_offseason_surgery',
+      category: 'body', cooldown: CD.body,
       title: 'The elective surgery window',
       body: 'The doctors say you can play three more years the way you are, or take a year of pain now and maybe get six. Nobody is going to make this decision for you.',
       options: [
@@ -699,6 +729,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.morale < 78 || yrs >= 3) {
     deck.push({
       id: 'lifeA_therapy_room',
+      category: 'body', cooldown: CD.body,
       title: 'The room with the couch',
       body: 'The team psychologist has an office nobody walks past on purpose. A ten year vet told you he goes every Tuesday and has since his second season.',
       options: [
@@ -723,6 +754,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && rng() < 0.8) {
     deck.push({
       id: 'lifeA_new_oc',
+      category: 'coaching', cooldown: CD.coaching,
       title: 'The new coordinator',
       body: 'The new offensive coordinator is 34, talks entirely in tempo and leverage, and has already told a podcast that everything is being installed from zero this spring.',
       options: [
@@ -749,6 +781,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.ovr >= 72 && yrs >= 1) {
     deck.push({
       id: 'lifeA_scheme_misfit',
+      category: 'coaching', cooldown: CD.coaching,
       title: 'The scheme does not fit you',
       body: `They are running a system built for somebody else's ${posNoun(c)}. Your tape is going to look like a lie about how good you actually are.`,
       options: [
@@ -775,6 +808,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
     const isQb = c.pos === 'QB';
     deck.push({
       id: 'lifeA_qb_room',
+      category: 'coaching', cooldown: CD.coaching,
       title: isQb ? 'They drafted a quarterback in the first round' : 'New quarterback, new everything',
       body: isQb
         ? 'Same podium, different smile. The GM said the words we love our room four times in one press conference and never once said the word starter.'
@@ -803,6 +837,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
     const tag = Math.round(marketOf(c) * 1.05 * 10) / 10;
     deck.push({
       id: 'lifeA_franchise_tag',
+      category: 'coaching', cooldown: CD.coaching, story: STORY.franchiseTag,
       title: 'They tagged you',
       body: `One year at ${tag}M fully guaranteed, no long term deal, and the right to do the exact same thing to you next February. ${teamLabelOf(c.team)} called it a compliment on the way out of the room.`,
       options: [
@@ -837,6 +872,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
           : 'They want you at a completely different spot and they want an answer this week.';
     deck.push({
       id: 'lifeA_position_switch',
+      category: 'coaching', cooldown: CD.once,
       title: 'They want to move you',
       body: pitch,
       options: [
@@ -859,6 +895,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && (missedPlayoffs || rng() < 0.4)) {
     deck.push({
       id: 'lifeA_coach_fired',
+      category: 'coaching', cooldown: CD.coaching,
       title: 'Black Monday',
       body: 'The head coach who drafted you got fired in a hallway at 7am. The interim wore a headset for one game and now there are nine candidates and a search firm nobody has met.',
       options: [
@@ -891,6 +928,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.contractYears >= 1 && c.ovr >= 80 && c.salary < marketOf(c) * 0.8) {
     deck.push({
       id: 'lifeA_holdout',
+      category: 'camp', cooldown: CD.camp,
       title: 'Hold out',
       body: `You are paid ${c.salary}M on a deal signed by a worse version of you. The market says ${marketOf(c)}M. Your agent says the only leverage you own is not being in the building.`,
       options: [
@@ -925,6 +963,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.ovr >= 80) {
     deck.push({
       id: 'lifeA_preseason_snub',
+      category: 'camp', cooldown: CD.camp,
       title: 'The list came out',
       body: 'The annual top 100 dropped and you are not on it. Two guys you handle in practice every Wednesday are in the top 60. Your phone has not stopped.',
       options: [
@@ -950,6 +989,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_thanksgiving',
+      category: 'camp', cooldown: CD.camp,
       title: 'Thanksgiving, 12:30, national television',
       body: 'Everyone you went to high school with and 30 million people who are already full will be watching. Your mother has invited 40 people to her house and told all of them you are coming after.',
       options: [
@@ -972,6 +1012,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 45 || c.ovr >= 82) {
     deck.push({
       id: 'lifeA_primetime',
+      category: 'camp', cooldown: CD.camp,
       title: 'Flexed into Sunday night',
       body: 'The league moved your division game into the last window of the day. One night, every eyeball in the country, and a broadcast crew already calling it your audition.',
       options: [
@@ -997,6 +1038,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.rings === 0 && yrs >= 4) {
     deck.push({
       id: 'lifeA_playoff_ultimatum',
+      category: 'camp', cooldown: CD.camp,
       title: 'Playoffs or changes',
       body: 'The owner said it out loud at a fan event with a microphone in his hand. Everybody in the building heard the second half of that sentence and knew who it was about.',
       options: [
@@ -1019,6 +1061,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (missedPlayoffs && c.morale < 72) {
     deck.push({
       id: 'lifeA_tank_room',
+      category: 'camp', cooldown: CD.camp,
       title: 'The room has stopped caring',
       body: 'Guys are discussing draft position in the cold tub in November. Two starters have asked to be traded. Somebody put a mock draft on the whiteboard as a joke and nobody laughed.',
       options: [
@@ -1046,6 +1089,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1) {
     deck.push({
       id: 'lifeA_cleat_deal',
+      category: 'money', cooldown: CD.money,
       title: 'The shoe meeting',
       body: 'Two brands, two very different rooms. The giant offers a small check and a huge logo. The challenger offers real money now and a signature model in three years if you hit.',
       options: [
@@ -1068,6 +1112,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 40) {
     deck.push({
       id: 'lifeA_card_show',
+      category: 'money', cooldown: CD.money,
       title: 'The card show',
       body: 'Four hours in a folding chair in a convention center, 1,200 autographs, 90,000 dollars, and a man who genuinely wants you to sign a photograph of somebody else.',
       options: [
@@ -1090,6 +1135,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 35) {
     deck.push({
       id: 'lifeA_car_dealership',
+      category: 'money', cooldown: CD.money,
       title: 'The car commercial',
       body: 'A dealership out on the highway wants you in a 30 second spot saying a slogan that rhymes with your last name. It will run 400 times a week during the local news.',
       options: [
@@ -1116,6 +1162,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (worth >= 2 || c.earnings >= 6) {
     deck.push({
       id: 'lifeA_mom_house',
+      category: 'money', cooldown: CD.once, story: STORY.familyHouse,
       title: 'The house for your mother',
       body: 'She still works Saturdays and still says she is fine. You have the money now. She has strong opinions about the neighborhood and none of them are about the kitchen.',
       options: [
@@ -1138,6 +1185,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && (worth >= 1 || c.earnings >= 4)) {
     deck.push({
       id: 'lifeA_teammate_loan',
+      category: 'money', cooldown: CD.money,
       title: 'The loan',
       body: 'A backup you came up with needs 250,000 for something he will not fully explain. He has never asked you for anything in six years. His hands are shaking.',
       options: [
@@ -1164,6 +1212,7 @@ export function getNflLifeEventsA(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 45 && yrs >= 3) {
     deck.push({
       id: 'lifeA_hometown_camp',
+      category: 'money', cooldown: CD.money, story: STORY.youthCamp,
       title: 'Your own camp back home',
       body: 'Four hundred kids, one high school field with a bad sprinkler, and a sponsor willing to write a serious check if the logo is big enough.',
       options: [

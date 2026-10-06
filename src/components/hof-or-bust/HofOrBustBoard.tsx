@@ -123,6 +123,8 @@ export function HofOrBustBoard() {
         {isRevealed && (
           <ResultScreen
             outcomeEmoji={userVote === 'hof' ? '🏆' : '💀'}
+            score={score}
+            scoreLabel="points"
             headline="Verdict Revealed"
             statLine={
               <>

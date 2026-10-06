@@ -325,6 +325,19 @@ export function probeAwardsNight({ soccer, appearance, cards }, { onNight } = {}
       }
     });
   });
+  /* Release AD: the greatest_ever gamble's winning side (+8) clamps on a save
+     already near the popularity cap, and after Rounds 972 and 1013 moved the
+     seeded careers every one of the eight winners sat there, so the fixture
+     saw only the losing side. Each sample is also tried at popularity 50, a
+     state any career passes through, so both sides of the gamble are always
+     exercised whatever the stream does. */
+  bdorSamples.forEach((st, i) => {
+    const low = { ...clone(st), popularity: 50 };
+    for (let k = 0; k < 3; k += 1) {
+      const r = trySpeech(soccer.applyBdorSpeech, low, 'greatest_ever', clubsList, 910001 + i * 1009 + k * 13);
+      speeches.push({ kind: 'bdor-low', sample: i, seed: k, ...r });
+    }
+  });
   wcSamples.forEach((st, i) => {
     WC_SPEECHES.forEach((choice, j) => {
       for (let k = 0; k < 3; k += 1) {

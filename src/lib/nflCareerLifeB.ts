@@ -13,6 +13,10 @@
    ========================================================================== */
 import type { CareerState, CareerEvent } from './nflMyCareer';
 import { teamLabelOf, nflEraById, POS_SALARY_MULT } from './nflMyCareer';
+/* Round 917: every card below carries a category (its section header), a
+   cooldown and, where two cards tell one story, a story key. Nothing reads
+   them yet; nflCareerLifeTags.ts says what they are for. */
+import { NFL_LIFE_COOLDOWN as CD, NFL_LIFE_STORY as STORY } from './nflCareerLifeTags';
 
 /* Round 56 money and flag fields ride on the save object. Old saves predate
    them and some builds have not caught the engine interface up yet, so every
@@ -77,6 +81,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && c.age >= 23 && flag(c, 'b_newborn') < 2) {
     deck.push({
       id: 'lifeB_newborn',
+      category: 'family', cooldown: CD.family,
       title: 'The due date is a road Sunday',
       body: 'Your first kid is due Week 9, three time zones from the hospital. The doctor keeps repeating that babies do not read the schedule.',
       options: [
@@ -111,6 +116,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.age >= 25 && flag(c, 'b_partnerCity') === 0) {
     deck.push({
       id: 'lifeB_partnerCity',
+      category: 'family', cooldown: CD.once,
       title: 'They got the job',
       body: 'Your partner just landed the role they have been chasing since college. It is in a city with a different team in it.',
       options: [
@@ -143,6 +149,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.age >= 24 && flag(c, 'b_sibAgent') === 0) {
     deck.push({
       id: 'lifeB_siblingManager',
+      category: 'family', cooldown: CD.once,
       title: 'Your brother has business cards now',
       body: 'They say MANAGER in a font he chose himself. He has already told two brands he speaks for you.',
       options: [
@@ -176,6 +183,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && flag(c, 'b_parentHome') === 0) {
     deck.push({
       id: 'lifeB_parentCloser',
+      category: 'family', cooldown: CD.once,
       title: 'She keeps saying the word closer',
       body: 'Your mom has not asked you for a car, a house or a dime. She has asked, in every phone call for three months, if you could be closer.',
       options: [
@@ -208,6 +216,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && c.fanbase >= 35 && flag(c, 'b_leak') === 0) {
     deck.push({
       id: 'lifeB_groupChatLeak',
+      category: 'family', cooldown: CD.once,
       title: 'The family group chat leaked',
       body: 'A cousin screenshotted it. Your review of the offensive coordinator, that he has never seen a football and has only heard of one, is now a trending audio.',
       options: [
@@ -239,6 +248,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if ((nw >= 3 || c.earnings >= 12) && flag(c, 'b_house') === 0) {
     deck.push({
       id: 'lifeB_houseForSomeone',
+      category: 'family', cooldown: CD.once, story: STORY.familyHouse,
       title: 'Somebody never pays rent again',
       body: 'The money is there to buy a person a house outright. The list of candidates turned out to be longer than you expected.',
       options: [
@@ -270,6 +280,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.age >= 24 && flag(c, 'b_holiday') === 0) {
     deck.push({
       id: 'lifeB_familyHoliday',
+      category: 'family', cooldown: CD.once,
       title: 'Forty two relatives, one bye week',
       body: 'They all want to come to your house. Someone has already asked whether the theater room has a lock on it.',
       options: [
@@ -307,6 +318,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 4 && teamYards >= 3000 && c.ovr >= 76 && flag(c, 'b_record') === 0) {
     deck.push({
       id: 'lifeB_franchiseRecord',
+      category: 'legacy', cooldown: CD.once,
       title: '218 yards from the franchise record',
       body: `The ${teamLabelOf(c.team)} record is right there, and the seed is already locked. Week 18 means nothing to anybody except you.`,
       options: [
@@ -339,6 +351,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 8 && (c.rings >= 1 || c.allPros >= 2 || c.fanbase >= 78) && flag(c, 'b_jersey') === 0) {
     deck.push({
       id: 'lifeB_jerseyRetirement',
+      category: 'legacy', cooldown: CD.once,
       title: 'They want your number in the rafters',
       body: `${teamLabelOf(c.team)} have three ceremony dates and one very specific request about how long the speech can be.`,
       options: [
@@ -370,6 +383,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 9 && c.age >= 31 && flag(c, 'b_hof') === 0) {
     deck.push({
       id: 'lifeB_hofPush',
+      category: 'legacy', cooldown: CD.once,
       title: 'A firm that specializes in Canton',
       body: 'They say your case needs narrative support. They have a slide deck about you with a title font and everything.',
       options: [
@@ -401,6 +415,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 5 && c.age >= 28 && flag(c, 'b_heir') === 0) {
     deck.push({
       id: 'lifeB_mentorHeir',
+      category: 'legacy', cooldown: CD.once,
       title: 'They drafted your replacement',
       body: `${teamLabelOf(c.team)} took your position in the first round. The kid has your rookie jersey framed in his apartment, which somehow makes it worse.`,
       options: [
@@ -432,6 +447,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 9 && (c.rings >= 1 || c.mvps >= 1) && flag(c, 'b_statue') === 0) {
     deck.push({
       id: 'lifeB_statueDebate',
+      category: 'legacy', cooldown: CD.once,
       title: 'The statue committee has notes',
       body: 'The city wants bronze outside the stadium. The sculptor sent eleven pose options and one of them is you screaming at a referee.',
       options: [
@@ -463,6 +479,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 8 && (c.age >= 33 || (c.pos === 'RB' && c.age >= 30)) && flag(c, 'b_tour') === 0) {
     deck.push({
       id: 'lifeB_retirementTour',
+      category: 'legacy', cooldown: CD.once,
       title: 'Announce it, or just go quietly',
       body: 'Say this is the last one and every road stadium hands you a framed something. Say nothing and you get to play football without a receiving line.',
       options: [
@@ -494,6 +511,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && c.ovr >= 80 && flag(c, 'b_top100') === 0) {
     deck.push({
       id: 'lifeB_top100Snub',
+      category: 'legacy', cooldown: CD.once,
       title: 'Number 74 on the Top 100',
       body: 'Two guys you cover for a living came in the twenties. The list producer says it is a players vote, which is somehow worse.',
       options: [
@@ -528,6 +546,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     const foe = c.pos === 'QB' ? 'an edge rusher' : 'a corner';
     deck.push({
       id: 'lifeB_nemesisDefender',
+      category: 'rivalry', cooldown: CD.once,
       title: 'He has your number',
       body: `There is ${foe} in your division who has genuinely solved you. Twice a year he makes you look like a camp body.`,
       options: [
@@ -559,6 +578,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && flag(c, 'b_trash') < 2 && rng() < 0.7) {
     deck.push({
       id: 'lifeB_divisionTrashTalk',
+      category: 'rivalry', cooldown: CD.rivalry, story: STORY.trashTalk,
       title: 'He did a whole podcast about you',
       body: 'A division rival spent forty minutes explaining that you are a system guy who runs excellent routes at the team buffet.',
       options: [
@@ -590,6 +610,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && prevTeam && flag(c, 'b_oldFriend') === 0) {
     deck.push({
       id: 'lifeB_formerTeammate',
+      category: 'rivalry', cooldown: CD.once,
       title: 'He is on the other sideline now',
       body: 'The guy who sat next to you on every flight for four years lines up across from you on Sunday. You were in his wedding.',
       options: [
@@ -621,6 +642,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 4 && flag(c, 'b_oldCoach') === 0) {
     deck.push({
       id: 'lifeB_coachWhoCutYou',
+      category: 'rivalry', cooldown: CD.once,
       title: 'The coach who wanted you cut',
       body: 'The position coach who told the front office you would be out of the league by 26 is now the coordinator across the field. He has requested a pregame handshake.',
       options: [
@@ -652,6 +674,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && prevTeam && flag(c, 'b_revenge') === 0) {
     deck.push({
       id: 'lifeB_revengeGame',
+      category: 'rivalry', cooldown: CD.once,
       title: 'They are coming to town',
       body: `${teamLabelOf(prevTeam)} decided you were replaceable. They are on the schedule in three weeks and everyone has noticed.`,
       options: [
@@ -683,6 +706,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 5 && flag(c, 'b_rivalTeammate') === 0 && rng() < 0.8) {
     deck.push({
       id: 'lifeB_rivalSignsHere',
+      category: 'rivalry', cooldown: CD.once,
       title: 'Your rival just signed here',
       body: `The man who has been talking about you for six straight years is now a ${teamLabelOf(c.team)}. His locker is two down from yours.`,
       options: [
@@ -716,6 +740,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && nw >= 1.5 && flag(c, 'b_food') === 0) {
     deck.push({
       id: 'lifeB_restaurantFranchise',
+      category: 'business', cooldown: CD.once,
       title: 'Wings at scale',
       body: 'A franchise group wants you as a multi unit owner. The pitch deck says athlete equity nine separate times.',
       options: [
@@ -748,6 +773,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && nw >= 1 && flag(c, 'b_tech') === 0) {
     deck.push({
       id: 'lifeB_techPitch',
+      category: 'business', cooldown: CD.once,
       title: 'A founder in a vest',
       body: 'He wants 1.5M for an app that lets you tip your barber in crypto. He has never, in his life, had a barber.',
       options: [
@@ -782,6 +808,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 4 && c.fanbase >= 45 && flag(c, 'b_academy') === 0) {
     deck.push({
       id: 'lifeB_trainingAcademy',
+      category: 'business', cooldown: CD.once, story: STORY.youthCamp,
       title: 'Every parent in the area code',
       body: 'They all want their kid trained by you specifically. You could turn that into an actual building with your name on it.',
       options: [
@@ -813,6 +840,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 3 && c.fanbase >= 50 && flag(c, 'b_pod') === 0) {
     deck.push({
       id: 'lifeB_podcastNetwork',
+      category: 'business', cooldown: CD.once,
       title: 'Three year podcast money',
       body: 'A network offers a guarantee. Building your own studio pays more, if anyone actually listens.',
       options: [
@@ -846,6 +874,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && c.fanbase >= 40 && flag(c, 'b_cards') === 0) {
     deck.push({
       id: 'lifeB_tradingCards',
+      category: 'business', cooldown: CD.once,
       title: '25,000 autographs in eleven weeks',
       body: 'A card company has the contract drawn up. Your wrist is already suspicious of this arrangement.',
       options: [
@@ -879,6 +908,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 5 && nw >= 4 && flag(c, 'b_club') === 0) {
     deck.push({
       id: 'lifeB_lowerLeagueClub',
+      category: 'business', cooldown: CD.once,
       title: 'Two clubs are for sale',
       body: 'A USL side with 6,000 real supporters, or an English non league club with a pub physically attached to the ground.',
       options: [
@@ -912,6 +942,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && flag(c, 'b_vacay') === 0) {
     deck.push({
       id: 'lifeB_vacationPhoto',
+      category: 'offseason', cooldown: CD.once,
       title: 'The catamaran photo exists',
       body: 'In it you are holding a jet ski helmet and a wedding cake that belongs to somebody else. You do not know whose wedding it was.',
       options: [
@@ -943,6 +974,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 40 && flag(c, 'b_golf') === 0) {
     deck.push({
       id: 'lifeB_celebGolf',
+      category: 'offseason', cooldown: CD.once,
       title: 'The Saturday celebrity group',
       body: 'You, an actor, a country singer, and a man who owns 400 car washes. Cameras on every hole.',
       options: [
@@ -974,6 +1006,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if ((c.ovr >= 85 || c.mvps >= 1 || c.allPros >= 1) && flag(c, 'b_cover') === 0) {
     deck.push({
       id: 'lifeB_gameCover',
+      category: 'offseason', cooldown: CD.once,
       title: 'They want you on the cover',
       body: 'The video game called. Everyone you have ever met has already brought up the curse, unprompted, within one hour.',
       options: [
@@ -1005,6 +1038,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 55 && flag(c, 'b_reality') === 0) {
     deck.push({
       id: 'lifeB_realityCameo',
+      category: 'offseason', cooldown: CD.once,
       title: 'Three weeks on an island',
       body: 'A survival show wants you, a former Olympic swimmer and a working magician. Filming ends nine days before camp.',
       options: [
@@ -1036,6 +1070,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (c.age >= 24 && flag(c, 'b_cook') === 0) {
     deck.push({
       id: 'lifeB_learningToCook',
+      category: 'offseason', cooldown: CD.once,
       title: 'Your signature dish is a shake',
       body: 'A protein shake with a banana in it. Your partner has started describing this to other people as a personality.',
       options: [
@@ -1067,6 +1102,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if ((yrs >= 4 || c.earnings >= 15) && flag(c, 'b_charity') === 0) {
     deck.push({
       id: 'lifeB_foundationLaunch',
+      category: 'offseason', cooldown: CD.once,
       title: 'The foundation question',
       body: 'You want to start one. Everyone in the room has a strong opinion about how much of your own money should actually be in it.',
       options: [
@@ -1100,6 +1136,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && flag(c, 'b_goat') === 0 && rng() < 0.85) {
     deck.push({
       id: 'lifeB_goatMascot',
+      category: 'weird', cooldown: CD.once,
       title: 'The owner bought a goat',
       body: 'A live one. His name is Gary. Gary has eaten a playbook, a glove and most of a hydration cart.',
       options: [
@@ -1131,6 +1168,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 60 && flag(c, 'b_namefan') === 0) {
     deck.push({
       id: 'lifeB_nameChangeFan',
+      category: 'weird', cooldown: CD.once,
       title: 'A man in Ohio changed his name to yours',
       body: 'Legally. Forty one years old, three kids. His wife found out from the mail.',
       options: [
@@ -1162,6 +1200,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && flag(c, 'b_psychic') === 0 && rng() < 0.8) {
     deck.push({
       id: 'lifeB_ownerPsychic',
+      category: 'weird', cooldown: CD.once,
       title: 'The owner hired a psychic',
       body: 'She sits in on install meetings and has firm opinions about the third down package. The coordinator has stopped arguing.',
       options: [
@@ -1195,6 +1234,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && flag(c, 'b_ghost') === 0 && rng() < 0.8) {
     deck.push({
       id: 'lifeB_lockerRoomGhost',
+      category: 'weird', cooldown: CD.once,
       title: 'The equipment room is haunted',
       body: 'Three rookies swear it is a linebacker from 1974. The equipment manager will not deny it, which is somehow much worse.',
       options: [
@@ -1226,6 +1266,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (c.fanbase >= 45 && flag(c, 'b_proposal') === 0) {
     deck.push({
       id: 'lifeB_stadiumProposal',
+      category: 'weird', cooldown: CD.once,
       title: 'He wants you to carry the ring',
       body: 'A season ticket holder has diagrammed a midfield proposal like a red zone play. He has sent you three versions of the diagram.',
       options: [
@@ -1259,6 +1300,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 1 && flag(c, 'b_raccoon') === 0 && rng() < 0.85) {
     deck.push({
       id: 'lifeB_facilityRaccoon',
+      category: 'weird', cooldown: CD.once,
       title: 'There is a raccoon in the ceiling',
       body: 'Nine days now. He has a name. It is Bandit and he is 3-0 against the strength staff.',
       options: [
@@ -1290,6 +1332,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 2 && flag(c, 'b_ritual') === 0 && rng() < 0.8) {
     deck.push({
       id: 'lifeB_taquitoRitual',
+      category: 'weird', cooldown: CD.once,
       title: 'The gas station taquito',
       body: 'You ate one before a three touchdown game. Now nine grown men require the taquito. The team nutritionist has stopped attending meetings.',
       options: [
@@ -1324,6 +1367,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
       && last && last.teamResult === 'Missed the playoffs' && flag(c, 'b_traderq') === 0) {
     deck.push({
       id: 'lifeB_tradeRequest',
+      category: 'contract', cooldown: CD.contract,
       title: 'You have the leverage to ask out',
       body: `Another January at home. You can force your way off ${teamLabelOf(c.team)} and lose every person who bought your jersey.`,
       options: [
@@ -1359,6 +1403,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     const cut = money(c.salary * 0.25);
     deck.push({
       id: 'lifeB_capRestructure',
+      category: 'contract', cooldown: CD.once, story: STORY.capRestructure,
       title: 'The cap guy has a slide with your name on it',
       body: `Moving ${cut}M of your ${money(c.salary)}M gets them the pass rusher they have been chasing since March.`,
       options: [
@@ -1404,6 +1449,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     const tag = money(Math.max(4, (c.ovr - 64) * 1.55 * posMult) * nflEraById(c.eraId).moneyScale);
     deck.push({
       id: 'lifeB_franchiseTag',
+      category: 'contract', cooldown: CD.contract, story: STORY.franchiseTag,
       title: `Tagged at ${tag}M`,
       body: `${teamLabelOf(c.team)} used the tag. Your agent said the word insulting four times in one sentence and then said it again on the phone with a reporter.`,
       options: [
@@ -1443,6 +1489,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
     const bag = money(Math.max(atEra(c, 2), c.salary * 1.35));
     deck.push({
       id: 'lifeB_contenderDiscount',
+      category: 'contract', cooldown: CD.contract,
       title: 'One piece away, for less money',
       body: `A real contender is offering ${discount}M. Two teams with nothing to play for are offering ${bag}M and a lovely facility.`,
       options: [
@@ -1477,6 +1524,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 7 && c.age >= 29 && c.health >= 70 && c.earnings >= 40 && flag(c, 'b_walkAway') === 0) {
     deck.push({
       id: 'lifeB_retireHealthy',
+      category: 'contract', cooldown: CD.once,
       title: 'You could stop right now',
       body: 'Knees, memory and money all intact at the same time. Almost nobody in this sport ever gets handed that combination.',
       options: [
@@ -1508,6 +1556,7 @@ export function getNflLifeEventsB(c: CareerState, rng: () => number): CareerEven
   if (yrs >= 8 && (c.age >= 33 || c.ovr <= 70) && flag(c, 'b_spring') === 0) {
     deck.push({
       id: 'lifeB_springLeague',
+      category: 'contract', cooldown: CD.once,
       title: 'The spring league called',
       body: 'A starting job, real money by their standards, and eight weeks of live tape in front of 32 general managers who stopped returning your calls.',
       options: [

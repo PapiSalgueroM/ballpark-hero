@@ -17,6 +17,7 @@ import type { CareerRival } from './careerRival';
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
 import { getNbaLifeEventsB } from './nbaCareerLifeB';
+import { getNbaLifeEventsC } from './nbaCareerLifeC';
 import { getNbaCorruptionEvents } from './nbaCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
 import { buildFaWindow } from './usCareerFreeAgency';
@@ -197,6 +198,15 @@ export interface NbaCareerEvent {
   title: string;
   body: string;
   options: { label: string; effect: string; apply: (c: NbaCareerState, rng: () => number) => string }[];
+  /** Round 918: the table the summer step list will read, the same three
+   *  fields the flagship's cards carry (soccerCareerEngine RandomEvent).
+   *  Read by nothing yet, so the draw is byte for byte what it was.
+   *  category is the deck's own section; cooldown is seasons the card sits
+   *  out after it fires (99 means once a career); cards sharing a story
+   *  share one cooldown ledger entry. All optional. */
+  category?: string;
+  cooldown?: number;
+  story?: string;
 }
 
 /* ---------- Round 172: era starts, his "add eras to nba" ask ---------- */
@@ -853,6 +863,7 @@ export function drawNbaEvent(c: NbaCareerState, rng: () => number): NbaCareerEve
   // Everything in those files self-gates, so no extra rules are needed here.
   deck.push(...getNbaLifeEventsA(c, rng));
   deck.push(...getNbaLifeEventsB(c, rng));
+  deck.push(...getNbaLifeEventsC(c, rng)); /* Round 918: deck C, 36 cards, draws nothing from rng */
   const corrupt = getNbaCorruptionEvents(c, rng);
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['props', 'tank', 'sneaks', 'tamper', 'wash'].includes(k));
