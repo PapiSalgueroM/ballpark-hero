@@ -1,0 +1,56 @@
+{
+  "about": "Round 945: final regular season records the simGmLineup spread band is measured from. Each sport read from two sources on 2026-10-03; the two agreed on every club.",
+  "mlb": {
+    "season": "2025",
+    "games": 162,
+    "sources": [
+      { "url": "https://www.baseball-reference.com/leagues/majors/2025-standings.shtml", "read": "2026-10-03" },
+      { "url": "https://www.espn.com/mlb/standings/_/season/2025", "read": "2026-10-03" }
+    ],
+    "records": {
+      "TOR": [94, 68, 0], "NYY": [94, 68, 0], "BOS": [89, 73, 0], "TB": [77, 85, 0], "BAL": [75, 87, 0],
+      "CLE": [88, 74, 0], "DET": [87, 75, 0], "KC": [82, 80, 0], "MIN": [70, 92, 0], "CHW": [60, 102, 0],
+      "SEA": [90, 72, 0], "HOU": [87, 75, 0], "TEX": [81, 81, 0], "ATH": [76, 86, 0], "LAA": [72, 90, 0],
+      "PHI": [96, 66, 0], "NYM": [83, 79, 0], "MIA": [79, 83, 0], "ATL": [76, 86, 0], "WSH": [66, 96, 0],
+      "MIL": [97, 65, 0], "CHC": [92, 70, 0], "CIN": [83, 79, 0], "STL": [78, 84, 0], "PIT": [71, 91, 0],
+      "LAD": [93, 69, 0], "SD": [90, 72, 0], "SF": [81, 81, 0], "ARI": [80, 82, 0], "COL": [43, 119, 0]
+    }
+  },
+  "nhl": {
+    "season": "2024-25",
+    "games": 82,
+    "note": "wins, regulation losses, overtime losses; the win percentage read here is wins over games played",
+    "sources": [
+      { "url": "https://www.hockey-reference.com/leagues/NHL_2025_standings.html", "read": "2026-10-03" },
+      { "url": "https://www.espn.com/nhl/standings/_/season/2025", "read": "2026-10-03" }
+    ],
+    "records": {
+      "WPG": [56, 22, 4], "WSH": [51, 22, 9], "VGK": [50, 22, 10], "TOR": [52, 26, 4], "DAL": [50, 26, 6],
+      "LA": [48, 25, 9], "COL": [49, 29, 4], "TB": [47, 27, 8], "EDM": [48, 29, 5], "CAR": [47, 30, 5],
+      "FLA": [47, 31, 4], "MIN": [45, 30, 7], "OTT": [45, 30, 7], "STL": [44, 30, 8], "CGY": [41, 27, 14],
+      "NJ": [42, 33, 7], "MTL": [40, 31, 11], "VAN": [38, 30, 14], "CBJ": [40, 33, 9], "UTAH": [38, 31, 13],
+      "DET": [39, 35, 8], "NYR": [39, 36, 7], "NYI": [35, 35, 12], "ANA": [35, 37, 10], "PIT": [34, 36, 12],
+      "BUF": [36, 39, 7], "SEA": [35, 41, 6], "BOS": [33, 39, 10], "PHI": [33, 39, 10], "NSH": [30, 44, 8],
+      "CHI": [25, 46, 11], "SJ": [20, 50, 12]
+    }
+  },
+  "nfl": {
+    "season": "2025",
+    "games": 17,
+    "note": "wins, losses, ties; a tie counts half a win",
+    "sources": [
+      { "url": "https://www.espn.com/nfl/standings/_/season/2025", "read": "2026-10-03" },
+      { "url": "https://www.nfl.com/standings/league/2025/REG", "read": "2026-10-03" }
+    ],
+    "records": {
+      "NE": [14, 3, 0], "BUF": [12, 5, 0], "MIA": [7, 10, 0], "NYJ": [3, 14, 0],
+      "PIT": [10, 7, 0], "BAL": [8, 9, 0], "CIN": [6, 11, 0], "CLE": [5, 12, 0],
+      "JAX": [13, 4, 0], "HOU": [12, 5, 0], "IND": [8, 9, 0], "TEN": [3, 14, 0],
+      "DEN": [14, 3, 0], "LAC": [11, 6, 0], "KC": [6, 11, 0], "LV": [3, 14, 0],
+      "PHI": [11, 6, 0], "DAL": [7, 9, 1], "WAS": [5, 12, 0], "NYG": [4, 13, 0],
+      "CHI": [11, 6, 0], "GB": [9, 7, 1], "MIN": [9, 8, 0], "DET": [9, 8, 0],
+      "CAR": [8, 9, 0], "TB": [8, 9, 0], "ATL": [8, 9, 0], "NO": [6, 11, 0],
+      "SEA": [14, 3, 0], "LAR": [12, 5, 0], "SF": [12, 5, 0], "ARI": [3, 14, 0]
+    }
+  }
+}
