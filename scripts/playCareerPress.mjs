@@ -53,6 +53,7 @@ const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
 
 console.log('1) A struggling career meets the scrum');
+await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
 await page.goto(`${BASE}/nfl-my-career`, { waitUntil: 'networkidle' });
 await page.waitForTimeout(1200);
 await page.locator('input[placeholder*="name"]').first().fill('Press Probe');

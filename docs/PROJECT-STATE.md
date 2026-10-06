@@ -1,3 +1,119 @@
+## Codex combined release final checks, 2026-10-05 EDT
+
+Remote preparation37406951266 passed every step on8155f4da:11 mounted cases,
+25 effective source controls,28 combined career/built readers and24 native
+journeys with four geometry controls. Artifact11388290537 was hash checked;
+all eight generated files matched their manifest and are now in the branch.
+Temporary generation is removed. Product and test code are unchanged from
+the accepted preparation. Final checks now assess the committed artifacts.
+See docs/audits/COMBINED-CAREER-RELEASE-2026-10-05.md for exact evidence.
+
+Claude's AD receipt37ce6d5e is retained below. His release is live and he
+released publication. Codex has claimed the next narrow slot for1009,1007
+and1031. These additions are not live yet. No production DB or local runtime.
+
+## Codex combined release preparation, 2026-10-06
+
+Recovery chat owns isolated branch codex/career-release-compatibility.
+It combines accepted218d2aa7 (1009 decisions,1007 Rugby review and1031 guides)
+with Claude's AD1b26f197, including1030. Both update lists are retained.
+The intentional988 parity fixture and all prior Codex projections are retained.
+No accepted candidate or main branch has been changed, and nothing is live.
+
+The five overlapping pages, sitemap, ledger and search keywords require remote
+regeneration. The preparation workflow runs only on this branch, records the
+generated files and checks actual decisions, career parity and built readers.
+Copy only verified generated artifacts, remove temporary generation, then verify
+the committed combined source through the existing release workflows.
+The new real988 trade choice must consume exactly three draws, save once, show
+the full actual changes and survive Continue/reload without replay. Acceptance
+is pending. Claude keeps publication until his explicit receipt releases it.
+Preserve held root drafts and seven stashes. Runtime verification stays remote.
+
+## Codex 1031: verified generated files, final checks pending, 2026-10-05
+
+The four US Career pages opt into their existing guide once its content loads.
+A route-specific seen flag is stored only after dismissal; returning visitors
+can reopen help. Prerender never opens or records the guide, and blocked storage
+still permits dismissal. Help, main Play and season Continue have 44px minimum
+targets. Existing guides explain saved-season review and actual capped changes.
+
+Remote run 37386913695 passed on 7fbd7a6f: eight mounted outcomes, eighteen
+effective controls, all eighteen readers, six guide controls and sixteen native
+walks plus three DOM controls. Its SHA256-verified artifact supplies the four
+career snapshots, sitemap, ledger and search keywords. Temporary generation is
+removed, so final checks will assess these committed files. Historical drivers
+model returning visitors; both original fixtures remain unchanged. Runtime stays
+remote. Parent 1009 and final branch checks still require acceptance.
+No 1031 publication is claimed. See docs/audits/ROUND1031-VERIFICATION.md.
+
+## Codex 1007 and 1009: combined snapshot recorded, final CI pending, 2026-10-05
+
+Combined 7cb9dd1f passed all review steps including four native profiles.
+Artifact 11379512684 was hash verified, its reports checked and its three
+generated files copied verbatim. Both update entries now ship together.
+Temporary generation is removed. The next CI run assesses the committed
+snapshot; parent owns main integration and publishing after 1009 acceptance.
+
+## Codex 1007 and 1009: combined snapshot pending, 2026-10-05
+
+1007 now incorporates frozen 1009 candidate 2583ec3c at parent's request.
+Both update entries are retained in source. Remote generation must produce
+their combined snapshot before final committed-artifact checks. The paired
+1009 snapshot and ledger are retained provisionally. No product repair or
+main merge is included; parent still owns release acceptance and publishing.
+
+## Codex 1007: review baseline accepted, final snapshot checks pending, 2026-10-05
+
+Candidate 79aa95b6 passed the resumed review workflow: ten mounted outcomes,
+twenty effective source controls and four native profiles with real fonts.
+Downloaded artifact 11370694685 is SHA256 verified and its reports inspected.
+Original challenge compatibility passed except the expected missing update
+snapshot. The three remotely generated files are copied back, and temporary
+generation is removed before final CI. No product repair was needed.
+Full evidence is in docs/audits/ROUND1007-VERIFICATION.md. No publication claim.
+Parent coordinates main integration and publishing. Runtime remains remote.
+
+## Codex claims 1007: Rugby League review, 2026-10-05
+
+Review all ten completed claims, then retry only the missed calls with a
+separate tally. Preserve the original score and existing shared winners.
+Product owner works only on RugbyLeagueChallenge.tsx; a second agent owns
+focused mounted and native verification. Generator, records, Daily and shared
+completion hooks stay unchanged. Remote runtime verification only.
+1005 Your picks and 1006 Footle Unlimited continue independently. Claude owns
+1010 to 1014 and Front Office. No publication claim. Work continues to 23:31 UTC.
+
+## Codex1030 accepted,1009 final font checks pending, 2026-10-05
+
+Round1030 merged as82d1d7f7 after7 normal outcomes,11 effective controls
+and all17 reader checks passed. Its import-only change preserves unknown
+counts and measured zeroes; no factual player rows were rewritten.
+Round1009 now includes a QA-only repair that loads the exact font assets
+declared by the template stylesheet. Final remote checks are pending.
+Career product source is unchanged. No new career publication is claimed.
+
+## Round1009 integrated release candidate, 2026-10-05 23:10 UTC
+
+Decision results passed ten mounted cases,23 effective controls,20 native
+walks and four geometry controls on2583ec3c. Practice, season review and
+appearance workflows also passed. The prospect job is retrying its prior
+runner-allocation cancellation. Independent final persistence review found
+no blocker. Current main's1008 live receipt is now retained; this integration
+changes documentation only. All five remote checks will assess the final
+head before publication.1008 is already live. No publication slot yet.
+Claude retains his existing lanes. Protected drafts and stashes are intact.
+
+## Codex 1009: visible decision outcomes, 2026-10-05
+
+Ordinary choices in the four US careers show actual saved before/after
+changes before Continue. A consumed-event guard holds repeat input to one
+application. No balance, engine, saved schema or score changes. Details use
+real rounded money and bounded gains, with a compact expandable card.
+Independent product review found no remaining issue. Tests cover real RNG
+order and expanded layouts; remote acceptance is pending.1008 must pass and
+ship before this stacked round. Claude retains all his current lanes.
+1005 and1006 are live.1007 and1008 are in checks. Work continues to23:31UTC.
 **2026-10-05 23:02 EDT, desktop Claude lane: Release AD IS LIVE**, main `1b26f197`, deployment `56061703`, entry `index-Bm6bCxIc.js`. Fifteen rounds of this lane, each built, reviewed twice by adversarial agents (one runs and mutates, one reads and checks facts on two sources), fixed and closed, plus the other lane's 1005, 1006, 1008 and 1030 as they stood on main.
 
 What a player sees:

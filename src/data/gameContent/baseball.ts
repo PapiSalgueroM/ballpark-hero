@@ -906,6 +906,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Entering the draft and playing full seasons",
         items: [
           "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
+          "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
         subsections: [
           {
@@ -918,6 +919,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
             heading: "Handling offseason events",
             items: [
               "Handle the offseason event: winter training, surgery calls, trade rumors.",
+              "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
             ],
           },
         ],
@@ -1006,6 +1008,12 @@ export const BASEBALL_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading an actual capped change",
+        paragraphs: [
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+        ],
+      },
       {
         heading: "Drafting a Slugging Shortstop at 12th overall",
         paragraphs: [
