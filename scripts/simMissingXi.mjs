@@ -49,6 +49,16 @@
    from 2026-10-06, 10 days land on a held lineup and are stepped on, and
    those are the only days that move.
 
+   The lead then decided (2026-10-06) to rebuild both held rows in place,
+   same id and same position in LINEUPS, after every field was re-read on
+   two hosts: bundesliga-2016-bayern-title is now the 2-1 at Ingolstadt that
+   settled the 2015-16 title, seriea-2010-inter-title the 1-0 at Siena that
+   settled the 2009-10 Scudetto. No row is held, HELD_LINEUP_IDS is empty,
+   and both rows go through 6c and 6d like the rest. Measured after the
+   rebuild: 207 rows, 207 elevens matched, 869 applied changes in place,
+   0 held; over 1500 days from 2026-10-06 no day moves. Under heldlive the
+   re-held Inter row is dealt on 7 of 1500 days and drawn 19 times in 4000.
+
    Negative controls (house rule: prove each check can fail):
      SIM_MISSINGXI_CONTROL=wrongxi    swaps the pinned Vinicius entry for the
                                       super-sub; section 2 must FAIL.
@@ -65,14 +75,18 @@
                                       ledger row; section 6 must FAIL.
      SIM_MISSINGXI_CONTROL=fact       gives De Bruyne (Belgium 2018) the false
                                       club filler fact; section 6 must FAIL.
-     SIM_MISSINGXI_CONTROL=heldxi     swaps Samuel for Materazzi in the held
-                                      Inter 2010 eleven; section 6 must FAIL.
+     SIM_MISSINGXI_CONTROL=heldxi     re-holds the rebuilt Inter 2010 row in
+                                      memory with its pre-rebuild eleven
+                                      pinned; section 6 must FAIL.
+     SIM_MISSINGXI_CONTROL=rebuilt    puts Lucio (on the bench) back in place
+                                      of Materazzi in the rebuilt Inter 2010
+                                      eleven; section 6 must FAIL.
      SIM_MISSINGXI_CONTROL=datelabel  turns the 2011 final into a 2012 one;
                                       section 6 must FAIL.
-     SIM_MISSINGXI_CONTROL=heldlive   empties HELD_LINEUP_IDS; section 7 must
-                                      FAIL (measured: 10 of 1500 days deal a
-                                      held lineup, about 40 of 4000 draws).
-   The six section 6 controls are judged on section 6 alone, heldlive on 7.
+     SIM_MISSINGXI_CONTROL=heldlive   marks the rebuilt Inter 2010 row held in
+                                      the ledger while the code list stays
+                                      empty; section 7 must FAIL.
+   The seven section 6 controls are judged on section 6 alone, heldlive on 7.
    Each control asserts it actually changed something before running, so a
    stale pin or a drifted file cannot green a control.
 
@@ -296,10 +310,24 @@ const ledgerFailuresBefore = failures;
     anchor(c && !c.fact, 'De Bruyne is not a fact-free blank of wc-2018-semi-belgium');
     c.fact = 'Started that night for Manchester City.';
   }
+  /* The two held rows were rebuilt in place (lead decision, 2026-10-06), so
+     no row is held. heldxi now re-holds the rebuilt Inter 2010 row in memory
+     with its pre-rebuild eleven pinned: the held branch must see the drift.
+     rebuilt puts Lucio (on the bench that day) back in place of Materazzi:
+     the rebuilt row is checked against its two host eleven like any other. */
   if (CONTROL === 'heldxi') {
-    const s = byId.get('seriea-2010-inter-title')?.slots.find(x => x.name === 'Walter Samuel');
-    anchor(s && rowById.get('seriea-2010-inter-title')?.verdict === 'held', 'Walter Samuel is not in the held seriea-2010 eleven');
-    s.name = 'Marco Materazzi';
+    const row = rowById.get('seriea-2010-inter-title');
+    const before = row && row.rebuilt && row.rebuilt.entryElevenBefore;
+    anchor(row && row.verdict !== 'held' && Array.isArray(before) && before.includes('Lucio'), 'seriea-2010-inter-title carries no pre-rebuild eleven with Lucio');
+    anchor(byId.get('seriea-2010-inter-title')?.slots.some(x => x.name === 'Marco Materazzi'), 'Marco Materazzi is not in the rebuilt seriea-2010 eleven');
+    row.verdict = 'held';
+    row.hold = { rule: 'control', why: 'control heldxi', entryEleven: before };
+  }
+  if (CONTROL === 'rebuilt') {
+    const s = byId.get('seriea-2010-inter-title')?.slots.find(x => x.name === 'Marco Materazzi');
+    anchor(s && rowById.get('seriea-2010-inter-title')?.verdict === 'corrected', 'Marco Materazzi is not in the rebuilt seriea-2010 eleven');
+    anchor(!rowById.get('seriea-2010-inter-title').eleven.includes('Lucio'), 'Lucio is in the two host eleven');
+    s.name = 'Lucio';
   }
   if (CONTROL === 'datelabel') {
     const lu = byId.get('cl-2011-final-barca');
@@ -386,19 +414,28 @@ const heldFailuresBefore = failures;
      7a the code's list equals the ledger's held rows; 7b over 1500 days the
      daily never deals one, and every day whose pick differs from the
      unskipped pick is a day that landed on a held lineup; 7c Unlimited never
-     draws one in 4000 draws. Measured 2026-10-06 over 1500 days from
-     2026-10-06: see the printed count (a handful of days, about 2 a year per
-     held lineup). Control SIM_MISSINGXI_CONTROL=heldlive empties the list:
-     7b and 7c must FAIL. */
+     draws one in 4000 draws.
+
+     Since the lead's decision of 2026-10-06 rebuilt both held rows in place,
+     no row is held and the code's list is empty, so 7b also proves the daily
+     deals exactly the unskipped pick on every day (no day moves), which is
+     the rotation main had before any hold. The checks read the ledger's held
+     set, not the code's list, so a row held in the ledger and forgotten in
+     the code is caught. Control SIM_MISSINGXI_CONTROL=heldlive marks the
+     rebuilt Inter 2010 row held in the ledger (in memory) while the code
+     list stays empty: 7a, 7b and 7c must FAIL. */
   const dir = path.join(ROOT, 'scripts', 'data', 'missingXiVerified2026-10');
-  const heldRows = fs.readdirSync(dir).filter(f => /^shard-\d+\.json$/.test(f))
-    .flatMap(f => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).lineups)
-    .filter(r => r.verdict === 'held').map(r => r.id).sort();
+  const ledgerRows = fs.readdirSync(dir).filter(f => /^shard-\d+\.json$/.test(f))
+    .flatMap(f => JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')).lineups);
+  const heldRows = ledgerRows.filter(r => r.verdict === 'held').map(r => r.id);
+  if (CONTROL === 'heldlive') {
+    const row = ledgerRows.find(r => r.id === 'seriea-2010-inter-title');
+    if (!row || row.verdict === 'held' || HELD_LINEUP_IDS.has(row.id)) { console.error('control cannot run: seriea-2010-inter-title is missing or already held'); process.exit(1); }
+    heldRows.push(row.id);
+  }
+  heldRows.sort();
   const codeHeld = [...HELD_LINEUP_IDS].sort();
   if (heldRows.join('|') !== codeHeld.join('|')) fail(`HELD_LINEUP_IDS (${codeHeld.join(', ')}) differs from the ledger's held rows (${heldRows.join(', ')})`);
-  if (CONTROL === 'heldlive') {
-    if (HELD_LINEUP_IDS.size === 0) { console.error('control cannot run: no held lineup to release'); process.exit(1); }
-  }
   const saved = [...HELD_LINEUP_IDS];
   const RealDate = Date;
   const START = RealDate.UTC(2026, 9, 6, 16, 0, 0);
@@ -409,30 +446,29 @@ const heldFailuresBefore = failures;
   };
   const days = 1500;
   const run = () => { const out = []; for (let d = 0; d < days; d += 1) { now = START + d * 86_400_000; const p = pickDailyPuzzle(); out.push(`${p.lineup.id}#${p.candidate.name}`); } return out; };
-  const withSkip = run();
+  const live = run();
   HELD_LINEUP_IDS.clear();
   const raw = run();
-  if (CONTROL !== 'heldlive') for (const id of saved) HELD_LINEUP_IDS.add(id);
-  const live = CONTROL === 'heldlive' ? raw : withSkip;
+  for (const id of saved) HELD_LINEUP_IDS.add(id);
   globalThis.Date = RealDate;
   let landed = 0, moved = 0;
   raw.forEach((r, d) => {
-    const heldDay = saved.includes(r.split('#')[0]);
-    if (heldDay) landed += 1;
-    if (r !== withSkip[d]) { moved += 1; if (!heldDay) fail(`day ${d}: the skip moved a day that did not land on a held lineup`); }
+    const id = r.split('#')[0];
+    if (heldRows.includes(id)) landed += 1;
+    if (r !== live[d]) { moved += 1; if (!saved.includes(id)) fail(`day ${d}: the skip moved a day that did not land on a held lineup`); }
   });
-  const dealtHeld = live.filter(x => saved.includes(x.split('#')[0])).length;
+  const dealtHeld = live.filter(x => heldRows.includes(x.split('#')[0])).length;
   if (dealtHeld) fail(`the daily deals a held lineup on ${dealtHeld} of ${days} days`);
-  if (landed === 0) fail(`no day in ${days} lands on a held lineup, so 7b has nothing to hold`);
+  if (heldRows.length && landed === 0) fail(`no day in ${days} lands on a held lineup, so 7b has nothing to hold`);
   let drawn = 0;
-  for (let i = 0; i < 4000; i += 1) if (saved.includes(pickUnlimitedPuzzle().lineup.id)) drawn += 1;
+  for (let i = 0; i < 4000; i += 1) if (heldRows.includes(pickUnlimitedPuzzle().lineup.id)) drawn += 1;
   if (drawn) fail(`Unlimited drew a held lineup ${drawn} times in 4000`);
-  console.log(`   ${saved.length} held; over ${days} days ${landed} landed on one and were stepped on, ${moved} days moved in all; Unlimited drew a held lineup ${drawn} times in 4000`);
+  console.log(`   ${heldRows.length} held in the ledger, ${saved.length} in the code; over ${days} days ${landed} landed on a held lineup, ${moved} days moved in all; Unlimited drew a held lineup ${drawn} times in 4000`);
 }
 const heldFailures = failures - heldFailuresBefore;
 
 if (CONTROL) {
-  if (['subswap', 'revert', 'onehost', 'fact', 'heldxi', 'datelabel'].includes(CONTROL) && ledgerFailures === 0) {
+  if (['subswap', 'revert', 'onehost', 'fact', 'heldxi', 'rebuilt', 'datelabel'].includes(CONTROL) && ledgerFailures === 0) {
     console.error(`\ncontrol "${CONTROL}": section 6 did not fire, the check is dead`);
     process.exit(1);
   }

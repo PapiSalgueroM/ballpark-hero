@@ -4570,31 +4570,31 @@ export const LINEUPS: Lineup[] = [
     id: 'bundesliga-2016-bayern-title',
     dateLabel: '2015-16 Bundesliga Title Decider',
     competition: 'Bundesliga',
-    matchDate: '2016-04-16',
+    matchDate: '2016-05-07',
     team: 'Bayern Munich',
-    opponent: 'Borussia Monchengladbach',
-    scoreLine: 'Bayern Munich 1-0 Borussia Monchengladbach (title clinched)',
-    venue: 'Allianz Arena, Munich',
+    opponent: 'FC Ingolstadt 04',
+    scoreLine: 'FC Ingolstadt 04 1-2 Bayern Munich (title clinched)',
+    venue: 'Audi Sportpark, Ingolstadt',
     formationLabel: '4-2-3-1',
     slots: [
       GK('Manuel Neuer'),
       { position: 'RB', name: 'Philipp Lahm', x: 84, y: 70 },
-      { position: 'CB', name: 'Jerome Boateng', x: 62, y: 74 },
-      { position: 'CB', name: 'Javi Martinez', x: 38, y: 74 },
+      { position: 'CB', name: 'Javi Martinez', x: 62, y: 74 },
+      { position: 'CB', name: 'Joshua Kimmich', x: 38, y: 74 },
       { position: 'LB', name: 'David Alaba', x: 16, y: 70 },
       { position: 'CDM', name: 'Xabi Alonso', x: 62, y: 56 },
-      { position: 'CDM', name: 'Joshua Kimmich', x: 38, y: 56 },
-      { position: 'RW', name: 'Arjen Robben', x: 80, y: 34 },
+      { position: 'CDM', name: 'Thiago Alcántara', x: 38, y: 56 },
+      { position: 'RW', name: 'Douglas Costa', x: 80, y: 34 },
       { position: 'CAM', name: 'Thomas Muller', x: 50, y: 34 },
-      { position: 'LW', name: 'Douglas Costa', x: 20, y: 34 },
+      { position: 'LW', name: 'Franck Ribery', x: 20, y: 34 },
       { position: 'ST', name: 'Robert Lewandowski', x: 50, y: 16 },
     ],
     blankCandidates: [
-      { name: 'Javi Martinez', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Bayern Munich' },
-      { name: 'Joshua Kimmich', slotIndex: 6, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
-      { name: 'Douglas Costa', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
+      { name: 'Javi Martinez', slotIndex: 2, nationality: 'Spain', clubAtTime: 'Bayern Munich' },
+      { name: 'Joshua Kimmich', slotIndex: 3, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
+      { name: 'Douglas Costa', slotIndex: 7, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
     ],
-    source: 'Round 1026: HELD, never dealt (HELD_LINEUP_IDS). The match as written (Bayern 1-0 Gladbach, 16 April 2016) did not take place and the eleven matches no Bayern lineup of that run-in; the ledger (scripts/data/missingXiVerified2026-10 shard 4) proposes the rebuild.',
+    source: 'Round 1026: rebuilt on two hosts, see scripts/data/missingXiVerified2026-10 shard 4. The title was won 2-1 at Ingolstadt on 7 May 2016, not against Gladbach in April; Thiago and Ribery started, Kimmich at centre-back, and Boateng and Robben were not in the squad.',
   },
 
   // 140. 2012-13 Premier League Title Decider - Manchester United clinch the title under Ferguson's final season
@@ -4634,31 +4634,31 @@ export const LINEUPS: Lineup[] = [
     id: 'seriea-2010-inter-title',
     dateLabel: '2009-10 Serie A Title Decider',
     competition: 'Serie A',
-    matchDate: '2010-05-05',
+    matchDate: '2010-05-16',
     team: 'Inter Milan',
     opponent: 'Siena',
-    scoreLine: 'Inter Milan 1-0 Siena (Scudetto clinched)',
-    venue: 'San Siro, Milan',
-    formationLabel: '4-3-1-2',
+    scoreLine: 'Siena 0-1 Inter Milan (Scudetto clinched)',
+    venue: 'Artemio Franchi, Siena',
+    formationLabel: '4-2-3-1',
     slots: [
       GK('Julio Cesar'),
       { position: 'RB', name: 'Maicon', x: 84, y: 70 },
-      { position: 'CB', name: 'Lucio', x: 62, y: 74 },
+      { position: 'CB', name: 'Marco Materazzi', x: 62, y: 74 },
       { position: 'CB', name: 'Walter Samuel', x: 38, y: 74 },
-      { position: 'LB', name: 'Cristian Chivu', x: 16, y: 70 },
-      { position: 'CM', name: 'Esteban Cambiasso', x: 62, y: 54 },
-      { position: 'CM', name: 'Thiago Motta', x: 38, y: 54 },
-      { position: 'CAM', name: 'Wesley Sneijder', x: 50, y: 36 },
-      { position: 'ST', name: 'Diego Milito', x: 60, y: 16 },
-      { position: 'ST', name: 'Samuel Eto\'o', x: 40, y: 16 },
-      { position: 'RW', name: 'Goran Pandev', x: 78, y: 28 },
+      { position: 'LB', name: 'Javier Zanetti', x: 16, y: 70 },
+      { position: 'CDM', name: 'Esteban Cambiasso', x: 62, y: 56 },
+      { position: 'CDM', name: 'Thiago Motta', x: 38, y: 56 },
+      { position: 'CAM', name: 'Wesley Sneijder', x: 50, y: 34 },
+      { position: 'ST', name: 'Diego Milito', x: 50, y: 16 },
+      { position: 'LW', name: "Samuel Eto'o", x: 20, y: 34 },
+      { position: 'RW', name: 'Mario Balotelli', x: 80, y: 34 },
     ],
     blankCandidates: [
-      { name: 'Cristian Chivu', slotIndex: 4, nationality: 'Romania', clubAtTime: 'Inter Milan' },
       { name: 'Thiago Motta', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Inter Milan' },
-      { name: 'Goran Pandev', slotIndex: 10, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
+      { name: 'Walter Samuel', slotIndex: 3, nationality: 'Argentina', clubAtTime: 'Inter Milan' },
+      { name: 'Wesley Sneijder', slotIndex: 7, nationality: 'Netherlands', clubAtTime: 'Inter Milan' },
     ],
-    source: 'Round 1026: HELD, never dealt (HELD_LINEUP_IDS). Inter played no league match on 5 May 2010; the title was won 1-0 at Siena on 16 May, and three of these starters and two of the blanks did not start it (ESPN, weltfussball.de). The ledger (shard 4) proposes the rebuild.',
+    source: 'Round 1026: rebuilt on two hosts, see scripts/data/missingXiVerified2026-10 shard 4. The Scudetto was won 1-0 at Siena on 16 May 2010, the last day; Materazzi, Zanetti and Balotelli started in a 4-2-3-1, and Lucio, Chivu and Pandev did not.',
   },
 
   // 142. 2007-08 Champions League Semifinal 1st Leg - Barcelona 0-0 Manchester United
@@ -7140,12 +7140,11 @@ function seededRandom(seed: number): () => number {
  * (wrong date, score or starters) and waits for a rebuild the ledger
  * proposes. They stay in LINEUPS so the daily rotation does not shift, and
  * no player is dealt one. simMissingXi section 7 keeps this list equal to
- * the ledger's held rows.
+ * the ledger's held rows. Empty since the lead's decision of 2026-10-06:
+ * both held lineups (bundesliga-2016-bayern-title, seriea-2010-inter-title)
+ * were rebuilt in place on two hosts, keeping their ids and positions.
  */
-export const HELD_LINEUP_IDS: ReadonlySet<string> = new Set([
-  'bundesliga-2016-bayern-title',
-  'seriea-2010-inter-title',
-]);
+export const HELD_LINEUP_IDS: ReadonlySet<string> = new Set<string>([]);
 
 /**
  * Picks today's lineup and which of its blankCandidates is blanked,

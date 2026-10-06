@@ -4455,7 +4455,7 @@
    "position": 136,
    "id": "bundesliga-2016-bayern-title",
    "research": "unverified",
-   "verdict": "held",
+   "verdict": "corrected",
    "eleven": [
     "Manuel Neuer",
     "Philipp Lahm",
@@ -4470,18 +4470,18 @@
     "Robert Lewandowski"
    ],
    "substitutes": [
-    "Medhi Benatia 45' for Xabi Alonso",
+    "Medhi Benatia at half-time for Xabi Alonso (ESPN 45', weltfussball.de 46')",
     "Rafinha 57' for Ribéry",
-    "Sebastian Rode 89' for Thiago (ESPN match page; the ESPN lineups page printed a garbled version)"
+    "Sebastian Rode 89' for Thiago (ESPN match page and weltfussball.de; the ESPN lineups page printed a garbled version)"
    ],
    "fields": {
     "dateLabel": "2015-16 Bundesliga Title Decider",
     "competition": "Bundesliga",
-    "matchDate": "2016-04-16",
+    "matchDate": "2016-05-07",
     "team": "Bayern Munich",
-    "opponent": "Borussia Monchengladbach",
-    "scoreLine": "Bayern Munich 1-0 Borussia Monchengladbach (title clinched)",
-    "venue": "Allianz Arena, Munich",
+    "opponent": "FC Ingolstadt 04",
+    "scoreLine": "FC Ingolstadt 04 1-2 Bayern Munich (title clinched)",
+    "venue": "Audi Sportpark, Ingolstadt",
     "formationLabel": "4-2-3-1"
    },
    "hints": [
@@ -4493,13 +4493,13 @@
     },
     {
      "name": "Joshua Kimmich",
-     "position": "CDM",
+     "position": "CB",
      "nationality": "Germany",
      "clubAtTime": "Bayern Munich"
     },
     {
      "name": "Douglas Costa",
-     "position": "LW",
+     "position": "RW",
      "nationality": "Brazil",
      "clubAtTime": "Bayern Munich"
     }
@@ -4538,8 +4538,29 @@
      "url": "https://www.weltfussball.de/spielbericht/bundesliga-2015-2016-fc-ingolstadt-04-bayern-muenchen/",
      "readOn": "2026-10-05",
      "xi": true,
-     "says": "Read by the shard 4 skeptic: supports the recorded XI for FC Ingolstadt 1-2 Bayern, 7 May 2016. Not reachable from this machine on 2026-10-06 (403).",
+     "says": "Read by the shard 4 skeptic: supports the recorded XI for FC Ingolstadt 1-2 Bayern, 7 May 2016. It answered 403 to a plain fetch on 2026-10-06 and loads with a browser user agent; this round read it itself (the next weltfussball.de source).",
      "addedBy": "shard 4 skeptic"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=426831",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "ESPN summary feed: 7 May 2016, FC Ingolstadt 04 1-2 Bayern Munich at Audi Sportpark. Bayern 4-2-3-1: Neuer G; Lahm RB, Javi Martínez CD-R, Kimmich CD-L, Alaba LB; Xabi Alonso RM and Thiago LM (the pair behind the line of three); Douglas Costa AM-R, Müller AM, Ribéry AM-L; Lewandowski F. Goals Lewandowski 15' pen and 32' (Xabi Alonso), Hartmann 42' pen. Recap headline: Bayern Munich clinch Bundesliga title with win at Ingolstadt."
+    },
+    {
+     "host": "weltfussball.de",
+     "url": "https://www.weltfussball.de/spielbericht/ma2416194/spielschema/",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Matchday 33, Saturday 07.05.2016 15:30, Ingolstadt 1:2 FC Bayern; Lewandowski 15. (penalty) and 32., Hartmann 42. (penalty); Stadion Audi Sportpark, 15,617; referee Florian Meyer. Bayern XI: Neuer, Javi Martínez, Lahm, Alaba, Thiago (off 89.), Xabi Alonso (off 46.), Kimmich, Ribéry (off 57.), Lewandowski, Douglas Costa, Müller; on Benatia 46., Rafinha 57., Rode 89. Its pitch drawing (data-xpos, high is right, checked on Ingolstadt's eleven against ESPN's sides): Lahm 0.90, Martínez 0.65, Kimmich 0.35, Alaba 0.10 at the back; Xabi Alonso 0.60 and Thiago 0.40 in front of them; Douglas Costa 0.90, Müller 0.50, Ribéry 0.10 in the line of three; Lewandowski 0.50 alone up front. A 4-2-3-1, every side as ESPN has it."
+    },
+    {
+     "host": "weltfussball.de",
+     "url": "https://www.weltfussball.de/wettbewerb/ro57041/md33/ergebnisse-und-tabellen/",
+     "readOn": "2026-10-06",
+     "xi": false,
+     "says": "Bundesliga 2015-16 tables: after matchday 32 Bayern 82 and Dortmund 77 (Bayern 1:1 Gladbach on 30.04.2016, read on the md32 page); after matchday 33 Bayern 85 and Dortmund 77 with one game left, so the title was settled on 7 May 2016."
     }
    ],
    "diffs": [
@@ -4548,32 +4569,40 @@
      "entry": "2016-04-16, Borussia Monchengladbach, 'Bayern Munich 1-0 Borussia Monchengladbach (title clinched)'",
      "evidence": "ESPN's Bayern 2015-16 Bundesliga results: 16 Apr 2016 was Bayern 3-0 Schalke 04; Bayern v Gladbach at home was 30 Apr 2016 and finished 1-1 (Müller scored); the title was clinched on 7 May 2016 with a 2-1 win at FC Ingolstadt (Lewandowski 15' pen, 32'). The entry's date, opponent and score do not describe one real match.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two own reads agree (ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing)); see applied"
     },
     {
      "field": "venue (single source)",
      "entry": "Allianz Arena, Munich",
      "evidence": "The title clincher was played in Ingolstadt (ESPN).",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two own reads agree (ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing)); see applied"
     },
     {
      "field": "slots (XI) vs the 7 May 2016 clincher (single source)",
      "entry": "Jerome Boateng (CB) and Arjen Robben (RW) in the XI",
      "evidence": "ESPN: neither Boateng nor Robben was in the Ingolstadt matchday squad. Thiago Alcántara and Franck Ribéry started instead; Kimmich started in defence. The other nine names (Neuer, Lahm, Javi Martínez, Alaba, Xabi Alonso, Kimmich, Müller, Douglas Costa, Lewandowski) did start that match.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two own reads agree (ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing)); see applied"
     },
     {
      "field": "slots (XI) vs the 30 Apr 2016 Gladbach match (single source)",
      "entry": "Same XI",
      "evidence": "ESPN's Bayern XI for the 1-1 with Gladbach was heavily rotated (Neuer, Boateng, Tasci, Benatia, Kimmich, Rode, Bernat, Rafinha, Müller, Götze, Coman). The entry does not match that match either.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two own reads agree (ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing)); see applied"
+    },
+    {
+     "field": "blank hints (Kimmich, Douglas Costa)",
+     "entry": "Kimmich CDM, Douglas Costa LW",
+     "evidence": "ESPN (CD-L, AM-R) and weltfussball.de (left centre-back, right of the line of three) for the 7 May 2016 clincher.",
+     "severity": "major",
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two own reads agree; see applied"
     }
    ],
    "applied": [
@@ -4582,13 +4611,99 @@
      "from": "(the old source line)",
      "to": "Round 1026: HELD, never dealt",
      "why": "the internal source string still vouched for a match two hosts contradict"
+    },
+    {
+     "path": "matchDate",
+     "from": "2016-04-16",
+     "to": "2016-05-07",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): the title was clinched on 7 May 2016 (matchday 33); 16 April was Bayern 3-0 Schalke"
+    },
+    {
+     "path": "opponent",
+     "from": "Borussia Monchengladbach",
+     "to": "FC Ingolstadt 04",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): the clincher was at FC Ingolstadt 04; Bayern v Gladbach was a 1-1 on 30 April"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Bayern Munich 1-0 Borussia Monchengladbach (title clinched)",
+     "to": "FC Ingolstadt 04 1-2 Bayern Munich (title clinched)",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing); ESPN's recap and weltfussball.de's tables put the title on this result"
+    },
+    {
+     "path": "venue",
+     "from": "Allianz Arena, Munich",
+     "to": "Audi Sportpark, Ingolstadt",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing)"
+    },
+    {
+     "path": "slots[2].name",
+     "from": "Jerome Boateng",
+     "to": "Javi Martinez",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): Javi Martinez started at right centre-back; Boateng was not in the matchday squad"
+    },
+    {
+     "path": "slots[3].name",
+     "from": "Javi Martinez",
+     "to": "Joshua Kimmich",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): Kimmich started at left centre-back"
+    },
+    {
+     "path": "slots[6].name",
+     "from": "Joshua Kimmich",
+     "to": "Thiago Alcántara",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): Thiago started in the holding pair, left of Xabi Alonso"
+    },
+    {
+     "path": "slots[7].name",
+     "from": "Arjen Robben",
+     "to": "Douglas Costa",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): Douglas Costa started on the right of the three; Robben was not in the matchday squad"
+    },
+    {
+     "path": "slots[9].name",
+     "from": "Douglas Costa",
+     "to": "Franck Ribery",
+     "why": "ESPN summary feed (426831) and weltfussball.de (ma2416194, its pitch drawing): Ribery started on the left of the three"
+    },
+    {
+     "path": "blankCandidates[Javi Martinez].slotIndex",
+     "from": 3,
+     "to": 2,
+     "why": "the blank follows him to right centre-back; he started on both hosts"
+    },
+    {
+     "path": "blankCandidates[Joshua Kimmich].slotIndex",
+     "from": 6,
+     "to": 3,
+     "why": "the blank follows him to centre-back, where both hosts put him; he started on both"
+    },
+    {
+     "path": "blankCandidates[Douglas Costa].slotIndex",
+     "from": 9,
+     "to": 7,
+     "why": "the blank follows him to the right, where both hosts put him; he started on both"
+    },
+    {
+     "path": "source",
+     "from": "Round 1026: HELD, never dealt",
+     "to": "Round 1026: rebuilt on two hosts",
+     "why": "the held note no longer describes the entry"
     }
    ],
-   "hold": {
-    "rule": "lead rule 6",
-    "why": "The entry's match (Bayern 1-0 Gladbach, 16 April 2016) did not take place; its eleven matches neither the 30 April Gladbach draw nor the 7 May clincher (Boateng and Robben were not in that squad). Marked, not removed: removing the two held lineups would change the daily puzzle on 202 of the next 365 days (measured 2026-10-06) while they are dealt on 2.",
+   "notes": [
+    "Verdict 'unverified' because only one host (espn.com) could be read for this season. bundesliga.com match URLs for 2015-16 (matchday 30, 32, 33 slugs, with and without /lineup) all returned 404; kicker.de returned 403; Sky Sports' and BeSoccer's archive pages only render current seasons; the session's web-search budget was exhausted, so no further hosts could be located. ESPN alone shows the entry is wrong on date/opponent/score/venue; a second host is needed before rewriting it.",
+    "If the entry is rebuilt around the real title clincher (Ingolstadt 1-2 Bayern, 7 May 2016), blankCandidates Javi Martínez, Kimmich and Douglas Costa all started that match per ESPN. Whether they fit any intended match cannot be settled until the match itself is chosen.",
+    "The entry's source text claims 'Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous on the title-clinching starting XI'; that claim cannot be true for a match that did not take place.",
+    "Round 1026: the eleven above is the 7 May 2016 clincher per ESPN, recorded for the lead; the entry was unchanged until the rebuild below.",
+    "Round 1026 rebuild (2026-10-06): the entry now describes FC Ingolstadt 04 1-2 Bayern Munich, 7 May 2016, Audi Sportpark, the day the title was settled. Every field was re-read on two hosts this session: date, venue, score and the eleven on ESPN's summary feed and weltfussball.de; the shape (4-2-3-1, unchanged) and every side on ESPN's roles and weltfussball.de's pitch drawing, which agree man for man; the title on ESPN's recap and weltfussball.de's tables. The three blanks (Javi Martinez, Kimmich, Douglas Costa) started on both; their hints now read CB, CB and RW. No reveal fact is carried. Id, dateLabel and position in LINEUPS are unchanged, and the lineup is dealt again."
+   ],
+   "rebuilt": {
+    "on": "2026-10-06",
+    "decision": "Lead decision 2026-10-06: rebuild both held lineups in place from their proposals, keeping each entry's id and its position in LINEUPS so the daily rotation does not shift; every field re-read on two independent non-wiki hosts first.",
+    "heldBecause": "The entry's match (Bayern 1-0 Gladbach, 16 April 2016) did not take place; its eleven matches neither the 30 April Gladbach draw nor the 7 May clincher (Boateng and Robben were not in that squad). Marked, not removed: removing the two held lineups would change the daily puzzle on 202 of the next 365 days (measured 2026-10-06) while they are dealt on 2.",
     "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at FC Ingolstadt 1-2 Bayern Munich, 7 May 2016, Audi Sportpark, Ingolstadt: Thiago Alcantara for Boateng, Franck Ribery for Robben, Kimmich at centre-back; Javi Martinez, Kimmich and Douglas Costa all started.",
-    "entryEleven": [
+    "entryElevenBefore": [
      "Manuel Neuer",
      "Philipp Lahm",
      "Jerome Boateng",
@@ -4600,15 +4715,8 @@
      "Thomas Muller",
      "Douglas Costa",
      "Robert Lewandowski"
-    ],
-    "dealt": "never: HELD_LINEUP_IDS in src/lib/missingXi.ts keeps it out of Unlimited, and the daily steps to the next lineup on a day that lands on it (review fix, 2026-10-06)"
-   },
-   "notes": [
-    "Verdict 'unverified' because only one host (espn.com) could be read for this season. bundesliga.com match URLs for 2015-16 (matchday 30, 32, 33 slugs, with and without /lineup) all returned 404; kicker.de returned 403; Sky Sports' and BeSoccer's archive pages only render current seasons; the session's web-search budget was exhausted, so no further hosts could be located. ESPN alone shows the entry is wrong on date/opponent/score/venue; a second host is needed before rewriting it.",
-    "If the entry is rebuilt around the real title clincher (Ingolstadt 1-2 Bayern, 7 May 2016), blankCandidates Javi Martínez, Kimmich and Douglas Costa all started that match per ESPN. Whether they fit any intended match cannot be settled until the match itself is chosen.",
-    "The entry's source text claims 'Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous on the title-clinching starting XI'; that claim cannot be true for a match that did not take place.",
-    "Round 1026: the eleven above is the 7 May 2016 clincher per ESPN, recorded for the lead; the entry is unchanged."
-   ]
+    ]
+   }
   },
   {
    "position": 137,
@@ -4825,7 +4933,7 @@
    "position": 138,
    "id": "seriea-2010-inter-title",
    "research": "unverified",
-   "verdict": "held",
+   "verdict": "corrected",
    "eleven": [
     "Julio Cesar",
     "Maicon",
@@ -4847,30 +4955,30 @@
    "fields": {
     "dateLabel": "2009-10 Serie A Title Decider",
     "competition": "Serie A",
-    "matchDate": "2010-05-05",
+    "matchDate": "2010-05-16",
     "team": "Inter Milan",
     "opponent": "Siena",
-    "scoreLine": "Inter Milan 1-0 Siena (Scudetto clinched)",
-    "venue": "San Siro, Milan",
-    "formationLabel": "4-3-1-2"
+    "scoreLine": "Siena 0-1 Inter Milan (Scudetto clinched)",
+    "venue": "Artemio Franchi, Siena",
+    "formationLabel": "4-2-3-1"
    },
    "hints": [
     {
-     "name": "Cristian Chivu",
-     "position": "LB",
-     "nationality": "Romania",
-     "clubAtTime": "Inter Milan"
-    },
-    {
      "name": "Thiago Motta",
-     "position": "CM",
+     "position": "CDM",
      "nationality": "Brazil",
      "clubAtTime": "Inter Milan"
     },
     {
-     "name": "Goran Pandev",
-     "position": "RW",
-     "nationality": "North Macedonia",
+     "name": "Walter Samuel",
+     "position": "CB",
+     "nationality": "Argentina",
+     "clubAtTime": "Inter Milan"
+    },
+    {
+     "name": "Wesley Sneijder",
+     "position": "CAM",
+     "nationality": "Netherlands",
      "clubAtTime": "Inter Milan"
     }
    ],
@@ -4901,8 +5009,50 @@
      "url": "https://www.weltfussball.de/spielbericht/serie-a-2009-2010-ac-siena-inter/",
      "readOn": "2026-10-05",
      "xi": true,
-     "says": "Read by the shard 4 skeptic: supports the recorded XI for Siena 0-1 Inter, 16 May 2010. Not reachable from this machine on 2026-10-06 (403).",
+     "says": "Read by the shard 4 skeptic: supports the recorded XI for Siena 0-1 Inter, 16 May 2010. It answered 403 to a plain fetch on 2026-10-06 and loads with a browser user agent; this round read it itself (the next weltfussball.de source).",
      "addedBy": "shard 4 skeptic"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=278289",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "ESPN summary feed: 16 May 2010, Siena 0-1 Internazionale at Artemio Franchi Montepaschi Arena, Milito 57'. Inter 4-2-3-1: the goalkeeper (shirt 12; the feed's name record is mis-mapped to 'Julio César De León'); Maicon RB, Materazzi CD-R, Samuel CD-L, Zanetti LB; Cambiasso RM and Thiago Motta LM (the pair behind the line of three); Balotelli AM-R, Sneijder in the middle, Eto'o AM-L; Milito F."
+    },
+    {
+     "host": "goal.com",
+     "url": "https://www.goal.com/it/notizie/siena-inter-0-1-prima-la-paura-poi-il-solito-principe-inter/blt837ad86504852b60",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Goal Italy match report of 16 May 2010, headline INTER CAMPIONE D'ITALIA (the 18th title). Tabellino: INTER (4-2-3-1): Julio Cesar; Maicon, Materazzi, Samuel, Zanetti; Thiago Motta (54' Pandev), Cambiasso; Balotelli (59' Stankovic), Sneijder (73' Chivu), Eto'o; Milito. Scorer 57' Milito. The report: Mourinho picked Balotelli over Pandev, Lucio on the bench, Motta and Cambiasso the screen in midfield, the goal set off the Franchi."
+    },
+    {
+     "host": "calciomercato.com",
+     "url": "https://www.calciomercato.com/news/siena-inter-0-1-tabellino",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Tabellino of 16 May 2010: Inter: 12 Julio Cesar; 13 Maicon, 23 Materazzi, 25 Samuel, 4 Zanetti; 8 Thiago Motta (8' st 27 Pandev), 19 Cambiasso; 45 Balotelli (14' st 5 Stankovic), 10 Sneijder (28' st 26 Chivu), 9 Eto'o; 22 Milito. Bench: Toldo, Lucio, Muntari, Mariga. Scorer 12' st Milito. Referee Morganti."
+    },
+    {
+     "host": "weltfussball.de",
+     "url": "https://www.weltfussball.de/spielbericht/ma99759/spielschema/",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Matchday 38, Sunday 16.05.2010 15:00, Siena 0:1 Inter, Milito 57.; Stadion Artemio Franchi, 15,373; referee Emidio Morganti. Inter XI: Júlio César, Javier Zanetti, Maicon, Marco Materazzi, Walter Samuel, Thiago Motta (off 54.), Wesley Sneijder (off 73.), Esteban Cambiasso, Samuel Eto'o, Diego Milito, Mario Balotelli (off 58.); on Pandev 54., Stankovic 58., Chivu 73. No pitch drawing for this match."
+    },
+    {
+     "host": "footballcritic.com",
+     "url": "https://www.footballcritic.com/serie-a-siena-fc-fc-internazionale-milano/match-report/114250",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Match report, 16 May 2010, Siena 0-1 Inter, Milito 57'. Inter starting XI: Materazzi, Julio Cesar, Maicon, Balotelli, Sneijder, Milito, Zanetti, Cambiasso, Eto'o, Thiago Motta, Samuel; Lucio, Pandev, Chivu and Stankovic among the substitutes."
+    },
+    {
+     "host": "weltfussball.de",
+     "url": "https://www.weltfussball.de/wettbewerb/ro4599/md38/ergebnisse-und-tabellen/",
+     "readOn": "2026-10-06",
+     "xi": false,
+     "says": "Serie A 2009-10 tables: Inter 79 and Roma 77 before the last day (md37 page), 82 and 80 after it, so the Scudetto was settled by this result."
     }
    ],
    "diffs": [
@@ -4911,48 +5061,64 @@
      "entry": "2010-05-05",
      "evidence": "ESPN's Inter 2009-10 Serie A results list 2 May (Lazio 0-2 Inter), 9 May (Inter v Chievo) and 16 May (Siena 0-1 Inter). No Serie A match on 5 May 2010.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
     },
     {
      "field": "venue + scoreLine (single source)",
      "entry": "San Siro, Milan; 'Inter Milan 1-0 Siena (Scudetto clinched)'",
      "evidence": "ESPN: Siena 0-1 Inter, Siena at home (Milito 57'). The only other 2009-10 meeting was Inter 4-3 Siena on 9 Jan 2010.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
     },
     {
      "field": "slots[2] (CB) (single source)",
      "entry": "Lucio",
      "evidence": "ESPN lists Lúcio on the bench; Marco Materazzi started.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
     },
     {
      "field": "slots[4] (LB) (single source)",
      "entry": "Cristian Chivu",
      "evidence": "Chivu came on in the 73rd minute for Sneijder; Javier Zanetti started in defence.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
     },
     {
      "field": "slots[10] (RW) (single source)",
      "entry": "Goran Pandev",
      "evidence": "Pandev came on in the 54th minute for Thiago Motta; Mario Balotelli started.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
     },
     {
      "field": "blankCandidates[0] and [2] (single source)",
      "entry": "Cristian Chivu (slot 4), Goran Pandev (slot 10)",
      "evidence": "Both were substitutes per ESPN.",
      "severity": "major",
-     "decision": "held: rule 6",
-     "reason": "one host on the research read; the entry describes a match that did not take place. Marked, not changed (lead rule 6)."
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): own reads of ESPN's summary feed, goal.com, calciomercato.com and weltfussball.de agree; see applied"
+    },
+    {
+     "field": "formationLabel",
+     "entry": "4-3-1-2",
+     "evidence": "ESPN summary feed 4-2-3-1 and goal.com INTER (4-2-3-1); calciomercato.com prints the same lines. No host states 4-3-1-2.",
+     "severity": "minor",
+     "decision": "applied",
+     "reason": "rebuilt on the lead's decision (2026-10-06): two hosts agree on the new shape"
+    },
+    {
+     "field": "holding pair sides (Cambiasso, Thiago Motta)",
+     "entry": "Cambiasso right, Motta left",
+     "evidence": "ESPN: Cambiasso RM, Motta LM. goal.com and calciomercato.com print Motta before Cambiasso, which in a right to left tabellino puts Motta right.",
+     "severity": "minor",
+     "decision": "kept: sources split",
+     "reason": "the hosts disagree on the pair's sides, so the entry's sides stay (rule 1)"
     }
    ],
    "applied": [
@@ -4961,13 +5127,127 @@
      "from": "(the old source line)",
      "to": "Round 1026: HELD, never dealt",
      "why": "the internal source string still vouched for a match two hosts contradict"
+    },
+    {
+     "path": "matchDate",
+     "from": "2010-05-05",
+     "to": "2010-05-16",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left), weltfussball.de: Inter played no league match on 5 May"
+    },
+    {
+     "path": "scoreLine",
+     "from": "Inter Milan 1-0 Siena (Scudetto clinched)",
+     "to": "Siena 0-1 Inter Milan (Scudetto clinched)",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left), weltfussball.de: Siena at home, Milito 57'; goal.com's headline and weltfussball.de's tables put the Scudetto on this result"
+    },
+    {
+     "path": "venue",
+     "from": "San Siro, Milan",
+     "to": "Artemio Franchi, Siena",
+     "why": "ESPN (Artemio Franchi Montepaschi Arena), weltfussball.de (Artemio Franchi) and goal.com (il Franchi)"
+    },
+    {
+     "path": "formationLabel",
+     "from": "4-3-1-2",
+     "to": "4-2-3-1",
+     "why": "ESPN summary feed and goal.com both state 4-2-3-1; no host states 4-3-1-2"
+    },
+    {
+     "path": "slots[2].name",
+     "from": "Lucio",
+     "to": "Marco Materazzi",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Materazzi started at right centre-back; Lucio was on the bench"
+    },
+    {
+     "path": "slots[4].name",
+     "from": "Cristian Chivu",
+     "to": "Javier Zanetti",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Zanetti started at left-back; Chivu came on 73'"
+    },
+    {
+     "path": "slots[5].position",
+     "from": "CM",
+     "to": "CDM",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Cambiasso in the holding pair of the 4-2-3-1; side split, entry side kept"
+    },
+    {
+     "path": "slots[6].position",
+     "from": "CM",
+     "to": "CDM",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Motta in the holding pair of the 4-2-3-1; side split, entry side kept"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "right",
+     "to": "centre",
+     "why": "layout: the lone striker of the 4-2-3-1 both hosts state"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "ST",
+     "to": "LW",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Eto'o on the left of the three behind Milito (ESPN AM-L, last of the line in both tabellini)"
+    },
+    {
+     "path": "slots[10].name",
+     "from": "Goran Pandev",
+     "to": "Mario Balotelli",
+     "why": "ESPN summary feed (278289) and the goal.com and calciomercato.com tabellini (4-2-3-1, lines printed right to left): Balotelli started on the right of the three (ESPN AM-R, first of the line in both tabellini); Pandev came on 54'"
+    },
+    {
+     "path": "blankCandidates[Cristian Chivu]",
+     "from": "candidate",
+     "to": null,
+     "why": "Chivu did not start: he came on 73' for Sneijder"
+    },
+    {
+     "path": "blankCandidates[Goran Pandev]",
+     "from": "candidate",
+     "to": null,
+     "why": "Pandev did not start: he came on 54' for Motta"
+    },
+    {
+     "path": "blankCandidates[Walter Samuel]",
+     "from": null,
+     "to": {
+      "slotIndex": 3,
+      "nationality": "Argentina",
+      "clubAtTime": "Inter Milan"
+     },
+     "why": "replacement blank: started on every host; spelled and hinted as his verified blanks in cl-2010-final-inter and cl-2010-semi-inter"
+    },
+    {
+     "path": "blankCandidates[Wesley Sneijder]",
+     "from": null,
+     "to": {
+      "slotIndex": 7,
+      "nationality": "Netherlands",
+      "clubAtTime": "Inter Milan"
+     },
+     "why": "replacement blank: started on every host; spelled and hinted as his verified blank in wc-2010-final-netherlands"
+    },
+    {
+     "path": "source",
+     "from": "Round 1026: HELD, never dealt",
+     "to": "Round 1026: rebuilt on two hosts",
+     "why": "the held note no longer describes the entry"
     }
    ],
-   "hold": {
-    "rule": "lead rule 6",
-    "why": "No Inter Serie A match on 5 May 2010 (ESPN); the title was won 1-0 at Siena on 16 May. Three of the entry's eleven and two of its three blanks did not start that match. Marked, not removed (see bundesliga-2016-bayern-title for the measured cost of removal).",
+   "notes": [
+    "Verdict 'unverified' because only espn.com could be read. Attempts: legaseriea.it old match and fixture URLs 301-redirect to the home page; the new site is script-rendered and its data API (api-sdp.legaseriea.it) returned 404 on the guessed path; BeSoccer and Sky Sports match pages could not be located without search (the session's web-search budget was exhausted); kicker.de returned 403.",
+    "ESPN's own data looks slightly off on the goalkeeper's name ('Julio Cesar de Leon') but shows shirt 12, which is Inter's goalkeeper Júlio César's number; treat as an ESPN naming quirk, not a different keeper.",
+    "Even on ESPN alone, three of the entry's eleven are wrong and two of three blankCandidates were substitutes. A second host must confirm before the entry is rebuilt.",
+    "blankCandidate Thiago Motta started (off 54') per ESPN.",
+    "Round 1026: the eleven above is the 16 May 2010 match per ESPN, recorded for the lead; the entry was unchanged until the rebuild below.",
+    "Round 1026 rebuild (2026-10-06): the entry now describes Siena 0-1 Inter Milan, 16 May 2010, Artemio Franchi, the last day of the season and the day the Scudetto was settled. Every field was re-read on two hosts or more this session: date, score and the eleven on ESPN's summary feed, goal.com, calciomercato.com, weltfussball.de and footballcritic; venue on ESPN, weltfussball.de and goal.com; the 4-2-3-1 on ESPN and goal.com; the back four and the line of three sides on ESPN and both tabellini; the Scudetto on goal.com and weltfussball.de's tables. The goalkeeper is Julio Cesar on goal.com, calciomercato.com, weltfussball.de and footballcritic (ESPN's name record for shirt 12 is mis-mapped). Stankovic's minute splits (59 on ESPN, goal.com and calciomercato.com, 58 on weltfussball.de); substitutes are not shown in the game.",
+    "Blanks: Thiago Motta started on every host and now reads CDM. Chivu and Pandev were substitutes and are dropped; Walter Samuel and Wesley Sneijder, who started on every host, replace them with the spelling and hints of their verified blanks elsewhere in this ledger (so the live reach sweep already covers both). Motta's nationality hint stays Brazil, as in the verified cl-2010-semi-inter row of the same spring. No reveal fact is carried. Id, dateLabel and position in LINEUPS are unchanged, and the lineup is dealt again."
+   ],
+   "rebuilt": {
+    "on": "2026-10-06",
+    "decision": "Lead decision 2026-10-06: rebuild both held lineups in place from their proposals, keeping each entry's id and its position in LINEUPS so the daily rotation does not shift; every field re-read on two independent non-wiki hosts first.",
+    "heldBecause": "No Inter Serie A match on 5 May 2010 (ESPN); the title was won 1-0 at Siena on 16 May. Three of the entry's eleven and two of its three blanks did not start that match. Marked, not removed (see bundesliga-2016-bayern-title for the measured cost of removal).",
     "proposal": "With ESPN (re-read 2026-10-06) and weltfussball.de (skeptic) the entry can be re-pointed at Siena 0-1 Inter Milan, 16 May 2010, Artemio Franchi, Siena: Materazzi for Lucio, Zanetti for Chivu, Balotelli for Pandev; the Chivu and Pandev blanks replaced (Thiago Motta started).",
-    "entryEleven": [
+    "entryElevenBefore": [
      "Julio Cesar",
      "Maicon",
      "Lucio",
@@ -4979,16 +5259,8 @@
      "Diego Milito",
      "Samuel Eto'o",
      "Goran Pandev"
-    ],
-    "dealt": "never: HELD_LINEUP_IDS in src/lib/missingXi.ts keeps it out of Unlimited, and the daily steps to the next lineup on a day that lands on it (review fix, 2026-10-06)"
-   },
-   "notes": [
-    "Verdict 'unverified' because only espn.com could be read. Attempts: legaseriea.it old match and fixture URLs 301-redirect to the home page; the new site is script-rendered and its data API (api-sdp.legaseriea.it) returned 404 on the guessed path; BeSoccer and Sky Sports match pages could not be located without search (the session's web-search budget was exhausted); kicker.de returned 403.",
-    "ESPN's own data looks slightly off on the goalkeeper's name ('Julio Cesar de Leon') but shows shirt 12, which is Inter's goalkeeper Júlio César's number; treat as an ESPN naming quirk, not a different keeper.",
-    "Even on ESPN alone, three of the entry's eleven are wrong and two of three blankCandidates were substitutes. A second host must confirm before the entry is rebuilt.",
-    "blankCandidate Thiago Motta started (off 54') per ESPN.",
-    "Round 1026: the eleven above is the 16 May 2010 match per ESPN, recorded for the lead; the entry is unchanged."
-   ]
+    ]
+   }
   },
   {
    "position": 139,
