@@ -1,13 +1,14 @@
 name: MMA promotion verification
 
 on:
-  push:
-    branches: [codex/fight-promotion-1062]
   pull_request:
     paths:
       - .github/workflows/mma-promotion.yml
       - src/components/fight-promoter/**
       - src/pages/FightPromoter.tsx
+      - src/data/gameContent/moreSports.ts
+      - src/data/gameRegistry.ts
+      - src/data/seoMeta.ts
       - src/components/game/GameHelp.tsx
       - src/hooks/useMmaPromotion.ts
       - src/lib/mmaPromotion.ts
@@ -54,40 +55,11 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-      - name: Prepare scoped guide and search source
-        if: ${{ github.event_name == 'push' }}
-        run: |
-          node scripts/genSearchKeywords.mjs 2>&1 | tee mma-promotion-artifacts/search-generation.log
-          node scripts/simGuideHeadings.mjs --refresh /fight-promoter 2>&1 | tee mma-promotion-artifacts/guide-refresh.log
       - name: Type check and build
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee mma-promotion-artifacts/types.log
           npm run build 2>&1 | tee mma-promotion-artifacts/build.log
-      - name: Prepare scoped generated pages
-        if: ${{ github.event_name == 'push' && !cancelled() && steps.build.outcome == 'success' }}
-        run: |
-          PRERENDER_ONLY=/fight-promoter,/whats-new node scripts/prerender.mjs 2>&1 | tee mma-promotion-artifacts/prerender.log
-          node scripts/genSitemap.mjs 2>&1 | tee mma-promotion-artifacts/sitemap.log
-          npm run build 2>&1 | tee mma-promotion-artifacts/generated-build.log
-          mkdir -p mma-promotion-artifacts/generated/public/fight-promoter mma-promotion-artifacts/generated/public/whats-new mma-promotion-artifacts/generated/scripts/data mma-promotion-artifacts/generated/src/data/seoMetaParts
-          cp public/fight-promoter/index.html mma-promotion-artifacts/generated/public/fight-promoter/index.html
-          cp public/whats-new/index.html mma-promotion-artifacts/generated/public/whats-new/index.html
-          cp public/sitemap.xml mma-promotion-artifacts/generated/public/sitemap.xml
-          cp scripts/data/lastmod.json mma-promotion-artifacts/generated/scripts/data/lastmod.json
-          cp scripts/data/guideHeadingsFrozen.json mma-promotion-artifacts/generated/scripts/data/guideHeadingsFrozen.json
-          cp src/data/searchKeywords.json mma-promotion-artifacts/generated/src/data/searchKeywords.json
-          cp src/data/seoMetaParts/seoMetaPart29.ts mma-promotion-artifacts/generated/src/data/seoMetaParts/seoMetaPart29.ts
-          git rev-parse HEAD > mma-promotion-artifacts/generated/source-head.txt
-          (cd mma-promotion-artifacts/generated && sha256sum public/fight-promoter/index.html public/whats-new/index.html public/sitemap.xml scripts/data/lastmod.json scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart29.ts > SHA256SUMS)
-          node --input-type=module <<'NODE'
-          import assert from 'node:assert/strict';
-          import { execFileSync } from 'node:child_process';
-          const allowed = new Set(['public/fight-promoter/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'scripts/data/guideHeadingsFrozen.json', 'src/data/searchKeywords.json', 'src/data/seoMetaParts/seoMetaPart29.ts']);
-          const changed = execFileSync('git', ['diff', '--name-only', '--', 'public', 'scripts/data', 'src/data/searchKeywords.json', 'src/data/seoMetaParts'], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
-          assert(changed.every(file => allowed.has(file)), 'Preparation writes only the seven scoped generated files');
-          console.log('Scoped generated artifacts:', changed.join(', '));
-          NODE
       - name: MMA mounted outcomes distributions and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MMA_PROMOTION_CONTROL=all ONLY=simMmaPromotion node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/mma.log
