@@ -3908,9 +3908,10 @@ function calcAssists(position: string, apps: number, overall?: number, mult = 1)
    2026-10-05 that as a CB or CDM goals should not matter as much, and the
    engine agreed with him the wrong way: only the keeper's clean sheets reached
    the rating, so centre backs had the most poor seasons on the pitch and the
-   fewest elite ones. Measured over 10,000 seeded careers before this round:
-   CB 31% poor and 23% elite, the strikers and wingers 15 to 25% poor and 36
-   to 48% elite (scripts/simCareerPositionRatings.mjs has the numbers).
+   fewest elite ones. Measured over 10,000 seeded careers before this round
+   (creation screen builds, both eras): CB 24% poor and 28% elite, the
+   strikers, wingers and number tens 12 to 15% poor and 47 to 49% elite
+   (scripts/simCareerPositionRatings.mjs has the numbers).
    Back line: each clean sheet he kept, the number already drawn for the
    season and shown in his history. Holding midfielder: nothing defensive is
    drawn for him, so the honest proxy is the team's EXPECTED clean sheets in

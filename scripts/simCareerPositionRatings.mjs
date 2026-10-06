@@ -24,15 +24,15 @@ const ENGINE_SRC = fs.readFileSync(ENGINE_FILE, 'utf8').replace(/\r\n/g, '\n');
 const CREDIT_LINE = '  base += defensiveRatingCredit(position, apps, cleanSheets);\n';
 const CREDIT_CONST = 'const DEFENSIVE_SHEET_CREDIT = 0.035;';
 const CONTROLS = {
-  oldrule: { from: CREDIT_LINE, to: '', red: [1] },
+  oldrule: { from: CREDIT_LINE, to: '', red: [1, 2, 3] },
   overcredit: { from: CREDIT_CONST, to: 'const DEFENSIVE_SHEET_CREDIT = 0.035 * 4;', red: [1, 2] },
-  stream: { from: CREDIT_LINE, to: '  base += defensiveRatingCredit(position, apps, cleanSheets) + 0 * Math.random();\n', red: [3] },
+  stream: { from: CREDIT_LINE, to: '  base += defensiveRatingCredit(position, apps, cleanSheets) + 0 * Math.random();\n', red: [2, 3] },
 };
 /* Margins and floors, measured (see the header). */
 const MARGIN = { poor: 3, elite: 3 };
-const FLOOR = { seasons: 800, careers: 100, cells: 9000, saves: 16, newRows: 24 };
-const DELTA = { peak: [-9, 9], trophies: [-9, 9], released: [-99, 99] };
-const BDOR_CEILING = 9;
+const FLOOR = { seasons: 800, careers: 240, identity: 60, cells: 9000, saves: 16, newRows: 24 };
+const DELTA = { peak: [0.15, 0.75], trophies: [0.05, 0.45], released: [-4, 4] };
+const BDOR_CEILING = 1;
 const count = (hay, needle) => hay.split(needle).length - 1;
 function swap(src, from, to, label) {
   const n = count(src, from);
@@ -185,14 +185,25 @@ const digest = s => crypto.createHash('sha256').update(JSON.stringify(s)).digest
 const TROPHY_KEYS = ['leagueTitle', 'domesticCup', 'championsLeague', 'worldCup', 'continentalCup', 'clubCupTitle'];
 
 /* The fleet: every position the creation screen offers, a 2020 start and a
-   1990 start, PER careers each, the same seeds on both engines. */
-function fleet(E) {
+   1990 start, PER careers each, the same seeds on both engines. The engine
+   before the rule plays the defenders in full (section 2 compares them) and
+   only the first IDENTITY careers of every other position, enough to prove
+   those careers did not move, which keeps the run a quarter shorter.
+   Every position plays the SAME seeds: the first draws are the creation
+   screen's overall and potential rolls, so career i is the same talent at
+   all ten positions. Talent is most of the spread between careers, and with
+   a seed per position it made a position's share swing 2 to 3 points from
+   run to run on its own (the first draft measured a holding midfielder 5.1
+   points under the attackers' band on one offset and inside it on the next).
+   Shared seeds make the comparison paired, position against position. */
+const IDENTITY = 10;
+function fleet(E, before = false) {
   const out = {};
-  let k = 0;
-  for (const position of POSITIONS) {
+  POSITIONS.forEach(position => {
     const o = out[position] = { seasons: 0, poor: 0, elite: 0, careers: 0, peak: 0, trophies: 0, bdor: 0, released: 0, digests: [] };
-    for (const [startYear, era] of ERAS) for (let i = 0; i < PER; i++) {
-      const seed = OFFSET * 1000003 + 7 + (k++) * 7919;
+    const per = before && !DEFENCE.includes(position) ? Math.min(IDENTITY, PER) : PER;
+    ERAS.forEach(([startYear, era], ei) => { for (let i = 0; i < per; i++) {
+      const seed = OFFSET * 1000003 + 7 + (ei * PER + i) * 7919;
       const { s, peak, released } = runCareer(E, seed, position, era, startYear);
       for (const r of CUR.R.soccerRatingRows(s.seasons, position)) {
         if (r.rating === null) continue;
@@ -205,14 +216,14 @@ function fleet(E) {
         for (const t of TROPHY_KEYS) if (r[t]) o.trophies += 1;
         if (r.ballonDor) o.bdor += 1;
       }
-      o.digests.push(digest(s));
-    }
-  }
+      o.digests.push(`${era}|${i}|${digest(s)}`);
+    } });
+  });
   return out;
 }
 const t0 = process.hrtime.bigint();
 const NEWF = fleet(CUR);
-const OLDF = fleet(OLD);
+const OLDF = fleet(OLD, true);
 const secs = Number(process.hrtime.bigint() - t0) / 1e9;
 const share = (o, k) => 100 * o[k] / o.seasons;
 
@@ -231,7 +242,7 @@ const band = { poor: span(NEWF, 'poor'), elite: span(NEWF, 'elite') };
 console.log(`   attacking band (ST, LW, RW, CAM): poor ${band.poor.map(v => v.toFixed(1)).join(' to ')}%, elite ${band.elite.map(v => v.toFixed(1)).join(' to ')}%, widened by ${MARGIN.poor} and ${MARGIN.elite} points`);
 for (const p of POSITIONS) {
   const n = NEWF[p], o = OLDF[p];
-  console.log(`   ${p.padEnd(4)} ${String(n.seasons).padStart(5)} seasons  poor ${share(n, 'poor').toFixed(1).padStart(4)}%  elite ${share(n, 'elite').toFixed(1).padStart(4)}%   (rule before this round: poor ${share(o, 'poor').toFixed(1)}%, elite ${share(o, 'elite').toFixed(1)}%)`);
+  console.log(`   ${p.padEnd(4)} ${String(n.seasons).padStart(5)} seasons  poor ${share(n, 'poor').toFixed(1).padStart(4)}%  elite ${share(n, 'elite').toFixed(1).padStart(4)}%   ${DEFENCE.includes(p) ? `(rule before this round: poor ${share(o, 'poor').toFixed(1)}%, elite ${share(o, 'elite').toFixed(1)}%)` : '(the rule does not touch this position)'}`);
   floorCheck(n.seasons, FLOOR.seasons, `${p} rated seasons`);
 }
 for (const p of [...DEFENCE, 'CM']) for (const k of ['poor', 'elite']) {
@@ -246,9 +257,12 @@ for (const p of [...DEFENCE, 'CM']) for (const k of ['poor', 'elite']) {
 section = 2;
 console.log('\n2) downstream, the same seeds on the engine before and after the rule');
 let same = 0, compared = 0;
-for (const p of [...ATTACK, 'CM', 'GK']) NEWF[p].digests.forEach((d, i) => { compared += 1; if (d === OLDF[p].digests[i]) same += 1; });
+for (const p of [...ATTACK, 'CM', 'GK']) {
+  const mine = new Set(NEWF[p].digests);
+  for (const d of OLDF[p].digests) { compared += 1; if (mine.has(d)) same += 1; }
+}
 console.log(`   attackers, CM and GK: ${same} of ${compared} careers byte identical on both engines`);
-floorCheck(compared, FLOOR.careers, 'careers compared');
+floorCheck(compared, FLOOR.identity, 'careers compared');
 if (same !== compared) fail(`${compared - same} careers at a position the rule does not touch came out different`);
 const pooled = (F, ps) => {
   const t = { careers: 0, peak: 0, trophies: 0, bdor: 0, released: 0 };
