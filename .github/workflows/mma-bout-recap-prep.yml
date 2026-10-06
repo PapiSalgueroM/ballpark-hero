@@ -1,30 +1,12 @@
-name: MMA promotion verification
+name: MMA bout recap preparation
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/mma-promotion.yml
-      - src/components/fight-promoter/**
-      - src/pages/FightPromoter.tsx
-      - src/data/gameContent/moreSports.ts
-      - src/data/gameRegistry.ts
-      - src/data/seoMeta.ts
-      - src/components/game/GameHelp.tsx
-      - src/hooks/useMmaPromotion.ts
-      - src/lib/mmaPromotion.ts
-      - src/test/mmaPromotion.test.tsx
-      - src/test/mmaBoutRecap.test.tsx
-      - scripts/simMmaPromotion.mjs
-      - scripts/simMmaBoutRecap.mjs
-      - scripts/simInventedNames.mjs
-      - scripts/qa/mmaPromotion1062.mjs
-      - public/fight-promoter/index.html
-      - public/whats-new/index.html
-
+  push:
+    branches: [codex/mma-bout-recap-1071]
 permissions:
   contents: read
 concurrency:
-  group: mma-promotion-${{ github.head_ref || github.ref_name }}
+  group: mma-bout-recap-prep
   cancel-in-progress: true
 
 jobs:
@@ -62,11 +44,12 @@ jobs:
           python -m pip install fonttools pillow
       - name: Preserve accepted MMA and boxing engines and saves
         run: git diff --exit-code 1c10e7e5c11a3d502afb16070af462086874014d HEAD -- src/lib/mmaPromotion.ts src/hooks/useMmaPromotion.ts src/lib/fightPromoter.ts src/hooks/useFightPromoter.ts
-      - name: Type check and build
+      - name: Type check and refresh pages
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee mma-promotion-artifacts/types.log
-          npm run build 2>&1 | tee mma-promotion-artifacts/build.log
+          node scripts/genSearchKeywords.mjs 2>&1 | tee mma-promotion-artifacts/search.log
+          PRERENDER_ONLY=/fight-promoter,/whats-new npm run build:seo 2>&1 | tee mma-promotion-artifacts/build.log
       - name: MMA mounted outcomes distributions and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MMA_PROMOTION_CONTROL=all ONLY=simMmaPromotion node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/mma.log
@@ -92,10 +75,27 @@ jobs:
       - name: Native MMA and saved boxing journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: node scripts/qa/mmaPromotion1062.mjs 2>&1 | tee mma-promotion-artifacts/native.log
+      - name: Package verified page candidates
+        if: success()
+        run: |
+          git rev-parse HEAD > mma-promotion-artifacts/source-head.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const files = ['public/fight-promoter/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const manifest = files.map(file => {
+            const target = path.join('mma-promotion-artifacts/generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            fs.copyFileSync(file, target);
+            return { file, sha256: crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex') };
+          });
+          fs.writeFileSync('mma-promotion-artifacts/generated-manifest.json', JSON.stringify(manifest, null, 2));
+          JS
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mma-promotion-${{ github.run_id }}-${{ github.run_attempt }}
+          name: mma-bout-recap-prep-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 1
           path: mma-promotion-artifacts/

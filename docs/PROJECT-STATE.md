@@ -1,3 +1,31 @@
+## Round 1071 claimed: MMA bout recaps, parallel preparation
+
+2026-10-06. Codex continues beyond Cage with Free Kick lab (1070) and
+a compact saved bout recap inside Fight Promoter's MMA mode (1071).
+Objective: after a card or from history, select a bout, read its actual
+saved round counters, then return to the same event result.
+Show recorded landed strikes, takedowns, ground control, submission
+attempts and round points for both fictional fighters. No invented
+thrown shots, clock time or unplayed rounds. Early finishes stay explicit.
+Ground control uses the engine's recorded units; never call them seconds.
+
+Read-only presentation. No new action, engine, RNG, cash, rankings,
+contract, save schema, score or boxing change. Compact round tabs and
+Back to event, 44px targets, pre-play rules and reopenable help.
+Success: asymmetric literal counters, early-finish bounds, preserved
+event context and byte-identical saves through open/back/reload;
+effective faults and native phone proof. All runtime stays remote.
+
+Reuse attached managed career-release-compatibility checkout, branch
+codex/mma-bout-recap-1071 from main 1c10e7e5, separate from 1070.
+Own MmaPromotionBoard result/help slice, new MmaBoutRecap component,
+MMA-only moreSports guide paragraph, one news bullet and targeted QA.
+Claude retains career/GM and agreed guide lanes. AH keeps main/publish
+while both Codex candidates are prepared. Preserve PR152 to160.
+Protected root drafts/seven stashes untouched. No production DB calls
+or public fight completions. Neither new feature is claimed LIVE.
+Next free round 1072 is unclaimed.
+
 ## Round 1069 LIVE: Cage move hints, 2026-10-06 22:30:41 UTC
 
 Cage Clash at https://douknowball.com/cage-clash now shows Ready, Move
