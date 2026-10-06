@@ -55,8 +55,9 @@
    homealt   both meetings at the same ground. Section 4 red.
    cadhold   the Liga MX 2019/20 hold is dropped. Section 3 red (Club America
              2019).
-   aliasdrop one alias entry (Athletic Bilbao) is deleted. Section 3 red: the
-             Basque derby goes dormant and the pinned 2020 status disagrees.
+   aliasdrop one alias entry (Athletic Bilbao) is deleted. Sections 1 and 3
+             red: the alias map no longer covers a respelled pair club, and
+             the Basque derby goes dormant against the pinned 2020 status.
    winner    the winning goal rule counts any goal up to the decider. Section
              6 red (the hero calibration).
    eliteoff  the engine passes an empty elite list. Section 4 red (the replay).
@@ -76,7 +77,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.SIM_DERBY_CONTROL || '';
-const CONTROLS = { nodetect: [3, 6], cadence1: [3], noalias: [3], stream: [5], uncapped: [6], homealt: [4], cadhold: [3], aliasdrop: [3], winner: [6], eliteoff: [4] };
+const CONTROLS = { nodetect: [3, 6], cadence1: [3], noalias: [3], stream: [5], uncapped: [6], homealt: [4], cadhold: [3], aliasdrop: [1, 3], winner: [6], eliteoff: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
 const OFFSET = Number(process.argv.find((a, i) => i > 1 && /^\d+$/.test(a)) || 0);
@@ -293,13 +294,28 @@ const DASH = /[\u2013\u2014]/;
      2.938, 0.290 and 0.956 over about 1300 seasons each way. Band 6, about
      twice the largest. The uncapped control reads 13.256 at offset 0.
    - section 4 replay: 2830 to 2870 seasons a run, 0 differ; home and away:
-     about 5000 two meeting rivalries a run, 0 at one ground. Both exact. */
+     about 5000 two meeting rivalries a run, 0 at one ground. Both exact.
+   Re-measured 2026-10-06 over offsets 0 to 3 on the tree merged with Release
+   AD, where Round 1013's clubs wake eleven pairs (51 active in 2020, not 40)
+   and the pool plays 1610 to 1650 derby seasons in 2000, not 1510 to 1550:
+   - 6b 0.560 to 0.588, 0.459 to 0.468, 0.359 to 0.383, 0.267 to 0.290,
+     0.166 to 0.189, at least 940 meetings a rung, smallest step 0.074.
+   - 6c 0.267 to 0.269. 6d attackers 0.083 to 0.102, midfield 0.047 to
+     0.072, defenders 0.020 to 0.027, smallest gaps 0.020 and 0.022; hero
+     calibration 0.995 to 1.060 over 484 to 577 meetings.
+   - 6e popularity every season 0.507 to 2.256; final popularity -0.125 to
+     0.688; net worth -1.194 to 1.921; Hall of Fame lines -0.025 to 0.013.
+     Final morale 1.425 to 6.825 and sponsorship -0.018 to 0.150: with more
+     derbies the swing is felt more, and both sat on their old bands (7 and
+     0.15), a coin toss, so both were reset to about twice the largest seen,
+     14 and 0.3. No control is caught by either limb alone.
+   - section 5: the 16 digest careers play 160 derby seasons (was 140). */
 const BANDS = {
   rungMin: 400, rungStep: 0.03, drawLo: 0.24, drawHi: 0.30,
   heroAttMid: 0.01, heroMidDef: 0.013,
   heroRatioLo: 0.85, heroRatioHi: 1.2, heroMinMeetings: 300, popSeasonDiff: 6,
-  popDiff: 2, moraleDiff: 7, sponsorDiff: 0.15, worthDiff: 4, hofDiff: 0.08,
-  digestDerbySeasons: 70, // 140 derby seasons over the 16 fixed digest careers (deterministic, offset free)
+  popDiff: 2, moraleDiff: 14, sponsorDiff: 0.3, worthDiff: 4, hofDiff: 0.08,
+  digestDerbySeasons: 80, // 160 derby seasons over the 16 fixed digest careers on the merged tree (deterministic, offset free)
 };
 
 /* The ratchet's frozen size, set when the round landed: 57 Club Manager
@@ -345,6 +361,24 @@ console.log('1) every pair two sourced, off any wiki, between real clubs, and th
     if (!scNames.has(k)) fail(`alias key ${k} is not a Soccer Career club`);
     if (!cmNames.has(v)) fail(`alias value ${v} is not a Club Manager club`);
   }
+  /* Name drift, held from the other side. Round 1013 copies Club Manager's
+     clubs into Soccer Career through its own alias map and an accent fold
+     (scripts/lib/careerClubPool.mjs), so a club the shared table names can
+     arrive under another spelling. Every pair club that reaches Soccer Career
+     that way must be in SC_CLUB_CANON, or its derbies stay silently dormant. */
+  const { NAME_ALIASES } = await import(pathToFileURL(path.join(ROOT, 'scripts/lib/careerClubPool.mjs')).href);
+  const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const pairClubs = new Set(rows.flatMap(r => [r.a, r.b]));
+  let drift = 0, spelled = 0;
+  for (const p of pairClubs) {
+    for (const sc of new Set([NAME_ALIASES[p], fold(p)].filter(x => x && x !== p))) {
+      if (!scNames.has(sc)) continue;
+      spelled += 1;
+      if (data.SC_CLUB_CANON[sc] !== p) { drift += 1; fail(`${sc} is ${p} in the shared table but SC_CLUB_CANON does not say so`); }
+    }
+  }
+  if (!NAME_ALIASES || Object.keys(NAME_ALIASES).length < 4 || spelled < 8) fail(`only ${spelled} respelled pair clubs found, the drift check reads nothing`);
+  console.log(`   ${spelled} pair clubs Soccer Career spells differently, ${drift} missing from the alias map`);
   const sourced = (x, y) => rows.some(r => (r.a === x && r.b === y) || (r.a === y && r.b === x));
   const unsourced = new Set(data.PRIMARY_RIVAL_UNSOURCED);
   let edges = 0, missing = 0;
@@ -421,8 +455,10 @@ const FORCED_CASES = [
   ['Sao Paulo', 2020, ['Corinthians', 'Palmeiras', 'Santos'], 'three Paulista rivals, through the alias map'],
   ['Corinthians', 2002, [], 'the Brasileirao before 2003 claims nothing'],
   ['Corinthians', 2003, ['Palmeiras', 'Sao Paulo', 'Santos'], 'the first double round robin Brasileirao'],
-  ['Newcastle', 2020, [], 'Sunderland is not a Soccer Career club, the pair is dormant'],
-  ['Celta Vigo', 2020, [], 'Deportivo is not a Soccer Career club, the pair is dormant'],
+  ['Newcastle', 2020, ['Sunderland'], 'the Tyne-Wear derby, woken by Round 1013 adding Sunderland'],
+  ['Celta Vigo', 2020, ['Deportivo'], 'the Galician derby, Round 1013 Deportivo through the alias map'],
+  ['West Ham', 2020, ['Tottenham'], 'Millwall plays in another league in the game, so the Dockers derby is dormant'],
+  ['Roma', 2020, ['Napoli'], 'Lazio is not a Soccer Career club, so the Derby della Capitale is dormant'],
   ['PSG', 2018, ['Marseille'], 'the last full Ligue 1 season before the held one'],
   ['PSG', 2019, [], 'Ligue 1 2019/20 was abandoned, held'],
   ['PSG', 2020, ['Marseille'], 'Ligue 1 after the held season'],
@@ -490,17 +526,19 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
      active count is fixed. A pair that changes status fails until it is moved
      on purpose: Round 1013 adds clubs and must move the pairs it wakes. */
   const REF_YEAR = 2020;
-  const ACTIVE_2020 = 40;
-  /* Recorded 2026-10-05 from the round's tree. Dormant means the other club
-     is not a Soccer Career club, or plays in another league in the game, or
-     the league has no verified cadence (Argentina). */
+  const ACTIVE_2020 = 51;
+  /* Recorded 2026-10-05 from the round's tree: 40 active and 24 dormant
+     before the merge, 51 and 13 after Round 1013 (merged from main) added
+     Sunderland, Leeds, Espanyol, Deportivo, Levante, Fluminense, Vasco da
+     Gama, Internacional and Atletico Mineiro, which woke eleven pairs (moved
+     here on purpose). Dormant means the other club is not a Soccer Career
+     club, or plays in another league in the game, or the league has no
+     verified cadence (Argentina). */
   const DORMANT_2020 = [
-    'Barcelona and Espanyol', 'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Botafogo and Fluminense',
-    'Celta Vigo and Deportivo La Coruña', 'Cruzeiro and Atlético Mineiro', 'Flamengo and Fluminense', 'Flamengo and Vasco da Gama',
-    'Fluminense and Vasco da Gama', 'Grêmio and Internacional', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
-    'Köln and Gladbach', 'Lille and Lens', 'Manchester United and Leeds United', 'Nantes and Rennes',
-    'Newcastle and Sunderland', 'Norwich City and Ipswich Town', 'Roma and Lazio', 'Stuttgart and Karlsruhe',
-    'Valencia and Levante', 'Werder Bremen and Hamburg', 'West Ham and Millwall', 'Wolves and West Brom',
+    'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
+    'Köln and Gladbach', 'Lille and Lens', 'Nantes and Rennes', 'Norwich City and Ipswich Town',
+    'Roma and Lazio', 'Stuttgart and Karlsruhe', 'Werder Bremen and Hamburg', 'West Ham and Millwall',
+    'Wolves and West Brom',
   ];
   const world2020 = eras.adjustClubsForYear(clubs, REF_YEAR);
   const status = { active: [], dormant: [] };
@@ -579,15 +617,22 @@ console.log('5) resolving the derbies draws nothing from the main stream');
   const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
   const digest = s => sha(JSON.stringify(s, function (k, v) { return DROP.includes(k) || (this === s && k === 'story') || (k === 'ovr' && isSeasonRow(this)) ? undefined : v; })).slice(0, 16);
   let equal = 0, derbySeasons = 0, aDerbies = 0;
+  const aDigests = [];
   for (let i = 1; i <= 16; i++) {
     const a = runCareer(A.engine, i);
     const b = runCareer(B.engine, i);
+    aDigests.push(digest(a));
     if (digest(a) === digest(b)) equal += 1;
     derbySeasons += (b.seasons || []).filter(r => r.derbies).length;
     aDerbies += (a.seasons || []).filter(r => r.derbies).length;
   }
   /* Measured on 2026-10-05: see BANDS. */
   console.log(`   ${equal} of 16 digests equal; bundle B played ${derbySeasons} derby seasons, bundle A ${aDerbies}`);
+  /* Bundle A has no derbies key, so these are simCareerLeagueFinish's own
+     digests of a build without the derbies: when that harness is re-recorded,
+     they are what the list was before this round's swing. Printed, never
+     asserted, since later rounds move that list on purpose. */
+  if (process.env.SIM_DERBY_PRINT_DIGESTS) console.log('   bundle A digests ' + JSON.stringify(aDigests));
   if (aDerbies) fail('bundle A was meant to have no derbies at all');
   if (derbySeasons < BANDS.digestDerbySeasons) fail(`bundle B played only ${derbySeasons} derby seasons over the 16 careers, under the floor ${BANDS.digestDerbySeasons}, so equal digests would prove nothing`);
   if (equal !== 16) fail(`${16 - equal} digests differ: resolving a derby moved the main Math.random stream`);

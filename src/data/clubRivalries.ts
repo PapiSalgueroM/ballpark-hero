@@ -129,6 +129,11 @@ export const SC_CLUB_CANON: Record<string, string> = {
   'Al Shabab': 'Al-Shabab',
   'Fenerbahce': 'Fenerbahçe',
   'Besiktas': 'Beşiktaş',
+  /* Round 1013's clubs that the shared table names under another spelling
+     (scripts/lib/careerClubPool.mjs NAME_ALIASES has the same two, the other
+     way round; simCareerDerbies section 1 holds the two maps together). */
+  'Deportivo': 'Deportivo La Coruña',
+  'Atletico Mineiro': 'Atlético Mineiro',
 };
 
 /* Sourced pairs, all read on 2026-10-05. A pair whose clubs are not both in
@@ -157,7 +162,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
   ] },
   { a: 'Crystal Palace', b: 'Brighton', name: 'M23 derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'Football Ground Guide', title: 'Brighton vs. Crystal Palace rivalry: M23 derby origin, history and head-to-head record', url: 'https://footballgroundguide.com/news/brighton-vs-crystal-palace-rivalry-m23-derby-origin-history-and-head-to-head-record.html' },
-    { publisher: 'NationalWorld', title: 'Why are Brighton and Crystal Palace rivals? M23 derby explained', url: 'https://www.nationalworld.com/sport/football/why-are-brighton-and-crystal-palace-rivals-m23-derby-explained-3398190' },
+    { publisher: 'NationalWorld', title: 'Why are Brighton and Crystal Palace rivals? M23 derby explained', url: 'https://www.nationalworld.com/sport/football/why-are-brighton-and-crystal-palace-rivals-m23-derby-explained-ahead-of-premier-league-clash-3398190' },
   ] },
   { a: 'Chelsea', b: 'Tottenham', name: 'London derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'Chelsea FC', title: 'Tottenham vs Chelsea: Fixture history and London derby record up for grabs', url: 'https://www.chelseafc.com/en/news/article/tottenham-vs-chelsea-fixture-history-and-london-derby-record-up-for-grabs' },
@@ -201,7 +206,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
   ] },
   { a: 'Manchester United', b: 'Leeds United', name: 'Roses rivalry', kind: 'rivalry', checked: '2026-10-05', sources: [
     { publisher: 'The Yorkshire Post', title: 'Roses rivalry? Leeds United motivated enough even without Manchester United task, says Daniel Farke', url: 'https://www.yorkshirepost.co.uk/sport/football/leeds-united/roses-rivalry-leeds-united-motivated-enough-even-without-manchester-united-task-says-daniel-farke-6570391' },
-    { publisher: 'Arizona State University', title: 'A Rivalry of Roses? An analysis of the Manchester United vs. Leeds United football rivalry', url: 'https://keep.lib.asu.edu/items/160967' },
+    { publisher: 'NBC Sports', title: 'Leeds-Manchester United Roses rivalry preview: Premier League Matchweek 33', url: 'https://www.nbcsports.com/watch/soccer/premier-league/previewing-sundays-leeds-man-united-rivalry-clash' },
   ] },
   // Spain
   { a: 'Real Madrid', b: 'Barcelona', name: 'El Clasico', kind: 'rivalry', checked: '2026-10-05', sources: [
@@ -226,7 +231,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
   ] },
   { a: 'Barcelona', b: 'Espanyol', name: 'Barcelona derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'LaLiga', title: 'FC Barcelona vs. RCD Espanyol: LALIGA Derby Statistics', url: 'https://www.laliga.com/en-GB/news/statistics-fc-barcelona-rcd-espanyol' },
-    { publisher: 'FC Barcelona', title: 'The Lowdown on the derby against Espanyol', url: 'https://www.fcbarcelona.com/en/news/4158957/the-lowdown-on-the-derby-against-espanyol' },
+    { publisher: 'My Football Facts', title: 'Barcelona Derby Head-to-Head: Barcelona vs Espanyol History and Stats', url: 'https://www.myfootballfacts.com/top-leagues/la-liga/barcelona-derby-head-to-head-barcelona-vs-espanyol-history-stats/' },
   ] },
   { a: 'Celta Vigo', b: 'Deportivo La Coruña', name: 'Galician derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'The National', title: 'Galician derby glory over Celta Vigo offers Deportivo La Coruna ray of light', url: 'https://www.thenationalnews.com/sport/galician-derby-glory-over-celta-vigo-offers-deportivo-la-coruna-ray-of-light-1.470302' },

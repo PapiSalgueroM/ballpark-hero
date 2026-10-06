@@ -227,15 +227,20 @@ const DIGEST_SEEDS = 16;
      16 of 16 equal once the derbies key is dropped, with 140 derby seasons
      played, so detecting and resolving a derby draws nothing from
      Math.random; only the bounded swing moves the stream.
-   The new list below was recorded twice on that tree, identical both times;
-   2 of the 16 (careers that never played a derby) did not change. The old
-   list was ['539858d7000e4591', 'e62cdae073abe906', 'da4789abe4543321',
-   '92f21863034d5bce', '707970f71384bd3d', '5879c7a10fb90659',
-   '1a9c7b940f5968e4', '69e1d33d413b0656', '8cdcb230d5724e65',
-   '4ebd88d3d4b6a6a0', '48ca4ba73be9e9fe', '74d8b0a22eed6238',
-   'de756b5070df2302', '197b2357e2742487', '2dc97ee74f43440b',
-   '6009b15056656286']. The stream control below still turns section 4 red. */
-const BASELINE = ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad', 'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a', '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1', 'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce', '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684', '3e5b99f018877dbe'];
+   Round 1012 then merged Release AD (origin/main 37ce6d5e, Rounds 1011,
+   1013 and 972) and was re-recorded once more on the merged tree
+   (2026-10-06, twice, identical). On that tree simCareerDerbies section 5's
+   bundle A (no derbies, rewords in) prints exactly Release AD's list,
+   ['6d58659a6c7b6b19', '7a49293de3b64362', '518382abade8e4ad',
+   'c2bdd490d39bf359', '0c7560cb51205a9b', 'c15c06e5974a981a',
+   '18b8f7ea19915bd9', 'd32f82153f14e7d1', '66cf56b8d2f68fe1',
+   'c3ccc66a13f5a240', 'c3c71a1c15ca6276', '29c2e2b92372a2ce',
+   '1901945635fde622', 'bce7f1d20b6ad693', '48123ee52e75b684',
+   '3e5b99f018877dbe'], 16 of 16, and bundle B (derbies resolved, swing off)
+   equals it 16 of 16. With Round 1013's clubs the 16 careers play 160
+   derby seasons between them and all 16 digests move, only through the
+   swing. The stream control below still turns section 4 red. */
+const BASELINE = ['9f88c7e2a3533c92', '09487908f21e5673', '137be606bdb3965f', '9d1002a558de6175', 'a339f65db70dab9a', '025d489afaadc84c', '7bf99192ff899949', '06f3cb2054fcf302', 'fd6e3b6921c0fc9a', '8223eadb342cff94', 'd3fc4fd71ea0964a', 'bf55ea038d4784eb', 'dad30a730ee92571', 'c8f760fd4b26c677', 'eafed0733348923f', '09c0ce4d94320c9f'];
 if (RECORD) {
   const out = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) out.push(digest(runCareer(i)));
