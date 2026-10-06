@@ -17,7 +17,9 @@ export function BestSoFar({ best }: { best: BestRecord | null }) {
 
 /** Under the final record: the odds of an unbeaten season for the team the
     sim just played (pass the RAW overall, the line rounds it to one decimal
-    itself), then the best record, or the news that this run set it. */
+    itself), then the best record, or the news that this run set it. Round 954:
+    that news slams in (cm-slam, from the celebration kit SeasonVerdict mounts);
+    inline-block because a transform does nothing on a plain inline span. */
 export function SeasonOddsLines({ sport, overall, perfect, best, newBest }: {
   sport: PerfectSeasonSportKey;
   overall: number;
@@ -33,7 +35,7 @@ export function SeasonOddsLines({ sport, overall, perfect, best, newBest }: {
       {best && (
         <p className="text-xs mb-3" data-best-record>
           {newBest
-            ? <span className="text-correct font-semibold">New personal best.</span>
+            ? <span className="cm-slam inline-block text-correct font-semibold" data-new-best>New personal best.</span>
             : <span className="text-muted-foreground">Your best: <span className="font-semibold text-foreground">{best.wins}-{best.losses}</span> at {best.overall} OVR.</span>}
         </p>
       )}

@@ -45,6 +45,16 @@ export interface XpBlock<T extends string> {
   v: number;
   xp: number;
   points: Record<T, number>;
+  /*
+   * Round 965: the tree a seat was handed one point in before it earned any,
+   * which is also the record that the point has been handed over. Club
+   * Manager's created manager gets it from his background. That point is a
+   * gift, not a purchase, so pointsFree does not charge for it.
+   *
+   * OPTIONAL. No GM save writes it, and a block without it reads exactly as it
+   * did before the field existed.
+   */
+  gift?: T;
 }
 
 /** One level per point, after the first. Nothing beyond this is earnable. */
@@ -123,8 +133,33 @@ export function pointsSpent<T extends string>(set: XpTreeSet<T>, block: XpBlock<
   return set.trees.reduce((n, t) => n + Math.max(0, block.points[t] ?? 0), 0);
 }
 
+/** Round 965: the points paid for with XP, which is every point less a gift
+ *  that really landed (a real tree of this set, holding at least one point). */
+export function pointsBought<T extends string>(set: XpTreeSet<T>, block: XpBlock<T>): number {
+  const g = block.gift;
+  const gifted = g !== undefined && set.trees.includes(g) && (block.points[g] ?? 0) >= 1 ? 1 : 0;
+  return Math.max(0, pointsSpent(set, block) - gifted);
+}
+
 export function pointsFree<T extends string>(set: XpTreeSet<T>, block: XpBlock<T>): number {
-  return Math.max(0, pointsEarned(block.xp, maxLevelOf(set)) - pointsSpent(set, block));
+  /* Never more than the room left on the board: with a gift in, the last level
+     would otherwise show a point with nowhere to go. Without a gift the room is
+     never the smaller of the two (earned tops out at every tree full), so a
+     block with no gift reads exactly as it did before Round 965. */
+  const room = set.trees.length * set.maxPoints - pointsSpent(set, block);
+  return Math.max(0, Math.min(pointsEarned(block.xp, maxLevelOf(set)) - pointsBought(set, block), room));
+}
+
+/*
+ * Round 965: put a gift point in. Pure, and once only: a block that already
+ * records a gift comes back as it was. A tree already at its cap keeps the cap
+ * and records the gift anyway, which hands back one of the bought points
+ * through pointsFree, so the seat still receives exactly one point's worth.
+ */
+export function grantGift<T extends string, B extends XpBlock<T>>(set: XpTreeSet<T>, block: B, tree: T): B {
+  if (block.gift !== undefined) return block;
+  const now = block.points[tree] ?? 0;
+  return { ...block, gift: tree, points: { ...block.points, [tree]: Math.min(set.maxPoints, now + 1) } };
 }
 
 /**

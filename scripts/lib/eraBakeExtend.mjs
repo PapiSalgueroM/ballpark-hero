@@ -55,12 +55,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 /* Same curves as bakeClubManagerRosters.mjs, verbatim, so an era value and a
- * 2026 value mean the same thing on the rating scale. */
+ * 2026 value mean the same thing on the rating scale. 'Sweeper' came over
+ * from scripts/bakeEra2005.mjs in Round 902 when that bake started reading
+ * this map: no year 2005, 2010 or 2015 row in the pull carries it, so no
+ * output moves, and the 2005 path keeps the map it always had. */
 export const POS_MAP = {
   'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
   'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
   'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF',
+  'Centre-Forward': 'ST', 'Second Striker': 'CF', 'Sweeper': 'CB',
 };
 export function ratingOf(usd) {
   if (!usd || usd <= 0) return 48;

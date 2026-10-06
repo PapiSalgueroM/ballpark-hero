@@ -40,12 +40,12 @@
  * scripts/simGmXp.mjs replays a fixture recorded before the move to prove
  * not one number changed.
  */
-import type { CareerState } from '@/lib/clubManager';
+import type { CareerState, ManagerBackground } from '@/lib/clubManager';
 import {
-  addXp as sharedAddXp, clampTreePoints, isValidPoints, levelFor as sharedLevelFor,
-  levelProgress as sharedLevelProgress, pointsEarned as sharedPointsEarned,
-  pointsFree as sharedPointsFree, pointsSpent as sharedPointsSpent, spendPoint as sharedSpendPoint,
-  xpForLevel as sharedXpForLevel, zeroPoints,
+  addXp as sharedAddXp, clampTreePoints, grantGift as sharedGrantGift, isValidPoints,
+  levelFor as sharedLevelFor, levelProgress as sharedLevelProgress, pointsBought as sharedPointsBought,
+  pointsEarned as sharedPointsEarned, pointsFree as sharedPointsFree, pointsSpent as sharedPointsSpent,
+  spendPoint as sharedSpendPoint, xpForLevel as sharedXpForLevel, zeroPoints,
 } from '@/lib/gmXp';
 import type { XpTreeSet } from '@/lib/gmXp';
 
@@ -172,6 +172,18 @@ export interface ManagerXp {
    * would pay him for every one of them in a single rollover.
    */
   graduatesSeen?: number;
+  /*
+   * Round 965: the tree the manager's background put its one point in, which
+   * is also the record that the point has been handed over. One point of
+   * points[gift] is a gift rather than a purchase, so pointsFree does not
+   * charge for it, and because the field is the record, the grant runs once
+   * per block and never twice.
+   *
+   * OPTIONAL. Absent on every block written before this round and on every
+   * career with no created manager, which is how a Skip career stays exactly
+   * the game it was.
+   */
+  gift?: SkillTree;
 }
 
 export function defaultXp(): ManagerXp {
@@ -194,6 +206,15 @@ export function isValidXp(u: unknown): u is ManagerXp {
      this block fails closed like every other field here. */
   const g = o.graduatesSeen;
   if (g !== undefined && (typeof g !== 'number' || !Number.isFinite(g) || g < 0)) return false;
+  /* Round 965: a gift must name a real tree that actually holds a point,
+     because a gift recorded against an empty tree would let pointsFree
+     refund a point nobody was given. */
+  const gift = o.gift;
+  if (gift !== undefined) {
+    if (typeof gift !== 'string' || !SKILL_TREES.includes(gift as SkillTree)) return false;
+    const held = p[gift];
+    if (typeof held !== 'number' || held < 1) return false;
+  }
   return isValidPoints(CM_TREE_SET, p);
 }
 
@@ -215,7 +236,58 @@ export function xpOf(state: CareerState): ManagerXp {
  */
 export function ensureXp(state: CareerState): ManagerXp {
   if (!isValidXp(state.managerXp)) state.managerXp = defaultXp();
+  /* Round 965: a created manager's background point, handed over the first
+     time this block is ensured with him in the dugout. That covers a new
+     career (startCareer ensures it), a Round 303 save opened for the first
+     time since (loadCareer ensures it) and a Skip career that names its
+     manager later (editManager ensures it). The gift field is the record, so
+     the second, third and hundredth ensure find it and do nothing. */
+  const tree = backgroundTree(state.manager?.background);
+  const block = state.managerXp as ManagerXp;
+  if (tree && block.gift === undefined) state.managerXp = grantGift(block, tree);
   return state.managerXp as ManagerXp;
+}
+
+/*
+ * Round 965: what a background is worth, off the owner's 2026-08-26 list
+ * ("managers as first class citizens"). Before this round the background was
+ * a badge and the form said so. Now each one starts the manager with ONE
+ * point in its own tree, the same point a level would buy, read by the same
+ * effect function, so it is measurable for the same reason every bought
+ * point is. No new modifier exists anywhere: rule 2 at the top of this file.
+ *
+ * Seven backgrounds, seven trees, one each. The map is TOTAL on purpose and
+ * simManagerXp walks every row; a background that maps to nothing would be a
+ * badge again, which is exactly what this round exists to end.
+ */
+export const BACKGROUND_TREE: Record<ManagerBackground, SkillTree> = {
+  exPlayer: 'manManagement',
+  coachingBadges: 'tactics',
+  analyst: 'recruitment',
+  youthCoach: 'youth',
+  agent: 'negotiation',
+  boardroom: 'finance',
+  pundit: 'media',
+};
+
+/** The tree a background opens, or null for no manager or an unknown id. */
+export function backgroundTree(background: unknown): SkillTree | null {
+  if (typeof background !== 'string') return null;
+  if (!Object.prototype.hasOwnProperty.call(BACKGROUND_TREE, background)) return null;
+  const tree = BACKGROUND_TREE[background as ManagerBackground];
+  return SKILL_TREES.includes(tree) ? tree : null;
+}
+
+/*
+ * Put the gift in. Pure. A tree already at its cap (an old save that bought
+ * all five) keeps five and records the gift anyway, which hands back one of
+ * the bought points through pointsFree: the manager still receives exactly
+ * one point's worth, it just lands where there is room. The rule itself is the
+ * shared ladder's (gmXp.ts), so every seat that ever hands out a starting
+ * point hands it out the same way.
+ */
+export function grantGift(block: ManagerXp, tree: SkillTree): ManagerXp {
+  return sharedGrantGift(CM_TREE_SET, block, tree);
 }
 
 /** Add a season's earnings. Pure: returns the new block, never mutates. */
@@ -319,6 +391,14 @@ export function pointsSpent(block: ManagerXp): number {
   return sharedPointsSpent(CM_TREE_SET, block);
 }
 
+/** Round 965: the points paid for with XP, which is every point less the
+ *  one a background handed over. */
+export function pointsBought(block: ManagerXp): number {
+  return sharedPointsBought(CM_TREE_SET, block);
+}
+
+/* Gift aware since Round 965, in the shared ladder, so spendPoint (which asks
+   the shared pointsFree) lets a gifted manager spend every point he earned. */
 export function pointsFree(block: ManagerXp): number {
   return sharedPointsFree(CM_TREE_SET, block);
 }
