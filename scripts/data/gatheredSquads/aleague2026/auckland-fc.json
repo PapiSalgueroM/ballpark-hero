@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
   "sources": {
     "club": {
       "host": "aucklandfc.co.nz",
@@ -70,7 +70,7 @@
     "twoHostRows": 24,
     "birthDateKnown": 23,
     "groupKnown": 24,
-    "minutesKnown": 23,
+    "minutesKnown": 17,
     "marketRows": 0,
     "perfPagesLoaded": 12
   },
@@ -268,18 +268,8 @@
       "position": "Goalkeeper",
       "group": "GK",
       "birthDate": "2004-11-02",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -355,7 +345,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Hiroki Sakai",
@@ -738,18 +731,8 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "2001-05-28",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -810,7 +793,10 @@
         "fotmob": null,
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Luka Vicelich",
@@ -896,18 +882,8 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "1996-01-12",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -983,7 +959,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Cameron Howieson",
@@ -1184,11 +1163,9 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1",
           "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Auckland FC",
           "Newcastle Jets FC"
         ]
       },
@@ -1267,25 +1244,17 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
     },
     {
       "name": "Daniel Normann",
       "position": "Midfielder",
       "group": "MID",
       "birthDate": null,
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1344,7 +1313,9 @@
         "from": "club squad page"
       },
       "notes": [
-        "birth date not on two hosts (Transfermarkt 2002-07-21), held as null"
+        "birth date not on two hosts (Transfermarkt 2002-07-21), held as null",
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
       ]
     },
     {
@@ -1705,18 +1676,8 @@
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "2005-07-12",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1776,25 +1737,18 @@
         "fotmob": null,
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Aaron Cartwright",
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "2008-07-05",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Auckland FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1870,7 +1824,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Auckland FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Logan Rogerson",

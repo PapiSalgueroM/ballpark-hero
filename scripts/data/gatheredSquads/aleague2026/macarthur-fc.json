@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
   "sources": {
     "club": {
       "host": "macarthurfc.com.au",
@@ -83,7 +83,7 @@
     "twoHostRows": 27,
     "birthDateKnown": 26,
     "groupKnown": 27,
-    "minutesKnown": 23,
+    "minutesKnown": 19,
     "marketRows": 1,
     "perfPagesLoaded": 12
   },
@@ -178,12 +178,10 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1",
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Auckland FC",
-          "Macarthur FC"
+          "Auckland FC"
         ]
       },
       "marketRow": null,
@@ -260,7 +258,8 @@
         "from": "club squad page"
       },
       "notes": [
-        "birth date: ESPN 1997-11-02, Transfermarkt 2002-09-16, FotMob 2002-09-16; set to the date two hosts agree on"
+        "birth date: ESPN 1997-11-02, Transfermarkt 2002-09-16, FotMob 2002-09-16; set to the date two hosts agree on",
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
       ]
     },
     {
@@ -354,18 +353,8 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "1996-06-07",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Macarthur FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -441,7 +430,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Harry Politidis",
@@ -918,18 +910,8 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "2005-11-10",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Macarthur FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1005,7 +987,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Ryan Fraser",
@@ -1572,18 +1557,8 @@
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "1993-11-11",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Macarthur FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -1659,7 +1634,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Luke Vickery",
@@ -1766,11 +1744,9 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1",
           "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Macarthur FC",
           "Newcastle Jets FC"
         ]
       },
@@ -1845,7 +1821,8 @@
         "from": "club squad page"
       },
       "notes": [
-        "birth date not on two hosts (ESPN 1993-01-15, Transfermarkt 2003-01-03, FotMob 2003-07-14), held as null"
+        "birth date not on two hosts (ESPN 1993-01-15, Transfermarkt 2003-01-03, FotMob 2003-07-14), held as null",
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
       ]
     },
     {
@@ -1947,18 +1924,8 @@
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "2008-04-28",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Macarthur FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2032,7 +1999,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Apostolos Stamatelopoulos",
@@ -2326,11 +2296,9 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/macarthur-fc/leistungsdaten/verein/71085/reldata/AUS1%262025/plus/1",
           "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Macarthur FC",
           "Melbourne Victory"
         ]
       },
@@ -2394,7 +2362,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Macarthur FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
     },
     {
       "name": "Zane Helweh",

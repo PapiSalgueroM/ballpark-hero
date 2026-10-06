@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. Minutes rest on one host, Transfermarkt, with no second source in this ledger (ESPN's 2025-26 gamelog came back empty when checked), so they are one-source values, unlike name, group and birthDate.",
   "sources": {
     "club": {
       "host": "wswanderersfc.com.au",
@@ -74,7 +74,7 @@
     "twoHostRows": 28,
     "birthDateKnown": 28,
     "groupKnown": 28,
-    "minutesKnown": 24,
+    "minutesKnown": 22,
     "marketRows": 1,
     "perfPagesLoaded": 12
   },
@@ -648,18 +648,8 @@
       "position": "Defender",
       "group": "DEF",
       "birthDate": "2007-03-23",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Western Sydney Wanderers FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -735,7 +725,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Jarrod Carluccio",
@@ -911,12 +904,10 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1",
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+          "https://www.transfermarkt.com/adelaide-united/leistungsdaten/verein/875/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Adelaide United FC",
-          "Western Sydney Wanderers FC"
+          "Adelaide United FC"
         ]
       },
       "marketRow": [
@@ -999,7 +990,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
     },
     {
       "name": "Marcus Savic",
@@ -1098,12 +1091,10 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1",
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Melbourne City FC",
-          "Western Sydney Wanderers FC"
+          "Melbourne City FC"
         ]
       },
       "marketRow": null,
@@ -1181,7 +1172,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
     },
     {
       "name": "Dylan Scicluna",
@@ -1382,12 +1375,10 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1",
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Central Coast Mariners FC",
-          "Western Sydney Wanderers FC"
+          "Central Coast Mariners FC"
         ]
       },
       "marketRow": null,
@@ -1463,7 +1454,9 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
     },
     {
       "name": "Oscar Morrison",
@@ -2305,12 +2298,10 @@
         "competition": "A-League Men 25/26 (regular season)",
         "read": "2026-10-06",
         "urls": [
-          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1",
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
         ],
         "clubs": [
-          "Auckland FC",
-          "Western Sydney Wanderers FC"
+          "Auckland FC"
         ]
       },
       "marketRow": null,
@@ -2388,7 +2379,8 @@
         "from": "club squad page"
       },
       "notes": [
-        "identity linked by hand: ESPN prints William Gillion; ESPN and Transfermarkt both give birth date 2002-10-17, so it is the same man"
+        "identity linked by hand: ESPN prints William Gillion; ESPN and Transfermarkt both give birth date 2002-10-17, so it is the same man",
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
       ]
     },
     {
@@ -2489,18 +2481,8 @@
       "position": "Attacker",
       "group": "FWD",
       "birthDate": "2009-03-03",
-      "minutes2025_26": 0,
-      "minutesSource": {
-        "host": "transfermarkt.com",
-        "competition": "A-League Men 25/26 (regular season)",
-        "read": "2026-10-06",
-        "urls": [
-          "https://www.transfermarkt.com/western-sydney-wanderers/leistungsdaten/verein/36100/reldata/AUS1%262025/plus/1"
-        ],
-        "clubs": [
-          "Western Sydney Wanderers FC"
-        ]
-      },
+      "minutes2025_26": null,
+      "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
@@ -2576,7 +2558,10 @@
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "Transfermarkt's 25/26 page for Western Sydney Wanderers FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
     },
     {
       "name": "Atiya Waraga",
