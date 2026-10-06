@@ -43,9 +43,12 @@ import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
 // imports nothing but types, so reading it at module scope is safe.
-import { CM_ROSTERS, CM_ROSTER_META, CM_PARTIAL } from '@/data/clubManagerRosters';
+import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import { CM_REAL_FREE_AGENTS } from '@/data/clubManagerFreeAgents2026';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+// Round 1035: the modern squads are the baked file joined with the A-League
+// Men's generated one, in one place both engine files read.
+import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL } from '@/data/clubManagerWorldRosters';
 // Round 612: how the real 2025-26 season finished, read by season one's
 // Champions League field. The data file imports nothing, so there is no cycle.
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
@@ -2151,6 +2154,11 @@ export interface CareerState {
   nationJob?: NationJob | null;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
+  /** Round 1035: a cup field short of sixteen clubs (a one league nation:
+   *  Scotland, Croatia, Denmark, the A-League's ten Australian clubs) plays
+   *  only as many round of 16 ties as it needs; these clubs go straight to
+   *  the quarter-finals. Absent for a full field and in older saves. */
+  cupByes?: string[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
   wageCap?: number;
   /** Round 71: sellers who walked away from me this window. */
@@ -2629,6 +2637,16 @@ export interface LeagueRules {
   flag: string;
   /** The domestic cup, or null for a league with none. */
   cup: string | null;
+  /** Round 1035: clubs of this league that do not enter its cup (the two
+   *  New Zealand clubs of the A-League Men). They are never drawn, and a
+   *  career at one plays no cup at all, as a cupless league does. */
+  cupExcluded?: string[];
+  /** Round 1035: a club of this league from another country, keyed by club
+   *  name, the country spelled as nationalityOf spells it (the A-League's
+   *  Auckland FC and Wellington Phoenix are New Zealand clubs). Read where a
+   *  club's own country matters (the board's home players ask); every other
+   *  club takes its league's flag. */
+  clubCountry?: Record<string, string>;
   /** The UEFA places the table hands out, or null outside UEFA's
    *  competitions in this game (no Champions League from this league). */
   europe: EuroSlots | null;
@@ -2806,6 +2824,56 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
     nationId: 'mexico', flag: 'Mexico', cup: null, europe: null, drop: 0, ladder: 'playoffs',
     playoff: { rankUpTo: 10, target: 8, label: 'Make the Liguilla' }, floorFromBottom: 4, season: 'autumnSpring',
     simplified: 'The Apertura and Clausura are played as one double round robin and the Liguilla is not played, so the table settles the season. There is no domestic cup (the Copa MX has not been played since 2020), and clubs level on points split by goal difference then goals scored, the real table\'s first two steps.',
+  },
+  /* Round 1035: the A-League Men 2026-27. Each fact read 2026-10-06:
+     - 12 clubs, no promotion or relegation (drop 0, the playoffs ladder).
+       The clubs are _membership.json's twelve. No relegation: ESPN
+       (https://www.espn.com.au/football/story/_/id/43800726/everything-need-know-australian-championship,
+       12 February 2025: the Australian Championship and the A-League are
+       separate competitions "with no promotion and relegation between the
+       two") and The Roar
+       (https://www.theroar.com.au/2025/02/17/the-australian-championship-is-not-really-a-second-division-but-its-a-decent-start/,
+       17 February 2025), both read 2026-10-06.
+     - 26 games a club, the full home and away 22 plus four third meetings,
+       over 28 matchweeks from Friday 16 October 2026, Grand Final on the
+       weekend of 3 to 6 June 2027: the league's own fixture release
+       (https://aleagues.com.au/news/aleague-men-2026-2027-fixture-list-revealed-key-dates-fixture-information/,
+       16 July 2026) and Football360 the same day
+       (https://football360.com.au/a-league-men-fixtures-released-key-dates-matches-will-they-play-through-asian-cup/).
+       The engine plays the double round robin, 22 rounds.
+     - The top six make the finals series (first and second straight to the
+       semi finals, third to sixth in the elimination finals): the league's
+       2026 finals page (https://aleagues.com.au/isuzu-ute-a-league-men-finals-series-2026/)
+       and Football360's elimination finals preview
+       (https://football360.com.au/a-league-elimination-finals-preview-auckland-fc-melbourne-city-melbourne-victory-sydney-fc-kisnorbo-reunion/).
+       THIN for 2026-27: those two describe the 2025-26 season; neither
+       fixture release above restates the cut, and only an encyclopedia's
+       2026-27 page (a spot check) says the top six again. So the copy (this
+       row's simplified, the guide, What's New) states it only as last
+       season's format, which is two sourced. The cut is the board's rung
+       only, since the finals are not played here.
+     - The Australia Cup is for Australian clubs only from the 2026 edition,
+       so Auckland FC and Wellington Phoenix do not enter it: Football
+       Australia (https://footballaustralia.com.au/news/football-australia-announces-refined-competitions-structure-2026,
+       28 January 2026, "Auckland FC and Wellington Phoenix FC no longer
+       participating"), Football360
+       (https://football360.com.au/australia-cup-wellington-auckland-new-zealand-teams-omitted/,
+       27 January 2026) and RNZ (https://www.rnz.co.nz/news/sport/585350, 29
+       January 2026). The ten Australian clubs enter at the round of 32.
+       The same three call the two New Zealand clubs, so clubCountry gives
+       them New Zealand and their board's home players ask reads it.
+     - No continental row: the Asian places explained in print
+       (https://football360.com.au/a-league-afc-champions-league-elite-acl-two-explained-who-has-qualified/,
+       26 April 2026) are the 2025-26 table's, nothing yet says what the
+       2026-27 table hands out, and the two New Zealand clubs are not
+       eligible for Asian competition at all.
+     - Clubs level on points: no order verified, so the gdGfOnly default. */
+  aleague: {
+    nationId: 'australia', flag: 'Australia', cup: 'Australia Cup', cupExcluded: ['Auckland FC', 'Wellington Phoenix'],
+    clubCountry: { 'Auckland FC': 'New Zealand', 'Wellington Phoenix': 'New Zealand' },
+    europe: null, drop: 0, ladder: 'playoffs',
+    playoff: { rankUpTo: 7, target: 6, label: 'Make the finals' }, floorFromBottom: 3, season: 'autumnSpring',
+    simplified: 'The real season is 26 games (home and away plus four third meetings), and last season\'s finals series took the top six; here it is a double round robin of 22 and the finals are not played, so the table settles the season and its winner is the Premiers. Auckland FC and Wellington Phoenix play no cup, as they really do not enter the Australia Cup.',
   },
   /* The era leagues. No Conference League existed before 2021, so uecl is 0
      and the board's ladder skips that band; 2005-06 still called the second
@@ -3203,6 +3271,15 @@ export const REAL_LEAGUES: LeagueDef[] = [
     id: 'ligamx', name: 'Liga MX',
     clubs: ['América', 'Guadalajara', 'Cruz Azul', 'Monterrey', 'Tigres UANL', 'Toluca', 'Pumas UNAM', 'Pachuca', 'León', 'Santos Laguna', 'Atlas', 'Necaxa', 'Puebla', 'Querétaro', 'Tijuana', 'FC Juárez', 'Atlético San Luis', 'Atlante'],
   },
+  /* Round 1035: the A-League Men 2026-27, exactly the twelve clubs of
+     scripts/data/gatheredSquads/aleague2026/_membership.json (the league's
+     own 2026/2027 ladder and ESPN's 2026-27 standings, read 2026-10-06).
+     Squads from src/data/clubManagerALeague2026.ts, generated offline from
+     the Round 1034 ledgers. */
+  {
+    id: 'aleague', name: 'A-League Men',
+    clubs: ['Adelaide United', 'Auckland FC', 'Brisbane Roar', 'Central Coast Mariners', 'Macarthur FC', 'Melbourne City', 'Melbourne Victory', 'Newcastle Jets', 'Perth Glory', 'Sydney FC', 'Wellington Phoenix', 'Western Sydney Wanderers'],
+  },
 ].map(leagueFromRow);
 
 /**
@@ -3534,7 +3611,33 @@ export function careerLeagueOf(career: Pick<CareerState, 'clubName' | 'eraId'> &
     const lg = customLeagueDef(career.customClub, career.eraId);
     if (lg) return lg;
   }
-  return eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName);
+  return withClubCup(eraLeagueOf(career.clubName, career.eraId) ?? leagueOf(career.clubName), career.clubName);
+}
+
+/** Round 1035: does this club enter its league's cup? False only for a club
+ *  its rules row lists in cupExcluded (Auckland FC and Wellington Phoenix,
+ *  New Zealand clubs in an Australian cup's league). */
+export function clubEntersCup(leagueId: string, clubName: string): boolean {
+  return !(leagueRulesOf(leagueId).cupExcluded ?? []).includes(clubName);
+}
+
+/** The league as a career at this club sees it: a club that does not enter
+ *  the league's cup plays a cupless season, exactly as a cupless league
+ *  does (no cup in the calendar, no bracket, no cup objective). Every other
+ *  club gets the def back untouched. */
+function withClubCup(league: LeagueDef, clubName: string): LeagueDef {
+  return league.cupName !== null && !clubEntersCup(league.id, clubName) ? { ...league, cupName: null } : league;
+}
+
+/** The cup this career's club sits out: its league plays one but the club is
+ *  in cupExcluded (Auckland FC in the Australia Cup's league). Null for every
+ *  other career, a cupless league included, so the cupless copy can say "your
+ *  club does not enter it" rather than "the league has no cup". */
+export function cupSatOutBy(career: Pick<CareerState, 'clubName' | 'eraId'> & { customClub?: CustomClubSpec }): string | null {
+  const lg = careerLeagueOf(career);
+  if (lg.cupName !== null) return null;
+  const cup = leagueRulesOf(lg.id).cup;
+  return cup !== null && !clubEntersCup(lg.id, career.clubName) ? cup : null;
 }
 
 /** Best XI average straight off an era bake, same math as bakedXIAvg. */
@@ -3685,6 +3788,8 @@ export const NATIONS: NationDef[] = [
   { id: 'brazil', name: 'Brazil', flag: '🇧🇷' },
   // Round 883
   { id: 'mexico', name: 'Mexico', flag: '🇲🇽' },
+  // Round 1035
+  { id: 'australia', name: 'Australia', flag: '🇦🇺' },
 ].map(n => ({ ...n, leagueIds: REAL_LEAGUES.filter(l => leagueRulesOf(l.id).nationId === n.id).map(l => l.id) }));
 
 /** Primary kit colors for the club dot in the UI (approximate, decorative). */
@@ -3859,6 +3964,15 @@ const CLUB_COLORS: Record<string, string> = {
   'Santos Laguna': '#0a7040', 'Atlas': '#c8102e', 'Necaxa': '#d02128',
   'Puebla': '#1b3f94', 'Querétaro': '#2b2b2b', 'Tijuana': '#c8102e',
   'FC Juárez': '#1f9d55', 'Atlético San Luis': '#d02128', 'Atlante': '#0057b8',
+  // Round 1035: A-League Men (plain shirt colours from this file's palette, no
+  // crest art), each where ESPN's team colour and FotMob's agree, read
+  // 2026-10-06. Auckland FC (black on ESPN, blue on FotMob) and Macarthur FC
+  // (gold on ESPN, black or white on FotMob) disagree, so they take the
+  // neutral default every unlisted club gets.
+  'Adelaide United': '#d02128', 'Western Sydney Wanderers': '#d02128',
+  'Brisbane Roar': '#f5a800', 'Central Coast Mariners': '#f5d800',
+  'Wellington Phoenix': '#f5d800', 'Sydney FC': '#6cabdd', 'Melbourne City': '#6cabdd',
+  'Melbourne Victory': '#1b3f94', 'Newcastle Jets': '#0057b8', 'Perth Glory': '#5c2d91',
 };
 
 /**
@@ -4952,6 +5066,28 @@ const CUSTOM_SLOTS: { pos: Position; off: number }[] = [
   { pos: 'RW', off: -7 }, { pos: 'ST', off: -6 },
 ];
 
+/** Round 1035: how far under its league's best real XI the small tier's
+ *  squad is anchored, at most. The tier anchors are absolute (62, 68, 74) and
+ *  were set against leagues whose best sides sit well above 62; the A-League
+ *  Men's best XI is 60.9, so a shoestring club founded there topped the table
+ *  and its board asked for the title. Measured 2026-10-06 over all 43 era and
+ *  league pairs, the cap binds only in the A-League (anchor 55, a best XI of
+ *  58.1, bottom of the table): the next lowest best XI, Croatia's 68.0, caps
+ *  at 63, a point above the small tier's 62. Mid and big money is left alone, since
+ *  money can buy a contender in a weak league, and the quality slider always
+ *  wins over any anchor. */
+const SMALL_BELOW_BEST = 5;
+
+function leagueFitAnchor(spec: CustomClubSpec, anchor: number, eraId?: string): number {
+  if (spec.budgetTier !== 'small') return anchor;
+  const league = customLeagueDef(spec, eraId);
+  if (!league) return anchor;
+  const xiOf = xiChainFor(eraId && isHistoricEra(eraId) ? eraId : undefined);
+  let best = 0;
+  for (const c of league.clubs) if (c !== spec.replacedClub && c !== spec.name) best = Math.max(best, xiOf(c));
+  return best > 0 ? Math.min(anchor, Math.floor(best) - SMALL_BELOW_BEST) : anchor;
+}
+
 /**
  * The day-one squad of a custom club: every player generated, every player
  * tagged as generated, no real footballer anywhere near it. Deterministic
@@ -4968,7 +5104,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
      genuinely produces starters in the low 90s (his ask: "a team full of 90
      overalls"). The board reads the squad either way, so a slider superteam
      gets told to win it all, honestly. */
-  const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
+  const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : leagueFitAnchor(spec, t.anchor, eraId);
   /* Round 640: the squad quality the tier's money buys. A squad founded above
      it carries a sale ratio on every man; at or under it, none at all. */
   const ceiling = customQualityCap(spec.budgetTier, eraId);
@@ -11870,7 +12006,9 @@ function cupCountryClubs(state: CareerState): ClubDef[] {
      before this round plays one cup across all its leagues, so for them this
      is the whole nation as before. */
   const ids = nation ? nation.leagueIds.filter(id => leagueRulesOf(id).cup === myLeague.cupName) : [myLeague.id];
-  return ids.flatMap(id => playableClubs(id)).filter(c => c.name !== dropped);
+  /* Round 1035: a club its league's row leaves out of the cup is never drawn
+     (the A-League's two New Zealand clubs and the Australia Cup). */
+  return ids.flatMap(id => playableClubs(id).filter(c => clubEntersCup(id, c.name))).filter(c => c.name !== dropped);
 }
 
 /**
@@ -11901,8 +12039,21 @@ function buildCupBracket(state: CareerState): CupTie[] {
   }
   const rest = shuffle(field.slice(1));
   const ordered = [state.clubName, ...rest];
+  /* Round 1035: a field of nine to fifteen clubs (a nation with one modelled
+     league: Scotland and Denmark draw twelve, Croatia and the A-League's
+     Australian clubs ten) used to pair everybody in the round of 16, which
+     left an odd number of winners: the quarter-finals or the semi-finals
+     dropped a club and no final was ever drawn, so the cup had no winner
+     unless the manager's own club went all the way. Now the round of 16 plays
+     only the ties the field needs to leave eight (field minus eight of them)
+     and the rest go straight to the quarter-finals. My own club is always in
+     a real tie, so the calendar's round of 16 week is never empty. */
+  const short = ordered.length > 8 && ordered.length < 16;
+  const realTies = short ? ordered.length - 8 : 8;
+  if (short) state.cupByes = ordered.slice(realTies * 2);
+  else delete state.cupByes;
   const ties: CupTie[] = [];
-  for (let i = 0; i < 8 && i * 2 + 1 < ordered.length; i++) {
+  for (let i = 0; i < realTies && i * 2 + 1 < ordered.length; i++) {
     const home = ordered[i * 2];
     const away = ordered[i * 2 + 1];
     ties.push({
@@ -11947,7 +12098,18 @@ function advanceCupBracket(state: CareerState, round: CupRound): void {
   if (bracket.some(t => t.round === next)) return;
   const thisRound = bracket.filter(t => t.round === round).sort((a, b) => a.slot - b.slot);
   if (thisRound.some(t => !t.winner)) return;   // my tie is settled by my match
-  const winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  let winners = thisRound.map(t => t.winner).filter((w): w is string => !!w);
+  /* Round 1035: the clubs a short field gave a bye join the quarter-finals,
+     each round of 16 winner paired with one of them first. */
+  if (round === 'R16' && state.cupByes?.length) {
+    const byes = state.cupByes;
+    const merged: string[] = [];
+    for (let i = 0; i < Math.max(winners.length, byes.length); i++) {
+      if (i < winners.length) merged.push(winners[i]);
+      if (i < byes.length) merged.push(byes[i]);
+    }
+    winners = merged;
+  }
   for (let i = 0; i * 2 + 1 < winners.length; i++) {
     const home = winners[i * 2];
     const away = winners[i * 2 + 1];
@@ -12357,9 +12519,10 @@ export function buildBoardObjectives(clubName: string, hasUcl: boolean, leagueSi
   const historic = !!eraId && isHistoricEra(eraId);
   const club = historic ? eraClubDefFor(clubName, eraId) : clubDefFor(clubName);
   const isCustom = !!ACTIVE_CUSTOM && ACTIVE_CUSTOM.def.name === clubName;
-  const league = (isCustom && customLeagueDef(ACTIVE_CUSTOM!.spec, eraId))
+  /* Round 1035: withClubCup, so a club outside its league's cup is set no cup objective. */
+  const league = withClubCup((isCustom && customLeagueDef(ACTIVE_CUSTOM!.spec, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
-    || leagueOf(clubName);
+    || leagueOf(clubName), clubName);
   const objs: BoardObjective[] = [];
   const demand = leagueDemand(club.expectation, club.tier, leagueSize, league, titleGapFor(clubName, league, eraId), eraId, clubName);
   objs.push({ id: 'league', target: demand.target, label: demand.label });
@@ -16698,9 +16861,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
   const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
-  const league = (custom && customLeagueDef(custom, era.id))
+  // Round 1035: withClubCup, so a club outside its league's cup starts cupless.
+  const league = withClubCup((custom && customLeagueDef(custom, era.id))
     || (historic && eraLeagueOf(club.name, era.id))
-    || leagueOf(club.name);
+    || leagueOf(club.name), club.name);
   const leagueClubs = shuffle(custom
     ? league.clubs.map(c => (c === custom!.replacedClub ? custom!.name : c))
     : [...league.clubs]);
@@ -18797,9 +18961,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       }
     }
   }
-  const nextLeague = (custom && customLeagueDef(custom, eraId))
+  // Round 1035: withClubCup, so a club outside its league's cup plays none.
+  const nextLeague = withClubCup((custom && customLeagueDef(custom, eraId))
     || (historic && eraLeagueOf(clubName, eraId))
-    || leagueOf(clubName);
+    || leagueOf(clubName), clubName);
   /* Round 310: prevPos alone lies the summer you come up: first in the
      Championship is not a Champions League place. summary.qualifiedUcl
      already encodes the league it was earned in; the fallback arm now
@@ -19165,6 +19330,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (league.cupName !== null) {
     state.cupBracket = buildCupBracket(state);
     state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  } else {
+    // Round 1035: last season's byes do not follow a manager into a cupless one.
+    delete state.cupByes;
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   /* Round 978: the new season's international windows. An older save gets its

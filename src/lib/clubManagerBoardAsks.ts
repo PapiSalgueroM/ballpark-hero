@@ -57,7 +57,7 @@
 import type { BoardObjective, CareerState, CMPlayer, MarketPlayer, ObjectiveStatus, PosGroup } from '@/lib/clubManager';
 import {
   LEAGUE_NATIONS, SQUAD_LIMIT, buildMarket, careerLeagueOf, groupOf, money,
-  REAL_LEAGUES, isHistoricEra,
+  REAL_LEAGUES, isHistoricEra, leagueRulesOf,
 } from '@/lib/clubManager';
 import { nationalityOf } from '@/data/playerNationalities';
 
@@ -131,7 +131,12 @@ function clubCountry(career: Pick<CareerState, 'clubName' | 'eraId' | 'customClu
   const historic = !!career.eraId && isHistoricEra(career.eraId);
   const custom = !!career.customClub && career.customClub.name === career.clubName;
   const home = historic || custom ? undefined : REAL_LEAGUES.find(l => l.clubs.includes(career.clubName));
-  const raw = LEAGUE_NATIONS[(home ?? careerLeagueOf(career)).id];
+  const leagueId = (home ?? careerLeagueOf(career)).id;
+  /* Round 1035: a club its league's row places in another country (Auckland
+     FC and Wellington Phoenix, New Zealand clubs in the A-League Men). */
+  const own = custom ? undefined : leagueRulesOf(leagueId).clubCountry?.[career.clubName];
+  if (own) return own;
+  const raw = LEAGUE_NATIONS[leagueId];
   if (!raw) return null;
   return LEAGUE_NATION_ALIAS[raw] ?? raw;
 }

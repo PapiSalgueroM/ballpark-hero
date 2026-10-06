@@ -23,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
 import { TRANSFER_OVERLAY_2026 } from './transferOverlay2026.mjs';
 import { DB_TO_ENGINE } from './lib/dbClubNames.mjs';
+import { POS_MAP, ratingOf, gbpM } from './lib/cmValueCurve.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -89,25 +90,9 @@ const CORE_LEAGUE_CLUBS = new Set([
   'Monaco', 'Nice', 'Paris FC', 'PSG', 'Rennes', 'Strasbourg', 'Toulouse',
 ]);
 
-const POS_MAP = {
-  'Goalkeeper': 'GK', 'Centre-Back': 'CB', 'Left-Back': 'LB', 'Right-Back': 'RB',
-  'Defensive Midfield': 'CDM', 'Central Midfield': 'CM', 'Attacking Midfield': 'CAM',
-  'Left Midfield': 'LM', 'Right Midfield': 'RM', 'Left Winger': 'LW', 'Right Winger': 'RW',
-  'Centre-Forward': 'ST', 'Second Striker': 'CF',
-};
-
-/** USD market value -> game rating on a 48-94 curve ($216m -> 94, $1m -> 64). */
-function ratingOf(usd) {
-  if (!usd || usd <= 0) return 48;
-  const r = Math.round(-13.106 + 12.851 * Math.log10(usd));
-  return Math.max(48, Math.min(94, r));
-}
-
-/** USD -> pounds sterling millions, one decimal. */
-function gbpM(usd) {
-  const m = (usd * 0.75) / 1e6;
-  return Math.round(m * 10) / 10;
-}
+/* Round 1035: the position map, the value to rating curve and the pounds
+   conversion live in scripts/lib/cmValueCurve.mjs, shared with
+   scripts/genClubManagerALeague.mjs so both rate on one curve. */
 
 /* ------------------------------------------------------------------ */
 /* Fetch: 2026 preferred, 2025 fallback                               */
