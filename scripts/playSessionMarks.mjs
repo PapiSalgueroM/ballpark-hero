@@ -139,6 +139,7 @@ const unscored = (m, game) =>
   const marks = await markCounter(page);
 
   console.log('5) Creating a career is not playing one');
+  await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
   await page.goto(`${BASE}/nfl-my-career`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');

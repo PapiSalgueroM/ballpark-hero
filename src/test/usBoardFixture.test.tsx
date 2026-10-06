@@ -26,6 +26,9 @@
  * this historical projection. Its callbacks, saved IDs and random draws stay
  * live; sport-specific presentation is covered by appearanceSportCopy and
  * native career creation checks instead of changing the recorded fixture.
+ * Round 1009 continues past only the new transient decision receipt using
+ * the Board's real callback. Its original event application, random draws,
+ * saves, feed and following screen still match the unchanged recording.
  *
  *   US_BOARD_FIXTURE=record  writes the fixture to US_BOARD_FIXTURE_OUT
  *   US_BOARD_FIXTURE=replay  compares against scripts/data/usBoardFixture.json
@@ -76,6 +79,16 @@ vi.mock('@/components/us-career/CareerSeasonReview', async () => {
     </div>
   </div> };
 });
+/* The historical path recorded the hub immediately after an ordinary choice.
+   Keep that projection through the real Continue callback, without replacing
+   any engine, storage or RNG behavior. The receipt has its own focused suite. */
+vi.mock('@/components/us-career/CareerDecisionOutcome', async () => {
+  const { useEffect } = await import('react');
+  return { default: function HistoricalDecisionOutcome({ onContinue }: ComponentProps<typeof import('@/components/us-career/CareerDecisionOutcome').default>) {
+    useEffect(() => { onContinue(); }, [onContinue]);
+    return null;
+  } };
+});
 
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
@@ -115,13 +128,22 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    one counter for the whole process, so the id a dialog trigger carries says
    how many dialogs every earlier test mounted and nothing about this screen:
    left in, one sport's path could turn another sport red. The number is
-   taken out. Only the additive practice and prospect entries are excluded;
-   removing a parent or changing the existing season button still changes the hash. */
+   taken out. Round 1031 also excludes only the two deliberate minimum-height
+   additions from this established presentation adapter; the rest of each
+   season button and every existing parent still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
   copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener]').forEach(el => el.remove());
   copy.querySelectorAll('[data-career-hub-buttons]').forEach(el => el.replaceWith(...el.childNodes));
-  copy.querySelectorAll('[data-career-event]').forEach(el => el.removeAttribute('data-career-event'));
+  for (const attribute of ['data-career-event', 'data-career-decision-event', 'data-career-decision-option']) {
+    copy.querySelectorAll(`[${attribute}]`).forEach(el => el.removeAttribute(attribute));
+  }
+  copy.querySelectorAll('button').forEach(button => {
+    if (/^Play the \d+ season$/.test(squash(button.textContent ?? ''))
+      || (button.closest('[data-season-reveal]') && squash(button.textContent ?? '') === 'Continue')) {
+      button.classList.remove('min-h-11');
+    }
+  });
   return copy;
 };
 const markupNow = () => legacyScreen().innerHTML.replace(/radix-:r[0-9a-z]+:/g, 'radix-:r:');
@@ -613,7 +635,7 @@ describe.skipIf(!MODE)('the four US career boards against the recorded fixture',
     if (MODE !== 'record' || !process.env.US_BOARD_FIXTURE_OUT) return;
     if (Object.keys(built).length !== SPORTS.length) return;
     const header = {
-      what: 'Round 900: the four US career boards, every click and every save, recorded before they became one board',
+      what: 'Round 900: the four US career boards, every click and every save. First recorded before they became one board; re-recorded on purpose since (Round 988, the career content packs), so recordedFrom names the tree and scripts/simUsBoardParity.mjs says what moved',
       recordedFrom: process.env.US_BOARD_FIXTURE_SHA ?? 'unknown',
       clock: PINNED_NOW,
       rerecord: 'node scripts/recordUsBoardFixture.mjs',

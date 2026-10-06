@@ -6,6 +6,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/career-practice.yml
+      - src/components/game/GameHelp.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
       - scripts/qa/career992.mjs
       - scripts/simUsCareerPractice.mjs
       - scripts/simCareerTraining.mjs

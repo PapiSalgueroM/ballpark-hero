@@ -55,6 +55,22 @@
       footprint (the five 2010-11 leagues, three of them new, "whole" in the
       2015-16 and 2005-06 saves with laliga2005 "start", the 2010-11
       objectives and the views' leagueNations and euroSlots).
+      Round 902 rewrote the eras and pure entries once more, for the
+      2005-06 era's Serie A, Bundesliga and Ligue 1, after the same
+      attribution: Round 899's head (06dc0741, a git archive of its src,
+      CM_RULES_ROOT) reproduced the old entries exactly (eras 9/0, pure
+      32/0), and the round's own diff is that era's data file, its
+      nationality block and its rows in the engine. Landing it on main
+      after Release AC (211da297, Round 901 included), the merge took main's
+      file and re-took eras and pure on the merged tree, whose only Club
+      Manager difference from main is that era's data, nationality block and
+      rows: modern stayed 22/22 with main's entries, every 2010-11 and
+      2015-16 entry of eras and pure matched main's untouched (eras 10 of 15,
+      pure 32 of 38), and what moved is exactly this round's footprint (the
+      2005-06 Premier League and La Liga saves and day one objectives, the
+      three new 2005-06 leagues, and the views' leagueNations and euroSlots).
+      The new pure entries for 2005-06 equal the ones the branch wrote before
+      the merge, value for value.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
@@ -364,8 +380,8 @@ async function partEras() {
   }
   /* Round 899: nine, the 2015-16 era gained its Bundesliga and its Ligue 1 (a league added to an era
      regenerates the baseline on purpose, like a modern one). Round 901: twelve, the 2010-11 era
-     gained its Serie A, Bundesliga and Ligue 1. */
-  if (saves.length !== 12) fail(`the eras hold ${saves.length} leagues where Round 901 left 12`);
+     gained its Serie A, Bundesliga and Ligue 1. Round 902: fifteen, the 2005-06 era gained the same three. */
+  if (saves.length !== 15) fail(`the eras hold ${saves.length} leagues where Rounds 901 and 902 left 15`);
   const got = await digestSaves(saves, mod);
   if (WRITE) written.eras = got; else compare('eras', got, baseline.parts.eras);
 }

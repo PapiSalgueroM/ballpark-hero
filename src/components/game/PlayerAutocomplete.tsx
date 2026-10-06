@@ -70,6 +70,18 @@ export interface PlayerAutocompleteProps {
   inputClassName?: string;
   /** Debounce delay before a search fires, in milliseconds. Default 200. */
   debounceMs?: number;
+  /**
+   * Round 1010a: what the list says when a search settles with nothing to
+   * offer. Defaults to 'No players found'. The search-failed text is separate
+   * and never replaced.
+   */
+  emptyText?: string;
+  /**
+   * Round 1010a: called once per search that settles with an empty merged
+   * list and no error, with the text that was searched. Never on an abort, a
+   * stale response or a failed search.
+   */
+  onNoResults?: (query: string) => void;
 }
 
 const DEFAULT_DEBOUNCE_MS = 200;
@@ -181,6 +193,8 @@ export function PlayerAutocomplete({
   className,
   inputClassName,
   debounceMs = DEFAULT_DEBOUNCE_MS,
+  emptyText = 'No players found',
+  onNoResults,
 }: PlayerAutocompleteProps) {
   const [suggestions, setSuggestions] = useState<PlayerEntity[]>([]);
   const [loading, setLoading] = useState(false);
@@ -193,6 +207,10 @@ export function PlayerAutocomplete({
   const requestIdRef = useRef(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const listboxId = useId();
+  /* Read through a ref because the search effect's dependencies leave the
+     callbacks out on purpose, so a prop read inside it could be stale. */
+  const onNoResultsRef = useRef(onNoResults);
+  onNoResultsRef.current = onNoResults;
 
   const minChars = searchOptions.minChars ?? 3;
 
@@ -240,6 +258,11 @@ export function PlayerAutocomplete({
           setSearchFailed(Boolean(error));
           setLoading(false);
           setHighlightedIndex(-1);
+          // searchPlayers settles an aborted search as empty with no error, so
+          // the signal is checked too: an abort is never a "no results". The
+          // merge is only redone for a caller that listens.
+          const notify = onNoResultsRef.current;
+          if (notify && !error && !controller.signal.aborted && mergeLocal(results).length === 0) notify(value);
         })
         .catch(error => {
           if (thisRequestId !== requestIdRef.current) return;
@@ -383,7 +406,7 @@ export function PlayerAutocomplete({
               className="flex items-center justify-center px-4 text-sm text-muted-foreground"
               style={{ minHeight: MIN_ROW_HEIGHT_PX }}
             >
-              {searchFailed ? 'Could not load players. Try searching again.' : 'No players found'}
+              {searchFailed ? 'Could not load players. Try searching again.' : emptyText}
             </div>
           )}
 

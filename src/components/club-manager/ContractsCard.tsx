@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, renewContract, renewContractWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms, releasePlayer, signFreeAgent } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, ReleaseBlock, FreeAgentBlock, FreeAgent } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { CelebrationStyles } from '@/components/club-manager/Celebration';
+import { DeskCueLine, useDeskCue } from '@/components/club-manager/deskCue';
+import type { DeskCueRead } from '@/components/club-manager/deskCue';
 
 /* Round 619 review: what the button says when the engine would refuse, so a
    disabled button always says why. Keyed on the engine's own reason codes, so
@@ -65,9 +68,57 @@ interface ContractsCardProps {
 export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, onSignFreeAgent }: ContractsCardProps) {
   /* Round 619 review: the man whose release is waiting on a second tap. */
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  /* Round 982: the line that says what a press just did. */
+  const { cue, press } = useDeskCue<string, CareerState>(career);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
+  /* Round 982: what the signing on fee really cost, read off the two saves. */
+  const paid = (after: CareerState) => money(Math.round((career.budget - after.budget) * 10) / 10);
+
+  /* Round 982: each press is checked against what the engine would write, and
+     the line is read off the save the screen is handed afterwards. Anything
+     that does not match (a refusal, a save that moved some other way) gives
+     null, and null says nothing. */
+  const renewRead = (id: string, next: CareerState | null): DeskCueRead<CareerState> | null => {
+    const before = career.squad.find(x => x.id === id);
+    const want = next?.squad.find(x => x.id === id);
+    if (!next || !before || !want) return null;
+    return after => {
+      const got = after.squad.find(x => x.id === id);
+      if (!got || got.contractYears !== want.contractYears || got.wage !== want.wage
+        || (got.releaseClause ?? 0) !== (want.releaseClause ?? 0) || after.budget !== next.budget) return null;
+      const clause = (got.releaseClause ?? 0) > 0 ? `exit clause ${money(got.releaseClause as number)}`
+        : (before.releaseClause ?? 0) > 0 ? 'clause deleted' : 'no release clause';
+      return `Renewed: ${got.name}. ${got.contractYears} years at ${got.wage}k a week, ${clause}, ${paid(after)} to sign.`;
+    };
+  };
+  /* The engine fills an old save's missing free agent pool in place, so it is
+     handed a copy: asking what a press would do must never change the save. */
+  const releaseRead = (id: string): DeskCueRead<CareerState> | null => {
+    const next = releasePlayer({ ...career }, id);
+    const rows = next?.severance ?? [];
+    const want = rows[rows.length - 1];
+    if (!next || !want) return null;
+    return after => {
+      const owed = after.severance ?? [];
+      const got = owed[owed.length - 1];
+      if (after.squad.some(x => x.id === id) || owed.length !== rows.length || !got
+        || got.name !== want.name || got.weekly !== want.weekly || got.weeksLeft !== want.weeksLeft) return null;
+      return `Released: ${got.name}. You pay him ${got.weekly}k a week for ${got.weeksLeft} more week${got.weeksLeft === 1 ? '' : 's'}.`;
+    };
+  };
+  const signRead = (name: string): DeskCueRead<CareerState> | null => {
+    const next = signFreeAgent({ ...career }, name);
+    const had = new Set(career.squad.map(x => x.id));
+    const want = next?.squad.find(x => !had.has(x.id) && x.name === name);
+    if (!next || !want) return null;
+    return after => {
+      const got = after.squad.find(x => !had.has(x.id) && x.name === name);
+      if (!got || got.wage !== want.wage || got.contractYears !== want.contractYears || after.budget !== next.budget) return null;
+      return `Signed: ${got.name}. ${got.contractYears} years at ${got.wage}k a week, ${paid(after)} to sign.`;
+    };
+  };
   const bill = wageBill(career);
   const cap = career.wageCap ?? wageCapFrom(bill);
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
@@ -115,7 +166,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
         <div className="mt-1 grid grid-cols-2 gap-1.5">
           <div className="min-w-0">
             <button
-              onClick={() => onRenew(p.id)}
+              onClick={() => press(p.id, renewRead(p.id, renewContract(career, p.id)), () => onRenew(p.id))}
               disabled={!affordable}
               title={affordable
                 ? `${terms.years} more years at ${terms.wage}k a week, ${money(terms.fee)} to sign. No clause; deletes any he carries.`
@@ -129,7 +180,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           </div>
           <div className="min-w-0">
             <button
-              onClick={() => onRenewWithClause(p.id)}
+              onClick={() => press(p.id, renewRead(p.id, renewContractWithClause(career, p.id)), () => onRenewWithClause(p.id))}
               disabled={!clauseAffordable}
               title={clauseAffordable
                 ? `${withClause.years} years at only ${withClause.wage}k a week, ${money(withClause.fee)} to sign, but a ${money(withClause.clause)} release clause any club can pay. It cannot be rejected or blocked.`
@@ -201,7 +252,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                     </div>
                   </div>
                   <button
-                    onClick={() => onRenew(p.id)}
+                    onClick={() => press(p.id, renewRead(p.id, renewContract(career, p.id)), () => onRenew(p.id))}
                     disabled={!affordable}
                     title={affordable
                       ? `A plain renewal deletes the clause: ${terms.years} years at ${terms.wage}k a week, ${money(terms.fee)} to sign.`
@@ -291,7 +342,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                       </p>
                       <div className="flex gap-1.5">
                         <button
-                          onClick={() => { onRelease(p.id); setConfirmId(null); }}
+                          onClick={() => { press(p.id, releaseRead(p.id), () => onRelease(p.id)); setConfirmId(null); }}
                           className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-destructive text-destructive-foreground hover:opacity-90 transition-all"
                         >
                           Release him
@@ -348,7 +399,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                   </div>
                   <button
                     data-sign-index={i}
-                    onClick={() => onSignFreeAgent(f.name)}
+                    onClick={() => press(f.name, signRead(f.name), () => onSignFreeAgent(f.name))}
                     disabled={!!block}
                     title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week and ${money(t.fee)} to sign. No transfer fee, and the window being shut does not matter.`}
                     className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
@@ -362,6 +413,12 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           </div>
         </div>
       )}
+
+      {/* Round 982: last on purpose, so the line sticks to the foot of the
+          screen while the card runs on below it, and the style tag adds no
+          gap to the stack. */}
+      <CelebrationStyles />
+      <DeskCueLine cue={cue} testId="cm-contracts-cue" />
     </div>
   );
 }

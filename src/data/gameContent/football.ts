@@ -353,6 +353,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Playing seasons one tap at a time",
         items: [
           "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
+          "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
         subsections: [
           {
@@ -367,6 +368,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Making tough offseason calls",
         items: [
           "Make the offseason call: train skills or body, fix the knee or play through it, take the envelope or report it.",
+          "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue to return to your career without applying the choice again.",
         ],
         subsections: [
           {
@@ -471,6 +473,12 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading an actual capped change",
+        paragraphs: [
+          "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue returns to your career with Health still at 100.",
+        ],
+      },
       {
         heading: "A Dual Threat quarterback's rookie leap",
         paragraphs: [

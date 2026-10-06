@@ -121,7 +121,7 @@ export default function StreakHistory({ legacyLabels = {} }: StreakHistoryProps)
           {neverPlayed
             ? 'Finish any game and your days start filling in here.'
             : `Played ${played} of the last ${seen - unknown} days${unknown > 0 ? ' on record' : ''}. ${current > 0 ? `${current} in a row right now` : 'No run going right now'}, best ever ${best}.`}
-          {' '}Counted on this device, same as your streak.
+          {' '}Counted on this device only. The streak tiles above count your account too, so they can be higher.
         </p>
       </CardHeader>
       <CardContent className="px-3 sm:px-6">

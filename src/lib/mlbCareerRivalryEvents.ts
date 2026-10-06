@@ -55,7 +55,7 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 /** The beat that fires forced, once, the season the rival retires. */
 export const MLB_RIVAL_RETIRE_ID = 205;
 
-/* Seventeen beats, gated on what an MLB rival's save actually tracks:
+/* Seventeen beats (six more since Round 919), gated on what an MLB rival's save actually tracks:
    rings, overall, team, age, and the head to head (season series) record
    judgeRivalSeason already keeps. Every mutation lands on fields the MLB
    career already has (morale, fanbase, netWorth, and the optional
@@ -210,6 +210,72 @@ export const MLB_RIVALRY_EVENTS: RivalryEventDef<MlbCareerState, CareerRival>[] 
     apply: s => {
       s.fanbase = clamp(s.fanbase + 8, 0, 100);
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) - 25, 0, 100);
+    },
+  },
+  /* Round 919: six more beats, the same rules as the seventeen above. Gated
+     only on fields the save and the rival already carry, narrated rather
+     than quoted, and every consequence line says exactly what apply moves
+     (the rivalry meter is flavor and is named without a number). */
+  {
+    id: 218, emoji: "🪞", title: "One Line Apart",
+    description: (_s, r) => `${r.name} plays your position, and every list of the best at it this year has the two of you one line apart.`,
+    consequence: "Morale +4, the rivalry heats up",
+    /* One line apart means close ratings, not just the same position. */
+    when: (s, r) => !r.retired && r.pos === s.pos && Math.abs(r.ovr - s.ovr) <= 3,
+    apply: s => {
+      s.morale = clamp(s.morale + 4, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 219, emoji: "⚔️", title: "The Eighth Inning Matchup",
+    description: (_s, r) => `Tie game, eighth inning, and it comes down to you against ${r.name}, pitcher against hitter, with the whole park standing.`,
+    consequence: "Fanbase +5, the rivalry heats up",
+    /* Pitcher against hitter needs two clubs: a teammate never faces you. */
+    when: (s, r) => !r.retired && r.team !== s.team && (s.pos === "SP" || s.pos === "RP") !== (r.pos === "SP" || r.pos === "RP"),
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 5, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+    },
+  },
+  {
+    id: 220, emoji: "💰", title: "The Bigger Contract",
+    description: (_s, r) => `${r.name} signs an extension, and the comparison graphics on every pregame show put his number right next to yours.`,
+    consequence: "Morale -4, Fanbase +2",
+    when: (s, r) => !r.retired && r.ovr >= s.ovr,
+    apply: s => {
+      s.morale = clamp(s.morale - 4, 0, 100);
+      s.fanbase = clamp(s.fanbase + 2, 0, 100);
+    },
+  },
+  {
+    id: 221, emoji: "🌴", title: "Same Winter Club",
+    description: (_s, r) => `${r.name} signs with the same winter ball club you play for, and the little ballpark sells out every night the two of you are in the lineup.`,
+    consequence: "Fanbase +3, Morale +2",
+    when: (s, r) => !r.retired && s.age <= 28 && r.age <= 28,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 3, 0, 100);
+      s.morale = clamp(s.morale + 2, 0, 100);
+    },
+  },
+  {
+    id: 222, emoji: "📺", title: "Sunday Night Series",
+    description: (_s, r) => `The network moves your series against ${r.name}'s club to Sunday night and builds the whole broadcast around the two of you.`,
+    consequence: "Fanbase +6, Morale +2",
+    when: (s, r) => !r.retired && r.team !== s.team,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 6, 0, 100);
+      s.morale = clamp(s.morale + 2, 0, 100);
+    },
+  },
+  {
+    id: 223, emoji: "🏛️", title: "The Hall Question",
+    description: (_s, r) => `Writers have started asking whether you and ${r.name} both belong in the Hall of Fame, or only one of you.`,
+    consequence: "Fanbase +4, the rivalry heats up",
+    when: (s, r) => s.age >= 33 && r.age >= 33,
+    apply: s => {
+      s.fanbase = clamp(s.fanbase + 4, 0, 100);
+      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 5, 0, 100);
     },
   },
 ];
