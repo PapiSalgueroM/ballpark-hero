@@ -126,15 +126,29 @@ const NEW_LEAGUES = [
      to 61), so six seasons were too few: over six a run, the Melbourne City
      over Brisbane Roar pair (61 against 59) measured 2.0 to 11.5 points and
      the rank correlation over six unmanaged clubs 0.50 to 0.91, both inside
-     what noise does. So the row plays twelve seasons, keeps the one pair with
-     a real rating gap (Adelaide United 61 over Central Coast Mariners 58),
-     and does not band the rank correlation (rhoMin null): ten of its twelve
-     previews sit at 60 or 61, and a rank of ties is not evidence.
+     what noise does. So the row first played twelve seasons, kept the one
+     pair with a real rating gap (Adelaide United 61 over Central Coast
+     Mariners 58), and left the rank correlation unbanded: ten of its twelve
+     previews sit at 60 or 61, and a rank of ties is weak evidence. The
+     review fix below plays 96 and bands both.
      MEASURED 2026-10-06, twelve seasons a run, SIM_SEED unset and 1 to 4:
-     Adelaide over Central Coast 7.4, 6.0, 8.8, 2.4 and 8.7 points a season,
-     so the band is 1 (the swap control turns the gap negative). */
+     Adelaide over Central Coast 7.4, 6.0, 8.8, 2.4 and 8.7 points a season.
+     A band of 1 sat about two standard deviations under that mean, a coin
+     toss in waiting, so the review fix plays more seasons rather than
+     loosening anything. The row's seasons are cheap (about 30 seconds for
+     96), and the spread of the gap falls as one over the root of the count:
+     twenty four seasons, SIM_SEED unset and 1 to 4: gap 5.7, 6.5, 7.3, 3.3,
+     8.8, rho 0.806, 0.836, 0.794, 0.794, 0.971.
+     NINETY SIX seasons, SIM_SEED unset and 1 to 7: gap 5.6, 6.6, 7.6, 5.6,
+     5.2, 6.1, 6.6, 4.0; rho 0.736, 0.853, 0.971, 0.971, 0.971, 0.853,
+     0.971, 0.853. Mean gap 5.9 with a standard deviation of 1.1, so the
+     band is 2 (3.6 deviations clear; the swap control turns the gap
+     negative), and the rank correlation over the
+     six unmanaged clubs is banded at 0.4, far under the lowest of fourteen
+     runs at 24 or 96 seasons (0.736): it is coarse with tied previews, so
+     the band only catches strength stopping to matter. */
   {
-    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 1, seeds: 12, rhoMin: null,
+    id: 'aleague', size: 12, drop: 0, cup: 'Australia Cup', pairGap: 2, seeds: 96, rhoMin: 0.4,
     pairs: [['Adelaide United', 'Central Coast Mariners']],
     managed: ['Perth Glory', 'Newcastle Jets', 'Melbourne Victory', 'Western Sydney Wanderers', 'Sydney FC', 'Macarthur FC'],
   },
