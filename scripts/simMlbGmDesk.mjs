@@ -17,7 +17,9 @@
  *      window shuts once round 19 is played (what the guide says), the older
  *      trade paths' refusal (mlbDeadlineRefusal) agrees with it every round,
  *      each of the board's four old trade handlers asks it first, and with
- *      the desk on the old paths put no pick in a deal
+ *      the desk on the old paths put no pick in a deal; the buyer and seller
+ *      split is drawn at the engine's own October field (six a league, what
+ *      mlbLeagueSeeds seeds), checked at every deadline of the walk
  *   4  picks are conserved league wide: every club's own pick in every round
  *      of the draft carried exists exactly once and is still its own
  *      (ordinary MLB picks cannot be traded and this game awards no
@@ -47,6 +49,7 @@
  *   nofarm        the desk's winter hands the engine no farm director        (5)
  *   nodefault     the engine's win probability reads an edge by default      (1)
  *   retaintwice   cash deals counted by club, not by contract                (6)
+ *   spots5        buyers and sellers split at five places, not October's six (3)
  * Recording the fixture: SIM_MLB_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/mlbGmDeskFixture.json from that engine.
  *
@@ -89,7 +92,7 @@ const CONTROL = process.env.SIM_MLB_GM_DESK_CONTROL || '';
 const RECORD = process.env.SIM_MLB_GM_DESK_RECORD || '';
 const CONTROLS = {
   coinflip: '2', latetrade: '3', refusaldrift: '3', noguard: '3', droppick: '4', pickmoves: '4', nocomp: '4',
-  flatstaff: '5', onepost: '5', nofarm: '5', nodefault: '1', retaintwice: '6',
+  flatstaff: '5', onepost: '5', nofarm: '5', nodefault: '1', retaintwice: '6', spots5: '3',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_MLB_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -160,6 +163,8 @@ const EDITS = {
     'export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam, edgeA = 0.01, edgeB = 0): number {'],
   /* The desk counts cash deals by club instead of by contract. */
   retaintwice: ['desk', '    timesRetained: id => retained.filter(r => r.playerId === id).length,', '    timesRetained: id => retained.filter(r => r.club === id).length,'],
+  /* The buyer and seller split drawn at five places a league, not October's six. */
+  spots5: ['desk', 'export const MLB_PLAYOFF_SPOTS = 6;', 'export const MLB_PLAYOFF_SPOTS = 5;'],
 };
 const overrides = new Map();
 if (CONTROL) {
@@ -348,7 +353,7 @@ console.log(`   ${idCompared} seasons replayed against ${fixture.recordedFrom}`)
 /* Sections 2, 3 and 4 share one walk: ten seasons a seed with the desk on. */
 const stats = {
   decisions: 0, gm: 0, auto: 0, earlyDeals: 0, lateTries: 0, lateDeals: 0, retained: 0, pickTries: 0, pickRefused: 0,
-  pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0,
+  pickChecks: 0, applyChecks: 0, buyers: 0, sellers: 0, refusalChecks: 0, fieldChecks: 0,
   drafteesUp: 0, drafteesFree: 0, arbTenders: 0, qualifyAccepted: 0, qualifyRejected: 0, compPaid: 0,
 };
 const problems = { s2: [], s3: [], s4: [] };
@@ -456,6 +461,13 @@ function seasonDesk(lg, team, desk, rng, s, where) {
       const st = Object.values(D.mlbStances(lg));
       stats.buyers += st.filter(x => x === 'buyer').length;
       stats.sellers += st.filter(x => x === 'seller').length;
+      /* The split is drawn at the engine's own October field: as many places a
+         league as runMlbPlayoffs seeds (mlbLeagueSeeds), never a number of its own. */
+      for (const al of [true, false]) {
+        const field = E.mlbLeagueSeeds(lg, al).length;
+        stats.fieldChecks++;
+        if (field !== D.MLB_PLAYOFF_SPOTS) problems.s3.push(`${where}: the deadline splits buyers from sellers at ${D.MLB_PLAYOFF_SPOTS} places a league, but October seeds ${field}`);
+      }
     }
     if (lg.round >= E.MLB_ROUNDS) break;
     lg.round += 1;
@@ -536,6 +548,7 @@ for (const p of problems.s3) fail(p);
 if (stats.earlyDeals < T.minEarlyDeals) fail(`only ${stats.earlyDeals} deals before the deadline, floor ${T.minEarlyDeals}`);
 if (stats.lateTries < T.minLateTries) fail(`only ${stats.lateTries} tries after the deadline, floor ${T.minLateTries}`);
 if (!(stats.buyers > 0 && stats.sellers > 0)) fail(`the deadline split nobody: ${stats.buyers} buyers, ${stats.sellers} sellers`);
+if (stats.fieldChecks < 2 * SEEDS.length * SEASONS) fail(`the split was held against the October field only ${stats.fieldChecks} times`);
 console.log(`   ${stats.earlyDeals} deals before the deadline, ${stats.lateTries} tries after it, ${stats.lateDeals} landed; ${stats.buyers} buyer and ${stats.sellers} seller places at the deadline`);
 {
   /* The board's older trade paths are guarded in the board itself, so read
