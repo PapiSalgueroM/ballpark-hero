@@ -115,7 +115,13 @@
      "path": "slots[8].name",
      "from": "Amavisca",
      "to": "Fernando Morientes",
-     "why": "UEFA (lineup and events) and Sky Sports: Morientes started; Amavisca came on 90' for Raul. No host states his role, the tile keeps the slot label"
+     "why": "UEFA (lineup and events) and Sky Sports: Morientes started; Amavisca came on 90' for Raul"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "LM",
+     "to": "FW",
+     "why": "Morientes: UEFA (FORWARD); Sky Sports prints him among the last three with Mijatovic and Raul lists him in that line and no host says otherwise; one host, so the row marks it open"
     }
    ],
    "notes": [
@@ -123,7 +129,7 @@
     "Formation 4-4-2 and the per-slot position labels are not published by either source; not counted as a diff. With Morientes in for Amavisca the shape is still plausibly 4-3-1-2 / 4-4-2, unverified.",
     "All three blankCandidates (Panucci, Seedorf, Raúl) are confirmed starters, so the puzzle answer pool is not affected; only the visible LM tile is wrong.",
     "besoccer.com (es.besoccer.com/partido/real-madrid/juventus-fc/199818861/alineaciones) was also read and is NOT reliable for this match: it lists only ten starters, shows Morientes as an 82' sub and a 4-1 score. Discarded.",
-    "Round 1026: no host states a role for Morientes; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): Morientes reads FW (UEFA's listing; Sky prints him with the forwards), not Amavisca's LM. The tile keeps its place in the entry's 4-4-2, which no host confirms; open for a role source."
    ]
   },
   {
@@ -208,6 +214,13 @@
      "readOn": "2026-10-05",
      "xi": false,
      "says": "3-0 win at the Stade de France in the 2000 final; names Casillas, Salgado, Roberto Carlos, McManaman, Morientes, Raúl, Anelka. No full team sheet."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/real-madrid/valencia-cf/200023340/lineups",
+     "xi": true,
+     "says": "Re-read in the review fix: Real Madrid 5-3-2, Defenders Karanka, Helguera, Ivan Campo, Roberto Carlos, Michel Salgado; Midfielders Raul, McManaman, Redondo; Forwards Morientes, Anelka."
     }
    ],
    "diffs": [
@@ -233,7 +246,7 @@
      "path": "slots[7].name",
      "from": "Geremi",
      "to": "Ivan Campo",
-     "why": "UEFA, BeSoccer and Sky Sports: Ivan Campo started (UEFA midfielder); Geremi was an unused substitute. No host states his role, the tile keeps the slot label"
+     "why": "UEFA, BeSoccer and Sky Sports: Ivan Campo started (UEFA midfielder); Geremi was an unused substitute"
     },
     {
      "path": "comment",
@@ -246,6 +259,12 @@
      "from": "Wikipedia dedicated match article, confirms 19-year-old Casillas started in goal ahead of the injured Illgner.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 4. Ivan Campo started; Illgner was on the bench, not injured.",
      "why": "the internal note made an unsupported claim"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "DF",
+     "why": "Ivan Campo: BeSoccer's 5-3-2 puts him in the back five; UEFA's listing says MIDFIELDER, his registered line. The match source wins over a registration line, so the tile reads DF, not Geremi's CM. One match host, open"
     }
    ],
    "notes": [
@@ -253,7 +272,7 @@
     "Formation 4-3-3 and per-slot labels (Morientes RW, Raúl LW) are not published by either source; not counted. With Iván Campo in the XI, UEFA classes him as a midfielder.",
     "All three blankCandidates (Casillas, Morientes, Helguera) are confirmed starters.",
     "UEFA's event feed (as summarised by the fetch tool) printed the substitution pairs in reverse; the pairs above are the on/off reading consistent with the bench list (Sávio, Sanchís, Hierro on the bench, Morientes, Anelka, Salgado in the XI).",
-    "Round 1026: no host states a role for Ivan Campo; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): Ivan Campo reads DF (BeSoccer's 5-3-2 has him in the back five). The tile keeps its place because the entry's 4-3-3 is not refuted by two hosts (BeSoccer alone states 5-3-2); the layout is open for a role source."
    ]
   },
   {
@@ -2426,6 +2445,13 @@
      "readOn": "2026-10-05",
      "xi": false,
      "says": "Match page: Netherlands 0-0 Argentina, 9 Jul 2014, Neo Química Arena São Paulo, Argentina win 4-2 on penalties (team sheet not rendered)."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "bleacherreport.com",
+     "url": "https://bleacherreport.com/articles/2124358-netherlands-vs-argentina-live-player-ratings-for-world-cup-semi-final",
+     "xi": false,
+     "says": "Live player ratings. Kuyt at half-time: \"Continuing to thrive as a right-sided wing-back\"; at full time he was less comfortable on the left in the second half than on the right in the first. Blind did not get much joy opposite Pablo Zabaleta."
     }
    ],
    "diffs": [
@@ -2467,7 +2493,7 @@
      "path": "slots[1].name",
      "from": "Daryl Janmaat",
      "to": "Dirk Kuyt",
-     "why": "fifa.com and ESPN: Kuyt started; Janmaat came on at half-time for Martins Indi. No host states his role, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Kuyt started; Janmaat came on at half-time for Martins Indi"
     },
     {
      "path": "slots[7].name",
@@ -2480,6 +2506,12 @@
      "from": "candidate",
      "to": null,
      "why": "a half-time substitute (fifa.com, ESPN)"
+    },
+    {
+     "path": "slots[1].position",
+     "from": "CB",
+     "to": "RWB",
+     "why": "Kuyt: Bleacher Report's ratings have him a right-sided wing-back in the first half (he moved left after Janmaat came on); ESPN states a 3-4-1-2 with no roster; fifa.com lists him a forward, his registered line. One match source, open for a second"
     }
    ],
    "notes": [
@@ -2488,8 +2520,8 @@
     "formationLabel 5-3-2 cannot be checked: neither source states a formation for this match. Not counted.",
     "blankCandidates Martins Indi and Sneijder are confirmed starters (Martins Indi off at half-time).",
     "ESPN's lineups and match pages did not render the team sheet to the fetch tool; ESPN's own published player ratings for the match (starters and subs listed separately) were used instead.",
-    "Round 1026: no host states a role for Kuyt (fifa.com lists him a forward); the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: formation 5-3-2 is not published by either host and stays unverified."
+    "Round 1026: formation 5-3-2 is not published by either host and stays unverified.",
+    "Round 1026 (review fix): Kuyt no longer sits in a back four as a CB. Bleacher Report's live ratings put him at right wing-back in the first half, so the tile reads RWB out on the right. One match source; the entry's Blind at CM is pre-existing and that host has Blind on the left opposite Zabaleta: not changed on one host."
    ]
   },
   {

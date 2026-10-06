@@ -5160,7 +5160,7 @@
      "path": "slots[7].name",
      "from": "Steve McManaman",
      "to": "Santiago Solari",
-     "why": "UEFA, RSSSF and ESPN: Solari started; McManaman came on 61' for Figo. No host states his role, the tile keeps the slot label"
+     "why": "UEFA, RSSSF and ESPN: Solari started; McManaman came on 61' for Figo"
     },
     {
      "path": "blankCandidates[Steve McManaman]",
@@ -5183,12 +5183,18 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI for Zidane's iconic left-foot volley.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Cesar Sanchez and Solari started; Casillas and McManaman came on.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "MF",
+     "why": "Solari: ESPN (M); UEFA gives him no position lists him in that line and no host says otherwise; one host, so the row marks it open"
     }
    ],
    "notes": [
     "Date, score and competition match. Venue: UEFA and RSSSF say Hampden Park, Glasgow (as the entry has); ESPN's feed says 'BayArena Leverkusen', which is an ESPN data error, so RSSSF was read as a third source and the entry's venue stands.",
     "Correct: Salgado, Hierro, Helguera, Roberto Carlos, Figo, Makelele, Zidane, Raúl, Morientes.",
-    "Round 1026: no host states a role for Solari; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): Solari reads MF on ESPN's listing (UEFA gives none); RSSSF prints him fourth of the four after the back four. One host on the line, open for a role source."
    ]
   },
   {
@@ -5297,7 +5303,7 @@
      "path": "slots[5].name",
      "from": "Jens Jeremies",
      "to": "Owen Hargreaves",
-     "why": "UEFA and RSSSF: Hargreaves started; Jeremies was in neither the eleven nor the bench. No host states his role, the tile keeps the slot label"
+     "why": "UEFA and RSSSF: Hargreaves started; Jeremies was in neither the eleven nor the bench"
     },
     {
      "path": "slots[7].name",
@@ -5309,19 +5315,25 @@
      "path": "slots[10].name",
      "from": "Carsten Jancker",
      "to": "Hasan Salihamidzic",
-     "why": "UEFA and RSSSF: Salihamidzic started; Jancker came on 46' for Sagnol. No host states his role, the tile keeps the slot label"
+     "why": "UEFA and RSSSF: Salihamidzic started; Jancker came on 46' for Sagnol"
     },
     {
      "path": "source",
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI and the penalty shootout win.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Hargreaves, Lizarazu and Salihamidzic started; Jancker came on. No host publishes the shape.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[5].position",
+     "from": "CM",
+     "to": "MF",
+     "why": "Hargreaves: UEFA (MIDFIELDER); RSSSF gives no positions lists him in that line and no host says otherwise; one host, so the row marks it open"
     }
    ],
    "notes": [
     "Date, score, penalties, venue and competition match. All three blank candidates (Sagnol, Elber, Scholl) did start.",
     "ESPN's API has no event for this match (scoreboard for 2001-05-22..24 returns an error), so the independent source is RSSSF. Sky Sports' teams page (skysports.com/football/bayern-munich-vs-valencia/teams/119179) and BeSoccer's lineup page were also tried: Sky lists only ten Bayern starters (no Elber) and gives the venue as the Olympic Stadium, Athens; BeSoccer lists ten starters and shows Sagnol as a 46' substitute. Both are visibly corrupt and were not used.",
-    "Round 1026: no host states a role for Hargreaves or Salihamidzic; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): Hargreaves reads MF on UEFA's listing (one host). Salihamidzic still shows Jancker's ST: UEFA gives him no position, RSSSF none, and no ESPN record of this final was found, so no host states a line for him either way. This is the one replacement still open with no role source."
    ]
   },
   {
@@ -5406,6 +5418,13 @@
      "readOn": "2026-10-05",
      "xi": false,
      "says": "Metzelder Borussia Dortmund; Schneider and Ramelow Bayer 04 Leverkusen."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "immortalfootball.com",
+     "url": "https://immortalfootball.com/germany-0-2-brazil-2002-world-cup-final/",
+     "xi": true,
+     "says": "Germany: Kahn; Linke, Ramelow, Metzelder; Frings, Hamann, Schneider, Jeremies (Asamoah), Bode (Ziege); Klose (Bierhoff), Neuville. Printed line by line as a 3-5-2."
     }
    ],
    "diffs": [
@@ -5423,15 +5442,15 @@
      "path": "slots[7].name",
      "from": "Christian Ziege",
      "to": "Marco Bode",
-     "why": "fifa.com and ESPN: Bode started; Ziege came on 84' for him. No host states sides, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Bode started; Ziege came on 84' for him"
     }
    ],
    "notes": [
     "Date, score, venue and competition match. Ballack is absent from both sources' XI, consistent with the entry's suspension note. Jeremies did start (fifa.com, ESPN).",
     "Blank candidates' clubs verified: Metzelder Borussia Dortmund, Schneider and Ramelow Bayer Leverkusen (planetworldcup.com 2002 squad list and national-football-teams.com Germany 2002 both agree). All three started.",
     "Exact wing-back sides (Schneider, Frings, Bode) are not published by either source, so slot sides were not checked.",
-    "Round 1026: no host states a role for Bode; the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: the skeptic notes Transfermarkt has Frings at right wing-back and Schneider as the No. 10, the reverse of the entry; one source gives roles, so not changed."
+    "Round 1026: the skeptic notes Transfermarkt has Frings at right wing-back and Schneider as the No. 10, the reverse of the entry; one source gives roles, so not changed.",
+    "Round 1026 (review fix): Bode keeps the LWB tile: immortalfootball.com prints the eleven line by line as a 3-5-2 with Bode at the left end of the five. fifa.com and ESPN list him a forward, which is his registered line, not a role for this match. One match source, open for a second. That host also puts Frings at the right end of the five and Schneider inside, unlike the entry; not changed on one host."
    ]
   },
   {

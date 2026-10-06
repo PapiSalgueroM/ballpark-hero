@@ -647,15 +647,21 @@
      "path": "slots[9].name",
      "from": "Christophe Dugarry",
      "to": "Christian Karembeu",
-     "why": "fifa.com and ESPN: Karembeu started; Dugarry came on 66' for Guivarc'h. No host states his role, the tile keeps the slot label"
+     "why": "fifa.com and ESPN: Karembeu started; Dugarry came on 66' for Guivarc'h"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "LW",
+     "to": "MF",
+     "why": "Karembeu: fifa.com (Position 2, midfield) and ESPN (M) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
     }
    ],
    "notes": [
     "Guivarc'h did start up front, as the entry's comment says.",
     "Formation 4-2-3-1 could not be checked (no formation published by either host).",
     "Blank candidates (Lizarazu, Djorkaeff, Petit) all started, so they remain valid answers; only the two wrong slots are affected.",
-    "Round 1026: no host states a role for Karembeu; the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: formation 4-2-3-1 is not published by either host and stays unverified."
+    "Round 1026: formation 4-2-3-1 is not published by either host and stays unverified.",
+    "Round 1026 (review fix): Karembeu's tile reads MF, the line fifa.com and ESPN both list him in. Neither states his role that night, so he no longer carries Dugarry's LW. The 4-2-3-1 placement is the entry's and is open for a role source."
    ]
   },
   {
@@ -704,7 +710,7 @@
     },
     {
      "name": "Andrea Pirlo",
-     "position": "CM",
+     "position": "MF",
      "nationality": "Italy",
      "clubAtTime": "AC Milan"
     }
@@ -760,19 +766,19 @@
      "path": "slots[4].name",
      "from": "Roque Junior",
      "to": "Kakha Kaladze",
-     "why": "UEFA and ESPN: Kaladze started; Roque Junior came on 66' for Costacurta. No host states a role, the tile keeps the slot label"
+     "why": "UEFA and ESPN: Kaladze started; Roque Junior came on 66' for Costacurta"
     },
     {
      "path": "slots[7].name",
      "from": "Massimo Ambrosini",
      "to": "Andrea Pirlo",
-     "why": "UEFA and ESPN: Pirlo started; Ambrosini came on 87' for Rui Costa. No host states a role, the tile keeps the slot label"
+     "why": "UEFA and ESPN: Pirlo started; Ambrosini came on 87' for Rui Costa"
     },
     {
      "path": "slots[8].name",
      "from": "Serginho",
      "to": "Rui Costa",
-     "why": "UEFA and ESPN: Rui Costa started; Serginho came on 71' for Pirlo. No host states a role, the tile keeps the slot label"
+     "why": "UEFA and ESPN: Rui Costa started; Serginho came on 71' for Pirlo"
     },
     {
      "path": "blankCandidates[Massimo Ambrosini]",
@@ -811,13 +817,31 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, both agree on the starting back four and midfield four.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[4].position",
+     "from": "LB",
+     "to": "DF",
+     "why": "Kaladze: UEFA (DEFENDER) and ESPN (D) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "MF",
+     "why": "Pirlo: UEFA (MIDFIELDER, detailed DEFENSIVE_MIDFIELDER) and ESPN (M) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "LM",
+     "to": "MF",
+     "why": "Rui Costa: ESPN (M); UEFA gives him no position lists him in that line and no host says otherwise; one host, so the row marks it open"
     }
    ],
    "notes": [
     "UEFA lists Juventus as the nominal home side; entry writes Milan first. Same result.",
     "ESPN writes 'Manuel Rui Costa'; UEFA 'Rui Costa'. Same man.",
-    "Round 1026: no host states a role for Kaladze, Pirlo or Rui Costa; the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: formation 4-4-2 is not published by either host and stays unverified."
+    "Round 1026: formation 4-4-2 is not published by either host and stays unverified.",
+    "Round 1026 (review fix): Kaladze reads DF and Pirlo MF, the lines UEFA and ESPN both list them in; Rui Costa reads MF on ESPN alone (UEFA gives no position). None of the three carries the dropped man's label any more. Exact roles open for a role source."
    ]
   },
   {
@@ -1197,6 +1221,13 @@
      "readOn": "page HTML",
      "xi": true,
      "says": "Chelsea XI A Cole, Terry, Lampard, J Cole, Ballack, Essien, Malouda, Drogba, Cech, Makelele, Alex; subs Cudicini, Belletti, Shevchenko, Kalou, Obi. 11.05.2008."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "premierleague.com",
+     "url": "https://footballapi.pulselive.com/football/fixtures/6318?altIds=true",
+     "xi": false,
+     "says": "Re-read in the review fix for positions only: matchPosition M for Ballack, Essien, Makelele, Lampard, Joe Cole and Malouda; D for Alex, Terry and Ashley Cole; F for Drogba."
     }
    ],
    "diffs": [
@@ -1259,7 +1290,7 @@
      "path": "slots[10].name",
      "from": "Salomon Kalou",
      "to": "Michael Ballack",
-     "why": "premierleague.com and Sky Sports: Ballack started, Kalou was an unused substitute. No host states his role, the tile keeps the slot label"
+     "why": "premierleague.com and Sky Sports: Ballack started, Kalou was an unused substitute"
     },
     {
      "path": "blankCandidates[Salomon Kalou]",
@@ -1276,13 +1307,19 @@
       "clubAtTime": "Chelsea"
      },
      "why": "started on both hosts; spelling already a verified blank in cl-2008-final-chelsea"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "MF",
+     "why": "Ballack: premierleague.com (matchPosition M) and ESPN (M) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
     }
    ],
    "notes": [
     "Two hosts disagreed (ESPN 12 starters incl. Carvalho vs premierleague.com 11 without), so a third host (Sky Sports) was read: Sky agrees with premierleague.com, 11 men, no Carvalho, Kalou on the bench.",
     "Entry's source note ('Chelsea needed to win to force a title playoff') is not a field and was not checked.",
-    "Round 1026: no host states a role for Ballack; the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: formation 4-3-3 is not published by any host and stays unverified."
+    "Round 1026: formation 4-3-3 is not published by any host and stays unverified.",
+    "Round 1026 (review fix): Ballack reads MF, the line premierleague.com and ESPN both give him; he no longer carries Kalou's LW. Exact role open."
    ]
   },
   {
@@ -4367,13 +4404,13 @@
      "path": "slots[8].name",
      "from": "Dmitri Alenichev",
      "to": "Carlos Alberto",
-     "why": "UEFA and ESPN: Carlos Alberto started and scored; Alenichev came on 60' for him. Both hosts list him a midfielder and neither states a shape, so the tile keeps the slot label"
+     "why": "UEFA and ESPN: Carlos Alberto started and scored; Alenichev came on 60' for him"
     },
     {
      "path": "slots[10].name",
      "from": "Benni McCarthy",
      "to": "Pedro Mendes",
-     "why": "UEFA and ESPN: Pedro Mendes started; McCarthy came on 78' for Derlei. Both hosts list him a midfielder and neither states a shape, so the tile keeps the slot label"
+     "why": "UEFA and ESPN: Pedro Mendes started; McCarthy came on 78' for Derlei"
     },
     {
      "path": "blankCandidates[Dmitri Alenichev]",
@@ -4412,14 +4449,26 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on the full starting XI including Alenichev and McCarthy on the wings.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. Carlos Alberto and Pedro Mendes started; Alenichev and McCarthy came on. No host publishes the shape.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "RW",
+     "to": "MF",
+     "why": "Carlos Alberto: UEFA (MIDFIELDER) and ESPN (M) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "MF",
+     "why": "Pedro Mendes: UEFA (MIDFIELDER) and ESPN (M) both list him in that line; neither states his exact role for this match, so the tile names the line rather than the dropped man's role"
     }
    ],
    "notes": [
     "The entry's source note ('agree on the full starting XI including Alenichev and McCarthy on the wings') is contradicted by both hosts.",
     "Formation 4-3-3 could not be checked (none published); with Pedro Mendes, Costinha and Maniche in midfield, Deco behind Carlos Alberto and Derlei, the published eleven has no wingers.",
     "ESPN writes full legal names (Manuel Vitor Baia, Paulo Jorge Costa, Vanderlei Fernandes Da Silva Derlei, de Jesus Carlos Alberto); same men.",
-    "Round 1026: no host states a role for Carlos Alberto or Pedro Mendes; the tile keeps the label of the slot he took. Open for a role source.",
-    "Round 1026: formation 4-3-3 is not published by either host and stays unverified; both list Carlos Alberto and Pedro Mendes as midfielders."
+    "Round 1026: formation 4-3-3 is not published by either host and stays unverified; both list Carlos Alberto and Pedro Mendes as midfielders.",
+    "Round 1026 (review fix): Carlos Alberto and Pedro Mendes read MF, the line UEFA and ESPN both list them in, instead of the wing labels of the men they replaced. The entry's 4-3-3 is unconfirmed (no host states a shape) and the placement is open for a role source."
    ]
   },
   {
@@ -4530,7 +4579,7 @@
      "path": "slots[7].name",
      "from": "Xavi",
      "to": "Mark van Bommel",
-     "why": "UEFA and Sky Sports: van Bommel started; Xavi was an unused substitute. No host states his role, the tile keeps the slot label"
+     "why": "UEFA and Sky Sports: van Bommel started; Xavi was an unused substitute"
     },
     {
      "path": "blankCandidates[Juliano Belletti]",
@@ -4553,13 +4602,19 @@
      "from": "Wikipedia dedicated match article + UEFA.com archive, agree on Barcelona's starting XI and Edmilson's holding role.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 2. van Bronckhorst and van Bommel started; Belletti came on and scored, Xavi stayed on the bench.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[7].position",
+     "from": "CM",
+     "to": "MF",
+     "why": "Van Bommel: ESPN (M, in a roster block that is otherwise unreliable); UEFA gives him no position and Sky none lists him in that line and no host says otherwise; one host, so the row marks it open"
     }
    ],
    "notes": [
     "ESPN's roster for this match is corrupt: it lists 20 'starters' for Barcelona including three goalkeepers and the injured Messi, so it cannot serve as a lineup source here. Its substitutes-on list (Larsson, Belletti, Iniesta) agrees with UEFA. Sky Sports was read as the third host and agrees with UEFA on all eleven.",
     "Sky's header gives the venue as 'Nou Camp', a Sky data error; UEFA and ESPN both say Stade de France, matching the entry.",
     "Blank candidates Oleguer and Giuly started and stay valid.",
-    "Round 1026: no host states a role for van Bommel; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): van Bommel reads MF (ESPN's listing; UEFA and Sky give no position), not Xavi's CM. One host, open."
    ]
   },
   {
