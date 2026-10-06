@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "macarthurfc.com.au",
@@ -67,6 +67,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+      "read": "2026-10-06"
     }
   },
   "notes": [],
@@ -76,7 +81,7 @@
     "rows": 27,
     "heldOut": 1,
     "twoHostRows": 27,
-    "birthDateKnown": 22,
+    "birthDateKnown": 26,
     "groupKnown": 27,
     "minutesKnown": 23,
     "marketRows": 1,
@@ -157,6 +162,7 @@
           "birthDate": "2005-03-09",
           "match": "fuzzy"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -165,7 +171,7 @@
       "name": "James Hilton",
       "position": "Goalkeeper",
       "group": "GK",
-      "birthDate": null,
+      "birthDate": "2002-09-16",
       "minutes2025_26": 180,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -185,13 +191,18 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -211,6 +222,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1128985"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1824338"
         }
       ],
       "seen": {
@@ -233,10 +250,17 @@
           "birthDate": "2002-09-16",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824338",
+          "name": "James Hilton",
+          "position": "Keeper",
+          "birthDate": "2002-09-16",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date disagreement: ESPN 1997-11-02, Transfermarkt 2002-09-16"
+        "birth date: ESPN 1997-11-02, Transfermarkt 2002-09-16, FotMob 2002-09-16; set to the date two hosts agree on"
       ]
     },
     {
@@ -251,16 +275,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -281,6 +308,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "188113"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "309463"
         }
       ],
       "seen": {
@@ -300,6 +333,13 @@
           "id": "188113",
           "name": "Tatsuki Nara",
           "position": "Centre-Back",
+          "birthDate": "1993-09-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "309463",
+          "name": "Tatsuki Nara",
+          "position": "Defender",
           "birthDate": "1993-09-19",
           "match": "exact"
         },
@@ -331,16 +371,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -361,6 +404,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "363689"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "622901"
         }
       ],
       "seen": {
@@ -380,6 +429,13 @@
           "id": "363689",
           "name": "Jonathan Aspropotamitis",
           "position": "Centre-Back",
+          "birthDate": "1996-06-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "622901",
+          "name": "Jonathan Aspropotamitis",
+          "position": "Defender",
           "birthDate": "1996-06-07",
           "match": "exact"
         },
@@ -409,16 +465,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -439,6 +498,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1118085"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1348516"
         }
       ],
       "seen": {
@@ -458,6 +523,13 @@
           "id": "1118085",
           "name": "Harry Politidis",
           "position": "Left-Back",
+          "birthDate": "2002-06-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1348516",
+          "name": "Harry Politidis",
+          "position": "Defender",
           "birthDate": "2002-06-28",
           "match": "exact"
         },
@@ -487,16 +559,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -517,6 +592,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1109823"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1555042"
         }
       ],
       "seen": {
@@ -536,6 +617,13 @@
           "id": "1109823",
           "name": "Nathan Paull",
           "position": "Centre-Back",
+          "birthDate": "2003-08-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1555042",
+          "name": "Nathan Paull",
+          "position": "Defender",
           "birthDate": "2003-08-21",
           "match": "exact"
         },
@@ -565,16 +653,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -595,6 +686,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "843401"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1227258"
         }
       ],
       "seen": {
@@ -614,6 +711,13 @@
           "id": "843401",
           "name": "Callum Talbot",
           "position": "Right-Back",
+          "birthDate": "2001-02-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1227258",
+          "name": "Callum Talbot",
+          "position": "Defender",
           "birthDate": "2001-02-26",
           "match": "exact"
         },
@@ -643,16 +747,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -673,6 +780,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1179903"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1823292"
         }
       ],
       "seen": {
@@ -692,6 +805,13 @@
           "id": "1179903",
           "name": "Sebastian Krslovic",
           "position": "Centre-Back",
+          "birthDate": "2006-07-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823292",
+          "name": "Sebastian Kršlović",
+          "position": "Defender",
           "birthDate": "2006-07-16",
           "match": "exact"
         },
@@ -721,16 +841,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -751,6 +874,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1169747"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1823293"
         }
       ],
       "seen": {
@@ -770,6 +899,13 @@
           "id": "1169747",
           "name": "Will McKay",
           "position": "Right-Back",
+          "birthDate": "2006-06-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823293",
+          "name": "Will McKay",
+          "position": "Defender",
           "birthDate": "2006-06-07",
           "match": "exact"
         },
@@ -799,16 +935,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -829,6 +968,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1150897"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "2019399"
         }
       ],
       "seen": {
@@ -848,6 +993,13 @@
           "id": "1150897",
           "name": "Harry Menham",
           "position": "Left-Back",
+          "birthDate": "2005-11-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "2019399",
+          "name": "Harry Menham",
+          "position": "Defender",
           "birthDate": "2005-11-10",
           "match": "exact"
         },
@@ -890,16 +1042,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -920,6 +1075,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "146795"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "230916"
         }
       ],
       "seen": {
@@ -939,6 +1100,13 @@
           "id": "146795",
           "name": "Ryan Fraser",
           "position": "Left Winger",
+          "birthDate": "1994-02-24",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "230916",
+          "name": "Ryan Fraser",
+          "position": "Attacker",
           "birthDate": "1994-02-24",
           "match": "exact"
         },
@@ -968,16 +1136,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -998,6 +1169,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1110867"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1686134"
         }
       ],
       "seen": {
@@ -1020,6 +1197,13 @@
           "birthDate": "2006-11-12",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1686134",
+          "name": "Oliver Randazzo",
+          "position": "Midfielder",
+          "birthDate": "2006-11-12",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1028,7 +1212,7 @@
       "name": "Dylan Rose",
       "position": "Midfielder",
       "group": "MID",
-      "birthDate": null,
+      "birthDate": "2006-04-20",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
@@ -1036,14 +1220,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1063,6 +1252,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1129403"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1824102"
         }
       ],
       "seen": {
@@ -1085,10 +1280,16 @@
           "birthDate": "2006-04-20",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824102",
+          "name": "Dylan Rose",
+          "position": "Midfielder",
+          "birthDate": "2006-04-20",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2006-04-20), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1114,16 +1315,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1144,6 +1348,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "329834"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "588426"
         }
       ],
       "seen": {
@@ -1163,6 +1373,13 @@
           "id": "329834",
           "name": "Liam Rose",
           "position": "Defensive Midfield",
+          "birthDate": "1997-04-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "588426",
+          "name": "Liam Rose",
+          "position": "Midfielder",
           "birthDate": "1997-04-07",
           "match": "exact"
         },
@@ -1192,16 +1409,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1222,6 +1442,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "500924"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "913821"
         }
       ],
       "seen": {
@@ -1244,6 +1470,13 @@
           "birthDate": "2000-08-10",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "913821",
+          "name": "Kosta Grozos",
+          "position": "Midfielder",
+          "birthDate": "2000-08-10",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1260,16 +1493,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1290,6 +1526,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "567150"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1112688"
         }
       ],
       "seen": {
@@ -1309,6 +1551,13 @@
           "id": "567150",
           "name": "Kai Kennedy",
           "position": "Left Winger",
+          "birthDate": "2002-03-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1112688",
+          "name": "Kai Kennedy",
+          "position": "Attacker",
           "birthDate": "2002-03-28",
           "match": "exact"
         },
@@ -1340,16 +1589,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1370,6 +1622,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "257682"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "426142"
         }
       ],
       "seen": {
@@ -1389,6 +1647,13 @@
           "id": "257682",
           "name": "Connor Pain",
           "position": "Left Winger",
+          "birthDate": "1993-11-11",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "426142",
+          "name": "Connor Pain",
+          "position": "Attacker",
           "birthDate": "1993-11-11",
           "match": "exact"
         },
@@ -1418,16 +1683,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1448,6 +1716,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1234443"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1612270"
         }
       ],
       "seen": {
@@ -1467,6 +1741,13 @@
           "id": "1234443",
           "name": "Luke Vickery",
           "position": "Right Winger",
+          "birthDate": "2005-10-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1612270",
+          "name": "Luke Vickery",
+          "position": "Attacker",
           "birthDate": "2005-10-25",
           "match": "exact"
         },
@@ -1498,11 +1779,13 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": []
       },
@@ -1524,6 +1807,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1109825"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1688566"
         }
       ],
       "seen": {
@@ -1546,10 +1835,17 @@
           "birthDate": "2003-01-03",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1688566",
+          "name": "Ben Gibson",
+          "position": "Attacker",
+          "birthDate": "2003-07-14",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date disagreement: ESPN 1993-01-15, Transfermarkt 2003-01-03"
+        "birth date not on two hosts (ESPN 1993-01-15, Transfermarkt 2003-01-03, FotMob 2003-07-14), held as null"
       ]
     },
     {
@@ -1574,16 +1870,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1604,6 +1903,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "883217"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1312752"
         }
       ],
       "seen": {
@@ -1626,6 +1931,13 @@
           "birthDate": "2004-03-16",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1312752",
+          "name": "Bernardo Oliveira",
+          "position": "Attacker",
+          "birthDate": "2004-03-16",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1634,7 +1946,7 @@
       "name": "Michael Pratezina",
       "position": "Attacker",
       "group": "FWD",
-      "birthDate": null,
+      "birthDate": "2008-04-28",
       "minutes2025_26": 0,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -1652,13 +1964,18 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1678,6 +1995,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1385157"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1824128"
         }
       ],
       "seen": {
@@ -1700,11 +2023,16 @@
           "birthDate": "2008-04-28",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824128",
+          "name": "Michael Pratezina",
+          "position": "Attacker",
+          "birthDate": "2008-04-28",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
-      "notes": [
-        "birth date from one source only (Transfermarkt 2008-04-28), held as null"
-      ]
+      "notes": []
     },
     {
       "name": "Apostolos Stamatelopoulos",
@@ -1728,16 +2056,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1758,6 +2089,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "547924"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "891956"
         }
       ],
       "seen": {
@@ -1777,6 +2114,13 @@
           "id": "547924",
           "name": "Apostolos Stamatelopoulos",
           "position": "Centre-Forward",
+          "birthDate": "1999-04-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "891956",
+          "name": "Apostolos Stamatelopoulos",
+          "position": "Attacker",
           "birthDate": "1999-04-09",
           "match": "exact"
         },
@@ -1806,16 +2150,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1836,6 +2183,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1329718"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1715701"
         }
       ],
       "seen": {
@@ -1855,6 +2208,13 @@
           "id": "1329718",
           "name": "Henrique Oliveira",
           "position": "Right Winger",
+          "birthDate": "2009-01-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1715701",
+          "name": "Henrique Oliveira",
+          "position": "Attacker",
           "birthDate": "2009-01-17",
           "match": "exact"
         },
@@ -1884,7 +2244,8 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
@@ -1893,7 +2254,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1914,6 +2276,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1144775"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1688759"
         }
       ],
       "seen": {
@@ -1936,6 +2304,13 @@
           "birthDate": "2006-10-11",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1688759",
+          "name": "Dean Bosnjak",
+          "position": "Midfielder",
+          "birthDate": "2006-10-11",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1944,7 +2319,7 @@
       "name": "Jing Reec",
       "position": "Attacker",
       "group": "FWD",
-      "birthDate": null,
+      "birthDate": "2003-06-12",
       "minutes2025_26": 340,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -1963,13 +2338,18 @@
       "facts": {
         "name": [
           "macarthurfc.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1983,6 +2363,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "899867"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1261660"
         }
       ],
       "seen": {
@@ -1999,11 +2385,16 @@
           "birthDate": "2003-06-12",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1261660",
+          "name": "Jing Reec",
+          "position": "Attacker",
+          "birthDate": "2003-06-12",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
-      "notes": [
-        "birth date from one source only (Transfermarkt 2003-06-12), held as null"
-      ]
+      "notes": []
     },
     {
       "name": "Zane Helweh",
@@ -2027,16 +2418,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -2057,6 +2451,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1173591"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1823291"
         }
       ],
       "seen": {
@@ -2079,6 +2479,13 @@
           "birthDate": "2006-04-21",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1823291",
+          "name": "Zane Helweh",
+          "position": "Attacker",
+          "birthDate": "2006-04-21",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -2095,16 +2502,19 @@
         "name": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "macarthurfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -2125,6 +2535,12 @@
           "url": "https://www.transfermarkt.com/macarthur-fc/kader/verein/71085/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1069960"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1209973/squad/macarthur-fc",
+          "read": "2026-10-06",
+          "id": "1412744"
         }
       ],
       "seen": {
@@ -2147,6 +2563,13 @@
           "birthDate": "2005-11-12",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1412744",
+          "name": "Musa Touré",
+          "position": "Attacker",
+          "birthDate": "2005-11-12",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
@@ -2158,7 +2581,7 @@
     {
       "name": "Joshua Lakkis",
       "position": "Goalkeeper",
-      "reason": "only the club page lists him; neither ESPN nor Transfermarkt has him in the 2026-27 squad",
+      "reason": "only the club page lists him; none of ESPN, Transfermarkt or FotMob has him in the 2026-27 squad",
       "seen": {
         "club": {
           "name": "Joshua Lakkis",
@@ -2167,6 +2590,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     }

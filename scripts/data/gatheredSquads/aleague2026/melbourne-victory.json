@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "melbournevictory.com.au",
@@ -58,6 +58,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+      "read": "2026-10-06"
     }
   },
   "notes": [
@@ -69,8 +74,8 @@
     "rows": 23,
     "heldOut": 0,
     "twoHostRows": 23,
-    "birthDateKnown": 22,
-    "groupKnown": 22,
+    "birthDateKnown": 23,
+    "groupKnown": 23,
     "minutesKnown": 23,
     "marketRows": 0,
     "perfPagesLoaded": 12
@@ -98,16 +103,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -128,6 +136,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "171382"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "240056"
         }
       ],
       "seen": {
@@ -147,6 +161,13 @@
           "id": "171382",
           "name": "Jack Duncan",
           "position": "Goalkeeper",
+          "birthDate": "1993-04-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "240056",
+          "name": "Jack Duncan",
+          "position": "Keeper",
           "birthDate": "1993-04-19",
           "match": "exact"
         },
@@ -176,16 +197,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -206,6 +230,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1106575"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1686140"
         }
       ],
       "seen": {
@@ -225,6 +255,13 @@
           "id": "1106575",
           "name": "Daniel Graskoski",
           "position": "Goalkeeper",
+          "birthDate": "2007-01-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1686140",
+          "name": "Daniel Graskoski",
+          "position": "Keeper",
           "birthDate": "2007-01-28",
           "match": "exact"
         },
@@ -254,16 +291,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -284,6 +324,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1005338"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1356317"
         }
       ],
       "seen": {
@@ -303,6 +349,13 @@
           "id": "1005338",
           "name": "Jack Warshawsky",
           "position": "Goalkeeper",
+          "birthDate": "2004-08-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1356317",
+          "name": "Jack Warshawsky",
+          "position": "Keeper",
           "birthDate": "2004-08-08",
           "match": "exact"
         },
@@ -332,16 +385,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -362,6 +418,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "137669"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "192303"
         }
       ],
       "seen": {
@@ -381,6 +443,13 @@
           "id": "137669",
           "name": "Jason Davidson",
           "position": "Centre-Back",
+          "birthDate": "1991-06-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "192303",
+          "name": "Jason Davidson",
+          "position": "Defender",
           "birthDate": "1991-06-29",
           "match": "exact"
         },
@@ -410,16 +479,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -440,6 +512,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "147600"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "207037"
         }
       ],
       "seen": {
@@ -459,6 +537,13 @@
           "id": "147600",
           "name": "Brendan Hamill",
           "position": "Centre-Back",
+          "birthDate": "1992-09-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "207037",
+          "name": "Brendan Hamill",
+          "position": "Defender",
           "birthDate": "1992-09-18",
           "match": "exact"
         },
@@ -488,16 +573,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -518,6 +606,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1132512"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1467027"
         }
       ],
       "seen": {
@@ -537,6 +631,13 @@
           "id": "1132512",
           "name": "Joshua Inserra",
           "position": "Right-Back",
+          "birthDate": "2005-01-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1467027",
+          "name": "Joshua Inserra",
+          "position": "Defender",
           "birthDate": "2005-01-21",
           "match": "exact"
         },
@@ -566,16 +667,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -596,6 +700,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1144488"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1565855"
         }
       ],
       "seen": {
@@ -615,6 +725,13 @@
           "id": "1144488",
           "name": "Franco Lino",
           "position": "Left-Back",
+          "birthDate": "2005-08-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565855",
+          "name": "Franco Lino",
+          "position": "Defender",
           "birthDate": "2005-08-26",
           "match": "exact"
         },
@@ -644,16 +761,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -674,6 +794,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "979025"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1332670"
         }
       ],
       "seen": {
@@ -693,6 +819,13 @@
           "id": "979025",
           "name": "Jordi Valadon",
           "position": "Defensive Midfield",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1332670",
+          "name": "Jordi Valadon",
+          "position": "Midfielder",
           "birthDate": "2003-03-04",
           "match": "exact"
         },
@@ -722,16 +855,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -752,6 +888,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "470618"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "814530"
         }
       ],
       "seen": {
@@ -771,6 +913,13 @@
           "id": "470618",
           "name": "Denis Genreau",
           "position": "Attacking Midfield",
+          "birthDate": "1999-05-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "814530",
+          "name": "Denis Genreau",
+          "position": "Midfielder",
           "birthDate": "1999-05-21",
           "match": "exact"
         },
@@ -800,16 +949,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -830,6 +982,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "561650"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "915630"
         }
       ],
       "seen": {
@@ -849,6 +1007,13 @@
           "id": "561650",
           "name": "Louis D'Arrigo",
           "position": "Defensive Midfield",
+          "birthDate": "2001-09-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "915630",
+          "name": "Louis D'Arrigo",
+          "position": "Midfielder",
           "birthDate": "2001-09-23",
           "match": "exact"
         },
@@ -878,16 +1043,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -908,6 +1076,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1356499"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823288"
         }
       ],
       "seen": {
@@ -927,6 +1101,13 @@
           "id": "1356499",
           "name": "Oliver Dragicevic",
           "position": "Central Midfield",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823288",
+          "name": "Oliver Dragicevic",
+          "position": "Midfielder",
           "birthDate": "2007-10-10",
           "match": "exact"
         },
@@ -956,15 +1137,18 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -985,6 +1169,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1232652"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823290"
         }
       ],
       "seen": {
@@ -1004,6 +1194,13 @@
           "id": "1232652",
           "name": "Xavier Stella",
           "position": "Defensive Midfield",
+          "birthDate": "2006-08-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823290",
+          "name": "Xavier Stella",
+          "position": "Midfielder",
           "birthDate": "2006-08-21",
           "match": "exact"
         },
@@ -1085,6 +1282,7 @@
           "birthDate": "2001-07-27",
           "match": "alias"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
@@ -1113,7 +1311,8 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
@@ -1122,7 +1321,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1143,6 +1343,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1127122"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1534818"
         }
       ],
       "seen": {
@@ -1162,6 +1368,13 @@
           "id": "1127122",
           "name": "Matthew Grimaldi",
           "position": "Right Winger",
+          "birthDate": "2003-11-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1534818",
+          "name": "Matthew Grimaldi",
+          "position": "Midfielder",
           "birthDate": "2003-11-28",
           "match": "exact"
         },
@@ -1191,15 +1404,18 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1220,6 +1436,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "677510"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1224986"
         }
       ],
       "seen": {
@@ -1239,6 +1461,13 @@
           "id": "677510",
           "name": "Keegan Jelacic",
           "position": "Attacking Midfield",
+          "birthDate": "2002-07-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1224986",
+          "name": "Keegan Jelacic",
+          "position": "Attacker",
           "birthDate": "2002-07-31",
           "match": "exact"
         },
@@ -1268,16 +1497,19 @@
         "name": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "melbournevictory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1298,6 +1530,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "856284"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1241593"
         }
       ],
       "seen": {
@@ -1317,6 +1555,13 @@
           "id": "856284",
           "name": "Charles Nduka",
           "position": "Centre-Forward",
+          "birthDate": "1998-08-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1241593",
+          "name": "Charles Nduka",
+          "position": "Attacker",
           "birthDate": "1998-08-08",
           "match": "exact"
         },
@@ -1348,15 +1593,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1377,6 +1625,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1144487"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1554828"
         }
       ],
       "seen": {
@@ -1396,6 +1650,13 @@
           "id": "1144487",
           "name": "Harrison Shillington",
           "position": "Right-Back",
+          "birthDate": "2005-06-30",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1554828",
+          "name": "Harrison Shillington",
+          "position": "Defender",
           "birthDate": "2005-06-30",
           "match": "fuzzy"
         },
@@ -1429,15 +1690,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1458,6 +1722,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "483593"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "821489"
         }
       ],
       "seen": {
@@ -1477,6 +1747,13 @@
           "id": "483593",
           "name": "Harry Sawyer",
           "position": "Centre-Forward",
+          "birthDate": "1996-12-31",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "821489",
+          "name": "Harry Sawyer",
+          "position": "Attacker",
           "birthDate": "1996-12-31",
           "match": "fuzzy"
         },
@@ -1508,15 +1785,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1537,6 +1817,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "152627"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "276711"
         }
       ],
       "seen": {
@@ -1556,6 +1842,13 @@
           "id": "152627",
           "name": "Philipp Ziereis",
           "position": "Centre-Back",
+          "birthDate": "1993-03-14",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "276711",
+          "name": "Philipp Ziereis",
+          "position": "Defender",
           "birthDate": "1993-03-14",
           "match": "fuzzy"
         },
@@ -1587,15 +1880,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1616,6 +1912,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "207742"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "369761"
         }
       ],
       "seen": {
@@ -1635,6 +1937,13 @@
           "id": "207742",
           "name": "Tom Lockyer",
           "position": "Centre-Back",
+          "birthDate": "1994-12-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "369761",
+          "name": "Tom Lockyer",
+          "position": "Defender",
           "birthDate": "1994-12-03",
           "match": "exact"
         },
@@ -1666,15 +1975,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1695,6 +2007,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "479718"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "979800"
         }
       ],
       "seen": {
@@ -1714,6 +2032,13 @@
           "id": "479718",
           "name": "Guillermo May",
           "position": "Centre-Forward",
+          "birthDate": "1998-03-11",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "979800",
+          "name": "Guillermo May",
+          "position": "Attacker",
           "birthDate": "1998-03-11",
           "match": "exact"
         },
@@ -1796,6 +2121,7 @@
           "birthDate": "2007-08-25",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
@@ -1806,8 +2132,8 @@
     {
       "name": "Jack Mihailidis",
       "position": null,
-      "group": null,
-      "birthDate": null,
+      "group": "MID",
+      "birthDate": "2006-10-17",
       "minutes2025_26": 0,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -1824,10 +2150,17 @@
       "facts": {
         "name": [
           "aleagues.com.au",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "group": [],
-        "birthDate": []
+        "group": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1841,6 +2174,12 @@
           "url": "https://www.transfermarkt.com/melbourne-victory/kader/verein/7006/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1373901"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6230/squad/melbourne-victory",
+          "read": "2026-10-06",
+          "id": "1823286"
         }
       ],
       "seen": {
@@ -1857,12 +2196,17 @@
           "birthDate": "2006-10-17",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1823286",
+          "name": "Jack Mihailidis",
+          "position": "Midfielder",
+          "birthDate": "2006-10-17",
+          "match": "exact"
+        },
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
-        "position group not settled: ESPN none (null), Transfermarkt Attacking Midfield (MID)",
-        "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2006-10-17), held as null"
+        "not on the club squad page; named for 2026-27 by the league's transfer centre"
       ]
     }
   ],
@@ -1961,6 +2305,36 @@
       "name": "Malik Olukhale",
       "position": "Right Winger",
       "birthDate": "2009-01-27"
+    },
+    {
+      "source": "fotmob",
+      "name": "Oskar Von Schrenk",
+      "position": "Keeper",
+      "birthDate": "2008-06-09"
+    },
+    {
+      "source": "fotmob",
+      "name": "John Radimisis",
+      "position": "Defender",
+      "birthDate": "2007-02-01"
+    },
+    {
+      "source": "fotmob",
+      "name": "Clarismario Santos",
+      "position": "Attacker",
+      "birthDate": "2001-07-27"
+    },
+    {
+      "source": "fotmob",
+      "name": "Theodore Limberis",
+      "position": "Attacker",
+      "birthDate": "2007-04-10"
+    },
+    {
+      "source": "fotmob",
+      "name": "Michael Ghossaini",
+      "position": "Attacker",
+      "birthDate": "2007-08-25"
     }
   ]
 }

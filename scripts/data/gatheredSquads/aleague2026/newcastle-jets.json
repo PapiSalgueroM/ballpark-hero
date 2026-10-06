@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "newcastlejetsfc.com.au",
@@ -59,6 +59,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+      "read": "2026-10-06"
     }
   },
   "notes": [],
@@ -68,7 +73,7 @@
     "rows": 24,
     "heldOut": 0,
     "twoHostRows": 24,
-    "birthDateKnown": 22,
+    "birthDateKnown": 24,
     "groupKnown": 24,
     "minutesKnown": 22,
     "marketRows": 0,
@@ -97,16 +102,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -127,6 +135,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "399981"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1012192"
         }
       ],
       "seen": {
@@ -146,6 +160,13 @@
           "id": "399981",
           "name": "James Delianov",
           "position": "Goalkeeper",
+          "birthDate": "1999-10-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1012192",
+          "name": "James Delianov",
+          "position": "Keeper",
           "birthDate": "1999-10-20",
           "match": "exact"
         },
@@ -175,16 +196,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -205,6 +229,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1336425"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750126"
         }
       ],
       "seen": {
@@ -224,6 +254,13 @@
           "id": "1336425",
           "name": "Alex Nassiep",
           "position": "Goalkeeper",
+          "birthDate": "2006-05-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1750126",
+          "name": "Alex Nassiep",
+          "position": "Keeper",
           "birthDate": "2006-05-17",
           "match": "exact"
         },
@@ -253,16 +290,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -283,6 +323,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1286282"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1740783"
         }
       ],
       "seen": {
@@ -302,6 +348,13 @@
           "id": "1286282",
           "name": "Jordan Baylis",
           "position": "Goalkeeper",
+          "birthDate": "2005-10-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1740783",
+          "name": "Jordan Baylis",
+          "position": "Keeper",
           "birthDate": "2005-10-17",
           "match": "exact"
         },
@@ -333,16 +386,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -363,6 +419,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "225068"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "316694"
         }
       ],
       "seen": {
@@ -382,6 +444,13 @@
           "id": "225068",
           "name": "Alex Grant",
           "position": "Centre-Back",
+          "birthDate": "1994-01-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "316694",
+          "name": "Alex Grant",
+          "position": "Defender",
           "birthDate": "1994-01-23",
           "match": "exact"
         },
@@ -411,16 +480,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -441,6 +513,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "119574"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "189927"
         }
       ],
       "seen": {
@@ -460,6 +538,13 @@
           "id": "119574",
           "name": "Joe Shaughnessy",
           "position": "Centre-Back",
+          "birthDate": "1992-07-06",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "189927",
+          "name": "Joe Shaughnessy",
+          "position": "Defender",
           "birthDate": "1992-07-06",
           "match": "exact"
         },
@@ -489,16 +574,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -519,6 +607,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1111966"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1690873"
         }
       ],
       "seen": {
@@ -538,6 +632,13 @@
           "id": "1111966",
           "name": "Will Kennedy",
           "position": "Left-Back",
+          "birthDate": "2005-02-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1690873",
+          "name": "Will Kennedy",
+          "position": "Defender",
           "birthDate": "2005-02-14",
           "match": "exact"
         },
@@ -567,16 +668,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -597,6 +701,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1105789"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1437063"
         }
       ],
       "seen": {
@@ -616,6 +726,13 @@
           "id": "1105789",
           "name": "Joel Bertolissio",
           "position": "Right-Back",
+          "birthDate": "2003-05-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1437063",
+          "name": "Joel Bertolissio",
+          "position": "Defender",
           "birthDate": "2003-05-27",
           "match": "exact"
         },
@@ -645,16 +762,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -675,6 +795,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "660145"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1031032"
         }
       ],
       "seen": {
@@ -694,6 +820,13 @@
           "id": "660145",
           "name": "Daniel Wilmering",
           "position": "Left-Back",
+          "birthDate": "2000-12-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1031032",
+          "name": "Daniel Wilmering",
+          "position": "Defender",
           "birthDate": "2000-12-19",
           "match": "exact"
         },
@@ -723,16 +856,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -753,6 +889,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "652486"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1220079"
         }
       ],
       "seen": {
@@ -772,6 +914,13 @@
           "id": "652486",
           "name": "Thomas Aquilina",
           "position": "Right-Back",
+          "birthDate": "2001-02-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1220079",
+          "name": "Thomas Aquilina",
+          "position": "Defender",
           "birthDate": "2001-02-02",
           "match": "exact"
         },
@@ -801,16 +950,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -831,6 +983,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1432453"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1823250"
         }
       ],
       "seen": {
@@ -850,6 +1008,13 @@
           "id": "1432453",
           "name": "Max Cooper",
           "position": "Centre-Back",
+          "birthDate": "2007-01-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823250",
+          "name": "Max Cooper",
+          "position": "Defender",
           "birthDate": "2007-01-14",
           "match": "exact"
         },
@@ -881,16 +1046,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -911,6 +1079,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1111965"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1543679"
         }
       ],
       "seen": {
@@ -930,6 +1104,13 @@
           "id": "1111965",
           "name": "Zane Schreiber",
           "position": "Defensive Midfield",
+          "birthDate": "2005-05-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1543679",
+          "name": "Zane Schreiber",
+          "position": "Midfielder",
           "birthDate": "2005-05-31",
           "match": "exact"
         },
@@ -959,7 +1140,8 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
@@ -967,7 +1149,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -988,6 +1171,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "246351"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "568580"
         }
       ],
       "seen": {
@@ -1007,6 +1196,13 @@
           "id": "246351",
           "name": "Zach Clough",
           "position": "Right Winger",
+          "birthDate": "1995-03-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "568580",
+          "name": "Zach Clough",
+          "position": "Attacker",
           "birthDate": "1995-03-08",
           "match": "exact"
         },
@@ -1036,16 +1232,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1066,6 +1265,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "343049"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "590367"
         }
       ],
       "seen": {
@@ -1085,6 +1290,13 @@
           "id": "343049",
           "name": "Max Burgess",
           "position": "Defensive Midfield",
+          "birthDate": "1995-01-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "590367",
+          "name": "Max Burgess",
+          "position": "Midfielder",
           "birthDate": "1995-01-16",
           "match": "exact"
         },
@@ -1114,16 +1326,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1144,6 +1359,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "957230"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1312639"
         }
       ],
       "seen": {
@@ -1163,6 +1384,13 @@
           "id": "957230",
           "name": "Alex Badolato",
           "position": "Attacking Midfield",
+          "birthDate": "2005-02-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1312639",
+          "name": "Alex Badolato",
+          "position": "Midfielder",
           "birthDate": "2005-02-23",
           "match": "exact"
         },
@@ -1192,16 +1420,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1222,6 +1453,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1251566"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750231"
         }
       ],
       "seen": {
@@ -1244,6 +1481,13 @@
           "birthDate": "2007-02-22",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1750231",
+          "name": "Alex Nunes",
+          "position": "Midfielder",
+          "birthDate": "2007-02-22",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1252,7 +1496,7 @@
       "name": "Julian Recchia",
       "position": "Midfielder",
       "group": "MID",
-      "birthDate": null,
+      "birthDate": "2008-10-06",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
@@ -1260,14 +1504,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1287,6 +1536,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1530071"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "2237422"
         }
       ],
       "seen": {
@@ -1309,10 +1564,16 @@
           "birthDate": "2008-10-06",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "2237422",
+          "name": "Julian Recchia",
+          "position": "Midfielder",
+          "birthDate": "2008-10-06",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2008-10-06), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1338,16 +1599,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1368,6 +1632,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1299227"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1688565"
         }
       ],
       "seen": {
@@ -1387,6 +1657,13 @@
           "id": "1299227",
           "name": "Will Dobson",
           "position": "Central Midfield",
+          "birthDate": "2007-09-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1688565",
+          "name": "Will Dobson",
+          "position": "Midfielder",
           "birthDate": "2007-09-07",
           "match": "exact"
         },
@@ -1418,16 +1695,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1448,6 +1728,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "833603"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1208173"
         }
       ],
       "seen": {
@@ -1467,6 +1753,13 @@
           "id": "833603",
           "name": "Patrick Wood",
           "position": "Centre-Forward",
+          "birthDate": "2002-09-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1208173",
+          "name": "Patrick Wood",
+          "position": "Attacker",
           "birthDate": "2002-09-16",
           "match": "exact"
         },
@@ -1498,16 +1791,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1528,6 +1824,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "118302"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "521755"
         }
       ],
       "seen": {
@@ -1549,6 +1851,13 @@
           "position": "Centre-Forward",
           "birthDate": "1996-01-13",
           "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "521755",
+          "name": "Nikos Vergos",
+          "position": "Attacker",
+          "birthDate": "1996-01-13",
+          "match": "exact"
         },
         "from": "club squad page"
       },
@@ -1576,7 +1885,8 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
@@ -1585,7 +1895,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1606,6 +1917,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "287167"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "471149"
         }
       ],
       "seen": {
@@ -1628,6 +1945,13 @@
           "birthDate": "1992-08-25",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "471149",
+          "name": "Joe Lolley",
+          "position": "Midfielder",
+          "birthDate": "1992-08-25",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1636,7 +1960,7 @@
       "name": "Oscar Gonzalez",
       "position": "Attacker",
       "group": "FWD",
-      "birthDate": null,
+      "birthDate": "2008-07-21",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
@@ -1644,14 +1968,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1671,6 +2000,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1423160"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1824856"
         }
       ],
       "seen": {
@@ -1693,10 +2028,16 @@
           "birthDate": "2008-07-21",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824856",
+          "name": "Oscar Gonzalez",
+          "position": "Attacker",
+          "birthDate": "2008-07-21",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2008-07-21), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1722,16 +2063,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1752,6 +2096,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1144781"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750237"
         }
       ],
       "seen": {
@@ -1771,6 +2121,13 @@
           "id": "1144781",
           "name": "Oscar Fryer",
           "position": "Left Winger",
+          "birthDate": "2006-04-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1750237",
+          "name": "Oscar Fryer",
+          "position": "Attacker",
           "birthDate": "2006-04-16",
           "match": "exact"
         },
@@ -1800,16 +2157,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1830,6 +2190,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1489849"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1869398"
         }
       ],
       "seen": {
@@ -1851,6 +2217,13 @@
           "position": "Right Winger",
           "birthDate": "2008-11-22",
           "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1869398",
+          "name": "Oliver Cockle",
+          "position": "Attacker",
+          "birthDate": "2008-11-22",
+          "match": "exact"
         },
         "from": "club squad page"
       },
@@ -1878,16 +2251,19 @@
         "name": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "newcastlejetsfc.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1908,6 +2284,12 @@
           "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1432451"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1799002"
         }
       ],
       "seen": {
@@ -1927,6 +2309,13 @@
           "id": "1432451",
           "name": "Xavier Bertoncello",
           "position": "Left Winger",
+          "birthDate": "2005-10-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1799002",
+          "name": "Xavier Bertoncello",
+          "position": "Attacker",
           "birthDate": "2005-10-08",
           "match": "exact"
         },
@@ -1985,6 +2374,48 @@
       "name": "Callan Thomson Prestwidge",
       "position": "Forward",
       "birthDate": null
+    },
+    {
+      "source": "fotmob",
+      "name": "Angus Reid",
+      "position": "Defender",
+      "birthDate": "2007-03-18"
+    },
+    {
+      "source": "fotmob",
+      "name": "Kaiden Walshe",
+      "position": "Defender",
+      "birthDate": "2010-04-22"
+    },
+    {
+      "source": "fotmob",
+      "name": "Nicholas Badolato",
+      "position": "Midfielder",
+      "birthDate": "2007-10-29"
+    },
+    {
+      "source": "fotmob",
+      "name": "Ethan Debono",
+      "position": "Attacker",
+      "birthDate": "2005-12-15"
+    },
+    {
+      "source": "fotmob",
+      "name": "Jake Goodwin",
+      "position": "Attacker",
+      "birthDate": "2007-08-05"
+    },
+    {
+      "source": "fotmob",
+      "name": "Callan Prestwidge",
+      "position": "Attacker",
+      "birthDate": "2008-08-31"
+    },
+    {
+      "source": "fotmob",
+      "name": "Jesse Hill",
+      "position": "Attacker",
+      "birthDate": "2007-02-11"
     }
   ]
 }

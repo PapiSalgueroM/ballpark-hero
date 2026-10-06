@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "aucklandfc.co.nz",
@@ -54,6 +54,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+      "read": "2026-10-06"
     }
   },
   "notes": [],
@@ -92,16 +97,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -122,6 +130,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "350347"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "848317"
         }
       ],
       "seen": {
@@ -141,6 +155,13 @@
           "id": "350347",
           "name": "Michael Woud",
           "position": "Goalkeeper",
+          "birthDate": "1999-01-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "848317",
+          "name": "Michael Woud",
+          "position": "Keeper",
           "birthDate": "1999-01-16",
           "match": "exact"
         },
@@ -170,16 +191,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -200,6 +224,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "290838"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "512614"
         }
       ],
       "seen": {
@@ -221,6 +251,13 @@
           "position": "Goalkeeper",
           "birthDate": "1996-01-13",
           "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "512614",
+          "name": "Oli Sail",
+          "position": "Keeper",
+          "birthDate": "1996-01-13",
+          "match": "exact"
         },
         "from": "club squad page"
       },
@@ -248,16 +285,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -278,6 +318,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "887859"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1541878"
         }
       ],
       "seen": {
@@ -297,6 +343,13 @@
           "id": "887859",
           "name": "Joseph Knowles",
           "position": "Goalkeeper",
+          "birthDate": "2004-11-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1541878",
+          "name": "Joseph Knowles",
+          "position": "Keeper",
           "birthDate": "2004-11-02",
           "match": "exact"
         },
@@ -326,16 +379,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -356,6 +412,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "83002"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "116645"
         }
       ],
       "seen": {
@@ -375,6 +437,13 @@
           "id": "83002",
           "name": "Hiroki Sakai",
           "position": "Right-Back",
+          "birthDate": "1990-04-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "116645",
+          "name": "Hiroki Sakai",
+          "position": "Defender",
           "birthDate": "1990-04-12",
           "match": "exact"
         },
@@ -404,16 +473,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -434,6 +506,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "455425"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1053731"
         }
       ],
       "seen": {
@@ -453,6 +531,13 @@
           "id": "455425",
           "name": "Nando Pijnaker",
           "position": "Centre-Back",
+          "birthDate": "1999-02-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1053731",
+          "name": "Nando Pijnaker",
+          "position": "Defender",
           "birthDate": "1999-02-25",
           "match": "exact"
         },
@@ -482,16 +567,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -512,6 +600,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "207061"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "825593"
         }
       ],
       "seen": {
@@ -531,6 +625,13 @@
           "id": "207061",
           "name": "Francis de Vries",
           "position": "Left-Back",
+          "birthDate": "1994-11-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "825593",
+          "name": "Francis de Vries",
+          "position": "Defender",
           "birthDate": "1994-11-28",
           "match": "exact"
         },
@@ -560,16 +661,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -590,6 +694,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "482204"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1013276"
         }
       ],
       "seen": {
@@ -609,6 +719,13 @@
           "id": "482204",
           "name": "Callan Elliot",
           "position": "Right-Back",
+          "birthDate": "1999-07-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1013276",
+          "name": "Callan Elliot",
+          "position": "Defender",
           "birthDate": "1999-07-07",
           "match": "exact"
         },
@@ -690,6 +807,7 @@
           "birthDate": "2001-05-28",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -768,6 +886,7 @@
           "birthDate": "2008-05-15",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -794,16 +913,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -824,6 +946,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "255162"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "419514"
         }
       ],
       "seen": {
@@ -843,6 +971,13 @@
           "id": "255162",
           "name": "Aaron Calver",
           "position": "Centre-Back",
+          "birthDate": "1996-01-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "419514",
+          "name": "Aaron Calver",
+          "position": "Defender",
           "birthDate": "1996-01-12",
           "match": "exact"
         },
@@ -872,16 +1007,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -902,6 +1040,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "172323"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "312764"
         }
       ],
       "seen": {
@@ -921,6 +1065,13 @@
           "id": "172323",
           "name": "Cameron Howieson",
           "position": "Central Midfield",
+          "birthDate": "1994-12-22",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "312764",
+          "name": "Cameron Howieson",
+          "position": "Midfielder",
           "birthDate": "1994-12-22",
           "match": "exact"
         },
@@ -950,16 +1101,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -980,6 +1134,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "155054"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "206847"
         }
       ],
       "seen": {
@@ -999,6 +1159,13 @@
           "id": "155054",
           "name": "Luis Felipe Gallegos",
           "position": "Central Midfield",
+          "birthDate": "1991-12-03",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "206847",
+          "name": "Luis Felipe Gallegos",
+          "position": "Midfielder",
           "birthDate": "1991-12-03",
           "match": "fuzzy"
         },
@@ -1030,16 +1197,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1060,6 +1230,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1109358"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1565865"
         }
       ],
       "seen": {
@@ -1079,6 +1255,13 @@
           "id": "1109358",
           "name": "Lachlan Bayliss",
           "position": "Attacking Midfield",
+          "birthDate": "2002-07-24",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565865",
+          "name": "Lachlan Bayliss",
+          "position": "Midfielder",
           "birthDate": "2002-07-24",
           "match": "exact"
         },
@@ -1157,10 +1340,11 @@
           "birthDate": "2002-07-21",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2002-07-21), held as null"
+        "birth date not on two hosts (Transfermarkt 2002-07-21), held as null"
       ]
     },
     {
@@ -1227,6 +1411,7 @@
           "birthDate": "2006-11-08",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
@@ -1255,16 +1440,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1285,6 +1473,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1010896"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1566308"
         }
       ],
       "seen": {
@@ -1304,6 +1498,13 @@
           "id": "1010896",
           "name": "Oliver Middleton",
           "position": "Central Midfield",
+          "birthDate": "2005-09-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1566308",
+          "name": "Oliver Middleton",
+          "position": "Midfielder",
           "birthDate": "2005-09-19",
           "match": "exact"
         },
@@ -1333,16 +1534,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1363,6 +1567,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "337282"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "760713"
         }
       ],
       "seen": {
@@ -1382,6 +1592,13 @@
           "id": "337282",
           "name": "Jake Brimmer",
           "position": "Central Midfield",
+          "birthDate": "1998-04-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "760713",
+          "name": "Jake Brimmer",
+          "position": "Midfielder",
           "birthDate": "1998-04-03",
           "match": "exact"
         },
@@ -1411,16 +1628,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1441,6 +1661,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "351691"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "609501"
         }
       ],
       "seen": {
@@ -1460,6 +1686,13 @@
           "id": "351691",
           "name": "Sam Cosgrove",
           "position": "Centre-Forward",
+          "birthDate": "1996-12-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "609501",
+          "name": "Sam Cosgrove",
+          "position": "Attacker",
           "birthDate": "1996-12-02",
           "match": "exact"
         },
@@ -1540,6 +1773,7 @@
           "birthDate": "2005-07-12",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -1566,16 +1800,19 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1596,6 +1833,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1291443"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "1814031"
         }
       ],
       "seen": {
@@ -1615,6 +1858,13 @@
           "id": "1291443",
           "name": "Aaron Cartwright",
           "position": "Right Winger",
+          "birthDate": "2008-07-05",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1814031",
+          "name": "Aaron Cartwright",
+          "position": "Attacker",
           "birthDate": "2008-07-05",
           "match": "exact"
         },
@@ -1644,7 +1894,8 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
@@ -1653,7 +1904,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1674,6 +1926,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "312317"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "676431"
         }
       ],
       "seen": {
@@ -1693,6 +1951,13 @@
           "id": "312317",
           "name": "Logan Rogerson",
           "position": "Right Winger",
+          "birthDate": "1998-05-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "676431",
+          "name": "Logan Rogerson",
+          "position": "Midfielder",
           "birthDate": "1998-05-28",
           "match": "exact"
         },
@@ -1774,6 +2039,7 @@
           "birthDate": "2004-11-05",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -1851,10 +2117,11 @@
           "birthDate": "2008-01-23",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
-        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID); group set to MID, which ESPN and Transfermarkt both support"
+        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID), FotMob none (null); group set to MID, which 2 independent hosts support"
       ]
     },
     {
@@ -1879,7 +2146,8 @@
         "name": [
           "aucklandfc.co.nz",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "aucklandfc.co.nz",
@@ -1888,7 +2156,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1909,6 +2178,12 @@
           "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "507115"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/1642068/squad/auckland-fc",
+          "read": "2026-10-06",
+          "id": "845381"
         }
       ],
       "seen": {
@@ -1931,6 +2206,13 @@
           "birthDate": "2001-02-08",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "845381",
+          "name": "Lachlan Brook",
+          "position": "Midfielder",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1940,7 +2222,7 @@
     {
       "name": "Bailey Ferguson",
       "position": null,
-      "reason": "only the league transfer centre lists him; neither ESPN nor Transfermarkt has him in the 2026-27 squad",
+      "reason": "only the league transfer centre lists him; none of ESPN, Transfermarkt or FotMob has him in the 2026-27 squad",
       "seen": {
         "club": {
           "name": "Bailey Ferguson",
@@ -1949,6 +2231,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       }
     }

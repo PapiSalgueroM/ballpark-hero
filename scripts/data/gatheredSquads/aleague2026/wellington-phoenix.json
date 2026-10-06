@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "wellingtonphoenix.com",
@@ -58,6 +58,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+      "read": "2026-10-06"
     }
   },
   "notes": [],
@@ -96,16 +101,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -126,6 +134,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "877280"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477412"
         }
       ],
       "seen": {
@@ -145,6 +159,13 @@
           "id": "877280",
           "name": "Alby Kelly-Heald",
           "position": "Goalkeeper",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477412",
+          "name": "Alby Kelly-Heald",
+          "position": "Keeper",
           "birthDate": "2005-03-18",
           "match": "exact"
         },
@@ -226,6 +247,7 @@
           "birthDate": "2007-09-14",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -242,16 +264,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -272,6 +297,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "877945"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1325762"
         }
       ],
       "seen": {
@@ -291,6 +322,13 @@
           "id": "877945",
           "name": "Henry Gray",
           "position": "Goalkeeper",
+          "birthDate": "2005-03-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1325762",
+          "name": "Henry Gray",
+          "position": "Keeper",
           "birthDate": "2005-03-29",
           "match": "exact"
         },
@@ -322,16 +360,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -352,6 +393,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "953953"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1436840"
         }
       ],
       "seen": {
@@ -371,6 +418,13 @@
           "id": "953953",
           "name": "Isaac Hughes",
           "position": "Centre-Back",
+          "birthDate": "2004-03-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1436840",
+          "name": "Isaac Hughes",
+          "position": "Defender",
           "birthDate": "2004-03-25",
           "match": "exact"
         },
@@ -400,16 +454,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -430,6 +487,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "172333"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "505792"
         }
       ],
       "seen": {
@@ -449,6 +512,13 @@
           "id": "172333",
           "name": "Bill Tuiloma",
           "position": "Centre-Back",
+          "birthDate": "1995-03-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "505792",
+          "name": "Bill Tuiloma",
+          "position": "Defender",
           "birthDate": "1995-03-27",
           "match": "exact"
         },
@@ -478,16 +548,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -508,6 +581,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "877294"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1541879"
         }
       ],
       "seen": {
@@ -527,6 +606,13 @@
           "id": "877294",
           "name": "Matthew Sheridan",
           "position": "Right-Back",
+          "birthDate": "2004-05-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1541879",
+          "name": "Matthew Sheridan",
+          "position": "Defender",
           "birthDate": "2004-05-09",
           "match": "exact"
         },
@@ -556,16 +642,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -586,6 +675,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "345343"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "686053"
         }
       ],
       "seen": {
@@ -605,6 +700,13 @@
           "id": "345343",
           "name": "James McGarry",
           "position": "Left-Back",
+          "birthDate": "1998-04-09",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "686053",
+          "name": "James McGarry",
+          "position": "Defender",
           "birthDate": "1998-04-09",
           "match": "exact"
         },
@@ -634,16 +736,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -664,6 +769,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "877290"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477435"
         }
       ],
       "seen": {
@@ -683,6 +794,13 @@
           "id": "877290",
           "name": "Lukas Kelly-Heald",
           "position": "Left-Back",
+          "birthDate": "2005-03-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477435",
+          "name": "Lukas Kelly-Heald",
+          "position": "Defender",
           "birthDate": "2005-03-18",
           "match": "exact"
         },
@@ -763,6 +881,7 @@
           "birthDate": "2005-03-26",
           "match": "fuzzy"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -838,10 +957,11 @@
           "birthDate": "2007-07-04",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
-        "birth date disagreement: ESPN 2006-03-29, Transfermarkt 2007-07-04"
+        "birth date not on two hosts (ESPN 2006-03-29, Transfermarkt 2007-07-04), held as null"
       ]
     },
     {
@@ -866,16 +986,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -896,6 +1019,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "560827"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "914814"
         }
       ],
       "seen": {
@@ -915,6 +1044,13 @@
           "id": "560827",
           "name": "Walter Scott",
           "position": "Left-Back",
+          "birthDate": "1999-10-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "914814",
+          "name": "Walter Scott",
+          "position": "Defender",
           "birthDate": "1999-10-02",
           "match": "exact"
         },
@@ -944,16 +1080,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -974,6 +1113,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "256019"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "519240"
         }
       ],
       "seen": {
@@ -993,6 +1138,13 @@
           "id": "256019",
           "name": "Alex Rufer",
           "position": "Defensive Midfield",
+          "birthDate": "1996-06-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "519240",
+          "name": "Alex Rufer",
+          "position": "Midfielder",
           "birthDate": "1996-06-12",
           "match": "exact"
         },
@@ -1022,15 +1174,18 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1051,6 +1206,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "263685"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "459493"
         }
       ],
       "seen": {
@@ -1070,6 +1231,13 @@
           "id": "263685",
           "name": "Kazuki Nagasawa",
           "position": "Left Winger",
+          "birthDate": "1991-12-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "459493",
+          "name": "Kazuki Nagasawa",
+          "position": "Midfielder",
           "birthDate": "1991-12-16",
           "match": "exact"
         },
@@ -1096,7 +1264,8 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
@@ -1105,7 +1274,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1126,6 +1296,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "739675"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1134447"
         }
       ],
       "seen": {
@@ -1148,6 +1324,13 @@
           "birthDate": "2001-02-28",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1134447",
+          "name": "Bryce Duke",
+          "position": "Defender",
+          "birthDate": "2001-02-28",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
@@ -1166,16 +1349,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1196,6 +1382,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "396561"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1050300"
         }
       ],
       "seen": {
@@ -1215,6 +1407,13 @@
           "id": "396561",
           "name": "Max Anderson",
           "position": "Central Midfield",
+          "birthDate": "2001-05-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1050300",
+          "name": "Max Anderson",
+          "position": "Midfielder",
           "birthDate": "2001-05-17",
           "match": "exact"
         },
@@ -1246,16 +1445,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1276,6 +1478,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "857968"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1477441"
         }
       ],
       "seen": {
@@ -1297,6 +1505,13 @@
           "position": "Defensive Midfield",
           "birthDate": "2003-08-10",
           "match": "exact"
+        },
+        "fotmob": {
+          "id": "1477441",
+          "name": "Fin Conchie",
+          "position": "Midfielder",
+          "birthDate": "2003-08-10",
+          "match": "fuzzy"
         },
         "from": "club squad page"
       },
@@ -1324,16 +1539,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1354,6 +1572,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1092674"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1838724"
         }
       ],
       "seen": {
@@ -1373,6 +1597,13 @@
           "id": "1092674",
           "name": "Anaru Cassidy",
           "position": "Defensive Midfield",
+          "birthDate": "2006-02-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1838724",
+          "name": "Anaru Cassidy",
+          "position": "Midfielder",
           "birthDate": "2006-02-26",
           "match": "exact"
         },
@@ -1402,16 +1633,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1432,6 +1666,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "552958"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "861895"
         }
       ],
       "seen": {
@@ -1451,6 +1691,13 @@
           "id": "552958",
           "name": "Rafael Durán",
           "position": "Centre-Forward",
+          "birthDate": "1997-08-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "861895",
+          "name": "Rafael Durán",
+          "position": "Attacker",
           "birthDate": "1997-08-20",
           "match": "exact"
         },
@@ -1480,15 +1727,18 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1509,6 +1759,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "888602"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1680420"
         }
       ],
       "seen": {
@@ -1531,6 +1787,13 @@
           "birthDate": "2002-09-10",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1680420",
+          "name": "Corban Piper",
+          "position": "Attacker",
+          "birthDate": "2002-09-10",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1547,16 +1810,19 @@
         "name": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "wellingtonphoenix.com",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1577,6 +1843,12 @@
           "url": "https://www.transfermarkt.com/wellington-phoenix/kader/verein/8445/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "724808"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/78785/squad/wellington-phoenix",
+          "read": "2026-10-06",
+          "id": "1353588"
         }
       ],
       "seen": {
@@ -1596,6 +1868,13 @@
           "id": "724808",
           "name": "Riley Bidois",
           "position": "Centre-Forward",
+          "birthDate": "2002-03-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1353588",
+          "name": "Riley Bidois",
+          "position": "Attacker",
           "birthDate": "2002-03-12",
           "match": "exact"
         },
@@ -1679,6 +1958,7 @@
           "birthDate": "2006-01-30",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": []
@@ -1692,6 +1972,12 @@
       "name": "Ben Trenberth",
       "position": "Midfielder",
       "birthDate": null
+    },
+    {
+      "source": "fotmob",
+      "name": "Dan Edwards",
+      "position": "Defender",
+      "birthDate": "1998-08-06"
     }
   ]
 }

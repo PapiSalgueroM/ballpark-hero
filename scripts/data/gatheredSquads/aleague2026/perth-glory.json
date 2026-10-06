@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "perthglory.com.au",
@@ -65,6 +65,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+      "read": "2026-10-06"
     }
   },
   "notes": [],
@@ -74,7 +79,7 @@
     "rows": 28,
     "heldOut": 1,
     "twoHostRows": 28,
-    "birthDateKnown": 23,
+    "birthDateKnown": 26,
     "groupKnown": 28,
     "minutesKnown": 22,
     "marketRows": 0,
@@ -103,16 +108,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -133,6 +141,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "561484"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "915413"
         }
       ],
       "seen": {
@@ -155,6 +169,13 @@
           "birthDate": "2000-03-07",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "915413",
+          "name": "Matthew Sutton",
+          "position": "Keeper",
+          "birthDate": "2000-03-07",
+          "match": "fuzzy"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -163,7 +184,7 @@
       "name": "Ryan Warner",
       "position": "Goalkeeper",
       "group": "GK",
-      "birthDate": null,
+      "birthDate": "2005-01-27",
       "minutes2025_26": 0,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -181,14 +202,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "site.api.espn.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -208,6 +234,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1118927"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1838265"
         }
       ],
       "seen": {
@@ -230,10 +262,17 @@
           "birthDate": "2005-10-27",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1838265",
+          "name": "Ryan Warner",
+          "position": "Keeper",
+          "birthDate": "2005-01-27",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date disagreement: ESPN 2005-01-27, Transfermarkt 2005-10-27"
+        "birth date: ESPN 2005-01-27, Transfermarkt 2005-10-27, FotMob 2005-01-27; set to the date two hosts agree on"
       ]
     },
     {
@@ -248,16 +287,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -278,6 +320,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1279262"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1702865"
         }
       ],
       "seen": {
@@ -297,6 +345,13 @@
           "id": "1279262",
           "name": "Daniel Solsky",
           "position": "Goalkeeper",
+          "birthDate": "2003-02-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1702865",
+          "name": "Daniel Solsky",
+          "position": "Keeper",
           "birthDate": "2003-02-25",
           "match": "exact"
         },
@@ -328,16 +383,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -358,6 +416,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1104722"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1607419"
         }
       ],
       "seen": {
@@ -377,6 +441,13 @@
           "id": "1104722",
           "name": "Andriano Lebib",
           "position": "Centre-Back",
+          "birthDate": "2006-01-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1607419",
+          "name": "Andriano Lebib",
+          "position": "Defender",
           "birthDate": "2006-01-29",
           "match": "exact"
         },
@@ -406,16 +477,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -436,6 +510,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "470986"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1101260"
         }
       ],
       "seen": {
@@ -455,6 +535,13 @@
           "id": "470986",
           "name": "Sam Sutton",
           "position": "Left-Back",
+          "birthDate": "2001-12-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1101260",
+          "name": "Sam Sutton",
+          "position": "Defender",
           "birthDate": "2001-12-10",
           "match": "exact"
         },
@@ -484,16 +571,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -514,6 +604,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "185114"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "505932"
         }
       ],
       "seen": {
@@ -533,6 +629,13 @@
           "id": "185114",
           "name": "Brian Kaltak",
           "position": "Centre-Back",
+          "birthDate": "1993-09-30",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "505932",
+          "name": "Brian Kaltak",
+          "position": "Defender",
           "birthDate": "1993-09-30",
           "match": "exact"
         },
@@ -562,16 +665,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -592,6 +698,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1112869"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1610770"
         }
       ],
       "seen": {
@@ -611,6 +723,13 @@
           "id": "1112869",
           "name": "Charbel Shamoon",
           "position": "Right-Back",
+          "birthDate": "2004-02-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1610770",
+          "name": "Charbel Shamoon",
+          "position": "Defender",
           "birthDate": "2004-02-10",
           "match": "exact"
         },
@@ -640,16 +759,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -670,6 +792,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1285841"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1791878"
         }
       ],
       "seen": {
@@ -689,6 +817,13 @@
           "id": "1285841",
           "name": "Tadiwanashe Kuzamba",
           "position": "Right-Back",
+          "birthDate": "2006-12-28",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1791878",
+          "name": "Tadiwanashe Kuzamba",
+          "position": "Defender",
           "birthDate": "2006-12-28",
           "match": "fuzzy"
         },
@@ -718,16 +853,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -748,6 +886,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1408382"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1853368"
         }
       ],
       "seen": {
@@ -767,6 +911,13 @@
           "id": "1408382",
           "name": "Riley Foxe",
           "position": "Centre-Back",
+          "birthDate": "2006-10-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1853368",
+          "name": "Riley Foxe",
+          "position": "Defender",
           "birthDate": "2006-10-10",
           "match": "exact"
         },
@@ -798,16 +949,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -828,6 +982,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "965604"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1420208"
         }
       ],
       "seen": {
@@ -847,6 +1007,13 @@
           "id": "965604",
           "name": "Matt Dench",
           "position": "Left-Back",
+          "birthDate": "2003-12-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1420208",
+          "name": "Matt Dench",
+          "position": "Defender",
           "birthDate": "2003-12-08",
           "match": "exact"
         },
@@ -878,16 +1045,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -908,6 +1078,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "298883"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "624510"
         }
       ],
       "seen": {
@@ -930,6 +1106,13 @@
           "birthDate": "1995-03-12",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "624510",
+          "name": "Lachlan Jackson",
+          "position": "Defender",
+          "birthDate": "1995-03-12",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -946,16 +1129,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -976,6 +1162,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1233818"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1686121"
         }
       ],
       "seen": {
@@ -998,6 +1190,13 @@
           "birthDate": "2005-06-30",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1686121",
+          "name": "Cher Deng",
+          "position": "Defender",
+          "birthDate": "2005-06-30",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
@@ -1008,20 +1207,25 @@
       "name": "Brandon O'Neill",
       "position": "Midfielder",
       "group": "MID",
-      "birthDate": null,
+      "birthDate": "1994-04-12",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
       "facts": {
         "name": [
           "perthglory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "site.api.espn.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1035,6 +1239,12 @@
           "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5322/roster?season=2026",
           "read": "2026-10-06",
           "id": "200396"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "309646"
         }
       ],
       "seen": {
@@ -1051,10 +1261,16 @@
           "match": "exact"
         },
         "tm": null,
+        "fotmob": {
+          "id": "309646",
+          "name": "Brandon O'Neill",
+          "position": "Midfielder",
+          "birthDate": "1994-04-12",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (ESPN 1994-04-12), held as null",
         "no Transfermarkt match, so no minutes source"
       ]
     },
@@ -1080,7 +1296,8 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
@@ -1088,7 +1305,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1109,6 +1327,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "692320"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1101136"
         }
       ],
       "seen": {
@@ -1128,6 +1352,13 @@
           "id": "692320",
           "name": "Trent Ostler",
           "position": "Right Winger",
+          "birthDate": "2002-04-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1101136",
+          "name": "Trent Ostler",
+          "position": "Attacker",
           "birthDate": "2002-04-03",
           "match": "exact"
         },
@@ -1157,16 +1388,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1187,6 +1421,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1169749"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1701526"
         }
       ],
       "seen": {
@@ -1209,6 +1449,13 @@
           "birthDate": "2005-11-04",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1701526",
+          "name": "William Freney",
+          "position": "Midfielder",
+          "birthDate": "2005-11-04",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1217,7 +1464,7 @@
       "name": "Sebastian Despotovski",
       "position": "Attacker",
       "group": "FWD",
-      "birthDate": null,
+      "birthDate": "2005-09-09",
       "minutes2025_26": 1151,
       "minutesSource": {
         "host": "transfermarkt.com",
@@ -1235,13 +1482,17 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1261,6 +1512,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1404854"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1752002"
         }
       ],
       "seen": {
@@ -1283,10 +1540,17 @@
           "birthDate": "2005-09-09",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1752002",
+          "name": "Sebastian Despotovski",
+          "position": "Midfielder",
+          "birthDate": "2005-09-09",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "birth date disagreement: ESPN 2005-12-17, Transfermarkt 2005-09-09"
+        "birth date: ESPN 2005-12-17, Transfermarkt 2005-09-09, FotMob 2005-09-09; set to the date two hosts agree on"
       ]
     },
     {
@@ -1311,15 +1575,18 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1340,6 +1607,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1273793"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1921661"
         }
       ],
       "seen": {
@@ -1359,6 +1632,13 @@
           "id": "1273793",
           "name": "Anthony Didulica",
           "position": "Right Winger",
+          "birthDate": "2008-03-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1921661",
+          "name": "Anthony Didulica",
+          "position": "Midfielder",
           "birthDate": "2008-03-03",
           "match": "exact"
         },
@@ -1390,7 +1670,8 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
@@ -1398,7 +1679,8 @@
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1419,6 +1701,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "560763"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1312753"
         }
       ],
       "seen": {
@@ -1438,6 +1726,13 @@
           "id": "560763",
           "name": "Henry Hore",
           "position": "Left Winger",
+          "birthDate": "1999-08-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1312753",
+          "name": "Henry Hore",
+          "position": "Attacker",
           "birthDate": "1999-08-17",
           "match": "exact"
         },
@@ -1467,16 +1762,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1497,6 +1795,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1145213"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1875183"
         }
       ],
       "seen": {
@@ -1516,6 +1820,13 @@
           "id": "1145213",
           "name": "Giovanni De Abreu",
           "position": "Central Midfield",
+          "birthDate": "2007-04-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1875183",
+          "name": "Giovanni De Abreu",
+          "position": "Midfielder",
           "birthDate": "2007-04-16",
           "match": "exact"
         },
@@ -1547,16 +1858,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1577,6 +1891,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1050131"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1686122"
         }
       ],
       "seen": {
@@ -1599,6 +1919,13 @@
           "birthDate": "2005-11-07",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1686122",
+          "name": "Lucas Scicluna",
+          "position": "Midfielder",
+          "birthDate": "2005-11-07",
+          "match": "exact"
+        },
         "from": "club squad page"
       },
       "notes": []
@@ -1615,16 +1942,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1645,6 +1975,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "734487"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1123206"
         }
       ],
       "seen": {
@@ -1664,6 +2000,13 @@
           "id": "734487",
           "name": "Calem Nieuwenhof",
           "position": "Defensive Midfield",
+          "birthDate": "2001-02-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1123206",
+          "name": "Calem Nieuwenhof",
+          "position": "Midfielder",
           "birthDate": "2001-02-17",
           "match": "exact"
         },
@@ -1695,16 +2038,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1725,6 +2071,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "867754"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1409554"
         }
       ],
       "seen": {
@@ -1744,6 +2096,13 @@
           "id": "867754",
           "name": "Jaiden Kucharski",
           "position": "Centre-Forward",
+          "birthDate": "2002-06-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1409554",
+          "name": "Jaiden Kucharski",
+          "position": "Attacker",
           "birthDate": "2002-06-25",
           "match": "exact"
         },
@@ -1773,15 +2132,18 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1802,6 +2164,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "229970"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "494435"
         }
       ],
       "seen": {
@@ -1821,6 +2189,13 @@
           "id": "229970",
           "name": "Tom Lawrence",
           "position": "Attacking Midfield",
+          "birthDate": "1994-01-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "494435",
+          "name": "Tom Lawrence",
+          "position": "Attacker",
           "birthDate": "1994-01-13",
           "match": "exact"
         },
@@ -1850,15 +2225,18 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1879,6 +2257,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1415926"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1823248"
         }
       ],
       "seen": {
@@ -1898,6 +2282,13 @@
           "id": "1415926",
           "name": "Oliver Evans",
           "position": "Attacking Midfield",
+          "birthDate": "2008-05-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823248",
+          "name": "Oliver Evans",
+          "position": "Attacker",
           "birthDate": "2008-05-19",
           "match": "exact"
         },
@@ -1927,16 +2318,19 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1957,6 +2351,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "714272"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1101904"
         }
       ],
       "seen": {
@@ -1976,6 +2376,13 @@
           "id": "714272",
           "name": "Stefan Colakovski",
           "position": "Left Winger",
+          "birthDate": "2000-04-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1101904",
+          "name": "Stefan Colakovski",
+          "position": "Attacker",
           "birthDate": "2000-04-20",
           "match": "exact"
         },
@@ -2005,15 +2412,18 @@
         "name": [
           "perthglory.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -2034,6 +2444,12 @@
           "url": "https://www.transfermarkt.com/perth-glory/kader/verein/970/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "724770"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/7961/squad/perth-glory",
+          "read": "2026-10-06",
+          "id": "1435048"
         }
       ],
       "seen": {
@@ -2056,10 +2472,17 @@
           "birthDate": "2001-02-27",
           "match": "fuzzy"
         },
+        "fotmob": {
+          "id": "1435048",
+          "name": "Matthew Ellis",
+          "position": "Midfielder",
+          "birthDate": "2001-02-27",
+          "match": "fuzzy"
+        },
         "from": "club squad page"
       },
       "notes": [
-        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID); group set to MID, which ESPN and Transfermarkt both support"
+        "position group disagreement: club Attacker (FWD), ESPN Midfielder (MID), Transfermarkt Attacking Midfield (MID), FotMob Midfielder (MID); group set to MID, which 3 independent hosts support"
       ]
     },
     {
@@ -2123,10 +2546,11 @@
           "birthDate": "2001-05-31",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2001-05-31), held as null",
+        "birth date not on two hosts (Transfermarkt 2001-05-31), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -2191,10 +2615,11 @@
           "birthDate": "2008-06-24",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "club squad page"
       },
       "notes": [
-        "birth date from one source only (Transfermarkt 2008-06-24), held as null",
+        "birth date not on two hosts (Transfermarkt 2008-06-24), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     }
@@ -2203,7 +2628,7 @@
     {
       "name": "Adam Taggart",
       "position": null,
-      "reason": "only the league transfer centre lists him; neither ESPN nor Transfermarkt has him in the 2026-27 squad",
+      "reason": "only the league transfer centre lists him; none of ESPN, Transfermarkt or FotMob has him in the 2026-27 squad",
       "seen": {
         "club": {
           "name": "Adam Taggart",
@@ -2212,6 +2637,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       }
     }
@@ -2234,6 +2660,18 @@
       "source": "transfermarkt",
       "name": "Arion Sulemani",
       "position": "Centre-Forward",
+      "birthDate": "2005-03-01"
+    },
+    {
+      "source": "fotmob",
+      "name": "Scott Wootton",
+      "position": "Defender",
+      "birthDate": "1991-09-12"
+    },
+    {
+      "source": "fotmob",
+      "name": "Arion Sulemani",
+      "position": "Attacker",
       "birthDate": "2005-03-01"
     }
   ]

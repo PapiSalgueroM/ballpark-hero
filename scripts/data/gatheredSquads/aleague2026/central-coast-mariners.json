@@ -5,7 +5,7 @@
   "season": "2026-27",
   "round": 1034,
   "read": "2026-10-06",
-  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
   "sources": {
     "club": {
       "host": "ccmariners.com.au",
@@ -64,6 +64,11 @@
       "host": "transfermarkt.com",
       "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
       "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+      "read": "2026-10-06"
     }
   },
   "notes": [
@@ -77,7 +82,7 @@
     "rows": 25,
     "heldOut": 9,
     "twoHostRows": 25,
-    "birthDateKnown": 19,
+    "birthDateKnown": 21,
     "groupKnown": 23,
     "minutesKnown": 17,
     "marketRows": 0,
@@ -106,16 +111,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -136,6 +144,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "51975"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "110616"
         }
       ],
       "seen": {
@@ -155,6 +169,13 @@
           "id": "51975",
           "name": "Andrew Redmayne",
           "position": "Goalkeeper",
+          "birthDate": "1989-01-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "110616",
+          "name": "Andrew Redmayne",
+          "position": "Keeper",
           "birthDate": "1989-01-13",
           "match": "exact"
         },
@@ -184,16 +205,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -214,6 +238,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1110879"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1565719"
         }
       ],
       "seen": {
@@ -233,6 +263,13 @@
           "id": "1110879",
           "name": "Dylan Peraić-Cullen",
           "position": "Goalkeeper",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565719",
+          "name": "Dylan Peraić-Cullen",
+          "position": "Keeper",
           "birthDate": "2006-07-25",
           "match": "exact"
         },
@@ -262,16 +299,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -292,6 +332,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "145840"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "207021"
         }
       ],
       "seen": {
@@ -311,6 +357,13 @@
           "id": "145840",
           "name": "Trent Sainsbury",
           "position": "Centre-Back",
+          "birthDate": "1992-01-05",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "207021",
+          "name": "Trent Sainsbury",
+          "position": "Defender",
           "birthDate": "1992-01-05",
           "match": "exact"
         },
@@ -340,16 +393,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -370,6 +426,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "795253"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1170521"
         }
       ],
       "seen": {
@@ -389,6 +451,13 @@
           "id": "795253",
           "name": "Lucas Mauragis",
           "position": "Left-Back",
+          "birthDate": "2001-09-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1170521",
+          "name": "Lucas Mauragis",
+          "position": "Defender",
           "birthDate": "2001-09-04",
           "match": "exact"
         },
@@ -418,16 +487,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -448,6 +520,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "175699"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "424603"
         }
       ],
       "seen": {
@@ -467,6 +545,13 @@
           "id": "175699",
           "name": "Storm Roux",
           "position": "Right-Back",
+          "birthDate": "1993-01-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "424603",
+          "name": "Storm Roux",
+          "position": "Defender",
           "birthDate": "1993-01-13",
           "match": "exact"
         },
@@ -496,16 +581,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -526,6 +614,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1043709"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1414871"
         }
       ],
       "seen": {
@@ -545,6 +639,13 @@
           "id": "1043709",
           "name": "Diesel Herrington",
           "position": "Centre-Back",
+          "birthDate": "2004-08-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1414871",
+          "name": "Diesel Herrington",
+          "position": "Defender",
           "birthDate": "2004-08-04",
           "match": "exact"
         },
@@ -574,16 +675,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -604,6 +708,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1385159"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1833005"
         }
       ],
       "seen": {
@@ -623,6 +733,13 @@
           "id": "1385159",
           "name": "Shumba Mutokoyi",
           "position": "Centre-Back",
+          "birthDate": "2008-08-13",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1833005",
+          "name": "Shumba Mutokoyi",
+          "position": "Defender",
           "birthDate": "2008-08-13",
           "match": "exact"
         },
@@ -652,16 +769,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -682,6 +802,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1271537"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1678528"
         }
       ],
       "seen": {
@@ -701,6 +827,13 @@
           "id": "1271537",
           "name": "Haine Eames",
           "position": "Attacking Midfield",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1678528",
+          "name": "Haine Eames",
+          "position": "Midfielder",
           "birthDate": "2008-02-27",
           "match": "exact"
         },
@@ -730,16 +863,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -760,6 +896,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "959614"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1315433"
         }
       ],
       "seen": {
@@ -779,6 +921,13 @@
           "id": "959614",
           "name": "Harrison Steele",
           "position": "Defensive Midfield",
+          "birthDate": "2002-10-12",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1315433",
+          "name": "Harrison Steele",
+          "position": "Midfielder",
           "birthDate": "2002-10-12",
           "match": "exact"
         },
@@ -808,15 +957,18 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -837,6 +989,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1238281"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1678529"
         }
       ],
       "seen": {
@@ -856,6 +1014,13 @@
           "id": "1238281",
           "name": "Arthur De Lima",
           "position": "Right Winger",
+          "birthDate": "2007-06-11",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1678529",
+          "name": "Arthur De Lima",
+          "position": "Midfielder",
           "birthDate": "2007-06-11",
           "match": "exact"
         },
@@ -885,16 +1050,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -915,6 +1083,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1373016"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1882331"
         }
       ],
       "seen": {
@@ -934,6 +1108,13 @@
           "id": "1373016",
           "name": "Laurence Taylor",
           "position": "Central Midfield",
+          "birthDate": "2008-02-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1882331",
+          "name": "Laurence Taylor",
+          "position": "Midfielder",
           "birthDate": "2008-02-27",
           "match": "exact"
         },
@@ -963,16 +1144,19 @@
         "name": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "ccmariners.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -993,6 +1177,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1110715"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1603555"
         }
       ],
       "seen": {
@@ -1012,6 +1202,13 @@
           "id": "1110715",
           "name": "Bailey Brandtman",
           "position": "Left Winger",
+          "birthDate": "2005-06-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1603555",
+          "name": "Bailey Brandtman",
+          "position": "Attacker",
           "birthDate": "2005-06-28",
           "match": "exact"
         },
@@ -1092,6 +1289,7 @@
           "birthDate": "2009-05-16",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
@@ -1120,15 +1318,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1149,6 +1350,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1089414"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1797425"
         }
       ],
       "seen": {
@@ -1168,6 +1375,13 @@
           "id": "1089414",
           "name": "Noah McCann",
           "position": "Centre-Back",
+          "birthDate": "2005-09-01",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1797425",
+          "name": "Noah McCann",
+          "position": "Defender",
           "birthDate": "2005-09-01",
           "match": "exact"
         },
@@ -1237,11 +1451,12 @@
           "birthDate": "2008-02-25",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2008-02-25), held as null",
+        "birth date not on two hosts (Transfermarkt 2008-02-25), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1267,15 +1482,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1296,6 +1514,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1413330"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1820424"
         }
       ],
       "seen": {
@@ -1315,6 +1539,13 @@
           "id": "1413330",
           "name": "Luke Becvinovski",
           "position": "Centre-Forward",
+          "birthDate": "2009-05-04",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1820424",
+          "name": "Luke Becvinovski",
+          "position": "Attacker",
           "birthDate": "2009-05-04",
           "match": "exact"
         },
@@ -1381,12 +1612,13 @@
           "birthDate": "2008-05-12",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
-        "position group not settled: ESPN Defender (DEF), Transfermarkt Midfielder (MID)",
+        "position group not settled: ESPN Defender (DEF), Transfermarkt Midfielder (MID), FotMob none (null)",
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2008-05-12), held as null",
+        "birth date not on two hosts (Transfermarkt 2008-05-12), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1402,15 +1634,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1431,6 +1666,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1533960"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "2308260"
         }
       ],
       "seen": {
@@ -1453,6 +1694,13 @@
           "birthDate": "2009-08-27",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "2308260",
+          "name": "Stevan Rujak",
+          "position": "Defender",
+          "birthDate": "2009-08-27",
+          "match": "exact"
+        },
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
@@ -1464,7 +1712,7 @@
       "name": "Presley Ortiz",
       "position": null,
       "group": "FWD",
-      "birthDate": null,
+      "birthDate": "2003-03-04",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
@@ -1472,13 +1720,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1498,6 +1751,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "732867"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1824871"
         }
       ],
       "seen": {
@@ -1520,11 +1779,17 @@
           "birthDate": "2003-03-04",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824871",
+          "name": "Presley Ortiz",
+          "position": "Attacker",
+          "birthDate": "2003-03-04",
+          "match": "exact"
+        },
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2003-03-04), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1532,7 +1797,7 @@
       "name": "Gabriel Tilo",
       "position": null,
       "group": "DEF",
-      "birthDate": null,
+      "birthDate": "2008-10-18",
       "minutes2025_26": null,
       "minutesSource": null,
       "marketRow": null,
@@ -1540,13 +1805,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
-        "birthDate": []
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
       },
       "sources": [
         {
@@ -1566,6 +1836,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1435608"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1824097"
         }
       ],
       "seen": {
@@ -1588,11 +1864,17 @@
           "birthDate": "2008-10-18",
           "match": "exact"
         },
+        "fotmob": {
+          "id": "1824097",
+          "name": "Gabriel Tilo",
+          "position": "Defender",
+          "birthDate": "2008-10-18",
+          "match": "exact"
+        },
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2008-10-18), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1653,12 +1935,13 @@
           "birthDate": "2007-11-24",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
-        "position group not settled: ESPN Defender (DEF), Transfermarkt Striker (FWD)",
+        "position group not settled: ESPN Defender (DEF), Transfermarkt Striker (FWD), FotMob none (null)",
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2007-11-24), held as null",
+        "birth date not on two hosts (Transfermarkt 2007-11-24), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     },
@@ -1725,6 +2008,7 @@
           "birthDate": "2008-01-05",
           "match": "fuzzy"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
@@ -1754,15 +2038,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1783,6 +2070,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1176547"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1635566"
         }
       ],
       "seen": {
@@ -1802,6 +2095,13 @@
           "id": "1176547",
           "name": "Oliver Lavale",
           "position": "Centre-Forward",
+          "birthDate": "2005-04-05",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1635566",
+          "name": "Oliver Lavale",
+          "position": "Attacker",
           "birthDate": "2005-04-05",
           "match": "fuzzy"
         },
@@ -1833,15 +2133,18 @@
         "name": [
           "aleagues.com.au",
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "group": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ],
         "birthDate": [
           "site.api.espn.com",
-          "transfermarkt.com"
+          "transfermarkt.com",
+          "fotmob.com"
         ]
       },
       "sources": [
@@ -1862,6 +2165,12 @@
           "url": "https://www.transfermarkt.com/central-coast-mariners/kader/verein/6954/saison_id/2026/plus/1",
           "read": "2026-10-06",
           "id": "1373017"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8164/squad/central-coast-mariners",
+          "read": "2026-10-06",
+          "id": "1949001"
         }
       ],
       "seen": {
@@ -1881,6 +2190,13 @@
           "id": "1373017",
           "name": "Jesse Mantell",
           "position": "Central Midfield",
+          "birthDate": "2007-10-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1949001",
+          "name": "Jesse Mantell",
+          "position": "Midfielder",
           "birthDate": "2007-10-10",
           "match": "exact"
         },
@@ -1950,11 +2266,12 @@
           "birthDate": "2009-01-01",
           "match": "exact"
         },
+        "fotmob": null,
         "from": "league transfer centre only (not on the club squad page)"
       },
       "notes": [
         "not on the club squad page; named for 2026-27 by the league's transfer centre",
-        "birth date from one source only (Transfermarkt 2009-01-01), held as null",
+        "birth date not on two hosts (Transfermarkt 2009-01-01), held as null",
         "not on any 2025-26 A-League Men club page on Transfermarkt"
       ]
     }
@@ -1972,6 +2289,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -1987,6 +2305,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2002,6 +2321,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2017,6 +2337,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2032,6 +2353,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2047,6 +2369,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2062,6 +2385,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2077,6 +2401,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     },
@@ -2092,6 +2417,7 @@
         },
         "espn": null,
         "tm": null,
+        "fotmob": null,
         "from": "club squad page"
       }
     }
@@ -2163,6 +2489,30 @@
       "name": "Noah Hooper",
       "position": "Left Winger",
       "birthDate": "2010-01-01"
+    },
+    {
+      "source": "fotmob",
+      "name": "Jai Ajanovic",
+      "position": "Keeper",
+      "birthDate": "2008-08-31"
+    },
+    {
+      "source": "fotmob",
+      "name": "Kristian Popović",
+      "position": "Defender",
+      "birthDate": "2001-08-14"
+    },
+    {
+      "source": "fotmob",
+      "name": "Chris Donnell",
+      "position": "Midfielder",
+      "birthDate": "2004-01-24"
+    },
+    {
+      "source": "fotmob",
+      "name": "Ali Auglah",
+      "position": "Midfielder",
+      "birthDate": "2002-03-11"
     }
   ]
 }
