@@ -1,0 +1,1891 @@
+{
+  "club": "Auckland FC",
+  "slug": "auckland-fc",
+  "shard": "A",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page who also appear in ESPN's 2026-27 roster or Transfermarkt's 26/27 squad. Name and position text as the club prints them. group stands when ESPN or Transfermarkt puts him in the same group, else null. birthDate only where ESPN and Transfermarkt agree (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs, null when he was on none.",
+  "sources": {
+    "club": {
+      "host": "aucklandfc.co.nz",
+      "url": "https://aucklandfc.co.nz/squad/",
+      "read": "2026-10-06"
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    }
+  },
+  "count": {
+    "clubPage": 24,
+    "rows": 24,
+    "heldOut": 0,
+    "twoHostRows": 24,
+    "birthDateKnown": 23,
+    "groupKnown": 24,
+    "minutesKnown": 23,
+    "marketRows": 0,
+    "perfPagesLoaded": 12
+  },
+  "rows": [
+    {
+      "name": "Michael Woud",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1999-01-16",
+      "minutes2025_26": 2091,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/michael-woud/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "228288"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "350347"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Michael Woud",
+          "position": "Goalkeeper",
+          "number": "1"
+        },
+        "espn": {
+          "id": "228288",
+          "name": "Michael Woud",
+          "position": "Goalkeeper",
+          "birthDate": "1999-01-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "350347",
+          "name": "Michael Woud",
+          "position": "Goalkeeper",
+          "birthDate": "1999-01-16",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Oli Sail",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1996-01-13",
+      "minutes2025_26": 69,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/oli-sail/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "194728"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "290838"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oli Sail",
+          "position": "Goalkeeper",
+          "number": "20"
+        },
+        "espn": {
+          "id": "194728",
+          "name": "Oliver Sail",
+          "position": "Goalkeeper",
+          "birthDate": "1996-01-13",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "290838",
+          "name": "Oliver Sail",
+          "position": "Goalkeeper",
+          "birthDate": "1996-01-13",
+          "match": "fuzzy"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Joseph Knowles",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2004-11-02",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/joseph-knowles/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "231211"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "887859"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joseph Knowles",
+          "position": "Goalkeeper",
+          "number": "30"
+        },
+        "espn": {
+          "id": "231211",
+          "name": "Joseph Knowles",
+          "position": "Goalkeeper",
+          "birthDate": "2004-11-02",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "887859",
+          "name": "Joseph Knowles",
+          "position": "Goalkeeper",
+          "birthDate": "2004-11-02",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Hiroki Sakai",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1990-04-12",
+      "minutes2025_26": 1176,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/hiroki-sakai/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "157692"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "83002"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Hiroki Sakai",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "157692",
+          "name": "Hiroki Sakai",
+          "position": "Defender",
+          "birthDate": "1990-04-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "83002",
+          "name": "Hiroki Sakai",
+          "position": "Right-Back",
+          "birthDate": "1990-04-12",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Nando Pijnaker",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1999-02-25",
+      "minutes2025_26": 719,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/nando-pijnaker/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "288469"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "455425"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nando Pijnaker",
+          "position": "Defender",
+          "number": "4"
+        },
+        "espn": {
+          "id": "288469",
+          "name": "Nando Pijnaker",
+          "position": "Defender",
+          "birthDate": "1999-02-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "455425",
+          "name": "Nando Pijnaker",
+          "position": "Centre-Back",
+          "birthDate": "1999-02-25",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Francis de Vries",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1994-11-28",
+      "minutes2025_26": 1980,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/francis-de-vries/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "254441"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "207061"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Francis de Vries",
+          "position": "Defender",
+          "number": "15"
+        },
+        "espn": {
+          "id": "254441",
+          "name": "Francis de Vries",
+          "position": "Defender",
+          "birthDate": "1994-11-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "207061",
+          "name": "Francis de Vries",
+          "position": "Left-Back",
+          "birthDate": "1994-11-28",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Callan Elliot",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1999-07-07",
+      "minutes2025_26": 1407,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/callan-elliot/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "282239"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "482204"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Callan Elliot",
+          "position": "Defender",
+          "number": "17"
+        },
+        "espn": {
+          "id": "282239",
+          "name": "Callan Elliot",
+          "position": "Defender",
+          "birthDate": "1999-07-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "482204",
+          "name": "Callan Elliot",
+          "position": "Right-Back",
+          "birthDate": "1999-07-07",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Ronan Wynne",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2001-05-28",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/ronan-wynne/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "382446"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "627143"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Ronan Wynne",
+          "position": "Defender",
+          "number": "23"
+        },
+        "espn": {
+          "id": "382446",
+          "name": "Ronan Wynne",
+          "position": "Defender",
+          "birthDate": "2001-05-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "627143",
+          "name": "Ronan Wynne",
+          "position": "Centre-Back",
+          "birthDate": "2001-05-28",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Luka Vicelich",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2008-05-15",
+      "minutes2025_26": 133,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/luka-vicelich/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392461"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1153793"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Luka Vicelich",
+          "position": "Defender",
+          "number": "25"
+        },
+        "espn": {
+          "id": "392461",
+          "name": "Luka Vicelich",
+          "position": "Defender",
+          "birthDate": "2008-05-15",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1153793",
+          "name": "Luka Vicelich",
+          "position": "Centre-Back",
+          "birthDate": "2008-05-15",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Aaron Calver",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1996-01-12",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/aaron-calver/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "181398"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "255162"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Aaron Calver",
+          "position": "Defender",
+          "number": "28"
+        },
+        "espn": {
+          "id": "181398",
+          "name": "Aaron Calver",
+          "position": "Defender",
+          "birthDate": "1996-01-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "255162",
+          "name": "Aaron Calver",
+          "position": "Centre-Back",
+          "birthDate": "1996-01-12",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Cameron Howieson",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1994-12-22",
+      "minutes2025_26": 771,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/cameron-howieson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "159466"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "172323"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Cameron Howieson",
+          "position": "Midfielder",
+          "number": "7"
+        },
+        "espn": {
+          "id": "159466",
+          "name": "Cameron Howieson",
+          "position": "Midfielder",
+          "birthDate": "1994-12-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "172323",
+          "name": "Cameron Howieson",
+          "position": "Central Midfield",
+          "birthDate": "1994-12-22",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Felipe Gallegos",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1991-12-03",
+      "minutes2025_26": 1362,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/luis-felipe-gallegos/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "176886"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "155054"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Felipe Gallegos",
+          "position": "Midfielder",
+          "number": "8"
+        },
+        "espn": {
+          "id": "176886",
+          "name": "Felipe Gallegos",
+          "position": "Midfielder",
+          "birthDate": "1991-12-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "155054",
+          "name": "Luis Felipe Gallegos",
+          "position": "Central Midfield",
+          "birthDate": "1991-12-03",
+          "match": "fuzzy"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Lachlan Bayliss",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2002-07-24",
+      "minutes2025_26": 1644,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1",
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC",
+          "Newcastle Jets FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/lachlan-bayliss/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "351369"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1109358"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lachlan Bayliss",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": {
+          "id": "351369",
+          "name": "Lachlan Bayliss",
+          "position": "Midfielder",
+          "birthDate": "2002-07-24",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1109358",
+          "name": "Lachlan Bayliss",
+          "position": "Attacking Midfield",
+          "birthDate": "2002-07-24",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Daniel Normann",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": null,
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/daniel-normann/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3111301"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1352333"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Daniel Normann",
+          "position": "Midfielder",
+          "number": "16"
+        },
+        "espn": {
+          "id": "3111301",
+          "name": "Daniel Normann",
+          "position": "Midfielder",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1352333",
+          "name": "Daniel Normann",
+          "position": "Defensive Midfield",
+          "birthDate": "2002-07-21",
+          "match": "exact"
+        }
+      },
+      "notes": [
+        "birth date from one source only (Transfermarkt 2002-07-21), held as null"
+      ]
+    },
+    {
+      "name": "Marley Leuluai",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2006-11-08",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/marley-leuluai/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "376510"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1092671"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Marley Leuluai",
+          "position": "Midfielder",
+          "number": "18"
+        },
+        "espn": {
+          "id": "376510",
+          "name": "Marley Leuluai",
+          "position": "Midfielder",
+          "birthDate": "2006-11-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1092671",
+          "name": "Marley Leuluai",
+          "position": "Defensive Midfield",
+          "birthDate": "2006-11-08",
+          "match": "exact"
+        }
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Oliver Middleton",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-09-19",
+      "minutes2025_26": 7,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/oliver-middleton/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386309"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1010896"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oliver Middleton",
+          "position": "Midfielder",
+          "number": "19"
+        },
+        "espn": {
+          "id": "386309",
+          "name": "Oliver Middleton",
+          "position": "Midfielder",
+          "birthDate": "2005-09-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1010896",
+          "name": "Oliver Middleton",
+          "position": "Central Midfield",
+          "birthDate": "2005-09-19",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Jake Brimmer",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1998-04-03",
+      "minutes2025_26": 707,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/jake-brimmer/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "228412"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "337282"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jake Brimmer",
+          "position": "Midfielder",
+          "number": "22"
+        },
+        "espn": {
+          "id": "228412",
+          "name": "Jake Brimmer",
+          "position": "Midfielder",
+          "birthDate": "1998-04-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "337282",
+          "name": "Jake Brimmer",
+          "position": "Central Midfield",
+          "birthDate": "1998-04-03",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Sam Cosgrove",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1996-12-02",
+      "minutes2025_26": 1941,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/sam-cosgrove/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "214938"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "351691"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sam Cosgrove",
+          "position": "Attacker",
+          "number": "9"
+        },
+        "espn": {
+          "id": "214938",
+          "name": "Sam Cosgrove",
+          "position": "Forward",
+          "birthDate": "1996-12-02",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "351691",
+          "name": "Sam Cosgrove",
+          "position": "Centre-Forward",
+          "birthDate": "1996-12-02",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Isa Prins",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2005-07-12",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/isa-prins/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "418903"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1104291"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Isa Prins",
+          "position": "Attacker",
+          "number": "21"
+        },
+        "espn": {
+          "id": "418903",
+          "name": "Isa Prins",
+          "position": "Midfielder",
+          "birthDate": "2005-07-12",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1104291",
+          "name": "Isa Prins",
+          "position": "Left Winger",
+          "birthDate": "2005-07-12",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Aaron Cartwright",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-07-05",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/aaron-cartwright/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "409366"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1291443"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Aaron Cartwright",
+          "position": "Attacker",
+          "number": "24"
+        },
+        "espn": {
+          "id": "409366",
+          "name": "Aaron Cartwright",
+          "position": "Forward",
+          "birthDate": "2008-07-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1291443",
+          "name": "Aaron Cartwright",
+          "position": "Right Winger",
+          "birthDate": "2008-07-05",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Logan Rogerson",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1998-05-28",
+      "minutes2025_26": 1174,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/logan-rogerson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "228281"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "312317"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Logan Rogerson",
+          "position": "Attacker",
+          "number": "27"
+        },
+        "espn": {
+          "id": "228281",
+          "name": "Logan Rogerson",
+          "position": "Forward",
+          "birthDate": "1998-05-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "312317",
+          "name": "Logan Rogerson",
+          "position": "Right Winger",
+          "birthDate": "1998-05-28",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Jonty Bidois",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2004-11-05",
+      "minutes2025_26": 112,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/jonty-bidois/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386310"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1016716"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jonty Bidois",
+          "position": "Attacker",
+          "number": "35"
+        },
+        "espn": {
+          "id": "386310",
+          "name": "Jonty Bidois",
+          "position": "Forward",
+          "birthDate": "2004-11-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1016716",
+          "name": "Jonty Bidois",
+          "position": "Centre-Forward",
+          "birthDate": "2004-11-05",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Van Fitzharris",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-01-23",
+      "minutes2025_26": 48,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/van-fitzharris/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "413897"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1289282"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Van Fitzharris",
+          "position": "Attacker",
+          "number": "57"
+        },
+        "espn": {
+          "id": "413897",
+          "name": "Van Fitzharris",
+          "position": "Midfielder",
+          "birthDate": "2008-01-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1289282",
+          "name": "Van Fitzharris",
+          "position": "Attacking Midfield",
+          "birthDate": "2008-01-23",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    },
+    {
+      "name": "Lachlan Brook",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-02-08",
+      "minutes2025_26": 1784,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/auckland-fc/leistungsdaten/verein/118373/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Auckland FC"
+        ]
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "aucklandfc.co.nz",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "aucklandfc.co.nz",
+          "url": "https://aucklandfc.co.nz/squad/",
+          "read": "2026-10-06",
+          "profile": "https://aucklandfc.co.nz/player/lachlan-brook/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/22344/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "249186"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/auckland-fc/kader/verein/118373/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "507115"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Lachlan Brook",
+          "position": "Attacker",
+          "number": "77"
+        },
+        "espn": {
+          "id": "249186",
+          "name": "Lachlan Brook",
+          "position": "Forward",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "507115",
+          "name": "Lachlan Brook",
+          "position": "Left Winger",
+          "birthDate": "2001-02-08",
+          "match": "exact"
+        }
+      },
+      "notes": []
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Eli Jones",
+      "position": "Goalkeeper",
+      "birthDate": "2007-02-04"
+    },
+    {
+      "source": "transfermarkt",
+      "name": "Ralph Rutherford",
+      "position": "Right Winger",
+      "birthDate": "2005-04-02"
+    }
+  ]
+}
