@@ -25,6 +25,7 @@
   },
   "count": {
     "clubPage": 24,
+    "staffSkipped": 0,
     "rows": 24,
     "heldOut": 0,
     "twoHostRows": 24,
