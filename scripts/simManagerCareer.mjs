@@ -30,11 +30,17 @@
  *      .0113).
  * Negative controls, SIM_MANAGER_CONTROL=<name>, each asserting the string
  * it mutates exists first (exit 2 otherwise), each measured red:
- *   tierfield  the old field (every club at his tier, topped up) is back
- *   canon      his club is matched by its exact spelling only
- *   words      a market club's look alike names are no longer dropped
- *   ofsize     "of N" is printed for every league
- *   field10    the unverified field shrinks from 20 to 10 clubs
+ *   tierfield  the old field (every club at his tier, topped up) is back:
+ *              111254 named rows from another league, and 4 tables naming
+ *              his own club twice (main's own bug, Manchester City and Man
+ *              City in one table)
+ *   canon      his club is matched by its exact spelling only: Man City in
+ *              8 of 10 Manchester City fields
+ *   words      a market club's look alike names are no longer dropped: Red
+ *              Bull Salzburg in the RB Salzburg table and field
+ *   ofsize     "of N" is printed for every league: 18206 lines wrong
+ *   field10    the unverified field shrinks from 20 to 10 clubs: 9 of the
+ *              10 rates leave the band (t1 title .2810)
  * Run: node scripts/simManagerCareer.mjs
  */
 import { build } from 'esbuild';
@@ -351,6 +357,18 @@ const probe = (club, tier, league, check) => {
   });
   console.log(`   an RB Salzburg job named ${salzburg.length ? salzburg.join(', ') : 'nobody'}`);
   if (salzburg.includes('Red Bull Salzburg')) fail('an RB Salzburg job meets Red Bull Salzburg in its own table');
+  /* the stored table is a five row window, so a club can hide below it:
+     ask the field itself, whole, for the same three jobs */
+  seedRandom(0x1029);
+  const field = (club, league) => lg.managerLeagueField({ clubs: FB, club, league, year: 2030 }, Math.random);
+  const fa = field('Arsenal'), fc = field('Manchester City', 'Premier League'), fs2 = field('RB Salzburg', 'Austrian Bundesliga');
+  console.log(`   whole fields: Arsenal ${fa.named.length} named of ${fa.size}, Manchester City ${fc.named.length} of ${fc.size}, RB Salzburg ${fs2.named.length} of ${fs2.size}`);
+  if (fa.named.length !== 19 || fa.named.some(n => byName.get(n)?.league !== 'Premier League')) fail('the Arsenal field is not 19 Premier League clubs');
+  /* 22 Premier League clubs are known and 19 fit, so draw ten fields */
+  const cityDraws = Array.from({ length: 10 }, () => field('Manchester City', 'Premier League'));
+  const withCity = cityDraws.filter(f => f.named.includes('Man City')).length;
+  if (fc.named.length !== 19 || withCity) fail(`the Manchester City field holds ${fc.named.length} clubs, and Man City in ${withCity} of 10 draws`);
+  if (fs2.named.includes('Red Bull Salzburg')) fail('the RB Salzburg field names Red Bull Salzburg');
 }
 /* d) rates per tier against main's band (numbers in the header) */
 {
