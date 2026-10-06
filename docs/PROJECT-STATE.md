@@ -1,3 +1,208 @@
+## Round1068 LIVE: Cage grappling motion, 2026-10-06 20:22:21 UTC
+
+Cage Clash at https://douknowball.com/cage-clash now draws distinct guard,
+half guard and mount legs, animated grappling and escape efforts, and
+submission grips driven by each fighter's actual pressure. Reduced motion
+keeps effort poses stable while real position/pressure changes remain
+visible. Help, the guide and What's New explain the update. There is no
+new timer, state history, combat, score, input, save, route, real-data or
+database change. The four engine/hook sources remain identical to84469b10.
+
+PR157 merged at0667c4761537a38eff00402ba21b8b0ad2957624. Its tree
+74e2ea097cd02419b590d2008e50d0fa514174e5 exactly equals accepted
+2b26387c4df78bcdf01385c7fb2fa919fe5d422a and tested synthetic392840db.
+Parent9c5034bb and PR152 to156, including Claude's guide grants, are preserved.
+
+Authenticated IAB imported157 and showed its merge as Previewing.
+The host first briefly failed to load while reconnecting, then recovered
+on reload. Shift-Refresh restarted the accepted preview. Publish changes
+completed with Your website was updated. LIVE entry index-BqbGmvBg.js.
+Public canvas metadata confirms position standing/top none/level0/pressure0.
+Reopened help has the ground-position/effort/actual-pressure rule. The guide
+has the same rule with the reduced-motion qualification. What's New has
+Make the mat your own. and Work on your ground game -> /cage-clash.
+Circuit, strikes, stats, Practice and Claude's207-lineup update stay intact.
+Cage/news each have one canonical and description, no noindex. No production
+fight was completed. The game stays at Quick setup with help closed.
+The owner's existing news tab was untouched; own game/news tabs are retained.
+
+Actual LIVE screenshots:
+C:/Users/antho/.codex/artifact-inspection/cage-grapple-motion-live-news-1068.png
+C:/Users/antho/.codex/artifact-inspection/cage-grapple-motion-live-help-1068.png
+
+Final remote runs37522038185 (Cage),37522038205 (MMA),37522037968 (entry)
+passed actual app type/build and their named closing harnesses. All saved
+artifacts were SHA256 verified and independently audited. Cage69/118
+outcomes/effective controls with34 harnesses: combat22/28, Practice14/22,
+Circuit11/22, Stats7/19, strike7/14 and grapple8/13. Every actual mutation
+fails only its mapped assertion, keeps an independent baseline green and
+has expected skips/no unhandled errors. All27 painter copies match accepted
+prep. All sixteen built readers, search, guide and source anchors pass.
+MMA20/23,72 campaigns/864 events and32 harnesses, four native journeys/
+66 panels/exact reload-history-legacy saves pass, zero captured/forwarded
+writes. Entry8/18 with19 harnesses and six effective guide failures,16
+native cases/80 targets/640 font checks/three geometry controls pass;
+saves/RNG preserved, zero score or forwarded writes.
+
+Native Cage: four profiles,1556 real inputs,187 measured screenshots,
+18 ground frames,12 strike frames and12 correct recaps (60 stat rows,
+120 values,216 measured table cells). Both winning Circuit runs independently
+average66; two actual early stops score0. Exactly eight terminal completions
+were intercepted, with no extra award, forwarded or Practice write.
+Saves,1418 controls,1496 stage font checks and five geometry controls pass.
+Final320 mount/390 pressure screenshots inspected; controls and text fit.
+
+Both score-free phone journeys actually earn ground levels0/1/2. Same-level
+grapple action ticks6/4/2 differ339/232/279 channels in normal motion and0/0/0
+in reduced motion. Each steady effort still differs from idle. Actual
+submission pressure2.9/26.1/66.7 produces grip differences214/250/258.
+Ground level crop differences540/623/940. All new crop hashes equal prep.
+Atomic painted metadata binds each crop to its exact state; the HUD keeps
+its existing slower cadence. Reduced motion still shows actual position
+and pressure. No prior-state inference or invented transition.
+
+Preparation37519544053 on8ff33ac9 passed. Five generated payloads were
+manifest-verified before/after copy. Only Cage/news text and two ledger hashes
+changed, dates remain October6; search regenerated. Temporary prep workflow
+removed. Permanent verification retains all prior gates plus grapple checks.
+
+SHA256 receipts:
+Cage11441612821:a36478815a90e9c81b86ea8b9c93655fefea3915f9e020cf5c8c016d3782f232
+MMA11441138406:97098c4d39c8ffa6687c7e125aa9e6fff3882e3588438b5b288fad8e1ab0d5fe
+Entry11441515727:65b72e2f88822f6f2e41c671ccb202a425ca82c1a2aa7d967228a2773894a586
+Prep11441041676:70f9eaeb289c5442588b87c107b730aec46c06df694b0b26328654bf2f393638
+
+Main/publish returns to AH with this closing docs receipt. Preserve PR152
+to157 and this receipt in every integration. Claude retains soccer/GM,
+soccer2.ts for1032/derby and US career guide hunks for1038/1039.
+Root held drafts/seven stashes remain protected. No local app runtime,
+direct production DB call, paid AI or indexing submission. Next1069 unclaimed.
+
+## Round1068 candidate ready, final CI pending
+
+Remote preparation37519544053 passed on8ff33ac90802d1ea3286065a4b9dcfea90de8ef1:
+real app type/build, eight grapple outcomes/thirteen effective controls,
+seven prior strike outcomes/fourteen controls, native phone/combat/mode
+journeys and all twenty guide/built-reader gates including search.
+
+Artifact11441041676 SHA256:
+70f9eaeb289c5442588b87c107b730aec46c06df694b0b26328654bf2f393638.
+All five generated payloads were verified against the manifest before and
+after copy. Only Cage/news text and two ledger hashes changed; dates remain
+October6. The search terms were regenerated. Temporary preparation workflow
+removed. The permanent Cage workflow includes the new outcomes/controls.
+
+Three original phone screenshots inspected:320 mount,390 guard and390
+high-pressure submission. Controls, arena and text fit; position changes
+and tightened grips are visible. Atomic canvas metadata binds pixels to
+the rendered state, while the HUD keeps its existing slower update cadence.
+Combat/Practice/Circuit/input engines remain byte-identical to84469b10.
+No score, save, route, real-data or database change.
+
+Final permanent workflows and artifact audits are required before merge.
+AH retains main/publish for now; no LIVE claim. Claude retains soccer/GM,
+soccer2.ts and the US career guide hunks. Root drafts/seven stashes stay
+protected. No local app runtime, direct production DB call or paid AI.
+
+## Round1068 claimed: Cage grappling motion
+
+Codex extends the existing Cage Clash renderer only: distinct guard, half
+guard and mount silhouettes, grappling/escape effort poses and submission
+grips driven by actual pressure. No prior-state inference, timer, combat,
+score, save, data or database changes. Reduced motion keeps effort stable
+while actual ground position and submission pressure remain visible.
+
+Design: player sees their current ground position in seconds, decides
+between passing, regaining guard, escaping and submitting, and can retry
+the existing score-free Practice lessons. Existing instructions/example
+and reopenable help explain the new poses. Success means literal original
+pixel outcomes with effective controls, real phone Practice frames, all
+existing combat/mode journeys and remote app type/build/site gates green.
+
+Branch codex/cage-grapple-motion-1068 from main9c5034bb. Narrow claim:
+Cage canvas, its new tests/harness, native QA, Cage workflow, Cage help,
+the Cage paragraphs in moreSports.ts and one What's New line. No career
+or soccer2.ts claim. Claude keeps1032/1037/1038/1039 and AH main/publish
+while implementation and remote gates run. Codex will coordinate a short
+merge/publish window only after final acceptance. Preserve PR152 to156.
+Root drafts/seven stashes remain protected. No local app runtime or
+direct production DB call. No LIVE claim yet.
+
+## Round1067 LIVE: Cage strike motion, 2026-10-06 19:12:51 UTC
+
+Cage Clash at https://douknowball.com/cage-clash now draws windup, contact
+and recovery poses for standing punches/kicks, clinch strikes/knees and
+top/bottom ground punches. Reduced motion keeps a readable contact pose
+steady and suppresses incidental cycles. The help, guide and What's New
+explain the motion. Combat, Practice, Circuit and score/input engine sources
+are unchanged. No save, route, real-data or database change.
+
+PR154 merged at f35218628611060f1c728c9f6b834e167565714d. Its tree
+962e75e24c77bef3285345cc11537c507d3f5265 equals accepted
+8d2d79cc06ad6e2feaed59259564c7b45b9617f8 and the tested synthetic merge.
+Claude's9bf04e5a guide claims, prior PR152/153 and AG remain preserved.
+PR155's docs recovery merged at2aab7f8c1f59cc0d457c163f2615dbfb65e92e59;
+only PROJECT-STATE and WORKBOARD changed, with the runtime byte-identical.
+
+Authenticated IAB now shows imports154/155. The latest155 is Previewing;
+Shift-Refresh restarted the preview and Publish changes completed with
+Your website was updated. LIVE entry index-DUMSIznJ.js. The public canvas
+exposes paint tick0/player action idle/action ticks0 at Quick setup.
+Reopened help has the full pixel pose and reduced motion rule. The guide
+has the motion rule, and What's New has Put some snap in your strikes.
+with Step into the cage -> /cage-clash. Circuit, Fight stats and Claude's
+207-lineup Missing XI update are intact. Cage/news each have exactly one
+canonical/description and no noindex. No production fight was completed.
+The game tab stays at Quick setup; the owner's existing news tab is untouched.
+
+Host trap: file contents and an In sync Git status were insufficient. The
+first publish still served index-BLmSHduv.js while chat/history ended at9bf.
+The docs-only155 receipt refreshed the import, after which154/155 appeared.
+Only the later public renderer metadata, help and news proof is accepted LIVE.
+Do not credit a successful publish toast alone.
+
+Live screenshots:
+C:/Users/antho/.codex/artifact-inspection/cage-strike-motion-live-news-1067.png
+C:/Users/antho/.codex/artifact-inspection/cage-strike-motion-live-help-1067.png
+
+Final remote runs37510443427 (Cage),37510443465 (MMA),37510443540 (entry)
+passed actual app type/build gates. All saved artifacts inspected and accepted:
+Cage61/105 outcomes/effective controls and33 named harnesses; MMA20/23
+and32; entry8/18 and19, including six effective guide controls. Each source
+copy changes its intended anchor, fails only the mapped assertion and keeps
+an independent baseline green. Motion7/14 copies match accepted preparation,
+85 older copies match1066 and six Board copies match the current source.
+All sixteen built readers, search and guide/source anchors passed.
+
+Native Cage: four profiles,927 inputs,159 measured screenshots,12 strike
+frames,12 recaps/60 stat rows/120 values/216 measured table cells. Recaps
+match raw hits, rounded damage, blocks, takedowns and50ms control time.
+Circuit [67,71,66] averages68; [80,74,67] averages74. All eight starts have
+full health/gas and zero counters. Exactly eight intercepted completions:
+keyboard65/68/0,320touch70/74/0,390touch67,mouse65. No extra award, forwarded
+write, save mutation or error. All32 fonts and1,272 stage font checks passed,
+controls at least44px, table cells11px with no overflow, five effective
+geometry controls and seven combat states. Phone screenshots inspected.
+
+Twelve strike samples read action ticks6/4/2 from the exact painted canvas.
+Normal Jab channel differences549/456/366 and Kick585/603/447 match prep.
+Reduced differences are all zero; stable poses equal normal contact.
+Preparation37505322005 on2081b28d and all five manifest hashes were accepted
+before/after copy. Temporary prep workflow removed. Only Cage/news text and
+ledger hashes changed, dates stayed October6; search was regenerated.
+
+SHA256 receipts:
+Cage11435803840:41463eafd61f478c4a66045a651959cc635391eaf27df6f3a862c3d1fe62a80e
+MMA11434357818:98a43572bb5b0b8a84c4d6a57ca0ffe52fe8d0c905dead1299baebeb85dbc82a
+Entry11435012098:102f1dcce37faf9a728625d0af6f653c2c03ae982eea36104eda3178fddeaf1c
+Prep11431748948:c4baff422a8da419f48c1bafe500e05d1f5d711415ccc200c51a98aab956a4ed
+
+Main/publish returns to AH with this docs receipt. Preserve PR152/153/154/155
+and this receipt in AH. Claude retains soccer/GM and the committed soccer2.ts
+and US career guide hunks for1032/1038/1039. Root drafts/seven stashes stay
+protected. No local app runtime, direct production DB call/probe, paid AI or
+indexing submission. Next1068 is unclaimed.
+
 ## Round1066 LIVE: Cage Clash Fight stats, 2026-10-06 17:21:33 UTC
 
 Fight stats is live at https://douknowball.com/cage-clash after a Quick
