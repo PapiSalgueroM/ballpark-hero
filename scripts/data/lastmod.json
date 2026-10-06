@@ -13,16 +13,16 @@
     "date": "2026-10-02"
   },
   "/afl-higher-lower": {
-    "hash": "ae510d9d49dca5f1",
-    "date": "2026-10-01"
+    "hash": "bf2af38a2473df2d",
+    "date": "2026-10-06"
   },
   "/alphabet-sprint": {
     "hash": "5fca3b9e05212f90",
     "date": "2026-09-30"
   },
   "/aussie-rules-manager": {
-    "hash": "38bed30c7c57cb50",
-    "date": "2026-10-01"
+    "hash": "bf3eefead9a779ac",
+    "date": "2026-10-06"
   },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
@@ -85,11 +85,11 @@
     "date": "2026-09-19"
   },
   "/champions-league-format-history": {
-    "hash": "3a05647fcae5f26a",
-    "date": "2026-09-19"
+    "hash": "09a13064428fce73",
+    "date": "2026-10-06"
   },
   "/club-manager": {
-    "hash": "1e9eeb7810d94f93",
+    "hash": "d2121577fa39d46a",
     "date": "2026-10-06"
   },
   "/clue-auction": {
@@ -201,8 +201,8 @@
     "date": "2026-09-30"
   },
   "/golf-higher-lower": {
-    "hash": "3353d54d86bc05d0",
-    "date": "2026-10-01"
+    "hash": "7676579fceea228c",
+    "date": "2026-10-06"
   },
   "/guess-cbb-team": {
     "hash": "94f3539b28989a10",
@@ -221,8 +221,8 @@
     "date": "2026-09-30"
   },
   "/guess-the-golfer": {
-    "hash": "9ddd24168decbba2",
-    "date": "2026-10-01"
+    "hash": "d0a5ded74d80c9ae",
+    "date": "2026-10-06"
   },
   "/guess-the-nation": {
     "hash": "5164e64fe7417ff0",
@@ -653,7 +653,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "c27963ebd7b40660",
+    "hash": "957a390c14aae8ff",
     "date": "2026-10-06"
   },
   "/who-am-i": {
