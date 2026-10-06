@@ -67,7 +67,28 @@
    and 120 of 120 untouched careers byte identical every time. Defenders end
    up level with the attackers on peak overall (0.44 under to 0.12 over, the
    rule before had them 0.36 to 0.84 under).
-   DELTA_AND_CONTROLS_GO_HERE
+   DELTA bands, about three standard deviations of those five around their
+   mean: peak 0.15 to 0.95, trophies 0.05 to 0.45, released -3 to +3 points.
+   Ballon d'Or ceiling for defenders 1 per 100 careers, under half the
+   attackers' measured rate; real defenders almost never win it.
+   The keeper stays the outlier the other way (65 to 67 percent elite). The
+   brief said measure it and leave it unless this same rule fixed it, and it
+   does not: his rule is untouched.
+
+   Negative controls, SIM_POSITION_RATINGS_CONTROL (each asserts its anchor is
+   in the engine exactly once, or refuses to run with exit 2):
+   oldrule     the rule's line is taken out (the keeper's clean sheets are the
+               only defensive credit again)              expected red {1, 2, 3}
+               (2: nothing moved; 3: every defender cell is off its credit)
+   overcredit  the credit is multiplied by four           expected red {1, 2}
+               measured at offset 0: CB 4.3 / 83.9, CDM 3.2 / 78.5, peak
+               +0.84 and trophies +0.59 (over the 0.45 ceiling)
+   stream      the credit line draws one Math.random      expected red {2, 3}
+               (2: the untouched careers move too, which is the point of
+               checking them)
+   Exit 1 only when the red set equals the expected set; exit 2 when the
+   anchor is missing or doubled, the name is unknown, or the red set is any
+   other set.
 
    Run: node scripts/simCareerPositionRatings.mjs [seedOffset] [careersPerPositionAndEra] */
 import { build } from 'esbuild';
@@ -95,9 +116,9 @@ const CONTROLS = {
   stream: { from: CREDIT_LINE, to: '  base += defensiveRatingCredit(position, apps, cleanSheets) + 0 * Math.random();\n', red: [2, 3] },
 };
 /* Margins and floors, measured (see the header). */
-const MARGIN = { poor: 3, elite: 3 };
+const MARGIN = { poor: 3, elite: 5 };
 const FLOOR = { seasons: 800, careers: 240, identity: 60, cells: 9000, saves: 16, newRows: 24 };
-const DELTA = { peak: [0.15, 0.75], trophies: [0.05, 0.45], released: [-4, 4] };
+const DELTA = { peak: [0.15, 0.95], trophies: [0.05, 0.45], released: [-3, 3] };
 const BDOR_CEILING = 1;
 const count = (hay, needle) => hay.split(needle).length - 1;
 function swap(src, from, to, label) {
