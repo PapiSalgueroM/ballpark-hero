@@ -11,8 +11,9 @@
    - RESULT (resolveSeasonDerbies): each meeting is drawn from keyedRng, keyed
      off the season and the rival, so the game's main Math.random stream does
      not move by one call. The meeting model itself (playDerbyMeeting) takes
-     only two strength numbers, home or away and a generator, so another
-     sport's career can bind it later without Soccer Career's club data.
+     two strength numbers, home or away and a generator, and no club data,
+     but its draw share (DERBY_DRAW) and its 0 to 3 goal scorelines are
+     soccer's: another sport's career would pass those in before binding it.
    - SWING (applySeasonDerbies): the only mutation. Popularity and morale move
      by a small, clamped amount per derby you played. The season rating is
      not touched.
@@ -109,12 +110,18 @@ export interface SeasonDerby {
    Liga MX: season Y is the Apertura (Invierno until 2001) of year Y plus the
      Clausura (Verano) of year Y+1. Each short tournament is a single round
      robin, 18 clubs and 17 games, so a season is two meetings, from
-     Invierno 1996 (rsssf.org/tablesm/mex97.html, mex2024.html; Claro Sports,
-     clarosports.com/futbol/liga-mx/historia-torneos-cortos-liga-mx). Nothing
-     is claimed before 1996/97, and 2019/20 is HELD: the Clausura 2020 was
-     cancelled after ten rounds (Mediotiempo, mediotiempo.com/futbol/liga-mx/
-     liga-mx-cancela-clausura-2020-pandemia-coronavirus; CBS Sports,
-     cbssports.com/soccer/news/liga-mx-cancels-clausura-2020-season).
+     Invierno 1996. The format, two publishers at each end: rsssf.org/
+     tablesm/mex97.html (Invierno 1996 and Verano 1997, 18 clubs, 17 games)
+     and mex2024.html (18 and 17); futsoc.com/torneo.php?te=1 (the Invierno
+     1996 calendar, 18 clubs, Jornada 1 to 17 before the playoffs); statscrew
+     .com/worldfootball/standings/l-MEXPRI/y-2022 (Apertura 2022, 18 clubs, 17
+     games each). Claro Sports dates the first short tournament to Invierno
+     1996 (clarosports.com/futbol/liga-mx/historia-torneos-cortos-liga-mx).
+     Nothing is claimed before 1996/97, and 2019/20 is HELD: the Clausura
+     2020 was cancelled ten games into its 17 game schedule (Mediotiempo,
+     mediotiempo.com/futbol/liga-mx/liga-mx-cancela-clausura-2020-pandemia-
+     coronavirus; Sports Illustrated, si.com/soccer/2020/05/22/liga-mx-
+     cancels-clausura-season-coronavirus, read 2026-10-05).
      Liguilla playoff meetings are never counted.
    Liga Profesional (Argentina): Apertura and Clausura, Inicial and Final,
      the 2015 thirty club season, the Superliga and the 2020s league and cup
@@ -186,7 +193,8 @@ export const DERBY_DRAW = 0.27;
 
 const clampN = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
-/** One meeting's scoreline from two strengths. Sport neutral: no club data. */
+/** One meeting's scoreline from two strengths. No club data, but the draw
+ *  share and the scorelines are soccer's (see the header). */
 export function playDerbyMeeting(rng: () => number, myStr: number, theirStr: number, home: boolean, titleSeason: boolean): { gf: number; ga: number } {
   const pWin = clampN(
     DERBY_BASE_WIN + DERBY_TIER_STEP * (myStr - theirStr) + (home ? DERBY_HOME : -DERBY_HOME) + (titleSeason ? DERBY_TITLE_NUDGE : 0),

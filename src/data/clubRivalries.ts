@@ -149,14 +149,14 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
   ] },
   { a: 'Manchester City', b: 'Manchester United', name: 'Manchester derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'Sports Illustrated', title: 'Man Utd vs. Man City: Complete Head-to-Head Record', url: 'https://www.si.com/soccer/manchester-city-vs-manchester-united-complete-head-to-head-record' },
-    { publisher: 'Yahoo Sports', title: 'Man United vs. Man City history, head to head: All-time records in Manchester derby', url: 'https://sports.yahoo.com/articles/man-united-vs-man-city-185000803.html' },
+    { publisher: 'The Sporting News (on Yahoo Sports)', title: 'Man United vs. Man City history, head to head: All-time records in Manchester derby', url: 'https://sports.yahoo.com/articles/man-united-vs-man-city-185000803.html' },
   ] },
   { a: 'Liverpool', b: 'Manchester United', name: 'North West derby', kind: 'rivalry', checked: '2026-10-05', sources: [
     { publisher: 'FBref', title: 'North West Derby History Liverpool vs. Manchester United Historical Head-to-Head', url: 'https://fbref.com/en/stathead/matchup/teams/822bd0ba/19538871/North-West-Derby-Liverpool-vs-Manchester-United-History' },
     { publisher: 'Goal', title: 'Are Liverpool the biggest rivals for Manchester United?', url: 'https://www.goal.com/en-us/news/are-liverpool-the-biggest-rivals-for-manchester-united/pw1pwl5czf3w1k2gfl2l39fha' },
   ] },
   { a: 'Crystal Palace', b: 'Brighton', name: 'M23 derby', kind: 'derby', checked: '2026-10-05', sources: [
-    { publisher: 'Crystal Palace FC', title: 'The Crystal Palace v Brighton rivalry explained', url: 'https://www.cpfc.co.uk/news/club/crystal-palace-brighton-rivalry-explained/' },
+    { publisher: 'Football Ground Guide', title: 'Brighton vs. Crystal Palace rivalry: M23 derby origin, history and head-to-head record', url: 'https://footballgroundguide.com/news/brighton-vs-crystal-palace-rivalry-m23-derby-origin-history-and-head-to-head-record.html' },
     { publisher: 'NationalWorld', title: 'Why are Brighton and Crystal Palace rivals? M23 derby explained', url: 'https://www.nationalworld.com/sport/football/why-are-brighton-and-crystal-palace-rivals-m23-derby-explained-3398190' },
   ] },
   { a: 'Chelsea', b: 'Tottenham', name: 'London derby', kind: 'derby', checked: '2026-10-05', sources: [
@@ -200,20 +200,20 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'Flashscore', title: 'Derby Week: Ipswich Town vs Norwich City, the duel for East Anglian pride', url: 'https://www.flashscoreusa.com/news/soccer-championship-derby-week-ipswich-town-vs-norwich-city-the-duel-for-east-anglian-pride/lYZz0AQr/' },
   ] },
   { a: 'Manchester United', b: 'Leeds United', name: 'Roses rivalry', kind: 'rivalry', checked: '2026-10-05', sources: [
-    { publisher: 'Leeds United', title: 'The history of Leeds United vs Manchester United', url: 'https://www.leedsunited.com/en/news/the-history-of-leeds-united-vs-manchester-united' },
+    { publisher: 'The Yorkshire Post', title: 'Roses rivalry? Leeds United motivated enough even without Manchester United task, says Daniel Farke', url: 'https://www.yorkshirepost.co.uk/sport/football/leeds-united/roses-rivalry-leeds-united-motivated-enough-even-without-manchester-united-task-says-daniel-farke-6570391' },
     { publisher: 'Arizona State University', title: 'A Rivalry of Roses? An analysis of the Manchester United vs. Leeds United football rivalry', url: 'https://keep.lib.asu.edu/items/160967' },
   ] },
   // Spain
   { a: 'Real Madrid', b: 'Barcelona', name: 'El Clasico', kind: 'rivalry', checked: '2026-10-05', sources: [
     { publisher: 'beIN Sports', title: 'Everything You Need to Know About El Clasico Between Real Madrid and Barcelona', url: 'https://www.beinsports.com/en-us/soccer/la-liga/articles/everything-you-need-to-know-about-el-cl%C3%A1sico-between-real-madrid-and-barcelona-2025-10-21' },
-    { publisher: 'Yahoo Sports', title: 'Real Madrid vs. Barcelona history: El Clasico all-time head to head', url: 'https://ca.sports.yahoo.com/news/real-madrid-vs-barcelona-history-100900932.html' },
+    { publisher: 'The Sporting News (on Yahoo Sports)', title: 'Real Madrid vs. Barcelona history: El Clasico all-time head to head', url: 'https://ca.sports.yahoo.com/news/real-madrid-vs-barcelona-history-100900932.html' },
   ] },
   { a: 'Real Madrid', b: 'Atlético Madrid', name: 'Madrid derby', kind: 'derby', checked: '2026-10-05', sources: [
     { publisher: 'LaLiga', title: 'El Derbi de Madrid', url: 'https://www.laliga.com/en-GB/partidazos/el-derbi-de-madrid' },
     { publisher: '90min', title: "Real Madrid vs Atletico Madrid: Spain's ferocious capital derby", url: 'https://www.90min.com/posts/real-madrid-vs-atletico-madrid-spain-ferocious-capital-derby' },
   ] },
-  { a: 'Sevilla', b: 'Real Betis', name: 'Seville derby', kind: 'derby', checked: '2026-10-05', sources: [
-    { publisher: 'LaLiga', title: 'El Gran Derbi: a history of Real Betis vs Sevilla FC', url: 'https://www.laliga.com/en-GB/news/el-gran-derbi-a-history-of-real-betis-vs-sevilla-fc' },
+  { a: 'Sevilla', b: 'Real Betis', name: 'El Gran Derbi', kind: 'derby', checked: '2026-10-05', sources: [
+    { publisher: 'LaLiga', title: 'Sevilla FC vs Real Betis head-to-head record: who has won more times?', url: 'https://www.laliga.com/en-GB/news/el-gran-derbi-a-history-of-real-betis-vs-sevilla-fc' },
     { publisher: 'Football Espana', title: 'El Gran Derbi: A history of Sevilla and Real Betis', url: 'https://www.football-espana.net/2022/02/26/el-gran-derbi-a-history-of-sevilla-real-betis' },
   ] },
   { a: 'Athletic Club', b: 'Real Sociedad', name: 'Basque derby', kind: 'derby', checked: '2026-10-05', sources: [
@@ -258,7 +258,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'Il Primato Nazionale', title: "Bologna-Fiorentina, il derby dell'Appennino", url: 'https://www.ilprimatonazionale.it/sport/bologna-fiorentina-il-derby-appennino-243568' },
   ] },
   { a: 'Roma', b: 'Lazio', name: 'Derby della Capitale', kind: 'derby', checked: '2026-10-05', sources: [
-    { publisher: 'OneFootball', title: 'A Brief History Of The Derby Della Capitale Ahead Of Roma vs Lazio Clash', url: 'https://onefootball.com/en/news/a-brief-history-of-the-derby-della-capitale-ahead-of-roma-vs-lazio-clash-28891985' },
+    { publisher: 'World Football Index (on OneFootball)', title: 'A Brief History Of The Derby Della Capitale Ahead Of Roma vs Lazio Clash', url: 'https://onefootball.com/en/news/a-brief-history-of-the-derby-della-capitale-ahead-of-roma-vs-lazio-clash-28891985' },
     { publisher: 'My Football Facts', title: 'Derby della Capitale Head-to-Head', url: 'https://www.myfootballfacts.com/top-leagues/serie-a/derby-della-capitale-head-to-head-as-roma-vs-lazio-history-stats' },
   ] },
   // Germany
@@ -282,9 +282,9 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'Bundesliga', title: 'The biggest soccer derbies and rivalries in the Bundesliga: Klassiker, Revierderby and more', url: 'https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578' },
     { publisher: 'Bulinews', title: 'FC Koln vs. Borussia Monchengladbach preview: Rhine derby bragging rights up for grabs', url: 'https://bulinews.com/koln-borussia-monchengladbach-preview-rhine-derby-bragging-rights-for-grabs' },
   ] },
-  { a: 'Stuttgart', b: 'Karlsruhe', name: 'Baden-Swabia derby', kind: 'derby', checked: '2026-10-05', sources: [
-    { publisher: 'Bundesliga', title: 'The biggest soccer derbies and rivalries in the Bundesliga: Klassiker, Revierderby and more', url: 'https://www.bundesliga.com/en/bundesliga/news/biggest-soccer-derbies-in-germany-klassiker-revierderby-oldest-rivalries-7578' },
-    { publisher: 'Stuttgarter Zeitung', title: 'Derby-Historie gegen den KSC: Emotionen, Aggressionen und Vorteil VfB', url: 'https://www.stuttgarter-zeitung.de/gallery.derby-historie-gegen-den-ksc-emotionen-aggressionen-und-vorteil-vfb.04cead27-afec-4b8e-9e0a-4f102469a496.html' },
+  { a: 'Stuttgart', b: 'Karlsruhe', name: 'Baden-Württemberg derby', kind: 'derby', checked: '2026-10-05', sources: [
+    { publisher: 'Goal', title: 'KSC gegen VfB, Baden gegen Schwaben: Woher kommt die Rivalitaet?', url: 'https://www.goal.com/de/meldungen/ksc-gegen-vfb-baden-gegen-schwaben-woher-kommt-die-rivalit%C3%A4t/blt0b058609d87c06f4' },
+    { publisher: 'Karlsruher SC', title: 'Matchfacts: Alles Wissenswerte zum 50. baden-wuerttembergischen Derby', url: 'https://www.ksc.de/profis/saison/news/show/article/matchfacts-alles-wissenswerte-zum-50-baden-wuerttembergischen-derby/' },
   ] },
   // France
   { a: 'PSG', b: 'Marseille', name: 'Le Classique', kind: 'rivalry', checked: '2026-10-05', sources: [
@@ -295,7 +295,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'AS Monaco', title: "The 100th Cote d'Azur derby is Monegasque!", url: 'https://www.asmonaco.com/en/news/the-100th-cote-dazur-derby-is-monegasque' },
     { publisher: 'Flashscore', title: 'Nice take derby spoils against Monaco as Laborde nets winner in tempestuous affair', url: 'https://www.flashscore.com/news/nice-monaco-report-2024-10-27/AFauaJ7F/' },
   ] },
-  { a: 'Lyon', b: 'Marseille', name: 'Olympico', kind: 'rivalry', checked: '2026-10-05', sources: [
+  { a: 'Lyon', b: 'Marseille', name: 'Choc des Olympiques', kind: 'rivalry', checked: '2026-10-05', sources: [
     { publisher: 'FBref', title: 'Choc des Olympiques History Lyon vs. Marseille Historical Head-to-Head', url: 'https://fbref.com/en/stathead/matchup/teams/d53c0b06/5725cc7b/Choc-des-Olympiques-Lyon-vs-Marseille-History' },
     { publisher: 'My Football Facts', title: 'Choc des Olympiques Head-to-Head', url: 'https://www.myfootballfacts.com/top-leagues/ligue-1/choc-des-olympiques-head-to-head-lyon-vs-marseille-history-stats/' },
   ] },
@@ -304,7 +304,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'Foot Sur 7', title: 'Derby du Nord Lens-Lille : bilan, records et matchs legendaires', url: 'https://www.foot-sur7.fr/784150-derby-du-nord-lens-lille-bilan' },
   ] },
   { a: 'Nantes', b: 'Rennes', name: 'Breton derby', kind: 'derby', checked: '2026-10-05', sources: [
-    { publisher: 'France Bleu', title: "Stade Rennais - FC Nantes. Le derby vu de Rennes : l'histoire d'une rivalite", url: 'https://www.francebleu.fr/sports/football/stade-rennais-fc-nantes-le-derby-vu-de-rennes-l-histoire-d-une-rivalite-1629551098' },
+    { publisher: 'ici (France Bleu)', title: 'Football en Bretagne : 20 ans de rivalites au plus haut niveau', url: 'https://www.ici.fr/sports/football/football-en-bretagne-20-ans-de-rivalite-au-plus-haut-niveau-1659537960' },
     { publisher: 'Foot Sur 7', title: 'Derby Nantes-Rennes : bilan, records et matchs legendaires', url: 'https://www.foot-sur7.fr/784043-derby-nantes-rennes-bilan' },
   ] },
   // Portugal
@@ -313,7 +313,7 @@ export const CLUB_RIVALRIES: ClubRivalry[] = [
     { publisher: 'Portugoal', title: 'Lisbon derby between Eagles and Lions: a century of passion between Benfica and Sporting', url: 'https://portugoal.net/classics-topmenu/3772-lisbon-derby-between-eagles-and-lions-a-century-of-passion-between-benfica-and-sporting' },
   ] },
   { a: 'Benfica', b: 'Porto', name: 'O Classico', kind: 'rivalry', checked: '2026-10-05', sources: [
-    { publisher: 'Bleacher Report', title: 'Benfica vs. Porto: An Intense Football Rivalry Like Few Others', url: 'https://bleacherreport.com/articles/2799084-benfica-vs-porto-an-intense-football-rivalry-like-few-others' },
+    { publisher: 'My Football Facts', title: 'O Classico Head-to-Head: Benfica vs FC Porto History and Stats', url: 'https://www.myfootballfacts.com/top-leagues/liga-portugal/o-classico-head-to-head-benfica-vs-fc-porto-history-stats/' },
     { publisher: '90min', title: "Benfica vs Porto: A Classic Rivalry Between Portugal's Two Most Decorated Clubs", url: 'https://www.90min.com/posts/benfica-vs-porto-a-classic-rivalry-between-portugal-s-two-most-decorated-clubs-01e9bbx5ynpb' },
   ] },
   { a: 'Porto', b: 'Sporting CP', name: 'O Classico', kind: 'rivalry', checked: '2026-10-05', sources: [

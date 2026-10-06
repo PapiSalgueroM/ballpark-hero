@@ -15,12 +15,16 @@
    3. cadence and detection (exact): every season at a club with a same league
       rival in a verified league and year carries exactly that many meetings
       per rival, every other season has no derbies key, forced cases (aliases,
-      the 2003 Brasileirao boundary, a dormant pair) say what they should, and
-      no meeting names a club outside the league or not founded yet.
+      the 2003 Brasileirao boundary, both ends of the Ligue 1 and Liga MX holds,
+      the 1996 start of Liga MX, a dormant pair) say what they should, no
+      meeting names a club outside the league or not founded yet, and every
+      pair's 2020 status (active or dormant) is pinned by name.
    4. record consistency (exact): derby goals are a subset of the season's,
       played meetings fit in the league apps, a keeper never scores one, the
       winner flag only on a won meeting he scored in, Derby Hero is derived and
-      never stored, and the resolution is deterministic.
+      never stored, the resolution is deterministic, each rival is met once at
+      home and once away, and every stored season replays exactly from its own
+      inputs with the engine's elite list.
    5. stream neutrality (exact): bundle A (no derbies at all) and bundle B
       (derbies resolved, swing off) run the same 16 digest careers; with the
       derbies and story keys out the digests are equal, and B really played
@@ -28,7 +32,8 @@
    6. effect bands (measured): the per season swing equals its clamp exactly;
       the win share climbs at every rung of the strength ladder; the draw share
       sits near the model's; Derby Hero rate is ordered by position group with
-      keepers at zero; and the swing on versus off moves final popularity,
+      keepers at zero and calibrated to the winning goal rule; and the swing on
+      versus off moves popularity (over every season and at the end),
       sponsorship, money and the morale gated life events by a bounded amount.
    7. old saves and UI (exact): a save without derbies loads and plays on; the
       reader returns nothing for garbage; the components render nothing for an
@@ -46,6 +51,15 @@
    noalias   the alias map is ignored. Section 3 goes red (Man City, Sao Paulo).
    stream    resolveSeasonDerbies makes one Math.random call. Section 5 red.
    uncapped  the popularity clamp is gone and a win is worth 10. Section 6 red.
+   Added after the review (each one a hole a mutation walked through green):
+   homealt   both meetings at the same ground. Section 4 red.
+   cadhold   the Liga MX 2019/20 hold is dropped. Section 3 red (Club America
+             2019).
+   aliasdrop one alias entry (Athletic Bilbao) is deleted. Section 3 red: the
+             Basque derby goes dormant and the pinned 2020 status disagrees.
+   winner    the winning goal rule counts any goal up to the decider. Section
+             6 red (the hero calibration).
+   eliteoff  the engine passes an empty elite list. Section 4 red (the replay).
 
    Record mode: node scripts/simCareerDerbies.mjs --record prints the Club
    Manager rivals hash and board snapshot hash of the current tree.
@@ -62,7 +76,7 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.SIM_DERBY_CONTROL || '';
-const CONTROLS = { nodetect: [3, 6], cadence1: [3], noalias: [3], stream: [5], uncapped: [6] };
+const CONTROLS = { nodetect: [3, 6], cadence1: [3], noalias: [3], stream: [5], uncapped: [6], homealt: [4], cadhold: [3], aliasdrop: [3], winner: [6], eliteoff: [4] };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error('unknown control ' + CONTROL + ' (known: ' + Object.keys(CONTROLS).join(', ') + ')'); process.exit(2); }
 const RECORD = process.argv.includes('--record');
 const OFFSET = Number(process.argv.find((a, i) => i > 1 && /^\d+$/.test(a)) || 0);
@@ -87,11 +101,20 @@ const DERBY_FILE = path.join(ROOT, 'src/lib/soccerCareerDerby.ts');
 const DERBY_SRC = fs.readFileSync(DERBY_FILE, 'utf8').replace(/\r\n/g, '\n');
 /* An edit to a copy of the derby module, refusing to run when the anchor is
    not there exactly once: a control that changes nothing proves nothing. */
-function edit(src, anchor, replacement, why) {
+function edit(src, anchor, replacement, why, file = 'soccerCareerDerby.ts') {
   const n = src.split(anchor).length - 1;
-  if (n !== 1) { console.error(`${why}: the anchor appears ${n} times in soccerCareerDerby.ts, refusing to run a dead edit`); process.exit(2); }
+  if (n !== 1) { console.error(`${why}: the anchor appears ${n} times in ${file}, refusing to run a dead edit`); process.exit(2); }
   return src.replace(anchor, replacement);
 }
+/* The engine and the rivalry table can be edited for a control too, served
+   to the MAIN bundle only in place of the file, the same way. */
+const ENGINE_FILE = path.join(ROOT, 'src/lib/soccerCareerEngine.ts');
+const DATA_FILE = path.join(ROOT, 'src/data/clubRivalries.ts');
+const mainOverrides = {};
+const overrideFile = (file, anchor, replacement) => {
+  const src = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+  mainOverrides[path.resolve(file).toLowerCase()] = edit(src, anchor, replacement, CONTROL, path.basename(file));
+};
 const APPLY_HEAD = 'export function applySeasonDerbies(s: CareerState, season: SeasonRecord): void {';
 const NO_SWING = src => edit(src, APPLY_HEAD, APPLY_HEAD + ' return;', 'swing off');
 const NO_DETECT = src => edit(src, 'return detected;', 'return detected.slice(0, 0);', 'detection off');
@@ -103,6 +126,11 @@ if (CONTROL === 'uncapped') {
   mainDerby = edit(mainDerby, 'pop = clampN(pop, DERBY_POP_MIN, DERBY_POP_MAX);', 'pop = clampN(pop, DERBY_POP_MIN, 1000);', CONTROL);
   mainDerby = edit(mainDerby, 'export const DERBY_WIN_POP = 2;', 'export const DERBY_WIN_POP = 10;', CONTROL);
 }
+if (CONTROL === 'homealt') mainDerby = edit(mainDerby, 'const home = (i % 2 === 0) === homeFirst;', 'const home = homeFirst;', CONTROL);
+if (CONTROL === 'cadhold') mainDerby = edit(mainDerby, '"Liga MX": [{ from: 1996, to: 2018, meetings: 2 }, { from: 2020, meetings: 2 }],', '"Liga MX": [{ from: 1996, meetings: 2 }],', CONTROL);
+if (CONTROL === 'winner') mainDerby = edit(mainDerby, 'if (gf > ga && k === ga + 1) won = true;', 'if (gf > ga && k <= ga + 1) won = true;', CONTROL);
+if (CONTROL === 'aliasdrop') overrideFile(DATA_FILE, "  'Athletic Bilbao': 'Athletic Club',\n", '');
+if (CONTROL === 'eliteoff') overrideFile(ENGINE_FILE, 'elite: ELITE_CLUBS,', 'elite: [],');
 let bDerby = NO_SWING(DERBY_SRC);
 if (CONTROL === 'stream') bDerby = edit(bDerby, 'const world = adjustClubsForYear(input.clubs, input.year);', 'Math.random(); const world = adjustClubsForYear(input.clubs, input.year);', CONTROL);
 const aDerby = NO_DETECT(NO_SWING(DERBY_SRC));
@@ -111,7 +139,7 @@ if (CONTROL) console.log(`NEGATIVE CONTROL ON: ${CONTROL}, sections ${CONTROLS[C
 /* Three bundles. MAIN is the round as it ships (or with the control's edit);
    B resolves derbies with the swing off; A has no derbies at all. The edit is
    served to esbuild in place of the file, so nothing on disk changes. */
-async function bundle(name, derbySrc, withUi) {
+async function bundle(name, derbySrc, withUi, overrides = {}) {
   const ENTRY = path.join(WORK, `${name}.entry.mjs`);
   const OUT = path.join(WORK, `${name}.bundle.mjs`);
   fs.writeFileSync(ENTRY, `
@@ -138,13 +166,17 @@ export const render = (Component, props) => renderToStaticMarkup(React.createEle
     define: { 'process.env.NODE_ENV': '"production"' },
     banner: { js: "import { createRequire as __cr } from 'node:module'; const require = __cr(import.meta.url);" },
     plugins: [{ name: 'derby-variant', setup(b) {
-      b.onLoad({ filter: /soccerCareerDerby\.ts$/ }, args => (path.resolve(args.path).toLowerCase() === key ? { contents: derbySrc, loader: 'ts' } : undefined));
+      b.onLoad({ filter: /(soccerCareerDerby|soccerCareerEngine|clubRivalries)\.ts$/ }, args => {
+        const k = path.resolve(args.path).toLowerCase();
+        if (k === key) return { contents: derbySrc, loader: 'ts' };
+        return overrides[k] !== undefined ? { contents: overrides[k], loader: 'ts' } : undefined;
+      });
     } }],
   });
   return import(pathToFileURL(OUT).href);
 }
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const MAIN = await bundle('main', mainDerby, true);
+const MAIN = await bundle('main', mainDerby, true, mainOverrides);
 const A = await bundle('a', aDerby, false);
 const B = await bundle('b', bDerby, false);
 try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
@@ -205,7 +237,10 @@ function step(e, s) {
     default: { const n = e.advanceProSeason(s, clubs); return n.phase === s.phase ? { ...n, retired: true } : n; }
   }
 }
-function runCareer(e, seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64, nation = 'England', until = null } = {}) {
+/* trace, when given, collects the popularity at the end of every playing
+   season's step, so 6e can read popularity mid career and not only at the
+   end, where it sits near its ceiling. */
+function runCareer(e, seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64, nation = 'England', until = null, trace = null } = {}) {
   const realRandom = Math.random;
   Math.random = seeded(seed * 7919 + 13);
   try {
@@ -213,9 +248,11 @@ function runCareer(e, seed, { era = '2020-24', startYear = 2020, proSeasons = 10
     let s = e.initCareer(`Sim ${seed}`, nation, position, era, stats(ovr), ovr, startYear, clubs, null, 82);
     let guard = 0;
     const played = () => (s.seasons || []).filter(r => r.type === 'playing').length;
+    let seen = played();
     while (!s.retired && guard++ < 500 && played() < proSeasons) {
       if (until && until(s)) return s;
       s = step(e, s);
+      if (trace && played() > seen) { seen = played(); trace.push(s.popularity); }
     }
     return s;
   } finally {
@@ -246,10 +283,21 @@ const DASH = /[\u2013\u2014]/;
      to 0.067, defenders 0.020 to 0.034, keepers 0 of 435 to 535. Smallest
      gaps seen 0.021 (attack over midfield) and 0.030 (midfield over defence);
      required 0.01 and 0.013. Without the extra seasons the first gap was
-     once 0.015, a coin toss, which is why they are there. */
+     once 0.015, a coin toss, which is why they are there.
+   Added after the review, measured 2026-10-05 over offsets 0 to 3:
+   - 6d hero calibration, winners over the expected g / gf sum: 0.963, 1.005,
+     1.024 and 1.079 over 450 to 496 won meetings he scored in (binomial
+     noise about 0.04). Band 0.85 to 1.2, floor 300 meetings. The winner
+     control (any goal up to the decider) reads 1.402 at offset 0.
+   - 6e popularity at the end of every season, swing on minus off: 1.477,
+     2.938, 0.290 and 0.956 over about 1300 seasons each way. Band 6, about
+     twice the largest. The uncapped control reads 13.256 at offset 0.
+   - section 4 replay: 2830 to 2870 seasons a run, 0 differ; home and away:
+     about 5000 two meeting rivalries a run, 0 at one ground. Both exact. */
 const BANDS = {
   rungMin: 400, rungStep: 0.03, drawLo: 0.24, drawHi: 0.30,
   heroAttMid: 0.01, heroMidDef: 0.013,
+  heroRatioLo: 0.85, heroRatioHi: 1.2, heroMinMeetings: 300, popSeasonDiff: 6,
   popDiff: 2, moraleDiff: 7, sponsorDiff: 0.15, worthDiff: 4, hofDiff: 0.08,
   digestDerbySeasons: 70, // 140 derby seasons over the 16 fixed digest careers (deterministic, offset free)
 };
@@ -375,7 +423,13 @@ const FORCED_CASES = [
   ['Corinthians', 2003, ['Palmeiras', 'Sao Paulo', 'Santos'], 'the first double round robin Brasileirao'],
   ['Newcastle', 2020, [], 'Sunderland is not a Soccer Career club, the pair is dormant'],
   ['Celta Vigo', 2020, [], 'Deportivo is not a Soccer Career club, the pair is dormant'],
+  ['PSG', 2018, ['Marseille'], 'the last full Ligue 1 season before the held one'],
   ['PSG', 2019, [], 'Ligue 1 2019/20 was abandoned, held'],
+  ['PSG', 2020, ['Marseille'], 'Ligue 1 after the held season'],
+  ['Club America', 1995, [], 'Liga MX before the short tournaments claims nothing'],
+  ['Club America', 1996, ['Chivas', 'Cruz Azul', 'Pumas'], 'Invierno 1996, the first short tournament'],
+  ['Club America', 2018, ['Chivas', 'Cruz Azul', 'Pumas'], 'the last Liga MX season before the held one'],
+  ['Club America', 2019, [], 'the Clausura 2020 was cancelled, held'],
   ['Club America', 2020, ['Chivas', 'Cruz Azul', 'Pumas'], 'the Liga MX clasicos, through the alias map'],
   ['Boca Juniors', 2020, [], 'Argentina has no verified cadence'],
   ['Brighton', 1990, ['Crystal Palace'], 'a First Division season the game labels Premier League'],
@@ -429,16 +483,68 @@ console.log('3) the right derbies, the verified number of meetings, and nothing 
     }
   }
   if (outside) fail(`${outside} meetings name a club outside the league or not yet founded`);
+
+  /* Every pair's status in 2020, pinned. Name drift is silent (an alias entry
+     lost, a club renamed) and turns a shipped derby dormant with every other
+     check still green, so the dormant pairs are listed here by name and the
+     active count is fixed. A pair that changes status fails until it is moved
+     on purpose: Round 1013 adds clubs and must move the pairs it wakes. */
+  const REF_YEAR = 2020;
+  const ACTIVE_2020 = 40;
+  /* Recorded 2026-10-05 from the round's tree. Dormant means the other club
+     is not a Soccer Career club, or plays in another league in the game, or
+     the league has no verified cadence (Argentina). */
+  const DORMANT_2020 = [
+    'Barcelona and Espanyol', 'Boca Juniors and River Plate', 'Borussia Dortmund and Schalke 04', 'Botafogo and Fluminense',
+    'Celta Vigo and Deportivo La Coruña', 'Cruzeiro and Atlético Mineiro', 'Flamengo and Fluminense', 'Flamengo and Vasco da Gama',
+    'Fluminense and Vasco da Gama', 'Grêmio and Internacional', 'Guadalajara and Atlas', 'Hertha BSC and Union Berlin',
+    'Köln and Gladbach', 'Lille and Lens', 'Manchester United and Leeds United', 'Nantes and Rennes',
+    'Newcastle and Sunderland', 'Norwich City and Ipswich Town', 'Roma and Lazio', 'Stuttgart and Karlsruhe',
+    'Valencia and Levante', 'Werder Bremen and Hamburg', 'West Ham and Millwall', 'Wolves and West Brom',
+  ];
+  const world2020 = eras.adjustClubsForYear(clubs, REF_YEAR);
+  const status = { active: [], dormant: [] };
+  for (const r of data.CLUB_RIVALRIES) {
+    const mine = world2020.filter(c => derby.canonClub(c.name) === r.a);
+    const on = mine.some(c => derby.seasonDerbies({ club: c.name, league: c.league, year: REF_YEAR, clubs }).some(d => derby.canonClub(d.rival) === r.b));
+    status[on ? 'active' : 'dormant'].push(`${r.a} and ${r.b}`);
+  }
+  const wantDormant = [...DORMANT_2020].sort();
+  const gotDormant = [...status.dormant].sort();
+  console.log(`   ${REF_YEAR}: ${status.active.length} pairs active, ${status.dormant.length} dormant (pinned ${ACTIVE_2020} and ${wantDormant.length})`);
+  if (status.active.length !== ACTIVE_2020) fail(`${status.active.length} pairs active in ${REF_YEAR}, pinned at ${ACTIVE_2020}`);
+  if (gotDormant.join('|') !== wantDormant.join('|')) {
+    const woke = wantDormant.filter(k => !gotDormant.includes(k));
+    const slept = gotDormant.filter(k => !wantDormant.includes(k));
+    fail(`pair status moved in ${REF_YEAR}: newly active ${JSON.stringify(woke)}, newly dormant ${JSON.stringify(slept)}`);
+    if (process.env.SIM_DERBY_PRINT_STATUS) console.log(JSON.stringify(gotDormant, null, 1));
+  }
 }
 
 section = 4;
 console.log('4) derby goals are a subset, keepers never score one, Derby Hero is derived and never stored');
 {
   let seasonsChecked = 0, overGoals = 0, overApps = 0, gkGoals = 0, badWon = 0, heroMismatch = 0, stored = 0, playedFalseGoals = 0;
+  let pairsOfTwo = 0, sameGround = 0, replayed = 0, replayOff = 0;
+  /* The replay: the engine's season inputs are all on the row (the seed key
+     is built from them), so the derbies the engine stored must be exactly
+     what the module draws from those inputs with the engine's own elite list.
+     That ties every input the engine passes (elite, title, apps, goals) to
+     what shipped, not just the module to itself. */
+  if (!Array.isArray(engine.ELITE_CLUBS) || engine.ELITE_CLUBS.length < 3) fail('the engine does not export its elite list, the replay would read nothing');
   for (const { r, position, state } of [...poolRows, ...forcedRows]) {
     const ds = derby.readSeasonDerbies(r);
     if (!ds.length) continue;
     seasonsChecked += 1;
+    /* A double round robin is one home and one away against each rival. */
+    for (const d of ds) if (d.meetings.length === 2) { pairsOfTwo += 1; if (d.meetings.filter(m => m.home).length !== 1) sameGround += 1; }
+    const again = derby.resolveSeasonDerbies({
+      club: r.club, league: leagueOf(r.club), year: r.year, clubs, elite: engine.ELITE_CLUBS || [], position,
+      apps: r.apps, leagueApps: r.leagueApps, goals: r.goals, leagueTitle: r.leagueTitle,
+      seedKey: `${state.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|derby`,
+    });
+    replayed += 1;
+    if (JSON.stringify(again) !== JSON.stringify(r.derbies)) replayOff += 1;
     const ms = ds.flatMap(d => d.meetings);
     const goals = ms.reduce((n, m) => n + m.goals, 0);
     if (goals > r.goals) overGoals += 1;
@@ -454,6 +560,10 @@ console.log('4) derby goals are a subset, keepers never score one, Derby Hero is
   console.log(`   ${seasonsChecked} derby seasons: ${overGoals} over the season's goals, ${overApps} over its league apps, ${gkGoals} keeper goals, ${badWon} bad winner flags, ${playedFalseGoals} goals in a missed game, ${heroMismatch} hero mismatches, ${stored} careers storing a Derby Hero award`);
   if (seasonsChecked < 100) fail(`only ${seasonsChecked} derby seasons to check`);
   if (overGoals + overApps + gkGoals + badWon + heroMismatch + stored + playedFalseGoals) fail('a record rule is broken');
+  console.log(`   ${pairsOfTwo} two meeting rivalries, ${sameGround} played both at one ground; ${replayed} seasons replayed from their own inputs, ${replayOff} differ from what the engine stored`);
+  if (pairsOfTwo < 100) fail(`only ${pairsOfTwo} two meeting rivalries to check home and away on`);
+  if (sameGround) fail(`${sameGround} rivalries met twice at the same ground, a double round robin is one home and one away`);
+  if (replayOff) fail(`${replayOff} seasons store derbies the module would not draw from their own inputs and the engine's elite list`);
   const input = { club: 'Arsenal', league: 'Premier League', year: 2021, clubs, elite: [], position: 'ST', apps: 40, leagueApps: 33, goals: 18, leagueTitle: true, seedKey: 'determinism' };
   if (JSON.stringify(derby.resolveSeasonDerbies(input)) !== JSON.stringify(derby.resolveSeasonDerbies({ ...input }))) fail('the same season resolved twice gave two answers');
 }
@@ -512,7 +622,8 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
      tiers and the era aware elite rule, then the win share per whole gap. */
   const ladderRows = [];
   for (const club of ['Chelsea', 'Crystal Palace', 'Brighton', 'Fulham', 'Juventus', 'Santos']) ladderRows.push(...forcedSeasons(engine, club, 2020 + OFFSET));
-  const ELITE = ['Bayern Munich', 'PSG', 'Man City', 'Real Madrid', 'Barcelona', 'Liverpool'];
+  /* The engine's own list (exported for this), never a copy that can drift. */
+  const ELITE = engine.ELITE_CLUBS || [];
   const str = (name, year) => {
     const c = eras.adjustClubsForYear(clubs, year).find(x => x.name === name);
     return 5 - (c ? c.tier : 4) + (league.eliteInYear(ELITE, name, year) ? 0.5 : 0);
@@ -564,6 +675,25 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
   if (!(rate('att') - rate('mid') >= BANDS.heroAttMid)) fail(`6d: attackers ${rate('att').toFixed(3)} not ahead of midfield ${rate('mid').toFixed(3)} by ${BANDS.heroAttMid}`);
   if (!(rate('mid') - rate('def') >= BANDS.heroMidDef && rate('def') > 0)) fail(`6d: midfield ${rate('mid').toFixed(3)} not ahead of defenders ${rate('def').toFixed(3)} by ${BANDS.heroMidDef}, or defenders never heroes`);
   if (!grp.gk || grp.gk.n < 20 || grp.gk.h !== 0) fail(`6d: keepers ${grp.gk?.h ?? '?'} hero seasons out of ${grp.gk?.n ?? 0}, must be 0 out of at least 20`);
+  /* 6d level: the ordering above says nothing about how often. The winning
+     goal is goal number ga + 1 of gf, and each of the team's goals is his
+     with the same chance, so in a won meeting where he scored g of gf the
+     chance it was the winner is g / gf. Heroes over that sum is about 1 when
+     the rule is the one the copy promises ("your goal won it"); counting any
+     goal up to the decider pushes it well above. Measured in BANDS. */
+  let heroMeetings = 0, heroExpected = 0, wonScored = 0;
+  for (const { r } of [...poolRows, ...forcedRows, ...ladderRows, ...heroRows]) {
+    for (const d of derby.readSeasonDerbies(r)) for (const m of d.meetings) {
+      if (!(m.played && m.gf > m.ga && m.goals > 0)) continue;
+      wonScored += 1;
+      heroExpected += m.goals / m.gf;
+      if (m.won) heroMeetings += 1;
+    }
+  }
+  const heroRatio = heroMeetings / Math.max(1e-9, heroExpected);
+  console.log(`   6d: ${heroMeetings} winners in ${wonScored} won meetings he scored in, ${heroExpected.toFixed(1)} expected, ratio ${heroRatio.toFixed(3)} (band ${BANDS.heroRatioLo} to ${BANDS.heroRatioHi})`);
+  if (wonScored < BANDS.heroMinMeetings) fail(`6d: only ${wonScored} won meetings he scored in`);
+  if (!(heroRatio >= BANDS.heroRatioLo && heroRatio <= BANDS.heroRatioHi)) fail(`6d: hero ratio ${heroRatio.toFixed(3)} outside ${BANDS.heroRatioLo} to ${BANDS.heroRatioHi}, the winning goal rule moved`);
 
   /* 6e: the same pool with the swing off (bundle B). The swing feeds
      popularity (sponsorship, event and dilemma gates) and morale (the life
@@ -573,8 +703,16 @@ console.log('6) the swing is bounded, results follow strength, heroes follow pos
      and the slow ones (a divorce) actually happen in both runs. */
   const LONG = [];
   for (const nation of NATIONS) for (let i = 0; i < Number(process.env.SIM_DERBY_LONG || 10); i++) LONG.push({ seed: 41000 + NATIONS.indexOf(nation) * 100 + i + OFFSET * 1000003, nation });
-  const on = LONG.map(c => runCareer(engine, c.seed, { nation: c.nation, proSeasons: 19, ovr: 72 }));
-  const off = LONG.map(c => runCareer(B.engine, c.seed, { nation: c.nation, proSeasons: 19, ovr: 72 }));
+  const traceOn = [], traceOff = [];
+  const on = LONG.map(c => runCareer(engine, c.seed, { nation: c.nation, proSeasons: 19, ovr: 72, trace: traceOn }));
+  const off = LONG.map(c => runCareer(B.engine, c.seed, { nation: c.nation, proSeasons: 19, ovr: 72, trace: traceOff }));
+  /* Final popularity sits near its ceiling of 100 (about 96), so it can hardly
+     move; the mean over every season's end is the stronger reading. */
+  const seasonMean = xs => xs.reduce((n, v) => n + v, 0) / Math.max(1, xs.length);
+  const popSeasons = seasonMean(traceOn) - seasonMean(traceOff);
+  console.log(`   6e: popularity at every season's end, on ${seasonMean(traceOn).toFixed(3)} (${traceOn.length}) off ${seasonMean(traceOff).toFixed(3)} (${traceOff.length}) difference ${popSeasons.toFixed(3)} (band ${BANDS.popSeasonDiff})`);
+  if (traceOn.length < 100 || traceOff.length < 100) fail('6e: too few seasons traced');
+  if (!(Math.abs(popSeasons) <= BANDS.popSeasonDiff)) fail(`6e: popularity over the seasons moved by ${popSeasons.toFixed(3)}, over the band ${BANDS.popSeasonDiff}`);
   const divorced = xs => xs.filter(x => x.family && x.family.isDivorced).length;
   console.log(`   6e: ${LONG.length} long careers each way, ${divorced(on)} and ${divorced(off)} divorced, ${on.filter(x => /Hall of Fame/.test(JSON.stringify([x.events, x.story]))).length} and ${off.filter(x => /Hall of Fame/.test(JSON.stringify([x.events, x.story]))).length} with a Hall of Fame line`);
   const mean = (xs, f) => xs.reduce((n, x) => n + f(x), 0) / xs.length;

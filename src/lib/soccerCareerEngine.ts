@@ -3362,7 +3362,9 @@ function resolveInvestments(s: CareerState): void {
 }
 
 
-const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
+/* Exported (Round 1012) only so simCareerDerbies can replay a season's
+   derbies with the list the engine really passes in. */
+export const ELITE_CLUBS = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 
 /* ─── Fallback club roster ───
    Used when the soccer_career_clubs table is unreachable or empty, so the game
@@ -3887,10 +3889,13 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   /* Round 1012: the season's derbies against real rivals in the same league,
      drawn from a generator keyed off this season and each rival, so the main
      Math.random stream does not move. The key is spread only when there is a
-     derby, so every other season serialises exactly as before. */
+     derby, so every other season serialises exactly as before. A severe
+     injury season goes on the record without its title (playPendingProSeason
+     drops it, the table was never finished for him), so its derbies are drawn
+     without the title nudge too and the row never contradicts itself. */
   const derbies = resolveSeasonDerbies({
     club: state.currentClub, league: state.currentLeague, year: seasonYear, clubs, elite: ELITE_CLUBS,
-    position, apps, leagueApps, goals, leagueTitle: winLeague,
+    position, apps, leagueApps, goals, leagueTitle: winLeague && !(injured && injurySevere),
     seedKey: `${state.playerName}|${state.currentClub}|${seasonYear}|${apps}|${goals}|${assists}|${rating}|derby`,
   });
 
