@@ -81,6 +81,10 @@ export interface GmTradeRules {
       the game's limit (a club can still pay a player down in other ways in
       real life), and the refusal is worded that way. */
   retention: GmRetentionRules | null;
+  /** Round 1019, optional: where the league itself has no kept salary (the
+      contract moves whole), the refusal says so in its words instead of
+      calling it this game's limit. See nfl-trade-dead-money in gmContractRules. */
+  retentionBarred?: string;
 }
 
 /* NFL and NBA: prospects false and retention null are the game's limits,
@@ -89,7 +93,14 @@ export interface GmTradeRules {
    either league bars the trade, so the refusals say "this game". */
 const PLAIN: Omit<GmTradeRules, 'sport'> = { maxAssetsPerSide: 5, prospects: false, retention: null };
 
-export const NFL_TRADE_RULES: GmTradeRules = { sport: 'nfl', ...PLAIN };
+/* Round 1019: in the NFL the contract moves whole and the old club keeps the
+   bonus it has not yet counted, as dead money (nfl-trade-dead-money in
+   gmContractRules.ts, its sources there). So the NFL's refusal is the
+   league's shape, not this game's gap. */
+export const NFL_TRADE_RULES: GmTradeRules = {
+  sport: 'nfl', ...PLAIN,
+  retentionBarred: 'In the NFL the contract moves whole: the old club cannot keep paying part of his salary. What it keeps is dead money.',
+};
 export const NBA_TRADE_RULES: GmTradeRules = { sport: 'nba', ...PLAIN };
 
 /* NHL retained salary: a club can keep paying up to half of a traded
@@ -222,7 +233,7 @@ function retentionRefusal(side: TradeAsset[], club: string, ctx: PackageContext)
   let fresh = 0;
   for (const a of side) {
     if (a.kind !== 'player' || !a.retain) continue;
-    if (!rule) return 'Retained salary is not part of this game for this sport yet.';
+    if (!rule) return ctx.tradeRules.retentionBarred ?? 'Retained salary is not part of this game for this sport yet.';
     if (a.retain < 0 || a.retain > rule.maxShare) {
       return `A club can keep paying at most ${Math.round(rule.maxShare * 100)} percent of a salary.`;
     }

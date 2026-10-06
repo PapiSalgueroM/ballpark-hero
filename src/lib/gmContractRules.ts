@@ -181,6 +181,19 @@ export const CONTRACT_RULES: ContractRule[] = [
     ],
   },
   {
+    /* Round 1019, read 2026-10-05. */
+    id: 'nfl-trade-dead-money',
+    sport: 'nfl',
+    name: 'A traded contract moves whole, the bonus stays behind',
+    plain: "When a player is traded his contract goes with him and his new club pays his salary from then on. His old club keeps the part of his signing bonus it has not yet counted against its cap, all of it at once, as dead money. Nothing lets the old club keep paying part of his salary the way an NHL club can.",
+    inGame: "Deals here carry one figure and no separate bonus, so the new club takes his whole salary and the old club keeps a share of it as dead money this season: the game's own share, 15 percent for every season he had left, never more than a cut would leave. A tagged man or one on his option year is on a guaranteed one year deal with no bonus, so he moves with nothing left behind. The trade desk refuses kept salary for the NFL. The sources describe the bonus staying behind; that there is no NFL version of retained salary is this game's reading of them, since the only way they show a club eating money is turning salary into bonus before the deal.",
+    sources: [
+      { url: 'https://www.cbssports.com/nfl/news/agents-take-antonio-brown-ryan-tannehill-top-the-12-biggest-dead-money-charges-in-2019', says: 'The original club keeps the remaining bonus proration as dead money and the acquiring club takes the contract from there (Beckham: the Giants kept 16M); Miami turned 5M of Tannehill\'s salary into bonus before trading him, which cut Tennessee\'s cap hit.' },
+      { url: 'https://www.espn.com/nfl/story/_/id/39665413/what-dead-money-largest-nfl-salary-cap-hits-ever-player-team', says: 'Dead money is any remaining signing bonus proration not yet counted when a player is released or traded; Seattle took a 26M dead money charge when it traded Russell Wilson to Denver.' },
+      { url: 'https://www.cbssports.com/nfl/news/nfl-june-1-salary-cap-myles-garrett-trade-aj-brown/', says: 'The trading club carries the dead cap: Cleveland takes a charge in 2026 and 2027 for trading Myles Garrett after June 1.' },
+    ],
+  },
+  {
     id: 'nba-bird-rights',
     sport: 'nba',
     name: 'Bird rights',

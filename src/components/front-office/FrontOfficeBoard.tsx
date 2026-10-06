@@ -56,6 +56,19 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
+/* Round 1019: the GM desk (staff, the re-sign desk, the pick ledger, packages
+   and the deadline), the shape Round 987 gave the NHL. One optional `gm`
+   field on the save; absent, the board plays exactly as before. */
+import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
+import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
+import { gmStaffLevel } from '@/lib/gmStaff';
+import {
+  nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
+  nflMirrorPickMove, nflNoteArrivals, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
+  nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
+} from '@/lib/nflGmDesk';
+/* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
+import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -95,6 +108,10 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 1019: the GM desk (src/lib/gmDesk.ts). Absent on every save written
+     before it, and on those the board plays exactly as it did until the GM
+     opens a desk box. Each block inside is validated alone. */
+  gm?: unknown;
 }
 
 export default function FrontOfficeBoard() {
@@ -167,6 +184,13 @@ export default function FrontOfficeBoard() {
   const [presser, setPresser] = useState<GmPresser | null>(null);
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
+  /* Round 1019: the GM desk. null is a save the desk has never been opened on. */
+  const [gm, setGmState] = useState<GmDesk | null>(null);
+  /* Every save reads the desk from here, so a handler that has just changed
+     it saves the new one without touching any of the board's persist calls. */
+  const gmLive = useRef<GmDesk | null>(null);
+  const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
+  const [gmOpen, setGmOpen] = useState<string | null>(null);
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
@@ -208,6 +232,8 @@ export default function FrontOfficeBoard() {
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
       setSeasonTradeLine(s.seasonTradeLine ?? null);
+      /* Round 1019: no `gm` on the save means the desk stays off until it is opened. */
+      setGm(s.gm === undefined ? null : readGmDesk(s.gm));
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          week and no postseason, this effect mapped it back to 'hub', the
@@ -235,6 +261,7 @@ export default function FrontOfficeBoard() {
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
+        ...(gmLive.current ? { gm: gmLive.current } : {}),
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
@@ -293,6 +320,9 @@ export default function FrontOfficeBoard() {
     }));
     setPressTilt(0);
     setSeasonTradeLine(null);
+    /* Round 1019: a new front office opens with the desk on. Only a save from
+       before it waits for the GM to open a desk box. */
+    setGm(openNflDesk(lg, abbr)); setGmOpen(null);
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
   };
 
@@ -339,6 +369,19 @@ export default function FrontOfficeBoard() {
   };
 
   const my = league?.teams[myTeam];
+  /* Round 1019: with the desk on, the grade the draft board shows is your
+     scouting director's read (his level sets the miss); the CPU clubs keep
+     the engine's own. */
+  const scoutLevel = gm && league ? gmStaffLevel(nflStaffOf(gm, league, myTeam).block, 'scouting') : null;
+  const gradeOf = (pr: Prospect): number => scoutLevel !== null && league
+    ? nflScoutRead(pr, myTeam, league.season, scoutLevel)
+    : pr.grade;
+  /* A rival's pick on the draft night card, read by your scout. The engine
+     hands back the name, so the prospect is found by it in the class. */
+  const scoutRival = (cls: Prospect[]) => (r: { team: string; playerName: string; pos: string; grade: number }) => {
+    const pr = cls.find(p => p.name === r.playerName);
+    return pr ? { ...r, grade: gradeOf(pr) } : r;
+  };
 
   const playWeek = () => {
     if (!league || !my) return;
@@ -356,10 +399,25 @@ export default function FrontOfficeBoard() {
        is to do nothing rather than play an 18th week. */
     if (league.champions.some(c => c.season === league.season)) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
-    const injuries = injuryPass(lg.teams, Math.random);
+    /* Round 1019: with the desk on, the staff's edge and the trainer ride on
+       the week; with it off the week is called exactly as before. */
+    const deskWeek = gm ? nflDeskWeekOptions(gm, lg, myTeam) : null;
+    const injuries = deskWeek ? injuryPass(lg.teams, Math.random, deskWeek.weeksFor) : injuryPass(lg.teams, Math.random);
     const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);
-    const games = lg.schedule[lg.week - 1].map(g => simGame(g, lg.teams, Math.random));
-    const feed: string[] = [];
+    const games = lg.schedule[lg.week - 1].map(g => (deskWeek ? simGame(g, lg.teams, Math.random, deskWeek.edges) : simGame(g, lg.teams, Math.random)));
+    let nextGm = gm;
+    const deskLines: string[] = [];
+    if (gm) {
+      const tick = nflDeskAfterWeek(gm, lg, myTeam);
+      nextGm = tick.desk;
+      if (tick.line) deskLines.push(tick.line);
+      /* The week the deadline shuts says so in the feed. */
+      if (lg.week < REGULAR_WEEKS && nflTradeWindow(lg).open && !nflTradeWindow({ ...lg, week: lg.week + 1 }).open) {
+        deskLines.push('🔒 The trade deadline has passed. Deals open again once the season is over.');
+      }
+    }
+    if (nextGm !== gm) setGm(nextGm);
+    const feed: string[] = [...deskLines];
     for (const inj of injuries.filter(i => i.team === myTeam)) {
       feed.push(`🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
@@ -369,7 +427,7 @@ export default function FrontOfficeBoard() {
     setFeedSlam(null);
 
     if (lg.week >= REGULAR_WEEKS) {
-      const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random);
+      const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined);
       lg.champions.push({ season: lg.season, team: champ });
       setPlayoffRounds(rounds);
       setChampion(champ);
@@ -447,9 +505,13 @@ export default function FrontOfficeBoard() {
     if (!pr) return;
     const mine = lg.teams[myTeam];
     if (draftBatchesLeft === null && mine.picks.length > picksLeft) mine.picks = mine.picks.slice(-picksLeft);
+    /* Round 1019: the round this pick is in, for the re-sign desk (a first
+       rounder's deal carries the fifth year option). */
+    const pickRound = mine.picks[0];
     if (!consumeDraftPick(mine)) return;
     draftAction.current = true;
     let note: string;
+    let deskNow: GmDesk | null = null;
     /* Round 519: the position he was actually SIGNED at, captured where pl is
        still in scope. prospectToPlayer rewrites the legacy 'DEF' placeholder
        into a real DL, LB or DB, and both the news line below and the rival
@@ -462,9 +524,14 @@ export default function FrontOfficeBoard() {
          number nobody could see. prospectToPlayer refuses nobody. */
       const pl = prospectToPlayer(pr, Math.random);
       minePos = pl ? pl.pos : pr.pos;
+      /* Round 1019: with the desk on he signs the rules' four year rookie
+         deal, and the re-sign desk learns he is a draft pick and his round. */
+      if (pl && gm) nflSignDraftee(pl);
       if (pl) lg.teams[myTeam].players.push(pl);
-      note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`;
+      if (pl && gm) deskNow = nflNoteArrivals(gm, lg, myTeam, [pl.id], 'draft', pickRound);
+      note = `📥 Drafted ${pr.name} (${pl ? pl.pos : pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`;
     }
+    if (deskNow) setGm(deskNow);
     let nextClass = draftClass.filter(p => p.id !== id);
     const nextPicks = picksLeft - 1;
     const beforeBatches = draftBatchesLeft ?? Math.min(3, picksLeft);
@@ -478,6 +545,8 @@ export default function FrontOfficeBoard() {
       nextClass = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
+    /* Round 1019: with the desk on, the card shows your scout's read of their picks too. */
+    if (gm) rivalPicks.splice(0, rivalPicks.length, ...rivalPicks.map(scoutRival(draftClass)));
     setDraftClass(nextClass);
     setPicksLeft(nextPicks);
     setDraftBatchesLeft(beforeBatches - batches);
@@ -488,22 +557,29 @@ export default function FrontOfficeBoard() {
        when the player presses Continue under the card. The offseason still
        runs right here, in the same order, drawing the same randomness. */
     setDraftNight(buildDraftNight(
-      { team: myTeam, playerName: pr.name, pos: minePos, grade: pr.grade },
+      { team: myTeam, playerName: pr.name, pos: minePos, grade: gradeOf(pr) },
       rivalPicks,
     ));
     setNewsFeed(f => [note, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      finishDraft(lg, note);
+      finishDraft(lg, note, deskNow ?? gm);
       return;
     }
     setLeague(lg);
     persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batches }, lg, myTeam);
   };
 
-  const finishDraft = (lg: LeagueState, note: string) => {
+  const finishDraft = (lg: LeagueState, note: string, deskNow: GmDesk | null = gm) => {
       /* Round 723: the GM's own tag was decided on this screen; the CPU
-         clubs tag inside the offseason, skipping this club. */
-      const news = runOffseason(lg, Math.random, myTeam);
+         clubs tag inside the offseason, skipping this club.
+         Round 1019: with the desk on, the summer runs through the re-sign
+         desk: nobody of yours leaves on the engine's coin flip, and a man you
+         tagged is held by the tag exactly as before. */
+      const summer = deskNow ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;
+      if (summer && (!summer.ok || !summer.news)) { setNewsFeed(f => [...summer.lines, ...f].slice(0, 6)); return; }
+      if (summer) setGm(summer.desk);
+      const deskSummerLines = summer?.lines ?? [];
+      const news = summer?.news ?? runOffseason(lg, Math.random, myTeam);
       const myTagged = lg.teams[myTeam].players.find(p => p.tagSeason === lg.season);
       /* Round 180: ownership re-reads the roster after the offseason churn
          and sets next season's ask. A defending champ is never asked for
@@ -517,6 +593,7 @@ export default function FrontOfficeBoard() {
       const feed = [
         ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[myTeam].players.length, owed)}`] : []),
         note,
+        ...deskSummerLines,
         `🏛️ The new mandate: ${m.text}`,
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
           : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
@@ -563,6 +640,7 @@ export default function FrontOfficeBoard() {
       remaining = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
+    if (gm) rivalPicks.splice(0, rivalPicks.length, ...rivalPicks.map(scoutRival(draftClass)));
     setDraftClass(remaining);
     setDraftNight(buildDraftNight(null, rivalPicks));
     finishDraft(lg, `📥 You had no picks left. The remaining league draft added ${rivalPicks.length} rival prospects.`);
@@ -643,6 +721,8 @@ export default function FrontOfficeBoard() {
          say what the engine did. */
       const signed = lg.teams[myTeam].players.find(p => p.id === pid);
       if (signed) slamFeed(`✍️ ${signed.name} (${signed.pos}) signs, $${signed.salary}M a year.`);
+      const deskNow = gm ? nflNoteArrivals(gm, lg, myTeam, [pid], 'signing') : null;
+      if (deskNow) setGm(deskNow);
       setLeague(lg);
       persist({}, lg, myTeam);
     }
@@ -666,8 +746,38 @@ export default function FrontOfficeBoard() {
       openPremium: 1.08,
     };
   };
+  /* Round 1019: with the desk on, every trade path asks the deadline first. */
+  const deadlineBlock = (): boolean => {
+    const why = gm && league ? nflDeadlineRefusal(league) : null;
+    if (why) setNewsFeed(f => [`🔒 ${why}`, ...f].slice(0, 6));
+    return !!why;
+  };
+  /* Round 1019: an older trade path with the desk on. The pick it moved (the
+     last on the list) moves in the ledger too, each man leaves his dead money
+     on the club he left (the NFL's rule, gmContractRules), and the man who
+     came in is written down as a trade. Returns the desk and the line for
+     the feed about your own dead money, or null with the desk off. */
+  const deskAfterTrade = (lg: LeagueState, partner: string, sentId: string, arrivedId: string, pickRound: number | null): { desk: GmDesk; line: string | null } | null => {
+    if (!gm) return null;
+    let d = gm;
+    if (pickRound !== null) {
+      const ledger = nflMirrorPickMove(nflPicksOf(d, lg), myTeam, partner, pickRound, lg.season);
+      d = withGmBlock(d, NFL_DESK_KEYS.picks, ledger);
+      syncNflPicks(lg, ledger);
+    }
+    const dead = nflApplyTradeDeadMoney(lg, [{ club: myTeam, playerId: sentId }, { club: partner, playerId: arrivedId }]);
+    const mine = dead.filter(x => x.club === myTeam).reduce((s, x) => s + x.amount, 0);
+    return {
+      desk: nflNoteArrivals(d, lg, myTeam, [arrivedId], 'trade'),
+      line: mine > 0 ? `💸 $${Math.round(mine * 10) / 10}M stays on your cap this season as dead money.` : null,
+    };
+  };
+  const lastPickRound = (lg: LeagueState, moving: boolean): number | null => {
+    const list = lg.teams[myTeam].picks;
+    return moving && list.length ? list[list.length - 1] : null;
+  };
   const openTradeTalks = (theirPid: string) => {
-    if (!tradePartner || !myTradePiece) return;
+    if (!tradePartner || !myTradePiece || deadlineBlock()) return;
     const args = talksArgsFor(tradePartner, myTradePiece, theirPid);
     if (!args) return;
     setTalks({ state: openTalks(args), partner: tradePartner, myPieceId: myTradePiece, wantId: theirPid });
@@ -680,15 +790,20 @@ export default function FrontOfficeBoard() {
   };
   const acceptTalks = () => {
     if (!league || !talks || !talks.state.pkg) return;
+    if (deadlineBlock()) { setTalks(null); return; }
     const pkg = talks.state.pkg;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const pickRound = lastPickRound(lg, pkg.addPick);
     const res = executeTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
     if (res === 'done') {
+      const deskNow = deskAfterTrade(lg, talks.partner, talks.myPieceId, pkg.theirPlayerId, pickRound);
+      if (deskNow?.line) setNewsFeed(f => [deskNow.line!, ...f].slice(0, 6));
       slamFeed(`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${pkg.theirPlayerName} in`;
       setSeasonTradeLine(line);
+      if (deskNow) setGm(deskNow.desk);
       setLeague(lg);
       persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
@@ -699,21 +814,25 @@ export default function FrontOfficeBoard() {
 
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
-    if (!league || !myTradePiece) return;
+    if (!league || !myTradePiece || deadlineBlock()) return;
     /* Round 828: the cheap probe copy, so fifty men a club does not freeze the button */
     const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, proposeTrade, tradeValue, { cloneTeam: tradeProbeCopy });
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
-    if (!league || !myTradePiece) return;
+    if (!league || !myTradePiece || deadlineBlock()) return;
     const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const pickRound = lastPickRound(lg, o.sweeten);
     const res = proposeTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
     if (res === 'accepted') {
+      const deskNow = deskAfterTrade(lg, o.teamId, myTradePiece, o.playerId, pickRound);
+      if (deskNow?.line) setNewsFeed(f => [deskNow.line!, ...f].slice(0, 6));
       slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
       /* Round 192: the room remembers the season's headline deal. */
       const line = `the deal that brought ${o.playerName} in`;
       setSeasonTradeLine(line);
+      if (deskNow) setGm(deskNow.desk);
       setLeague(lg);
       persist({ seasonTradeLine: line }, lg, myTeam);
     } else {
@@ -734,7 +853,35 @@ export default function FrontOfficeBoard() {
     setPresser(null);
     setPressTilt(0);
     setSeasonTradeLine(null);
+    setGm(null); setGmOpen(null);
   };
+
+  /* Round 1019: the desk boxes. The first tap on one, on a save from before
+     the desk, switches it on: the ledgers are opened from the league as it
+     stands (every pick on the old lists kept) and saved with it. */
+  const openDesk = (key: string | null) => {
+    if (key !== null && !gm && league) {
+      const desk = openNflDesk(league, myTeam);
+      const lg: LeagueState = JSON.parse(JSON.stringify(league));
+      syncNflPicks(lg, nflPicksOf(desk, lg));
+      setGm(desk); setLeague(lg);
+      persist({}, lg, myTeam);
+    }
+    setGmOpen(key);
+  };
+  const changeDesk = (next: GmDesk) => {
+    setGm(next);
+    persist({}, league, myTeam);
+  };
+  const deskFacts = (hub: NflDeskFacts['hub']): NflDeskFacts | null => league ? {
+    teamId: myTeam, teamLabel: label(myTeam), seasonsPlayed, phase, hub, league,
+    seasonOver: phase === 'recap', deskOn: gm !== null, clubName: label,
+    say: line => setNewsFeed(f => [line, ...f].slice(0, 6)),
+    commit: (lg, desk, line) => {
+      setGm(desk); setLeague(lg); slamFeed(line);
+      persist({}, lg, myTeam);
+    },
+  } : null;
 
   /* ------------------------------ pick screen ------------------------------ */
   if (phase === 'pick' || !league || !my) {
@@ -783,6 +930,57 @@ export default function FrontOfficeBoard() {
   const room = capRoom(my, league.cap);
   const strength = Math.round(teamStrength(my));
 
+  const myGameThisWeek = league.week <= REGULAR_WEEKS
+    ? league.schedule[league.week - 1].find(g => g.home === myTeam || g.away === myTeam)
+    : undefined;
+  /* Round 204: the facts each box carries. Flattened here, decided in
+     src/lib/foHub.ts so the wording is harnessed rather than eyeballed.
+     The conference table is the one the playoffs are drawn from, and the
+     NFL sends seven of each. Round 1019: built here, above the recap,
+     because the recap mounts the re-sign desk too. */
+  const conf = conferenceOf(myTeam);
+  const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
+  const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
+  /* Round 828: on a full roster the men on the chart's starting lines, hurt or
+     not, are the ones the boxes talk about; the bench is counted, not quoted. */
+  const deep = my.rosterDepth === 2;
+  const chartNow = depthChart(my);
+  const chartStarters = deep ? DEPTH_GROUPS.flatMap(g => chartNow[g].slice(0, STARTER_SLOTS[g])) : null;
+  const hubFacts: NflDeskFacts['hub'] = {
+    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    starters: chartStarters?.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    rosterMax: deep ? DEEP_ROSTER_MAX : undefined,
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. The NFL has no roster ceiling. */
+    ledger: my,
+    wins: my.wins,
+    losses: my.losses,
+    period: league.week,
+    periods: REGULAR_WEEKS,
+    playWord: 'This week',
+    periodWord: 'week',
+    hasFixtures: true,
+    /* The nickname alone, because "at Tennessee Titans" does not fit a box
+       two columns wide on a phone and "at Titans" is what people say. */
+    nextOpponent: myGameThisWeek
+      ? { label: nickname(myGameThisWeek.home === myTeam ? myGameThisWeek.away : myGameThisWeek.home), home: myGameThisWeek.home === myTeam }
+      : null,
+    lastResult: myLast
+      ? {
+        won: myLast.winner === myTeam,
+        us: myLast.home === myTeam ? myLast.homeScore : myLast.awayScore,
+        them: myLast.home === myTeam ? myLast.awayScore : myLast.homeScore,
+        opponent: label(myLast.home === myTeam ? myLast.away : myLast.home),
+      }
+      : null,
+    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
+    cut: 7,
+    tableName: conf,
+    tradeLine: seasonTradeLine,
+    titles,
+  };
+
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
     return (
@@ -809,6 +1007,17 @@ export default function FrontOfficeBoard() {
        Round 180 wrote; stageVerdict only decides confetti and tone, and
        the harness pins that a good grade is not a parade. */
     const staging = stageVerdict({ iAmChampion: champion === myTeam, fired });
+    /* Round 1019: the season is over and the summer runs after the draft, so
+       the re-sign desk is a box here, under the verdict. Open, it takes the
+       screen, with a back button to the recap. */
+    const recapDesk = gm && !fired ? deskFacts(hubFacts) : null;
+    if (gm && recapDesk && gmPanelFor(NFL_RECAP_PANELS, gmOpen)) {
+      return (
+        <div className="space-y-4">
+          <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        </div>
+      );
+    }
     return (
       <div className="space-y-4">
         <div
@@ -879,6 +1088,9 @@ export default function FrontOfficeBoard() {
             </div>
           )}
         </div>
+        {gm && recapDesk && (
+          <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        )}
       </div>
     );
   }
@@ -901,8 +1113,8 @@ export default function FrontOfficeBoard() {
             </p>
           ) : (
             <p className="mt-1 text-xs text-muted-foreground">
-              You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
-              the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
+              You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. {gm ? "Grades are your scouting director's read, and a better one misses by less." : 'Scout grades carry error:'}
+              {gm ? ' A first rounder signs four years with a fifth year option, everyone else four years.' : ' the number on the card is what your scouts THINK.'} Every pick joins your roster as a player, defenders included.
               {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if your picks take you over it, you cut down before Week 1, dead money and all.`}
             </p>
           )}
@@ -971,7 +1183,8 @@ export default function FrontOfficeBoard() {
           </div>
         )}
         {!draftDone && picksLeft > 0 && my.picks.length > 0 && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
-          {draftClass.slice(0, 18).map(pr => (
+          {/* Round 1019: with the desk on, the board is your scout's, in his order. */}
+          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 18).map(pr => (
             <button
               key={pr.id}
               onClick={() => draftProspect(pr.id)}
@@ -981,7 +1194,7 @@ export default function FrontOfficeBoard() {
                 <span className="block text-sm font-bold text-foreground">{pr.name}</span>
                 <span className="block text-[10px] text-muted-foreground">{pr.pos} · age {pr.age}</span>
               </span>
-              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{pr.grade}</span>
+              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{gradeOf(pr)}</span>
             </button>
           ))}
         </div>}
@@ -998,57 +1211,11 @@ export default function FrontOfficeBoard() {
 
   /* -------------------------------- hub -------------------------------- */
   const t = FO_TEAM_MAP.get(myTeam)!;
-  const myGameThisWeek = league.week <= REGULAR_WEEKS
-    ? league.schedule[league.week - 1].find(g => g.home === myTeam || g.away === myTeam)
-    : undefined;
-
-  /* Round 204: the facts each box carries. Flattened here, decided in
-     src/lib/foHub.ts so the wording is harnessed rather than eyeballed.
-     The conference table is the one the playoffs are drawn from, and the
-     NFL sends seven of each. */
-  const conf = conferenceOf(myTeam);
-  const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
-  const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
-  /* Round 828: on a full roster the men on the chart's starting lines, hurt or
-     not, are the ones the boxes talk about; the bench is counted, not quoted. */
-  const deep = my.rosterDepth === 2;
-  const chartNow = depthChart(my);
-  const chartStarters = deep ? DEPTH_GROUPS.flatMap(g => chartNow[g].slice(0, STARTER_SLOTS[g])) : null;
-  const tiles = foHubTiles({
-    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    starters: chartStarters?.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    rosterMax: deep ? DEEP_ROSTER_MAX : undefined,
-    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    capRoom: room,
-    /* Round 631: the box offers only men the sign path would take. The NFL has no roster ceiling. */
-    ledger: my,
-    wins: my.wins,
-    losses: my.losses,
-    period: league.week,
-    periods: REGULAR_WEEKS,
-    playWord: 'This week',
-    periodWord: 'week',
-    hasFixtures: true,
-    /* The nickname alone, because "at Tennessee Titans" does not fit a box
-       two columns wide on a phone and "at Titans" is what people say. */
-    nextOpponent: myGameThisWeek
-      ? { label: nickname(myGameThisWeek.home === myTeam ? myGameThisWeek.away : myGameThisWeek.home), home: myGameThisWeek.home === myTeam }
-      : null,
-    lastResult: myLast
-      ? {
-        won: myLast.winner === myTeam,
-        us: myLast.home === myTeam ? myLast.homeScore : myLast.awayScore,
-        them: myLast.home === myTeam ? myLast.awayScore : myLast.homeScore,
-        opponent: label(myLast.home === myTeam ? myLast.away : myLast.home),
-      }
-      : null,
-    place: confTable.findIndex(x => x.abbr === myTeam) + 1,
-    cut: 7,
-    tableName: conf,
-    tradeLine: seasonTradeLine,
-    titles,
-  });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setTab(key === 'play' ? 'week' : key); };
+  const tiles = foHubTiles(hubFacts);
+  /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
+  const hubDesk = deskFacts(hubFacts);
+  const deskPanelOpen = gmPanelFor(NFL_DESK_PANELS, gmOpen) !== null;
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setGmOpen(null); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
   const chart = chartNow;
   const starters = starterIds(my);
@@ -1225,8 +1392,12 @@ export default function FrontOfficeBoard() {
       {/* Round 204: boxes, not pills. Each one already tells you the thing
           you used to have to tap to find out. */}
       {tab === null
-        ? <FoHubTiles tiles={tiles} onOpen={openPanel} />
+        ? !deskPanelOpen && <FoHubTiles tiles={tiles} onOpen={openPanel} />
         : <FoPanelHeader title={panelTitle} onBack={() => setTab(null)} />}
+      {tab === null && hubDesk && (
+        <GmDeskMount sport="nfl" desk={gm ?? readGmDesk(undefined)} facts={hubDesk} panels={NFL_DESK_PANELS}
+          open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+      )}
 
       {newsFeed.length > 0 && (
         <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -1480,6 +1651,14 @@ export default function FrontOfficeBoard() {
 
       {tab === 'trade' && (
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
+          {/* Round 1019: with the desk on, the deadline shuts this screen too, and a deal leaves dead money behind. */}
+          {gm && nflDeadlineRefusal(league) && <p data-nfl-deadline className="rounded-lg border border-destructive/40 bg-destructive/5 p-2 text-center text-xs font-semibold">🔒 {nflDeadlineRefusal(league)}</p>}
+          {gm && !nflDeadlineRefusal(league) && <p data-nfl-deadline className="text-center text-[11px] text-muted-foreground">Trade deadline: the break after Week {nflTradeWindow(league).deadlineAfter} is the last chance, and deals shut once Week {nflTradeWindow(league).deadlineAfter + 1} is played. Packages with picks are on the Trade desk box.</p>}
+          {gm && myTradePiece && (() => {
+            const p = my.players.find(x => x.id === myTradePiece);
+            const dead = p ? nflTradeDeadMoney(p) : 0;
+            return p ? <p data-nfl-trade-dead className="text-center text-[11px] text-muted-foreground">Trading {p.name} leaves {dead > 0 ? `$${dead}M of dead money on your cap this season` : 'no dead money behind: his deal is a guaranteed one year'}.</p> : null;
+          })()}
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
