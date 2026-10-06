@@ -86,13 +86,15 @@ function seeded(seed: number) {
 const tick = (ms = 5) => act(async () => { await new Promise(r => setTimeout(r, ms)); });
 const mount = (el: JSX.Element) => render(<HelmetProvider><MemoryRouter>{el}</MemoryRouter></HelmetProvider>);
 
-/** A retired pro in the dugout at `club`, one season played. */
-function dugout(club: string, tier: number, league?: string): CareerState {
+/** A retired pro in the dugout at `club`, one season played. A career of the
+ *  current era, so the dugout plays seasons after the list's own (2026-27);
+ *  `startYear` 1990 puts the dugout in the past. */
+function dugout(club: string, tier: number, league?: string, startYear = 2025): CareerState {
   const real = Math.random;
   Math.random = seeded(1029);
   try {
     const st = { pace: 80, shooting: 80, passing: 80, dribbling: 80, defending: 80, physical: 80, reflexes: 80 };
-    let s = E.initCareer('Gaffer', 'England', 'ST', '2020s', st, 80, 2020, clubs, null, 88);
+    let s = E.initCareer('Gaffer', 'England', 'ST', startYear === 1990 ? '1990-94' : '2025', st, 80, startYear, clubs, null, 88);
     while (s.phase === 'youth') s = E.advanceYouthYear(s, clubs);
     s = E.acceptOffer(s, { club: clubs.find(c => c.tier === 2) ?? clubs[0], contractYears: 3, wage: 90000, transferFee: 0 });
     s = E.choosePostRetirement({ ...s, retired: true, phase: 'post_retirement' }, 'manager', clubs);
@@ -181,5 +183,20 @@ describe('Soccer Career: the dugout table is his own league (Round 1029)', () =>
     const t = await finalTable({ ...s, managerState: { ...ms, league: undefined, seasonResults: [old] } });
     expect(t.label).toBe('Final table');
     expect(t.rows).toEqual(['Boca Juniors', 'Arsenal', 'Ajax', 'Flamengo', 'Bayern Munich']);
+  });
+
+  it('a season before the list\'s own names nobody and says why', async () => {
+    const s = dugout('Arsenal', 1, undefined, 1990);
+    const last = s.managerState!.seasonResults[s.managerState!.seasonResults.length - 1];
+    expect(s.seasons[s.seasons.length - 1].year).toBeLessThan(2025);
+    expect(last.league).toBe('Premier League');
+    expect(last.lineupUnknown).toBe(true);
+    expect(last.knownRivals).toBe(0);
+    expect(last.table!.filter(r => !r.you).every(r => r.unnamed && !r.club)).toBe(true);
+    const t = await finalTable(s);
+    expect(t.label).toBe('Final table · Premier League');
+    expect(t.rows).toEqual([]);
+    expect(t.text).toContain("We can't say for sure who was in the Premier League that season, so there's no table.");
+    expect(t.text).not.toContain("We don't know enough");
   });
 });

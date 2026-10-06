@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { divisionMove, drawLeagueFinish, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
+import { divisionMove, drawLeagueFinish, eliteInYear, finishBand, finishZone, leagueSizeFor, listLeague, leagueWithArticle, LIST_SEASON, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -199,13 +199,20 @@ describe("managerLeagueField (Round 1029)", () => {
   });
 
   it("moves division only between the Premier League and the Championship", () => {
-    const pl = Array.from({ length: 20 }, (_, i) => divisionMove("Premier League", i + 1, 20)?.to ?? null);
+    const pl = Array.from({ length: 20 }, (_, i) => divisionMove("Premier League", i + 1, 20, 2030)?.to ?? null);
     expect(pl).toEqual([...Array(17).fill(null), "Championship", "Championship", "Championship"]);
-    const ch = Array.from({ length: 24 }, (_, i) => divisionMove("Championship", i + 1, 24)?.to ?? null);
+    const ch = Array.from({ length: 24 }, (_, i) => divisionMove("Championship", i + 1, 24, 2030)?.to ?? null);
     expect(ch).toEqual(["Premier League", "Premier League", ...Array(22).fill(null)]);
-    expect(divisionMove("Championship", 1, 24)?.up).toBe(true);
-    expect(divisionMove("Premier League", 20, 20)?.up).toBe(false);
-    expect([divisionMove("La Liga", 20, 20), divisionMove("La Liga", 1, 20), divisionMove(null, 20, 20)]).toEqual([null, null, null]);
+    expect(divisionMove("Championship", 1, 24, 2030)?.up).toBe(true);
+    expect(divisionMove("Premier League", 20, 20, 2030)?.up).toBe(false);
+    expect([divisionMove("La Liga", 20, 20, 2030), divisionMove("La Liga", 1, 20, 2030), divisionMove(null, 20, 20, 2030)]).toEqual([null, null, null]);
+  });
+
+  it("moves division only from 2004/05, when the Championship got its name", () => {
+    const down = (y: number) => divisionMove("Premier League", 20, 20, y)?.to ?? null;
+    const up = (y: number) => divisionMove("Championship", 1, 24, y)?.to ?? null;
+    expect([down(1997), down(2003), down(2004), down(2026)]).toEqual([null, null, "Championship", "Championship"]);
+    expect([up(1999), up(2003), up(2004), up(2040)]).toEqual([null, null, "Premier League", "Premier League"]);
   });
 
   it("says where he finished without a position, at every place of a 20 field", () => {
@@ -217,12 +224,27 @@ describe("managerLeagueField (Round 1029)", () => {
   it("walks the verified size into a manager's table, step by step", () => {
     const at = (y: number) => managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: y }, seq(0.5)).size;
     expect([at(1990), at(1991), at(1992), at(2030)]).toEqual([18, 20, 18, 18]);
-    expect(managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: 1990 }, seq(0.5)).named).toEqual(["Dortmund"]);
+    expect(managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: 2030 }, seq(0.5)).named).toEqual(["Dortmund"]);
+  });
+
+  it("names nobody in a season before the list's own, at the same size", () => {
+    const at = (y: number) => managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: y }, seq(0.5));
+    expect(LIST_SEASON).toBe(2026);
+    expect([1990, 2012, 2025, 2026, 2030].map(y => at(y).named)).toEqual([[], [], [], ["Dortmund"], ["Dortmund"]]);
+    expect([1990, 2025, 2026].map(y => at(y).lineupUnknown)).toEqual([true, true, false]);
+    expect([at(2025).size, at(2025).league, at(2025).sizeVerified]).toEqual([18, "Bundesliga", true]);
+    /* a past season draws from the rng exactly as a later one does, so the
+       races the table settles do not move */
+    const big = Array.from({ length: 30 }, (_, i) => row(`PL ${i}`, "Premier League", "England"));
+    const calls = (y: number) => { let n = 0; managerLeagueField({ clubs: big, club: "PL 0", year: y }, () => { n += 1; return 0.5; }); return n; };
+    expect(calls(2012)).toBe(calls(2030));
+    expect(calls(2012)).toBeGreaterThan(0);
   });
 
   it("names nobody when nothing names the league", () => {
     const f = managerLeagueField({ clubs: CLUBS, club: "Unknown FC", year: 2030 }, seq(0.5));
-    expect(f).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] });
+    expect(f).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [], lineupUnknown: false });
+    expect(managerLeagueField({ clubs: CLUBS, club: "Unknown FC", year: 2012 }, seq(0.5)).lineupUnknown).toBe(false);
   });
 
   it("draws which known clubs fill a full table from the rng, and only then", () => {

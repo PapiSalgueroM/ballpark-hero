@@ -220,8 +220,16 @@ export function ordinal(n: number): string {
      finishZone);
    - every position is counted, but only clubs the game knows in that league
      are named. When the game knows more of them than the table has room for,
-     the season draws which ones played that year. */
+     the season draws which ones played that year;
+   - a season before LIST_SEASON names nobody. The list's league labels are
+     the 2026-27 season's (src/data/soccerCareerClubPool.ts says so in its
+     header), and adjustClubsForYear moves a club's tier, never its league,
+     so the game cannot say who was in a league in 2012: Coventry City in
+     that year's Premier League would be a fact made up. Every place is
+     still played and counted, and the field keeps its size. */
 export const MANAGER_FIELD = 20;
+/** The season (start year) the career list's league labels describe. */
+export const LIST_SEASON = 2026;
 
 const foldName = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 const clubKey = (name: string) => foldName(SC_CLUB_CANON[name] ?? name);
@@ -258,15 +266,20 @@ export function listLeague(clubs: readonly ClubData[], label: string): string | 
    eng2024.html (Leicester and Ipswich up, Luton, Burnley and Sheffield
    United 18th to 20th down); ESPN's 2023-24 tables (espn.com/soccer/
    standings/_/league/eng.1/season/2023, "Positions 18, 19, 20: Relegation";
-   .../eng.2/season/2023, "Positions 1, 2: Promotion"). Anywhere else the
+   .../eng.2/season/2023, "Positions 1, 2: Promotion"). Only from 2004/05,
+   the first season read and the first the second tier was called the
+   Championship (the same window as its size above): a 1999 move would name
+   a division that did not exist yet. Anywhere else, and before then, the
    club stays in its league, and the season says so in tiers, never in
    divisions. */
 const DIVISION_UP: Record<string, string> = { "Championship": "Premier League" };
 const DIVISION_DOWN: Record<string, string> = { "Premier League": "Championship" };
+const DIVISION_FROM = 2004;
 
-/** The league a finish moves his club to, or null when it stays put. */
-export function divisionMove(league: string | null, pos: number, size: number): { to: string; up: boolean } | null {
-  if (league === null) return null;
+/** The league a finish moves his club to in the season starting in `year`,
+ *  or null when it stays put. */
+export function divisionMove(league: string | null, pos: number, size: number, year: number): { to: string; up: boolean } | null {
+  if (league === null || year < DIVISION_FROM) return null;
   if (DIVISION_UP[league] && pos <= 2) return { to: DIVISION_UP[league], up: true };
   if (DIVISION_DOWN[league] && pos >= size - 2) return { to: DIVISION_DOWN[league], up: false };
   return null;
@@ -301,6 +314,9 @@ export interface ManagerLeagueField {
   sizeVerified: boolean;
   /** The rivals named in this season's table, at most size - 1. */
   named: string[];
+  /** True when the game knows clubs of this league but not who was in it
+   *  that season (a season before LIST_SEASON), so it names nobody. */
+  lineupUnknown: boolean;
 }
 
 /** The manager's league for one season. `rng` only draws which known clubs
@@ -330,5 +346,6 @@ export function managerLeagueField(input: ManagerLeagueInput, rng: () => number)
       [names[i], names[j]] = [names[j], names[i]];
     }
   }
-  return { league, size, sizeVerified: verified !== null, named: names.slice(0, size - 1) };
+  const lineupUnknown = input.year < LIST_SEASON && names.length > 0;
+  return { league, size, sizeVerified: verified !== null, named: lineupUnknown ? [] : names.slice(0, size - 1), lineupUnknown };
 }

@@ -3151,7 +3151,9 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
             </div>
             {!named && me && (
               <p className="cm-tick-in text-xs" style={{ animationDelay: revealDelay(afterResults) }}>
-                We don't know enough {league ? `${league} clubs` : "clubs in this league"} by name to draw the table. You finished {sizeUnknown
+                {last.lineupUnknown === true
+                  ? `We can't say for sure who was in ${league ? leagueWithArticle(league) : "the league"} that season, so there's no table.`
+                  : `We don't know enough ${league ? `${league} clubs` : "clubs in this league"} by name to draw the table.`} You finished {sizeUnknown
                   ? `${finishZone(me.pos, size)}.`
                   : `${ordinal(me.pos)}${last.sizeVerified && last.leagueSize ? ` of ${last.leagueSize}` : ""} on ${me.pts} points.`}
               </p>

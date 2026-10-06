@@ -450,6 +450,10 @@ export interface ManagerState {
     /** Round 1029: how many rivals in the whole table the game could name,
      *  so the page tells "nobody to name" from a window that missed them. */
     knownRivals?: number;
+    /** Round 1029: true when the game knows clubs of that league but not who
+     *  was in it that season (a season before the list's own), so the
+     *  table names nobody and the page says why. */
+    lineupUnknown?: boolean;
     /** W-D-L line for the league season. */
     record?: string;
     /** How far the domestic cup run went. */
@@ -8203,7 +8207,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     if (leagues.size === 1) savedLeague = [...leagues][0];
   }
   const lf = marketJob && !savedLeague
-    ? { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] as string[] }
+    ? { league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] as string[], lineupUnknown: false }
     : managerLeagueField({ clubs, club: ms.club, league: savedLeague, year: calYear }, Math.random);
   if (lf.league) ms.league = lf.league;
   const field: (string | null)[] = [...lf.named, ...Array<null>(Math.max(0, lf.size - 1 - lf.named.length)).fill(null)];
@@ -8273,8 +8277,9 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
      points can be a place or a total that league does not have. */
   const ofSize = lf.sizeVerified ? ` of ${leagueSize}` : "";
   const sizeUnknown = lf.league !== null && !lf.sizeVerified;
-  /* only the English pair moves a club between named divisions */
-  const move = divisionMove(lf.league, me.pos, leagueSize);
+  /* only the English pair moves a club between named divisions, and only
+     from 2004/05, when the second tier took the Championship's name */
+  const move = divisionMove(lf.league, me.pos, leagueSize, calYear);
 
   if (champion) {
     ms.trophies += 1;
@@ -8350,6 +8355,7 @@ export function advanceManagerSeason(prev: CareerState, clubs: ClubData[]): Care
     ...(lf.league ? { league: lf.league } : {}),
     ...(lf.sizeVerified ? { sizeVerified: true } : {}),
     knownRivals: lf.named.length,
+    ...(lf.lineupUnknown ? { lineupUnknown: true } : {}),
   }];
 
   // National team offer, now earned by the season rather than rolled blind:
