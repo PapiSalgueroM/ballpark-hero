@@ -85,7 +85,7 @@
  *   onetap         Release fires on the first tap                    -> section 15
  *   nofee          a signing takes no signing on fee from the kitty  -> sections 15 and 16
  *   jmworth        journeymen valued like squad players again        -> section 16
- *   feefloor       the signing on fee can drop to 0.1m               -> section 16
+ *   feefloor       the signing on fee can drop to 0.1m               -> sections 16 and 18
  *   marketreleased the market lists a man you released               -> section 17
  *   buyreleased    a deal signs a man you released                   -> section 17
  *   noreleasedlist a release is not written to the permanent list    -> section 17
@@ -363,7 +363,7 @@ if (CONTROL === 'nosev') {
     '      value: worth,\n');
 } else if (CONTROL === 'feefloor') {
   rewrite('feefloor', 'engine',
-    '  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);',
+    '  const fee = Math.max(floor, Math.round(wage * years * 0.045 * 10) / 10);',
     '  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);');
 } else if (CONTROL === 'nofee') {
   rewrite('nofee', 'engine',
