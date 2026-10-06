@@ -135,10 +135,15 @@
        plus both measurement floors falling to zero).
      CM_UCL_CONTROL=poolnames bundles a copy of the engine whose scorer draw
        falls back to the static pool in every era again, the pre-1028 draw.
-       Section 7 must go red (measured: see the section 7 floors).
+       Section 7 must go red (measured: 135 findings, today's scorers at all
+       six exposed field clubs, Milan, Inter, Bayern and Panathinaikos in
+       2005-06, Panathinaikos in 2010-11, Galatasaray in 2015-16).
      CM_UCL_CONTROL=oldname bundles a copy of the engine whose roster lookup
-       ignores the Round 899 long names again. Section 7 must go red (the
-       long name nights score with shirt numbers instead of the 2015 squad).
+       ignores the Round 899 long names again. Section 7 must go red
+       (measured: 21 findings, the long name nights scoring with shirt
+       numbers instead of the 2015 squad).
+     Main's own engine before Round 1028, run through section 7: 176
+       findings (both regressions at once).
 
    Sample floors are measured counts with headroom, set after the first runs
    and recorded beside each check.
@@ -1135,7 +1140,7 @@ const tally = {
   groupTables: 0, finalGroups: 0, groupsLevel: 0, groupsTurned: 0, winnerChanged: 0,
   seededGroups: 0, crafted: 0, migratedGroups: 0, groupNights: 0,
   /* Round 1028 */
-  eraNights: 0, eraGoals: 0, rosterGoals: 0, numberGoals: 0, exposedGoals: 0, longNameGoals: 0, exposedClubs: [],
+  eraNights: 0, eraGoals: 0, rosterGoals: 0, numberGoals: 0, exposedGoals: 0, longNameGoals: 0, exposedClubs: [], previews: 0, dangerMen: 0,
 };
 function runCareer(tag, club, eraId) {
   const isEra = !!eraId;
@@ -1266,6 +1271,24 @@ function checkEraNights(tally) {
          and attackers or midfielders in the static pool. */
       const exposed = !(world[opp]?.length) && staticPool.some(p => p.club === opp && attOrMid(p.position));
       if (exposed) tally.exposedClubs.push(`${eraId} ${opp}`);
+      /* The Match Centre's preview of the same night: its danger men read
+         the same opponent, so they answer to the same two rules. matchFacts
+         draws nothing, so the stream the plays below walk is untouched. */
+      const pre = clone(s);
+      pre.uclGroup.opponents[idx] = opp;
+      const facts = cm.matchFacts(pre);
+      if (facts?.opponent !== opp) note('eranames', `${eraId}: the Match Centre preview of the night at ${opp} names ${facts?.opponent ?? 'nobody'}`);
+      else {
+        tally.previews += 1;
+        for (const n of facts.oppDanger ?? []) {
+          tally.dangerMen += 1;
+          if (!roster.has(n)) note('eranames', `${eraId} at ${opp}: the preview's danger man ${n} is not in the ${eraId} ${rosterKey} roster`);
+        }
+        const factsText = JSON.stringify(facts);
+        for (const n of forbidden) {
+          if (containsName(factsText, n)) note('eranames', `${eraId} at ${opp}: the Match Centre preview names ${n}, a man of today's ${opp} the ${eraId} world does not have`);
+        }
+      }
       for (let k = 0; k < PLAYS_PER_CLUB; k++) {
         const c = clone(s);
         c.uclGroup.opponents[idx] = opp;
@@ -1391,12 +1414,27 @@ section('6) A Champions League group is sorted by the Champions League rule, and
 
 section('7) An era European night names only men of that era, at every club of every era\'s field', 'eranames', [
   `${tally.eraNights} era nights played across ${Object.keys(ERA_UCL_FIELDS).length} eras (${PLAYS_PER_CLUB} at each club of each field, plus the long names); ${tally.eraGoals} opposition goals: ${tally.rosterGoals} by men of the club's own era roster, ${tally.numberGoals} on the neutral shirt number line`,
+  `${tally.previews} Match Centre previews of the same nights read, ${tally.dangerMen} danger men named, every one from the club's era roster`,
   `${tally.exposedGoals} of those goals were at the ${tally.exposedClubs.length} clubs the pre-1028 draw handed today's scorers (${tally.exposedClubs.join(', ')}); ${tally.longNameGoals} at the Round 899 long names`,
   `THE TWIN: a modern Real Madrid season, ${twinNow.reports} reports, digest ${twinNow.hash} on the engine and ${twinBefore.hash} before Round 1028`,
 ], () => {
   if (twinNow.hash !== twinBefore.hash) note('eranames', `the modern season changed: digest ${twinNow.hash} on the engine, ${twinBefore.hash} with the Round 1028 edits taken out`);
   if (twinNow.reports < 30) note('eranames', `the twin played only ${twinNow.reports} reports (floor 30)`);
   if (tally.exposedClubs.length < 1) note('eranames', 'no era club is exposed to the static pool any more, so the check reads nothing: retire it or point it somewhere real');
+  /* Every night is played (a count, not a sample): each era's field less my
+     club, plus the long names, PLAYS_PER_CLUB times, and one preview each. */
+  const targets = Object.entries(ERA_UCL_FIELDS).reduce((n, [eraId, f]) => n + f.length - 1 + Object.keys(LONG_NAMES[eraId] ?? {}).length, 0);
+  if (tally.eraNights !== targets * PLAYS_PER_CLUB) note('eranames', `${tally.eraNights} era nights played where ${targets * PLAYS_PER_CLUB} were due`);
+  if (tally.previews !== targets) note('eranames', `${tally.previews} Match Centre previews read where ${targets} were due`);
+  /* Floors from the measured spread. Over its own seed and SIM_SEED 1 to 5
+     (Round 1028, three eras): 911 to 1088 opposition goals, 82 to 95 of them
+     at the exposed clubs, 15 to 24 at the long names, and 80 danger men every
+     run (two at each of the 40 clubs with an era roster). The exposed and long
+     name floors are what keep the two controls able to fire: below them the
+     check is reading too few goals at the clubs it exists for. */
+  if (tally.exposedGoals < 40) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 40, measured 82 to 95)`);
+  if (tally.longNameGoals < 6) note('eranames', `only ${tally.longNameGoals} goals at the long names (floor 6, measured 15 to 24)`);
+  if (tally.dangerMen < 40) note('eranames', `only ${tally.dangerMen} danger men read (floor 40, measured 80)`);
 });
 
 console.log('');
