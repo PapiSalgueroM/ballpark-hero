@@ -72,6 +72,9 @@
  * refusaldrift 100 in 3, droppick 1617 in 4, pickmoves 154 in 4, nocomp 145
  * in 4, flatstaff 63 in 5, onepost 27 in 5, nofarm 1 in 5, nodefault 2 in 1
  * (and 5: a level 1 staff moves the game), retaintwice 1 in 6, noguard 1 in 3.
+ * Review rerun 2026-10-05 on seeds 1..10 after the copy fixes: the same counts
+ * for all twelve, and spots5 200 in 3 (every deadline of the walk, both
+ * leagues); the walk itself measured 1560 buyer and 746 seller places.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
