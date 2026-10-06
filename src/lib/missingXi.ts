@@ -3687,7 +3687,7 @@ export const LINEUPS: Lineup[] = [
       { position: 'CM', name: 'Pablo Perez', x: 32, y: 50 },
       { position: 'RW', name: 'Cristian Pavon', x: 80, y: 24 },
       { position: 'CF', name: 'Dario Benedetto', x: 50, y: 18 },
-      { position: 'LW', name: 'Sebastian Villa', x: 20, y: 24 },
+      { position: 'FW', name: 'Sebastian Villa', x: 20, y: 24 },
     ],
     blankCandidates: [
       { name: 'Julio Buffarini', slotIndex: 1, nationality: 'Argentina', clubAtTime: 'Boca Juniors' },
@@ -4232,8 +4232,8 @@ export const LINEUPS: Lineup[] = [
       { position: 'CDM', name: 'Fred', x: 38, y: 56 },
       { position: 'RW', name: 'Everton Soares', x: 80, y: 34 },
       { position: 'CAM', name: 'Lucas Paqueta', x: 50, y: 34 },
-      { position: 'LW', name: 'Neymar', x: 20, y: 34 },
-      { position: 'ST', name: 'Richarlison', x: 50, y: 16 },
+      { position: 'ST', name: 'Neymar', x: 50, y: 16 },
+      { position: 'LW', name: 'Richarlison', x: 20, y: 34 },
     ],
     blankCandidates: [
       { name: 'Marquinhos', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },

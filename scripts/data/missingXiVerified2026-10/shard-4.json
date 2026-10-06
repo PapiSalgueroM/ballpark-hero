@@ -330,6 +330,13 @@
      "readOn": "2026-10-05",
      "xi": false,
      "says": "9 Dec 2018, Santiago Bernabéu, River 3-1 Boca; Quintero's goal was 'unstoppable for goalkeeper Esteban Andrada'. No line-ups."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/ca-river-plate/ca-boca-juniors/2018869135/lineups",
+     "xi": true,
+     "says": "Re-read in the review fix: Boca Juniors 4-3-3, grouped Defenders Magallan, Izquierdoz, Olaza, Buffarini; Midfielders Barrios, Pablo Perez, Nandez; Forwards Pavon, Benedetto, Villa. No sides."
     }
    ],
    "diffs": [
@@ -411,7 +418,7 @@
      "path": "slots[10].name",
      "from": "Ramon Abila",
      "to": "Sebastian Villa",
-     "why": "ESPN and BeSoccer: Villa started; Abila came on 62' for Benedetto. Only ESPN states sides (Villa RF, Pavon LF), so the tile keeps the slot label"
+     "why": "ESPN and BeSoccer: Villa started; Abila came on 62' for Benedetto"
     },
     {
      "path": "blankCandidates[Frank Fabra]",
@@ -424,6 +431,12 @@
      "from": "Wikipedia dedicated match article for the relocated Bernabeu final, confirms Boca's starting XI in the 2nd leg after the 1st leg was postponed for the bus attack.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 4. Andrada, Magallan, Olaza and Villa started; the old eleven read like a first-leg projection.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "LW",
+     "to": "FW",
+     "why": "Villa was in the front three on both hosts (ESPN RF, BeSoccer Forwards); only ESPN gives a side, and it is the side the entry gives Pavon, so the tile names the line and keeps its place"
     }
    ],
    "notes": [
@@ -431,7 +444,7 @@
     "Buffarini, Izquierdoz, Barrios, Nández, Pablo Pérez, Pavón and Benedetto match the sources. blankCandidates Buffarini and Barrios are confirmed starters.",
     "Entry's Rossi, Jara, Fabra-style back line looks like a first-leg or pre-match projection; the first leg (11 Nov 2018, 2-2 at La Bombonera) is a different match.",
     "No CONMEBOL match sheet could be read: conmebol.com searches returned only previews and a feature article (which confirms Andrada was the Boca keeper and the 9 Dec Bernabéu venue).",
-    "Round 1026: ESPN alone puts Villa right and Pavon left; single source, tiles unchanged."
+    "Round 1026 (review fix): ESPN alone puts Villa right and Pavon left; BeSoccer lists both as forwards with no side. Single source on the sides, so Pavon keeps RW and Villa's tile reads FW (the line both hosts state) rather than LW. Open for a second host on the wings."
    ]
   },
   {
@@ -2725,6 +2738,20 @@
      "readOn": "2026-10-05",
      "xi": false,
      "says": "Final at the Maracanã on July 10th, Argentina 1-0, Di María 22' chip over Ederson. No line-ups."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "besoccer.com",
+     "url": "https://www.besoccer.com/match/seleccion-argentina/seleccion-brasil/2020504043/lineups",
+     "xi": true,
+     "says": "Re-read in the review fix: Brazil 4-2-3-1, grouped Defenders Danilo, Marquinhos, Thiago Silva, Renan Lodi; Midfielders Casemiro, Fred, L. Paqueta, Richarlison; Forwards Everton, Neymar. No sides."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=603182",
+     "xi": true,
+     "says": "ESPN summary feed: Brazil 4-3-3. Ederson G; Danilo RB, Marquinhos CD-R, Thiago Silva CD-L, Renan Lodi LB; Paqueta RM, Casemiro CM, Fred LM; Everton RF, Neymar F, Richarlison LF."
     }
    ],
    "diffs": [
@@ -2764,20 +2791,44 @@
      "path": "slots[10].name",
      "from": "Gabriel Barbosa",
      "to": "Richarlison",
-     "why": "ESPN and BeSoccer: Richarlison started; Gabriel Barbosa came on 76'. Only ESPN states his role (LF), so the tile keeps the slot label"
+     "why": "ESPN and BeSoccer: Richarlison started; Gabriel Barbosa came on 76'"
     },
     {
      "path": "source",
      "from": "Wikipedia infobox for the 2021 Copa America Final, agrees on Brazil's starting XI as hosts and runners-up.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 4. Everton Soares (not Everton Ribeiro) and Richarlison started.",
      "why": "the internal note vouched for the wrong eleven"
+    },
+    {
+     "path": "slots[9].position",
+     "from": "LW",
+     "to": "ST",
+     "why": "Neymar was in the forward line on both hosts (ESPN F, through the middle; BeSoccer Forwards), and the 4-2-3-1 the entry keeps (BeSoccer) has one forward"
+    },
+    {
+     "path": "slots[9].side",
+     "from": "left",
+     "to": "centre",
+     "why": "Neymar: ESPN F, the centre of its front three; BeSoccer forward"
+    },
+    {
+     "path": "slots[10].position",
+     "from": "ST",
+     "to": "LW",
+     "why": "Richarlison: ESPN LF and BeSoccer Midfielders, which a wide man in the attacking three of a 4-2-3-1 is. The left side rests on ESPN alone; no host contradicts it (BeSoccer gives no sides). Not the striker on either host"
+    },
+    {
+     "path": "slots[10].side",
+     "from": "centre",
+     "to": "left",
+     "why": "Richarlison: ESPN LF; BeSoccer gives no sides"
     }
    ],
    "notes": [
     "Date 2021-07-10 (CONMEBOL and ESPN; BeSoccer shows 11 Jul 20:00 in a European time zone), score Brazil 0-1 Argentina (Di María 22') and venue Maracanã match.",
     "Nine of eleven names correct. All three blankCandidates (Marquinhos, Renan Lodi, Fred) are confirmed starters.",
     "CONMEBOL's copaamerica.com match story was read (date, venue, score, Di María goal) but carries no team sheet.",
-    "Round 1026: no host states a role for Richarlison; the tile keeps the label of the slot he took. Open for a role source."
+    "Round 1026 (review fix): Richarlison was not the striker on either host (ESPN LF, BeSoccer a midfielder in its 4-2-3-1) and Neymar was in the forward line on both, so Neymar takes the ST tile and Richarlison the left of the three behind him. His side rests on ESPN alone (one host, uncontradicted), recorded here as open. Formation splits (ESPN 4-3-3, BeSoccer 4-2-3-1): the entry keeps 4-2-3-1."
    ]
   },
   {
