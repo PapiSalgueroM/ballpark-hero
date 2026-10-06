@@ -221,7 +221,12 @@ const RACE_SECOND_SHARE = 0.26;
  * changes only through the men available to it.
  */
 function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>): ProjectedPlayer[] {
-  return projectedRoster(club, yearsOnNow, eraId).filter(p => !exclude.has(p.n));
+  /* Round 1028: a 2015 save from before Round 899 can still meet Paris
+     Saint-Germain or Borussia Mönchengladbach under the long name its group
+     was drawn with. The strength and the association already read that as the
+     club it always was (eraEuroName); the roster now does too, so its line up
+     and its scorers are the 2015 squad rather than nobody. */
+  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));
 }
 const NO_NAMES: ReadonlySet<string> = new Set();
 
@@ -12448,7 +12453,13 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
   // against me for them. See oppRosterFor.
   const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
-  const oppPool = getPool().filter(p =>
+  /* Round 1028: the static pool is today's squads, so it only ever backs up
+     today's world. A historic era's foreign Champions League club (AC Milan in
+     2005-06, Panathinaikos in 2010-11, Galatasaray in 2015-16) has no era
+     roster, and this fallback used to hand a 2010 report a 2026 scorer. In an
+     era that club gets the shirt number line below instead. One draw either
+     way (pick and ri), so the seeded stream is the same. */
+  const oppPool = isHistoricEra(eraId) ? [] : getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
   const lines: ScorerLine[] = [];
   for (let g = 0; g < goals; g++) {
