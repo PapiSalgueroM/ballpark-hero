@@ -17,7 +17,7 @@ import { NBA_RIVALRY_CHOICES } from '@/lib/nbaCareerRivalryEvents';
 import { NFL_RIVALRY_CHOICES } from '@/lib/nflCareerRivalryEvents';
 import { MLB_RIVALRY_CHOICES } from '@/lib/mlbCareerRivalryEvents';
 import { NHL_RIVALRY_CHOICES } from '@/lib/nhlCareerRivalryEvents';
-import { copyCareer, decisionSave, decisionSports, makeDecisionCareer, realDecisionEvent } from '@/test/fixtures/careerDecisionOutcome1009';
+import { copyCareer, decisionSave, decisionSports, makeDecisionCareer, nativeTradeDecisionFixture, realDecisionEvent } from '@/test/fixtures/careerDecisionOutcome1009';
 import type { UsCareerCore } from '@/lib/usCareerSport';
 
 const slugs = ['nba', 'nfl', 'mlb', 'nhl'];
@@ -73,6 +73,50 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('ordinary career decision outcomes', () => {
+  it('applies the real third-season NBA trade once before its quality draw and keeps the full save on return', () => {
+    const fixture = nativeTradeDecisionFixture(), sport = decisionSports.nba;
+    expect(fixture.initial.seasons).toHaveLength(2); expect(fixture.before.seasons).toHaveLength(3);
+    expect(fixture.before.ovr).toBeLessThanOrEqual(86); expect(fixture.before.contractYears).toBeGreaterThanOrEqual(1);
+    expect(fixture.after.team).not.toBe(fixture.before.team);
+    localStorage.setItem(sport.saveKey, decisionSave(fixture.initial, fixture.quality));
+    localStorage.setItem('decision-unrelated-save', 'held bytes');
+    const mounted = render(<MemoryRouter><UsCareerBoard sport={sport} /></MemoryRouter>);
+    const setupTape = [...fixture.tape];
+    vi.mocked(Math.random).mockClear().mockImplementation(() => setupTape.shift() ?? .5);
+    click(/^Play the \d+ season$/); dismissSeason();
+    expect(document.querySelector('[data-career-decision-event]')?.getAttribute('data-career-decision-event')).toBe(fixture.eventId);
+    expect(localStorage.getItem(sport.saveKey)).toBe(fixture.pendingBytes);
+    expect(setupTape).toHaveLength(0); expect(Math.random).toHaveBeenCalledTimes(fixture.tape.length);
+    const choiceTape = [...fixture.choiceTape], writes = vi.spyOn(Storage.prototype, 'setItem'), removes = vi.spyOn(Storage.prototype, 'removeItem');
+    vi.mocked(Math.random).mockClear().mockImplementation(() => choiceTape.shift() ?? .5);
+    vi.mocked(recordActivity).mockClear();
+    const choice = option(fixture.optionIndex);
+    act(() => { choice.click(); choice.click(); });
+    expect(Math.random).toHaveBeenCalledTimes(3); expect(choiceTape).toHaveLength(0);
+    expect(rows()).toEqual(fixture.expectedRows);
+    expect(document.querySelector('[data-decision-title]')?.textContent).toBe(fixture.eventTitle);
+    expect(document.querySelector('[data-decision-choice]')?.textContent).toBe(`You chose: ${fixture.choice}`);
+    expect(read('nba')).toEqual(JSON.parse(fixture.appliedBytes));
+    expect(localStorage.getItem(sport.saveKey)).toBe(fixture.appliedBytes);
+    expect(writes.mock.calls.filter(([key]) => key === sport.saveKey)).toHaveLength(1);
+    const appliedWrites = [...writes.mock.calls];
+    const next = screen.getByRole('button', { name: 'Continue' });
+    act(() => { next.click(); next.click(); });
+    expect(document.activeElement).toBe(screen.getByRole('button', { name: /^Play the \d+ season$/ }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(fixture.appliedBytes);
+    expect(writes.mock.calls).toEqual(appliedWrites); expect(Math.random).toHaveBeenCalledTimes(3);
+    mounted.unmount();
+    const restored = render(<MemoryRouter><UsCareerBoard sport={sport} /></MemoryRouter>);
+    expect(screen.queryByRole('button', { name: /^Play the \d+ season$/ })).not.toBeNull();
+    expect(document.querySelector('[data-career-decision-outcome], [data-career-decision-event]')).toBeNull();
+    expect(read('nba')).toEqual(JSON.parse(fixture.appliedBytes));
+    expect(localStorage.getItem(sport.saveKey)).toBe(fixture.appliedBytes);
+    expect(localStorage.getItem('decision-unrelated-save')).toBe('held bytes');
+    expect(writes.mock.calls).toEqual(appliedWrites); expect(removes).not.toHaveBeenCalled();
+    expect(Math.random).toHaveBeenCalledTimes(3); expect(choiceTape).toHaveLength(0);
+    expect(recordActivity).not.toHaveBeenCalled(); expect(recordCompletion).not.toHaveBeenCalled();
+    restored.unmount();
+  });
   it('shows each real sport choice as the actual capped change and saves it once', () => {
     for (const slug of slugs) {
       const mounted = mountEvent(slug), expected = mounted.expected(1);

@@ -9,6 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), s
 const board = 'src/components/us-career/UsCareerBoard.tsx', helper = 'src/lib/usCareerDecisionOutcome.ts';
 const card = 'src/components/us-career/CareerDecisionOutcome.tsx', testFile = 'src/test/careerDecisionOutcome.test.tsx';
 const titles = {
+  trade: 'applies the real third-season NBA trade once before its quality draw and keeps the full save on return',
   capped: 'shows each real sport choice as the actual capped change and saves it once',
   signs: 'reports negative effects and real endorsement earnings without calling them cash',
   rapid: 'consumes same-frame choices once and accepts the next ordinary event',
@@ -29,6 +30,9 @@ const controls = {
   rapid: { file: board, from: ' || consumedEvent.current === pendingEvent', to: '', test: titles.rapid },
   drawOrder: { file: board, from: 'const outcome = pendingEvent.options[idx].apply(c, Math.random);', to: 'const earlyQuality = sport.rollTeamQuality(teamQuality, Math.random); const outcome = pendingEvent.options[idx].apply(c, Math.random);',
     also: [{ from: 'const tq = sport.rollTeamQuality(teamQuality, Math.random);', to: 'const tq = earlyQuality;' }], test: titles.rapid },
+  tradeDrawOrder: { file: board, from: 'const outcome = pendingEvent.options[idx].apply(c, Math.random);', to: 'const earlyQuality = sport.rollTeamQuality(teamQuality, Math.random); const outcome = pendingEvent.options[idx].apply(c, Math.random);',
+    also: [{ from: 'const tq = sport.rollTeamQuality(teamQuality, Math.random);', to: 'const tq = earlyQuality;' }], test: titles.trade },
+  tradeTeam: { file: board, from: 'const tq = sport.rollTeamQuality(teamQuality, Math.random);', to: 'const tq = sport.rollTeamQuality(teamQuality, Math.random); c.team = career.team;', test: titles.trade },
   persist: { file: board, from: 'setFeed(f => [outcome, ...f].slice(0, 6));', to: 'setFeed(f => [outcome, ...f].slice(0, 6)); c.earnings = career.earnings;', test: titles.reload },
   continueDraw: { file: board, from: 'decisionReturn.current = true;', to: 'decisionReturn.current = true; Math.random();', test: titles.continue },
   continueWrite: { file: board, from: 'decisionReturn.current = true;', to: "decisionReturn.current = true; persist(career, 'season', teamQuality);", test: titles.continue },

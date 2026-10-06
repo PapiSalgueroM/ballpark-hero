@@ -444,6 +444,7 @@ const RIVAL_NAME_COLLISIONS = new Set([
   "Thiago Fernández",
   // Round 883: Liga MX brought a real Iván Moreno and Sergio Hernández into Club Manager.
   "Iván Moreno", "Sergio Hernández",
+  // Round 902: the 2005-06 era's Ligue 1 brought a real Eduardo Costa (at Espanyol after that summer).
   // Round 901: the 2010-11 big five brought a real Ricardo Costa (Valencia) and Eduardo Costa (Monaco).
   "Ricardo Costa", "Eduardo Costa",
 ]);
@@ -474,6 +475,11 @@ const CLUB_FOUNDED_AFTER: Record<string, number> = {
      and the newer franchises from their own first seasons. */
   "LA Galaxy": 1996, "Columbus Crew": 1996, "Seattle Sounders": 2007,
   "Atlanta United": 2017,
+  /* Round 1013: the club played as Bragantino until Red Bull's rebrand for
+     the 2020 season (Planet Football's Red Bull in Brazil piece, and Lance!'s
+     2020 badge and kit launch, read 2026-10-05). Same rule as RB Leipzig: the
+     name did not exist before then. */
+  "Red Bull Bragantino": 2020,
 };
 interface TierRule { name: string; from?: number; until?: number; tier: number }
 const ERA_TIER_RULES: TierRule[] = [
@@ -499,6 +505,17 @@ const ERA_TIER_RULES: TierRule[] = [
   { name: "Wolves", until: 2017, tier: 4 },
   { name: "Zenit", until: 2006, tier: 4 },
   { name: "Shakhtar Donetsk", until: 1999, tier: 4 },
+  /* Round 1013: Forest were relegated in 1999 and came back up through the
+     2022 Championship play-off final, so 1999-00 to 2021-22 were spent
+     outside the top flight (ESPN's 29 May 2022 match report and Sports
+     Illustrated the same day, "the first time since 1999"). Their tier 2 is
+     Club Manager's 2026 XI and would otherwise apply in every era. The two
+     earlier second tier seasons, 1993-94 (Division One runners up) and
+     1997-98 (Division One champions), get one season rules of their own
+     (rsssf's Football League tables for both seasons and Wikipedia's list
+     of the club's seasons, read 2026-10-05). */
+  { name: "Nottingham Forest", from: 1993, until: 1993, tier: 4 }, { name: "Nottingham Forest", from: 1997, until: 1997, tier: 4 },
+  { name: "Nottingham Forest", from: 1999, until: 2021, tier: 4 },
 ];
 export function adjustClubsForYear(clubs: ClubData[], year: number): ClubData[] {
   return clubs

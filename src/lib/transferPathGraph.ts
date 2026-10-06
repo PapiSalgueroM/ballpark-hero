@@ -123,3 +123,133 @@ export function* linkedFrom(index: SeasonIndex, keys: ClubSeasonKeys): Generator
     }
   }
 }
+
+/** Round 1010a: what the "More help" tier counts. Counts only, never a name. */
+export interface TransferPathDoors {
+  /** Distinct pool players linked to the head, played names left out. */
+  total: number;
+  /** How many of those sit one step closer to the target than the head does. */
+  onRoute: number;
+  /** Per club the links run through. A man linked through two clubs counts at both. */
+  byClub: { club: string; players: number; onRoute: number }[];
+  /** Distinct pool players linked to the target, played names left out. */
+  intoTotal: number;
+  /** The same per club, for the target's side. */
+  into: { club: string; players: number }[];
+}
+
+const byPlayersThenClub = (x: { club: string; players: number }, y: { club: string; players: number }) =>
+  y.players - x.players || x.club.localeCompare(y.club);
+
+/** Linked players with every club the link runs through, the man himself and `skip` left out. */
+function doorMap(index: SeasonIndex, keys: ClubSeasonKeys, self: string, skip: ReadonlySet<string>): Map<string, Set<string>> {
+  const out = new Map<string, Set<string>>();
+  for (const { name, club } of linkedFrom(index, keys)) {
+    if (name === self || skip.has(name)) continue;
+    const clubs = out.get(name);
+    if (clubs) clubs.add(club);
+    else out.set(name, new Set([club]));
+  }
+  return out;
+}
+
+/**
+ * Round 1010a, the second hint tier. Counts the doors out of the head and into
+ * the target on the graph the game is actually playing (pass the RULE graph),
+ * with every played name left out, so it can never point at a refusal or a
+ * duplicate (the Round 294 and Round 536 lessons).
+ *
+ * THE ATTRIBUTION RULE: a man counts under every club he links through, and
+ * `total` counts distinct men, so the club figures can add up to more than
+ * `total`. onRoute is one search from the target that skips the played names
+ * (the head excepted): a neighbour is on a route when his distance is the
+ * head's minus one, the same search findPath runs.
+ *
+ * Measured on the bake (2026-10-05, Round 475 rule graph) for tpa-762, Alisson
+ * Becker to Mikel Oyarzabal: 19 pool players, Liverpool 17, Roma 3,
+ * Internacional 2, 1 on a shortest route; into the target 3, all through Real
+ * Sociedad. Until Round 1010b removes the twin, "Alisson" counts as Alisson
+ * Becker's own teammate.
+ *
+ * null when either end is not in the graph, the head is the target, or no
+ * route is left from the head (the stranded state says that instead).
+ */
+export function doorsFrom(
+  index: SeasonIndex,
+  keys: Map<string, ClubSeasonKeys>,
+  head: string,
+  target: string,
+  played: readonly string[],
+): TransferPathDoors | null {
+  const headKeys = keys.get(head);
+  const targetKeys = keys.get(target);
+  if (!headKeys || !targetKeys || head === target) return null;
+  const skip = new Set(played);
+  skip.delete(head);
+
+  const dist = new Map<string, number>([[target, 0]]);
+  const queue = [target];
+  for (let i = 0; i < queue.length && !dist.has(head); i += 1) {
+    const cur = queue[i];
+    const curKeys = keys.get(cur);
+    if (!curKeys) continue;
+    for (const { name } of linkedFrom(index, curKeys)) {
+      if (dist.has(name) || skip.has(name)) continue;
+      dist.set(name, dist.get(cur)! + 1);
+      queue.push(name);
+    }
+  }
+  const headDist = dist.get(head);
+  if (headDist === undefined) return null;
+
+  const playedSet = new Set(played);
+  const out = doorMap(index, headKeys, head, playedSet);
+  const clubs = new Map<string, { club: string; players: number; onRoute: number }>();
+  let onRoute = 0;
+  for (const [name, via] of out) {
+    const near = dist.get(name) === headDist - 1;
+    if (near) onRoute += 1;
+    for (const club of via) {
+      const row = clubs.get(club) ?? { club, players: 0, onRoute: 0 };
+      row.players += 1;
+      if (near) row.onRoute += 1;
+      clubs.set(club, row);
+    }
+  }
+
+  const inward = doorMap(index, targetKeys, target, playedSet);
+  const intoClubs = new Map<string, number>();
+  for (const via of inward.values()) for (const club of via) intoClubs.set(club, (intoClubs.get(club) ?? 0) + 1);
+
+  return {
+    total: out.size,
+    onRoute,
+    byClub: [...clubs.values()].sort(byPlayersThenClub),
+    intoTotal: inward.size,
+    into: [...intoClubs].map(([club, players]) => ({ club, players })).sort(byPlayersThenClub),
+  };
+}
+
+const TOP_CLUBS = 4;
+const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+
+function clubList(rows: { club: string; players: number }[]): string {
+  const shown = rows.slice(0, TOP_CLUBS).map(r => `${r.club} ${r.players}`).join(', ');
+  const more = rows.length - TOP_CLUBS;
+  return more > 0 ? `${shown}, and ${more} more ${plural(more, 'club', 'clubs')}` : shown;
+}
+
+/** The two "More help" lines. They name the head and the target and nobody else. */
+export function moreHelpLines(doors: TransferPathDoors, head: string, target: string): string[] {
+  const route = doors.total === 1
+    ? 'He is on a shortest route.'
+    : doors.onRoute === 1
+      ? 'Just 1 of them is on a shortest route.'
+      : `${doors.onRoute} of them are on a shortest route.`;
+  const out = `🔎 From ${head}, ${doors.total} pool ${plural(doors.total, 'player', 'players')} shared a season with him: ${clubList(doors.byClub)}. ${route}`;
+  const via = doors.into.length === 1
+    ? `${doors.intoTotal === 1 ? '' : 'all '}through ${doors.into[0].club}`
+    : `through ${clubList(doors.into)}`;
+  const into = `🎯 Into ${target}: ${doors.intoTotal} pool ${plural(doors.intoTotal, 'player', 'players')}, ${via}.`;
+  return [out, into];
+}

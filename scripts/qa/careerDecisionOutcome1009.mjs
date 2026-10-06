@@ -30,8 +30,8 @@ await build({
       "export const SUPABASE_URL='http://offline.invalid'; export const SUPABASE_PUBLISHABLE_KEY='offline'; export const supabase=new Proxy({}, {get(){throw new Error('Native decision fixture cannot use transport');}});" }));
   } }],
 });
-const { decisionSports, nativeDecisionFixture, decisionSave } = createRequire(import.meta.url)(bundle);
-const fixtures = [...['nba', 'nfl', 'mlb', 'nhl'].map(slug => nativeDecisionFixture(slug)), nativeDecisionFixture('nba', true)];
+const { decisionSports, nativeDecisionFixture, nativeTradeDecisionFixture, decisionSave } = createRequire(import.meta.url)(bundle);
+const fixtures = [...['nba', 'nfl', 'mlb', 'nhl'].map(slug => nativeDecisionFixture(slug)), nativeDecisionFixture('nba', true), nativeTradeDecisionFixture()];
 const profiles = [
   { width: 320, height: 780, input: 'touch', theme: 'dark', reduced: true },
   { width: 390, height: 844, input: 'touch', theme: 'light', reduced: false },
@@ -106,7 +106,7 @@ try {
   await ready; browser = await chromium.launch({ headless: true });
   for (const profile of profiles) for (const fixture of fixtures) {
     const { slug } = fixture, sport = decisionSports[slug];
-    const id = `${slug}-${fixture.expanded ? 'expanded' : 'capped'}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
+    const id = `${slug}-${fixture.caseId || (fixture.expanded ? 'expanded' : 'capped')}-${profile.width}-${profile.input}-${profile.theme}${profile.reduced ? '-reduced' : ''}`;
     const result = { id, route: `/${sport.gameSlug}`, viewport: { width: profile.width, height: profile.height }, steps: [], screenshots: [], pageErrors: [], consoleErrors: [], localFailures: [], fontFailures: [], fontRequests: [], fontAssets: [], scoreWrites: [], eventSetupWrites: [], outbound: [] };
     const fontAssets = new Set();
     let playingSetupSeason = false;
@@ -228,6 +228,7 @@ try {
       assert.deepEqual(result.scoreWrites, [], 'The receipt interval starts with no completion writes');
       const choice = page.locator(`[data-career-decision-option="${fixture.optionIndex}"]`);
       assert.equal(await choice.locator('span').first().textContent(), fixture.choice);
+      if (fixture.choiceTape) await page.evaluate(tape => { window.__decisionTape = [...tape]; }, fixture.choiceTape);
       const beforeChoice = await state(page);
       await activate(choice, profile.input);
       await page.locator('[data-career-decision-outcome]').waitFor(); await inspect('outcome');
@@ -236,9 +237,11 @@ try {
       assert.deepEqual(await rows(page), fixture.expectedRows.slice(0, 4));
       assert.equal(await page.locator('[data-decision-title]').evaluate(el => el === document.activeElement), true);
       const applied = await state(page);
+      assert.equal(applied.draws - beforeChoice.draws, fixture.choiceTape?.length ?? 1, 'The choice and quality roll consume exactly their additional draws');
+      assert.equal(applied.tapeRemaining, 0, 'The separate choice tape is exhausted');
       assert.equal(applied.storage[sport.saveKey], fixture.appliedBytes, 'Choice writes the exact real applied save before Continue');
       assert.equal(applied.writes.filter(row => row.method === 'setItem' && row.args[0] === sport.saveKey).length - beforeChoice.writes.filter(row => row.method === 'setItem' && row.args[0] === sport.saveKey).length, 1, 'The choice persists exactly once');
-      assert.equal(JSON.parse(applied.storage[sport.saveKey]).c.seasons.length, 1);
+      assert.equal(JSON.parse(applied.storage[sport.saveKey]).c.seasons.length, fixture.before.seasons.length);
       const next = page.locator('[data-decision-continue]');
       if (report.controls.length === 0) {
         const old = await geometry(page), style = await next.getAttribute('style');

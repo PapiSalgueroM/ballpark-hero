@@ -4,6 +4,7 @@ import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
 import { pushHeadlines } from '@/lib/careerSocial';
+import { nbaEraTeamIds } from '@/lib/nbaMyCareer';
 import type { UsCareerCore, UsCareerEvent, UsCareerSport } from '@/lib/usCareerSport';
 
 export const decisionSports: Record<string, UsCareerSport> = {
@@ -82,4 +83,48 @@ export function nativeDecisionFixture(slug: string, expanded = false) {
     }
   }
   throw new Error(`No deterministic ${slug} ${eventId} fixture reached the real deck`);
+}
+
+// The third season and its card come from the real NBA binding. The expected
+// trade is independent of both the option application and the quality roller.
+export function nativeTradeDecisionFixture() {
+  const slug = 'nba', sport = decisionSports[slug], quality = 80;
+  const eventId = 'nbaC_rule_salary_match', optionIndex = 1;
+  for (const roll of [.5, .61, .75, .9, .37]) {
+    let initial = makeDecisionCareer(slug);
+    for (let season = 0; season < 2; season++) initial = advanceDecisionSeason(slug, initial, quality, () => roll);
+    if (initial.pendingRivalryEvent || initial.pendingRivalryChoice) continue;
+    const tape: number[] = [];
+    const before = advanceDecisionSeason(slug, initial, quality, () => { tape.push(roll); return roll; });
+    if (sport.shouldRetire(before) || before.ovr > 86 || before.contractYears < 1 || before.pendingRivalryEvent || before.pendingRivalryChoice) continue;
+    let draws = 0;
+    sport.drawEvent(copyCareer(before), () => { draws++; return roll; });
+    if (!draws) continue;
+    for (let last = 0; last < 512; last++) {
+      let count = 0;
+      const eventTape: number[] = [], pending = copyCareer(before);
+      const event = sport.drawEvent(pending, () => {
+        const value = ++count === draws ? last / 512 : roll; eventTape.push(value); return value;
+      });
+      if (event.id !== eventId) continue;
+      const pool = nbaEraTeamIds('now').filter(id => id !== pending.team);
+      const after = copyCareer(pending);
+      after.team = pool[Math.floor(.1 * pool.length)];
+      after.morale = Math.max(0, Math.min(100, pending.morale - 8));
+      after.fanbase = 44;
+      const amount = (n: number) => String(Number(n.toFixed(6)));
+      const expectedRows = [
+        { key: 'team', label: 'Team', before: sport.teamLabelOf(pending.team, pending.eraId), after: sport.teamLabelOf(after.team, after.eraId), delta: null },
+        ...(['morale', 'fanbase'] as const).map(key => ({
+          key, label: key === 'morale' ? 'Morale' : 'Fanbase', before: amount(pending[key]), after: amount(after[key]),
+          delta: `${after[key] > pending[key] ? '+' : ''}${amount(after[key] - pending[key])}`,
+        })),
+      ];
+      return { slug, caseId: 'salary-match-trade', expanded: false, eventId, optionIndex, expectedRows, initial, quality,
+        before: pending, after, eventTitle: event.title, choice: event.options[optionIndex].label,
+        tape: [...tape, ...eventTape], choiceTape: [.9, .1, .7],
+        appliedBytes: decisionSave(after, 82), pendingBytes: decisionSave(pending, quality, 'event') };
+    }
+  }
+  throw new Error('No deterministic third-season NBA salary matching card reached the real deck');
 }

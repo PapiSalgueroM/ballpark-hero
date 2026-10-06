@@ -1205,67 +1205,166 @@
    "era2005|premier2005": {
     "club": "Arsenal",
     "eraId": "era2005",
-    "entries": 47,
+    "entries": 18,
     "read": {
-     "position": 3,
-     "champion": "Manchester United",
-     "bottom": "Sunderland",
-     "cupWinner": "Chelsea",
-     "uclWinner": "Chelsea",
+     "position": 15,
+     "champion": "Chelsea",
+     "bottom": "Wigan Athletic",
+     "cupWinner": null,
+     "uclWinner": null,
      "nextLeague": "premier2005",
-     "nextUcl": true,
+     "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "b23d520020224640",
-     "table": "e71f79f2be580f84",
-     "results": "85ff3385e5e5765f",
-     "world": "cad0f745066ba3e1",
-     "cup": "a993ad62c0e2ef09",
-     "europe": "8e5fb0bd34728679",
+     "start": "59df305bcd327bee",
+     "table": "3b3d32f44967d210",
+     "results": "3368bcde0bf4863d",
+     "world": "44b810704ede2c08",
+     "cup": "eec824c1fbac17a5",
+     "europe": "77200f593a12d7f0",
      "trophies": "4f53cda18c2baa0c",
      "objectives": "434cf8b4cfc81dfc",
-     "whole": "dab01f64c128ff6b",
-     "summary": "b4f9b50d163adf53",
+     "whole": "3b5aaf8a0d7a0f47",
+     "summary": "1027860ed8761751",
      "promotions": "74234e98afe7498f",
-     "europeNext": "b63b3f062ceb232d",
-     "objectivesNext": "9c7b01c6a2079e6a",
+     "europeNext": "85583c158b019c6c",
+     "objectivesNext": "90b115318b427d93",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "14dd9e84ef4a0e16",
-     "wholeNext": "ec4af2698fc39a40"
+     "cupDrawNext": "d8e1c957bc504705",
+     "wholeNext": "e13b5ec75ebf2c81"
     }
    },
    "era2005|laliga2005": {
     "club": "Alavés",
     "eraId": "era2005",
-    "entries": 19,
+    "entries": 38,
     "read": {
-     "position": 20,
+     "position": 19,
      "champion": "Real Madrid",
-     "bottom": "Alavés",
-     "cupWinner": null,
+     "bottom": "Cádiz",
+     "cupWinner": "Real Madrid",
      "uclWinner": null,
      "nextLeague": "laliga2005",
      "nextUcl": false,
      "overrides": {}
     },
     "hashes": {
-     "start": "cc2913fd8504cb38",
-     "table": "db3b1ecf15be501a",
-     "results": "c1ea224bd0139adc",
-     "world": "ecb9775f5e7498d8",
-     "cup": "75889c808291dc77",
+     "start": "774cae9533b88d4e",
+     "table": "7c46148ce4250f27",
+     "results": "63208724bbf96646",
+     "world": "3260307bef713d5f",
+     "cup": "e4c4cd58d3d73ac9",
      "europe": "9814fd6ccd11c92b",
      "trophies": "4f53cda18c2baa0c",
-     "objectives": "b07cb30c05d246ac",
-     "whole": "7bc75c9f97589f71",
-     "summary": "b63884a750d94c47",
+     "objectives": "038fd7e734a7bdb8",
+     "whole": "a283d5e6bf46ccb6",
+     "summary": "26dc2857387e8caf",
      "promotions": "74234e98afe7498f",
      "europeNext": "85583c158b019c6c",
-     "objectivesNext": "b2615418e2603512",
+     "objectivesNext": "1fc205867ae68dbc",
      "calendarNext": "bc765b33645f0e7b",
-     "cupDrawNext": "13e94b8b6a695f80",
-     "wholeNext": "9abd202374022017"
+     "cupDrawNext": "e5090dba921bef20",
+     "wholeNext": "784856d200314034"
+    }
+   },
+   "era2005|seriea2005": {
+    "club": "AC Milan",
+    "eraId": "era2005",
+    "entries": 52,
+    "read": {
+     "position": 1,
+     "champion": "AC Milan",
+     "bottom": "Empoli",
+     "cupWinner": "AC Milan",
+     "uclWinner": "Barcelona",
+     "nextLeague": "seriea2005",
+     "nextUcl": true,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "c206c2bc78e994d2",
+     "table": "9dcdd908d8d5e58a",
+     "results": "f9bdb513c5608441",
+     "world": "93ff075e304b77f3",
+     "cup": "0d33da4eca081d86",
+     "europe": "3164e88d5d0e935b",
+     "trophies": "cd06796a204ec96a",
+     "objectives": "65636ee3bf243a66",
+     "whole": "2f826ccc39b41041",
+     "summary": "d6a64c939afc224d",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "a8c0a85510922afe",
+     "objectivesNext": "e49da81cf14db067",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "24b39994a70eb9c2",
+     "wholeNext": "ae877a69c8b8bde5"
+    }
+   },
+   "era2005|bundesliga2005": {
+    "club": "Arminia Bielefeld",
+    "eraId": "era2005",
+    "entries": 40,
+    "read": {
+     "position": 10,
+     "champion": "Schalke 04",
+     "bottom": "Duisburg",
+     "cupWinner": "Wolfsburg",
+     "uclWinner": null,
+     "nextLeague": "bundesliga2005",
+     "nextUcl": false,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "2ccd4581a16abff2",
+     "table": "878e0588a8693edb",
+     "results": "36dba8611426ec86",
+     "world": "3a951aa3ed2e9324",
+     "cup": "33bf52367707080b",
+     "europe": "9814fd6ccd11c92b",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "c17070a376b16f1d",
+     "whole": "0da3be44191cbb3e",
+     "summary": "7965407a58ac13e6",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "85583c158b019c6c",
+     "objectivesNext": "535973d8d790c920",
+     "calendarNext": "2fd0ce2aa56f0a07",
+     "cupDrawNext": "9f453ea0eb73daea",
+     "wholeNext": "f6982f1d286f8125"
+    }
+   },
+   "era2005|ligue12005": {
+    "club": "AC Ajaccio",
+    "eraId": "era2005",
+    "entries": 20,
+    "read": {
+     "position": 19,
+     "champion": "Lens",
+     "bottom": "Nancy",
+     "cupWinner": null,
+     "uclWinner": null,
+     "nextLeague": "ligue12005",
+     "nextUcl": false,
+     "overrides": {}
+    },
+    "hashes": {
+     "start": "fbf4c9f44ab70f97",
+     "table": "d0f77fa9080b443f",
+     "results": "b33c20a12bb97a6e",
+     "world": "5fb7a0f6b2451f2a",
+     "cup": "75cf3276f1ca5dec",
+     "europe": "9814fd6ccd11c92b",
+     "trophies": "4f53cda18c2baa0c",
+     "objectives": "92d30e4203c32c14",
+     "whole": "3e6b9392895fabb2",
+     "summary": "4ec2b24e2274f376",
+     "promotions": "74234e98afe7498f",
+     "europeNext": "85583c158b019c6c",
+     "objectivesNext": "1b319efb93832eed",
+     "calendarNext": "bc765b33645f0e7b",
+     "cupDrawNext": "5a98e5077376256e",
+     "wholeNext": "c901add141823d79"
     }
    }
   },
@@ -1499,20 +1598,41 @@
     "ucl": "4b227777d4dd1fc6",
     "def": "b7fb111c0255e4e8",
     "demand": "97c2e80de38b9f71",
-    "objectives": "d74553dac1253321"
+    "objectives": "0659fda7f865f371"
    },
    "era2005|laliga2005": {
     "drop": "4e07408562bedb8b",
     "ucl": "4b227777d4dd1fc6",
     "def": "fe4b711a6ec5f626",
     "demand": "8dd5efb2f048ae01",
-    "objectives": "58b1b108e9262add"
+    "objectives": "f30c32bfdbd62745"
+   },
+   "era2005|seriea2005": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4b227777d4dd1fc6",
+    "def": "f9c44328927058ba",
+    "demand": "1426bbfb5f2a237f",
+    "objectives": "0a112cb825bc3397"
+   },
+   "era2005|bundesliga2005": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4e07408562bedb8b",
+    "def": "7681bdce928d2457",
+    "demand": "2b4607a7ba6f9127",
+    "objectives": "c223ed4cd65b9344"
+   },
+   "era2005|ligue12005": {
+    "drop": "4e07408562bedb8b",
+    "ucl": "4e07408562bedb8b",
+    "def": "c4d1e818279e3a33",
+    "demand": "babda33fe675e812",
+    "objectives": "6a8c595b327304e8"
    },
    "views": {
     "pyramids": "7948e7f92fbb0ad0",
     "nations": "eac10a4f2b46d3b0",
-    "leagueNations": "193c62292faf9150",
-    "euroSlots": "3d0ee02d8393d825",
+    "leagueNations": "5025bb51b2726d42",
+    "euroSlots": "fcd4142b75e63467",
     "eraIds": "b61feed18056a8cc",
     "historic": "58e7fc74426ffa01"
    }

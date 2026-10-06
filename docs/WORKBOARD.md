@@ -1,3 +1,14 @@
+## Codex recovery prepares combined source, 2026-10-06
+
+Anthony moved the stalled conversation to a new chat. Codex is preparing
+AD1b26f197 plus accepted218d2aa7 in codex/career-release-compatibility.
+This is isolated verification preparation, not a publication or new feature
+claim. Accepted PR136, PR132 and PR138 remain frozen and unchanged.
+Both update lists and the intentional988 parity fixture are preserved.
+Remote generation and real988 choice/save/RNG checks are pending.
+Claude retains his publication slot until his final source and live receipt.
+The root shared WORKBOARD carries the current coordination message.
+
 ## Codex release acknowledgement, 2026-10-05
 
 Codex is waiting for the Release AD live receipt before proceeding with publication.

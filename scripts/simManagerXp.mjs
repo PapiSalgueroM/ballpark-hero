@@ -32,6 +32,12 @@
  *  7. Balance: a maxed manager against an untouched one, paired seasons.
  *  8. A tree must not switch off a guarantee another round measured. The
  *     Negotiation tree did exactly that and every other gate stayed green.
+ *  9. Round 965: every manager background hands over exactly one point in its
+ *     own tree, reading the same on its effect as a bought one, once and never
+ *     twice (a Round 303 save included), and never to a career with no manager.
+ * 10. Round 965: the same on the real engine. A Boardroom manager's gifted
+ *     Finance point and a bought one make identical budgets over eight weeks on
+ *     the same seed, and both differ from an untouched career.
  *
  * Negative controls (house rule: prove the checks can fail):
  *   XP_CONTROL=notneutral  gives Tactics a lift at zero points, so section 1
@@ -42,6 +48,11 @@
  *                          points in a five point tree.
  *   XP_CONTROL=flatlevels  makes every level cost the same, so section 2 finds
  *                          a curve that does not steepen.
+ *   XP_CONTROL=nomap       maps the TV pundit background to no tree (Round 965),
+ *                          so section 9 finds a background that is a badge again.
+ *   XP_CONTROL=dropgift    makes addXp rebuild the block field by field, losing
+ *                          the gift record, so section 9 finds the point paid
+ *                          again after the rollover's XP write.
  * Each control refuses to run if its rewrite did not find its text.
  *
  * Run: node scripts/simManagerXp.mjs
@@ -55,17 +66,29 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
+/* Round 965: esbuild found by walking up, the way node resolves a module, so
+   the harness also runs from a git worktree that has no node_modules of its
+   own. On the main checkout the first directory tried is ROOT itself. */
+const ESBUILD = (() => {
+  for (let d = ROOT; ; d = path.dirname(d)) {
+    const bin = path.join(d, 'node_modules', '.bin', 'esbuild');
+    if (fs.existsSync(bin) || fs.existsSync(bin + '.cmd')) return bin.replaceAll('\\', '/');
+    if (path.dirname(d) === d) return `${ROOT_URL}/node_modules/.bin/esbuild`;
+  }
+})();
 const ENTRY = `${TMP}/mgrXp.entry.mjs`;
 const BUNDLE = `${TMP}/mgrXp.bundle.mjs`;
 
 const CONTROL = process.env.XP_CONTROL || '';
-const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate'];
+const KNOWN = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'deadgate', 'saturate', 'nomap', 'dropgift'];
 /* The first four rewrite clubManagerXp.ts (freepoints, nocap and flatlevels
    reach gmXp.ts through it since Round 942) and are read by sections 1 to 6.
+   nomap and dropgift (Round 965) are read by section 9; dropgift also reaches
+   gmXp.ts, where addXp has lived since Round 942.
    'deadgate' patches the ENGINE bundle instead, because section 7 runs the
    real engine and the engine imports the real module whatever we do to a copy
    of the source. */
-const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate'];
+const SOURCE_CONTROLS = ['notneutral', 'freepoints', 'nocap', 'flatlevels', 'saturate', 'nomap', 'dropgift'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`XP_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -92,11 +115,15 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
       "  return 1 + treePoints(state, 'tactics') * 0.1;",
       "  return 1.1 + treePoints(state, 'tactics') * 0.1;",
     );
-  } else if (['freepoints', 'nocap', 'flatlevels'].includes(CONTROL)) {
+  } else if (CONTROL === 'nomap') {
+    /* Round 965: one background mapped to no tree, which is the badge the
+       round exists to end. Section 9 must go red. */
+    swap("  pundit: 'media',", "  pundit: 'nowhere' as SkillTree,");
+  } else if (['freepoints', 'nocap', 'flatlevels', 'dropgift'].includes(CONTROL)) {
     /* Round 942 lifted the curve and the spending into gmXp.ts, which
-       clubManagerXp.ts delegates to. These three now rewrite a copy of THAT
+       clubManagerXp.ts delegates to. These four now rewrite a copy of THAT
        file and point the clubManagerXp copy at it, so they still reach the
-       code sections 2 and 3 read. */
+       code sections 2, 3 and 9 read. */
     const GM_PATH = `${ROOT}/src/lib/gmXp.ts`;
     let gm = fs.readFileSync(GM_PATH, 'utf8').replaceAll('\r\n', '\n');
     const swapGm = (from, to) => {
@@ -108,12 +135,17 @@ if (SOURCE_CONTROLS.includes(CONTROL)) {
       gm = gm.replace(from, to);
     };
     if (CONTROL === 'freepoints') {
+      /* Round 965 made the shared pointsFree gift aware, so this is its line now. */
       swapGm(
-        '  return Math.max(0, pointsEarned(block.xp, maxLevelOf(set)) - pointsSpent(set, block));',
+        '  return Math.max(0, Math.min(pointsEarned(block.xp, maxLevelOf(set)) - pointsBought(set, block), room));',
         '  return Math.max(0, pointsEarned(block.xp, maxLevelOf(set)));',
       );
     } else if (CONTROL === 'nocap') {
       swapGm('  if (now >= set.maxPoints) return null;', '');
+    } else if (CONTROL === 'dropgift') {
+      /* Round 965 review: addXp rebuilds the block field by field and loses the
+         gift record. Section 9 must go red. */
+      swapGm('  return { ...block, xp: block.xp + add };', '  return { v: block.v, xp: block.xp + add, points: block.points, graduatesSeen: block.graduatesSeen };');
     } else {
       swapGm('    step = Math.round(step * XP_LEVEL_STEP);', '');
     }
@@ -143,7 +175,7 @@ const mod = await import('${xpPath.replaceAll('\\', '/')}');
 export const xp = mod;
 `);
 execSync(
-  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
+  `"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
 
@@ -490,7 +522,7 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 export const engine = await import('${ROOT_URL}/src/lib/clubManager.ts');
 `);
 execSync(
-  `"${ROOT}/node_modules/.bin/esbuild" "${ENGINE_ENTRY}" --bundle --format=esm --platform=node --outfile="${ENGINE_BUNDLE}" --log-level=error${engineAlias} --alias:@=${ROOT_URL}/src`,
+  `"${ESBUILD}" "${ENGINE_ENTRY}" --bundle --format=esm --platform=node --outfile="${ENGINE_BUNDLE}" --log-level=error${engineAlias} --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
 const { engine } = await import(pathToFileURL(ENGINE_BUNDLE).href);
@@ -813,6 +845,201 @@ console.log('8) A maxed manager cannot buy his way out of Round 506 haggling');
      of 40 at every one of six bases on the fixed engine; it was 14 to 17 when
      the tree moved patience. */
   if (maxed.agreed > 8) fail(`a maxed manager landed a repeated ${LOWBALL} lowball ${maxed.agreed} times of ${maxed.opened} (ceiling 8; untouched scored ${base.agreed}), which is the free lunch Round 506 removed`);
+}
+
+/* ---------- 9. Round 965: the background point ---------- */
+console.log('9) Every background hands over exactly one point, in its own tree, once');
+{
+  /*
+   * The owner's 2026-08-26 item 11 asked for the created manager to be a real
+   * choice. Before Round 965 the background was a badge and the form said so.
+   * Each background now starts the manager with one point in its own tree, and
+   * everything below is exact arithmetic over the pure module, so there is no
+   * band to set: a point is a point.
+   *
+   * XP_CONTROL=nomap maps the TV pundit to no tree, the badge restored, and
+   * section 9 must go red on it.
+   */
+  const { backgroundTree, grantGift, ensureXp, pointsBought, addXp, MAX_LEVEL: TOP } = xp;
+  for (const [name, fn] of Object.entries({ backgroundTree, grantGift, ensureXp, pointsBought, addXp })) {
+    if (typeof fn !== 'function') {
+      console.error(`section 9 could not reach ${name}; the bundle is not the shape it expects`);
+      process.exit(1);
+    }
+  }
+  const EXPECT = {
+    exPlayer: 'manManagement', coachingBadges: 'tactics', analyst: 'recruitment', youthCoach: 'youth',
+    agent: 'negotiation', boardroom: 'finance', pundit: 'media',
+  };
+  const EFFECT_OF = {
+    tactics: dutyEdge, recruitment: valuationTighten, negotiation: askEdge, youth: youthIntakeEdge,
+    manManagement: promiseCushion, finance: gateEdge, media: pressCushion,
+  };
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const mgr = background => ({ name: 'Sam Calloway', nationality: 'Spain', background, style: 'balanced' });
+  let walked = 0;
+  const treesHit = new Set();
+  for (const [bg, tree] of Object.entries(EXPECT)) {
+    const s = { manager: mgr(bg) };
+    ensureXp(s);
+    const b = s.managerXp;
+    /* 9a. Exactly one spent point, in the mapped tree, nothing free. */
+    if (pointsSpent(b) !== 1) fail(`${bg}: ${pointsSpent(b)} points spent after the grant, wanted exactly 1`);
+    if ((b.points[tree] ?? 0) !== 1) fail(`${bg}: ${tree} holds ${b.points[tree]} points, wanted the background's 1`);
+    if (pointsFree(b) !== 0) fail(`${bg}: ${pointsFree(b)} points free on day one, wanted 0`);
+    if (b.gift !== tree) fail(`${bg}: the gift is recorded as ${b.gift}, wanted ${tree}`);
+    if (b.gift) treesHit.add(b.gift);
+    /* 9b. The gift reads the same on its consumer as a point bought with XP,
+       and it moves that consumer off its day one value. */
+    const buyer = defaultXp();
+    buyer.xp = xpForLevel(2);
+    const paid = spendPoint(buyer, tree);
+    if (!paid) fail(`${bg}: could not buy the comparison point in ${tree}`);
+    else {
+      const gifted = EFFECT_OF[tree](s);
+      const bought = EFFECT_OF[tree]({ managerXp: paid });
+      const zero = EFFECT_OF[tree]({});
+      if (gifted !== bought) fail(`${bg}: the gifted point reads ${gifted} on ${tree}'s effect, a bought one reads ${bought}`);
+      if (gifted === zero) fail(`${bg}: the gifted point left ${tree}'s effect at its day one value ${zero}, so it bought nothing`);
+    }
+    /* 9c. The gift does not eat the first point the manager earns. */
+    if (pointsFree({ ...s.managerXp, xp: xpForLevel(2) }) !== 1) fail(`${bg}: reaching level 2 frees ${pointsFree({ ...s.managerXp, xp: xpForLevel(2) })} points, wanted 1`);
+    /* 9d. Once, never twice: five more ensures and a save round trip. */
+    for (let i = 0; i < 5; i++) ensureXp(s);
+    const reloaded = clone(s);
+    ensureXp(reloaded);
+    ensureXp(reloaded);
+    if (pointsSpent(s.managerXp) !== 1) fail(`${bg}: repeated ensures took the spend to ${pointsSpent(s.managerXp)}`);
+    if (pointsSpent(reloaded.managerXp) !== 1) fail(`${bg}: a reload took the spend to ${pointsSpent(reloaded.managerXp)}`);
+    /* Round 965 review: and across the rollover, whose XP write is addXp. A
+       block rebuilt there field by field drops the gift record and the grant
+       runs again every summer (XP_CONTROL=dropgift). simManagerSpec section 7
+       crosses two real rollovers; this is the pure module's half. */
+    const summer = { manager: s.manager, managerXp: addXp(clone(s.managerXp), xpForLevel(3)) };
+    ensureXp(summer);
+    ensureXp(summer);
+    if (pointsSpent(summer.managerXp) !== 1 || summer.managerXp.gift !== tree) fail(`${bg}: after the rollover's XP write the spend is ${pointsSpent(summer.managerXp)} and the gift ${summer.managerXp.gift}`);
+    walked += 1;
+  }
+  if (walked !== 7) fail(`only ${walked} backgrounds were walked, wanted all 7`);
+  if (treesHit.size !== 7) fail(`the backgrounds opened ${treesHit.size} distinct trees, wanted all 7`);
+  console.log(`   ${walked} backgrounds, ${treesHit.size} distinct trees, each one point that reads exactly like a bought one`);
+
+  /* 9e. A Round 303 save: a manager, points already bought, no gift field.
+     He gets his point once, it costs him nothing, and a reload adds nothing. */
+  {
+    const old = defaultXp();
+    old.xp = xpForLevel(4);
+    old.points.tactics = 2;
+    const s = { manager: mgr('exPlayer'), managerXp: clone(old) };
+    const freeBefore = pointsFree(old);
+    ensureXp(s);
+    if (s.managerXp.points.manManagement !== 1) fail(`a Round 303 ex player got ${s.managerXp.points.manManagement} Man Management points, wanted 1`);
+    if (pointsFree(s.managerXp) !== freeBefore) fail(`the Round 303 grant moved free points from ${freeBefore} to ${pointsFree(s.managerXp)}`);
+    if (s.managerXp.points.tactics !== 2) fail('the Round 303 grant disturbed the points he had already bought');
+    const again = clone(s);
+    ensureXp(again);
+    ensureXp(again);
+    if (again.managerXp.points.manManagement !== 1) fail(`a Round 303 save opened twice holds ${again.managerXp.points.manManagement} Man Management points`);
+    console.log(`   a Round 303 save got its point once: ${freeBefore} free before and after, Man Management 1 after two reloads`);
+  }
+  /* 9f. A tree he had already filled keeps five and hands one back. */
+  {
+    const full = defaultXp();
+    full.xp = xpForLevel(6);
+    full.points.media = 5;
+    const s = { manager: mgr('pundit'), managerXp: full };
+    ensureXp(s);
+    if (s.managerXp.points.media !== 5) fail(`a full Media tree reads ${s.managerXp.points.media} after the grant`);
+    if (pointsFree(s.managerXp) !== 1) fail(`a full Media tree's gift came back as ${pointsFree(s.managerXp)} free points, wanted 1`);
+  }
+  /* 9g. No manager, no gift: a Skip career is untouched. Nor does a
+     background this build has never heard of. */
+  {
+    const s = {};
+    ensureXp(s);
+    if (s.managerXp.gift !== undefined || pointsSpent(s.managerXp) !== 0) fail('a career with no manager was handed a point');
+    const odd = { manager: { ...mgr('exPlayer'), background: 'astronaut' } };
+    ensureXp(odd);
+    if (pointsSpent(odd.managerXp) !== 0) fail('an unknown background was handed a point');
+  }
+  /* 9h. Fails closed: a gift recorded against an empty tree is not a block. */
+  {
+    const bad = defaultXp();
+    bad.gift = 'tactics';
+    if (isValidXp(bad)) fail('a gift on an empty tree passed validation, so pointsFree could refund a point nobody was given');
+    const wrong = defaultXp();
+    wrong.points.tactics = 1;
+    wrong.gift = 'astrology';
+    if (isValidXp(wrong)) fail('a gift naming no tree passed validation');
+  }
+  /* 9i. A full board with a gift never offers a point with nowhere to go. */
+  {
+    const b = defaultXp();
+    b.xp = xpForLevel(TOP);
+    for (const t of SKILL_TREES) b.points[t] = MAX_TREE_POINTS;
+    b.gift = 'media';
+    if (pointsFree(b) !== 0) fail(`a full board shows ${pointsFree(b)} free points`);
+  }
+  console.log('   a full tree hands its gift back, no manager gets nothing, a bad gift fails closed, a full board offers nothing');
+}
+
+/* ---------- 10. Round 965: the gift on the engine's own consumer ---------- */
+console.log('10) A background point and a bought point make the same money in the real engine');
+{
+  /*
+   * Section 9 reads the effect function. This reads the engine: a Boardroom
+   * manager (Finance gift) against a manager-less career that bought its one
+   * Finance point with XP, same club, same seed, a run of weeks. The budgets
+   * must match to the penny, and both must differ from an untouched career, or
+   * the point never reached the gate. Tiki-taka is formation 0 and Balanced,
+   * the classic day one, so the tactics are the same in all three arms.
+   */
+  const { startCareer, playNextEntry } = engine;
+  const seeded = seed => {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+  const withSeed = (seed, fn) => {
+    const saved = Math.random;
+    Math.random = seeded(seed);
+    try { return fn(); } finally { Math.random = saved; }
+  };
+  const WEEKS = 8;
+  const run = (club, seed, manager, xpBlock) => {
+    let s = withSeed(seed, () => startCareer(club, undefined, undefined, manager));
+    if (xpBlock) s = { ...s, managerXp: xpBlock };
+    return withSeed(seed * 3 + 11, () => {
+      for (let i = 0; i < WEEKS; i++) s = playNextEntry(s, { skipHalftime: true }).state;
+      return s;
+    });
+  };
+  const bought = () => {
+    const b = defaultXp();
+    b.xp = xpForLevel(2);
+    return spendPoint(b, 'finance');
+  };
+  let pairs = 0;
+  let moved = 0;
+  for (const [i, club] of ['Arsenal', 'Napoli', 'Ajax'].entries()) {
+    const seed = 4242 + i * 104729;
+    const gifted = run(club, seed, { name: 'Sam Calloway', nationality: 'England', background: 'boardroom', style: 'tikitaka' });
+    const paid = run(club, seed, undefined, bought());
+    const plain = run(club, seed, undefined, undefined);
+    pairs += 1;
+    if ((gifted.managerXp?.points?.finance ?? 0) !== 1) fail(`${club}: the Boardroom manager's career holds ${gifted.managerXp?.points?.finance} Finance points`);
+    if (gifted.budget !== paid.budget) fail(`${club}: the gifted point made ${gifted.budget}, the bought one ${paid.budget}`);
+    if (gifted.budget !== plain.budget) moved += 1;
+  }
+  if (pairs !== 3) fail(`only ${pairs} clubs ran`);
+  if (moved < 2) fail(`the Finance point moved the budget at only ${moved} of 3 clubs, so it is not reaching the gate`);
+  console.log(`   ${pairs} clubs, ${WEEKS} weeks each: gifted and bought budgets equal at every club, both off the untouched one at ${moved}`);
 }
 
 if (failures) {

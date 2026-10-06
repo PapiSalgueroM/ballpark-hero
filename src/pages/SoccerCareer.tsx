@@ -53,6 +53,7 @@ import {
   applyMoneyAction,
   acceptLoan, projectLeagueApps,
 } from "@/lib/soccerCareerEngine";
+import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -67,6 +68,8 @@ import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
 import TrainingPanel from "@/components/soccer-career/TrainingPanel";
 import CareerStory from "@/components/soccer-career/CareerStory";
+import SeasonRatings, { BAND_CLASS } from "@/components/soccer-career/SeasonRatings";
+import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
 import { ordinal, leagueWithArticle, readLeagueFinish } from "@/lib/soccerCareerLeague";
@@ -98,6 +101,7 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
+import { beatStyle, debutMomentKey, legacyMomentKey, rivalryMomentKey, settleLoadedMoments, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
 
 /* ─── Constants ─── */
@@ -227,9 +231,17 @@ function getPositionStatBars(pos: string, s: AttrHolder) {
   });
 }
 
+/* Round 972: the cabinet tile for continental club cups won outside UEFA. One
+   name when every win was the same cup, a plain label when the cup was renamed
+   or the player won in two parts of the world. */
+function clubCupTileLabel(seasons: SeasonRecord[]): string {
+  const names = [...new Set(seasons.map(s => s.clubCupTitle).filter((n): n is string => !!n))];
+  return names.length === 1 ? names[0] : "Club continental cups";
+}
+
 /* ─── Position-specific career stats display ─── */
-function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; yellowCards: number; redCards: number }) {
-  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
+function getPositionCareerStats(pos: string, totals: { apps: number; goals: number; assists: number; cleanSheets: number; leagueTitles: number; domesticCups: number; championsLeagues: number; worldCups: number; continentalCups: number; clubCups: number; yellowCards: number; redCards: number }) {
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
   // Derive approximate stats from existing data
   const saves = totals.cleanSheets * 4 + Math.round(totals.apps * 2.5); // ~estimated saves
   const pensSaved = Math.max(0, Math.floor(totals.cleanSheets / 5)); // ~1 per 5 clean sheets
@@ -353,14 +365,87 @@ function NumberStepper({ value, min, max, onChange, label, disabled, wide }: {
   );
 }
 
+/* ─── Round 972: the first stage on the cup card ───
+   The group stage (or the league phase) that now comes before the knockouts:
+   where my club finished, the table of four, and the nights behind a fold so
+   the card stays a small tile. Highlighting reads the stage's own row, not the
+   current club, because the card can outlive a summer move. */
+const stageOrdinal = (n: number): string => {
+  const v = n % 100;
+  const suffix = v >= 11 && v <= 13 ? "th" : n % 10 === 1 ? "st" : n % 10 === 2 ? "nd" : n % 10 === 3 ? "rd" : "th";
+  return `${n}${suffix}`;
+};
+
+function FirstStageBlock({ stage }: { stage: FirstStageStage }) {
+  const mine = stage.myRow.club;
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between text-[10px] uppercase tracking-wider text-muted-foreground">
+        <span>{stage.label}</span>
+        <span className="font-bold text-foreground">{stageOrdinal(stage.position)} of {stage.of}</span>
+      </div>
+      {stage.table ? (
+        <div className="rounded-lg bg-muted/20 px-2 py-1">
+          {stage.table.map((r, i) => (
+            <div key={r.club} className={`flex items-center text-[11px] py-0.5 ${r.club === mine ? "font-bold text-foreground" : "text-muted-foreground"}`}>
+              <span className="w-4 shrink-0">{i + 1}</span>
+              <span className="flex-1 truncate">{r.club}</span>
+              <span className="w-12 text-right shrink-0">{r.w}-{r.d}-{r.l}</span>
+              <span className="w-8 text-right shrink-0">{r.gf - r.ga > 0 ? "+" : ""}{r.gf - r.ga}</span>
+              <span className="w-8 text-right shrink-0">{r.pts}</span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="rounded-lg bg-muted/20 px-3 py-1.5 text-[11px] text-muted-foreground">
+          <span className="font-bold text-foreground">{stage.myRow.w}-{stage.myRow.d}-{stage.myRow.l}, {stage.myRow.pts} pts</span>
+          {stage.cutoffs && <> · 8th had {stage.cutoffs.direct} pts, 24th had {stage.cutoffs.playoff}</>}
+        </div>
+      )}
+      <details className="text-[11px]">
+        <summary className="cursor-pointer text-muted-foreground">All {stage.games.length} games</summary>
+        <div className="space-y-0.5 pt-1">
+          {stage.games.map(g => (
+            <div key={g.matchday} className="flex items-center justify-between bg-muted/10 rounded px-2 py-0.5">
+              <span className="text-[10px] text-muted-foreground w-9 shrink-0">MD{g.matchday}</span>
+              <span className="truncate flex-1">{g.home ? "vs" : "at"} {g.opponent}</span>
+              <span className="font-black shrink-0 mx-2">{g.goalsFor}-{g.goalsAgainst}</span>
+              <span className={`text-[10px] w-3 shrink-0 ${g.goalsFor > g.goalsAgainst ? "text-emerald-400" : g.goalsFor < g.goalsAgainst ? "text-red-400" : "text-muted-foreground"}`}>
+                {g.goalsFor > g.goalsAgainst ? "W" : g.goalsFor < g.goalsAgainst ? "L" : "D"}
+              </span>
+            </div>
+          ))}
+        </div>
+      </details>
+      {stage.runnerUpOut && (
+        <div className="text-[10px] text-center text-muted-foreground">Second, but not one of the two best runners-up, so out.</div>
+      )}
+      <div className="text-[10px] text-muted-foreground">{stage.footnote}</div>
+    </div>
+  );
+}
+
+/** What the card says when the run ended before the knockouts. */
+const cupResultLabel = (result: string): string =>
+  result === "Group Stage" ? "Out in the group stage" :
+  result === "League Phase" ? "Out in the league phase" :
+  result === "Play-off" ? "Out in the knockout play-off" : result;
+
 /* ─── Timeline Entry ─── */
-function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; isCurrent: boolean; isLast: boolean }) {
+function TimelineEntry({ season, position, isCurrent, isLast }: { season: SeasonRecord; position: string; isCurrent: boolean; isLast: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
   const finish = season.type === "playing" ? readLeagueFinish(season) : null;
+  /* Round 1011: the season's match rating and the overall it was played at,
+     read through the same rules as the Ratings screen. A season nobody played
+     has no rating here (never a 0.0), and a row saved before the overall was
+     kept simply shows none. The stats are the ones this position keeps. */
+  const rated = season.type === "playing" ? readMatchRating(season) : null;
+  const playedAt = rated !== null ? readOvr(season.ovr) : null;
+  const statLine = season.type === "playing" ? soccerRatingRows([season], position)[0]?.stats ?? [] : [];
 
   return (
-    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`}>
+    <div className={`relative flex items-start gap-3 py-2 px-3 rounded-lg transition-colors ${isCurrent ? 'bg-emerald-500/15 border border-emerald-500/30' : ''}`} data-timeline-season={season.year}>
       {!isLast && <div className="absolute left-[1.65rem] top-9 w-0.5 h-[calc(100%-0.5rem)] bg-border" />}
       <div className={`shrink-0 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black z-10 ${
         label === "A" ? "bg-amber-500/80 text-amber-950" :
@@ -376,7 +461,24 @@ function TimelineEntry({ season, isCurrent, isLast }: { season: SeasonRecord; is
         </div>
         {season.type === "playing" && (
           <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-            <span className="text-[10px] text-muted-foreground">{season.apps}A · {season.goals}G · {season.assists}As</span>
+            {rated !== null && (
+              <span className={`text-[10px] font-black px-1 rounded bg-muted/40 tabular-nums ${BAND_CLASS[ratingBand(rated)]}`} data-season-rating={rated.toFixed(1)} title={`Average match rating ${rated.toFixed(1)}`}>
+                {rated.toFixed(1)}
+              </span>
+            )}
+            {playedAt !== null && (
+              <span className="text-[10px] text-muted-foreground tabular-nums" data-season-ovr={playedAt} title={`Played this season at OVR ${playedAt}`}>OVR {playedAt}</span>
+            )}
+            <span className="text-[10px] text-muted-foreground">
+              {statLine.map((st, i) => (
+                <Fragment key={st.label}>
+                  {i > 0 && " · "}
+                  {st.value === null
+                    ? <span title={`${st.label} may not have been counted this season`} aria-label={`${st.label} may not have been counted`}>-{st.short}</span>
+                    : `${st.value}${st.short}`}
+                </Fragment>
+              ))}
+            </span>
             {/* Round 929: where the club finished. Absent on old saves and in
                 leagues whose size is not verified, so it prints nothing there. */}
             {finish && (
@@ -514,14 +616,16 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 /* ─── Season Summary Card ─── */
 function SeasonSummaryCard({ season, position, onContinue, appearance, league, world }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; league?: string; world?: WorldSeason | null }) {
   const isGK = position === "GK";
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
   const champion = finish && finish.finish !== 1 && league && world && world.year === season.year
     ? (world.leagues?.[league] && world.leagues[league] !== season.club ? world.leagues[league] : null)
     : null;
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && "🏆 Cup", season.championsLeague && "⭐ UCL", season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   const celebration = appearance ? getCelebration(appearance.celebration) : null;
+  const summaryRating = readMatchRating(season);
+  const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
 
   return (
     <div className="relative bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -558,7 +662,15 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, league, w
       </div>
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>Avg Rating: <strong className="text-foreground">{season.rating.toFixed(1)}</strong></span>
+        {/* Round 1011: a ban, prison or doping year was never played, so it
+            has no rating to show (it used to print 0.0). The overall the
+            season was played at sits beside it when the row has one. */}
+        <span data-summary-rating>
+          Avg Rating: {summaryRating === null
+            ? <strong className="text-muted-foreground" aria-label="no rating, no games played" title="No games played this season">-</strong>
+            : <strong className="text-foreground">{summaryRating.toFixed(1)}</strong>}
+          {summaryOvr !== null && <span data-summary-ovr> · Played at OVR <strong className="text-foreground">{summaryOvr}</strong></span>}
+        </span>
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
 
@@ -693,7 +805,11 @@ export default function SoccerCareer() {
          taking a single step. repairCareer fills every optional field this
          game has grown, including the primeType migration that used to live
          here, and it runs again at the top of both step functions. */
-      return { career: repairCareer(parsed as CareerState), invalid: false };
+      const loaded = repairCareer(parsed as CareerState);
+      /* Round 985: a moment this save already holds was seen; it never replays.
+         Its own try, so an odd save can only cost a moment, never the save. */
+      try { settleLoadedMoments(loaded); } catch { /* the card plays; nothing else changes */ }
+      return { career: loaded, invalid: false };
     } catch { return { career: null, invalid: true }; }
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
@@ -2294,15 +2410,29 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
 }
 
 /* ─── International Debut Screen ─── */
-function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
+/* Round 985: the call-up lands as a moment. The flag and the heading slam,
+   the call-up line and the nation, age and OVR row rise, the last line ticks
+   in, each on the kit's stagger. Only the first time the career steps onto
+   this card (careerMoments.ts); a reload or a second mount draws it still.
+   Every value is the save's own, final from its first frame. The last line
+   used to promise a morale boost the call-up never applied (the engine's
+   debut path sets the debut year and nothing else), so it says only what is
+   true. The Continue button is never animated, so it can always be pressed. */
+export function InternationalDebutCard({ career, onDismiss }: { career: CareerState; onDismiss: () => void }) {
+  const m = useCareerMoment(debutMomentKey(career));
+  const fx = (cls: string) => (m.fresh ? ` ${cls}` : "");
+  const at = (i: number) => beatStyle(m, revealDelay(i, 0.1, 0.2));
+  /* A slam starts at 1.6 times its size, so it goes on a content wide child and
+     its row clips across: a full width block scaled up would push past a
+     phone's edge and widen the page for a moment. */
   return (
-    <div className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
-      <div className="flex justify-center"><FlagImg name={career.nationality} size={48} /></div>
-      <h3 className="text-2xl font-black tracking-tight">INTERNATIONAL DEBUT</h3>
-      <p className="text-sm text-muted-foreground">
+    <div ref={m.ref} className="rounded-xl border-2 border-amber-500/50 bg-gradient-to-b from-amber-500/10 to-transparent p-6 space-y-4 text-center">
+      <div className="flex justify-center overflow-x-clip"><span className={`inline-flex${fx("cm-slam")}`} style={at(0)} data-beat="flag"><FlagImg name={career.nationality} size={48} /></span></div>
+      <h3 className="text-2xl font-black tracking-tight overflow-x-clip"><span className={`inline-block${fx("cm-slam")}`} style={at(1)} data-beat="heading">INTERNATIONAL DEBUT</span></h3>
+      <p className={`text-sm text-muted-foreground${fx("cm-rise")}`} style={at(2)} data-beat="callup">
         {career.playerName} has been called up to the <strong><FlagImg name={career.nationality} size={14} showLabel /></strong> national team!
       </p>
-      <div className="flex items-center justify-center gap-3 text-sm">
+      <div className={`flex items-center justify-center gap-3 text-sm${fx("cm-rise")}`} style={at(3)} data-beat="row">
         <span><FlagImg name={career.nationality} size={24} /></span>
         <span className="font-bold">{career.nationality}</span>
         <span className="text-muted-foreground">·</span>
@@ -2310,8 +2440,8 @@ function InternationalDebutCard({ career, onDismiss }: { career: CareerState; on
         <span className="text-muted-foreground">·</span>
         <span className="text-muted-foreground">OVR {career.overall}</span>
       </div>
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
-        <p className="text-xs text-amber-300">🎉 Massive morale boost! Your international journey begins.</p>
+      <div className={`bg-amber-500/10 border border-amber-500/20 rounded-lg p-3${fx("cm-tick-in")}`} style={at(4)} data-beat="journey">
+        <p className="text-xs text-amber-300">🎉 Your international journey begins.</p>
       </div>
       <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-amber-600 hover:bg-amber-500 text-black">
         Continue →
@@ -2533,16 +2663,21 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
 }
 
 /* ─── Rivalry Summary Card (End of Career) ─── */
-function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; career: CareerState }) {
+/* Round 985: the verdict line rises the first time the career lands on it
+   (careerMoments.ts), the same rise the debut card's row uses. The hook sits
+   above the early return on purpose (React error #310). The card sits low in
+   the right column, so the rise waits until the card is in view. */
+export function RivalrySummaryCard({ summary, career }: { summary: RivalrySummary; career: CareerState }) {
+  const m = useCareerMoment(rivalryMomentKey(career));
   const rival = career.rival;
   if (!rival) return null;
   const winnerColor = summary.overallWinner === "player" ? "border-emerald-500/50 from-emerald-500/10" : summary.overallWinner === "rival" ? "border-orange-500/50 from-orange-500/10" : "border-amber-500/50 from-amber-500/10";
-  
+
   return (
-    <div className={`rounded-xl border-2 ${winnerColor} bg-gradient-to-b to-transparent p-5 space-y-4`}>
+    <div ref={m.ref} className={`rounded-xl border-2 ${winnerColor} bg-gradient-to-b to-transparent p-5 space-y-4`}>
       <div className="text-center space-y-2">
         <div className="text-4xl">{summary.overallWinner === "player" ? "👑" : summary.overallWinner === "rival" ? "😔" : "🤝"}</div>
-        <h3 className="text-xl font-black">
+        <h3 className={`text-xl font-black${m.fresh ? " cm-rise" : ""}`} style={beatStyle(m, revealDelay(0, 0.1))} data-beat="verdict">
           {summary.overallWinner === "player" ? "RIVALRY WON!" : summary.overallWinner === "rival" ? "RIVALRY LOST" : "RIVALRY TIED"}
         </h3>
         <p className="text-sm text-muted-foreground">{career.playerName} vs {rival.name}: Career Rivalry</p>
@@ -2880,7 +3015,7 @@ function RetirementCeremonyCard({ career, totals, onPostRetirement }: { career: 
       <div className="grid grid-cols-3 gap-2 text-center">
         {[
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
-          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
@@ -3070,28 +3205,54 @@ function ManagerPanel({ manager, career, onAdvance, onEnd, onAcceptOffer }: { ma
 }
 
 /* ─── Legacy Card (shown on final retirement screen) ─── */
-function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onShare: () => void }) {
+/* Round 985: the end of a career is a moment. The first time the career
+   lands here (careerMoments.ts) the tier emoji and the tier slam, the score
+   and the name rise, then the breakdown rows and the four stat tiles tick in
+   on the kit's stagger. The score is its final value from its first frame
+   (Round 147: no number ever rolls). Gold confetti only for GOAT and LEGEND,
+   the rule the retirement ceremony already keeps. A reload or a second mount
+   draws the card still. The hook sits above the early return (error #310).
+   The card mounts at the foot of the retired screen, below the fold, so the
+   beats wait until it is in view (careerMoments.ts) rather than play to
+   nobody. The slams sit on content wide children inside rows that clip
+   across, so the 1.6 times start never widens a phone's page; the confetti is
+   the LAST child, because as the first it would take the space-y gap and push
+   the header down the moment it appears (Round 926 found the same). */
+export function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: ReturnType<typeof getCareerTotals>; onShare: () => void }) {
+  const m = useCareerMoment(legacyMomentKey(career));
   if (!career.legacy) return null;
   const legacy = career.legacy;
+  const fx = (cls: string) => (m.fresh ? ` ${cls}` : "");
+  const at = (i: number) => beatStyle(m, revealDelay(i, 0.1, 0.16));
   const tierColors: Record<LegacyTier, string> = { "GOAT": "text-amber-400", "LEGEND": "text-purple-400", "GREAT": "text-emerald-400", "SOLID PRO": "text-blue-400", "JOURNEYMAN": "text-muted-foreground" };
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const rows = legacy.breakdown.filter(b => b.points > 0);
+  const tiles: { value: number; label: string }[] = [
+    { value: totals.goals, label: "Goals" },
+    { value: totalTrophies, label: "Trophies" },
+    { value: totals.ballonDors, label: "Ballon d'Or" },
+    { value: career.intStats.caps, label: "Caps" },
+  ];
+  /* The header takes beats 0 to 3, the rows follow it, the tiles follow the rows. */
+  const rowBeat = 4;
+  const tileBeat = rowBeat + rows.length;
 
   return (
-    <div className={`rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
+    <div ref={m.ref} className={`relative rounded-xl border-2 ${tierBorder[legacy.tier]} bg-card p-5 space-y-4`}>
       <div className="text-center space-y-1">
-        <div className="text-4xl">{tierEmoji[legacy.tier]}</div>
-        <div className={`text-2xl font-black ${tierColors[legacy.tier]}`}>{legacy.tier}</div>
-        <div className="text-4xl font-black">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
-        <p className="text-xs text-muted-foreground flex items-center justify-center gap-1"><FlagImg name={career.nationality} size={16} />{career.playerName} · {career.position}</p>
+        <div className="text-4xl overflow-x-clip"><span className={`inline-block${fx("cm-slam")}`} style={at(0)} data-beat="tier-emoji">{tierEmoji[legacy.tier]}</span></div>
+        <div className={`text-2xl font-black ${tierColors[legacy.tier]} overflow-x-clip`}><span className={`inline-block${fx("cm-slam")}`} style={at(1)} data-beat="tier">{legacy.tier}</span></div>
+        <div className={`text-4xl font-black${fx("cm-rise")}`} style={at(2)} data-beat="score">{legacy.score}<span className="text-base text-muted-foreground">/100</span></div>
+        <p className={`text-xs text-muted-foreground flex items-center justify-center gap-1${fx("cm-rise")}`} style={at(3)} data-beat="name"><FlagImg name={career.nationality} size={16} />{career.playerName} · {career.position}</p>
       </div>
 
       {/* Breakdown */}
       <div className="space-y-1">
-        {legacy.breakdown.filter(b => b.points > 0).map(b => (
-          <div key={b.label} className="flex items-center justify-between text-xs">
+        {rows.map((b, i) => (
+          <div key={b.label} className={`flex items-center justify-between text-xs${fx("cm-tick-in")}`} style={at(rowBeat + i)} data-beat="row">
             <span className="text-muted-foreground">{b.label}</span>
             <span className="font-bold text-foreground">+{b.points}</span>
           </div>
@@ -3100,22 +3261,12 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
 
       {/* Key stats */}
       <div className="grid grid-cols-4 gap-2 text-center text-[10px]">
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totals.goals}</div>
-          <div className="text-muted-foreground">Goals</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totalTrophies}</div>
-          <div className="text-muted-foreground">Trophies</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{totals.ballonDors}</div>
-          <div className="text-muted-foreground">Ballon d'Or</div>
-        </div>
-        <div className="bg-muted/20 rounded-lg p-1.5">
-          <div className="font-black text-sm">{career.intStats.caps}</div>
-          <div className="text-muted-foreground">Caps</div>
-        </div>
+        {tiles.map((t, j) => (
+          <div key={t.label} className={`bg-muted/20 rounded-lg p-1.5${fx("cm-tick-in")}`} style={at(tileBeat + j)} data-beat="tile">
+            <div className="font-black text-sm">{t.value}</div>
+            <div className="text-muted-foreground">{t.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* Rival result */}
@@ -3155,6 +3306,7 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
         gamePath="/soccer-career"
         customText={generateShareText(career)}
       />
+      {m.fresh && m.live && (legacy.tier === "GOAT" || legacy.tier === "LEGEND") && <Confetti pieces={60} gold />}
     </div>
   );
 }
@@ -3490,6 +3642,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   // Round 974: the career story, every season kept, opened from Latest Events
   const [storyOpen, setStoryOpen] = useState(false);
+  // Round 1011: every season's rating and the overall it was played at
+  const [ratingsOpen, setRatingsOpen] = useState(false);
   // Round 131: the whole attribute tree on its own screen with a back button
   const [attrsOpen, setAttrsOpen] = useState(false);
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "pundit_season" || career.phase === "owner_season";
@@ -3678,7 +3832,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {career.seasons.map((s, i) => (
-              <TimelineEntry key={s.year + s.club} season={s} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
+              <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
             ))}
           </div>
         </div>
@@ -4060,11 +4214,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3">
+            <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-7" : "sm:grid-cols-6"}`}>
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles },
                 { emoji: "🏆", l: "Cups", v: totals.domesticCups },
                 { emoji: "⭐", l: "UCL", v: totals.championsLeagues },
+                // Round 972: a continental club cup won outside UEFA gets its
+                // own tile under its own name, never the UCL one.
+                ...(totals.clubCups > 0 ? [{ emoji: "⭐", l: clubCupTileLabel(career.seasons), v: totals.clubCups }] : []),
                 { emoji: "🌍", l: "World Cup", v: totals.worldCups },
                 // Round 124: continental championships are a trophy too.
                 { emoji: "🌐", l: "Continental", v: totals.continentalCups },
@@ -4112,11 +4269,21 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* UCL Result (latest) */}
           {career.lastUCLResult && career.lastUCLResult.qualified && (
             <div className="bg-card border border-border rounded-xl p-4 space-y-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">⭐ Champions League</span>
+              {/* Round 972: named by the club's confederation and season, so a
+                  club in Brazil plays the Copa Libertadores and 1990-91 is the
+                  European Cup. A result saved before this round has no name
+                  and was always the Champions League. */}
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">⭐ {career.lastUCLResult.competition ?? "Champions League"}</span>
               <div className="text-xs text-muted-foreground text-center font-semibold">
-                {career.lastUCLResult.result === "Winner" ? "🏆 WINNER!" : career.lastUCLResult.result}
+                {career.lastUCLResult.result === "Winner" ? "🏆 WINNER!" : cupResultLabel(career.lastUCLResult.result)}
                 {career.lastUCLResult.isTopScorer && " · 👟 Top Scorer"}
               </div>
+              {career.lastUCLResult.firstStage?.stages.map((stage, i) => (
+                <FirstStageBlock key={i} stage={stage} />
+              ))}
+              {career.lastUCLResult.firstStage && career.lastUCLResult.matches.length > 0 && (
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground pt-1">Knockouts</div>
+              )}
               <div className="space-y-1">
                 {/* Round 546: a tie is two legs now, so each leg is its own row
                     and the deciding one carries the aggregate and how it was
@@ -4138,8 +4305,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                   return (
                     <Fragment key={i}>
                       <div className="flex items-center justify-between text-xs bg-muted/20 rounded-lg px-3 py-1.5">
-                        <span className="text-[10px] text-muted-foreground w-14 shrink-0">
-                          {m.round}{twoLegged ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
+                        <span className="text-[10px] text-muted-foreground w-16 shrink-0">
+                          {m.round === "PO" ? "Play-off" : m.round}{twoLegged ? " L2" : m.leg === 1 && m.aggFor === undefined ? " L1" : ""}
                         </span>
                         <span className="font-semibold text-foreground truncate">{m.home ? career.currentClub : m.opponent}</span>
                         <span className="font-black mx-2 shrink-0">{m.home ? m.goalsFor : m.goalsAgainst} - {m.home ? m.goalsAgainst : m.goalsFor}</span>
@@ -4165,6 +4332,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 <div className="text-[10px] text-center text-muted-foreground">
                   ⚽ {career.lastUCLResult.playerGoals} goal{career.lastUCLResult.playerGoals > 1 ? "s" : ""} in tournament
                 </div>
+              )}
+              {career.lastUCLResult.simplified && (
+                <div className="text-[10px] text-muted-foreground">{career.lastUCLResult.simplified}</div>
               )}
             </div>
           )}
@@ -4210,8 +4380,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
-            <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
-              className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+            <div className="flex items-center gap-1">
+              <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
+                className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
+              <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
+                className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
+            </div>
           </div>
           <div className="mt-2 space-y-1">
             {career.events.slice(-3).map((e, i) => (
@@ -4223,6 +4397,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         </div>
       )}
       {storyOpen && <CareerStory career={career} onClose={() => setStoryOpen(false)} />}
+      {ratingsOpen && <SeasonRatings career={career} onClose={() => setRatingsOpen(false)} />}
 
       {/* Action bar */}
       {/* Round 86: the bar only floats when it actually has buttons to offer.

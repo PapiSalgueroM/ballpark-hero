@@ -1,3 +1,21 @@
+## Codex combined release preparation, 2026-10-06
+
+Recovery chat owns isolated branch codex/career-release-compatibility.
+It combines accepted218d2aa7 (1009 decisions,1007 Rugby review and1031 guides)
+with Claude's AD1b26f197, including1030. Both update lists are retained.
+The intentional988 parity fixture and all prior Codex projections are retained.
+No accepted candidate or main branch has been changed, and nothing is live.
+
+The five overlapping pages, sitemap, ledger and search keywords require remote
+regeneration. The preparation workflow runs only on this branch, records the
+generated files and checks actual decisions, career parity and built readers.
+Copy only verified generated artifacts, remove temporary generation, then verify
+the committed combined source through the existing release workflows.
+The new real988 trade choice must consume exactly three draws, save once, show
+the full actual changes and survive Continue/reload without replay. Acceptance
+is pending. Claude keeps publication until his explicit receipt releases it.
+Preserve held root drafts and seven stashes. Runtime verification stays remote.
+
 ## Codex 1031: verified generated files, final checks pending, 2026-10-05
 
 The four US Career pages opt into their existing guide once its content loads.

@@ -13,7 +13,7 @@ const componentPath = path.join(root, 'src/components/game/PlayerAutocomplete.ts
 const controls = {
   error: { file: 'library', test: 'reports each failed empty request leg', edits: [["error: results.length === 0 && error ? error.message || 'Search failed' : null", 'error: null']] },
   partial: { file: 'library', test: 'keeps useful partial request results', edits: [['if (ilikeRes.error && prominenceRes.error)', 'if (ilikeRes.error || prominenceRes.error)']] },
-  message: { file: 'component', test: 'shows a generic retry message', edits: [["{searchFailed ? 'Could not load players. Try searching again.' : 'No players found'}", "{'No players found'}"]] },
+  message: { file: 'component', test: 'shows a generic retry message', edits: [["{searchFailed ? 'Could not load players. Try searching again.' : emptyText}", '{emptyText}']] },
   local: { file: 'component', test: 'keeps useful local matches selectable', edits: [['{!loading && suggestions.length === 0 && (', '{!loading && (']] },
   stale: { file: 'component', test: 'ignores an old failure after a newer request', edits: [['if (thisRequestId !== requestIdRef.current) return;', '', 2]] },
   cleanup: { file: 'component', test: 'keeps a cleared in-flight search quiet', edits: [['      ++requestIdRef.current;\n      abortRef.current?.abort();', '']] },
