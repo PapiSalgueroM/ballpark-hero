@@ -42,12 +42,12 @@
       "holder": "Neymar",
       "goals": 80,
       "asOf": "2026-10-06",
-      "note": "Final. Full internationals only (Pele 77 on that count). Neymar retired from the national team on 2026-07-29.",
+      "note": "Final. Official matches between national teams only, FIFA's count, on which Pele has 77. The CBF's own count, which takes in matches against clubs and select sides, gives Pele 95 in 113 (futemais above), so the line 'Became Brazil's All Time Top International Scorer' holds on FIFA's count. Neymar retired from the national team on 2026-07-29.",
       "sources": [
         {
-          "url": "https://www.band.com.br/esportes/futebol/copa-do-mundo/noticias/neymar-chega-a-80-gols-pela-selecao-brasileira-e-amplia-recorde-veja-lista-202607051914",
+          "url": "https://www.terra.com.br/esportes/futebol/nao-quero-mais-neymar-se-aposenta-da-selecao-com-recordes-e-frustracoes-veja-10-feitos-do-craque-com-a-camisa-10,b43fb6000097f3565e15186cdae7c582sarakshk.html",
           "read": "2026-10-06",
-          "says": "published 2026-07-05: Neymar reaches 80 goals for Brazil (search listing; the page answers 403 to a direct fetch)"
+          "says": "published 2026-07-29, the day he retired from the national team: 80 goals in 130 official matches, past Pele, who has 77"
         },
         {
           "url": "https://www.futemais.com.br/post/quantos-gols-neymar-marcou-pela-selecao-brasileira-uma-analise-completa",

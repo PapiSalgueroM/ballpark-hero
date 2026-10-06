@@ -1409,7 +1409,7 @@ export default function SoccerCareer() {
             "Transfer from Ajax to Premier League for a big contract",
             "Win the Champions League and earn a Ballon d'Or nomination",
             "Buy a Private Chef upgrade (+2 Physical, +2 Stamina)",
-            "Break your country's all-time scoring record",
+            "Pass your country's real all-time scoring record (not every nation has one on file yet)",
             "Earn Club Legend status with 300+ appearances at one club",
             "Retire after 20 seasons with a legendary career score"
           ]}
