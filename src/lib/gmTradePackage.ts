@@ -87,10 +87,11 @@ export interface GmTradeRules {
   retentionBarred?: string;
 }
 
-/* NFL and NBA: prospects false and retention null are the game's limits,
-   not league rules. The engines hold no pool of unsigned prospects today
-   (a drafted man joins the roster at once), and nothing sourced says
-   either league bars the trade, so the refusals say "this game". */
+/* NFL and NBA: prospects false is the game's limit, not a league rule. The
+   engines hold no pool of unsigned prospects today (a drafted man joins the
+   roster at once), so that refusal says "this game". Retention null is the
+   game's limit for the NBA the same way. The NFL adds retentionBarred below,
+   so its kept salary refusal is the league's rule in the league's words. */
 const PLAIN: Omit<GmTradeRules, 'sport'> = { maxAssetsPerSide: 5, prospects: false, retention: null };
 
 /* Round 1019: in the NFL the contract moves whole and the old club keeps the

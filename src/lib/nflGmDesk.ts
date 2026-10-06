@@ -285,10 +285,10 @@ export function nflStances(league: LeagueState): Record<string, DeadlineStance> 
  * old club keeps the bonus it has not counted yet (gmContractRules,
  * nfl-trade-dead-money). Deals here carry one figure and no bonus, so a
  * share of that figure stands in for it: this much for every season he had
- * left, up to the five a bonus can be spread over.
+ * left, never more than a cut would leave this season (half his salary), so
+ * the share stops growing at four seasons left (0.15 x 4 = 0.6 is past 0.5).
  */
 export const NFL_TRADE_BONUS_SHARE = 0.15;
-export const NFL_TRADE_BONUS_SEASONS = 5;
 
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 
@@ -299,7 +299,7 @@ const round1 = (n: number): number => Math.round(n * 10) / 10;
  */
 export function nflTradeDeadMoney(p: Pick<GmPlayer, 'salary' | 'years' | 'guaranteed'>): number {
   if (p.guaranteed) return 0;
-  const seasons = Math.max(1, Math.min(NFL_TRADE_BONUS_SEASONS, p.years));
+  const seasons = Math.max(1, p.years);
   return Math.min(deadMoneyFor(p).now, round1(p.salary * NFL_TRADE_BONUS_SHARE * seasons));
 }
 
