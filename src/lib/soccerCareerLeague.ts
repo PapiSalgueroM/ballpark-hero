@@ -16,6 +16,8 @@
 
    Pure: no state, no clock, no Math.random. */
 import { adjustClubsForYear } from "./careerEras";
+import { SC_CLUB_CANON } from "../data/clubRivalries";
+import type { ClubData } from "./soccerCareerEngine";
 
 /* ─── League sizes, verified ───
    Clubs in the top flight by season, keyed by the season's START year (the
@@ -176,4 +178,87 @@ export function ordinal(n: number): string {
   if (tens >= 11 && tens <= 13) return `${n}th`;
   const unit = n % 10;
   return `${n}${unit === 1 ? "st" : unit === 2 ? "nd" : unit === 3 ? "rd" : "th"}`;
+}
+
+/* ─── Round 1029: the manager's league ───
+   The dugout season used to build its table from every club in the world at
+   the manager's tier, so an Arsenal manager read a final table with Boca and
+   Flamengo in it. The field is his club's own league now, in the game's own
+   world (the same rule the derbies use: every club stays in the league its
+   row names, and a league is matched by its name, so Monaco sits in Ligue 1
+   and Swansea in the Championship):
+
+   - his club is found in the career's club list by its name, or by the
+     spelling the shared rivalry table holds for it (a job offer names
+     Manchester City, the career's list says Man City), accents folded;
+   - a club the list does not carry (a job from the wider market) keeps the
+     league its offer named, and any club whose name shares a word with his
+     is left out of the names, so the same club under another spelling (RB
+     Salzburg, Red Bull Salzburg) can never sit in his table twice;
+   - the table has the league's verified size where soccerCareerLeague knows
+     it, and otherwise the field the dugout always played (20), or more when
+     the game knows more clubs than that. Only a verified size is ever
+     printed;
+   - every position is counted, but only clubs the game knows in that league
+     are named. When the game knows more of them than the table has room for,
+     the season draws which ones played that year. */
+export const MANAGER_FIELD = 20;
+
+const foldName = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const clubKey = (name: string) => foldName(SC_CLUB_CANON[name] ?? name);
+const PLAIN_WORDS = new Set(["city", "united", "club", "real", "sporting", "athletic", "atletico", "town", "county", "rovers", "football"]);
+const nameWords = (name: string) => foldName(name).split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !PLAIN_WORDS.has(w));
+
+export interface ManagerLeagueInput {
+  clubs: readonly ClubData[];
+  /** The club he manages, as the save holds it. */
+  club: string;
+  /** The league the job came with, for a club the list does not carry. */
+  league?: string;
+  /** The season's start year. */
+  year: number;
+}
+export interface ManagerLeagueField {
+  /** The league the season is played in, or null when nothing names it. */
+  league: string | null;
+  /** Positions in the table, his own included. */
+  size: number;
+  /** True only when `size` is the league's verified size that season. */
+  sizeVerified: boolean;
+  /** The rivals named in this season's table, at most size - 1. */
+  named: string[];
+}
+
+/** The manager's league for one season. `rng` only draws which known clubs
+ *  fill the table when the game knows more than it has room for. */
+export function managerLeagueField(input: ManagerLeagueInput, rng: () => number): ManagerLeagueField {
+  const world = adjustClubsForYear([...input.clubs], input.year);
+  const mine = clubKey(input.club);
+  const home = world.find(c => clubKey(c.name) === mine);
+  let league: string | null = null;
+  let rivals: ClubData[] = [];
+  if (home) {
+    league = home.league;
+    rivals = world.filter(c => c.league === league && clubKey(c.name) !== mine);
+  } else if (input.league) {
+    const label = world.find(c => foldName(c.league) === foldName(input.league!))?.league;
+    league = label ?? input.league;
+    const myWords = nameWords(input.club);
+    rivals = label ? world.filter(c => c.league === label && clubKey(c.name) !== mine && !nameWords(c.name).some(w => myWords.includes(w))) : [];
+  }
+  const names: string[] = [];
+  const seen = new Set<string>();
+  for (const c of rivals) {
+    const k = clubKey(c.name);
+    if (!seen.has(k)) { seen.add(k); names.push(c.name); }
+  }
+  const verified = league ? leagueSizeFor(league, input.year) : null;
+  const size = verified ?? Math.max(MANAGER_FIELD, names.length + 1);
+  if (names.length > size - 1) {
+    for (let i = names.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(rng() * (i + 1));
+      [names[i], names[j]] = [names[j], names[i]];
+    }
+  }
+  return { league, size, sizeVerified: verified !== null, named: names.slice(0, size - 1) };
 }

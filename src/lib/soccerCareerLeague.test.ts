@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawLeagueFinish, eliteInYear, finishBand, leagueSizeFor, leagueWithArticle, ordinal, readLeagueFinish } from "./soccerCareerLeague";
+import { drawLeagueFinish, eliteInYear, finishBand, leagueSizeFor, leagueWithArticle, managerLeagueField, MANAGER_FIELD, ordinal, readLeagueFinish } from "./soccerCareerLeague";
 
 const ELITE = ["Bayern Munich", "PSG", "Man City", "Real Madrid", "Barcelona", "Liverpool"];
 const base = { league: "La Liga", year: 2020, tier: 1, elite: false, rating: 7, leagueTitle: false, seedKey: "k" };
@@ -118,5 +118,68 @@ describe("leagueWithArticle", () => {
 describe("ordinal", () => {
   it("reads like a table", () => {
     expect([1, 2, 3, 4, 11, 12, 13, 21, 22].map(ordinal)).toEqual(["1st", "2nd", "3rd", "4th", "11th", "12th", "13th", "21st", "22nd"]);
+  });
+});
+
+describe("managerLeagueField (Round 1029)", () => {
+  const row = (name: string, league: string, country = "England", tier = 2) => ({ id: name, name, country, tier, color: "#000", league });
+  const PL = Array.from({ length: 21 }, (_, i) => row(`PL Club ${i + 1}`, "Premier League"));
+  const CLUBS = [
+    row("Arsenal", "Premier League", "England", 1), row("Man City", "Premier League", "England", 1), ...PL,
+    row("Boca Juniors", "Liga Profesional", "Argentina", 1), row("Flamengo", "Brasileirao", "Brazil", 1),
+    row("Norwich City", "Championship", "England", 4), row("Swansea City", "Championship", "Wales", 4),
+    row("Red Bull Salzburg", "Austrian Bundesliga", "Austria", 3), row("Sturm Graz", "Austrian Bundesliga", "Austria", 4),
+    row("Bayern Munich", "Bundesliga", "Germany", 1), row("Dortmund", "Bundesliga", "Germany", 2),
+  ];
+  const seq = (...v: number[]) => { let i = 0; return () => v[i++ % v.length]; };
+
+  it("names only clubs of his own league, at its verified size", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "Arsenal", year: 2030 }, seq(0.3, 0.7, 0.1));
+    expect(f.league).toBe("Premier League");
+    expect(f.size).toBe(20);
+    expect(f.sizeVerified).toBe(true);
+    expect(f.named).toHaveLength(19);
+    expect(f.named).not.toContain("Arsenal");
+    for (const n of f.named) expect(CLUBS.find(c => c.name === n)?.league).toBe("Premier League");
+  });
+
+  it("finds his club under the other game's spelling and never names it twice", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "Manchester City", league: "EFL Championship", year: 2030 }, seq(0.5));
+    expect(f.league).toBe("Premier League");
+    expect(f.named).not.toContain("Man City");
+  });
+
+  it("keeps a market job's league and drops any name that could be his own club", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "RB Salzburg", league: "Austrian Bundesliga", year: 2030 }, seq(0.5));
+    expect(f.league).toBe("Austrian Bundesliga");
+    expect(f.named).toEqual(["Sturm Graz"]);
+    expect(f.sizeVerified).toBe(false);
+    expect(f.size).toBe(MANAGER_FIELD);
+  });
+
+  it("matches a league by name across a border", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "Swansea City", year: 2030 }, seq(0.5));
+    expect(f.league).toBe("Championship");
+    expect(f.named).toEqual(["Norwich City"]);
+  });
+
+  it("walks the verified size into a manager's table, step by step", () => {
+    const at = (y: number) => managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: y }, seq(0.5)).size;
+    expect([at(1990), at(1991), at(1992), at(2030)]).toEqual([18, 20, 18, 18]);
+    expect(managerLeagueField({ clubs: CLUBS, club: "Bayern Munich", year: 1990 }, seq(0.5)).named).toEqual(["Dortmund"]);
+  });
+
+  it("names nobody when nothing names the league", () => {
+    const f = managerLeagueField({ clubs: CLUBS, club: "Unknown FC", year: 2030 }, seq(0.5));
+    expect(f).toEqual({ league: null, size: MANAGER_FIELD, sizeVerified: false, named: [] });
+  });
+
+  it("draws which known clubs fill a full table from the rng, and only then", () => {
+    const a = managerLeagueField({ clubs: CLUBS, club: "Arsenal", year: 2030 }, seq(0.1, 0.9, 0.4));
+    const b = managerLeagueField({ clubs: CLUBS, club: "Arsenal", year: 2030 }, seq(0.1, 0.9, 0.4));
+    expect(a.named).toEqual(b.named);
+    let calls = 0;
+    managerLeagueField({ clubs: CLUBS, club: "Norwich City", year: 2030 }, () => { calls += 1; return 0.5; });
+    expect(calls).toBe(0);
   });
 });
