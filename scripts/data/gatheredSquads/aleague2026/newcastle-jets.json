@@ -1,0 +1,2679 @@
+{
+  "club": "Newcastle Jets FC",
+  "slug": "newcastle-jets",
+  "shard": "B",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "newcastlejetsfc.com.au",
+      "url": "https://newcastlejetsfc.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Nikos Vergos",
+        "Zane Schreiber",
+        "Patrick Wood",
+        "Joe Lolley",
+        "Will Kennedy",
+        "Alex Grant",
+        "Julian Recchia"
+      ],
+      "outs": [
+        "Lachie Rose (Dundee United)",
+        "Mark Natta",
+        "Kota Mizunuma",
+        "Clayton Taylor",
+        "Lachlan Bayliss",
+        "Ben Gibson",
+        "Noah James",
+        "Lucas Scicluna",
+        "Ben van Dorssen",
+        "Christian Bracco",
+        "Kosta Grozos",
+        "Eli Adams",
+        "Richard Nkomo"
+      ],
+      "resignings": [
+        "Jordan Baylis",
+        "Oliver Cockle",
+        "Alex Nunes",
+        "Alex Nassiep",
+        "Thomas Aquilina",
+        "Oscar Fryer"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [
+    "7 players are on two or more independent 2026-27 lists for this club but on neither the club squad page nor the transfer centre's Ins or Re-signings, so they are not rows and this squad may be incomplete without them: Kaiden Walshe (espn, fotmob); Angus Benjamin Reid (espn, fotmob); Nicholas Paul Badolato (espn, fotmob); Ethan Debono (espn, fotmob); Jake Goodwin (espn, fotmob); Jesse Raymond Hill (espn, fotmob); Callan Thomson Prestwidge (espn, fotmob). See independentOnly."
+  ],
+  "count": {
+    "clubPage": 24,
+    "staffSkipped": 4,
+    "rows": 24,
+    "heldOut": 0,
+    "twoHostRows": 24,
+    "birthDateKnown": 24,
+    "groupKnown": 24,
+    "minutesKnown": 22,
+    "marketRows": 0,
+    "perfPagesLoaded": 12,
+    "independentOnly": 7
+  },
+  "rows": [
+    {
+      "name": "James Delianov",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1999-10-20",
+      "minutes2025_26": 2340,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/225517/statistics",
+        "minutes": 2340,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/james-delianov/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "225517"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "399981"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1012192"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "James Delianov",
+          "position": "Goalkeeper",
+          "number": "1"
+        },
+        "espn": {
+          "id": "225517",
+          "name": "James Delianov",
+          "position": "Goalkeeper",
+          "birthDate": "1999-10-20",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "399981",
+          "name": "James Delianov",
+          "position": "Goalkeeper",
+          "birthDate": "1999-10-20",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1012192",
+          "name": "James Delianov",
+          "position": "Keeper",
+          "birthDate": "1999-10-20",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Nassiep",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2006-05-17",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/399256/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/alex-nassiep/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "399256"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1336425"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750126"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Nassiep",
+          "position": "Goalkeeper",
+          "number": "20"
+        },
+        "espn": {
+          "id": "399256",
+          "name": "Alex Nassiep",
+          "position": "Goalkeeper",
+          "birthDate": "2006-05-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1336425",
+          "name": "Alex Nassiep",
+          "position": "Goalkeeper",
+          "birthDate": "2006-05-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1750126",
+          "name": "Alex Nassiep",
+          "position": "Keeper",
+          "birthDate": "2006-05-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jordan Baylis",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2005-10-17",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/388167/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/jordan-baylis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "388167"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1286282"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1740783"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jordan Baylis",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "388167",
+          "name": "Jordan Baylis",
+          "position": "Goalkeeper",
+          "birthDate": "2005-10-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1286282",
+          "name": "Jordan Baylis",
+          "position": "Goalkeeper",
+          "birthDate": "2005-10-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1740783",
+          "name": "Jordan Baylis",
+          "position": "Keeper",
+          "birthDate": "2005-10-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Grant",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1994-01-23",
+      "minutes2025_26": 1861,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/173189/statistics",
+        "minutes": 1859,
+        "appearances": 22
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/alex-grant/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "173189"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "225068"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "316694"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Grant",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "173189",
+          "name": "Alex Grant",
+          "position": "Defender",
+          "birthDate": "1994-01-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "225068",
+          "name": "Alex Grant",
+          "position": "Centre-Back",
+          "birthDate": "1994-01-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "316694",
+          "name": "Alex Grant",
+          "position": "Defender",
+          "birthDate": "1994-01-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Newcastle Jets FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Joe Shaughnessy",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1992-07-06",
+      "minutes2025_26": 1458,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/143180/statistics",
+        "minutes": 1458,
+        "appearances": 20
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/joe-shaughnessy/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "143180"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "119574"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "189927"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joe Shaughnessy",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "143180",
+          "name": "Joe Shaughnessy",
+          "position": "Defender",
+          "birthDate": "1992-07-06",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "119574",
+          "name": "Joe Shaughnessy",
+          "position": "Centre-Back",
+          "birthDate": "1992-07-06",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "189927",
+          "name": "Joe Shaughnessy",
+          "position": "Defender",
+          "birthDate": "1992-07-06",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Will Kennedy",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-02-14",
+      "minutes2025_26": 169,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392209/statistics",
+        "minutes": 169,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/will-kennedy/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392209"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1111966"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1690873"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Will Kennedy",
+          "position": "Defender",
+          "number": "16"
+        },
+        "espn": {
+          "id": "392209",
+          "name": "Will Kennedy",
+          "position": "Defender",
+          "birthDate": "2005-02-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1111966",
+          "name": "Will Kennedy",
+          "position": "Left-Back",
+          "birthDate": "2005-02-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1690873",
+          "name": "Will Kennedy",
+          "position": "Defender",
+          "birthDate": "2005-02-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Joel Bertolissio",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2003-05-27",
+      "minutes2025_26": 1976,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/351688/statistics",
+        "minutes": 1976,
+        "appearances": 25
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/joel-bertolissio/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "351688"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1105789"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1437063"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joel Bertolissio",
+          "position": "Defender",
+          "number": "22"
+        },
+        "espn": {
+          "id": "351688",
+          "name": "Joel Bertolissio",
+          "position": "Defender",
+          "birthDate": "2003-05-27",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1105789",
+          "name": "Joel Bertolissio",
+          "position": "Right-Back",
+          "birthDate": "2003-05-27",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1437063",
+          "name": "Joel Bertolissio",
+          "position": "Defender",
+          "birthDate": "2003-05-27",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Daniel Wilmering",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2000-12-19",
+      "minutes2025_26": 2070,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/286982/statistics",
+        "minutes": 2070,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/daniel-wilmering/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "286982"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "660145"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1031032"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Daniel Wilmering",
+          "position": "Defender",
+          "number": "23"
+        },
+        "espn": {
+          "id": "286982",
+          "name": "Daniel Wilmering",
+          "position": "Defender",
+          "birthDate": "2000-12-19",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "660145",
+          "name": "Daniel Wilmering",
+          "position": "Left-Back",
+          "birthDate": "2000-12-19",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1031032",
+          "name": "Daniel Wilmering",
+          "position": "Defender",
+          "birthDate": "2000-12-19",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Thomas Aquilina",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2001-02-02",
+      "minutes2025_26": 467,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/312245/statistics",
+        "minutes": 466,
+        "appearances": 10
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/thomas-aquilina/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "312245"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "652486"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1220079"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Thomas Aquilina",
+          "position": "Defender",
+          "number": "39"
+        },
+        "espn": {
+          "id": "312245",
+          "name": "Thomas Aquilina",
+          "position": "Defender",
+          "birthDate": "2001-02-02",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "652486",
+          "name": "Thomas Aquilina",
+          "position": "Right-Back",
+          "birthDate": "2001-02-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1220079",
+          "name": "Thomas Aquilina",
+          "position": "Defender",
+          "birthDate": "2001-02-02",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Max Cooper",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2007-01-14",
+      "minutes2025_26": 679,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410629/statistics",
+        "minutes": 679,
+        "appearances": 9
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/max-cooper/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410629"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1432453"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1823250"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Cooper",
+          "position": "Defender",
+          "number": "42"
+        },
+        "espn": {
+          "id": "410629",
+          "name": "Max Cooper",
+          "position": "Defender",
+          "birthDate": "2007-01-14",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1432453",
+          "name": "Max Cooper",
+          "position": "Centre-Back",
+          "birthDate": "2007-01-14",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1823250",
+          "name": "Max Cooper",
+          "position": "Defender",
+          "birthDate": "2007-01-14",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Zane Schreiber",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-05-31",
+      "minutes2025_26": 1214,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne City FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/368559/statistics",
+        "minutes": 1213,
+        "appearances": 22
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/zane-schreiber/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368559"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1111965"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1543679"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Zane Schreiber",
+          "position": "Midfielder",
+          "number": "6"
+        },
+        "espn": {
+          "id": "368559",
+          "name": "Zane Schreiber",
+          "position": "Midfielder",
+          "birthDate": "2005-05-31",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1111965",
+          "name": "Zane Schreiber",
+          "position": "Defensive Midfield",
+          "birthDate": "2005-05-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1543679",
+          "name": "Zane Schreiber",
+          "position": "Midfielder",
+          "birthDate": "2005-05-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Newcastle Jets FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Zach Clough",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1995-03-08",
+      "minutes2025_26": 170,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/191564/statistics",
+        "minutes": 170,
+        "appearances": 4
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/zach-clough/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "191564"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "246351"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "568580"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Zach Clough",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": {
+          "id": "191564",
+          "name": "Zach Clough",
+          "position": "Midfielder",
+          "birthDate": "1995-03-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "246351",
+          "name": "Zach Clough",
+          "position": "Right Winger",
+          "birthDate": "1995-03-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "568580",
+          "name": "Zach Clough",
+          "position": "Attacker",
+          "birthDate": "1995-03-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Max Burgess",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1995-01-16",
+      "minutes2025_26": 2027,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/212917/statistics",
+        "minutes": 2025,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/max-burgess/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "212917"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "343049"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "590367"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Burgess",
+          "position": "Midfielder",
+          "number": "14"
+        },
+        "espn": {
+          "id": "212917",
+          "name": "Max Burgess",
+          "position": "Midfielder",
+          "birthDate": "1995-01-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "343049",
+          "name": "Max Burgess",
+          "position": "Defensive Midfield",
+          "birthDate": "1995-01-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "590367",
+          "name": "Max Burgess",
+          "position": "Midfielder",
+          "birthDate": "1995-01-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Badolato",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-02-23",
+      "minutes2025_26": 899,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/328544/statistics",
+        "minutes": 899,
+        "appearances": 11
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/alex-badolato/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "328544"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "957230"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1312639"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Badolato",
+          "position": "Midfielder",
+          "number": "19"
+        },
+        "espn": {
+          "id": "328544",
+          "name": "Alexander Badolato",
+          "position": "Midfielder",
+          "birthDate": "2005-02-23",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "957230",
+          "name": "Alex Badolato",
+          "position": "Attacking Midfield",
+          "birthDate": "2005-02-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1312639",
+          "name": "Alex Badolato",
+          "position": "Midfielder",
+          "birthDate": "2005-02-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Alex Nunes",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-02-22",
+      "minutes2025_26": 55,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386119/statistics",
+        "minutes": 55,
+        "appearances": 8
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/alex-nunes/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386119"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1251566"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750231"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Alex Nunes",
+          "position": "Midfielder",
+          "number": "24"
+        },
+        "espn": {
+          "id": "386119",
+          "name": "Alex Nunes",
+          "position": "Midfielder",
+          "birthDate": "2007-02-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1251566",
+          "name": "Alex Nunes",
+          "position": "Attacking Midfield",
+          "birthDate": "2007-02-22",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1750231",
+          "name": "Alex Nunes",
+          "position": "Midfielder",
+          "birthDate": "2007-02-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Julian Recchia",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2008-10-06",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/julian-recchia/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3140886"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1530071"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "2237422"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Julian Recchia",
+          "position": "Midfielder",
+          "number": "27"
+        },
+        "espn": {
+          "id": "3140886",
+          "name": "Julian Recchia",
+          "position": "Midfielder",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1530071",
+          "name": "Julian Recchia",
+          "position": "Central Midfield",
+          "birthDate": "2008-10-06",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "2237422",
+          "name": "Julian Recchia",
+          "position": "Midfielder",
+          "birthDate": "2008-10-06",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Will Dobson",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2007-09-07",
+      "minutes2025_26": 1693,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/390049/statistics",
+        "minutes": 1693,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/will-dobson/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "390049"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1299227"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1688565"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Will Dobson",
+          "position": "Midfielder",
+          "number": "28"
+        },
+        "espn": {
+          "id": "390049",
+          "name": "Will Dobson",
+          "position": "Midfielder",
+          "birthDate": "2007-09-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1299227",
+          "name": "Will Dobson",
+          "position": "Central Midfield",
+          "birthDate": "2007-09-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1688565",
+          "name": "Will Dobson",
+          "position": "Midfielder",
+          "birthDate": "2007-09-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Patrick Wood",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2002-09-16",
+      "minutes2025_26": 427,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/310562/statistics",
+        "minutes": 425,
+        "appearances": 19
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/patrick-wood/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "310562"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "833603"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1208173"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Patrick Wood",
+          "position": "Attacker",
+          "number": "8"
+        },
+        "espn": {
+          "id": "310562",
+          "name": "Patrick Wood",
+          "position": "Forward",
+          "birthDate": "2002-09-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "833603",
+          "name": "Patrick Wood",
+          "position": "Centre-Forward",
+          "birthDate": "2002-09-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1208173",
+          "name": "Patrick Wood",
+          "position": "Attacker",
+          "birthDate": "2002-09-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Newcastle Jets FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Nikos Vergos",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1996-01-13",
+      "minutes2025_26": 1239,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-victory/leistungsdaten/verein/7006/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne Victory"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/196064/statistics",
+        "minutes": 1241,
+        "appearances": 24
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/nikos-vergos/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "196064"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "118302"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "521755"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nikos Vergos",
+          "position": "Attacker",
+          "number": "9"
+        },
+        "espn": {
+          "id": "196064",
+          "name": "Nikolaos Vergos",
+          "position": "Forward",
+          "birthDate": "1996-01-13",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "118302",
+          "name": "Nikolaos Vergos",
+          "position": "Centre-Forward",
+          "birthDate": "1996-01-13",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "521755",
+          "name": "Nikos Vergos",
+          "position": "Attacker",
+          "birthDate": "1996-01-13",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Newcastle Jets FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes"
+      ]
+    },
+    {
+      "name": "Joe Lolley",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1992-08-25",
+      "minutes2025_26": 973,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/191001/statistics",
+        "minutes": 973,
+        "appearances": 14
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/joe-lolley/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "191001"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "287167"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "471149"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joe Lolley",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": {
+          "id": "191001",
+          "name": "Joe Lolley",
+          "position": "Forward",
+          "birthDate": "1992-08-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "287167",
+          "name": "Joe Lolley",
+          "position": "Right Winger",
+          "birthDate": "1992-08-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "471149",
+          "name": "Joe Lolley",
+          "position": "Midfielder",
+          "birthDate": "1992-08-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oscar Gonzalez",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-07-21",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/oscar-gonzalez/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3105917"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1423160"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1824856"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oscar Gonzalez",
+          "position": "Attacker",
+          "number": "26"
+        },
+        "espn": {
+          "id": "3105917",
+          "name": "Oscar Gonzalez",
+          "position": "Forward",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1423160",
+          "name": "Oscar Gonzalez",
+          "position": "Centre-Forward",
+          "birthDate": "2008-07-21",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1824856",
+          "name": "Oscar Gonzalez",
+          "position": "Attacker",
+          "birthDate": "2008-07-21",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Oscar Fryer",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-04-16",
+      "minutes2025_26": 119,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/386118/statistics",
+        "minutes": 119,
+        "appearances": 3
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/oscar-fryer/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "386118"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1144781"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1750237"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oscar Fryer",
+          "position": "Attacker",
+          "number": "25"
+        },
+        "espn": {
+          "id": "386118",
+          "name": "Oscar Fryer",
+          "position": "Forward",
+          "birthDate": "2006-04-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1144781",
+          "name": "Oscar Fryer",
+          "position": "Left Winger",
+          "birthDate": "2006-04-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1750237",
+          "name": "Oscar Fryer",
+          "position": "Attacker",
+          "birthDate": "2006-04-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oliver Cockle",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2008-11-22",
+      "minutes2025_26": 0,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/415741/statistics",
+        "minutes": 0,
+        "appearances": 0
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/oliver-cockle/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "415741"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1489849"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1869398"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oliver Cockle",
+          "position": "Attacker",
+          "number": "37"
+        },
+        "espn": {
+          "id": "415741",
+          "name": "Oliver Cockle",
+          "position": "Forward",
+          "birthDate": "2008-11-22",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1489849",
+          "name": "Oli Cockle",
+          "position": "Right Winger",
+          "birthDate": "2008-11-22",
+          "match": "fuzzy"
+        },
+        "fotmob": {
+          "id": "1869398",
+          "name": "Oliver Cockle",
+          "position": "Attacker",
+          "birthDate": "2008-11-22",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Xavier Bertoncello",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2005-10-08",
+      "minutes2025_26": 887,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/newcastle-united-jets/leistungsdaten/verein/5551/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Newcastle Jets FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/410630/statistics",
+        "minutes": 888,
+        "appearances": 25
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "newcastlejetsfc.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "newcastlejetsfc.com.au",
+          "url": "https://newcastlejetsfc.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://newcastlejetsfc.com.au/player/xavier-bertoncello/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5323/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "410630"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/newcastle-united-jets/kader/verein/5551/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1432451"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/6454/squad/newcastle-jets",
+          "read": "2026-10-06",
+          "id": "1799002"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Xavier Bertoncello",
+          "position": "Attacker",
+          "number": "43"
+        },
+        "espn": {
+          "id": "410630",
+          "name": "Xavier Bertoncello",
+          "position": "Forward",
+          "birthDate": "2005-10-08",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1432451",
+          "name": "Xavier Bertoncello",
+          "position": "Left Winger",
+          "birthDate": "2005-10-08",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1799002",
+          "name": "Xavier Bertoncello",
+          "position": "Attacker",
+          "birthDate": "2005-10-08",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Kaiden Walshe",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Archie Philip Brideson",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Angus Benjamin Reid",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Nicholas Paul Badolato",
+      "position": "Midfielder",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Ethan Debono",
+      "position": "Forward",
+      "birthDate": "2005-12-15"
+    },
+    {
+      "source": "espn",
+      "name": "Jake Goodwin",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Jesse Raymond Hill",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Callan Thomson Prestwidge",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "fotmob",
+      "name": "Angus Reid",
+      "position": "Defender",
+      "birthDate": "2007-03-18"
+    },
+    {
+      "source": "fotmob",
+      "name": "Kaiden Walshe",
+      "position": "Defender",
+      "birthDate": "2010-04-22"
+    },
+    {
+      "source": "fotmob",
+      "name": "Nicholas Badolato",
+      "position": "Midfielder",
+      "birthDate": "2007-10-29"
+    },
+    {
+      "source": "fotmob",
+      "name": "Ethan Debono",
+      "position": "Attacker",
+      "birthDate": "2005-12-15"
+    },
+    {
+      "source": "fotmob",
+      "name": "Jake Goodwin",
+      "position": "Attacker",
+      "birthDate": "2007-08-05"
+    },
+    {
+      "source": "fotmob",
+      "name": "Callan Prestwidge",
+      "position": "Attacker",
+      "birthDate": "2008-08-31"
+    },
+    {
+      "source": "fotmob",
+      "name": "Jesse Hill",
+      "position": "Attacker",
+      "birthDate": "2007-02-11"
+    }
+  ],
+  "independentOnly": [
+    {
+      "name": "Kaiden Walshe",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Angus Benjamin Reid",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Nicholas Paul Badolato",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Ethan Debono",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": "2005-12-15",
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Jake Goodwin",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Jesse Raymond Hill",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    },
+    {
+      "name": "Callan Thomson Prestwidge",
+      "listedBy": [
+        "espn",
+        "fotmob"
+      ],
+      "birthDateOnTwo": null,
+      "inTransferCentre": [],
+      "outHere": false
+    }
+  ]
+}

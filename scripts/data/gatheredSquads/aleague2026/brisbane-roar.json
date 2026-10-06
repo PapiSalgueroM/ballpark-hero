@@ -1,0 +1,2434 @@
+{
+  "club": "Brisbane Roar FC",
+  "slug": "brisbane-roar",
+  "shard": "A",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "method": "Rows are the players on the club's own A-League Men squad page (or, where that page lags, named under Ins or Re-signings in the league's 2026-27 transfer centre) who also appear in at least one independent 2026-27 list: ESPN's roster, Transfermarkt's 26/27 squad or FotMob's squad. A player the club page lists under an on loan heading is held out, not a first team row. Name and position text as the club prints them. group stands when an independent source puts him in the same group; otherwise it is the group two independent hosts agree on, else null. birthDate only where two independent hosts give the same date (the club pages print age, not date), else null. minutes2025_26 is A-League Men 25/26 regular season minutes from Transfermarkt club pages, summed over clubs: 0 only where a page says \"Not used during this season\" (named in a matchday squad, never on); a \"Not in squad during this season\" entry is not counted (Transfermarkt prints it for players who joined after the season too), so minutes are null when he has no played or unused entry on any page. A minutes value also needs a second host: ESPN's own 2025-26 regular season record (season 2025, type 1) for the ESPN id the row cites. The two hosts round substitution and stoppage minutes their own way, so they count as agreeing when they are no more than one minute an appearance apart (ESPN's appearance count); the value kept is Transfermarkt's and ESPN's sits beside it in minutesSecondSource. Where they are further apart, or only one host has a value, minutes are null and the row's notes give what each host said.",
+  "sources": {
+    "club": {
+      "host": "brisbaneroar.com.au",
+      "url": "https://brisbaneroar.com.au/squads/men",
+      "read": "2026-10-06"
+    },
+    "leagueTransferCentre": {
+      "host": "aleagues.com.au",
+      "url": "https://aleagues.com.au/news/isuzu-ute-a-league-2026-27-transfer-centre-ins-outs/",
+      "read": "2026-10-06",
+      "dated": "2026-09-21",
+      "ins": [
+        "Marko Ilic",
+        "Joel King",
+        "Sabit Ngor",
+        "Tate Russell",
+        "Jacob Nasso",
+        "Nam Tae-hee",
+        "Emin Durakovic",
+        "Dimitri Valkanis",
+        "Tom Aldred",
+        "Virgiliu Postolachi",
+        "Tyrese Francois"
+      ],
+      "outs": [
+        "Ben Warland",
+        "Austin Ludwik",
+        "Antonee Burke-Gilroy",
+        "Michael Ruhs",
+        "Ben Halloran",
+        "Chris Long",
+        "Quinn MacNicol and Jacob Brazete",
+        "Marius Lode",
+        "Youstin Salas",
+        "Nick D’Agostino",
+        "Giorgios Vrakas",
+        "Sam Klein",
+        "(St Pauli)",
+        "Henry Hore",
+        "Macklin Freke",
+        "Matthew Dench",
+        "Jay O'Shea"
+      ],
+      "resignings": [
+        "Noah Maieroni"
+      ]
+    },
+    "espn": {
+      "host": "site.api.espn.com",
+      "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+      "read": "2026-10-06"
+    },
+    "espnSeasonStats": {
+      "host": "sports.core.api.espn.com",
+      "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/<espn id>/statistics",
+      "read": "2026-10-06"
+    },
+    "transfermarkt": {
+      "host": "transfermarkt.com",
+      "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+      "read": "2026-10-06"
+    },
+    "fotmob": {
+      "host": "fotmob.com",
+      "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+      "read": "2026-10-06"
+    }
+  },
+  "notes": [],
+  "count": {
+    "clubPage": 25,
+    "staffSkipped": 1,
+    "rows": 25,
+    "heldOut": 0,
+    "twoHostRows": 25,
+    "birthDateKnown": 23,
+    "groupKnown": 25,
+    "minutesKnown": 13,
+    "marketRows": 0,
+    "perfPagesLoaded": 12,
+    "independentOnly": 0
+  },
+  "rows": [
+    {
+      "name": "Dean Bouzanis",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "1990-10-02",
+      "minutes2025_26": 2295,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/97794/statistics",
+        "minutes": 2295,
+        "appearances": 26
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/dean-bouzanis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "97794"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "50104"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "69302"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Dean Bouzanis",
+          "position": "Goalkeeper",
+          "number": "1"
+        },
+        "espn": {
+          "id": "97794",
+          "name": "Dean Bouzanis",
+          "position": "Goalkeeper",
+          "birthDate": "1990-10-02",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "50104",
+          "name": "Dean Bouzanis",
+          "position": "Goalkeeper",
+          "birthDate": "1990-10-02",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "69302",
+          "name": "Dean Bouzanis",
+          "position": "Keeper",
+          "birthDate": "1990-10-02",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Oscar Page",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": "2006-04-26",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/oscar-page/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "399518"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1240369"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1711766"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Oscar Page",
+          "position": "Goalkeeper",
+          "number": "23"
+        },
+        "espn": {
+          "id": "399518",
+          "name": "Oscar Page",
+          "position": "Goalkeeper",
+          "birthDate": "2007-01-01",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1240369",
+          "name": "Oscar Page",
+          "position": "Goalkeeper",
+          "birthDate": "2006-04-26",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1711766",
+          "name": "Oscar Page",
+          "position": "Keeper",
+          "birthDate": "2006-04-26",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date: ESPN 2007-01-01, Transfermarkt 2006-04-26, FotMob 2006-04-26; set to the date two hosts agree on",
+        "Transfermarkt's 25/26 page for Brisbane Roar FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "George Plusnin",
+      "position": "Goalkeeper",
+      "group": "GK",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/george-plusnin/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3114274"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1336427"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "George Plusnin",
+          "position": "Goalkeeper",
+          "number": "40"
+        },
+        "espn": {
+          "id": "3114274",
+          "name": "George Plusnin",
+          "position": "Goalkeeper",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1336427",
+          "name": "George Plusnin",
+          "position": "Goalkeeper",
+          "birthDate": "2007-12-27",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (Transfermarkt 2007-12-27), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Jacob Nasso",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2006-07-25",
+      "minutes2025_26": 301,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/418495/statistics",
+        "minutes": 301,
+        "appearances": 8
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/jacob-nasso/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "418495"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1121271"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1899854"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jacob Nasso",
+          "position": "Defender",
+          "number": "2"
+        },
+        "espn": {
+          "id": "418495",
+          "name": "Jacob Nasso",
+          "position": "Defender",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1121271",
+          "name": "Jacob Nasso",
+          "position": "Right-Back",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1899854",
+          "name": "Jacob Nasso",
+          "position": "Defender",
+          "birthDate": "2006-07-25",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Dimitri Valkanis",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2005-10-18",
+      "minutes2025_26": 2027,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412224/statistics",
+        "minutes": 2027,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/dimitri-valkanis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412224"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1056224"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1798777"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Dimitri Valkanis",
+          "position": "Defender",
+          "number": "3"
+        },
+        "espn": {
+          "id": "412224",
+          "name": "Dimitrios Valkanis",
+          "position": "Defender",
+          "birthDate": "2005-10-18",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "1056224",
+          "name": "Dimitri Valkanis",
+          "position": "Centre-Back",
+          "birthDate": "2005-10-18",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1798777",
+          "name": "Dimitri Valkanis",
+          "position": "Defender",
+          "birthDate": "2005-10-18",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tom Aldred",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1990-09-11",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/tom-aldred/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "129654"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "95076"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "184449"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tom Aldred",
+          "position": "Defender",
+          "number": "5"
+        },
+        "espn": {
+          "id": "129654",
+          "name": "Tom Aldred",
+          "position": "Defender",
+          "birthDate": "1990-09-11",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "95076",
+          "name": "Tom Aldred",
+          "position": "Centre-Back",
+          "birthDate": "1990-09-11",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "184449",
+          "name": "Tom Aldred",
+          "position": "Defender",
+          "birthDate": "1990-09-11",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Tate Russell",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "1999-08-24",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/tate-russell/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "259602"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "589458"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "970573"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tate Russell",
+          "position": "Defender",
+          "number": "13"
+        },
+        "espn": {
+          "id": "259602",
+          "name": "Tate Russell",
+          "position": "Defender",
+          "birthDate": "1999-08-24",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "589458",
+          "name": "Tate Russell",
+          "position": "Right-Back",
+          "birthDate": "1999-08-24",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "970573",
+          "name": "Tate Russell",
+          "position": "Defender",
+          "birthDate": "1999-08-24",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Hosine Bility",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2001-05-10",
+      "minutes2025_26": 475,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/310465/statistics",
+        "minutes": 475,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/hosine-bility/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "310465"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "710470"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "862700"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Hosine Bility",
+          "position": "Defender",
+          "number": "15"
+        },
+        "espn": {
+          "id": "310465",
+          "name": "Hosine Bility",
+          "position": "Defender",
+          "birthDate": "2001-05-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "710470",
+          "name": "Hosine Bility",
+          "position": "Centre-Back",
+          "birthDate": "2001-05-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "862700",
+          "name": "Hosine Bility",
+          "position": "Defender",
+          "birthDate": "2001-05-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Joel King",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2000-10-30",
+      "minutes2025_26": 605,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/sydney-fc/leistungsdaten/verein/8054/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Sydney FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/276916/statistics",
+        "minutes": 605,
+        "appearances": 9
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/joel-king/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "276916"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "616430"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1017151"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Joel King",
+          "position": "Defender",
+          "number": "16"
+        },
+        "espn": {
+          "id": "276916",
+          "name": "Joel King",
+          "position": "Defender",
+          "birthDate": "2000-10-30",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "616430",
+          "name": "Joel King",
+          "position": "Left-Back",
+          "birthDate": "2000-10-30",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1017151",
+          "name": "Joel King",
+          "position": "Defender",
+          "birthDate": "2000-10-30",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Archie Mitchell",
+      "position": "Defender",
+      "group": "DEF",
+      "birthDate": "2009-05-06",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/archie-mitchell-2/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422561"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1378246"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Archie Mitchell",
+          "position": "Defender",
+          "number": "53"
+        },
+        "espn": {
+          "id": "422561",
+          "name": "Archie Mitchell",
+          "position": "Midfielder",
+          "birthDate": "2009-05-06",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1378246",
+          "name": "Archie Mitchell",
+          "position": "Left-Back",
+          "birthDate": "2009-05-06",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Noah Maieroni",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-08-10",
+      "minutes2025_26": 1100,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/412799/statistics",
+        "minutes": 1100,
+        "appearances": 20
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/noah-maieroni/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "412799"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1326936"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1665588"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Noah Maieroni",
+          "position": "Midfielder",
+          "number": "6"
+        },
+        "espn": {
+          "id": "412799",
+          "name": "Noah Maieroni",
+          "position": "Midfielder",
+          "birthDate": "2005-08-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1326936",
+          "name": "Noah Maieroni",
+          "position": "Defensive Midfield",
+          "birthDate": "2005-08-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1665588",
+          "name": "Noah Maieroni",
+          "position": "Midfielder",
+          "birthDate": "2005-08-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tae-Hee Nam",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "1991-07-03",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/tae-hee-nam/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "136694"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "118451"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "180292"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tae-Hee Nam",
+          "position": "Midfielder",
+          "number": "10"
+        },
+        "espn": {
+          "id": "136694",
+          "name": "Nam Tae-Hee",
+          "position": "Midfielder",
+          "birthDate": "1991-07-03",
+          "match": "fuzzy"
+        },
+        "tm": {
+          "id": "118451",
+          "name": "Tae-hee Nam",
+          "position": "Attacking Midfield",
+          "birthDate": "1991-07-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "180292",
+          "name": "Nam Tae-Hee",
+          "position": "Attacker",
+          "birthDate": "1991-07-03",
+          "match": "fuzzy"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Emin Durakovic",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2005-07-28",
+      "minutes2025_26": 781,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/melbourne-city-fc/leistungsdaten/verein/25580/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Melbourne City FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/346554/statistics",
+        "minutes": 781,
+        "appearances": 21
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/emin-durakovic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "346554"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1066862"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1411353"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Emin Durakovic",
+          "position": "Midfielder",
+          "number": "14"
+        },
+        "espn": {
+          "id": "346554",
+          "name": "Emin Durakovic",
+          "position": "Midfielder",
+          "birthDate": "2005-07-28",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1066862",
+          "name": "Emin Durakovic",
+          "position": "Central Midfield",
+          "birthDate": "2005-07-28",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1411353",
+          "name": "Emin Durakovic",
+          "position": "Midfielder",
+          "birthDate": "2005-07-28",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Max Court",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2009-01-16",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/max-court/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "422373"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1333552"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1824857"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Max Court",
+          "position": "Midfielder",
+          "number": "21"
+        },
+        "espn": {
+          "id": "422373",
+          "name": "Max Court",
+          "position": "Midfielder",
+          "birthDate": "2009-01-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1333552",
+          "name": "Max Court",
+          "position": "Attacking Midfield",
+          "birthDate": "2009-01-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1824857",
+          "name": "Max Court",
+          "position": "Midfielder",
+          "birthDate": "2009-01-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Emmett Shaw",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2009-04-03",
+      "minutes2025_26": 89,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/417370/statistics",
+        "minutes": 89,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/emmett-shaw/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "417370"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1484878"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1883411"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Emmett Shaw",
+          "position": "Midfielder",
+          "number": "41"
+        },
+        "espn": {
+          "id": "417370",
+          "name": "Emmett Shaw",
+          "position": "Midfielder",
+          "birthDate": "2009-04-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1484878",
+          "name": "Emmett Shaw",
+          "position": "Central Midfield",
+          "birthDate": "2009-04-03",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1883411",
+          "name": "Emmett Shaw",
+          "position": "Midfielder",
+          "birthDate": "2009-04-03",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Jordan Lauton",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2003-04-01",
+      "minutes2025_26": 567,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/346731/statistics",
+        "minutes": 567,
+        "appearances": 19
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/jordan-lauton/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "346731"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1099425"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1609081"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Jordan Lauton",
+          "position": "Midfielder",
+          "number": "44"
+        },
+        "espn": {
+          "id": "346731",
+          "name": "Jordan Lauton",
+          "position": "Midfielder",
+          "birthDate": "2003-04-01",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1099425",
+          "name": "Jordan Lauton",
+          "position": "Central Midfield",
+          "birthDate": "2003-04-01",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1609081",
+          "name": "Jordan Lauton",
+          "position": "Midfielder",
+          "birthDate": "2003-04-01",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Milorad Stajic",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2002-02-07",
+      "minutes2025_26": 530,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/304792/statistics",
+        "minutes": 530,
+        "appearances": 7
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/milorad-stajic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "304792"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "499341"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1787569"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Milorad Stajic",
+          "position": "Midfielder",
+          "number": "77"
+        },
+        "espn": {
+          "id": "304792",
+          "name": "Milorad Stajic",
+          "position": "Midfielder",
+          "birthDate": "2002-02-07",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "499341",
+          "name": "Milorad Stajic",
+          "position": "Defensive Midfield",
+          "birthDate": "2002-02-07",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1787569",
+          "name": "Milorad Stajić",
+          "position": "Midfielder",
+          "birthDate": "2002-02-07",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Tyrese Francois",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": "2000-07-16",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/tyrese-francois/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "267709"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "528888"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "894805"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Tyrese Francois",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "267709",
+          "name": "Tyrese Francois",
+          "position": "Midfielder",
+          "birthDate": "2000-07-16",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "528888",
+          "name": "Tyrese Francois",
+          "position": "Central Midfield",
+          "birthDate": "2000-07-16",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "894805",
+          "name": "Tyrese Francois",
+          "position": "Midfielder",
+          "birthDate": "2000-07-16",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Taj Sorensen",
+      "position": "Midfielder",
+      "group": "MID",
+      "birthDate": null,
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com"
+        ],
+        "birthDate": []
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/taj-sorensen/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "3115637"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1567445"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Taj Sorensen",
+          "position": "Midfielder",
+          "number": null
+        },
+        "espn": {
+          "id": "3115637",
+          "name": "Taj Sorensen",
+          "position": "Midfielder",
+          "birthDate": null,
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1567445",
+          "name": "Taj Sorensen",
+          "position": "Striker",
+          "birthDate": "2009-05-19",
+          "match": "exact"
+        },
+        "fotmob": null,
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date not on two hosts (Transfermarkt 2009-05-19), held as null",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Virgiliu Postolachi",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2000-03-17",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/virgiliu-postolachi/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "276332"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "536519"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "949215"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Virgiliu Postolachi",
+          "position": "Attacker",
+          "number": "9"
+        },
+        "espn": {
+          "id": "276332",
+          "name": "Virgiliu Postolachi",
+          "position": "Forward",
+          "birthDate": "2000-03-17",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "536519",
+          "name": "Virgiliu Postolachi",
+          "position": "Centre-Forward",
+          "birthDate": "2000-03-17",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "949215",
+          "name": "Virgiliu Postolachi",
+          "position": "Attacker",
+          "birthDate": "2000-03-17",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Marko Ilic",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "1999-05-31",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com"
+        ],
+        "birthDate": [
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/marko-ilic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "238233"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "595096"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1409696"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Marko Ilic",
+          "position": "Attacker",
+          "number": "11"
+        },
+        "espn": {
+          "id": "238233",
+          "name": "Marko Ilic",
+          "position": "Forward",
+          "birthDate": "1998-02-03",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "595096",
+          "name": "Marko Ilic",
+          "position": "Left Winger",
+          "birthDate": "1999-05-31",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1409696",
+          "name": "Marko Ilic",
+          "position": "Defender",
+          "birthDate": "1999-05-31",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "birth date: ESPN 1998-02-03, Transfermarkt 1999-05-31, FotMob 1999-05-31; set to the date two hosts agree on",
+        "not on any 2025-26 A-League Men club page on Transfermarkt"
+      ]
+    },
+    {
+      "name": "Justin Vidic",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2004-04-29",
+      "minutes2025_26": 1287,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/374094/statistics",
+        "minutes": 1286,
+        "appearances": 23
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/justin-vidic/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "374094"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1116294"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1565863"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Justin Vidic",
+          "position": "Attacker",
+          "number": "17"
+        },
+        "espn": {
+          "id": "374094",
+          "name": "Justin Vidic",
+          "position": "Forward",
+          "birthDate": "2004-04-29",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1116294",
+          "name": "Justin Vidic",
+          "position": "Centre-Forward",
+          "birthDate": "2004-04-29",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565863",
+          "name": "Justin Vidic",
+          "position": "Attacker",
+          "birthDate": "2004-04-29",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Sabit Ngor",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2001-01-05",
+      "minutes2025_26": 1381,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/central-coast-mariners/leistungsdaten/verein/6954/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Central Coast Mariners FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/392308/statistics",
+        "minutes": 1380,
+        "appearances": 25
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/sabit-ngor/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "392308"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1107973"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1469770"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Sabit Ngor",
+          "position": "Attacker",
+          "number": "19"
+        },
+        "espn": {
+          "id": "392308",
+          "name": "Sabit Ngor",
+          "position": "Forward",
+          "birthDate": "2001-01-05",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1107973",
+          "name": "Sabit Ngor",
+          "position": "Right Winger",
+          "birthDate": "2001-01-05",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1469770",
+          "name": "Sabit Ngor",
+          "position": "Attacker",
+          "birthDate": "2001-01-05",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    },
+    {
+      "name": "Nathan Amanatidis",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-01-23",
+      "minutes2025_26": null,
+      "minutesSource": null,
+      "minutesSecondSource": null,
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/nathan-amanatidis/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "368567"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1145209"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1565868"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Nathan Amanatidis",
+          "position": "Attacker",
+          "number": "22"
+        },
+        "espn": {
+          "id": "368567",
+          "name": "Nathan Amanatidis",
+          "position": "Forward",
+          "birthDate": "2006-01-23",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1145209",
+          "name": "Nathan Amanatidis",
+          "position": "Right Winger",
+          "birthDate": "2006-01-23",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1565868",
+          "name": "Nathan Amanatidis",
+          "position": "Attacker",
+          "birthDate": "2006-01-23",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": [
+        "Transfermarkt's 25/26 page for Brisbane Roar FC lists him only as \"Not in squad during this season\", which it also prints for players who joined after that season, so that page is not counted for minutes",
+        "no 2025-26 A-League Men minutes on Transfermarkt (no played or unused-substitute entry on any club page), held as null"
+      ]
+    },
+    {
+      "name": "Niall Thom",
+      "position": "Attacker",
+      "group": "FWD",
+      "birthDate": "2006-08-10",
+      "minutes2025_26": 206,
+      "minutesSource": {
+        "host": "transfermarkt.com",
+        "competition": "A-League Men 25/26 (regular season)",
+        "read": "2026-10-06",
+        "urls": [
+          "https://www.transfermarkt.com/brisbane-roar/leistungsdaten/verein/7831/reldata/AUS1%262025/plus/1"
+        ],
+        "clubs": [
+          "Brisbane Roar FC"
+        ]
+      },
+      "minutesSecondSource": {
+        "host": "sports.core.api.espn.com",
+        "competition": "A-League Men 2025-26 Regular Season",
+        "read": "2026-10-06",
+        "url": "https://sports.core.api.espn.com/v2/sports/soccer/leagues/aus.1/seasons/2025/types/1/athletes/420180/statistics",
+        "minutes": 206,
+        "appearances": 6
+      },
+      "marketRow": null,
+      "facts": {
+        "name": [
+          "brisbaneroar.com.au",
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "group": [
+          "brisbaneroar.com.au",
+          "transfermarkt.com",
+          "fotmob.com"
+        ],
+        "birthDate": [
+          "site.api.espn.com",
+          "transfermarkt.com",
+          "fotmob.com"
+        ]
+      },
+      "sources": [
+        {
+          "host": "brisbaneroar.com.au",
+          "url": "https://brisbaneroar.com.au/squads/men",
+          "read": "2026-10-06",
+          "profile": "https://brisbaneroar.com.au/player/niall-thom/"
+        },
+        {
+          "host": "site.api.espn.com",
+          "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/aus.1/teams/5326/roster?season=2026",
+          "read": "2026-10-06",
+          "id": "420180"
+        },
+        {
+          "host": "transfermarkt.com",
+          "url": "https://www.transfermarkt.com/brisbane-roar/kader/verein/7831/saison_id/2026/plus/1",
+          "read": "2026-10-06",
+          "id": "1326934"
+        },
+        {
+          "host": "fotmob.com",
+          "url": "https://www.fotmob.com/teams/8118/squad/brisbane-roar-fc",
+          "read": "2026-10-06",
+          "id": "1926974"
+        }
+      ],
+      "seen": {
+        "club": {
+          "name": "Niall Thom",
+          "position": "Attacker",
+          "number": "39"
+        },
+        "espn": {
+          "id": "420180",
+          "name": "Niall Thom",
+          "position": "Defender",
+          "birthDate": "2006-08-10",
+          "match": "exact"
+        },
+        "tm": {
+          "id": "1326934",
+          "name": "Niall Thom",
+          "position": "Right Winger",
+          "birthDate": "2006-08-10",
+          "match": "exact"
+        },
+        "fotmob": {
+          "id": "1926974",
+          "name": "Niall Thom",
+          "position": "Attacker",
+          "birthDate": "2006-08-10",
+          "match": "exact"
+        },
+        "from": "club squad page"
+      },
+      "notes": []
+    }
+  ],
+  "heldOut": [],
+  "marketRecheck": [],
+  "notOnClubPage": [
+    {
+      "source": "espn",
+      "name": "Charlie Benjamin Parkin",
+      "position": "Defender",
+      "birthDate": null
+    },
+    {
+      "source": "espn",
+      "name": "Ianni Valkanis",
+      "position": "Forward",
+      "birthDate": null
+    },
+    {
+      "source": "transfermarkt",
+      "name": "James Durrington",
+      "position": "Attacking Midfield",
+      "birthDate": "2006-03-26"
+    }
+  ],
+  "independentOnly": []
+}

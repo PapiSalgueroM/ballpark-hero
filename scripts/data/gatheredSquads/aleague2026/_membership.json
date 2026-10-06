@@ -1,0 +1,48 @@
+{
+  "league": "A-League Men",
+  "season": "2026-27",
+  "round": 1034,
+  "read": "2026-10-06",
+  "status": "verified: the league's own 2026/2027 ladder and ESPN's 2026-27 standings list the same 12 clubs; Transfermarkt's 26/27 competition page is a third check and agrees",
+  "sources": [
+    {
+      "host": "aleagues.com.au",
+      "kind": "league official",
+      "url": "https://aleagues.com.au/ladders/a-league-men/",
+      "read": "2026-10-06",
+      "note": "Ladder headed 'ISUZU UTE A-League Men 2026/2027' with 12 rows (aleague.com.au redirects here)."
+    },
+    {
+      "host": "site.web.api.espn.com",
+      "kind": "independent publisher",
+      "url": "https://site.web.api.espn.com/apis/v2/sports/soccer/aus.1/standings?season=2026",
+      "read": "2026-10-06",
+      "note": "ESPN standings feed, season displayName '2026-27 Australian A-League Men', 12 entries."
+    },
+    {
+      "host": "transfermarkt.com",
+      "kind": "independent publisher, third check",
+      "url": "https://www.transfermarkt.com/a-league-men/startseite/wettbewerb/AUS1/saison_id/2026",
+      "read": "2026-10-06",
+      "note": "Competition page 'A-League Men 26/27' links the same 12 clubs."
+    }
+  ],
+  "clubs": [
+    { "slug": "adelaide-united", "shard": "A", "league": "Adelaide United FC", "espn": "Adelaide United", "espnId": 5321, "tmId": 875, "site": "https://adelaideunited.com.au/" },
+    { "slug": "auckland-fc", "shard": "A", "league": "Auckland FC", "espn": "Auckland FC", "espnId": 22344, "tmId": 118373, "site": "https://aucklandfc.co.nz/" },
+    { "slug": "brisbane-roar", "shard": "A", "league": "Brisbane Roar FC", "espn": "Brisbane Roar", "espnId": 5326, "tmId": 7831, "site": "https://brisbaneroar.com.au/" },
+    { "slug": "central-coast-mariners", "shard": "A", "league": "Central Coast Mariners FC", "espn": "Central Coast Mariners", "espnId": 5325, "tmId": 6954, "site": "https://ccmariners.com.au/" },
+    { "slug": "macarthur-fc", "shard": "B", "league": "Macarthur FC", "espn": "Macarthur FC", "espnId": 19340, "tmId": 71085, "site": "https://macarthurfc.com.au/" },
+    { "slug": "melbourne-city", "shard": "B", "league": "Melbourne City FC", "espn": "Melbourne City FC", "espnId": 11143, "tmId": 25580, "site": "https://melbournecityfc.com.au/" },
+    { "slug": "melbourne-victory", "shard": "B", "league": "Melbourne Victory", "espn": "Melbourne Victory", "espnId": 5328, "tmId": 7006, "site": "https://melbournevictory.com.au/" },
+    { "slug": "newcastle-jets", "shard": "B", "league": "Newcastle Jets FC", "espn": "Newcastle Jets", "espnId": 5323, "tmId": 5551, "site": "https://newcastlejetsfc.com.au/" },
+    { "slug": "perth-glory", "shard": "C", "league": "Perth Glory FC", "espn": "Perth Glory", "espnId": 5322, "tmId": 970, "site": "https://perthglory.com.au/" },
+    { "slug": "sydney-fc", "shard": "C", "league": "Sydney FC", "espn": "Sydney FC", "espnId": 5327, "tmId": 8054, "site": "https://sydneyfc.com/" },
+    { "slug": "wellington-phoenix", "shard": "C", "league": "Wellington Phoenix FC", "espn": "Wellington Phoenix FC", "espnId": 8352, "tmId": 8445, "site": "https://wellingtonphoenix.com/" },
+    { "slug": "western-sydney-wanderers", "shard": "C", "league": "Western Sydney Wanderers FC", "espn": "Western Sydney Wanderers", "espnId": 13696, "tmId": 36100, "site": "https://wswanderersfc.com.au/" }
+  ],
+  "notes": [
+    "The 2026-27 membership is the same 12 clubs as the plan's 2025-26 list, so the plan's shard split stands.",
+    "The league's clubs page also links Canberra United and Western United, but neither is on the 2026/2027 A-League Men ladder or in ESPN's 2026-27 standings, so neither is a member here."
+  ]
+}
