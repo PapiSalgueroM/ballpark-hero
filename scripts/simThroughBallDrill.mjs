@@ -11,14 +11,15 @@
      - SKILL GAPS: a better judge of weight beats a worse one at three gaps,
        and a better all round player beats a worse one at three gaps, on
        paired seeds. Measured 2026-10-06 over five batches of 240 runs:
-       weight +-0.03/0.06/0.10/0.18 scored 100.0 / 89.2 to 90.0 / 55.6 to
-       56.7 / 31.2 to 31.7, gaps 10.0 to 10.8, 33.0 to 34.4, 24.7 to 25.4,
-       held at floors 5, 16, 12; all round 0.6/1/1.4/2 scored 99.5 / 87.5 to
-       89.0 / 66.1 to 68.3 / 33.6 to 36.4, gaps 10.5 to 12.1, 20.4 to 21.5,
-       31.6 to 32.8, held at 5, 10, 15. The best of 729 fixed inputs scored
-       10.5 to 12.4 against 87.5 to 89.2 for all round skill 1 (floor 50).
-       A noisy player converts 0.739 to 0.751 of the first three balls and
-       0.489 to 0.547 of the last three (floor 0.1).
+       weight +-0.03/0.06/0.10/0.18 scored 100.0 / 88.9 to 89.8 / 55.8 to
+       56.9 / 30.7 to 31.2, gaps 10.2 to 11.1, 32.4 to 33.8, 24.6 to 25.8,
+       held at floors 5, 16, 12; the best single weight with perfect aim and
+       timing scored 66.8 against 100 (floor 18); all round 0.6/1/1.4/2
+       scored 99.4 to 99.7 / 86.8 to 88.5 / 65.3 to 68.4 / 33.8 to 35.9,
+       gaps 10.9 to 12.6, 20.2 to 21.5, 31.5 to 32.7, held at 5, 10, 15. The
+       best of 729 fixed inputs scored about 10 against about 88 for all
+       round skill 1 (floor 50). A noisy player converts 0.726 to 0.751 of
+       the first three balls and 0.511 to 0.526 of the last three (floor 0.1).
      - BANKING: Passing through drillStatFor and applyDrillResult, +2 at 80,
        +1 at 50, capped by the ceiling, once a season shared with every
        other drill, and the board banks once before the callback.

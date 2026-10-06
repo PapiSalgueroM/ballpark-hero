@@ -48,8 +48,6 @@ export interface PitchPoint { x: number; y: number; }
 /* Board units: the board's viewBox is 360 by 240, up the screen is up the pitch. */
 /** Where you stand when you play it. */
 export const PASSER: PitchPoint = { x: 180, y: 222 };
-/** The defensive line. The runner must not be past it when the ball is played. */
-export const LINE_Y = 120;
 /** A ball that rolls this far is the keeper's. */
 export const KEEPER_Y = 36;
 export const PITCH_LEFT = 18;
@@ -68,6 +66,10 @@ export const LEAD_IDEAL = 0.15;
 export const MAX_ANGLE = 75;
 
 export interface ThroughBallSetup {
+  /** How high the defensive line stands, in board y: a high line leaves a
+      long ball in behind, a deep one a short one. He must not be past it
+      when the ball is played. */
+  line: number;
   /** Where the runner starts, onside. */
   start: PitchPoint;
   /** His velocity once he goes, board units a second. */
@@ -102,6 +104,8 @@ export interface ThroughBallResult {
   verdict: string;
   /** Where the ball stops. */
   target: PitchPoint;
+  /** The height of the line it had to beat. */
+  line: number;
   /** Where it crossed the line, or null when it never reached it. */
   crossX: number | null;
   press: number;
@@ -131,7 +135,7 @@ export function runnerAt(setup: ThroughBallSetup, seconds: number): PitchPoint {
 
 /** The moment he crosses the line. A pass played after it is offside. */
 export function crossTime(setup: ThroughBallSetup): number {
-  return setup.hold + (setup.start.y - LINE_Y) / -setup.vel.y;
+  return setup.hold + (setup.start.y - setup.line) / -setup.vel.y;
 }
 
 /** When the round settles itself if nothing is played: he is well offside. */
@@ -157,9 +161,9 @@ export function aimFor(point: PitchPoint): { angle: number; weight: number } {
 }
 
 /** Where a pass to this spot crosses the line, or null when it stops short. */
-export function lineCrossX(target: PitchPoint): number | null {
-  if (target.y >= LINE_Y) return null;
-  return PASSER.x + (target.x - PASSER.x) * (PASSER.y - LINE_Y) / (PASSER.y - target.y);
+export function lineCrossX(target: PitchPoint, line: number): number | null {
+  if (target.y >= line) return null;
+  return PASSER.x + (target.x - PASSER.x) * (PASSER.y - line) / (PASSER.y - target.y);
 }
 
 /** The stretch of his run, from `from` on, when he is within reach of a spot. */
@@ -191,10 +195,10 @@ export function takeThroughBall(input: ThroughBallInput, setup: ThroughBallSetup
   const press = Number.isFinite(input.press) ? Math.max(0, input.press) : Infinity;
   const target = passTarget(input.angle, input.weight);
   const arrival = press + Math.hypot(target.x - PASSER.x, target.y - PASSER.y) / BALL_SPEED;
-  const crossX = lineCrossX(target);
+  const crossX = lineCrossX(target, setup.line);
   const settle = (outcome: ThroughBallOutcome, taken: number | null = null): ThroughBallResult => ({
     won: outcome === 'through', points: outcome === 'through' ? 10 : 0, outcome, verdict: VERDICTS[outcome],
-    target, crossX, press, arrival, taken,
+    target, line: setup.line, crossX, press, arrival, taken,
   });
   if (!(press <= crossTime(setup))) return settle('offside');
   if (crossX === null) return settle('short');
@@ -247,16 +251,17 @@ export function buildThroughBallRun(seed: number): ThroughBallSetup[] {
   return buildLadder(seed, ROUNDS_PER_RUN, (t, rng) => {
     /* He starts out wide and cuts in across the line, so the pass and his run
        meet at an angle and the weight decides whether they meet at all. */
+    const line = rounded(104 + rng() * 32);
     const side = rng() < 0.5 ? 1 : -1;
-    const start = { x: rounded(side === 1 ? 50 + rng() * 70 : 240 + rng() * 70), y: rounded(172 + rng() * 14) };
+    const start = { x: rounded(side === 1 ? 50 + rng() * 70 : 240 + rng() * 70), y: rounded(line + 52 + rng() * 14) };
     const endX = clamp(start.x + side * (70 + 60 * t) * (0.7 + 0.3 * rng()), 50, 310);
     const speed = 40 + 22 * t + rng() * 6;
     const len = Math.hypot(endX - start.x, 60 - start.y);
     const vel = { x: rounded(speed * (endX - start.x) / len), y: rounded(speed * (60 - start.y) / len) };
     const hold = rounded(0.5 + rng() * 0.7);
-    const partial = { start, vel, hold, defenders: [] as number[], wait: rounded(0.3 - 0.15 * t), reach: rounded(12 - 4 * t), cue: 0 };
+    const partial = { line, start, vel, hold, defenders: [] as number[], wait: rounded(0.3 - 0.15 * t), reach: rounded(12 - 4 * t), cue: 0 };
     partial.cue = rounded(crossTime(partial) - 0.2);
-    const ideal = lineCrossX(meetingPoint(partial, partial.cue)) ?? PASSER.x;
+    const ideal = lineCrossX(meetingPoint(partial, partial.cue), line) ?? PASSER.x;
     const half = 30 - 14 * t + rng() * 4;
     const left = half * (0.6 + rng() * 0.8);
     const right = 2 * half - left;
@@ -272,7 +277,7 @@ export function buildThroughBallRun(seed: number): ThroughBallSetup[] {
 /** Where the ball is at a moment after it was played. A cut out ball stops
     at the defender it hit; everything else rolls to its spot. */
 export function ballAt(result: ThroughBallResult, seconds: number): PitchPoint {
-  const end = result.outcome === 'cutout' && result.crossX !== null ? { x: result.crossX, y: LINE_Y } : result.target;
+  const end = result.outcome === 'cutout' && result.crossX !== null ? { x: result.crossX, y: result.line } : result.target;
   const whole = Math.hypot(result.target.x - PASSER.x, result.target.y - PASSER.y);
   const part = Math.hypot(end.x - PASSER.x, end.y - PASSER.y);
   const span = Math.max(0.001, (result.arrival - result.press) * (whole > 0 ? part / whole : 0));

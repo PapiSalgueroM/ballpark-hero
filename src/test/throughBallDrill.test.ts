@@ -5,18 +5,22 @@
    Measured on 2026-10-06 over five batches of 240 paired runs (bases 314159,
    271828, 161803, 141421, 173205), which is where every floor below comes from:
      weight only, error +-0.03 / 0.06 / 0.10 / 0.18 of a full pass:
-       100.0 / 89.2 to 90.0 / 55.6 to 56.7 / 31.2 to 31.7 points,
-       so the three gaps were 10.0 to 10.8, 33.0 to 34.4 and 24.7 to 25.4.
+       100.0 / 88.9 to 89.8 / 55.8 to 56.9 / 30.7 to 31.2 points,
+       so the three gaps were 10.2 to 11.1, 32.4 to 33.8 and 24.6 to 25.8.
+     one fixed weight with perfect aim and timing: 38.0 at 0.50, 66.8 at
+       0.55, 65.8 at 0.60, 33.0 at 0.65 (the ideal weight runs 0.506 to 0.632
+       from the 10th to the 90th percentile), so weight is a decision on
+       every ball, not a setting.
      all round (angle +-4 deg, weight +-0.04, release +-0.15 s, times
-       0.6 / 1 / 1.4 / 2): 99.5 to 99.6 / 87.5 to 89.0 / 66.1 to 68.3 /
-       33.6 to 36.4, so the gaps were 10.5 to 12.1, 20.4 to 21.5, 31.6 to 32.8.
-     the run gets harder: a noisy player converts 0.739 to 0.751 of the first
-       three balls and 0.489 to 0.547 of the last three.
-     the best fixed input found by the sweep: 10.5 to 12.4 points. */
+       0.6 / 1 / 1.4 / 2): 99.4 to 99.7 / 86.8 to 88.5 / 65.3 to 68.4 /
+       33.8 to 35.9, so the gaps were 10.9 to 12.6, 20.2 to 21.5, 31.5 to 32.7.
+     the run gets harder: a noisy player converts 0.726 to 0.751 of the first
+       three balls and 0.511 to 0.526 of the last three.
+     the best fixed input found by the sweep: about 10 points. */
 import { describe, expect, it } from 'vitest';
 import { applyDrillResult, daySeed, drillForPosition, drillSeed, drillStatFor, lehmer, DRILL_META, type DrillKind } from '@/lib/careerDrills';
 import {
-  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, LINE_Y, MAX_PASS, maxThroughBallScore, passTarget, PASSER,
+  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, MAX_PASS, maxThroughBallScore, passTarget, PASSER,
   perfectThroughBall, runnerAt, takeThroughBall, throughBallDeadline, validateThroughBallRecord,
   type ThroughBallInput, type ThroughBallOutcome, type ThroughBallSetup,
 } from '@/lib/throughBallDrill';
@@ -80,11 +84,11 @@ describe('seeded Through Ball rules', () => {
       }
       expect(takeThroughBall({ ...perfect, weight: 0.2 }, setup)).toMatchObject({ won: false, outcome: 'short', crossX: null });
       for (const x of setup.defenders) {
-        const atHim = aimFor({ x: PASSER.x + (x - PASSER.x) * 1.3, y: PASSER.y + (LINE_Y - PASSER.y) * 1.3 });
+        const atHim = aimFor({ x: PASSER.x + (x - PASSER.x) * 1.3, y: PASSER.y + (setup.line - PASSER.y) * 1.3 });
         const hit = takeThroughBall({ ...atHim, press: perfect.press }, setup);
         expect(hit.outcome).toBe('cutout');
         const stop = ballAt(hit, hit.arrival);
-        expect(stop.x).toBeCloseTo(hit.crossX!, 6); expect(stop.y).toBeCloseTo(LINE_Y, 6);
+        expect(stop.x).toBeCloseTo(hit.crossX!, 6); expect(stop.y).toBeCloseTo(setup.line, 6);
       }
       const long = takeThroughBall({ ...perfect, weight: 1 }, setup);
       if (long.target.y <= KEEPER_Y) expect(long.outcome).toBe('keeper');
@@ -107,7 +111,7 @@ describe('seeded Through Ball rules', () => {
     const setup = RUNS[0][0];
     expect(runnerAt(setup, 0)).toEqual(setup.start);
     expect(runnerAt(setup, setup.hold)).toEqual(setup.start);
-    expect(runnerAt(setup, crossTime(setup)).y).toBeCloseTo(LINE_Y, 6);
+    expect(runnerAt(setup, crossTime(setup)).y).toBeCloseTo(setup.line, 6);
     const clean = takeThroughBall(perfectThroughBall(setup), setup);
     expect(ballAt(clean, clean.press)).toEqual(PASSER);
     const landed = ballAt(clean, clean.arrival + 1);
@@ -120,6 +124,12 @@ describe('seeded Through Ball rules', () => {
     const means = errors.map(size => meanScore(RUNS, weightOnly(size)));
     console.log(`Through Ball weight ladder over ${RUNS.length} paired runs: ${means.map(m => m.toFixed(1)).join(' / ')} points`);
     floors.forEach((floor, i) => expect(means[i] - means[i + 1]).toBeGreaterThan(floor));
+    /* and no one weight is right every time: the best fixed weight, with
+       perfect aim and timing, still trails reading the weight ball by ball */
+    let bestFixed = -1;
+    for (let w = 8; w <= 16; w++) bestFixed = Math.max(bestFixed, meanScore(RUNS, setup => ({ ...perfectThroughBall(setup), weight: w / 20 })));
+    console.log(`Through Ball best single weight with perfect aim and timing: ${bestFixed.toFixed(1)} points`);
+    expect(meanScore(RUNS, setup => perfectThroughBall(setup)) - bestFixed).toBeGreaterThan(18);
   });
 
   it('a better all round player outscores a worse one at three skill gaps', () => {

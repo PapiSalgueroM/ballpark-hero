@@ -9,7 +9,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { DRILL_META, drillBoost, drillHeadroom, drillSeed, drillStatFor, type DrillKind } from '@/lib/careerDrills';
 import {
-  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, LINE_Y, MAX_ANGLE, passTarget, PASSER, PITCH_LEFT, PITCH_RIGHT,
+  aimFor, ballAt, buildThroughBallRun, crossTime, KEEPER_Y, MAX_ANGLE, passTarget, PASSER, PITCH_LEFT, PITCH_RIGHT,
   replayEnd, runnerAt, runTime, takeThroughBall, throughBallDeadline, validateThroughBallRecord,
   type ThroughBallRecord, type ThroughBallResult,
 } from '@/lib/throughBallDrill';
@@ -277,8 +277,8 @@ export default function ThroughBallBoard({ career, canBank, onBank, onBack }: {
           <rect x="150" y="10" width="60" height="8" fill="none" stroke="white" strokeOpacity=".6" />
           <path d={`M110 18V${KEEPER_Y}H250V18`} fill="none" stroke="white" strokeOpacity=".3" />
           <circle cx="180" cy="27" r="6" fill="#a855f7" />
-          <path d={`M${PITCH_LEFT} ${LINE_Y}H${PITCH_RIGHT}`} stroke="#fca5a5" strokeOpacity=".55" strokeDasharray="6 5" data-defensive-line />
-          {setup.defenders.map((x, i) => <circle key={i} data-defender cx={x} cy={LINE_Y} r="7" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" />)}
+          <path d={`M${PITCH_LEFT} ${setup.line}H${PITCH_RIGHT}`} stroke="#fca5a5" strokeOpacity=".55" strokeDasharray="6 5" data-defensive-line />
+          {setup.defenders.map((x, i) => <circle key={i} data-defender cx={x} cy={setup.line} r="7" fill="#ef4444" stroke="#7f1d1d" strokeWidth="2" />)}
           <path d={`M${setup.start.x} ${setup.start.y}L${runEnd.x} ${runEnd.y}`} fill="none" stroke="#fde68a" strokeOpacity=".45" strokeDasharray="4 5" data-runner-path />
           <circle cx={crossing.x} cy={crossing.y} r="3" fill="#fde68a" fillOpacity=".7" data-runner-crossing />
           {canAim && <path d={`M${PASSER.x} ${PASSER.y}L${spot.x} ${spot.y}`} stroke="white" strokeOpacity=".5" strokeDasharray="2 4" />}
