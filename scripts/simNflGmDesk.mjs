@@ -64,15 +64,20 @@
  * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nflGmDeskFixture.json from that engine.
  *
- * MEASURED 2026-10-05 on three seed sets of ten (1..10, 11..20, 21..30), ten
- * seasons a seed, full rosters, the GM at Kansas City, totals per set (the
- * walk is deterministic: the same set run twice printed the same numbers):
- *   expiring men decided   1632 / 1597 / 1658   (by the GM 820 / 803 / 829, by the staff's rule 812 / 794 / 829)
- *   draftees come up       160 / 162 / 156, every one after exactly four seasons; 60 / 60 / 60 first rounders with the option
+ * MEASURED 2026-10-06 (remeasured after the review fixes: buyers became the
+ * seed holders, which moved the prices and so the deals) on three seed sets
+ * of ten (1..10, 11..20, 21..30), ten seasons a seed, full rosters, the GM at
+ * Kansas City, totals per set (the walk is deterministic):
+ *   expiring men decided   1643 / 1619 / 1633   (by the GM 821 / 813 / 819, by the staff's rule 822 / 806 / 814)
+ *   draftees come up       155 / 157 / 153, every one after exactly four seasons; 60 / 60 / 60 first rounders with the option
  *   tags                   41 / 41 / 41 tagged men held by the tag, none on the desk
- *   deals before deadline  692 / 723 / 711   tries after it 700 each, landed 0; refusal agreed 1700 weeks each
- *   deals moving a pick    692 / 721 / 709   leaving dead money on your cap 692 / 721 / 711, every one the rule's figure
- *   buyer and seller places at the deadline  1700 / 1719 / 1717 and 435 / 433 / 406
+ *   deals before deadline  707 / 705 / 718   tries after it 700 each, landed 0; refusal agreed 1700 weeks each
+ *   deals moving a pick    700 / 701 / 716   leaving dead money on your cap 707 / 703 / 717, every one the rule's figure
+ *   buyer and seller places at the deadline  1517 / 1526 / 1547 and 568 / 556 / 583
+ *   seed holders at the deadline  1400 each, every one a buyer; a cut by record alone would have missed 0 / 2 / 2
+ *   the staff a new franchise opens with  edge 0.33 (MIA) to 2.36 (SF), median 1.17 (CHI), on the
+ *                          user's club only (no computer club has a staff edge; the guide says so)
+ * The previous measurement (2026-10-05, before the fixes) is in git history.
  *   staff ladder (fixed)   edge 0 to 3.00 strength, win .408 to .530 (Kansas City at home to
  *                          Buffalo), scouting miss 2.20 to 0.56, a three week injury 3.00 to 2.25 weeks;
  *                          alone, the head coach takes the win .408 to .438, the offensive
@@ -789,6 +794,14 @@ console.log(`   each post alone: ${postLines.join('; ')}`);
   if (!pw.includes('simGame(g, lg.teams, Math.random, deskWeek.edges)')) fail('the board\'s playWeek plays the week without the staff edge');
   if (!pw.includes('injuryPass(lg.teams, Math.random, deskWeek.weeksFor)')) fail('the board\'s playWeek runs injuries without the trainer');
   if (!pw.includes('runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined)')) fail('the board\'s playoffs run without the staff edge');
+}
+{
+  /* Measured, not asserted: the staff a new franchise opens with gives the
+     user's club an edge no computer club has (the guide says so). Its size
+     follows the club's stature. */
+  const edges = Object.keys(L5.teams).map(k => ({ k, e: D.nflStaffEdge(D.nflStaffOf(D.openNflDesk(L5, k), L5, k).block) })).sort((a, b) => a.e - b.e);
+  const mid = edges[Math.floor(edges.length / 2)];
+  console.log(`   the staff a new franchise opens with: edge ${edges[0].e.toFixed(2)} (${edges[0].k}) to ${edges.at(-1).e.toFixed(2)} (${edges.at(-1).k}), median ${mid.e.toFixed(2)} (${mid.k})`);
 }
 console.log(`   edge ${ladder[0].edge.toFixed(2)} to ${ladder[9].edge.toFixed(2)}, win ${ladder[0].win.toFixed(3)} to ${ladder[9].win.toFixed(3)}, miss ${ladder[0].miss.toFixed(2)} to ${ladder[9].miss.toFixed(2)}, weeks out ${ladder[0].out.toFixed(2)} to ${ladder[9].out.toFixed(2)}`);
 
