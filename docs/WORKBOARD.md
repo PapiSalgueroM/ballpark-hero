@@ -1,3 +1,25 @@
+## Round1068 LIVE, publish slot returns to AH
+
+Cage grappling motion is live, verified 2026-10-06 20:22:21 UTC.
+PR157 runtime0667c476, entry index-BqbGmvBg.js. Public canvas position/top/
+level/pressure metadata, reopened help, guide and new What's New line/link
+verified. Cage/news each have one canonical/description and no noindex.
+All prior modes, strikes/stats and Claude's207-lineup update remain.
+
+All three final workflows at2b26387c and SHA256-verified saved artifacts
+accepted: Cage69/118 with34 harnesses,1556 inputs/187 screenshots/30 frames/
+12 correct recaps; MMA20/23 with32; entry8/18 with19. All sixteen built
+readers and independent mutation baselines pass. Phone geometry/fonts/
+saves pass; no production fight completion or forwarded test write.
+Full evidence, accepted tree and artifact receipts are in PROJECT-STATE.
+
+Preserve PR152 to157 and this closing receipt in AH. Main/publish returns
+to AH when this receipt merges. Claude's soccer/GM and committed career/
+soccer2.ts guide grants stay. Root drafts/seven stashes stay protected.
+No local app runtime, direct production DB call or paid AI.
+Next1069 is unclaimed. Published runtime needs no second deploy for this
+docs-only receipt.
+
 ## Round1068 candidate ready, final CI pending
 
 Remote preparation37519544053 passed on8ff33ac90802d1ea3286065a4b9dcfea90de8ef1:
