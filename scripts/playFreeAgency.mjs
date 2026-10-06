@@ -40,6 +40,7 @@ const browser = await chromium.launch();
 
 /* Create a career through the real create screen, then expire the deal. */
 async function reachFreeAgency(page, path, saveKey, eraTileText) {
+  await page.addInitScript(route => localStorage.setItem(`rules-gate-seen:${route}`, '1'), path);
   await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');

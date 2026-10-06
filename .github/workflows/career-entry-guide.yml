@@ -1,0 +1,133 @@
+name: Career entry guide verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-entry-guide.yml
+      - src/components/game/GameHelp.tsx
+      - src/components/game/HowToPlayPopover.tsx
+      - src/pages/NbaMyCareer.tsx
+      - src/pages/NflMyCareer.tsx
+      - src/pages/MlbMyCareer.tsx
+      - src/pages/NhlMyCareer.tsx
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/us-career/SeasonRevealCard.tsx
+      - src/lib/usCareerSport.ts
+      - src/lib/*CareerSport.ts
+      - src/lib/nbaMyCareer.ts
+      - src/lib/nflMyCareer.ts
+      - src/lib/mlbMyCareer.ts
+      - src/lib/nhlMyCareer.ts
+      - src/lib/nbaCareer*.ts
+      - src/lib/nflCareer*.ts
+      - src/lib/mlbCareer*.ts
+      - src/lib/nhlCareer*.ts
+      - src/lib/usCareerDeckC.ts
+      - src/lib/careerHeadroom.ts
+      - src/lib/usCareerAnnualBenefits.ts
+      - src/lib/usCareerRecovery.ts
+      - src/lib/careerVariance.ts
+      - src/lib/careerAwards.ts
+      - src/lib/careerRival.ts
+      - src/lib/careerInbox.ts
+      - src/lib/careerRivalryEvents.ts
+      - src/lib/careerRivalryChoices.ts
+      - src/lib/careerMoney.ts
+      - src/lib/careerSocial.ts
+      - src/lib/keyedRng.ts
+      - src/data/conquestDataNba.ts
+      - src/data/conquestDataMlb.ts
+      - src/data/conquestDataNhl.ts
+      - src/data/gameContent/basketball.ts
+      - src/data/gameContent/football.ts
+      - src/data/gameContent/baseball.ts
+      - src/data/gameContent/hockey.ts
+      - src/data/gameContent/loader.ts
+      - src/data/gameContent/guideShape.ts
+      - src/test/careerEntryGuide.test.tsx
+      - src/test/fixtures/careerDecisionOutcome1009.ts
+      - scripts/simCareerEntryGuide.mjs
+      - scripts/qa/careerEntryGuide1031.mjs
+      - scripts/simGuideHeadings.mjs
+      - src/data/searchKeywords.json
+      - public/nba-my-career/index.html
+      - public/nfl-my-career/index.html
+      - public/mlb-my-career/index.html
+      - public/nhl-my-career/index.html
+      - public/sitemap.xml
+      - scripts/data/lastmod.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-entry-guide-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p career-entry-guide-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-entry-guide-artifacts/types.log
+          npm run build 2>&1 | tee career-entry-guide-artifacts/build.log
+      - name: First-visit outcomes and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAREER_ENTRY_GUIDE_CONTROL=all ONLY=simCareerEntryGuide node scripts/runAllSims.mjs 2>&1 | tee career-entry-guide-artifacts/mounted.log
+      - name: All built readers, guides and harness anchors
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch simGuideHeadings simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-entry-guide-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Frozen and reviewed guide sentences retain effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          for control in skiplevel nokeyword lostline careerline unconvert snapdrift; do
+            set +e
+            GUIDE_HEADINGS_CONTROL="$control" node scripts/simGuideHeadings.mjs 2>&1 | tee "career-entry-guide-artifacts/guide-$control.log"
+            status=${PIPESTATUS[0]}
+            set -e
+            test "$status" -eq 1
+            grep -E "simGuideHeadings control $control: section [1-4] red and every other section green" "career-entry-guide-artifacts/guide-$control.log"
+          done
+      - name: Native guides and career controls across four sports
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/careerEntryGuide1031.mjs 2>&1 | tee career-entry-guide-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-entry-guide-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: career-entry-guide-artifacts/
