@@ -20,11 +20,25 @@
       FALLBACK_CLUBS, and a 1990 season contains no MLS club, proving the
       founded after table holds for the league that did not exist yet.
 
-   Negative control: SIM_CAREER_ERAS_CONTROL=drop bundles a copy of
-   careerEras.ts with one window's "Primeira Liga" key deleted, and the run
-   must fail. The copy edit asserts the key was present before deleting, the
-   simPrerender house rule, so a renamed key can never leave the control
-   passing for the wrong reason.
+   6. Round 1024: every era star (the Ballon d'Or field and the world feed,
+      163 real players plus the reigning winner) is pinned to the season by
+      season ledger in scripts/data/careerEraStarsVerified2026-10/: his
+      club and nationality must equal the ledger row, the row's club must
+      follow from its own seasons by the stated rule (most seasons of the
+      window, a split season half to each club, a tie keeps the game's club
+      if tied, else the middle season's, else the later club; 2025-2029 is
+      the 2026-27 club), every row carries two sources and none of them is
+      Wikipedia, the chosen club holds at least one season backed by two
+      hosts, and the 2025-2029 window agrees with the verified 2026 overlay
+      on every name both carry. Exact pins, so there is no band to measure.
+
+   Negative controls, each asserting the text it mutates exists first (the
+   simPrerender house rule) and each required to raise its own failure, not
+   just any failure:
+     SIM_CAREER_ERAS_CONTROL=drop    one window's "Primeira Liga" key deleted
+     SIM_CAREER_ERAS_CONTROL=club    Salah's 2025-2029 club put back to Liverpool
+     SIM_CAREER_ERAS_CONTROL=derive  one ledger season of Matthaeus flipped, so
+                                     the ledger's club no longer follows
 
    Run: node scripts/simCareerEras.mjs
 */
@@ -36,18 +50,31 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
-const CONTROL = process.env.SIM_CAREER_ERAS_CONTROL === 'drop';
+const failMsgs = [];
+const fail = m => { failures += 1; failMsgs.push(m); console.error('  FAIL: ' + m); };
+const CONTROL_MODE = process.env.SIM_CAREER_ERAS_CONTROL || '';
+/* Source controls edit a copy of careerEras.ts; derive edits the ledger in
+   memory. expect is the failure each one must raise. */
+const CONTROLS = {
+  drop: { needle: '"Primeira Liga": ["Porto", "Benfica", "Sporting CP"],', replace: '', expect: /missing "Primeira Liga"/ },
+  club: { needle: 'S("Mohamed Salah", "Egypt", "RW", "Trabzonspor",', replace: 'S("Mohamed Salah", "Egypt", "RW", "Liverpool",', expect: /Mohamed Salah.*"Liverpool"/ },
+  derive: { expect: /Lothar Matthäus.*does not follow/ },
+};
+if (CONTROL_MODE && !CONTROLS[CONTROL_MODE]) { console.error(`unknown SIM_CAREER_ERAS_CONTROL "${CONTROL_MODE}"`); process.exit(1); }
+const CONTROL = Boolean(CONTROL_MODE);
 
 const ENTRY = path.join(os.tmpdir(), 'careerEras.entry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'careerEras.bundle.mjs');
 let erasPath = `${ROOT}/src/lib/careerEras.ts`;
-if (CONTROL) {
+if (CONTROL && CONTROLS[CONTROL_MODE].needle) {
+  const { needle, replace } = CONTROLS[CONTROL_MODE];
   const src = fs.readFileSync(erasPath, 'utf8');
-  const needle = '"Primeira Liga": ["Porto", "Benfica", "Sporting CP"],';
-  if (!src.includes(needle)) { console.error('control run: the line the control deletes is not in the source, refusing to run a dead control'); process.exit(1); }
+  if (!src.includes(needle)) { console.error('control run: the text the control edits is not in the source, refusing to run a dead control'); process.exit(1); }
   erasPath = path.join(os.tmpdir(), 'careerEras.control.ts');
-  fs.writeFileSync(erasPath, src.replace(needle, ''));
+  /* The copy lives outside src, so its relative imports are pointed back at
+     src/lib or the bundle cannot resolve them. */
+  const libDir = `${ROOT.replaceAll('\\', '/')}/src/lib/`;
+  fs.writeFileSync(erasPath, src.replace(needle, replace).replaceAll('from "./', `from "${libDir}`));
 }
 fs.writeFileSync(ENTRY, `
 export { ERA_DEFS, eraDefFor, adjustClubsForYear } from '${erasPath.replaceAll('\\', '/')}';
@@ -150,9 +177,79 @@ console.log('5) the owner named leagues have playable depth, and 1990 has no MLS
   console.log(`   six named leagues at 3+ clubs, MLS empty in 1990 and ${now} strong in 2026`);
 }
 
+console.log('6) every era star is pinned to the season by season ledger');
+{
+  const LEDGER_DIR = `${ROOT}/scripts/data/careerEraStarsVerified2026-10`;
+  const rows = ['eras-1990-1999', 'eras-2000-2014', 'eras-2015-2029']
+    .flatMap(f => JSON.parse(fs.readFileSync(`${LEDGER_DIR}/${f}.json`, 'utf8')).rows);
+  if (CONTROL_MODE === 'derive') {
+    const row = rows.find(r => r.window === '1990-1994' && r.name === 'Lothar Matthäus');
+    if (!row || row.seasons['1994-95'] !== 'Bayern Munich') { console.error('control run: the ledger season the control flips is not there, refusing to run a dead control'); process.exit(1); }
+    row.seasons['1994-95'] = 'Inter Milan';
+  }
+  const HOST_KEYS = ['sm', 'nft', 'rsssf', 'fsq', 'uefa', 'espn', 'overlay', 'psv.nl', 'saopaulofc.net', 'fcbarcelona.com'];
+  const hostCount = h => new Set((h || '').replace(/\([^)]*\)/g, ' ').split(/\s+/).filter(k => HOST_KEYS.includes(k))).size;
+  const seasonKeys = def => Array.from({ length: def.to - def.from + 1 }, (_, i) => `${def.from + i}-${String((def.from + i + 1) % 100).padStart(2, '0')}`);
+  /* The rule the ledger's about text states, recomputed so the club is
+     derived from the seasons, never typed beside them. */
+  const derive = (row, def) => {
+    const keys = seasonKeys(def);
+    if (def.from === 2025) return row.seasons['2026-27'];
+    const tally = new Map();
+    keys.forEach((k, i) => {
+      const parts = row.seasons[k] ? row.seasons[k].split(' / ') : [];
+      for (const p of parts) {
+        const t = tally.get(p) || { n: 0, last: -1 };
+        tally.set(p, { n: t.n + 1 / parts.length, last: i });
+      }
+    });
+    const max = Math.max(...[...tally.values()].map(t => t.n));
+    const tied = [...tally].filter(([, t]) => Math.abs(t.n - max) < 1e-9).map(([c]) => c);
+    if (tied.length === 1) return tied[0];
+    if (tied.includes(row.game)) return row.game;
+    const mid = (row.seasons[keys[Math.floor(keys.length / 2)]] || '').split(' / ').find(c => tied.includes(c));
+    if (mid) return mid;
+    return tied.sort((a, b) => tally.get(b).last - tally.get(a).last)[0];
+  };
+  const matched = new Set();
+  let stars = 0;
+  for (const def of ERA_DEFS) {
+    const keys = seasonKeys(def);
+    for (const star of def.stars) {
+      stars += 1;
+      const row = rows.find(r => r.window === `${def.from}-${def.to}` && r.name === star.name);
+      if (!row) { fail(`${def.from}-${def.to} ${star.name} has no ledger row, an unverified real player in the field`); continue; }
+      matched.add(row);
+      if (star.club !== row.club) fail(`${def.from}-${def.to} ${star.name}: the game has club "${star.club}", the ledger says "${row.club}"`);
+      if (star.nationality !== row.nationality) fail(`${def.from}-${def.to} ${star.name}: the game has nationality "${star.nationality}", the ledger says "${row.nationality}"`);
+      if (Object.keys(row.seasons).join() !== keys.join()) fail(`${def.from}-${def.to} ${star.name}: ledger seasons ${Object.keys(row.seasons).join()} are not the window's`);
+      const want = derive(row, def);
+      if (want !== row.club) fail(`${def.from}-${def.to} ${star.name}: ledger club "${row.club}" does not follow from its seasons, the rule gives "${want}"`);
+      if (!Array.isArray(row.sources) || row.sources.length < 2) fail(`${def.from}-${def.to} ${star.name}: fewer than two sources`);
+      if ((row.sources || []).some(u => /wikipedia\.org/i.test(u))) fail(`${def.from}-${def.to} ${star.name}: Wikipedia cited as a source`);
+      const backed = keys.filter(k => (row.seasons[k] || '').split(' / ').includes(row.club) && hostCount(row.hosts[k]) >= 2);
+      if (backed.length === 0) fail(`${def.from}-${def.to} ${star.name}: no season at "${row.club}" is backed by two hosts`);
+    }
+  }
+  for (const r of rows) if (!matched.has(r)) fail(`ledger row ${r.window} ${r.name} matches no star in ERA_DEFS`);
+  /* The current window against the repo's own verified 2026 record. */
+  const { TRANSFER_OVERLAY_2026 } = await import(pathToFileURL(`${ROOT}/scripts/transferOverlay2026.mjs`).href);
+  const now = ERA_DEFS.find(d => d.from === 2025);
+  let overlaid = 0;
+  for (const star of now.stars) {
+    const move = TRANSFER_OVERLAY_2026.find(m => m.name === star.name);
+    if (!move || !move.to) continue;
+    overlaid += 1;
+    if (move.to !== star.club) fail(`2025-2029 ${star.name}: the game has "${star.club}", the verified 2026 overlay has "${move.to}"`);
+  }
+  if (overlaid < 3) fail(`only ${overlaid} current window stars found in the 2026 overlay, expected Rodri, Salah and Endrick at least`);
+  const corrected = rows.filter(r => r.status === 'corrected').length;
+  console.log(`   ${stars} star lines, ${rows.length} ledger rows, every club derived from its seasons (${corrected} corrected from the old table), ${overlaid} current stars agree with the 2026 overlay`);
+}
+
 if (CONTROL) {
-  if (failures > 0) { console.log(`\ncontrol run: ${failures} failure(s) fired as expected`); process.exit(0); }
-  console.error('\ncontrol run: deleting a league key changed NOTHING, the checks are dead');
+  if (failMsgs.some(m => CONTROLS[CONTROL_MODE].expect.test(m))) { console.log(`\ncontrol run (${CONTROL_MODE}): ${failures} failure(s) fired as expected`); process.exit(0); }
+  console.error(`\ncontrol run (${CONTROL_MODE}): the mutation did not raise its own failure, the check is dead`);
   process.exit(1);
 }
 console.log('   teeth: exemptions pinned by exact window list, picker parsed from page source, labels byte compared');
