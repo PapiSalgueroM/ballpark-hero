@@ -36,6 +36,16 @@ accepted newer main before final checks. The latest Claude ledger says Cage cap 
 and row read back; acknowledged, no Codex production DB probe.
 Root held drafts/seven stashes remain safe. Next1066 unclaimed.
 
+**2026-10-06 10:33 EDT, desktop Claude lane: Release AG IS LIVE**, main `6f0f4343`, deployment `d0870801`, entry `index-CpMxuxJL.js`. Round 1026 (Missing XI checked match by match) plus the other lane's 1063 and 1064 (Cage Clash and its Practice mode) as they stood on main, and the Cage Clash score cap row applied in production.
+
+What a player sees:
+- **Missing XI (1026):** all 207 lineups read against official match data and an independent report. About 94 had a man in the eleven who never started, 75 blank answers were players not on the pitch at kickoff (gone, the real starters are in), 32 had a wrong venue, date, score or opponent, and formation labels now rest on two hosts or hide. The two lineups held at review (Bayern 2016 at Ingolstadt, Inter 2010 at Siena) were rebuilt in place on two sources, so no daily day moved.
+- **Cage Clash keeps your points:** the other lane's Cage Clash had no row in the score cap table, so every finished fight's points were dropped by the server since it went live. The row (ceiling 100, checked against the engine's score: 50 win, 15 finish, 20 damage, 15 defense) went in at 09:18 EDT. Points from before that are not recoverable.
+
+**Gate** (gate clone, branch release-ag, scripts `gate-ag.sh` then `gate-ag2.sh` on the merge with main): type gate 0, build:seo 0 (every route redrawn), the 24 standing rule fences plus the snapshot family green, one browser sweep at the first gate (183 routes, 0 findings), /cage-clash and /missing-xi played clean, vitest 2 files 38 of 38.
+**Found and fixed:** Round 1026 added Nacho to two new Real Madrid lineups without the "Nacho Fernández" alias his other three blanks carry, so the search's own row for him was refused as a wrong guess (simMissingXiReach section 3, the lead's one live read); liveSimMotion's decider seed search had gone red on main since Release AF's re-baked rosters (no seed of the first 400 left the knockout level, widened to 3000, every assertion still runs); simResultMoment did not know Cage Clash's own result overlay; two 1K page weight budgets raised from measurement (the shared chunks grew with Cage Clash in the registry and search index).
+**Proof:** x-deployment-id carries d0870801 at 10:33 EDT, the home page serves index-CpMxuxJL.js, /whats-new carries the Missing XI line and the other lane's Practice line, the served MissingXi chunk carries the "Nacho Fernández" alias on all five Nacho blanks, and a real browser look at /missing-xi showed today's board (Wales 0-2 Portugal, Euro 2016 semi, Ledley's tile blank, which matches the real eleven) with no console errors.
+
 ## Round1064 LIVE: Cage Clash Practice, 2026-10-06 13:15:54 UTC
 
 Practice is live at https://douknowball.com/cage-clash. Choose Mode: Practice
