@@ -126,9 +126,10 @@ export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpO
         <div className="grid grid-cols-3 gap-1.5">
           {actions.map(({ action, key }) => {
             const descriptionId = `${hintId}-${action}-readiness`;
+            const label = fight.position === 'ground' && action === 'power' ? 'Heavy strike' : cageActionLabel(fight, action);
             const hint = practice && !canCagePracticeAction(practice, action) ? 'Not in drill'
               : !canCageAction(fight, action) ? 'Unavailable' : paused || helpOpen ? 'Paused' : cageActionReadiness(fight, action);
-            return <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} h-11 leading-3 ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)} aria-describedby={descriptionId}><span className="block">{cageActionLabel(fight, action)} <span className="text-[9px] text-muted-foreground">{key}</span></span><span id={descriptionId} data-cage-readiness={action} className="block whitespace-nowrap text-[10px] font-normal leading-3 text-muted-foreground">{hint}</span></button>;
+            return <button type="button" key={action} {...controlProps(action)} disabled={!running || !canCageAction(fight, action) || Boolean(practice && !canCagePracticeAction(practice, action))} className={`${button} h-11 leading-3 ${action === 'grapple' || action === 'submit' ? 'border-blue-400/50 bg-blue-500/5' : ''}`} aria-label={cageActionLabel(fight, action)} aria-describedby={descriptionId}><span className="block">{label} <span className="text-[9px] text-muted-foreground">{key}</span></span><span id={descriptionId} data-cage-readiness={action} className="block whitespace-nowrap text-[10px] font-normal leading-3 text-muted-foreground">{hint}</span></button>;
           })}
         </div>
         <p className="text-[10px] leading-tight text-muted-foreground">{practice ? 'Only this drill’s moves are active. Release every control to recover gas. P pauses.' : `${tip} Hold buttons or keys. P pauses.`}</p>

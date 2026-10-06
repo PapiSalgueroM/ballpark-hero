@@ -170,6 +170,18 @@ try {
     }
     const inspect = async stage => {
       const value = await measure(page); geometry(value, profile, stage);
+      if (stage === 'practice-submission' && profile.width === 320 && !report.controls.includes('readiness-wrap')) {
+        const label = control('power').locator('span').first();
+        const original = await label.evaluate(el => el.firstChild.textContent);
+        assert.equal(original.trim(), 'Heavy strike');
+        await label.evaluate(el => { el.firstChild.textContent = 'Heavy ground strike '; });
+        assert.equal(await label.evaluate(el => el.firstChild.textContent), 'Heavy ground strike ');
+        assert.notEqual(await label.evaluate(el => el.firstChild.textContent), original, 'The wrap control restores the actual previously clipped label');
+        const wrapped = await measure(page); assert.throws(() => geometry(wrapped, profile, 'readiness-wrap'), /readiness text clipped or overlapping/);
+        await label.evaluate((el, text) => { el.firstChild.textContent = text; }, original);
+        assert.equal(await label.evaluate(el => el.firstChild.textContent), original);
+        geometry(await measure(page), profile, 'readiness-wrap-restored'); report.controls.push('readiness-wrap');
+      }
       const file = `${id}-${stage}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' });
       const state = await hud(page);
       if (state.phase !== 'finished' || state.drill !== 'none') {
@@ -714,7 +726,7 @@ try {
     } catch (error) { row.error = String(error?.stack || error); console.error(`${id}: ${row.error}`); await page.screenshot({ path: path.join(OUT, `${id}-failure.png`) }).catch(() => {}); throw error; }
     finally { await context.close(); report.coverage = [...coverage]; save(); }
   }
-  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 7); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
+  assert.equal(report.cases.length, 4); assert.equal(report.controls.length, 8); assert(report.cases.every(row => row.passed), 'All four native profiles pass');
   assert(report.cases.every(row => row.fightStats.some(stats => stats.stage === 'quick-result')), 'All four profiles inspect earned Quick fight stats');
   for (const row of report.cases.filter(row => row.circuit)) assert.equal(row.fightStats.filter(stats => stats.stage.startsWith('circuit-')).length, row.circuit.runs.reduce((sum, run) => sum + run.fights.length, 0), 'Every earned Circuit result gets its own current fight recap');
   assert.equal(report.cases.filter(row => row.practice?.passed && row.practice.drills.length === 4).length, 2, 'Keyboard and 320px touch complete all four practice drills');
@@ -724,5 +736,5 @@ try {
   assert.equal(report.cases.filter(row => row.circuit?.passed && row.circuit.won).length, 2, '320px touch and full-motion desktop complete winning circuits and real early stops');
   for (const needed of ['standing', 'clinch', 'ground-player', 'ground-cpu', 'submission', 'escape', 'result']) assert(coverage.has(needed), `Actual UI reaches ${needed}`);
   assert.equal(report.forwardedWrites, 0);
-  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, seven proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
+  console.log(`cageClash1063: four complete native fights, every earned fight recap, twelve actual strike frames, six earned ground positions, six grapple frames, six pressure grips, two native readiness journeys, eight proven controls, seven actual combat states, input lifecycle and zero forwarded writes passed.`);
 } finally { if (browser) await browser.close(); server.kill(); fs.writeFileSync(path.join(OUT, 'server.log'), serverLog); save(); }

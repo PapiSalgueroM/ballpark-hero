@@ -62,8 +62,18 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_READINESS_CONTROL=all ONLY=simCageReadiness node scripts/runAllSims.mjs 2>&1 | tee readiness-artifacts/readiness.log
       - name: Native recap, combat and circuit journeys
+        id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: xvfb-run -a node scripts/qa/cageClash1063.mjs 2>&1 | tee readiness-artifacts/native.log
+      - name: Preserve native failure for immediate diagnosis
+        if: ${{ failure() && steps.native.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-readiness-native-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            readiness-artifacts/native/
+            readiness-artifacts/native.log
       - name: Every built reader and guides
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
