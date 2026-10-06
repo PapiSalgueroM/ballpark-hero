@@ -3058,9 +3058,9 @@ export const LINEUPS: Lineup[] = [
       { position: 'LB', name: 'Alphonso Davies', x: 16, y: 70 },
       { position: 'CDM', name: 'Joshua Kimmich', x: 62, y: 56 },
       { position: 'CDM', name: 'Leon Goretzka', x: 38, y: 56 },
-      { position: 'LW', name: 'Serge Gnabry', x: 20, y: 34 },
+      { position: 'RW', name: 'Serge Gnabry', x: 80, y: 34 },
       { position: 'CAM', name: 'Thomas Muller', x: 50, y: 34 },
-      { position: 'RW', name: 'Kingsley Coman', x: 80, y: 34 },
+      { position: 'LW', name: 'Kingsley Coman', x: 20, y: 34 },
       { position: 'ST', name: 'Robert Lewandowski', x: 50, y: 16 },
     ],
     blankCandidates: [

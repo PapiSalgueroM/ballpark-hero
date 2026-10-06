@@ -91,6 +91,13 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Inter 3-1 Barcelona, Giuseppe Meazza. Inter 4-2-3-1: Julio César; Maicon RB, Lúcio, Samuel, Zanetti LB; Cambiasso, Thiago Motta; Pandev AM-L, Sneijder, Eto'o AM-R; Milito. Chivu on for Maicon, Stankovic on for Pandev, Balotelli on for Milito."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "uefa.com",
+     "url": "https://match.uefa.com/v5/matches/2000487/lineups",
+     "xi": true,
+     "says": "UEFA lineup feed with pitch coordinates (small x is the right touchline: Maicon 130, Zanetti 893). Motta 180, Cambiasso 489 and Pandev 775 in one band at y 501; Sneijder 489 at y 676; Milito 279 and Eto'o 718 at y 794."
     }
    ],
    "diffs": [
@@ -122,13 +129,13 @@
      "path": "slots[7].position",
      "from": "RW",
      "to": "LW",
-     "why": "ESPN (AM-L) and UEFA coordinates (left side) put Pandev on the left; the shard 3 skeptic found Transfermarkt agrees"
+     "why": "Pandev on the left on two own reads: ESPN summary feed AM-L and UEFA's coordinates (x 775, the left half). Transfermarkt (shard 3 skeptic) agrees"
     },
     {
      "path": "slots[9].position",
      "from": "LW",
      "to": "RW",
-     "why": "ESPN (AM-R) and Transfermarkt (per the shard 3 skeptic) put Eto'o on the right"
+     "why": "Eto'o takes the right tile Pandev vacated. ESPN has him AM-R (Transfermarkt, per the skeptic, agrees); UEFA's coordinates put him in a front two left of Milito (x 718, y 794). The hosts split on his side and the left tile is Pandev's on two hosts, so the right is the only tile left; recorded as split"
     },
     {
      "path": "blankCandidates[Cristian Chivu]",
@@ -156,19 +163,20 @@
      "path": "slots[7].side",
      "from": "right",
      "to": "left",
-     "why": "ESPN (AM-L) and UEFA coordinates (left side) put Pandev on the left; the shard 3 skeptic found Transfermarkt agrees"
+     "why": "Pandev: ESPN AM-L and UEFA x 775 (left) agree"
     },
     {
      "path": "slots[9].side",
      "from": "left",
      "to": "right",
-     "why": "ESPN (AM-R) and Transfermarkt (per the shard 3 skeptic) put Eto'o on the right"
+     "why": "Eto'o: forced by Pandev's two-host move; ESPN right, UEFA left of Milito in a front two (split, recorded)"
     }
    ],
    "notes": [
     "Score, date, venue, competition and stage all match both sources.",
     "Wide forwards: entry has Pandev RW and Eto'o LW. ESPN lists Pandev AM-L and Eto'o AM-R (the reverse). UEFA's tactical diagram is not conclusive (places both left of centre). Position only, recorded as a note, not a name diff.",
-    "Round 1026: the side note above is applied. ESPN (AM-L) and UEFA coordinates put Pandev on the left, and the shard 3 skeptic read the same on Transfermarkt with Eto'o on the right; the Pandev blank now reads LW."
+    "Round 1026: the side note above is applied. ESPN (AM-L) and UEFA coordinates put Pandev on the left, and the shard 3 skeptic read the same on Transfermarkt with Eto'o on the right; the Pandev blank now reads LW.",
+    "Round 1026 (review fix): Pandev's move to the left rests on two own reads (ESPN feed and UEFA coordinates), not on the skeptic alone. Eto'o's side splits (ESPN AM-R, UEFA a forward left of Milito); he takes the one free wing and the split is recorded. UEFA's coordinates also read the shape as a midfield three behind Sneijder and a front two, unlike ESPN's 4-2-3-1; the entry keeps 4-2-3-1."
    ]
   },
   {
@@ -2842,6 +2850,13 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Saturday 20th April 2019. Juventus XI: Szczesny, Cancelo, Rugani, Bonucci (c), Alex Sandro, Cuadrado, E Can, Pjanic, Matuidi, Bernardeschi, C Ronaldo."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "calciomercato.com",
+     "url": "https://www.calciomercato.com/news/juventus-fiorentina-2-1-il-tabellino-12494",
+     "xi": true,
+     "says": "Tabellino: JUVENTUS (4-4-2): Szczesny; Cancelo, Bonucci, Rugani, Alex Sandro; Cuadrado, Emre Can, Pjanic, Matuidi; Bernardeschi, Ronaldo. Each line printed right to left (Cancelo first, Alex Sandro last)."
     }
    ],
    "diffs": [
@@ -2875,7 +2890,7 @@
      "path": "formationLabel",
      "from": "4-3-3",
      "to": "4-4-2",
-     "why": "ESPN states 4-4-2 (re-read 2026-10-06) and the shard 3 skeptic read the same on Transfermarkt; Sky gives no label and no host states 4-3-3"
+     "why": "both state 4-4-2: ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same. Sky gives no label and no host states 4-3-3"
     },
     {
      "path": "slots[2].name",
@@ -2887,13 +2902,13 @@
      "path": "slots[5].position",
      "from": "CDM",
      "to": "CM",
-     "why": "in the 4-4-2, ESPN has Pjanic CM-L"
+     "why": "Pjanic, left of the two central midfielders (ESPN CM-L; third of four in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[6].position",
      "from": "CM",
      "to": "LM",
-     "why": "ESPN (LM) and Transfermarkt per the skeptic: Matuidi wide left"
+     "why": "Matuidi wide left (ESPN LM; last of four in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[7].name",
@@ -2905,19 +2920,19 @@
      "path": "slots[8].position",
      "from": "RW",
      "to": "RM",
-     "why": "ESPN (RM) and Transfermarkt per the skeptic: Cuadrado wide right"
+     "why": "Cuadrado wide right (ESPN RM; first of four in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[9].position",
      "from": "CF",
      "to": "ST",
-     "why": "ESPN (CF-L): one of two strikers"
+     "why": "Ronaldo one of two strikers (ESPN CF-L; second of the two in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[10].position",
      "from": "LW",
      "to": "ST",
-     "why": "ESPN (CF-R) and Transfermarkt per the skeptic: Bernardeschi up front beside Ronaldo"
+     "why": "Bernardeschi up front beside Ronaldo (ESPN CF-R; first of the two in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "blankCandidates[Rodrigo Bentancur]",
@@ -2945,36 +2960,37 @@
      "path": "slots[5].side",
      "from": "centre",
      "to": "left",
-     "why": "in the 4-4-2, ESPN has Pjanic CM-L"
+     "why": "Pjanic: ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[6].side",
      "from": "right",
      "to": "left",
-     "why": "ESPN (LM) and Transfermarkt per the skeptic: Matuidi wide left"
+     "why": "Matuidi: ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[7].side",
      "from": "left",
      "to": "right",
-     "why": "ESPN (CM-R) and Sky Sports: Emre Can started; Bentancur came on 65'"
+     "why": "Emre Can right of centre (ESPN CM-R; second of four in the tabellino line): ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[9].side",
      "from": "centre",
      "to": "left",
-     "why": "ESPN (CF-L): one of two strikers"
+     "why": "Ronaldo: ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     },
     {
      "path": "slots[10].side",
      "from": "left",
      "to": "right",
-     "why": "ESPN (CF-R) and Transfermarkt per the skeptic: Bernardeschi up front beside Ronaldo"
+     "why": "Bernardeschi: ESPN (re-read 2026-10-06) and calciomercato.com's tabellino (JUVENTUS (4-4-2), lines printed right to left) agree; Transfermarkt (the shard 3 skeptic) reads the same"
     }
    ],
    "notes": [
     "Date, score and venue match. ESPN calls it 4-4-2 against the entry's 4-3-3; single source, so not a diff. The '(Scudetto clinched)' framing was not checked against two sources.",
-    "Organiser page not readable (legaseriea.it serves an app shell with no match data). Sources used: ESPN and Sky Sports, both independent, in full agreement on the eleven."
+    "Organiser page not readable (legaseriea.it serves an app shell with no match data). Sources used: ESPN and Sky Sports, both independent, in full agreement on the eleven.",
+    "Round 1026 (review fix): the 4-4-2 and the six role and side changes first rested on one own read (ESPN) plus the skeptic's Transfermarkt. calciomercato.com's tabellino, read 2026-10-06, states the same 4-4-2 with every man in the same line and order, so each change now has two own reads. The centre-backs are not moved (the tabellino prints Bonucci before Rugani; not checked against a second host)."
    ]
   },
   {
@@ -3040,6 +3056,13 @@
      "readOn": "2026-10-05",
      "xi": true,
      "says": "Werder Bremen 0-1 Bayern Munich, Weserstadion. Bayern 4-2-3-1: Neuer; Pavard, Boateng, Alaba, Davies; Kimmich, Goretzka; Gnabry, Müller, Coman; Lewandowski. Lucas Hernández for Gnabry 82'. Davies second yellow 79'."
+    },
+    {
+     "readOn": "2026-10-06",
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=548077",
+     "xi": true,
+     "says": "ESPN summary feed: Bayern Munich 4-2-3-1. Pavard RB, Boateng CD-R, Alaba CD-L, Davies LB; Kimmich RM, Goretzka LM; Coman AM-R, Muller AM, Gnabry AM-L; Lewandowski F."
     }
    ],
    "diffs": [
@@ -3104,22 +3127,10 @@
      "why": "bundesliga.com and ESPN"
     },
     {
-     "path": "slots[7].position",
-     "from": "RW",
-     "to": "LW",
-     "why": "ESPN (AM-L, re-read 2026-10-06) and Transfermarkt per the shard 3 skeptic: Gnabry on the left"
-    },
-    {
      "path": "slots[9].name",
      "from": "Ivan Perišić",
      "to": "Kingsley Coman",
-     "why": "bundesliga.com and ESPN: Coman started (ESPN AM-R, Transfermarkt right per the skeptic); Perisic was in neither eleven"
-    },
-    {
-     "path": "slots[9].position",
-     "from": "LW",
-     "to": "RW",
-     "why": "bundesliga.com and ESPN: Coman started (ESPN AM-R, Transfermarkt right per the skeptic); Perisic was in neither eleven"
+     "why": "bundesliga.com and ESPN: Coman started; Perisic was in neither eleven. He takes the left tile Perisic left"
     },
     {
      "path": "blankCandidates[Ivan Perišić]",
@@ -3142,22 +3153,11 @@
      "from": "Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 3. Werder Bremen 0-1 Bayern at the Weserstadion; Coman, not Perisic, started.",
      "why": "the internal note vouched for the wrong match"
-    },
-    {
-     "path": "slots[7].side",
-     "from": "right",
-     "to": "left",
-     "why": "ESPN (AM-L, re-read 2026-10-06) and Transfermarkt per the shard 3 skeptic: Gnabry on the left"
-    },
-    {
-     "path": "slots[9].side",
-     "from": "left",
-     "to": "right",
-     "why": "bundesliga.com and ESPN: Coman started (ESPN AM-R, Transfermarkt right per the skeptic); Perisic was in neither eleven"
     }
    ],
    "notes": [
-    "The other ten names and the 4-2-3-1 match. Davies was sent off 79' (second yellow, ESPN). Sides of Gnabry and Coman differ between sources (bundesliga.com lists Gnabry first, ESPN has Gnabry AM-L and Coman AM-R), so not a diff."
+    "The other ten names and the 4-2-3-1 match. Davies was sent off 79' (second yellow, ESPN). Sides of Gnabry and Coman differ between sources (bundesliga.com lists Gnabry first, ESPN has Gnabry AM-L and Coman AM-R), so not a diff.",
+    "Round 1026 (review fix): the wings split. ESPN's feed has Gnabry AM-L and Coman AM-R (the shard 3 skeptic read Transfermarkt the same way), while bundesliga.com prints the line \"Gnabry, Muller, Coman\" in the same right to left order as its back four (Pavard first, Davies last), and a Bavarian Football Works match report (read through a search extract; the page refuses a direct fetch) has Bayern leaning on its left through Davies and Coman. Sources split, so under rule 1 the entry keeps Gnabry at RW and Coman takes the left tile of the man he replaced. The earlier side swap rested on one own read and is withdrawn."
    ]
   },
   {
