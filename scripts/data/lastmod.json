@@ -52,6 +52,10 @@
     "hash": "795163b07ed4406f",
     "date": "2026-10-06"
   },
+  "/cage-clash": {
+    "hash": "1b6f7a125f6b6574",
+    "date": "2026-10-06"
+  },
   "/career": {
     "hash": "082418ed69282829",
     "date": "2026-09-30"
@@ -169,8 +173,8 @@
     "date": "2026-10-06"
   },
   "/fight-gym": {
-    "hash": "c1c2babb4159ff95",
-    "date": "2026-09-19"
+    "hash": "ecb65418183dd51d",
+    "date": "2026-10-06"
   },
   "/fight-promoter": {
     "hash": "8fe4cefe4a7ee023",
@@ -653,7 +657,7 @@
     "date": "2026-10-06"
   },
   "/whats-new": {
-    "hash": "ca204fdf5eaffe0d",
+    "hash": "97142c8e0f1166cc",
     "date": "2026-10-06"
   },
   "/who-am-i": {

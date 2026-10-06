@@ -1,8 +1,6 @@
 name: Cage Clash verification
 
 on:
-  push:
-    branches: [codex/pixel-cage-1063]
   pull_request:
     paths:
       - .github/workflows/cage-clash.yml
@@ -55,32 +53,11 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-      - name: Prepare generated source
-        if: github.event_name == 'push'
-        run: |
-          node scripts/genSeoMetaParts.mjs 2>&1 | tee cage-clash-artifacts/seo-generation.log
-          node scripts/genSearchKeywords.mjs 2>&1 | tee cage-clash-artifacts/search-generation.log
-          node scripts/genHomeCopy.mjs 2>&1 | tee cage-clash-artifacts/home-generation.log
-          node scripts/genSitemap.mjs --routes-only 2>&1 | tee cage-clash-artifacts/routes-generation.log
       - name: Type check and build
         id: build
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee cage-clash-artifacts/types.log
           npm run build 2>&1 | tee cage-clash-artifacts/build.log
-      - name: Prepare route snapshots and final ledger
-        if: github.event_name == 'push' && steps.build.outcome == 'success'
-        run: |
-          PRERENDER_ONLY=/cage-clash,/whats-new,/fight-gym node scripts/prerender.mjs 2>&1 | tee cage-clash-artifacts/prerender.log
-          node scripts/genSitemap.mjs 2>&1 | tee cage-clash-artifacts/sitemap.log
-          npm run build 2>&1 | tee cage-clash-artifacts/generated-build.log
-          files=(index.html public/cage-clash/index.html public/whats-new/index.html public/fight-gym/index.html public/sitemap.xml scripts/data/lastmod.json src/data/searchKeywords.json src/data/seoMetaParts/seoMetaPart14.ts)
-          printf '%s\n' "${files[@]}" | sort > cage-clash-artifacts/allowed-generation.txt
-          { git diff --name-only; git ls-files --others --exclude-standard public/cage-clash; } | sort -u > cage-clash-artifacts/changed-generation.txt
-          if comm -23 cage-clash-artifacts/changed-generation.txt cage-clash-artifacts/allowed-generation.txt | grep .; then exit 1; fi
-          mkdir -p cage-clash-artifacts/generated
-          cp --parents "${files[@]}" cage-clash-artifacts/generated/
-          printf '%s\n' "$GITHUB_SHA" > cage-clash-artifacts/generated/source-head.txt
-          sha256sum "${files[@]}" > cage-clash-artifacts/generated/SHA256SUMS
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log

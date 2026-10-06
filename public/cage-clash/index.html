@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Cage Clash: Pixel MMA Fighting Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Cage Clash","item":"https://douknowball.com/cage-clash"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I grapple and submit an opponent?","acceptedAnswer":{"@type":"Answer","text":"Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it."}},{"@type":"Question","name":"What are the keyboard controls?","acceptedAnswer":{"@type":"Answer","text":"Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position."}},{"@type":"Question","name":"Does a fight keep running when I switch tabs?","acceptedAnswer":{"@type":"Answer","text":"No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too."}},{"@type":"Question","name":"Does my fight save if I refresh?","acceptedAnswer":{"@type":"Answer","text":"These are quick fights, so refreshing starts over. A completed fight records its earned score through the normal site scoring system. Quitting does not award a score."}},{"@type":"Question","name":"Is Cage Clash free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Cage Clash is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Cage Clash: Pixel MMA Fighting Game | DoUKnowBall","description":"Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.","url":"https://douknowball.com/cage-clash","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/cage-clash" data-rh="true"><meta name="description" content="Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/cage-clash" data-rh="true"><meta property="og:description" content="Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:description" content="Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta property="og:title" content="Cage Clash: Pixel MMA Fighting Game | DoUKnowBall" data-rh="true"><meta name="twitter:title" content="Cage Clash: Pixel MMA Fighting Game | DoUKnowBall" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Cage Clash</h1>
+<p>Hands up. Find your opening.</p>
+<p>Pick your cornerQuick fight</p>
+<p>Win by KO, submission or points over three 45-second rounds. Strikers hit harder; grapplers control the mat. Low gas makes attacks weaker.</p>
+<p>Try this: move close, jab, then release to recover. Guard incoming shots. Grapple to clinch, grapple again to take down, then pass and hold Submit.</p>
+<h2>Cage Clash: Pixel MMA Fighting Game</h2>
+<p>Take control of your own fighter in an original pixel cage. Pick a style, manage distance and stamina, then choose between striking and grappling.</p>
+<p>Cage Clash puts you in control of an original pixel fighter. Move around the cage, find a gap in the guard and decide whether to keep trading shots or take the fight to the ground. Every hit, takedown and submission comes from what happens in the fight.</p>
+<p>Pick a balanced fighter, a striker or a grappler, then choose the style you want to face. Each fight lasts up to three short arcade rounds. Play with the touch controls or use the keyboard. No account or download needed.</p>
+<h2>How to play Cage Clash on phone or keyboard</h2>
+<li>Choose your fighting style and the CPU style, read the controls and start a fight.</li>
+<li>Hold the movement buttons to get in range. Hold Guard to block. Use Punch, Heavy or Kick when you have an opening and enough stamina.</li>
+<li>Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.</li>
+<li>On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.</li>
+<li>Hold Submission to build pressure. Watch your stamina and submission progress. The other fighter can resist or escape.</li>
+<li>Between rounds, read the scorecard and continue when ready. At the finish, check the result and your score, then try another matchup.</li>
+<h2>Cage Clash rules for strikes and grappling</h2>
+<li>A fight has up to three 45 second arcade rounds. Between rounds, the clock waits for you to continue.</li>
+<li>Strikes need the correct range. Attacks spend stamina and have a cooldown. Holding a button does not create free attacks.</li>
+<li>Guard reduces incoming strike damage and costs stamina. Low stamina weakens your attacks and your defense.</li>
+<li>A clinch starts at close range. Takedowns decide who lands on top. Position, style and stamina matter on the ground.</li>
+<li>Health reaching zero ends the fight by knockout. Full submission progress ends it by submission. Otherwise, earned round points decide the result.</li>
+<li>Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.</li>
+<li>Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.</li>
+<li>These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.</li>
+<h2>Cage Clash example: from clinch to submission</h2>
+<p>You choose a grappler against a striker. Walk into punching range with Guard held, then release it when you want to attack. Trading kicks all round lets the opponent keep the fight where they want it.</p>
+<p>Get close and use Clinch. Save enough stamina for the takedown. If you land on top, pass into a better position before holding Submission. If you land underneath, defend, regain guard and look for a sweep or an escape.</p>
+<p>Submission progress shows actual pressure. If the opponent resists and your stamina gets low, ease off and recover instead of holding the same button until you have nothing left.</p>
+<h2>Cage Clash tips for stamina and ground control</h2>
+<li>Distance is a defense. Step out of punching range when you need a moment to recover.</li>
+<li>Mix your strikes. Kicks reach farther, while the closer attacks work when the opponent lets you inside.</li>
+<li>Read the position label and button names after a takedown. A button that passed on top becomes a sweep underneath.</li>
+<li>Try the same style against different opponents. The CPU uses the same range, stamina and legal action rules you do.</li>
+<h2>Cage Clash FAQ: controls, scoring and pauses</h2>
+<h3>Can I grapple and submit an opponent?</h3>
+<p>Yes. Clinch at close range, try a takedown and use the ground controls to pass, sweep, defend or escape. Hold Submission to apply pressure when your position and stamina allow it.</p>
+<h3>What are the keyboard controls?</h3>
+<p>Use Left and Right or A and D to move, Space to guard, J, K and L for the upper action row, and U, I and O for the lower row. P or Escape pauses. The buttons show what each action does in your current position.</p>
+<h3>Does a fight keep running when I switch tabs?</h3>
+<p>No. Switching away or losing focus pauses it and releases held inputs. Resume when you are ready. Opening the rules pauses it too.</p>
+<h3>Does my fight save if I refresh?</h3>
+<p>These are quick fights, so refreshing starts over. A completed fight records its earned score through the normal site scoring system. Quitting does not award a score.</p>
+<h3>Is Cage Clash free to play?</h3>
+<p>Yes. Cage Clash is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/fight-career">👊 Fight Career Turn pro, pick your fights and climb to a world title. The damage never heals.</a>
+<a href="/fight-promoter">🎟️ Fight Promoter Run an MMA or boxing promotion. Sign fighters, build cards and crown champions.</a>
+<a href="/fight-gym">🥊 Fight Gym Sign fighters, pick their nights, take your cut, and decide when a man is finished.</a>
+<a href="/minefield">💣 Minefield Click everyone who belongs. Some tiles explode</a>
+<a href="/sign-the-player">🔨 Sign the Player A blind auction: outbid two AI moguls, £1B each, then sim the showdown</a>
+<a href="/nfl-higher-lower">📊 NFL Higher or Lower Which star scored more career touchdowns?</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,134 +1,35 @@
-## Codex1063 accepted gameplay and AF integration, 2026-10-06
+## Codex1063 Cage Clash release candidate, 2026-10-06
 
-Sixth preparation37448229911 at36220aaf451402e0f7dc8dcee1c2e4b57cb8282a
-passed types/build,22 combat/controller outcomes,28 effective controls,
-12 regressions and all16 built readers. Four complete native fights passed
-(320touch,390touch,1280mouse,1280keyboard), seven actual combat states,
-four effective geometry controls, all8 real font faces and zero forwarded writes.
-Real keyboard focus loss, pause, held-input clearing and explicit resume passed.
-Artifact11406850552 ZIP SHA256 verified:
-cf186d90d017b2f7cd8e650724b7b3acb86eac9dd5d6b7227b401099ac3c128c.
+Cage Clash adds original pixel MMA at /cage-clash: strikes, clinches, takedowns,
+top and bottom control, posture, escapes and resisted submissions. Fictional
+styles, three45s rounds, touch/mouse/keyboard, reopenable help, explicit pause
+and resume, and existing completion scoring. Leaving earns nothing.
 
-Main advanced to4a3644b858c33bba2d1f4bd2dbd9a8a0845b4c7e (Release AF).
-Merged AF into Cage's isolated branch without conflict; Cage product unchanged.
-Do not copy pre-AF generated outputs over AF's pages, keywords or lastmod ledger.
-Combined generation and all existing gates will run remotely again before the
-product PR. Claude still owns AF publication. Cage1063 is not on main or live.
-Public /cage-clash remains404, entryindex-Bj0du-Y6.js. No local runtime or DB.
-Root drafts/seven stashes safe. Next1064 unclaimed.
-## Codex1063 original browser focus repair, 2026-10-06
+Combined sourcefa7297de7aaa8b5a739dae87485dd56170ef7d5d preserves Release AF
+4a3644b8. Remote preparation37450761171 passed type/build,22 outcomes,
+28 effective controls,12 regressions and16 built readers. Four complete native
+fights passed all7 combat states,4 effective geometry controls,8 real font faces
+and zero forwarded writes. Actual keyboard tab loss/pause/cleared input/resume
+passed. No local runtime or production DB.
 
-Fifth preparation37442764404 at7f30e3f3e9569dddc438227c994a7aee649b859b
-passed types/build,22 outcomes,28 effective controls,12 regressions and all16
-built readers. Three native profiles completed fights. The headed keyboard
-check still failed actual focus loss. Playwright1.63 enables focus on its
-original Chromium session; a second session cannot clear that stored setting.
-The native harness now clears the original session after navigation, keeps
-the actual tab-switch/pause/frozen-input/resume checks, and fails closed if
-the connection shape changes. Keyboard runs first, with immediate failure
-artifacts. No product rules or acceptance assertions relaxed.
+Artifact11406329586 ZIP SHA256:
+2619cf5733cd2ddcf85d37226952b29a196d25c4352accfa384966e61335ebef.
+Source and all8 generated hashes verified before and after copying. AF's
+snapshots, keyword changes and ledger preserved. Temporary generation/push
+workflow removed; permanent PR gates retained. Product PR and final CI next.
+Cage is not on main/live yet. Public route remains404 onindex-Bj0du-Y6.js.
+Claude owns AF publication; Codex requested its receipt and then the slot for
+1063. Root held drafts/seven stashes safe. Next1064 unclaimed.
+**2026-10-06 06:49 EDT, desktop Claude lane: Release AF IS LIVE**, main `4a3644b8`, deployment `9b491698`, entry `index-OHWcrYTY.js`. Eleven rounds of this lane, each built, reviewed twice, fixed and closed, integrated on branch release-af-int by an agent with every re-record attributed, plus the other lane's 1061 (Season highs), 1062 and 1063 as they stood on main (1061 published here, as the other lane asked).
 
-Artifact11401949855 ZIP SHA256 verified:
-0266623fe3ac9acfbfbb46992979934e65d85595f9201b8e6b4b59b4eb83bff5.
-No failed generated outputs copied. Sixth remote preparation follows.
-Cage1063 remains branch-only; no release/live claim. Claude retains1062/AF
-publication. No local runtime, DB probes or paid host AI. Root drafts and
-seven stashes safe. Next1064 unclaimed.
-## Codex1063 remote headed keyboard check, 2026-10-06
+What a player sees:
+- **The GM desk reaches the NBA, NFL and MLB front offices (1018, 1019, 1020):** a staff whose effects are measured at every level, a re-sign desk with each sport's own contract rules (rookie scale and restricted free agency for the NBA, the fifth year option and the franchise tag for the NFL, club control and the qualifying offer for MLB, all two sourced), a pick ledger, trade packages and a trade deadline.
+- **Soccer Career:** derby days with 64 two sourced club rivalries, 40 active today (1012); the era rival stars two sourced (1024); World Cups and continental cups in the format their year had (1027); defenders and holding midfielders rated on their defending, as a player asked (1016).
+- **Club Manager:** the 318 players only one source placed are settled (124 confirmed, 152 moved to their real clubs, 81 out, 18 no longer current, 39 still pending and marked), the modern rosters re-baked offline, and every player carries a nationality (720 from one production read by the lead, era2020 from the offline dump; four era flags corrected) (1015); 2020-21 starts late like it really did (1021); era European nights never name a current player (1028).
 
-Fourth preparation37440952238 at04707bef passed types/build,22 combat/controller
-outcomes,28 effective controls,12 regressions and all16 built readers. Three
-native profiles completed actual fights (320touch,390touch,1280mouse), all
-seven combat states and all4 effective geometry controls. Help settled at
-scale1/opacity1 on every profile. All8 font faces loaded. Zero forwarded writes.
-The headless keyboard target still reports focused after activating another
-tab and removing its focus override, so native keyboard focus acceptance is
-not proved. Move the native script to remote headed Chromium under Xvfb;
-keep real focus loss, pause, frozen state, cleared held input and explicit
-resume assertions. No synthetic blur, no bypass and no local runtime.
-
-Artifact11401717542 ZIP SHA256 verified:
-5ed1d14337025148e77cd0eab49cda4b2d5589c37a16a98c82b1d8d4e186e2e8.
-Root viewed actual light phone submission and desktop standing screens.
-No failed generated outputs copied, no release or live claim. Claude retains
-1062/AF publication slot. IAB publisher available if coordinated fallback needed.
-Cage1063 stays branch-only. Next1064 unclaimed. Root held drafts safe.
-
-## Codex1063 native timing repairs, 2026-10-06
-
-Third preparation37438939732 at76613b21490dfa4aba6126f389a8193aa2d56414
-passed types/build,22 outcomes/28 effective controls,12 regressions and all16
-built readers. The320px real touch fight passed, including clinch, both ground
-positions, submission pressure, three rounds and a scored result. All4 effective
-native geometry controls passed. Remaining native failures are help entrance
-animation measured before settling (44px close scales to41.8px) and headless
-tab activation not producing actual window blur. Repair only the timing/native
-focus setup, preserve assertions. No accepted release or generated outputs copied.
-Artifact11400254241 ZIP hash verified:
-e268ccc326828e6deeab07dc639306dc20fb8e57c84542e685415f321e6ce51d.
-Root viewed actual phone ground/result screenshots. Fourth remote prep follows.
-
-Publisher availability: authenticated IAB project tab works independently of
-the failed Edge binding. Publish menu shows unpublished changes and Publish
-changes. No publish action ran. Claude retains1062/AF publishing ownership.
-If Claude's publisher fails, Codex can take the coordinated slot here. Cage1063
-is still branch-only. Main remains0badf777 (docs claim, not Cage product).
-Claude ledger05:00 says AF gating9825d3a3 includes1061 to1063;1063 there means
-only the claim. AF must preserve accepted MMA, and do not claim Cage is live.
-No localruntime/productionDB/paidhostAI. Root drafts/seven stashes safe.
-Next1064 unclaimed.
-
-## Codex1063 browser repairs, 2026-10-06
-
-Preparation37436921766 is still not acceptance. All16 built readers passed,
-including actual link graph and171-URL ratchet. Stronger22combat/controller
-outcomes and28 effective controls passed. All8 real font faces loaded on all4
-native profiles and setup regions were captured. Native had not played fights:
-its clipping control assumed exactviewportcoordinates despite an ancestor
-transform, and select labels included option text. Control now proves measured
-offscreen movement; actual selects get explicit accessible style names.
-Full metadata assertions passed171pages/32chunks/133entries but wrapper still
-caught an external request. The harness now aborts all nonlocal requests before
-its guard, leaves database reads pending as before, closes WebSockets locally,
-and prints any remaining receipt for diagnosis. No transport guard relaxed.
-Artifact11398899820 ZIP SHA256b7b245d66c84b96329c610a643f45a535f1724d3f49b422b4818e98b3eed033e
-verified. No failed generated outputs copied. Third remote preparation follows.
-No product PR or live claim; Claude still owns1062 publication. No localruntime
-or productionDB. Root held drafts/seven stashes safe. Next1064 unclaimed.
-
-## Codex1063 first remote findings and repairs, 2026-10-06
-
-Preparation37435349135 failed and is not acceptance. Type/build, generation,
-22 combat/controller outcomes and28 effective controls passed. Paired72-fight
-policies measured blank0wins/0damage/0score and active70wins, mean97.2567damage
-and86.9861score. Outcome margins now use that measured headroom. No general
-balance claim. Native had not reached gameplay because its extra loopback
-preload blocked actual fonts; it now uses the accepted isolated native routing,
-only template/declared fonts with redirects0, all DB/writes fulfilled locally,
-and all8 real font faces required. No production access.
-The full171-page metadata check passed assertions but blocked two fonts;
-font hosts now abort before its guard, preserving all head/chunk assertions.
-New game link graph is restored by regenerating Fight Gym's actual related
-links. Sitemap ratchet grows170to171. Generation fence now eight files.
-Artifact11399321725 ZIP hash verified45839d412af821d47d09f39ca2be72bbdee71e99dcef7c4087ed124ee13b4527;
-no failed generated outputs copied. No product PR or live claim. New remote
-preparation follows. Root drafts/seven stashes safe. Claude pub1062 unchanged.
-
-## Codex1063 source preparation, 2026-10-06
-
-Cage Clash is implemented in its isolated branch, with original pixel art,
-real-time shared combat rules, contextual grappling and submissions, touch
-and keyboard controls, pause/help, setup example and completion scoring.
-Static review repaired guard recovery copy, explicit resume focus and guard
-animation. Remote preparation is next; no accepted or live claim yet.
-It will run actual engine/controller outcomes and effective controls, native
-phone/desktop fights, all16 built readers and existing combat regressions.
-Temporary push-only generation has a seven-file output fence and SHA manifest.
-No local runtime or production DB. Claude still owns accepted1062 publication;
-main0badf777 is the docs-only1063 claim merge and contains accepted MMA.
-PR145 https://github.com/PapiSalgueroM/ballpark-hero/pull/145 is docs only.
-Product1063 is not on main. Root drafts/seven stashes preserved. Next1064
-unclaimed. Use current main for publishing, preserve accepted PR144 in AF.
+**Gate** (gate clone, branch release-af = origin/release-af-int 9825d3a3, script `gate-af.sh`): type gate 0, build:seo 0 (every route redrawn), 77 fences green including the 24 standing rule fences (simReportRelay and simScoringCoverage skipped as live), one browser sweep (182 routes, 364 checks, 0 findings), /club-manager, /soccer-career, /nba-front-office, /front-office and /mlb-front-office played clean, playEra2020 green, 6 test files 61 of 61, sweepWeight green after three budgets set from measurement (/front-office 353K: the desk loads with the board; loading its panels on demand is owed).
+**Found and fixed in the integration:** Round 1015's own head was red on its tree (its nationalities moved simCmLeagueRules digests it never re-took); the release's merge of 1021 left duplicate exports in clubManagerCalendar.ts that broke every Club Manager harness at the bundle step; Round 1027 moved simCareerLeagueFinish and the awards fixture without re-recording them. Every re-record (league rules, league finish, awards night, derby board hash, GM staff fixture) proven by taking each round out in a throwaway copy.
+**Proof:** x-deployment-id carries 9b491698 at 06:49 EDT, the home page serves index-OHWcrYTY.js, /whats-new carries the three front office desk lines, "2020-21 starts late" and "Soccer Career: derby days." (seen in a real browser with its Play a derby link).
 
 ## Codex claims1063: Cage Clash pixel action MMA, 2026-10-06
 
