@@ -70,6 +70,7 @@ const browser = await chromium.launch();
   page.on('pageerror', e => errors.push(String(e)));
 
   console.log('1) Play opens the curtain, not the crossroads');
+  await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nfl-my-career', '1'));
   await page.goto(`${BASE}/nfl-my-career`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('input[placeholder*="name"]').first().fill('Curtain Probe');
@@ -138,6 +139,7 @@ const browser = await chromium.launch();
   page.on('pageerror', e => errors.push(String(e)));
 
   console.log('5) The shared card serves the NBA');
+  await page.addInitScript(() => localStorage.setItem('rules-gate-seen:/nba-my-career', '1'));
   await page.goto(`${BASE}/nba-my-career`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   await page.locator('input[placeholder*="name"]').first().fill('Curtain Probe');

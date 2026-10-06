@@ -1,28 +1,52 @@
-name: Career season review verification
+name: Career decision outcome verification
 
 on:
   pull_request:
     paths:
-      - .github/workflows/career-season-review.yml
+      - .github/workflows/career-decision-outcome.yml
       - src/components/game/GameHelp.tsx
       - src/pages/NbaMyCareer.tsx
       - src/pages/NflMyCareer.tsx
       - src/pages/MlbMyCareer.tsx
       - src/pages/NhlMyCareer.tsx
       - src/components/us-career/UsCareerBoard.tsx
-      - src/components/us-career/CareerSeasonReview.tsx
-      - src/lib/usCareerSeasonReview.ts
+      - src/components/us-career/CareerDecisionOutcome.tsx
+      - src/lib/usCareerDecisionOutcome.ts
       - src/lib/usCareerSport.ts
       - src/lib/*CareerSport.ts
-      - src/test/careerSeasonReview.test.tsx
-      - src/test/fixtures/careerSeasonReview1008.ts
-      - scripts/simCareerSeasonReview.mjs
-      - scripts/qa/careerSeasonReview1008.mjs
+      - src/lib/nbaMyCareer.ts
+      - src/lib/nflMyCareer.ts
+      - src/lib/mlbMyCareer.ts
+      - src/lib/nhlMyCareer.ts
+      - src/lib/nbaCareer*.ts
+      - src/lib/nflCareer*.ts
+      - src/lib/mlbCareer*.ts
+      - src/lib/nhlCareer*.ts
+      - src/lib/usCareerDeckC.ts
+      - src/lib/careerHeadroom.ts
+      - src/lib/usCareerAnnualBenefits.ts
+      - src/lib/usCareerRecovery.ts
+      - src/lib/careerVariance.ts
+      - src/lib/careerAwards.ts
+      - src/lib/careerRival.ts
+      - src/lib/careerInbox.ts
+      - src/lib/careerRivalryEvents.ts
+      - src/lib/careerRivalryChoices.ts
+      - src/lib/careerMoney.ts
+      - src/lib/careerSocial.ts
+      - src/lib/keyedRng.ts
+      - src/data/conquestDataNba.ts
+      - src/data/conquestDataMlb.ts
+      - src/data/conquestDataNhl.ts
+      - src/test/careerDecisionOutcome.test.tsx
+      - src/test/fixtures/careerDecisionOutcome1009.ts
+      - scripts/simCareerDecisionOutcome.mjs
+      - scripts/qa/careerDecisionOutcome1009.mjs
 
 permissions:
   contents: read
 concurrency:
-  group: career-season-review-${{ github.head_ref || github.ref_name }}
+  group: career-decision-outcome-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -47,50 +71,50 @@ jobs:
           cache: npm
       - name: Install verification dependencies
         run: |
-          mkdir -p career-season-review-artifacts
+          mkdir -p career-decision-outcome-artifacts
           npm ci
           npm install --no-save playwright
           npx playwright install --with-deps chromium
       - name: Type check and build
         id: build
         run: |
-          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-season-review-artifacts/types.log
-          npm run build 2>&1 | tee career-season-review-artifacts/build.log
-      - name: Saved-season outcomes and effective controls
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-decision-outcome-artifacts/types.log
+          npm run build 2>&1 | tee career-decision-outcome-artifacts/build.log
+      - name: Actual decision changes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: CAREER_SEASON_REVIEW_CONTROL=all ONLY=simCareerSeasonReview node scripts/runAllSims.mjs 2>&1 | tee career-season-review-artifacts/review.log
+        run: CAREER_DECISION_OUTCOME_CONTROL=all ONLY=simCareerDecisionOutcome node scripts/runAllSims.mjs 2>&1 | tee career-decision-outcome-artifacts/review.log
       - name: Existing careers, saves and scoring
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
           for harness in simNbaCareer simNflCareer simMlbCareer simNhlCareer simUsCareerRecovery simUsCareerPractice simUsCareerActionConfirm simUsCareerWeight simCareerInbox simNoDoubleRecord simHarnessAnchors; do
-            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "career-season-review-artifacts/$harness.log" || failed=1
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "career-decision-outcome-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
       - name: Unapproved inbox cap copy still fails
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           set +e
-          INBOX_CONTROL=privatecap ONLY=simCareerInbox node scripts/runAllSims.mjs 2>&1 | tee career-season-review-artifacts/privatecap.log
+          INBOX_CONTROL=privatecap ONLY=simCareerInbox node scripts/runAllSims.mjs 2>&1 | tee career-decision-outcome-artifacts/privatecap.log
           status=${PIPESTATUS[0]}
           set -e
           test "$status" -eq 1
           node --input-type=module <<'NODE'
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
-          const output = fs.readFileSync('career-season-review-artifacts/privatecap.log', 'utf8');
+          const output = fs.readFileSync('career-decision-outcome-artifacts/privatecap.log', 'utf8');
           assert(output.includes('src/lib/inboxCapNegativeControl.ts carries a private copy of the drop-oldest-answered cap'));
           assert.equal(output.split('\n').filter(line => /^\s*FAIL:/.test(line)).length, 1);
           assert(output.includes('1 harness not green.'));
           console.log('The injected private cap was rejected; the distinct GM week cap remains allowed.');
           NODE
-      - name: Native saved-season review across four sports
+      - name: Native career decision outcomes across four sports
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: node scripts/qa/careerSeasonReview1008.mjs 2>&1 | tee career-season-review-artifacts/native.log
+        run: node scripts/qa/careerDecisionOutcome1009.mjs 2>&1 | tee career-decision-outcome-artifacts/native.log
       - name: Preserve verification evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: career-season-review-${{ github.run_id }}-${{ github.run_attempt }}
+          name: career-decision-outcome-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 1
-          path: career-season-review-artifacts/
+          path: career-decision-outcome-artifacts/

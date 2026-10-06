@@ -50,7 +50,7 @@ const controls = {
     { from: "import { cn } from '@/lib/utils';", to: "import { cn } from '@/lib/utils';\nimport { recordCompletion } from '@/lib/completions';" },
     { from: 'lastSelected.current = index;', to: 'lastSelected.current = index; recordCompletion(sport.gameSlug, 1);' },
   ], test: titles.live },
-  returnFocus: { file: board, from: 'target?.focus({ preventScroll: true });', to: 'target?.blur();', test: titles.live },
+  returnFocus: { file: board, from: "hubButtons.current?.querySelectorAll<HTMLButtonElement>('button')[reviewHubIndex.current]", to: 'null', test: titles.live },
   pendingEvent: { file: board, from: "phase !== 'coach' && phase !== 'freeagency' && panel === 'log'", to: "phase !== 'coach' && phase !== 'event' && phase !== 'freeagency' && panel === 'log'", test: titles.event, message: /Career Log opens while the ordinary choice stays pending/ },
   retiredBack: { file: board, from: "if (phase === 'retired') setRetiredReview(false);", to: "if (phase === 'retired') setRetiredReview(true);", test: titles.retired },
 };
