@@ -102,12 +102,12 @@ function inspectResult(fight: CageFight, action: string) {
     ['Blocks', String(fight.player.blocked), String(fight.cpu.blocked)], ['Takedowns', String(fight.player.takedowns), String(fight.cpu.takedowns)],
     ['Top control', `${(fight.player.controlTicks / 20).toFixed(1)}s`, `${(fight.cpu.controlTicks / 20).toFixed(1)}s`],
   ]);
-  expect(screen.queryByRole('button', { name: 'Back' })).toHaveFocus();
+  expect(document.activeElement).toBe(screen.queryByRole('button', { name: 'Back' }));
   act(() => { for (let i = 0; i < 8; i++) frame(50); });
   expect(['data-cage-tick', 'data-cage-winner', 'data-cage-fight-score', 'data-cage-circuit-score'].map(key => board.getAttribute(key))).toEqual(prior);
   expect(recordCompletion).toHaveBeenCalledTimes(priorCalls);
   click('Back'); act(() => frame());
-  expect(screen.queryByRole('table')).toBeNull(); expect(screen.queryByRole('button', { name: 'Fight stats' })).toHaveFocus();
+  expect(screen.queryByRole('table')).toBeNull(); expect(document.activeElement).toBe(screen.queryByRole('button', { name: 'Fight stats' }));
   expect(screen.queryByRole('button', { name: action })).not.toBeNull(); expect(recordCompletion).toHaveBeenCalledTimes(priorCalls);
 }
 
@@ -136,7 +136,7 @@ describe('Cage Fight Stats display', () => {
 
   it('focuses Back and calls its callback once without editing the supplied fight', () => {
     const fight = fixture(), prior = copy(fight), back = vi.fn(); render(<CageFightStats fight={fight} onBack={back} />);
-    expect(screen.queryByRole('button', { name: 'Back' })).toHaveFocus(); click('Back');
+    expect(document.activeElement).toBe(screen.queryByRole('button', { name: 'Back' })); click('Back');
     expect(back).toHaveBeenCalledTimes(1); expect(fight).toEqual(prior); expect(recordCompletion).not.toHaveBeenCalled();
   });
 });

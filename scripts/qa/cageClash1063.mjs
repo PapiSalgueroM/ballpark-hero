@@ -187,10 +187,12 @@ try {
       if (profile.input === 'keyboard') await visibleFocus(back);
       if (!report.controls.includes('stats-clipping')) {
         const table = stats.locator('table'), original = await table.getAttribute('style'), prior = await table.boundingBox(); assert(prior);
-        await table.evaluate((el, height) => { el.style.transform = `translateY(${-2 * height}px)`; }, profile.height);
+        await table.evaluate((el, height) => { el.style.setProperty('transition', 'none', 'important'); el.style.transform = `translateY(${-2 * height}px)`; }, profile.height);
+        await page.clock.runFor(112);
         const moved = await table.boundingBox(), clipped = await measure(page); assert(moved && moved.bottom < 0 && moved.y < prior.y - prior.height, 'The recap control moves the real table outside its arena');
         assert.throws(() => geometry(clipped, profile, 'control-stats-clipping'), /stats row clipped/);
         await table.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), original);
+        await page.clock.runFor(112);
         assert.equal(await table.getAttribute('style'), original); geometry(await measure(page), profile, 'stats-control-restored'); report.controls.push('stats-clipping');
       }
       const combat = ({ text, ...state }) => state;
