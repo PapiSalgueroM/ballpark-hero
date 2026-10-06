@@ -3997,18 +3997,18 @@
     "opponent": "FC Augsburg",
     "scoreLine": "FC Augsburg 1-4 Bayern Munich (title clinched)",
     "venue": "WWK Arena, Augsburg",
-    "formationLabel": "4-2-3-1"
+    "formationLabel": "4-3-3"
    },
    "hints": [
     {
      "name": "Corentin Tolisso",
-     "position": "CDM",
+     "position": "CM",
      "nationality": "France",
      "clubAtTime": "Bayern Munich"
     },
     {
      "name": "James Rodriguez",
-     "position": "CAM",
+     "position": "CM",
      "nationality": "Colombia",
      "clubAtTime": "Bayern Munich (loan)"
     },
@@ -4047,6 +4047,27 @@
      "readOn": "2026-10-06",
      "xi": "partial",
      "says": "Re-read in Round 1026: goals 18 Sule own goal, 32 Tolisso, 38 James Rodriguez, 62 Robben, 87 Wagner; substitutions Javi Martinez for James 64, Ribery for Bernat 82, Muller for Robben 83. Bayern men named: Sule, Tolisso, James, Bernat, Robben, Boateng, Wagner (on from the start) and the three substitutes. No full eleven on the page."
+    },
+    {
+     "host": "sport.sky.de",
+     "url": "https://sport.sky.de/fussball/augsburg-vs-fc-bayern/aufstellung/377769",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "FC Bayern Muenchen 4-3-3. Ulreich; defence Kimmich, Boateng, Suele, Rafinha; midfield Rodriguez, Rudy, Tolisso; forwards Robben, Wagner, Bernat (printed in that order)."
+    },
+    {
+     "host": "foxsports.com",
+     "url": "https://www.foxsports.com/soccer/bundesliga-fc-augsburg-vs-bayern-munich-apr-07-2018-game-boxscore-39508",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "Bayern Munich 4-1-4-1, printed Ulreich, Rafinha, Boateng, Sule, Bernat, Rudy, Kimmich, Rodriguez, Tolisso, Robben, Wagner. Same eleven as ESPN and Sky; it reads the shape differently (Bernat in the back four, Kimmich in midfield)."
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/site/v2/sports/soccer/all/summary?event=487001",
+     "readOn": "2026-10-06",
+     "xi": true,
+     "says": "ESPN summary feed: Bayern Munich formation 4-3-3. Ulreich G; Kimmich RB, Boateng CD-R, Sule CD-L, Rafinha LB; James Rodriguez RM, Rudy CM, Tolisso LM; Robben RF, Wagner F, Bernat LF."
     }
    ],
    "diffs": [
@@ -4112,13 +4133,13 @@
      "path": "slots[4].name",
      "from": "David Alaba",
      "to": "Rafinha",
-     "why": "ESPN (LB): Rafinha started; bundesliga.com does not name him, so his start rests on ESPN alone, inside a match both hosts identify"
+     "why": "ESPN (LB), Sky (back four, left end) and Fox Sports: Rafinha started; Alaba did not play"
     },
     {
      "path": "slots[5].name",
      "from": "Javi Martinez",
      "to": "Sebastian Rudy",
-     "why": "ESPN (CM): Rudy started; Javi Martinez came on 64' for James (bundesliga.com and ESPN). Rudy's start rests on ESPN alone"
+     "why": "ESPN (CM), Sky (midfield, centre) and Fox Sports: Rudy started; Javi Martinez came on 64' for James (bundesliga.com and ESPN)"
     },
     {
      "path": "slots[9].name",
@@ -4137,6 +4158,54 @@
      "from": "Wikipedia match report + fcbayern.com official archive + Bundesliga.com, unanimous on the title-clinching 6-0 win with Ulreich deputizing for the injured Neuer.",
      "to": "Round 1026: XI corrected against two hosts, see scripts/data/missingXiVerified2026-10 shard 4. The 6-0 over Wolfsburg never happened: the title was won 4-1 at Augsburg on this date, with a rotated side.",
      "why": "the internal note vouched for a match that did not take place"
+    },
+    {
+     "path": "formationLabel",
+     "from": "4-2-3-1",
+     "to": "4-3-3",
+     "why": "ESPN and Sky both state 4-3-3 (the 4-2-3-1 belonged to the 6-0 that never happened); Fox Sports states 4-1-4-1 for the same eleven"
+    },
+    {
+     "path": "slots[2].side",
+     "from": "right",
+     "to": "left",
+     "why": "Sule: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[3].side",
+     "from": "left",
+     "to": "right",
+     "why": "Boateng: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[5].position",
+     "from": "CDM",
+     "to": "CM",
+     "why": "Rudy: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[5].side",
+     "from": "right",
+     "to": "centre",
+     "why": "Rudy: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[6].position",
+     "from": "CDM",
+     "to": "CM",
+     "why": "Tolisso, left of the midfield three: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[8].position",
+     "from": "CAM",
+     "to": "CM",
+     "why": "James, right of the midfield three: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
+    },
+    {
+     "path": "slots[8].side",
+     "from": "centre",
+     "to": "right",
+     "why": "James: ESPN summary feed and Sky (sport.sky.de) agree on a 4-3-3 and on each man's line and side; Fox Sports prints the same eleven as a 4-1-4-1 and is recorded as a dissent"
     }
    ],
    "notes": [
@@ -4145,7 +4214,7 @@
     "The entry's source text claims 'Wikipedia match report + fcbayern.com + Bundesliga.com, unanimous on the title-clinching 6-0 win'; that claim is false.",
     "bundesliga.com's lineup tab is script-rendered and did not return the XI to the fetch tool; it did return the match identity, venue, score, scorers and all three Bayern substitutions, which agree with ESPN. Formation not published by either source.",
     "Possible origin of the error: ESPN lists a 6-0 Bayern win over Borussia Dortmund on 31 March 2018, one week before the clincher (home/away not confirmed here).",
-    "Round 1026: the entry described a 6-0 over Wolfsburg that never happened. Re-pointed at the real title clincher on its own date (two hosts on the match). Nine of the eleven starters are confirmed by bundesliga.com as well as ESPN (scorers, substitutions); Rafinha and Rudy rest on ESPN alone. Formation not published by bundesliga.com; entry keeps 4-2-3-1 (ESPN 4-3-3)."
+    "Round 1026: the entry described a 6-0 over Wolfsburg that never happened. Re-pointed at the real title clincher on its own date. The eleven rests on three full hosts (ESPN, Sky, Fox Sports); bundesliga.com names seven of the starters (Sule, Tolisso, James, Bernat, Robben, Boateng, Wagner) through scorers and substitutions. The tiles and the 4-3-3 follow ESPN and Sky, which agree on every man's line and side; Fox Sports reads the same eleven as a 4-1-4-1 with Bernat at the back and Kimmich in midfield, and that dissent is recorded here."
    ]
   },
   {

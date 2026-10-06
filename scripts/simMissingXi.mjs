@@ -285,9 +285,7 @@ const ledgerFailuresBefore = failures;
     const hosts = new Set(r.sources.map(s => s.host));
     if ([...hosts].some(h => /wiki/i.test(h))) fail(`${r.id}: a wiki host is cited`);
     const full = new Set(r.sources.filter(s => s.xi === true).map(s => s.host));
-    const partial = new Set(r.sources.filter(s => s.xi === 'partial').map(s => s.host));
-    const partialOk = full.size === 1 && partial.size >= 1 && [...partial].some(h => !full.has(h)) && r.notes.some(n => /alone/.test(n));
-    if (full.size < 2 && !partialOk) fail(`${r.id}: ${full.size} host(s) vouch for the eleven (${[...hosts].join(', ')})`);
+    if (full.size < 2) fail(`${r.id}: ${full.size} host(s) vouch for the eleven (${[...hosts].join(', ')})`);
     if (r.verdict === 'held') {
       held += 1;
       if (!r.hold || !r.hold.why || !r.hold.rule) fail(`${r.id}: held without a recorded reason`);

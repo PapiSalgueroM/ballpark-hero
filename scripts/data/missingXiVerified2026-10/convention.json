@@ -14,7 +14,7 @@
     "6. A lineup the research could not put on two hosts is kept only if its eleven matches a reachable source and nothing contradicts it; otherwise it is held (verdict held, with the reason, the measured cost of removing it from the daily rotation and a rebuild proposal) and the entry is not changed."
   ],
   "conventions": [
-    "Eleven: a row's eleven is vouched for by at least two distinct hosts whose source carries xi true. One row (bundesliga-2018-bayern-title) has a second host marked xi partial: bundesliga.com names nine of the eleven and all three substitutions, and the note says which two starters rest on ESPN alone.",
+    "Eleven: every row's eleven is vouched for by at least two distinct hosts whose source carries xi true. bundesliga-2018-bayern-title, which first rested on ESPN plus a partial bundesliga.com read, now has Sky (sport.sky.de) and Fox Sports as full hosts, and the harness carries no exemption.",
     "Names: the entry and the published eleven match when normalizeName (the game's own fold) agrees, after a German oe, ue, ae fold and a word-order fold, or through the row's explicit aka.",
     "Wrong starter: the man the two hosts list takes the slot of the man who did not start. His tile label is the role a host states for him; where no host states one, the slot's label is carried and the row says so (open for a role source).",
     "Formation: changes when two hosts agree, counting an organiser's pitch coordinates as a statement of shape. When the two host eleven makes the old label impossible (two strikers named where one started) the label stated by a host is used; when both hosts refute the old label but state different ones, the organiser's is used and the split is recorded.",
