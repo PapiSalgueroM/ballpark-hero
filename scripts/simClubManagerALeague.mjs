@@ -352,6 +352,7 @@ function partSeasons(cm) {
     if (cupWeeks) fail(`${club} schedules ${cupWeeks} cup weeks`);
     if (cm.careerLeagueOf(start).cupName !== null) fail(`${club}'s career names a cup: ${cm.careerLeagueOf(start).cupName}`);
     if (start.cupRound !== 'out') fail(`${club} starts in the cup (${start.cupRound})`);
+    if (start.cupByes) fail(`${club} starts with cup byes`);
     if ((start.boardObjectives ?? []).some(o => /cup/i.test(o.label))) fail(`${club}'s board sets a cup objective`);
     const played = playSeason(cm, start);
     const s = played.state;

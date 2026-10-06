@@ -19217,6 +19217,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (league.cupName !== null) {
     state.cupBracket = buildCupBracket(state);
     state.cupDraw.R16 = myCupOpponent(state, 'R16') ?? drawCupOpponent(state);
+  } else {
+    // Round 1035: last season's byes do not follow a manager into a cupless one.
+    delete state.cupByes;
   }
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   /* Round 978: the new season's international windows. An older save gets its
