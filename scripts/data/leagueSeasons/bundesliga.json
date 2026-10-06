@@ -1,0 +1,5948 @@
+{
+  "league": "Bundesliga",
+  "country": "Germany",
+  "tierNames": [
+    {
+      "from": "1990-91",
+      "to": "2025-26",
+      "name": "Bundesliga"
+    }
+  ],
+  "seasons": [
+    {
+      "season": "1990-91",
+      "startYear": 1990,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt"
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Wattenscheid 09",
+            "SG Wattenscheid 09"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "FC St. Pauli",
+            "FC St. Pauli"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Bayer Uerdingen",
+            "Bayer 05 Uerdingen"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit91.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1990-1991",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "Last season before the East German clubs joined, 18 clubs in both sources. The two sources order 2 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1991-92",
+      "startYear": 1991,
+      "size": 20,
+      "clubs": [
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Dynamo Dresden",
+            "1. FC Dynamo Dresden"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Wattenscheid 09",
+            "SG Wattenscheid 09"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Stuttgarter Kickers",
+            "SV Stuttgarter Kickers"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 18
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 19
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 20
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit92.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1991-1992",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "First season with East German clubs: both sources print 20 clubs, including Hansa Rostock and Dynamo Dresden. Four clubs do not reappear in 1992-93, two come up, back to 18."
+    },
+    {
+      "season": "1992-93",
+      "startYear": 1992,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Wattenscheid 09",
+            "SG Wattenscheid 09"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Dynamo Dresden",
+            "1. FC Dynamo Dresden"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Bayer Uerdingen",
+            "Bayer 05 Uerdingen"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "1. FC Saarbrücken",
+            "1. FC Saarbrücken"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit93.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1992-1993",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "The two sources order 2 clubs differently, so those carry no position. The two sources order 2 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1993-94",
+      "startYear": 1993,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund"
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen"
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen"
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Dynamo Dresden",
+            "1. FC Dynamo Dresden"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Wattenscheid 09",
+            "SG Wattenscheid 09"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "VfB Leipzig",
+            "VfB Leipzig"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit94.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1993-1994",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "VfB Leipzig is a different club from RB Leipzig, so canon null. The two sources order 6 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1994-95",
+      "startYear": 1994,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Bayer Uerdingen",
+            "Bayer 05 Uerdingen"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Dynamo Dresden",
+            "1. FC Dynamo Dresden"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit95.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1994-1995",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "TSV 1860 München is a different club from Bayern München, so canon null."
+    },
+    {
+      "season": "1995-96",
+      "startYear": 1995,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC St. Pauli",
+            "FC St. Pauli"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen"
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 17
+        },
+        {
+          "printed": [
+            "KFC Uerdingen",
+            "KFC Uerdingen 05"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit96.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1995-1996",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "The two sources order 2 clubs differently, so those carry no position. The two sources order 2 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1996-97",
+      "startYear": 1996,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC St. Pauli",
+            "FC St. Pauli"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit97.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1996-1997",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "The two sources order 2 clubs differently, so those carry no position. The two sources order 2 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1997-98",
+      "startYear": 1997,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "TSV München 1860",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit98.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1997-1998",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "1998-99",
+      "startYear": 1998,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart"
+        },
+        {
+          "printed": [
+            "Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen"
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit99.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1998-1999",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "The two sources order 6 clubs differently, so those carry no position. The two sources order 6 clubs differently, so those carry no position."
+    },
+    {
+      "season": "1999-00",
+      "startYear": 1999,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Hertha BSC",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "SpVgg Unterhaching",
+            "SpVgg Unterhaching"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "BV 09 Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "SG Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt"
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "SSV Ulm 1846",
+            "SSV Ulm 1846"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit00.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/1999-2000",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "bundesliga.com prints Schalke 04 and Eintracht Frankfurt both 13th, RSSSF prints Frankfurt 14th, so Frankfurt carries no position."
+    },
+    {
+      "season": "2000-01",
+      "startYear": 2000,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "BV 09 Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Hertha BSC",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "SpVgg Unterhaching",
+            "SpVgg Unterhaching"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "SG Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 17
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit01.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2000-2001",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2001-02",
+      "startYear": 2001,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "BV 09 Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hertha BSC",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "FC Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC Sankt Pauli",
+            "FC St. Pauli"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit02.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2001-2002",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2002-03",
+      "startYear": 2002,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "BV 09 Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Hertha BSC",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "FC Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit03.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2002-2003",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2003-04",
+      "startYear": 2003,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt/Main",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "TSV 1860 München",
+            "TSV 1860 München"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit04.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2003-2004",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2004-05",
+      "startYear": 2004,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit05.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2004-2005",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2005-06",
+      "startYear": 2005,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit06.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2005-2006",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2006-07",
+      "startYear": 2006,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "TSV Alemannia Aachen",
+            "Alemannia Aachen"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit07.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2006-2007",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2007-08",
+      "startYear": 2007,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "FC Hansa Rostock",
+            "FC Hansa Rostock"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "MSV Duisburg",
+            "MSV Duisburg"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit08.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2007-2008",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2008-09",
+      "startYear": 2008,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "FC Energie Cottbus",
+            "FC Energie Cottbus"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Karlsruher SC",
+            "Karlsruher SC"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit09.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2008-2009",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2009-10",
+      "startYear": 2009,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2010.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2009-2010",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2010-11",
+      "startYear": 2010,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Hannover '96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1. FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "1. FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1. FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1. FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Schalke 04",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Borussia M'gladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC St. Pauli",
+            "FC St. Pauli"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2011.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2010-2011",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2011-12",
+      "startYear": 2011,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "1.FC Kaiserslautern",
+            "1. FC Kaiserslautern"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2012.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2011-2012",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2012-13",
+      "startYear": 2012,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 14
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SpVgg Greuther Fürth",
+            "SpVgg Greuther Fürth"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2013.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2012-2013",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2013-14",
+      "startYear": 2013,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Eintracht Braunschweig",
+            "Eintracht Braunschweig"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2014.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2013-2014",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "Eintracht Braunschweig is a different club from Eintracht Frankfurt, so canon null."
+    },
+    {
+      "season": "2014-15",
+      "startYear": 2014,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 14
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SC Paderborn 07",
+            "SC Paderborn 07"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2015.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2014-2015",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2015-16",
+      "startYear": 2015,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "FC Ingolstadt 04",
+            "FC Ingolstadt 04"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "SV Darmstadt 98",
+            "SV Darmstadt 98"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2016.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2015-2016",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2016-17",
+      "startYear": 2016,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "FC Ingolstadt 04",
+            "FC Ingolstadt 04"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SV Darmstadt 98",
+            "SV Darmstadt 98"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2017.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2016-2017",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2017-18",
+      "startYear": 2017,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 2
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburger SV"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2018.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2017-2018",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2018-19",
+      "startYear": 2018,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Hannover 96",
+            "Hannover 96"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "1.FC Nürnberg",
+            "1. FC Nürnberg"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2019.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2018-2019",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2019-20",
+      "startYear": 2019,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "1. FC Union Berlin"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Fortuna Düsseldorf",
+            "Fortuna Düsseldorf"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SC Paderborn 07",
+            "SC Paderborn 07"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2020.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2019-2020",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "1. FC Union Berlin is a different club from Hertha BSC, so canon null."
+    },
+    {
+      "season": "2020-21",
+      "startYear": 2020,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "1. FC Union Berlin"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 14
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "SV Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "FC Schalke 04"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2021.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2020-2021",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2021-22",
+      "startYear": 2021,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "FC Bayern München"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer 04 Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "1. FC Union Berlin"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "1. FC Köln"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "1. FSV Mainz 05"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia M'gladbach"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "VfL Bochum 1848"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha BSC"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "DSC Arminia Bielefeld",
+            "DSC Arminia Bielefeld"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SpVgg Greuther Fürth",
+            "SpVgg Greuther Fürth"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2022.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2021-2022",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2022-23",
+      "startYear": 2022,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "Bayern Munich"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "Union Berlin"
+          ],
+          "canon": null,
+          "pos": 4
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "Freiburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "Mainz"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia Mönchengladbach"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "Cologne"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 13
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "Bochum"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "Augsburg"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 16
+        },
+        {
+          "printed": [
+            "FC Schalke 04 Gelsenkirchen",
+            "Schalke"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "Hertha BSC Berlin",
+            "Hertha Berlin"
+          ],
+          "canon": "Hertha Berlin",
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2023.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2022-2023",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "bundesliga.com prints short English names from this season on."
+    },
+    {
+      "season": "2023-24",
+      "startYear": 2023,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "FC Bayern München",
+            "Bayern Munich"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "1.FC Heidenheim",
+            "Heidenheim"
+          ],
+          "canon": null,
+          "pos": 8
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "Freiburg"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "Augsburg"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "Mainz"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia Mönchengladbach"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "Union Berlin"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "Bochum"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "Cologne"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "SV Darmstadt 98",
+            "Darmstadt"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2024.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2023-2024",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2024-25",
+      "startYear": 2024,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "Bayern Munich"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "Freiburg"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "Mainz"
+          ],
+          "canon": null,
+          "pos": 6
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 7
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 9
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia Mönchengladbach"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "Augsburg"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "Union Berlin"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "FC Sankt Pauli",
+            "St. Pauli"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 15
+        },
+        {
+          "printed": [
+            "1.FC Heidenheim",
+            "Heidenheim"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "Holstein Kiel",
+            "Holstein Kiel"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "VfL Bochum",
+            "Bochum"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2025.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2024-2025",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true
+    },
+    {
+      "season": "2025-26",
+      "startYear": 2025,
+      "size": 18,
+      "clubs": [
+        {
+          "printed": [
+            "FC Bayern München",
+            "Bayern Munich",
+            "Bayern Munich"
+          ],
+          "canon": "Bayern Munich",
+          "pos": 1
+        },
+        {
+          "printed": [
+            "Borussia Dortmund",
+            "Borussia Dortmund",
+            "Borussia Dortmund"
+          ],
+          "canon": "Dortmund",
+          "pos": 2
+        },
+        {
+          "printed": [
+            "RB Leipzig",
+            "RB Leipzig",
+            "RB Leipzig"
+          ],
+          "canon": "Leipzig",
+          "pos": 3
+        },
+        {
+          "printed": [
+            "VfB Stuttgart",
+            "VfB Stuttgart",
+            "VfB Stuttgart"
+          ],
+          "canon": "Stuttgart",
+          "pos": 4
+        },
+        {
+          "printed": [
+            "TSG 1899 Hoffenheim",
+            "Hoffenheim",
+            "TSG Hoffenheim"
+          ],
+          "canon": null,
+          "pos": 5
+        },
+        {
+          "printed": [
+            "Bayer 04 Leverkusen",
+            "Bayer Leverkusen",
+            "Bayer Leverkusen"
+          ],
+          "canon": "Leverkusen",
+          "pos": 6
+        },
+        {
+          "printed": [
+            "SC Freiburg",
+            "Freiburg",
+            "SC Freiburg"
+          ],
+          "canon": null,
+          "pos": 7
+        },
+        {
+          "printed": [
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt",
+            "Eintracht Frankfurt"
+          ],
+          "canon": "Frankfurt",
+          "pos": 8
+        },
+        {
+          "printed": [
+            "FC Augsburg",
+            "Augsburg",
+            "FC Augsburg"
+          ],
+          "canon": null,
+          "pos": 9
+        },
+        {
+          "printed": [
+            "1.FSV Mainz 05",
+            "Mainz",
+            "Mainz"
+          ],
+          "canon": null,
+          "pos": 10
+        },
+        {
+          "printed": [
+            "1.FC Union Berlin",
+            "Union Berlin",
+            "1. FC Union Berlin"
+          ],
+          "canon": null,
+          "pos": 11
+        },
+        {
+          "printed": [
+            "Borussia Mönchengladbach",
+            "Borussia Mönchengladbach",
+            "Borussia Mönchengladbach"
+          ],
+          "canon": null,
+          "pos": 12
+        },
+        {
+          "printed": [
+            "Hamburger SV",
+            "Hamburg",
+            "Hamburg SV"
+          ],
+          "canon": null,
+          "pos": 13
+        },
+        {
+          "printed": [
+            "1.FC Köln",
+            "Cologne",
+            "FC Cologne"
+          ],
+          "canon": null,
+          "pos": 14
+        },
+        {
+          "printed": [
+            "SV Werder Bremen",
+            "Werder Bremen",
+            "Werder Bremen"
+          ],
+          "canon": "Werder Bremen",
+          "pos": 15
+        },
+        {
+          "printed": [
+            "VfL Wolfsburg",
+            "Wolfsburg",
+            "VfL Wolfsburg"
+          ],
+          "canon": null,
+          "pos": 16
+        },
+        {
+          "printed": [
+            "1.FC Heidenheim",
+            "Heidenheim",
+            "1. FC Heidenheim 1846"
+          ],
+          "canon": null,
+          "pos": 17
+        },
+        {
+          "printed": [
+            "FC Sankt Pauli",
+            "St. Pauli",
+            "St. Pauli"
+          ],
+          "canon": null,
+          "pos": 18
+        }
+      ],
+      "sources": [
+        {
+          "host": "rsssf.org",
+          "url": "https://www.rsssf.org/tablesd/duit2026.html",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "bundesliga.com",
+          "url": "https://www.bundesliga.com/en/bundesliga/table/2025-2026",
+          "read": "2026-10-06"
+        },
+        {
+          "host": "espn.com",
+          "url": "https://www.espn.com/soccer/standings/_/league/GER.1/season/2025",
+          "read": "2026-10-06"
+        }
+      ],
+      "verified": true,
+      "note": "Newest season, so ESPN's standings were read as a third check; all three agree on the 18 clubs and their order."
+    }
+  ]
+}

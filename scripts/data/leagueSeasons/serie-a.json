@@ -1,0 +1,6380 @@
+{
+ "league": "Serie A",
+ "tierNames": [
+  {
+   "from": "1990-91",
+   "to": "2025-26",
+   "name": "Serie A"
+  }
+ ],
+ "notes": "printed is [RSSSF name, second source name] in the order of each season's sources array. pos is set only when both sources print the club at the same final position; otherwise posBySource gives [RSSSF position, second source position] (relegation play-offs, Calciopoli sanctions in 2005-06, tie-break differences). canon is the Soccer Career spelling from HAND_CLUBS in src/lib/soccerCareerEngine.ts (exact name match only; Lazio Roma and SS Lazio are not Roma, Chievo Verona and Hellas Verona are separate clubs and have canon null). Italy has no club in src/data/soccerCareerClubPool.ts.",
+ "seasons": [
+  {
+   "season": "1990-91",
+   "startYear": 1990,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "SAMPDORIA",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Milan",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Genoa",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Pisa",
+      "Pisa SC"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cesena",
+      "AC Cesena"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Bologna",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital91.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1990",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1991-92",
+   "startYear": 1991,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "MILAN",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Foggia",
+      "US Foggia"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Genoa",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Verona",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cremonese",
+      "US Cremonese"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Ascoli",
+      "Ascoli Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital92.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1991",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1992-93",
+   "startYear": 1992,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "MILAN",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Foggia",
+      "US Foggia"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Genoa",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Udinese",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "BRESCIA",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      15,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "FIORENTINA",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "posBySource": [
+      16,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "ANCONA",
+      "Ancona Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "PESCARA",
+      "Pescara Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital93.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1992",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1993-94",
+   "startYear": 1993,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "MILAN",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Foggia",
+      "US Foggia"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Cremonese",
+      "US Cremonese"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Genoa",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Reggiana",
+      "AC Reggiana"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "PIACENZA",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "UDINESE",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "ATALANTA",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "LECCE",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital94.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1993",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1994-95",
+   "startYear": 1994,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Milan",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Cremonese",
+      "US Cremonese"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Genoa",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Padova",
+      "Calcio Padova"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Foggia",
+      "US Foggia"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Reggiana",
+      "AC Reggiana"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Brescia",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital95.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1994",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1995-96",
+   "startYear": 1995,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "MILAN",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Vicenza",
+      "Vicenza Calcio"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      10,
+      11
+     ]
+    },
+    {
+     "printed": [
+      "Udinese",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      11,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Piacenza",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Torino",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cremonese",
+      "US Cremonese"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Padova",
+      "Calcio Padova"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital96.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1995",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1996-97",
+   "startYear": 1996,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Udinese",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Bologna",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Vicenza",
+      "Vicenza Calcio"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Milan",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Piacenza",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Cagliari",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      15,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Verona",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Reggiana",
+      "AC Reggiana"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital97.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1996",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1997-98",
+   "startYear": 1997,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "JUVENTUS",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Inter",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Udinese",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Parma",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Bologna",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Milan",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Empoli",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Piacenza",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Vicenza",
+      "Vicenza Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Brescia",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital98.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1997",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1998-99",
+   "startYear": 1998,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AS Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AC Venezia",
+      "AC Venezia"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Piacenza FC",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Salernitana Sport",
+      "Salernitana Sport"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "US Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Vicenza Calcio",
+      "Vicenza Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Empoli",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital99.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1998",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1999-00",
+   "startYear": 1999,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Hellas Verona",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Reggina",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AS Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Torino Calcio",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Venezia",
+      "AC Venezia"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Piacenza FC",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital00.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-1999",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2000-01",
+   "startYear": 2000,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "BC Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Reggina",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Hellas Verona",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Vicenza Calcio",
+      "Vicenza Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AS Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital01.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2000",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2001-02",
+   "startYear": 2001,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "BC Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Torino Calcio",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Piacenza FC",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Hellas Verona",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AC Venezia",
+      "AC Venezia"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital02.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2001",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2002-03",
+   "startYear": 2002,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Modena FC",
+      "Modena FC"
+     ],
+     "canon": null,
+     "posBySource": [
+      12,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "posBySource": [
+      13,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "BC Atalanta",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "posBySource": [
+      14,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      15,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Piacenza FC",
+      "Piacenza Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Como Calcio",
+      "Calcio Como"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Torino Calcio",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital03.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2002",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2003-04",
+   "startYear": 2003,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Parma AC",
+      "Parma AC"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Perugia",
+      "AC Perugia"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Modena FC",
+      "Modena FC"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Ancona Calcio",
+      "Ancona Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital04.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2003",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2004-05",
+   "startYear": 2004,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Messina PFC",
+      "FC Messina"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Livorno Calcio",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital05.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2004",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "note": "Juventus's 2004-05 title was revoked in 2006 (Calciopoli); membership is unaffected. First 20-club season."
+  },
+  {
+   "season": "2005-06",
+   "startYear": 2005,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "posBySource": [
+      1,
+      2
+     ]
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "posBySource": [
+      2,
+      3
+     ]
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "posBySource": [
+      3,
+      4
+     ]
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "posBySource": [
+      4,
+      5
+     ]
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "posBySource": [
+      5,
+      6
+     ]
+    },
+    {
+     "printed": [
+      "Livorno Calcio",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "posBySource": [
+      6,
+      7
+     ]
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "posBySource": [
+      7,
+      8
+     ]
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "posBySource": [
+      8,
+      9
+     ]
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "posBySource": [
+      9,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "Ascoli Calcio",
+      "Ascoli Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      10,
+      11
+     ]
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      11,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "posBySource": [
+      12,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      13,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "posBySource": [
+      15,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "posBySource": [
+      16,
+      17
+     ]
+    },
+    {
+     "printed": [
+      "Messina PFC",
+      "FC Messina"
+     ],
+     "canon": null,
+     "posBySource": [
+      17,
+      18
+     ]
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "posBySource": [
+      18,
+      19
+     ]
+    },
+    {
+     "printed": [
+      "Treviso FC",
+      "Treviso FBC"
+     ],
+     "canon": null,
+     "posBySource": [
+      19,
+      20
+     ]
+    },
+    {
+     "printed": [
+      "FC Juventus",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "posBySource": [
+      20,
+      1
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital06.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2005",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "note": "Calciopoli: RSSSF prints the table after the 2006 sanctions (Juventus title revoked and placed last, point deductions for Milan, Fiorentina and Lazio); statscrew lists Juventus first on its on-field points and every other club in the post-sanction order. The 20 members agree, which is what this ledger verifies; positions for this season are not to be used.",
+   "positionsUsable": false
+  },
+  {
+   "season": "2006-07",
+   "startYear": 2006,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Livorno Calcio",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Ascoli Calcio",
+      "Ascoli Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Messina PFC",
+      "FC Messina"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital07.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2006",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "note": "Juventus absent: relegated to Serie B by the 2006 Calciopoli ruling."
+  },
+  {
+   "season": "2007-08",
+   "startYear": 2007,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Livorno Calcio",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital08.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2007",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2008-09",
+   "startYear": 2008,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Reggina Calcio",
+      "Reggina Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital09.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2008",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2009-10",
+   "startYear": 2009,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AS Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      14,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "posBySource": [
+      16,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AS Livorno Calcio",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2010.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2009",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2010-11",
+   "startYear": 2010,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Cesena",
+      "AC Cesena"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AS Bari",
+      "AS Bari"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2011.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2010",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2011-12",
+   "startYear": 2011,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Novara Calcio",
+      "Novara Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Cesena",
+      "AC Cesena"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2012.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2011",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2012-13",
+   "startYear": 2012,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "AC Siena",
+      "AC Siena"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Delfino Pescara",
+      "Pescara Calcio"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2013.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2012",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2013-14",
+   "startYear": 2013,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Calcio Catania",
+      "Calcio Catania"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AS Livorno",
+      "AS Livorno"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2014.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2013",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2014-15",
+   "startYear": 2014,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "AC Cesena",
+      "AC Cesena"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Parma FC",
+      "Parma FC"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2015.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2014",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2015-16",
+   "startYear": 2015,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Carpi FC",
+      "Carpi FC"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Frosinone Calcio",
+      "Frosinone Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2016.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2015",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2016-17",
+   "startYear": 2016,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Crotone",
+      "FC Crotone"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "US Città di Palermo",
+      "US Palermo"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Delfino Pescara",
+      "Pescara Calcio"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2017.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2016",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2017-18",
+   "startYear": 2017,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SPAL (Ferrara)",
+      "SPAL 2013 Ferrara"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Crotone",
+      "FC Crotone"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Benevento Calcio",
+      "Benevento Calcio"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2018.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2017",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2018-19",
+   "startYear": 2018,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "SPAL (Ferrara)",
+      "SPAL 2013 Ferrara"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Parma Calcio",
+      "Parma Calcio 1913"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Frosinone Calcio",
+      "Frosinone Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Chievo Verona",
+      "Chievo Verona"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2019.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2018",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2019-20",
+   "startYear": 2019,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Parma Calcio",
+      "Parma Calcio 1913"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Brescia Calcio",
+      "Brescia Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "SPAL (Ferrara)",
+      "SPAL 2013 Ferrara"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2020.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2019",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2020-21",
+   "startYear": 2020,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Spezia Calcio",
+      "Spezia Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Benevento Calcio",
+      "Benevento Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "FC Crotone",
+      "FC Crotone"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Parma Calcio",
+      "Parma Calcio 1913"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2021.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2020",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2021-22",
+   "startYear": 2021,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Spezia Calcio",
+      "Spezia Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "US Salernitana",
+      "US Salernitana 1919"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Venezia FC",
+      "Venezia FC"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2022.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2021",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2022-23",
+   "startYear": 2022,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AC Monza",
+      "AC Monza"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "US Salernitana",
+      "US Salernitana 1919"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Spezia Calcio",
+      "Spezia Calcio"
+     ],
+     "canon": null,
+     "posBySource": [
+      17,
+      18
+     ]
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "posBySource": [
+      18,
+      17
+     ]
+    },
+    {
+     "printed": [
+      "US Cremonese",
+      "US Cremonese"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "UC Sampdoria",
+      "Sampdoria"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2023.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2022",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2023-24",
+   "startYear": 2023,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Inter"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna FC"
+     ],
+     "canon": "Bologna",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio Roma"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "ACF Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino FC"
+     ],
+     "canon": "Torino",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "SSC Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa CFC"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "AC Monza",
+      "AC Monza"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "US Lecce"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese Calcio"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari Calcio"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli FC"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Frosinone Calcio",
+      "Frosinone Calcio"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo Calcio"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "US Salernitana",
+      "US Salernitana 1919"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2024.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "statscrew.com",
+     "url": "https://www.statscrew.com/worldfootball/standings/l-ITASEA/y-2023",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2024-25",
+   "startYear": 2024,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "SSC Napoli",
+      "Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Internazionale",
+      "Internazionale"
+     ],
+     "canon": "Inter Milan",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna"
+     ],
+     "canon": "Bologna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Como 1907",
+      "Como"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino"
+     ],
+     "canon": "Torino",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Parma Calcio",
+      "Parma"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "Lecce"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Empoli FC",
+      "Empoli"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Venezia FC",
+      "Venezia"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Monza",
+      "Monza"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2025.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/standings/_/league/ita.1/season/2024",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "note": "statscrew has no 2024-25 table (page empty on read), so ESPN is the second source."
+  },
+  {
+   "season": "2025-26",
+   "startYear": 2025,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Internazionale",
+      "Internazionale"
+     ],
+     "canon": "Inter Milan",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SSC Napoli",
+      "Napoli"
+     ],
+     "canon": "Napoli",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Roma",
+      "AS Roma"
+     ],
+     "canon": "Roma",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Como 1907",
+      "Como"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Milan AC",
+      "AC Milan"
+     ],
+     "canon": "AC Milan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Juventus FC",
+      "Juventus"
+     ],
+     "canon": "Juventus",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Atalanta BC",
+      "Atalanta"
+     ],
+     "canon": "Atalanta",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Bologna FC",
+      "Bologna"
+     ],
+     "canon": "Bologna",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "SS Lazio",
+      "Lazio"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Udinese Calcio",
+      "Udinese"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "US Sassuolo",
+      "Sassuolo"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Torino FC",
+      "Torino"
+     ],
+     "canon": "Torino",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Parma Calcio",
+      "Parma"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cagliari Calcio",
+      "Cagliari"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Fiorentina",
+      "Fiorentina"
+     ],
+     "canon": "Fiorentina",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Genoa CFC",
+      "Genoa"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "US Lecce",
+      "Lecce"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "US Cremonese",
+      "Cremonese"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Hellas Verona FC",
+      "Hellas Verona"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Pisa",
+      "Pisa"
+     ],
+     "canon": null,
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesi/ital2026.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://www.espn.com/soccer/standings/_/league/ita.1/season/2025",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "note": "RSSSF page marks the table final (last updated 21 Jun 2026); ESPN shows 38 games played. statscrew not used (no table from 2024-25 on)."
+  }
+ ]
+}

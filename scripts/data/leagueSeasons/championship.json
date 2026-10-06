@@ -1,0 +1,8406 @@
+{
+ "league": "EFL Championship",
+ "slug": "championship",
+ "country": "England",
+ "tier": 2,
+ "tierNames": [
+  {
+   "from": "1990-91",
+   "to": "1991-92",
+   "name": "Second Division"
+  },
+  {
+   "from": "1992-93",
+   "to": "2003-04",
+   "name": "First Division"
+  },
+  {
+   "from": "2004-05",
+   "to": "2025-26",
+   "name": "Championship"
+  }
+ ],
+ "shardNotes": [
+  "Read 2026-10-06 by the Round 1036 championship research agent. Every season is England tier 2 and has 24 clubs, checked against the row count of every source.",
+  "Sources: 1990-91 to 2007-08 rsssf.org/engpaul season pages; 2008-09 to 2025-26 rsssf.org/tablese pages (eng09 is 2008-09, engYYYY is the season ending in YYYY). ESPN standings (the JSON behind espn.com/soccer/standings/_/league/ENG.2/season/Y, season Y = Y-(Y+1)) from 2002-03, the first season ESPN has. 1990-91 to 2001-02 have no second source on the brief list (worldfootball.net refuses automated reads with HTTP 402 and 403, statscrew.com has no English tables, ESPN starts 2002-03), so those seasons carry two further independent non-wiki archives, footballsite.co.uk and englishfootballleaguetables.co.uk, marked listed:false. englishfootballleaguetables.co.uk is also the third source that settles 2002-03 and 2003-04.",
+  "printed holds each club as each source prints it, in the order of sources. RSSSF engpaul prints promoted and relegated clubs in capitals; that is kept as printed.",
+  "Names are matched across sources by an explicit alias list only (Wolves, Wolverhampton W, QPR, Queen's Park Rangers, AFC Bournemouth, Brighton and similar), never fuzzily. Season scoped aliases, each explained in that season's note: 2002-03 RSSSF misspellings Crystal Palalce and Sheffield Wedsnesday; 2002-03 and 2003-04 ESPN printing Wimbledon FC as Milton Keynes Dons.",
+  "canon is the club's spelling in src/lib/soccerCareerEngine.ts HAND_CLUBS or src/data/soccerCareerClubPool.ts (England and Wales), matched by exact club identity: Manchester City is Man City, Newcastle United is Newcastle, West Bromwich Albion is West Brom, Queens Park Rangers is QPR, Brighton and Hove Albion is Brighton, Wolverhampton Wanderers is Wolves, West Ham United is West Ham, AFC Bournemouth is Bournemouth. Clubs the career world does not know (Leicester City, Sheffield Wednesday, Wimbledon, Milton Keynes Dons and others) have canon null. Sheffield Wednesday is never Sheffield United; Bristol Rovers is never Bristol City.",
+  "pos is the final league position when every source prints the same one; it did in all 36 seasons. Play-off winners keep their league position (for example 3 to 6).",
+  "Self check: 36 seasons, each 24 clubs with no duplicate and positions 1 to 24; every source agrees on membership; 35 season to season transitions checked against the RSSSF tier 1 and tier 3 tables: every club leaving tier 2 is in tier 1 (from positions 1 to 6) or tier 3 (from positions 21 to 24) the next season, every club arriving was in tier 1 or tier 3 the season before, and leavers equal arrivals. 1990-91 promoted four (top flight grew to 22) and 1994-95 relegated four (top flight shrank to 20), both as printed."
+ ],
+ "seasons": [
+  {
+   "season": "1990-91",
+   "startYear": 1990,
+   "size": 24,
+   "tierName": "Second Division",
+   "printedTier": [
+    "Barclays League Division 2",
+    "footballsite - Football League Division 2 table 1990/91",
+    "Second Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "OLDHAM ATHLETIC",
+      "Oldham Athletic",
+      "Oldham Athletic"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "WEST HAM UNITED",
+      "West Ham United",
+      "West Ham United"
+     ],
+     "canon": "West Ham",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "SHEFFIELD WEDNESDAY",
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "NOTTS COUNTY",
+      "Notts County",
+      "Notts County"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Newcastle United",
+      "Newcastle United",
+      "Newcastle United"
+     ],
+     "canon": "Newcastle",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bristol Rovers",
+      "Bristol Rovers",
+      "Bristol Rovers"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Swindon Town",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "WEST BROMWICH ALBION",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "HULL CITY",
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1990-91.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1990-91/Div21990-91.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1990-91.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1991-92",
+   "startYear": 1991,
+   "size": 24,
+   "tierName": "Second Division",
+   "printedTier": [
+    "Barclays League Division 2",
+    "footballsite - Football League Division 2 table 1991/92",
+    "Second Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "IPSWICH TOWN",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MIDDLESBROUGH",
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Cambridge United",
+      "Cambridge United",
+      "Cambridge United"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "BLACKBURN ROVERS",
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Swindon Town",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Southend United",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bristol Rovers",
+      "Bristol Rovers",
+      "Bristol Rovers"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Newcastle United",
+      "Newcastle United",
+      "Newcastle United"
+     ],
+     "canon": "Newcastle",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "PLYMOUTH ARGYLE",
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "BRIGHTON & HOVE ALBION",
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "PORT VALE",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1991-92.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1991-92/Div21991-92.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1991-92.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1992-93",
+   "startYear": 1992,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Barclays League Division 1",
+    "footballsite - Football League Division 1 table 1992/93",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "NEWCASTLE UNITED",
+      "Newcastle United",
+      "Newcastle United"
+     ],
+     "canon": "Newcastle",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "WEST HAM UNITED",
+      "West Ham United",
+      "West Ham United"
+     ],
+     "canon": "West Ham",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "SWINDON TOWN",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Peterborough United",
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton W.",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Notts County",
+      "Notts County",
+      "Notts County"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Southend United",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "BRENTFORD",
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "CAMBRIDGE UNITED",
+      "Cambridge United",
+      "Cambridge United"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "BRISTOL ROVERS",
+      "Bristol Rovers",
+      "Bristol Rovers"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1992-93.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1992-93/Div11992-93.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1992-93.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1993-94",
+   "startYear": 1993,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Endsleigh League Division 1",
+    "footballsite - Football League Division 1 table 1993/94",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "CRYSTAL PALACE",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "NOTTINGHAM FOREST",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "LEICESTER CITY",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Notts County",
+      "Notts County",
+      "Notts County"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton W.",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Southend United",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "BIRMINGHAM CITY",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "OXFORD UNITED",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "PETERBOROUGH UNITED",
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1993-94.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1993-94/Div11993-94.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1993-94.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1994-95",
+   "startYear": 1994,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Endsleigh League Division 1",
+    "footballsite - Football League Division 1 table 1994/95",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "MIDDLESBROUGH",
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "BOLTON WANDERERS",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Southend United",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Oldham Athletic",
+      "Oldham Athletic",
+      "Oldham Athletic"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "SWINDON TOWN",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "BURNLEY",
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "BRISTOL CITY",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "NOTTS COUNTY",
+      "Notts County",
+      "Notts County"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1994-95.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1994-95/Div11994-95.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1994-95.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1995-96",
+   "startYear": 1995,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Endsleigh League Division 1",
+    "footballsite - Football League Division 1 table 1995/96",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "SUNDERLAND",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "DERBY COUNTY",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "LEICESTER CITY",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Southend United",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Oldham Athletic",
+      "Oldham Athletic",
+      "Oldham Athletic"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton W.",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "MILLWALL",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "WATFORD",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "LUTON TOWN",
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1995-96.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1995-96/Div11995-96.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1995-96.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1996-97",
+   "startYear": 1996,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1",
+    "footballsite - Football League Division 1 table 1996/97",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "BOLTON WANDERERS",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "BARNSLEY",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "CRYSTAL PALACE",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Queen's Park Rangers",
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Manchester City",
+      "Manchester City",
+      "Manchester City"
+     ],
+     "canon": "Man City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Swindon Town",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Bradford City",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "GRIMSBY TOWN",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "OLDHAM ATHLETIC",
+      "Oldham Athletic",
+      "Oldham Athletic"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "SOUTHEND UNITED",
+      "Southend United",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1996-97.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1996-97/Div11996-97.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1996-97.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1997-98",
+   "startYear": 1997,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 1997/98",
+    "footballsite - Football League Division 1 table 1997/98",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "NOTTINGHAM FOREST",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MIDDLESBROUGH",
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "CHARLTON ATHLETIC",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Stockport County",
+      "Stockport County",
+      "Stockport County"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton W.",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Bradford City",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bury",
+      "Bury",
+      "Bury"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Swindon Town",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "MANCHESTER CITY",
+      "Manchester City",
+      "Manchester City"
+     ],
+     "canon": "Man City",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "STOKE CITY",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "READING",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1997-98.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1997-98/Div11997-98.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1997-98.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1998-99",
+   "startYear": 1998,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 1998/99",
+    "footballsite - Football League Division 1 table 1998/99",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "SUNDERLAND",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "BRADFORD CITY",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "WATFORD",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Stockport County",
+      "Stockport County",
+      "Stockport County"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Swindon Town",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Port Vale",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "BURY",
+      "Bury",
+      "Bury"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "OXFORD UNITED",
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "BRISTOL CITY",
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1998-99.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1998-99/Div11998-99.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1998-99.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "1999-00",
+   "startYear": 1999,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 1999/2000",
+    "footballsite - Football League Division 1 table 1999/2000",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "CHARLTON ATHLETIC",
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MANCHESTER CITY",
+      "Manchester City",
+      "Manchester City"
+     ],
+     "canon": "Man City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "IPSWICH TOWN",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Tranmere Rovers",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Stockport County",
+      "Stockport County",
+      "Stockport County"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "WALSALL",
+      "Walsall",
+      "Walsall"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "PORT VALE",
+      "Port Vale",
+      "Port Vale"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "SWINDON TOWN",
+      "Swindon Town",
+      "Swindon Town"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/1999-00.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/1999-00/Div11999-00.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f1999-00.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "2000-01",
+   "startYear": 2000,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 2000/2001",
+    "footballsite - Football League Division 1 table 2000/01",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "FULHAM",
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "BLACKBURN ROVERS",
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "BOLTON WANDERERS",
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Wimbledon",
+      "Wimbledon",
+      "Wimbledon"
+     ],
+     "canon": null,
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Gillingham",
+      "Gillingham",
+      "Gillingham"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Stockport County",
+      "Stockport County",
+      "Stockport County"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "HUDDERSFIELD TOWN",
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "QUEENS PARK RANGERS",
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "TRANMERE ROVERS",
+      "Tranmere Rovers",
+      "Tranmere Rovers"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2000-01.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/2000-01/Div12000-01.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f2000-01.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "2001-02",
+   "startYear": 2001,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 2001/2002",
+    "footballsite - Football League Division 1 table 2001/02",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "MANCHESTER CITY",
+      "Manchester City",
+      "Manchester City"
+     ],
+     "canon": "Man City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "WEST BROMWICH ALBION",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "BIRMINGHAM CITY",
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Wimbledon",
+      "Wimbledon",
+      "Wimbledon"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Gillingham",
+      "Gillingham",
+      "Gillingham"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bradford City",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Walsall",
+      "Walsall",
+      "Walsall"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Grimsby Town",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "CREWE ALEXANDRA",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "BARNSLEY",
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "STOCKPORT COUNTY",
+      "Stockport County",
+      "Stockport County"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2001-02.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "footballsite.co.uk",
+     "url": "https://www.footballsite.co.uk/Statistics/Seasons/2001-02/Div12001-02.htm",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f2001-02.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 1,
+   "note": "Only one source here (rsssf.org) is on the brief's named list: worldfootball.net refused automated reads (HTTP 402 and 403), statscrew.com carries no English league tables, and ESPN's standings start at 2002-03. Two further independent non-wiki archives (footballsite.co.uk, englishfootballleaguetables.co.uk) agree with RSSSF on all 24 clubs and every position.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "2002-03",
+   "startYear": 2002,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 2002/2003",
+    "2002/03 English League Championship",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "PORTSMOUTH",
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "LEICESTER CITY",
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "WOLVERHAMPTON WANDERERS",
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Wimbledon",
+      "Milton Keynes Dons",
+      "Wimbledon"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Gillingham",
+      "Gillingham",
+      "Gillingham"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Crystal Palalce",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Walsall",
+      "Walsall",
+      "Walsall"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Bradford City",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "SHEFFIELD WEDSNESDAY",
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "BRIGHTON & HOVE ALBION",
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "GRIMSBY TOWN",
+      "Grimsby Town",
+      "Grimsby Town"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2002-03.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2002",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2002"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f2002-03.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2,
+   "note": "ESPN prints Wimbledon FC under its later name, Milton Keynes Dons (the club moved and took that name in 2004); RSSSF and englishfootballleaguetables.co.uk both print Wimbledon, so that row is one club. RSSSF misspells two clubs (Crystal Palalce, Sheffield Wedsnesday); both other sources print Crystal Palace and Sheffield Wednesday at the same positions.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "2003-04",
+   "startYear": 2003,
+   "size": 24,
+   "tierName": "First Division",
+   "printedTier": [
+    "Nationwide League Division 1 - 2003/2004",
+    "2003/04 English League Championship",
+    "First Division"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "NORWICH CITY",
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "WEST BROMWICH ALBION",
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "West Ham United",
+      "West Ham United",
+      "West Ham United"
+     ],
+     "canon": "West Ham",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "CRYSTAL PALACE",
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Gillingham",
+      "Gillingham",
+      "Gillingham"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "WALSALL",
+      "Walsall",
+      "Walsall"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "BRADFORD CITY",
+      "Bradford City",
+      "Bradford City"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "WIMBLEDON",
+      "Milton Keynes Dons",
+      "Wimbledon"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2003-04.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2003",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2003"
+    },
+    {
+     "host": "englishfootballleaguetables.co.uk",
+     "url": "https://www.englishfootballleaguetables.co.uk/final/f2003-04.html",
+     "read": "2026-10-06",
+     "listed": false,
+     "accepted": "lead ruling"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2,
+   "note": "ESPN prints Wimbledon FC under its later name, Milton Keynes Dons (the club moved and took that name in 2004); RSSSF and englishfootballleaguetables.co.uk both print Wimbledon, so that row is one club.",
+   "ruling": "Lead ruling 2026-10-06: the data law asks for two independent non-wiki sources; the brief's host list was examples, not a closed list. 11v11.com (Association of Football Statisticians data), footballsite.co.uk and englishfootballleaguetables.co.uk are independent of RSSSF and are accepted as the second source."
+  },
+  {
+   "season": "2004-05",
+   "startYear": 2004,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Nationwide - The Championship - 2004/2005",
+    "2004/05 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "SUNDERLAND",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "WIGAN ATHLETIC",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "WEST HAM UNITED",
+      "West Ham United"
+     ],
+     "canon": "West Ham",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Crewe Alexandra",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "GILLINGHAM",
+      "Gillingham"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "NOTTINGHAM FOREST",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "ROTHERHAM UNITED",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2004-05.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2004",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2004"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2005-06",
+   "startYear": 2005,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Nationwide - The Championship - 2005/2006",
+    "2005/06 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "READING",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "SHEFFIELD UNITED",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "WATFORD",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "CREWE ALEXANDRA",
+      "Crewe Alexandra"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "MILLWALL",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "BRIGHTON & HOVE ALBION",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2005-06.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2005",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2005"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2006-07",
+   "startYear": 2006,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "The Championship - 2006/2007",
+    "2006/07 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "SUNDERLAND",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "BIRMINGHAM CITY",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "DERBY COUNTY",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Colchester United",
+      "Colchester United"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "SOUTHEND UNITED",
+      "Southend United"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "LUTON TOWN",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "LEEDS UNITED",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2006-07.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2006",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2006"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2007-08",
+   "startYear": 2007,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "The Championship - 2007/2008",
+    "2007/08 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "WEST BROMWICH ALBION",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "STOKE CITY",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "HULL CITY",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "LEICESTER CITY",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "SCUNTHORPE UNITED",
+      "Scunthorpe United"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "COLCHESTER UNITED",
+      "Colchester United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/engpaul/FLA/2007-08.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2007",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2007"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2008-09",
+   "startYear": 2008,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2008/09 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Doncaster Rovers",
+      "Doncaster Rovers"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng09.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2008",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2008"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2009-10",
+   "startYear": 2009,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2009/10 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Newcastle United",
+      "Newcastle United"
+     ],
+     "canon": "Newcastle",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Doncaster Rovers",
+      "Doncaster Rovers"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Scunthorpe United",
+      "Scunthorpe United"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2010.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2009",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2009"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2010-11",
+   "startYear": 2010,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2010-11 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Doncaster Rovers",
+      "Doncaster Rovers"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Scunthorpe United",
+      "Scunthorpe United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2011.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2010",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2010"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2011-12",
+   "startYear": 2011,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2011-12 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "West Ham United",
+      "West Ham United"
+     ],
+     "canon": "West Ham",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Doncaster Rovers",
+      "Doncaster Rovers"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2012.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2011",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2011"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2012-13",
+   "startYear": 2012,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2012-13 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Crystal Palace",
+      "Crystal Palace"
+     ],
+     "canon": "Crystal Palace",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2013.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2012",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2012"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2013-14",
+   "startYear": 2013,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2013-14 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AFC Bournemouth",
+      "AFC Bournemouth"
+     ],
+     "canon": "Bournemouth",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Doncaster Rovers",
+      "Doncaster Rovers"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Yeovil Town",
+      "Yeovil Town"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2014.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2013",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2013"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2014-15",
+   "startYear": 2014,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2014-15 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "AFC Bournemouth",
+      "AFC Bournemouth"
+     ],
+     "canon": "Bournemouth",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2015.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2014",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2014"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2015-16",
+   "startYear": 2015,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2015-16 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Milton Keynes Dons",
+      "Milton Keynes Dons"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2016.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2015",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2015"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2016-17",
+   "startYear": 2016,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2016-17 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Newcastle United",
+      "Newcastle United"
+     ],
+     "canon": "Newcastle",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Brighton & Hove Albion",
+      "Brighton & Hove Albion"
+     ],
+     "canon": "Brighton",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Aston Villa",
+      "Aston Villa"
+     ],
+     "canon": "Aston Villa",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Burton Albion",
+      "Burton Albion"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2017.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2016",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2016"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2017-18",
+   "startYear": 2017,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2017-18 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Wolverhampton Wanderers",
+      "Wolverhampton Wanderers"
+     ],
+     "canon": "Wolves",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Aston Villa",
+      "Aston Villa"
+     ],
+     "canon": "Aston Villa",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Burton Albion",
+      "Burton Albion"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2018.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2017",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2017"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2018-19",
+   "startYear": 2018,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2018-19 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Aston Villa",
+      "Aston Villa"
+     ],
+     "canon": "Aston Villa",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Bolton Wanderers",
+      "Bolton Wanderers"
+     ],
+     "canon": "Bolton Wanderers",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2019.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2018",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2018"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2019-20",
+   "startYear": 2019,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2019-20 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2020.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2019",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2019"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2020-21",
+   "startYear": 2020,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2020-21 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Brentford",
+      "Brentford"
+     ],
+     "canon": "Brentford",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AFC Bournemouth",
+      "AFC Bournemouth"
+     ],
+     "canon": "Bournemouth",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Wycombe Wanderers",
+      "Wycombe Wanderers"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2021.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2020",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2020"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2021-22",
+   "startYear": 2021,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2021-22 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Fulham",
+      "Fulham"
+     ],
+     "canon": "Fulham",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AFC Bournemouth",
+      "AFC Bournemouth"
+     ],
+     "canon": "Bournemouth",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Nottingham Forest",
+      "Nottingham Forest"
+     ],
+     "canon": "Nottingham Forest",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Peterborough United",
+      "Peterborough United"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Barnsley",
+      "Barnsley"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2022.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2021",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2021"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2022-23",
+   "startYear": 2022,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2022-23 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Reading",
+      "Reading"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Blackpool",
+      "Blackpool"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Wigan Athletic",
+      "Wigan Athletic"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2023.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2022",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2022"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2023-24",
+   "startYear": 2023,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2023-24 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Huddersfield Town",
+      "Huddersfield Town"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Rotherham United",
+      "Rotherham United"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2024.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2023",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2023"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2024-25",
+   "startYear": 2024,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2024-25 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Leeds United",
+      "Leeds United"
+     ],
+     "canon": "Leeds United",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Burnley",
+      "Burnley"
+     ],
+     "canon": "Burnley",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sunderland",
+      "Sunderland"
+     ],
+     "canon": "Sunderland",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Luton Town",
+      "Luton Town"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Plymouth Argyle",
+      "Plymouth Argyle"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Cardiff City",
+      "Cardiff City"
+     ],
+     "canon": "Cardiff City",
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2025.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2024",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2024"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  },
+  {
+   "season": "2025-26",
+   "startYear": 2025,
+   "size": 24,
+   "tierName": "Championship",
+   "printedTier": [
+    "Championship",
+    "2025-26 English League Championship"
+   ],
+   "clubs": [
+    {
+     "printed": [
+      "Coventry City",
+      "Coventry City"
+     ],
+     "canon": "Coventry City",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Ipswich Town",
+      "Ipswich Town"
+     ],
+     "canon": "Ipswich Town",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Millwall",
+      "Millwall"
+     ],
+     "canon": "Millwall",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Southampton",
+      "Southampton"
+     ],
+     "canon": "Southampton",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Middlesbrough",
+      "Middlesbrough"
+     ],
+     "canon": "Middlesbrough",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Hull City",
+      "Hull City"
+     ],
+     "canon": "Hull City",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Wrexham",
+      "Wrexham"
+     ],
+     "canon": "Wrexham",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Derby County",
+      "Derby County"
+     ],
+     "canon": "Derby County",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Norwich City",
+      "Norwich City"
+     ],
+     "canon": "Norwich City",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Birmingham City",
+      "Birmingham City"
+     ],
+     "canon": "Birmingham City",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Swansea City",
+      "Swansea City"
+     ],
+     "canon": "Swansea City",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Bristol City",
+      "Bristol City"
+     ],
+     "canon": "Bristol City",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Sheffield United",
+      "Sheffield United"
+     ],
+     "canon": "Sheffield United",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Preston North End",
+      "Preston North End"
+     ],
+     "canon": "Preston North End",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Queens Park Rangers",
+      "Queens Park Rangers"
+     ],
+     "canon": "QPR",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Watford",
+      "Watford"
+     ],
+     "canon": "Watford",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Stoke City",
+      "Stoke City"
+     ],
+     "canon": "Stoke City",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Portsmouth",
+      "Portsmouth"
+     ],
+     "canon": "Portsmouth",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Charlton Athletic",
+      "Charlton Athletic"
+     ],
+     "canon": "Charlton Athletic",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Blackburn Rovers",
+      "Blackburn Rovers"
+     ],
+     "canon": "Blackburn Rovers",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "West Bromwich Albion",
+      "West Bromwich Albion"
+     ],
+     "canon": "West Brom",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "Oxford United",
+      "Oxford United"
+     ],
+     "canon": null,
+     "pos": 22
+    },
+    {
+     "printed": [
+      "Leicester City",
+      "Leicester City"
+     ],
+     "canon": null,
+     "pos": 23
+    },
+    {
+     "printed": [
+      "Sheffield Wednesday",
+      "Sheffield Wednesday"
+     ],
+     "canon": null,
+     "pos": 24
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablese/eng2026.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/eng.2/standings?season=2025",
+     "read": "2026-10-06",
+     "page": "https://www.espn.com/soccer/standings/_/league/ENG.2/season/2025"
+    }
+   ],
+   "verified": true,
+   "listedSources": 2
+  }
+ ]
+}

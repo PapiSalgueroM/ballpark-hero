@@ -1,0 +1,7904 @@
+{
+ "league": "Ligue 1",
+ "country": "France",
+ "slug": "ligue-1",
+ "tierNames": [
+  {
+   "from": "1990-91",
+   "to": "2001-02",
+   "name": "Division 1"
+  },
+  {
+   "from": "2002-03",
+   "to": "2025-26",
+   "name": "Ligue 1"
+  }
+ ],
+ "tierNamesSource": "rsssf.org/tablesf/fran02.html prints \"Division 1\" for 2001-02; fran03.html prints \"Ligue 1 (NB: name change from Division 1 to Ligue 1)\" for 2002-03",
+ "readDate": "2026-10-06",
+ "sourceNotes": [
+  "Every page was fetched raw (curl) and parsed by script, never through a summariser, so printed names are exactly as each source prints them.",
+  "rsssf.org: franfullhist.html (France first division tables 1932 to 1998) for 1990-91 to 1996-97; season pages franYY.html for 1997-98 to 2008-09 and franYYYY.html (YYYY = end year) for 2009-10 to 2025-26.",
+  "LFP: ma-api.ligue1.fr (season = start year) returns tables from 1993-94 and nothing for 1990-91 to 1992-93; for those three the LFP's own historic standings page on lfp.fr, as archived by web.archive.org on 2007-11-24, is the league source.",
+  "ESPN (site.api.espn.com, season = start year) returns Ligue 1 tables from 2002-03 only; it is a third source on 2002-03 to 2025-26 and agrees on every one.",
+  "worldfootball.net could not be read (a Cloudflare challenge on direct fetch, HTTP 402 through WebFetch), and statscrew.com has no Ligue 1 tables (its l-FRA1 standings page is empty), so neither is used.",
+  "verified is true when the two primary sources (rsssf and the LFP) list the same clubs, and, where ESPN exists, ESPN lists them too. All 36 seasons meet that. Positions: pos is set when rsssf and the LFP print the same place; posPrinted lists every source's place wherever any source differs."
+ ],
+ "keyNote": "key is this ledger's own identity for a club across sources and seasons, set by an exact alias table, never by a fuzzy match (AC Ajaccio and Gazelec Ajaccio stay two clubs, Paris FC is not PSG). canon is the Soccer Career spelling from HAND_CLUBS in src/lib/soccerCareerEngine.ts; only eight French clubs exist there (PSG, Marseille, Lyon, Lille, Monaco, Nantes, Strasbourg, Nice), so every other club is canon null.",
+ "seasons": [
+  {
+   "season": "1990-91",
+   "startYear": 1990,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "MARSEILLE",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MONACO",
+      "Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "CANNES",
+      "Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "LYON",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "LILLE",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris SG"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "BREST",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "METZ",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "Saint Etienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "NICE",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "NANTES",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "TOULON",
+      "Toulon"
+     ],
+     "canon": null,
+     "key": "toulon",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "NANCY",
+      "Nancy"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "SOCHAUX",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "TOULOUSE",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "RENNES",
+      "Rennes"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "lfp.fr",
+     "url": "https://web.archive.org/web/20071124033712/http://www.lfp.fr/ligue1/historique/classement.asp?saison=1990/1991",
+     "read": "2026-10-06",
+     "note": "the LFP's own historic standings page (ligue1/historique/classement.asp) as archived on 2007-11-24; lfp.fr no longer serves it"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1991-92",
+   "startYear": 1991,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "MARSEILLE",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MONACO",
+      "Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris SG"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Le Havre"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "LENS",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "NANTES",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "Saint Etienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "TOULOUSE",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "METZ",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "LILLE",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "TOULON",
+      "Toulon"
+     ],
+     "canon": null,
+     "key": "toulon",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "NIMES",
+      "Nimes"
+     ],
+     "canon": null,
+     "key": "nimes",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "LYON",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SOCHAUX",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RENNES",
+      "Rennes"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CANNES",
+      "Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "NANCY",
+      "Nancy"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "lfp.fr",
+     "url": "https://web.archive.org/web/20071124032431/http://www.lfp.fr/ligue1/historique/classement.asp?saison=1991/1992",
+     "read": "2026-10-06",
+     "note": "the LFP's own historic standings page (ligue1/historique/classement.asp) as archived on 2007-11-24; lfp.fr no longer serves it"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1992-93",
+   "startYear": 1992,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "MARSEILLE",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris SG"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "MONACO",
+      "Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "NANTES",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "Saint Etienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "STRASBOURG",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "LENS",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "METZ",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "TOULOUSE",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "LYON",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Le Havre"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "SOCHAUX",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "LILLE",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "VALENCIENNES",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "TOULON",
+      "Toulon"
+     ],
+     "canon": null,
+     "key": "toulon",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "NIMES",
+      "Nimes"
+     ],
+     "canon": null,
+     "key": "nimes",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "lfp.fr",
+     "url": "https://web.archive.org/web/20071124035115/http://www.lfp.fr/ligue1/historique/classement.asp?saison=1992/1993",
+     "read": "2026-10-06",
+     "note": "the LFP's own historic standings page (ligue1/historique/classement.asp) as archived on 2007-11-24; lfp.fr no longer serves it"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1993-94",
+   "startYear": 1993,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "MARSEILLE",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "NANTES",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "CANNES",
+      "A.S. Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "LYON",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "MONACO",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "LENS",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "AS Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "METZ",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "STRASBOURG",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "SOCHAUX",
+      "FC Sochaux-Montbéliard"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "LILLE",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Stade Malherbe Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "MARTIGUES",
+      "F.C. Martigues"
+     ],
+     "canon": null,
+     "key": "martigues",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "TOULOUSE",
+      "Toulouse FC"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "ANGERS",
+      "Angers SCO"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1993",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1994-95",
+   "startYear": 1994,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "NANTES",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "LYON",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "LENS",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "MONACO",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "METZ",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "CANNES",
+      "A.S. Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "STRASBOURG",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "MARTIGUES",
+      "F.C. Martigues"
+     ],
+     "canon": null,
+     "key": "martigues",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RENNES",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "LILLE",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "BASTIA",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "NICE",
+      "OGC Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "AS Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Stade Malherbe Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "SOCHAUX",
+      "FC Sochaux-Montbéliard"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1994",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1995-96",
+   "startYear": 1995,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "AUXERRE",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "MONACO",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "METZ",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "LENS",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "NANTES",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RENNES",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "STRASBOURG",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "GUINGAMP",
+      "En Avant Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "LYON",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "NICE",
+      "OGC Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "CANNES",
+      "A.S. Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "BASTIA",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "LILLE",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "GUEUGNON",
+      "F.C. Gueugnon"
+     ],
+     "canon": null,
+     "key": "gueugnon",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "ST.ETIENNE",
+      "AS Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "MARTIGUES",
+      "F.C. Martigues"
+     ],
+     "canon": null,
+     "key": "martigues",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1995",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1996-97",
+   "startYear": 1996,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "MONACO",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "PARIS ST.GERM.",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "NANTES",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "BORDEAUX",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "METZ",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AUXERRE",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "BASTIA",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "LYON",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "STRASBOURG",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "MONTPELLIER",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "MARSEILLE",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "GUINGAMP",
+      "En Avant Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "LENS",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "LE HAVRE",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "CANNES",
+      "A.S. Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RENNES",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CAEN",
+      "Stade Malherbe Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "NANCY",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "LILLE",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "NICE",
+      "OGC Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/franfullhist.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1996",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1997-98",
+   "startYear": 1997,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Girondins de Bordeaux",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stade Rennais",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Berrichonne Châteauroux",
+      "Châteauroux"
+     ],
+     "canon": null,
+     "key": "chateauroux",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AS Cannes",
+      "A.S. Cannes"
+     ],
+     "canon": null,
+     "key": "cannes",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran98.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1997",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   },
+   "notes": [
+    "rsssf franfullhist.html is not used for 1997-98: its final table prints 38 in the games column although every row's W-D-L sums to 34, and it prints angers where fran98.html and lfp have auxerre (its own results grid for the season has AUXERRE, so the table row is a misprint); fran98.html, the rsssf season page, is used instead"
+   ]
+  },
+  {
+   "season": "1998-99",
+   "startYear": 1998,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Girondins de Bordeaux",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Stade Rennais",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Nancy-Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Havre AC",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran99.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1998",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "1999-00",
+   "startYear": 1999,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Paris Saint-Germain FC",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Girondins de Bordeaux",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "CS Sedan-Ardennes",
+      "C.S. Sedan Ardennes"
+     ],
+     "canon": null,
+     "key": "sedan",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Nantes Atlantique",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "ATAC Troyes",
+      "ESTAC Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AS Nancy-Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Havre AC",
+      "Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran00.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=1999",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "2000-01",
+   "startYear": 2000,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "FC Nantes Atlantique",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Girondins de Bordeaux",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "CS Sedan-Ardennes",
+      "C.S. Sedan Ardennes"
+     ],
+     "canon": null,
+     "key": "sedan",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Paris Saint-Germain FC",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "posPrinted": [
+      16,
+      17
+     ]
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "posPrinted": [
+      17,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran01.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2000",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   },
+   "notes": [
+    "rsssf and lfp swap 16th and 17th (Toulouse, Saint-Etienne) over the Saint-Etienne false passport points ruling, footnoted at length on the rsssf page; both relegated, membership unaffected"
+   ]
+  },
+  {
+   "season": "2001-02",
+   "startYear": 2001,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Paris Saint-Germain FC",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins de Bordeaux",
+      "FC Girondins de Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Nantes Atlantique",
+      "FC Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "CS Sedan-Ardennes",
+      "C.S. Sedan Ardennes"
+     ],
+     "canon": null,
+     "key": "sedan",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran02.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2001",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "sourcesAgree": true
+   }
+  },
+  {
+   "season": "2002-03",
+   "startYear": 2002,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre AC",
+      "Le Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CS Sedan-Ardennes",
+      "C.S. Sedan Ardennes",
+      "Sedan"
+     ],
+     "canon": null,
+     "key": "sedan",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran03.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2002",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2002",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2003-04",
+   "startYear": 2003,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Le Mans UC72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Montpellier HSC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran04.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2003",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2003",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2004-05",
+   "startYear": 2004,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Stade Malherbe Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Istres",
+      "F.C. Istres Ouest Provence",
+      "FC Istres"
+     ],
+     "canon": null,
+     "key": "istres",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran05.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2004",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2004",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2005-06",
+   "startYear": 2005,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Le Mans UC 72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran06.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2005",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2005",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2006-07",
+   "startYear": 2006,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Le Mans UC 72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CS Sedan Ardennes",
+      "C.S. Sedan Ardennes",
+      "Sedan"
+     ],
+     "canon": null,
+     "key": "sedan",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran07.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2006",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2006",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2007-08",
+   "startYear": 2007,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Le Mans UC 72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "AS Monaco FC",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RC Strasbourg",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran08.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2007",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2007",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2008-09",
+   "startYear": 2008,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Grenoble Foot 38",
+      "Grenoble Foot 38",
+      "Grenoble"
+     ],
+     "canon": null,
+     "key": "grenoble",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Le Mans UC 72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Nantes FC",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre AC",
+      "Le Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran09.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2008",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2008",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2009-10",
+   "startYear": 2009,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Le Mans UC 72",
+      "Le Mans FC",
+      "Le Mans"
+     ],
+     "canon": null,
+     "key": "le-mans",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "US Boulogne-sur-mer CO",
+      "U.S. Boulogne Cote d'Opale",
+      "Boulogne"
+     ],
+     "canon": null,
+     "key": "boulogne",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Grenoble Foot 38",
+      "Grenoble Foot 38",
+      "Grenoble"
+     ],
+     "canon": null,
+     "key": "grenoble",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2010.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2009",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2009",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2010-11",
+   "startYear": 2010,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Arles-Avignon",
+      "A.C. Arles - Avignon",
+      "Arles"
+     ],
+     "canon": null,
+     "key": "arles-avignon",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2011.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2010",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2010",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2011-12",
+   "startYear": 2011,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Evian-Thonon Gaillard FC",
+      "Evian Thonon Gaillard F. C.",
+      "Evian Thonon Gaillard"
+     ],
+     "canon": null,
+     "key": "evian",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon FCO",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2012.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2011",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2011",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2012-13",
+   "startYear": 2012,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Evian-Thonon Gaillard FC",
+      "Evian Thonon Gaillard F. C.",
+      "Evian Thonon Gaillard"
+     ],
+     "canon": null,
+     "key": "evian",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2013.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2012",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2012",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2013-14",
+   "startYear": 2013,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Evian-Thonon Gaillard FC",
+      "Evian Thonon Gaillard F. C.",
+      "Evian Thonon Gaillard"
+     ],
+     "canon": null,
+     "key": "evian",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Sochaux-Montbéliard",
+      "FC Sochaux-Montbéliard",
+      "Sochaux"
+     ],
+     "canon": null,
+     "key": "sochaux",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Valenciennes FC",
+      "Valenciennes FC",
+      "Valenciennes"
+     ],
+     "canon": null,
+     "key": "valenciennes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2014.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2013",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2013",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2014-15",
+   "startYear": 2014,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Evian-Thonon Gaillard FC",
+      "Evian Thonon Gaillard F. C.",
+      "Evian Thonon Gaillard"
+     ],
+     "canon": null,
+     "key": "evian",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2015.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2014",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2014",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2015-16",
+   "startYear": 2015,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Gazélec Ajaccio FCO",
+      "Gazelec FC Ajaccio",
+      "GFC Ajaccio"
+     ],
+     "canon": null,
+     "key": "gazelec-ajaccio",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2016.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2015",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2015",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2016-17",
+   "startYear": 2016,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon FCO",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine",
+      "AS Nancy Lorraine"
+     ],
+     "canon": null,
+     "key": "nancy",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "SC Bastia",
+      "S.C. Bastiais",
+      "Bastia"
+     ],
+     "canon": null,
+     "key": "bastia",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2017.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2016",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2016",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2017-18",
+   "startYear": 2017,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon FCO",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Amiens SC",
+      "Amiens SC",
+      "SC Amiens"
+     ],
+     "canon": null,
+     "key": "amiens",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2018.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2017",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2017",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2018-19",
+   "startYear": 2018,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Nîmes Olympique",
+      "Nîmes Olympique",
+      "Nimes"
+     ],
+     "canon": null,
+     "key": "nimes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Amiens SC",
+      "Amiens SC",
+      "SC Amiens"
+     ],
+     "canon": null,
+     "key": "amiens",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon FCO",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "SM Caen",
+      "Stade Malherbe Caen",
+      "Caen"
+     ],
+     "canon": null,
+     "key": "caen",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "En Avant Guingamp",
+      "En Avant Guingamp",
+      "Guingamp"
+     ],
+     "canon": null,
+     "key": "guingamp",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2019.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2018",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2018",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2019-20",
+   "startYear": 2019,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon FCO",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Nîmes Olympique",
+      "Nîmes Olympique",
+      "Nimes"
+     ],
+     "canon": null,
+     "key": "nimes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Amiens SC",
+      "Amiens SC",
+      "SC Amiens"
+     ],
+     "canon": null,
+     "key": "amiens",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2020.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2019",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2019",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   },
+   "notes": [
+    "rsssf: no club played 38; games played 27 (2 clubs), 28 (18 clubs)",
+    "lfp: no club played 38; games played 27 (2 clubs), 28 (18 clubs)",
+    "espn: no club played 38; games played 27 (2 clubs), 28 (18 clubs)",
+    "season stopped early; all three sources print the same 20 clubs, so membership is unaffected"
+   ]
+  },
+  {
+   "season": "2020-21",
+   "startYear": 2020,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Lyon",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Rennes",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "St Etienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "Strasbourg",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Brest",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Nîmes Olympique",
+      "Nîmes",
+      "Nimes"
+     ],
+     "canon": null,
+     "key": "nimes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Dijon FCO",
+      "Dijon",
+      "Dijon FCO"
+     ],
+     "canon": null,
+     "key": "dijon",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2021.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2020",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2020",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2021-22",
+   "startYear": 2021,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Clermont Foot Auvergne 63",
+      "Clermont Foot 63",
+      "Clermont Foot"
+     ],
+     "canon": null,
+     "key": "clermont",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "FC Girondins Bordeaux",
+      "FC Girondins de Bordeaux",
+      "Bordeaux"
+     ],
+     "canon": null,
+     "key": "bordeaux",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2022.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2021",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2021",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2022-23",
+   "startYear": 2022,
+   "size": 20,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Clermont Foot Auvergne 63",
+      "Clermont Foot 63",
+      "Clermont Foot"
+     ],
+     "canon": null,
+     "key": "clermont",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "AC Ajaccio",
+      "AC Ajaccio",
+      "AC Ajaccio"
+     ],
+     "canon": null,
+     "key": "ajaccio-ac",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "ES Troyes AC",
+      "ESTAC Troyes",
+      "Troyes"
+     ],
+     "canon": null,
+     "key": "troyes",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2023.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2022",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2022",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2023-24",
+   "startYear": 2023,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade de Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre Athletic Club",
+      "Le Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Clermont Foot Auvergne 63",
+      "Clermont Foot 63",
+      "Clermont Foot"
+     ],
+     "canon": null,
+     "key": "clermont",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2024.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2023",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2023",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2024-25",
+   "startYear": 2024,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre Athletic Club",
+      "Le Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Stade de Reims",
+      "Stade DE Reims",
+      "Stade de Reims"
+     ],
+     "canon": null,
+     "key": "reims",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "AS Saint-Etienne",
+      "AS Saint-Étienne",
+      "Saint-Étienne"
+     ],
+     "canon": null,
+     "key": "saint-etienne",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Montpellier-Hérault SC",
+      "Montpellier Hérault SC",
+      "Montpellier"
+     ],
+     "canon": null,
+     "key": "montpellier",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2025.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2024",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2024",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   }
+  },
+  {
+   "season": "2025-26",
+   "startYear": 2025,
+   "size": 18,
+   "clubs": [
+    {
+     "printed": [
+      "Paris-Saint-Germain FC",
+      "Paris Saint-Germain",
+      "Paris Saint-Germain"
+     ],
+     "canon": "PSG",
+     "key": "psg",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Lens",
+      "RC Lens",
+      "Lens"
+     ],
+     "canon": null,
+     "key": "lens",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Lille OSC",
+      "LOSC Lille",
+      "Lille"
+     ],
+     "canon": "Lille",
+     "key": "lille",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Olympique Lyonnais",
+      "Olympique Lyonnais",
+      "Lyon"
+     ],
+     "canon": "Lyon",
+     "key": "lyon",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Olympique de Marseille",
+      "Olympique de Marseille",
+      "Marseille"
+     ],
+     "canon": "Marseille",
+     "key": "marseille",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Stade Rennais FC",
+      "Stade Rennais FC",
+      "Stade Rennais"
+     ],
+     "canon": null,
+     "key": "rennes",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "AS Monaco",
+      "AS Monaco",
+      "AS Monaco"
+     ],
+     "canon": "Monaco",
+     "key": "monaco",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Strasbourg Alsace",
+      "RC Strasbourg Alsace",
+      "Strasbourg"
+     ],
+     "canon": "Strasbourg",
+     "key": "strasbourg",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Toulouse FC",
+      "Toulouse FC",
+      "Toulouse"
+     ],
+     "canon": null,
+     "key": "toulouse",
+     "pos": 9,
+     "posPrinted": [
+      9,
+      9,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "FC Lorient",
+      "FC Lorient",
+      "Lorient"
+     ],
+     "canon": null,
+     "key": "lorient",
+     "pos": 10,
+     "posPrinted": [
+      10,
+      10,
+      9
+     ]
+    },
+    {
+     "printed": [
+      "Paris FC",
+      "Paris FC",
+      "Paris FC"
+     ],
+     "canon": null,
+     "key": "paris-fc",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Stade Brestois",
+      "Stade Brestois 29",
+      "Brest"
+     ],
+     "canon": null,
+     "key": "brest",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Angers SCO",
+      "Angers SCO",
+      "Angers"
+     ],
+     "canon": null,
+     "key": "angers",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Le Havre AC",
+      "Havre Athletic Club",
+      "Le Havre AC"
+     ],
+     "canon": null,
+     "key": "le-havre",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "AJ Auxerre",
+      "AJ Auxerre",
+      "AJ Auxerre"
+     ],
+     "canon": null,
+     "key": "auxerre",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "OGC Nice",
+      "OGC Nice",
+      "Nice"
+     ],
+     "canon": "Nice",
+     "key": "nice",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "FC Nantes",
+      "FC Nantes",
+      "Nantes"
+     ],
+     "canon": "Nantes",
+     "key": "nantes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "FC Metz",
+      "FC Metz",
+      "Metz"
+     ],
+     "canon": null,
+     "key": "metz",
+     "pos": 18
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tablesf/fran2026.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "ma-api.ligue1.fr",
+     "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2025",
+     "read": "2026-10-06",
+     "note": "the LFP's own standings data, the feed behind ligue1.com"
+    },
+    {
+     "host": "site.api.espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/fra.1/standings?season=2025",
+     "read": "2026-10-06",
+     "note": "ESPN standings data, the feed behind espn.com/soccer/standings/_/league/fra.1"
+    }
+   ],
+   "verified": true,
+   "agreement": {
+    "rsssfVsLfp": true,
+    "espnAgrees": true
+   },
+   "notes": [
+    "espn: games played other than 34: Toulouse 33, Nantes 33",
+    "espn prints 33 games for Toulouse and Nantes and puts Lorient 9th, Toulouse 10th; rsssf and lfp print 34 games for every club and Toulouse 9th, Lorient 10th, so pos follows those two; membership unaffected"
+   ]
+  }
+ ]
+}

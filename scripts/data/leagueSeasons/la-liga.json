@@ -1,0 +1,9072 @@
+{
+ "league": "La Liga",
+ "slug": "la-liga",
+ "country": "Spain",
+ "tierNames": [
+  {
+   "from": "1990-91",
+   "to": "2025-26",
+   "name": "La Liga"
+  }
+ ],
+ "tierNote": "The competition is officially the Primera División in every season 1990-91 to 2025-26 (each season row carries tier \"Primera División\"); \"La Liga\" is the label the career world uses (CAREER_CLUB_POOL league field). Sponsor names (Liga BBVA, LaLiga Santander, LaLiga EA Sports) were not researched and are not recorded.",
+ "sizes": [
+  {
+   "from": "1990-91",
+   "to": "1994-95",
+   "size": 20
+  },
+  {
+   "from": "1995-96",
+   "to": "1996-97",
+   "size": 22
+  },
+  {
+   "from": "1997-98",
+   "to": "2025-26",
+   "size": 20
+  }
+ ],
+ "method": "See _method.md (written by the premier-league shard). La Liga specifics: counted sources are RSSSF (rsssf.org tabless/spanhist8999.html for 1990-91 to 1998-99, spanhist9909.html for 1999-2000, span01.html to span09.html for 2000-01 to 2008-09, span2010.html to span2026.html for 2009-10 to 2025-26) and worldfootball.net (final matchday table, matchday 38, or 42 for the 22-club seasons 1995-96 and 1996-97). ESPN's standings feed is a third agreeing source from 2002-03 on (season=2001 and earlier return no table). RSSSF pages were downloaded with curl and parsed as Latin-1 text. worldfootball.net refuses curl (403) and WebFetch (402) but answers a real browser: its pages were read in a headless Chromium (Playwright) tab on worldfootball.net with a same-origin fetch of each season page, the table parsed from the raw HTML with DOMParser (no summarising), and the rows hand-carried into the ledger input were proven identical by a SHA-256 of each season's rows computed in the browser (36 of 36 match). A season is verified only when every source in its sources list gives the same set of clubs, every count equals the size, and no club appears twice. pos is recorded only when every source prints the same position; otherwise posBySource (same order as sources) and a note.",
+ "identityNotes": [
+  "Real Burgos (RSSSF, the club in the top flight 1990-91 to 1992-93, Real Burgos CF) is printed \"Burgos CF\" by worldfootball.net; one Burgos club per table, same slot, keyed burgos. canon null.",
+  "Merida (1995-96 and 1997-98) is printed \"Mérida CP\" by RSSSF and \"Mérida AD\" by worldfootball.net (which files the old CP Mérida under the later club); one Merida club per table, keyed merida. canon null.",
+  "Lleida (1993-94) is printed \"UE Lleida\" by RSSSF and \"Lleida CF\" by worldfootball.net; keyed lleida. canon null.",
+  "Deportivo (canon \"Deportivo\") is RC Deportivo de La Coruña only. Deportivo Alavés is a different club, keyed alaves, canon \"Alaves\". ESPN prints the first as \"Deportivo\" and the second as \"Alavés\".",
+  "Malaga (canon \"Malaga\") is Málaga CF, in the top flight from 1999-2000. The older CD Málaga (dissolved 1992) is not in any season 1990-91 to 2025-26 here.",
+  "Sporting de Gijón (keyed sporting, canon null) is not Sporting CP. Real Sociedad, Real Betis, Real Valladolid, Real Zaragoza, Real Oviedo, Real Murcia, Real Burgos are separate clubs, none merged on \"Real\".",
+  "Atlético Osasuna (RSSSF 1990s) and CA Osasuna are the same club; RCD Español (RSSSF to 1994-95) and RCD Espanyol are the same club."
+ ],
+ "aliases": {
+  "atletico-madrid": [
+   "ATLETICO DE MADRID",
+   "Atlético de Madrid",
+   "Atlético Madrid"
+  ],
+  "albacete": [
+   "Albacete",
+   "Albacete Balompié"
+  ],
+  "athletic": [
+   "Athletic de Bilbao",
+   "Athletic Club"
+  ],
+  "osasuna": [
+   "Atlético Osasuna",
+   "CA Osasuna (Pamplona)",
+   "CA Osasuna",
+   "Osasuna"
+  ],
+  "castellon": [
+   "CD Castellón"
+  ],
+  "leganes": [
+   "CD Leganés",
+   "Leganés"
+  ],
+  "logrones": [
+   "CD Logroñés"
+  ],
+  "numancia": [
+   "CD Numancia",
+   "CD Numancia (Soria)",
+   "Numancia (Soria)",
+   "Numancia"
+  ],
+  "tenerife": [
+   "CD Tenerife",
+   "CD Tenerife (Santa Cruz)",
+   "Tenerife"
+  ],
+  "extremadura": [
+   "CF Extremadura"
+  ],
+  "gimnastic": [
+   "Club Gimnàstic de Tarragona",
+   "Gimnàstic de Tarragona"
+  ],
+  "cadiz": [
+   "Cádiz CF",
+   "Cádiz"
+  ],
+  "cordoba": [
+   "Córdoba CF",
+   "Córdoba"
+  ],
+  "alaves": [
+   "Deportivo Alavés",
+   "Deportivo Alavés (Vitoria)",
+   "CD Alavés",
+   "Alavés"
+  ],
+  "elche": [
+   "Elche CF",
+   "Elche"
+  ],
+  "barcelona": [
+   "FC BARCELONA",
+   "FC Barcelona",
+   "Barcelona"
+  ],
+  "getafe": [
+   "Getafe CF",
+   "Getafe"
+  ],
+  "girona": [
+   "Girona FC",
+   "Girona"
+  ],
+  "granada": [
+   "Granada CF",
+   "Granada"
+  ],
+  "hercules": [
+   "Hércules CF",
+   "Hércules CF (Alicante)",
+   "Hercules"
+  ],
+  "levante": [
+   "Levante UD",
+   "Levante UD (Valencia)",
+   "Levante"
+  ],
+  "malaga": [
+   "Málaga CF",
+   "Málaga"
+  ],
+  "merida": [
+   "Mérida CP",
+   "Mérida AD"
+  ],
+  "celta": [
+   "RC Celta",
+   "RC Celta (Vigo)",
+   "Celta de Vigo",
+   "Celta Vigo"
+  ],
+  "deportivo": [
+   "RC DEPORTIVO",
+   "RC Deportivo",
+   "RC Deportivo (La Coruña)",
+   "Deportivo A Coruña",
+   "Deportivo"
+  ],
+  "recreativo": [
+   "RC Recreativo de Huelva",
+   "Recreativo Huelva"
+  ],
+  "espanyol": [
+   "RCD Espanyol",
+   "RCD Espanyol (Barcelona)",
+   "RCD Español",
+   "Espanyol"
+  ],
+  "mallorca": [
+   "RCD Mallorca",
+   "RCD Mallorca (Palma de M.)",
+   "Mallorca"
+  ],
+  "real-madrid": [
+   "REAL MADRID",
+   "Real Madrid",
+   "Real Madrid CF"
+  ],
+  "racing": [
+   "Racing de Santander",
+   "Racing Santander"
+  ],
+  "rayo": [
+   "Rayo Vallecano",
+   "Rayo Vallecano (Madrid)"
+  ],
+  "betis": [
+   "Real Betis",
+   "Real Betis Balompié (Sevilla)"
+  ],
+  "burgos": [
+   "Real Burgos",
+   "Burgos CF"
+  ],
+  "murcia": [
+   "Real Murcia",
+   "Real Murcia CF"
+  ],
+  "oviedo": [
+   "Real Oviedo"
+  ],
+  "real-sociedad": [
+   "Real Sociedad",
+   "Real Sociedad (San Sebastián)"
+  ],
+  "valladolid": [
+   "Real Valladolid"
+  ],
+  "zaragoza": [
+   "Real Zaragoza"
+  ],
+  "compostela": [
+   "SD Compostela"
+  ],
+  "eibar": [
+   "SD Eibar",
+   "Eibar"
+  ],
+  "huesca": [
+   "SD Huesca",
+   "Huesca"
+  ],
+  "sevilla": [
+   "Sevilla FC",
+   "Sevilla"
+  ],
+  "sporting": [
+   "Sporting de Gijón",
+   "Sporting Gijón"
+  ],
+  "almeria": [
+   "UD Almería",
+   "Almería"
+  ],
+  "las-palmas": [
+   "UD Las Palmas",
+   "Las Palmas"
+  ],
+  "salamanca": [
+   "UD Salamanca"
+  ],
+  "lleida": [
+   "UE Lleida",
+   "Lleida CF"
+  ],
+  "valencia": [
+   "Valencia CF",
+   "Valencia"
+  ],
+  "villarreal": [
+   "Villarreal",
+   "Villarreal CF"
+  ],
+  "xerez": [
+   "Xerez CD",
+   "Xerez"
+  ]
+ },
+ "generated": "2026-10-06",
+ "seasons": [
+  {
+   "season": "1990-91",
+   "startYear": 1990,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atlético Osasuna",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "posBySource": [
+      9,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "posBySource": [
+      10,
+      11
+     ]
+    },
+    {
+     "printed": [
+      "Real Burgos",
+      "Burgos CF"
+     ],
+     "canon": null,
+     "key": "burgos",
+     "posBySource": [
+      11,
+      9
+     ]
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      12,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      13,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "posBySource": [
+      15,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "posBySource": [
+      16,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Castellón",
+      "CD Castellón"
+     ],
+     "canon": null,
+     "key": "castellon",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9091",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11040/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 7 clubs (valladolid 9/10, logrones 10/11, burgos 11/9, athletic 12/13, real-sociedad 13/12, mallorca 15/16, espanyol 16/15; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1991-92",
+   "startYear": 1991,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Burgos",
+      "Burgos CF"
+     ],
+     "canon": null,
+     "key": "burgos",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "posBySource": [
+      10,
+      11
+     ]
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "posBySource": [
+      11,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Atlético Osasuna",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      15,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "posBySource": [
+      19,
+      20
+     ]
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "posBySource": [
+      20,
+      19
+     ]
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9192",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11036/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 6 clubs (logrones 10/11, oviedo 11/10, athletic 14/15, osasuna 15/14, valladolid 19/20, mallorca 20/19; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1992-93",
+   "startYear": 1992,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Atlético Osasuna",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "posBySource": [
+      12,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      13,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Burgos",
+      "Burgos CF"
+     ],
+     "canon": null,
+     "key": "burgos",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9293",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11035/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 2 clubs (sporting 12/13, real-sociedad 13/12; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1993-94",
+   "startYear": 1993,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "UE Lleida",
+      "Lleida CF"
+     ],
+     "canon": null,
+     "key": "lleida",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Atlético Osasuna",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9394",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11034/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1994-95",
+   "startYear": 1994,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "REAL MADRID",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      5,
+      6
+     ]
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "posBySource": [
+      6,
+      5
+     ]
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "posBySource": [
+      10,
+      11
+     ]
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      11,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "SD Compostela",
+      "SD Compostela"
+     ],
+     "canon": null,
+     "key": "compostela",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9495",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11033/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (sevilla 5/6, espanyol 6/5, valencia 10/11, real-sociedad 11/10; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1995-96",
+   "startYear": 1995,
+   "size": 22,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "ATLETICO DE MADRID",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SD Compostela",
+      "SD Compostela"
+     ],
+     "canon": null,
+     "key": "compostela",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      12,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "posBySource": [
+      13,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      15,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "posBySource": [
+      20,
+      21
+     ]
+    },
+    {
+     "printed": [
+      "Mérida CP",
+      "Mérida AD"
+     ],
+     "canon": null,
+     "key": "merida",
+     "posBySource": [
+      21,
+      20
+     ]
+    },
+    {
+     "printed": [
+      "UD Salamanca",
+      "UD Salamanca"
+     ],
+     "canon": null,
+     "key": "salamanca",
+     "pos": 22
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9596",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11031/md42/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 6 clubs (sevilla 12/14, zaragoza 13/12, oviedo 14/15, athletic 15/13, albacete 20/21, merida 21/20; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1996-97",
+   "startYear": 1996,
+   "size": 22,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "REAL MADRID",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "posBySource": [
+      3,
+      4
+     ]
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "posBySource": [
+      4,
+      3
+     ]
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "SD Compostela",
+      "SD Compostela"
+     ],
+     "canon": null,
+     "key": "compostela",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CF Extremadura",
+      "CF Extremadura"
+     ],
+     "canon": null,
+     "key": "extremadura",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 20
+    },
+    {
+     "printed": [
+      "Hércules CF",
+      "Hércules CF"
+     ],
+     "canon": null,
+     "key": "hercules",
+     "pos": 21
+    },
+    {
+     "printed": [
+      "CD Logroñés",
+      "CD Logroñés"
+     ],
+     "canon": null,
+     "key": "logrones",
+     "pos": 22
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9697",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11030/md42/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 2 clubs (deportivo 3/4, betis 4/3; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1997-98",
+   "startYear": 1997,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "posBySource": [
+      5,
+      6
+     ]
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "posBySource": [
+      6,
+      7
+     ]
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "posBySource": [
+      7,
+      5
+     ]
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "posBySource": [
+      14,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "UD Salamanca",
+      "UD Salamanca"
+     ],
+     "canon": null,
+     "key": "salamanca",
+     "posBySource": [
+      15,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "SD Compostela",
+      "SD Compostela"
+     ],
+     "canon": null,
+     "key": "compostela",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Mérida CP",
+      "Mérida AD"
+     ],
+     "canon": null,
+     "key": "merida",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9798",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11029/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 5 clubs (mallorca 5/6, celta 6/7, atletico-madrid 7/5, racing 14/15, salamanca 15/14; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "1998-99",
+   "startYear": 1998,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC BARCELONA",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Deportivo",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RCD Español",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Deportivo Alavés",
+      "CD Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CF Extremadura",
+      "CF Extremadura"
+     ],
+     "canon": null,
+     "key": "extremadura",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "UD Salamanca",
+      "UD Salamanca"
+     ],
+     "canon": null,
+     "key": "salamanca",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist8999.html#9899",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11028/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "1999-00",
+   "startYear": 1999,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "RC DEPORTIVO",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Deportivo Alavés",
+      "CD Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Celta",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      13,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "RCD Espanyol",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "posBySource": [
+      14,
+      13
+     ]
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "posBySource": [
+      16,
+      17
+     ]
+    },
+    {
+     "printed": [
+      "CD Numancia",
+      "CD Numancia"
+     ],
+     "canon": null,
+     "key": "numancia",
+     "posBySource": [
+      17,
+      16
+     ]
+    },
+    {
+     "printed": [
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/spanhist9909.html#9900",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11027/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (real-sociedad 13/14, espanyol 14/13, oviedo 16/17, numancia 17/16; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2000-01",
+   "startYear": 2000,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RCD Mallorca",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Villarreal",
+      "Villarreal CF"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RCD Espanyol",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      12,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "posBySource": [
+      14,
+      12
+     ]
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      15,
+      17
+     ]
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "posBySource": [
+      17,
+      15
+     ]
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Numancia (Soria)",
+      "CD Numancia"
+     ],
+     "canon": null,
+     "key": "numancia",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span01.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11026/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (athletic 12/14, rayo 14/12, osasuna 15/17, zaragoza 17/15; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2001-02",
+   "startYear": 2001,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      8,
+      10
+     ]
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      9,
+      8
+     ]
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "posBySource": [
+      10,
+      9
+     ]
+    },
+    {
+     "printed": [
+      "Rayo Vallecano (Madrid)",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Villarreal",
+      "Villarreal CF"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Tenerife (Santa Cruz)",
+      "CD Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span02.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro10104/md38/results-and-standings/",
+     "read": "2026-10-06"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 3 clubs (athletic 8/10, sevilla 9/8, malaga 10/9; order rsssf.org, worldfootball.net). Membership unaffected. Only two sources this season, so these clubs carry no pos. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2002-03",
+   "startYear": 2002,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "posBySource": [
+      11,
+      11,
+      12
+     ],
+     "pos": 11,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      12,
+      12,
+      11
+     ],
+     "pos": 12,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "posBySource": [
+      13,
+      13,
+      14
+     ],
+     "pos": 13,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "posBySource": [
+      14,
+      14,
+      13
+     ],
+     "pos": 14,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Recreativo Huelva",
+      "Recreativo Huelva",
+      "Recreativo Huelva"
+     ],
+     "canon": null,
+     "key": "recreativo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Rayo Vallecano (Madrid)",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span03.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro10458/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2002",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (atletico-madrid 11/11/12, osasuna 12/12/11, valladolid 13/13/14, malaga 14/14/13; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2003-04",
+   "startYear": 2003,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "posBySource": [
+      12,
+      13,
+      12
+     ],
+     "pos": 12,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      13,
+      12,
+      13
+     ],
+     "pos": 13,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Albacete Balompié",
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "posBySource": [
+      16,
+      17,
+      16
+     ],
+     "pos": 16,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "posBySource": [
+      17,
+      16,
+      17
+     ],
+     "pos": 17,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Murcia CF",
+      "Real Murcia",
+      "Real Murcia"
+     ],
+     "canon": null,
+     "key": "murcia",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span04.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro11337/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2003",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (zaragoza 12/13/12, osasuna 13/12/13, espanyol 16/17/16, racing 17/16/17; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2004-05",
+   "startYear": 2004,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "posBySource": [
+      8,
+      9,
+      8
+     ],
+     "pos": 8,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "posBySource": [
+      9,
+      8,
+      9
+     ],
+     "pos": 9,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Levante UD",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Numancia (Soria)",
+      "CD Numancia",
+      "Numancia"
+     ],
+     "canon": null,
+     "key": "numancia",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Albacete Balompié",
+      "Albacete",
+      "Albacete"
+     ],
+     "canon": null,
+     "key": "albacete",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span05.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro13208/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2004",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 2 clubs (deportivo 8/9/8, athletic 9/8/9; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2005-06",
+   "startYear": 2005,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      4,
+      5,
+      4
+     ],
+     "pos": 4,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      5,
+      4,
+      5
+     ],
+     "pos": 5,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      16,
+      17,
+      16
+     ],
+     "pos": 16,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "posBySource": [
+      17,
+      16,
+      17
+     ],
+     "pos": 17,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF",
+      "Cádiz"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span06.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro13983/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2005",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (osasuna 4/5/4, sevilla 5/4/5, real-sociedad 16/17/16, racing 17/16/17; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2006-07",
+   "startYear": 2006,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "posBySource": [
+      1,
+      2,
+      1
+     ],
+     "pos": 1,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "posBySource": [
+      2,
+      1,
+      2
+     ],
+     "pos": 2,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Recreativo de Huelva",
+      "Recreativo Huelva",
+      "Recreativo Huelva"
+     ],
+     "canon": null,
+     "key": "recreativo",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "posBySource": [
+      11,
+      12,
+      11
+     ],
+     "pos": 11,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "posBySource": [
+      12,
+      11,
+      12
+     ],
+     "pos": 12,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Club Gimnàstic de Tarragona",
+      "Gimnàstic de Tarragona",
+      "Gimnàstic de Tarragona"
+     ],
+     "canon": null,
+     "key": "gimnastic",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span07.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro14729/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2006",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 4 clubs (real-madrid 1/2/1, barcelona 2/1/2, espanyol 11/12/11, mallorca 12/11/12; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2007-08",
+   "startYear": 2007,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "posBySource": [
+      4,
+      5,
+      4
+     ],
+     "pos": 4,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      5,
+      4,
+      5
+     ],
+     "pos": 5,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "posBySource": [
+      8,
+      9,
+      8
+     ],
+     "pos": 8,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "posBySource": [
+      9,
+      8,
+      9
+     ],
+     "pos": 9,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "posBySource": [
+      13,
+      14,
+      13
+     ],
+     "pos": 13,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "posBySource": [
+      14,
+      13,
+      14
+     ],
+     "pos": 14,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RC Recreativo de Huelva",
+      "Recreativo Huelva",
+      "Recreativo Huelva"
+     ],
+     "canon": null,
+     "key": "recreativo",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Murcia",
+      "Real Murcia",
+      "Real Murcia"
+     ],
+     "canon": null,
+     "key": "murcia",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span08.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro16421/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2007",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 6 clubs (atletico-madrid 4/5/4, sevilla 5/4/5, almeria 8/9/8, deportivo 9/8/9, betis 13/14/13, getafe 14/13/14; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2008-09",
+   "startYear": 2008,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "posBySource": [
+      11,
+      12,
+      11
+     ],
+     "pos": 11,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "posBySource": [
+      12,
+      11,
+      12
+     ],
+     "pos": 12,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "posBySource": [
+      14,
+      16,
+      14
+     ],
+     "pos": 14,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "posBySource": [
+      15,
+      14,
+      15
+     ],
+     "pos": 15,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "posBySource": [
+      16,
+      15,
+      16
+     ],
+     "pos": 16,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Numancia (Soria)",
+      "CD Numancia",
+      "Numancia"
+     ],
+     "canon": null,
+     "key": "numancia",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "RC Recreativo de Huelva",
+      "Recreativo Huelva",
+      "Recreativo Huelva"
+     ],
+     "canon": null,
+     "key": "recreativo",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span09.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro298/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2008",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 5 clubs (almeria 11/12/11, racing 12/11/12, sporting 14/16/14, osasuna 15/14/15, valladolid 16/15/16; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. Every one settled by two of three sources. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2009-10",
+   "startYear": 2009,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CD Tenerife",
+      "CD Tenerife",
+      "Tenerife"
+     ],
+     "canon": null,
+     "key": "tenerife",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Xerez CD",
+      "Xerez CD",
+      "Xerez"
+     ],
+     "canon": null,
+     "key": "xerez",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2010.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro4496/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2009",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2010-11",
+   "startYear": 2010,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "posBySource": [
+      5,
+      7,
+      5
+     ],
+     "pos": 5,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "posBySource": [
+      7,
+      5,
+      7
+     ],
+     "pos": 7,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "posBySource": [
+      13,
+      14,
+      13
+     ],
+     "pos": 13,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "posBySource": [
+      14,
+      15,
+      15
+     ],
+     "pos": 15,
+     "posSettled": "two of three sources"
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "posBySource": [
+      15,
+      13,
+      14
+     ]
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Hércules CF (Alicante)",
+      "Hércules CF",
+      "Hercules"
+     ],
+     "canon": null,
+     "key": "hercules",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2011.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro18656/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2010",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true,
+   "notes": [
+    "positions differ by source for 5 clubs (sevilla 5/7/5, atletico-madrid 7/5/7, zaragoza 13/14/13, real-sociedad 14/15/15, levante 15/13/14; order rsssf.org, worldfootball.net, espn.com). Membership unaffected. 1 left without pos because no two sources agree: levante. The disputed clubs are level on points; La Liga breaks ties on head-to-head, and worldfootball.net's matchday table orders some tied clubs differently from RSSSF (and from ESPN where present)."
+   ]
+  },
+  {
+   "season": "2011-12",
+   "startYear": 2011,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Racing de Santander",
+      "Racing Santander",
+      "Racing Santander"
+     ],
+     "canon": "Racing Santander",
+     "key": "racing",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2012.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro23082/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2011",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2012-13",
+   "startYear": 2012,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Zaragoza",
+      "Real Zaragoza",
+      "Real Zaragoza"
+     ],
+     "canon": null,
+     "key": "zaragoza",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2013.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro29917/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2012",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2013-14",
+   "startYear": 2013,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2014.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro38893/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2013",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2014-15",
+   "startYear": 2014,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Córdoba CF",
+      "Córdoba CF",
+      "Córdoba"
+     ],
+     "canon": null,
+     "key": "cordoba",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2015.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro47268/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2014",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2015-16",
+   "startYear": 2015,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas",
+      "Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2016.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro57057/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2015",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2016-17",
+   "startYear": 2016,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas",
+      "Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CD Leganés",
+      "CD Leganés",
+      "Leganés"
+     ],
+     "canon": null,
+     "key": "leganes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Sporting de Gijón",
+      "Sporting Gijón",
+      "Sporting Gijón"
+     ],
+     "canon": null,
+     "key": "sporting",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2017.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/co97/spain-primera-division/se20829/2016-2017/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2016",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2017-18",
+   "startYear": 2017,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CD Leganés",
+      "CD Leganés",
+      "Leganés"
+     ],
+     "canon": null,
+     "key": "leganes",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RC Deportivo (La Coruña)",
+      "Deportivo A Coruña",
+      "Deportivo"
+     ],
+     "canon": "Deportivo",
+     "key": "deportivo",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas",
+      "Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Málaga CF",
+      "Málaga CF",
+      "Málaga"
+     ],
+     "canon": "Malaga",
+     "key": "malaga",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2018.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro73064/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2017",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2018-19",
+   "startYear": 2018,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "CD Leganés",
+      "CD Leganés",
+      "Leganés"
+     ],
+     "canon": null,
+     "key": "leganes",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "SD Huesca",
+      "SD Huesca",
+      "Huesca"
+     ],
+     "canon": null,
+     "key": "huesca",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2019.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro92335/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2018",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2019-20",
+   "startYear": 2019,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "CD Leganés",
+      "CD Leganés",
+      "Leganés"
+     ],
+     "canon": null,
+     "key": "leganes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2020.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro100698/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2019",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2020-21",
+   "startYear": 2020,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF",
+      "Cádiz"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "SD Huesca",
+      "SD Huesca",
+      "Huesca"
+     ],
+     "canon": null,
+     "key": "huesca",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "SD Eibar",
+      "SD Eibar",
+      "Eibar"
+     ],
+     "canon": null,
+     "key": "eibar",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2021.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro109907/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2020",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2021-22",
+   "startYear": 2021,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF",
+      "Cádiz"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2022.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro116777/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2021",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2022-23",
+   "startYear": 2022,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF",
+      "Cádiz"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2023.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro133694/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2022",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2023-24",
+   "startYear": 2023,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas",
+      "Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "Cádiz CF",
+      "Cádiz CF",
+      "Cádiz"
+     ],
+     "canon": null,
+     "key": "cadiz",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "UD Almería",
+      "UD Almería",
+      "Almería"
+     ],
+     "canon": null,
+     "key": "almeria",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Granada CF",
+      "Granada CF",
+      "Granada"
+     ],
+     "canon": null,
+     "key": "granada",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2024.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro150182/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2023",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2024-25",
+   "startYear": 2024,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "CD Leganés",
+      "CD Leganés",
+      "Leganés"
+     ],
+     "canon": null,
+     "key": "leganes",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "UD Las Palmas",
+      "UD Las Palmas",
+      "Las Palmas"
+     ],
+     "canon": null,
+     "key": "las-palmas",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Valladolid",
+      "Real Valladolid",
+      "Real Valladolid"
+     ],
+     "canon": null,
+     "key": "valladolid",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2025.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro209282/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2024",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  },
+  {
+   "season": "2025-26",
+   "startYear": 2025,
+   "size": 20,
+   "tier": "Primera División",
+   "clubs": [
+    {
+     "printed": [
+      "FC Barcelona",
+      "FC Barcelona",
+      "Barcelona"
+     ],
+     "canon": "Barcelona",
+     "key": "barcelona",
+     "pos": 1
+    },
+    {
+     "printed": [
+      "Real Madrid CF",
+      "Real Madrid",
+      "Real Madrid"
+     ],
+     "canon": "Real Madrid",
+     "key": "real-madrid",
+     "pos": 2
+    },
+    {
+     "printed": [
+      "Villarreal CF",
+      "Villarreal CF",
+      "Villarreal"
+     ],
+     "canon": "Villarreal",
+     "key": "villarreal",
+     "pos": 3
+    },
+    {
+     "printed": [
+      "Atlético de Madrid",
+      "Atlético Madrid",
+      "Atlético Madrid"
+     ],
+     "canon": "Atletico Madrid",
+     "key": "atletico-madrid",
+     "pos": 4
+    },
+    {
+     "printed": [
+      "Real Betis Balompié (Sevilla)",
+      "Real Betis",
+      "Real Betis"
+     ],
+     "canon": "Real Betis",
+     "key": "betis",
+     "pos": 5
+    },
+    {
+     "printed": [
+      "RC Celta (Vigo)",
+      "Celta de Vigo",
+      "Celta Vigo"
+     ],
+     "canon": "Celta Vigo",
+     "key": "celta",
+     "pos": 6
+    },
+    {
+     "printed": [
+      "Getafe CF",
+      "Getafe CF",
+      "Getafe"
+     ],
+     "canon": "Getafe",
+     "key": "getafe",
+     "pos": 7
+    },
+    {
+     "printed": [
+      "Rayo Vallecano",
+      "Rayo Vallecano",
+      "Rayo Vallecano"
+     ],
+     "canon": "Rayo Vallecano",
+     "key": "rayo",
+     "pos": 8
+    },
+    {
+     "printed": [
+      "Valencia CF",
+      "Valencia CF",
+      "Valencia"
+     ],
+     "canon": "Valencia",
+     "key": "valencia",
+     "pos": 9
+    },
+    {
+     "printed": [
+      "Real Sociedad (San Sebastián)",
+      "Real Sociedad",
+      "Real Sociedad"
+     ],
+     "canon": "Real Sociedad",
+     "key": "real-sociedad",
+     "pos": 10
+    },
+    {
+     "printed": [
+      "RCD Espanyol (Barcelona)",
+      "RCD Espanyol",
+      "Espanyol"
+     ],
+     "canon": "Espanyol",
+     "key": "espanyol",
+     "pos": 11
+    },
+    {
+     "printed": [
+      "Athletic de Bilbao",
+      "Athletic Club",
+      "Athletic Club"
+     ],
+     "canon": "Athletic Bilbao",
+     "key": "athletic",
+     "pos": 12
+    },
+    {
+     "printed": [
+      "Sevilla FC",
+      "Sevilla FC",
+      "Sevilla"
+     ],
+     "canon": "Sevilla",
+     "key": "sevilla",
+     "pos": 13
+    },
+    {
+     "printed": [
+      "Deportivo Alavés (Vitoria)",
+      "CD Alavés",
+      "Alavés"
+     ],
+     "canon": "Alaves",
+     "key": "alaves",
+     "pos": 14
+    },
+    {
+     "printed": [
+      "Elche CF",
+      "Elche CF",
+      "Elche"
+     ],
+     "canon": "Elche",
+     "key": "elche",
+     "pos": 15
+    },
+    {
+     "printed": [
+      "Levante UD (Valencia)",
+      "Levante UD",
+      "Levante"
+     ],
+     "canon": "Levante",
+     "key": "levante",
+     "pos": 16
+    },
+    {
+     "printed": [
+      "CA Osasuna (Pamplona)",
+      "CA Osasuna",
+      "Osasuna"
+     ],
+     "canon": "Osasuna",
+     "key": "osasuna",
+     "pos": 17
+    },
+    {
+     "printed": [
+      "RCD Mallorca (Palma de M.)",
+      "RCD Mallorca",
+      "Mallorca"
+     ],
+     "canon": null,
+     "key": "mallorca",
+     "pos": 18
+    },
+    {
+     "printed": [
+      "Girona FC",
+      "Girona FC",
+      "Girona"
+     ],
+     "canon": "Girona",
+     "key": "girona",
+     "pos": 19
+    },
+    {
+     "printed": [
+      "Real Oviedo",
+      "Real Oviedo",
+      "Real Oviedo"
+     ],
+     "canon": null,
+     "key": "oviedo",
+     "pos": 20
+    }
+   ],
+   "sources": [
+    {
+     "host": "rsssf.org",
+     "url": "https://www.rsssf.org/tabless/span2026.html",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "worldfootball.net",
+     "url": "https://www.worldfootball.net/competition/ro267177/md38/results-and-standings/",
+     "read": "2026-10-06"
+    },
+    {
+     "host": "espn.com",
+     "url": "https://site.api.espn.com/apis/v2/sports/soccer/esp.1/standings?season=2025",
+     "read": "2026-10-06",
+     "note": "ESPN standings feed behind espn.com/soccer/standings (site.api.espn.com)"
+    }
+   ],
+   "verified": true
+  }
+ ],
+ "selfCheck": {
+  "seasons": 36,
+  "verified": 36,
+  "sizeCheck": "PASS: every season has exactly size clubs in every source (20 for 1990-91 to 1994-95, 22 for 1995-96 and 1996-97, 20 from 1997-98), no club twice",
+  "controls": "CONTROL=membership in build.js swaps Hércules CF for Real Valladolid in worldfootball.net 2010-11: verified falls from 36 to 35 and the season names both clubs. CONTROL=dupe in check.js copies a club over another in 2010-11: the check reports a duplicate club. Both run in memory and never write the ledger.",
+  "churn": [
+   {
+    "from": "1990-91",
+    "to": "1991-92",
+    "out": [
+     "castellon",
+     "betis"
+    ],
+    "in": [
+     "albacete",
+     "deportivo"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1991-92",
+    "to": "1992-93",
+    "out": [
+     "valladolid",
+     "mallorca"
+    ],
+    "in": [
+     "celta",
+     "rayo"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1992-93",
+    "to": "1993-94",
+    "out": [
+     "espanyol",
+     "cadiz",
+     "burgos"
+    ],
+    "in": [
+     "racing",
+     "valladolid",
+     "lleida"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1993-94",
+    "to": "1994-95",
+    "out": [
+     "rayo",
+     "lleida",
+     "osasuna"
+    ],
+    "in": [
+     "betis",
+     "espanyol",
+     "compostela"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1994-95",
+    "to": "1995-96",
+    "out": [
+     "logrones"
+    ],
+    "in": [
+     "rayo",
+     "merida",
+     "salamanca"
+    ],
+    "balanced": true,
+    "note": "league size changed 20 to 22, found in both counted sources"
+   },
+   {
+    "from": "1995-96",
+    "to": "1996-97",
+    "out": [
+     "albacete",
+     "merida",
+     "salamanca"
+    ],
+    "in": [
+     "extremadura",
+     "hercules",
+     "logrones"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1996-97",
+    "to": "1997-98",
+    "out": [
+     "rayo",
+     "extremadura",
+     "sevilla",
+     "hercules",
+     "logrones"
+    ],
+    "in": [
+     "mallorca",
+     "salamanca",
+     "merida"
+    ],
+    "balanced": true,
+    "note": "league size changed 22 to 20, found in both counted sources"
+   },
+   {
+    "from": "1997-98",
+    "to": "1998-99",
+    "out": [
+     "compostela",
+     "merida",
+     "sporting"
+    ],
+    "in": [
+     "alaves",
+     "extremadura",
+     "villarreal"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1998-99",
+    "to": "1999-00",
+    "out": [
+     "extremadura",
+     "villarreal",
+     "tenerife",
+     "salamanca"
+    ],
+    "in": [
+     "rayo",
+     "malaga",
+     "numancia",
+     "sevilla"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "1999-00",
+    "to": "2000-01",
+    "out": [
+     "betis",
+     "atletico-madrid",
+     "sevilla"
+    ],
+    "in": [
+     "villarreal",
+     "las-palmas",
+     "osasuna"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2000-01",
+    "to": "2001-02",
+    "out": [
+     "oviedo",
+     "racing",
+     "numancia"
+    ],
+    "in": [
+     "betis",
+     "sevilla",
+     "tenerife"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2001-02",
+    "to": "2002-03",
+    "out": [
+     "las-palmas",
+     "tenerife",
+     "zaragoza"
+    ],
+    "in": [
+     "atletico-madrid",
+     "racing",
+     "recreativo"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2002-03",
+    "to": "2003-04",
+    "out": [
+     "recreativo",
+     "alaves",
+     "rayo"
+    ],
+    "in": [
+     "zaragoza",
+     "albacete",
+     "murcia"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2003-04",
+    "to": "2004-05",
+    "out": [
+     "valladolid",
+     "celta",
+     "murcia"
+    ],
+    "in": [
+     "getafe",
+     "levante",
+     "numancia"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2004-05",
+    "to": "2005-06",
+    "out": [
+     "levante",
+     "numancia",
+     "albacete"
+    ],
+    "in": [
+     "celta",
+     "alaves",
+     "cadiz"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2005-06",
+    "to": "2006-07",
+    "out": [
+     "alaves",
+     "cadiz",
+     "malaga"
+    ],
+    "in": [
+     "recreativo",
+     "levante",
+     "gimnastic"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2006-07",
+    "to": "2007-08",
+    "out": [
+     "celta",
+     "real-sociedad",
+     "gimnastic"
+    ],
+    "in": [
+     "almeria",
+     "valladolid",
+     "murcia"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2007-08",
+    "to": "2008-09",
+    "out": [
+     "zaragoza",
+     "murcia",
+     "levante"
+    ],
+    "in": [
+     "malaga",
+     "sporting",
+     "numancia"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2008-09",
+    "to": "2009-10",
+    "out": [
+     "betis",
+     "numancia",
+     "recreativo"
+    ],
+    "in": [
+     "zaragoza",
+     "tenerife",
+     "xerez"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2009-10",
+    "to": "2010-11",
+    "out": [
+     "valladolid",
+     "tenerife",
+     "xerez"
+    ],
+    "in": [
+     "real-sociedad",
+     "levante",
+     "hercules"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2010-11",
+    "to": "2011-12",
+    "out": [
+     "deportivo",
+     "hercules",
+     "almeria"
+    ],
+    "in": [
+     "betis",
+     "rayo",
+     "granada"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2011-12",
+    "to": "2012-13",
+    "out": [
+     "villarreal",
+     "sporting",
+     "racing"
+    ],
+    "in": [
+     "valladolid",
+     "celta",
+     "deportivo"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2012-13",
+    "to": "2013-14",
+    "out": [
+     "mallorca",
+     "deportivo",
+     "zaragoza"
+    ],
+    "in": [
+     "villarreal",
+     "elche",
+     "almeria"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2013-14",
+    "to": "2014-15",
+    "out": [
+     "osasuna",
+     "valladolid",
+     "betis"
+    ],
+    "in": [
+     "deportivo",
+     "eibar",
+     "cordoba"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2014-15",
+    "to": "2015-16",
+    "out": [
+     "elche",
+     "almeria",
+     "cordoba"
+    ],
+    "in": [
+     "betis",
+     "las-palmas",
+     "sporting"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2015-16",
+    "to": "2016-17",
+    "out": [
+     "rayo",
+     "getafe",
+     "levante"
+    ],
+    "in": [
+     "alaves",
+     "leganes",
+     "osasuna"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2016-17",
+    "to": "2017-18",
+    "out": [
+     "sporting",
+     "osasuna",
+     "granada"
+    ],
+    "in": [
+     "getafe",
+     "girona",
+     "levante"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2017-18",
+    "to": "2018-19",
+    "out": [
+     "deportivo",
+     "las-palmas",
+     "malaga"
+    ],
+    "in": [
+     "valladolid",
+     "huesca",
+     "rayo"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2018-19",
+    "to": "2019-20",
+    "out": [
+     "girona",
+     "huesca",
+     "rayo"
+    ],
+    "in": [
+     "granada",
+     "osasuna",
+     "mallorca"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2019-20",
+    "to": "2020-21",
+    "out": [
+     "leganes",
+     "mallorca",
+     "espanyol"
+    ],
+    "in": [
+     "cadiz",
+     "elche",
+     "huesca"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2020-21",
+    "to": "2021-22",
+    "out": [
+     "huesca",
+     "valladolid",
+     "eibar"
+    ],
+    "in": [
+     "rayo",
+     "espanyol",
+     "mallorca"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2021-22",
+    "to": "2022-23",
+    "out": [
+     "granada",
+     "levante",
+     "alaves"
+    ],
+    "in": [
+     "girona",
+     "almeria",
+     "valladolid"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2022-23",
+    "to": "2023-24",
+    "out": [
+     "valladolid",
+     "espanyol",
+     "elche"
+    ],
+    "in": [
+     "alaves",
+     "las-palmas",
+     "granada"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2023-24",
+    "to": "2024-25",
+    "out": [
+     "cadiz",
+     "almeria",
+     "granada"
+    ],
+    "in": [
+     "espanyol",
+     "leganes",
+     "valladolid"
+    ],
+    "balanced": true
+   },
+   {
+    "from": "2024-25",
+    "to": "2025-26",
+    "out": [
+     "leganes",
+     "las-palmas",
+     "valladolid"
+    ],
+    "in": [
+     "elche",
+     "levante",
+     "oviedo"
+    ],
+    "balanced": true
+   }
+  ],
+  "problems": []
+ }
+}
