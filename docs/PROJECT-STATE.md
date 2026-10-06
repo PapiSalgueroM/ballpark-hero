@@ -1,3 +1,21 @@
+## Codex1063 browser repairs, 2026-10-06
+
+Preparation37436921766 is still not acceptance. All16 built readers passed,
+including actual link graph and171-URL ratchet. Stronger22combat/controller
+outcomes and28 effective controls passed. All8 real font faces loaded on all4
+native profiles and setup regions were captured. Native had not played fights:
+its clipping control assumed exactviewportcoordinates despite an ancestor
+transform, and select labels included option text. Control now proves measured
+offscreen movement; actual selects get explicit accessible style names.
+Full metadata assertions passed171pages/32chunks/133entries but wrapper still
+caught an external request. The harness now aborts all nonlocal requests before
+its guard, leaves database reads pending as before, closes WebSockets locally,
+and prints any remaining receipt for diagnosis. No transport guard relaxed.
+Artifact11398899820 ZIP SHA256b7b245d66c84b96329c610a643f45a535f1724d3f49b422b4818e98b3eed033e
+verified. No failed generated outputs copied. Third remote preparation follows.
+No product PR or live claim; Claude still owns1062 publication. No localruntime
+or productionDB. Root held drafts/seven stashes safe. Next1064 unclaimed.
+
 ## Codex1063 first remote findings and repairs, 2026-10-06
 
 Preparation37435349135 failed and is not acceptance. Type/build, generation,

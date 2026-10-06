@@ -143,8 +143,12 @@ try {
         const restore = () => target.evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), original);
         await target.evaluate(el => { el.style.minHeight = '0'; el.style.height = '20px'; el.style.padding = '0'; });
         const small = await measure(page); assert(small.controls.some(r => r.height === 20)); assert.throws(() => geometry(small, profile, 'control-size'), /below44px/); await restore(); report.controls.push('action-size');
-        await target.evaluate(el => { el.style.position = 'fixed'; el.style.top = '-90px'; }); const clipped = await measure(page);
-        assert(clipped.controls.some(r => r.y === -90)); assert.throws(() => geometry(clipped, profile, 'control-clipping'), /action clipped/); await restore(); report.controls.push('action-clipping');
+        const beforeClip = await target.boundingBox(); assert(beforeClip);
+        await target.evaluate(el => { el.style.position = 'fixed'; el.style.top = `${-2 * innerHeight}px`; });
+        const moved = await target.boundingBox(), clipped = await measure(page);
+        assert(moved && moved.y < beforeClip.y - beforeClip.height && moved.y + moved.height < 0, 'Clipping control moves the actual target fully outside the viewport');
+        assert.throws(() => geometry(clipped, profile, 'control-clipping'), /action clipped/); await restore();
+        assert.equal(await target.getAttribute('style'), original); geometry(await measure(page), profile, 'clipping-restored'); report.controls.push('action-clipping');
         const bodyStyle = await page.locator('body').getAttribute('style'); await page.locator('body').evaluate((el, width) => { el.style.minWidth = `${width + 80}px`; }, profile.width);
         const wide = await measure(page); assert(wide.scrollWidth > profile.width + 60); assert.throws(() => geometry(wide, profile, 'control-overflow'), /horizontal overflow/);
         await page.locator('body').evaluate((el, style) => style === null ? el.removeAttribute('style') : el.setAttribute('style', style), bodyStyle); report.controls.push('horizontal-overflow');

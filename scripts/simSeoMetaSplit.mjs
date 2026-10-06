@@ -371,11 +371,13 @@ const ORIGIN = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, args: ['--no-sandbox'] });
 async function newPage() {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 900 }, timezoneId: 'America/New_York' });
+  await ctx.routeWebSocket('**/*', socket => socket.close());
   await ctx.addInitScript(clockScript(SAMPLE_DAYS[0], { setPrerenderFlag: true }));
   const page = await ctx.newPage();
   await page.addInitScript(() => {
     try { localStorage.clear(); sessionStorage.clear(); } catch { /* blocked, nothing to clear */ }
   });
+  await page.route('**/*', route => new URL(route.request().url()).origin === ORIGIN ? route.continue() : route.abort());
   await page.route('**://*.supabase.co/**', () => { /* never settled on purpose, as the prerenderer leaves it */ });
   await page.route('**://*.googletagmanager.com/**', r => r.abort());
   await page.route('**://pagead2.googlesyndication.com/**', r => r.abort());
@@ -629,5 +631,9 @@ if (CONTROL) {
 if (red.length) {
   console.error(`simSeoMetaSplit: RED in section${red.length === 1 ? '' : 's'} ${red.join(', ')}`);
   process.exit(1);
+}
+if (process.env.SIM_OFFLINE_RECEIPT && fs.existsSync(process.env.SIM_OFFLINE_RECEIPT)) {
+  const traffic = fs.readFileSync(process.env.SIM_OFFLINE_RECEIPT, 'utf8').trim();
+  if (traffic) console.error(`simSeoMetaSplit transport receipt: ${traffic}`);
 }
 console.log(`simSeoMetaSplit: green. ${compared} pages drawn from the split build carry the saved head in every field a crawler reads, every game page fetched only its own part, and all ${mainRoutes} routes in ${BASE_REF}'s table are served with the same title and description.`);

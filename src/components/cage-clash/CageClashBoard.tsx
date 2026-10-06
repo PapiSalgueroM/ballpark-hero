@@ -74,7 +74,7 @@ export function CageClashBoard({ onHelp, helpOpen }: { onHelp: () => void; helpO
     </div>
     {!fight ? <>
       <div className="grid grid-cols-2 gap-2">
-        {([{ title: 'Your style', value: style, change: setStyle }, { title: 'Opponent style', value: opponent, change: setOpponent }]).map(({ title, value, change }) => <label key={title} className="space-y-1 text-[11px] font-bold">{title}<select className="block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs" value={value} onChange={event => change(event.target.value as CageStyle)}><option value="balanced">Balanced</option><option value="striker">Striker</option><option value="grappler">Grappler</option></select></label>)}
+        {([{ title: 'Your style', value: style, change: setStyle }, { title: 'Opponent style', value: opponent, change: setOpponent }]).map(({ title, value, change }) => <label key={title} className="space-y-1 text-[11px] font-bold">{title}<select aria-label={title} className="block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs" value={value} onChange={event => change(event.target.value as CageStyle)}><option value="balanced">Balanced</option><option value="striker">Striker</option><option value="grappler">Grappler</option></select></label>)}
       </div>
       <p className="text-[11px] leading-relaxed text-muted-foreground">Win by KO, submission or points over three 45-second rounds. Strikers hit harder; grapplers control the mat. Low gas makes attacks weaker.</p>
       <p className="rounded-lg bg-muted px-2 py-1.5 text-[11px] leading-relaxed"><strong>Try this:</strong> move close, jab, then release to recover. Guard incoming shots. Grapple to clinch, grapple again to take down, then pass and hold Submit.</p>
