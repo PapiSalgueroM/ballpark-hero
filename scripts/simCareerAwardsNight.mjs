@@ -121,6 +121,15 @@
  * every control turns its own section red (winnernottop also breaks sections
  * 1 and 6, speechleak sections 1 and 3, effectonly sections 1 and 2,
  * nominalnight section 2).
+ * Round 1023, measured on its branch: numberback turns 1, 3 and 6 red;
+ * wcleaves, wctwice, wcnominal and wccardmute turn 7 red. Two old controls
+ * went quiet once the log line's number became the measured move, and the
+ * checks were tightened rather than the controls dropped: speechleak's line
+ * now describes its leaked move truly, so section 3 also requires every meter
+ * to move by exactly its steps away from the caps (red again: 1, 2 and 3);
+ * numberedline's card line now carries a true number, so sections 6 and 7
+ * require the card's line to be words only, the numbers once in the moved
+ * line beside it (red again: 6).
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
@@ -555,6 +564,11 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
         for (const st of steps) want[st.meter] = Math.round(((want[st.meter] ?? 0) + st.delta) * 100) / 100;
         const moved = ids.filter(k => s[k] !== before[k]);
         if (moved.sort().join() !== Object.keys(want).sort().join()) bad.keys += 1;
+        /* Round 1023: the line's number is measured now, so a speech that
+           moved the wrong amount would describe itself truly; away from the
+           caps (every meter here sits mid range) each meter must move by
+           exactly its steps. */
+        else if (moved.some(k => Math.round((s[k] - before[k]) * 100) / 100 !== want[k])) bad.keys += 1;
         for (const m of line.matchAll(labelRe)) {
           mentions += 1;
           const id = labelToId[m[1]];
@@ -565,7 +579,7 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
       }
       const note = opt.risk ? `, came up ${hits} of 250 on a stated ${Math.round(opt.risk.chance * 100)}%` : '';
       console.log(`   ${kind.padEnd(11)} ${opt.id.padEnd(18)} moves ${[...new Set([...opt.effect, ...(opt.risk ? [...opt.risk.hit, ...opt.risk.miss] : [])].map(x => x.meter))].join(', ')}${note}`);
-      check(bad.keys === 0, `${opt.id}: ${bad.keys} of 250 moved a meter it does not name, or missed one it does`);
+      check(bad.keys === 0, `${opt.id}: ${bad.keys} of 250 moved a meter it does not name, missed one it does, or moved one by other than its steps`);
       check(bad.words === 0, `${opt.id}: ${bad.words} of 250 printed a number it did not do, or no single log line`);
       if (opt.risk) {
         /* Seeded, so this is the same count every run. 250 draws put one
@@ -857,6 +871,10 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       }
       if (claims(logged).some(c => did[labelToId[c.label]] !== c.delta)) logLies += 1;
       for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card ${b}`);
+      /* Round 1023: the log line's number is true now, but the card keeps
+         its words and its numbers apart: the line is words, the moved line
+         beside it carries every number once. */
+      if (claims(sp.line).length) speechLies.push(`${opt.id} on real win ${k}: the card's line prints a number beside the moved line`);
       const shown = strip(B.cards.bdor(out.pendingBallonDor, out));
       if (!shown.includes(sp.line) || !shown.includes(sp.moved)) speechLies.push(`${opt.id} on real win ${k}: the card does not show the line and what it moved`);
     }
@@ -907,6 +925,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
       for (const st of [...opt.effect, ...(opt.risk ? opt.risk[outcome] : [])]) asked[st.meter] = (asked[st.meter] ?? 0) + st.delta;
       if (Object.keys(asked).some(m => (did[m] ?? 0) !== asked[m])) wcCut += 1;
       for (const b of lies(`${sp.line} ${sp.moved}`, did, sp.moved)) wcBad.push(`${tag}: the card ${b}`);
+      if (claims(sp.line).length) wcBad.push(`${tag}: the card's line prints a number beside the moved line`);
       for (const b of lies(logged, did, logged).filter(x => !x.includes('never says so'))) wcBad.push(`${tag}: the log line ${b}`);
       if (soccer.worldCupSpeechOpen(out)) wcBad.push(`${tag}: still offers a speech after one`);
       const other = WC.find(o => o.id !== opt.id).id;
@@ -936,7 +955,7 @@ console.log('\n6) The ceremony card says what the night does, and a win offers t
     const t = real.pendingTournament;
     const legacy = { ...real, pendingTournament: null, pendingWorldCup: { year: t.year, nation: t.nation, matches: [], playerApps: 7, playerGoals: 4, playerAssists: 2, playerAvgRating: 7.9, result: 'Winner', bestPlayer: false } };
     const legacyOut = soccer.giveWorldCupSpeech(legacy, 'quiet_lap');
-    const legacyText = strip(B.cards.worldCup(legacyOut.pendingWorldCup, legacyOut));
+    const legacyText = legacyOut.pendingWorldCup ? strip(B.cards.worldCup(legacyOut.pendingWorldCup, legacyOut)) : '';
     check(legacyOut.phase === 'world_cup' && legacyOut.pendingWorldCup?.speech?.id === 'quiet_lap' && soccer.giveWorldCupSpeech(legacyOut, 'tears') === legacyOut
       && legacyText.includes(legacyOut.pendingWorldCup.speech.moved) && /Continue/.test(legacyText) && WC.every(o => !legacyText.includes(o.label)),
       'a pre Round 124 World Cup save does not keep its speech on the card the same way');

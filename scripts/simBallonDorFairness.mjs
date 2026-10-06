@@ -54,11 +54,32 @@
    controls: 20 of 20 red (nodominance wins 0 to 3.6%, nofloor pushes
    monster seasons off the podium on every run).
 
+   ROUND 1023: THE ENGINE NOW JUDGES THE MEN ON SCREEN. The game change the
+   paragraph above reported to the lead is made: calculateBallonDor judges
+   dominance against the nine rivals the card seats (shortlistSize - 1, the
+   player takes the tenth seat), so the off screen tenth man cannot cost a
+   season any more. That turns must-win into an invariant like must-podium:
+   a must-win season outscored the nine on screen by five with a major, the
+   engine calls it dominant by the same field, and the dominance verdict puts
+   it first. So every must-win season must win; the 95% rate floor stays.
+   Measured, base seeds 0xb4110 and 104729k + 834 for k = 1 to 4 (20 seeds):
+     main 1aaba4d5  0xb4110 162 of 163, k1 135 of 137, k2 137 of 137,
+                    k3 132 of 134, k4 139 of 139: 705 of 710, 5 snubs
+     branch         0xb4110 157 of 157, k1 138 of 138, k2 133 of 133,
+                    k3 106 of 106, k4 135 of 135: 669 of 669, none
+   (the run is not the same run on both sides after the first season the
+   rule decides differently, because the difficulty bonus draws only for a
+   season that is not dominant). Every monster season podiumed on both.
+
    NEGATIVE CONTROLS (BDOR_FAIRNESS_CONTROL), each must exit 1:
      nodominance  the engine never calls a season dominant (the Round 54
                   snub machine back): the must-win rate collapses
      nofloor      the podium floor verdict is gone: monster seasons fall
                   off the podium
+     tenthman     Round 1023: the engine judges ten rivals again, the tenth
+                  off the card: on the default seed that is main's run, one
+                  must-win season (35 goals and a major against a card whose
+                  best rival scored 28) finishes third
    Each control refuses to run unless the exact text it replaces is present.
 
    Run: node scripts/simBallonDorFairness.mjs   (BDOR_FAIRNESS_SEED=<n> to
@@ -80,6 +101,8 @@ const CONTROL = process.env.BDOR_FAIRNESS_CONTROL || "";
 const CONTROLS = {
   nodominance: ["  const playerDominant = playerCanContend && (", "  const playerDominant = false && playerCanContend && ("],
   nofloor: ["        if (statMonster && playerRank !== null && playerRank > 3) {", "        if (false && statMonster && playerRank !== null && playerRank > 3) {"],
+  /* Round 1023: the engine judges ten rivals again, one of them off the card. */
+  tenthman: ["  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);", "  const visibleField = allNomineeData.slice(0, 10);"],
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`unknown BDOR_FAIRNESS_CONTROL=${CONTROL} (known: ${Object.keys(CONTROLS).join(", ")})`);
@@ -241,8 +264,12 @@ if (mustWin < 60 || mustPodium < 200) {
   console.log(`\nINCONCLUSIVE: too few dominant seasons to judge (${mustWin} must-win, ${mustPodium} must-podium)`);
   process.exit(2);
 }
-const ok = winRate >= MUST_WIN_FLOOR && offPodium === 0;
+/* Round 1023: the engine judges the nine rivals the card seats, so a season
+   that outscored them by five with a major is dominant by the engine's own
+   rule and the dominance verdict puts it first. Every must-win season wins,
+   the same kind of invariant as the podium floor; the rate floor stays. */
+const ok = winRate >= MUST_WIN_FLOOR && snubs === 0 && offPodium === 0;
 console.log(ok
   ? `\nPASS: ${(winRate * 100).toFixed(1)}% of must-win seasons won, every monster season podiumed`
-  : `\nFAIL: ${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}`);
+  : `\nFAIL: ${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${snubs ? ` ${snubs} must-win seasons lost the award` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}`);
 process.exit(ok ? 0 : 1);
