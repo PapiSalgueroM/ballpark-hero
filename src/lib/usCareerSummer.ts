@@ -75,25 +75,44 @@ const probeStream = (key: string, first: number | null): (() => number) => {
   };
 };
 
-/** Whether any answer to the card can move the rating or its ceiling. Each
- *  answer is tried on copies of the career, never on the career itself and
- *  never on Math.random: once with the first draw at the bottom of the range,
- *  once at the top, and once on a keyed stream, so a raise behind a coin flip
- *  (mlbA_shoulder_scare's 40 percent) is still found. */
-export function movesRating<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): boolean {
+/** What the card's answers do, tried on copies of the career (never the
+ *  career itself, never Math.random): each answer once with the first draw at
+ *  the bottom of the range, once at the top and once on a keyed stream, so a
+ *  raise behind a coin flip (mlbA_shoulder_scare's 40 percent) is still found.
+ *  `rating` is whether any try moved the rating or its ceiling; `morale` is
+ *  the average morale change over every try. A try that throws counts as a
+ *  rating move, so a card that cannot be read is never dealt late. */
+export function probeCard<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): { rating: boolean; morale: number } {
+  let morale = 0, tries = 0;
   for (let k = 0; k < e.options.length; k += 1) {
     for (const first of [0, 0.9999, null]) {
       const probe = JSON.parse(snapshot) as C;
       try {
         e.options[k].apply(probe, probeStream(`rating-probe:${e.id}:${k}:${first}`, first));
       } catch {
-        return true;
+        return { rating: true, morale: 0 };
       }
-      if (probe.ovr !== c.ovr || probe.pot !== c.pot) return true;
+      if (probe.ovr !== c.ovr || probe.pot !== c.pot) return { rating: true, morale: 0 };
+      morale += probe.morale - c.morale;
+      tries += 1;
     }
   }
-  return false;
+  return { rating: false, morale: tries ? morale / tries : 0 };
 }
+
+/** Whether any answer to the card can move the rating or its ceiling. */
+export function movesRating<C extends UsCareerCore>(c: C, e: UsCareerEvent<C>, snapshot: string = JSON.stringify(c)): boolean {
+  return probeCard(c, e, snapshot).rating;
+}
+
+/** A later card whose answers lift morale on average (by more than this) is
+ *  passed over, so the later cards are the summer's give and take. Morale
+ *  feeds every season's form, and measured over 800 careers a sport, later
+ *  cards free to lift it put the median legacy 7 to 11 percent higher and the
+ *  Hall share 2 to 6 points higher in every sport even at an average lift of
+ *  4; at 0 the four sports sit near the one card game (section 6 of
+ *  scripts/simUsCareerSummer.mjs holds them to it). */
+export const LATER_CARD_MORALE_LIFT = 0;
 
 /** Deal the summer onto the career: the ids, and every dealt card stamped in
  *  the ledger (press moments never are). Mutates c, which is always the
@@ -134,18 +153,23 @@ export function dealSummer<C extends UsCareerCore>(c: C, sport: UsCareerSport<C>
   const taken = new Set<string>([ledgerKey(first)]);
   for (let i = 1; i < knob.cards; i += 1) {
     const r = slotStream(c, sport.slug, year, i);
-    const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big');
-    /* Card 1 is the summer's one call that can move the rating. A card any of
-       whose answers moves it is passed over in the later slots, so three
-       cards a summer never mean three rating raises a summer, and every
-       button still does exactly what it says (scripts/simUsCareerSummer.mjs,
-       section 6, measured the careers without this: peak OVR 4 to 7 points
-       higher and the Hall share doubled). */
+    /* The later slots are the rest of your life around the one big call.
+       Card 1 is the only card that can move the rating, so a card any of
+       whose answers moves it is passed over here, and every button still
+       does exactly what it says (scripts/simUsCareerSummer.mjs, section 6,
+       measured the careers without this: peak OVR 4 to 7 points higher and
+       the Hall share doubled). The integrity arc stays with card 1 too: the
+       corruption deck is dealt there only, as it always was, because arcs
+       opened by the later slots came back as card 1's arc cards (MLB's PED
+       clinic) and lifted the rating that way. */
+    const deck = sport.eventDeck(c, r).filter(e => e.press !== 'big' && !e.corruption);
     const passed = new Set<string>(taken);
     let e: UsCareerEvent<C> | undefined;
     for (;;) {
       [e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);
-      if (!e || !movesRating(c, e, snapshot)) break;
+      if (!e) break;
+      const fx = probeCard(c, e, snapshot);
+      if (!fx.rating && fx.morale <= LATER_CARD_MORALE_LIFT) break;
       passed.add(ledgerKey(e));
     }
     /* A slot that finds nothing ends the deal, so ids[i] was always dealt

@@ -129,6 +129,8 @@ export interface UsCareerEvent<C> {
   cooldown?: number;
   story?: string;
   press?: 'big' | 'small';
+  /** Round 1038: set on the corruption deck's cards; the summer deals them as card 1 only. */
+  corruption?: boolean;
 }
 
 /** One thing in the shop. The seven aisles are the same in every sport. */

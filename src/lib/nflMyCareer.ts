@@ -308,6 +308,8 @@ export interface CareerEvent {
   /** Round 1038: set on the press room's card only. Press moments react to
       the season, so the summer's cooldowns never hold them out. */
   press?: 'big' | 'small';
+  /** Round 1038: set on the corruption deck's cards; the summer deals them as card 1 only. */
+  corruption?: boolean;
   options: { label: string; effect: string; apply: (c: CareerState, rng: () => number) => string }[];
 }
 
@@ -1014,6 +1016,8 @@ function buildNflDeck(c: CareerState, rng: () => number, stopAtBig: boolean): { 
   deck.push(...getNflLifeEventsB(c, rng));
   deck.push(...getNflLifeEventsC(c, rng)); /* Round 917: 36 cards, position, age, role and roster rules */
   const corrupt = getNflCorruptionEvents(c, rng);
+  /* Round 1038: marked, so the summer keeps the integrity arc to card 1. */
+  for (const e of corrupt) e.corruption = true;
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['book', 'bounty', 'peds', 'agentSkim', 'wash'].includes(k));
   return { big, deck, corrupt, arcOpen };

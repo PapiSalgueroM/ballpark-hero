@@ -249,6 +249,8 @@ export interface MlbCareerEvent {
   story?: string;
   /** Round 1038: the press room's card only; cooldowns never hold it out. */
   press?: 'big' | 'small';
+  /** Round 1038: set on the corruption deck's cards; the summer deals them as card 1 only. */
+  corruption?: boolean;
 }
 
 /* ---------- Round 173: era starts, his "add eras to every sport" ask ---------- */
@@ -858,6 +860,8 @@ function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean):
   deck.push(...getMlbLifeEventsB(c, rng));
   deck.push(...getMlbLifeEventsC(c, rng)); /* Round 919: deck C, 36 cards, draws nothing from rng */
   const corrupt = getMlbCorruptionEvents(c, rng);
+  /* Round 1038: marked, so the summer keeps the integrity arc to card 1. */
+  for (const e of corrupt) e.corruption = true;
   deck.push(...corrupt);
   const arcOpen = Object.keys(c.lifeFlags ?? {}).some(k => ['signs', 'sticky', 'clinic', 'tips', 'academy', 'wash'].includes(k));
   return { big, deck, corrupt, arcOpen };
