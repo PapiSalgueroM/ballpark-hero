@@ -96,6 +96,10 @@ import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoard
    scope, so the cycle back into this file stays evaluation safe. */
 import { answerBreak, backFromDuty, endRest, ensureIntl, fireDueBreaks, freshIntl, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlDuty } from '@/lib/clubManagerInternationals';
+/* Round 1021: the late 2020-21 start's summer window. Called inside
+   startCareer only, never at module scope: the calendar module imports this
+   one, the same loop the internationals module already closes. */
+import { lateSummerWindowWeeks } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -2025,6 +2029,11 @@ export interface CareerState {
    *  through early season fixtures, so listing a man and waiting for offers
    *  is now an actual strategy instead of a single-screen gamble. */
   windowWeeksLeft?: number;
+  /** Round 1021: a late season's summer window length in my matches (the
+   *  2020-21 start, see seasonPlanOf in clubManagerCalendar.ts), kept so the
+   *  calendar can place the deadline after the window has shut. Absent on
+   *  every other season, which runs the usual four. */
+  summerWindow?: { season: number; matchWeeks: number };
   /** Round 619: men with no club, carried across weeks and seasons. */
   freeAgents?: FreeAgent[];
   /** Round 619: what ending a contract early still costs after he has gone. */
@@ -2632,6 +2641,12 @@ export interface LeagueRules {
    *  August to May calendar, which a calendar year league shares by
    *  simplification (MLS since Round 72). */
   season: 'autumnSpring' | 'calendarYear';
+  /** Round 1021: a season that really started late, drawn on its real dates
+   *  in the one world year it was played (kickoff.y): the Saturday of the
+   *  opening weekend and the day the summer window shut. Every other season
+   *  of the league opens on the usual August Saturday. See seasonPlanOf in
+   *  clubManagerCalendar.ts. */
+  lateStart?: { kickoff: { y: number; m: number; d: number }; summerClose: { y: number; m: number; d: number } };
   /** What the engine plays more simply than the real league, in words,
    *  where the verified notes on the league say so. */
   simplified?: string;
@@ -2647,6 +2662,31 @@ const SPLIT_SIMPLIFIED = 'The real league splits into groups part way through th
 /* Round 971: the 2020-21 tables fed the first Conference League (2021-22),
    which a historic era's Europe does not play. */
 const CONFERENCE_LEAGUE_UNPLAYED = 'The Conference League place this table really earned (the competition began the season after) is not played.';
+/* Round 1021: 2020-21 started late. The pandemic pushed the end of 2019-20
+   into August, so the big five opened between late August and mid September
+   and the summer window ran to 5 October. Each 2020 row's lateStart is that
+   league's opening Saturday, two sources each, read 2026-10-05: RSSSF's
+   season pages (tablese/eng2021, tabless/span2021, tablesi/ital2021,
+   tablesd/duit2021, tablesf/fran2021) and football-data.co.uk's 2020-21
+   match files (mmz4281/2021: E0, SP1, I1, D1, F1), which agree on every date.
+     Premier League  Saturday 12 September 2020, Fulham 0-3 Arsenal first
+                     (also BBC Sport 53530479, 24 July 2020, "seasons to start
+                     on 12 September", and Sky Sports 11927589).
+     La Liga         Saturday 12 September 2020, Eibar 0-0 Celta first.
+     Serie A         Saturday 19 September 2020, Fiorentina 1-0 Torino first.
+     Bundesliga      Friday 18 September 2020 (Bayern against Schalke), the
+                     rest on Saturday 19 September, which is the day drawn.
+     Ligue 1         Friday 21 August 2020 (Bordeaux 0-0 Nantes), the rest
+                     on Saturday 22 August, which is the day drawn.
+   The summer window shut at 23:00 on Monday 5 October 2020
+   (premierleague.com news 1725887, "Dates for summer 2020 transfer window
+   agreed": "starting on 27 July and ending on 5 October"; BBC Sport 53417773;
+   Sky Sports 11927589, "will close on Monday October 5 at 11pm"), and the
+   other four leagues shut the same day (dated 5 October 2020 deals into
+   Italy, Germany and France in Maxifoot's summer 2020 tables, the records
+   scripts/bakeEra2020.mjs cites as MF-IT, MF-DE and MF-FR). All five ended
+   on the weekend of 22 and 23 May 2021 (the same two sources). */
+const SUMMER_2020_CLOSE = { y: 2020, m: 10, d: 5 };
 
 export const LEAGUE_RULES: Record<string, LeagueRules> = {
   premier: { nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 6 }, drop: 3, tiebreak: 'gdGf', secondTier: 'championship', ladder: 'top', season: 'autumnSpring' },
@@ -2921,21 +2961,26 @@ export const LEAGUE_RULES: Record<string, LeagueRules> = {
        rows claim none. */
   premier2020: {
     nationId: 'england', flag: 'England', cup: 'FA Cup', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'gdGf', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 12 }, summerClose: SUMMER_2020_CLOSE },
     simplified: CONFERENCE_LEAGUE_UNPLAYED,
   },
   laliga2020: {
     nationId: 'spain', flag: 'Spain', cup: 'Copa del Rey', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 12 }, summerClose: SUMMER_2020_CLOSE },
   },
   seriea2020: {
     nationId: 'italy', flag: 'Italy', cup: 'Coppa Italia', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 3, tiebreak: 'h2h', ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 19 }, summerClose: SUMMER_2020_CLOSE },
     simplified: CONFERENCE_LEAGUE_UNPLAYED,
   },
   bundesliga2020: {
     nationId: 'germany', flag: 'Germany', cup: 'DFB-Pokal', europe: { ucl: 4, uel: 5, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 9, d: 19 }, summerClose: SUMMER_2020_CLOSE },
     simplified: `The real relegation playoff (sixteenth against the 2. Bundesliga's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
   },
   ligue12020: {
     nationId: 'france', flag: 'France', cup: 'Coupe de France', europe: { ucl: 3, uel: 4, uecl: 0 }, drop: 2, ladder: 'top', season: 'autumnSpring',
+    lateStart: { kickoff: { y: 2020, m: 8, d: 22 }, summerClose: SUMMER_2020_CLOSE },
     simplified: `The real relegation playoff (eighteenth against Ligue 2's third) is not played: two go straight down. ${CONFERENCE_LEAGUE_UNPLAYED}`,
   },
 };
@@ -16566,6 +16611,13 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureSetPieces(state);
   /* Round 978: this season's international windows. */
   state.intl = freshIntl(state);
+  /* Round 1021: a season that started late keeps its summer window open to
+     the real deadline (5 October 2020), however many matches that is. */
+  const lateWeeks = lateSummerWindowWeeks(state);
+  if (lateWeeks !== null) {
+    state.windowWeeksLeft = lateWeeks;
+    state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
+  }
   generateHeadlines(state);
   return state;
 }

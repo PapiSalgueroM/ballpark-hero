@@ -87,7 +87,7 @@ import { nationalityOf } from '@/data/playerNationalities';
 import { NATION_CONFED } from '@/lib/soccerInternational';
 import type { Confederation } from '@/lib/soccerInternational';
 import { eraRosters } from '@/lib/clubManagerEras';
-import { addDays, dateKey, dateOfEntries, dayOfWeek, shortDate, worldYearOf } from '@/lib/clubManagerCalendar';
+import { addDays, dateKey, dayOfWeek, entryDatesOf, shortDate, worldYearOf } from '@/lib/clubManagerCalendar';
 import type { CalDate } from '@/lib/clubManagerCalendar';
 
 /* ================================================================== */
@@ -413,6 +413,11 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
   const who = [...byNation].map(([nation, names]) => `${nation}: ${listNames(names)}`).join('; ');
   const hurt = going.filter(c => c.injuredWeeks > 0);
   const fit = going.filter(c => c.injuredWeeks === 0);
+  /* Round 1021: a season that started late (2020-21) can meet its first
+     window before a ball is kicked, so the men went from preseason. */
+  const when = brk.atWeek === 0
+    ? 'and it comes before your first game of the season, so they went from preseason'
+    : 'and your fixtures do not stop for it, so they went straight after your last game';
   const back = brk.backOpponent ? `the ${brk.backOpponent} game` : 'the next game';
   const hurtLine = hurt.length
     ? ` ${listNames(hurt.map(c => c.name))} picked up a knock away and ${hurt.length === 1 ? 'is' : 'are'} out for a bit.`
@@ -433,7 +438,7 @@ export function breakMessage(brk: IntlBreak): IntlMessage | null {
     playerId: '',
     /* The window's dates are the window's, never the time the men are away:
        the fixture list plays on through a window, so the note says so. */
-    text: `International break: the window runs ${brk.label}, and your fixtures do not stop for it, so they went straight after your last game. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
+    text: `International break: the window runs ${brk.label}, ${when}. Away with their countries (${who}). They are back for ${back}.${fit.length ? playedLine : ''}${longHaul}${hurtLine}${ask}`,
     options: fit.length
       ? [
         { label: 'Rest the ones who are spent', effect: 'restIntl' },
@@ -461,7 +466,7 @@ export function fireDueBreaks(state: CareerState): IntlMessage[] {
   const backWeek = myNextMatchWeek(state, state.week);
   if (backWeek < 0) return [];
   const worldYear = worldYearOf(state);
-  const dates = dateOfEntries(worldYear, state.calendar);
+  const dates = entryDatesOf(state);
   const nextKey = dateKey(dates[backWeek]);
   const out: IntlMessage[] = [];
   for (const w of intlWindowsFor(worldYear)) {

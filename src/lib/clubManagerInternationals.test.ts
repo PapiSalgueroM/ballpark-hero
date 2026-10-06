@@ -107,6 +107,16 @@ describe('who goes', () => {
     expect(breakMessage({ windowId: 'x', atWeek: 0, label: 'y', backWeek: 1, backOpponent: null, called: [] })).toBeNull();
   });
 
+  /* Round 1021: 2020-21 starts late, so its first window can come before the first game. */
+  it('says the men went from preseason when the break comes before the first game', () => {
+    const called = callUpsFor(s, { id: '2026-sepoct', matches: 4 });
+    const pre = breakMessage({ windowId: '2026-sepoct', atWeek: 0, label: '7 to 15 Sep', backWeek: 0, backOpponent: 'Everton', called });
+    expect(pre?.text).toContain('before your first game of the season, so they went from preseason');
+    expect(pre?.text).not.toContain('your last game');
+    const mid = breakMessage({ windowId: '2026-sepoct', atWeek: 6, label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton', called });
+    expect(mid?.text).toContain('so they went straight after your last game');
+  });
+
   it('says the rest watched from the bench only when somebody did', () => {
     const called = callUpsFor(s, { id: '2026-sepoct', matches: 4 }).slice(0, 3);
     const brk = { windowId: '2026-sepoct', atWeek: 6, label: '21 Sep to 6 Oct', backWeek: 7, backOpponent: 'Everton' };

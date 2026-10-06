@@ -55,6 +55,20 @@
         capitals or digits and tell Manchester's two clubs apart.
      5) The grid's shape: seven columns, never more than six rows, every day
         of every month of the season exactly once, today exactly once.
+     6) Round 1021, the late season. 2020-21 opens on each big five league's
+        real Saturday (12 and 19 September, 22 August), its dates only ever
+        go forward, the league keeps its full count of rounds, every round
+        moved into midweek sits on a Wednesday between two Saturdays, and the
+        last round lands on or before the real final weekend (22 May 2021)
+        and no more than 21 days before it (measured, deterministic: 0 to 14).
+        Every other save, an era2020 save's second season and an era2015
+        save's sixth (world year 2020) draw the plain rule's dates with a
+        four match window. A save started before this round migrates: it
+        keeps its results and its four match window, every break it played
+        stays behind it, the rest are played once each.
+        Section 3 holds 2020-21 to the same fences as every era (summer
+        deadline within 21 days of 5 October 2020, January opening within
+        10, January deadline within 21).
 
    Negative controls (house rule: prove the checks can fail):
      CM_CALENDAR_CONTROL=drift    bundles a copy of the calendar module whose
@@ -68,7 +82,15 @@
        on the window entry, which is the shape Round 158 shipped. Section 3
        must go red (measured: 9 failures, the January window drawn on 12 to
        25 December for every 18 and 20 club league).
-     Each control refuses to run if its rewrite did not find its text.
+     CM_CALENDAR_CONTROL=nolate   (Round 1021) takes the late start off the
+       five 2020 rules rows at run time, so 2020-21 opens on 8 August with a
+       four match window again. Sections 3 and 6 must go red, section 3 on
+       the 21 day summer fence.
+     CM_CALENDAR_CONTROL=nocram   (Round 1021) bundles a copy whose late
+       season plays no league round in midweek. Section 3 must go red on the
+       10 day January fence.
+     Each control refuses to run if its rewrite did not find its text (nolate:
+     unless exactly five rules rows carry a late start).
 
    Run: node scripts/simClubManagerCalendar.mjs
 */
@@ -119,6 +141,25 @@ const CONTROLS = {
    * the other checks would need a clamp that knows the club count, which the
    * calendar module deliberately does not.
    */
+  /* Round 1021: the late 2020-21 season. nolate takes the late start off
+     the five 2020 rules rows at run time (it is data, so no source text is
+     rewritten, and the control refuses to run unless exactly five rows
+     carry one), so the engine and this harness both draw 2020-21 the way
+     the code before this round did: an 8 August start and a four match
+     window, whose deadline lands weeks before the real 5 October. The 21 day
+     summer fence in section 3 and the kickoff check in section 6 must go
+     red. nocram keeps the late kickoff but drops the midweek rounds, so the
+     January window lands two or three weeks into January: the 10 day
+     January fence must go red. */
+  nolate: {
+    runtime: true,
+    say: 'NEGATIVE CONTROL ON: 2020-21 opens on the second Saturday of August again, with the usual four match window',
+  },
+  nocram: {
+    fixed: '  return drawEntries(plan.kickoff, worldYear, calendar, midweek);',
+    broken: '  return plain;',
+    say: 'NEGATIVE CONTROL ON: the late season plays no league round in midweek, so January drifts',
+  },
   latejan: {
     fixed: '      out.push(next);',
     broken: "      out.push(entry.type === 'window' && dateKey(next) >= dateKey(newYear) ? addDays(next, 21) : next);",
@@ -157,7 +198,7 @@ const same = (a, b) => relevant(a) === relevant(b);
 /* ---- bundle the modules, the calendar regressed when a control is on ---- */
 const CAL = path.join(ROOT, 'src', 'lib', 'clubManagerCalendar.ts');
 let calPath = `${ROOT_URL}/src/lib/clubManagerCalendar.ts`;
-if (CONTROL) {
+if (CONTROL && !CONTROLS[CONTROL].runtime) {
   const src = fs.readFileSync(CAL, 'utf8').replaceAll('\r\n', '\n');
   const { fixed, broken, say } = CONTROLS[CONTROL];
   if (!src.includes(fixed)) {
@@ -174,16 +215,27 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const cal = await import('${calPath}');
 const cm = await import('${ROOT_URL}/src/lib/clubManager.ts');
-export const mods = { cal, cm };
+const intl = await import('${ROOT_URL}/src/lib/clubManagerInternationals.ts');
+export const mods = { cal, cm, intl };
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
-const { cal, cm } = (await import(pathToFileURL(BUNDLE).href)).mods;
+const { cal, cm, intl } = (await import(pathToFileURL(BUNDLE).href)).mods;
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
+if (CONTROL === 'nolate') {
+  const rows = Object.values(cm.LEAGUE_RULES).filter(r => r.lateStart);
+  if (rows.length !== 5) {
+    console.error(`control cannot run: ${rows.length} rules rows carry a late start, not the five 2020-21 leagues`);
+    process.exit(1);
+  }
+  for (const r of rows) delete r.lateStart;
+  console.log(CONTROLS.nolate.say);
+}
 const {
   seasonDays, monthGrid, fastForwardTargets, targetWeekForDate, simToWeek, simToDate, weekAfterMatches,
   windowSpans, dateOfEntries, worldYearOf, dateKey, addDays, daysBetween, daysInMonth, clubTag, potentialEntry,
   WINDOW_MATCH_WEEKS, REAL_WINDOWS,
+  entryDatesOf, kickoffOf, seasonPlanOf, summerWindowWeeksOf, lateSummerWindowWeeks, dayOfWeek,
 } = cal;
 const { startCareer, playNextEntry, fixtureFor, entryInvolvesMe } = cm;
 
@@ -191,10 +243,14 @@ const fmt = d => `${d.y}-${String(d.m).padStart(2, '0')}-${String(d.d).padStart(
 const clone = s => JSON.parse(JSON.stringify(s));
 
 /* Clubs in even sized leagues (a bye week would blur the "every round has a
-   result" check), across the four eras and three league lengths. */
+   result" check), across the five eras and three league lengths. Round
+   1021: 2020-21 started late, so it brings three saves, one for each of its
+   three opening dates (Liverpool 12 September, Bayern 19 September and the
+   18 club league, Lille 22 August and the longest window). */
 const SAVES = [
   ['Everton', 'now'], ['Arsenal', 'now'], ['Augsburg', 'now'], ['Norwich City', 'now'],
   ['Barcelona', 'era2015'], ['Juventus', 'era2015'], ['Barcelona', 'era2010'], ['Chelsea', 'era2005'],
+  ['Liverpool', 'era2020'], ['Bayern Munich', 'era2020'], ['Lille', 'era2020'],
 ];
 const fresh = ([club, era], seed) => {
   reseed(seed);
@@ -211,7 +267,7 @@ console.log('1) Sim to a day: the week pointer lands on the target, never past i
   const haltCounts = { window: 0, seasonOver: 0, sacked: 0, approach: 0 };
   SAVES.forEach((pick, i) => {
     let s = fresh(pick, 1000 + i);
-    const dates = dateOfEntries(worldYearOf(s), s.calendar);
+    const dates = entryDatesOf(s);
     const windowIdx = s.calendar.findIndex(e => e.type === 'window');
     const plan = [
       addDays(dates[0], 3),                       // a quiet day before the second match
@@ -332,7 +388,11 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     let s, spans0, summer0, jan0, days0, dates, st, summerShut, janShut, janOpened, janLive;
     while (true) {
     s = fresh(pick, 3000 + i + 1000 * attempt);
-    if (s.windowWeeksLeft !== WINDOW_MATCH_WEEKS.summer) fail(`${pick[0]}: a fresh save opens the summer with ${s.windowWeeksLeft} match weeks, the module says ${WINDOW_MATCH_WEEKS.summer}`);
+    /* Round 1021: a late season's window is as many matches as reach the
+       real deadline (lateSummerWindowWeeks), every other season's is the
+       module's four. */
+    const summerWeeks = seasonPlanOf(s) ? lateSummerWindowWeeks(s) : WINDOW_MATCH_WEEKS.summer;
+    if (s.windowWeeksLeft !== summerWeeks || summerWindowWeeksOf(s) !== summerWeeks) fail(`${pick[0]}: a fresh save opens the summer with ${s.windowWeeksLeft} match weeks (the grid reads ${summerWindowWeeksOf(s)}), the module says ${summerWeeks}`);
     spans0 = windowSpans(s);
     summer0 = spans0.find(w => w.kind === 'summer');
     jan0 = spans0.find(w => w.kind === 'january');
@@ -439,7 +499,7 @@ console.log('3) Windows: the grid\'s deadline day is the entry the engine shut t
     fail(`the long league's January window opens ${max(gaps.janOpenBig)} days into January (bound 22; measured 15, and it is deterministic rather than sampled), which is too late to call a January window`);
   }
   if (max(gaps.janClose) > 21) fail(`the January deadline drifts ${max(gaps.janClose)} days from the real one`);
-  for (const era of ['now', 'era2015', 'era2010', 'era2005']) if (!REAL_WINDOWS[era]) fail(`no real window dates recorded for ${era}`);
+  for (const era of ['now', 'era2015', 'era2010', 'era2005', 'era2020']) if (!REAL_WINDOWS[era]) fail(`no real window dates recorded for ${era}`);
 }
 
 /* ---------- 4. Match days name the opponent ---------- */
@@ -483,7 +543,12 @@ console.log('4) Match days: the opponent and venue are the engine\'s own, rounds
         named += 1;
         if (day.opponent !== fx.opponent || day.home !== fx.home || day.compLabel !== fx.compLabel) fail(`${pick[0]}: entry ${w} names ${day.opponent} (${day.home}) where the engine plays ${fx.opponent} (${fx.home})`);
         const tag = clubTag(fx.opponent);
-        if (!/^[A-Z0-9À-Ý]{2,3}$/.test(tag)) fail(`${pick[0]}: tag "${tag}" for ${fx.opponent} is not two or three capitals`);
+        /* Round 1021: any capital letter, not only Latin-1's. The 2010-11
+           Champions League field brought Zilina, whose tag starts with a
+           capital Z caron (U+017D, outside the old A to Z and À to Ý), and
+           Barcelona drew them on this seed: red on 564d604e (the Round 971
+           head this round is built on), and main carries the same regex. */
+        if (!/^[\p{Lu}0-9]{2,3}$/u.test(tag)) fail(`${pick[0]}: tag "${tag}" for ${fx.opponent} is not two or three capitals`);
       } else {
         pending += 1;
         if (day.opponent !== null) fail(`${pick[0]}: entry ${w} has no draw yet but names ${day.opponent}`);
@@ -520,6 +585,129 @@ console.log('5) Grid: seven columns, at most six rows, every day of the season o
   }
   if (todays !== 1) fail(`today appears ${todays} times across the season`);
   console.log(`   ${months} months drawn, today once, no month over 42 cells`);
+}
+
+/* ---------- 6. The late season (Round 1021) ---------- */
+console.log('6) Late season: 2020-21 opens on each league\'s real Saturday, crams rounds into midweek rather than drifting, ends by the real final weekend, and no other season moves a day');
+{
+  /* The real frame, typed here a second time on purpose so the module's
+     table is checked against a copy rather than against itself: each
+     league's opening Saturday, and the Saturday of the final weekend (22 May
+     2021, the same for all five). Sources at the 2020 rows of LEAGUE_RULES (RSSSF and
+     football-data.co.uk, which agree on every date). */
+  const REAL_2020 = [
+    ['Liverpool', 'premier2020', '2020-09-12'], ['Barcelona', 'laliga2020', '2020-09-12'],
+    ['Juventus', 'seriea2020', '2020-09-19'], ['Bayern Munich', 'bundesliga2020', '2020-09-19'],
+    ['Lille', 'ligue12020', '2020-08-22'],
+  ];
+  const FINAL_SATURDAY = { y: 2021, m: 5, d: 22 };
+  const SUMMER_CLOSE_2020 = { y: 2020, m: 10, d: 5 };
+  const endGaps = [], fourGaps = [];
+  let crammed = 0;
+  REAL_2020.forEach(([club, leagueId, open], i) => {
+    const s = fresh([club, 'era2020'], 6000 + i);
+    const dates = entryDatesOf(s);
+    if (cm.careerLeagueOf(s).id !== leagueId) fail(`${club}: plays ${cm.careerLeagueOf(s).id}, the check expects ${leagueId}`);
+    if (fmt(dates[0]) !== open || fmt(kickoffOf(s)) !== open || fmt(seasonDays(s).seasonStart) !== open) {
+      fail(`${club}: 2020-21 opens on ${fmt(dates[0])} (kickoff ${fmt(kickoffOf(s))}, grid ${fmt(seasonDays(s).seasonStart)}), really ${open}`);
+    }
+    for (let w = 1; w < dates.length; w++) if (dateKey(dates[w]) <= dateKey(dates[w - 1])) fail(`${club}: entry ${w} is drawn on ${fmt(dates[w])}, not after entry ${w - 1}`);
+    const leagueWeeks = s.calendar.map((e, w) => (e.type === 'league' ? w : -1)).filter(w => w >= 0);
+    if (leagueWeeks.length !== (s.leagueClubs.length - 1) * 2) fail(`${club}: ${leagueWeeks.length} league rounds for ${s.leagueClubs.length} clubs`);
+    const dow = d => dayOfWeek(d.y, d.m, d.d);
+    const midweek = leagueWeeks.filter(w => dow(dates[w]) !== 6);
+    for (const w of midweek) {
+      if (dow(dates[w]) !== 3 || dow(dates[w - 1]) !== 6 || dow(dates[w + 1]) !== 6) fail(`${club}: the midweek round ${w} on ${fmt(dates[w])} does not sit on a Wednesday between two Saturdays`);
+    }
+    crammed += midweek.length;
+    /* The window against the four match one it replaces: the late deadline
+       must sit on or before 5 October and within the 21 day fence, and the
+       four match deadline is printed beside it as the baseline. */
+    const mine = cal.myMatchWeeks(s);
+    const lateDeadline = dates[mine[s.windowWeeksLeft - 1]];
+    const fourDeadline = dates[mine[WINDOW_MATCH_WEEKS.summer - 1]];
+    const lateGap = daysBetween(lateDeadline, SUMMER_CLOSE_2020), fourGap = daysBetween(fourDeadline, SUMMER_CLOSE_2020);
+    if (lateGap < 0 || lateGap > 21) fail(`${club}: the late summer window shuts on ${fmt(lateDeadline)}, ${lateGap} days before the real 5 October`);
+    fourGaps.push(fourGap);
+    const end = dates[leagueWeeks[leagueWeeks.length - 1]];
+    const gap = daysBetween(end, FINAL_SATURDAY);
+    if (gap < 0) fail(`${club}: the last league round is drawn on ${fmt(end)}, after the real final weekend`);
+    endGaps.push(gap);
+    console.log(`   ${club} (${leagueId}): opens ${fmt(dates[0])}, ${midweek.length} league rounds in midweek (${midweek.map(w => fmt(dates[w])).join(", ") || "none"}), January window ${fmt(dates[s.calendar.findIndex(e => e.type === 'window')])}, last league round ${fmt(end)} (${gap} days before the real final weekend), summer window ${s.windowWeeksLeft} matches to ${fmt(lateDeadline)} (four would shut it on ${fmt(fourDeadline)}, ${fourGap} days early)`);
+  });
+  /* The baseline: with the usual four matches at least one league's window would shut more than 21 days early (Lille's August start, measured 26), so the late window is what keeps 2020-21 inside the fence. */
+  if (Math.max(...fourGaps) <= 21) fail(`a four match window would already shut within 21 days of 5 October in every league (${fourGaps.join(', ')}), so the late window proved nothing`);
+  if (crammed === 0) fail('no late season crammed a single round into midweek, so the January check above proved nothing about it');
+  if (Math.max(...endGaps) > 21) fail(`a late season's last league round sits ${Math.max(...endGaps)} days before the real final weekend (fence 21)`);
+
+  /* No other season moves a day. Every other save draws exactly the dates
+     the plain rule gives (the rule every season used before this round),
+     carries no late window, and so do the two seasons that share a world
+     year or an era with 2020-21 without being it: an era2020 save's second
+     season (2021-22, an August start) and an era2015 save's sixth (world
+     year 2020, a world that never had the pandemic). */
+  let untouched = 0;
+  const plainDates = s => JSON.stringify(dateOfEntries(worldYearOf(s), s.calendar));
+  const checkUntouched = (who, s) => {
+    untouched += 1;
+    if (seasonPlanOf(s) !== null) fail(`${who}: has a late season plan`);
+    if (JSON.stringify(entryDatesOf(s)) !== plainDates(s)) fail(`${who}: its dates moved off the plain rule`);
+    if (summerWindowWeeksOf(s) !== WINDOW_MATCH_WEEKS.summer) fail(`${who}: its summer window is ${summerWindowWeeksOf(s)} matches`);
+  };
+  SAVES.forEach((pick, i) => {
+    if (pick[1] === 'era2020') return;
+    const s = fresh(pick, 6200 + i);
+    checkUntouched(`${pick[0]} ${pick[1]}`, s);
+    if (s.windowWeeksLeft !== WINDOW_MATCH_WEEKS.summer || s.summerWindow !== undefined) fail(`${pick[0]} ${pick[1]}: a fresh save carries a late window`);
+  });
+  const late = fresh(['Liverpool', 'era2020'], 6300);
+  checkUntouched('Liverpool era2020, season two', { ...late, season: 2 });
+  checkUntouched('Barcelona era2015, season six (world year 2020)', { ...fresh(['Barcelona', 'era2015'], 6301), season: 6 });
+  console.log(`   ${untouched} seasons outside 2020-21 checked: every one draws the plain rule's dates and a four match window`);
+
+  /* A 2020-21 save started BEFORE this round is migrated, not frozen. Its
+     dates were never stored (the grid draws them from the season and the
+     calendar every time), so it loads on the late dates; what it did store
+     (its results, its four match summer window, the breaks it played) is
+     kept as it was. Built here the honest way: the late start comes off
+     the five 2020 rules rows while the save starts and plays nine entries
+     (the code before this round), then goes back. Dates only ever move later, so a break it played
+     is still behind it, the next one is caught up on its next match, none is
+     played twice, and the summer window it was dealt shuts where the grid
+     says it did. */
+  const lateRows = Object.entries(cm.LEAGUE_RULES).filter(([, r]) => r.lateStart);
+  const saved = lateRows.map(([id, r]) => [id, r.lateStart]);
+  for (const [, r] of lateRows) delete r.lateStart;
+  let old = fresh(['Liverpool', 'era2020'], 6400);
+  const oldShape = old.windowWeeksLeft === WINDOW_MATCH_WEEKS.summer && old.summerWindow === undefined && fmt(seasonDays(old).seasonStart) === '2020-08-08';
+  let summerShut = null;
+  const step = () => {
+    const before = old.transferWindow;
+    old = playNextEntry(old, { skipHalftime: true }).state;
+    if (before === 'summer' && old.transferWindow === null && summerShut === null) summerShut = old.week - 1;
+  };
+  for (let k = 0; k < 9; k++) step();
+  const firedOld = [...(old.intl?.fired ?? [])];
+  const resultsOld = JSON.stringify(old.resultLog ?? []);
+  for (const [id, late] of saved) cm.LEAGUE_RULES[id].lateStart = late;
+  if (lateRows.length !== 5) fail(`${lateRows.length} rules rows carry a late start, the five 2020-21 leagues should`);
+  if (!oldShape) fail('the emulated pre-round save does not have the pre-round shape (four match window, 8 August start)');
+  if (firedOld.length === 0) fail('the emulated old save played no international break before migrating, so the catch-up proved nothing');
+  const migrated = seasonDays(old);
+  if (fmt(migrated.seasonStart) !== '2020-09-12') fail(`the migrated save opens on ${fmt(migrated.seasonStart)}`);
+  const windows = intl.intlWindowsFor(worldYearOf(old));
+  for (const id of firedOld) {
+    const w = windows.find(x => x.id === id);
+    if (!w || dateKey(w.start) > dateKey(migrated.today)) fail(`the migrated save played the ${id} break, which now lies after its today ${fmt(migrated.today)}`);
+  }
+  for (let k = 0; k < 80 && old.week < old.calendar.length && !old.sacked; k++) step();
+  if (JSON.stringify((old.resultLog ?? []).slice(0, JSON.parse(resultsOld).length)) !== resultsOld) fail('the migrated save lost or rewrote a result it had');
+  const fired = old.intl?.fired ?? [];
+  if (new Set(fired).size !== fired.length) fail(`a break was played twice after migrating: ${fired.join(', ')}`);
+  if (!old.sacked && fired.length !== windows.length) fail(`after migrating, ${fired.length} of the season's ${windows.length} breaks were played`);
+  const shut = windowSpans(old).find(w => w.kind === 'summer')?.deadlineWeek;
+  if (summerShut === null || shut !== summerShut) fail(`the migrated save's summer window shut on entry ${summerShut}, the grid says ${shut}`);
+  console.log(`   a pre-round 2020-21 save migrated at week 9: ${firedOld.length} break(s) already played stay behind it, ${fired.length} of ${windows.length} played once each by the end${old.sacked ? ' (sacked before the end)' : ''}, its four match window shut on entry ${summerShut} and the grid agrees`);
 }
 
 if (failures > 0) {
