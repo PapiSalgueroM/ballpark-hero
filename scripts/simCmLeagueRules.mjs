@@ -71,6 +71,18 @@
       three new 2005-06 leagues, and the views' leagueNations and euroSlots).
       The new pure entries for 2005-06 equal the ones the branch wrote before
       the merge, value for value.
+      Round 1015 rewrote modern, eras and pure for the roster fold (the six
+      adjudication shards folded into the ledger and the modern rosters
+      re-baked from the 2026-10-02 dump), after attribution in three trees:
+      main's src at 37ce6d5e (a git archive, CM_RULES_ROOT) matched the old
+      baseline exactly; main's src with only the re-baked
+      clubManagerRosters.ts moved 55 entries (all 22 modern saves, 13 of 15
+      era saves, in "whole" and "start" with laliga2005 deeper, because the
+      era filler refuses every real modern name and the name set changed,
+      and the day one objectives of 20 modern leagues, the board reading the
+      re-baked squads), and the baseline was written from that tree; the
+      round's whole tree, which adds its nationality changes, then matched it
+      22/0, 15/0 and 38/0, so the nationality map moves nothing here.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
