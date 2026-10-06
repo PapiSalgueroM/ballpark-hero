@@ -1,3 +1,9 @@
+## Main9bf04e5a preserved, US guide handshake approved
+
+Only the two state/board documents changed during integration. App, scripts,
+tests, workflows and generated payloads are byte-identical to76741b77.
+Fresh final CI will assess the combined commit. No live claim.
+
 ## Round1067 preparation passed, final release checks pending
 
 Remote preparation37505322005 on2081b28d passed actual type/build:seo,
