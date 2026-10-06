@@ -35,10 +35,11 @@ export default function CageClash() {
               <li>On top, strike, posture up or pass into a better position. From underneath, block, regain guard, sweep or try to stand.</li>
               <li>Hold Submission to build pressure. Your opponent can resist or escape. Low stamina makes both defending and attacking harder.</li>
               <li>Use Pause any time. Switching away, opening these rules or losing focus pauses the fight. Resume clears held inputs. Refresh starts over.</li>
+              <li>Choose Practice before starting to learn four skills with an untimed partner: land three shots and recover gas, earn a takedown, finish a submission, or regain guard and stand up. Only the moves for that drill are active. Retry as often as you like.</li>
               <li>Keyboard: arrows or A/D to move, Space to guard, J/K/L for the upper action row and U/I/O for the lower row. P or Escape pauses.</li>
             </ul>
             <p className="text-sm"><strong>Try this:</strong> move into punching range, block a shot, then clinch. Use Takedown, pass from guard and hold Submission when you have stamina. If the opponent gets on top, defend and try a sweep or stand up.</p>
-            <p className="text-xs text-muted-foreground">Your score is out of 100: a win earns 50, a winning finish adds 15, damage earns up to 20 and defense or ground control earns up to 15. A draw earns 25 outcome points. Quitting earns no score. The fighters and arcade rules are fictional.</p>
+            <p className="text-xs text-muted-foreground">Quick fight scores are out of 100: a win earns 50, a winning finish adds 15, damage earns up to 20 and defense or ground control earns up to 15. A draw earns 25 outcome points. Practice and quitting earn no score. The fighters and arcade rules are fictional.</p>
           </DialogContent>
         </Dialog>
         <GameSeoContent pageHasOwnH1 title="Cage Clash: Pixel MMA Fighting Game" description="Take control of your own fighter in an original pixel cage. Pick a style, manage distance and stamina, then choose between striking and grappling." />

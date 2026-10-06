@@ -8,8 +8,11 @@ on:
       - src/components/cage-clash/**
       - src/hooks/useCageClash.ts
       - src/lib/cageClash.ts
+      - src/lib/cagePractice.ts
       - src/test/cageClash.test.tsx
+      - src/test/cagePractice.test.tsx
       - scripts/simCageClash.mjs
+      - scripts/simCagePractice.mjs
       - scripts/qa/cageClash1063.mjs
       - src/data/gameContent/moreSports.ts
       - src/data/gameRegistry.ts
@@ -35,10 +38,12 @@ jobs:
       VITEST_MAX_FORKS: 1
       VITEST_MIN_FORKS: 1
       SEO_SPLIT_BASE_REF: HEAD
+      CAGE_PRACTICE_ARTIFACTS: cage-clash-artifacts/practice
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -53,6 +58,8 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
+      - name: Harness source and mutation anchors
+        run: ONLY=simHarnessAnchors node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/simHarnessAnchors.log
       - name: Type check and build
         id: build
         run: |
@@ -61,6 +68,19 @@ jobs:
       - name: Combat controller outcomes and effective controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: CAGE_CLASH_CONTROL=all ONLY=simCageClash node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/combat.log
+      - name: Practice outcomes and effective controls
+        id: practice
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: CAGE_PRACTICE_CONTROL=all ONLY=simCagePractice node scripts/runAllSims.mjs 2>&1 | tee cage-clash-artifacts/practice.log
+      - name: Preserve practice failure for immediate diagnosis
+        if: ${{ failure() && steps.practice.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cage-practice-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: |
+            cage-clash-artifacts/practice/
+            cage-clash-artifacts/practice.log
       - name: Native pixel combat and input lifecycle
         id: native
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
@@ -78,7 +98,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simMmaPromotion simFightPromoter simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeCopy simSeoMetaSplit simInventedNames simRelatedGames; do
+          for harness in simMmaPromotion simFightPromoter simNoDoubleRecord simScoringCoverage simScoreShown simGuideHeadings simSeoTitles simHomeCopy simSeoMetaSplit simInventedNames simRelatedGames; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "cage-clash-artifacts/$harness.log" || failed=1
           done
           exit "$failed"

@@ -15,7 +15,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       faq: 'Cage Clash FAQ: controls, scoring and pauses',
     },
     howToPlay: [
-      'Choose your fighting style and the CPU style, read the controls and start a fight.',
+      'Choose Quick fight, your fighting style and the CPU style, read the controls and start a fight. Choose Practice for four untimed drills with a passive partner.',
       'Hold the movement buttons to get in range. Hold Guard to block. Use Punch, Heavy or Kick when you have an opening and enough stamina.',
       'Get close and use Clinch. The buttons change with your position: try a takedown, strike from the clinch or break away.',
       'On the ground, work for position before chasing a finish. The top fighter can strike, posture up and pass. The bottom fighter can defend, regain guard, sweep or stand.',
@@ -30,6 +30,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       'Health reaching zero ends the fight by knockout. Full submission progress ends it by submission. Otherwise, earned round points decide the result.',
       'Your score is out of 100. A win earns 50 points and a winning knockout or submission adds 15. Damage contributes up to 20, while defense or ground control contributes up to 15. A draw earns 25 outcome points.',
       'Pause, opening the rules, losing focus or switching away stops the fight. Resume clears held controls. Quitting or refreshing gives no completion score.',
+      'Practice uses the same range, stamina and ground rules with an untimed partner. Learn striking and recovery, an earned takedown, a submission finish or escaping from mount. Only the moves for your drill are active, and practice earns no score.',
       'These are original fighters and simplified arcade rules. This game does not replay real fights or use real athletes.',
     ],
     example: [
