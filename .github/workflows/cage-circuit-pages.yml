@@ -1,0 +1,74 @@
+name: Cage Circuit integrated pages preparation
+
+on:
+  push:
+    branches: [codex/cage-circuit-1065-pages]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      SEO_SPLIT_BASE_REF: HEAD
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install preparation dependencies
+        run: |
+          mkdir -p circuit-pages-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Preserve the accepted Cage source
+        run: git diff --exit-code 8c346db1cc54b571e95794e97b029771b4e9a0a7 HEAD -- src/lib/cageClash.ts src/lib/cagePractice.ts src/lib/cageCircuit.ts src/hooks/useCageClash.ts src/pages/CageClash.tsx src/components/cage-clash src/test/cageClash.test.tsx src/test/cagePractice.test.tsx src/test/cageCircuit.test.tsx scripts/simCageClash.mjs scripts/simCagePractice.mjs scripts/simCageCircuit.mjs scripts/qa/cageClash1063.mjs src/data/gameContent/moreSports.ts .github/workflows/cage-clash.yml
+      - name: Type check and refresh merged pages
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee circuit-pages-artifacts/types.log
+          node scripts/genSearchKeywords.mjs 2>&1 | tee circuit-pages-artifacts/search.log
+          PRERENDER_ONLY=/cage-clash,/whats-new npm run build:seo 2>&1 | tee circuit-pages-artifacts/build.log
+      - name: Integrated data and every built reader
+        run: |
+          failed=0
+          for harness in simMissingXi simResultMoment simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "circuit-pages-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Package verified page candidates
+        if: success()
+        run: |
+          git rev-parse HEAD > circuit-pages-artifacts/source-head.txt
+          node --input-type=module <<'JS'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import crypto from 'node:crypto';
+          const files = ['public/cage-clash/index.html', 'public/whats-new/index.html', 'public/sitemap.xml', 'scripts/data/lastmod.json', 'src/data/searchKeywords.json'];
+          const manifest = files.map(file => {
+            const target = path.join('circuit-pages-artifacts/generated', file);
+            fs.mkdirSync(path.dirname(target), { recursive: true });
+            fs.copyFileSync(file, target);
+            return { file, sha256: crypto.createHash('sha256').update(fs.readFileSync(target)).digest('hex') };
+          });
+          fs.writeFileSync('circuit-pages-artifacts/generated-manifest.json', JSON.stringify(manifest, null, 2));
+          JS
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: circuit-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: circuit-pages-artifacts/
