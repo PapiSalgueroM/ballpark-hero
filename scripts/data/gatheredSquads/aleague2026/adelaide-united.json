@@ -1135,7 +1135,8 @@
         ],
         "group": [
           "adelaideunited.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
@@ -1212,7 +1213,8 @@
         ],
         "group": [
           "adelaideunited.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
@@ -1716,18 +1718,20 @@
           "name": "Anselmo",
           "position": "Midfielder",
           "birthDate": "1989-02-20",
-          "match": "fuzzy"
+          "match": "alias"
         },
         "tm": {
           "id": "114341",
           "name": "Anselmo",
           "position": "Attacking Midfield",
           "birthDate": "1989-02-20",
-          "match": "fuzzy"
+          "match": "alias"
         },
         "from": "club squad page"
       },
-      "notes": []
+      "notes": [
+        "identity linked by hand: ESPN and Transfermarkt print the one-word name Anselmo; both give birth date 1989-02-20, so it is the same man"
+      ]
     },
     {
       "name": "Craig Goodwin",
@@ -2433,6 +2437,10 @@
       "onClubPage": false,
       "onEspn": false,
       "onTm": false,
+      "inTransferCentre": [
+        "outs at Adelaide United",
+        "ins at Western Sydney Wanderers"
+      ],
       "verdict": "not in the club's 2026-27 squad on the club page, ESPN or Transfermarkt: the dump row is stale"
     }
   ],

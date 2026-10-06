@@ -1039,7 +1039,8 @@
         ],
         "group": [
           "macarthurfc.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": []
       },
@@ -1116,7 +1117,8 @@
         ],
         "group": [
           "macarthurfc.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
@@ -1193,7 +1195,8 @@
         ],
         "group": [
           "macarthurfc.com.au",
-          "site.api.espn.com"
+          "site.api.espn.com",
+          "transfermarkt.com"
         ],
         "birthDate": [
           "site.api.espn.com",
