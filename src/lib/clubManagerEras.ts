@@ -325,6 +325,11 @@ const ALSO_REAL_ELSEWHERE = [
      Club Manager world now. He is still a real man, and listing him here
      keeps the guard's set exactly what it was, so no seed re-rolls. */
   'Kian Hansen',
+  /* Round 1015: Rafa Soares, the Portuguese left back, is withheld from
+     every modern squad until two sources say where he plays (off the 2026-27
+     Famalicao squad, probably at Estrela). Still a real man, so listing him
+     keeps the set of the guard as it was and no seed re-rolls. */
+  'Rafa Soares',
 ];
 
 /**
