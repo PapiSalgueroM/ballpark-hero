@@ -105,6 +105,7 @@
  *   speechleak    a gamble's hit also lands its miss steps       -> sections 2 and 3
  *   legacyreal    a second file declares real era stars          -> section 4
  *   secondcopy    an inline wider ranking reappears in the engine -> section 5
+ *   speechcopy    a second spoken speech block in the tournament card -> section 5
  *   cardtext      the winner line goes back to "Legacy +20, ..."  -> section 6
  *   effectonly    the night drops the winner's first step only    -> section 6
  *   speechtwice   the card's speech loses its once-only guard     -> section 6
@@ -138,6 +139,14 @@
  * (market value and followers in millions, the rest plain points), and
  * section 7 requires some card to name a follower move so the unit check
  * cannot pass by never running. Control followersbare takes the unit off.
+ * The same review lifted the kept speech (GivenSpeech, keepSpeech,
+ * givenSpeechOf, giveSpeechOnce in careerAwardsNight.ts, SpokenSpeech in
+ * AwardsNightCard.tsx) out of the soccer files, so wcleaves, wctwice,
+ * wcnominal, nominalmoved, numberedline and speechtwice now patch the
+ * shared helper's call sites (numberedline the helper itself, which turns 6
+ * and 7 red); section 5 requires both soccer speeches to give through
+ * giveSpeechOnce and both tournament cards to draw SpokenSpeech, with
+ * control speechcopy. Measured: all nine of those controls fire.
  *
  * Bands, all on fixed seeds so the same numbers come back every run: the
  * synthetic 35% gamble came up 338 of 1,000 (band 30 to 40%); Soccer's
@@ -194,8 +203,8 @@ const CONTROLS = {
     section: 7,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: '  else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n  return s;\n}',
-      to: '  else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n  return dismissWorldCup(s, FALLBACK_CLUBS);\n}',
+      from: '      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n    },',
+      to: '      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };\n      Object.assign(s, dismissWorldCup(s, FALLBACK_CLUBS));\n    },',
     }],
   },
   /* Round 1023: the tournament speech loses its once-only guard. */
@@ -203,8 +212,8 @@ const CONTROLS = {
     section: 7,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: '  if (!worldCupSpeechOpen(prev) || !SOCCER_WORLD_CUP_SPEECHES.some(o => o.id === choice)) return prev;',
-      to: '  if (!SOCCER_WORLD_CUP_SPEECHES.some(o => o.id === choice)) return prev;',
+      from: '    open: worldCupSpeechOpen,',
+      to: '    open: () => true,',
     }],
   },
   /* Round 1023: the tournament card reports the speech's steps, not what landed. */
@@ -212,8 +221,8 @@ const CONTROLS = {
     section: 7,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: 'const speech: StagedSpeech = { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) };',
-      to: 'const speech: StagedSpeech = { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, SOCCER_WORLD_CUP_SPEECHES.find(o => o.id === choice)!.effect) };',
+      from: '    speak: s => speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!,',
+      to: '    speak: s => ({ ...speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!, moved: SOCCER_WORLD_CUP_SPEECHES.find(o => o.id === choice)!.effect }),',
     }],
   },
   /* Round 1023: the tournament card stops showing the speech it was given. */
@@ -237,6 +246,7 @@ const CONTROLS = {
   },
   legacyreal: { section: 4, patches: [] },
   secondcopy: { section: 5, patches: [] },
+  speechcopy: { section: 5, patches: [] },
   cardtext: {
     section: 6,
     patches: [{
@@ -265,24 +275,24 @@ const CONTROLS = {
     section: 6,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: 'moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };',
-      to: 'moved: describeSteps(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES.find(o => o.id === choice)!.effect) } };',
+      from: '    speak: s => speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!,',
+      to: '    speak: s => ({ ...speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!, moved: SOCCER_BDOR_SPEECHES.find(o => o.id === choice)!.effect }),',
     }],
   },
   numberedline: {
     section: 6,
     patches: [{
-      file: 'src/lib/soccerCareerEngine.ts',
-      from: 'speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved:',
-      to: 'speech: { id: choice, line, moved:',
+      file: 'src/lib/careerAwardsNight.ts',
+      from: '  return { id, line: narrativeOf(meters, line), moved: describeSteps(meters, moved) };',
+      to: '  return { id, line, moved: describeSteps(meters, moved) };',
     }],
   },
   speechtwice: {
     section: 6,
     patches: [{
       file: 'src/lib/soccerCareerEngine.ts',
-      from: '  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
-      to: '  if (!SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;',
+      from: '    open: bdorSpeechOpen,',
+      to: '    open: () => true,',
     }],
   },
 };
@@ -686,13 +696,20 @@ console.log('\n5) One awards night: no second copy beside the shared one');
   let engine = read('src/lib/soccerCareerEngine.ts');
   if (CONTROL === 'secondcopy') engine += '\nconst extendedRank = Math.max(11, better + 1);\n';
   const page = read('src/pages/SoccerCareer.tsx');
-  const intl = read('src/components/soccer-career/InternationalPanel.tsx');
+  let intl = read('src/components/soccer-career/InternationalPanel.tsx');
+  /* Round 1023's review: a second spoken speech block beside the shared one. */
+  if (CONTROL === 'speechcopy') intl += '\nconst Spoken = ({ speech }) => <div data-spoken-speech={speech.id}>{speech.line}</div>;\n';
   const banned = [
     ['src/lib/soccerCareerEngine.ts', engine, /\bextendedRank\b|\btopNPCs\b|const top10 = /, 'an inline shortlist or wider ranking'],
     ['src/lib/soccerCareerEngine.ts', engine, /case "greatest_ever"|case "call_out_doubters"/, 'a hand written speech switch'],
     ['src/pages/SoccerCareer.tsx', page, /\brankEmoji\b|BALLON D'OR WINNER!/, 'an inline ceremony card'],
     ['src/pages/SoccerCareer.tsx', page, /onSpeech\("for_the_country"\)/, 'hand written speech buttons'],
     ['src/components/soccer-career/InternationalPanel.tsx', intl, /onSpeech\("for_the_country"\)/, 'hand written speech buttons'],
+    /* Round 1023's review: the kept speech's shape, its validator and the
+       block that shows it live once, in the shared module and card. */
+    ['src/lib/soccerCareerEngine.ts', engine, /interface StagedSpeech|function stagedSpeechOf|narrativeOf\(SOCCER_AWARDS_METERS/, 'its own kept speech shape'],
+    ['src/components/soccer-career/InternationalPanel.tsx', intl, /data-spoken-speech/, 'its own spoken speech block'],
+    ['src/pages/SoccerCareer.tsx', page, /data-spoken-speech/, 'its own spoken speech block'],
   ];
   for (const [rel, text, re, what] of banned) check(!re.test(text), `${rel} carries ${what} again`);
   const needed = [
@@ -706,6 +723,10 @@ console.log('\n5) One awards night: no second copy beside the shared one');
     ['src/pages/SoccerCareer.tsx', page, /<AwardsNightCard/, 'the shared ceremony card'],
     ['src/pages/SoccerCareer.tsx', page, /<SpeechChoices[^>]*SOCCER_WORLD_CUP_SPEECHES/, 'the shared speech buttons'],
     ['src/components/soccer-career/InternationalPanel.tsx', intl, /<SpeechChoices[^>]*SOCCER_WORLD_CUP_SPEECHES/, 'the shared speech buttons'],
+    ['src/lib/soccerCareerEngine.ts', engine, /giveSpeechOnce\(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES,/, 'the shared give once for the Ballon d\'Or speech'],
+    ['src/lib/soccerCareerEngine.ts', engine, /giveSpeechOnce\(SOCCER_AWARDS_METERS, SOCCER_WORLD_CUP_SPEECHES,/, 'the shared give once for the tournament speech'],
+    ['src/components/soccer-career/InternationalPanel.tsx', intl, /<SpokenSpeech speech=\{given\} \/>/, 'the shared spoken speech block'],
+    ['src/pages/SoccerCareer.tsx', page, /<SpokenSpeech speech=\{given\} \/>/, 'the shared spoken speech block'],
   ];
   for (const [rel, text, re, what] of needed) check(re.test(text), `${rel} no longer uses ${what}`);
   console.log(`   ${banned.length} old copies absent, ${needed.length} shared calls present`);

@@ -309,22 +309,10 @@ export interface WorldCupResult {
   playerAvgRating: number;
   result: string; // "Winner", "Runner-up", "Semi-final", "Quarter-final", "Group Stage"
   bestPlayer: boolean;
-  /** Round 1023: the winner's speech once given on the card. Optional, so an
-      old save loads unchanged. */
-  speech?: StagedSpeech;
-}
-
-/** Round 1023: a winner's speech as the card keeps it once given: which one,
- *  its words without the log's number, and what it measurably moved. The same
- *  shape a Ballon d'Or night keeps (careerAwardsNight.ts). */
-export interface StagedSpeech { id: string; line: string; moved: string }
-
-/** The speech a card holds, or null when there is none or it is not the
- *  shape above: a corrupt block reads as no speech, and nothing else resets. */
-export function stagedSpeechOf(holder: { speech?: unknown } | null | undefined): StagedSpeech | null {
-  const sp = holder?.speech as Partial<StagedSpeech> | null | undefined;
-  return sp && typeof sp === "object" && typeof sp.id === "string" && typeof sp.line === "string" && typeof sp.moved === "string"
-    ? { id: sp.id, line: sp.line, moved: sp.moved } : null;
+  /** Round 1023: the winner's speech once given on the card, the shape a
+      Ballon d'Or night keeps (careerAwardsNight.ts). Optional, so an old save
+      loads unchanged. */
+  speech?: GivenSpeech;
 }
 
 /* ─── Ballon d'Or System ───
@@ -897,7 +885,7 @@ export interface CareerState {
   pendingWorldCup: WorldCupResult | null;
   /** Round 124: the tournament waiting on the "world_cup" screen. Round 1023:
       it also keeps the winner's speech once given (optional). */
-  pendingTournament?: (IntlTournament & { speech?: StagedSpeech }) | null;
+  pendingTournament?: (IntlTournament & { speech?: GivenSpeech }) | null;
   /** The most recent tournament, kept in full so the bracket stays readable
       from the International tile all season. */
   lastTournament?: IntlTournament | null;
@@ -6624,8 +6612,8 @@ const TOP_SCORER_BAR_PER_STAGE_GAME = 0.4;
    night may move with soccer's own clamps and rounding, the award, the copy,
    and (further down) the scoring and the speeches. */
 import {
-  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, narrativeOf,
-  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep,
+  runAwardsNight, settleAwardsNight, applySpeech, describeSteps, measureMoves, giveSpeechOnce, givenSpeechOf,
+  type AwardsCandidate, type AwardsNight, type AwardsMeter, type AwardsNightSport, type SpeechOption, type MeterStep, type GivenSpeech,
 } from "./careerAwardsNight";
 
 type SoccerAwardsMeter = "popularity" | "morale" | "integrityBonus" | "rivalryIntensity" | "socialMediaFollowers" | "marketValue";
@@ -7256,11 +7244,11 @@ export function bdorSpeechOpen(s: CareerState): boolean {
  *  prints ("Popularity +8"), which a winner at the cap never gets; the moved
  *  line beside it carries the real one. */
 export function giveBdorSpeech(prev: CareerState, choice: BdorSpeechChoice): CareerState {
-  if (!bdorSpeechOpen(prev) || !SOCCER_BDOR_SPEECHES.some(o => o.id === choice)) return prev;
-  const s = { ...prev };
-  const { line, moved } = speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!;
-  s.pendingBallonDor = { ...prev.pendingBallonDor!, speech: { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) } };
-  return s;
+  return giveSpeechOnce(SOCCER_AWARDS_METERS, SOCCER_BDOR_SPEECHES, prev, choice, {
+    open: bdorSpeechOpen,
+    speak: s => speakSoccer(s, SOCCER_BDOR_SPEECHES, choice)!,
+    keep: (s, speech) => { s.pendingBallonDor = { ...prev.pendingBallonDor!, speech }; },
+  });
 }
 
 /* ─── Dismiss international debut screen ─── */
@@ -7357,20 +7345,21 @@ function tournamentOnScreen(s: CareerState): { speech?: unknown; won: boolean } 
  *  tournament screen, only on a title, and only once. */
 export function worldCupSpeechOpen(s: CareerState): boolean {
   const t = s.phase === "world_cup" ? tournamentOnScreen(s) : null;
-  return !!t && t.won && !stagedSpeechOf(t);
+  return !!t && t.won && !givenSpeechOf(t);
 }
 
 /** Gives the speech on the card. Applied once: the tournament keeps which
  *  speech it was, its words and what it measurably moved, and a second call
  *  does nothing. */
 export function giveWorldCupSpeech(prev: CareerState, choice: WorldCupSpeechChoice): CareerState {
-  if (!worldCupSpeechOpen(prev) || !SOCCER_WORLD_CUP_SPEECHES.some(o => o.id === choice)) return prev;
-  const s = { ...prev };
-  const { line, moved } = speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!;
-  const speech: StagedSpeech = { id: choice, line: narrativeOf(SOCCER_AWARDS_METERS, line), moved: describeSteps(SOCCER_AWARDS_METERS, moved) };
-  if (prev.pendingTournament) s.pendingTournament = { ...prev.pendingTournament, speech };
-  else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };
-  return s;
+  return giveSpeechOnce(SOCCER_AWARDS_METERS, SOCCER_WORLD_CUP_SPEECHES, prev, choice, {
+    open: worldCupSpeechOpen,
+    speak: s => speakSoccer(s, SOCCER_WORLD_CUP_SPEECHES, choice)!,
+    keep: (s, speech) => {
+      if (prev.pendingTournament) s.pendingTournament = { ...prev.pendingTournament, speech };
+      else s.pendingWorldCup = { ...prev.pendingWorldCup!, speech };
+    },
+  });
 }
 
 /* ─── Retire from international football ─── */

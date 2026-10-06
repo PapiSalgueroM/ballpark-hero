@@ -73,7 +73,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
-import { availableSpeeches } from '@/lib/careerAwardsNight';
+import { availableSpeeches, givenSpeechOf, type GivenSpeech } from '@/lib/careerAwardsNight';
 import { localizeMoney } from '@/lib/soccerCurrency';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -375,8 +375,8 @@ describe('Soccer Career: the tournament winner\'s speech', () => {
     expect(after.phase).toBe('world_cup');
     expect(after.pendingWorldCup?.speech?.moved).toBe(movedBetween(legacy, after));
     expect(E.giveWorldCupSpeech(after, 'quiet_lap')).toBe(after);
-    const corrupt = { ...legacy, pendingWorldCup: { ...legacy.pendingWorldCup!, speech: 7 as unknown as E.StagedSpeech } };
-    expect(E.stagedSpeechOf(corrupt.pendingWorldCup)).toBeNull();
+    const corrupt = { ...legacy, pendingWorldCup: { ...legacy.pendingWorldCup!, speech: 7 as unknown as GivenSpeech } };
+    expect(givenSpeechOf(corrupt.pendingWorldCup)).toBeNull();
     expect(E.worldCupSpeechOpen(corrupt)).toBe(true);
     const lost: CareerState = { ...won, pendingTournament: { ...t, myResult: 'Runner-up' } };
     expect(E.worldCupSpeechOpen(lost)).toBe(false);

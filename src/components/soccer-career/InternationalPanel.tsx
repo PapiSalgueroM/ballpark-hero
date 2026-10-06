@@ -5,10 +5,11 @@ import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { Confetti } from "@/components/soccer-career/CareerFx";
 import { beatStyle, tournamentMomentKey, useCareerMoment } from "@/components/soccer-career/careerMoments";
 import { revealDelay } from "@/components/club-manager/Celebration";
-import { SpeechChoices } from "@/components/career/AwardsNightCard";
-import { SOCCER_WORLD_CUP_SPEECHES, stagedSpeechOf } from "@/lib/soccerCareerEngine";
+import { SpeechChoices, SpokenSpeech } from "@/components/career/AwardsNightCard";
+import { givenSpeechOf, type GivenSpeech } from "@/lib/careerAwardsNight";
+import { SOCCER_WORLD_CUP_SPEECHES } from "@/lib/soccerCareerEngine";
 import type {
-  IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry, StagedSpeech,
+  IntlTournament, IntlTie, IntlRound, IntlTableRow, IntlHistoryEntry,
 } from "@/lib/soccerCareerEngine";
 
 /* ─── Round 124: the international screens ───
@@ -127,18 +128,6 @@ function ordinal(n: number): string {
   return `${n}${s}`;
 }
 
-/** Round 1023: a winner's speech once given, as the card keeps showing it: the
- *  words, then what it really moved. The same block the Ballon d'Or card shows
- *  (AwardsNightCard). */
-export function SpokenSpeech({ speech }: { speech: StagedSpeech }) {
-  return (
-    <div data-spoken-speech={speech.id} className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3 space-y-1 text-center animate-fade-in">
-      <p className="text-xs">{speech.line}</p>
-      {speech.moved && <p className="text-[11px] font-bold text-amber-300">{speech.moved}</p>}
-    </div>
-  );
-}
-
 /**
  * The tournament screen. Headline, then tiles. Each tile is its own screen.
  */
@@ -146,7 +135,7 @@ export function TournamentCard({
   t, onDismiss, onSpeech,
 }: {
   /** Round 1023: the tournament carries the winner's speech once given. */
-  t: IntlTournament & { speech?: StagedSpeech };
+  t: IntlTournament & { speech?: GivenSpeech };
   onDismiss: () => void;
   onSpeech: (choice: "for_the_country" | "shirt_to_the_fans" | "call_out_doubters" | "quiet_lap") => void;
 }) {
@@ -174,7 +163,7 @@ export function TournamentCard({
   /* Round 1023: a title offers the speeches until one is given (the engine's
      giveWorldCupSpeech gives it once), then shows what it did above Continue.
      The page mounts this card only on the tournament screen. */
-  const given = stagedSpeechOf(t);
+  const given = givenSpeechOf(t);
   const speechOpen = !given;
   const missed = t.myResult === "Did Not Qualify" || t.myResult === "Not Selected";
   /* Saves written before Round 257 carry a tournament with no groupTable at
