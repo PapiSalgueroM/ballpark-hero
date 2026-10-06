@@ -1,0 +1,91 @@
+name: MMA promotion verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/mma-promotion.yml
+      - src/components/fight-promoter/**
+      - src/pages/FightPromoter.tsx
+      - src/data/gameContent/moreSports.ts
+      - src/data/gameRegistry.ts
+      - src/data/seoMeta.ts
+      - src/components/game/GameHelp.tsx
+      - src/hooks/useMmaPromotion.ts
+      - src/lib/mmaPromotion.ts
+      - src/test/mmaPromotion.test.tsx
+      - scripts/simMmaPromotion.mjs
+      - scripts/simInventedNames.mjs
+      - scripts/qa/mmaPromotion1062.mjs
+      - public/fight-promoter/index.html
+      - public/whats-new/index.html
+
+permissions:
+  contents: read
+concurrency:
+  group: mma-promotion-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      VITEST_MAX_FORKS: 1
+      VITEST_MIN_FORKS: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install verification dependencies
+        run: |
+          mkdir -p mma-promotion-artifacts
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+      - name: Type check and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee mma-promotion-artifacts/types.log
+          npm run build 2>&1 | tee mma-promotion-artifacts/build.log
+      - name: MMA mounted outcomes distributions and effective controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: MMA_PROMOTION_CONTROL=all ONLY=simMmaPromotion node scripts/runAllSims.mjs 2>&1 | tee mma-promotion-artifacts/mma.log
+      - name: Existing fight saves careers and scoring
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simFightPromoter simFightGym simFightCareer simNbaCareer simNflCareer simMlbCareer simNhlCareer simNoDoubleRecord simScoringCoverage simScoreShown simHarnessAnchors simGuideHeadings simSeoTitles simHomeFront simInventedNames; do
+            ONLY="$harness" node scripts/runAllSims.mjs 2>&1 | tee "mma-promotion-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All built pages and search readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets simSiteSearch; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "mma-promotion-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native MMA and saved boxing journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/qa/mmaPromotion1062.mjs 2>&1 | tee mma-promotion-artifacts/native.log
+      - name: Preserve verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mma-promotion-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 1
+          path: mma-promotion-artifacts/

@@ -986,37 +986,46 @@
     },
     "/fight-promoter": {
       "howToPlay": [
-        "Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
-        "Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
-        "Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
-        "Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
-        "Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
-        "Put the show on, then read the room. A one sided beating earns you nothing at all."
+        "Choose MMA and name your promotion. You start with $120,000, twelve signed fighters and three divisions. Every fighter and result is fictional.",
+        "MMA: Open Fighters to sign free agents or renew a contract with one fight left. Contracts cover three appearances; the signing bonus and each appearance's purse are separate costs.",
+        "MMA: Open Book card, choose a venue and ticket price, then choose two healthy contracted fighters in the same division. Add up to three bouts; each fighter appears only once per card.",
+        "MMA: Read the estimated gate, purses and venue cost before running the event. The receipt keeps the actual winners, methods, rounds and financial totals for later review.",
+        "Boxing: Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
+        "Boxing: Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
+        "Boxing: Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
+        "Boxing: Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
+        "Boxing: Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
+        "Boxing: Put the show on, then read the room. A one sided beating earns you nothing at all."
       ],
       "rules": [
-        "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
-        "The room costs its hire fee whether anybody turns up or not.",
-        "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
-        "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
-        "Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
-        "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
-        "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
-        "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
-        "Go below zero after a show and you are out of the business.",
+        "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
+        "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
+        "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+        "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
+        "Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+        "Boxing: The room costs its hire fee whether anybody turns up or not.",
+        "Boxing: Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+        "Boxing: Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+        "Boxing: Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
+        "Boxing: A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+        "Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+        "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+        "Boxing: Go below zero after a show and you are out of the business.",
         "There is no betting anywhere in this game."
       ],
       "example": [
-        "Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
-        "Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
-        "He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
-        "Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."
+        "MMA: Choose two healthy contracted light division fighters from the top four and mark the bout as a title fight. The winner takes the belt, both use a contract appearance, and their recovery can prevent an immediate rematch. Check the saved receipt, then sign another contender or rest before the next card.",
+        "Boxing: Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
+        "Boxing: Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
+        "Boxing: He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
+        "Boxing: Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."
       ],
       "tips": [
-        "Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
-        "The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
-        "Two men at the same weight with ratings within about ten points is the fight worth making.",
-        "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
-        "A damaged veteran still sells. That is exactly why he is still on your books."
+        "Boxing: Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
+        "Boxing: The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
+        "Boxing: Two men at the same weight with ratings within about ten points is the fight worth making.",
+        "Boxing: Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+        "Boxing: A damaged veteran still sells. That is exactly why he is still on your books."
       ]
     },
     "/football-connect-4": {

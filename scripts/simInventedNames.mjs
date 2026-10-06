@@ -80,6 +80,7 @@ const GENERATORS = [
      product is checked here like every other bank. The three games share one
      roster model, so registering the source file covers all of them. */
   { file: 'src/lib/fightCareer.ts', first: 'FIRST', last: 'LAST', what: 'boxers' },
+  { file: 'src/lib/mmaPromotion.ts', first: 'FIRST', last: 'LAST', what: 'MMA promotion fighters' },
   /* Round 728: the coordinators on every college staff, shared by both
      dynasties through the program layer. */
   { file: 'src/lib/collegeProgram.ts', first: 'COACH_FIRST', last: 'COACH_LAST', what: 'college coordinators' },

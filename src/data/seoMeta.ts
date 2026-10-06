@@ -458,8 +458,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Turn pro as a nobody, pick your fights, run your camps and climb to a world title before the damage catches up. Free boxing career sim, invented fighters.',
   },
   '/fight-promoter': {
-    title: 'Fight Promoter: Boxing Promotion Sim Game',
-    description: 'Book the room, make the fights, set the ticket price and pay the purses. Selling tonight and building your name pull apart. Free boxing matchmaking sim.',
+    title: 'Fight Promoter: MMA and Boxing Management Sim',
+    description: 'Run a free MMA or boxing promotion. Sign fictional fighters, book cards, crown division champions and manage ticket prices, contracts and event costs.',
   },
   '/fight-gym': {
     title: 'Fight Gym: Boxing Gym Management Sim',
