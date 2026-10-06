@@ -45,7 +45,11 @@
         16 January, 15 days out, because 46 Saturday rounds reach January
         on their own), January deadline 5 to 16 days (16 when a European
         round of 16 lands inside the window and brings the third match a
-        week forward). Fences: 21, 10 and 21.
+        week forward). Fences: 21, 10 and 21. Round 1021 review: the strip
+        under a tapped day inside an open window ("Deadline day is Sat 3 Oct,
+        your 7th match of the season") must name the very day the engine
+        shut the market on and how many matches of mine the engine had
+        played by then, in every save, summer and January (22 strips).
      4) Match days name the opponent. Every match day ahead carries the
         opponent and venue the engine's own fixtureFor resolves; a cup or
         European round ahead of the one I am in is drawn as a maybe with no
@@ -69,26 +73,51 @@
         Section 3 holds 2020-21 to the same fences as every era (summer
         deadline within 21 days of 5 October 2020, January opening within
         10, January deadline within 21).
+        Round 1021 review: each league's January window day is pinned (2
+        January 2021, the 9th for Serie A and the Bundesliga, deterministic),
+        every late window is longer than four matches, the checks run per
+        club rather than on a maximum, the plain rule's own dates over four
+        real calendar shapes and 28 world years must hash to the digest taken
+        from the module before this round (564d604e), and a mid-season join
+        (joinClubNow) keeps the late window in 2020-21 and gets four in a
+        later season.
 
-   Negative controls (house rule: prove the checks can fail):
+   Negative controls (house rule: prove the checks can fail). Failure counts
+   re-measured 2026-10-06 on the five era tree with the review's checks in
+   (the 2026-09 counts were taken on four eras and fewer checks):
      CM_CALENDAR_CONTROL=drift    bundles a copy of the calendar module whose
        Next match button computes its own week (one past the tap's) instead
-       of taking it from the tap rule. Section 2 must go red (measured: 88
+       of taking it from the tap rule. Section 2 must go red (measured: 132
        failures, every Next match pair disagreeing on the week and the save).
      CM_CALENDAR_CONTROL=window   bundles a copy whose summer window count is
-       5 where the engine writes 4. Section 3 must go red (measured: 16
+       5 where the engine writes 4. Section 3 must go red (measured: 28
        failures, the count off the fresh save and the deadline a match late).
      CM_CALENDAR_CONTROL=december bundles a copy without the new year clamp
        on the window entry, which is the shape Round 158 shipped. Section 3
-       must go red (measured: 9 failures, the January window drawn on 12 to
-       25 December for every 18 and 20 club league).
+       must go red (measured: 10 failures, the January window drawn on 12 to
+       25 December for every 18 and 20 club league), and so must section 6's
+       digest of the plain rule, which the clamp is part of.
      CM_CALENDAR_CONTROL=nolate   (Round 1021) takes the late start off the
        five 2020 rules rows at run time, so 2020-21 opens on 8 August with a
        four match window again. Sections 3 and 6 must go red, section 3 on
-       the 21 day summer fence.
+       the 21 day summer fence (measured: 22 failures).
      CM_CALENDAR_CONTROL=nocram   (Round 1021) bundles a copy whose late
        season plays no league round in midweek. Section 3 must go red on the
-       10 day January fence.
+       10 day January fence (measured: 15 failures, January opening 22 days late).
+     CM_CALENDAR_CONTROL=latejan  pushes a January window that already
+       reached the new year three weeks later (see its comment below;
+       measured: 37 failures, the long league's own bound among them).
+     CM_CALENDAR_CONTROL=fourth   (Round 1021 review) the window strip names
+       the constant 4th match again. Section 3's strip check must go red on
+       the three 2020-21 summers (measured: 3 failures, 7th, 5th and 9th).
+     CM_CALENDAR_CONTROL=undercram (Round 1021 review) crams one round fewer
+       than the window is late. Section 6's pinned January day must go red
+       for the Premier League and La Liga (measured: 5 failures; the other
+       three come from the engine reading the real module while this
+       harness reads the copy, the same as nocram).
+     CM_CALENDAR_CONTROL=joinlate (Round 1021 review) a mid-season join in a
+       later season keeps 2020-21's late window. Section 6's join check must
+       go red (measured: 1 failure, 5 matches left of an August four).
      Each control refuses to run if its rewrite did not find its text (nolate:
      unless exactly five rules rows carry a late start).
 
